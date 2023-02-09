@@ -1,6 +1,5 @@
 {
-  "name": "taaabs-fe",
-  "version": "0.1.0",
+  "name": "@taaabs-fe/client-web",
   "private": true,
   "workspaces": [
     "packages/ui-kit"

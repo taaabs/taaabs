@@ -1,22 +1,12 @@
 {
   "name": "taaabs-fe",
-  "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "packages/ui-kit",
-    "packages/repositories",
-    "packages/client-web"
-  ],
   "scripts": {
-    "client-web:dev": "npm run dev --workspace=packages/client-web",
-    "client-web:build": "npm run build --workspace=packages/client-web",
-    "client-web:start": "npm run start --workspace=packages/client-web",
-    "client-web:lint": "npm run lint --workspace=packages/client-web",
-    "repositories:test": "npm run test --workspace=packages/repositories",
-    "repositories:test:watch": "npm run test:watch --workspace=packages/repositories",
-    "ui-kit:storybook": "npm run storybook --workspace=packages/ui-kit",
-    "ui-kit:build-storybook": "npm run build-storybook --workspace=packages/ui-kit"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "jest": "^29.4.2"
+  }
 }
