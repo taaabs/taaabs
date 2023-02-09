@@ -4,9 +4,15 @@ importers:
 
   .:
     specifiers:
+      '@types/jest': ^29.4.0
       jest: ^29.4.2
+      ts-jest: ^29.0.5
+      typescript: ^4.9.5
     devDependencies:
+      '@types/jest': 29.4.0
       jest: 29.4.2
+      ts-jest: 29.0.5_gelezmms3va3pnkofxaadhcvma
+      typescript: 4.9.5
 
   packages/client-web:
     specifiers:
@@ -41,23 +47,14 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-redux: 8.0.5_fxtgt6bjwd6p4cwoordejim2zi
-      taaabs-types: github.com/interbe/taaabs-types/e9d8e96d80fc790272c6214edbca77a3a717bbd7
+      taaabs-types: github.com/interbe/taaabs-types/bb568f028da9d837c51df171d9ced4b0077027d6
       typescript: 4.9.5
 
   packages/repositories:
     specifiers:
-      '@types/jest': ^29.4.0
-      jest: ^29.4.2
       taaabs-types: git+ssh://git@github.com:interbe/taaabs-types.git
-      ts-jest: ^29.0.5
-      typescript: ^4.9.5
     dependencies:
-      taaabs-types: github.com/interbe/taaabs-types/e9d8e96d80fc790272c6214edbca77a3a717bbd7
-    devDependencies:
-      '@types/jest': 29.4.0
-      jest: 29.4.2
-      ts-jest: 29.0.5_gelezmms3va3pnkofxaadhcvma
-      typescript: 4.9.5
+      taaabs-types: github.com/interbe/taaabs-types/bb568f028da9d837c51df171d9ced4b0077027d6
 
   packages/ui-kit:
     specifiers:
@@ -13981,10 +13978,10 @@ packages:
       - '@babel/core'
     dev: false
 
-  github.com/interbe/taaabs-types/e9d8e96d80fc790272c6214edbca77a3a717bbd7:
-    resolution: {commit: e9d8e96d80fc790272c6214edbca77a3a717bbd7, repo: git+ssh://git@github.com/interbe/taaabs-types.git, type: git}
+  github.com/interbe/taaabs-types/bb568f028da9d837c51df171d9ced4b0077027d6:
+    resolution: {commit: bb568f028da9d837c51df171d9ced4b0077027d6, repo: git+ssh://git@github.com/interbe/taaabs-types.git, type: git}
     name: taaabs-types
-    version: 0.1.0
+    version: 0.0.0
     dependencies:
       '@nestjs/swagger': 6.2.1_class-validator@0.14.0
       class-validator: 0.14.0
