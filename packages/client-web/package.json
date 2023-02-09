@@ -1,0 +1,33 @@
+{
+  "name": "taaabs-fe",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/ui-kit"
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@taaabs/ui-kit": "file:../ui-kit",
+    "taaabs-types": "git+ssh://git@github.com:interbe/taaabs-types.git",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@reduxjs/toolkit": "^1.9.2",
+    "@types/node": "18.11.18",
+    "@types/react": "18.0.27",
+    "@types/react-dom": "18.0.10",
+    "axios": "^1.3.2",
+    "eslint": "8.33.0",
+    "eslint-config-next": "13.1.6",
+    "next": "13.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-redux": "^8.0.5",
+    "typescript": "4.9.5"
+  },
+  "devDependencies": {}
+}
