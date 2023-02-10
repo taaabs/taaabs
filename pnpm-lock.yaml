@@ -51,10 +51,7 @@ importers:
       typescript: 4.9.5
 
   packages/repositories:
-    specifiers:
-      taaabs-types: git+ssh://git@github.com:interbe/taaabs-types.git
-    dependencies:
-      taaabs-types: github.com/interbe/taaabs-types/06369b8ff57a63c91a082f47fe8f9f63d1871439
+    specifiers: {}
 
   packages/ui-kit:
     specifiers:

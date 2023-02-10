@@ -1,5 +1,5 @@
 {
-  "name": "@taaabs-fe/client-web",
+  "name": "@taaabs/client-web",
   "private": true,
   "workspaces": [
     "packages/ui-kit"

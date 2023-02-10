@@ -1,5 +1,5 @@
 {
-  "name": "@taaabs-fe/ui-kit",
+  "name": "@taaabs/ui-kit",
   "private": true,
   "scripts": {
     "storybook": "start-storybook -p 6006 --no-open",

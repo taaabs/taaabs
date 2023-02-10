@@ -1,5 +1,5 @@
 {
-  "name": "taaabs-fe",
+  "name": "taaabs",
   "private": true,
   "scripts": {
     "test": "jest",
