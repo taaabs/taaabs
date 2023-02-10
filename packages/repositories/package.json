@@ -6,6 +6,6 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "taaabs-types": "*"
+    "taaabs-types": "git+ssh://git@github.com:interbe/taaabs-types.git"
   }
 }
