@@ -11,8 +11,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@taaabs/ui-kit": "file:../ui-kit",
-    "taaabs-types": "git+ssh://git@github.com:interbe/taaabs-types.git",
+    "@taaabs/ui-kit":  "workspace:*",
+    "@taaabs/types":  "workspace:*",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@reduxjs/toolkit": "^1.9.2",
