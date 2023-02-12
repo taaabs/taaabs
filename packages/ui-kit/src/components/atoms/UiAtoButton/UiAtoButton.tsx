@@ -44,6 +44,7 @@ export const UiAtoButton: React.FC<UiAtoButtonProps> = ({
 }
 
 const button = css`
+  display: inline-block;
   color: red;
   background: blue;
   padding: 1rem 2rem;

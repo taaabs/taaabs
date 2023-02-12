@@ -2,6 +2,8 @@
   "name": "taaabs",
   "private": true,
   "scripts": {
+    "storybook": "pnpm --filter \"@taaabs/ui-kit\" storybook",
+    "build-storybook": "pnpm --filter \"@taaabs/ui-kit\" build-storybook",
     "test": "jest",
     "test:watch": "jest --watch"
   },
