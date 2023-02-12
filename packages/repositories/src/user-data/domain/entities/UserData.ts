@@ -1,43 +1,39 @@
-export type Bookmark = {
-  title: string
-  description?: string
-  url: string
-  urlParts: {
-    scheme: string
-    domain: string
-    path: Array<string>
-    queryString: string
-    fragment: string
-  }
-  collections: Array<string>
-}
-
 type TreeNode<T> = T & {
   children: Array<TreeNode<T>>
-}
-
-type Collection = {
-  name: string
-  bookmarks: Array<Bookmark>
 }
 
 export type UserData = {
   domains: {
     [domain: string]: {
-      name: string
-      bookmarks: Array<Bookmark>
+      siteName: string
+      bookmarks: Array<string>
     }
   }
   bookmarks: {
-    [bookmarkId: string]: Bookmark
+    [bookmarkId: string]: {
+      title: string
+      description?: string
+      url: string
+      urlParts: {
+        scheme: string
+        domain: string
+        path: Array<string>
+        queryString: string
+        fragment: string
+      }
+      collections: Array<string>
+    }
   }
   collections: {
     [collectionId: string]: {
       name: string
       parentId: string | null
       children: Array<string>
-      bookmarks: Array<Bookmark>
+      bookmarks: Array<string>
     }
   }
-  tree: TreeNode<Collection>
+  tree: TreeNode<{
+    name?: string
+    bookmarks: Array<string>
+  }>
 }
