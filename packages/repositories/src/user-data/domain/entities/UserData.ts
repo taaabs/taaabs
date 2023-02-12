@@ -12,8 +12,13 @@ export type Bookmark = {
   collections: Array<string>
 }
 
-export type Collection = {
+type TreeNode<T> = T & {
+  children: Array<TreeNode<T>>
+}
+
+type Collection = {
   name: string
+  bookmarks: Array<Bookmark>
 }
 
 export type UserData = {
@@ -29,7 +34,10 @@ export type UserData = {
   collections: {
     [collectionId: string]: {
       name: string
+      parentId: string | null
+      children: Array<string>
       bookmarks: Array<Bookmark>
     }
   }
+  tree: TreeNode<Collection>
 }
