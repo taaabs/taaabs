@@ -1,5 +1,5 @@
 {
-  "name": "@taaabs/types",
+  "name": "@taaabs/repositories",
   "private": true,
   "scripts": {},
   "typesVersions": {
@@ -10,8 +10,6 @@
     }
   },
   "dependencies": {
-    "@nestjs/swagger": "^6.1.4",
-    "class-validator": "^0.14.0",
-    "zod": "^3.20.2"
+    "@taaabs/types": "workspace:*"
   }
 }

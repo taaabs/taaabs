@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const bookmarkSchema = z.object({
-  url123: z.string(),
+  url: z.string(),
   title: z.string(),
   description: z.string(),
   collectionId: z.string(),

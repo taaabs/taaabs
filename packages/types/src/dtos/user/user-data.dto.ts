@@ -1,5 +1,5 @@
-import { bookmarkSchema } from 'common/bookmark'
-import { collectionSchema } from 'common/collection'
+import { bookmarkSchema } from '../../common/bookmark'
+import { collectionSchema } from '../../common/collection'
 import { z } from 'zod'
 
 export const userDataSchema = z.object({

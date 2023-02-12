@@ -147,6 +147,12 @@ importers:
       react-redux: 8.0.5_fxtgt6bjwd6p4cwoordejim2zi
       typescript: 4.9.5
 
+  packages/repositories:
+    specifiers:
+      '@taaabs/types': workspace:*
+    dependencies:
+      '@taaabs/types': link:../types
+
   packages/types:
     specifiers:
       '@nestjs/swagger': ^6.1.4
