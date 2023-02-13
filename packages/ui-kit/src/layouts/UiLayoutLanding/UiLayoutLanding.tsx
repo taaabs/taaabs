@@ -2,10 +2,6 @@ import { UiAtoWrapper } from '@/components/atoms/UiAtoWrapper'
 import { theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
 
-export enum UiLayoutLandingTestId {
-  Main = 'UiLayoutLanding_Main',
-}
-
 export type UiLayoutLandingProps = {
   children?: React.ReactNode
   logIn: {
@@ -21,18 +17,18 @@ export type UiLayoutLandingProps = {
 export const UiLayoutLanding: React.FC<UiLayoutLandingProps> = (props) => {
   return (
     <$Container>
-      {/* <$Header.outer>
+      <$Header.outer>
         <UiAtoWrapper>
           <$Header.inner>
-            <div>logo</div>
+            <div>logo11</div>
             <$Header.actionButtons>
-              <div>{props.logIn.label}</div>
-              <div>{props.getStarted.label}</div>
+              <div onClick={props.logIn.onClick}>{props.logIn.label}</div>
+              <div onClick={props.getStarted.onClick}>{props.getStarted.label}</div>
             </$Header.actionButtons>
           </$Header.inner>
         </UiAtoWrapper>
-      </$Header.outer> */}
-      <$Main data-testid={UiLayoutLandingTestId.Main}>{props.children}</$Main>
+      </$Header.outer>
+      <$Main>{props.children}</$Main>
       <$Footer>
         <UiAtoWrapper>footer</UiAtoWrapper>
       </$Footer>
