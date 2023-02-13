@@ -23,7 +23,7 @@ describe('UiLayoutLanding', () => {
     expect(screen.queryByText(props.getStarted.label)).toBeInTheDocument()
   })
 
-  it('should call proper callbacks when labels are clicked', () => {
+  it('calls callbacks when labels are clicked', () => {
     const logInOnClickMock = jest.fn()
     const signUpOnClickMock = jest.fn()
     const props: UiLayoutLandingProps = {
