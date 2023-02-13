@@ -2,11 +2,11 @@ import { at } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 
 export enum UiAtoWrapperTestId {
-  Container,
+  Container = 'UiAtoWrapper_Container',
 }
 
 export type UiAtoWrapperProps = {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const UiAtoWrapper: React.FC<UiAtoWrapperProps> = (props) => {
