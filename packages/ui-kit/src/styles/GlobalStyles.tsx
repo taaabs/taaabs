@@ -47,9 +47,6 @@ const globalStyles = css`
     font-size: 1.4rem;
     color: var(${theme.colors.text});
     background: var(${theme.colors.gray50});
-    @media (min-width: 768px) {
-      font-size: 1.6rem;
-    }
   }
 
   body,

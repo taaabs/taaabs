@@ -1,5 +1,7 @@
+import { UiAtoButton } from '@/components/atoms/UiAtoButton'
 import { UiAtoWrapper } from '@/components/atoms/UiAtoWrapper'
 import { theme } from '@/styles/GlobalStyles'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 export type UiLayoutLandingProps = {
@@ -22,8 +24,10 @@ export const UiLayoutLanding: React.FC<UiLayoutLandingProps> = (props) => {
           <$Header.inner>
             <div>logo11</div>
             <$Header.actionButtons>
-              <div onClick={props.logIn.onClick}>{props.logIn.label}</div>
-              <div onClick={props.getStarted.onClick}>{props.getStarted.label}</div>
+              <button css={$Header.menuItem} onClick={props.logIn.onClick}>
+                {props.logIn.label}
+              </button>
+              <UiAtoButton onClick={props.getStarted.onClick}>{props.getStarted.label}</UiAtoButton>
             </$Header.actionButtons>
           </$Header.inner>
         </UiAtoWrapper>
@@ -55,7 +59,18 @@ const $Header = {
   `,
   actionButtons: styled.div`
     display: flex;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 1rem;
+  `,
+  menuItem: css`
+    cursor: pointer;
+    height: 100%;
+    padding: 0 1.5rem;
+    font-size: 1.6rem;
+    &:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+    }
   `,
 }
 
