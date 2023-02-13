@@ -4,15 +4,31 @@ import styled from '@emotion/styled'
 
 export type UiLayoutLandingProps = {
   children: React.ReactNode
+  logIn: {
+    onClick: () => void
+    label: string
+  }
+  getStarted: {
+    onClick: () => void
+    label: string
+  }
 }
 
 export const UiLayoutLanding: React.FC<UiLayoutLandingProps> = (props) => {
   return (
     <>
       <$Container>
-        <$Header>
-          <UiAtoWrapper>header</UiAtoWrapper>
-        </$Header>
+        <$Header.outer>
+          <UiAtoWrapper>
+            <$Header.inner>
+              <div>logo</div>
+              <$Header.actionButtons>
+                <div>{props.logIn.label}</div>
+                <div>{props.getStarted.label}</div>
+              </$Header.actionButtons>
+            </$Header.inner>
+          </UiAtoWrapper>
+        </$Header.outer>
         <$Main>{props.children}</$Main>
         <$Footer>
           <UiAtoWrapper>footer</UiAtoWrapper>
@@ -28,10 +44,22 @@ const $Container = styled.div`
   flex-direction: column;
 `
 
-const $Header = styled.header`
-  background: ${theme.colors.bgDefault};
-  height: 8rem;
-`
+const $Header = {
+  outer: styled.header`
+    display: flex;
+    background: var(${theme.colors.gray100});
+    height: 8rem;
+    align-items: center;
+  `,
+  inner: styled.div`
+    display: flex;
+    justify-content: space-between;
+  `,
+  actionButtons: styled.div`
+    display: flex;
+    gap: 1.5rem;
+  `,
+}
 
 const $Main = styled.main`
   flex: 1;

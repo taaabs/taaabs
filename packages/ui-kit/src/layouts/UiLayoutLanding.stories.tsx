@@ -10,3 +10,7 @@ const Template: Story<UiLayoutLandingProps> = (props) => (
   <UiLayoutLanding {...props}>body</UiLayoutLanding>
 )
 export const standard = Template.bind({})
+standard.args = {
+  logIn: { label: 'Log in', onClick: () => {} },
+  getStarted: { label: 'Get started', onClick: () => {} },
+}
