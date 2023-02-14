@@ -39,13 +39,13 @@ const button = css`
     padding: 0 1.6rem;
   `)}
   &:after {
-    background-color: var(${theme.colors.gray100});
+    background-color: var(${theme.colors.default100});
     border-radius: 4.7px;
     content: '';
     left: 0;
     width: 100%;
     position: absolute;
-    transition: transform 0.15s ease-out;
+    transition: transform 0.15s ease-in-out;
     z-index: -1;
     height: 4rem;
     transform: translate(3px, 3px);
@@ -55,6 +55,8 @@ const button = css`
     `)}
   }
   &:hover:after {
-    transform: translate(0, 0);
+    ${mq.at768(css`
+      transform: translate(2px, 2px);
+    `)}
   }
 `

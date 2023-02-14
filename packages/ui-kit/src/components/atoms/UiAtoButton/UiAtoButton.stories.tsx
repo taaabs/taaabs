@@ -1,13 +1,16 @@
+import { Margin } from '@/helpers/Margin'
 import { Meta, Story } from '@storybook/react'
 import { UiAtoButton, UiAtoButtonProps } from './UiAtoButton'
 
 export default {
-  title: 'Atoms/Button',
+  title: 'Atoms/UiAtoButton',
   component: UiAtoButton,
 } as Meta
 
 const template: Story<UiAtoButtonProps> = (props) => (
-  <UiAtoButton {...props}>Click me</UiAtoButton>
+  <Margin>
+    <UiAtoButton {...props}>Click me</UiAtoButton>
+  </Margin>
 )
 
 export const standard = template.bind({})

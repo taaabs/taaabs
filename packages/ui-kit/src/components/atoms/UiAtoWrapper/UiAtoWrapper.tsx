@@ -2,19 +2,15 @@ import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
-export enum UiAtoWrapperTestId {
-  Container = 'UiAtoWrapper_Container',
-}
-
 export type UiAtoWrapperProps = {
   children?: React.ReactNode
 }
 
 export const UiAtoWrapper: React.FC<UiAtoWrapperProps> = (props) => {
-  return <$Container data-testid={UiAtoWrapperTestId.Container}>{props.children}</$Container>
+  return <div css={[container]}>{props.children}</div>
 }
 
-const $Container = styled.div`
+const container = css`
   width: 100%;
   margin: 0 auto;
   padding: 0 1.5rem;

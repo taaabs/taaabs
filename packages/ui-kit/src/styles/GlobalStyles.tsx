@@ -5,10 +5,15 @@ export const theme = {
     white: '--color-white',
     black: '--color-black',
     text: '--color-text',
-    accentDefault: '--color-accent-default',
-    gray50: '--color-gray-50',
-    gray100: '--color-gray-100',
-    gray200: '--color-gray-200',
+    defaultAccent: '--color-default-accent',
+    default50: '--color-default-50',
+    default100: '--color-default-100',
+    default200: '--color-default-200',
+  },
+  margin: {
+    '1.5rem': '--margin-1-5rem',
+    '4rem': '--margin-4rem',
+    '6rem': '--margin-6rem',
   },
 }
 
@@ -16,10 +21,13 @@ const vars = css({
   [theme.colors.white]: '#FFF',
   [theme.colors.black]: '#000',
   [theme.colors.text]: '#1D1D1F',
-  [theme.colors.accentDefault]: '#0944BA',
-  [theme.colors.gray50]: '#F7F7F7',
-  [theme.colors.gray100]: '#ECECEC',
-  [theme.colors.gray200]: '#DFDFDF',
+  [theme.colors.defaultAccent]: '#0944BA',
+  [theme.colors.default50]: '#F7F7F7',
+  [theme.colors.default100]: '#ECECEC',
+  [theme.colors.default200]: '#DFDFDF',
+  [theme.margin['1.5rem']]: '1.5rem',
+  [theme.margin['4rem']]: '4rem',
+  [theme.margin['6rem']]: '6rem',
 })
 
 const globalStyles = css`
@@ -46,7 +54,7 @@ const globalStyles = css`
     line-height: 1.5;
     font-size: 1.4rem;
     color: var(${theme.colors.text});
-    background: var(${theme.colors.gray50});
+    background: var(${theme.colors.default50});
   }
 
   body,

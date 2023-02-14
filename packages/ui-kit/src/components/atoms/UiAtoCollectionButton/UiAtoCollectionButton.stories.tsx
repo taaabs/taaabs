@@ -1,3 +1,4 @@
+import { Margin } from '@/helpers/Margin'
 import { Meta, Story } from '@storybook/react'
 import { UiAtoCollectionButton, UiAtoCollectionButtonProps } from './UiAtoCollectionButton'
 
@@ -7,9 +8,9 @@ export default {
 } as Meta
 
 const template: Story<UiAtoCollectionButtonProps> = (props) => (
-  <div style={{ margin: '4rem' }}>
+  <Margin>
     <UiAtoCollectionButton {...props}>Click me</UiAtoCollectionButton>
-  </div>
+  </Margin>
 )
 
 export const standard = template.bind({})
