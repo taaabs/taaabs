@@ -49,7 +49,7 @@ const $Container = styled.div`
 const $Header = {
   outer: styled.header`
     display: flex;
-    background: var(${theme.colors.default100});
+    background: var(${theme.colors['100']});
     height: 8rem;
     align-items: center;
   `,

@@ -5,10 +5,10 @@ export const theme = {
     white: '--color-white',
     black: '--color-black',
     text: '--color-text',
-    defaultAccent: '--color-default-accent',
-    default50: '--color-default-50',
-    default100: '--color-default-100',
-    default200: '--color-default-200',
+    accent: '--color-accent',
+    '50': '--color-50',
+    '100': '--color-100',
+    '200': '--color-200',
   },
   margin: {
     '1.5rem': '--margin-1-5rem',
@@ -17,14 +17,14 @@ export const theme = {
   },
 }
 
-const vars = css({
+const defaultTheme = css({
   [theme.colors.white]: '#FFF',
   [theme.colors.black]: '#000',
   [theme.colors.text]: '#1D1D1F',
-  [theme.colors.defaultAccent]: '#0944BA',
-  [theme.colors.default50]: '#F7F7F7',
-  [theme.colors.default100]: '#ECECEC',
-  [theme.colors.default200]: '#DFDFDF',
+  [theme.colors.accent]: '#0944BA',
+  [theme.colors['50']]: '#F7F7F7',
+  [theme.colors['100']]: '#ECECEC',
+  [theme.colors['200']]: '#DFDFDF',
   [theme.margin['1.5rem']]: '1.5rem',
   [theme.margin['4rem']]: '4rem',
   [theme.margin['6rem']]: '6rem',
@@ -46,7 +46,7 @@ const globalStyles = css`
   }
 
   :root {
-    ${vars}
+    ${defaultTheme}
   }
 
   body {
@@ -54,7 +54,7 @@ const globalStyles = css`
     line-height: 1.5;
     font-size: 1.4rem;
     color: var(${theme.colors.text});
-    background: var(${theme.colors.default50});
+    background: var(${theme.colors['50']});
   }
 
   body,

@@ -45,7 +45,7 @@ const button = css`
   display: inline-flex;
   align-items: center;
   color: var(${theme.colors.white});
-  background: var(${theme.colors.defaultAccent});
+  background: var(${theme.colors.accent});
   padding: 0 2rem;
   font-weight: 600;
   border-radius: 0.8rem;

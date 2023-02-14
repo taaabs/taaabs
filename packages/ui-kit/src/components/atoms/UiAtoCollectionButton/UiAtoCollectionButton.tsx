@@ -39,7 +39,7 @@ const button = css`
     padding: 0 1.6rem;
   `)}
   &:after {
-    background-color: var(${theme.colors.default100});
+    background-color: var(${theme.colors['100']});
     border-radius: 4.7px;
     content: '';
     left: 0;
