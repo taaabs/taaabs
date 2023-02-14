@@ -10,9 +10,11 @@ export default {
 
 const template: Story = () => (
   <Margin>
-    <UiAtoLogo type="simple" />
-    <Divider />
-    <UiAtoLogo type="wide" />
+    <div style={{ background: '#ddd', padding: '4rem' }}>
+      <UiAtoLogo type="simple" />
+      <Divider />
+      <UiAtoLogo type="wide" />
+    </div>
   </Margin>
 )
 

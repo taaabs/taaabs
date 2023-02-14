@@ -50,6 +50,6 @@ const button = css`
   font-weight: 600;
   border-radius: 0.8rem;
   cursor: pointer;
-  height: 4.4rem;
+  height: 4.8rem;
   font-size: 1.6rem;
 `

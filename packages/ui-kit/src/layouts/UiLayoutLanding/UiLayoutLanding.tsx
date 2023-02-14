@@ -1,4 +1,5 @@
 import { UiAtoButton } from '@/components/atoms/UiAtoButton'
+import { UiAtoLogo } from '@/components/atoms/UiAtoLogo'
 import { UiAtoWrapper } from '@/components/atoms/UiAtoWrapper'
 import { theme } from '@/styles/GlobalStyles'
 import { css } from '@emotion/react'
@@ -22,7 +23,7 @@ export const UiLayoutLanding: React.FC<UiLayoutLandingProps> = (props) => {
       <$Header.outer>
         <UiAtoWrapper>
           <$Header.inner>
-            <div>logo11</div>
+            <UiAtoLogo type="wide" />
             <$Header.actionButtons>
               <button css={$Header.menuItem} onClick={props.logIn.onClick}>
                 {props.logIn.label}

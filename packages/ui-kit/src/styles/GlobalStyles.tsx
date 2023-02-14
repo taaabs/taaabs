@@ -1,6 +1,10 @@
 import { css, Global } from '@emotion/react'
 
 export const theme = {
+  font: {
+    sans: '--font-sans',
+    serif: '--font-serif',
+  },
   colors: {
     white: '--color-white',
     black: '--color-black',
@@ -18,6 +22,8 @@ export const theme = {
 }
 
 const defaultTheme = css({
+  [theme.font.sans]: 'Inter, sans-serif',
+  [theme.font.serif]: 'Alice, serif',
   [theme.colors.white]: '#FFF',
   [theme.colors.black]: '#000',
   [theme.colors.text]: '#1D1D1F',
@@ -31,6 +37,8 @@ const defaultTheme = css({
 })
 
 const globalStyles = css`
+  @import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
+
   #__next {
     min-height: 100vh;
   }
@@ -50,7 +58,7 @@ const globalStyles = css`
   }
 
   body {
-    font-family: sans-serif;
+    font-family: var(${theme.font.sans});
     line-height: 1.5;
     font-size: 1.4rem;
     color: var(${theme.colors.text});
