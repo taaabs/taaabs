@@ -42,7 +42,8 @@ export const UiAtoButton: React.FC<UiAtoButtonProps> = ({ size = 'medium', ...pr
 }
 
 const button = css`
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   color: var(${theme.colors.white});
   background: var(${theme.colors.accentDefault});
   padding: 0 2rem;

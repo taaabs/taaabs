@@ -1,4 +1,5 @@
-import { at } from '@/styles/mediaQueries'
+import { mq } from '@/styles/mediaQueries'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 export enum UiAtoWrapperTestId {
@@ -10,11 +11,7 @@ export type UiAtoWrapperProps = {
 }
 
 export const UiAtoWrapper: React.FC<UiAtoWrapperProps> = (props) => {
-  return (
-    <$Container data-testid={UiAtoWrapperTestId.Container}>
-      {props.children}
-    </$Container>
-  )
+  return <$Container data-testid={UiAtoWrapperTestId.Container}>{props.children}</$Container>
 }
 
 const $Container = styled.div`
@@ -22,7 +19,7 @@ const $Container = styled.div`
   margin: 0 auto;
   padding: 0 1.5rem;
   max-width: 125rem;
-  ${at[768]`
+  ${mq.at768(css`
     padding: 0 4rem;
-  `}
+  `)}
 `
