@@ -1,10 +1,6 @@
-import { UiAtoSpacer } from '@/components/atoms/UiAtoSpacer'
-import { UiOrgLandingFeatureGrid } from '@/components/organisms/UiOrgLandingFeatureGrid'
-import { uiOrgLandingFeatureGridPropsData } from '@/components/organisms/UiOrgLandingFeatureGrid/UiOrgLandingFratureGrid.data'
-import { UiOrgLandingHero } from '@/components/organisms/UiOrgLandingHero/UiOrgLandingHero'
-import { uiOrgLandingHeroPropsData } from '@/components/organisms/UiOrgLandingHero/UiOrgLandingHero.data'
-import { UiLayoutLanding } from '@/layouts/UiLayoutLanding'
-import { uiLayoutLandingPropsData } from '@/layouts/UiLayoutLanding/UiLayoutLanding.data'
+import { Atoms, Organisms } from '@/components'
+import { LayoutLanding } from '@/layouts/LayoutLanding'
+import { uiLayoutLandingPropsData } from '@/layouts/LayoutLanding/LayoutLanding.data'
 import { Meta, Story } from '@storybook/react'
 
 export default {
@@ -12,13 +8,15 @@ export default {
 } as Meta
 
 const template: Story = () => (
-  <UiLayoutLanding {...uiLayoutLandingPropsData}>
-    <UiAtoSpacer />
-    <UiOrgLandingHero {...uiOrgLandingHeroPropsData} />
-    <UiAtoSpacer />
-    <UiOrgLandingFeatureGrid {...uiOrgLandingFeatureGridPropsData} />
-    <UiAtoSpacer />
-  </UiLayoutLanding>
+  <LayoutLanding {...uiLayoutLandingPropsData}>
+    <Atoms.Spacer size="large" />
+    <Organisms.Landing.Hero {...Organisms.Landing.HeroPropsData} />
+    <Atoms.Spacer size="large" />
+    <Organisms.Landing.FeatureGrid
+      {...Organisms.Landing.FeatureGridPropsData}
+    />
+    <Atoms.Spacer size="large" />
+  </LayoutLanding>
 )
 
 export const standard = template.bind({})
