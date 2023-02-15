@@ -1,5 +1,5 @@
-import { StorybookMargin } from '@/storybook-helpers/components/StorybookMargin'
-import { StorybookSpacer } from '@/storybook-helpers/components/StorybookSpacer'
+import { StorybookMargin } from '@/helpers/components/StorybookMargin'
+import { StorybookSpacer } from '@/helpers/components/StorybookSpacer'
 import { Meta, Story } from '@storybook/react'
 import { UiAtoLogo, UiAtoLogoProps } from './UiAtoLogo'
 

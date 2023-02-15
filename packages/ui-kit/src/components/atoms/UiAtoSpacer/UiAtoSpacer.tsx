@@ -1,12 +1,11 @@
-import { theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
+import styled, { css } from 'styled-components'
 
 export const UiAtoSpacer: React.FC = () => {
-  return <div css={[container]} />
+  return <$Container />
 }
 
-const container = css`
+const $Container = styled.div`
   height: 4rem;
   ${mq.at768(css`
     height: 6rem;

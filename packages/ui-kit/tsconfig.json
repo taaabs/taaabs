@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,8 +17,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    },
-    "jsxImportSource": "@emotion/react",
+    }
+    // "jsxImportSource": "@emotion/react",
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]

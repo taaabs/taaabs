@@ -1,6 +1,6 @@
 import { UiAtoWrapper } from '@/components/atoms/UiAtoWrapper'
 import { theme } from '@/styles/GlobalStyles'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 
 export type UiOrgLandingHeroProps = {
   text: string
@@ -19,7 +19,7 @@ export const UiOrgLandingHero: React.FC<UiOrgLandingHeroProps> = ({ text }) => {
 }
 
 const $Container = styled.div`
-  max-width: 94rem;
+  max-width: 98rem;
   & h1 {
     font-size: 6rem;
     font-family: var(${theme.font.serif});

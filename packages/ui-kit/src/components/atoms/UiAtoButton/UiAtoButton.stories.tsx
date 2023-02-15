@@ -1,4 +1,4 @@
-import { StorybookMargin } from '@/storybook-helpers/components/StorybookMargin'
+import { StorybookMargin } from '@/helpers/components/StorybookMargin'
 import { Meta, Story } from '@storybook/react'
 import { UiAtoButton, UiAtoButtonProps } from './UiAtoButton'
 

@@ -1,7 +1,6 @@
 import { theme } from '@/styles/GlobalStyles'
-import { css } from '@emotion/react'
+import styled, { css } from 'styled-components'
 import Link from 'next/link'
-import React from 'react'
 
 export type UiAtoButtonProps = {
   href?: string
@@ -13,31 +12,18 @@ export type UiAtoButtonProps = {
   ariaLabelledby?: string
 }
 
-export const UiAtoButton: React.FC<UiAtoButtonProps> = ({ size = 'medium', ...props }) => {
+export const UiAtoButton: React.FC<UiAtoButtonProps> = ({
+  size = 'medium',
+  ...props
+}) => {
   if (props.type == 'submit') {
-    return (
-      <button css={button} type="submit">
-        {props.children}
-      </button>
-    )
+    return <$Button type="submit">{props.children}</$Button>
   } else if (props.href != undefined) {
-    return (
-      <Link css={button} href={props.href}>
-        {props.children}
-      </Link>
-    )
+    return <$Link href={props.href}>{props.children}</$Link>
   } else if (props.onClick != undefined) {
-    return (
-      <button css={button} onClick={props.onClick}>
-        {props.children}
-      </button>
-    )
+    return <$Button onClick={props.onClick}>{props.children}</$Button>
   } else {
-    return (
-      <button css={button} disabled>
-        {props.children}
-      </button>
-    )
+    return <$Button disabled>{props.children}</$Button>
   }
 }
 
@@ -49,7 +35,15 @@ const button = css`
   padding: 0 2rem;
   font-weight: 600;
   border-radius: 0.8rem;
-  cursor: pointer;
   height: 4.8rem;
   font-size: 1.6rem;
+`
+
+const $Button = styled.button`
+  ${button}
+  cursor: pointer;
+`
+
+const $Link = styled(Link)`
+  ${button}
 `

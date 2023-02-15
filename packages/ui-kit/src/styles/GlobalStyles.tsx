@@ -1,4 +1,4 @@
-import { css, Global } from '@emotion/react'
+import { css, createGlobalStyle } from 'styled-components'
 
 export const theme = {
   font: {
@@ -36,7 +36,7 @@ const defaultTheme = css({
   [theme.margin['6rem']]: '6rem',
 })
 
-const globalStyles = css`
+export const GlobalStyles = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
 
   #__next {
@@ -112,5 +112,3 @@ const globalStyles = css`
     padding: 0;
   }
 `
-
-export const GlobalStyles = () => <Global styles={globalStyles} />

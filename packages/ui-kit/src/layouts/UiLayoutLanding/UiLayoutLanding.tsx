@@ -2,8 +2,7 @@ import { UiAtoButton } from '@/components/atoms/UiAtoButton'
 import { UiAtoLogo } from '@/components/atoms/UiAtoLogo'
 import { UiAtoWrapper } from '@/components/atoms/UiAtoWrapper'
 import { theme } from '@/styles/GlobalStyles'
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 
 export type UiLayoutLandingProps = {
   children?: React.ReactNode
@@ -25,10 +24,12 @@ export const UiLayoutLanding: React.FC<UiLayoutLandingProps> = (props) => {
           <$Header.inner>
             <UiAtoLogo type="wide" />
             <$Header.actionButtons>
-              <button css={$Header.menuItem} onClick={props.logIn.onClick}>
+              <$Header.menuItem onClick={props.logIn.onClick}>
                 {props.logIn.label}
-              </button>
-              <UiAtoButton onClick={props.getStarted.onClick}>{props.getStarted.label}</UiAtoButton>
+              </$Header.menuItem>
+              <UiAtoButton onClick={props.getStarted.onClick}>
+                {props.getStarted.label}
+              </UiAtoButton>
             </$Header.actionButtons>
           </$Header.inner>
         </UiAtoWrapper>
@@ -63,7 +64,7 @@ const $Header = {
     align-items: center;
     gap: 1rem;
   `,
-  menuItem: css`
+  menuItem: styled.button`
     cursor: pointer;
     height: 100%;
     padding: 0 1.5rem;

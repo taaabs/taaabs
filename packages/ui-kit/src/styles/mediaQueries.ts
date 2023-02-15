@@ -1,27 +1,27 @@
-import { css } from '@emotion/react'
+import { css } from 'styled-components'
 
 type CSSParams = Parameters<typeof css>
 
 function mediaQueryBuilder(type: 'min' | 'max' | 'only', width: number, nextWidth?: number) {
-  return (...styles: CSSParams) => {
+  return (...styles: any) => {
     if (type == 'only') {
       if (nextWidth !== undefined) {
         return css`
           @media (min-width: ${width}px) and (max-width: calc(${nextWidth}px - 0.02px)) {
-            ${css(...styles)};
+            ${css(styles)};
           }
         `
       } else {
         return css`
           @media (min-width: ${width}px) {
-            ${css(...styles)};
+            ${css(styles)};
           }
         `
       }
     } else {
       return css`
         @media (${type}-width: calc(${width}px - ${type == 'max' ? '0.02px' : '0px'})) {
-          ${css(...styles)};
+          ${css(styles)};
         }
       `
     }

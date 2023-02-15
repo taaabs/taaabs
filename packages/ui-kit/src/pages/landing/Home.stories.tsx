@@ -1,10 +1,10 @@
 import { UiAtoSpacer } from '@/components/atoms/UiAtoSpacer'
 import { UiOrgLandingFeatureGrid } from '@/components/organisms/UiOrgLandingFeatureGrid'
-import { uiOrgLandingFeatureGridProps } from '@/components/organisms/UiOrgLandingFeatureGrid/UiOrgLandingFeatureGrid.stories'
+import { uiOrgLandingFeatureGridPropsData } from '@/components/organisms/UiOrgLandingFeatureGrid/UiOrgLandingFratureGrid.data'
 import { UiOrgLandingHero } from '@/components/organisms/UiOrgLandingHero/UiOrgLandingHero'
-import { uiOrgLandingHeroProps } from '@/components/organisms/UiOrgLandingHero/UiOrgLandingHero.stories'
+import { uiOrgLandingHeroPropsData } from '@/components/organisms/UiOrgLandingHero/UiOrgLandingHero.data'
 import { UiLayoutLanding } from '@/layouts/UiLayoutLanding'
-import { uiLayoutLandingPropsData } from '@/layouts/UiLayoutLanding/UiLayoutLanding.stories'
+import { uiLayoutLandingPropsData } from '@/layouts/UiLayoutLanding/UiLayoutLanding.data'
 import { Meta, Story } from '@storybook/react'
 
 export default {
@@ -14,9 +14,9 @@ export default {
 const template: Story = () => (
   <UiLayoutLanding {...uiLayoutLandingPropsData}>
     <UiAtoSpacer />
-    <UiOrgLandingHero {...uiOrgLandingHeroProps} />
+    <UiOrgLandingHero {...uiOrgLandingHeroPropsData} />
     <UiAtoSpacer />
-    <UiOrgLandingFeatureGrid {...uiOrgLandingFeatureGridProps} />
+    <UiOrgLandingFeatureGrid {...uiOrgLandingFeatureGridPropsData} />
     <UiAtoSpacer />
   </UiLayoutLanding>
 )

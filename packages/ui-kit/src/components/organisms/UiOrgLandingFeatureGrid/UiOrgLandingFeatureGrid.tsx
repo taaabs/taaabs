@@ -1,8 +1,7 @@
 import { UiAtoWrapper } from '@/components/atoms/UiAtoWrapper'
 import { theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
+import styled, { css } from 'styled-components'
 
 export type GridItem = {
   firstLine: string
@@ -14,17 +13,19 @@ export type UiOrgLandingFeatureGridProps = {
   gridItems: [GridItem, GridItem, GridItem, GridItem]
 }
 
-export const UiOrgLandingFeatureGrid: React.FC<UiOrgLandingFeatureGridProps> = ({ gridItems }) => {
+export const UiOrgLandingFeatureGrid: React.FC<
+  UiOrgLandingFeatureGridProps
+> = ({ gridItems }) => {
   return (
     <section>
       <UiAtoWrapper>
         <$Container>
           {gridItems.map((gridItem) => (
-            <$Item key={gridItem.firstLine}>
+            <div>
               <$FirstLine>{gridItem.firstLine}</$FirstLine>
               <$SecondLine>{gridItem.secondLine}</$SecondLine>
               <$ThirdLine>{gridItem.thirdLine}</$ThirdLine>
-            </$Item>
+            </div>
           ))}
         </$Container>
       </UiAtoWrapper>
@@ -42,7 +43,6 @@ const $Container = styled.div`
     grid-row-gap: 10rem;
   `)}
 `
-const $Item = styled.div``
 
 const $FirstLine = styled.span`
   display: block;

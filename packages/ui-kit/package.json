@@ -7,15 +7,13 @@
     "test": "jest"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
     "next": "13.1.6",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
-    "@emotion/jest": "^11.10.5",
     "@storybook/builder-vite": "0.4.2",
     "@storybook/client-api": "^6.5.16",
     "@storybook/client-logger": "^6.5.16",
@@ -27,6 +25,7 @@
     "@types/node": "^18.13.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.10",
+    "@types/styled-components": "^5.1.26",
     "@types/testing-library__jest-dom": "^5.14.5",
     "@vitejs/plugin-react": "^3.1.0",
     "babel-jest": "^29.4.2",

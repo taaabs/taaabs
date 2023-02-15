@@ -1,6 +1,5 @@
 import { theme } from '@/styles/GlobalStyles'
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
+import styled from 'styled-components'
 
 export type UiAtoLogoProps = {
   type: 'simple' | 'wide'

@@ -1,6 +1,6 @@
 import { theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
+import styled, { css } from 'styled-components'
 import Link from 'next/link'
 
 export type UiAtoCollectionButtonProps = {
@@ -8,15 +8,14 @@ export type UiAtoCollectionButtonProps = {
   children?: React.ReactNode
 }
 
-export const UiAtoCollectionButton: React.FC<UiAtoCollectionButtonProps> = ({ href, children }) => {
-  return (
-    <Link href={href} css={[button]}>
-      {children}
-    </Link>
-  )
+export const UiAtoCollectionButton: React.FC<UiAtoCollectionButtonProps> = ({
+  href,
+  children,
+}) => {
+  return <$Link href={href}>{children}1</$Link>
 }
 
-const button = css`
+const $Link = styled(Link)`
   display: inline-flex;
   align-items: center;
   background-color: var(${theme.colors.white});

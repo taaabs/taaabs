@@ -1,16 +1,16 @@
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
+import { css } from 'styled-components'
+import styled from 'styled-components'
 
 export type UiAtoWrapperProps = {
   children?: React.ReactNode
 }
 
 export const UiAtoWrapper: React.FC<UiAtoWrapperProps> = (props) => {
-  return <div css={[container]}>{props.children}</div>
+  return <$Container>{props.children}</$Container>
 }
 
-const container = css`
+const $Container = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 0 1.5rem;

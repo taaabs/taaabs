@@ -1,12 +1,12 @@
 import { theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
+import styled, { css } from 'styled-components'
 
 export const StorybookSpacer: React.FC = () => {
-  return <div css={[container]} />
+  return <$Container />
 }
 
-const container = css`
+const $Container = styled.div`
   height: var(${theme.margin['1.5rem']});
   ${mq.at768(css`
     height: var(${theme.margin['4rem']});
