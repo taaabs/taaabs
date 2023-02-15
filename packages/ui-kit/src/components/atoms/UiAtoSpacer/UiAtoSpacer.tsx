@@ -2,13 +2,16 @@ import { theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
 
-export const Divider: React.FC = () => {
+export const UiAtoSpacer: React.FC = () => {
   return <div css={[container]} />
 }
 
 const container = css`
-  height: var(${theme.margin['1.5rem']});
+  height: 4rem;
   ${mq.at768(css`
-    height: var(${theme.margin['4rem']});
+    height: 6rem;
+  `)}
+  ${mq.at1200(css`
+    height: 8rem;
   `)}
 `

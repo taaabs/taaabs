@@ -1,17 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import { UiOrgLandingFeatureGrid, UiOrgLandingFeatureGridProps } from './UiOrgLandingFeatureGrid'
 
-export default {
-  title: 'Organisms/UiOrgLandingFeatureGrid',
-  component: UiOrgLandingFeatureGrid,
-} as Meta
-
-const template: Story<UiOrgLandingFeatureGridProps> = (props) => (
-  <UiOrgLandingFeatureGrid {...props}></UiOrgLandingFeatureGrid>
-)
-
-export const standard = template.bind({})
-standard.args = {
+export const uiOrgLandingFeatureGridProps: UiOrgLandingFeatureGridProps = {
   gridItems: [
     {
       firstLine: 'lag free',
@@ -35,3 +25,15 @@ standard.args = {
     },
   ],
 }
+
+export default {
+  title: 'Organisms/UiOrgLandingFeatureGrid',
+  component: UiOrgLandingFeatureGrid,
+} as Meta
+
+const template: Story<UiOrgLandingFeatureGridProps> = (props) => (
+  <UiOrgLandingFeatureGrid {...props}></UiOrgLandingFeatureGrid>
+)
+
+export const standard = template.bind({})
+standard.args = uiOrgLandingFeatureGridProps

@@ -1,5 +1,5 @@
-import { Divider } from '@/helpers/Divider'
-import { Margin } from '@/helpers/Margin'
+import { StorybookMargin } from '@/storybook-helpers/components/StorybookMargin'
+import { StorybookSpacer } from '@/storybook-helpers/components/StorybookSpacer'
 import { Meta, Story } from '@storybook/react'
 import { UiAtoLogo, UiAtoLogoProps } from './UiAtoLogo'
 
@@ -9,13 +9,13 @@ export default {
 } as Meta
 
 const template: Story = () => (
-  <Margin>
+  <StorybookMargin>
     <div style={{ background: '#ddd', padding: '4rem' }}>
       <UiAtoLogo type="simple" />
-      <Divider />
+      <StorybookSpacer />
       <UiAtoLogo type="wide" />
     </div>
-  </Margin>
+  </StorybookMargin>
 )
 
 export const standard = template.bind({})

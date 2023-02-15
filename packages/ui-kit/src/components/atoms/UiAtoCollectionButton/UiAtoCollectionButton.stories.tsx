@@ -1,4 +1,4 @@
-import { Margin } from '@/helpers/Margin'
+import { StorybookMargin } from '@/storybook-helpers/components/StorybookMargin'
 import { Meta, Story } from '@storybook/react'
 import { UiAtoCollectionButton, UiAtoCollectionButtonProps } from './UiAtoCollectionButton'
 
@@ -8,9 +8,9 @@ export default {
 } as Meta
 
 const template: Story<UiAtoCollectionButtonProps> = (props) => (
-  <Margin>
+  <StorybookMargin>
     <UiAtoCollectionButton {...props}>Click me</UiAtoCollectionButton>
-  </Margin>
+  </StorybookMargin>
 )
 
 export const standard = template.bind({})

@@ -1,7 +1,9 @@
-import { UiAtoWrapper } from '@/components/atoms/UiAtoWrapper'
-import { Margin } from '@/helpers/Margin'
 import { Meta, Story } from '@storybook/react'
 import { UiOrgLandingHero, UiOrgLandingHeroProps } from './UiOrgLandingHero'
+
+export const uiOrgLandingHeroProps: UiOrgLandingHeroProps = {
+  text: 'Meet Taaabs, bookmark manager that makes the web organized.',
+}
 
 export default {
   title: 'Organisms/UiOrgLandingHero',
@@ -13,4 +15,4 @@ const template: Story<UiOrgLandingHeroProps> = (props) => (
 )
 
 export const standard = template.bind({})
-standard.args = { text: 'Meet Taaabs, bookmark manager that makes the web organized.' }
+standard.args = uiOrgLandingHeroProps
