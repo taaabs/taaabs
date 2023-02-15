@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import { Wrapper, WrapperProps } from './Wrapper'
 
 export default {
-  title: 'Atoms/wrapper',
+  title: 'Atoms/Wrapper',
   component: Wrapper,
 } as Meta
 

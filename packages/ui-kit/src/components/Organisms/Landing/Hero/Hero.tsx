@@ -1,6 +1,7 @@
 import { Atoms } from '@/components'
 import { theme } from '@/styles/GlobalStyles'
-import styled from 'styled-components'
+import { mq } from '@/styles/mediaQueries'
+import styled, { css } from 'styled-components'
 
 export type HeroProps = {
   text: string
@@ -19,11 +20,25 @@ export const Hero: React.FC<HeroProps> = ({ text }) => {
 }
 
 const $Container = styled.div`
-  max-width: 98rem;
+  ${mq.at768(css`
+    max-width: 90%;
+  `)}
+  ${mq.at992(css`
+    max-width: 98rem;
+  `)}
   & h1 {
-    font-size: 6rem;
+    font-size: 4rem;
     font-family: var(${theme.font.serif});
     line-height: 1.1;
     font-weight: normal;
+    ${mq.at768(css`
+      font-size: 5rem;
+    `)}
+    ${mq.at992(css`
+      font-size: 5.5rem;
+    `)}
+    ${mq.at1200(css`
+      font-size: 6rem;
+    `)}
   }
 `

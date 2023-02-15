@@ -33,7 +33,7 @@ export const FeatureGrid: React.FC<FeatureGridProps> = ({ gridItems }) => {
 
 const $Container = styled.div`
   display: grid;
-  grid-row-gap: 6rem;
+  grid-row-gap: 4rem;
   ${mq.at576(css`
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
@@ -46,20 +46,17 @@ const $FirstLine = styled.span`
   display: block;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
-  ${mq.to576(css`
-    font-size: 1.2rem;
-  `)}
   ${mq.at576(css`
     margin-bottom: 1rem;
   `)}
 `
 
 const commonProperties = css`
-  font-size: 2.2rem;
+  font-size: 2.6rem;
   line-height: 1.2;
   white-space: pre-line;
   ${mq.at576(css`
-    font-size: 2.8rem;
+    font-size: 3rem;
   `)}
   ${mq.at1200(css`
     font-size: 3.6rem;

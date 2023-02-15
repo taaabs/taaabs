@@ -36,12 +36,12 @@ const $Container = styled.div<$ContainerProps>`
         `
       case 'large':
         return css`
-          height: 4rem;
+          height: 6rem;
           ${mq.at768(css`
-            height: 6rem;
+            height: 8rem;
           `)}
           ${mq.at1200(css`
-            height: 8rem;
+            height: 10rem;
           `)}
         `
     }

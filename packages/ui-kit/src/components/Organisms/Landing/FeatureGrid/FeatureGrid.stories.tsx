@@ -6,7 +6,7 @@ import {
 import { FeatureGridPropsData } from './FratureGrid.data'
 
 export default {
-  title: 'Organisms/landing/LandingFeatureGrid',
+  title: 'Organisms/Landing/FeatureGrid',
   component: FeatureGrid,
 } as Meta
 

@@ -1,6 +1,7 @@
 import { Atoms } from '@/components'
 import { theme } from '@/styles/GlobalStyles'
-import styled from 'styled-components'
+import { mq } from '@/styles/mediaQueries'
+import styled, { css } from 'styled-components'
 
 export type LayoutLandingProps = {
   children?: React.ReactNode
@@ -20,7 +21,13 @@ export const LayoutLanding: React.FC<LayoutLandingProps> = (props) => {
       <$Header.outer>
         <Atoms.Wrapper>
           <$Header.inner>
-            <Atoms.Logo type="wide" />
+            <$Header.logoDesktop>
+              <Atoms.Logo type="wide" />
+            </$Header.logoDesktop>
+            <$Header.logoMobile>
+              <Atoms.Logo type="simple" />
+            </$Header.logoMobile>
+
             <$Header.actionButtons>
               <$Header.menuItem onClick={props.logIn.onClick}>
                 {props.logIn.label}
@@ -56,6 +63,16 @@ const $Header = {
   inner: styled.div`
     display: flex;
     justify-content: space-between;
+  `,
+  logoMobile: styled.div`
+    ${mq.at576(css`
+      display: none;
+    `)}
+  `,
+  logoDesktop: styled.div`
+    ${mq.to576(css`
+      display: none;
+    `)}
   `,
   actionButtons: styled.div`
     display: flex;
