@@ -12,7 +12,7 @@ export const CollectionButton: React.FC<CollectionButtonProps> = ({
   href,
   children,
 }) => {
-  return <$Link href={href}>{children}1</$Link>
+  return <$Link href={href}>{children}</$Link>
 }
 
 const $Link = styled(Link)`

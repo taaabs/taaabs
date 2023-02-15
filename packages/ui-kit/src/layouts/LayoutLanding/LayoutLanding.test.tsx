@@ -6,7 +6,7 @@ const exampleProps: LayoutLandingProps = {
   getStarted: { label: 'Get started', onClick: () => {} },
 }
 
-describe('UiLayoutLanding', () => {
+describe('Layouts/Landing', () => {
   it('renders children', () => {
     const text = 'Test content'
 

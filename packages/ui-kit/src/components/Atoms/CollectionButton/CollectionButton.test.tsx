@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { CollectionButton } from './CollectionButton'
 
-describe('UiAtoCollectionButton', () => {
+describe('Atoms/CollectionButton', () => {
   it('renders children', () => {
     render(<CollectionButton href="/test">test</CollectionButton>)
 

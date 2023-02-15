@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { FeatureGrid, FeatureGridProps } from './FeatureGrid'
 
-describe('UiOrgLandingFeatureGrid', () => {
+describe('Organisms/Landing/FeatureGrid', () => {
   it('renders props data', () => {
     const props: FeatureGridProps = {
       gridItems: [

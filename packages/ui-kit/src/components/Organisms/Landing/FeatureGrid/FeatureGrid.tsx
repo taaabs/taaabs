@@ -13,15 +13,13 @@ export type FeatureGridProps = {
   gridItems: [GridItem, GridItem, GridItem, GridItem]
 }
 
-export const FeatureGrid: React.FC<FeatureGridProps> = ({
-  gridItems,
-}) => {
+export const FeatureGrid: React.FC<FeatureGridProps> = ({ gridItems }) => {
   return (
     <section>
       <Atoms.Wrapper>
         <$Container>
-          {gridItems.map((gridItem) => (
-            <div>
+          {gridItems.map((gridItem, index) => (
+            <div key={index}>
               <$FirstLine>{gridItem.firstLine}</$FirstLine>
               <$SecondLine>{gridItem.secondLine}</$SecondLine>
               <$ThirdLine>{gridItem.thirdLine}</$ThirdLine>
