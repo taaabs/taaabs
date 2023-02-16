@@ -28,7 +28,7 @@ const $Container = styled.div`
   `)}
   & h1 {
     font-size: 4rem;
-    font-family: var(${theme.font.serif});
+    font-family: var(${theme.fontFamily.serif});
     line-height: 1.1;
     font-weight: normal;
     ${mq.at768(css`

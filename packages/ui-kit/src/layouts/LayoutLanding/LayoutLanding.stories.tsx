@@ -3,7 +3,7 @@ import { LayoutLanding, LayoutLandingProps } from './LayoutLanding'
 import { uiLayoutLandingPropsData } from './LayoutLanding.data'
 
 export default {
-  title: 'layouts/LayoutLanding',
+  title: 'Layouts/LayoutLanding',
   component: LayoutLanding,
 } as Meta
 

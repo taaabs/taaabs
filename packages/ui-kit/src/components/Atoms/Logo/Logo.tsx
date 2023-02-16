@@ -46,7 +46,7 @@ const $LetterBox = {
     font-size: 3.2rem;
     border-radius: 1rem;
     border-bottom-right-radius: ${({ type }) => (type == 'wide' ? '0' : '1rem')};
-    font-family: var(${theme.font.serif});
+    font-family: var(${theme.fontFamily.serif});
     position: relative;
     z-index: 3;
   `,

@@ -1,9 +1,16 @@
 import { css, createGlobalStyle } from 'styled-components'
 
 export const theme = {
-  font: {
-    sans: '--font-sans',
-    serif: '--font-serif',
+  fontFamily: {
+    sans: '--font-family-sans',
+    serif: '--font-family-serif',
+  },
+  fontSize: {
+    body: {
+      '1.2': '--font-size-body-1.2',
+      '1.4': '--font-size-body-1.4',
+      '1.6': '--font-size-body-1.6',
+    },
   },
   colors: {
     white: '--color-white',
@@ -22,8 +29,11 @@ export const theme = {
 }
 
 const defaultTheme = css({
-  [theme.font.sans]: 'Inter, sans-serif',
-  [theme.font.serif]: 'Alice, serif',
+  [theme.fontFamily.sans]: 'Inter, sans-serif',
+  [theme.fontFamily.serif]: 'Alice, serif',
+  [theme.fontSize.body['1.2']]: '1.2rem',
+  [theme.fontSize.body['1.4']]: '1.4rem',
+  [theme.fontSize.body['1.6']]: '1.6rem',
   [theme.colors.white]: '#FFF',
   [theme.colors.black]: '#000',
   [theme.colors.text]: '#1D1D1F',
@@ -58,7 +68,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    font-family: var(${theme.font.sans});
+    font-family: var(${theme.fontFamily.sans});
     line-height: 1.5;
     font-size: 1.4rem;
     color: var(${theme.colors.text});

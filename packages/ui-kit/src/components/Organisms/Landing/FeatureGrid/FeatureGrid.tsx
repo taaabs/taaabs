@@ -69,6 +69,6 @@ const $SecondLine = styled.div`
 `
 
 const $ThirdLine = styled.div`
-  font-family: var(${theme.font.serif});
+  font-family: var(${theme.fontFamily.serif});
   ${commonProperties}
 `
