@@ -1,9 +1,6 @@
 {
   "name": "@taaabs/client-web",
   "private": true,
-  "workspaces": [
-    "packages/ui-kit"
-  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,6 +10,7 @@
   "dependencies": {
     "@taaabs/ui-kit":  "workspace:*",
     "@taaabs/types":  "workspace:*",
+    "@taaabs/repositories":  "workspace:*",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@reduxjs/toolkit": "^1.9.2",
