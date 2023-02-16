@@ -11,8 +11,8 @@ export const StorybookMargin: React.FC<MarginProps> = ({ children }) => {
 }
 
 const $Container = styled.div`
-  margin: var(${theme.margin['1.5rem']});
+  margin: var(${theme.padding['1.5rem']});
   ${mq.at768(css`
-    margin: var(${theme.margin['4rem']});
+    margin: var(${theme.padding['4rem']});
   `)}
 `

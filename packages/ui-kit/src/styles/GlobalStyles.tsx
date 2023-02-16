@@ -21,10 +21,13 @@ export const theme = {
     '100': '--color-100',
     '200': '--color-200',
   },
-  margin: {
-    '1.5rem': '--margin-1-5rem',
-    '4rem': '--margin-4rem',
-    '6rem': '--margin-6rem',
+  padding: {
+    '1.5rem': '--padding-1-5rem',
+    '4rem': '--padding-4rem',
+    '6rem': '--padding-6rem',
+  },
+  border: {
+    '100': '--border-100',
   },
 }
 
@@ -41,9 +44,10 @@ const defaultTheme = css({
   [theme.colors['50']]: '#F7F7F7',
   [theme.colors['100']]: '#ECECEC',
   [theme.colors['200']]: '#DFDFDF',
-  [theme.margin['1.5rem']]: '1.5rem',
-  [theme.margin['4rem']]: '4rem',
-  [theme.margin['6rem']]: '6rem',
+  [theme.padding['1.5rem']]: '1.5rem',
+  [theme.padding['4rem']]: '4rem',
+  [theme.padding['6rem']]: '6rem',
+  [theme.border['100']]: `0.2rem solid var(${theme.colors[100]})`,
 })
 
 export const GlobalStyles = createGlobalStyle`

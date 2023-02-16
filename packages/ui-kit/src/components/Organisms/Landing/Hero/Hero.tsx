@@ -24,7 +24,7 @@ const $Container = styled.div`
     max-width: 90%;
   `)}
   ${mq.at992(css`
-    max-width: 98rem;
+    max-width: 110rem;
   `)}
   & h1 {
     font-size: 4rem;
@@ -38,7 +38,7 @@ const $Container = styled.div`
       font-size: 5.5rem;
     `)}
     ${mq.at1200(css`
-      font-size: 6rem;
+      font-size: 6.5rem;
     `)}
   }
 `

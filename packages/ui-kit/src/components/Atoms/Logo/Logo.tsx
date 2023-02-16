@@ -60,7 +60,7 @@ const $LetterBox = {
     &:after {
       content: '';
       position: absolute;
-      background: var(${theme.colors[50]});
+      background: var(${theme.colors[100]});
       width: 1.1rem;
       height: 1.1rem;
       border-bottom-left-radius: 1.1rem;
@@ -76,7 +76,7 @@ const $OtherTab = {
     justify-content: right;
     align-items: center;
     border-radius: 1rem;
-    background-color: var(${theme.colors[50]});
+    background-color: var(${theme.colors[100]});
     margin-left: -2.1rem;
     &:nth-child(1) {
       z-index: 3;

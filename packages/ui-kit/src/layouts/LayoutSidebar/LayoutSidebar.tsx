@@ -49,7 +49,7 @@ const $Topbar = {
     background-color: var(${theme.colors[50]});
     padding: 0 ${topBarPadding}rem;
     ${mq.at576(css`
-      padding: 0 var(${theme.margin['4rem']});
+      padding: 0 var(${theme.padding['4rem']});
     `)}
   `,
   left: styled.div`
@@ -76,6 +76,9 @@ const sidebarAside = css`
   left: 0;
   width: 100%;
   height: 100%;
+  border: var(${theme.border[100]});
+  background-color: var(${theme.colors[50]});
+  padding: var(${theme.padding['1.5rem']});
 `
 
 const $Sidebar = {
@@ -84,7 +87,7 @@ const $Sidebar = {
     flex-direction: column;
     position: fixed;
     top: ${topBarHeight}rem;
-    left: var(${theme.margin['4rem']});
+    left: var(${theme.padding['4rem']});
     height: calc(100vh - ${topBarHeight}rem);
     width: 30rem;
   `,
@@ -95,17 +98,15 @@ const $Sidebar = {
   asideLeft: styled.div`
     ${sidebarAside};
     transform: scale(0.98) translateX(-1.2rem);
-    background-color: var(${theme.colors[200]});
   `,
   asideRight: styled.div`
     ${sidebarAside};
-    background-color: var(${theme.colors[100]});
   `,
   copyright: styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: var(${theme.margin['4rem']});
+    height: var(${theme.padding['4rem']});
     font-size: var(${theme.fontSize.body['1.2']});
     opacity: 0.4;
   `,

@@ -7,8 +7,8 @@ export const StorybookSpacer: React.FC = () => {
 }
 
 const $Container = styled.div`
-  height: var(${theme.margin['1.5rem']});
+  height: var(${theme.padding['1.5rem']});
   ${mq.at768(css`
-    height: var(${theme.margin['4rem']});
+    height: var(${theme.padding['4rem']});
   `)}
 `
