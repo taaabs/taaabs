@@ -29,6 +29,9 @@ export const theme = {
   border: {
     '100': '--border-100',
   },
+  animation: {
+    duration: '--animation-duration'
+  }
 }
 
 const defaultTheme = css({
@@ -48,6 +51,7 @@ const defaultTheme = css({
   [theme.padding['4rem']]: '4rem',
   [theme.padding['6rem']]: '6rem',
   [theme.border['100']]: `0.2rem solid var(${theme.colors[100]})`,
+  [theme.animation.duration]: '0.15s',
 })
 
 export const GlobalStyles = createGlobalStyle`

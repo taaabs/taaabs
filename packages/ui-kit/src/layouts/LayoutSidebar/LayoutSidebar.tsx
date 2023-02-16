@@ -8,10 +8,12 @@ export type LayoutSidebarProps = {}
 export const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
   return (
     <$Container>
+      <$Backdrop isVisible={false} />
       <$Topbar.container>
         <$Topbar.left>
-          <$Topbar.collapseSidebarIcon />
-          Where am I?
+          <Atoms.Logo type="simple" />
+          <$Topbar.collapseSidebarIcon>HOME</$Topbar.collapseSidebarIcon>
+          {`COLLECTION > COLLECTION > COLLECTION`}
         </$Topbar.left>
         <$Topbar.right>NOTIFICATIONS | NIGHT MODE | USER</$Topbar.right>
       </$Topbar.container>
@@ -33,6 +35,25 @@ export const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
 const $Container = styled.div`
   min-height: 100vh;
 `
+
+const $Backdrop = styled.div<{ isVisible: boolean }>`
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.16);
+  transition-duration: ${theme.animation.duration};
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0s;
+  transition-property: opacity, visibility;
+  ${({ isVisible }) => css`
+    opacity: ${isVisible ? 1 : 0};
+    visibility: ${isVisible ? 'visible' : 'hidden'};
+  `}
+`
+
 const topBarIconHeight = 4.8
 const topBarPadding = 1.5
 const topBarHeight = topBarIconHeight + topBarPadding * 2
@@ -90,6 +111,7 @@ const $Sidebar = {
     left: var(${theme.padding['4rem']});
     height: calc(100vh - ${topBarHeight}rem);
     width: 30rem;
+    z-index: 101;
   `,
   inner: styled.div`
     flex-grow: 1;

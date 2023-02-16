@@ -32,14 +32,14 @@ export const Logo: React.FC<LogoProps> = ({ type }) => {
 
 const $Container = styled.div`
   display: inline-flex;
-  height: 5rem;
+  height: 4.8rem;
 `
 
 const $LetterBox = {
   container: styled.div<{ type: 'simple' | 'wide' }>`
     color: var(${theme.colors.white});
     background: var(${theme.colors.accent});
-    width: 5rem;
+    width: 4.8rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,6 +99,6 @@ const $OtherTab = {
     opacity: ${({ isTransparent }) => (isTransparent ? '0' : '1')};
     width: 0.2rem;
     height: 2.5rem;
-    background-color: var(${theme.colors.white});
+    background-color: var(${theme.colors[200]});
   `,
 }
