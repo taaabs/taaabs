@@ -9,21 +9,21 @@ export const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
   return (
     <$Container>
       <$Backdrop isVisible={false} />
-      <$Topbar.container>
-        <$Topbar.left>
+      <$Topbar._>
+        <$Topbar.Left._>
           <Atoms.Logo type="simple" />
           <$Topbar.collapseSidebarIcon>HOME</$Topbar.collapseSidebarIcon>
           {`COLLECTION > COLLECTION > COLLECTION`}
-        </$Topbar.left>
-        <$Topbar.right>NOTIFICATIONS | NIGHT MODE | USER</$Topbar.right>
-      </$Topbar.container>
+        </$Topbar.Left._>
+        <$Topbar.Right._>NOTIFICATIONS | NIGHT MODE | USER</$Topbar.Right._>
+      </$Topbar._>
       <$Sidebar.container>
         <$Sidebar.inner>
           <$Sidebar.asideLeft>L</$Sidebar.asideLeft>
           <$Sidebar.asideRight>R</$Sidebar.asideRight>
         </$Sidebar.inner>
         <$Sidebar.copyright>
-          Taaabs &copy; 2023 · Privacy Policy
+          &copy; 2023 Taaabs · Privacy Policy
         </$Sidebar.copyright>
       </$Sidebar.container>
 
@@ -59,7 +59,7 @@ const topBarPadding = 1.5
 const topBarHeight = topBarIconHeight + topBarPadding * 2
 
 const $Topbar = {
-  container: styled.header`
+  _: styled.header`
     position: fixed;
     display: flex;
     align-items: center;
@@ -73,12 +73,16 @@ const $Topbar = {
       padding: 0 var(${theme.padding['4rem']});
     `)}
   `,
-  left: styled.div`
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  `,
-  right: styled.div``,
+  Left: {
+    _: styled.div`
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    `,
+  },
+  Right: {
+    _: styled.div``,
+  },
   collapseSidebarIcon: styled.div`
     width: ${topBarIconHeight}rem;
     height: ${topBarIconHeight}rem;

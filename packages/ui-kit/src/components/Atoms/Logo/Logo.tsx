@@ -97,7 +97,7 @@ const $OtherTab = {
   `,
   line: styled.div<{ isTransparent: boolean }>`
     opacity: ${({ isTransparent }) => (isTransparent ? '0' : '1')};
-    width: 0.2rem;
+    width: 0.15rem;
     height: 2.5rem;
     background-color: var(${theme.colors[200]});
   `,

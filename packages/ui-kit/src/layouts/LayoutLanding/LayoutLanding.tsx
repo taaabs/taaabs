@@ -17,7 +17,7 @@ export type LayoutLandingProps = {
 
 export const LayoutLanding: React.FC<LayoutLandingProps> = (props) => {
   return (
-    <$Container>
+    <$Container._>
       <$Header.outer>
         <Atoms.Wrapper>
           <$Header.inner>
@@ -43,20 +43,22 @@ export const LayoutLanding: React.FC<LayoutLandingProps> = (props) => {
       <$Footer>
         <Atoms.Wrapper>footer</Atoms.Wrapper>
       </$Footer>
-    </$Container>
+    </$Container._>
   )
 }
 
-const $Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-`
+const $Container = {
+  _: styled.div`
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  `,
+}
 
 const $Header = {
   outer: styled.header`
     display: flex;
-    height: 8rem;
+    height: 7.8rem; // 4.8 + 1.5*2 TODO: refactor
     align-items: center;
     border-bottom: var(${theme.border[100]});
   `,
