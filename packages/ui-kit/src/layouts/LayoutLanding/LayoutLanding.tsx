@@ -21,12 +21,7 @@ export const LayoutLanding: React.FC<LayoutLandingProps> = (props) => {
       <$Header.outer>
         <Atoms.Wrapper>
           <$Header.inner>
-            <$Header.logoDesktop>
-              <Atoms.Logo type="wide" />
-            </$Header.logoDesktop>
-            <$Header.logoMobile>
-              <Atoms.Logo type="simple" />
-            </$Header.logoMobile>
+            <Atoms.Logo type="simple" />
 
             <$Header.actionButtons>
               <$Header.menuItem onClick={props.logIn.onClick}>
@@ -60,21 +55,10 @@ const $Header = {
     display: flex;
     height: 7.8rem; // 4.8 + 1.5*2 TODO: refactor
     align-items: center;
-    border-bottom: var(${theme.border[100]});
   `,
   inner: styled.div`
     display: flex;
     justify-content: space-between;
-  `,
-  logoMobile: styled.div`
-    ${mq.at576(css`
-      display: none;
-    `)}
-  `,
-  logoDesktop: styled.div`
-    ${mq.to576(css`
-      display: none;
-    `)}
   `,
   actionButtons: styled.div`
     display: flex;
