@@ -15,7 +15,7 @@ export const FeatureGridPropsData: FeatureGridProps = {
     {
       firstLine: 'social',
       secondLine: 'explore public\ncollections',
-      thirdLine: 'make them part\nof your own',
+      thirdLine: 'be notified\nabout updates',
     },
     {
       firstLine: 'seamless',
