@@ -1,2 +1,6 @@
 node_modules
 /.vscode
+dist
+.env
+build
+storybook-static
