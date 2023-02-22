@@ -17,40 +17,40 @@ export type LayoutLandingProps = {
 
 export const LayoutLanding: React.FC<LayoutLandingProps> = (props) => {
   return (
-    <$Container._>
-      <$Header.outer>
+    <_Container.$>
+      <_Header.outer>
         <Atoms.Wrapper>
-          <$Header.inner>
+          <_Header.inner>
             <Atoms.Logo type="simple" />
 
-            <$Header.actionButtons>
-              <$Header.menuItem onClick={props.logIn.onClick}>
+            <_Header.actionButtons>
+              <_Header.menuItem onClick={props.logIn.onClick}>
                 {props.logIn.label}
-              </$Header.menuItem>
+              </_Header.menuItem>
               <Atoms.Button onClick={props.getStarted.onClick}>
                 {props.getStarted.label}
               </Atoms.Button>
-            </$Header.actionButtons>
-          </$Header.inner>
+            </_Header.actionButtons>
+          </_Header.inner>
         </Atoms.Wrapper>
-      </$Header.outer>
+      </_Header.outer>
       <$Main>{props.children}</$Main>
       <$Footer>
         <Atoms.Wrapper>footer</Atoms.Wrapper>
       </$Footer>
-    </$Container._>
+    </_Container.$>
   )
 }
 
-const $Container = {
-  _: styled.div`
+const _Container = {
+  $: styled.div`
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   `,
 }
 
-const $Header = {
+const _Header = {
   outer: styled.header`
     display: flex;
     height: 7.8rem; // 4.8 + 1.5*2 TODO: refactor

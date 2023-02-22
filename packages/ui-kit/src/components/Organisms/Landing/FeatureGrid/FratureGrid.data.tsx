@@ -3,7 +3,7 @@ import { FeatureGridProps } from './FeatureGrid'
 export const FeatureGridPropsData: FeatureGridProps = {
   gridItems: [
     {
-      firstLine: 'lag free',
+      firstLine: 'snappy',
       secondLine: 'crazy fast\nloading times',
       thirdLine: 'locally synced\nacross all devices',
     },
