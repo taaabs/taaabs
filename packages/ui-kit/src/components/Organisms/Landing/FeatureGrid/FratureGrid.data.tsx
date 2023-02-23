@@ -9,7 +9,7 @@ export const FeatureGridPropsData: FeatureGridProps = {
     },
     {
       firstLine: 'secure',
-      secondLine: 'end-to-end encrypted\nprivate collections',
+      secondLine: 'end-to-end encrypted\nsecret collections',
       thirdLine: 'protected with your\nvery own seed phase',
     },
     {
