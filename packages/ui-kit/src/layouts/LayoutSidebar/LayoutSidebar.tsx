@@ -7,36 +7,36 @@ export type LayoutSidebarProps = {}
 
 export const LayoutSidebar: React.FC<LayoutSidebarProps> = (props) => {
   return (
-    <$Container>
-      <$Backdrop isVisible={false} />
-      <$Topbar._>
-        <$Topbar.Left._>
+    <Container>
+      <Backdrop isVisible={false} />
+      <Topbar._>
+        <Topbar.Left._>
           <Atoms.Logo type="simple" />
-          <$Topbar.collapseSidebarIcon>HOME</$Topbar.collapseSidebarIcon>
+          <Topbar.collapseSidebarIcon>HOME</Topbar.collapseSidebarIcon>
           {`COLLECTION > COLLECTION > COLLECTION`}
-        </$Topbar.Left._>
-        <$Topbar.Right._>NOTIFICATIONS | NIGHT MODE | USER</$Topbar.Right._>
-      </$Topbar._>
-      <$Sidebar.container>
-        <$Sidebar.inner>
-          <$Sidebar.asideLeft>L</$Sidebar.asideLeft>
-          <$Sidebar.asideRight>R</$Sidebar.asideRight>
-        </$Sidebar.inner>
-        <$Sidebar.copyright>
+        </Topbar.Left._>
+        <Topbar.Right._>NOTIFICATIONS | NIGHT MODE | USER</Topbar.Right._>
+      </Topbar._>
+      <Sidebar.container>
+        <Sidebar.inner>
+          <Sidebar.asideLeft>L</Sidebar.asideLeft>
+          <Sidebar.asideRight>R</Sidebar.asideRight>
+        </Sidebar.inner>
+        <Sidebar.copyright>
           &copy; 2023 Taaabs · Privacy Policy
-        </$Sidebar.copyright>
-      </$Sidebar.container>
+        </Sidebar.copyright>
+      </Sidebar.container>
 
-      <$Main>hi</$Main>
-    </$Container>
+      <Main>hi</Main>
+    </Container>
   )
 }
 
-const $Container = styled.div`
+const Container = styled.div`
   min-height: 100vh;
 `
 
-const $Backdrop = styled.div<{ isVisible: boolean }>`
+const Backdrop = styled.div<{ isVisible: boolean }>`
   position: fixed;
   top: 0px;
   left: 0px;
@@ -58,7 +58,7 @@ const topBarIconHeight = 4.8
 const topBarPadding = 1.5
 const topBarHeight = topBarIconHeight + topBarPadding * 2
 
-const $Topbar = {
+const Topbar = {
   _: styled.header`
     position: fixed;
     display: flex;
@@ -106,7 +106,7 @@ const sidebarAside = css`
   padding: var(${theme.padding['1.5rem']});
 `
 
-const $Sidebar = {
+const Sidebar = {
   container: styled.div`
     display: flex;
     flex-direction: column;
@@ -138,6 +138,6 @@ const $Sidebar = {
   `,
 }
 
-const $Main = styled.main`
+const Main = styled.main`
   height: 4000px;
 `
