@@ -1,7 +1,8 @@
 import { Atoms } from '@/components'
 import { theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
-import styled, { css } from 'styled-components'
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 
 export type LayoutSidebarProps = {}
 

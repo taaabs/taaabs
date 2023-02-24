@@ -1,5 +1,5 @@
 import { theme } from '@/styles/GlobalStyles'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 export type LogoProps = {
   type: 'simple' | 'wide'

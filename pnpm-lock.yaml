@@ -269,6 +269,8 @@ importers:
       '@babel/preset-env': ^7.20.2
       '@babel/preset-react': ^7.18.6
       '@babel/preset-typescript': ^7.21.0
+      '@emotion/react': ^11.10.5
+      '@emotion/styled': ^11.10.5
       '@storybook/builder-vite': 0.4.2
       '@storybook/client-api': ^6.5.16
       '@storybook/client-logger': ^6.5.16
@@ -280,7 +282,6 @@ importers:
       '@types/node': ^18.13.0
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.10
-      '@types/styled-components': ^5.1.26
       '@types/testing-library__jest-dom': ^5.14.5
       '@vitejs/plugin-react': ^3.1.0
       babel-jest: ^29.4.2
@@ -291,14 +292,14 @@ importers:
       next: 13.1.6
       react: 18.2.0
       react-dom: 18.2.0
-      styled-components: ^5.3.6
       typescript: ^4.9.5
       vite: ^4.1.1
     dependencies:
+      '@emotion/react': 11.10.5_wkiylh6bncbdhwh6tncqb3s2nm
+      '@emotion/styled': 11.10.5_cjinou6kcnbro54hfk33pnlsly
       next: 13.1.6_pjwopsidmaokadturxaafygjp4
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      styled-components: 5.3.6_biqbaboplfbrettd7655fr4n2y
     devDependencies:
       '@babel/core': 7.20.12
       '@babel/preset-env': 7.20.2_@babel+core@7.20.12
@@ -315,7 +316,6 @@ importers:
       '@types/node': 18.13.0
       '@types/react': 18.0.28
       '@types/react-dom': 18.0.10
-      '@types/styled-components': 5.1.26
       '@types/testing-library__jest-dom': 5.14.5
       '@vitejs/plugin-react': 3.1.0_vite@4.1.1
       babel-jest: 29.4.2_@babel+core@7.20.12
@@ -2251,6 +2251,26 @@ packages:
       stylis: 4.1.3
     dev: false
 
+  /@emotion/babel-plugin/11.10.5_@babel+core@7.20.12:
+    resolution: {integrity: sha512-xE7/hyLHJac7D2Ve9dKroBBZqBT7WuPQmWcq7HSGb84sUuP4mlOWoB8dvVfD9yk5DHkU1m6RW7xSoDtnQHNQeA==}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+    dependencies:
+      '@babel/core': 7.20.12
+      '@babel/helper-module-imports': 7.18.6
+      '@babel/plugin-syntax-jsx': 7.18.6_@babel+core@7.20.12
+      '@babel/runtime': 7.20.13
+      '@emotion/hash': 0.9.0
+      '@emotion/memoize': 0.8.0
+      '@emotion/serialize': 1.1.1
+      babel-plugin-macros: 3.1.0
+      convert-source-map: 1.9.0
+      escape-string-regexp: 4.0.0
+      find-root: 1.1.0
+      source-map: 0.5.7
+      stylis: 4.1.3
+    dev: false
+
   /@emotion/cache/11.10.5:
     resolution: {integrity: sha512-dGYHWyzTdmK+f2+EnIGBpkz1lKc4Zbj2KHd4cX3Wi8/OWr5pKslNjc3yABKH4adRGCvSX4VDC0i04mrrq0aiRA==}
     dependencies:
@@ -2299,6 +2319,31 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@emotion/react/11.10.5_wkiylh6bncbdhwh6tncqb3s2nm:
+    resolution: {integrity: sha512-TZs6235tCJ/7iF6/rvTaOH4oxQg2gMAcdHemjwLKIjKz4rRuYe1HJ2TQJKnAcRAfOUDdU8XoDadCe1rl72iv8A==}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+      '@types/react': '*'
+      react: '>=16.8.0'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/core': 7.20.12
+      '@babel/runtime': 7.20.13
+      '@emotion/babel-plugin': 11.10.5_@babel+core@7.20.12
+      '@emotion/cache': 11.10.5
+      '@emotion/serialize': 1.1.1
+      '@emotion/use-insertion-effect-with-fallbacks': 1.0.0_react@18.2.0
+      '@emotion/utils': 1.2.0
+      '@emotion/weak-memoize': 0.3.0
+      '@types/react': 18.0.28
+      hoist-non-react-statics: 3.3.2
+      react: 18.2.0
+    dev: false
+
   /@emotion/serialize/1.1.1:
     resolution: {integrity: sha512-Zl/0LFggN7+L1liljxXdsVSVlg6E/Z/olVWpfxUTxOAmi8NU7YoeWeLfi1RmnB2TATHoaWwIBRoL+FvAJiTUQA==}
     dependencies:
@@ -2311,6 +2356,31 @@ packages:
 
   /@emotion/sheet/1.2.1:
     resolution: {integrity: sha512-zxRBwl93sHMsOj4zs+OslQKg/uhF38MB+OMKoCrVuS0nyTkqnau+BM3WGEoOptg9Oz45T/aIGs1qbVAsEFo3nA==}
+    dev: false
+
+  /@emotion/styled/11.10.5_cjinou6kcnbro54hfk33pnlsly:
+    resolution: {integrity: sha512-8EP6dD7dMkdku2foLoruPCNkRevzdcBaY6q0l0OsbyJK+x8D9HWjX27ARiSIKNF634hY9Zdoedh8bJCiva8yZw==}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+      '@emotion/react': ^11.0.0-rc.0
+      '@types/react': '*'
+      react: '>=16.8.0'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/core': 7.20.12
+      '@babel/runtime': 7.20.13
+      '@emotion/babel-plugin': 11.10.5_@babel+core@7.20.12
+      '@emotion/is-prop-valid': 1.2.0
+      '@emotion/react': 11.10.5_wkiylh6bncbdhwh6tncqb3s2nm
+      '@emotion/serialize': 1.1.1
+      '@emotion/use-insertion-effect-with-fallbacks': 1.0.0_react@18.2.0
+      '@emotion/utils': 1.2.0
+      '@types/react': 18.0.28
+      react: 18.2.0
     dev: false
 
   /@emotion/styled/11.10.5_jrh5enlbqfbnumycmktdqgd6se:
@@ -5234,7 +5304,7 @@ packages:
     resolution: {integrity: sha512-+n8dL/9GWblDO0iU6eZAwEIJVr5DWigtle+Q6HLOrh/pdbXOhOtqzq8VPPE2zvNJzSKY4vH/z3iT3tn0A3ypiQ==}
     dependencies:
       '@babel/parser': 7.20.15
-      '@babel/types': 7.20.7
+      '@babel/types': 7.21.2
       '@types/babel__generator': 7.6.4
       '@types/babel__template': 7.4.1
       '@types/babel__traverse': 7.18.3

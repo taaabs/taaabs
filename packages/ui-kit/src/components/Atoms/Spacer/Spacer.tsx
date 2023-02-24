@@ -1,5 +1,6 @@
 import { mq } from '@/styles/mediaQueries'
-import styled, { css } from 'styled-components'
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 
 export type SpacerProps = {
   size: 'small' | 'medium' | 'large'

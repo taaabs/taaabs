@@ -1,5 +1,7 @@
 import { theme } from '@/styles/GlobalStyles'
-import styled, { css } from 'styled-components'
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+
 import Link from 'next/link'
 
 export type ButtonProps = {

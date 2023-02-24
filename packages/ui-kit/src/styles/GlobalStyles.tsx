@@ -1,4 +1,4 @@
-import { css, createGlobalStyle } from 'styled-components'
+import { css } from '@emotion/react'
 
 export const theme = {
   fontFamily: {
@@ -54,7 +54,7 @@ const defaultTheme = css({
   [theme.animation.duration]: '0.15s',
 })
 
-export const GlobalStyles = createGlobalStyle`
+export const globalStyles = css`
   @import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
 
   #__next {
