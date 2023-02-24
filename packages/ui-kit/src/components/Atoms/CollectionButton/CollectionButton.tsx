@@ -2,6 +2,7 @@ import { theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
+import type {} from 'styled-components/cssprop'
 
 export type CollectionButtonProps = {
   href: string
@@ -12,10 +13,10 @@ export const CollectionButton: React.FC<CollectionButtonProps> = ({
   href,
   children,
 }) => {
-  return <$Link href={href}>{children}</$Link>
+  return <StyledLink href={href}>{children}</StyledLink>
 }
 
-const $Link = styled(Link)`
+const StyledLink = styled(Link)`
   display: inline-flex;
   align-items: center;
   background-color: var(${theme.colors.white});

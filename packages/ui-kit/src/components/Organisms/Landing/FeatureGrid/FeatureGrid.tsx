@@ -1,7 +1,7 @@
+import { Ui } from '@/index'
 import { theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import styled, { css } from 'styled-components'
-import { Atoms } from '@/components'
 
 export type GridItem = {
   firstLine: string
@@ -16,7 +16,7 @@ export type FeatureGridProps = {
 export const FeatureGrid: React.FC<FeatureGridProps> = ({ gridItems }) => {
   return (
     <section>
-      <Atoms.Wrapper>
+      <Ui.Atoms.Wrapper>
         <$Container>
           {gridItems.map((gridItem, index) => (
             <div key={index}>
@@ -26,7 +26,7 @@ export const FeatureGrid: React.FC<FeatureGridProps> = ({ gridItems }) => {
             </div>
           ))}
         </$Container>
-      </Atoms.Wrapper>
+      </Ui.Atoms.Wrapper>
     </section>
   )
 }

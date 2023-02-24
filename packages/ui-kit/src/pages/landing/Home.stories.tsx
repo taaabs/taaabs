@@ -1,6 +1,5 @@
-import { Atoms, Organisms } from '@/components'
-import { LayoutLanding } from '@/layouts/LayoutLanding'
-import { uiLayoutLandingPropsData } from '@/layouts/LayoutLanding/LayoutLanding.data'
+import { Ui } from '@/index'
+import { uiLayoutLandingPropsData } from '@/components/Layouts/LayoutLanding/LayoutLanding.data'
 import { Meta, Story } from '@storybook/react'
 
 export default {
@@ -8,15 +7,15 @@ export default {
 } as Meta
 
 const template: Story = () => (
-  <LayoutLanding {...uiLayoutLandingPropsData}>
-    <Atoms.Spacer size="large" />
-    <Organisms.Landing.Hero {...Organisms.Landing.HeroPropsData} />
-    <Atoms.Spacer size="large" />
-    <Organisms.Landing.FeatureGrid
-      {...Organisms.Landing.FeatureGridPropsData}
+  <Ui.Layouts.LayoutLanding {...uiLayoutLandingPropsData}>
+    <Ui.Atoms.Spacer size="large" />
+    <Ui.Organisms.Landing.Hero {...Ui.Organisms.Landing.HeroPropsData} />
+    <Ui.Atoms.Spacer size="large" />
+    <Ui.Organisms.Landing.FeatureGrid
+      {...Ui.Organisms.Landing.FeatureGridPropsData}
     />
-    <Atoms.Spacer size="large" />
-  </LayoutLanding>
+    <Ui.Atoms.Spacer size="large" />
+  </Ui.Layouts.LayoutLanding>
 )
 
 export const standard = template.bind({})

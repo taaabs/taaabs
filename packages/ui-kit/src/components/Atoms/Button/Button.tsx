@@ -17,13 +17,15 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   if (props.type == 'submit') {
-    return <$Button type="submit">{props.children}</$Button>
+    return <Styled.Button type="submit">{props.children}</Styled.Button>
   } else if (props.href != undefined) {
-    return <$Link href={props.href}>{props.children}</$Link>
+    return <Styled.Link href={props.href}>{props.children}</Styled.Link>
   } else if (props.onClick != undefined) {
-    return <$Button onClick={props.onClick}>{props.children}</$Button>
+    return (
+      <Styled.Button onClick={props.onClick}>{props.children}</Styled.Button>
+    )
   } else {
-    return <$Button disabled>{props.children}</$Button>
+    return <Styled.Button disabled>{props.children}</Styled.Button>
   }
 }
 
@@ -39,11 +41,12 @@ const button = css`
   font-size: 1.6rem;
 `
 
-const $Button = styled.button`
-  ${button}
-  cursor: pointer;
-`
-
-const $Link = styled(Link)`
-  ${button}
-`
+const Styled = {
+  Button: styled.button`
+    ${button}
+    cursor: pointer;
+  `,
+  Link: styled(Link)`
+    ${button}
+  `,
+}

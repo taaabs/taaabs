@@ -1,4 +1,4 @@
-import { Atoms } from '@/components'
+import { Ui } from '@/index'
 import { theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import styled, { css } from 'styled-components'
@@ -10,11 +10,11 @@ export type HeroProps = {
 export const Hero: React.FC<HeroProps> = ({ text }) => {
   return (
     <section>
-      <Atoms.Wrapper>
+      <Ui.Atoms.Wrapper>
         <$Container>
           <h1>{text}</h1>
         </$Container>
-      </Atoms.Wrapper>
+      </Ui.Atoms.Wrapper>
     </section>
   )
 }

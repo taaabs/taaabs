@@ -4,7 +4,8 @@
   "scripts": {
     "storybook": "start-storybook -p 6006 --no-open",
     "build-storybook": "build-storybook",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "next": "13.1.6",
@@ -14,6 +15,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.21.0",
     "@storybook/builder-vite": "0.4.2",
     "@storybook/client-api": "^6.5.16",
     "@storybook/client-logger": "^6.5.16",
