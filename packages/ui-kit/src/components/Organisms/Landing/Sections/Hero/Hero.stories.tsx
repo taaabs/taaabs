@@ -3,7 +3,7 @@ import { Hero, HeroProps } from './Hero'
 import { HeroPropsData } from './Hero.data'
 
 export default {
-  title: 'Organisms/Landing/Hero',
+  title: 'Organisms/Landing/Sections/Hero',
   component: Hero,
 } as Meta
 

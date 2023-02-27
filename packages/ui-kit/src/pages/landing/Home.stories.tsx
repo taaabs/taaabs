@@ -9,10 +9,10 @@ export default {
 const template: Story = () => (
   <Ui.Layouts.LayoutLanding {...uiLayoutLandingPropsData}>
     <Ui.Atoms.Spacer size="large" />
-    <Ui.Organisms.Landing.Hero {...Ui.Organisms.Landing.HeroPropsData} />
+    <Ui.Organisms.Landing.Sections.Hero {...Ui.Organisms.Landing.Sections.HeroPropsData} />
     <Ui.Atoms.Spacer size="large" />
-    <Ui.Organisms.Landing.FeatureGrid
-      {...Ui.Organisms.Landing.FeatureGridPropsData}
+    <Ui.Organisms.Landing.Sections.FeatureGrid
+      {...Ui.Organisms.Landing.Sections.FeatureGridPropsData}
     />
     <Ui.Atoms.Spacer size="large" />
   </Ui.Layouts.LayoutLanding>

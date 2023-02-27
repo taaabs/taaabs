@@ -1,4 +1,4 @@
-import { theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
@@ -8,8 +8,8 @@ export const StorybookSpacer: React.FC = () => {
 }
 
 const $Container = styled.div`
-  height: var(${theme.padding['1.5rem']});
+  height: var(${Theme.PADDING_15});
   ${mq.at768(css`
-    height: var(${theme.padding['4rem']});
+    height: var(${Theme.PADDING_40}});
   `)}
 `

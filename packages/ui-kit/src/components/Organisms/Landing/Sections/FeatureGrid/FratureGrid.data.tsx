@@ -1,6 +1,6 @@
-import { FeatureGridProps } from './FeatureGrid'
+import { FeatureGridTypes } from './FeatureGrid'
 
-export const FeatureGridPropsData: FeatureGridProps = {
+export const FeatureGridPropsData: FeatureGridTypes.Props = {
   gridItems: [
     {
       firstLine: 'snappy',

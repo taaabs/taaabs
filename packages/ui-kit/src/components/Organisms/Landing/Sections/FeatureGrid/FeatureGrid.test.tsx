@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react'
-import { FeatureGrid, FeatureGridProps } from './FeatureGrid'
+import { FeatureGrid, FeatureGridTypes } from './FeatureGrid'
 
 describe('Organisms/Landing/FeatureGrid', () => {
   it('renders props data', () => {
-    const props: FeatureGridProps = {
+    const props: FeatureGridTypes.Props = {
       gridItems: [
         { firstLine: 'testA1', secondLine: 'testA2', thirdLine: 'testA3' },
         { firstLine: 'testB1', secondLine: 'testB2', thirdLine: 'testB3' },

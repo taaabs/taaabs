@@ -1,2 +1,1 @@
-export * from './FeatureGrid'
-export * from './Hero'
+export * as Sections from './Sections'

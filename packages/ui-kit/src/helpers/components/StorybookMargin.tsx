@@ -1,4 +1,4 @@
-import { theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
@@ -12,8 +12,8 @@ export const StorybookMargin: React.FC<MarginProps> = ({ children }) => {
 }
 
 const $Container = styled.div`
-  margin: var(${theme.padding['1.5rem']});
+  margin: var(${Theme['PADDING_15']});
   ${mq.at768(css`
-    margin: var(${theme.padding['4rem']});
+    margin: var(${Theme.PADDING_40});
   `)}
 `

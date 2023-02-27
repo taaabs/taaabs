@@ -1,27 +1,27 @@
-import { theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
+import { CollectionButtonTypes } from './CollectionButton.types'
 
-export type CollectionButtonProps = {
-  href: string
-  children?: React.ReactNode
-}
-
-export const CollectionButton: React.FC<CollectionButtonProps> = ({
+export const CollectionButton: React.FC<CollectionButtonTypes.Props> = ({
   href,
   children,
 }) => {
-  return <StyledLink href={href}>{children}</StyledLink>
+  return (
+    <Link css={link} href={href}>
+      {children}
+    </Link>
+  )
 }
 
-const StyledLink = styled(Link)`
+const link = css`
   display: inline-flex;
   align-items: center;
-  background-color: var(${theme.colors.white});
-  border-radius: 4px;
-  color: var(${theme.colors.text});
+  background-color: var(${Theme.COLOR_WHITE});
+  border-radius: var(${Theme.BORDER_RADIUS_4});
+  color: var(${Theme.COLOR_TEXT});
   font-weight: 600;
   cursor: pointer;
   position: relative;
@@ -38,9 +38,12 @@ const StyledLink = styled(Link)`
     height: 4.8rem;
     padding: 0 1.6rem;
   `)}
+  &:hover {
+    color: var(${Theme.COLOR_ACCENT});
+  }
   &:after {
-    background-color: var(${theme.colors['100']});
-    border-radius: 4.7px;
+    background-color: var(${Theme.COLOR_100});
+    border-radius: calc(var(${Theme.BORDER_RADIUS_4}) * 1.3);
     content: '';
     left: 0;
     width: 100%;
@@ -49,6 +52,7 @@ const StyledLink = styled(Link)`
     z-index: -1;
     height: 4rem;
     transform: translate(3px, 3px);
+    will-change: transform;
     ${mq.at768(css`
       height: 4.8rem;
       transform: translate(4px, 4px);

@@ -1,58 +1,58 @@
 import { css } from '@emotion/react'
 
-export const theme = {
-  fontFamily: {
-    sans: '--font-family-sans',
-    serif: '--font-family-serif',
-  },
-  fontSize: {
-    body: {
-      '1.2': '--font-size-body-1.2',
-      '1.4': '--font-size-body-1.4',
-      '1.6': '--font-size-body-1.6',
-    },
-  },
-  colors: {
-    white: '--color-white',
-    black: '--color-black',
-    text: '--color-text',
-    accent: '--color-accent',
-    '50': '--color-50',
-    '100': '--color-100',
-    '200': '--color-200',
-  },
-  padding: {
-    '1.5rem': '--padding-1-5rem',
-    '4rem': '--padding-4rem',
-    '6rem': '--padding-6rem',
-  },
-  border: {
-    '100': '--border-100',
-  },
-  animation: {
-    duration: '--animation-duration'
-  }
+export enum Theme {
+  FONT_FAMILY_SANS = '--font-family-sans',
+  FONT_FAMILY_SERIF = '--font-family-serif',
+  FONT_SIZE_BODY_12 = '--font-size-body-12',
+  FONT_SIZE_BODY_14 = '--font-size-body-14',
+  FONT_SIZE_BODY_16 = '--font-size-body-16',
+  FONT_SIZE_BODY_18 = '--font-size-body-18',
+  FONT_SIZE_BODY_20 = '--font-size-body-20',
+  BORDER_RADIUS_4 = '--border-radius-4',
+  BORDER_RADIUS_8 = '--border-radius-8',
+  BORDER_RADIUS_10 = '--border-radius-10',
+  COLOR_WHITE = '--color-white',
+  COLOR_BLACK = '--color-black',
+  COLOR_TEXT = '--color-text',
+  COLOR_ACCENT = '--color-accent',
+  COLOR_50 = '--color-50',
+  COLOR_100 = '--color-100',
+  COLOR_200 = '--color-200',
+  PADDING_15 = '--padding-15',
+  PADDING_40 = '--padding-40',
+  PADDING_60 = '--padding-60',
+  BORDER_100 = '--border-100',
+  ANIMATION_DURATION = '--animation-duration',
 }
 
-const defaultTheme = css({
-  [theme.fontFamily.sans]: 'Inter, sans-serif',
-  [theme.fontFamily.serif]: 'Alice, serif',
-  [theme.fontSize.body['1.2']]: '1.2rem',
-  [theme.fontSize.body['1.4']]: '1.4rem',
-  [theme.fontSize.body['1.6']]: '1.6rem',
-  [theme.colors.white]: '#FFF',
-  [theme.colors.black]: '#000',
-  [theme.colors.text]: '#1D1D1F',
-  [theme.colors.accent]: '#0944BA',
-  [theme.colors['50']]: '#F7F7F7',
-  [theme.colors['100']]: '#ECECEC',
-  [theme.colors['200']]: '#DFDFDF',
-  [theme.padding['1.5rem']]: '1.5rem',
-  [theme.padding['4rem']]: '4rem',
-  [theme.padding['6rem']]: '6rem',
-  [theme.border['100']]: `0.2rem solid var(${theme.colors[100]})`,
-  [theme.animation.duration]: '0.15s',
-})
+type ThemeMap = {
+  [key in Theme]: string
+}
+
+const defaultTheme: ThemeMap = {
+  [Theme.FONT_FAMILY_SANS]: 'Inter, sans-serif',
+  [Theme.FONT_FAMILY_SERIF]: 'Alice, serif',
+  [Theme.FONT_SIZE_BODY_12]: '1.2rem',
+  [Theme.FONT_SIZE_BODY_14]: '1.4rem',
+  [Theme.FONT_SIZE_BODY_16]: '1.6rem',
+  [Theme.FONT_SIZE_BODY_18]: '1.8rem',
+  [Theme.FONT_SIZE_BODY_20]: '2rem',
+  [Theme.BORDER_RADIUS_4]: '4px',
+  [Theme.BORDER_RADIUS_8]: '8px',
+  [Theme.BORDER_RADIUS_10]: '10px',
+  [Theme.COLOR_WHITE]: '#FFF',
+  [Theme.COLOR_BLACK]: '#000',
+  [Theme.COLOR_TEXT]: '#1D1D1F',
+  [Theme.COLOR_ACCENT]: '#0944BA',
+  [Theme.COLOR_50]: '#F7F7F7',
+  [Theme.COLOR_100]: '#ECECEC',
+  [Theme.COLOR_200]: '#DFDFDF',
+  [Theme.PADDING_15]: '15px',
+  [Theme.PADDING_40]: '40px',
+  [Theme.PADDING_60]: '60px',
+  [Theme.BORDER_100]: `2px solid var(${Theme.COLOR_100})`,
+  [Theme.ANIMATION_DURATION]: '.15s',
+}
 
 export const globalStyles = css`
   @import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
@@ -72,15 +72,15 @@ export const globalStyles = css`
   }
 
   :root {
-    ${defaultTheme}
+    ${css(defaultTheme)}
   }
 
   body {
-    font-family: var(${theme.fontFamily.sans});
+    font-family: var(${Theme.FONT_FAMILY_SANS});
     line-height: 1.5;
     font-size: 1.4rem;
-    color: var(${theme.colors.text});
-    background: var(${theme.colors['50']});
+    color: var(${Theme.COLOR_TEXT});
+    background: var(${Theme.COLOR_50});
   }
 
   body,

@@ -1,7 +1,7 @@
 import { Atoms } from '@/components'
-import { theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
+import { css, ThemeContext } from '@emotion/react'
 import styled from '@emotion/styled'
 
 export type LayoutSidebarProps = {}
@@ -45,7 +45,7 @@ const Backdrop = styled.div<{ isVisible: boolean }>`
   height: 100%;
   z-index: 100;
   background: rgba(0, 0, 0, 0.16);
-  transition-duration: ${theme.animation.duration};
+  transition-duration: ${Theme.ANIMATION_DURATION};
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-delay: 0s;
   transition-property: opacity, visibility;
@@ -68,10 +68,10 @@ const Topbar = {
     top: 0;
     width: 100%;
     height: ${topBarHeight}rem;
-    background-color: var(${theme.colors[50]});
+    background-color: var(${Theme.COLOR_50});
     padding: 0 ${topBarPadding}rem;
     ${mq.at576(css`
-      padding: 0 var(${theme.padding['4rem']});
+      padding: 0 var(${Theme.PADDING_40});
     `)}
   `,
   Left: {
@@ -90,7 +90,7 @@ const Topbar = {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(${theme.colors[100]});
+    background-color: var(${Theme.COLOR_100});
     border-radius: 1rem;
   `,
 }
@@ -102,9 +102,9 @@ const sidebarAside = css`
   left: 0;
   width: 100%;
   height: 100%;
-  border: var(${theme.border[100]});
-  background-color: var(${theme.colors[50]});
-  padding: var(${theme.padding['1.5rem']});
+  border: var(${Theme.BORDER_100});
+  background-color: var(${Theme.COLOR_50});
+  padding: var(${Theme['PADDING_15']});
 `
 
 const Sidebar = {
@@ -113,7 +113,7 @@ const Sidebar = {
     flex-direction: column;
     position: fixed;
     top: ${topBarHeight}rem;
-    left: var(${theme.padding['4rem']});
+    left: var(${Theme.PADDING_40});
     height: calc(100vh - ${topBarHeight}rem);
     width: 30rem;
     z-index: 101;
@@ -133,8 +133,8 @@ const Sidebar = {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: var(${theme.padding['4rem']});
-    font-size: var(${theme.fontSize.body['1.2']});
+    height: var(${Theme.PADDING_40});
+    font-size: var(${Theme.FONT_SIZE_BODY_12});
     opacity: 0.4;
   `,
 }

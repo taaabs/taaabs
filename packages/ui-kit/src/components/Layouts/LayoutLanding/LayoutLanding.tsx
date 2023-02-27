@@ -1,5 +1,5 @@
 import { Atoms } from '@/components'
-import { theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 

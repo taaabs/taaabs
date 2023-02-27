@@ -1,15 +1,21 @@
 import { StorybookMargin } from '@/helpers/components/StorybookMargin'
+import { StorybookSpacer } from '@/helpers/components/StorybookSpacer'
 import { Meta, Story } from '@storybook/react'
-import { Button, ButtonProps } from './Button'
+import { Button } from './Button'
+import { ButtonTypes } from './Button.types'
 
 export default {
   title: 'Atoms/Button',
   component: Button,
 } as Meta
 
-const template: Story<ButtonProps> = (props) => (
+const template: Story<ButtonTypes.Props> = (props) => (
   <StorybookMargin>
-    <Button {...props}>Click me</Button>
+    <Button {...props}>I'm default</Button>
+    <StorybookSpacer />
+    <Button {...props} size={ButtonTypes.Size.LARGE}>
+      I'm large
+    </Button>
   </StorybookMargin>
 )
 

@@ -1,16 +1,13 @@
 import { Meta, Story } from '@storybook/react'
-import {
-  FeatureGrid,
-  FeatureGridProps,
-} from './FeatureGrid'
+import { FeatureGrid, FeatureGridTypes } from './FeatureGrid'
 import { FeatureGridPropsData } from './FratureGrid.data'
 
 export default {
-  title: 'Organisms/Landing/FeatureGrid',
+  title: 'Organisms/Landing/Sections/FeatureGrid',
   component: FeatureGrid,
 } as Meta
 
-const template: Story<FeatureGridProps> = (props) => (
+const template: Story<FeatureGridTypes.Props> = (props) => (
   <FeatureGrid {...props}></FeatureGrid>
 )
 

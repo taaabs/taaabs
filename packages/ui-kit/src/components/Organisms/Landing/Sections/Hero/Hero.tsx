@@ -1,5 +1,5 @@
 import { Ui } from '@/index'
-import { theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
@@ -12,15 +12,15 @@ export const Hero: React.FC<HeroProps> = ({ text }) => {
   return (
     <section>
       <Ui.Atoms.Wrapper>
-        <$Container>
+        <div css={container}>
           <h1>{text}</h1>
-        </$Container>
+        </div>
       </Ui.Atoms.Wrapper>
     </section>
   )
 }
 
-const $Container = styled.div`
+const container = css`
   ${mq.at768(css`
     max-width: 90%;
   `)}
@@ -29,7 +29,7 @@ const $Container = styled.div`
   `)}
   & h1 {
     font-size: 4rem;
-    font-family: var(${theme.fontFamily.serif});
+    font-family: var(${Theme.FONT_FAMILY_SERIF});
     line-height: 1.1;
     font-weight: normal;
     ${mq.at768(css`
