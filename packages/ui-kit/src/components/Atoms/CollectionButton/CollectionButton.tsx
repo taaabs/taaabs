@@ -33,11 +33,11 @@ const link = css`
   font-size: 1.4rem;
   height: 4rem;
   padding: 0 1.2rem;
-  ${mq.at768(css`
+  ${mq.at768} {
     font-size: 1.6rem;
     height: 4.8rem;
     padding: 0 1.6rem;
-  `)}
+  }
   &:hover {
     color: var(${Theme.COLOR_ACCENT});
   }
@@ -53,14 +53,14 @@ const link = css`
     height: 4rem;
     transform: translate(3px, 3px);
     will-change: transform;
-    ${mq.at768(css`
+    ${mq.at768} {
       height: 4.8rem;
       transform: translate(4px, 4px);
-    `)}
+    }
   }
   &:hover:after {
-    ${mq.at768(css`
+    ${mq.at768} {
       transform: translate(2px, 2px);
-    `)}
+    }
   }
 `

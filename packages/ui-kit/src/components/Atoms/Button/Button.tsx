@@ -54,12 +54,13 @@ namespace S {
     `,
     [ButtonTypes.Size.LARGE]: css`
       padding: 0 2.5rem;
-      height: 5.4rem;
       border-radius: var(${Theme.BORDER_RADIUS_10});
+      height: 5.4rem;
       font-size: var(${Theme.FONT_SIZE_BODY_18});
-      ${mq.at1200(css`
+      ${mq.at1200} {
+        height: 5.6rem;
         font-size: var(${Theme.FONT_SIZE_BODY_20});
-      `)}
+      }
     `,
   }
   type ButtonProps = {

@@ -15,7 +15,7 @@ const $Container = styled.div`
   margin: 0 auto;
   padding: 0 1.5rem;
   max-width: 146rem;
-  ${mq.at768(css`
+  ${mq.at768} {
     padding: 0 4rem;
-  `)}
+  }
 `

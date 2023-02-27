@@ -70,9 +70,9 @@ const Topbar = {
     height: ${topBarHeight}rem;
     background-color: var(${Theme.COLOR_50});
     padding: 0 ${topBarPadding}rem;
-    ${mq.at576(css`
+    ${mq.at576} {
       padding: 0 var(${Theme.PADDING_40});
-    `)}
+    }
   `,
   Left: {
     _: styled.div`

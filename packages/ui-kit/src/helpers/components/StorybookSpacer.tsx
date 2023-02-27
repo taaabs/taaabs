@@ -9,7 +9,7 @@ export const StorybookSpacer: React.FC = () => {
 
 const $Container = styled.div`
   height: var(${Theme.PADDING_15});
-  ${mq.at768(css`
-    height: var(${Theme.PADDING_40}});
-  `)}
+  ${mq.at768} {
+    height: var(${Theme.PADDING_40});
+  }
 `

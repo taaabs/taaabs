@@ -21,25 +21,25 @@ export const Hero: React.FC<HeroProps> = ({ text }) => {
 }
 
 const container = css`
-  ${mq.at768(css`
+  ${mq.at768} {
     max-width: 90%;
-  `)}
-  ${mq.at992(css`
+  }
+  ${mq.at992} {
     max-width: 110rem;
-  `)}
+  }
   & h1 {
     font-size: 4rem;
     font-family: var(${Theme.FONT_FAMILY_SERIF});
     line-height: 1.1;
     font-weight: normal;
-    ${mq.at768(css`
+    ${mq.at768} {
       font-size: 5rem;
-    `)}
-    ${mq.at992(css`
+    }
+    ${mq.at992} {
       font-size: 5.5rem;
-    `)}
-    ${mq.at1200(css`
+    }
+    ${mq.at1200} {
       font-size: 6.5rem;
-    `)}
+    }
   }
 `

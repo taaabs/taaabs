@@ -18,32 +18,32 @@ const $Container = styled.div<$ContainerProps>`
       case 'small':
         return css`
           height: 4rem;
-          ${mq.at768(css`
+          ${mq.at768} {
             height: 6rem;
-          `)}
-          ${mq.at1200(css`
+          }
+          ${mq.at1200} {
             height: 8rem;
-          `)}
+          }
         `
       case 'medium':
         return css`
           height: 4rem;
-          ${mq.at768(css`
+          ${mq.at768} {
             height: 6rem;
-          `)}
-          ${mq.at1200(css`
+          }
+          ${mq.at1200} {
             height: 8rem;
-          `)}
+          }
         `
       case 'large':
         return css`
           height: 6rem;
-          ${mq.at768(css`
+          ${mq.at768} {
             height: 8rem;
-          `)}
-          ${mq.at1200(css`
+          }
+          ${mq.at1200} {
             height: 10rem;
-          `)}
+          }
         `
     }
   }}

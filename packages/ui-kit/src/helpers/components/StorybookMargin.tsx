@@ -13,7 +13,7 @@ export const StorybookMargin: React.FC<MarginProps> = ({ children }) => {
 
 const $Container = styled.div`
   margin: var(${Theme['PADDING_15']});
-  ${mq.at768(css`
+  ${mq.at768} {
     margin: var(${Theme.PADDING_40});
-  `)}
+  }
 `
