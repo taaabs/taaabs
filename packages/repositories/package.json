@@ -10,7 +10,7 @@
     }
   },
   "dependencies": {
-    "@taaabs/types": "workspace:*"
+    "@taaabs/shared": "workspace:*"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",

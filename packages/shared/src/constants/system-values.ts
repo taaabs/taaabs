@@ -1,0 +1,5 @@
+export enum SystemValues {
+  USERNAME_MAX_LENGTH = 15,
+  USERNAME_MIN_LENGTH = 4,
+  PASSWORD_LENGTH = 32,
+}

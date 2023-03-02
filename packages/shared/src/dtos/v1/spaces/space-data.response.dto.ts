@@ -13,6 +13,7 @@ class Collection {
   @IsOptional()
   parentId?: string
 
+  @ApiProperty()
   @IsISO8601()
   updatedAt: string
 }

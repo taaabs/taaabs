@@ -1,5 +1,5 @@
 {
-  "name": "@taaabs/types",
+  "name": "@taaabs/shared",
   "private": true,
   "scripts": {},
   "dependencies": {
