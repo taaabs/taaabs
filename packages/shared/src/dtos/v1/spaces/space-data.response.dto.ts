@@ -10,8 +10,7 @@ class Collection {
   id: string
 
   @ApiProperty()
-  @IsOptional()
-  parentId?: string
+  parentId: string | null
 
   @ApiProperty()
   @IsISO8601()
