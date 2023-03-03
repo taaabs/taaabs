@@ -11,11 +11,15 @@ export default {
 
 const template: Story<ButtonTypes.Props> = (props) => (
   <StorybookMargin>
-    <Button {...props}>I'm default</Button>
+    Default:
+    <br/>
+    <br/>
+    <Button {...props}>Click me!</Button>
     <StorybookSpacer />
-    <Button {...props} size={ButtonTypes.Size.LARGE}>
-      I'm large
-    </Button>
+    Large:
+    <br/>
+    <br/>
+    <Button {...props} size={ButtonTypes.Size.LARGE}>Click me!</Button>
   </StorybookMargin>
 )
 
