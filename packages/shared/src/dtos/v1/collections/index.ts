@@ -1,1 +1,1 @@
-export * from './get-collection.dto'
+export * from './collection-data.response'
