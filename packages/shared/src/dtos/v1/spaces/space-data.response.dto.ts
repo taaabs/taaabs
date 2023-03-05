@@ -6,5 +6,5 @@ class Collection {
 }
 
 export class SpaceDataResponseDto {
-  collections: Collection[] = []
+  collections: Collection[]
 }

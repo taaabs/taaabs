@@ -1,12 +1,12 @@
 type TreeNode<T> = T & {
-  children: Array<TreeNode<T>>
+  children: TreeNode<T>[]
 }
 
 export type UserData = {
   domains: {
     [domain: string]: {
       siteName: string
-      bookmarks: Array<string>
+      bookmarks: string[]
     }
   }
   bookmarks: {
@@ -17,23 +17,23 @@ export type UserData = {
       urlParts: {
         scheme: string
         domain: string
-        path: Array<string>
+        path: string[]
         queryString: string
         fragment: string
       }
-      collections: Array<string>
+      collections: string[]
     }
   }
   collections: {
     [collectionId: string]: {
       name: string
       parentId: string | null
-      children: Array<string>
-      bookmarks: Array<string>
+      children: string[]
+      bookmarks: string[]
     }
   }
   tree: TreeNode<{
     name?: string
-    bookmarks: Array<string>
+    bookmarks: string[]
   }>
 }
