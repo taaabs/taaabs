@@ -4,6 +4,6 @@ class Space {
   updatedAt: string
 }
 
-export class UserDataResponseDto {
+export class PublicUserDataResponseDto {
   spaces: Space[]
 }

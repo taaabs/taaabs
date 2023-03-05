@@ -1,1 +1,1 @@
-export * from './collection-data.response'
+export * from './public-collection-data.response'

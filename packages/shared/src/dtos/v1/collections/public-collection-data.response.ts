@@ -4,6 +4,6 @@ class Bookmark {
   description: string | null
 }
 
-export class CollectionDataResponseDto {
+export class PublicCollectionDataResponseDto {
   bookmarks: Bookmark[]
 }

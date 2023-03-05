@@ -1,1 +1,1 @@
-export * from './user-data.response.dto'
+export * from './public-user-data.response.dto'

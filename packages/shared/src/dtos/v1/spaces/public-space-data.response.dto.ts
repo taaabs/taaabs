@@ -5,6 +5,6 @@ class Collection {
   updatedAt: string
 }
 
-export class SpaceDataResponseDto {
+export class PublicSpaceDataResponseDto {
   collections: Collection[]
 }
