@@ -1,7 +1,6 @@
 import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
-import styled from '@emotion/styled'
 import Link from 'next/link'
 import { CollectionButtonTypes } from './CollectionButton.types'
 
