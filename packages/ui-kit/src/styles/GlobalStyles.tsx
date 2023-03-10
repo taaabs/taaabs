@@ -24,6 +24,7 @@ export enum Theme {
   PADDING_60 = '--padding-60',
   BORDER_100 = '--border-100',
   ANIMATION_DURATION = '--animation-duration',
+  TRANSITION_HOVER = '--transition-hover',
 }
 
 type ThemeMap = {
@@ -46,14 +47,15 @@ const defaultTheme: ThemeMap = {
   [Theme.COLOR_BLACK]: '#000',
   [Theme.COLOR_TEXT]: '#1D1D1F',
   [Theme.COLOR_ACCENT]: '#0944BA',
-  [Theme.COLOR_50]: '#F7F7F7',
-  [Theme.COLOR_100]: '#ECECEC',
-  [Theme.COLOR_200]: '#DFDFDF',
+  [Theme.COLOR_50]: '#FAFAFA',
+  [Theme.COLOR_100]: '#EAEAEA',
+  [Theme.COLOR_200]: '#D1D1D1',
   [Theme.PADDING_15]: '15px',
   [Theme.PADDING_40]: '40px',
   [Theme.PADDING_60]: '60px',
   [Theme.BORDER_100]: `2px solid var(${Theme.COLOR_100})`,
   [Theme.ANIMATION_DURATION]: '.15s',
+  [Theme.TRANSITION_HOVER]: 'all .15s ease-in-out',
 }
 
 export const globalStyles = css`
