@@ -288,6 +288,7 @@ importers:
       '@types/node': ^18.13.0
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.10
+      '@types/slideout': ^0.1.20
       '@types/testing-library__jest-dom': ^5.14.5
       '@vitejs/plugin-react': ^3.1.0
       babel-jest: ^29.4.2
@@ -298,6 +299,7 @@ importers:
       next: 13.1.6
       react: 18.2.0
       react-dom: 18.2.0
+      slideout: ^1.0.1
       typescript: ^4.9.5
       vite: ^4.1.1
     dependencies:
@@ -306,6 +308,7 @@ importers:
       next: 13.1.6_6m24vuloj5ihw4zc5lbsktc4fu
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      slideout: 1.0.1
     devDependencies:
       '@babel/core': 7.21.0
       '@babel/preset-env': 7.20.2_@babel+core@7.21.0
@@ -322,6 +325,7 @@ importers:
       '@types/node': 18.14.2
       '@types/react': 18.0.28
       '@types/react-dom': 18.0.10
+      '@types/slideout': 0.1.20
       '@types/testing-library__jest-dom': 5.14.5
       '@vitejs/plugin-react': 3.1.0_vite@4.1.4
       babel-jest: 29.4.3_@babel+core@7.21.0
@@ -5570,6 +5574,10 @@ packages:
     resolution: {integrity: sha512-+OpjSaq85gvlZAYINyzKpLeiFkSC4EsC6IIiT6v6TLSU5k5U83fHGj9Lel8oKEXM0HqgrMVCjXPDPVICtxF7EQ==}
     dev: true
 
+  /@types/slideout/0.1.20:
+    resolution: {integrity: sha512-KEDC9zhmAHCnWdq1mFEXud2KEZBM+JHVNnS5e4fY27x+kX9nOKWEOXVOWE/LU2b3aFyXXj936KogIFic50mFVA==}
+    dev: true
+
   /@types/sockjs/0.3.33:
     resolution: {integrity: sha512-f0KEEe05NvUnat+boPTZ0dgaLZ4SfSouXUgv5noUiefG2ajgKjmETo9ZJyuqsl7dfl2aHlLJUiki6B4ZYldiiw==}
     dependencies:
@@ -8330,6 +8338,10 @@ packages:
     resolution: {integrity: sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==}
     engines: {node: '>=0.10'}
     dev: true
+
+  /decouple/0.0.2:
+    resolution: {integrity: sha512-qXqJDCIYRNAVxqPMcJ+/d7CS76P1lJzHZfYs7v+t1ecB2aEqH4fp9Owg9OITYMOPCOmA0WgH9jUNqDbZb+hLuQ==}
+    dev: false
 
   /dedent/0.7.0:
     resolution: {integrity: sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==}
@@ -16935,6 +16947,13 @@ packages:
       is-fullwidth-code-point: 3.0.0
     dev: true
 
+  /slideout/1.0.1:
+    resolution: {integrity: sha512-vbGfQ1A6OaONXycA83BxFiFQy9QVkmOwSX9B8YJdaFBTWe/gzU2Iz5U16dP5yYJmYK0IVXXuEWJyiKB6jNEAHQ==}
+    dependencies:
+      decouple: 0.0.2
+      emitter: github.com/Mango/emitter/41ab8a3956269c7ed468bde50203e15b3274152f
+    dev: false
+
   /snapdragon-node/2.1.1:
     resolution: {integrity: sha512-O27l4xaMYt/RSQ5TR3vpWCAB5Kb/czIcqUFOM/C4fYcLnbZUc1PkjTAMjof2pBWaSTwOUd6qUHcFGVGj7aIwnw==}
     engines: {node: '>=0.10.0'}
@@ -19425,3 +19444,9 @@ packages:
   /zwitch/1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
+
+  github.com/Mango/emitter/41ab8a3956269c7ed468bde50203e15b3274152f:
+    resolution: {tarball: https://codeload.github.com/Mango/emitter/tar.gz/41ab8a3956269c7ed468bde50203e15b3274152f}
+    name: emitter
+    version: 0.0.7
+    dev: false
