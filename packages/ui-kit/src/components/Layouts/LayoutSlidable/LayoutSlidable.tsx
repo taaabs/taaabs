@@ -18,8 +18,6 @@ const useWindowWidth = () => {
   const [width, setWidth] = useState<number | null>(null)
   useLayoutEffect(() => {
     const updateWidth = () => {
-      console.log(document.body.offsetWidth)
-      console.log(window.innerWidth)
       setWidth(window.innerWidth)
     }
     window.addEventListener('resize', updateWidth)
