@@ -40,7 +40,7 @@ namespace S {
     color: var(${Theme.COLOR_WHITE});
     background: var(${Theme.COLOR_ACCENT});
     font-weight: 600;
-    transition: var(${Theme.ANIMATION_DURATION});
+    transition: var(${Theme.ANIMATION_DURATION_150});
     &:hover {
       transform: translateY(-2px);
     }

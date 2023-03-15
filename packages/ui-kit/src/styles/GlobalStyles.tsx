@@ -1,4 +1,5 @@
 import { css } from '@emotion/react'
+import { mq } from './mediaQueries'
 
 export enum Theme {
   FONT_FAMILY_SANS = '--font-family-sans',
@@ -23,7 +24,9 @@ export enum Theme {
   PADDING_40 = '--padding-40',
   PADDING_60 = '--padding-60',
   BORDER_100 = '--border-100',
-  ANIMATION_DURATION = '--animation-duration',
+  ANIMATION_DURATION_150 = '--animation-duration-15',
+  ANIMATION_DURATION_300 = '--animation-duration-300',
+  TRANSITION_TIMING_FUNCTION = '--transition-timing-function',
   TRANSITION_HOVER = '--transition-hover',
 }
 
@@ -54,7 +57,9 @@ const defaultTheme: ThemeMap = {
   [Theme.PADDING_40]: '40px',
   [Theme.PADDING_60]: '60px',
   [Theme.BORDER_100]: `2px solid var(${Theme.COLOR_100})`,
-  [Theme.ANIMATION_DURATION]: '.15s',
+  [Theme.ANIMATION_DURATION_150]: '150ms',
+  [Theme.ANIMATION_DURATION_300]: '300ms',
+  [Theme.TRANSITION_TIMING_FUNCTION]: 'ease-in-out',
   [Theme.TRANSITION_HOVER]: 'all .15s ease-in-out',
 }
 
@@ -133,4 +138,21 @@ export const globalStyles = css`
     border: none;
     padding: 0;
   }
+
+  // Slideout - start
+  .slideout-open,
+  .slideout-open body,
+  .slideout-open .slideout-panel {
+    ${mq.to992} {
+      overflow: hidden;
+      border-color: var(${Theme.COLOR_100});
+    }
+  }
+
+  .slideout-open .slideout-menu {
+    ${mq.to992} {
+      display: block;
+    }
+  }
+  // Slideout - end
 `
