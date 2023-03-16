@@ -116,7 +116,6 @@ namespace Styled {
         bottom: 0;
         width: ${({ width }) => width}px;
         min-height: 100vh;
-        overflow-y: scroll;
         -webkit-overflow-scrolling: touch;
         z-index: 0;
         display: none;

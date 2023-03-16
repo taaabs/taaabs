@@ -2,7 +2,7 @@ import { Theme } from '@/styles/GlobalStyles'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import SimpleBar from 'simplebar-react'
-import 'simplebar-react/dist/simplebar.min.css';
+import 'simplebar-react/dist/simplebar.min.css'
 
 export namespace AsideAvatars {
   export type Avatar = {
@@ -21,21 +21,25 @@ export namespace AsideAvatars {
 export const AsideAvatars: React.FC<AsideAvatars.Props> = (props) => {
   const buildAvatar = (avatar: AsideAvatars.Avatar) =>
     avatar.imageUrl ? (
-      <Styled.Inner.Avatar.WithImage.$>
-        <img src={avatar.imageUrl} />
+      <Styled.Inner.Avatar.$>
+        <Styled.Inner.Avatar.WithImage.$>
+          <img src={avatar.imageUrl} />
+        </Styled.Inner.Avatar.WithImage.$>
         {avatar.isActive && <Styled.Inner.Indicator.$ />}
-      </Styled.Inner.Avatar.WithImage.$>
+      </Styled.Inner.Avatar.$>
     ) : (
-      <Styled.Inner.Avatar.WithoutImage.$>
-        <span>
-          {avatar.displayName
-            .split(' ')
-            .map((word) => word.substring(0, 1))
-            .slice(0, 3)
-            .join(' ')}
-        </span>
+      <Styled.Inner.Avatar.$>
+        <Styled.Inner.Avatar.WithoutImage.$>
+          <span>
+            {avatar.displayName
+              .split(' ')
+              .map((word) => word.substring(0, 1))
+              .slice(0, 3)
+              .join(' ')}
+          </span>
+        </Styled.Inner.Avatar.WithoutImage.$>
         {avatar.isActive && <Styled.Inner.Indicator.$ />}
-      </Styled.Inner.Avatar.WithoutImage.$>
+      </Styled.Inner.Avatar.$>
     )
 
   return (
@@ -43,8 +47,10 @@ export const AsideAvatars: React.FC<AsideAvatars.Props> = (props) => {
       <SimpleBar style={{ height: '100vh' }} autoHide={false}>
         <Styled.Inner.$>
           <Styled.Inner.Logo.$>
-            <span>T</span>
-            {props.isLogoActive && <Styled.Inner.Indicator.$ />}
+            <Styled.Inner.Logo.Button.$>
+              <span>T</span>
+              {props.isLogoActive && <Styled.Inner.Indicator.$ />}
+            </Styled.Inner.Logo.Button.$>
           </Styled.Inner.Logo.$>
           {props.tempAvatar && (
             <Styled.Inner.TempAvatarWrapper.$>
@@ -75,7 +81,6 @@ namespace Styled {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
     transition: var(${Theme.TRANSITION_HOVER});
   `
   const buttonHover = css`
@@ -105,32 +110,45 @@ namespace Styled {
       `,
     },
     Logo: {
-      $: styled.button`
-        ${avatarBase}
-        background-color: var(${Theme.COLOR_ACCENT});
-        & span {
-          color: var(${Theme.COLOR_WHITE});
-          font-family: var(${Theme.FONT_FAMILY_SERIF});
-          font-size: 32px;
-        }
-        &:hover {
-          ${buttonHover}
-        }
+      $: styled.div`
+        border-bottom: 1px solid var(${Theme.COLOR_100});
+        padding-bottom: var(${Theme.PADDING_8});
       `,
+      Button: {
+        $: styled.button`
+          ${avatarBase}
+          background-color: var(${Theme.COLOR_ACCENT});
+          & span {
+            color: var(${Theme.COLOR_WHITE});
+            font-family: var(${Theme.FONT_FAMILY_SERIF});
+            font-size: 32px;
+          }
+          &:hover {
+            ${buttonHover}
+          }
+        `,
+      },
     },
     TempAvatarWrapper: {
       $: styled.div`
-        border-top: 1px solid var(${Theme.COLOR_100});
-        border-bottom: 1px solid var(${Theme.COLOR_100});
-        padding: var(${Theme.PADDING_8}) 0;
+        & button {
+          opacity: 0.5;
+        }
       `,
     },
     Avatar: {
+      $: styled.div`
+        position: relative;
+      `,
       WithImage: {
         $: styled.button`
           ${avatarBase}
+          overflow: hidden;
           & > img {
             object-fit: cover;
+          }
+          &:hover {
+            ${buttonHover}
           }
         `,
       },
