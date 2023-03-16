@@ -159,11 +159,21 @@ export const globalStyles = css`
       border-color: var(${Theme.COLOR_100});
     }
   }
-
   .slideout-open .slideout-menu {
     ${mq.to992} {
       display: block;
     }
   }
   // Slideout - end
+
+  // Simplebar - start
+  .simplebar-scrollbar:before {
+    background: var(${Theme.COLOR_200});
+    left: 5px;
+    right: 2px;
+  }
+  .simplebar-scrollbar.simplebar-visible:before {
+    opacity: 1;
+  }
+  // Simplebar - end
 `

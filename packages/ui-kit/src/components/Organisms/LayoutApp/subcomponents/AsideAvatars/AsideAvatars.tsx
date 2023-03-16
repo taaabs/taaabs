@@ -1,7 +1,8 @@
 import { Theme } from '@/styles/GlobalStyles'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Scrollbars } from 'react-custom-scrollbars-2'
+import SimpleBar from 'simplebar-react'
+import 'simplebar-react/dist/simplebar.min.css';
 
 export namespace AsideAvatars {
   export type Avatar = {
@@ -39,7 +40,7 @@ export const AsideAvatars: React.FC<AsideAvatars.Props> = (props) => {
 
   return (
     <Styled.Container.$>
-      <Scrollbars>
+      <SimpleBar style={{ height: '100vh' }} autoHide={false}>
         <Styled.Inner.$>
           <Styled.Inner.Logo.$>
             <span>T</span>
@@ -52,7 +53,7 @@ export const AsideAvatars: React.FC<AsideAvatars.Props> = (props) => {
           )}
           {props.pinnedAvatars.map((pinnedAvatar) => buildAvatar(pinnedAvatar))}
         </Styled.Inner.$>
-      </Scrollbars>
+      </SimpleBar>
     </Styled.Container.$>
   )
 }
@@ -62,7 +63,6 @@ namespace Styled {
     $: styled.div`
       background-color: var(${Theme.COLOR_WHITE});
       border-right: 1px solid var(${Theme.COLOR_100});
-      height: 100vh;
       width: calc(
         var(${Theme.PADDING_8}) * 2 + var(${Theme.BUTTON_HEIGHT_46}) + 1px
       );
