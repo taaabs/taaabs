@@ -6,8 +6,9 @@ import styled from '@emotion/styled'
 import Slideout from 'slideout'
 import { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import { avatarPinBarWidth } from '@/styles/constants'
+import { AsideAvatars } from './subcomponents/AsideAvatars/AsideAvatars'
 
-export namespace LayoutSlidable {
+export namespace LayoutApp {
   export type Props = {
     slotAside: React.ReactNode
     slotMain: React.ReactNode
@@ -27,7 +28,7 @@ const useWindowWidth = () => {
   return width
 }
 
-export const LayoutSlidable: React.FC<LayoutSlidable.Props> = (props) => {
+export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   const windowWidth = useWindowWidth()
   const [slideout, setSlideout] = useState<Slideout>()
   const [isSlideoutOpen, setIsSlideoutOpen] = useState(false)
@@ -74,7 +75,12 @@ export const LayoutSlidable: React.FC<LayoutSlidable.Props> = (props) => {
   return (
     <Styled.Container.$>
       <Styled.Aside.$ ref={asideRef} width={padding}>
-        aside
+        <Styled.Aside.Inner.$>
+          <AsideAvatars pinnedAvatars={[]} isLogoActive={false} />
+          <Styled.Aside.Inner.Sidebar.$>
+            <div>xx</div>
+          </Styled.Aside.Inner.Sidebar.$>
+        </Styled.Aside.Inner.$>
       </Styled.Aside.$>
       <Styled.Main.$
         ref={mainRef}
@@ -97,6 +103,9 @@ namespace Styled {
   export const Container = {
     $: styled.div`
       min-height: 100vh;
+      ${mq.at992} {
+        display: flex;
+      }
     `,
   }
   export const Aside = {
@@ -112,7 +121,20 @@ namespace Styled {
         z-index: 0;
         display: none;
       }
+      ${mq.at992} {
+        width: 380px;
+      }
     `,
+    Inner: {
+      $: styled.div`
+        display: flex;
+      `,
+      Sidebar: {
+        $: styled.div`
+          flex: 1;
+        `,
+      },
+    },
   }
   export const Main = {
     $: styled.main`

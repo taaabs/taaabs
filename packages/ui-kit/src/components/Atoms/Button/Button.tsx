@@ -71,7 +71,6 @@ namespace S {
   export const Button = styled.button<ButtonProps>`
     ${base}
     ${({ size = ButtonTypes.Size.DEFAULT }) => sizeMap[size]}
-    cursor: pointer;
   `
   export const NextLink = styled(Link)<ButtonProps>`
     ${base}

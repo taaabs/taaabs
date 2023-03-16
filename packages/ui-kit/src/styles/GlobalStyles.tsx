@@ -9,6 +9,9 @@ export enum Theme {
   FONT_SIZE_BODY_16 = '--font-size-body-16',
   FONT_SIZE_BODY_18 = '--font-size-body-18',
   FONT_SIZE_BODY_20 = '--font-size-body-20',
+  FONT_WEIGHT_MEDIUM = '--font-weight-medium',
+  FONT_WEIGHT_SEMIBOLD = '--font-weight-semibold',
+  FONT_WEIGHT_BOLD = '--font-weight-bold',
   BORDER_RADIUS_4 = '--border-radius-4',
   BORDER_RADIUS_10 = '--border-radius-10',
   BORDER_RADIUS_12 = '--border-radius-12',
@@ -20,10 +23,12 @@ export enum Theme {
   COLOR_50 = '--color-50',
   COLOR_100 = '--color-100',
   COLOR_200 = '--color-200',
+  PADDING_8 = '--padding-8',
   PADDING_15 = '--padding-15',
   PADDING_40 = '--padding-40',
   PADDING_60 = '--padding-60',
   BORDER_100 = '--border-100',
+  BUTTON_HEIGHT_46 = '--button-height-46',
   ANIMATION_DURATION_150 = '--animation-duration-15',
   ANIMATION_DURATION_300 = '--animation-duration-300',
   TRANSITION_TIMING_FUNCTION = '--transition-timing-function',
@@ -42,6 +47,9 @@ const defaultTheme: ThemeMap = {
   [Theme.FONT_SIZE_BODY_16]: '1.6rem',
   [Theme.FONT_SIZE_BODY_18]: '1.8rem',
   [Theme.FONT_SIZE_BODY_20]: '2rem',
+  [Theme.FONT_WEIGHT_MEDIUM]: '500',
+  [Theme.FONT_WEIGHT_SEMIBOLD]: '600',
+  [Theme.FONT_WEIGHT_BOLD]: '700',
   [Theme.BORDER_RADIUS_4]: '4px',
   [Theme.BORDER_RADIUS_10]: '10px',
   [Theme.BORDER_RADIUS_12]: '12px',
@@ -53,14 +61,16 @@ const defaultTheme: ThemeMap = {
   [Theme.COLOR_50]: '#FAFAFA',
   [Theme.COLOR_100]: '#EAEAEA',
   [Theme.COLOR_200]: '#D1D1D1',
+  [Theme.PADDING_8]: '8px',
   [Theme.PADDING_15]: '15px',
   [Theme.PADDING_40]: '40px',
   [Theme.PADDING_60]: '60px',
   [Theme.BORDER_100]: `2px solid var(${Theme.COLOR_100})`,
+  [Theme.BUTTON_HEIGHT_46]: '46px',
   [Theme.ANIMATION_DURATION_150]: '150ms',
   [Theme.ANIMATION_DURATION_300]: '300ms',
   [Theme.TRANSITION_TIMING_FUNCTION]: 'ease-in-out',
-  [Theme.TRANSITION_HOVER]: 'all .15s ease-in-out',
+  [Theme.TRANSITION_HOVER]: 'all 150ms ease-in-out',
 }
 
 export const globalStyles = css`
@@ -137,6 +147,7 @@ export const globalStyles = css`
     background: none;
     border: none;
     padding: 0;
+    cursor: pointer;
   }
 
   // Slideout - start

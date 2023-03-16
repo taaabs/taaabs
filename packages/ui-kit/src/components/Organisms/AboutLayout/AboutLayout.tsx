@@ -3,7 +3,7 @@ import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 
-export type LayoutLandingProps = {
+export type AboutLayoutProps = {
   children?: React.ReactNode
   logIn: {
     onClick: () => void
@@ -15,7 +15,7 @@ export type LayoutLandingProps = {
   }
 }
 
-export const LayoutLanding: React.FC<LayoutLandingProps> = (props) => {
+export const AboutLayout: React.FC<AboutLayoutProps> = (props) => {
   return (
     <_Container.$>
       <_Header.outer>

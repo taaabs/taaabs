@@ -4,7 +4,7 @@ type Props = {
   children: React.ReactNode
 }
 
-const LayoutLanding: React.FC<Props> = (props) => {
+const AboutLayout: React.FC<Props> = (props) => {
   return (
     <div>
       <UiAtoButton href="">dfdf</UiAtoButton>
@@ -15,5 +15,5 @@ const LayoutLanding: React.FC<Props> = (props) => {
 }
 
 export const layoutLanding = (props: Props) => (
-  <LayoutLanding {...props}>{props.children}</LayoutLanding>
+  <AboutLayout {...props}>{props.children}</AboutLayout>
 )
