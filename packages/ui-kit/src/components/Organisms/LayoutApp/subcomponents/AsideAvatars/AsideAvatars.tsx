@@ -132,7 +132,7 @@ namespace Styled {
     TempAvatarWrapper: {
       $: styled.div`
         & button {
-          opacity: 0.5;
+          opacity: 0.6;
         }
       `,
     },
