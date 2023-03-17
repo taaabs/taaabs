@@ -14,13 +14,15 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "simplebar-react": "^3.2.1",
-    "slideout": "^1.0.1"
+    "slideout": "^1.0.1",
+    "vite-plugin-svgr": "^2.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.21.0",
+    "@emotion/babel-plugin": "^11.10.5",
     "@storybook/builder-vite": "0.4.2",
     "@storybook/client-api": "^6.5.16",
     "@storybook/client-logger": "^6.5.16",

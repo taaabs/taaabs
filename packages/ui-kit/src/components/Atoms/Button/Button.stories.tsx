@@ -9,19 +9,16 @@ export default {
   component: Button,
 } as Meta
 
-const template: Story<ButtonTypes.Props> = (props) => (
+export const sizes: Story = () => (
   <StorybookMargin>
     Default:
-    <br/>
-    <br/>
-    <Button {...props}>Click me!</Button>
+    <br />
+    <br />
+    <Button>Click me!</Button>
     <StorybookSpacer />
     Large:
-    <br/>
-    <br/>
-    <Button {...props} size={ButtonTypes.Size.LARGE}>Click me!</Button>
+    <br />
+    <br />
+    <Button size={ButtonTypes.Size.LARGE}>Click me!</Button>
   </StorybookMargin>
 )
-
-export const standard = template.bind({})
-standard.args = { href: '/' }

@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import { AsideAvatars } from './AsideAvatars'
 
 export default {
-  title: 'Organisms/LayoutApp/subcomponents/AsideAvatars',
+  title: 'Atoms/AsideAvatars',
   component: AsideAvatars,
 } as Meta
 

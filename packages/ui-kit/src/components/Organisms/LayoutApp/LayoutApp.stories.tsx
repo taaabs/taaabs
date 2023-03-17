@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react'
+import { Meta } from '@storybook/react'
 import { LayoutApp } from './LayoutApp'
 
 export default {
@@ -6,9 +6,6 @@ export default {
   component: LayoutApp,
 } as Meta
 
-const template: Story<LayoutApp.Props> = (props) => (
-  <LayoutApp {...props}></LayoutApp>
+export const standard = (
+  <LayoutApp slotAside={<div>aside</div>} slotMain={<div>main</div>} />
 )
-
-export const standard = template.bind({})
-standard.args = {}

@@ -18,7 +18,8 @@
     "jsxImportSource": "@emotion/react",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "types": ["vite/client", "@emotion/react/types/css-prop"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]

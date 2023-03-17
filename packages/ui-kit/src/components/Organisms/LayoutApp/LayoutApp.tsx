@@ -70,15 +70,15 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   }, [windowWidth])
 
   return (
-    <S.container.$>
-      <S.aside.$ ref={asideRef} width={asideWidth}>
+    <S.Container>
+      <S.aside ref={asideRef} width={asideWidth}>
         {props.slotAside}
-      </S.aside.$>
-      <S.main.$
+      </S.aside>
+      <S.Main.Container
         ref={mainRef}
         onClick={() => isSlideoutOpen && slideout?.close()}
       >
-        <S.main.inner.$
+        <S.Main.Inner
           isDimmed={
             (isSlideoutOpen && !isSlideoutDragged) ||
             (!isSlideoutOpen && isSlideoutDragged)
@@ -86,40 +86,36 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
         >
           <button onClick={() => slideout?.open()}>BURGER</button>
           {props.slotMain}
-        </S.main.inner.$>
-      </S.main.$>
-    </S.container.$>
+        </S.Main.Inner>
+      </S.Main.Container>
+    </S.Container>
   )
 }
 
 namespace S {
-  export const container = {
-    $: styled.div`
+  export const Container = styled.div`
+    min-height: 100vh;
+    ${mq.at992} {
+      display: flex;
+    }
+  `
+  export const aside = styled.aside<{ width: number }>`
+    ${mq.to992} {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: ${({ width }) => width}px;
       min-height: 100vh;
-      ${mq.at992} {
-        display: flex;
-      }
-    `,
-  }
-  export const aside = {
-    $: styled.aside<{ width: number }>`
-      ${mq.to992} {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        width: ${({ width }) => width}px;
-        min-height: 100vh;
-        -webkit-overflow-scrolling: touch;
-        z-index: 0;
-        display: none;
-      }
-      ${mq.at992} {
-        width: 380px;
-      }
-    `,
-  }
-  export const main = {
-    $: styled.main`
+      -webkit-overflow-scrolling: touch;
+      z-index: 0;
+      display: none;
+    }
+    ${mq.at992} {
+      width: 380px;
+    }
+  `
+  export namespace Main {
+    export const Container = styled.main`
       ${mq.to992} {
         position: relative;
         z-index: 1;
@@ -133,15 +129,13 @@ namespace S {
       ${mq.at992} {
         transform: translateX(0px) !important;
       }
-    `,
-    inner: {
-      $: styled.div<{ isDimmed: boolean }>`
-        height: 100%;
-        width: 100%;
-        opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
-        transition: opacity var(${Theme.ANIMATION_DURATION_300})
-          var(${Theme.TRANSITION_TIMING_FUNCTION});
-      `,
-    },
+    `
+    export const Inner = styled.div<{ isDimmed: boolean }>`
+      height: 100%;
+      width: 100%;
+      opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
+      transition: opacity var(${Theme.ANIMATION_DURATION_300})
+        var(${Theme.TRANSITION_TIMING_FUNCTION});
+    `
   }
 }

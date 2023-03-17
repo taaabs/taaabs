@@ -75,6 +75,7 @@ const defaultTheme: ThemeMap = {
 
 export const globalStyles = css`
   @import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
   #__next {
     min-height: 100vh;
