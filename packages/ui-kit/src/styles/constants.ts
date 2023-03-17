@@ -1,1 +1,1 @@
-export const avatarPinBarWidth = 63
+export const ASIDE_AVATARS_WIDTH = 63

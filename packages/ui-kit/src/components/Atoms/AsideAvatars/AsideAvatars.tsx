@@ -21,15 +21,15 @@ export namespace AsideAvatars {
 export const AsideAvatars: React.FC<AsideAvatars.Props> = (props) => {
   const buildAvatar = (avatar: AsideAvatars.Avatar) =>
     avatar.imageUrl ? (
-      <Styled.Inner.Avatar.$>
-        <Styled.Inner.Avatar.WithImage.$>
+      <S.inner.avatar.$>
+        <S.inner.avatar.withImage.$>
           <img src={avatar.imageUrl} />
-        </Styled.Inner.Avatar.WithImage.$>
-        {avatar.isActive && <Styled.Inner.Indicator.$ />}
-      </Styled.Inner.Avatar.$>
+        </S.inner.avatar.withImage.$>
+        {avatar.isActive && <S.inner.indicator.$ />}
+      </S.inner.avatar.$>
     ) : (
-      <Styled.Inner.Avatar.$>
-        <Styled.Inner.Avatar.WithoutImage.$>
+      <S.inner.avatar.$>
+        <S.inner.avatar.withoutImage.$>
           <span>
             {avatar.displayName
               .split(' ')
@@ -37,35 +37,35 @@ export const AsideAvatars: React.FC<AsideAvatars.Props> = (props) => {
               .slice(0, 3)
               .join(' ')}
           </span>
-        </Styled.Inner.Avatar.WithoutImage.$>
-        {avatar.isActive && <Styled.Inner.Indicator.$ />}
-      </Styled.Inner.Avatar.$>
+        </S.inner.avatar.withoutImage.$>
+        {avatar.isActive && <S.inner.indicator.$ />}
+      </S.inner.avatar.$>
     )
 
   return (
-    <Styled.Container.$>
+    <S.container.$>
       <SimpleBar style={{ height: '100vh' }} autoHide={false}>
-        <Styled.Inner.$>
-          <Styled.Inner.Logo.$>
-            <Styled.Inner.Logo.Button.$>
+        <S.inner.$>
+          <S.inner.logo.$>
+            <S.inner.logo.button.$>
               <span>T</span>
-              {props.isLogoActive && <Styled.Inner.Indicator.$ />}
-            </Styled.Inner.Logo.Button.$>
-          </Styled.Inner.Logo.$>
+              {props.isLogoActive && <S.inner.indicator.$ />}
+            </S.inner.logo.button.$>
+          </S.inner.logo.$>
           {props.tempAvatar && (
-            <Styled.Inner.TempAvatarWrapper.$>
+            <S.inner.tempAvatarWrapper.$>
               {buildAvatar(props.tempAvatar)}
-            </Styled.Inner.TempAvatarWrapper.$>
+            </S.inner.tempAvatarWrapper.$>
           )}
           {props.pinnedAvatars.map((pinnedAvatar) => buildAvatar(pinnedAvatar))}
-        </Styled.Inner.$>
+        </S.inner.$>
       </SimpleBar>
-    </Styled.Container.$>
+    </S.container.$>
   )
 }
 
-namespace Styled {
-  export const Container = {
+namespace S {
+  export const container = {
     $: styled.div`
       background-color: var(${Theme.COLOR_WHITE});
       border-right: 1px solid var(${Theme.COLOR_100});
@@ -88,7 +88,7 @@ namespace Styled {
       transform: scale(0.96);
     }
   `
-  export const Inner = {
+  export const inner = {
     $: styled.div`
       padding: var(${Theme.PADDING_8}) 0;
       display: flex;
@@ -96,7 +96,7 @@ namespace Styled {
       align-items: center;
       gap: 8px;
     `,
-    Indicator: {
+    indicator: {
       $: styled.div`
         position: absolute;
         height: 22px;
@@ -109,12 +109,12 @@ namespace Styled {
         transform: translate(-8px, 50%);
       `,
     },
-    Logo: {
+    logo: {
       $: styled.div`
         border-bottom: 1px solid var(${Theme.COLOR_100});
         padding-bottom: var(${Theme.PADDING_8});
       `,
-      Button: {
+      button: {
         $: styled.button`
           ${avatarBase}
           background-color: var(${Theme.COLOR_ACCENT});
@@ -129,18 +129,16 @@ namespace Styled {
         `,
       },
     },
-    TempAvatarWrapper: {
+    tempAvatarWrapper: {
       $: styled.div`
-        & button {
-          opacity: 0.6;
-        }
+        background: red;
       `,
     },
-    Avatar: {
+    avatar: {
       $: styled.div`
         position: relative;
       `,
-      WithImage: {
+      withImage: {
         $: styled.button`
           ${avatarBase}
           overflow: hidden;
@@ -152,7 +150,7 @@ namespace Styled {
           }
         `,
       },
-      WithoutImage: {
+      withoutImage: {
         $: styled.button`
           ${avatarBase}
           outline: 1px solid var(${Theme.COLOR_200});

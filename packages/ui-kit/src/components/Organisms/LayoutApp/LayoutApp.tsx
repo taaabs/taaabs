@@ -1,12 +1,9 @@
-import { Atoms } from '@/components'
 import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Slideout from 'slideout'
 import { useEffect, useRef, useLayoutEffect, useState } from 'react'
-import { avatarPinBarWidth } from '@/styles/constants'
-import { AsideAvatars } from './subcomponents/AsideAvatars/AsideAvatars'
+import { ASIDE_AVATARS_WIDTH } from '@/styles/constants'
 
 export namespace LayoutApp {
   export type Props = {
@@ -36,23 +33,23 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   const asideRef = useRef<HTMLElement>(null)
   const mainRef = useRef<HTMLElement>(null)
 
-  let padding: number
+  let asideWidth: number
   // 64 (avatarbar) + 8 (gap) + 300 (sidebar) + 8 + 64 (for symmetry with avatarbar) = *444* - 64 = *380*
   if (windowWidth == null) {
-    padding = 0
+    asideWidth = 0
   } else if (windowWidth >= 444) {
-    padding = 380
+    asideWidth = 380
   } else {
-    padding = windowWidth - avatarPinBarWidth
+    asideWidth = windowWidth - ASIDE_AVATARS_WIDTH
   }
 
   useEffect(() => {
-    if (!windowWidth) return
+    if (!windowWidth || !asideRef.current || !mainRef.current) return
 
     const slideoutInstance = new Slideout({
-      menu: asideRef.current!,
-      panel: mainRef.current!,
-      padding: padding,
+      menu: asideRef.current,
+      panel: mainRef.current,
+      padding: asideWidth,
     })
     slideoutInstance.on('beforeclose', () => {
       setIsSlideoutOpen(false)
@@ -73,34 +70,30 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   }, [windowWidth])
 
   return (
-    <Styled.Container.$>
-      <Styled.Aside.$ ref={asideRef} width={padding}>
-        <Styled.Aside.Inner.$>
-          <AsideAvatars pinnedAvatars={[]} isLogoActive={false} />
-          <Styled.Aside.Inner.Sidebar.$>
-            <div>xx</div>
-          </Styled.Aside.Inner.Sidebar.$>
-        </Styled.Aside.Inner.$>
-      </Styled.Aside.$>
-      <Styled.Main.$
+    <S.container.$>
+      <S.aside.$ ref={asideRef} width={asideWidth}>
+        {props.slotAside}
+      </S.aside.$>
+      <S.main.$
         ref={mainRef}
         onClick={() => isSlideoutOpen && slideout?.close()}
       >
-        <Styled.Main.Inner.$
+        <S.main.inner.$
           isDimmed={
             (isSlideoutOpen && !isSlideoutDragged) ||
             (!isSlideoutOpen && isSlideoutDragged)
           }
         >
           <button onClick={() => slideout?.open()}>BURGER</button>
-        </Styled.Main.Inner.$>
-      </Styled.Main.$>
-    </Styled.Container.$>
+          {props.slotMain}
+        </S.main.inner.$>
+      </S.main.$>
+    </S.container.$>
   )
 }
 
-namespace Styled {
-  export const Container = {
+namespace S {
+  export const container = {
     $: styled.div`
       min-height: 100vh;
       ${mq.at992} {
@@ -108,7 +101,7 @@ namespace Styled {
       }
     `,
   }
-  export const Aside = {
+  export const aside = {
     $: styled.aside<{ width: number }>`
       ${mq.to992} {
         position: fixed;
@@ -124,18 +117,8 @@ namespace Styled {
         width: 380px;
       }
     `,
-    Inner: {
-      $: styled.div`
-        display: flex;
-      `,
-      Sidebar: {
-        $: styled.div`
-          flex: 1;
-        `,
-      },
-    },
   }
-  export const Main = {
+  export const main = {
     $: styled.main`
       ${mq.to992} {
         position: relative;
@@ -151,7 +134,7 @@ namespace Styled {
         transform: translateX(0px) !important;
       }
     `,
-    Inner: {
+    inner: {
       $: styled.div<{ isDimmed: boolean }>`
         height: 100%;
         width: 100%;
