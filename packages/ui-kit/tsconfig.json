@@ -19,7 +19,12 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["vite/client", "@emotion/react/types/css-prop"]
+    "types": [
+      "vite/client",
+      "@emotion/react/types/css-prop",
+      "jest",
+      "@testing-library/jest-dom"
+    ]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]

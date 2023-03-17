@@ -1,17 +1,17 @@
 import { Meta, Story } from '@storybook/react'
-import { AsideAvatars } from './AsideAvatars'
+import { QuickAccessPanel } from './QuickAccessPanel'
 
 export default {
-  title: 'Atoms/AsideAvatars',
-  component: AsideAvatars,
+  title: 'Atoms/QuickAccessPanel',
+  component: QuickAccessPanel,
 } as Meta
 
-export const WithoutPinnedAvatars: Story = () => (
-  <AsideAvatars pinnedAvatars={[]} isLogoActive={true} />
+export const Standard: Story = () => (
+  <QuickAccessPanel pinnedAvatars={[]} isLogoActive={true} />
 )
 
 export const WithPinnedAvatars: Story = () => (
-  <AsideAvatars
+  <QuickAccessPanel
     isLogoActive={false}
     pinnedAvatars={[
       { displayName: 'Alicia Keys', username: 'alicia', isActive: true },
@@ -25,7 +25,7 @@ export const WithPinnedAvatars: Story = () => (
 )
 
 export const WithPinnedImageAvatar: Story = () => (
-  <AsideAvatars
+  <QuickAccessPanel
     isLogoActive={false}
     tempAvatar={{
       displayName: 'Alicia Keys',
@@ -45,7 +45,7 @@ export const WithPinnedImageAvatar: Story = () => (
 )
 
 export const WithLotsOfPinnedAvatars: Story = () => (
-  <AsideAvatars
+  <QuickAccessPanel
     isLogoActive={false}
     pinnedAvatars={[
       { displayName: 'Alicia Keys', username: 'alicia', isActive: true },
@@ -61,7 +61,7 @@ export const WithLotsOfPinnedAvatars: Story = () => (
 )
 
 export const WithPinnedAvatarsAndTempAvatar: Story = () => (
-  <AsideAvatars
+  <QuickAccessPanel
     isLogoActive={false}
     tempAvatar={{
       displayName: 'Alicia Keys',

@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
 
-export namespace AsideAvatars {
+export namespace QuickAccessPanel {
   export type Avatar = {
     imageUrl?: string
     username: string
@@ -18,8 +18,8 @@ export namespace AsideAvatars {
   }
 }
 
-export const AsideAvatars: React.FC<AsideAvatars.Props> = (props) => {
-  const buildAvatar = (avatar: AsideAvatars.Avatar) => (
+export const QuickAccessPanel: React.FC<QuickAccessPanel.Props> = (props) => {
+  const buildAvatar = (avatar: QuickAccessPanel.Avatar) => (
     <S.Inner.Avatar.Wrapper key={avatar.username}>
       {avatar.imageUrl ? (
         <>
@@ -49,17 +49,12 @@ export const AsideAvatars: React.FC<AsideAvatars.Props> = (props) => {
     <S.Container>
       <SimpleBar style={{ height: '100vh' }} autoHide={false}>
         <S.Inner.Container>
-          <S.Inner.Logo.Wrapper>
-            <S.Inner.Logo.Button>
-              <span>T</span>
-              {props.isLogoActive && <S.Inner.Indicator />}
-            </S.Inner.Logo.Button>
-          </S.Inner.Logo.Wrapper>
-          {props.tempAvatar && (
-            <S.Inner.TempAvatarWrapper>
-              {buildAvatar(props.tempAvatar)}
-            </S.Inner.TempAvatarWrapper>
-          )}
+          <S.Inner.Logo>
+            <span>T</span>
+            {props.isLogoActive && <S.Inner.Indicator />}
+          </S.Inner.Logo>
+          {props.tempAvatar && buildAvatar(props.tempAvatar)}
+          <S.Inner.Divider />
           {props.pinnedAvatars.map((pinnedAvatar) => buildAvatar(pinnedAvatar))}
         </S.Inner.Container>
       </SimpleBar>
@@ -98,6 +93,11 @@ namespace S {
       align-items: center;
       gap: 8px;
     `
+    export const Divider = styled.div`
+      height: 1px;
+      background: var(${Theme.COLOR_200});
+      width: var(${Theme.BUTTON_HEIGHT_46});
+    `
     export const Indicator = styled.div`
       position: absolute;
       height: 22px;
@@ -109,24 +109,18 @@ namespace S {
       top: 0;
       transform: translate(-8px, 50%);
     `
-    export namespace Logo {
-      export const Wrapper = styled.div`
-        border-bottom: 1px solid var(${Theme.COLOR_100});
-        padding-bottom: var(${Theme.PADDING_8});
-      `
-      export const Button = styled.button`
-        ${buttonBase}
-        background-color: var(${Theme.COLOR_ACCENT});
-        & span {
-          color: var(${Theme.COLOR_WHITE});
-          font-family: var(${Theme.FONT_FAMILY_SERIF});
-          font-size: 32px;
-        }
-        &:hover {
-          ${buttonHover}
-        }
-      `
-    }
+    export const Logo = styled.button`
+      ${buttonBase}
+      background-color: var(${Theme.COLOR_ACCENT});
+      & span {
+        color: var(${Theme.COLOR_WHITE});
+        font-family: var(${Theme.FONT_FAMILY_SERIF});
+        font-size: 32px;
+      }
+      &:hover {
+        ${buttonHover}
+      }
+    `
     export namespace Avatar {
       export const Wrapper = styled.div`
         position: relative;
@@ -154,10 +148,5 @@ namespace S {
         }
       `
     }
-    export const TempAvatarWrapper = styled.div`
-      & ${Avatar.WithImage}, & ${Avatar.WithoutImage} {
-        border-radius: 999px;
-      }
-    `
   }
 }
