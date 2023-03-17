@@ -20,17 +20,17 @@ export namespace QuickAccessPanel {
 
 export const QuickAccessPanel: React.FC<QuickAccessPanel.Props> = (props) => {
   const buildAvatar = (avatar: QuickAccessPanel.Avatar) => (
-    <S.Inner.Avatar.Wrapper key={avatar.username}>
+    <S.Inner.avatar key={avatar.username}>
       {avatar.imageUrl ? (
         <>
-          <S.Inner.Avatar.WithImage>
+          <S.Inner.Avatar.withImage>
             <img src={avatar.imageUrl} />
-          </S.Inner.Avatar.WithImage>
-          {avatar.isActive && <S.Inner.Indicator />}
+          </S.Inner.Avatar.withImage>
+          {avatar.isActive && <S.Inner.indicator />}
         </>
       ) : (
         <>
-          <S.Inner.Avatar.WithoutImage>
+          <S.Inner.Avatar.withoutImage>
             <span>
               {avatar.displayName
                 .split(' ')
@@ -38,39 +38,45 @@ export const QuickAccessPanel: React.FC<QuickAccessPanel.Props> = (props) => {
                 .slice(0, 3)
                 .join(' ')}
             </span>
-          </S.Inner.Avatar.WithoutImage>
-          {avatar.isActive && <S.Inner.Indicator />}
+          </S.Inner.Avatar.withoutImage>
+          {avatar.isActive && <S.Inner.indicator />}
         </>
       )}
-    </S.Inner.Avatar.Wrapper>
+    </S.Inner.avatar>
   )
 
   return (
-    <S.Container>
+    <S.container>
       <SimpleBar style={{ height: '100vh' }} autoHide={false}>
-        <S.Inner.Container>
-          <S.Inner.Logo>
+        <S.inner>
+          <S.Inner.logo>
             <span>T</span>
-            {props.isLogoActive && <S.Inner.Indicator />}
-          </S.Inner.Logo>
+            {props.isLogoActive && <S.Inner.indicator />}
+          </S.Inner.logo>
           {props.tempAvatar && buildAvatar(props.tempAvatar)}
-          <S.Inner.Divider />
+          <S.Inner.divider />
           {props.pinnedAvatars.map((pinnedAvatar) => buildAvatar(pinnedAvatar))}
-        </S.Inner.Container>
+        </S.inner>
       </SimpleBar>
-    </S.Container>
+    </S.container>
   )
 }
 
 namespace S {
-  export const Container = styled.div`
+  export const container = styled.div`
     background-color: var(${Theme.COLOR_WHITE});
     border-right: 1px solid var(${Theme.COLOR_100});
     width: calc(
       var(${Theme.PADDING_8}) * 2 + var(${Theme.BUTTON_HEIGHT_46}) + 1px
     );
   `
-
+  export const inner = styled.div`
+    padding: var(${Theme.PADDING_8}) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  `
   export namespace Inner {
     const buttonBase = css`
       width: var(${Theme.BUTTON_HEIGHT_46});
@@ -86,19 +92,12 @@ namespace S {
         transform: scale(0.96);
       }
     `
-    export const Container = styled.div`
-      padding: var(${Theme.PADDING_8}) 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    `
-    export const Divider = styled.div`
+    export const divider = styled.div`
       height: 1px;
       background: var(${Theme.COLOR_200});
-      width: var(${Theme.BUTTON_HEIGHT_46});
+      width: 28px;
     `
-    export const Indicator = styled.div`
+    export const indicator = styled.div`
       position: absolute;
       height: 22px;
       width: 4px;
@@ -109,7 +108,7 @@ namespace S {
       top: 0;
       transform: translate(-8px, 50%);
     `
-    export const Logo = styled.button`
+    export const logo = styled.button`
       ${buttonBase}
       background-color: var(${Theme.COLOR_ACCENT});
       & span {
@@ -121,11 +120,11 @@ namespace S {
         ${buttonHover}
       }
     `
+    export const avatar = styled.div`
+      position: relative;
+    `
     export namespace Avatar {
-      export const Wrapper = styled.div`
-        position: relative;
-      `
-      export const WithImage = styled.button`
+      export const withImage = styled.button`
         ${buttonBase}
         overflow: hidden;
         & > img {
@@ -135,7 +134,7 @@ namespace S {
           ${buttonHover}
         }
       `
-      export const WithoutImage = styled.button`
+      export const withoutImage = styled.button`
         ${buttonBase}
         outline: 1px solid var(${Theme.COLOR_200});
         outline-offset: -1px;
