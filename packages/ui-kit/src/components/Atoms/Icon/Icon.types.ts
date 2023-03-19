@@ -14,6 +14,8 @@ export namespace IconTypes {
     STAR_FILLED,
     STAR,
     TRASH,
+    LIKE,
+    LIKE_FILLED,
   }
 
   export type VariantMap = {

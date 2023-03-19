@@ -12,6 +12,8 @@ import { ReactComponent as Sort } from '@/assets/icons/sort.svg'
 import { ReactComponent as StarFilled } from '@/assets/icons/star-filled.svg'
 import { ReactComponent as Star } from '@/assets/icons/star.svg'
 import { ReactComponent as Trash } from '@/assets/icons/trash.svg'
+import { ReactComponent as Like } from '@/assets/icons/like.svg'
+import { ReactComponent as LikeFilled } from '@/assets/icons/like-filled.svg'
 import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
 import { IconTypes } from './Icon.types'
@@ -31,18 +33,21 @@ const iconVariantMap: IconTypes.VariantMap = {
   [IconTypes.Variant.STAR_FILLED]: <StarFilled />,
   [IconTypes.Variant.STAR]: <Star />,
   [IconTypes.Variant.TRASH]: <Trash />,
+  [IconTypes.Variant.LIKE]: <Like />,
+  [IconTypes.Variant.LIKE_FILLED]: <LikeFilled />,
 }
 
 export const Icon: React.FC<IconTypes.Props> = (props) => {
-  return <S.Wrapper>{iconVariantMap[props.variant]}</S.Wrapper>
+  return <S.iconWrapper>{iconVariantMap[props.variant]}</S.iconWrapper>
 }
 
 namespace S {
-  export const Wrapper = styled.div`
+  const iconSize = 20
+  export const iconWrapper = styled.div`
     display: inline-flex;
     & > svg {
-      width: 20px;
-      height: 20px;
+      width: ${iconSize}px;
+      height: ${iconSize}px;
       fill: var(${Theme.COLOR_BLACK});
     }
   `

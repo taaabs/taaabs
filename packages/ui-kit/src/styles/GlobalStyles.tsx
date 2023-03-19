@@ -19,6 +19,8 @@ export enum Theme {
   COLOR_WHITE = '--color-white',
   COLOR_BLACK = '--color-black',
   COLOR_TEXT = '--color-text',
+  COLOR_TEXT_VARIANT = '--color-text-variant',
+  COLOR_TEXT_DIMMED = '--color-text-dimmed',
   COLOR_ACCENT = '--color-accent',
   COLOR_50 = '--color-50',
   COLOR_100 = '--color-100',
@@ -55,8 +57,10 @@ const defaultTheme: ThemeMap = {
   [Theme.BORDER_RADIUS_12]: '12px',
   [Theme.BORDER_RADIUS_14]: '14px',
   [Theme.COLOR_WHITE]: '#FFF',
-  [Theme.COLOR_BLACK]: '#000',
-  [Theme.COLOR_TEXT]: '#1D1D1F',
+  [Theme.COLOR_BLACK]: '#1F1F1F',
+  [Theme.COLOR_TEXT]: '#202020',
+  [Theme.COLOR_TEXT_VARIANT]: '#444746',
+  [Theme.COLOR_TEXT_DIMMED]: '#747474',
   [Theme.COLOR_ACCENT]: '#0944BA',
   [Theme.COLOR_50]: '#FAFAFA',
   [Theme.COLOR_100]: '#EAEAEA',
@@ -74,8 +78,8 @@ const defaultTheme: ThemeMap = {
 }
 
 export const globalStyles = css`
-  @import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
 
   #__next {
     min-height: 100vh;

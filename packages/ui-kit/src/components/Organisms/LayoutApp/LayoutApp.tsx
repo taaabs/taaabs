@@ -4,11 +4,13 @@ import styled from '@emotion/styled'
 import Slideout from 'slideout'
 import { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import { ASIDE_AVATARS_WIDTH } from '@/styles/constants'
+import { css } from '@emotion/react'
 
 export namespace LayoutApp {
   export type Props = {
     slotAside: React.ReactNode
     slotMain: React.ReactNode
+    slotTabs: React.ReactNode
   }
 }
 
@@ -27,11 +29,15 @@ const useWindowWidth = () => {
 
 export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   const windowWidth = useWindowWidth()
-  const [slideout, setSlideout] = useState<Slideout>()
-  const [isSlideoutOpen, setIsSlideoutOpen] = useState(false)
-  const [isSlideoutDragged, setIsSlideoutDragged] = useState(false)
+  const [slideoutLeft, setSlideoutLeft] = useState<Slideout>()
+  const [slideoutRight, setSlideoutRight] = useState<Slideout>()
+  const [isSlideoutLeftOpen, setIsSlideoutLeftOpen] = useState(false)
+  const [isSlideoutRightOpen, setIsSlideoutRightOpen] = useState(false)
+  const [isSlideoutLeftDefinetelyClosed, setIsSlideoutLeftDefinetelyClosed] =
+    useState(true)
   const asideRef = useRef<HTMLElement>(null)
   const mainRef = useRef<HTMLElement>(null)
+  const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
 
   let asideWidth: number
   // 64 (avatarbar) + 8 (gap) + 300 (sidebar) + 8 + 64 (for symmetry with avatarbar) = *444* - 64 = *380*
@@ -43,70 +49,100 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
     asideWidth = windowWidth - ASIDE_AVATARS_WIDTH
   }
 
-  useEffect(() => {
-    if (!windowWidth || !asideRef.current || !mainRef.current) return
+  const mobileTabsPanelWidth = 220
 
-    const slideoutInstance = new Slideout({
+  useEffect(() => {
+    if (
+      !windowWidth ||
+      !asideRef.current ||
+      !mainRef.current ||
+      !mobileTabsPanelRef.current
+    )
+      return
+    const slideoutLeftInstance = new Slideout({
       menu: asideRef.current,
       panel: mainRef.current,
       padding: asideWidth,
     })
-    slideoutInstance.on('beforeclose', () => {
-      setIsSlideoutOpen(false)
+    const slideoutRightInstance = new Slideout({
+      menu: mobileTabsPanelRef.current,
+      panel: mainRef.current,
+      padding: mobileTabsPanelWidth,
+      side: 'right',
     })
-    slideoutInstance.on('beforeopen', () => {
-      setIsSlideoutOpen(true)
+    slideoutLeftInstance.on('beforeopen', () => {
+      setIsSlideoutLeftOpen(true)
     })
-    slideoutInstance.on('translatestart', () => {
-      setIsSlideoutDragged(true)
+    slideoutLeftInstance.on('beforeclose', () => {
+      setIsSlideoutLeftOpen(false)
     })
-    slideoutInstance.on('translateend', () => {
-      setIsSlideoutDragged(false)
+    slideoutLeftInstance.on('close', () => {
+      setIsSlideoutLeftOpen(false)
+      setIsSlideoutLeftDefinetelyClosed(true)
     })
-    setSlideout(slideoutInstance)
+    slideoutLeftInstance.on('translatestart', () => {
+      setIsSlideoutLeftOpen(false)
+      setIsSlideoutLeftDefinetelyClosed(false)
+    })
+    slideoutRightInstance.on('beforeopen', () => {
+      setIsSlideoutRightOpen(true)
+    })
+    slideoutRightInstance.on('beforeclose', () => {
+      setIsSlideoutRightOpen(false)
+    })
+    slideoutRightInstance.on('translatestart', () => {
+      setIsSlideoutRightOpen(false)
+    })
+    setSlideoutLeft(slideoutLeftInstance)
+    setSlideoutRight(slideoutRightInstance)
     return () => {
-      slideoutInstance.destroy()
+      slideoutLeftInstance.destroy()
+      slideoutRightInstance.destroy()
     }
   }, [windowWidth])
 
   return (
-    <S.Container>
-      <S.aside ref={asideRef} width={asideWidth}>
-        {props.slotAside}
-      </S.aside>
-      <S.Main.Container
+    <S.container>
+      <S.asideLeft ref={asideRef} width={asideWidth}>
+        <S.AsideLeft.inner isVisible={true}>
+          {props.slotAside}
+        </S.AsideLeft.inner>
+      </S.asideLeft>
+      <S.mobileTabsPanel ref={mobileTabsPanelRef} width={mobileTabsPanelWidth}>
+        <S.MobileTabsPanel.inner isVisible={isSlideoutLeftDefinetelyClosed}>
+          {props.slotTabs}
+        </S.MobileTabsPanel.inner>
+      </S.mobileTabsPanel>
+      <S.main
         ref={mainRef}
-        onClick={() => isSlideoutOpen && slideout?.close()}
+        onClick={() => {
+          isSlideoutLeftOpen && slideoutLeft?.close()
+          isSlideoutRightOpen && slideoutRight?.close()
+        }}
       >
-        <S.Main.Inner
-          isDimmed={
-            (isSlideoutOpen && !isSlideoutDragged) ||
-            (!isSlideoutOpen && isSlideoutDragged)
-          }
-        >
-          <button onClick={() => slideout?.open()}>BURGER</button>
+        <S.Main.inner isDimmed={isSlideoutLeftOpen || isSlideoutRightOpen}>
+          <button onClick={() => slideoutLeft?.open()}>BURGER</button>
           {props.slotMain}
-        </S.Main.Inner>
-      </S.Main.Container>
-    </S.Container>
+        </S.Main.inner>
+      </S.main>
+    </S.container>
   )
 }
 
 namespace S {
-  export const Container = styled.div`
+  export const container = styled.div`
     min-height: 100vh;
     ${mq.at992} {
       display: flex;
     }
   `
-  export const aside = styled.aside<{ width: number }>`
+  export const asideLeft = styled.aside<{ width: number }>`
     ${mq.to992} {
       position: fixed;
       top: 0;
       bottom: 0;
       width: ${({ width }) => width}px;
       min-height: 100vh;
-      -webkit-overflow-scrolling: touch;
       z-index: 0;
       display: none;
     }
@@ -114,23 +150,60 @@ namespace S {
       width: 380px;
     }
   `
-  export namespace Main {
-    export const Container = styled.main`
-      ${mq.to992} {
-        position: relative;
-        z-index: 1;
-        will-change: transform;
-        background-color: var(${Theme.COLOR_50});
-        min-height: 100vh;
-        border-left: 1px solid var(${Theme.COLOR_50});
-        transition: border-color var(${Theme.ANIMATION_DURATION_300})
-          var(${Theme.TRANSITION_TIMING_FUNCTION}); // Other color is defined in the global styles
-      }
-      ${mq.at992} {
-        transform: translateX(0px) !important;
-      }
+  export namespace AsideLeft {
+    export const inner = styled.div<{ isVisible: boolean }>`
+      height: 100%;
+      visibility: hidden;
+      pointer-events: none;
+      ${({ isVisible }) =>
+        isVisible &&
+        css`
+          visibility: visible;
+          pointer-events: all;
+        `}
     `
-    export const Inner = styled.div<{ isDimmed: boolean }>`
+  }
+  export const mobileTabsPanel = styled.div<{ width: number }>`
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: ${({ width }) => width}px;
+    min-height: 100vh;
+    z-index: 1;
+    display: none;
+  `
+  export namespace MobileTabsPanel {
+    export const inner = styled.div<{ isVisible: boolean }>`
+      height: 100%;
+      visibility: hidden;
+      pointer-events: none;
+      ${({ isVisible }) =>
+        isVisible &&
+        css`
+          visibility: visible;
+          pointer-events: all;
+        `}
+    `
+  }
+  export const main = styled.main`
+    ${mq.to992} {
+      position: relative;
+      z-index: 2;
+      will-change: transform;
+      background-color: var(${Theme.COLOR_50});
+      min-height: 100vh;
+      border-left: 1px solid var(${Theme.COLOR_50});
+      border-right: 1px solid var(${Theme.COLOR_50});
+      transition: border-color var(${Theme.ANIMATION_DURATION_300})
+        var(${Theme.TRANSITION_TIMING_FUNCTION}); // Other color is defined in the global styles
+    }
+    ${mq.at992} {
+      transform: translateX(0px) !important;
+    }
+  `
+  export namespace Main {
+    export const inner = styled.div<{ isDimmed: boolean }>`
       height: 100%;
       width: 100%;
       opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
