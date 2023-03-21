@@ -6,6 +6,15 @@ export default {
   component: LayoutApp,
 } as Meta
 
+export const standard = () => (
+  <LayoutApp
+    slotDesktopTopBar={<>slot desktop top bar</>}
+    slotHeader={<>slot header</>}
+    slotMain={<>slot main</>}
+    slotAside={<>slot aside</>}
+  />
+)
+
 export const scrollingTtest = () => (
   <LayoutApp
     slotDesktopTopBar={<>slot desktop top bar</>}
