@@ -297,11 +297,14 @@ namespace S {
   `
   export namespace Main {
     export const inner = styled.div<{ isDimmed: boolean }>`
-      height: 100%;
-      width: 100%;
-      opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
-      transition: opacity var(${Theme.ANIMATION_DURATION_300})
-        var(${Theme.TRANSITION_TIMING_FUNCTION});
+      ${mq.to992} {
+        opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
+        transition: opacity var(${Theme.ANIMATION_DURATION_300})
+          var(${Theme.TRANSITION_TIMING_FUNCTION});
+      }
+      ${mq.at992} {
+        padding-top: ${DESKTOP_TOP_BAR_HEIGHT}px;
+      }
     `
   }
 }
