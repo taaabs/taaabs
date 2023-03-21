@@ -16,6 +16,9 @@ export namespace IconTypes {
     TRASH,
     LIKE,
     LIKE_FILLED,
+    SWIPE_LEFT,
+    SWIPE_RIGHT,
+    ARROW_LEFT,
   }
 
   export type VariantMap = {

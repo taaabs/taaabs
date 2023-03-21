@@ -14,6 +14,9 @@ import { ReactComponent as Star } from '@/assets/icons/star.svg'
 import { ReactComponent as Trash } from '@/assets/icons/trash.svg'
 import { ReactComponent as Like } from '@/assets/icons/like.svg'
 import { ReactComponent as LikeFilled } from '@/assets/icons/like-filled.svg'
+import { ReactComponent as SwipeLeft } from '@/assets/icons/swipe-left.svg'
+import { ReactComponent as SwipeRight } from '@/assets/icons/swipe-right.svg'
+import { ReactComponent as ArrowLeft } from '@/assets/icons/arrow-left.svg'
 import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
 import { IconTypes } from './Icon.types'
@@ -35,6 +38,9 @@ const iconVariantMap: IconTypes.VariantMap = {
   [IconTypes.Variant.TRASH]: <Trash />,
   [IconTypes.Variant.LIKE]: <Like />,
   [IconTypes.Variant.LIKE_FILLED]: <LikeFilled />,
+  [IconTypes.Variant.SWIPE_LEFT]: <SwipeLeft />,
+  [IconTypes.Variant.SWIPE_RIGHT]: <SwipeRight />,
+  [IconTypes.Variant.ARROW_LEFT]: <ArrowLeft />,
 }
 
 export const Icon: React.FC<IconTypes.Props> = (props) => {

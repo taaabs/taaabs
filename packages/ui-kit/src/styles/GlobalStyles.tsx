@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import { mq } from './mediaQueries'
 
-export enum Theme {
+export const enum Theme {
   FONT_FAMILY_SANS = '--font-family-sans',
   FONT_FAMILY_SERIF = '--font-family-serif',
   FONT_SIZE_BODY_12 = '--font-size-body-12',
@@ -18,20 +18,25 @@ export enum Theme {
   BORDER_RADIUS_14 = '--border-radius-14',
   COLOR_WHITE = '--color-white',
   COLOR_BLACK = '--color-black',
-  COLOR_TEXT = '--color-text',
+  COLOR_TEXT_NORMAL = '--color-text--normal',
   COLOR_TEXT_VARIANT = '--color-text-variant',
   COLOR_TEXT_DIMMED = '--color-text-dimmed',
   COLOR_ACCENT = '--color-accent',
   COLOR_50 = '--color-50',
   COLOR_100 = '--color-100',
   COLOR_200 = '--color-200',
+  COLOR_BORDER_PRIMARY = '--color-border-primary',
+  COLOR_BORDER_SECONDARY = '--color-border-secondary',
   PADDING_8 = '--padding-8',
   PADDING_15 = '--padding-15',
   PADDING_40 = '--padding-40',
   PADDING_60 = '--padding-60',
-  BORDER_100 = '--border-100',
+  BORDER_PRIMARY = '--border-primary',
+  BORDER_SECONDARY = '--border-secondary',
   BUTTON_HEIGHT_46 = '--button-height-46',
-  ANIMATION_DURATION_150 = '--animation-duration-15',
+  BUTTON_HEIGHT_32 = '--button-height-32',
+  TOPBAR_HEIGHT = '--topbar-height',
+  ANIMATION_DURATION_150 = '--animation-duration-150',
   ANIMATION_DURATION_300 = '--animation-duration-300',
   TRANSITION_TIMING_FUNCTION = '--transition-timing-function',
   TRANSITION_HOVER = '--transition-hover',
@@ -58,19 +63,24 @@ const defaultTheme: ThemeMap = {
   [Theme.BORDER_RADIUS_14]: '14px',
   [Theme.COLOR_WHITE]: '#FFF',
   [Theme.COLOR_BLACK]: '#1F1F1F',
-  [Theme.COLOR_TEXT]: '#202020',
+  [Theme.COLOR_TEXT_NORMAL]: '#202020',
   [Theme.COLOR_TEXT_VARIANT]: '#444746',
   [Theme.COLOR_TEXT_DIMMED]: '#747474',
   [Theme.COLOR_ACCENT]: '#0944BA',
   [Theme.COLOR_50]: '#FAFAFA',
-  [Theme.COLOR_100]: '#EAEAEA',
-  [Theme.COLOR_200]: '#D1D1D1',
+  [Theme.COLOR_100]: '#F1F1F1',
+  [Theme.COLOR_200]: '#C3C3C3',
+  [Theme.COLOR_BORDER_PRIMARY]: '#E7E7E7',
+  [Theme.COLOR_BORDER_SECONDARY]: '#F2F2F2',
   [Theme.PADDING_8]: '8px',
   [Theme.PADDING_15]: '15px',
   [Theme.PADDING_40]: '40px',
   [Theme.PADDING_60]: '60px',
-  [Theme.BORDER_100]: `2px solid var(${Theme.COLOR_100})`,
+  [Theme.BORDER_PRIMARY]: `1px solid var(${Theme.COLOR_BORDER_PRIMARY})`,
+  [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.COLOR_BORDER_SECONDARY})`,
   [Theme.BUTTON_HEIGHT_46]: '46px',
+  [Theme.BUTTON_HEIGHT_32]: '32px',
+  [Theme.TOPBAR_HEIGHT]: '62px',
   [Theme.ANIMATION_DURATION_150]: '150ms',
   [Theme.ANIMATION_DURATION_300]: '300ms',
   [Theme.TRANSITION_TIMING_FUNCTION]: 'ease-in-out',
@@ -103,7 +113,7 @@ export const globalStyles = css`
     font-family: var(${Theme.FONT_FAMILY_SANS});
     line-height: 1.5;
     font-size: 1.4rem;
-    color: var(${Theme.COLOR_TEXT});
+    color: var(${Theme.COLOR_TEXT_NORMAL});
     background: var(${Theme.COLOR_50});
   }
 
@@ -161,7 +171,7 @@ export const globalStyles = css`
   .slideout-open .slideout-panel {
     ${mq.to992} {
       overflow: hidden;
-      border-color: var(${Theme.COLOR_100});
+      border-color: var(${Theme.COLOR_BORDER_PRIMARY});
     }
   }
   .slideout-open .slideout-menu {

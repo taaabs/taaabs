@@ -13,9 +13,9 @@ export const Wrapper: React.FC<WrapperProps> = (props) => {
 const $Container = styled.div`
   width: 100%;
   margin: 0 auto;
-  padding: 0 1.5rem;
-  max-width: 146rem;
+  padding: 0 15px;
+  max-width: 1280px;
   ${mq.at768} {
-    padding: 0 4rem;
+    padding: 0 40px;
   }
 `
