@@ -133,7 +133,9 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
             <S.Aside.inner isVisible={isSlideoutLeftDefinetelyClosed}>
               <S.Aside.Inner.mobile>{props.slotAside}</S.Aside.Inner.mobile>
               <S.Aside.Inner.desktop>
-                <StickyBox>{props.slotAside}</StickyBox>
+                <StickyBox offsetTop={S.DESKTOP_TOP_BAR_HEIGHT}>
+                  {props.slotAside}
+                </StickyBox>
               </S.Aside.Inner.desktop>
             </S.Aside.inner>
           </S.aside>
@@ -146,7 +148,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
 namespace S {
   const SITE_WIDTH = 1280
   const ASIDE_WIDTH = 300
-  const DESKTOP_TOP_BAR_HEIGHT = 60
+  export const DESKTOP_TOP_BAR_HEIGHT = 60
 
   export const container = styled.div``
   export const wrapper = styled.div`
