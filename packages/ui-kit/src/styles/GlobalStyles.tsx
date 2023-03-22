@@ -21,10 +21,11 @@ export const enum Theme {
   COLOR_TEXT_NORMAL = '--color-text--normal',
   COLOR_TEXT_VARIANT = '--color-text-variant',
   COLOR_TEXT_DIMMED = '--color-text-dimmed',
-  COLOR_ACCENT = '--color-accent',
-  COLOR_50 = '--color-50',
-  COLOR_100 = '--color-100',
-  COLOR_200 = '--color-200',
+  COLOR_PRIMARY_300 = '--color-primary-300',
+  COLOR_NEUTRAL_25 = '--color-neutral-25',
+  COLOR_NEUTRAL_50 = '--color-neutral-50',
+  COLOR_NEUTRAL_100 = '--color-neutral-100',
+  COLOR_NEUTRAL_200 = '--color-neutral-200',
   COLOR_BORDER_PRIMARY = '--color-border-primary',
   COLOR_BORDER_SECONDARY = '--color-border-secondary',
   PADDING_8 = '--padding-8',
@@ -66,10 +67,11 @@ const defaultTheme: ThemeMap = {
   [Theme.COLOR_TEXT_NORMAL]: '#202020',
   [Theme.COLOR_TEXT_VARIANT]: '#444746',
   [Theme.COLOR_TEXT_DIMMED]: '#747474',
-  [Theme.COLOR_ACCENT]: '#0944BA',
-  [Theme.COLOR_50]: '#FAFAFA',
-  [Theme.COLOR_100]: '#F1F1F1',
-  [Theme.COLOR_200]: '#C3C3C3',
+  [Theme.COLOR_PRIMARY_300]: '#0944BA',
+  [Theme.COLOR_NEUTRAL_25]: '#FAFAFA',
+  [Theme.COLOR_NEUTRAL_50]: '#F1F1F1',
+  [Theme.COLOR_NEUTRAL_100]: '#E6E6E6',
+  [Theme.COLOR_NEUTRAL_200]: '#C3C3C3',
   [Theme.COLOR_BORDER_PRIMARY]: '#E7E7E7',
   [Theme.COLOR_BORDER_SECONDARY]: '#F2F2F2',
   [Theme.PADDING_8]: '8px',
@@ -114,7 +116,7 @@ export const globalStyles = css`
     line-height: 1.5;
     font-size: 1.4rem;
     color: var(${Theme.COLOR_TEXT_NORMAL});
-    background: var(${Theme.COLOR_50});
+    background: var(${Theme.COLOR_NEUTRAL_25});
   }
 
   body,
@@ -183,7 +185,7 @@ export const globalStyles = css`
 
   // Simplebar - start
   .simplebar-scrollbar:before {
-    background: var(${Theme.COLOR_200});
+    background: var(${Theme.COLOR_NEUTRAL_200});
     left: 5px;
     right: 2px;
   }

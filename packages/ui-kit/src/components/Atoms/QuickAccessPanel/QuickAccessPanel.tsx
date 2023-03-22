@@ -65,7 +65,7 @@ export const QuickAccessPanel: React.FC<QuickAccessPanel.Props> = (props) => {
 namespace S {
   export const container = styled.div`
     background-color: var(${Theme.COLOR_WHITE});
-    border-right: 1px solid var(${Theme.COLOR_100});
+    border-right: 1px solid var(${Theme.COLOR_NEUTRAL_50});
     width: calc(
       var(${Theme.PADDING_8}) * 2 + var(${Theme.BUTTON_HEIGHT_46}) + 1px
     );
@@ -94,7 +94,7 @@ namespace S {
     `
     export const divider = styled.div`
       height: 1px;
-      background: var(${Theme.COLOR_200});
+      background: var(${Theme.COLOR_NEUTRAL_200});
       width: 28px;
     `
     export const indicator = styled.div`
@@ -103,14 +103,14 @@ namespace S {
       width: 4px;
       border-top-right-radius: var(${Theme.BORDER_RADIUS_10});
       border-bottom-right-radius: var(${Theme.BORDER_RADIUS_10});
-      background-color: var(${Theme.COLOR_ACCENT});
+      background-color: var(${Theme.COLOR_PRIMARY_300});
       left: 0;
       top: 0;
       transform: translate(-8px, 50%);
     `
     export const logo = styled.button`
       ${buttonBase}
-      background-color: var(${Theme.COLOR_ACCENT});
+      background-color: var(${Theme.COLOR_PRIMARY_300});
       & span {
         color: var(${Theme.COLOR_WHITE});
         font-family: var(${Theme.FONT_FAMILY_SERIF});
@@ -136,14 +136,14 @@ namespace S {
       `
       export const withoutImage = styled.button`
         ${buttonBase}
-        outline: 1px solid var(${Theme.COLOR_200});
+        outline: 1px solid var(${Theme.COLOR_NEUTRAL_200});
         outline-offset: -1px;
         & > span {
           font-weight: var(${Theme.FONT_WEIGHT_SEMIBOLD});
           letter-spacing: -0.1rem;
         }
         &:hover {
-          outline-color: var(${Theme.COLOR_100});
+          outline-color: var(${Theme.COLOR_NEUTRAL_50});
         }
       `
     }

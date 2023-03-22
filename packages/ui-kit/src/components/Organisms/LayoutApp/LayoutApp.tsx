@@ -108,7 +108,6 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
       <S.desktopTopBar>
         <S.wrapper>{props.slotDesktopTopBar}</S.wrapper>
       </S.desktopTopBar>
-      <S.desktopTopBarBg />
 
       <S.wrapper>
         <S.content>
@@ -133,6 +132,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
             <S.Aside.inner isVisible={isSlideoutLeftDefinetelyClosed}>
               <S.Aside.Inner.mobile>{props.slotAside}</S.Aside.Inner.mobile>
               <S.Aside.Inner.desktop>
+                <S.Aside.Inner.Desktop.topBarFix />
                 <StickyBox offsetTop={S.DESKTOP_TOP_BAR_HEIGHT}>
                   {props.slotAside}
                 </StickyBox>
@@ -146,8 +146,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
 }
 
 namespace S {
-  const SITE_WIDTH = 1280
-  const ASIDE_WIDTH = 300
+  const SITE_WIDTH = 1380
   export const DESKTOP_TOP_BAR_HEIGHT = 60
 
   export const container = styled.div``
@@ -155,7 +154,7 @@ namespace S {
     ${mq.at992} {
       max-width: ${SITE_WIDTH}px;
       margin: 0 auto;
-      padding: 0 15px;
+      padding: 0 40px;
     }
   `
   export const desktopTopBar = styled.nav`
@@ -171,15 +170,6 @@ namespace S {
     backdrop-filter: saturate(180%) blur(5px);
     height: ${DESKTOP_TOP_BAR_HEIGHT}px;
   `
-  export const desktopTopBarBg = styled.div`
-    ${mq.to992} {
-      display: none;
-    }
-    width: 100vw;
-    height: ${DESKTOP_TOP_BAR_HEIGHT}px;
-    background-color: var(${Theme.COLOR_WHITE});
-    position: fixed;
-  `
   export const content = styled.div`
     ${mq.at992} {
       display: flex;
@@ -187,7 +177,10 @@ namespace S {
       min-height: 100vh;
       & > aside,
       & > header {
-        width: ${ASIDE_WIDTH}px;
+        width: 240px;
+        ${mq.at1200} {
+          width: 300px;
+        }
       }
     }
   `
@@ -271,6 +264,16 @@ namespace S {
         }
         height: 100%;
       `
+      export namespace Desktop {
+        export const topBarFix = styled.div`
+          width: 100vw;
+          height: ${DESKTOP_TOP_BAR_HEIGHT}px;
+          background-color: var(${Theme.COLOR_WHITE});
+          top: 0;
+          position: fixed;
+          z-index: 1;
+        `
+      }
     }
   }
   export const main = styled.main`

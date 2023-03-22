@@ -39,7 +39,7 @@ namespace S {
     type ContainerProps = { type: 'simple' | 'wide' }
     export const Container = styled.div<ContainerProps>`
       color: var(${Theme.COLOR_WHITE});
-      background: var(${Theme.COLOR_ACCENT});
+      background: var(${Theme.COLOR_PRIMARY_300});
       width: 4.8rem;
       display: flex;
       align-items: center;
@@ -61,11 +61,11 @@ namespace S {
       right: -1.1rem;
       width: 1.1rem;
       height: 1.1rem;
-      background: var(${Theme.COLOR_ACCENT});
+      background: var(${Theme.COLOR_PRIMARY_300});
       &:after {
         content: '';
         position: absolute;
-        background: var(${Theme.COLOR_100});
+        background: var(${Theme.COLOR_NEUTRAL_50});
         width: 1.1rem;
         height: 1.1rem;
         border-bottom-left-radius: 1.1rem;
@@ -81,7 +81,7 @@ const Styled = {
   `,
   LetterBox: styled.div<{ type: 'simple' | 'wide' }>`
     color: var(${Theme.COLOR_WHITE});
-    background: var(${Theme.COLOR_ACCENT});
+    background: var(${Theme.COLOR_PRIMARY_300});
     width: 4.8rem;
     display: flex;
     align-items: center;
@@ -104,11 +104,11 @@ const Styled = {
       right: -1.1rem;
       width: 1.1rem;
       height: 1.1rem;
-      background: var(${Theme.COLOR_ACCENT});
+      background: var(${Theme.COLOR_PRIMARY_300});
       &:after {
         content: '';
         position: absolute;
-        background: var(${Theme.COLOR_100});
+        background: var(${Theme.COLOR_NEUTRAL_50});
         width: 1.1rem;
         height: 1.1rem;
         border-bottom-left-radius: 1.1rem;
@@ -122,7 +122,7 @@ const Styled = {
     justify-content: right;
     align-items: center;
     border-radius: 1rem;
-    background-color: var(${Theme.COLOR_100});
+    background-color: var(${Theme.COLOR_NEUTRAL_50});
     margin-left: -2.1rem;
     &:nth-child(1) {
       z-index: 3;
@@ -146,7 +146,7 @@ const Styled = {
       opacity: ${({ isTransparent }) => (isTransparent ? '0' : '1')};
       width: 0.15rem;
       height: 2.5rem;
-      background-color: var(${Theme.COLOR_200});
+      background-color: var(${Theme.COLOR_NEUTRAL_200});
     `,
   },
 }
