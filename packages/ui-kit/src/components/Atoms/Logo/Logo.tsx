@@ -39,7 +39,7 @@ namespace S {
     type ContainerProps = { type: 'simple' | 'wide' }
     export const Container = styled.div<ContainerProps>`
       color: var(${Theme.COLOR_WHITE});
-      background: var(${Theme.COLOR_PRIMARY_300});
+      background: var(${Theme.COLOR_PRIMARY_900});
       width: 4.8rem;
       display: flex;
       align-items: center;
@@ -48,7 +48,7 @@ namespace S {
       border-radius: 1rem;
       border-bottom-right-radius: ${({ type }) =>
         type == 'wide' ? '0' : '1rem'};
-      font-family: var(${Theme.FONT_FAMILY_SERIF});
+      font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
       position: relative;
       z-index: 3;
       > ${S.LetterBox.Corner} {
@@ -61,7 +61,7 @@ namespace S {
       right: -1.1rem;
       width: 1.1rem;
       height: 1.1rem;
-      background: var(${Theme.COLOR_PRIMARY_300});
+      background: var(${Theme.COLOR_PRIMARY_900});
       &:after {
         content: '';
         position: absolute;
@@ -81,7 +81,7 @@ const Styled = {
   `,
   LetterBox: styled.div<{ type: 'simple' | 'wide' }>`
     color: var(${Theme.COLOR_WHITE});
-    background: var(${Theme.COLOR_PRIMARY_300});
+    background: var(${Theme.COLOR_PRIMARY_900});
     width: 4.8rem;
     display: flex;
     align-items: center;
@@ -90,7 +90,7 @@ const Styled = {
     border-radius: 1rem;
     border-bottom-right-radius: ${({ type }) =>
       type == 'wide' ? '0' : '1rem'};
-    font-family: var(${Theme.FONT_FAMILY_SERIF});
+    font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
     position: relative;
     z-index: 3;
     > {
@@ -104,7 +104,7 @@ const Styled = {
       right: -1.1rem;
       width: 1.1rem;
       height: 1.1rem;
-      background: var(${Theme.COLOR_PRIMARY_300});
+      background: var(${Theme.COLOR_PRIMARY_900});
       &:after {
         content: '';
         position: absolute;

@@ -2,8 +2,8 @@ import { css } from '@emotion/react'
 import { mq } from './mediaQueries'
 
 export const enum Theme {
-  FONT_FAMILY_SANS = '--font-family-sans',
-  FONT_FAMILY_SERIF = '--font-family-serif',
+  FONT_FAMILY_INTER = '--font-family-inter',
+  FONT_FAMILY_SPACE_GROTESK = '--font-family-space-grotesk',
   FONT_SIZE_BODY_12 = '--font-size-body-12',
   FONT_SIZE_BODY_14 = '--font-size-body-14',
   FONT_SIZE_BODY_16 = '--font-size-body-16',
@@ -21,11 +21,12 @@ export const enum Theme {
   COLOR_TEXT_NORMAL = '--color-text--normal',
   COLOR_TEXT_VARIANT = '--color-text-variant',
   COLOR_TEXT_DIMMED = '--color-text-dimmed',
-  COLOR_PRIMARY_300 = '--color-primary-300',
+  COLOR_PRIMARY_900 = '--color-primary-900',
   COLOR_NEUTRAL_25 = '--color-neutral-25',
   COLOR_NEUTRAL_50 = '--color-neutral-50',
   COLOR_NEUTRAL_100 = '--color-neutral-100',
   COLOR_NEUTRAL_200 = '--color-neutral-200',
+  COLOR_BRAND = '--color-brand',
   COLOR_BORDER_PRIMARY = '--color-border-primary',
   COLOR_BORDER_SECONDARY = '--color-border-secondary',
   PADDING_8 = '--padding-8',
@@ -48,8 +49,8 @@ type ThemeMap = {
 }
 
 const defaultTheme: ThemeMap = {
-  [Theme.FONT_FAMILY_SANS]: 'Inter, sans-serif',
-  [Theme.FONT_FAMILY_SERIF]: 'Alice, serif',
+  [Theme.FONT_FAMILY_INTER]: "'Inter', sans-serif",
+  [Theme.FONT_FAMILY_SPACE_GROTESK]: "'Space Grotesk', sans-serif",
   [Theme.FONT_SIZE_BODY_12]: '1.2rem',
   [Theme.FONT_SIZE_BODY_14]: '1.4rem',
   [Theme.FONT_SIZE_BODY_16]: '1.6rem',
@@ -67,11 +68,12 @@ const defaultTheme: ThemeMap = {
   [Theme.COLOR_TEXT_NORMAL]: '#202020',
   [Theme.COLOR_TEXT_VARIANT]: '#444746',
   [Theme.COLOR_TEXT_DIMMED]: '#747474',
-  [Theme.COLOR_PRIMARY_300]: '#0944BA',
+  [Theme.COLOR_PRIMARY_900]: '#0944BA',
   [Theme.COLOR_NEUTRAL_25]: '#FAFAFA',
   [Theme.COLOR_NEUTRAL_50]: '#F1F1F1',
   [Theme.COLOR_NEUTRAL_100]: '#E6E6E6',
   [Theme.COLOR_NEUTRAL_200]: '#C3C3C3',
+  [Theme.COLOR_BRAND]: `var(${Theme.COLOR_PRIMARY_900})`,
   [Theme.COLOR_BORDER_PRIMARY]: '#E7E7E7',
   [Theme.COLOR_BORDER_SECONDARY]: '#F2F2F2',
   [Theme.PADDING_8]: '8px',
@@ -91,7 +93,7 @@ const defaultTheme: ThemeMap = {
 
 export const globalStyles = css`
   @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap');
 
   #__next {
     min-height: 100vh;
@@ -103,8 +105,15 @@ export const globalStyles = css`
     box-sizing: border-box;
   }
 
+  ::selection {
+    background-color: var(${Theme.COLOR_BRAND});
+    color: var(${Theme.COLOR_WHITE});
+  }
+
   html {
     font-size: 62.5%;
+    accent-color: var(${Theme.COLOR_BRAND});
+    caret-color: var(${Theme.COLOR_BRAND});
   }
 
   :root {
@@ -112,7 +121,7 @@ export const globalStyles = css`
   }
 
   body {
-    font-family: var(${Theme.FONT_FAMILY_SANS});
+    font-family: var(${Theme.FONT_FAMILY_INTER});
     line-height: 1.5;
     font-size: 1.4rem;
     color: var(${Theme.COLOR_TEXT_NORMAL});

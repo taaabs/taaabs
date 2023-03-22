@@ -9,7 +9,7 @@ import StickyBox from 'react-sticky-box'
 
 export namespace LayoutApp {
   export type Props = {
-    slotDesktopTopBar: React.ReactNode
+    slotDesktopTopNavigationBar: React.ReactNode
     slotHeader: React.ReactNode
     slotMain: React.ReactNode
     slotAside: React.ReactNode
@@ -37,21 +37,21 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   const [isSlideoutRightOpen, setIsSlideoutRightOpen] = useState(false)
   const [isSlideoutLeftDefinetelyClosed, setIsSlideoutLeftDefinetelyClosed] =
     useState(true)
+  const [isSlideoutRightDefinetelyClosed, setIsSlideoutRightDefinetelyClosed] =
+    useState(true)
   const asideRef = useRef<HTMLElement>(null)
   const mainRef = useRef<HTMLElement>(null)
   const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
 
-  let asideWidth: number
+  let slidableWidth: number
   // 64 (avatarbar) + 8 (gap) + 300 (sidebar) + 8 + 64 (for symmetry with avatarbar) = *444* - 64 = *380*
   if (windowWidth == null) {
-    asideWidth = 0
+    slidableWidth = 0
   } else if (windowWidth >= 444) {
-    asideWidth = 380
+    slidableWidth = 380
   } else {
-    asideWidth = windowWidth - ASIDE_AVATARS_WIDTH
+    slidableWidth = windowWidth - ASIDE_AVATARS_WIDTH
   }
-
-  const mobileTabsPanelWidth = 220
 
   useEffect(() => {
     if (
@@ -64,12 +64,12 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
     const slideoutLeftInstance = new Slideout({
       menu: asideRef.current,
       panel: mainRef.current,
-      padding: asideWidth,
+      padding: slidableWidth,
     })
     const slideoutRightInstance = new Slideout({
       menu: mobileTabsPanelRef.current,
       panel: mainRef.current,
-      padding: mobileTabsPanelWidth,
+      padding: slidableWidth,
       side: 'right',
     })
     slideoutLeftInstance.on('beforeopen', () => {
@@ -92,8 +92,13 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
     slideoutRightInstance.on('beforeclose', () => {
       setIsSlideoutRightOpen(false)
     })
+    slideoutRightInstance.on('close', () => {
+      setIsSlideoutRightOpen(false)
+      setIsSlideoutRightDefinetelyClosed(true)
+    })
     slideoutRightInstance.on('translatestart', () => {
       setIsSlideoutRightOpen(false)
+      setIsSlideoutRightDefinetelyClosed(false)
     })
     setSlideoutLeft(slideoutLeftInstance)
     setSlideoutRight(slideoutRightInstance)
@@ -104,15 +109,17 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   }, [windowWidth])
 
   return (
-    <S.container>
-      <S.desktopTopBar>
-        <S.wrapper>{props.slotDesktopTopBar}</S.wrapper>
-      </S.desktopTopBar>
+    <>
+      <S.desktopTopNavigationBar>
+        <S.wrapper>{props.slotDesktopTopNavigationBar}</S.wrapper>
+      </S.desktopTopNavigationBar>
 
       <S.wrapper>
         <S.content>
-          <S.header ref={asideRef} width={asideWidth}>
-            <S.Header.inner isVisible={true}>{props.slotHeader}</S.Header.inner>
+          <S.header ref={asideRef} width={slidableWidth}>
+            <S.Header.inner isVisible={isSlideoutRightDefinetelyClosed}>
+              {props.slotHeader}
+            </S.Header.inner>
           </S.header>
 
           <S.main
@@ -128,36 +135,39 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
             </S.Main.inner>
           </S.main>
 
-          <S.aside ref={mobileTabsPanelRef} width={mobileTabsPanelWidth}>
+          <S.aside ref={mobileTabsPanelRef} width={slidableWidth}>
             <S.Aside.inner isVisible={isSlideoutLeftDefinetelyClosed}>
-              <S.Aside.Inner.mobile>{props.slotAside}</S.Aside.Inner.mobile>
-              <S.Aside.Inner.desktop>
-                <S.Aside.Inner.Desktop.topBarFix />
-                <StickyBox offsetTop={S.DESKTOP_TOP_BAR_HEIGHT}>
-                  {props.slotAside}
-                </StickyBox>
-              </S.Aside.Inner.desktop>
+              {windowWidth && windowWidth >= 992 ? (
+                <>
+                  <S.Aside.Inner.Desktop.topBarBlurBgFix />
+                  <StickyBox offsetTop={S.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}>
+                    {props.slotAside}
+                  </StickyBox>
+                </>
+              ) : (
+                props.slotAside
+              )}
             </S.Aside.inner>
           </S.aside>
         </S.content>
       </S.wrapper>
-    </S.container>
+    </>
   )
 }
 
 namespace S {
   const SITE_WIDTH = 1380
-  export const DESKTOP_TOP_BAR_HEIGHT = 60
+  export const DESKTOP_TOP_NAVIGATION_BAR_HEIGHT = 60
 
-  export const container = styled.div``
   export const wrapper = styled.div`
     ${mq.at992} {
       max-width: ${SITE_WIDTH}px;
+      width: 100%;
       margin: 0 auto;
       padding: 0 40px;
     }
   `
-  export const desktopTopBar = styled.nav`
+  export const desktopTopNavigationBar = styled.div`
     ${mq.to992} {
       display: none;
     }
@@ -168,7 +178,9 @@ namespace S {
     z-index: 100;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: saturate(180%) blur(5px);
-    height: ${DESKTOP_TOP_BAR_HEIGHT}px;
+    height: ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
+    display: flex;
+    align-items: center;
   `
   export const content = styled.div`
     ${mq.at992} {
@@ -177,8 +189,11 @@ namespace S {
       min-height: 100vh;
       & > aside,
       & > header {
-        width: 240px;
+        width: 23vw;
         ${mq.at1200} {
+          width: 22vw;
+        }
+        ${mq.at1380} {
           width: 300px;
         }
       }
@@ -196,9 +211,9 @@ namespace S {
     }
     ${mq.at992} {
       position: sticky;
-      height: calc(100vh - ${DESKTOP_TOP_BAR_HEIGHT}px);
+      height: calc(100vh - ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px);
       width: 100%;
-      top: ${DESKTOP_TOP_BAR_HEIGHT}px;
+      top: ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
       overflow: auto;
       border-right: var(${Theme.BORDER_PRIMARY});
     }
@@ -232,7 +247,7 @@ namespace S {
       display: none;
     }
     ${mq.at992} {
-      padding-top: ${DESKTOP_TOP_BAR_HEIGHT}px;
+      padding-top: ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
       border-left: var(${Theme.BORDER_PRIMARY});
       z-index: -1;
     }
@@ -265,9 +280,9 @@ namespace S {
         height: 100%;
       `
       export namespace Desktop {
-        export const topBarFix = styled.div`
+        export const topBarBlurBgFix = styled.div`
           width: 100vw;
-          height: ${DESKTOP_TOP_BAR_HEIGHT}px;
+          height: ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
           background-color: var(${Theme.COLOR_WHITE});
           top: 0;
           position: fixed;
@@ -306,7 +321,7 @@ namespace S {
           var(${Theme.TRANSITION_TIMING_FUNCTION});
       }
       ${mq.at992} {
-        padding-top: ${DESKTOP_TOP_BAR_HEIGHT}px;
+        padding-top: ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
       }
     `
   }

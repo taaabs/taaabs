@@ -29,7 +29,7 @@ const container = css`
   }
   & h1 {
     font-size: 4rem;
-    font-family: var(${Theme.FONT_FAMILY_SERIF});
+    font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
     line-height: 1.1;
     font-weight: normal;
     ${mq.at768} {

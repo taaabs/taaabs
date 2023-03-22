@@ -71,6 +71,6 @@ namespace S {
   `
   export const ThirdLine = styled.div`
     ${base}
-    font-family: var(${Theme.FONT_FAMILY_SERIF});
+    font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
   `
 }

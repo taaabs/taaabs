@@ -38,7 +38,7 @@ namespace S {
     display: inline-flex;
     align-items: center;
     color: var(${Theme.COLOR_WHITE});
-    background: var(${Theme.COLOR_PRIMARY_300});
+    background: var(${Theme.COLOR_PRIMARY_900});
     font-weight: 600;
     transition: var(${Theme.ANIMATION_DURATION_150});
     &:hover {
