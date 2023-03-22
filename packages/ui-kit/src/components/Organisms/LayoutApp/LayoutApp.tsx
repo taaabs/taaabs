@@ -172,7 +172,7 @@ namespace S {
       display: none;
     }
     border-bottom: var(${Theme.BORDER_PRIMARY});
-    position: fixed;
+    position: sticky;
     top: 0;
     width: 100%;
     z-index: 100;
@@ -247,7 +247,6 @@ namespace S {
       display: none;
     }
     ${mq.at992} {
-      padding-top: ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
       border-left: var(${Theme.BORDER_PRIMARY});
       z-index: -1;
     }
@@ -319,9 +318,6 @@ namespace S {
         opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
         transition: opacity var(${Theme.ANIMATION_DURATION_300})
           var(${Theme.TRANSITION_TIMING_FUNCTION});
-      }
-      ${mq.at992} {
-        padding-top: ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
       }
     `
   }
