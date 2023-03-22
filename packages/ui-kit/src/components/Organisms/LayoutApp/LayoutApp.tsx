@@ -13,6 +13,7 @@ export namespace LayoutApp {
     slotHeader: React.ReactNode
     slotMain: React.ReactNode
     slotAside: React.ReactNode
+    slotFooter: React.ReactNode
   }
 }
 
@@ -133,6 +134,9 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
               <button onClick={() => slideoutLeft?.open()}>BURGER</button>
               {props.slotMain}
             </S.Main.inner>
+            <S.footer>
+              <div>this is footer</div>
+            </S.footer>
           </S.main>
 
           <S.aside ref={mobileTabsPanelRef} width={slidableWidth}>
@@ -164,6 +168,9 @@ namespace S {
       max-width: ${SITE_WIDTH}px;
       width: 100%;
       margin: 0 auto;
+      padding: 0 10px;
+    }
+    ${mq.at1200} {
       padding: 0 40px;
     }
   `
@@ -186,10 +193,10 @@ namespace S {
     ${mq.at992} {
       display: flex;
       width: 100%;
-      min-height: 100vh;
+      min-height: calc(100vh - ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px);
       & > aside,
       & > header {
-        width: 23vw;
+        width: 25vw;
         ${mq.at1200} {
           width: 22vw;
         }
@@ -316,9 +323,16 @@ namespace S {
     export const inner = styled.div<{ isDimmed: boolean }>`
       ${mq.to992} {
         opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
+        min-height: 100vh;
         transition: opacity var(${Theme.ANIMATION_DURATION_300})
           var(${Theme.TRANSITION_TIMING_FUNCTION});
       }
+      ${mq.at992} {
+        min-height: calc(100vh - ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px);
+      }
     `
   }
+  export const footer = styled.div`
+    border-top: var(${Theme.BORDER_PRIMARY});
+  `
 }
