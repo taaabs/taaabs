@@ -1,6 +1,7 @@
 import { Atoms } from '@/components'
 import { Icon } from '@/components/Atoms/Icon'
 import { Theme } from '@/styles/GlobalStyles'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 
@@ -15,6 +16,7 @@ export namespace DesktopTopNavigationBar {
     breadcrumbs: Array<{ title: string; link: string }>
     onClickSearch: () => void
     onClickTheme: () => void
+    onClickSignIn: () => void
     currentTheme: 'LIGHT' | 'DARK' | 'OS'
   }
 }
@@ -49,12 +51,48 @@ export const DesktopTopNavigationBar: React.FC<DesktopTopNavigationBar.Props> =
             <S.Left.pageTitle>{props.pageTitle}</S.Left.pageTitle>
           )}
         </S.left>
-        <S.right>right</S.right>
+        <S.right>
+          {!props.user ? (
+            <S.Right.guest>
+              <S.Right.Guest.nav>
+                <ul>
+                  <li>
+                    <Link href="/about">About</Link>
+                  </li>
+                  <li>
+                    <Link href="/pricing">Pricing</Link>
+                  </li>
+                </ul>
+              </S.Right.Guest.nav>
+              <S.Right.Guest.signInButton onClick={props.onClickSignIn}>
+                Sign in
+              </S.Right.Guest.signInButton>
+            </S.Right.guest>
+          ) : (
+            <S.Right.user>
+              <S.Right.User.button>
+                <Icon variant="SEARCH" />
+              </S.Right.User.button>
+              <S.Right.User.button>
+                <Icon variant="SUN" />
+              </S.Right.User.button>
+            </S.Right.user>
+          )}
+        </S.right>
       </S.container>
     )
   }
 
 namespace S {
+  const buttonBase = css`
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(${Theme.BORDER_RADIUS_10});
+    font-size: 16px;
+    font-weight: var(${Theme.FONT_WEIGHT_INTER_SEMIBOLD});
+    height: var(${Theme.BUTTON_HEIGHT_40});
+    padding: 0 10px;
+  `
   export const container = styled.div`
     display: flex;
     justify-content: space-between;
@@ -74,14 +112,8 @@ namespace S {
     `
     export namespace Breadcrumbs {
       export const link = styled(Link)`
-        display: inline-flex;
-        align-items: center;
+        ${buttonBase}
         background-color: var(${Theme.COLOR_NEUTRAL_50});
-        border-radius: var(${Theme.BORDER_RADIUS_10});
-        font-size: 18px;
-        font-weight: var(${Theme.FONT_WEIGHT_SEMIBOLD});
-        height: var(${Theme.BUTTON_HEIGHT_40});
-        padding: 0 10px;
         @media (hover: hover) {
           :hover {
             background-color: var(${Theme.COLOR_NEUTRAL_100});
@@ -98,12 +130,69 @@ namespace S {
       `
     }
     export const pageTitle = styled.div`
-      font-size: 18px;
-      font-weight: var(${Theme.FONT_WEIGHT_SEMIBOLD});
+      font-size: 16px;
+      font-weight: var(${Theme.FONT_WEIGHT_INTER_SEMIBOLD});
     `
   }
   export const right = styled.div`
     display: flex;
     gap: var(${Theme.SPACER_8});
   `
+  export namespace Right {
+    export const guest = styled.div`
+      display: flex;
+      gap: var(${Theme.SPACER_8});
+    `
+    export namespace Guest {
+      export const nav = styled.nav`
+        ul {
+          display: flex;
+        }
+        a {
+          font-size: var(${Theme.FONT_SIZE_16});
+          display: flex;
+          height: var(${Theme.BUTTON_HEIGHT_40});
+          align-items: center;
+          padding: 0 var(${Theme.SPACER_8});
+          @media (hover: hover) {
+            &:hover {
+              text-decoration: underline;
+              text-decoration-thickness: 1.5px;
+            }
+          }
+        }
+      `
+
+      export const signInButton = styled.button`
+        ${buttonBase}
+        background-color: var(${Theme.COLOR_BRAND});
+        color: var(${Theme.COLOR_WHITE});
+      `
+    }
+    export const user = styled.div`
+      display: flex;
+      gap: var(${Theme.SPACER_8});
+    `
+    export namespace User {
+      const iconBase = css`
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(${Theme.COLOR_NEUTRAL_50});
+        width: var(${Theme.BUTTON_HEIGHT_40});
+        height: var(${Theme.BUTTON_HEIGHT_40});
+        border-radius: 50%;
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(${Theme.COLOR_NEUTRAL_100});
+          }
+        }
+      `
+      export const button = styled.button`
+        ${iconBase}
+        & > div svg {
+        }
+      `
+    }
+  }
 }

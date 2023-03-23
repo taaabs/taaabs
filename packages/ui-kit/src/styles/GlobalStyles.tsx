@@ -4,14 +4,16 @@ import { mq } from './mediaQueries'
 export const enum Theme {
   FONT_FAMILY_INTER = '--font-family-inter',
   FONT_FAMILY_SPACE_GROTESK = '--font-family-space-grotesk',
-  FONT_SIZE_BODY_12 = '--font-size-body-12',
-  FONT_SIZE_BODY_14 = '--font-size-body-14',
-  FONT_SIZE_BODY_16 = '--font-size-body-16',
-  FONT_SIZE_BODY_18 = '--font-size-body-18',
-  FONT_SIZE_BODY_20 = '--font-size-body-20',
-  FONT_WEIGHT_MEDIUM = '--font-weight-medium',
-  FONT_WEIGHT_SEMIBOLD = '--font-weight-semibold',
-  FONT_WEIGHT_BOLD = '--font-weight-bold',
+  FONT_SIZE_12 = '--font-size-12',
+  FONT_SIZE_14 = '--font-size-14',
+  FONT_SIZE_16 = '--font-size-16',
+  FONT_SIZE_18 = '--font-size-18',
+  FONT_SIZE_20 = '--font-size-20',
+  FONT_WEIGHT_INTER_MEDIUM = '--font-weight-inter-medium',
+  FONT_WEIGHT_INTER_SEMIBOLD = '--font-weight-inter-semibold',
+  FONT_WEIGHT_INTER_BOLD = '--font-weight-inter-bold',
+  FONT_SPACE_GROTESK_WEIGHT_MEDIUM = '--font-space-grotesk-weight-medium',
+  FONT_SPACE_GROTESK_WEIGHT_BOLD = '--font-space-grotesk-weight-bold',
   BORDER_RADIUS_4 = '--border-radius-4',
   BORDER_RADIUS_10 = '--border-radius-10',
   BORDER_RADIUS_12 = '--border-radius-12',
@@ -56,14 +58,16 @@ type ThemeMap = {
 const defaultTheme: ThemeMap = {
   [Theme.FONT_FAMILY_INTER]: `"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Twemoji Country Flags", "Segoe UI Emoji", "Segoe UI Symbol"`,
   [Theme.FONT_FAMILY_SPACE_GROTESK]: `"Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
-  [Theme.FONT_SIZE_BODY_12]: '1.2rem',
-  [Theme.FONT_SIZE_BODY_14]: '1.4rem',
-  [Theme.FONT_SIZE_BODY_16]: '1.6rem',
-  [Theme.FONT_SIZE_BODY_18]: '1.8rem',
-  [Theme.FONT_SIZE_BODY_20]: '2rem',
-  [Theme.FONT_WEIGHT_MEDIUM]: '500',
-  [Theme.FONT_WEIGHT_SEMIBOLD]: '600',
-  [Theme.FONT_WEIGHT_BOLD]: '700',
+  [Theme.FONT_SIZE_12]: '1.2rem',
+  [Theme.FONT_SIZE_14]: '1.4rem',
+  [Theme.FONT_SIZE_16]: '1.6rem',
+  [Theme.FONT_SIZE_18]: '1.8rem',
+  [Theme.FONT_SIZE_20]: '2rem',
+  [Theme.FONT_WEIGHT_INTER_MEDIUM]: '500',
+  [Theme.FONT_WEIGHT_INTER_SEMIBOLD]: '600',
+  [Theme.FONT_WEIGHT_INTER_BOLD]: '700',
+  [Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM]: '500',
+  [Theme.FONT_SPACE_GROTESK_WEIGHT_BOLD]: '700',
   [Theme.BORDER_RADIUS_4]: '4px',
   [Theme.BORDER_RADIUS_10]: '10px',
   [Theme.BORDER_RADIUS_12]: '12px',
@@ -102,7 +106,7 @@ const defaultTheme: ThemeMap = {
 }
 
 export const globalStyles = css`
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
 
   #__next {
     min-height: 100vh;
@@ -134,7 +138,6 @@ export const globalStyles = css`
     line-height: 1.5;
     font-size: 1.4rem;
     color: var(${Theme.COLOR_TEXT_NORMAL});
-    background: var(${Theme.COLOR_NEUTRAL_25});
   }
 
   body,

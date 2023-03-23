@@ -17,6 +17,7 @@ export const combined = () => (
       currentTheme={'LIGHT'}
       onClickSearch={() => {}}
       onClickTheme={() => {}}
+      onClickSignIn={() => {}}
       pageTitle="Lorem ipsum"
     />
     <StorybookSpacer />
@@ -27,6 +28,7 @@ export const combined = () => (
       currentTheme={'LIGHT'}
       onClickSearch={() => {}}
       onClickTheme={() => {}}
+      onClickSignIn={() => {}}
       pageTitle="Lorem ipsum"
       user={{ username: 'lorem', displayName: 'Lorem ipsum' }}
     />
@@ -42,6 +44,7 @@ export const combined = () => (
       currentTheme={'LIGHT'}
       onClickSearch={() => {}}
       onClickTheme={() => {}}
+      onClickSignIn={() => {}}
       pageTitle="Lorem ipsum"
       user={{ username: 'lorem', displayName: 'Lorem ipsum' }}
     />

@@ -139,7 +139,7 @@ namespace S {
         outline: 1px solid var(${Theme.COLOR_NEUTRAL_200});
         outline-offset: -1px;
         & > span {
-          font-weight: var(${Theme.FONT_WEIGHT_SEMIBOLD});
+          font-weight: var(${Theme.FONT_WEIGHT_INTER_SEMIBOLD});
           letter-spacing: -0.1rem;
         }
         &:hover {

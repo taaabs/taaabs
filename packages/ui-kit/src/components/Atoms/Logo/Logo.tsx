@@ -23,7 +23,7 @@ namespace S {
     display: inline-flex;
     gap: var(${Theme.SPACER_8});
     align-items: center;
-    font-weight: var(${Theme.FONT_WEIGHT_MEDIUM});
+    font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
   `
   export const circle = styled.div<{ isPrimary: boolean }>`
     width: var(${Theme.BUTTON_HEIGHT_40});

@@ -9,9 +9,11 @@ import { ReactComponent as Home } from '@/assets/icons/home.svg'
 import { ReactComponent as Pin } from '@/assets/icons/pin.svg'
 import { ReactComponent as RecentFilled } from '@/assets/icons/recent-filled.svg'
 import { ReactComponent as Recent } from '@/assets/icons/recent.svg'
+import { ReactComponent as Search } from '@/assets/icons/search.svg'
 import { ReactComponent as Sort } from '@/assets/icons/sort.svg'
 import { ReactComponent as StarFilled } from '@/assets/icons/star-filled.svg'
 import { ReactComponent as Star } from '@/assets/icons/star.svg'
+import { ReactComponent as Sun } from '@/assets/icons/sun.svg'
 import { ReactComponent as Trash } from '@/assets/icons/trash.svg'
 import { ReactComponent as Like } from '@/assets/icons/like.svg'
 import { ReactComponent as LikeFilled } from '@/assets/icons/like-filled.svg'
@@ -32,11 +34,13 @@ export namespace Icon {
     | 'HOME_FILLED'
     | 'HOME'
     | 'PIN'
+    | 'SEARCH'
     | 'RECENT_FILLED'
     | 'RECENT'
     | 'SORT'
     | 'STAR_FILLED'
     | 'STAR'
+    | 'SUN'
     | 'TRASH'
     | 'LIKE'
     | 'LIKE_FILLED'
@@ -91,6 +95,9 @@ export const Icon: React.FC<Icon.Props> = (props) => {
     case 'RECENT':
       icon = <Recent />
       break
+    case 'SEARCH':
+      icon = <Search />
+      break
     case 'RECENT_FILLED':
       icon = <RecentFilled />
       break
@@ -99,6 +106,9 @@ export const Icon: React.FC<Icon.Props> = (props) => {
       break
     case 'STAR':
       icon = <Star />
+      break
+    case 'SUN':
+      icon = <Sun />
       break
     case 'STAR_FILLED':
       icon = <StarFilled />

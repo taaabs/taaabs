@@ -47,7 +47,7 @@ namespace S {
   const sizeMap: ButtonTypes.SizeMap = {
     [ButtonTypes.Size.DEFAULT]: css`
       height: 4.8rem;
-      font-size: var(${Theme.FONT_SIZE_BODY_16});
+      font-size: var(${Theme.FONT_SIZE_16});
       padding: 0 2rem;
       border-radius: var(${Theme.BORDER_RADIUS_10});
     `,
@@ -55,11 +55,11 @@ namespace S {
       padding: 0 2.2rem;
       border-radius: var(${Theme.BORDER_RADIUS_12});
       height: 5.6rem;
-      font-size: var(${Theme.FONT_SIZE_BODY_18});
+      font-size: var(${Theme.FONT_SIZE_18});
       ${mq.at1200} {
         height: 6rem;
         padding: 0 2.8rem;
-        font-size: var(${Theme.FONT_SIZE_BODY_20});
+        font-size: var(${Theme.FONT_SIZE_20});
         border-radius: var(${Theme.BORDER_RADIUS_14});
       }
     `,

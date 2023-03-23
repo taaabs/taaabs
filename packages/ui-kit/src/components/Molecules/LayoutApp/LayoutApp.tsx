@@ -111,7 +111,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   }, [windowWidth])
 
   return (
-    <>
+    <S.container>
       <S.desktopTopNavigationBar>
         <Atoms.Wrapper>{props.slotDesktopTopNavigationBar}</Atoms.Wrapper>
       </S.desktopTopNavigationBar>
@@ -154,13 +154,16 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
           </S.aside>
         </S.content>
       </Atoms.Wrapper>
-    </>
+    </S.container>
   )
 }
 
 namespace S {
   export const DESKTOP_TOP_NAVIGATION_BAR_HEIGHT = 60
 
+  export const container = styled.div`
+    background: var(${Theme.COLOR_NEUTRAL_25});
+  `
   export const desktopTopNavigationBar = styled.div`
     ${mq.to992} {
       display: none;
@@ -242,7 +245,6 @@ namespace S {
     }
     ${mq.at992} {
       border-left: var(${Theme.BORDER_PRIMARY});
-      z-index: -1;
     }
   `
   export namespace Aside {

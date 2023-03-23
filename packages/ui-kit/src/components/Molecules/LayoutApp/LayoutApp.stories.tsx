@@ -2,7 +2,7 @@ import { Meta } from '@storybook/react'
 import { LayoutApp } from './LayoutApp'
 
 export default {
-  title: 'Organisms/LayoutApp',
+  title: 'Molecules/LayoutApp',
   component: LayoutApp,
 } as Meta
 
