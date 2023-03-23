@@ -17,8 +17,7 @@ export const combined = () => (
       currentTheme={'LIGHT'}
       onClickSearch={() => {}}
       onClickTheme={() => {}}
-      pageTitle="x"
-      user={{ username: 'lorem', displayName: 'Lorem ipsum' }}
+      pageTitle="Lorem ipsum"
     />
     <StorybookSpacer />
     Logged in user:

@@ -91,7 +91,7 @@ namespace S {
       export const arrow = styled.div`
         display: flex;
         align-items: center;
-        svg {
+        & > div svg {
           width: 8px;
           fill: var(${Theme.COLOR_NEUTRAL_200});
         }
