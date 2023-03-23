@@ -27,13 +27,13 @@ export const MobileAppBar: React.FC<MobileAppBar.Props> = (props) => {
 
 namespace S {
   export const wrapper = styled.div`
-    height: var(${Theme.TOPBAR_HEIGHT});
+    height: var(${Theme.MOBILE_TOP_BAR_HEIGHT});
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: var(${Theme.COLOR_WHITE});
     border-bottom: var(${Theme.BORDER_PRIMARY});
-    padding-right: var(${Theme.PADDING_15});
+    padding-right: var(${Theme.SPACER_16});
     box-sizing: content-box;
   `
   export const content = styled.div`

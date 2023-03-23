@@ -6,6 +6,7 @@ import { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import { ASIDE_AVATARS_WIDTH } from '@/styles/constants'
 import { css } from '@emotion/react'
 import StickyBox from 'react-sticky-box'
+import { Atoms } from '@/components'
 
 export namespace LayoutApp {
   export type Props = {
@@ -112,10 +113,10 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   return (
     <>
       <S.desktopTopNavigationBar>
-        <S.wrapper>{props.slotDesktopTopNavigationBar}</S.wrapper>
+        <Atoms.Wrapper>{props.slotDesktopTopNavigationBar}</Atoms.Wrapper>
       </S.desktopTopNavigationBar>
 
-      <S.wrapper>
+      <Atoms.Wrapper>
         <S.content>
           <S.header ref={asideRef} width={slidableWidth}>
             <S.Header.inner isVisible={isSlideoutRightDefinetelyClosed}>
@@ -134,9 +135,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
               <button onClick={() => slideoutLeft?.open()}>BURGER</button>
               {props.slotMain}
             </S.Main.inner>
-            <S.footer>
-              <div>this is footer</div>
-            </S.footer>
+            <S.footer>{props.slotFooter}</S.footer>
           </S.main>
 
           <S.aside ref={mobileTabsPanelRef} width={slidableWidth}>
@@ -154,26 +153,14 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
             </S.Aside.inner>
           </S.aside>
         </S.content>
-      </S.wrapper>
+      </Atoms.Wrapper>
     </>
   )
 }
 
 namespace S {
-  const SITE_WIDTH = 1380
   export const DESKTOP_TOP_NAVIGATION_BAR_HEIGHT = 60
 
-  export const wrapper = styled.div`
-    ${mq.at992} {
-      max-width: ${SITE_WIDTH}px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 0 10px;
-    }
-    ${mq.at1200} {
-      padding: 0 40px;
-    }
-  `
   export const desktopTopNavigationBar = styled.div`
     ${mq.to992} {
       display: none;
@@ -196,9 +183,9 @@ namespace S {
       min-height: calc(100vh - ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px);
       & > aside,
       & > header {
-        width: 25vw;
+        width: 26vw;
         ${mq.at1200} {
-          width: 22vw;
+          width: 21.7vw;
         }
         ${mq.at1380} {
           width: 300px;

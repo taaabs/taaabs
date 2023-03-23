@@ -38,9 +38,8 @@ namespace S {
     display: inline-flex;
     align-items: center;
     color: var(${Theme.COLOR_WHITE});
-    background: var(${Theme.COLOR_PRIMARY_900});
+    background: var(${Theme.COLOR_BRAND});
     font-weight: 600;
-    transition: var(${Theme.ANIMATION_DURATION_150});
     &:hover {
       transform: translateY(-2px);
     }

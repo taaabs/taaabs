@@ -29,15 +29,20 @@ export const enum Theme {
   COLOR_BRAND = '--color-brand',
   COLOR_BORDER_PRIMARY = '--color-border-primary',
   COLOR_BORDER_SECONDARY = '--color-border-secondary',
-  PADDING_8 = '--padding-8',
-  PADDING_15 = '--padding-15',
-  PADDING_40 = '--padding-40',
-  PADDING_60 = '--padding-60',
+  LOGO_BACKGROUND_COLOR_PRIMARY = '--logo-background-color-primary',
+  LOGO_FOREGROUND_COLOR_PRIMARY = '--logo-foreground-color-primary',
+  LOGO_BACKGROUND_COLOR_SECONDARY = '--logo-background-color-secondary',
+  LOGO_FOREGROUND_COLOR_SECONDARY = '--logo-foreground-color-secondary',
+  SPACER_8 = '--padding-8',
+  SPACER_16 = '--padding-15',
+  SPACER_40 = '--padding-40',
+  SPACER_60 = '--padding-60',
   BORDER_PRIMARY = '--border-primary',
   BORDER_SECONDARY = '--border-secondary',
-  BUTTON_HEIGHT_46 = '--button-height-46',
   BUTTON_HEIGHT_32 = '--button-height-32',
-  TOPBAR_HEIGHT = '--topbar-height',
+  BUTTON_HEIGHT_40 = '--button-height-40',
+  BUTTON_HEIGHT_46 = '--button-height-46',
+  MOBILE_TOP_BAR_HEIGHT = '--mobile-top-bar-height',
   ANIMATION_DURATION_150 = '--animation-duration-150',
   ANIMATION_DURATION_300 = '--animation-duration-300',
   TRANSITION_TIMING_FUNCTION = '--transition-timing-function',
@@ -49,8 +54,8 @@ type ThemeMap = {
 }
 
 const defaultTheme: ThemeMap = {
-  [Theme.FONT_FAMILY_INTER]: "'Inter', sans-serif",
-  [Theme.FONT_FAMILY_SPACE_GROTESK]: "'Space Grotesk', sans-serif",
+  [Theme.FONT_FAMILY_INTER]: `"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Twemoji Country Flags", "Segoe UI Emoji", "Segoe UI Symbol"`,
+  [Theme.FONT_FAMILY_SPACE_GROTESK]: `"Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
   [Theme.FONT_SIZE_BODY_12]: '1.2rem',
   [Theme.FONT_SIZE_BODY_14]: '1.4rem',
   [Theme.FONT_SIZE_BODY_16]: '1.6rem',
@@ -76,15 +81,20 @@ const defaultTheme: ThemeMap = {
   [Theme.COLOR_BRAND]: `var(${Theme.COLOR_PRIMARY_900})`,
   [Theme.COLOR_BORDER_PRIMARY]: '#E7E7E7',
   [Theme.COLOR_BORDER_SECONDARY]: '#F2F2F2',
-  [Theme.PADDING_8]: '8px',
-  [Theme.PADDING_15]: '15px',
-  [Theme.PADDING_40]: '40px',
-  [Theme.PADDING_60]: '60px',
+  [Theme.SPACER_8]: '8px',
+  [Theme.SPACER_16]: '15px',
+  [Theme.SPACER_40]: '40px',
+  [Theme.SPACER_60]: '60px',
   [Theme.BORDER_PRIMARY]: `1px solid var(${Theme.COLOR_BORDER_PRIMARY})`,
   [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.COLOR_BORDER_SECONDARY})`,
-  [Theme.BUTTON_HEIGHT_46]: '46px',
+  [Theme.LOGO_BACKGROUND_COLOR_PRIMARY]: `var(${Theme.COLOR_PRIMARY_900})`,
+  [Theme.LOGO_FOREGROUND_COLOR_PRIMARY]: `var(${Theme.COLOR_WHITE})`,
+  [Theme.LOGO_BACKGROUND_COLOR_SECONDARY]: `var(${Theme.COLOR_NEUTRAL_50})`,
+  [Theme.LOGO_FOREGROUND_COLOR_SECONDARY]: `var(${Theme.COLOR_PRIMARY_900})`,
   [Theme.BUTTON_HEIGHT_32]: '32px',
-  [Theme.TOPBAR_HEIGHT]: '62px',
+  [Theme.BUTTON_HEIGHT_40]: '40px',
+  [Theme.BUTTON_HEIGHT_46]: '46px',
+  [Theme.MOBILE_TOP_BAR_HEIGHT]: '62px',
   [Theme.ANIMATION_DURATION_150]: '150ms',
   [Theme.ANIMATION_DURATION_300]: '300ms',
   [Theme.TRANSITION_TIMING_FUNCTION]: 'ease-in-out',
@@ -92,8 +102,7 @@ const defaultTheme: ThemeMap = {
 }
 
 export const globalStyles = css`
-  @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
   #__next {
     min-height: 100vh;
@@ -144,6 +153,11 @@ export const globalStyles = css`
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  a,
+  button {
+    transition: var(${Theme.TRANSITION_HOVER});
   }
 
   ol,

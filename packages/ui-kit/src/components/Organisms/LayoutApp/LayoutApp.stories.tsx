@@ -12,15 +12,17 @@ export const standard = () => (
     slotHeader={<>slot header</>}
     slotMain={<>slot main</>}
     slotAside={<>slot aside</>}
+    slotFooter={<>slot footer</>}
   />
 )
 
-export const scrollingTtest = () => (
+export const scrollingTest = () => (
   <LayoutApp
     slotDesktopTopNavigationBar={<>slot desktop top bar</>}
     slotHeader={<>{lorem}</>}
     slotMain={<>{lorem + lorem + lorem + lorem + lorem}</>}
     slotAside={<>{lorem}</>}
+    slotFooter={<>{lorem}</>}
   />
 )
 

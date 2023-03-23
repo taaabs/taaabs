@@ -3,6 +3,7 @@ import { ReactComponent as Alias } from '@/assets/icons/alias.svg'
 import { ReactComponent as Archive } from '@/assets/icons/archive.svg'
 import { ReactComponent as CollectionFilled } from '@/assets/icons/collection-filled.svg'
 import { ReactComponent as Collection } from '@/assets/icons/collection.svg'
+import { ReactComponent as GreaterThan } from '@/assets/icons/greater-than.svg'
 import { ReactComponent as HomeFilled } from '@/assets/icons/home-filled.svg'
 import { ReactComponent as Home } from '@/assets/icons/home.svg'
 import { ReactComponent as Pin } from '@/assets/icons/pin.svg'
@@ -19,41 +20,109 @@ import { ReactComponent as SwipeRight } from '@/assets/icons/swipe-right.svg'
 import { ReactComponent as ArrowLeft } from '@/assets/icons/arrow-left.svg'
 import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
-import { IconTypes } from './Icon.types'
 
-const iconVariantMap: IconTypes.VariantMap = {
-  [IconTypes.Variant.ACTIVITY]: <Activity />,
-  [IconTypes.Variant.ALIAS]: <Alias />,
-  [IconTypes.Variant.ARCHIVE]: <Archive />,
-  [IconTypes.Variant.COLLECTION_FILLED]: <CollectionFilled />,
-  [IconTypes.Variant.COLLECTION]: <Collection />,
-  [IconTypes.Variant.HOME_FILLED]: <HomeFilled />,
-  [IconTypes.Variant.HOME]: <Home />,
-  [IconTypes.Variant.PIN]: <Pin />,
-  [IconTypes.Variant.RECENT_FILLED]: <RecentFilled />,
-  [IconTypes.Variant.RECENT]: <Recent />,
-  [IconTypes.Variant.SORT]: <Sort />,
-  [IconTypes.Variant.STAR_FILLED]: <StarFilled />,
-  [IconTypes.Variant.STAR]: <Star />,
-  [IconTypes.Variant.TRASH]: <Trash />,
-  [IconTypes.Variant.LIKE]: <Like />,
-  [IconTypes.Variant.LIKE_FILLED]: <LikeFilled />,
-  [IconTypes.Variant.SWIPE_LEFT]: <SwipeLeft />,
-  [IconTypes.Variant.SWIPE_RIGHT]: <SwipeRight />,
-  [IconTypes.Variant.ARROW_LEFT]: <ArrowLeft />,
+export namespace Icon {
+  export type Variant =
+    | 'ACTIVITY'
+    | 'ALIAS'
+    | 'ARCHIVE'
+    | 'COLLECTION_FILLED'
+    | 'COLLECTION'
+    | 'GREATER_THAN'
+    | 'HOME_FILLED'
+    | 'HOME'
+    | 'PIN'
+    | 'RECENT_FILLED'
+    | 'RECENT'
+    | 'SORT'
+    | 'STAR_FILLED'
+    | 'STAR'
+    | 'TRASH'
+    | 'LIKE'
+    | 'LIKE_FILLED'
+    | 'SWIPE_LEFT'
+    | 'SWIPE_RIGHT'
+    | 'ARROW_LEFT'
+
+  export type Props = {
+    variant: Variant
+  }
 }
 
-export const Icon: React.FC<IconTypes.Props> = (props) => {
-  return <S.iconWrapper>{iconVariantMap[props.variant]}</S.iconWrapper>
+export const Icon: React.FC<Icon.Props> = (props) => {
+  let icon: JSX.Element
+  switch (props.variant) {
+    case 'ACTIVITY':
+      icon = <Activity />
+      break
+    case 'ALIAS':
+      icon = <Alias />
+      break
+    case 'ARCHIVE':
+      icon = <Archive />
+      break
+    case 'ARROW_LEFT':
+      icon = <ArrowLeft />
+      break
+    case 'COLLECTION':
+      icon = <Collection />
+      break
+    case 'COLLECTION_FILLED':
+      icon = <CollectionFilled />
+      break
+    case 'GREATER_THAN':
+      icon = <GreaterThan />
+      break
+    case 'HOME':
+      icon = <Home />
+      break
+    case 'HOME_FILLED':
+      icon = <HomeFilled />
+      break
+    case 'LIKE':
+      icon = <Like />
+      break
+    case 'LIKE_FILLED':
+      icon = <LikeFilled />
+      break
+    case 'PIN':
+      icon = <Pin />
+      break
+    case 'RECENT':
+      icon = <Recent />
+      break
+    case 'RECENT_FILLED':
+      icon = <RecentFilled />
+      break
+    case 'SORT':
+      icon = <Sort />
+      break
+    case 'STAR':
+      icon = <Star />
+      break
+    case 'STAR_FILLED':
+      icon = <StarFilled />
+      break
+    case 'SWIPE_LEFT':
+      icon = <SwipeLeft />
+      break
+    case 'SWIPE_RIGHT':
+      icon = <SwipeRight />
+      break
+    case 'TRASH':
+      icon = <Trash />
+  }
+  return <S.iconWrapper>{icon}</S.iconWrapper>
 }
 
 namespace S {
-  const iconSize = 20
+  const ICON_SIZE = 20
+
   export const iconWrapper = styled.div`
     display: inline-flex;
     & > svg {
-      width: ${iconSize}px;
-      height: ${iconSize}px;
+      width: ${ICON_SIZE}px;
+      height: ${ICON_SIZE}px;
       fill: var(${Theme.COLOR_BLACK});
     }
   `

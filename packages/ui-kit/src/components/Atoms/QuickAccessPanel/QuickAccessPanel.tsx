@@ -67,11 +67,11 @@ namespace S {
     background-color: var(${Theme.COLOR_WHITE});
     border-right: 1px solid var(${Theme.COLOR_NEUTRAL_50});
     width: calc(
-      var(${Theme.PADDING_8}) * 2 + var(${Theme.BUTTON_HEIGHT_46}) + 1px
+      var(${Theme.SPACER_8}) * 2 + var(${Theme.BUTTON_HEIGHT_46}) + 1px
     );
   `
   export const inner = styled.div`
-    padding: var(${Theme.PADDING_8}) 0;
+    padding: var(${Theme.SPACER_8}) 0;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,21 +1,21 @@
 import { StorybookMargin } from '@/helpers/components/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/components/StorybookSpacer'
-import { Meta, Story } from '@storybook/react'
-import { Logo, LogoProps } from './Logo'
+import { Meta } from '@storybook/react'
+import { Logo } from './Logo'
 
 export default {
   title: 'Atoms/Logo',
   component: Logo,
 } as Meta
 
-const template: Story = () => (
+export const standard = () => (
   <StorybookMargin>
-    <div style={{ background: '#ddd', padding: '4rem' }}>
-      <Logo type="simple" />
-      <StorybookSpacer />
-      <Logo type="wide" />
-    </div>
+    <Logo />
+    <StorybookSpacer />
+    <Logo text="taaabs" />
+    <StorybookSpacer />
+    <Logo isPrimary={false} />
+    <StorybookSpacer />
+    <Logo text="lorem ipsum" isPrimary={false} />
   </StorybookMargin>
 )
-
-export const standard = template.bind({})

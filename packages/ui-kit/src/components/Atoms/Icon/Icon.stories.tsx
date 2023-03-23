@@ -2,7 +2,6 @@ import { StorybookMargin } from '@/helpers/components/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/components/StorybookSpacer'
 import { Meta, Story } from '@storybook/react'
 import { Icon } from './Icon'
-import { IconTypes } from './Icon.types'
 
 export default {
   title: 'Atoms/Icon',
@@ -11,32 +10,34 @@ export default {
 
 export const icons: Story = () => (
   <StorybookMargin>
-    <Icon variant={IconTypes.Variant['ACTIVITY']} />
+    <Icon variant={'ACTIVITY'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['ALIAS']} />
+    <Icon variant={'ALIAS'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['ARCHIVE']} />
+    <Icon variant={'ARCHIVE'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['COLLECTION_FILLED']} />
+    <Icon variant={'COLLECTION_FILLED'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['COLLECTION']} />
+    <Icon variant={'COLLECTION'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['HOME_FILLED']} />
+    <Icon variant={'GREATER_THAN'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['HOME']} />
+    <Icon variant={'HOME_FILLED'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['PIN']} />
+    <Icon variant={'HOME'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['RECENT_FILLED']} />
+    <Icon variant={'PIN'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['RECENT']} />
+    <Icon variant={'RECENT_FILLED'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['SORT']} />
+    <Icon variant={'RECENT'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['STAR_FILLED']} />
+    <Icon variant={'SORT'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['STAR']} />
+    <Icon variant={'STAR_FILLED'} />
     <StorybookSpacer />
-    <Icon variant={IconTypes.Variant['TRASH']} />
+    <Icon variant={'STAR'} />
+    <StorybookSpacer />
+    <Icon variant={'TRASH'} />
   </StorybookMargin>
 )
