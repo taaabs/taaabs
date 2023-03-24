@@ -20,6 +20,9 @@ import { ReactComponent as LikeFilled } from '@/assets/icons/like-filled.svg'
 import { ReactComponent as SwipeLeft } from '@/assets/icons/swipe-left.svg'
 import { ReactComponent as SwipeRight } from '@/assets/icons/swipe-right.svg'
 import { ReactComponent as ArrowLeft } from '@/assets/icons/arrow-left.svg'
+import { ReactComponent as UserAdd } from '@/assets/icons/user-add.svg'
+import { ReactComponent as UserRemove } from '@/assets/icons/user-remove.svg'
+import { ReactComponent as User } from '@/assets/icons/user.svg'
 import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
 
@@ -47,6 +50,9 @@ export namespace Icon {
     | 'SWIPE_LEFT'
     | 'SWIPE_RIGHT'
     | 'ARROW_LEFT'
+    | 'USER_ADD'
+    | 'USER_REMOVE'
+    | 'USER'
 
   export type Props = {
     variant: Variant
@@ -121,12 +127,22 @@ export const Icon: React.FC<Icon.Props> = (props) => {
       break
     case 'TRASH':
       icon = <Trash />
+      break
+    case 'USER_ADD':
+      icon = <UserAdd />
+      break
+    case 'USER_REMOVE':
+      icon = <UserRemove />
+      break
+    case 'USER':
+      icon = <User />
+      break
   }
   return <S.iconWrapper>{icon}</S.iconWrapper>
 }
 
 namespace S {
-  const ICON_SIZE = 20
+  const ICON_SIZE = 40
 
   export const iconWrapper = styled.div`
     display: inline-flex;

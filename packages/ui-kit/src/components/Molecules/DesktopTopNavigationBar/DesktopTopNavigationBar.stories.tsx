@@ -33,6 +33,22 @@ export const combined = () => (
       user={{ username: 'lorem', displayName: 'Lorem ipsum' }}
     />
     <StorybookSpacer />
+    Logged in user with avatar:
+    <StorybookSpacer />
+    <DesktopTopNavigationBar
+      breadcrumbs={[]}
+      currentTheme={'LIGHT'}
+      onClickSearch={() => {}}
+      onClickTheme={() => {}}
+      onClickSignIn={() => {}}
+      pageTitle="Lorem ipsum"
+      user={{
+        username: 'lorem',
+        displayName: 'Lorem ipsum',
+        avatarUrl: 'https://picsum.photos/300/200',
+      }}
+    />
+    <StorybookSpacer />
     Logged in user with breadcrumbs:
     <StorybookSpacer />
     <DesktopTopNavigationBar

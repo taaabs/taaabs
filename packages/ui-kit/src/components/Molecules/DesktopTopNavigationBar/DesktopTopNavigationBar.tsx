@@ -28,9 +28,13 @@ export const DesktopTopNavigationBar: React.FC<DesktopTopNavigationBar.Props> =
         <S.left>
           <S.Left.logo>
             {props.user ? (
-              <Atoms.Logo text={props.user.username} isPrimary={false} />
+              <Atoms.Logo
+                text={props.user.username}
+                isPrimary={false}
+                isLinkingToHomepage={true}
+              />
             ) : (
-              <Atoms.Logo text="taaabs" />
+              <Atoms.Logo text="taaabs" isLinkingToHomepage={true} />
             )}
           </S.Left.logo>
           {props.breadcrumbs.length > 0 && (
@@ -60,10 +64,16 @@ export const DesktopTopNavigationBar: React.FC<DesktopTopNavigationBar.Props> =
                     <Link href="/about">About</Link>
                   </li>
                   <li>
-                    <Link href="/pricing">Pricing</Link>
+                    <Link href="/discover">Discover</Link>
                   </li>
                 </ul>
               </S.Right.Guest.nav>
+              <S.Right.User.button>
+                <Icon variant="SEARCH" />
+              </S.Right.User.button>
+              <S.Right.User.button>
+                <Icon variant="SUN" />
+              </S.Right.User.button>
               <S.Right.Guest.signInButton onClick={props.onClickSignIn}>
                 Sign in
               </S.Right.Guest.signInButton>
@@ -75,6 +85,13 @@ export const DesktopTopNavigationBar: React.FC<DesktopTopNavigationBar.Props> =
               </S.Right.User.button>
               <S.Right.User.button>
                 <Icon variant="SUN" />
+              </S.Right.User.button>
+              <S.Right.User.button>
+                {props.user.avatarUrl ? (
+                  <img src={props.user.avatarUrl} />
+                ) : (
+                  <Icon variant="USER" />
+                )}
               </S.Right.User.button>
             </S.Right.user>
           )}
@@ -89,7 +106,7 @@ namespace S {
     align-items: center;
     border-radius: var(${Theme.BORDER_RADIUS_10});
     font-size: 16px;
-    font-weight: var(${Theme.FONT_WEIGHT_INTER_SEMIBOLD});
+    font-weight: var(${Theme.FONT_WEIGHT_INTER_MEDIUM});
     height: var(${Theme.BUTTON_HEIGHT_40});
     padding: 0 10px;
   `
@@ -131,7 +148,7 @@ namespace S {
     }
     export const pageTitle = styled.div`
       font-size: 16px;
-      font-weight: var(${Theme.FONT_WEIGHT_INTER_SEMIBOLD});
+      font-weight: var(${Theme.FONT_WEIGHT_INTER_MEDIUM});
     `
   }
   export const right = styled.div`
@@ -150,6 +167,8 @@ namespace S {
         }
         a {
           font-size: var(${Theme.FONT_SIZE_16});
+          font-weight: var(${Theme.FONT_WEIGHT_INTER_MEDIUM});
+          text-underline-offset: 2px;
           display: flex;
           height: var(${Theme.BUTTON_HEIGHT_40});
           align-items: center;
@@ -162,11 +181,15 @@ namespace S {
           }
         }
       `
-
       export const signInButton = styled.button`
         ${buttonBase}
         background-color: var(${Theme.COLOR_BRAND});
         color: var(${Theme.COLOR_WHITE});
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(${Theme.COLOR_PRIMARY_900});
+          }
+        }
       `
     }
     export const user = styled.div`
@@ -174,7 +197,7 @@ namespace S {
       gap: var(${Theme.SPACER_8});
     `
     export namespace User {
-      const iconBase = css`
+      export const button = styled.button`
         display: flex;
         align-items: center;
         justify-content: center;
@@ -182,15 +205,24 @@ namespace S {
         width: var(${Theme.BUTTON_HEIGHT_40});
         height: var(${Theme.BUTTON_HEIGHT_40});
         border-radius: 50%;
+        overflow: hidden;
         @media (hover: hover) {
           &:hover {
             background-color: var(${Theme.COLOR_NEUTRAL_100});
+            & > img {
+              opacity: 0.8;
+            }
           }
         }
-      `
-      export const button = styled.button`
-        ${iconBase}
         & > div svg {
+          height: 20px;
+          width: 20px;
+        }
+        & > img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: var(${Theme.TRANSITION_HOVER});
         }
       `
     }

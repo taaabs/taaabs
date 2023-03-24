@@ -103,14 +103,14 @@ namespace S {
       width: 4px;
       border-top-right-radius: var(${Theme.BORDER_RADIUS_10});
       border-bottom-right-radius: var(${Theme.BORDER_RADIUS_10});
-      background-color: var(${Theme.COLOR_PRIMARY_900});
+      background-color: var(${Theme.COLOR_PRIMARY_800});
       left: 0;
       top: 0;
       transform: translate(-8px, 50%);
     `
     export const logo = styled.button`
       ${buttonBase}
-      background-color: var(${Theme.COLOR_PRIMARY_900});
+      background-color: var(${Theme.COLOR_PRIMARY_800});
       & span {
         color: var(${Theme.COLOR_WHITE});
         font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
