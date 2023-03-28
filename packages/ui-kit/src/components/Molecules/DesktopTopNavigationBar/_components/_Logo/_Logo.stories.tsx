@@ -1,5 +1,5 @@
-import { StorybookMargin } from '@/helpers/components/StorybookMargin'
-import { StorybookSpacer } from '@/helpers/components/StorybookSpacer'
+import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
+import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
 import { Meta, Story } from '@storybook/react'
 import { _Logo } from '.'
 

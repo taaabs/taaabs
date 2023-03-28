@@ -1,4 +1,4 @@
-import { StorybookMargin } from '@/helpers/components/StorybookMargin'
+import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
 import { Meta } from '@storybook/react'
 import { Logo } from './Logo'
 

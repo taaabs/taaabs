@@ -1,4 +1,4 @@
-import { StorybookMargin as HamburgerStory } from '@/helpers/components/StorybookMargin'
+import { StorybookMargin as HamburgerStory } from '@/helpers/storybook/StorybookMargin'
 import { Meta, Story } from '@storybook/react'
 import { useState } from 'react'
 import { Hamburger } from './'
