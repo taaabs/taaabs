@@ -1,6 +1,7 @@
 import { ButtonUnderlined } from '@/components/Atoms/ButtonUnderlined/ButtonUnderlined'
 import { Icon } from '@/components/Atoms/Icon'
 import { sharedValues } from '@/constants'
+import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
 import { _Logo } from './_components/_Logo'
@@ -48,9 +49,9 @@ export const DesktopTopNavigationBar: React.FC<DesktopTopNavigationBar.Props> =
             <Icon variant="SUN" />
           </S.Right.circleButton>
           {!props.user ? (
-            <S.Right.signInButton onClick={props.onClickSignIn}>
+            <Ui.Atoms.Button onClick={props.onClickSignIn}>
               Sign in
-            </S.Right.signInButton>
+            </Ui.Atoms.Button>
           ) : (
             <S.Right.circleButton>
               {props.user.avatarUrl ? (
@@ -111,22 +112,6 @@ namespace S {
         height: 100%;
         object-fit: cover;
         transition: var(${Theme.TRANSITION_HOVER});
-      }
-    `
-    export const signInButton = styled.button`
-      display: inline-flex;
-      align-items: center;
-      border-radius: var(${Theme.BORDER_RADIUS_10});
-      font-size: 16px;
-      font-weight: var(${Theme.FONT_WEIGHT_INTER_MEDIUM});
-      height: var(${Theme.BUTTON_HEIGHT_40});
-      padding: 0 10px;
-      background-color: var(${Theme.COLOR_BRAND});
-      color: var(${Theme.COLOR_WHITE});
-      @media (hover: hover) {
-        &:hover {
-          background-color: var(${Theme.COLOR_PRIMARY_900});
-        }
       }
     `
   }
