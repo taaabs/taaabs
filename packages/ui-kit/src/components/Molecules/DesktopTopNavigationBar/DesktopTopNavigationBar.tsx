@@ -17,6 +17,7 @@ export namespace DesktopTopNavigationBar {
     onClickSearch: () => void
     onClickTheme: () => void
     onClickSignIn: () => void
+    onClickAdd: () => void
     navItems: NavItem[]
     currentTheme: 'LIGHT' | 'DARK' | 'OS'
   }
@@ -53,13 +54,16 @@ export const DesktopTopNavigationBar: React.FC<DesktopTopNavigationBar.Props> =
               Sign in
             </Ui.Atoms.Button>
           ) : (
-            <S.Right.circleButton>
-              {props.user.avatarUrl ? (
-                <img src={props.user.avatarUrl} />
-              ) : (
-                <Icon variant="USER" />
-              )}
-            </S.Right.circleButton>
+            <>
+              <S.Right.circleButton>
+                {props.user.avatarUrl ? (
+                  <img src={props.user.avatarUrl} />
+                ) : (
+                  <Icon variant="USER" />
+                )}
+              </S.Right.circleButton>
+              <Ui.Atoms.Button onClick={props.onClickAdd}>Add</Ui.Atoms.Button>
+            </>
           )}
         </S.right>
       </S.container>

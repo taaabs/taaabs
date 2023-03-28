@@ -21,7 +21,7 @@ export const standard = () => (
         ]}
       />
     }
-    slotHeader={<>slot header</>}
+    slotSidebar={<>slot header</>}
     slotMain={<>slot main</>}
     slotAside={<>slot aside</>}
     slotFooter={<>slot footer</>}

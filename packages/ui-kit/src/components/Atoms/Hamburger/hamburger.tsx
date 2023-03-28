@@ -1,3 +1,4 @@
+import { sharedValues } from '@/constants'
 import { Theme } from '@/styles/GlobalStyles'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
@@ -28,17 +29,17 @@ namespace S {
   export const container = styled.div`
     position: relative;
     display: inline-flex;
-    height: var(${Theme.BUTTON_HEIGHT_46});
-    width: var(${Theme.BUTTON_HEIGHT_46});
+    height: ${sharedValues.MOBILE_TOP_NAVIGATION_BAR_HEIGHT}px;
+    width: ${sharedValues.MOBILE_TOP_NAVIGATION_BAR_HEIGHT}px;
   `
   export const hamburger = styled.div<Pick<Hamburger.Props, 'isToggled'>>`
     position: absolute;
-    height: var(${Theme.BUTTON_HEIGHT_46});
-    width: var(${Theme.BUTTON_HEIGHT_46});
-    transform: scale(0.6);
+    height: ${sharedValues.MOBILE_TOP_NAVIGATION_BAR_HEIGHT}px;
+    width: ${sharedValues.MOBILE_TOP_NAVIGATION_BAR_HEIGHT}px;
+    transform: scale(0.5);
     & > div {
       position: relative;
-      width: var(${Theme.BUTTON_HEIGHT_46});
+      width: ${sharedValues.MOBILE_TOP_NAVIGATION_BAR_HEIGHT}px;
       height: 6px;
       border-radius: 2px;
       background-color: var(${Theme.COLOR_BLACK});

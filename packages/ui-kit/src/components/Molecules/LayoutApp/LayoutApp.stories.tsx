@@ -9,7 +9,7 @@ export default {
 export const standard = () => (
   <LayoutApp
     slotDesktopTopNavigationBar={<>slot desktop top bar</>}
-    slotHeader={<>slot header</>}
+    slotSidebar={<>slot sidebar</>}
     slotMain={<>slot main</>}
     slotAside={<>slot aside</>}
     slotFooter={<>slot footer</>}
@@ -19,7 +19,7 @@ export const standard = () => (
 export const scrollingTest = () => (
   <LayoutApp
     slotDesktopTopNavigationBar={<>slot desktop top bar</>}
-    slotHeader={<>{lorem}</>}
+    slotSidebar={<>{lorem}</>}
     slotMain={<>{lorem + lorem + lorem + lorem + lorem}</>}
     slotAside={<>{lorem}</>}
     slotFooter={<>{lorem}</>}

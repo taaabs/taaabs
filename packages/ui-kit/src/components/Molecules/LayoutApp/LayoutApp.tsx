@@ -6,12 +6,12 @@ import { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import { sharedValues } from '@/constants'
 import { css } from '@emotion/react'
 import StickyBox from 'react-sticky-box'
-import { Atoms } from '@/components'
+import { Ui } from '@/index'
 
 export namespace LayoutApp {
   export type Props = {
     slotDesktopTopNavigationBar: React.ReactNode
-    slotHeader: React.ReactNode
+    slotSidebar: React.ReactNode
     slotMain: React.ReactNode
     slotAside: React.ReactNode
     slotFooter: React.ReactNode
@@ -41,7 +41,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
     useState(true)
   const [isSlideoutRightDefinetelyClosed, setIsSlideoutRightDefinetelyClosed] =
     useState(true)
-  const asideRef = useRef<HTMLElement>(null)
+  const sidebarRef = useRef<HTMLDivElement>(null)
   const mainRef = useRef<HTMLElement>(null)
   const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
 
@@ -60,13 +60,13 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   useEffect(() => {
     if (
       !windowWidth ||
-      !asideRef.current ||
+      !sidebarRef.current ||
       !mainRef.current ||
       !mobileTabsPanelRef.current
     )
       return
     const slideoutLeftInstance = new Slideout({
-      menu: asideRef.current,
+      menu: sidebarRef.current,
       panel: mainRef.current,
       padding: slidableWidth,
     })
@@ -115,16 +115,16 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   return (
     <S.container>
       <S.desktopTopNavigationBar>
-        <Atoms.Wrapper>{props.slotDesktopTopNavigationBar}</Atoms.Wrapper>
+        <Ui.Atoms.Wrapper>{props.slotDesktopTopNavigationBar}</Ui.Atoms.Wrapper>
       </S.desktopTopNavigationBar>
 
-      <Atoms.Wrapper>
+      <Ui.Atoms.Wrapper>
         <S.content>
-          <S.header ref={asideRef} width={slidableWidth}>
-            <S.Header.inner isVisible={isSlideoutRightDefinetelyClosed}>
-              {props.slotHeader}
-            </S.Header.inner>
-          </S.header>
+          <S.sidebar ref={sidebarRef} width={slidableWidth}>
+            <S.Sidebar.inner isVisible={isSlideoutRightDefinetelyClosed}>
+              {props.slotSidebar}
+            </S.Sidebar.inner>
+          </S.sidebar>
 
           <S.main
             ref={mainRef}
@@ -157,7 +157,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
             </S.Aside.inner>
           </S.aside>
         </S.content>
-      </Atoms.Wrapper>
+      </Ui.Atoms.Wrapper>
     </S.container>
   )
 }
@@ -166,7 +166,7 @@ namespace S {
   export const container = styled.div`
     background: var(${Theme.COLOR_NEUTRAL_25});
   `
-  export const desktopTopNavigationBar = styled.div`
+  export const desktopTopNavigationBar = styled.header`
     ${mq.to992} {
       display: none;
     }
@@ -178,29 +178,8 @@ namespace S {
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: saturate(180%) blur(5px);
     height: ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
-    display: flex;
-    align-items: center;
   `
-  export const content = styled.div`
-    ${mq.at992} {
-      display: flex;
-      width: 100%;
-      min-height: calc(
-        100vh - ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px
-      );
-      & > aside,
-      & > header {
-        width: 26vw;
-        ${mq.at1200} {
-          width: 21.7vw;
-        }
-        ${mq.at1380} {
-          width: 300px;
-        }
-      }
-    }
-  `
-  export const header = styled.header<{ width: number }>`
+  export const sidebar = styled.div<{ width: number }>`
     ${mq.to992} {
       position: fixed;
       top: 0;
@@ -219,7 +198,7 @@ namespace S {
       border-right: var(${Theme.BORDER_PRIMARY});
     }
   `
-  export namespace Header {
+  export namespace Sidebar {
     export const inner = styled.div<{ isVisible: boolean }>`
       ${mq.to992} {
         height: 100%;
@@ -290,6 +269,24 @@ namespace S {
       }
     }
   }
+  export const content = styled.div`
+    ${mq.at992} {
+      display: flex;
+      width: 100%;
+      min-height: calc(
+        100vh - ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px
+      );
+      > ${aside}, > ${sidebar} {
+        width: 25vw;
+        ${mq.at1200} {
+          width: 21.7vw;
+        }
+        ${mq.at1380} {
+          width: 300px;
+        }
+      }
+    }
+  `
   export const main = styled.main`
     ${mq.to992} {
       position: relative;
