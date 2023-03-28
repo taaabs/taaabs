@@ -1,19 +1,20 @@
 import { Ui } from '@/index'
-import { uiAboutLayoutPropsData } from '@/components/Organisms/AboutLayout/AboutLayout.data'
-import { Meta, Story } from '@storybook/react'
+import { Meta } from '@storybook/react'
+import { LayoutApp, LayoutRoot } from '@/layouts'
 
 export default {
   title: 'pages/app/guest',
 } as Meta
 
 export const standard = () => (
-  <Ui.Molecues.LayoutApp
-    slotDesktopTopNavigationBar={
+  <LayoutRoot
+    slotDesktopHeader={
       <Ui.Molecues.DesktopTopNavigationBar
         currentTheme={'LIGHT'}
         onClickSearch={() => {}}
         onClickTheme={() => {}}
         onClickSignIn={() => {}}
+        onClickAdd={() => {}}
         navItems={[
           { label: 'Explore', href: '/', isActive: true },
           { label: 'About', href: '/about', isActive: false },
@@ -21,9 +22,13 @@ export const standard = () => (
         ]}
       />
     }
-    slotSidebar={<>slot header</>}
-    slotMain={<>slot main</>}
-    slotAside={<>slot aside</>}
-    slotFooter={<>slot footer</>}
-  />
+    slotMobileHeader={<>mobile header</>}
+  >
+    <LayoutApp
+      slotMain={<>main</>}
+      slotAside={<>aside</>}
+      slotFooter={<>footer</>}
+      slotSidebar={<>sidebar</>}
+    ></LayoutApp>
+  </LayoutRoot>
 )

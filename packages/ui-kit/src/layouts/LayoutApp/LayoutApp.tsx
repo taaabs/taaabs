@@ -10,7 +10,6 @@ import { Ui } from '@/index'
 
 export namespace LayoutApp {
   export type Props = {
-    slotDesktopTopNavigationBar: React.ReactNode
     slotSidebar: React.ReactNode
     slotMain: React.ReactNode
     slotAside: React.ReactNode
@@ -114,9 +113,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
 
   return (
     <S.container>
-      <S.desktopTopNavigationBar>
-        <Ui.Atoms.Wrapper>{props.slotDesktopTopNavigationBar}</Ui.Atoms.Wrapper>
-      </S.desktopTopNavigationBar>
+      <S.headerSpacer />
 
       <Ui.Atoms.Wrapper>
         <S.content>
@@ -146,7 +143,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
                 <>
                   <S.Aside.Inner.Desktop.topBarBlurBgFix />
                   <StickyBox
-                    offsetTop={sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}
+                    offsetTop={sharedValues.DESKTOP_HEADER_HEIGHT}
                   >
                     {props.slotAside}
                   </StickyBox>
@@ -166,18 +163,15 @@ namespace S {
   export const container = styled.div`
     background: var(${Theme.COLOR_NEUTRAL_25});
   `
-  export const desktopTopNavigationBar = styled.header`
-    ${mq.to992} {
-      display: none;
-    }
-    box-shadow: inset 0px -1px 0px 0px var(${Theme.COLOR_BORDER_PRIMARY});
+  export const headerSpacer = styled.header`
     position: sticky;
     top: 0;
     width: 100%;
-    z-index: 100;
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: saturate(180%) blur(5px);
-    height: ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
+    background-color: var(${Theme.COLOR_WHITE});
+    height: ${sharedValues.MOBILE_HEADER_HEIGHT}px;
+    ${mq.at992} {
+      height: ${sharedValues.DESKTOP_HEADER_HEIGHT}px;
+    }
   `
   export const sidebar = styled.div<{ width: number }>`
     ${mq.to992} {
@@ -191,9 +185,9 @@ namespace S {
     }
     ${mq.at992} {
       position: sticky;
-      height: calc(100vh - ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px);
+      height: calc(100vh - ${sharedValues.DESKTOP_HEADER_HEIGHT}px);
       width: 100%;
-      top: ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
+      top: ${sharedValues.DESKTOP_HEADER_HEIGHT}px;
       overflow: auto;
       border-right: var(${Theme.BORDER_PRIMARY});
     }
@@ -260,7 +254,7 @@ namespace S {
       export namespace Desktop {
         export const topBarBlurBgFix = styled.div`
           width: 100vw;
-          height: ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
+          height: ${sharedValues.DESKTOP_HEADER_HEIGHT}px;
           background-color: var(${Theme.COLOR_WHITE});
           top: 0;
           position: fixed;
@@ -274,7 +268,7 @@ namespace S {
       display: flex;
       width: 100%;
       min-height: calc(
-        100vh - ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px
+        100vh - ${sharedValues.DESKTOP_HEADER_HEIGHT}px
       );
       > ${aside}, > ${sidebar} {
         width: 25vw;
@@ -319,7 +313,7 @@ namespace S {
       }
       ${mq.at992} {
         min-height: calc(
-          100vh - ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px
+          100vh - ${sharedValues.DESKTOP_HEADER_HEIGHT}px
         );
       }
     `

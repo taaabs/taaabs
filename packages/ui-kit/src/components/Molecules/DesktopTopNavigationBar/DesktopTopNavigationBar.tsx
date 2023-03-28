@@ -87,7 +87,7 @@ namespace S {
         display: flex;
       }
       li {
-        height: ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
+        height: ${sharedValues.DESKTOP_HEADER_HEIGHT}px;
       }
     `
     export const circleButton = styled.button`

@@ -1,12 +1,12 @@
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
+import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 
 export namespace LayoutLanding {
   export type Props = {
-    slotDesktopNavigationBar: React.ReactNode
-    slotMobileNavigationBar: React.ReactNode
+    children: React.ReactNode
     slotFooter: React.ReactNode
   }
 }
@@ -14,9 +14,8 @@ export namespace LayoutLanding {
 export const LayoutLanding: React.FC<LayoutLanding.Props> = (props) => {
   return (
     <>
-      <S.content>
-        <S.Content.header></S.Content.header>
-      </S.content>
+      <S.headerSpacer />
+      <S.content>{props.children}</S.content>
       <S.footer>
         <Ui.Atoms.Wrapper>{props.slotFooter}</Ui.Atoms.Wrapper>
       </S.footer>
@@ -25,8 +24,19 @@ export const LayoutLanding: React.FC<LayoutLanding.Props> = (props) => {
 }
 
 namespace S {
+  export const headerSpacer = styled.header`
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: var(${Theme.COLOR_WHITE});
+    height: ${sharedValues.MOBILE_HEADER_HEIGHT}px;
+    ${mq.at992} {
+      height: ${sharedValues.DESKTOP_HEADER_HEIGHT}px;
+    }
+  `
   export const content = styled.div`
     min-height: 100vh;
+    position: relative;
   `
   export namespace Content {
     export const header = styled.header`
@@ -37,7 +47,7 @@ namespace S {
       z-index: 100;
       background-color: rgba(255, 255, 255, 0.8);
       backdrop-filter: saturate(180%) blur(5%);
-      height: ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
+      height: ${sharedValues.DESKTOP_HEADER_HEIGHT}px;
       display: flex;
       align-items: center;
     `

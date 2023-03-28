@@ -29,17 +29,17 @@ namespace S {
   export const container = styled.div`
     position: relative;
     display: inline-flex;
-    height: ${sharedValues.MOBILE_TOP_NAVIGATION_BAR_HEIGHT}px;
-    width: ${sharedValues.MOBILE_TOP_NAVIGATION_BAR_HEIGHT}px;
+    height: ${sharedValues.MOBILE_HEADER_HEIGHT}px;
+    width: ${sharedValues.MOBILE_HEADER_HEIGHT}px;
   `
   export const hamburger = styled.div<Pick<Hamburger.Props, 'isToggled'>>`
     position: absolute;
-    height: ${sharedValues.MOBILE_TOP_NAVIGATION_BAR_HEIGHT}px;
-    width: ${sharedValues.MOBILE_TOP_NAVIGATION_BAR_HEIGHT}px;
+    height: ${sharedValues.MOBILE_HEADER_HEIGHT}px;
+    width: ${sharedValues.MOBILE_HEADER_HEIGHT}px;
     transform: scale(0.5);
     & > div {
       position: relative;
-      width: ${sharedValues.MOBILE_TOP_NAVIGATION_BAR_HEIGHT}px;
+      width: ${sharedValues.MOBILE_HEADER_HEIGHT}px;
       height: 6px;
       border-radius: 2px;
       background-color: var(${Theme.COLOR_BLACK});
