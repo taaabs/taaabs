@@ -1,71 +1,34 @@
 import { Theme } from '@/styles/GlobalStyles'
+import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
-import styled from '@emotion/styled'
-import Link from 'next/link'
 
-export namespace Logo {
-  export type Props = {
-    text?: string
-    isPrimary?: boolean
-    isLinkingToHomepage?: boolean
-  }
-}
-
-export const Logo: React.FC<Logo.Props> = ({
-  isPrimary = true,
-  text,
-  isLinkingToHomepage,
-}) => {
+export const Logo: React.FC = () => {
   return (
-    <S.container>
-      <S.circle
-        isPrimary={isPrimary}
-        href="/"
-        isLinkingToHomepage={isLinkingToHomepage}
-      ></S.circle>
-      {text && <S.text>{text}</S.text>}
-    </S.container>
-  )
-}
-
-namespace S {
-  export const container = styled.div`
-    display: inline-flex;
-    gap: var(${Theme.SPACER_8});
-    align-items: center;
-    font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
-  `
-  type CircleProps = Pick<Logo.Props, 'isPrimary' | 'isLinkingToHomepage'>
-  export const circle = styled(Link)<CircleProps>`
-    width: var(${Theme.BUTTON_HEIGHT_40});
-    height: var(${Theme.BUTTON_HEIGHT_40});
-    font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
-    font-size: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    ${({ isLinkingToHomepage }) =>
-      !isLinkingToHomepage &&
-      css`
-        pointer-events: none;
+    <div
+      css={css`
+        width: var(${Theme.BUTTON_HEIGHT_34});
+        height: var(${Theme.BUTTON_HEIGHT_34});
+        font-size: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
+        background-color: var(${Theme.COLOR_BRAND});
+        color: var(${Theme.COLOR_WHITE});
+        &::after {
+          content: 't';
+          transform: translateX(-0.2px);
+        }
+        ${mq.at992} {
+          width: var(${Theme.BUTTON_HEIGHT_40});
+          height: var(${Theme.BUTTON_HEIGHT_40});
+          font-size: 32px;
+          &::after {
+            transform: translateX(-1px);
+          }
+        }
       `}
-    ${({ isPrimary }) =>
-      isPrimary
-        ? css`
-            background-color: var(${Theme.LOGO_BACKGROUND_COLOR_PRIMARY});
-            color: var(${Theme.LOGO_FOREGROUND_COLOR_PRIMARY});
-          `
-        : css`
-            background-color: var(${Theme.LOGO_BACKGROUND_COLOR_SECONDARY});
-            color: var(${Theme.LOGO_FOREGROUND_COLOR_SECONDARY});
-          `}
-    &::after {
-      content: 't';
-    }
-  `
-  export const text = styled.span`
-    font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
-    font-size: 20px;
-  `
+    />
+  )
 }

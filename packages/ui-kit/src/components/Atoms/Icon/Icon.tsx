@@ -59,9 +59,10 @@ export namespace Icon {
   }
 }
 
-export const Icon: React.FC<Icon.Props> = (props) => {
+export const Icon: React.FC<Icon.Props> = ({ variant }) => {
   let icon: JSX.Element
-  switch (props.variant) {
+
+  switch (variant) {
     case 'ACTIVITY':
       icon = <Activity />
       break
@@ -146,7 +147,7 @@ namespace S {
 
   export const iconWrapper = styled.div`
     display: inline-flex;
-    & > svg {
+    svg {
       width: ${ICON_SIZE}px;
       height: ${ICON_SIZE}px;
       fill: var(${Theme.COLOR_BLACK});

@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Button } from './Button'
-import { ButtonTypes } from './Button.types'
 
 const label = 'Test'
 
@@ -67,12 +66,12 @@ describe('Atoms/Button', () => {
 
   it('assigns different classes for different sizes', () => {
     render(
-      <Button href="/test" size={ButtonTypes.Size.DEFAULT}>
+      <Button href="/test" size="default">
         default
       </Button>,
     )
     render(
-      <Button href="/test" size={ButtonTypes.Size.LARGE}>
+      <Button href="/test" size="large">
         large
       </Button>,
     )

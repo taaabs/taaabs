@@ -2,7 +2,6 @@ import { StorybookMargin } from '@/helpers/components/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/components/StorybookSpacer'
 import { Meta, Story } from '@storybook/react'
 import { Button } from './Button'
-import { ButtonTypes } from './Button.types'
 
 export default {
   title: 'Atoms/Button',
@@ -11,6 +10,11 @@ export default {
 
 export const sizes: Story = () => (
   <StorybookMargin>
+    Small:
+    <br />
+    <br />
+    <Button size="small">Click me!</Button>
+    <StorybookSpacer />
     Default:
     <br />
     <br />
@@ -19,6 +23,6 @@ export const sizes: Story = () => (
     Large:
     <br />
     <br />
-    <Button size={ButtonTypes.Size.LARGE}>Click me!</Button>
+    <Button size="large">Click me!</Button>
   </StorybookMargin>
 )

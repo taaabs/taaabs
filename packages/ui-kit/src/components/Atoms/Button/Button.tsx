@@ -1,11 +1,22 @@
 import { Theme } from '@/styles/GlobalStyles'
-import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
+import { css, SerializedStyles } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
-import { ButtonTypes } from './Button.types'
 
-export const Button: React.FC<ButtonTypes.Props> = (props) => {
+export namespace Button {
+  export type Size = 'small' | 'default' | 'large'
+  export type Props = {
+    href?: string
+    size?: Size
+    onClick?: () => void
+    type?: 'submit'
+    children?: React.ReactNode
+    ariaLabel?: string
+    ariaLabelledby?: string
+  }
+}
+
+export const Button: React.FC<Button.Props> = (props) => {
   if (props.type == 'submit') {
     return (
       <S.Button size={props.size} type="submit">
@@ -34,46 +45,48 @@ export const Button: React.FC<ButtonTypes.Props> = (props) => {
 }
 
 namespace S {
-  const base = css`
+  const buttonBase = css`
     display: inline-flex;
     align-items: center;
     color: var(${Theme.COLOR_WHITE});
     background: var(${Theme.COLOR_BRAND});
-    font-weight: 600;
+    font-weight: var(${Theme.FONT_WEIGHT_INTER_MEDIUM});
     &:hover {
-      transform: translateY(-2px);
+      background: var(${Theme.COLOR_PRIMARY_900});
     }
   `
-  const sizeMap: ButtonTypes.SizeMap = {
-    [ButtonTypes.Size.DEFAULT]: css`
-      height: 4.8rem;
-      font-size: var(${Theme.FONT_SIZE_16});
-      padding: 0 2rem;
+  type SizeMap = {
+    [Key in Button.Size]: SerializedStyles
+  }
+  const sizeMap: SizeMap = {
+    small: css`
+      height: var(${Theme.BUTTON_HEIGHT_34});
+      font-size: var(${Theme.FONT_SIZE_14_PX});
+      padding: 0 11px;
+      border-radius: var(${Theme.BORDER_RADIUS_8});
+    `,
+    default: css`
+      height: var(${Theme.BUTTON_HEIGHT_40});
+      font-size: var(${Theme.FONT_SIZE_16_PX});
+      padding: 0 14px;
       border-radius: var(${Theme.BORDER_RADIUS_10});
     `,
-    [ButtonTypes.Size.LARGE]: css`
-      padding: 0 2.2rem;
+    large: css`
+      height: var(${Theme.BUTTON_HEIGHT_46});
+      padding: 0 18px;
       border-radius: var(${Theme.BORDER_RADIUS_12});
-      height: 5.6rem;
-      font-size: var(${Theme.FONT_SIZE_18});
-      ${mq.at1200} {
-        height: 6rem;
-        padding: 0 2.8rem;
-        font-size: var(${Theme.FONT_SIZE_20});
-        border-radius: var(${Theme.BORDER_RADIUS_14});
-      }
+      font-size: var(${Theme.FONT_SIZE_18_PX});
     `,
   }
-  type ButtonProps = {
-    size?: ButtonTypes.Size
-  }
+
+  type ButtonProps = Pick<Button.Props, 'size'>
+
   export const Button = styled.button<ButtonProps>`
-    ${base}
-    ${({ size = ButtonTypes.Size.DEFAULT }) => sizeMap[size]}
+    ${buttonBase}
+    ${({ size = 'default' }) => sizeMap[size]}
   `
   export const NextLink = styled(Link)<ButtonProps>`
-    ${base}
-    ${({ size = ButtonTypes.Size.DEFAULT }) =>
-      sizeMap[size || ButtonTypes.Size.DEFAULT]}
+    ${buttonBase}
+    ${({ size = 'default' }) => sizeMap[size]}
   `
 }

@@ -3,7 +3,7 @@ import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 import Slideout from 'slideout'
 import { useEffect, useRef, useLayoutEffect, useState } from 'react'
-import { ASIDE_AVATARS_WIDTH } from '@/styles/constants'
+import { sharedValues } from '@/constants'
 import { css } from '@emotion/react'
 import StickyBox from 'react-sticky-box'
 import { Atoms } from '@/components'
@@ -45,14 +45,16 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   const mainRef = useRef<HTMLElement>(null)
   const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
 
+  const visibleWidth = 64
+
   let slidableWidth: number
-  // 64 (avatarbar) + 8 (gap) + 300 (sidebar) + 8 + 64 (for symmetry with avatarbar) = *444* - 64 = *380*
+  // 64 (visibleWidth) + 8 (gap) + 300 (sidebar) + 8 + 64 (for symmetry with visibleWidth) = *444* - 64 = *380*
   if (windowWidth == null) {
     slidableWidth = 0
   } else if (windowWidth >= 444) {
     slidableWidth = 380
   } else {
-    slidableWidth = windowWidth - ASIDE_AVATARS_WIDTH
+    slidableWidth = windowWidth - visibleWidth
   }
 
   useEffect(() => {
@@ -143,7 +145,9 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
               {windowWidth && windowWidth >= 992 ? (
                 <>
                   <S.Aside.Inner.Desktop.topBarBlurBgFix />
-                  <StickyBox offsetTop={S.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}>
+                  <StickyBox
+                    offsetTop={sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}
+                  >
                     {props.slotAside}
                   </StickyBox>
                 </>
@@ -159,8 +163,6 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
 }
 
 namespace S {
-  export const DESKTOP_TOP_NAVIGATION_BAR_HEIGHT = 60
-
   export const container = styled.div`
     background: var(${Theme.COLOR_NEUTRAL_25});
   `
@@ -168,14 +170,14 @@ namespace S {
     ${mq.to992} {
       display: none;
     }
-    border-bottom: var(${Theme.BORDER_PRIMARY});
+    box-shadow: inset 0px -1px 0px 0px var(${Theme.COLOR_BORDER_PRIMARY});
     position: sticky;
     top: 0;
     width: 100%;
     z-index: 100;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: saturate(180%) blur(5px);
-    height: ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
+    height: ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
     display: flex;
     align-items: center;
   `
@@ -183,7 +185,9 @@ namespace S {
     ${mq.at992} {
       display: flex;
       width: 100%;
-      min-height: calc(100vh - ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px);
+      min-height: calc(
+        100vh - ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px
+      );
       & > aside,
       & > header {
         width: 26vw;
@@ -208,9 +212,9 @@ namespace S {
     }
     ${mq.at992} {
       position: sticky;
-      height: calc(100vh - ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px);
+      height: calc(100vh - ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px);
       width: 100%;
-      top: ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
+      top: ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
       overflow: auto;
       border-right: var(${Theme.BORDER_PRIMARY});
     }
@@ -277,7 +281,7 @@ namespace S {
       export namespace Desktop {
         export const topBarBlurBgFix = styled.div`
           width: 100vw;
-          height: ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
+          height: ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px;
           background-color: var(${Theme.COLOR_WHITE});
           top: 0;
           position: fixed;
@@ -317,7 +321,9 @@ namespace S {
           var(${Theme.TRANSITION_TIMING_FUNCTION});
       }
       ${mq.at992} {
-        min-height: calc(100vh - ${DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px);
+        min-height: calc(
+          100vh - ${sharedValues.DESKTOP_TOP_NAVIGATION_BAR_HEIGHT}px
+        );
       }
     `
   }

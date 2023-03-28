@@ -8,61 +8,52 @@ export default {
   component: DesktopTopNavigationBar,
 } as Meta
 
+const navItemsLoggedInUser: DesktopTopNavigationBar.NavItem[] = [
+  { label: 'My Library', href: '/', isActive: true },
+  { label: 'Notifications', href: '/notifications', isActive: false },
+  { label: 'Explore', href: '/explore', isActive: false },
+]
+
 export const combined = () => (
   <StorybookMargin>
     Guest:
     <StorybookSpacer />
     <DesktopTopNavigationBar
-      breadcrumbs={[]}
       currentTheme={'LIGHT'}
       onClickSearch={() => {}}
       onClickTheme={() => {}}
       onClickSignIn={() => {}}
-      pageTitle="Lorem ipsum"
+      navItems={[
+        { label: 'Explore', href: '/', isActive: true },
+        { label: 'About', href: '/about', isActive: false },
+        { label: 'Pricing', href: '/pricing', isActive: false },
+      ]}
     />
     <StorybookSpacer />
     Logged in user:
     <StorybookSpacer />
     <DesktopTopNavigationBar
-      breadcrumbs={[]}
       currentTheme={'LIGHT'}
       onClickSearch={() => {}}
       onClickTheme={() => {}}
       onClickSignIn={() => {}}
-      pageTitle="Lorem ipsum"
       user={{ username: 'lorem', displayName: 'Lorem ipsum' }}
+      navItems={navItemsLoggedInUser}
     />
     <StorybookSpacer />
     Logged in user with avatar:
     <StorybookSpacer />
     <DesktopTopNavigationBar
-      breadcrumbs={[]}
       currentTheme={'LIGHT'}
       onClickSearch={() => {}}
       onClickTheme={() => {}}
       onClickSignIn={() => {}}
-      pageTitle="Lorem ipsum"
       user={{
         username: 'lorem',
         displayName: 'Lorem ipsum',
         avatarUrl: 'https://picsum.photos/300/200',
       }}
-    />
-    <StorybookSpacer />
-    Logged in user with breadcrumbs:
-    <StorybookSpacer />
-    <DesktopTopNavigationBar
-      breadcrumbs={[
-        { title: 'Lorem', link: '/lorem' },
-        { title: 'Lorem', link: '/lorem' },
-        { title: 'Lorem', link: '/lorem' },
-      ]}
-      currentTheme={'LIGHT'}
-      onClickSearch={() => {}}
-      onClickTheme={() => {}}
-      onClickSignIn={() => {}}
-      pageTitle="Lorem ipsum"
-      user={{ username: 'lorem', displayName: 'Lorem ipsum' }}
+      navItems={navItemsLoggedInUser}
     />
   </StorybookMargin>
 )
