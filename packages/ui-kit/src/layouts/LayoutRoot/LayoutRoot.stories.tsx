@@ -9,8 +9,8 @@ export default {
 
 export const standard = () => (
   <LayoutRoot
-    slotDesktopHeader={<>desktop navigation bar</>}
-    slotMobileHeader={<>mobile navigation bar</>}
+    slotHeaderDesktop={<>header desktop</>}
+    slotHeaderMobile={<>header mobile</>}
   >
     {loremIpsum.long}
   </LayoutRoot>

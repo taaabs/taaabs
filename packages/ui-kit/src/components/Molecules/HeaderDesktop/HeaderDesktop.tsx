@@ -1,10 +1,8 @@
-import { ButtonUnderlined } from '@/components/Atoms/ButtonUnderlined/ButtonUnderlined'
-import { Icon } from '@/components/Atoms/Icon'
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
-import { _Logo } from './_components/_Logo'
+import { _Logo } from './_Logo'
 import { Blurhash } from 'react-blurhash'
 
 export namespace HeaderDesktop {
@@ -36,21 +34,21 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
           <ul>
             {props.navItems.map((navItem) => (
               <li>
-                <ButtonUnderlined
+                <Ui.Atoms.ButtonUnderlined
                   href={navItem.href}
                   isActive={navItem.isActive}
                 >
                   {navItem.label}
-                </ButtonUnderlined>
+                </Ui.Atoms.ButtonUnderlined>
               </li>
             ))}
           </ul>
         </S.Right.nav>
         <S.Right.circleButton>
-          <Icon variant="SEARCH" />
+          <Ui.Atoms.Icon variant="SEARCH" />
         </S.Right.circleButton>
         <S.Right.circleButton>
-          <Icon variant="SUN" />
+          <Ui.Atoms.Icon variant="SUN" />
         </S.Right.circleButton>
         {!props.user ? (
           <Ui.Atoms.Button onClick={props.onClickSignIn}>
@@ -67,7 +65,7 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
                   <img src={props.user.avatar.url} />
                 </>
               ) : (
-                <Icon variant="USER" />
+                <Ui.Atoms.Icon variant="USER" />
               )}
             </S.Right.circleButton>
             <Ui.Atoms.Button onClick={props.onClickAdd}>Add</Ui.Atoms.Button>
@@ -95,7 +93,7 @@ namespace S {
         display: flex;
       }
       li {
-        height: ${sharedValues.DESKTOP_HEADER_HEIGHT}px;
+        height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
       }
     `
     export const circleButton = styled.button`

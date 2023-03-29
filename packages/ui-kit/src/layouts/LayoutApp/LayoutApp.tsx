@@ -140,7 +140,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
             {windowWidth && windowWidth >= 992 ? (
               <>
                 <S.Aside.Inner.Desktop.topBarBlurBgFix />
-                <StickyBox offsetTop={sharedValues.DESKTOP_HEADER_HEIGHT}>
+                <StickyBox offsetTop={sharedValues.HEADER_DESKTOP_HEIGHT}>
                   {props.slotAside}
                 </StickyBox>
               </>
@@ -163,9 +163,9 @@ namespace S {
     top: 0;
     width: 100%;
     background-color: var(${Theme.COLOR_WHITE});
-    height: ${sharedValues.MOBILE_HEADER_HEIGHT}px;
+    height: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
     ${mq.at992} {
-      height: ${sharedValues.DESKTOP_HEADER_HEIGHT}px;
+      height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
     }
   `
   export const sidebar = styled.div<{ width: number }>`
@@ -180,9 +180,9 @@ namespace S {
     }
     ${mq.at992} {
       position: sticky;
-      height: calc(100vh - ${sharedValues.DESKTOP_HEADER_HEIGHT}px);
+      height: calc(100vh - ${sharedValues.HEADER_DESKTOP_HEIGHT}px);
       width: 100%;
-      top: ${sharedValues.DESKTOP_HEADER_HEIGHT}px;
+      top: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
       overflow: auto;
       border-right: var(${Theme.BORDER_PRIMARY});
     }
@@ -249,7 +249,7 @@ namespace S {
       export namespace Desktop {
         export const topBarBlurBgFix = styled.div`
           width: 100vw;
-          height: ${sharedValues.DESKTOP_HEADER_HEIGHT}px;
+          height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
           background-color: var(${Theme.COLOR_WHITE});
           top: 0;
           position: fixed;
@@ -305,12 +305,12 @@ namespace S {
     export const inner = styled.main<{ isDimmed: boolean }>`
       ${mq.to992} {
         opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
-        min-height: calc(100vh - ${sharedValues.MOBILE_HEADER_HEIGHT}px);
+        min-height: calc(100vh - ${sharedValues.HEADER_MOBILE_HEIGHT}px);
         transition: opacity var(${Theme.ANIMATION_DURATION_300})
           var(${Theme.TRANSITION_TIMING_FUNCTION});
       }
       ${mq.at992} {
-        min-height: calc(100vh - ${sharedValues.DESKTOP_HEADER_HEIGHT}px);
+        min-height: calc(100vh - ${sharedValues.HEADER_DESKTOP_HEIGHT}px);
       }
     `
   }

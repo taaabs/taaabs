@@ -1,12 +1,14 @@
-const breakpoints = [576, 768, 992, 1200, 1380]
+import { sharedValues } from '@/constants'
+
+const breakpoints = [576, 768, 992, 1200, sharedValues.SITE_MAX_WIDTH]
 
 export const mq = {
   at576: `@media (min-width: ${breakpoints[0]}px)`,
   to576: `@media (max-width: ${breakpoints[0] - 0.02}px)`,
   at768: `@media (min-width: ${breakpoints[1]}px)`,
   to768: `@media (max-width: ${breakpoints[1] - 0.02}px)`,
-  only768: `@media (min-width: ${breakpoints[0]}px) and (max-width: ${
-    breakpoints[1] - 0.02
+  only768: `@media (min-width: ${breakpoints[1]}px) and (max-width: ${
+    breakpoints[2] - 0.02
   }px)`,
   at992: `@media (min-width: ${breakpoints[2]}px)`,
   to992: `@media (max-width: ${breakpoints[2] - 0.02}px)`,

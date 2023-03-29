@@ -1,50 +1,52 @@
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
+import { css, SerializedStyles } from '@emotion/react'
 import styled from '@emotion/styled'
 
-export type SpacerProps = {
-  size: 'small' | 'medium' | 'large'
+export namespace Spacer {
+  export type Size = 'small' | 'medium' | 'large'
+  export type Props = {
+    size: Size
+  }
 }
 
-export const Spacer: React.FC<SpacerProps> = ({ size }) => {
-  return <$Container size={size} />
+export const Spacer: React.FC<Spacer.Props> = ({ size }) => {
+  return <S.container size={size} />
 }
 
-type $ContainerProps = SpacerProps
+namespace S {
+  type SizeMap = { [Key in Spacer.Size]: SerializedStyles }
 
-const $Container = styled.div<$ContainerProps>`
-  ${(props) => {
-    switch (props.size) {
-      case 'small':
-        return css`
-          height: 4rem;
-          ${mq.at768} {
-            height: 6rem;
-          }
-          ${mq.at1200} {
-            height: 8rem;
-          }
-        `
-      case 'medium':
-        return css`
-          height: 4rem;
-          ${mq.at768} {
-            height: 6rem;
-          }
-          ${mq.at1200} {
-            height: 8rem;
-          }
-        `
-      case 'large':
-        return css`
-          height: 6rem;
-          ${mq.at768} {
-            height: 8rem;
-          }
-          ${mq.at1200} {
-            height: 10rem;
-          }
-        `
-    }
-  }}
-`
+  const sizeMap: SizeMap = {
+    small: css`
+      height: 4rem;
+      ${mq.at768} {
+        height: 6rem;
+      }
+      ${mq.at1200} {
+        height: 8rem;
+      }
+    `,
+    medium: css`
+      height: 4rem;
+      ${mq.at768} {
+        height: 6rem;
+      }
+      ${mq.at1200} {
+        height: 8rem;
+      }
+    `,
+    large: css`
+      height: 6rem;
+      ${mq.at768} {
+        height: 8rem;
+      }
+      ${mq.at1200} {
+        height: 10rem;
+      }
+    `,
+  }
+
+  export const container = styled.div<Pick<Spacer.Props, 'size'>>`
+    ${({ size }) => sizeMap[size]}
+  `
+}

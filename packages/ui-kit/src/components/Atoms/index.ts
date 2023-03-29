@@ -1,4 +1,7 @@
 export * from './Button'
+export * from './ButtonUnderlined'
+export * from './Hamburger'
+export * from './Icon'
 export * from './Logo'
 export * from './Spacer'
 export * from './Wrapper'

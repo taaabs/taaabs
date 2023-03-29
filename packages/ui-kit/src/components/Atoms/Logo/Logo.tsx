@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 export namespace Logo {
   export type Size = 'small' | 'default'
   export type Props = {
-    size: Size
+    size?: Size
   }
 }
 
@@ -34,6 +34,7 @@ namespace S {
       }
     `,
   }
+
   export const logo = styled.div<Pick<Logo.Props, 'size'>>`
     display: flex;
     align-items: center;
@@ -45,6 +46,6 @@ namespace S {
     ::after {
       content: 't';
     }
-    ${({ size }) => sizeMap[size]}
+    ${({ size = 'default' }) => sizeMap[size]}
   `
 }

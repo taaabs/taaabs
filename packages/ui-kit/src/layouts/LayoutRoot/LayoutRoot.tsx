@@ -6,8 +6,8 @@ import styled from '@emotion/styled'
 
 export namespace LayoutRoot {
   export type Props = {
-    slotDesktopHeader: React.ReactNode
-    slotMobileHeader: React.ReactNode
+    slotHeaderDesktop: React.ReactNode
+    slotHeaderMobile: React.ReactNode
     children?: React.ReactNode
   }
 }
@@ -17,9 +17,9 @@ export const LayoutRoot: React.FC<LayoutRoot.Props> = (props) => {
     <>
       <S.header>
         <S.Header.desktop>
-          <Ui.Atoms.Wrapper>{props.slotDesktopHeader}</Ui.Atoms.Wrapper>
+          <Ui.Atoms.Wrapper>{props.slotHeaderDesktop}</Ui.Atoms.Wrapper>
         </S.Header.desktop>
-        <S.Header.mobile>{props.slotMobileHeader}</S.Header.mobile>
+        <S.Header.mobile>{props.slotHeaderMobile}</S.Header.mobile>
       </S.header>
       {props.children}
     </>
@@ -36,9 +36,9 @@ namespace S {
     z-index: 100;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: saturate(180%) blur(5px);
-    height: ${sharedValues.MOBILE_HEADER_HEIGHT - 1}px;
+    height: ${sharedValues.HEADER_MOBILE_HEIGHT - 1}px;
     ${mq.at992} {
-      height: ${sharedValues.DESKTOP_HEADER_HEIGHT - 1}px;
+      height: ${sharedValues.HEADER_DESKTOP_HEIGHT - 1}px;
     }
   `
   export namespace Header {

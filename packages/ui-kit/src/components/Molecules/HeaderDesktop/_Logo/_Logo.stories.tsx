@@ -4,7 +4,7 @@ import { Meta, Story } from '@storybook/react'
 import { _Logo } from '.'
 
 export default {
-  title: 'Molecules/DesktopTopNavigationBar/_Logo',
+  title: 'Molecules/HeaderDesktop/_Logo',
   component: _Logo,
 } as Meta
 
