@@ -36,9 +36,9 @@ namespace S {
     z-index: 100;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: saturate(180%) blur(5px);
-    height: ${sharedValues.HEADER_MOBILE_HEIGHT - 1}px;
+    height: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
     ${mq.at992} {
-      height: ${sharedValues.HEADER_DESKTOP_HEIGHT - 1}px;
+      height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
     }
   `
   export namespace Header {

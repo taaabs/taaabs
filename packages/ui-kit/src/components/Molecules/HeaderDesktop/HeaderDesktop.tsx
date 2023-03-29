@@ -21,7 +21,7 @@ export namespace HeaderDesktop {
     onClickSignIn: () => void
     onClickAdd: () => void
     navItems: NavItem[]
-    currentTheme: 'LIGHT' | 'DARK' | 'OS'
+    currentTheme: 'LIGHT' | 'DARK'
   }
 }
 

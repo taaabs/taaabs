@@ -47,7 +47,6 @@ namespace S {
     justify-content: center;
     padding: 0 var(${Theme.SPACER_16});
     position: relative;
-    overflow: hidden;
     span {
       height: 100%;
       display: inline-flex;
@@ -61,7 +60,7 @@ namespace S {
           content: '';
           width: 100%;
           height: ${underlineHeight}px;
-          bottom: 1px;
+          bottom: 0;
           left: 0;
           margin-left: 50%;
           transform: translateX(-50%);
@@ -78,7 +77,7 @@ namespace S {
       width: 100%;
       height: 100%;
       left: 0;
-      bottom: 1px;
+      top: 0;
       z-index: -1;
     }
 

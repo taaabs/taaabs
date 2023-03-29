@@ -10,7 +10,7 @@ export const standard = () => (
   <LayoutRoot
     slotHeaderDesktop={
       <Ui.Molecues.HeaderDesktop
-        currentTheme={'LIGHT'}
+        currentTheme="LIGHT"
         onClickSearch={() => {}}
         onClickTheme={() => {}}
         onClickSignIn={() => {}}
@@ -22,7 +22,14 @@ export const standard = () => (
         ]}
       />
     }
-    slotHeaderMobile={<>mobile header</>}
+    slotHeaderMobile={
+      <Ui.Molecues.HeaderMobile
+        currentTheme="LIGHT"
+        hamburgerIsToggled={false}
+        onClickHamburger={() => {}}
+        onClickTheme={() => {}}
+      />
+    }
   >
     <LayoutApp
       slotMain={<>main</>}

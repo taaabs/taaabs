@@ -11,7 +11,7 @@ export namespace HeaderMobile {
     hamburgerIsToggled: boolean
     onClickHamburger: () => void
     onClickTheme: () => void
-    currentTheme: 'LIGHT' | 'DARK' | 'OS'
+    currentTheme: 'LIGHT' | 'DARK'
   } & _Logo.Props
 }
 
@@ -33,13 +33,9 @@ export const HeaderMobile: React.FC<HeaderMobile.Props> = (props) => {
 
 namespace S {
   export const container = styled.div`
-    height: var(${sharedValues.HEADER_MOBILE_HEIGHT});
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(${Theme.COLOR_WHITE});
-    border-bottom: var(${Theme.BORDER_PRIMARY});
-    box-sizing: content-box;
   `
   export const right = styled.div`
     display: flex;
