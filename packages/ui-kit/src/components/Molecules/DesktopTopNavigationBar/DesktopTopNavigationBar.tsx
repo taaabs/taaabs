@@ -5,6 +5,7 @@ import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
 import { _Logo } from './_components/_Logo'
+import { Blurhash } from 'react-blurhash'
 
 export namespace DesktopTopNavigationBar {
   export type NavItem = { label: string; href: string; isActive: boolean }
@@ -12,7 +13,10 @@ export namespace DesktopTopNavigationBar {
     user?: {
       username: string
       displayName: string
-      avatarUrl?: string
+      avatar?: {
+        url: string
+        blurhash: string
+      }
     }
     onClickSearch: () => void
     onClickTheme: () => void
@@ -56,8 +60,13 @@ export const DesktopTopNavigationBar: React.FC<DesktopTopNavigationBar.Props> =
           ) : (
             <>
               <S.Right.circleButton>
-                {props.user.avatarUrl ? (
-                  <img src={props.user.avatarUrl} />
+                {props.user.avatar ? (
+                  <>
+                    <S.Right.blurHash>
+                      <Blurhash hash={props.user.avatar.blurhash} />
+                    </S.Right.blurHash>
+                    <img src={props.user.avatar.url} />
+                  </>
                 ) : (
                   <Icon variant="USER" />
                 )}
@@ -99,11 +108,12 @@ namespace S {
       height: var(${Theme.BUTTON_HEIGHT_40});
       border-radius: 50%;
       overflow: hidden;
+      position: relative;
       @media (hover: hover) {
-        &:hover {
+        :hover {
           background-color: var(${Theme.COLOR_NEUTRAL_100});
-          & > img {
-            opacity: 0.8;
+          > img {
+            filter: brightness(90%);
           }
         }
       }
@@ -114,9 +124,16 @@ namespace S {
       & > img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
         transition: var(${Theme.TRANSITION_HOVER});
+        z-index: 0;
       }
+    `
+    export const blurHash = styled.div`
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
     `
   }
 }

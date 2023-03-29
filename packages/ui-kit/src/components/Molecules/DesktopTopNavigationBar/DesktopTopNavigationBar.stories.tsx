@@ -54,7 +54,10 @@ export const combined = () => (
       user={{
         username: 'lorem',
         displayName: 'Lorem ipsum',
-        avatarUrl: 'https://picsum.photos/300/200',
+        avatar: {
+          url: 'https://picsum.photos/300',
+          blurhash: 'KGF5?xYk^6@-5c,1@[or[Q'
+        },
       }}
       navItems={navItemsLoggedInUser}
     />
