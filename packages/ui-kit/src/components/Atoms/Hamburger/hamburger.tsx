@@ -58,7 +58,7 @@ namespace S {
           }
           &:nth-of-type(2) {
             transform: rotate(45deg);
-            margin-top: -7px;
+            margin-top: -6px;
           }
           &:nth-of-type(3) {
             opacity: 0;

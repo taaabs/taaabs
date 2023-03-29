@@ -9,7 +9,7 @@ export default {
 export const standard = () => (
   <LayoutRoot
     slotDesktopHeader={
-      <Ui.Molecues.DesktopTopNavigationBar
+      <Ui.Molecues.HeaderDesktop
         currentTheme={'LIGHT'}
         onClickSearch={() => {}}
         onClickTheme={() => {}}

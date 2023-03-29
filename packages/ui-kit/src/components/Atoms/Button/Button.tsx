@@ -62,7 +62,7 @@ namespace S {
     small: css`
       height: var(${Theme.BUTTON_HEIGHT_34});
       font-size: var(${Theme.FONT_SIZE_14_PX});
-      padding: 0 11px;
+      padding: 0 10px;
       border-radius: var(${Theme.BORDER_RADIUS_8});
     `,
     default: css`

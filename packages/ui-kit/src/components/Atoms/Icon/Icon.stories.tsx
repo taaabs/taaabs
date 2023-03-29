@@ -28,6 +28,8 @@ export const icons: Story = () => (
     <StorybookSpacer />
     <Icon variant={'PIN'} />
     <StorybookSpacer />
+    <Icon variant={'SEARCH'} />
+    <StorybookSpacer />
     <Icon variant={'RECENT_FILLED'} />
     <StorybookSpacer />
     <Icon variant={'RECENT'} />
@@ -38,6 +40,23 @@ export const icons: Story = () => (
     <StorybookSpacer />
     <Icon variant={'STAR'} />
     <StorybookSpacer />
+    <Icon variant={'SUN'} />
+    <StorybookSpacer />
     <Icon variant={'TRASH'} />
+    <StorybookSpacer />
+    <Icon variant={'LIKE'} />
+    <StorybookSpacer />
+    <Icon variant={'LIKE_FILLED'} />
+    <StorybookSpacer />
+    <Icon variant={'SWIPE_LEFT'} />
+    <StorybookSpacer />
+    <Icon variant={'SWIPE_RIGHT'} />
+    <StorybookSpacer />
+    <Icon variant={'USER_ADD'} />
+    <StorybookSpacer />
+    <Icon variant={'USER_REMOVE'} />
+    <StorybookSpacer />
+    <Icon variant={'USER'} />
+    <StorybookSpacer />
   </StorybookMargin>
 )

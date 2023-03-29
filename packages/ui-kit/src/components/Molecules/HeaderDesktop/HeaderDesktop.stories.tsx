@@ -1,14 +1,14 @@
 import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
 import { Meta } from '@storybook/react'
-import { DesktopTopNavigationBar } from './DesktopTopNavigationBar'
+import { HeaderDesktop } from './HeaderDesktop'
 
 export default {
-  title: 'Molecules/DesktopTopNavigationBar',
-  component: DesktopTopNavigationBar,
+  title: 'Molecules/HeaderDesktop',
+  component: HeaderDesktop,
 } as Meta
 
-const navItemsLoggedInUser: DesktopTopNavigationBar.NavItem[] = [
+const navItemsLoggedInUser: HeaderDesktop.NavItem[] = [
   { label: 'My Library', href: '/', isActive: true },
   { label: 'Notifications', href: '/notifications', isActive: false },
   { label: 'Explore', href: '/explore', isActive: false },
@@ -18,7 +18,7 @@ export const combined = () => (
   <StorybookMargin>
     Guest:
     <StorybookSpacer />
-    <DesktopTopNavigationBar
+    <HeaderDesktop
       currentTheme={'LIGHT'}
       onClickSearch={() => {}}
       onClickTheme={() => {}}
@@ -33,7 +33,7 @@ export const combined = () => (
     <StorybookSpacer />
     Logged in user:
     <StorybookSpacer />
-    <DesktopTopNavigationBar
+    <HeaderDesktop
       currentTheme={'LIGHT'}
       onClickSearch={() => {}}
       onClickTheme={() => {}}
@@ -45,7 +45,7 @@ export const combined = () => (
     <StorybookSpacer />
     Logged in user with avatar:
     <StorybookSpacer />
-    <DesktopTopNavigationBar
+    <HeaderDesktop
       currentTheme={'LIGHT'}
       onClickSearch={() => {}}
       onClickTheme={() => {}}
@@ -56,7 +56,7 @@ export const combined = () => (
         displayName: 'Lorem ipsum',
         avatar: {
           url: 'https://picsum.photos/300',
-          blurhash: 'KGF5?xYk^6@-5c,1@[or[Q'
+          blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',
         },
       }}
       navItems={navItemsLoggedInUser}

@@ -5,7 +5,8 @@
     "storybook": "start-storybook -p 6006 --no-open",
     "build-storybook": "build-storybook",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "find-deadcode": "ts-prune"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",

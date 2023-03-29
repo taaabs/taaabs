@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import { _Logo } from './_components/_Logo'
 import { Blurhash } from 'react-blurhash'
 
-export namespace DesktopTopNavigationBar {
+export namespace HeaderDesktop {
   export type NavItem = { label: string; href: string; isActive: boolean }
   export type Props = {
     user?: {
@@ -27,57 +27,56 @@ export namespace DesktopTopNavigationBar {
   }
 }
 
-export const DesktopTopNavigationBar: React.FC<DesktopTopNavigationBar.Props> =
-  (props) => {
-    return (
-      <S.container>
-        <_Logo userDisplayName={props.user && props.user.displayName} />
-        <S.right>
-          <S.Right.nav>
-            <ul>
-              {props.navItems.map((navItem) => (
-                <li>
-                  <ButtonUnderlined
-                    href={navItem.href}
-                    isActive={navItem.isActive}
-                  >
-                    {navItem.label}
-                  </ButtonUnderlined>
-                </li>
-              ))}
-            </ul>
-          </S.Right.nav>
-          <S.Right.circleButton>
-            <Icon variant="SEARCH" />
-          </S.Right.circleButton>
-          <S.Right.circleButton>
-            <Icon variant="SUN" />
-          </S.Right.circleButton>
-          {!props.user ? (
-            <Ui.Atoms.Button onClick={props.onClickSignIn}>
-              Sign in
-            </Ui.Atoms.Button>
-          ) : (
-            <>
-              <S.Right.circleButton>
-                {props.user.avatar ? (
-                  <>
-                    <S.Right.blurHash>
-                      <Blurhash hash={props.user.avatar.blurhash} />
-                    </S.Right.blurHash>
-                    <img src={props.user.avatar.url} />
-                  </>
-                ) : (
-                  <Icon variant="USER" />
-                )}
-              </S.Right.circleButton>
-              <Ui.Atoms.Button onClick={props.onClickAdd}>Add</Ui.Atoms.Button>
-            </>
-          )}
-        </S.right>
-      </S.container>
-    )
-  }
+export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
+  return (
+    <S.container>
+      <_Logo userDisplayName={props.user && props.user.displayName} />
+      <S.right>
+        <S.Right.nav>
+          <ul>
+            {props.navItems.map((navItem) => (
+              <li>
+                <ButtonUnderlined
+                  href={navItem.href}
+                  isActive={navItem.isActive}
+                >
+                  {navItem.label}
+                </ButtonUnderlined>
+              </li>
+            ))}
+          </ul>
+        </S.Right.nav>
+        <S.Right.circleButton>
+          <Icon variant="SEARCH" />
+        </S.Right.circleButton>
+        <S.Right.circleButton>
+          <Icon variant="SUN" />
+        </S.Right.circleButton>
+        {!props.user ? (
+          <Ui.Atoms.Button onClick={props.onClickSignIn}>
+            Sign in
+          </Ui.Atoms.Button>
+        ) : (
+          <>
+            <S.Right.circleButton>
+              {props.user.avatar ? (
+                <>
+                  <S.Right.blurHash>
+                    <Blurhash hash={props.user.avatar.blurhash} />
+                  </S.Right.blurHash>
+                  <img src={props.user.avatar.url} />
+                </>
+              ) : (
+                <Icon variant="USER" />
+              )}
+            </S.Right.circleButton>
+            <Ui.Atoms.Button onClick={props.onClickAdd}>Add</Ui.Atoms.Button>
+          </>
+        )}
+      </S.right>
+    </S.container>
+  )
+}
 
 namespace S {
   export const container = styled.div`

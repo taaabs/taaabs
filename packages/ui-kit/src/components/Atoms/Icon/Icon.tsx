@@ -19,7 +19,6 @@ import { ReactComponent as Like } from '@/assets/icons/like.svg'
 import { ReactComponent as LikeFilled } from '@/assets/icons/like-filled.svg'
 import { ReactComponent as SwipeLeft } from '@/assets/icons/swipe-left.svg'
 import { ReactComponent as SwipeRight } from '@/assets/icons/swipe-right.svg'
-import { ReactComponent as ArrowLeft } from '@/assets/icons/arrow-left.svg'
 import { ReactComponent as UserAdd } from '@/assets/icons/user-add.svg'
 import { ReactComponent as UserRemove } from '@/assets/icons/user-remove.svg'
 import { ReactComponent as User } from '@/assets/icons/user.svg'
@@ -49,7 +48,6 @@ export namespace Icon {
     | 'LIKE_FILLED'
     | 'SWIPE_LEFT'
     | 'SWIPE_RIGHT'
-    | 'ARROW_LEFT'
     | 'USER_ADD'
     | 'USER_REMOVE'
     | 'USER'
@@ -71,9 +69,6 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'ARCHIVE':
       icon = <Archive />
-      break
-    case 'ARROW_LEFT':
-      icon = <ArrowLeft />
       break
     case 'COLLECTION':
       icon = <Collection />

@@ -29,7 +29,7 @@ export const standard = () => (
     </Wrapper>
     <StorybookSpacer />
     <Wrapper>
-      <ButtonUnderlined isActive={true}>Lorem ispum</ButtonUnderlined>
+      <ButtonUnderlined isActive={false}>Lorem ispum</ButtonUnderlined>
     </Wrapper>
   </StorybookMargin>
 )
