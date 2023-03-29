@@ -1,4 +1,5 @@
 import { sharedValues } from '@/constants'
+import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
@@ -15,7 +16,9 @@ export const LayoutRoot: React.FC<LayoutRoot.Props> = (props) => {
   return (
     <>
       <S.header>
-        <S.Header.desktop>{props.slotDesktopHeader}</S.Header.desktop>
+        <S.Header.desktop>
+          <Ui.Atoms.Wrapper>{props.slotDesktopHeader}</Ui.Atoms.Wrapper>
+        </S.Header.desktop>
         <S.Header.mobile>{props.slotMobileHeader}</S.Header.mobile>
       </S.header>
       {props.children}

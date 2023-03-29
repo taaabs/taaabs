@@ -1,1 +1,1 @@
-export * from './shared-values'
+export * as sharedValues from './shared-values'

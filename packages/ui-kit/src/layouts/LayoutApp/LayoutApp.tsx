@@ -3,10 +3,9 @@ import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 import Slideout from 'slideout'
 import { useEffect, useRef, useLayoutEffect, useState } from 'react'
-import { sharedValues } from '@/constants'
 import { css } from '@emotion/react'
 import StickyBox from 'react-sticky-box'
-import { Ui } from '@/index'
+import { sharedValues } from '@/constants'
 
 export namespace LayoutApp {
   export type Props = {
@@ -41,7 +40,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
   const [isSlideoutRightDefinetelyClosed, setIsSlideoutRightDefinetelyClosed] =
     useState(true)
   const sidebarRef = useRef<HTMLDivElement>(null)
-  const mainRef = useRef<HTMLElement>(null)
+  const mainRef = useRef<HTMLDivElement>(null)
   const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
 
   const visibleWidth = 64
@@ -115,46 +114,42 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
     <S.container>
       <S.headerSpacer />
 
-      <Ui.Atoms.Wrapper>
-        <S.content>
-          <S.sidebar ref={sidebarRef} width={slidableWidth}>
-            <S.Sidebar.inner isVisible={isSlideoutRightDefinetelyClosed}>
-              {props.slotSidebar}
-            </S.Sidebar.inner>
-          </S.sidebar>
+      <S.content>
+        <S.sidebar ref={sidebarRef} width={slidableWidth}>
+          <S.Sidebar.inner isVisible={isSlideoutRightDefinetelyClosed}>
+            {props.slotSidebar}
+          </S.Sidebar.inner>
+        </S.sidebar>
 
-          <S.main
-            ref={mainRef}
-            onClick={() => {
-              isSlideoutLeftOpen && slideoutLeft?.close()
-              isSlideoutRightOpen && slideoutRight?.close()
-            }}
-          >
-            <S.Main.inner isDimmed={isSlideoutLeftOpen || isSlideoutRightOpen}>
-              <button onClick={() => slideoutLeft?.open()}>BURGER</button>
-              {props.slotMain}
-            </S.Main.inner>
-            <S.footer>{props.slotFooter}</S.footer>
-          </S.main>
+        <S.main
+          ref={mainRef}
+          onClick={() => {
+            isSlideoutLeftOpen && slideoutLeft?.close()
+            isSlideoutRightOpen && slideoutRight?.close()
+          }}
+        >
+          <S.Main.inner isDimmed={isSlideoutLeftOpen || isSlideoutRightOpen}>
+            <button onClick={() => slideoutLeft?.open()}>BURGER</button>
+            {props.slotMain}
+          </S.Main.inner>
+          <S.footer>{props.slotFooter}</S.footer>
+        </S.main>
 
-          <S.aside ref={mobileTabsPanelRef} width={slidableWidth}>
-            <S.Aside.inner isVisible={isSlideoutLeftDefinetelyClosed}>
-              {windowWidth && windowWidth >= 992 ? (
-                <>
-                  <S.Aside.Inner.Desktop.topBarBlurBgFix />
-                  <StickyBox
-                    offsetTop={sharedValues.DESKTOP_HEADER_HEIGHT}
-                  >
-                    {props.slotAside}
-                  </StickyBox>
-                </>
-              ) : (
-                props.slotAside
-              )}
-            </S.Aside.inner>
-          </S.aside>
-        </S.content>
-      </Ui.Atoms.Wrapper>
+        <S.aside ref={mobileTabsPanelRef} width={slidableWidth}>
+          <S.Aside.inner isVisible={isSlideoutLeftDefinetelyClosed}>
+            {windowWidth && windowWidth >= 992 ? (
+              <>
+                <S.Aside.Inner.Desktop.topBarBlurBgFix />
+                <StickyBox offsetTop={sharedValues.DESKTOP_HEADER_HEIGHT}>
+                  {props.slotAside}
+                </StickyBox>
+              </>
+            ) : (
+              props.slotAside
+            )}
+          </S.Aside.inner>
+        </S.aside>
+      </S.content>
     </S.container>
   )
 }
@@ -267,9 +262,12 @@ namespace S {
     ${mq.at992} {
       display: flex;
       width: 100%;
-      min-height: calc(
-        100vh - ${sharedValues.DESKTOP_HEADER_HEIGHT}px
-      );
+      max-width: ${sharedValues.SITE_MAX_WIDTH}px;
+      margin: 0 auto;
+      padding: 0 var(${Theme.SPACER_16});
+      ${mq.at1200} {
+        padding: 0 var(${Theme.SPACER_40});
+      }
       > ${aside}, > ${sidebar} {
         width: 25vw;
         ${mq.at1200} {
@@ -281,7 +279,7 @@ namespace S {
       }
     }
   `
-  export const main = styled.main`
+  export const main = styled.div`
     ${mq.to992} {
       position: relative;
       z-index: 2;
@@ -304,21 +302,19 @@ namespace S {
     }
   `
   export namespace Main {
-    export const inner = styled.div<{ isDimmed: boolean }>`
+    export const inner = styled.main<{ isDimmed: boolean }>`
       ${mq.to992} {
         opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
-        min-height: 100vh;
+        min-height: calc(100vh - ${sharedValues.MOBILE_HEADER_HEIGHT}px);
         transition: opacity var(${Theme.ANIMATION_DURATION_300})
           var(${Theme.TRANSITION_TIMING_FUNCTION});
       }
       ${mq.at992} {
-        min-height: calc(
-          100vh - ${sharedValues.DESKTOP_HEADER_HEIGHT}px
-        );
+        min-height: calc(100vh - ${sharedValues.DESKTOP_HEADER_HEIGHT}px);
       }
     `
   }
-  export const footer = styled.div`
+  export const footer = styled.footer`
     border-top: var(${Theme.BORDER_PRIMARY});
   `
 }
