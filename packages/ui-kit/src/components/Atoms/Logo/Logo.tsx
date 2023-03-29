@@ -30,7 +30,7 @@ namespace S {
       height: 40px;
       font-size: 32px;
       ::after {
-        transform: translateX(-1px);
+        transform: translateX(-0.5px);
       }
     `,
   }
@@ -42,6 +42,9 @@ namespace S {
     font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
     background-color: var(${Theme.COLOR_BRAND});
     color: var(${Theme.COLOR_WHITE});
+    ::after {
+      content: 't';
+    }
     ${({ size }) => sizeMap[size]}
   `
 }

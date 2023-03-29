@@ -1,4 +1,5 @@
 import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
+import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
 import { Meta } from '@storybook/react'
 import { Logo } from './Logo'
 
@@ -9,6 +10,8 @@ export default {
 
 export const standard = () => (
   <StorybookMargin>
-    <Logo />
+    <Logo size="small" />
+    <StorybookSpacer />
+    <Logo size="default" />
   </StorybookMargin>
 )
