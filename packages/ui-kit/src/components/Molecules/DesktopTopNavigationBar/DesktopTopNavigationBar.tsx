@@ -27,7 +27,7 @@ export const DesktopTopNavigationBar: React.FC<DesktopTopNavigationBar.Props> =
   (props) => {
     return (
       <S.container>
-        <_Logo username={props.user && props.user.username} />
+        <_Logo userDisplayName={props.user && props.user.displayName} />
         <S.right>
           <S.Right.nav>
             <ul>

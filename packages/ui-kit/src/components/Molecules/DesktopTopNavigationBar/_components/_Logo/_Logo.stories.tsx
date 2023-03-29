@@ -12,6 +12,6 @@ export const standard = () => (
   <StorybookMargin>
     <_Logo />
     <StorybookSpacer />
-    <_Logo username="alicia" />
+    <_Logo userDisplayName="Alicia Keys" />
   </StorybookMargin>
 )

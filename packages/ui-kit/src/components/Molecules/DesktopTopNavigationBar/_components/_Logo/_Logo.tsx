@@ -6,17 +6,17 @@ import Link from 'next/link'
 
 export namespace _Logo {
   export type Props = {
-    username?: string
+    userDisplayName?: string
   }
 }
 
 export const _Logo: React.FC<_Logo.Props> = (props) => {
-  return props.username ? (
+  return props.userDisplayName ? (
     <S.container>
       <Link href="/">
         <Atoms.Logo />
       </Link>
-      @{props.username}
+      {props.userDisplayName}
     </S.container>
   ) : (
     <S.link href="/">
@@ -35,10 +35,24 @@ namespace S {
     font-size: var(${Theme.FONT_SIZE_20_REM});
     letter-spacing: -1.5px;
   `
+  const logoHoverState = css`
+    > div {
+      transition: var(${Theme.TRANSITION_HOVER});
+    }
+    @media (hover: hover) {
+      :hover > div {
+        background-color: var(${Theme.COLOR_PRIMARY_900});
+      }
+    }
+  `
   export const container = styled.div`
     ${alignment}
+    > a {
+      ${logoHoverState}
+    }
   `
   export const link = styled(Link)`
     ${alignment}
+    ${logoHoverState}
   `
 }

@@ -23,6 +23,7 @@ export const combined = () => (
       onClickSearch={() => {}}
       onClickTheme={() => {}}
       onClickSignIn={() => {}}
+      onClickAdd={() => {}}
       navItems={[
         { label: 'Explore', href: '/', isActive: true },
         { label: 'About', href: '/about', isActive: false },
@@ -37,6 +38,7 @@ export const combined = () => (
       onClickSearch={() => {}}
       onClickTheme={() => {}}
       onClickSignIn={() => {}}
+      onClickAdd={() => {}}
       user={{ username: 'lorem', displayName: 'Lorem ipsum' }}
       navItems={navItemsLoggedInUser}
     />
@@ -48,6 +50,7 @@ export const combined = () => (
       onClickSearch={() => {}}
       onClickTheme={() => {}}
       onClickSignIn={() => {}}
+      onClickAdd={() => {}}
       user={{
         username: 'lorem',
         displayName: 'Lorem ipsum',
