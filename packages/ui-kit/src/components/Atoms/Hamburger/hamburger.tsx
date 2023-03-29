@@ -1,4 +1,3 @@
-import { sharedValues } from '@/constants'
 import { Theme } from '@/styles/GlobalStyles'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
@@ -6,17 +5,13 @@ import styled from '@emotion/styled'
 export namespace Hamburger {
   export type Props = {
     isToggled: boolean
-    onClick: () => void
   }
 }
 
-export const Hamburger: React.FC<Hamburger.Props> = ({
-  isToggled,
-  onClick,
-}) => {
+export const Hamburger: React.FC<Hamburger.Props> = ({ isToggled }) => {
   return (
     <S.container>
-      <S.hamburger onClick={onClick} isToggled={isToggled}>
+      <S.hamburger isToggled={isToggled}>
         <div />
         <div />
         <div />
@@ -28,37 +23,34 @@ export const Hamburger: React.FC<Hamburger.Props> = ({
 namespace S {
   export const container = styled.div`
     position: relative;
-    display: inline-flex;
-    height: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
-    width: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
+    height: 20px;
+    width: 22px;
   `
   export const hamburger = styled.div<Pick<Hamburger.Props, 'isToggled'>>`
     position: absolute;
-    height: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
-    width: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
-    transform: scale(0.5);
+    height: 20px;
+    width: 22px;
     & > div {
-      position: relative;
-      width: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
-      height: 6px;
+      width: 22px;
+      height: 3px;
       border-radius: 2px;
       background-color: var(${Theme.COLOR_BLACK});
-      margin-top: 8px;
+      margin-top: 3px;
       transition: all var(${Theme.ANIMATION_DURATION_300})
         var(${Theme.TRANSITION_TIMING_FUNCTION});
       &:nth-of-type(1) {
-        margin-top: 6px;
+        margin-top: 3px;
       }
       ${({ isToggled }) =>
         isToggled &&
         css`
           &:nth-of-type(1) {
             transform: rotate(-45deg);
-            margin-top: 20px !important;
+            margin-top: 9px !important;
           }
           &:nth-of-type(2) {
             transform: rotate(45deg);
-            margin-top: -6px;
+            margin-top: -3px;
           }
           &:nth-of-type(3) {
             opacity: 0;
@@ -67,9 +59,4 @@ namespace S {
         `}
     }
   `
-  export namespace Bar {
-    export const top = styled.div``
-    export const center = styled.div``
-    export const bottom = styled.div``
-  }
 }

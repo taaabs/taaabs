@@ -12,17 +12,17 @@ export namespace _Logo {
 
 export const _Logo: React.FC<_Logo.Props> = (props) => {
   return props.userDisplayName ? (
-    <S.container>
+    <S.user>
       <Link href="/">
         <Atoms.Logo />
       </Link>
       {props.userDisplayName}
-    </S.container>
+    </S.user>
   ) : (
-    <S.link href="/">
+    <S.logo href="/">
       <Atoms.Logo />
       taaabs
-    </S.link>
+    </S.logo>
   )
 }
 
@@ -32,7 +32,7 @@ namespace S {
     gap: var(${Theme.SPACER_8});
     align-items: center;
     font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
-    font-size: var(${Theme.FONT_SIZE_20_REM});
+    font-size: var(${Theme.FONT_SIZE_20_PX});
     letter-spacing: -1.5px;
   `
   const logoHoverState = css`
@@ -45,14 +45,15 @@ namespace S {
       }
     }
   `
-  export const container = styled.div`
+  export const user = styled.div`
     ${alignment}
     > a {
       ${logoHoverState}
     }
   `
-  export const link = styled(Link)`
+  export const logo = styled(Link)`
     ${alignment}
     ${logoHoverState}
+    padding-right: var(${Theme.SPACER_8});
   `
 }

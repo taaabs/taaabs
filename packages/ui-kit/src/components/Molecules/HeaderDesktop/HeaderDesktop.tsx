@@ -114,11 +114,11 @@ namespace S {
           }
         }
       }
-      & > div svg {
+      > div > svg {
         height: 20px;
         width: 20px;
       }
-      & > img {
+      > img {
         width: 100%;
         height: 100%;
         transition: var(${Theme.TRANSITION_HOVER});

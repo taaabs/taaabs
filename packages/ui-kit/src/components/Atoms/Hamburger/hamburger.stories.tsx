@@ -17,11 +17,12 @@ export const standard: Story = () => (
 const HamburgerTester: React.FC = () => {
   const [isToggled, setIsToggled] = useState(false)
   return (
-    <Hamburger
-      isToggled={isToggled}
+    <div
       onClick={() => {
         setIsToggled(!isToggled)
       }}
-    />
+    >
+      <Hamburger isToggled={isToggled} />
+    </div>
   )
 }

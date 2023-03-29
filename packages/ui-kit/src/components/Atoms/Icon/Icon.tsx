@@ -6,6 +6,7 @@ import { ReactComponent as Collection } from '@/assets/icons/collection.svg'
 import { ReactComponent as GreaterThan } from '@/assets/icons/greater-than.svg'
 import { ReactComponent as HomeFilled } from '@/assets/icons/home-filled.svg'
 import { ReactComponent as Home } from '@/assets/icons/home.svg'
+import { ReactComponent as LessThan } from '@/assets/icons/less-than.svg'
 import { ReactComponent as Pin } from '@/assets/icons/pin.svg'
 import { ReactComponent as RecentFilled } from '@/assets/icons/recent-filled.svg'
 import { ReactComponent as Recent } from '@/assets/icons/recent.svg'
@@ -35,6 +36,7 @@ export namespace Icon {
     | 'GREATER_THAN'
     | 'HOME_FILLED'
     | 'HOME'
+    | 'LESS_THAN'
     | 'PIN'
     | 'SEARCH'
     | 'RECENT_FILLED'
@@ -81,6 +83,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'HOME':
       icon = <Home />
+      break
+    case 'LESS_THAN':
+      icon = <LessThan />
       break
     case 'HOME_FILLED':
       icon = <HomeFilled />

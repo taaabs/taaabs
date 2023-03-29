@@ -14,7 +14,7 @@ const navItemsLoggedInUser: HeaderDesktop.NavItem[] = [
   { label: 'Explore', href: '/explore', isActive: false },
 ]
 
-export const combined = () => (
+export const standard = () => (
   <StorybookMargin>
     Guest:
     <StorybookSpacer />
