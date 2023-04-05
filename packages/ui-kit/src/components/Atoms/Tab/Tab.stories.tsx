@@ -1,35 +1,35 @@
 import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
 import { Meta } from '@storybook/react'
-import { ButtonUnderlined } from './ButtonUnderlined'
+import { Tab } from './Tab'
 
 export default {
-  title: 'Atoms/ButtonUnderlined',
-  component: ButtonUnderlined,
+  title: 'Atoms/Tab',
+  component: Tab,
 } as Meta
 
 export const standard = () => (
   <StorybookMargin>
     <Wrapper>
-      <ButtonUnderlined isActive={true} href="/">
+      <Tab isActive={true} href="/">
         Lorem ispum
-      </ButtonUnderlined>
+      </Tab>
     </Wrapper>
     <StorybookSpacer />
     <Wrapper>
-      <ButtonUnderlined isActive={false} href="/">
+      <Tab isActive={false} href="/">
         Lorem ispum
-      </ButtonUnderlined>
+      </Tab>
     </Wrapper>
     <StorybookSpacer />
     <Wrapper>
-      <ButtonUnderlined isActive={true} onClick={() => {}}>
+      <Tab isActive={true} onClick={() => {}}>
         Lorem ispum
-      </ButtonUnderlined>
+      </Tab>
     </Wrapper>
     <StorybookSpacer />
     <Wrapper>
-      <ButtonUnderlined isActive={false}>Lorem ispum</ButtonUnderlined>
+      <Tab isActive={false}>Lorem ispum</Tab>
     </Wrapper>
   </StorybookMargin>
 )

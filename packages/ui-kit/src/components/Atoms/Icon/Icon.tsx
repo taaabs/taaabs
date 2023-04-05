@@ -16,8 +16,9 @@ import { ReactComponent as StarFilled } from '@/assets/icons/star-filled.svg'
 import { ReactComponent as Star } from '@/assets/icons/star.svg'
 import { ReactComponent as Sun } from '@/assets/icons/sun.svg'
 import { ReactComponent as Trash } from '@/assets/icons/trash.svg'
-import { ReactComponent as Like } from '@/assets/icons/like.svg'
 import { ReactComponent as LikeFilled } from '@/assets/icons/like-filled.svg'
+import { ReactComponent as Like } from '@/assets/icons/like.svg'
+import { ReactComponent as Logo } from '@/assets/icons/logo.svg'
 import { ReactComponent as SwipeLeft } from '@/assets/icons/swipe-left.svg'
 import { ReactComponent as SwipeRight } from '@/assets/icons/swipe-right.svg'
 import { ReactComponent as UserAdd } from '@/assets/icons/user-add.svg'
@@ -46,8 +47,9 @@ export namespace Icon {
     | 'STAR'
     | 'SUN'
     | 'TRASH'
-    | 'LIKE'
     | 'LIKE_FILLED'
+    | 'LIKE'
+    | 'LOGO'
     | 'SWIPE_LEFT'
     | 'SWIPE_RIGHT'
     | 'USER_ADD'
@@ -90,11 +92,14 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'HOME_FILLED':
       icon = <HomeFilled />
       break
+    case 'LIKE_FILLED':
+      icon = <LikeFilled />
+      break
     case 'LIKE':
       icon = <Like />
       break
-    case 'LIKE_FILLED':
-      icon = <LikeFilled />
+    case 'LOGO':
+      icon = <Logo />
       break
     case 'PIN':
       icon = <Pin />

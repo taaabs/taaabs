@@ -2,7 +2,7 @@ import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
-import { _Logo } from './_Logo'
+import { LogoForHeader } from '../../Atoms/LogoForHeader'
 import { Blurhash } from 'react-blurhash'
 
 export namespace HeaderDesktop {
@@ -28,18 +28,15 @@ export namespace HeaderDesktop {
 export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
   return (
     <S.container>
-      <_Logo userDisplayName={props.user && props.user.displayName} />
+      <LogoForHeader />
       <S.right>
         <S.Right.nav>
           <ul>
             {props.navItems.map((navItem) => (
               <li>
-                <Ui.Atoms.ButtonUnderlined
-                  href={navItem.href}
-                  isActive={navItem.isActive}
-                >
+                <Ui.Atoms.Tab href={navItem.href} isActive={navItem.isActive}>
                   {navItem.label}
-                </Ui.Atoms.ButtonUnderlined>
+                </Ui.Atoms.Tab>
               </li>
             ))}
           </ul>

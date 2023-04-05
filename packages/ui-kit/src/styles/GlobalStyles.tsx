@@ -9,11 +9,11 @@ export const enum Theme {
   FONT_SIZE_16_PX = '--font-size-16-px',
   FONT_SIZE_18_PX = '--font-size-18-px',
   FONT_SIZE_20_PX = '--font-size-20-px',
-  FONT_SIZE_12_REM = '--font-size-12',
-  FONT_SIZE_14_REM = '--font-size-14',
-  FONT_SIZE_16_REM = '--font-size-16',
-  FONT_SIZE_18_REM = '--font-size-18',
-  FONT_SIZE_20_REM = '--font-size-20',
+  FONT_SIZE_12_REM = '--font-size-12-rem',
+  FONT_SIZE_14_REM = '--font-size-14-rem',
+  FONT_SIZE_16_REM = '--font-size-16-rem',
+  FONT_SIZE_18_REM = '--font-size-18-rem',
+  FONT_SIZE_20_REM = '--font-size-20-rem',
   FONT_WEIGHT_INTER_MEDIUM = '--font-weight-inter-medium',
   FONT_WEIGHT_INTER_SEMIBOLD = '--font-weight-inter-semibold',
   FONT_WEIGHT_INTER_BOLD = '--font-weight-inter-bold',
@@ -41,6 +41,7 @@ export const enum Theme {
   COLOR_BORDER_SECONDARY = '--color-border-secondary',
   SPACER_8 = '--spacer-8',
   SPACER_16 = '--spacer-15',
+  SPACER_24 = '--spacer-24',
   SPACER_40 = '--spacer-40',
   SPACER_60 = '--spacer-60',
   BORDER_PRIMARY = '--border-primary',
@@ -98,6 +99,7 @@ const defaultTheme: ThemeMap = {
   [Theme.COLOR_BORDER_SECONDARY]: '#F2F2F2',
   [Theme.SPACER_8]: '8px',
   [Theme.SPACER_16]: '15px',
+  [Theme.SPACER_24]: '24px',
   [Theme.SPACER_40]: '40px',
   [Theme.SPACER_60]: '60px',
   [Theme.BORDER_PRIMARY]: `1px solid var(${Theme.COLOR_BORDER_PRIMARY})`,
@@ -142,7 +144,7 @@ export const globalStyles = css`
   body {
     font-family: var(${Theme.FONT_FAMILY_INTER});
     line-height: 1.5;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     color: var(${Theme.COLOR_TEXT_NORMAL});
   }
 
