@@ -97,15 +97,15 @@ namespace S {
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: var(${Theme.COLOR_NEUTRAL_50});
       width: var(${Theme.BUTTON_HEIGHT_40});
       height: var(${Theme.BUTTON_HEIGHT_40});
       border-radius: 50%;
+      border: var(${Theme.BORDER_PRIMARY});
       overflow: hidden;
       position: relative;
       @media (hover: hover) {
         :hover {
-          background-color: var(${Theme.COLOR_NEUTRAL_100});
+          background-color: var(${Theme.COLOR_NEUTRAL_50});
           > img {
             filter: brightness(90%);
           }
@@ -114,6 +114,9 @@ namespace S {
       > div > svg {
         height: 20px;
         width: 20px;
+      }
+      :has(img) {
+        border: none;
       }
       > img {
         width: 100%;

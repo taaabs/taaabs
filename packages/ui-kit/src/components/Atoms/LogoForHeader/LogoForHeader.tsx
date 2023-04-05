@@ -9,12 +9,8 @@ export const LogoForHeader: React.FC = () => {
     <S.logo href="/">
       <Ui.Atoms.Icon variant="LOGO" />
       <S.Logo.text>
-        <S.Logo.Text.topLine>taaabs.com</S.Logo.Text.topLine>
-        <S.Logo.Text.bottomLine>
-          {'social bookmarking'.split('').map((letter) => (
-            <span>{letter == ' ' ? <>&nbsp;</> : letter}</span>
-          ))}
-        </S.Logo.Text.bottomLine>
+        <S.Logo.Text.topLine>taaabs</S.Logo.Text.topLine>
+        <S.Logo.Text.bottomLine>free social bookmarking</S.Logo.Text.bottomLine>
       </S.Logo.text>
     </S.logo>
   )
@@ -29,7 +25,8 @@ namespace S {
       fill: var(${Theme.COLOR_PRIMARY_800});
       height: 36px;
       width: auto;
-      transition: var(${Theme.TRANSITION_HOVER});
+      transition: fill var(${Theme.ANIMATION_DURATION_150})
+        var(${Theme.TRANSITION_TIMING_FUNCTION});
       ${mq.at992} {
         height: 42px;
       }
@@ -62,6 +59,8 @@ namespace S {
         @media (hover: hover) {
           :hover {
             text-decoration: underline;
+            text-decoration-thickness: 1.5px;
+            text-underline-offset: 1.5px;
           }
         }
       `
@@ -71,12 +70,12 @@ namespace S {
         justify-content: space-between;
         padding-right: 2px;
         color: var(${Theme.COLOR_TEXT_DIMMED});
-        span {
-          letter-spacing: -2px;
-          font-size: 11px;
-          ${mq.at992} {
-            font-size: 14px;
-          }
+        letter-spacing: -0.03em;
+        font-size: 11px;
+        margin-left: 2px;
+        ${mq.at992} {
+          font-size: 12px;
+          margin-left: 2.5px;
         }
       `
     }

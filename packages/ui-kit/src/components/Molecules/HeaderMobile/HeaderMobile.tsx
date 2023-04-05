@@ -4,7 +4,6 @@ import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { _Logo } from './_Logo'
 
 export namespace HeaderMobile {
   export type Props = {
@@ -12,13 +11,13 @@ export namespace HeaderMobile {
     onClickHamburger: () => void
     onClickTheme: () => void
     currentTheme: 'LIGHT' | 'DARK'
-  } & _Logo.Props
+  }
 }
 
 export const HeaderMobile: React.FC<HeaderMobile.Props> = (props) => {
   return (
     <S.container>
-      <_Logo user={props.user} />
+      <Ui.Atoms.LogoForHeader />
       <S.right>
         <S.Right.theme onClick={props.onClickTheme}>
           <Icon variant="SUN" />
@@ -36,6 +35,7 @@ namespace S {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-left: var(${Theme.SPACER_16});
   `
   export const right = styled.div`
     display: flex;
