@@ -10,7 +10,7 @@ export const LogoForHeader: React.FC = () => {
       <Ui.Atoms.Icon variant="LOGO" />
       <S.Logo.text>
         <S.Logo.Text.topLine>taaabs</S.Logo.Text.topLine>
-        <S.Logo.Text.bottomLine>free social bookmarking</S.Logo.Text.bottomLine>
+        <S.Logo.Text.bottomLine>social bookmarking</S.Logo.Text.bottomLine>
       </S.Logo.text>
     </S.logo>
   )
@@ -19,8 +19,11 @@ export const LogoForHeader: React.FC = () => {
 namespace S {
   export const logo = styled(Link)`
     display: flex;
-    gap: 8px;
+    gap: 7px;
     align-items: center;
+    ${mq.at992} {
+      gap: 8px;
+    }
     > div > svg {
       fill: var(${Theme.COLOR_PRIMARY_800});
       height: 36px;
@@ -42,8 +45,10 @@ namespace S {
       display: flex;
       flex-direction: column;
       line-height: 1em;
+      padding-top: 2px;
       ${mq.at992} {
         line-height: 1.1em;
+        padding-top: 3px;
       }
     `
     export namespace Text {
