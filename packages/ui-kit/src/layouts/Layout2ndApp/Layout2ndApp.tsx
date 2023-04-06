@@ -7,7 +7,7 @@ import { css } from '@emotion/react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@/constants'
 
-export namespace LayoutApp {
+export namespace Layout2ndApp {
   export type Props = {
     slotSidebar: React.ReactNode
     slotMain: React.ReactNode
@@ -29,7 +29,7 @@ const useWindowWidth = () => {
   return width
 }
 
-export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
+export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
   const windowWidth = useWindowWidth()
   const [slideoutLeft, setSlideoutLeft] = useState<Slideout>()
   const [slideoutRight, setSlideoutRight] = useState<Slideout>()
@@ -132,7 +132,7 @@ export const LayoutApp: React.FC<LayoutApp.Props> = (props) => {
             <button onClick={() => slideoutLeft?.open()}>BURGER</button>
             {props.slotMain}
           </S.Main.inner>
-          <S.footer>{props.slotFooter}</S.footer>
+          {props.slotFooter}
         </S.main>
 
         <S.aside ref={mobileTabsPanelRef} width={slidableWidth}>
@@ -184,7 +184,6 @@ namespace S {
       width: 100%;
       top: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
       overflow: auto;
-      border-right: var(${Theme.BORDER_PRIMARY});
     }
   `
   export namespace Sidebar {
@@ -200,8 +199,6 @@ namespace S {
             pointer-events: all;
           `}
       }
-      ${mq.at992} {
-      }
     `
   }
   export const aside = styled.aside<{ width: number }>`
@@ -214,9 +211,6 @@ namespace S {
       height: 100vh;
       z-index: 1;
       display: none;
-    }
-    ${mq.at992} {
-      border-left: var(${Theme.BORDER_PRIMARY});
     }
   `
   export namespace Aside {
@@ -298,7 +292,6 @@ namespace S {
     ${mq.at992} {
       flex: 1;
       transform: translateX(0px) !important;
-      background: var(${Theme.COLOR_WHITE});
     }
   `
   export namespace Main {
@@ -314,7 +307,4 @@ namespace S {
       }
     `
   }
-  export const footer = styled.footer`
-    border-top: var(${Theme.BORDER_PRIMARY});
-  `
 }

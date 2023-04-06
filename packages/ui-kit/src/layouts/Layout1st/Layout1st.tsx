@@ -1,7 +1,7 @@
 import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 
-export namespace LayoutRoot {
+export namespace Layout1st {
   export type Props = {
     slotHeaderDesktop: React.ReactNode
     slotHeaderMobile: React.ReactNode
@@ -9,7 +9,7 @@ export namespace LayoutRoot {
   }
 }
 
-export const LayoutRoot: React.FC<LayoutRoot.Props> = (props) => {
+export const Layout1st: React.FC<Layout1st.Props> = (props) => {
   return (
     <>
       <S.header>

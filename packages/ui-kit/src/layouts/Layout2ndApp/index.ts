@@ -1,2 +1,1 @@
 export * from './Layout2ndApp'
-export * from './Layout1st'

@@ -1,17 +1,17 @@
 import { loremIpsum } from '@/helpers/storybook/lorem-ipsum'
 import { Meta } from '@storybook/react'
-import { LayoutRoot } from './LayoutRoot'
+import { Layout1st } from './Layout1st'
 
 export default {
-  title: 'Layouts/LayoutRoot',
-  component: LayoutRoot,
+  title: 'Layouts/Layout1st',
+  component: Layout1st,
 } as Meta
 
 export const standard = () => (
-  <LayoutRoot
+  <Layout1st
     slotHeaderDesktop={<>header desktop</>}
     slotHeaderMobile={<>header mobile</>}
   >
     {loremIpsum.long}
-  </LayoutRoot>
+  </Layout1st>
 )

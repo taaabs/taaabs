@@ -4,14 +4,14 @@ import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 
-export namespace LayoutLanding {
+export namespace Layout2ndLanding {
   export type Props = {
     children: React.ReactNode
     slotFooter: React.ReactNode
   }
 }
 
-export const LayoutLanding: React.FC<LayoutLanding.Props> = (props) => {
+export const Layout2ndLanding: React.FC<Layout2ndLanding.Props> = (props) => {
   return (
     <>
       <S.headerSpacer />

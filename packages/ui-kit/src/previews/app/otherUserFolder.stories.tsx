@@ -1,13 +1,13 @@
 import { Ui } from '@/index'
 import { Meta } from '@storybook/react'
-import { LayoutApp, LayoutRoot } from '@/layouts'
+import { Layout2ndApp, Layout1st } from '@/layouts'
 
 export default {
-  title: 'pages/app/guest',
+  title: 'previews/app/otherUserFolder',
 } as Meta
 
 export const standard = () => (
-  <LayoutRoot
+  <Layout1st
     slotHeaderDesktop={
       <Ui.Molecues.HeaderDesktop
         currentTheme="LIGHT"
@@ -31,11 +31,11 @@ export const standard = () => (
       />
     }
   >
-    <LayoutApp
+    <Layout2ndApp
       slotMain={<>main</>}
       slotAside={<>aside</>}
       slotFooter={<>footer</>}
       slotSidebar={<>sidebar</>}
-    ></LayoutApp>
-  </LayoutRoot>
+    ></Layout2ndApp>
+  </Layout1st>
 )

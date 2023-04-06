@@ -7,7 +7,6 @@ import { Blurhash } from 'react-blurhash'
 
 export namespace HeaderDesktop {
   export type NavItem = { label: string; href: string; isActive: boolean }
-  export type Breadcrumb = { label: string; href: string }
   export type Props = {
     user?: {
       username: string
@@ -23,10 +22,6 @@ export namespace HeaderDesktop {
     onClickAdd: () => void
     navigation: NavItem[]
     currentTheme: 'LIGHT' | 'DARK'
-    breadcrumbs?: {
-      items: Breadcrumb[]
-      pageTitle: string
-    }
   }
 }
 
@@ -41,7 +36,10 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
               <ul>
                 {props.navigation.map((link) => (
                   <li>
-                    <Ui.Atoms.ButtonUnderlined href={link.href} isActive={link.isActive}>
+                    <Ui.Atoms.ButtonUnderlined
+                      href={link.href}
+                      isActive={link.isActive}
+                    >
                       {link.label}
                     </Ui.Atoms.ButtonUnderlined>
                   </li>
@@ -80,15 +78,6 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
           </S.Top.right>
         </S.top>
       </Ui.Atoms.Wrapper>
-
-      <S.bottom>
-        <Ui.Atoms.Wrapper>
-          <S.Bottom.inner>
-            <div>breadcrumbs</div>
-            <div>right</div>
-          </S.Bottom.inner>
-        </Ui.Atoms.Wrapper>
-      </S.bottom>
     </S.container>
   )
 }
@@ -160,15 +149,5 @@ namespace S {
         bottom: 0;
       `
     }
-  }
-  export const bottom = styled.div`
-    height: 36px;
-    border-top: var(${Theme.BORDER_SECONDARY});
-  `
-  export namespace Bottom {
-    export const inner = styled.div`
-      display: flex;
-      justify-content: space-between;
-    `
   }
 }
