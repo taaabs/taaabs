@@ -1,6 +1,9 @@
 import { css } from '@emotion/react'
 import { mq } from './mediaQueries'
 
+// create color base that can't be used outside this file
+// each color usage has its dedicated variable that can be easily themed
+
 export const enum Theme {
   FONT_FAMILY_INTER = '--font-family-inter',
   FONT_FAMILY_SPACE_GROTESK = '--font-family-space-grotesk',

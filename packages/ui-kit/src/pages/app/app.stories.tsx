@@ -15,7 +15,7 @@ export const standard = () => (
         onClickTheme={() => {}}
         onClickSignIn={() => {}}
         onClickAdd={() => {}}
-        navItems={[
+        navigation={[
           { label: 'Explore', href: '/', isActive: true },
           { label: 'About', href: '/about', isActive: false },
           { label: 'Pricing', href: '/pricing', isActive: false },

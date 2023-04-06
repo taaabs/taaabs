@@ -35,7 +35,10 @@ namespace S {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-left: var(${Theme.SPACER_16});
+    padding-left: var(${Theme.SPACER_16});
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: saturate(180%) blur(5px);
+    border-bottom: var(${Theme.BORDER_PRIMARY});
   `
   export const right = styled.div`
     display: flex;

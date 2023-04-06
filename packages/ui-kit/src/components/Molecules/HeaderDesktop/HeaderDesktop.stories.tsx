@@ -24,7 +24,7 @@ export const standard = () => (
       onClickTheme={() => {}}
       onClickSignIn={() => {}}
       onClickAdd={() => {}}
-      navItems={[
+      navigation={[
         { label: 'Explore', href: '/', isActive: true },
         { label: 'About', href: '/about', isActive: false },
         { label: 'Pricing', href: '/pricing', isActive: false },
@@ -40,7 +40,7 @@ export const standard = () => (
       onClickSignIn={() => {}}
       onClickAdd={() => {}}
       user={{ username: 'lorem', displayName: 'Lorem ipsum' }}
-      navItems={navItemsLoggedInUser}
+      navigation={navItemsLoggedInUser}
     />
     <StorybookSpacer />
     Logged in user with avatar:
@@ -59,7 +59,7 @@ export const standard = () => (
           blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',
         },
       }}
-      navItems={navItemsLoggedInUser}
+      navigation={navItemsLoggedInUser}
     />
   </StorybookMargin>
 )
