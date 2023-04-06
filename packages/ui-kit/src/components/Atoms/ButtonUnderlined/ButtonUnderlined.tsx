@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 
-export namespace Tab {
+export namespace ButtonUnderlined {
   export type Props = {
     children: React.ReactNode
     href?: string
@@ -12,7 +12,7 @@ export namespace Tab {
   }
 }
 
-export const Tab: React.FC<Tab.Props> = (props) => {
+export const ButtonUnderlined: React.FC<ButtonUnderlined.Props> = (props) => {
   const { children, href, onClick, isActive } = props
   if (href != undefined) {
     return (
