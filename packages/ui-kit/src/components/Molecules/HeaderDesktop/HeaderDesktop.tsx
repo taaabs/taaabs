@@ -46,34 +46,18 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
                 ))}
               </ul>
             </S.Top.Right.nav>
-            <S.Top.Right.circleButton>
-              <Ui.Atoms.Icon variant="SEARCH" />
-            </S.Top.Right.circleButton>
-            <S.Top.Right.circleButton>
-              <Ui.Atoms.Icon variant="SUN" />
-            </S.Top.Right.circleButton>
+            <Ui.Atoms.ButtonCircle iconVariant="SEARCH" />
+            <Ui.Atoms.ButtonCircle iconVariant="SUN" />
             {!props.user ? (
               <Ui.Atoms.Button onClick={props.onClickSignIn}>
                 Sign in
               </Ui.Atoms.Button>
             ) : (
-              <>
-                <S.Top.Right.circleButton>
-                  {props.user.avatar ? (
-                    <>
-                      <S.Top.Right.blurHash>
-                        <Blurhash hash={props.user.avatar.blurhash} />
-                      </S.Top.Right.blurHash>
-                      <img src={props.user.avatar.url} />
-                    </>
-                  ) : (
-                    <Ui.Atoms.Icon variant="USER" />
-                  )}
-                </S.Top.Right.circleButton>
-                <Ui.Atoms.Button onClick={props.onClickAdd}>
-                  Add
-                </Ui.Atoms.Button>
-              </>
+              <Ui.Atoms.ButtonCircle
+                blurhash={props.user.avatar?.blurhash}
+                imageUrl={props.user.avatar?.url}
+                iconVariant="USER"
+              />
             )}
           </S.Top.right>
         </S.top>
@@ -107,38 +91,6 @@ namespace S {
         }
         li {
           height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
-        }
-      `
-      export const circleButton = styled.button`
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: var(${Theme.BUTTON_HEIGHT_40});
-        height: var(${Theme.BUTTON_HEIGHT_40});
-        border-radius: 50%;
-        border: var(${Theme.BORDER_PRIMARY});
-        overflow: hidden;
-        position: relative;
-        @media (hover: hover) {
-          :hover {
-            background-color: var(${Theme.COLOR_NEUTRAL_50});
-            > img {
-              filter: brightness(90%);
-            }
-          }
-        }
-        > div > svg {
-          height: 20px;
-          width: 20px;
-        }
-        :has(img) {
-          border: none;
-        }
-        > img {
-          width: 100%;
-          height: 100%;
-          transition: var(${Theme.TRANSITION_HOVER});
-          z-index: 0;
         }
       `
       export const blurHash = styled.div`

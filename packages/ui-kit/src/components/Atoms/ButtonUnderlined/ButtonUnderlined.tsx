@@ -84,7 +84,6 @@ namespace S {
         top: 0;
         z-index: -1;
       }
-
       @media (hover: hover) {
         :hover {
           ::before {

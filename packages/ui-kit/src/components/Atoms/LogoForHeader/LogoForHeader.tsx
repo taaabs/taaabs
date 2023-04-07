@@ -1,28 +1,123 @@
+import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 
-export const LogoForHeader: React.FC = () => {
-  return (
+export namespace LogoForHeader {
+  export type Props = {
+    user?: {
+      username: string
+      avatar?: {
+        url: string
+        blurhash: string
+      }
+      backHref: string
+    }
+  }
+}
+
+export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
+  return user ? (
+    <S.user>
+      <S.User.backArrow href={user.backHref}>
+        <Ui.Atoms.Icon variant="LESS_THAN" />
+      </S.User.backArrow>
+      <S.User.profile href={`/${user.username}`}>
+        <Ui.Atoms.ButtonCircle
+          blurhash={user.avatar?.blurhash}
+          imageUrl={user.avatar?.url}
+          iconVariant="USER"
+        />
+        <S.User.Profile.username>@{user.username}</S.User.Profile.username>
+      </S.User.profile>
+    </S.user>
+  ) : (
     <S.logo href="/">
       <Ui.Atoms.Icon variant="LOGO" />
-      <S.Logo.text>
-        <S.Logo.Text.topLine>taaabs</S.Logo.Text.topLine>
-        <S.Logo.Text.bottomLine>social bookmarking</S.Logo.Text.bottomLine>
-      </S.Logo.text>
+      <span>taaabs</span>
     </S.logo>
   )
 }
 
 namespace S {
+  const logoTextLetterSpacing = '-0.06em'
+
+  export const user = styled.div`
+    display: flex;
+    align-items: center;
+  `
+  export namespace User {
+    export const backArrow = styled(Link)`
+      display: flex;
+      align-items: center;
+      padding-right: var(${Theme.SPACER_24});
+      padding-left: var(${Theme.SPACER_16});
+      margin-left: calc(var(${Theme.SPACER_16}) * -1);
+      height: var(${Theme.BUTTON_HEIGHT_34});
+      ${mq.at992} {
+        height: var(${Theme.BUTTON_HEIGHT_40});
+      }
+      @media (hover: hover) {
+        :hover > div > svg {
+          transform: translateX(-2px);
+        }
+      }
+      > div > svg {
+        fill: var(${Theme.COLOR_BRAND});
+        transition: transform var(${Theme.ANIMATION_DURATION_150})
+          var(${Theme.ANIMATION_DURATION_150});
+        height: 18px;
+        width: 10px;
+        ${mq.at992} {
+          height: 20px;
+          width: 12px;
+        }
+      }
+    `
+    export const profile = styled(Link)`
+      display: flex;
+      align-items: center;
+      gap: var(${Theme.SPACER_8});
+    `
+    export namespace Profile {
+      export const username = styled.span`
+        font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
+        font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
+        letter-spacing: ${logoTextLetterSpacing};
+        color: var(${Theme.COLOR_BRAND});
+        font-size: 18px;
+        ${mq.at992} {
+          font-size: 22px;
+        }
+        @media (hover: hover) {
+          :hover {
+            text-decoration: underline;
+          }
+        }
+      `
+    }
+  }
   export const logo = styled(Link)`
     display: flex;
-    gap: 7px;
+    gap: var(${Theme.SPACER_8});
     align-items: center;
-    ${mq.at992} {
-      gap: 8px;
+    > span {
+      color: var(${Theme.COLOR_BRAND});
+      font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
+      font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
+      font-size: 20px;
+      letter-spacing: ${logoTextLetterSpacing};
+      ${mq.at992} {
+        font-size: 24px;
+      }
+      @media (hover: hover) {
+        :hover {
+          text-decoration: underline;
+        }
+      }
     }
     > div > svg {
       fill: var(${Theme.COLOR_PRIMARY_800});
@@ -40,49 +135,4 @@ namespace S {
       }
     }
   `
-  export namespace Logo {
-    export const text = styled.div`
-      display: flex;
-      flex-direction: column;
-      line-height: 1em;
-      padding-top: 2px;
-      ${mq.at992} {
-        line-height: 1.1em;
-        padding-top: 3px;
-      }
-    `
-    export namespace Text {
-      export const topLine = styled.div`
-        font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
-        font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
-        color: var(${Theme.COLOR_PRIMARY_800});
-        font-size: 18px;
-        letter-spacing: -1.2px;
-        ${mq.at992} {
-          font-size: 22px;
-        }
-        @media (hover: hover) {
-          :hover {
-            text-decoration: underline;
-            text-decoration-thickness: 1.5px;
-            text-underline-offset: 1.5px;
-          }
-        }
-      `
-      export const bottomLine = styled.div`
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        padding-right: 2px;
-        color: var(${Theme.COLOR_TEXT_DIMMED});
-        letter-spacing: -0.03em;
-        font-size: 11px;
-        margin-left: 2px;
-        ${mq.at992} {
-          font-size: 12px;
-          margin-left: 2.5px;
-        }
-      `
-    }
-  }
 }

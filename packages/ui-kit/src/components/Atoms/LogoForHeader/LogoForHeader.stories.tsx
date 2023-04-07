@@ -1,6 +1,7 @@
 import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
 import { Meta } from '@storybook/react'
 import { LogoForHeader } from '.'
+import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
 
 export default {
   title: 'Atoms/LogoForHeader',
@@ -10,5 +11,7 @@ export default {
 export const standard = () => (
   <StorybookMargin>
     <LogoForHeader />
+    <StorybookSpacer />
+    <LogoForHeader user={{ username: 'lorem', backHref: '/lorem' }} />
   </StorybookMargin>
 )
