@@ -5,7 +5,7 @@ import { Ui } from '@/index'
 import { Blurhash } from 'react-blurhash'
 import { mq } from '@/styles/mediaQueries'
 
-export namespace ButtonCircle {
+export namespace ButtonOutlinedIcon {
   export type Props = {
     iconVariant: Icon.Variant
     onClick?: () => void
@@ -14,7 +14,9 @@ export namespace ButtonCircle {
   }
 }
 
-export const ButtonCircle: React.FC<ButtonCircle.Props> = (props) => {
+export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIcon.Props> = (
+  props,
+) => {
   return (
     <S.circleButton>
       {props.imageUrl ? (
@@ -51,7 +53,7 @@ namespace S {
     @media (hover: hover) {
       :hover {
         background-color: var(${Theme.COLOR_NEUTRAL_50});
-        border-color: var(${Theme.COLOR_NEUTRAL_50});
+        border-color: var(${Theme.COLOR_BORDER_PRIMARY});
         > img {
           filter: brightness(90%);
         }

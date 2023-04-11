@@ -3,12 +3,16 @@ import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
 import { LogoForHeader } from '../../Atoms/LogoForHeader'
-import { Blurhash } from 'react-blurhash'
+import { ButtonOutlinedText } from '@/components/Atoms/ButtonOutlinedText/ButtonOutlinedText'
 
 export namespace HeaderDesktop {
-  export type NavItem = { label: string; href: string; isActive: boolean }
+  export type Navigation = Array<{
+    label: string
+    href: string
+    isActive: boolean
+  }>
   export type Props = {
-    user?: {
+    loggedInUser?: {
       username: string
       displayName?: string
       avatar?: {
@@ -20,17 +24,30 @@ export namespace HeaderDesktop {
     onClickTheme: () => void
     onClickSignIn: () => void
     onClickAdd: () => void
-    navigation: NavItem[]
+    navigation: Navigation
     currentTheme: 'LIGHT' | 'DARK'
+    viewedUser?: LogoForHeader.User
   }
 }
 
 export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
+  const userArea = !props.loggedInUser ? (
+    <Ui.Atoms.Button onClick={props.onClickSignIn}>Sign in</Ui.Atoms.Button>
+  ) : (
+    <Ui.Atoms.ButtonOutlinedIcon
+      blurhash={props.loggedInUser.avatar?.blurhash}
+      imageUrl={props.loggedInUser.avatar?.url}
+      iconVariant="USER"
+    />
+  )
   return (
     <S.container>
       <Ui.Atoms.Wrapper>
         <S.top>
-          <LogoForHeader />
+          <S.Top.left>
+            <LogoForHeader user={props.viewedUser} />
+            <ButtonOutlinedText>Follow</ButtonOutlinedText>
+          </S.Top.left>
           <S.Top.right>
             <S.Top.Right.nav>
               <ul>
@@ -46,19 +63,9 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
                 ))}
               </ul>
             </S.Top.Right.nav>
-            <Ui.Atoms.ButtonCircle iconVariant="SEARCH" />
-            <Ui.Atoms.ButtonCircle iconVariant="SUN" />
-            {!props.user ? (
-              <Ui.Atoms.Button onClick={props.onClickSignIn}>
-                Sign in
-              </Ui.Atoms.Button>
-            ) : (
-              <Ui.Atoms.ButtonCircle
-                blurhash={props.user.avatar?.blurhash}
-                imageUrl={props.user.avatar?.url}
-                iconVariant="USER"
-              />
-            )}
+            <Ui.Atoms.ButtonOutlinedIcon iconVariant="SEARCH" />
+            <Ui.Atoms.ButtonOutlinedIcon iconVariant="SUN" />
+            {userArea}
           </S.Top.right>
         </S.top>
       </Ui.Atoms.Wrapper>
@@ -78,8 +85,12 @@ namespace S {
     align-items: center;
   `
   export namespace Top {
-    export const inner = styled.div``
     export const right = styled.div`
+      display: flex;
+      align-items: center;
+      gap: var(${Theme.SPACER_8});
+    `
+    export const left = styled.div`
       display: flex;
       align-items: center;
       gap: var(${Theme.SPACER_8});

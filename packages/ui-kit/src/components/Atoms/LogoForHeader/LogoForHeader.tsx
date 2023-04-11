@@ -1,21 +1,20 @@
-import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 
 export namespace LogoForHeader {
-  export type Props = {
-    user?: {
-      username: string
-      avatar?: {
-        url: string
-        blurhash: string
-      }
-      backHref: string
+  export type User = {
+    username: string
+    avatar?: {
+      url: string
+      blurhash: string
     }
+    backHref: string
+  }
+  export type Props = {
+    user?: User
   }
 }
 
@@ -26,7 +25,7 @@ export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
         <Ui.Atoms.Icon variant="LESS_THAN" />
       </S.User.backArrow>
       <S.User.profile href={`/${user.username}`}>
-        <Ui.Atoms.ButtonCircle
+        <Ui.Atoms.ButtonOutlinedIcon
           blurhash={user.avatar?.blurhash}
           imageUrl={user.avatar?.url}
           iconVariant="USER"

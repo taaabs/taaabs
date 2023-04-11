@@ -8,7 +8,7 @@ export default {
   component: HeaderDesktop,
 } as Meta
 
-const navItemsLoggedInUser: HeaderDesktop.NavItem[] = [
+const navItemsLoggedInUser: HeaderDesktop.Navigation = [
   { label: 'My Library', href: '/', isActive: true },
   { label: 'Notifications', href: '/notifications', isActive: false },
   { label: 'Explore', href: '/explore', isActive: false },
@@ -39,7 +39,7 @@ export const standard = () => (
       onClickTheme={() => {}}
       onClickSignIn={() => {}}
       onClickAdd={() => {}}
-      user={{ username: 'lorem', displayName: 'Lorem ipsum' }}
+      loggedInUser={{ username: 'lorem', displayName: 'Lorem ipsum' }}
       navigation={navItemsLoggedInUser}
     />
     <StorybookSpacer />
@@ -51,7 +51,7 @@ export const standard = () => (
       onClickTheme={() => {}}
       onClickSignIn={() => {}}
       onClickAdd={() => {}}
-      user={{
+      loggedInUser={{
         username: 'lorem',
         displayName: 'Lorem ipsum',
         avatar: {
@@ -60,6 +60,26 @@ export const standard = () => (
         },
       }}
       navigation={navItemsLoggedInUser}
+    />
+    <StorybookSpacer />
+    Viewing another user
+    <StorybookSpacer />
+    <HeaderDesktop
+      currentTheme={'LIGHT'}
+      onClickSearch={() => {}}
+      onClickTheme={() => {}}
+      onClickSignIn={() => {}}
+      onClickAdd={() => {}}
+      loggedInUser={{ username: 'lorem', displayName: 'Lorem ipsum' }}
+      navigation={navItemsLoggedInUser}
+      viewedUser={{
+        backHref: '/',
+        username: 'lorem',
+        avatar: {
+          url: 'https://picsum.photos/300',
+          blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',
+        },
+      }}
     />
   </StorybookMargin>
 )
