@@ -3,7 +3,6 @@ import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 import Slideout from 'slideout'
 import { useEffect, useRef, useLayoutEffect, useState } from 'react'
-import { css } from '@emotion/react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@/constants'
 
@@ -115,10 +114,12 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
       <S.headerSpacer />
 
       <S.content>
-        <S.sidebar ref={sidebarRef} width={slidableWidth}>
-          <S.Sidebar.inner isVisible={isSlideoutRightDefinetelyClosed}>
-            {props.slotSidebar}
-          </S.Sidebar.inner>
+        <S.sidebar
+          ref={sidebarRef}
+          width={slidableWidth}
+          style={{ zIndex: !isSlideoutLeftDefinetelyClosed ? 1 : 0 }}
+        >
+          <S.Sidebar.inner>{props.slotSidebar}</S.Sidebar.inner>
         </S.sidebar>
 
         <S.main
@@ -135,8 +136,12 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
           {props.slotFooter}
         </S.main>
 
-        <S.aside ref={mobileTabsPanelRef} width={slidableWidth}>
-          <S.Aside.inner isVisible={isSlideoutLeftDefinetelyClosed}>
+        <S.aside
+          ref={mobileTabsPanelRef}
+          width={slidableWidth}
+          style={{ zIndex: !isSlideoutRightDefinetelyClosed ? 1 : 0 }}
+        >
+          <S.Aside.inner>
             {windowWidth && windowWidth >= 992 ? (
               <>
                 <S.Aside.Inner.Desktop.topBarBlurBgFix />
@@ -177,6 +182,8 @@ namespace S {
       height: 100vh;
       z-index: 0;
       display: none;
+      overflow: auto;
+      background-color: var(${Theme.COLOR_NEUTRAL_25});
     }
     ${mq.at992} {
       position: sticky;
@@ -187,17 +194,9 @@ namespace S {
     }
   `
   export namespace Sidebar {
-    export const inner = styled.div<{ isVisible: boolean }>`
+    export const inner = styled.div`
       ${mq.to992} {
         height: 100%;
-        visibility: hidden;
-        pointer-events: none;
-        ${({ isVisible }) =>
-          isVisible &&
-          css`
-            visibility: visible;
-            pointer-events: all;
-          `}
       }
     `
   }
@@ -209,23 +208,16 @@ namespace S {
       right: 0;
       width: ${({ width }) => width}px;
       height: 100vh;
-      z-index: 1;
       display: none;
+      overflow: auto;
+      background-color: var(${Theme.COLOR_NEUTRAL_25});
     }
   `
   export namespace Aside {
-    export const inner = styled.div<{ isVisible: boolean }>`
+    export const inner = styled.div`
       height: 100%;
       ${mq.to992} {
         height: 100%;
-        visibility: hidden;
-        pointer-events: none;
-        ${({ isVisible }) =>
-          isVisible &&
-          css`
-            visibility: visible;
-            pointer-events: all;
-          `}
       }
     `
     export namespace Inner {
