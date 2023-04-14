@@ -37,16 +37,18 @@ namespace S {
     align-items: center;
     justify-content: space-between;
     padding-left: var(${Theme.SPACER_16});
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: saturate(180%) blur(5px);
+    background-color: ${sharedValues.TRANSPARENT_BACKGROUND_COLOR};
+    backdrop-filter: ${sharedValues.BACKDROP_FILTER};
     border-bottom: var(${Theme.BORDER_PRIMARY});
+    height: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
   `
   export const right = styled.div`
     display: flex;
+    height: 100%;
   `
   export namespace Right {
     const baseButton = css`
-      height: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
+      /* height: ${sharedValues.HEADER_MOBILE_HEIGHT}px; */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -55,8 +57,8 @@ namespace S {
       ${baseButton}
       padding: 0 var(${Theme.SPACER_8});
       > div > svg {
-        height: 20px;
-        width: 20px;
+        height: 24px;
+        width: 24px;
       }
     `
     export const hamburger = styled.button`

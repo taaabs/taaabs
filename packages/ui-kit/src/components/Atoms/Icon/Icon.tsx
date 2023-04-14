@@ -1,4 +1,5 @@
 import { ReactComponent as Activity } from '@/assets/icons/activity.svg'
+import { ReactComponent as Add } from '@/assets/icons/add.svg'
 import { ReactComponent as Alias } from '@/assets/icons/alias.svg'
 import { ReactComponent as Archive } from '@/assets/icons/archive.svg'
 import { ReactComponent as CollectionFilled } from '@/assets/icons/collection-filled.svg'
@@ -7,6 +8,7 @@ import { ReactComponent as GreaterThan } from '@/assets/icons/greater-than.svg'
 import { ReactComponent as HomeFilled } from '@/assets/icons/home-filled.svg'
 import { ReactComponent as Home } from '@/assets/icons/home.svg'
 import { ReactComponent as LessThan } from '@/assets/icons/less-than.svg'
+import { ReactComponent as Library } from '@/assets/icons/library.svg'
 import { ReactComponent as Pin } from '@/assets/icons/pin.svg'
 import { ReactComponent as RecentFilled } from '@/assets/icons/recent-filled.svg'
 import { ReactComponent as Recent } from '@/assets/icons/recent.svg'
@@ -19,6 +21,7 @@ import { ReactComponent as Trash } from '@/assets/icons/trash.svg'
 import { ReactComponent as LikeFilled } from '@/assets/icons/like-filled.svg'
 import { ReactComponent as Like } from '@/assets/icons/like.svg'
 import { ReactComponent as Logo } from '@/assets/icons/logo.svg'
+import { ReactComponent as Notifications } from '@/assets/icons/notifications.svg'
 import { ReactComponent as SwipeLeft } from '@/assets/icons/swipe-left.svg'
 import { ReactComponent as SwipeRight } from '@/assets/icons/swipe-right.svg'
 import { ReactComponent as UserAdd } from '@/assets/icons/user-add.svg'
@@ -30,6 +33,7 @@ import styled from '@emotion/styled'
 export namespace Icon {
   export type Variant =
     | 'ACTIVITY'
+    | 'ADD'
     | 'ALIAS'
     | 'ARCHIVE'
     | 'COLLECTION_FILLED'
@@ -38,6 +42,7 @@ export namespace Icon {
     | 'HOME_FILLED'
     | 'HOME'
     | 'LESS_THAN'
+    | 'LIBRARY'
     | 'PIN'
     | 'SEARCH'
     | 'RECENT_FILLED'
@@ -50,6 +55,7 @@ export namespace Icon {
     | 'LIKE_FILLED'
     | 'LIKE'
     | 'LOGO'
+    | 'NOTIFICATIONS'
     | 'SWIPE_LEFT'
     | 'SWIPE_RIGHT'
     | 'USER_ADD'
@@ -67,6 +73,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
   switch (variant) {
     case 'ACTIVITY':
       icon = <Activity />
+      break
+    case 'ADD':
+      icon = <Add />
       break
     case 'ALIAS':
       icon = <Alias />
@@ -89,6 +98,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'LESS_THAN':
       icon = <LessThan />
       break
+    case 'LIBRARY':
+      icon = <Library />
+      break
     case 'HOME_FILLED':
       icon = <HomeFilled />
       break
@@ -100,6 +112,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'LOGO':
       icon = <Logo />
+      break
+    case 'NOTIFICATIONS':
+      icon = <Notifications />
       break
     case 'PIN':
       icon = <Pin />

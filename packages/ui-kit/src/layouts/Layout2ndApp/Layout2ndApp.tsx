@@ -5,6 +5,8 @@ import Slideout from 'slideout'
 import { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@/constants'
+import { Ui } from '@/index'
+import { css } from '@emotion/react'
 
 export namespace Layout2ndApp {
   export type Props = {
@@ -51,6 +53,15 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
     slidableWidth = 380
   } else {
     slidableWidth = windowWidth - visibleWidth
+  }
+
+  const openRightSlideout = () => {
+    setIsSlideoutRightDefinetelyClosed(false)
+    slideoutRight?.open()
+  }
+  const openLeftSlideout = () => {
+    setIsSlideoutLeftDefinetelyClosed(false)
+    slideoutLeft?.open()
   }
 
   useEffect(() => {
@@ -136,7 +147,13 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
           }}
         >
           <S.Main.inner isDimmed={isSlideoutLeftOpen || isSlideoutRightOpen}>
-            <button onClick={() => slideoutLeft?.open()}>BURGER</button>
+            <S.Main.Inner.mobileTitlebar>
+              <Ui.Molecues.PageTitlebarMobile
+                pageTitle="x"
+                swipeLeftOnClick={openLeftSlideout}
+                swipeRightOnClick={openRightSlideout}
+              />
+            </S.Main.Inner.mobileTitlebar>
             {props.slotMain}
           </S.Main.inner>
         </S.main>
@@ -184,12 +201,10 @@ namespace S {
       top: 0;
       bottom: 0;
       width: ${({ width }) => width}px;
-      height: 100vh;
       z-index: 0;
       display: none;
       padding-top: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
       padding-bottom: ${sharedValues.BOTTOM_NAVIGATION_BAR_HEIGHT}px;
-      background-color: var(${Theme.COLOR_WHITE});
     }
     ${mq.at992} {
       position: sticky;
@@ -282,16 +297,18 @@ namespace S {
     ${mq.to992} {
       position: relative;
       z-index: 2;
-      will-change: transform;
-      min-height: 100vh;
       border-left-width: 1px;
       border-left-style: solid;
-      border-left-color: var(${Theme.COLOR_WHITE});
+      border-left-color: transparent;
       border-right-width: 1px;
       border-right-style: solid;
-      border-right-color: var(${Theme.COLOR_WHITE});
+      border-right-color: transparent;
       transition: border-color var(${Theme.ANIMATION_DURATION_300})
-        var(${Theme.TRANSITION_TIMING_FUNCTION}); // Other color is defined in the global styles
+        var(${Theme.TRANSITION_TIMING_FUNCTION}); // Active color is defined in the global styles
+      padding-bottom: ${sharedValues.BOTTOM_NAVIGATION_BAR_HEIGHT}px;
+      padding-top: ${sharedValues.PAGE_TITLEBAR_MOBILE}px;
+      height: calc(100vh - ${sharedValues.HEADER_MOBILE_HEIGHT}px);
+      overflow: hidden;
     }
     ${mq.at992} {
       flex: 1;
@@ -299,16 +316,27 @@ namespace S {
     }
   `
   export namespace Main {
-    export const inner = styled.main<{ isDimmed: boolean }>`
+    export const inner = styled.div<{ isDimmed: boolean }>`
       ${mq.to992} {
         opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
-        min-height: calc(100vh - ${sharedValues.HEADER_MOBILE_HEIGHT}px);
         transition: opacity var(${Theme.ANIMATION_DURATION_300})
           var(${Theme.TRANSITION_TIMING_FUNCTION});
+        overflow: auto;
+        height: 100%;
       }
       ${mq.at992} {
         min-height: calc(100vh - ${sharedValues.HEADER_DESKTOP_HEIGHT}px);
       }
     `
+    export namespace Inner {
+      export const mobileTitlebar = styled.div`
+        position: absolute;
+        top: 0;
+        width: 100%;
+        ${mq.at992} {
+          display: none;
+        }
+      `
+    }
   }
 }

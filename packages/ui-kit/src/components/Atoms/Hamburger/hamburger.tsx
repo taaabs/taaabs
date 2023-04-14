@@ -24,22 +24,22 @@ namespace S {
   export const container = styled.div`
     position: relative;
     height: 20px;
-    width: 22px;
+    width: 24px;
   `
   export const hamburger = styled.div<Pick<Hamburger.Props, 'isToggled'>>`
     position: absolute;
     height: 20px;
-    width: 22px;
+    width: 24px;
     & > div {
-      width: 22px;
-      height: 3px;
+      width: 24px;
+      height: 3.5px;
       border-radius: 2px;
       background-color: var(${Theme.COLOR_BLACK});
       margin-top: 3px;
       transition: all var(${Theme.ANIMATION_DURATION_300})
         var(${Theme.TRANSITION_TIMING_FUNCTION});
       &:nth-of-type(1) {
-        margin-top: 3px;
+        margin-top: 2.5px;
       }
       ${({ isToggled }) =>
         isToggled &&
@@ -50,7 +50,7 @@ namespace S {
           }
           &:nth-of-type(2) {
             transform: rotate(45deg);
-            margin-top: -3px;
+            margin-top: -3.5px;
           }
           &:nth-of-type(3) {
             opacity: 0;

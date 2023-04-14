@@ -138,6 +138,7 @@ export const globalStyles = css`
     font-size: 62.5%;
     accent-color: var(${Theme.COLOR_BRAND});
     caret-color: var(${Theme.COLOR_BRAND});
+    -webkit-tap-highlight-color: transparent;
   }
 
   :root {
@@ -210,7 +211,7 @@ export const globalStyles = css`
   .slideout-open .slideout-panel {
     ${mq.to992} {
       overflow: hidden;
-      border-color: var(${Theme.COLOR_BORDER_PRIMARY});
+      border-color: var(${Theme.COLOR_BORDER_PRIMARY}) !important;
     }
   }
   .slideout-open .slideout-menu {

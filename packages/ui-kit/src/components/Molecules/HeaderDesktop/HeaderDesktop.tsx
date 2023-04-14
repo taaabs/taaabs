@@ -94,6 +94,7 @@ namespace S {
       display: flex;
       align-items: center;
       gap: var(${Theme.SPACER_8});
+      height: 100%;
     `
     export const left = styled.div`
       display: flex;

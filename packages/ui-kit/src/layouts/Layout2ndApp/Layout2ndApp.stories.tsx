@@ -11,7 +11,6 @@ export const standard = () => (
     slotSidebar={<>slot sidebar</>}
     slotMain={<>slot main</>}
     slotAside={<>slot aside</>}
-    slotFooter={<>slot footer</>}
   />
 )
 
@@ -20,7 +19,6 @@ export const scrollingTest = () => (
     slotSidebar={<div>{lorem}</div>}
     slotMain={<>{lorem + lorem + lorem + lorem + lorem}</>}
     slotAside={<>{lorem}</>}
-    slotFooter={<>{lorem}</>}
   />
 )
 
