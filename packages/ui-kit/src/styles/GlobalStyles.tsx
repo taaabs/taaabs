@@ -62,7 +62,7 @@ type ThemeMap = {
   [key in Theme]: string
 }
 
-const defaultTheme: ThemeMap = {
+export const defaultTheme: ThemeMap = {
   [Theme.FONT_FAMILY_INTER]: `"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Twemoji Country Flags", "Segoe UI Emoji", "Segoe UI Symbol"`,
   [Theme.FONT_FAMILY_SPACE_GROTESK]: `"Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
   [Theme.FONT_SIZE_12_PX]: '12px',

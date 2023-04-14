@@ -11,6 +11,7 @@ export const standard = () => (
   <Layout1st
     slotHeaderDesktop={<>header desktop</>}
     slotHeaderMobile={<>header mobile</>}
+    slotBottomNavigationBarMobile={<>bottom navigation bar</>}
   >
     {loremIpsum.long}
   </Layout1st>

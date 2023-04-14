@@ -17,7 +17,7 @@ export const standard = () => (
 
 export const scrollingTest = () => (
   <Layout2ndApp
-    slotSidebar={<>{lorem}</>}
+    slotSidebar={<div>{lorem}</div>}
     slotMain={<>{lorem + lorem + lorem + lorem + lorem}</>}
     slotAside={<>{lorem}</>}
     slotFooter={<>{lorem}</>}

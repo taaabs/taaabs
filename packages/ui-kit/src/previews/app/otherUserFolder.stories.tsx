@@ -30,11 +30,11 @@ export const standard = () => (
         onClickTheme={() => {}}
       />
     }
+    slotBottomNavigationBarMobile={<>bottom nav bar</>}
   >
     <Layout2ndApp
       slotMain={<>main</>}
       slotAside={<>aside</>}
-      slotFooter={<>footer</>}
       slotSidebar={<>sidebar</>}
     ></Layout2ndApp>
   </Layout1st>

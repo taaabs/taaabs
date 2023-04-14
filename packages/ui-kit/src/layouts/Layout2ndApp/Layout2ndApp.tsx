@@ -1,4 +1,4 @@
-import { Theme } from '@/styles/GlobalStyles'
+import { Theme, defaultTheme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 import Slideout from 'slideout'
@@ -11,7 +11,6 @@ export namespace Layout2ndApp {
     slotSidebar: React.ReactNode
     slotMain: React.ReactNode
     slotAside: React.ReactNode
-    slotFooter: React.ReactNode
   }
 }
 
@@ -128,12 +127,18 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
             isSlideoutLeftOpen && slideoutLeft?.close()
             isSlideoutRightOpen && slideoutRight?.close()
           }}
+          style={{
+            backgroundColor:
+              !isSlideoutLeftDefinetelyClosed ||
+              !isSlideoutRightDefinetelyClosed
+                ? defaultTheme['--color-neutral-25']
+                : '',
+          }}
         >
           <S.Main.inner isDimmed={isSlideoutLeftOpen || isSlideoutRightOpen}>
             <button onClick={() => slideoutLeft?.open()}>BURGER</button>
             {props.slotMain}
           </S.Main.inner>
-          {props.slotFooter}
         </S.main>
 
         <S.aside
@@ -182,8 +187,9 @@ namespace S {
       height: 100vh;
       z-index: 0;
       display: none;
-      overflow: auto;
-      background-color: var(${Theme.COLOR_NEUTRAL_25});
+      padding-top: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
+      padding-bottom: ${sharedValues.BOTTOM_NAVIGATION_BAR_HEIGHT}px;
+      background-color: var(${Theme.COLOR_WHITE});
     }
     ${mq.at992} {
       position: sticky;
@@ -197,6 +203,8 @@ namespace S {
     export const inner = styled.div`
       ${mq.to992} {
         height: 100%;
+        overflow: auto;
+        background-color: var(${Theme.COLOR_NEUTRAL_25});
       }
     `
   }
@@ -209,14 +217,19 @@ namespace S {
       width: ${({ width }) => width}px;
       height: 100vh;
       display: none;
-      overflow: auto;
-      background-color: var(${Theme.COLOR_NEUTRAL_25});
+      padding-top: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
+      padding-bottom: ${sharedValues.BOTTOM_NAVIGATION_BAR_HEIGHT}px;
+      background-color: var(${Theme.COLOR_WHITE});
     }
   `
   export namespace Aside {
     export const inner = styled.div`
-      height: 100%;
       ${mq.to992} {
+        height: 100%;
+        overflow: auto;
+        background-color: var(${Theme.COLOR_NEUTRAL_25});
+      }
+      ${mq.at992} {
         height: 100%;
       }
     `
@@ -270,7 +283,6 @@ namespace S {
       position: relative;
       z-index: 2;
       will-change: transform;
-      background-color: var(${Theme.COLOR_WHITE});
       min-height: 100vh;
       border-left-width: 1px;
       border-left-style: solid;
