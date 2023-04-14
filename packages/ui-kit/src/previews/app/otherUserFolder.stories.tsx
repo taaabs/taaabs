@@ -30,7 +30,7 @@ export const standard = () => (
         onClickTheme={() => {}}
       />
     }
-    slotBottomNavigationBarMobile={<>bottom nav bar</>}
+    slotBottomNavigationBar={<Ui.Molecues.BottomNavigationBar />}
   >
     <Layout2ndApp
       slotMain={<>main</>}

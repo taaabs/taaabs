@@ -76,13 +76,18 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
 namespace S {
   export const container = styled.div`
     border-bottom: var(${Theme.BORDER_PRIMARY});
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: saturate(180%) blur(5px);
+    background-color: ${sharedValues.TRANSPARENT_BACKGROUND_COLOR};
+    backdrop-filter: ${sharedValues.BACKDROP_FILTER};
+    height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
+    & > div {
+      height: 100%;
+    }
   `
   export const top = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 100%;
   `
   export namespace Top {
     export const right = styled.div`
@@ -97,11 +102,13 @@ namespace S {
     `
     export namespace Right {
       export const nav = styled.nav`
+        height: 100%;
         ul {
+          height: 100%;
           display: flex;
         }
         li {
-          height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
+          height: 100%;
         }
       `
       export const blurHash = styled.div`

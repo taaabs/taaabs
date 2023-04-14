@@ -5,7 +5,7 @@ export namespace Layout1st {
   export type Props = {
     slotHeaderDesktop: React.ReactNode
     slotHeaderMobile: React.ReactNode
-    slotBottomNavigationBarMobile: React.ReactNode
+    slotBottomNavigationBar: React.ReactNode
     children?: React.ReactNode
   }
 }
@@ -19,7 +19,7 @@ export const Layout1st: React.FC<Layout1st.Props> = (props) => {
       </S.header>
       {props.children}
       <S.bottomNavigationBarMobile>
-        {props.slotBottomNavigationBarMobile}
+        {props.slotBottomNavigationBar}
       </S.bottomNavigationBarMobile>
     </>
   )

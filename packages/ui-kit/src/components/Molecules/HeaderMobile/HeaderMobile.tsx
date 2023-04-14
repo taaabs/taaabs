@@ -1,4 +1,4 @@
-import { Icon } from '@/components/Atoms'
+import { Icon, LogoForHeader } from '@/components/Atoms'
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
@@ -11,13 +11,14 @@ export namespace HeaderMobile {
     onClickHamburger: () => void
     onClickTheme: () => void
     currentTheme: 'LIGHT' | 'DARK'
+    viewedUser?: LogoForHeader.User
   }
 }
 
 export const HeaderMobile: React.FC<HeaderMobile.Props> = (props) => {
   return (
     <S.container>
-      <Ui.Atoms.LogoForHeader />
+      <Ui.Atoms.LogoForHeader user={props.viewedUser} />
       <S.right>
         <S.Right.theme onClick={props.onClickTheme}>
           <Icon variant="SUN" />
