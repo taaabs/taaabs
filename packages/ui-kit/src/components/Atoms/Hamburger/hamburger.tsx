@@ -10,17 +10,17 @@ export namespace Hamburger {
 
 export const Hamburger: React.FC<Hamburger.Props> = ({ isToggled }) => {
   return (
-    <S.container>
-      <S.hamburger isToggled={isToggled}>
+    <$.container>
+      <$.hamburger isToggled={isToggled}>
         <div />
         <div />
         <div />
-      </S.hamburger>
-    </S.container>
+      </$.hamburger>
+    </$.container>
   )
 }
 
-namespace S {
+namespace $ {
   export const container = styled.div`
     position: relative;
     height: 20px;

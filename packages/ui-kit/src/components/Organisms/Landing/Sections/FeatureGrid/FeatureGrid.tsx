@@ -21,21 +21,21 @@ export const FeatureGrid: React.FC<FeatureGridTypes.Props> = ({
   return (
     <section>
       <Ui.Atoms.Wrapper>
-        <S.Grid>
+        <$.Grid>
           {gridItems.map((gridItem, index) => (
             <div key={index}>
-              <S.FirstLine>{gridItem.firstLine}</S.FirstLine>
-              <S.SecondLine>{gridItem.secondLine}</S.SecondLine>
-              <S.ThirdLine>{gridItem.thirdLine}</S.ThirdLine>
+              <$.FirstLine>{gridItem.firstLine}</$.FirstLine>
+              <$.SecondLine>{gridItem.secondLine}</$.SecondLine>
+              <$.ThirdLine>{gridItem.thirdLine}</$.ThirdLine>
             </div>
           ))}
-        </S.Grid>
+        </$.Grid>
       </Ui.Atoms.Wrapper>
     </section>
   )
 }
 
-namespace S {
+namespace $ {
   export const Grid = styled.div`
     display: grid;
     grid-row-gap: 4rem;

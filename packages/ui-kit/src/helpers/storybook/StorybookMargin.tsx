@@ -8,10 +8,10 @@ type MarginProps = {
 }
 
 export const StorybookMargin: React.FC<MarginProps> = ({ children }) => {
-  return <S.container>{children}</S.container>
+  return <$.container>{children}</$.container>
 }
 
-namespace S {
+namespace $ {
   export const container = styled.div`
     margin: var(${Theme.SPACER_16});
     ${mq.at768} {

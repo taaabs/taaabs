@@ -17,21 +17,21 @@ export namespace HeaderMobile {
 
 export const HeaderMobile: React.FC<HeaderMobile.Props> = (props) => {
   return (
-    <S.container>
+    <$.container>
       <Ui.Atoms.LogoForHeader user={props.viewedUser} />
-      <S.right>
-        <S.Right.theme onClick={props.onClickTheme}>
+      <$.right>
+        <$.Right.theme onClick={props.onClickTheme}>
           <Icon variant="SUN" />
-        </S.Right.theme>
-        <S.Right.hamburger onClick={props.onClickHamburger}>
+        </$.Right.theme>
+        <$.Right.hamburger onClick={props.onClickHamburger}>
           <Ui.Atoms.Hamburger isToggled={props.hamburgerIsToggled} />
-        </S.Right.hamburger>
-      </S.right>
-    </S.container>
+        </$.Right.hamburger>
+      </$.right>
+    </$.container>
   )
 }
 
-namespace S {
+namespace $ {
   export const container = styled.div`
     display: flex;
     align-items: center;

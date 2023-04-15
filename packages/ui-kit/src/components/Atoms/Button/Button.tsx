@@ -19,32 +19,32 @@ export namespace Button {
 export const Button: React.FC<Button.Props> = (props) => {
   if (props.type == 'submit') {
     return (
-      <S.Button size={props.size} type="submit">
+      <$.Button size={props.size} type="submit">
         {props.children}
-      </S.Button>
+      </$.Button>
     )
   } else if (props.href != undefined) {
     return (
-      <S.NextLink size={props.size} href={props.href} onClick={props.onClick}>
+      <$.NextLink size={props.size} href={props.href} onClick={props.onClick}>
         {props.children}
-      </S.NextLink>
+      </$.NextLink>
     )
   } else if (props.onClick != undefined) {
     return (
-      <S.Button size={props.size} onClick={props.onClick}>
+      <$.Button size={props.size} onClick={props.onClick}>
         {props.children}
-      </S.Button>
+      </$.Button>
     )
   } else {
     return (
-      <S.Button size={props.size} disabled>
+      <$.Button size={props.size} disabled>
         {props.children}
-      </S.Button>
+      </$.Button>
     )
   }
 }
 
-namespace S {
+namespace $ {
   const buttonBase = css`
     display: inline-flex;
     align-items: center;

@@ -20,28 +20,28 @@ export namespace LogoForHeader {
 
 export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
   return user ? (
-    <S.user>
-      <S.User.backArrow href={user.backHref}>
+    <$.user>
+      <$.User.backArrow href={user.backHref}>
         <Ui.Atoms.Icon variant="LESS_THAN" />
-      </S.User.backArrow>
-      <S.User.profile href={`/${user.username}`}>
+      </$.User.backArrow>
+      <$.User.profile href={`/${user.username}`}>
         <Ui.Atoms.ButtonOutlinedIcon
           blurhash={user.avatar?.blurhash}
           imageUrl={user.avatar?.url}
           iconVariant="USER"
         />
-        <S.User.Profile.username>@{user.username}</S.User.Profile.username>
-      </S.User.profile>
-    </S.user>
+        <$.User.Profile.username>@{user.username}</$.User.Profile.username>
+      </$.User.profile>
+    </$.user>
   ) : (
-    <S.logo href="/">
+    <$.logo href="/">
       <Ui.Atoms.Icon variant="LOGO" />
       <span>taaabs</span>
-    </S.logo>
+    </$.logo>
   )
 }
 
-namespace S {
+namespace $ {
   const logoTextLetterSpacing = '-0.06em'
 
   export const user = styled.div`
@@ -79,7 +79,6 @@ namespace S {
     export const profile = styled(Link)`
       display: flex;
       align-items: center;
-      gap: var(${Theme.SPACER_8});
     `
     export namespace Profile {
       export const username = styled.span`
@@ -87,6 +86,7 @@ namespace S {
         font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
         letter-spacing: ${logoTextLetterSpacing};
         color: var(${Theme.COLOR_BRAND});
+        padding-left: 0.4em;
         font-size: 18px;
         ${mq.at992} {
           font-size: 22px;
@@ -101,14 +101,14 @@ namespace S {
   }
   export const logo = styled(Link)`
     display: flex;
-    gap: var(${Theme.SPACER_8});
     align-items: center;
     > span {
       color: var(${Theme.COLOR_BRAND});
       font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
       font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
-      font-size: 20px;
+      font-size: 22px;
       letter-spacing: ${logoTextLetterSpacing};
+      padding-left: 0.3em;
       ${mq.at992} {
         font-size: 24px;
       }

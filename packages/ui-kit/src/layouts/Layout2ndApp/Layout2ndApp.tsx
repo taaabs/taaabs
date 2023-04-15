@@ -5,13 +5,14 @@ import Slideout from 'slideout'
 import { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@/constants'
-import { Ui } from '@/index'
+import { _AppBar } from './components/_AppBar'
 
 export namespace Layout2ndApp {
   export type Props = {
     slotSidebar: React.ReactNode
     slotMain: React.ReactNode
     slotAside: React.ReactNode
+    slotAppBar: React.ReactNode
   }
 }
 
@@ -38,6 +39,10 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
     useState(true)
   const [isSlideoutRightDefinetelyClosed, setIsSlideoutRightDefinetelyClosed] =
     useState(true)
+  const [isSlideoutLeftDefinetelyOpened, setIsSlideoutLeftDefinetelyOpened] =
+    useState(false)
+  const [isSlideoutRightDefinetelyOpened, setIsSlideoutRightDefinetelyOpened] =
+    useState(false)
   const sidebarRef = useRef<HTMLDivElement>(null)
   const mainRef = useRef<HTMLDivElement>(null)
   const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
@@ -84,6 +89,7 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
     })
     slideoutLeftInstance.on('beforeopen', () => {
       setIsSlideoutLeftOpen(true)
+      setIsSlideoutLeftDefinetelyOpened(true)
     })
     slideoutLeftInstance.on('beforeclose', () => {
       setIsSlideoutLeftOpen(false)
@@ -91,13 +97,15 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
     slideoutLeftInstance.on('close', () => {
       setIsSlideoutLeftOpen(false)
       setIsSlideoutLeftDefinetelyClosed(true)
+      setIsSlideoutLeftDefinetelyOpened(false)
     })
     slideoutLeftInstance.on('translatestart', () => {
-      setIsSlideoutLeftOpen(false)
       setIsSlideoutLeftDefinetelyClosed(false)
+      setIsSlideoutLeftDefinetelyOpened(false)
     })
     slideoutRightInstance.on('beforeopen', () => {
       setIsSlideoutRightOpen(true)
+      setIsSlideoutRightDefinetelyOpened(true)
     })
     slideoutRightInstance.on('beforeclose', () => {
       setIsSlideoutRightOpen(false)
@@ -105,10 +113,11 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
     slideoutRightInstance.on('close', () => {
       setIsSlideoutRightOpen(false)
       setIsSlideoutRightDefinetelyClosed(true)
+      setIsSlideoutRightDefinetelyOpened(false)
     })
     slideoutRightInstance.on('translatestart', () => {
-      setIsSlideoutRightOpen(false)
       setIsSlideoutRightDefinetelyClosed(false)
+      setIsSlideoutRightDefinetelyOpened(false)
     })
     setSlideoutLeft(slideoutLeftInstance)
     setSlideoutRight(slideoutRightInstance)
@@ -119,55 +128,59 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
   }, [windowWidth])
 
   return (
-    <S.container>
-      <S.headerSpacer />
+    <$.container>
+      <$.headerSpacer />
 
-      <S.content>
-        <S.sidebar
+      <$.content>
+        <$.sidebar
           ref={sidebarRef}
           width={slidableWidth}
           style={{ zIndex: !isSlideoutLeftDefinetelyClosed ? 1 : 0 }}
         >
-          <S.Sidebar.inner>{props.slotSidebar}</S.Sidebar.inner>
-        </S.sidebar>
+          <$.Sidebar.inner>{props.slotSidebar}</$.Sidebar.inner>
+        </$.sidebar>
 
-        <S.main
+        <$.main
           ref={mainRef}
           onClick={() => {
             isSlideoutLeftOpen && slideoutLeft?.close()
             isSlideoutRightOpen && slideoutRight?.close()
           }}
         >
-          <S.Main.inner
-            isDimmed={isSlideoutLeftOpen || isSlideoutRightOpen}
+          <$.Main.mobileTitlebar>
+            <_AppBar
+              swipeLeftOnClick={openLeftSlideout}
+              swipeRightOnClick={openRightSlideout}
+              isLeftOpen={isSlideoutLeftOpen}
+              isRightOpen={isSlideoutRightOpen}
+            >
+              {props.slotAppBar}
+            </_AppBar>
+          </$.Main.mobileTitlebar>
+          <$.Main.inner
+            isDimmed={
+              isSlideoutLeftDefinetelyOpened || isSlideoutRightDefinetelyOpened
+            }
             style={{
-              overflow:
+              pointerEvents:
                 !isSlideoutLeftDefinetelyClosed ||
                 !isSlideoutRightDefinetelyClosed
-                  ? 'hidden'
-                  : '',
+                  ? 'none'
+                  : 'all',
             }}
           >
-            <S.Main.Inner.mobileTitlebar>
-              <Ui.Molecues.PageTitlebarMobile
-                pageTitle="x"
-                swipeLeftOnClick={openLeftSlideout}
-                swipeRightOnClick={openRightSlideout}
-              />
-            </S.Main.Inner.mobileTitlebar>
             {props.slotMain}
-          </S.Main.inner>
-        </S.main>
+          </$.Main.inner>
+        </$.main>
 
-        <S.aside
+        <$.aside
           ref={mobileTabsPanelRef}
           width={slidableWidth}
           style={{ zIndex: !isSlideoutRightDefinetelyClosed ? 1 : 0 }}
         >
-          <S.Aside.inner>
+          <$.Aside.inner>
             {windowWidth && windowWidth >= 992 ? (
               <>
-                <S.Aside.Inner.Desktop.topBarBlurBgFix />
                 <StickyBox offsetTop={sharedValues.HEADER_DESKTOP_HEIGHT}>
                   {props.slotAside}
                 </StickyBox>
@@ -175,20 +188,22 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
             ) : (
               props.slotAside
             )}
-          </S.Aside.inner>
-        </S.aside>
-      </S.content>
-    </S.container>
+          </$.Aside.inner>
+        </$.aside>
+      </$.content>
+    </$.container>
   )
 }
 
-namespace S {
+namespace $ {
   export const container = styled.div`
     background: var(${Theme.COLOR_NEUTRAL_25});
   `
   export const headerSpacer = styled.header`
-    position: sticky;
+    position: fixed;
+    z-index: 2;
     top: 0;
+    left: 0;
     width: 100%;
     background-color: var(${Theme.COLOR_WHITE});
     height: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
@@ -235,7 +250,9 @@ namespace S {
       display: none;
       padding-top: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
       padding-bottom: ${sharedValues.BOTTOM_NAVIGATION_BAR_HEIGHT}px;
-      background-color: var(${Theme.COLOR_WHITE});
+    }
+    ${mq.at992} {
+      margin-top: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
     }
   `
   export namespace Aside {
@@ -261,16 +278,6 @@ namespace S {
         }
         height: 100%;
       `
-      export namespace Desktop {
-        export const topBarBlurBgFix = styled.div`
-          width: 100vw;
-          height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
-          background-color: var(${Theme.COLOR_WHITE});
-          top: 0;
-          position: fixed;
-          z-index: 1;
-        `
-      }
     }
   }
   export const content = styled.div`
@@ -298,7 +305,6 @@ namespace S {
     ${mq.to992} {
       position: relative;
       z-index: 2;
-      will-change: transform;
       border-left-width: 1px;
       border-left-style: solid;
       border-left-color: transparent;
@@ -307,8 +313,9 @@ namespace S {
       border-right-color: transparent;
       transition: border-color var(${Theme.ANIMATION_DURATION_300})
         var(${Theme.TRANSITION_TIMING_FUNCTION}); // Active color is defined in the global styles
+      margin-top: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
+      padding-top: ${sharedValues.APP_BAR_HEIGHT}px;
       padding-bottom: ${sharedValues.BOTTOM_NAVIGATION_BAR_HEIGHT}px;
-      padding-top: ${sharedValues.PAGE_TITLEBAR_MOBILE}px;
       height: calc(100vh - ${sharedValues.HEADER_MOBILE_HEIGHT}px);
       overflow: hidden;
       background-color: var(${Theme.COLOR_NEUTRAL_25});
@@ -316,9 +323,18 @@ namespace S {
     ${mq.at992} {
       flex: 1;
       transform: translateX(0px) !important;
+      z-index: 2;
     }
   `
   export namespace Main {
+    export const mobileTitlebar = styled.div`
+      position: absolute;
+      top: 0;
+      width: 100%;
+      ${mq.at992} {
+        display: none;
+      }
+    `
     export const inner = styled.div<{ isDimmed: boolean }>`
       ${mq.to992} {
         opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
@@ -331,15 +347,5 @@ namespace S {
         min-height: calc(100vh - ${sharedValues.HEADER_DESKTOP_HEIGHT}px);
       }
     `
-    export namespace Inner {
-      export const mobileTitlebar = styled.div`
-        position: absolute;
-        top: 0;
-        width: 100%;
-        ${mq.at992} {
-          display: none;
-        }
-      `
-    }
   }
 }

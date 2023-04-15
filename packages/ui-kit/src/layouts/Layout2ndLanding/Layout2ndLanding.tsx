@@ -14,16 +14,16 @@ export namespace Layout2ndLanding {
 export const Layout2ndLanding: React.FC<Layout2ndLanding.Props> = (props) => {
   return (
     <>
-      <S.headerSpacer />
-      <S.content>{props.children}</S.content>
-      <S.footer>
+      <$.headerSpacer />
+      <$.content>{props.children}</$.content>
+      <$.footer>
         <Ui.Atoms.Wrapper>{props.slotFooter}</Ui.Atoms.Wrapper>
-      </S.footer>
+      </$.footer>
     </>
   )
 }
 
-namespace S {
+namespace $ {
   export const headerSpacer = styled.header`
     position: sticky;
     top: 0;

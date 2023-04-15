@@ -18,24 +18,24 @@ export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIcon.Props> = (
   props,
 ) => {
   return (
-    <S.circleButton>
+    <$.circleButton>
       {props.imageUrl ? (
         <>
           {props.blurhash && (
-            <S.CicrleButton.blurHash>
+            <$.CicrleButton.blurHash>
               <Blurhash hash={props.blurhash} />
-            </S.CicrleButton.blurHash>
+            </$.CicrleButton.blurHash>
           )}
           <img src={props.imageUrl} />
         </>
       ) : (
         <Ui.Atoms.Icon variant={props.iconVariant} />
       )}
-    </S.circleButton>
+    </$.circleButton>
   )
 }
 
-namespace S {
+namespace $ {
   export const circleButton = styled.button`
     display: flex;
     align-items: center;

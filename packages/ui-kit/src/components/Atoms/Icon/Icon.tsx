@@ -159,10 +159,10 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       icon = <User />
       break
   }
-  return <S.iconWrapper>{icon}</S.iconWrapper>
+  return <$.iconWrapper>{icon}</$.iconWrapper>
 }
 
-namespace S {
+namespace $ {
   const ICON_SIZE = 40
 
   export const iconWrapper = styled.div`

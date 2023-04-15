@@ -24,7 +24,7 @@ export const Page: React.VFC = () => {
         <p>
           We recommend building UIs with a{' '}
           <a href="https://componentdriven.org" target="_blank" rel="noopener noreferrer">
-            <strong>component-driven</strong>
+            <strong>component-driven</$trong>
           </a>{' '}
           process starting with atomic components and ending with pages.
         </p>

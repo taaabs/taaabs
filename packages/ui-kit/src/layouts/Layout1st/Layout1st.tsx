@@ -13,19 +13,19 @@ export namespace Layout1st {
 export const Layout1st: React.FC<Layout1st.Props> = (props) => {
   return (
     <>
-      <S.header>
-        <S.Header.desktop>{props.slotHeaderDesktop}</S.Header.desktop>
-        <S.Header.mobile>{props.slotHeaderMobile}</S.Header.mobile>
-      </S.header>
+      <$.header>
+        <$.Header.desktop>{props.slotHeaderDesktop}</$.Header.desktop>
+        <$.Header.mobile>{props.slotHeaderMobile}</$.Header.mobile>
+      </$.header>
       {props.children}
-      <S.bottomNavigationBarMobile>
+      <$.bottomNavigationBarMobile>
         {props.slotBottomNavigationBar}
-      </S.bottomNavigationBarMobile>
+      </$.bottomNavigationBarMobile>
     </>
   )
 }
 
-namespace S {
+namespace $ {
   export const header = styled.header`
     position: fixed;
     top: 0;

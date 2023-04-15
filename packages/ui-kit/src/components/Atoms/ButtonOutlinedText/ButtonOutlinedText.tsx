@@ -9,10 +9,10 @@ export namespace ButtonOutlinedText {
 export const ButtonOutlinedText: React.FC<ButtonOutlinedText.Props> = (
   props,
 ) => {
-  return <S.button>{props.children}</S.button>
+  return <$.button>{props.children}</$.button>
 }
 
-namespace S {
+namespace $ {
   export const button = styled.button`
   `
 }
