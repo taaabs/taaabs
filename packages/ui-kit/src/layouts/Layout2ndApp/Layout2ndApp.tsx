@@ -344,6 +344,8 @@ namespace $ {
     export namespace AppBar {
       export const slot = styled.div<{ isDimmed: boolean }>`
         opacity: ${({ isDimmed }) => (isDimmed ? dimmedOpacity : 1)};
+        transition: opacity var(${Theme.ANIMATION_DURATION_300})
+          var(${Theme.TRANSITION_TIMING_FUNCTION});
       `
     }
     export const inner = styled.div<{ isDimmed: boolean }>`
