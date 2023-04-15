@@ -1,4 +1,4 @@
-import { Theme, defaultTheme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 import Slideout from 'slideout'
@@ -6,7 +6,6 @@ import { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
-import { css } from '@emotion/react'
 
 export namespace Layout2ndApp {
   export type Props = {
@@ -138,15 +137,17 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
             isSlideoutLeftOpen && slideoutLeft?.close()
             isSlideoutRightOpen && slideoutRight?.close()
           }}
-          style={{
-            backgroundColor:
-              !isSlideoutLeftDefinetelyClosed ||
-              !isSlideoutRightDefinetelyClosed
-                ? defaultTheme['--color-neutral-25']
-                : '',
-          }}
         >
-          <S.Main.inner isDimmed={isSlideoutLeftOpen || isSlideoutRightOpen}>
+          <S.Main.inner
+            isDimmed={isSlideoutLeftOpen || isSlideoutRightOpen}
+            style={{
+              overflow:
+                !isSlideoutLeftDefinetelyClosed ||
+                !isSlideoutRightDefinetelyClosed
+                  ? 'hidden'
+                  : '',
+            }}
+          >
             <S.Main.Inner.mobileTitlebar>
               <Ui.Molecues.PageTitlebarMobile
                 pageTitle="x"
@@ -297,6 +298,7 @@ namespace S {
     ${mq.to992} {
       position: relative;
       z-index: 2;
+      will-change: transform;
       border-left-width: 1px;
       border-left-style: solid;
       border-left-color: transparent;
@@ -309,6 +311,7 @@ namespace S {
       padding-top: ${sharedValues.PAGE_TITLEBAR_MOBILE}px;
       height: calc(100vh - ${sharedValues.HEADER_MOBILE_HEIGHT}px);
       overflow: hidden;
+      background-color: var(${Theme.COLOR_NEUTRAL_25});
     }
     ${mq.at992} {
       flex: 1;
