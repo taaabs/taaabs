@@ -3,7 +3,7 @@ import { Meta } from '@storybook/react'
 import { Layout2ndApp, Layout1st } from '@/layouts'
 
 export default {
-  title: 'previews/app/otherUserFolder',
+  title: 'previews/app/other user folder',
 } as Meta
 
 export const standard = () => (

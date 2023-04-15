@@ -47,14 +47,14 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
   const mainRef = useRef<HTMLDivElement>(null)
   const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
 
-  const visibleWidth = 64
+  const visibleWidth = 58
 
   let slidableWidth: number
-  // 64 (visibleWidth) + 8 (gap) + 300 (sidebar) + 8 + 64 (for symmetry with visibleWidth) = *444* - 64 = *380*
+  // 58 (visibleWidth) + 8 (gap) + 300 (sidebar) + 8 + 58 (for symmetry with visibleWidth) = *423* - 58 = *374*
   if (windowWidth == null) {
     slidableWidth = 0
-  } else if (windowWidth >= 444) {
-    slidableWidth = 380
+  } else if (windowWidth >= 432) {
+    slidableWidth = 330
   } else {
     slidableWidth = windowWidth - visibleWidth
   }
@@ -324,6 +324,7 @@ namespace $ {
       flex: 1;
       transform: translateX(0px) !important;
       z-index: 2;
+      margin-top: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
     }
   `
   export namespace Main {
@@ -345,6 +346,7 @@ namespace $ {
       }
       ${mq.at992} {
         min-height: calc(100vh - ${sharedValues.HEADER_DESKTOP_HEIGHT}px);
+        
       }
     `
   }
