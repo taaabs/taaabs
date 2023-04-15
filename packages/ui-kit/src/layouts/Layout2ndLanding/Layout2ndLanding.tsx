@@ -29,9 +29,9 @@ namespace $ {
     top: 0;
     width: 100%;
     background-color: var(${Theme.COLOR_WHITE});
-    height: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
+    height: ${sharedValues.heights.HEADER_MOBILE}px;
     ${mq.at992} {
-      height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
+      height: ${sharedValues.heights.HEADER_DESKTOP}px;
     }
   `
   export const content = styled.div`
@@ -47,7 +47,7 @@ namespace $ {
       z-index: 100;
       background-color: rgba(255, 255, 255, 0.8);
       backdrop-filter: saturate(180%) blur(5%);
-      height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
+      height: ${sharedValues.heights.HEADER_DESKTOP}px;
       display: flex;
       align-items: center;
     `

@@ -47,16 +47,13 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
   const mainRef = useRef<HTMLDivElement>(null)
   const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
 
-  const visibleWidth = 58
-
   let slidableWidth: number
-  // 58 (visibleWidth) + 8 (gap) + 300 (sidebar) + 8 + 58 (for symmetry with visibleWidth) = *423* - 58 = *374*
   if (windowWidth == null) {
     slidableWidth = 0
   } else if (windowWidth >= 432) {
-    slidableWidth = 330
+    slidableWidth = 300
   } else {
-    slidableWidth = windowWidth - visibleWidth
+    slidableWidth = windowWidth / 1.5
   }
 
   const openRightSlideout = () => {
@@ -147,16 +144,23 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
             isSlideoutRightOpen && slideoutRight?.close()
           }}
         >
-          <$.Main.mobileTitlebar>
+          <$.Main.appBar>
             <_AppBar
               swipeLeftOnClick={openLeftSlideout}
               swipeRightOnClick={openRightSlideout}
               isLeftOpen={isSlideoutLeftOpen}
               isRightOpen={isSlideoutRightOpen}
             >
-              {props.slotAppBar}
+              <$.Main.AppBar.slot
+                isDimmed={
+                  isSlideoutLeftDefinetelyOpened ||
+                  isSlideoutRightDefinetelyOpened
+                }
+              >
+                {props.slotAppBar}
+              </$.Main.AppBar.slot>
             </_AppBar>
-          </$.Main.mobileTitlebar>
+          </$.Main.appBar>
           <$.Main.inner
             isDimmed={
               isSlideoutLeftDefinetelyOpened || isSlideoutRightDefinetelyOpened
@@ -181,7 +185,7 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
           <$.Aside.inner>
             {windowWidth && windowWidth >= 992 ? (
               <>
-                <StickyBox offsetTop={sharedValues.HEADER_DESKTOP_HEIGHT}>
+                <StickyBox offsetTop={sharedValues.heights.HEADER_DESKTOP}>
                   {props.slotAside}
                 </StickyBox>
               </>
@@ -206,9 +210,9 @@ namespace $ {
     left: 0;
     width: 100%;
     background-color: var(${Theme.COLOR_WHITE});
-    height: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
+    height: ${sharedValues.heights.HEADER_MOBILE}px;
     ${mq.at992} {
-      height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
+      height: ${sharedValues.heights.HEADER_DESKTOP}px;
     }
   `
   export const sidebar = styled.div<{ width: number }>`
@@ -219,14 +223,14 @@ namespace $ {
       width: ${({ width }) => width}px;
       z-index: 0;
       display: none;
-      padding-top: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
-      padding-bottom: ${sharedValues.BOTTOM_NAVIGATION_BAR_HEIGHT}px;
+      padding-top: ${sharedValues.heights.HEADER_MOBILE}px;
+      padding-bottom: ${sharedValues.heights.BOTTOM_NAVIGATION_BAR}px;
     }
     ${mq.at992} {
       position: sticky;
-      height: calc(100vh - ${sharedValues.HEADER_DESKTOP_HEIGHT}px);
+      height: calc(100vh - ${sharedValues.heights.HEADER_DESKTOP}px);
       width: 100%;
-      top: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
+      top: ${sharedValues.heights.HEADER_DESKTOP}px;
       overflow: auto;
     }
   `
@@ -248,11 +252,11 @@ namespace $ {
       width: ${({ width }) => width}px;
       height: 100vh;
       display: none;
-      padding-top: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
-      padding-bottom: ${sharedValues.BOTTOM_NAVIGATION_BAR_HEIGHT}px;
+      padding-top: ${sharedValues.heights.HEADER_MOBILE}px;
+      padding-bottom: ${sharedValues.heights.BOTTOM_NAVIGATION_BAR}px;
     }
     ${mq.at992} {
-      margin-top: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
+      margin-top: ${sharedValues.heights.HEADER_DESKTOP}px;
     }
   `
   export namespace Aside {
@@ -313,10 +317,10 @@ namespace $ {
       border-right-color: transparent;
       transition: border-color var(${Theme.ANIMATION_DURATION_300})
         var(${Theme.TRANSITION_TIMING_FUNCTION}); // Active color is defined in the global styles
-      margin-top: ${sharedValues.HEADER_MOBILE_HEIGHT}px;
-      padding-top: ${sharedValues.APP_BAR_HEIGHT}px;
-      padding-bottom: ${sharedValues.BOTTOM_NAVIGATION_BAR_HEIGHT}px;
-      height: calc(100vh - ${sharedValues.HEADER_MOBILE_HEIGHT}px);
+      margin-top: ${sharedValues.heights.HEADER_MOBILE}px;
+      padding-top: ${sharedValues.heights.APP_BAR}px;
+      padding-bottom: ${sharedValues.heights.BOTTOM_NAVIGATION_BAR}px;
+      height: calc(100vh - ${sharedValues.heights.HEADER_MOBILE}px);
       overflow: hidden;
       background-color: var(${Theme.COLOR_NEUTRAL_25});
     }
@@ -324,11 +328,12 @@ namespace $ {
       flex: 1;
       transform: translateX(0px) !important;
       z-index: 2;
-      margin-top: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
+      margin-top: ${sharedValues.heights.HEADER_DESKTOP}px;
     }
   `
   export namespace Main {
-    export const mobileTitlebar = styled.div`
+    const dimmedOpacity = 0.4
+    export const appBar = styled.div`
       position: absolute;
       top: 0;
       width: 100%;
@@ -336,17 +341,21 @@ namespace $ {
         display: none;
       }
     `
+    export namespace AppBar {
+      export const slot = styled.div<{ isDimmed: boolean }>`
+        opacity: ${({ isDimmed }) => (isDimmed ? dimmedOpacity : 1)};
+      `
+    }
     export const inner = styled.div<{ isDimmed: boolean }>`
       ${mq.to992} {
-        opacity: ${({ isDimmed }) => (isDimmed ? 0.4 : 1)};
+        opacity: ${({ isDimmed }) => (isDimmed ? dimmedOpacity : 1)};
         transition: opacity var(${Theme.ANIMATION_DURATION_300})
           var(${Theme.TRANSITION_TIMING_FUNCTION});
         overflow: auto;
         height: 100%;
       }
       ${mq.at992} {
-        min-height: calc(100vh - ${sharedValues.HEADER_DESKTOP_HEIGHT}px);
-        
+        min-height: calc(100vh - ${sharedValues.heights.HEADER_DESKTOP}px);
       }
     `
   }

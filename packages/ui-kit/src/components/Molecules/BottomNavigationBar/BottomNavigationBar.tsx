@@ -20,7 +20,7 @@ export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
   return (
     <div
       css={css`
-        height: ${sharedValues.BOTTOM_NAVIGATION_BAR_HEIGHT}px;
+        height: ${sharedValues.heights.BOTTOM_NAVIGATION_BAR}px;
         border-top: var(${Theme.BORDER_PRIMARY});
         background-color: var(${Theme.COLOR_WHITE});
         display: flex;
@@ -30,7 +30,7 @@ export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
           height: ${sharedValues.ICON_SIZE}px;
         }
         > * {
-          width: ${sharedValues.BUTTON_SIZE_46}px;
+          width: ${sharedValues.heights.BUTTON_46}px;
           display: flex;
           align-items: center;
           justify-content: center;

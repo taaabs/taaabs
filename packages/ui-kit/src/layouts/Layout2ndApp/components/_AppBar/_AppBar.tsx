@@ -44,7 +44,7 @@ namespace $ {
     border-bottom: var(${Theme.BORDER_PRIMARY});
     display: flex;
     justify-content: space-between;
-    height: ${sharedValues.APP_BAR_HEIGHT}px;
+    height: ${sharedValues.heights.APP_BAR}px;
   `
   export const swipe = styled.button<{ isVisible: boolean }>`
     display: flex;

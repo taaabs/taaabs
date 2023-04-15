@@ -78,7 +78,7 @@ namespace $ {
     border-bottom: var(${Theme.BORDER_PRIMARY});
     background-color: ${sharedValues.TRANSPARENT_BACKGROUND_COLOR};
     backdrop-filter: ${sharedValues.BACKDROP_FILTER};
-    height: ${sharedValues.HEADER_DESKTOP_HEIGHT}px;
+    height: ${sharedValues.heights.HEADER_DESKTOP}px;
     & > div {
       height: 100%;
     }
