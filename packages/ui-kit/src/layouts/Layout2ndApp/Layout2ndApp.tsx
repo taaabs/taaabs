@@ -149,14 +149,18 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
         <$.main
           ref={mainRef}
           onClick={() => {
-            isSlideoutLeftOpen && slideoutLeft?.close()
-            isSlideoutRightOpen && slideoutRight?.close()
+            isSlideoutLeftDefinetelyOpened && toggleLeftSlideout()
+            isSlideoutRightDefinetelyOpened && toggleRightSlideout()
           }}
         >
           <$.Main.appBar>
             <_AppBar
-              swipeLeftOnClick={toggleLeftSlideout}
-              swipeRightOnClick={toggleRightSlideout}
+              swipeLeftOnClick={
+                !isSlideoutLeftOpen ? toggleLeftSlideout : () => {}
+              }
+              swipeRightOnClick={
+                !isSlideoutRightOpen ? toggleRightSlideout : () => {}
+              }
               isLeftOpen={isSlideoutLeftOpen}
               isRightOpen={isSlideoutRightOpen}
             >
@@ -170,6 +174,7 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
               </$.Main.AppBar.slot>
             </_AppBar>
           </$.Main.appBar>
+
           <$.Main.inner
             isDimmed={
               isSlideoutLeftDefinetelyOpened || isSlideoutRightDefinetelyOpened
