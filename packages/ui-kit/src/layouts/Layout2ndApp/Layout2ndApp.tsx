@@ -6,6 +6,7 @@ import { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@/constants'
 import { _AppBar } from './components/_AppBar'
+import { css } from '@emotion/react'
 
 export namespace Layout2ndApp {
   export type Props = {
@@ -56,13 +57,21 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
     slidableWidth = windowWidth / 1.5
   }
 
-  const openRightSlideout = () => {
-    setIsSlideoutRightDefinetelyClosed(false)
-    slideoutRight?.open()
+  const toggleRightSlideout = () => {
+    if (!isSlideoutRightOpen) {
+      setIsSlideoutRightDefinetelyClosed(false)
+    } else {
+      setIsSlideoutRightDefinetelyOpened(false)
+    }
+    slideoutRight?.toggle()
   }
-  const openLeftSlideout = () => {
-    setIsSlideoutLeftDefinetelyClosed(false)
-    slideoutLeft?.open()
+  const toggleLeftSlideout = () => {
+    if (!isSlideoutLeftOpen) {
+      setIsSlideoutLeftDefinetelyClosed(false)
+    } else {
+      setIsSlideoutLeftDefinetelyOpened(false)
+    }
+    slideoutLeft?.toggle()
   }
 
   useEffect(() => {
@@ -146,8 +155,8 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
         >
           <$.Main.appBar>
             <_AppBar
-              swipeLeftOnClick={openLeftSlideout}
-              swipeRightOnClick={openRightSlideout}
+              swipeLeftOnClick={toggleLeftSlideout}
+              swipeRightOnClick={toggleRightSlideout}
               isLeftOpen={isSlideoutLeftOpen}
               isRightOpen={isSlideoutRightOpen}
             >
@@ -165,6 +174,10 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
             isDimmed={
               isSlideoutLeftDefinetelyOpened || isSlideoutRightDefinetelyOpened
             }
+            withBorders={
+              !isSlideoutLeftDefinetelyClosed ||
+              !isSlideoutRightDefinetelyClosed
+            }
             style={{
               pointerEvents:
                 !isSlideoutLeftDefinetelyClosed ||
@@ -173,7 +186,7 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
                   : 'all',
             }}
           >
-            {props.slotMain}
+            <div>{props.slotMain}</div>
           </$.Main.inner>
         </$.main>
 
@@ -309,19 +322,10 @@ namespace $ {
     ${mq.to992} {
       position: relative;
       z-index: 2;
-      border-left-width: 1px;
-      border-left-style: solid;
-      border-left-color: transparent;
-      border-right-width: 1px;
-      border-right-style: solid;
-      border-right-color: transparent;
-      transition: border-color var(${Theme.ANIMATION_DURATION_300})
-        var(${Theme.TRANSITION_TIMING_FUNCTION}); // Active color is defined in the global styles
       margin-top: ${sharedValues.heights.HEADER_MOBILE}px;
       padding-top: ${sharedValues.heights.APP_BAR}px;
       padding-bottom: ${sharedValues.heights.BOTTOM_NAVIGATION_BAR}px;
       height: calc(100vh - ${sharedValues.heights.HEADER_MOBILE}px);
-      overflow: hidden;
       background-color: var(${Theme.COLOR_NEUTRAL_25});
     }
     ${mq.at992} {
@@ -333,6 +337,7 @@ namespace $ {
   `
   export namespace Main {
     const dimmedOpacity = 0.4
+
     export const appBar = styled.div`
       position: absolute;
       top: 0;
@@ -348,13 +353,40 @@ namespace $ {
           var(${Theme.TRANSITION_TIMING_FUNCTION});
       `
     }
-    export const inner = styled.div<{ isDimmed: boolean }>`
+    export const inner = styled.div<{
+      isDimmed: boolean
+      withBorders: boolean
+    }>`
       ${mq.to992} {
-        opacity: ${({ isDimmed }) => (isDimmed ? dimmedOpacity : 1)};
-        transition: opacity var(${Theme.ANIMATION_DURATION_300})
-          var(${Theme.TRANSITION_TIMING_FUNCTION});
         overflow: auto;
         height: 100%;
+        ${({ withBorders }) =>
+          withBorders &&
+          css`
+            ::before {
+              content: '';
+              width: 1px;
+              height: 100%;
+              background-color: var(${Theme.COLOR_BORDER_PRIMARY});
+              top: 0;
+              left: 0;
+              position: absolute;
+            }
+            ::after {
+              content: '';
+              width: 1px;
+              height: 100%;
+              background-color: var(${Theme.COLOR_BORDER_PRIMARY});
+              top: 0;
+              right: 0;
+              position: absolute;
+            }
+          `}
+        > div {
+          transition: opacity var(${Theme.ANIMATION_DURATION_300})
+            var(${Theme.TRANSITION_TIMING_FUNCTION});
+          opacity: ${({ isDimmed }) => (isDimmed ? dimmedOpacity : 1)};
+        }
       }
       ${mq.at992} {
         min-height: calc(100vh - ${sharedValues.heights.HEADER_DESKTOP}px);

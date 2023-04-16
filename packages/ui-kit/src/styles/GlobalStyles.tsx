@@ -211,7 +211,6 @@ export const globalStyles = css`
   .slideout-open .slideout-panel {
     ${mq.to992} {
       overflow: hidden;
-      border-color: var(${Theme.COLOR_BORDER_PRIMARY}) !important;
     }
   }
   .slideout-open .slideout-menu {
