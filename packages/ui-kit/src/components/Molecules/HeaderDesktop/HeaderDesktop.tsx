@@ -40,6 +40,7 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
       iconVariant="USER"
     />
   )
+
   return (
     <$.container>
       <Ui.Atoms.Wrapper>
@@ -76,8 +77,7 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
 namespace $ {
   export const container = styled.div`
     border-bottom: var(${Theme.BORDER_PRIMARY});
-    background-color: ${sharedValues.TRANSPARENT_BACKGROUND_COLOR};
-    backdrop-filter: ${sharedValues.BACKDROP_FILTER};
+    background-color: var(${Theme.COLOR_WHITE});
     height: ${sharedValues.heights.HEADER_DESKTOP}px;
     & > div {
       height: 100%;

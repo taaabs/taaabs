@@ -1,0 +1,1 @@
+Page shows recently clicked bookmarks. User can select only his own bookmarks or all their clicks.
