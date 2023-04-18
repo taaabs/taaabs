@@ -59,7 +59,7 @@ The objective is to list in the aside all tags occuring on visible bookmarks wit
 | 93      | 3           | cooking recpies           |
 | 93      | 3           | cooking recpies other     |
 
-1. Select all bookmarks which tag_hierarchy is equal to what is selected.
+1. Select all bookmarks which tag_hierarchy is equal to what is selected. If there are provided excluded tags, filter out all bookmarksIds containing them.
 2. For each bookmark select all tags from tags_on_bookmarks ommiting current tags and count them.
 
 | tag_id | count |
@@ -99,4 +99,5 @@ On "tag_hierarchies_on_bookmarks" we select all distinct bookmark ids having "pa
 
 ### Private tags
 
-User can mark a tag as private by prefixing it with a dot. These won't be sent to other users.
+User can set a tag to be private, so it won't appear on a public bookmark and in the aside for profile visitors.
+For compatibility with pinboard, we set all imported bookmarks prefixed with a dot as private.
