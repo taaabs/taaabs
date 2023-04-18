@@ -20,7 +20,9 @@ module.exports = {
         exclude: [/\.stories\.tsx?$/, /node_modules/],
         jsxImportSource: '@emotion/react',
         babel: {
-          plugins: ['@emotion/babel-plugin'],
+          plugins: [
+            ['@emotion/babel-plugin', { labelFormat: '[filename]-[local]' }],
+          ],
         },
       }),
     )

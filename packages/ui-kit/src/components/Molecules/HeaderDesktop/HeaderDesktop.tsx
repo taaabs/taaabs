@@ -79,7 +79,7 @@ namespace $ {
     border-bottom: var(${Theme.BORDER_PRIMARY});
     background-color: var(${Theme.COLOR_WHITE});
     height: ${sharedValues.heights.HEADER_DESKTOP}px;
-    & > div {
+    > div {
       height: 100%;
     }
   `

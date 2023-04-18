@@ -135,8 +135,6 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
 
   return (
     <$.container>
-      <$.headerSpacer />
-
       <$.content>
         <$.sidebar
           ref={sidebarRef}
@@ -220,18 +218,6 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
 namespace $ {
   export const container = styled.div`
     background: var(${Theme.COLOR_NEUTRAL_25});
-  `
-  export const headerSpacer = styled.header`
-    position: fixed;
-    z-index: 2;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: var(${Theme.COLOR_WHITE});
-    height: ${sharedValues.heights.HEADER_MOBILE}px;
-    ${mq.at992} {
-      height: ${sharedValues.heights.HEADER_DESKTOP}px;
-    }
   `
   export const sidebar = styled.div<{ width: number }>`
     ${mq.to992} {
@@ -336,7 +322,6 @@ namespace $ {
     ${mq.at992} {
       flex: 1;
       transform: translateX(0px) !important;
-      z-index: 2;
       margin-top: ${sharedValues.heights.HEADER_DESKTOP}px;
     }
   `

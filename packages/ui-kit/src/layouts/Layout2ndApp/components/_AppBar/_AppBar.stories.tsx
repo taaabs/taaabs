@@ -2,7 +2,7 @@ import { Meta } from '@storybook/react'
 import { _AppBar } from './_AppBar'
 
 export default {
-  title: 'Layouts/Layout2ndApp/AppBar',
+  title: 'Layouts/Layout2ndApp/components/AppBar',
   component: _AppBar,
 } as Meta
 

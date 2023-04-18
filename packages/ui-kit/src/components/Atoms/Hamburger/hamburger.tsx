@@ -30,7 +30,7 @@ namespace $ {
     position: absolute;
     height: 20px;
     width: 24px;
-    & > div {
+    > div {
       width: 24px;
       height: 3.5px;
       border-radius: 2px;
@@ -38,21 +38,21 @@ namespace $ {
       margin-top: 3px;
       transition: all var(${Theme.ANIMATION_DURATION_300})
         var(${Theme.TRANSITION_TIMING_FUNCTION});
-      &:nth-of-type(1) {
+      :nth-of-type(1) {
         margin-top: 2.5px;
       }
       ${({ isToggled }) =>
         isToggled &&
         css`
-          &:nth-of-type(1) {
+          :nth-of-type(1) {
             transform: rotate(-45deg);
             margin-top: 9px !important;
           }
-          &:nth-of-type(2) {
+          :nth-of-type(2) {
             transform: rotate(45deg);
             margin-top: -3.5px;
           }
-          &:nth-of-type(3) {
+          :nth-of-type(3) {
             opacity: 0;
             transform: rotate(45deg);
           }

@@ -1,3 +1,5 @@
+Inspiration: https://news.ycombinator.com/from?site=forbes.com/sites/startswithabang
+
 Let's say we save urls:
 
 > https://github.com/openwrt/luci/pull/3291

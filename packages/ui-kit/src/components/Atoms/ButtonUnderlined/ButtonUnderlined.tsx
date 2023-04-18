@@ -16,9 +16,11 @@ export const ButtonUnderlined: React.FC<ButtonUnderlined.Props> = (props) => {
   const { children, href, onClick, isActive } = props
   if (href != undefined) {
     return (
-      <$.link href={href} isActive={isActive}>
-        <span>{children}</span>
-      </$.link>
+      <Link href={href} passHref legacyBehavior>
+        <$.link isActive={isActive}>
+          <span>{children}</span>
+        </$.link>
+      </Link>
     )
   } else if (onClick != undefined) {
     return (
@@ -95,13 +97,16 @@ namespace $ {
       }
     `
   }
-  export const link = styled(Link)<{ isActive: boolean }>`
+  export const link = styled.a<{ isActive: boolean }>`
     ${({ isActive }) => buttonBase(isActive)}
   `
   export const button = styled.button<{ isActive: boolean }>`
     ${({ isActive }) => buttonBase(isActive)}
     :disabled {
       pointer-events: none;
+      span {
+        color: var(${Theme.COLOR_TEXT_DIMMED});
+      }
     }
   `
 }

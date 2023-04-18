@@ -80,12 +80,12 @@ Say we heave 3 bookmarks having the following tags:
 - cooking
 - pasta
 - carbonara
-<br><br>
+  <br><br>
 - recipes
 - cooking
 - pasta
 - ravioli
-<br><br>
+  <br><br>
 - recipes
 - cooking
 - pasta
@@ -96,8 +96,11 @@ They select +recipes +pasta -tortellini.
 
 On "tag_hierarchies_on_bookmarks" we select all distinct bookmark ids having "pasta recpies" and exclude all having "pasta tortellini recipes".
 
-
 ### Private tags
 
 User can set a tag to be private, so it won't appear on a public bookmark and in the aside for profile visitors.
 For compatibility with pinboard, we set all imported bookmarks prefixed with a dot as private.
+
+### Public tag browser
+
+Views settings: relevant, latest, top
