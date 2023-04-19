@@ -1,7 +1,5 @@
 import { sharedValues } from '@/constants'
-import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 type MarginProps = {
@@ -16,7 +14,7 @@ namespace $ {
   export const container = styled.div`
     margin: ${sharedValues.distance[16]}px;
     ${mq.at768} {
-      margin: var(${Theme.SPACER_40});
+      margin: ${sharedValues.distance[40]}px;
     }
   `
 }

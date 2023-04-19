@@ -296,7 +296,7 @@ namespace $ {
       margin: 0 auto;
       padding: 0 ${sharedValues.distance[16]}px;
       ${mq.at1200} {
-        padding: 0 var(${Theme.SPACER_40});
+        padding: 0 ${sharedValues.distance[40]}px;
       }
       > ${aside}, > ${sidebar} {
         width: 25vw;
