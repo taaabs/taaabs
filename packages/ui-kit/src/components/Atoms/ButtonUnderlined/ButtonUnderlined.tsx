@@ -1,3 +1,4 @@
+import { sharedValues } from '@/constants'
 import { Theme } from '@/styles/GlobalStyles'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'

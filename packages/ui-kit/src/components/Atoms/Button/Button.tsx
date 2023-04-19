@@ -1,3 +1,4 @@
+import { sharedValues } from '@/constants'
 import { Theme } from '@/styles/GlobalStyles'
 import { css, SerializedStyles } from '@emotion/react'
 import styled from '@emotion/styled'
@@ -63,18 +64,18 @@ namespace $ {
       height: var(${Theme.BUTTON_HEIGHT_34});
       font-size: var(${Theme.FONT_SIZE_14_PX});
       padding: 0 10px;
-      border-radius: var(${Theme.BORDER_RADIUS_8});
+      border-radius: ${sharedValues.borderRadius[8]}px;
     `,
     default: css`
       height: var(${Theme.BUTTON_HEIGHT_40});
       font-size: var(${Theme.FONT_SIZE_16_PX});
       padding: 0 14px;
-      border-radius: var(${Theme.BORDER_RADIUS_10});
+      border-radius: ${sharedValues.borderRadius[10]}px;
     `,
     large: css`
       height: var(${Theme.BUTTON_HEIGHT_46});
       padding: 0 18px;
-      border-radius: var(${Theme.BORDER_RADIUS_12});
+      border-radius: ${sharedValues.borderRadius[12]}px;
       font-size: var(${Theme.FONT_SIZE_18_PX});
     `,
   }

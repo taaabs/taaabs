@@ -1,12 +1,11 @@
 import { css } from '@emotion/react'
 import { mq } from './mediaQueries'
+import { sharedValues } from '@/constants'
 
 // create color base that can't be used outside this file
 // each color usage has its dedicated variable that can be easily themed
 
 export const enum Theme {
-  FONT_FAMILY_INTER = '--font-family-inter',
-  FONT_FAMILY_SPACE_GROTESK = '--font-family-space-grotesk',
   FONT_SIZE_12_PX = '--font-size-12-px',
   FONT_SIZE_14_PX = '--font-size-14-px',
   FONT_SIZE_16_PX = '--font-size-16-px',
@@ -22,11 +21,6 @@ export const enum Theme {
   FONT_WEIGHT_INTER_BOLD = '--font-weight-inter-bold',
   FONT_SPACE_GROTESK_WEIGHT_MEDIUM = '--font-space-grotesk-weight-medium',
   FONT_SPACE_GROTESK_WEIGHT_BOLD = '--font-space-grotesk-weight-bold',
-  BORDER_RADIUS_4 = '--border-radius-4',
-  BORDER_RADIUS_8 = '--border-radius-8',
-  BORDER_RADIUS_10 = '--border-radius-10',
-  BORDER_RADIUS_12 = '--border-radius-12',
-  BORDER_RADIUS_14 = '--border-radius-14',
   COLOR_WHITE = '--color-white',
   COLOR_BLACK = '--color-black',
   COLOR_TEXT_NORMAL = '--color-text--normal',
@@ -42,11 +36,6 @@ export const enum Theme {
   COLOR_BRAND = '--color-brand',
   COLOR_BORDER_PRIMARY = '--color-border-primary',
   COLOR_BORDER_SECONDARY = '--color-border-secondary',
-  SPACER_8 = '--spacer-8',
-  SPACER_16 = '--spacer-16',
-  SPACER_24 = '--spacer-24',
-  SPACER_40 = '--spacer-40',
-  SPACER_60 = '--spacer-60',
   BORDER_PRIMARY = '--border-primary',
   BORDER_SECONDARY = '--border-secondary',
   BUTTON_HEIGHT_34 = '--button-height-34',
@@ -63,8 +52,6 @@ type ThemeMap = {
 }
 
 export const defaultTheme: ThemeMap = {
-  [Theme.FONT_FAMILY_INTER]: `"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Twemoji Country Flags", "Segoe UI Emoji", "Segoe UI Symbol"`,
-  [Theme.FONT_FAMILY_SPACE_GROTESK]: `"Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
   [Theme.FONT_SIZE_12_PX]: '12px',
   [Theme.FONT_SIZE_14_PX]: '14px',
   [Theme.FONT_SIZE_16_PX]: '16px',
@@ -80,11 +67,6 @@ export const defaultTheme: ThemeMap = {
   [Theme.FONT_WEIGHT_INTER_BOLD]: '700',
   [Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM]: '500',
   [Theme.FONT_SPACE_GROTESK_WEIGHT_BOLD]: '700',
-  [Theme.BORDER_RADIUS_4]: '4px',
-  [Theme.BORDER_RADIUS_8]: '8px',
-  [Theme.BORDER_RADIUS_10]: '10px',
-  [Theme.BORDER_RADIUS_12]: '12px',
-  [Theme.BORDER_RADIUS_14]: '14px',
   [Theme.COLOR_WHITE]: '#FFF',
   [Theme.COLOR_BLACK]: '#1F1F1F',
   [Theme.COLOR_TEXT_NORMAL]: '#202020',
@@ -100,11 +82,6 @@ export const defaultTheme: ThemeMap = {
   [Theme.COLOR_BRAND]: `var(${Theme.COLOR_PRIMARY_800})`,
   [Theme.COLOR_BORDER_PRIMARY]: '#E7E7E7',
   [Theme.COLOR_BORDER_SECONDARY]: '#F2F2F2',
-  [Theme.SPACER_8]: '8px',
-  [Theme.SPACER_16]: '16px',
-  [Theme.SPACER_24]: '24px',
-  [Theme.SPACER_40]: '40px',
-  [Theme.SPACER_60]: '60px',
   [Theme.BORDER_PRIMARY]: `1px solid var(${Theme.COLOR_BORDER_PRIMARY})`,
   [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.COLOR_BORDER_SECONDARY})`,
   [Theme.BUTTON_HEIGHT_34]: '34px',
@@ -146,7 +123,7 @@ export const globalStyles = css`
   }
 
   body {
-    font-family: var(${Theme.FONT_FAMILY_INTER});
+    font-family: ${sharedValues.fontFamily.inter};
     line-height: 1.5;
     font-size: 1.6rem;
     color: var(${Theme.COLOR_TEXT_NORMAL});

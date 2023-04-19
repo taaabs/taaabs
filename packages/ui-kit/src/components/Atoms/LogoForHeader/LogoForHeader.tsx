@@ -53,7 +53,7 @@ namespace $ {
     export const backArrow = styled(Link)`
       display: flex;
       align-items: center;
-      padding-right: var(${Theme.SPACER_24});
+      padding-right: ${sharedValues.distance[24]}px;
       padding-left: ${sharedValues.distance[16]}px;
       margin-left: calc(${sharedValues.distance[16]}px * -1);
       height: var(${Theme.BUTTON_HEIGHT_34});
@@ -83,7 +83,7 @@ namespace $ {
     `
     export namespace Profile {
       export const username = styled.span`
-        font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
+        font-family: ${sharedValues.fontFamily.spaceGrotesk};
         font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
         letter-spacing: ${logoTextLetterSpacing};
         color: var(${Theme.COLOR_BRAND});
@@ -105,7 +105,7 @@ namespace $ {
     align-items: center;
     > span {
       color: var(${Theme.COLOR_BRAND});
-      font-family: var(${Theme.FONT_FAMILY_SPACE_GROTESK});
+      font-family: ${sharedValues.fontFamily.spaceGrotesk};
       font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
       font-size: 22px;
       letter-spacing: ${logoTextLetterSpacing};
