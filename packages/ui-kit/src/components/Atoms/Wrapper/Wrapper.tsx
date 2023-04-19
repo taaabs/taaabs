@@ -1,3 +1,4 @@
+import { sharedValues } from '@/constants'
 import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
@@ -13,7 +14,7 @@ export const Wrapper: React.FC<WrapperProps> = (props) => {
         width: 100%;
         max-width: 1380px;
         margin: 0 auto;
-        padding: 0 var(${Theme.SPACER_16});
+        padding: 0 ${sharedValues.distance[16]}px;
         ${mq.at1200} {
           padding: 0 var(${Theme.SPACER_40});
         }

@@ -36,7 +36,7 @@ namespace $ {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: var(${Theme.SPACER_16});
+    padding-left: ${sharedValues.distance[16]}px;
     background-color: ${sharedValues.TRANSPARENT_BACKGROUND_COLOR};
     backdrop-filter: ${sharedValues.BACKDROP_FILTER};
     border-bottom: var(${Theme.BORDER_PRIMARY});
@@ -63,7 +63,7 @@ namespace $ {
     `
     export const hamburger = styled.button`
       ${baseButton}
-      padding-right: var(${Theme.SPACER_16});
+      padding-right: ${sharedValues.distance[16]}px;
       padding-left: var(${Theme.SPACER_8});
     `
   }

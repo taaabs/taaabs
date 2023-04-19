@@ -1,3 +1,4 @@
+import { sharedValues } from '@/constants'
 import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
@@ -13,7 +14,7 @@ export const StorybookMargin: React.FC<MarginProps> = ({ children }) => {
 
 namespace $ {
   export const container = styled.div`
-    margin: var(${Theme.SPACER_16});
+    margin: ${sharedValues.distance[16]}px;
     ${mq.at768} {
       margin: var(${Theme.SPACER_40});
     }

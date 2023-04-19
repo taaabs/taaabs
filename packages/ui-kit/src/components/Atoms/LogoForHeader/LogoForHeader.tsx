@@ -1,3 +1,4 @@
+import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
@@ -53,8 +54,8 @@ namespace $ {
       display: flex;
       align-items: center;
       padding-right: var(${Theme.SPACER_24});
-      padding-left: var(${Theme.SPACER_16});
-      margin-left: calc(var(${Theme.SPACER_16}) * -1);
+      padding-left: ${sharedValues.distance[16]}px;
+      margin-left: calc(${sharedValues.distance[16]}px * -1);
       height: var(${Theme.BUTTON_HEIGHT_34});
       ${mq.at992} {
         height: var(${Theme.BUTTON_HEIGHT_40});

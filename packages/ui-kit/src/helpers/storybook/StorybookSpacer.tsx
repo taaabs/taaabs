@@ -1,6 +1,6 @@
+import { sharedValues } from '@/constants'
 import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 export const StorybookSpacer: React.FC = () => {
@@ -8,7 +8,7 @@ export const StorybookSpacer: React.FC = () => {
 }
 
 const $Container = styled.div`
-  height: var(${Theme.SPACER_16});
+  height: ${sharedValues.distance[16]}px;
   ${mq.at768} {
     height: var(${Theme.SPACER_40});
   }

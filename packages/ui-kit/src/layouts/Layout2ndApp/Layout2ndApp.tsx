@@ -294,7 +294,7 @@ namespace $ {
       width: 100%;
       max-width: ${sharedValues.SITE_MAX_WIDTH}px;
       margin: 0 auto;
-      padding: 0 var(${Theme.SPACER_16});
+      padding: 0 ${sharedValues.distance[16]}px;
       ${mq.at1200} {
         padding: 0 var(${Theme.SPACER_40});
       }

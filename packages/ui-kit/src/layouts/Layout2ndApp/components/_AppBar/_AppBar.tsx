@@ -50,7 +50,7 @@ namespace $ {
     display: flex;
     align-items: center;
     height: 100%;
-    padding: 0 var(${Theme.SPACER_16});
+    padding: 0 ${sharedValues.distance[16]}px;
     ${({ isVisible }) =>
       !isVisible &&
       css`
