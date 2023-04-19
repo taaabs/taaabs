@@ -60,7 +60,7 @@ The objective is to list in the aside all tags occuring on visible bookmarks wit
 | 93      | 3           | cooking recpies other     |
 
 1. Select all bookmarks which tag_hierarchy is equal to what is selected. If there are provided excluded tags, filter out all bookmarksIds containing them.
-2. For each bookmark select all tags from tags_on_bookmarks ommiting current tags and count them.
+2. For each bookmark select all tags from "tags_on_bookmarks" ommiting current tags and count them.
 
 | tag_id | count |
 | ------ | ----- |
@@ -74,7 +74,7 @@ Counting occurences of each tag gives number of bookmarks that are going to be s
 
 From the related tag section, user is selecting tags they don't want to see bookmarks with.
 
-Say we heave 3 bookmarks having the following tags:
+Say we have 3 bookmarks having the following tags:
 
 - recipes
 - cooking
@@ -92,9 +92,9 @@ Say we heave 3 bookmarks having the following tags:
 - tortellini
 
 User decides to see all pasta recpies that are not tortellini.
-They select +recipes +pasta -tortellini.
+They select +recipes +pasta -tortellini -carbonara.
 
-On "tag_hierarchies_on_bookmarks" we select all distinct bookmark ids having "pasta recpies" and exclude all having "pasta tortellini recipes".
+On "tag_hierarchies_on_bookmarks" we select all distinct bookmark ids having pasta recpies and exclude all having _tortellini_ or _carbonara_
 
 ### Private tags
 

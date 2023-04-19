@@ -3,7 +3,7 @@ import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
 import { LogoForHeader } from '../../Atoms/LogoForHeader'
-import { ButtonOutlinedText } from '@/components/Atoms/ButtonOutlinedText/ButtonOutlinedText'
+import { ButtonFollow } from '@/components/Atoms'
 
 export namespace HeaderDesktop {
   export type Navigation = Array<{
@@ -35,9 +35,9 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
     <Ui.Atoms.Button onClick={props.onClickSignIn}>Sign in</Ui.Atoms.Button>
   ) : (
     <Ui.Atoms.ButtonOutlinedIcon
-      blurhash={props.loggedInUser.avatar?.blurhash}
-      imageUrl={props.loggedInUser.avatar?.url}
+      avatar={props.loggedInUser.avatar}
       iconVariant="USER"
+      onClick={() => {}}
     />
   )
 
@@ -47,7 +47,7 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
         <$.top>
           <$.Top.left>
             <LogoForHeader user={props.viewedUser} />
-            <ButtonOutlinedText>Follow</ButtonOutlinedText>
+            <ButtonFollow onClick={() => {}}>Follow</ButtonFollow>
           </$.Top.left>
           <$.Top.right>
             <$.Top.Right.nav>
@@ -64,8 +64,14 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
                 ))}
               </ul>
             </$.Top.Right.nav>
-            <Ui.Atoms.ButtonOutlinedIcon iconVariant="SEARCH" />
-            <Ui.Atoms.ButtonOutlinedIcon iconVariant="SUN" />
+            <Ui.Atoms.ButtonOutlinedIcon
+              iconVariant="SEARCH"
+              onClick={props.onClickSearch}
+            />
+            <Ui.Atoms.ButtonOutlinedIcon
+              iconVariant="SUN"
+              onClick={props.onClickTheme}
+            />
             {userArea}
           </$.Top.right>
         </$.top>
@@ -78,7 +84,7 @@ namespace $ {
   export const container = styled.div`
     border-bottom: var(${Theme.BORDER_PRIMARY});
     background-color: var(${Theme.COLOR_WHITE});
-    height: ${sharedValues.heights.HEADER_DESKTOP}px;
+    height: ${sharedValues.height.HEADER_DESKTOP}px;
     > div {
       height: 100%;
     }
@@ -99,7 +105,7 @@ namespace $ {
     export const left = styled.div`
       display: flex;
       align-items: center;
-      gap: var(${Theme.SPACER_8});
+      gap: ${sharedValues.distance[20]}px;
     `
     export namespace Right {
       export const nav = styled.nav`

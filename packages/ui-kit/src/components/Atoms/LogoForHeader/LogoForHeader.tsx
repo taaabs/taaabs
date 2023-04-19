@@ -26,9 +26,9 @@ export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
       </$.User.backArrow>
       <$.User.profile href={`/${user.username}`}>
         <Ui.Atoms.ButtonOutlinedIcon
-          blurhash={user.avatar?.blurhash}
-          imageUrl={user.avatar?.url}
+          avatar={user.avatar}
           iconVariant="USER"
+          onClick={() => {}}
         />
         <$.User.Profile.username>@{user.username}</$.User.Profile.username>
       </$.User.profile>

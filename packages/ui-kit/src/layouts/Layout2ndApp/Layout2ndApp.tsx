@@ -201,7 +201,7 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
           <$.Aside.inner>
             {windowWidth && windowWidth >= 992 ? (
               <>
-                <StickyBox offsetTop={sharedValues.heights.HEADER_DESKTOP}>
+                <StickyBox offsetTop={sharedValues.height.HEADER_DESKTOP}>
                   {props.slotAside}
                 </StickyBox>
               </>
@@ -227,14 +227,14 @@ namespace $ {
       width: ${({ width }) => width}px;
       z-index: 0;
       display: none;
-      padding-top: ${sharedValues.heights.HEADER_MOBILE}px;
-      padding-bottom: ${sharedValues.heights.BOTTOM_NAVIGATION_BAR}px;
+      padding-top: ${sharedValues.height.HEADER_MOBILE}px;
+      padding-bottom: ${sharedValues.height.BOTTOM_NAVIGATION_BAR}px;
     }
     ${mq.at992} {
       position: sticky;
-      height: calc(100vh - ${sharedValues.heights.HEADER_DESKTOP}px);
+      height: calc(100vh - ${sharedValues.height.HEADER_DESKTOP}px);
       width: 100%;
-      top: ${sharedValues.heights.HEADER_DESKTOP}px;
+      top: ${sharedValues.height.HEADER_DESKTOP}px;
       overflow: auto;
     }
   `
@@ -256,11 +256,11 @@ namespace $ {
       width: ${({ width }) => width}px;
       height: 100vh;
       display: none;
-      padding-top: ${sharedValues.heights.HEADER_MOBILE}px;
-      padding-bottom: ${sharedValues.heights.BOTTOM_NAVIGATION_BAR}px;
+      padding-top: ${sharedValues.height.HEADER_MOBILE}px;
+      padding-bottom: ${sharedValues.height.BOTTOM_NAVIGATION_BAR}px;
     }
     ${mq.at992} {
-      margin-top: ${sharedValues.heights.HEADER_DESKTOP}px;
+      margin-top: ${sharedValues.height.HEADER_DESKTOP}px;
     }
   `
   export namespace Aside {
@@ -313,16 +313,16 @@ namespace $ {
     ${mq.to992} {
       position: relative;
       z-index: 2;
-      margin-top: ${sharedValues.heights.HEADER_MOBILE}px;
-      padding-top: ${sharedValues.heights.APP_BAR}px;
-      padding-bottom: ${sharedValues.heights.BOTTOM_NAVIGATION_BAR}px;
-      height: calc(100vh - ${sharedValues.heights.HEADER_MOBILE}px);
+      margin-top: ${sharedValues.height.HEADER_MOBILE}px;
+      padding-top: ${sharedValues.height.APP_BAR}px;
+      padding-bottom: ${sharedValues.height.BOTTOM_NAVIGATION_BAR}px;
+      height: calc(100vh - ${sharedValues.height.HEADER_MOBILE}px);
       background-color: var(${Theme.COLOR_NEUTRAL_25});
     }
     ${mq.at992} {
       flex: 1;
       transform: translateX(0px) !important;
-      margin-top: ${sharedValues.heights.HEADER_DESKTOP}px;
+      margin-top: ${sharedValues.height.HEADER_DESKTOP}px;
     }
   `
   export namespace Main {
@@ -379,7 +379,7 @@ namespace $ {
         }
       }
       ${mq.at992} {
-        min-height: calc(100vh - ${sharedValues.heights.HEADER_DESKTOP}px);
+        min-height: calc(100vh - ${sharedValues.height.HEADER_DESKTOP}px);
       }
     `
   }

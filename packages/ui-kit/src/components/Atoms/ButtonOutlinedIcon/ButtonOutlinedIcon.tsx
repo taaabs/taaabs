@@ -7,10 +7,12 @@ import { mq } from '@/styles/mediaQueries'
 
 export namespace ButtonOutlinedIcon {
   export type Props = {
-    iconVariant: Icon.Variant
-    onClick?: () => void
-    imageUrl?: string
-    blurhash?: string
+    onClick: () => void
+    iconVariant?: Icon.Variant
+    avatar?: {
+      url: string
+      blurhash: string
+    }
   }
 }
 
@@ -18,17 +20,18 @@ export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIcon.Props> = (
   props,
 ) => {
   return (
-    <$.circleButton>
-      {props.imageUrl ? (
+    <$.circleButton onClick={props.onClick}>
+      {props.avatar && (
         <>
-          {props.blurhash && (
+          {props.avatar && (
             <$.CicrleButton.blurHash>
-              <Blurhash hash={props.blurhash} />
+              <Blurhash hash={props.avatar.blurhash} />
             </$.CicrleButton.blurHash>
           )}
-          <img src={props.imageUrl} />
+          <img src={props.avatar.url} />
         </>
-      ) : (
+      )}
+      {!props.avatar && props.iconVariant && (
         <Ui.Atoms.Icon variant={props.iconVariant} />
       )}
     </$.circleButton>
@@ -61,10 +64,8 @@ namespace $ {
     }
     > div > svg {
       height: 16px;
-      width: 16px;
       ${mq.at992} {
         height: 20px;
-        width: 20px;
       }
     }
     :has(img) {

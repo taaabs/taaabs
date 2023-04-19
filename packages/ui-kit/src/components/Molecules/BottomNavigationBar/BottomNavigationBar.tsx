@@ -5,7 +5,6 @@ import { css } from '@emotion/react'
 
 export namespace BottomNavigationBar {
   export type Props = {
-    x?: string
     onClickSearch: () => void
     onClickUser: () => void
     onClickAdd: () => void
@@ -20,17 +19,17 @@ export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
   return (
     <div
       css={css`
-        height: ${sharedValues.heights.BOTTOM_NAVIGATION_BAR}px;
+        height: ${sharedValues.height.BOTTOM_NAVIGATION_BAR}px;
         border-top: var(${Theme.BORDER_PRIMARY});
         background-color: var(${Theme.COLOR_WHITE});
         display: flex;
         justify-content: space-around;
         > * > div > svg {
-          width: ${sharedValues.ICON_SIZE}px;
-          height: ${sharedValues.ICON_SIZE}px;
+          width: ${sharedValues.icon[24]}px;
+          height: ${sharedValues.icon[24]}px;
         }
         > * {
-          width: ${sharedValues.heights.BUTTON_46}px;
+          width: ${sharedValues.height.BUTTON[46]}px;
           display: flex;
           align-items: center;
           justify-content: center;

@@ -163,13 +163,11 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
 }
 
 namespace $ {
-  const ICON_SIZE = 40
-
   export const iconWrapper = styled.div`
     display: inline-flex;
     svg {
-      width: ${ICON_SIZE}px;
-      height: ${ICON_SIZE}px;
+      width: auto;
+      height: auto;
       fill: var(${Theme.COLOR_BLACK});
     }
   `

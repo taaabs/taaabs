@@ -1,5 +1,6 @@
 export * from './Button'
 export * from './ButtonOutlinedIcon'
+export * from './ButtonFollow'
 export * from './ButtonUnderlined'
 export * from './Hamburger'
 export * from './Icon'

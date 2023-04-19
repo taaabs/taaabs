@@ -40,7 +40,7 @@ namespace $ {
     background-color: ${sharedValues.TRANSPARENT_BACKGROUND_COLOR};
     backdrop-filter: ${sharedValues.BACKDROP_FILTER};
     border-bottom: var(${Theme.BORDER_PRIMARY});
-    height: ${sharedValues.heights.HEADER_MOBILE}px;
+    height: ${sharedValues.height.HEADER_MOBILE}px;
   `
   export const right = styled.div`
     display: flex;
@@ -48,7 +48,7 @@ namespace $ {
   `
   export namespace Right {
     const baseButton = css`
-      /* height: ${sharedValues.heights.HEADER_MOBILE}px; */
+      /* height: ${sharedValues.height.HEADER_MOBILE}px; */
       display: flex;
       align-items: center;
       justify-content: center;

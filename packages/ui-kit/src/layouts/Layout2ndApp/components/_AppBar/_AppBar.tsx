@@ -44,7 +44,7 @@ namespace $ {
     border-bottom: var(${Theme.BORDER_PRIMARY});
     display: flex;
     justify-content: space-between;
-    height: ${sharedValues.heights.APP_BAR}px;
+    height: ${sharedValues.height.APP_BAR}px;
   `
   export const swipe = styled.button<{ isVisible: boolean }>`
     display: flex;
@@ -58,8 +58,8 @@ namespace $ {
         visibility: hidden;
       `}
     > div > svg {
-      width: ${sharedValues.ICON_SIZE}px;
-      height: ${sharedValues.ICON_SIZE}px;
+      width: ${sharedValues.icon[24]}px;
+      height: ${sharedValues.icon[24]}px;
     }
   `
   export const content = styled.div`
