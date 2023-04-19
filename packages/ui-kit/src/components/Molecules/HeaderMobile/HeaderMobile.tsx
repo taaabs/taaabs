@@ -55,7 +55,7 @@ namespace $ {
     `
     export const theme = styled.button`
       ${baseButton}
-      padding: 0 var(${Theme.SPACER_8});
+      padding: 0 ${sharedValues.distance[8]}px;
       > div > svg {
         height: 24px;
         width: 24px;
@@ -64,7 +64,7 @@ namespace $ {
     export const hamburger = styled.button`
       ${baseButton}
       padding-right: ${sharedValues.distance[16]}px;
-      padding-left: var(${Theme.SPACER_8});
+      padding-left: ${sharedValues.distance[8]}px;
     `
   }
 }

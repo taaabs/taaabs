@@ -99,7 +99,7 @@ namespace $ {
     export const right = styled.div`
       display: flex;
       align-items: center;
-      gap: var(${Theme.SPACER_8});
+      gap: ${sharedValues.distance[8]}px;
       height: 100%;
     `
     export const left = styled.div`
