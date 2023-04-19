@@ -53,7 +53,7 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
             <$.Top.Right.nav>
               <ul>
                 {props.navigation.map((link) => (
-                  <li>
+                  <li key={link.label}>
                     <Ui.Atoms.ButtonUnderlined
                       href={link.href}
                       isActive={link.isActive}
