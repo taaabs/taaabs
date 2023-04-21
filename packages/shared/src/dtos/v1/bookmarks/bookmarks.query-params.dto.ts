@@ -2,7 +2,6 @@ import { SortOption } from '../../common'
 import { PaginationOptions } from '../../../dtos/common'
 
 export interface BookmarksOnUserQueryParams extends PaginationOptions {
-  include?: string
-  exclude?: string
+  tags?: string
   sort_by?: SortOption
 }

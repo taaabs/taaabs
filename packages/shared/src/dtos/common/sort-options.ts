@@ -1,1 +1,1 @@
-export type SortOption = 'asc' | 'desc' | 'az' | 'za'
+export type SortOption = 'asc' | 'desc'

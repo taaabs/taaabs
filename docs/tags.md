@@ -3,7 +3,7 @@ Tag is a globally unique string living in a table "tags".
 
 ### Tags on a bookmark
 
-To find all tags associated with a bookmark and their order lookup table "tags_on_bookmarks"
+To find all tags associated with a bookmark and their order lookup table "tags_on_bookmarks".
 
 ### Bookmarks with a given tag or tags
 
