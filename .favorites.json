@@ -1,0 +1,34 @@
+[
+    {
+        "type": "Group",
+        "name": "bookmarks",
+        "parent_id": null,
+        "workspaceRoot": null,
+        "workspacePath": null,
+        "id": "Emf13TDVOx7JgtFn"
+    },
+    {
+        "type": "File",
+        "name": "/home/robertpiosik/Development/Interbe/Taaabs/taaabs/packages/api/src/modules/bookmarks/controllers/bookmarks.controller.ts",
+        "parent_id": null,
+        "workspaceRoot": "/home/robertpiosik/Development/Interbe/Taaabs/taaabs",
+        "workspacePath": "packages/api/src/modules/bookmarks/controllers/bookmarks.controller.ts",
+        "id": "F2jWU8l16z0T3mEA"
+    },
+    {
+        "type": "File",
+        "name": "/home/robertpiosik/Development/Interbe/Taaabs/taaabs/packages/api/src/modules/bookmarks/controllers/bookmarks.controller.ts",
+        "parent_id": "Emf13TDVOx7JgtFn",
+        "workspaceRoot": "/home/robertpiosik/Development/Interbe/Taaabs/taaabs",
+        "workspacePath": "packages/api/src/modules/bookmarks/controllers/bookmarks.controller.ts",
+        "id": "Tz8GxnoesjaPSufm"
+    },
+    {
+        "type": "File",
+        "name": "/home/robertpiosik/Development/Interbe/Taaabs/taaabs/packages/api/src/modules/bookmarks/repositories/bookmarks.repository.ts",
+        "parent_id": "Emf13TDVOx7JgtFn",
+        "workspaceRoot": "/home/robertpiosik/Development/Interbe/Taaabs/taaabs",
+        "workspacePath": "packages/api/src/modules/bookmarks/repositories/bookmarks.repository.ts",
+        "id": "xDXOg7ybdak9Pq25"
+    }
+]
