@@ -1,7 +1,9 @@
-import { SortOption } from '../../common'
-import { PaginationOptions } from '../../../dtos/common'
+import { DateRange, PaginationOptionsDto, SortBy } from '../../common'
 
-export interface BookmarksOnUserQueryParams extends PaginationOptions {
+export class BookmarksOnUserQueryParamsDto extends PaginationOptionsDto {
   tags?: string
-  sort_by?: SortOption
+  date_range?: DateRange
+  date_start?: string
+  date_end?: string
+  sort_by?: SortBy
 }

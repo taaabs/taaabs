@@ -1,14 +1,17 @@
-import { PaginatedResponse } from '../../common'
+import { PaginatedResponseDto } from '../../common/paginated-response.dto'
 
-type Bookmark = {
+class Bookmark {
   isEncrypted: boolean
   title: string
   description: string | null
   url: string
   createdAt: string
   tags: string[]
+  saves: number | null
+  isStarred: boolean
+  isPublic: boolean
 }
 
-export type BookmarksResponseDto = {
+export class BookmarksResponseDto extends PaginatedResponseDto {
   bookmarks: Bookmark[]
-} & PaginatedResponse
+}
