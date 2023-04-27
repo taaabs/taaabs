@@ -10,6 +10,7 @@ class Bookmark {
   saves: number | null
   isStarred: boolean
   isPublic: boolean
+  site: string | null
 }
 
 export class BookmarksResponseDto extends PaginatedResponseDto {
