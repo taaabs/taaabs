@@ -1,3 +1,3 @@
-export class PaginationOptionsDto {
+export class PaginationOptions_Dto {
   after?: string
 }

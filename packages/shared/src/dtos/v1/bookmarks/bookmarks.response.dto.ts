@@ -1,18 +1,29 @@
-import { PaginatedResponseDto } from '../../common/paginated-response.dto'
+import { PaginatedResponse_Dto } from '../../common/paginated-response.dto'
 
 class Bookmark {
-  isEncrypted: boolean
   title: string
   description: string | null
   url: string
   createdAt: string
   tags: string[]
-  saves: number | null
   isStarred: boolean
-  isPublic: boolean
-  site: string | null
 }
 
-export class BookmarksResponseDto extends PaginatedResponseDto {
-  bookmarks: Bookmark[]
+class BookmarkOnOtherUser extends Bookmark {
+  site: string
+  saves: number | null
+}
+
+class BookmarkOnCurrentUser extends Bookmark {
+  site: string | null
+  isPublic: boolean
+  isEncrypted: boolean
+}
+
+export class BookmarksOnOtherUser_Response_Dto extends PaginatedResponse_Dto {
+  bookmarks: BookmarkOnOtherUser[]
+}
+
+export class BookmarksOnCurrentUser_Response_Dto extends PaginatedResponse_Dto {
+  bookmarks: BookmarkOnCurrentUser[]
 }
