@@ -264,10 +264,12 @@ importers:
   packages/shared:
     specifiers:
       '@nestjs/swagger': ^6.2.1
+      class-transformer: ^0.5.1
       class-validator: ^0.14.0
       zod: ^3.20.2
     dependencies:
-      '@nestjs/swagger': 6.2.1_class-validator@0.14.0
+      '@nestjs/swagger': 6.2.1_p4ywi7fdcrugq6nsanv77hac4q
+      class-transformer: 0.5.1
       class-validator: 0.14.0
       zod: 3.20.6
 
@@ -3581,7 +3583,7 @@ packages:
       jsonwebtoken: 9.0.0
     dev: false
 
-  /@nestjs/mapped-types/1.2.2_class-validator@0.14.0:
+  /@nestjs/mapped-types/1.2.2_p4ywi7fdcrugq6nsanv77hac4q:
     resolution: {integrity: sha512-3dHxLXs3M0GPiriAcCFFJQHoDFUuzTD5w6JDhE7TyfT89YKpe6tcCCIqOZWdXmt9AZjjK30RkHRSFF+QEnWFQg==}
     peerDependencies:
       '@nestjs/common': ^7.0.8 || ^8.0.0 || ^9.0.0
@@ -3594,6 +3596,7 @@ packages:
       class-validator:
         optional: true
     dependencies:
+      class-transformer: 0.5.1
       class-validator: 0.14.0
     dev: false
 
@@ -3672,31 +3675,6 @@ packages:
       - chokidar
     dev: true
 
-  /@nestjs/swagger/6.2.1_class-validator@0.14.0:
-    resolution: {integrity: sha512-9M2vkfJHIzLqDZwvM5TEZO0MxRCvIb0xVy0LsmWwxH1lrb0z/4MhU+r2CWDhBtTccVJrKxVPiU2s3T3b9uUJbg==}
-    peerDependencies:
-      '@fastify/static': ^6.0.0
-      '@nestjs/common': ^9.0.0
-      '@nestjs/core': ^9.0.0
-      class-transformer: '*'
-      class-validator: '*'
-      reflect-metadata: ^0.1.12
-    peerDependenciesMeta:
-      '@fastify/static':
-        optional: true
-      class-transformer:
-        optional: true
-      class-validator:
-        optional: true
-    dependencies:
-      '@nestjs/mapped-types': 1.2.2_class-validator@0.14.0
-      class-validator: 0.14.0
-      js-yaml: 4.1.0
-      lodash: 4.17.21
-      path-to-regexp: 3.2.0
-      swagger-ui-dist: 4.15.5
-    dev: false
-
   /@nestjs/swagger/6.2.1_ldzmua2hsw2tga2e42i6lmmdty:
     resolution: {integrity: sha512-9M2vkfJHIzLqDZwvM5TEZO0MxRCvIb0xVy0LsmWwxH1lrb0z/4MhU+r2CWDhBtTccVJrKxVPiU2s3T3b9uUJbg==}
     peerDependencies:
@@ -3723,6 +3701,32 @@ packages:
       lodash: 4.17.21
       path-to-regexp: 3.2.0
       reflect-metadata: 0.1.13
+      swagger-ui-dist: 4.15.5
+    dev: false
+
+  /@nestjs/swagger/6.2.1_p4ywi7fdcrugq6nsanv77hac4q:
+    resolution: {integrity: sha512-9M2vkfJHIzLqDZwvM5TEZO0MxRCvIb0xVy0LsmWwxH1lrb0z/4MhU+r2CWDhBtTccVJrKxVPiU2s3T3b9uUJbg==}
+    peerDependencies:
+      '@fastify/static': ^6.0.0
+      '@nestjs/common': ^9.0.0
+      '@nestjs/core': ^9.0.0
+      class-transformer: '*'
+      class-validator: '*'
+      reflect-metadata: ^0.1.12
+    peerDependenciesMeta:
+      '@fastify/static':
+        optional: true
+      class-transformer:
+        optional: true
+      class-validator:
+        optional: true
+    dependencies:
+      '@nestjs/mapped-types': 1.2.2_p4ywi7fdcrugq6nsanv77hac4q
+      class-transformer: 0.5.1
+      class-validator: 0.14.0
+      js-yaml: 4.1.0
+      lodash: 4.17.21
+      path-to-regexp: 3.2.0
       swagger-ui-dist: 4.15.5
     dev: false
 
