@@ -8,7 +8,7 @@ import {
 } from '@prisma/client'
 import { v4 as uuidV4, parse as uuidParse } from 'uuid'
 import * as argon2 from 'argon2'
-import { CreateUserDto } from '@taaabs/shared'
+import { CreateUser_Dto } from '@taaabs/shared'
 
 @Injectable()
 export class UsersRepository {
@@ -16,7 +16,7 @@ export class UsersRepository {
 
   constructor(private _prismaService: PrismaService) {}
 
-  public async create(dto: CreateUserDto): Promise<User> {
+  public async create(dto: CreateUser_Dto): Promise<User> {
     const { email, password, username } = dto
 
     try {

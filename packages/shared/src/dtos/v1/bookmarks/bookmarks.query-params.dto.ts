@@ -15,15 +15,15 @@ export class BookmarksOnUser_QueryParams_Dto extends PaginationOptions_Dto {
   date_range?: DateRange = BookmarksOnUser_QueryParams_Dto.defaultDateRange
   
   @ApiProperty({ description: 'Epoch timestamp in seconds.' })
-  @Type(() => Number)
+  @Type()
   date_start?: number
   
   @ApiProperty({ description: 'Epoch timestamp in seconds.' })
-  @Type(() => Number)
+  @Type()
   date_end?: number
   
   sort_by?: SortBy = BookmarksOnUser_QueryParams_Dto.defaultSortBy
   
-  @Type(() => Boolean)
+  @Type()
   starred_only?: boolean
 }
