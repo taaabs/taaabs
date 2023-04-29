@@ -1,9 +1,9 @@
 class Space {
-  name: string
-  id: string
-  updatedAt: string
+  name!: string
+  id!: string
+  updatedAt!: string
 }
 
 export class PublicUserDataResponseDto {
-  spaces: Space[]
+  spaces!: Space[]
 }

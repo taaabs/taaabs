@@ -1,3 +1,3 @@
 export class SpaceUpdatedAtResponseDto {
-  updatedAt: string
+  updatedAt!: string
 }
