@@ -6,6 +6,7 @@ export namespace Layout1st {
     slotHeaderDesktop: React.ReactNode
     slotHeaderMobile: React.ReactNode
     slotBottomNavigationBar: React.ReactNode
+    slotFooterDesktop: React.ReactNode
     children?: React.ReactNode
   }
 }
@@ -18,9 +19,10 @@ export const Layout1st: React.FC<Layout1st.Props> = (props) => {
         <$.Header.mobile>{props.slotHeaderMobile}</$.Header.mobile>
       </$.header>
       {props.children}
-      <$.bottomNavigationBarMobile>
+      <$.footerDesktop>{props.slotFooterDesktop}</$.footerDesktop>
+      <$.bottomNavigationBar>
         {props.slotBottomNavigationBar}
-      </$.bottomNavigationBarMobile>
+      </$.bottomNavigationBar>
     </>
   )
 }
@@ -44,7 +46,12 @@ namespace $ {
       }
     `
   }
-  export const bottomNavigationBarMobile = styled.div`
+  export const footerDesktop = styled.div`
+    ${mq.to992} {
+      display: none;
+    }
+  `
+  export const bottomNavigationBar = styled.div`
     position: fixed;
     bottom: 0;
     width: 100%;

@@ -3,7 +3,7 @@ import { Meta } from '@storybook/react'
 import { Layout2ndApp, Layout1st } from '@/layouts'
 
 export default {
-  title: 'previews/app/other user folder',
+  title: 'previews/app/other user catalog',
 } as Meta
 
 export const standard = () => (
@@ -20,6 +20,7 @@ export const standard = () => (
           { label: 'About', href: '/about', isActive: false },
           { label: 'Pricing', href: '/pricing', isActive: false },
         ]}
+        viewedUser={{ username: 'lorem_ipsum', backHref: '/' }}
       />
     }
     slotHeaderMobile={
@@ -28,8 +29,10 @@ export const standard = () => (
         hamburgerIsToggled={false}
         onClickHamburger={() => {}}
         onClickTheme={() => {}}
+        viewedUser={{ username: 'lorem_ipsum', backHref: '/' }}
       />
     }
+    slotFooterDesktop={<div style={{ height: 1000 }}>footer</div>}
     slotBottomNavigationBar={
       <Ui.Molecues.BottomNavigationBar
         onClickAdd={() => {}}
