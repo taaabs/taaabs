@@ -69,38 +69,3 @@ The objective is to list in the aside all tags occuring on visible bookmarks wit
 | 7      | 11    |
 
 Counting occurences of each tag gives number of bookmarks that are going to be shown upon its selection.
-
-### Exclude tags
-
-From the related tag section, user is selecting tags they don't want to see bookmarks with.
-
-Say we have 3 bookmarks having the following tags:
-
-- recipes
-- cooking
-- pasta
-- carbonara
-  <br><br>
-- recipes
-- cooking
-- pasta
-- ravioli
-  <br><br>
-- recipes
-- cooking
-- pasta
-- tortellini
-
-User decides to see all pasta recpies that are not tortellini.
-They select +recipes +pasta -tortellini -carbonara.
-
-On "tag_hierarchies_on_bookmarks" we select all distinct bookmark ids having pasta recpies and exclude all having _tortellini_ or _carbonara_
-
-### Private tags
-
-User can set a tag to be private, so it won't appear on a public bookmark and in the aside for profile visitors.
-For compatibility with pinboard, we set all imported bookmarks prefixed with a dot as private.
-
-### Public tag browser
-
-Views settings: relevant, latest, top

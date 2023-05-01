@@ -11,6 +11,13 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   })
   tags?: string
 
+  @ApiProperty({
+    description: `Tag bundles to match all combinations, for example
+                  Langugage > Platform > Stability:
+                  "js,dart|web,mobile|stable,cutting_edge"`,
+  })
+  bundles?: string
+
   date_range?: DateRange = BookmarksOnUser_Params_Dto.defaultDateRange
 
   @ApiProperty({ description: 'Epoch timestamp in seconds.' })
