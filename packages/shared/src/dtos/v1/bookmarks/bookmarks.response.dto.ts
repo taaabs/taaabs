@@ -1,6 +1,7 @@
 import { PaginatedResponse_Dto } from '../../common/paginated-response.dto'
 
 class Bookmark {
+  id!: string
   title!: string
   description?: string
   url!: string
