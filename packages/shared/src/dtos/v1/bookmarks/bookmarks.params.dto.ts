@@ -28,6 +28,11 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   @Type()
   date_end?: number
 
+  @ApiProperty({
+    description: 'Comma separated list of sites a bookmark can be from.',
+  })
+  sites?: string
+
   sort_by?: SortBy = BookmarksOnUser_Params_Dto.defaultSortBy
 
   @Type()
