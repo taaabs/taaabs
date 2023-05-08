@@ -1,15 +1,20 @@
 FREE
 
-- up to 10 000 bookmarks
+- unlimited bookmarks
+- up to 10 000 unarchived 
 - ads
+- access to copies of popular urls
 
 PRO
 
-- unlimited bookmarks
+- unlimited unarchived bookmarks
+- unlimited secret bookmarks
+- no ads
+- pdf upload ?
+- note taking ?
 - full text search
 - no ads
-- secret bookmarks
 - 2FA
 - backups
 
-cost: $3 monthly (billed annually) $4 (billed monthly)
+cost: $4 monthly (billed annually) $5 (billed monthly)
