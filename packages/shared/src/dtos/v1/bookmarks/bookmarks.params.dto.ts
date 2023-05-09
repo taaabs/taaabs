@@ -1,20 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { DateRange, PaginationOptions_Dto, SortBy } from '../../common'
+import {
+  ArchivedBookmarks,
+  DateRange,
+  PaginationOptions_Dto,
+  SortBy,
+} from '../../common'
 import { Type } from 'class-transformer'
 
 export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   static defaultDateRange = DateRange.ANY
   static defaultSortBy = SortBy.DATE_ASC
+  static defaultArchived = ArchivedBookmarks.EXCLUDE
+  static defaultStarredOnly = false
 
   @ApiProperty({
     description: 'Comma separated list of tags a bookmark must include.',
+    example: 'tagA,tagB,tagC',
   })
   tags?: string
 
   @ApiProperty({
-    description: `Tag bundles to match all combinations, for example
-                  Langugage > Platform > Stability:
-                  "js,dart|web,mobile|stable,cutting_edge"`,
+    description: 'Tag bundles from folder hierarchy must be separated by "|".',
+    example: 'js,dart|web,mobile|stable,cutting_edge',
   })
   bundles?: string
 
@@ -29,12 +36,18 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   date_end?: number
 
   @ApiProperty({
-    description: 'Comma separated list of sites a bookmark can be from.',
+    description: 'Include only those bookmarks matching given site.',
+    example: 'exmaple.com',
   })
-  sites?: string
+  site?: string
 
   sort_by?: SortBy = BookmarksOnUser_Params_Dto.defaultSortBy
 
   @Type()
-  starred_only?: boolean = false
+  @ApiProperty({
+    example: 'true',
+  })
+  starred_only?: boolean = BookmarksOnUser_Params_Dto.defaultStarredOnly
+
+  archived?: ArchivedBookmarks = BookmarksOnUser_Params_Dto.defaultArchived
 }

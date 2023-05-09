@@ -18,7 +18,7 @@ class BookmarkOnOtherUser extends Bookmark {
 class BookmarkOnCurrentUser extends Bookmark {
   site?: string
   saves?: number
-  isPrivate?: boolean
+  isPublic?: boolean
   isEncrypted?: boolean
 }
 
