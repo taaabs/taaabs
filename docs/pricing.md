@@ -5,7 +5,7 @@ FREE
 - ads
 - access to copies of popular urls
 
-PRO
+Pro (For power users)
 
 - unlimited unarchived bookmarks
 - unlimited secret bookmarks
@@ -17,4 +17,4 @@ PRO
 - 2FA
 - backups
 
-cost: $4 monthly (billed annually) $5 (billed monthly)
+cost: $4 monthly (billed annually) $5 (billed monthly), similar to todoist
