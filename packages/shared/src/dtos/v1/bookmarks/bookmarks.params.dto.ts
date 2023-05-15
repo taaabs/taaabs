@@ -35,12 +35,6 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   @Type()
   date_end?: number
 
-  @ApiProperty({
-    description: 'Include only those bookmarks matching given site.',
-    example: 'exmaple.com',
-  })
-  site?: string
-
   sort_by?: SortBy = BookmarksOnUser_Params_Dto.defaultSortBy
 
   @Type()
