@@ -84,7 +84,7 @@ namespace $ {
   export const container = styled.div`
     border-bottom: var(${Theme.BORDER_PRIMARY});
     background-color: var(${Theme.COLOR_WHITE});
-    height: ${sharedValues.height.HEADER_DESKTOP}px;
+    height: ${sharedValues.numeric.headerDesktop}px;
     > div {
       height: 100%;
     }
@@ -99,13 +99,13 @@ namespace $ {
     export const right = styled.div`
       display: flex;
       align-items: center;
-      gap: ${sharedValues.distance[8]}px;
+      gap: ${sharedValues.numeric.spacer[8]}px;
       height: 100%;
     `
     export const left = styled.div`
       display: flex;
       align-items: center;
-      gap: ${sharedValues.distance[20]}px;
+      gap: ${sharedValues.numeric.spacer[20]}px;
     `
     export namespace Right {
       export const nav = styled.nav`

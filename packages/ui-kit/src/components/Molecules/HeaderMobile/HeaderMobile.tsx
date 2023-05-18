@@ -36,11 +36,11 @@ namespace $ {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: ${sharedValues.distance[16]}px;
+    padding-left: ${sharedValues.numeric.spacer[16]}px;
     background-color: ${sharedValues.TRANSPARENT_BACKGROUND_COLOR};
     backdrop-filter: ${sharedValues.BACKDROP_FILTER};
     border-bottom: var(${Theme.BORDER_PRIMARY});
-    height: ${sharedValues.height.HEADER_MOBILE}px;
+    height: ${sharedValues.numeric.headerMobile}px;
   `
   export const right = styled.div`
     display: flex;
@@ -48,14 +48,14 @@ namespace $ {
   `
   export namespace Right {
     const baseButton = css`
-      /* height: ${sharedValues.height.HEADER_MOBILE}px; */
+      height: ${sharedValues.numeric.headerMobile}px;
       display: flex;
       align-items: center;
       justify-content: center;
     `
     export const theme = styled.button`
       ${baseButton}
-      padding: 0 ${sharedValues.distance[8]}px;
+      padding: 0 ${sharedValues.numeric.spacer[8]}px;
       > div > svg {
         height: 24px;
         width: 24px;
@@ -63,8 +63,8 @@ namespace $ {
     `
     export const hamburger = styled.button`
       ${baseButton}
-      padding-right: ${sharedValues.distance[16]}px;
-      padding-left: ${sharedValues.distance[8]}px;
+      padding-right: ${sharedValues.numeric.spacer[16]}px;
+      padding-left: ${sharedValues.numeric.spacer[8]}px;
     `
   }
 }

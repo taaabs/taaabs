@@ -4,6 +4,7 @@ import { Theme } from '@/styles/GlobalStyles'
 import { Ui } from '@/index'
 import { Blurhash } from 'react-blurhash'
 import { mq } from '@/styles/mediaQueries'
+import { sharedValues } from '@/constants'
 
 export namespace ButtonOutlinedIcon {
   export type Props = {
@@ -47,11 +48,9 @@ namespace $ {
     border: var(${Theme.BORDER_SECONDARY});
     overflow: hidden;
     position: relative;
-    width: var(${Theme.BUTTON_HEIGHT_34});
-    height: var(${Theme.BUTTON_HEIGHT_34});
+    ${sharedValues.styles.buttonSize[34]}
     ${mq.at992} {
-      width: var(${Theme.BUTTON_HEIGHT_40});
-      height: var(${Theme.BUTTON_HEIGHT_40});
+      ${sharedValues.styles.buttonSize[40]}
     }
     @media (hover: hover) {
       :hover {

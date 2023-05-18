@@ -53,12 +53,12 @@ namespace $ {
     export const backArrow = styled(Link)`
       display: flex;
       align-items: center;
-      padding-right: ${sharedValues.distance[24]}px;
-      padding-left: ${sharedValues.distance[16]}px;
-      margin-left: calc(${sharedValues.distance[16]}px * -1);
-      height: var(${Theme.BUTTON_HEIGHT_34});
+      padding-right: ${sharedValues.numeric.spacer[24]}px;
+      padding-left: ${sharedValues.numeric.spacer[16]}px;
+      margin-left: calc(${sharedValues.numeric.spacer[16]}px * -1);
+      ${sharedValues.styles.buttonHeight[34]}
       ${mq.at992} {
-        height: var(${Theme.BUTTON_HEIGHT_40});
+        ${sharedValues.styles.buttonHeight[40]}
       }
       @media (hover: hover) {
         :hover > div > svg {
@@ -83,7 +83,7 @@ namespace $ {
     `
     export namespace Profile {
       export const username = styled.span`
-        font-family: ${sharedValues.fontFamily.spaceGrotesk};
+        ${sharedValues.styles.fontFamily.spaceGrotesk};
         font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
         letter-spacing: ${logoTextLetterSpacing};
         color: var(${Theme.COLOR_BRAND});
@@ -105,7 +105,7 @@ namespace $ {
     align-items: center;
     > span {
       color: var(${Theme.COLOR_BRAND});
-      font-family: ${sharedValues.fontFamily.spaceGrotesk};
+      ${sharedValues.styles.fontFamily.spaceGrotesk};
       font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
       font-size: 22px;
       letter-spacing: ${logoTextLetterSpacing};

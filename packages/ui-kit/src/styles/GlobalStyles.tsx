@@ -6,16 +6,6 @@ import { sharedValues } from '@/constants'
 // each color usage has its dedicated variable that can be easily themed
 
 export const enum Theme {
-  FONT_SIZE_12_PX = '--font-size-12-px',
-  FONT_SIZE_14_PX = '--font-size-14-px',
-  FONT_SIZE_16_PX = '--font-size-16-px',
-  FONT_SIZE_18_PX = '--font-size-18-px',
-  FONT_SIZE_20_PX = '--font-size-20-px',
-  FONT_SIZE_12_REM = '--font-size-12-rem',
-  FONT_SIZE_14_REM = '--font-size-14-rem',
-  FONT_SIZE_16_REM = '--font-size-16-rem',
-  FONT_SIZE_18_REM = '--font-size-18-rem',
-  FONT_SIZE_20_REM = '--font-size-20-rem',
   FONT_WEIGHT_INTER_MEDIUM = '--font-weight-inter-medium',
   FONT_WEIGHT_INTER_SEMIBOLD = '--font-weight-inter-semibold',
   FONT_WEIGHT_INTER_BOLD = '--font-weight-inter-bold',
@@ -38,9 +28,6 @@ export const enum Theme {
   COLOR_BORDER_SECONDARY = '--color-border-secondary',
   BORDER_PRIMARY = '--border-primary',
   BORDER_SECONDARY = '--border-secondary',
-  BUTTON_HEIGHT_34 = '--button-height-34',
-  BUTTON_HEIGHT_40 = '--button-height-40',
-  BUTTON_HEIGHT_46 = '--button-height-46',
   ANIMATION_DURATION_150 = '--animation-duration-150',
   ANIMATION_DURATION_300 = '--animation-duration-300',
   TRANSITION_TIMING_FUNCTION = '--transition-timing-function',
@@ -52,16 +39,6 @@ type ThemeMap = {
 }
 
 export const defaultTheme: ThemeMap = {
-  [Theme.FONT_SIZE_12_PX]: '12px',
-  [Theme.FONT_SIZE_14_PX]: '14px',
-  [Theme.FONT_SIZE_16_PX]: '16px',
-  [Theme.FONT_SIZE_18_PX]: '18px',
-  [Theme.FONT_SIZE_20_PX]: '20px',
-  [Theme.FONT_SIZE_12_REM]: '1.2rem',
-  [Theme.FONT_SIZE_14_REM]: '1.4rem',
-  [Theme.FONT_SIZE_16_REM]: '1.6rem',
-  [Theme.FONT_SIZE_18_REM]: '1.8rem',
-  [Theme.FONT_SIZE_20_REM]: '2rem',
   [Theme.FONT_WEIGHT_INTER_MEDIUM]: '500',
   [Theme.FONT_WEIGHT_INTER_SEMIBOLD]: '600',
   [Theme.FONT_WEIGHT_INTER_BOLD]: '700',
@@ -84,9 +61,6 @@ export const defaultTheme: ThemeMap = {
   [Theme.COLOR_BORDER_SECONDARY]: '#F2F2F2',
   [Theme.BORDER_PRIMARY]: `1px solid var(${Theme.COLOR_BORDER_PRIMARY})`,
   [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.COLOR_BORDER_SECONDARY})`,
-  [Theme.BUTTON_HEIGHT_34]: '34px',
-  [Theme.BUTTON_HEIGHT_40]: '40px',
-  [Theme.BUTTON_HEIGHT_46]: '46px',
   [Theme.ANIMATION_DURATION_150]: '150ms',
   [Theme.ANIMATION_DURATION_300]: '300ms',
   [Theme.TRANSITION_TIMING_FUNCTION]: 'ease-in-out',
@@ -94,7 +68,7 @@ export const defaultTheme: ThemeMap = {
 }
 
 export const globalStyles = css`
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700&display=swap');
 
   #__next {
     min-height: 100vh;
@@ -123,9 +97,9 @@ export const globalStyles = css`
   }
 
   body {
-    font-family: ${sharedValues.fontFamily.inter};
+    ${sharedValues.styles.fontFamily.inter};
     line-height: 1.5;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     color: var(${Theme.COLOR_TEXT_NORMAL});
   }
 

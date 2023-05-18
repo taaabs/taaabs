@@ -44,13 +44,13 @@ namespace $ {
     border-bottom: var(${Theme.BORDER_PRIMARY});
     display: flex;
     justify-content: space-between;
-    height: ${sharedValues.height.APP_BAR}px;
+    height: ${sharedValues.numeric.appBar}px;
   `
   export const swipe = styled.button<{ isVisible: boolean }>`
     display: flex;
     align-items: center;
     height: 100%;
-    padding: 0 ${sharedValues.distance[16]}px;
+    padding: 0 ${sharedValues.numeric.spacer[16]}px;
     ${({ isVisible }) =>
       !isVisible &&
       css`
@@ -58,8 +58,7 @@ namespace $ {
         visibility: hidden;
       `}
     > div > svg {
-      width: ${sharedValues.icon[24]}px;
-      height: ${sharedValues.icon[24]}px;
+      ${sharedValues.styles.iconSize[24]}
     }
   `
   export const content = styled.div`

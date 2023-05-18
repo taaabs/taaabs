@@ -13,9 +13,9 @@ export const Wrapper: React.FC<WrapperProps> = (props) => {
         width: 100%;
         max-width: 1380px;
         margin: 0 auto;
-        padding: 0 ${sharedValues.distance[16]}px;
+        padding: 0 ${sharedValues.numeric.spacer[16]}px;
         ${mq.at1200} {
-          padding: 0 ${sharedValues.distance[40]}px;
+          padding: 0 ${sharedValues.numeric.spacer[40]}px;
         }
       `}
     >

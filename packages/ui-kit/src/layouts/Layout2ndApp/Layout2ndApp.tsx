@@ -201,7 +201,7 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
           <$.Aside.inner>
             {windowWidth && windowWidth >= 992 ? (
               <>
-                <StickyBox offsetTop={sharedValues.height.HEADER_DESKTOP}>
+                <StickyBox offsetTop={sharedValues.numeric.headerDesktop}>
                   {props.slotAside}
                 </StickyBox>
               </>
@@ -227,14 +227,14 @@ namespace $ {
       width: ${({ width }) => width}px;
       z-index: 0;
       display: none;
-      padding-top: ${sharedValues.height.HEADER_MOBILE}px;
-      padding-bottom: ${sharedValues.height.BOTTOM_NAVIGATION_BAR}px;
+      padding-top: ${sharedValues.numeric.headerMobile}px;
+      padding-bottom: ${sharedValues.numeric.bottomNavigationBar}px;
     }
     ${mq.at992} {
       position: sticky;
-      height: calc(100vh - ${sharedValues.height.HEADER_DESKTOP}px);
+      height: calc(100vh - ${sharedValues.numeric.headerDesktop}px);
       width: 100%;
-      top: ${sharedValues.height.HEADER_DESKTOP}px;
+      top: ${sharedValues.numeric.headerDesktop}px;
       overflow: auto;
     }
   `
@@ -256,11 +256,11 @@ namespace $ {
       width: ${({ width }) => width}px;
       height: 100vh;
       display: none;
-      padding-top: ${sharedValues.height.HEADER_MOBILE}px;
-      padding-bottom: ${sharedValues.height.BOTTOM_NAVIGATION_BAR}px;
+      padding-top: ${sharedValues.numeric.headerMobile}px;
+      padding-bottom: ${sharedValues.numeric.bottomNavigationBar}px;
     }
     ${mq.at992} {
-      margin-top: ${sharedValues.height.HEADER_DESKTOP}px;
+      margin-top: ${sharedValues.numeric.headerDesktop}px;
     }
   `
   export namespace Aside {
@@ -292,11 +292,11 @@ namespace $ {
     ${mq.at992} {
       display: flex;
       width: 100%;
-      max-width: ${sharedValues.SITE_MAX_WIDTH}px;
+      max-width: ${sharedValues.numeric.siteMaxWidth}px;
       margin: 0 auto;
-      padding: 0 ${sharedValues.distance[16]}px;
+      padding: 0 ${sharedValues.numeric.spacer[16]}px;
       ${mq.at1200} {
-        padding: 0 ${sharedValues.distance[40]}px;
+        padding: 0 ${sharedValues.numeric.spacer[40]}px;
       }
       > ${aside}, > ${sidebar} {
         width: 25vw;
@@ -313,16 +313,16 @@ namespace $ {
     ${mq.to992} {
       position: relative;
       z-index: 2;
-      margin-top: ${sharedValues.height.HEADER_MOBILE}px;
-      padding-top: ${sharedValues.height.APP_BAR}px;
-      padding-bottom: ${sharedValues.height.BOTTOM_NAVIGATION_BAR}px;
-      height: calc(100vh - ${sharedValues.height.HEADER_MOBILE}px);
+      margin-top: ${sharedValues.numeric.headerMobile}px;
+      padding-top: ${sharedValues.numeric.appBar}px;
+      padding-bottom: ${sharedValues.numeric.bottomNavigationBar}px;
+      height: calc(100vh - ${sharedValues.numeric.headerMobile}px);
       background-color: var(${Theme.COLOR_NEUTRAL_25});
     }
     ${mq.at992} {
       flex: 1;
       transform: translateX(0px) !important;
-      margin-top: ${sharedValues.height.HEADER_DESKTOP}px;
+      margin-top: ${sharedValues.numeric.headerDesktop}px;
     }
   `
   export namespace Main {
@@ -379,7 +379,7 @@ namespace $ {
         }
       }
       ${mq.at992} {
-        min-height: calc(100vh - ${sharedValues.height.HEADER_DESKTOP}px);
+        min-height: calc(100vh - ${sharedValues.numeric.headerDesktop}px);
       }
     `
   }

@@ -1,6 +1,5 @@
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
-import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
@@ -72,6 +71,6 @@ namespace $ {
   `
   export const ThirdLine = styled.div`
     ${base}
-    font-family: ${sharedValues.fontFamily.spaceGrotesk};
+    ${sharedValues.styles.fontFamily.spaceGrotesk};
   `
 }

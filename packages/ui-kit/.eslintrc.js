@@ -3,17 +3,14 @@ module.exports = {
   parserOptions: {
     project: 'tsconfig.json',
     sourceType: 'module',
-    tsconfigRootDir: __dirname,
+    tsconfigRootDir: __dirname
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    // 'plugin:prettier/recommended',
-  ],
+  extends: ['plugin:@typescript-eslint/recommended', 'plugin:storybook/recommended'],
   root: true,
   env: {
     node: true,
-    jest: true,
+    jest: true
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
@@ -25,30 +22,27 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-unused-vars': ['warn'],
     'no-unused-vars': 'off',
-    '@typescript-eslint/explicit-member-accessibility': [
-      'warn',
-      { accessibility: 'explicit', overrides: { constructors: 'no-public' } },
-    ],
+    '@typescript-eslint/explicit-member-accessibility': ['warn', {
+      accessibility: 'explicit',
+      overrides: {
+        constructors: 'no-public'
+      }
+    }],
     'no-console': ['warn'],
-    '@typescript-eslint/naming-convention': [
-      'error',
-      {
-        selector: 'memberLike',
-        modifiers: ['private'],
-        format: ['camelCase'],
-        leadingUnderscore: 'require',
-      },
-      {
-        selector: 'function',
-        format: ['camelCase'],
-        leadingUnderscore: 'require',
-      },
-      {
-        selector: 'function',
-        modifiers: ['exported'],
-        format: ['camelCase'],
-        leadingUnderscore: 'forbid',
-      },
-    ],
-  },
-}
+    '@typescript-eslint/naming-convention': ['error', {
+      selector: 'memberLike',
+      modifiers: ['private'],
+      format: ['camelCase'],
+      leadingUnderscore: 'require'
+    }, {
+      selector: 'function',
+      format: ['camelCase'],
+      leadingUnderscore: 'require'
+    }, {
+      selector: 'function',
+      modifiers: ['exported'],
+      format: ['camelCase'],
+      leadingUnderscore: 'forbid'
+    }]
+  }
+};

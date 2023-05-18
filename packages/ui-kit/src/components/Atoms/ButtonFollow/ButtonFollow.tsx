@@ -23,11 +23,11 @@ namespace $ {
   export const button = styled.button`
     display: flex;
     align-items: center;
-    height: ${sharedValues.height.BUTTON[34]}px;
-    border-radius: ${sharedValues.height.BUTTON[34]}px;
+    ${sharedValues.styles.buttonHeight[34]}
+    ${sharedValues.styles.borderRadius[999]}
     border: var(${Theme.BORDER_SECONDARY});
-    padding: 0 ${sharedValues.distance[12]}px;
-    gap: ${sharedValues.distance[8]}px;
+    padding: 0 ${sharedValues.numeric.spacer[12]}px;
+    gap: ${sharedValues.numeric.spacer[8]}px;
     > div > svg {
       height: 17px;
     }

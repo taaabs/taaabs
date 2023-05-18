@@ -19,17 +19,16 @@ export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
   return (
     <div
       css={css`
-        height: ${sharedValues.height.BOTTOM_NAVIGATION_BAR}px;
+        height: ${sharedValues.numeric.bottomNavigationBar}px;
         border-top: var(${Theme.BORDER_PRIMARY});
         background-color: var(${Theme.COLOR_WHITE});
         display: flex;
         justify-content: space-around;
         > * > div > svg {
-          width: ${sharedValues.icon[24]}px;
-          height: ${sharedValues.icon[24]}px;
+          ${sharedValues.styles.iconSize[24]}
         }
         > * {
-          width: ${sharedValues.height.BUTTON[46]}px;
+          width: 46px;
           display: flex;
           align-items: center;
           justify-content: center;

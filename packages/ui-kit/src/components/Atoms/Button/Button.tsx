@@ -61,22 +61,22 @@ namespace $ {
   }
   const sizeMap: SizeMap = {
     small: css`
-      height: var(${Theme.BUTTON_HEIGHT_34});
-      font-size: var(${Theme.FONT_SIZE_14_PX});
+      ${sharedValues.styles.buttonHeight[34]};
+      ${sharedValues.styles.fontSize[15].px};
       padding: 0 10px;
-      border-radius: ${sharedValues.borderRadius[8]}px;
+      ${sharedValues.styles.borderRadius[8]}
     `,
     default: css`
-      height: var(${Theme.BUTTON_HEIGHT_40});
-      font-size: var(${Theme.FONT_SIZE_16_PX});
+      ${sharedValues.styles.buttonHeight[40]};
+      ${sharedValues.styles.fontSize[16].px};
       padding: 0 14px;
-      border-radius: ${sharedValues.borderRadius[10]}px;
+      ${sharedValues.styles.borderRadius[10]}
     `,
     large: css`
-      height: var(${Theme.BUTTON_HEIGHT_46});
+      ${sharedValues.styles.buttonHeight[46]};
       padding: 0 18px;
-      border-radius: ${sharedValues.borderRadius[12]}px;
-      font-size: var(${Theme.FONT_SIZE_18_PX});
+      ${sharedValues.styles.borderRadius[12]}
+      ${sharedValues.styles.fontSize[17].px};
     `,
   }
 

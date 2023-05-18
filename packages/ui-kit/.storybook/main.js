@@ -1,12 +1,14 @@
 const path = require('path')
 const react = require('@vitejs/plugin-react')
-const svgr = require('vite-plugin-svgr')
+import svgr from 'vite-plugin-svgr'
 
 module.exports = {
   stories: ['../src/**/*.stories.tsx'],
-  framework: '@storybook/react',
+  framework: {
+    name: '@storybook/react-vite',
+    options: {},
+  },
   core: {
-    builder: '@storybook/builder-vite',
     disableTelemetry: true,
   },
   viteFinal(config) {
@@ -14,25 +16,27 @@ module.exports = {
       (plugin) =>
         !(Array.isArray(plugin) && plugin[0]?.name.includes('vite:react')),
     )
-
     config.plugins.push(
       react({
         exclude: [/\.stories\.tsx?$/, /node_modules/],
         jsxImportSource: '@emotion/react',
         babel: {
           plugins: [
-            ['@emotion/babel-plugin', { labelFormat: '[filename]-[local]' }],
+            [
+              '@emotion/babel-plugin',
+              {
+                labelFormat: '[filename]-[local]',
+              },
+            ],
           ],
         },
       }),
     )
-
     config.plugins.push(
       svgr({
         svgrOptions: {},
       }),
     )
-
     return {
       ...config,
       resolve: {
@@ -43,6 +47,13 @@ module.exports = {
           },
         ],
       },
+      // https://github.com/storybookjs/storybook/issues/18920
+      define: {
+        'process.env': {}, 
+      },
     }
+  },
+  docs: {
+    autodocs: true,
   },
 }

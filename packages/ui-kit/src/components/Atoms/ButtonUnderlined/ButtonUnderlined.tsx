@@ -43,14 +43,14 @@ namespace $ {
     const underlineHeight = 2.5
 
     return css`
-      font-size: var(${Theme.FONT_SIZE_16_REM});
+      ${sharedValues.styles.fontSize[16].px}
       font-weight: var(${Theme.FONT_WEIGHT_INTER_MEDIUM});
       display: inline-flex;
       height: 100%;
       width: 100%;
       align-items: center;
       justify-content: center;
-      padding: 0 ${sharedValues.distance[16]}px;
+      padding: 0 ${sharedValues.numeric.spacer[16]}px;
       position: relative;
       span {
         height: 100%;

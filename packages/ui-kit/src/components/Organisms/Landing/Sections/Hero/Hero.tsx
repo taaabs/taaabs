@@ -1,9 +1,7 @@
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
-import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import { css } from '@emotion/react'
-import styled from '@emotion/styled'
 
 export type HeroProps = {
   text: string
@@ -30,7 +28,7 @@ const container = css`
   }
   & h1 {
     font-size: 4rem;
-    font-family: ${sharedValues.fontFamily.spaceGrotesk};
+    ${sharedValues.styles.fontFamily.spaceGrotesk};
     line-height: 1.1;
     font-weight: normal;
     ${mq.at768} {

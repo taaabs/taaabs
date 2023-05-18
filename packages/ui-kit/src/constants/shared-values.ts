@@ -1,45 +1,125 @@
-export const SITE_MAX_WIDTH = 1380
-export const TRANSPARENT_BACKGROUND_COLOR = 'rgba(255, 255, 255, 0.8)'
-export const BACKDROP_FILTER = 'saturate(180%) blur(5px)'
+import { css } from '@emotion/react'
 
-export const fontFamily = {
-  inter:
-    '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Twemoji Country Flags", "Segoe UI Emoji", "Segoe UI Symbol"',
-  spaceGrotesk:
-    '"Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-}
-
-export const icon = {
-  20: 20,
-  24: 24,
-}
-
-export const height = {
-  HEADER_DESKTOP: 63,
-  HEADER_MOBILE: 45,
-  BOTTOM_NAVIGATION_BAR: 49,
-  APP_BAR: 63,
-  BUTTON: {
-    34: 34,
+export const numeric = {
+  siteMaxWidth: 1380,
+  headerDesktop: 63,
+  headerMobile: 45,
+  bottomNavigationBar: 49,
+  appBar: 63,
+  spacer: {
+    8: 8,
+    12: 12,
+    16: 16,
+    20: 20,
+    24: 24,
     40: 40,
-    46: 46,
+    60: 60,
   },
 }
 
-export const distance = {
-  8: 8,
-  12: 12,
-  16: 16,
-  20: 20,
-  24: 24,
-  40: 40,
-  60: 60,
-}
+export const TRANSPARENT_BACKGROUND_COLOR = 'rgba(255, 255, 255, 0.8)'
+export const BACKDROP_FILTER = 'saturate(180%) blur(5px)'
 
-export const borderRadius = {
-  4: 4,
-  8: 8,
-  10: 10,
-  12: 12,
-  14: 14,
+export const styles = {
+  fontFamily: {
+    inter: css`
+      font-family: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Twemoji Country Flags", "Segoe UI Emoji", "Segoe UI Symbol"';
+    `,
+    spaceGrotesk: css`
+      font-family: '"Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"';
+    `,
+  },
+  fontSize: {
+    13: {
+      px: css`
+        font-size: 13px;
+      `,
+      rem: css`
+        font-size: 1.3rem;
+      `,
+    },
+    15: {
+      px: css`
+        font-size: 15px;
+      `,
+      rem: css`
+        font-size: 1.5rem;
+      `,
+    },
+    16: {
+      px: css`
+        font-size: 16px;
+      `,
+      rem: css`
+        font-size: 1.6rem;
+      `,
+    },
+    17: {
+      px: css`
+        font-size: 17px;
+      `,
+      rem: css`
+        font-size: 1.7rem;
+      `,
+    },
+    20: {
+      px: css`
+        font-size: 20px;
+      `,
+      rem: css`
+        font-size: 2rem;
+      `,
+    },
+  },
+  iconSize: {
+    20: css`
+      width: 20px;
+      height: 20px;
+    `,
+    24: css`
+      width: 24px;
+      height: 24px;
+    `,
+  },
+  buttonHeight: {
+    34: css`
+      height: 34px;
+    `,
+    40: css`
+      height: 40px;
+    `,
+    46: css`
+      height: 46px;
+    `,
+  },
+  buttonSize: {
+    34: css`
+      height: 34px;
+      width: 34px;
+    `,
+    40: css`
+      height: 40px;
+      width: 40px;
+    `,
+  },
+  borderRadius: {
+    4: css`
+      border-radius: 4px;
+    `,
+    8: css`
+      border-radius: 8px;
+    `,
+    10: css`
+      border-radius: 10px;
+    `,
+    12: css`
+      border-radius: 12px;
+    `,
+    14: css`
+      border-radius: 14px;
+    `,
+    999: css`
+      border-radius: 999px;
+    `,
+  },
 }
