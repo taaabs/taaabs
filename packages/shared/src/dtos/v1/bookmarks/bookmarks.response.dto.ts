@@ -8,17 +8,14 @@ class Bookmark {
   createdAt!: string
   tags?: string[]
   isStarred?: boolean
+  sitePath?: string
 }
 
-class BookmarkOnOtherUser extends Bookmark {
-  site!: string
-  saves!: number
-}
+class BookmarkOnOtherUser extends Bookmark {}
 
 class BookmarkOnCurrentUser extends Bookmark {
-  site?: string
-  saves?: number
   isPublic?: boolean
+  isArchived?: boolean
   isEncrypted?: boolean
 }
 

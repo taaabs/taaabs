@@ -12,6 +12,7 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   static defaultSortBy = SortBy.DATE_ASC
   static defaultArchived = ArchivedBookmarks.EXCLUDE
   static defaultStarredOnly = false
+  static defaultEncryptedOnly = false
 
   @ApiProperty({
     description: 'Comma separated list of tags a bookmark must include.',
@@ -44,4 +45,10 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   starred_only?: boolean = BookmarksOnUser_Params_Dto.defaultStarredOnly
 
   archived?: ArchivedBookmarks = BookmarksOnUser_Params_Dto.defaultArchived
+
+  @Type()
+  @ApiProperty({
+    description: 'Applies to authenticated requester only.',
+  })
+  encrypted_only?: boolean = BookmarksOnUser_Params_Dto.defaultEncryptedOnly
 }
