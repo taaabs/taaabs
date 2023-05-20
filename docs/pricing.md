@@ -2,9 +2,9 @@ Free
 
 - unlimited bookmarks
 - ads
-- access to copies of popular urls
+- access to copies of popular urls only
 
-Pro (For power users)
+Pro
 
 - unlimited secret bookmarks
 - no ads
