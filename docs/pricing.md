@@ -7,6 +7,7 @@ Free
 Pro
 
 - unlimited secret bookmarks
+- date range selector
 - no ads
 - full text search
 - 2FA
