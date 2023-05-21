@@ -2,12 +2,17 @@ Free
 
 - unlimited bookmarks
 - ads
-- access to copies of popular urls only
+
+Supporter
+
+- date range selector
+- access to copies of popular urls
+
+cost: $10 yearly
 
 Pro
 
 - unlimited secret bookmarks
-- date range selector
 - no ads
 - full text search
 - 2FA

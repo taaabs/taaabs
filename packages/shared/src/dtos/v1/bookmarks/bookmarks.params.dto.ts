@@ -21,11 +21,7 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   })
   tags?: string
 
-  @ApiProperty({
-    description: 'Tag bundles from folder hierarchy must be separated by "|".',
-    example: 'js,dart|web,mobile|stable,cutting_edge',
-  })
-  bundles?: string
+  category_id?: string
 
   date_range?: DateRange = BookmarksOnUser_Params_Dto.defaultDateRange
 
