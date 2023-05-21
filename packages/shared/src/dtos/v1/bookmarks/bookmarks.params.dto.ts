@@ -4,6 +4,7 @@ import {
   DateRange,
   PaginationOptions_Dto,
   SortBy,
+  BookmarkVisibility,
 } from '../../common'
 import { Type } from 'class-transformer'
 
@@ -12,7 +13,7 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   static defaultSortBy = SortBy.DATE_ASC
   static defaultArchived = ArchivedBookmarks.EXCLUDE
   static defaultStarredOnly = false
-  static defaultEncryptedOnly = false
+  static defaultVisibility = BookmarkVisibility.ALL
 
   @ApiProperty({
     description: 'Comma separated list of tags a bookmark must include.',
@@ -50,5 +51,5 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   @ApiProperty({
     description: 'Applies to authenticated requester only.',
   })
-  encrypted_only?: boolean = BookmarksOnUser_Params_Dto.defaultEncryptedOnly
+  visibility?: BookmarkVisibility = BookmarksOnUser_Params_Dto.defaultVisibility
 }
