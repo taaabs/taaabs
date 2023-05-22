@@ -3,10 +3,13 @@ Free
 - unlimited bookmarks
 - ads
 
-Supporter
+Enthusiast
 
 - date range selector
+- nsfw exclusive/excluded filter
+- starred only filter
 - access to copies of popular urls
+- presets
 - no ads
 
 cost: $10 yearly

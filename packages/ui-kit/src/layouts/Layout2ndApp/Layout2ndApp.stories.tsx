@@ -6,19 +6,21 @@ export default {
   component: Layout2ndApp,
 } as Meta
 
-export const standard = () => (
+export const Standard = () => (
   <Layout2ndApp
     slotSidebar={<>slot sidebar</>}
     slotMain={<>slot main</>}
     slotAside={<>slot aside</>}
+    slotAppBar={<>slot appbar</>}
   />
 )
 
-export const scrollingTest = () => (
+export const ScrollingTest = () => (
   <Layout2ndApp
     slotSidebar={<div>{lorem}</div>}
     slotMain={<>{lorem + lorem + lorem + lorem + lorem}</>}
     slotAside={<>{lorem}</>}
+    slotAppBar={<>slot appbar</>}
   />
 )
 

@@ -83,7 +83,8 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
 namespace $ {
   export const container = styled.div`
     border-bottom: var(${Theme.BORDER_PRIMARY});
-    background-color: var(${Theme.COLOR_WHITE});
+    background-color: var(${Theme.HEADER_TRANSPARENT_BACKGROUND});
+    ${sharedValues.styles.backdropFilter.desktopHeader}
     height: ${sharedValues.numeric.headerDesktop}px;
     > div {
       height: 100%;

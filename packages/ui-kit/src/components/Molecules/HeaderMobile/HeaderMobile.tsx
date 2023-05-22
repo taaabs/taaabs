@@ -37,8 +37,6 @@ namespace $ {
     align-items: center;
     justify-content: space-between;
     padding-left: ${sharedValues.numeric.spacer[16]}px;
-    background-color: ${sharedValues.TRANSPARENT_BACKGROUND_COLOR};
-    backdrop-filter: ${sharedValues.BACKDROP_FILTER};
     border-bottom: var(${Theme.BORDER_PRIMARY});
     height: ${sharedValues.numeric.headerMobile}px;
   `

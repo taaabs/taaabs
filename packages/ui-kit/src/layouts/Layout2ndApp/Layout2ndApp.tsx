@@ -298,6 +298,15 @@ namespace $ {
       ${mq.at1200} {
         padding: 0 ${sharedValues.numeric.spacer[40]}px;
       }
+      ::before {
+        top: 0;
+        left: 0;
+        width: 100vw;
+        content: '';
+        height: ${sharedValues.numeric.headerDesktop}px;
+        background: var(${Theme.HEADER_BACKGROUND});
+        position: fixed;
+      }
       > ${aside}, > ${sidebar} {
         width: 25vw;
         ${mq.at1200} {

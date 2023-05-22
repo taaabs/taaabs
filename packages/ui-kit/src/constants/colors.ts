@@ -1,4 +1,5 @@
 export const colors = {
+  white: '#fff',
   neutral: {
     25: '#FBFBFB',
     50: '#FAFAFA',

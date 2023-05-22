@@ -17,10 +17,6 @@ export const numeric = {
   },
 }
 
-export const TRANSPARENT_BACKGROUND_COLOR = 'rgba(255, 255, 255, 0.8)'
-export const BACKDROP_FILTER = 'saturate(180%) blur(5px)'
-
-export const miscellaneous = {}
 
 export const styles = {
   fontFamily: {
@@ -156,6 +152,11 @@ export const styles = {
     `,
     999: css`
       border-radius: 999px;
+    `,
+  },
+  backdropFilter: {
+    desktopHeader: css`
+      backdrop-filter: saturate(180%) blur(5px);
     `,
   },
 }

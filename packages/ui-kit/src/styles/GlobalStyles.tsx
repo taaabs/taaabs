@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import { mq } from './mediaQueries'
-import { sharedValues } from '@/constants'
+import { colors, sharedValues } from '@/constants'
 
 export const enum Theme {
   COLOR_WHITE = '--color-white',
@@ -20,13 +20,15 @@ export const enum Theme {
   COLOR_BORDER_SECONDARY = '--color-border-secondary',
   BORDER_PRIMARY = '--border-primary',
   BORDER_SECONDARY = '--border-secondary',
+  HEADER_BACKGROUND = '--header-background',
+  HEADER_TRANSPARENT_BACKGROUND = '--header-transparent-background',
 }
 
 type ThemeMap = {
   [key in Theme]: string
 }
 
-export const defaultTheme: ThemeMap = {
+export const lightTheme: ThemeMap = {
   [Theme.COLOR_WHITE]: '#FFF',
   [Theme.COLOR_BLACK]: '#1F1F1F',
   [Theme.COLOR_TEXT_NORMAL]: '#202020',
@@ -44,6 +46,8 @@ export const defaultTheme: ThemeMap = {
   [Theme.COLOR_BORDER_SECONDARY]: '#F2F2F2',
   [Theme.BORDER_PRIMARY]: `1px solid var(${Theme.COLOR_BORDER_PRIMARY})`,
   [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.COLOR_BORDER_SECONDARY})`,
+  [Theme.HEADER_BACKGROUND]: `${colors.white}`,
+  [Theme.HEADER_TRANSPARENT_BACKGROUND]: 'rgba(255, 255, 255, 0.8)',
 }
 
 export const globalStyles = css`
@@ -72,7 +76,7 @@ export const globalStyles = css`
   }
 
   :root {
-    ${css(defaultTheme)}
+    ${css(lightTheme)}
   }
 
   body {
