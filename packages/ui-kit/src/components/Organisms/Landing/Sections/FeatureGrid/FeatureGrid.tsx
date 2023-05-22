@@ -71,6 +71,6 @@ namespace $ {
   `
   export const ThirdLine = styled.div`
     ${base}
-    ${sharedValues.styles.fontFamily.spaceGrotesk};
+    ${sharedValues.styles.fontFamily.plusJakartaSans};
   `
 }

@@ -2,15 +2,7 @@ import { css } from '@emotion/react'
 import { mq } from './mediaQueries'
 import { sharedValues } from '@/constants'
 
-// create color base that can't be used outside this file
-// each color usage has its dedicated variable that can be easily themed
-
 export const enum Theme {
-  FONT_WEIGHT_INTER_MEDIUM = '--font-weight-inter-medium',
-  FONT_WEIGHT_INTER_SEMIBOLD = '--font-weight-inter-semibold',
-  FONT_WEIGHT_INTER_BOLD = '--font-weight-inter-bold',
-  FONT_SPACE_GROTESK_WEIGHT_MEDIUM = '--font-space-grotesk-weight-medium',
-  FONT_SPACE_GROTESK_WEIGHT_BOLD = '--font-space-grotesk-weight-bold',
   COLOR_WHITE = '--color-white',
   COLOR_BLACK = '--color-black',
   COLOR_TEXT_NORMAL = '--color-text--normal',
@@ -28,10 +20,6 @@ export const enum Theme {
   COLOR_BORDER_SECONDARY = '--color-border-secondary',
   BORDER_PRIMARY = '--border-primary',
   BORDER_SECONDARY = '--border-secondary',
-  ANIMATION_DURATION_150 = '--animation-duration-150',
-  ANIMATION_DURATION_300 = '--animation-duration-300',
-  TRANSITION_TIMING_FUNCTION = '--transition-timing-function',
-  TRANSITION_HOVER = '--transition-hover',
 }
 
 type ThemeMap = {
@@ -39,11 +27,6 @@ type ThemeMap = {
 }
 
 export const defaultTheme: ThemeMap = {
-  [Theme.FONT_WEIGHT_INTER_MEDIUM]: '500',
-  [Theme.FONT_WEIGHT_INTER_SEMIBOLD]: '600',
-  [Theme.FONT_WEIGHT_INTER_BOLD]: '700',
-  [Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM]: '500',
-  [Theme.FONT_SPACE_GROTESK_WEIGHT_BOLD]: '700',
   [Theme.COLOR_WHITE]: '#FFF',
   [Theme.COLOR_BLACK]: '#1F1F1F',
   [Theme.COLOR_TEXT_NORMAL]: '#202020',
@@ -61,14 +44,10 @@ export const defaultTheme: ThemeMap = {
   [Theme.COLOR_BORDER_SECONDARY]: '#F2F2F2',
   [Theme.BORDER_PRIMARY]: `1px solid var(${Theme.COLOR_BORDER_PRIMARY})`,
   [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.COLOR_BORDER_SECONDARY})`,
-  [Theme.ANIMATION_DURATION_150]: '150ms',
-  [Theme.ANIMATION_DURATION_300]: '300ms',
-  [Theme.TRANSITION_TIMING_FUNCTION]: 'ease-in-out',
-  [Theme.TRANSITION_HOVER]: 'all 150ms ease-in-out',
 }
 
 export const globalStyles = css`
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
   #__next {
     min-height: 100vh;
@@ -123,7 +102,7 @@ export const globalStyles = css`
 
   a,
   button {
-    transition: var(${Theme.TRANSITION_HOVER});
+    ${sharedValues.styles.transition[150]('all')}
   }
 
   ol,

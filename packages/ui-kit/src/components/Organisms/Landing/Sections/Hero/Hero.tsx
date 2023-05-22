@@ -28,7 +28,7 @@ const container = css`
   }
   & h1 {
     font-size: 4rem;
-    ${sharedValues.styles.fontFamily.spaceGrotesk};
+    ${sharedValues.styles.fontFamily.plusJakartaSans};
     line-height: 1.1;
     font-weight: normal;
     ${mq.at768} {

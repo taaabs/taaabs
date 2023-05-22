@@ -51,7 +51,7 @@ namespace $ {
     align-items: center;
     color: var(${Theme.COLOR_WHITE});
     background: var(${Theme.COLOR_BRAND});
-    font-weight: var(${Theme.FONT_WEIGHT_INTER_MEDIUM});
+    ${sharedValues.styles.fontWeight.inter.medium};
     &:hover {
       background: var(${Theme.COLOR_PRIMARY_900});
     }

@@ -67,8 +67,7 @@ namespace $ {
       }
       > div > svg {
         fill: var(${Theme.COLOR_BRAND});
-        transition: transform var(${Theme.ANIMATION_DURATION_150})
-          var(${Theme.ANIMATION_DURATION_150});
+        ${sharedValues.styles.transition[150]('transform')}
         height: 18px;
         width: 10px;
         ${mq.at992} {
@@ -83,8 +82,8 @@ namespace $ {
     `
     export namespace Profile {
       export const username = styled.span`
-        ${sharedValues.styles.fontFamily.spaceGrotesk};
-        font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
+        ${sharedValues.styles.fontFamily.plusJakartaSans};
+        ${sharedValues.styles.fontWeight.plusJakartaSans.medium};
         letter-spacing: ${logoTextLetterSpacing};
         color: var(${Theme.COLOR_BRAND});
         padding-left: 0.4em;
@@ -105,8 +104,8 @@ namespace $ {
     align-items: center;
     > span {
       color: var(${Theme.COLOR_BRAND});
-      ${sharedValues.styles.fontFamily.spaceGrotesk};
-      font-weight: var(${Theme.FONT_SPACE_GROTESK_WEIGHT_MEDIUM});
+      ${sharedValues.styles.fontFamily.plusJakartaSans};
+      ${sharedValues.styles.fontWeight.plusJakartaSans.medium};
       font-size: 22px;
       letter-spacing: ${logoTextLetterSpacing};
       padding-left: 0.3em;
@@ -123,8 +122,7 @@ namespace $ {
       fill: var(${Theme.COLOR_PRIMARY_800});
       height: 36px;
       width: auto;
-      transition: fill var(${Theme.ANIMATION_DURATION_150})
-        var(${Theme.TRANSITION_TIMING_FUNCTION});
+      ${sharedValues.styles.transition[150]('fill')}
       ${mq.at992} {
         height: 42px;
       }

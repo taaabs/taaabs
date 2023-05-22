@@ -1,3 +1,4 @@
+import { sharedValues } from '@/constants'
 import { Theme } from '@/styles/GlobalStyles'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
@@ -36,8 +37,7 @@ namespace $ {
       border-radius: 2px;
       background-color: var(${Theme.COLOR_BLACK});
       margin-top: 3px;
-      transition: all var(${Theme.ANIMATION_DURATION_300})
-        var(${Theme.TRANSITION_TIMING_FUNCTION});
+      ${sharedValues.styles.transition[300]('all')};
       :nth-of-type(1) {
         margin-top: 2.5px;
       }

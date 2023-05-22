@@ -73,7 +73,7 @@ namespace $ {
     > img {
       width: 100%;
       height: 100%;
-      transition: var(${Theme.TRANSITION_HOVER});
+      ${sharedValues.styles.transition[150]('all')};
       z-index: 0;
     }
   `

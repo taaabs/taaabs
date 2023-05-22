@@ -20,13 +20,15 @@ export const numeric = {
 export const TRANSPARENT_BACKGROUND_COLOR = 'rgba(255, 255, 255, 0.8)'
 export const BACKDROP_FILTER = 'saturate(180%) blur(5px)'
 
+export const miscellaneous = {}
+
 export const styles = {
   fontFamily: {
     inter: css`
-      font-family: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Twemoji Country Flags", "Segoe UI Emoji", "Segoe UI Symbol"';
+      font-family: 'Inter', sans-serif;
     `,
-    spaceGrotesk: css`
-      font-family: '"Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"';
+    plusJakartaSans: css`
+      font-family: 'Plus Jakarta Sans', sans-serif;
     `,
   },
   fontSize: {
@@ -70,6 +72,40 @@ export const styles = {
         font-size: 2rem;
       `,
     },
+  },
+  fontWeight: {
+    inter: {
+      medium: css`
+        font-weight: 500;
+      `,
+      semiBold: css`
+        font-weight: 600;
+      `,
+      bold: css`
+        font-weight: 700;
+      `,
+    },
+    plusJakartaSans: {
+      medium: css`
+        font-weight: 500;
+      `,
+      semiBold: css`
+        font-weight: 600;
+      `,
+      bold: css`
+        font-weight: 700;
+      `,
+    },
+  },
+  transition: {
+    150: (transitionProperty: string) =>
+      css`
+        transition: ${transitionProperty} 0.15s ease-in-out;
+      `,
+    300: (transitionProperty: string) =>
+      css`
+        transition: ${transitionProperty} 0.3s ease-in-out;
+      `,
   },
   iconSize: {
     20: css`

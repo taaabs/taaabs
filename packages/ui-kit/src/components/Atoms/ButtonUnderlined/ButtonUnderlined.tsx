@@ -44,7 +44,7 @@ namespace $ {
 
     return css`
       ${sharedValues.styles.fontSize[16].px}
-      font-weight: var(${Theme.FONT_WEIGHT_INTER_MEDIUM});
+      ${sharedValues.styles.fontWeight.inter.medium};
       display: inline-flex;
       height: 100%;
       width: 100%;
@@ -77,8 +77,7 @@ namespace $ {
         `};
       }
       ::before {
-        transition: background-color var(${Theme.ANIMATION_DURATION_150})
-          var(${Theme.TRANSITION_TIMING_FUNCTION});
+        ${sharedValues.styles.transition[150]('background-color')};
         position: absolute;
         content: '';
         width: 100%;

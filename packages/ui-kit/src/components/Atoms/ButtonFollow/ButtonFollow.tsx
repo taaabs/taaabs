@@ -38,7 +38,7 @@ namespace $ {
       }
     }
     span {
-      font-weight: var(${Theme.FONT_WEIGHT_INTER_MEDIUM});
+      ${sharedValues.styles.fontWeight.inter.medium};
     }
   `
 }
