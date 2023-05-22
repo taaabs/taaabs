@@ -1,1 +1,1 @@
-Taaabs - privacy first social bookmark manager
+Taaabs - blazing fast bookmark manager
