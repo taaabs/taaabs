@@ -1,4 +1,4 @@
-import { IsEmail, Length, MaxLength, MinLength } from 'class-validator'
+import { IsEmail, MaxLength, MinLength } from 'class-validator'
 import { SystemValues } from '../../../constants'
 import { ApiProperty } from '@nestjs/swagger'
 
