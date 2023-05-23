@@ -19,6 +19,7 @@ Pro
 - secret bookmarks
 - full text search
 - permanent library
+- website change notifications
 - 2FA
 
 cost: $4 monthly (billed annually) $5 (billed monthly), similar to todoist

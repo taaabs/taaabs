@@ -5,10 +5,10 @@ import Slideout from 'slideout'
 import { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@/constants'
-import { _AppBar } from './components/_AppBar'
+import { _MobileTitleBar } from './components/_MobileTitleBar'
 import { css } from '@emotion/react'
 
-export namespace Layout2ndApp {
+export namespace LayoutLibrary {
   export type Props = {
     slotSidebar: React.ReactNode
     slotMain: React.ReactNode
@@ -30,7 +30,7 @@ const useWindowWidth = () => {
   return width
 }
 
-export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
+export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
   const windowWidth = useWindowWidth()
   const [slideoutLeft, setSlideoutLeft] = useState<Slideout>()
   const [slideoutRight, setSlideoutRight] = useState<Slideout>()
@@ -150,37 +150,11 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
             isSlideoutLeftDefinetelyOpened && toggleLeftSlideout()
             isSlideoutRightDefinetelyOpened && toggleRightSlideout()
           }}
+          withBorders={
+            !isSlideoutLeftDefinetelyClosed || !isSlideoutRightDefinetelyClosed
+          }
         >
-          <$.Main.appBar>
-            <_AppBar
-              swipeLeftOnClick={
-                !isSlideoutLeftOpen ? toggleLeftSlideout : () => {}
-              }
-              swipeRightOnClick={
-                !isSlideoutRightOpen ? toggleRightSlideout : () => {}
-              }
-              isLeftOpen={isSlideoutLeftOpen}
-              isRightOpen={isSlideoutRightOpen}
-            >
-              <$.Main.AppBar.slot
-                isDimmed={
-                  isSlideoutLeftDefinetelyOpened ||
-                  isSlideoutRightDefinetelyOpened
-                }
-              >
-                {props.slotAppBar}
-              </$.Main.AppBar.slot>
-            </_AppBar>
-          </$.Main.appBar>
-
           <$.Main.inner
-            isDimmed={
-              isSlideoutLeftDefinetelyOpened || isSlideoutRightDefinetelyOpened
-            }
-            withBorders={
-              !isSlideoutLeftDefinetelyClosed ||
-              !isSlideoutRightDefinetelyClosed
-            }
             style={{
               pointerEvents:
                 !isSlideoutLeftDefinetelyClosed ||
@@ -189,6 +163,24 @@ export const Layout2ndApp: React.FC<Layout2ndApp.Props> = (props) => {
                   : 'all',
             }}
           >
+            <$.Main.Inner.mobileAlphaOverlay
+              isEnabled={
+                isSlideoutLeftDefinetelyOpened ||
+                isSlideoutRightDefinetelyOpened
+              }
+            />
+            <$.Main.Inner.mobileTitleBar>
+              <_MobileTitleBar
+                swipeLeftOnClick={
+                  !isSlideoutLeftOpen ? toggleLeftSlideout : () => {}
+                }
+                swipeRightOnClick={
+                  !isSlideoutRightOpen ? toggleRightSlideout : () => {}
+                }
+              >
+                {props.slotAppBar}
+              </_MobileTitleBar>
+            </$.Main.Inner.mobileTitleBar>
             <div>{props.slotMain}</div>
           </$.Main.inner>
         </$.main>
@@ -318,15 +310,40 @@ namespace $ {
       }
     }
   `
-  export const main = styled.div`
+  export const main = styled.div<{
+    withBorders: boolean
+  }>`
     ${mq.to992} {
       position: relative;
       z-index: 2;
       margin-top: ${sharedValues.numeric.headerMobile}px;
-      padding-top: ${sharedValues.numeric.appBar}px;
       padding-bottom: ${sharedValues.numeric.bottomNavigationBar}px;
       height: calc(100vh - ${sharedValues.numeric.headerMobile}px);
       background-color: var(${Theme.COLOR_NEUTRAL_25});
+      ${({ withBorders }) =>
+        withBorders &&
+        css`
+          ::before {
+            content: '';
+            width: 1px;
+            height: 100%;
+            background-color: var(${Theme.COLOR_BORDER_PRIMARY});
+            top: 0;
+            left: 0;
+            position: absolute;
+            z-index: 2;
+          }
+          ::after {
+            content: '';
+            width: 1px;
+            height: 100%;
+            background-color: var(${Theme.COLOR_BORDER_PRIMARY});
+            top: 0;
+            right: 0;
+            position: absolute;
+            z-index: 1;
+          }
+        `}
     }
     ${mq.at992} {
       flex: 1;
@@ -335,59 +352,56 @@ namespace $ {
     }
   `
   export namespace Main {
-    const dimmedOpacity = 0.4
-
-    export const appBar = styled.div`
-      position: absolute;
-      top: 0;
-      width: 100%;
-      ${mq.at992} {
-        display: none;
-      }
-    `
-    export namespace AppBar {
-      export const slot = styled.div<{ isDimmed: boolean }>`
-        opacity: ${({ isDimmed }) => (isDimmed ? dimmedOpacity : 1)};
-        ${sharedValues.styles.transition[300]('opacity')}
-      `
-    }
-    export const inner = styled.div<{
-      isDimmed: boolean
-      withBorders: boolean
-    }>`
+    export const inner = styled.div`
       ${mq.to992} {
         overflow: auto;
         height: 100%;
-        ${({ withBorders }) =>
-          withBorders &&
-          css`
-            ::before {
-              content: '';
-              width: 1px;
-              height: 100%;
-              background-color: var(${Theme.COLOR_BORDER_PRIMARY});
-              top: 0;
-              left: 0;
-              position: absolute;
-            }
-            ::after {
-              content: '';
-              width: 1px;
-              height: 100%;
-              background-color: var(${Theme.COLOR_BORDER_PRIMARY});
-              top: 0;
-              right: 0;
-              position: absolute;
-            }
-          `}
-        > div {
-          ${sharedValues.styles.transition[300]('opacity')};
-          opacity: ${({ isDimmed }) => (isDimmed ? dimmedOpacity : 1)};
+        ::before {
+          position: absolute;
+          content: '';
+          height: ${sharedValues.numeric.appBar}px;
+          width: 100%;
+          top: 0;
+          left: 0;
+          z-index: -1;
+          background-color: var(${Theme.HEADER_BACKGROUND});
         }
       }
       ${mq.at992} {
         min-height: calc(100vh - ${sharedValues.numeric.headerDesktop}px);
       }
     `
+    export namespace Inner {
+      export const mobileAlphaOverlay = styled.div<{ isEnabled: boolean }>`
+        ${mq.to992} {
+          pointer-events: none;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          background: var(${Theme.HEADER_BACKGROUND});
+          opacity: 0;
+          visibility: hidden;
+          z-index: 1;
+          ${sharedValues.styles.transition[300]('opacity')};
+          ${({ isEnabled }) =>
+            isEnabled &&
+            css`
+              opacity: 0.6;
+              visibility: visible;
+            `}
+        }
+      `
+      export const mobileTitleBar = styled.div`
+        ${mq.to992} {
+          position: sticky;
+          top: 0;
+          width: 100%;
+        }
+        ${mq.at992} {
+          display: none;
+        }
+      `
+    }
   }
 }

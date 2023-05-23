@@ -1,13 +1,13 @@
 import { Meta } from '@storybook/react'
-import { Layout2ndApp } from './Layout2ndApp'
+import { LayoutLibrary } from './LayoutLibrary'
 
 export default {
-  title: 'Layouts/Layout2ndApp',
-  component: Layout2ndApp,
+  title: 'Layouts/LayoutLibrary',
+  component: LayoutLibrary,
 } as Meta
 
 export const Standard = () => (
-  <Layout2ndApp
+  <LayoutLibrary
     slotSidebar={<>slot sidebar</>}
     slotMain={<>slot main</>}
     slotAside={<>slot aside</>}
@@ -15,8 +15,8 @@ export const Standard = () => (
   />
 )
 
-export const ScrollingTest = () => (
-  <Layout2ndApp
+export const Scrolling = () => (
+  <LayoutLibrary
     slotSidebar={<div>{lorem}</div>}
     slotMain={<>{lorem + lorem + lorem + lorem + lorem}</>}
     slotAside={<>{lorem}</>}
