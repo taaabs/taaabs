@@ -16,10 +16,12 @@ export class SpacesService {
   }): Promise<PublicSpaceDataResponseDto> {
     try {
       const collections =
-        await this._spacesRepository.publicCollectionsOnSpaceByUsernameAndSpaceSlug({
-          username,
-          slug,
-        })
+        await this._spacesRepository.publicCollectionsOnSpaceByUsernameAndSpaceSlug(
+          {
+            username,
+            slug,
+          },
+        )
 
       return {
         collections: collections.map((collection) => ({

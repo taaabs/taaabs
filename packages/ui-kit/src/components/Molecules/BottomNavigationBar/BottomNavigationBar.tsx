@@ -1,6 +1,7 @@
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/components/GlobalStyles'
+import { s } from '@/styles/constants'
 import { css } from '@emotion/react'
 
 export namespace BottomNavigationBar {
@@ -36,16 +37,13 @@ export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
       `}
     >
       <button onClick={props.onClickMyLibrary}>
-        <Ui.Atoms.Icon variant="LIBRARY" />
-      </button>
-      <button onClick={props.onClickNotifications}>
-        <Ui.Atoms.Icon variant="NOTIFICATIONS" />
-      </button>
-      <button onClick={props.onClickAdd}>
         <Ui.Atoms.Icon variant="ADD" />
       </button>
-      <button onClick={props.onClickSearch}>
+      <button onClick={props.onClickNotifications}>
         <Ui.Atoms.Icon variant="SEARCH" />
+      </button>
+      <button onClick={props.onClickAdd}>
+        <Ui.Atoms.Icon variant="NOTIFICATIONS" />
       </button>
       <button onClick={props.onClickUser}>
         <Ui.Atoms.Icon variant="USER" />

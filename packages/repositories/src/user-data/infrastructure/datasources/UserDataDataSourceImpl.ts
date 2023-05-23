@@ -7,7 +7,7 @@ export class UserDataDataSourceImpl implements UserDataDataSource {
 
   async getUserData(): Promise<UserDataDto> {
     const response: AxiosResponse<UserDataDto> = await this._axios.get(
-      `/v1/user-data`
+      `/v1/user-data`,
     )
 
     return response.data

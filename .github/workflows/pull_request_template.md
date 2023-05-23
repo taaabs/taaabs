@@ -4,12 +4,10 @@
 
 ## What is changed
 
-- 
+-
 
 ## Why is the change needed
 
-
-
 ## What is affected
 
-- 
+-

@@ -29,7 +29,6 @@ const Tab1: React.FC = () => {
           <IonToolbar>
             <IonTitle size="large">Tab 1</IonTitle>
           </IonToolbar>
-          
         </IonHeader>
         <ExploreContainer name="Tab 1 page" />
       </IonContent>

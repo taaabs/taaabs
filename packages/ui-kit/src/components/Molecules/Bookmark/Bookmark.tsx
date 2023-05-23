@@ -23,7 +23,7 @@ export namespace Bookmark {
   }
 }
 
-export const Bookmark: React.FC<Bookmark.Props> = (props) => {
+export const Bookmark: React.FC<Bookmark.Props> = () => {
   return <$.container>x</$.container>
 }
 

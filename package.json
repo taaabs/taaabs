@@ -3,7 +3,25 @@
   "private": true,
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "fix": "yarn fix:eslint && yarn fix:prettier",
+    "fix:eslint": "eslint --fix \"**/*.*\"",
+    "fix:prettier": "prettier --write \"**/*.*\"",
+    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "lint:eslint": "eslint \"**/*.*\"",
+    "lint:prettier": "prettier --check \"**/*.*\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.*": [
+      "eslint",
+      "prettier --write",
+      "git add"
+    ]
   },
   "devDependencies": {
     "jest": "^29.4.2"

@@ -23,9 +23,7 @@ export const HeaderMobile: React.FC<HeaderMobile.Props> = (props) => {
         <$.Right.theme onClick={props.onClickTheme}>
           <Icon variant="SUN" />
         </$.Right.theme>
-        <$.Right.hamburger onClick={props.onClickHamburger}>
-          <Ui.Atoms.Hamburger isToggled={props.hamburgerIsToggled} />
-        </$.Right.hamburger>
+        <$.Right.hamburger onClick={props.onClickHamburger}></$.Right.hamburger>
       </$.right>
     </$.container>
   )
