@@ -1,5 +1,5 @@
-export enum SystemValues {
-  USERNAME_MAX_LENGTH = 15,
-  USERNAME_MIN_LENGTH = 4,
-  PASSWORD_LENGTH = 64,
+export const systemValues = {
+  usernameMaxLength: 15,
+  usernameMinLength: 4,
+  passwordLength: 64,
 }

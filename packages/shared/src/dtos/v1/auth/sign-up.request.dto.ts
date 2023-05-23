@@ -1,17 +1,17 @@
 import { IsEmail, MaxLength, MinLength } from 'class-validator'
-import { SystemValues } from '../../../constants'
+import { systemValues } from '../../../constants'
 import { ApiProperty } from '@nestjs/swagger'
 
 export class SignUp_Request_Dto {
-  @MaxLength(SystemValues.USERNAME_MAX_LENGTH)
-  @MinLength(SystemValues.USERNAME_MIN_LENGTH)
+  @MaxLength(systemValues.usernameMaxLength)
+  @MinLength(systemValues.usernameMinLength)
   username!: string
 
   @IsEmail()
   email!: string
 
-  @MinLength(SystemValues.PASSWORD_LENGTH)
-  @MaxLength(SystemValues.PASSWORD_LENGTH)
+  @MinLength(systemValues.passwordLength)
+  @MaxLength(systemValues.passwordLength)
   @ApiProperty({
     description:
       'Passwords sent over the network are SHA256 hashes made of concatenated email and password',
