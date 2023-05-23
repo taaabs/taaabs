@@ -1,24 +1,19 @@
 import { sharedValues } from '@/constants'
-import { Ui } from '@/index'
 import { Theme } from '@/styles/GlobalStyles'
 import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 
-export namespace Layout2ndLanding {
+export namespace LayoutLanding {
   export type Props = {
     children: React.ReactNode
-    slotFooter: React.ReactNode
   }
 }
 
-export const Layout2ndLanding: React.FC<Layout2ndLanding.Props> = (props) => {
+export const LayoutLanding: React.FC<LayoutLanding.Props> = (props) => {
   return (
     <>
       <$.headerSpacer />
       <$.content>{props.children}</$.content>
-      <$.footer>
-        <Ui.Atoms.Wrapper>{props.slotFooter}</Ui.Atoms.Wrapper>
-      </$.footer>
     </>
   )
 }
@@ -52,7 +47,4 @@ namespace $ {
       align-items: center;
     `
   }
-  export const footer = styled.footer`
-    border-top: var(${Theme.BORDER_PRIMARY});
-  `
 }
