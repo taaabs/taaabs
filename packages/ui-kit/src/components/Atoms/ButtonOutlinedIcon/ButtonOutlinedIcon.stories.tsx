@@ -1,14 +1,12 @@
-import { Meta } from '@storybook/react'
 import { ButtonOutlinedIcon } from './ButtonOutlinedIcon'
 import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
 
 export default {
-  title: 'Atoms/ButtonOutlinedIcon',
   component: ButtonOutlinedIcon,
-} as Meta
+}
 
-export const standard = () => (
+export const Primary = () => (
   <StorybookMargin>
     <ButtonOutlinedIcon iconVariant="ADD" onClick={() => {}} />
     <StorybookSpacer />

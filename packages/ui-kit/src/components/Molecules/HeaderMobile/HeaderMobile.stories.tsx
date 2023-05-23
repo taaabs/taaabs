@@ -1,13 +1,11 @@
-import { Meta } from '@storybook/react'
 import { HeaderMobile } from './HeaderMobile'
 import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
 
 export default {
-  title: 'Molecules/HeaderMobile',
   component: HeaderMobile,
-} as Meta
+}
 
-export const standard = () => (
+export const Primary = () => (
   <div css={{ maxWidth: '400px', width: '100%' }}>
     <HeaderMobile
       hamburgerIsToggled={false}

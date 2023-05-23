@@ -319,8 +319,7 @@ namespace $ {
       margin-top: ${sharedValues.headerMobile}px;
       height: calc(
         100svh -
-          ${sharedValues.headerMobile +
-          sharedValues.bottomNavigationBar}px
+          ${sharedValues.headerMobile + sharedValues.bottomNavigationBar}px
       );
       background-color: var(${Theme.COLOR_NEUTRAL_25});
       ${({ withBorders }) =>

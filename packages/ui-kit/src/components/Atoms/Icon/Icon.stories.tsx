@@ -1,12 +1,10 @@
 import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
-import { Meta } from '@storybook/react'
 import { Icon } from './Icon'
 
 export default {
-  title: 'Atoms/Icon',
   component: Icon,
-} as Meta
+}
 
 export const Icons = () => (
   <StorybookMargin>

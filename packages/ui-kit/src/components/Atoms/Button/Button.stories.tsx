@@ -1,14 +1,12 @@
 import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
-import { Meta, Story } from '@storybook/react'
 import { Button } from './Button'
 
 export default {
-  title: 'Atoms/Button',
   component: Button,
-} as Meta
+}
 
-export const sizes: Story = () => (
+export const Primary = () => (
   <StorybookMargin>
     Small:
     <br />

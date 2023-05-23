@@ -49,7 +49,7 @@ module.exports = {
       },
       // https://github.com/storybookjs/storybook/issues/18920
       define: {
-        'process.env': {}, 
+        'process.env': {},
       },
     }
   },

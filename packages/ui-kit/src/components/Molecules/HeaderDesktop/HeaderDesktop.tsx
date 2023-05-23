@@ -2,7 +2,6 @@ import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import styled from '@emotion/styled'
 import { LogoForHeader } from '../../Atoms/LogoForHeader'
-import { ButtonFollow } from '@/components/Atoms'
 import { Theme } from '@/styles/components/GlobalStyles'
 import { s } from '@/styles/constants'
 
@@ -48,7 +47,6 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
         <$.top>
           <$.Top.left>
             <LogoForHeader user={props.viewedUser} />
-            <ButtonFollow onClick={() => {}}>Follow</ButtonFollow>
           </$.Top.left>
           <$.Top.right>
             <$.Top.Right.nav>

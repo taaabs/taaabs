@@ -6,6 +6,12 @@
     "build-storybook": "storybook build",
     "test": "jest",
     "test:watch": "jest --watch",
+    "fix": "yarn fix:eslint && yarn fix:prettier",
+    "fix:eslint": "eslint --fix \"**/*.*\"",
+    "fix:prettier": "prettier --write \"**/*.*\"",
+    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "lint:eslint": "eslint \"**/*.*\"",
+    "lint:prettier": "prettier --check \"**/*.*\"",
     "find-deadcode": "ts-prune"
   },
   "dependencies": {

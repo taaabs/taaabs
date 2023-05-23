@@ -1,12 +1,10 @@
 import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
-import { Meta } from '@storybook/react'
 import { HeaderDesktop } from './HeaderDesktop'
 
 export default {
-  title: 'Molecules/HeaderDesktop',
   component: HeaderDesktop,
-} as Meta
+}
 
 const navItemsLoggedInUser: HeaderDesktop.Navigation = [
   { label: 'My Library', href: '/', isActive: true },
@@ -14,7 +12,7 @@ const navItemsLoggedInUser: HeaderDesktop.Navigation = [
   { label: 'Explore', href: '/explore', isActive: false },
 ]
 
-export const standard = () => (
+export const Primary = () => (
   <StorybookMargin>
     Guest:
     <StorybookSpacer />

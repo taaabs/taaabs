@@ -1,14 +1,12 @@
 import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
-import { Meta } from '@storybook/react'
 import { ButtonUnderlined } from './ButtonUnderlined'
 
 export default {
-  title: 'Atoms/ButtonUnderlined',
   component: ButtonUnderlined,
-} as Meta
+}
 
-export const standard = () => (
+export const Primary = () => (
   <StorybookMargin>
     <Wrapper>
       <ButtonUnderlined isActive={true} href="/">
