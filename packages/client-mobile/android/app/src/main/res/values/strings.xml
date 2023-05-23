@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">photo-gallery</$tring>
-    <string name="title_activity_main">photo-gallery</$tring>
-    <string name="package_name">io.ionic.starter</$tring>
-    <string name="custom_url_scheme">io.ionic.starter</$tring>
-</resources>
