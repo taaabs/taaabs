@@ -39,6 +39,7 @@ namespace $ {
     padding-left: ${sharedValues.numeric.spacer[16]}px;
     border-bottom: var(${Theme.BORDER_PRIMARY});
     height: ${sharedValues.numeric.headerMobile}px;
+    background-color: var(${Theme.HEADER_BACKGROUND});
   `
   export const right = styled.div`
     display: flex;

@@ -20,9 +20,9 @@ export const LayoutRoot: React.FC<LayoutRoot.Props> = (props) => {
       </$.header>
       {props.children}
       <$.footerDesktop>{props.slotFooterDesktop}</$.footerDesktop>
-      <$.bottomNavigationBar>
+      <$.mobileBottomNavigationBar>
         {props.slotBottomNavigationBar}
-      </$.bottomNavigationBar>
+      </$.mobileBottomNavigationBar>
     </>
   )
 }
@@ -50,7 +50,7 @@ namespace $ {
       display: none;
     }
   `
-  export const bottomNavigationBar = styled.div`
+  export const mobileBottomNavigationBar = styled.div`
     position: fixed;
     bottom: 0;
     width: 100%;

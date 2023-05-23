@@ -317,8 +317,11 @@ namespace $ {
       position: relative;
       z-index: 2;
       margin-top: ${sharedValues.numeric.headerMobile}px;
-      padding-bottom: ${sharedValues.numeric.bottomNavigationBar}px;
-      height: calc(100vh - ${sharedValues.numeric.headerMobile}px);
+      height: calc(
+        100svh -
+          ${sharedValues.numeric.headerMobile +
+          sharedValues.numeric.bottomNavigationBar}px
+      );
       background-color: var(${Theme.COLOR_NEUTRAL_25});
       ${({ withBorders }) =>
         withBorders &&
