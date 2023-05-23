@@ -1,5 +1,5 @@
 import { sharedValues } from '@/constants'
-import { mq } from '@/styles/mediaQueries'
+import { mq } from '@/styles/constants'
 import styled from '@emotion/styled'
 
 type MarginProps = {
@@ -12,9 +12,9 @@ export const StorybookMargin: React.FC<MarginProps> = ({ children }) => {
 
 namespace $ {
   export const container = styled.div`
-    margin: ${sharedValues.numeric.spacer[16]}px;
+    margin: ${sharedValues.spacer[16]}px;
     ${mq.at768} {
-      margin: ${sharedValues.numeric.spacer[40]}px;
+      margin: ${sharedValues.spacer[40]}px;
     }
   `
 }

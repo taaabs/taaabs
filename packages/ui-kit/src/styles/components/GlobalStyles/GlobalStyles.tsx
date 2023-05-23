@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
-import { mq } from './mediaQueries'
-import { colors, sharedValues } from '@/constants'
+import { mq } from '../../constants/mediaQueries'
+import { colors, s } from '@/styles/constants'
 
 export const enum Theme {
   COLOR_WHITE = '--color-white',
@@ -80,7 +80,7 @@ export const globalStyles = css`
   }
 
   body {
-    ${sharedValues.styles.fontFamily.inter};
+    ${s.fontFamily.inter};
     line-height: 1.5;
     font-size: 1.5rem;
     color: var(${Theme.COLOR_TEXT_NORMAL});
@@ -106,7 +106,7 @@ export const globalStyles = css`
 
   a,
   button {
-    ${sharedValues.styles.transition[150]('all')}
+    ${s.transition[150]('all')}
   }
 
   ol,

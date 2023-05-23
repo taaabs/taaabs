@@ -1,5 +1,5 @@
-import { sharedValues } from '@/constants'
-import { Theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/components/GlobalStyles'
+import { s } from '@/styles/constants'
 import { css, SerializedStyles } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
@@ -20,27 +20,27 @@ export namespace Button {
 export const Button: React.FC<Button.Props> = (props) => {
   if (props.type == 'submit') {
     return (
-      <$.Button size={props.size} type="submit">
+      <$.button size={props.size} type="submit">
         {props.children}
-      </$.Button>
+      </$.button>
     )
   } else if (props.href != undefined) {
     return (
-      <$.NextLink size={props.size} href={props.href} onClick={props.onClick}>
+      <$.nextLink size={props.size} href={props.href} onClick={props.onClick}>
         {props.children}
-      </$.NextLink>
+      </$.nextLink>
     )
   } else if (props.onClick != undefined) {
     return (
-      <$.Button size={props.size} onClick={props.onClick}>
+      <$.button size={props.size} onClick={props.onClick}>
         {props.children}
-      </$.Button>
+      </$.button>
     )
   } else {
     return (
-      <$.Button size={props.size} disabled>
+      <$.button size={props.size} disabled>
         {props.children}
-      </$.Button>
+      </$.button>
     )
   }
 }
@@ -51,7 +51,7 @@ namespace $ {
     align-items: center;
     color: var(${Theme.COLOR_WHITE});
     background: var(${Theme.COLOR_BRAND});
-    ${sharedValues.styles.fontWeight.inter.medium};
+    ${s.fontWeight.inter.medium};
     &:hover {
       background: var(${Theme.COLOR_PRIMARY_900});
     }
@@ -61,32 +61,32 @@ namespace $ {
   }
   const sizeMap: SizeMap = {
     small: css`
-      ${sharedValues.styles.buttonHeight[34]};
-      ${sharedValues.styles.fontSize[15].px};
+      ${s.buttonHeight[34]};
+      ${s.fontSize[15].px};
       padding: 0 10px;
-      ${sharedValues.styles.borderRadius[8]}
+      ${s.borderRadius[8]}
     `,
     default: css`
-      ${sharedValues.styles.buttonHeight[40]};
-      ${sharedValues.styles.fontSize[16].px};
+      ${s.buttonHeight[40]};
+      ${s.fontSize[16].px};
       padding: 0 14px;
-      ${sharedValues.styles.borderRadius[10]}
+      ${s.borderRadius[10]}
     `,
     large: css`
-      ${sharedValues.styles.buttonHeight[46]};
+      ${s.buttonHeight[46]};
       padding: 0 18px;
-      ${sharedValues.styles.borderRadius[12]}
-      ${sharedValues.styles.fontSize[17].px};
+      ${s.borderRadius[12]}
+      ${s.fontSize[17].px};
     `,
   }
 
   type ButtonProps = Pick<Button.Props, 'size'>
 
-  export const Button = styled.button<ButtonProps>`
+  export const button = styled.button<ButtonProps>`
     ${buttonBase}
     ${({ size = 'default' }) => sizeMap[size]}
   `
-  export const NextLink = styled(Link)<ButtonProps>`
+  export const nextLink = styled(Link)<ButtonProps>`
     ${buttonBase}
     ${({ size = 'default' }) => sizeMap[size]}
   `

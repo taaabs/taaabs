@@ -1,6 +1,7 @@
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
-import { Theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/components/GlobalStyles'
+import { s } from '@/styles/constants'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
@@ -19,14 +20,14 @@ export const _MobileTitleBar: React.FC<_MobileTitleBar.Props> = (props) => {
         onClick={props.swipeLeftOnClick}
         isVisible={props.swipeLeftOnClick != undefined}
       >
-        <Ui.Atoms.Icon variant={'SWIPE_LEFT'} />
+        <Ui.Atoms.Icon variant={'MOBILE_TITLE_BAR_MENU'} />
       </$.swipe>
       <$.content>{props.children}</$.content>
       <$.swipe
         onClick={props.swipeRightOnClick}
         isVisible={props.swipeRightOnClick != undefined}
       >
-        <Ui.Atoms.Icon variant={'SWIPE_RIGHT'} />
+        <Ui.Atoms.Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
       </$.swipe>
     </$.container>
   )
@@ -37,15 +38,15 @@ namespace $ {
     border-bottom: var(${Theme.BORDER_PRIMARY});
     display: flex;
     justify-content: space-between;
-    height: ${sharedValues.numeric.appBar}px;
+    height: ${sharedValues.appBar}px;
     background-color: var(${Theme.HEADER_TRANSPARENT_BACKGROUND});
-    ${sharedValues.styles.backdropFilter.desktopHeader}
+    ${s.backdropFilter.desktopHeader}
   `
   export const swipe = styled.button<{ isVisible: boolean }>`
     display: flex;
     align-items: center;
     height: 100%;
-    padding: 0 ${sharedValues.numeric.spacer[16]}px;
+    padding: 0 ${sharedValues.spacer[16]}px;
     ${({ isVisible }) =>
       !isVisible &&
       css`
@@ -53,7 +54,7 @@ namespace $ {
         visibility: hidden;
       `}
     > div > svg {
-      ${sharedValues.styles.iconSize[24]}
+      ${s.iconSize[24]}
     }
   `
   export const content = styled.div`

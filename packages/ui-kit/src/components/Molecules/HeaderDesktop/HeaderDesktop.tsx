@@ -1,9 +1,10 @@
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
-import { Theme } from '@/styles/GlobalStyles'
 import styled from '@emotion/styled'
 import { LogoForHeader } from '../../Atoms/LogoForHeader'
 import { ButtonFollow } from '@/components/Atoms'
+import { Theme } from '@/styles/components/GlobalStyles'
+import { s } from '@/styles/constants'
 
 export namespace HeaderDesktop {
   export type Navigation = Array<{
@@ -84,8 +85,8 @@ namespace $ {
   export const container = styled.div`
     border-bottom: var(${Theme.BORDER_PRIMARY});
     background-color: var(${Theme.HEADER_TRANSPARENT_BACKGROUND});
-    ${sharedValues.styles.backdropFilter.desktopHeader}
-    height: ${sharedValues.numeric.headerDesktop}px;
+    ${s.backdropFilter.desktopHeader}
+    height: ${sharedValues.headerDesktop}px;
     > div {
       height: 100%;
     }
@@ -100,13 +101,13 @@ namespace $ {
     export const right = styled.div`
       display: flex;
       align-items: center;
-      gap: ${sharedValues.numeric.spacer[8]}px;
+      gap: ${sharedValues.spacer[8]}px;
       height: 100%;
     `
     export const left = styled.div`
       display: flex;
       align-items: center;
-      gap: ${sharedValues.numeric.spacer[20]}px;
+      gap: ${sharedValues.spacer[20]}px;
     `
     export namespace Right {
       export const nav = styled.nav`

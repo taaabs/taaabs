@@ -1,10 +1,9 @@
 import styled from '@emotion/styled'
 import { Icon } from '../Icon'
-import { Theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/components/GlobalStyles'
 import { Ui } from '@/index'
 import { Blurhash } from 'react-blurhash'
-import { mq } from '@/styles/mediaQueries'
-import { sharedValues } from '@/constants'
+import { mq, s } from '@/styles/constants'
 
 export namespace ButtonOutlinedIcon {
   export type Props = {
@@ -48,9 +47,9 @@ namespace $ {
     border: var(${Theme.BORDER_SECONDARY});
     overflow: hidden;
     position: relative;
-    ${sharedValues.styles.buttonSize[34]}
+    ${s.buttonSize[34]}
     ${mq.at992} {
-      ${sharedValues.styles.buttonSize[40]}
+      ${s.buttonSize[40]}
     }
     @media (hover: hover) {
       :hover {
@@ -73,7 +72,7 @@ namespace $ {
     > img {
       width: 100%;
       height: 100%;
-      ${sharedValues.styles.transition[150]('all')};
+      ${s.transition[150]('all')};
       z-index: 0;
     }
   `

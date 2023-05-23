@@ -1,6 +1,5 @@
-import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
-import { mq } from '@/styles/mediaQueries'
+import { mq, s } from '@/styles/constants'
 import { css } from '@emotion/react'
 
 export type HeroProps = {
@@ -28,7 +27,7 @@ const container = css`
   }
   & h1 {
     font-size: 4rem;
-    ${sharedValues.styles.fontFamily.plusJakartaSans};
+    ${s.fontFamily.plusJakartaSans};
     line-height: 1.1;
     font-weight: normal;
     ${mq.at768} {

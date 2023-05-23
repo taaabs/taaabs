@@ -1,5 +1,6 @@
 import { sharedValues } from '@/constants'
-import { Theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/components/GlobalStyles'
+import { s } from '@/styles/constants'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
@@ -43,14 +44,14 @@ namespace $ {
     const underlineHeight = 2.5
 
     return css`
-      ${sharedValues.styles.fontSize[16].px}
-      ${sharedValues.styles.fontWeight.inter.medium};
+      ${s.fontSize[16].px}
+      ${s.fontWeight.inter.medium};
       display: inline-flex;
       height: 100%;
       width: 100%;
       align-items: center;
       justify-content: center;
-      padding: 0 ${sharedValues.numeric.spacer[16]}px;
+      padding: 0 ${sharedValues.spacer[16]}px;
       position: relative;
       span {
         height: 100%;
@@ -77,7 +78,7 @@ namespace $ {
         `};
       }
       ::before {
-        ${sharedValues.styles.transition[150]('background-color')};
+        ${s.transition[150]('background-color')};
         position: absolute;
         content: '';
         width: 100%;

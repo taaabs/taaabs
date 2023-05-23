@@ -1,4 +1,4 @@
-import { mq } from '@/styles/mediaQueries'
+import { mq } from '@/styles/constants'
 import { css, SerializedStyles } from '@emotion/react'
 import styled from '@emotion/styled'
 

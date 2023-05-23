@@ -1,4 +1,4 @@
-import { globalStyles } from '@/styles/GlobalStyles'
+import { globalStyles } from '@/styles/components/GlobalStyles'
 import { Global } from '@emotion/react'
 
 interface ThemeWithGlobalStylesProps {

@@ -1,7 +1,7 @@
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
-import { Theme } from '@/styles/GlobalStyles'
-import { mq } from '@/styles/mediaQueries'
+import { Theme } from '@/styles/components/GlobalStyles'
+import { mq, s } from '@/styles/constants'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 
@@ -53,12 +53,12 @@ namespace $ {
     export const backArrow = styled(Link)`
       display: flex;
       align-items: center;
-      padding-right: ${sharedValues.numeric.spacer[24]}px;
-      padding-left: ${sharedValues.numeric.spacer[16]}px;
-      margin-left: calc(${sharedValues.numeric.spacer[16]}px * -1);
-      ${sharedValues.styles.buttonHeight[34]}
+      padding-right: ${sharedValues.spacer[24]}px;
+      padding-left: ${sharedValues.spacer[16]}px;
+      margin-left: calc(${sharedValues.spacer[16]}px * -1);
+      ${s.buttonHeight[34]}
       ${mq.at992} {
-        ${sharedValues.styles.buttonHeight[40]}
+        ${s.buttonHeight[40]}
       }
       @media (hover: hover) {
         :hover > div > svg {
@@ -67,7 +67,7 @@ namespace $ {
       }
       > div > svg {
         fill: var(${Theme.COLOR_BRAND});
-        ${sharedValues.styles.transition[150]('transform')}
+        ${s.transition[150]('transform')}
         height: 18px;
         width: 10px;
         ${mq.at992} {
@@ -82,8 +82,8 @@ namespace $ {
     `
     export namespace Profile {
       export const username = styled.span`
-        ${sharedValues.styles.fontFamily.plusJakartaSans};
-        ${sharedValues.styles.fontWeight.plusJakartaSans.medium};
+        ${s.fontFamily.plusJakartaSans};
+        ${s.fontWeight.plusJakartaSans.medium};
         letter-spacing: ${logoTextLetterSpacing};
         color: var(${Theme.COLOR_BRAND});
         padding-left: 0.4em;
@@ -104,8 +104,8 @@ namespace $ {
     align-items: center;
     > span {
       color: var(${Theme.COLOR_BRAND});
-      ${sharedValues.styles.fontFamily.plusJakartaSans};
-      ${sharedValues.styles.fontWeight.plusJakartaSans.medium};
+      ${s.fontFamily.plusJakartaSans};
+      ${s.fontWeight.plusJakartaSans.medium};
       font-size: 22px;
       letter-spacing: ${logoTextLetterSpacing};
       padding-left: 0.3em;
@@ -122,7 +122,7 @@ namespace $ {
       fill: var(${Theme.COLOR_PRIMARY_800});
       height: 36px;
       width: auto;
-      ${sharedValues.styles.transition[150]('fill')}
+      ${s.transition[150]('fill')}
       ${mq.at992} {
         height: 42px;
       }

@@ -1,7 +1,7 @@
 import { Icon, LogoForHeader } from '@/components/Atoms'
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
-import { Theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/components/GlobalStyles'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
@@ -36,9 +36,9 @@ namespace $ {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: ${sharedValues.numeric.spacer[16]}px;
+    padding-left: ${sharedValues.spacer[16]}px;
     border-bottom: var(${Theme.BORDER_PRIMARY});
-    height: ${sharedValues.numeric.headerMobile}px;
+    height: ${sharedValues.headerMobile}px;
     background-color: var(${Theme.HEADER_BACKGROUND});
   `
   export const right = styled.div`
@@ -47,14 +47,14 @@ namespace $ {
   `
   export namespace Right {
     const baseButton = css`
-      height: ${sharedValues.numeric.headerMobile}px;
+      height: ${sharedValues.headerMobile}px;
       display: flex;
       align-items: center;
       justify-content: center;
     `
     export const theme = styled.button`
       ${baseButton}
-      padding: 0 ${sharedValues.numeric.spacer[8]}px;
+      padding: 0 ${sharedValues.spacer[8]}px;
       > div > svg {
         height: 24px;
         width: 24px;
@@ -62,8 +62,8 @@ namespace $ {
     `
     export const hamburger = styled.button`
       ${baseButton}
-      padding-right: ${sharedValues.numeric.spacer[16]}px;
-      padding-left: ${sharedValues.numeric.spacer[8]}px;
+      padding-right: ${sharedValues.spacer[16]}px;
+      padding-left: ${sharedValues.spacer[8]}px;
     `
   }
 }

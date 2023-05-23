@@ -1,6 +1,6 @@
 import { StorybookMargin } from '@/helpers/storybook/StorybookMargin'
 import { StorybookSpacer } from '@/helpers/storybook/StorybookSpacer'
-import { Meta, Story } from '@storybook/react'
+import { Meta } from '@storybook/react'
 import { Icon } from './Icon'
 
 export default {
@@ -8,49 +8,25 @@ export default {
   component: Icon,
 } as Meta
 
-export const icons: Story = () => (
+export const Icons = () => (
   <StorybookMargin>
-    <Icon variant={'ACTIVITY'} />
+    <Icon variant={'ADD'} />
     <StorybookSpacer />
-    <Icon variant={'ALIAS'} />
-    <StorybookSpacer />
-    <Icon variant={'ARCHIVE'} />
-    <StorybookSpacer />
-    <Icon variant={'COLLECTION_FILLED'} />
-    <StorybookSpacer />
-    <Icon variant={'COLLECTION'} />
+    <Icon variant={'BOOKMARK'} />
     <StorybookSpacer />
     <Icon variant={'GREATER_THAN'} />
     <StorybookSpacer />
-    <Icon variant={'HOME_FILLED'} />
+    <Icon variant={'MOBILE_TITLE_BAR_MENU'} />
     <StorybookSpacer />
-    <Icon variant={'HOME'} />
-    <StorybookSpacer />
-    <Icon variant={'PIN'} />
+    <Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
     <StorybookSpacer />
     <Icon variant={'SEARCH'} />
-    <StorybookSpacer />
-    <Icon variant={'RECENT_FILLED'} />
-    <StorybookSpacer />
-    <Icon variant={'RECENT'} />
-    <StorybookSpacer />
-    <Icon variant={'SORT'} />
     <StorybookSpacer />
     <Icon variant={'STAR_FILLED'} />
     <StorybookSpacer />
     <Icon variant={'STAR'} />
     <StorybookSpacer />
     <Icon variant={'SUN'} />
-    <StorybookSpacer />
-    <Icon variant={'TRASH'} />
-    <StorybookSpacer />
-    <Icon variant={'LIKE'} />
-    <StorybookSpacer />
-    <Icon variant={'LIKE_FILLED'} />
-    <StorybookSpacer />
-    <Icon variant={'SWIPE_LEFT'} />
-    <StorybookSpacer />
-    <Icon variant={'SWIPE_RIGHT'} />
     <StorybookSpacer />
     <Icon variant={'USER_ADD'} />
     <StorybookSpacer />

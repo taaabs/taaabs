@@ -1,6 +1,5 @@
-import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
-import { mq } from '@/styles/mediaQueries'
+import { mq, s } from '@/styles/constants'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
@@ -71,6 +70,6 @@ namespace $ {
   `
   export const ThirdLine = styled.div`
     ${base}
-    ${sharedValues.styles.fontFamily.plusJakartaSans};
+    ${s.fontFamily.plusJakartaSans};
   `
 }

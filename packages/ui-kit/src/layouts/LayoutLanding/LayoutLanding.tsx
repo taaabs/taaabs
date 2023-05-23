@@ -1,6 +1,6 @@
 import { sharedValues } from '@/constants'
-import { Theme } from '@/styles/GlobalStyles'
-import { mq } from '@/styles/mediaQueries'
+import { Theme } from '@/styles/components/GlobalStyles'
+import { mq } from '@/styles/constants'
 import styled from '@emotion/styled'
 
 export namespace LayoutLanding {
@@ -24,9 +24,9 @@ namespace $ {
     top: 0;
     width: 100%;
     background-color: var(${Theme.COLOR_WHITE});
-    height: ${sharedValues.numeric.headerMobile}px;
+    height: ${sharedValues.headerMobile}px;
     ${mq.at992} {
-      height: ${sharedValues.numeric.headerDesktop}px;
+      height: ${sharedValues.headerDesktop}px;
     }
   `
   export const content = styled.div`
@@ -42,7 +42,7 @@ namespace $ {
       z-index: 100;
       background-color: rgba(255, 255, 255, 0.8);
       backdrop-filter: saturate(180%) blur(5%);
-      height: ${sharedValues.numeric.headerDesktop}px;
+      height: ${sharedValues.headerDesktop}px;
       display: flex;
       align-items: center;
     `

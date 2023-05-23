@@ -3,7 +3,7 @@ Free
 - unlimited bookmarks
 - ads
 
-Enthusiast
+Pro
 
 - date range selector
 - nsfw exclusive/excluded filter
@@ -11,18 +11,19 @@ Enthusiast
 - access to copies of popular urls
 - presets
 - no ads
+- encrypted bookmarks
+- related tags counts
 
 cost: $10 yearly
 
-Pro
+Archiving
 
-- secret bookmarks
 - full text search
 - permanent library
-- website change notifications
+- be notified when a website updates
 - 2FA
 
-cost: $4 monthly (billed annually) $5 (billed monthly), similar to todoist
+cost: $40 yearly (billed annually) $5 (billed monthly), similar to todoist
 
 Business/teams
 

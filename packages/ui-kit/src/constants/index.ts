@@ -1,2 +1,1 @@
-export * as sharedValues from './shared-values'
-export * from './colors'
+export * from './shared-values'

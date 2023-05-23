@@ -1,6 +1,6 @@
 import { sharedValues } from '@/constants'
 
-const breakpoints = [576, 768, 992, 1200, sharedValues.numeric.siteMaxWidth]
+const breakpoints = [576, 768, 992, 1200, sharedValues.siteMaxWidth]
 
 export const mq = {
   at576: `@media (min-width: ${breakpoints[0]}px)`,

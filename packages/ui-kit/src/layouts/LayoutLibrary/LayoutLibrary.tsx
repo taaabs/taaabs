@@ -1,5 +1,3 @@
-import { Theme } from '@/styles/GlobalStyles'
-import { mq } from '@/styles/mediaQueries'
 import styled from '@emotion/styled'
 import Slideout from 'slideout'
 import { useEffect, useRef, useLayoutEffect, useState } from 'react'
@@ -7,6 +5,8 @@ import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@/constants'
 import { _MobileTitleBar } from './components/_MobileTitleBar'
 import { css } from '@emotion/react'
+import { mq, s } from '@/styles/constants'
+import { Theme } from '@/styles/components/GlobalStyles'
 
 export namespace LayoutLibrary {
   export type Props = {
@@ -193,7 +193,7 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
           <$.Aside.inner>
             {windowWidth && windowWidth >= 992 ? (
               <>
-                <StickyBox offsetTop={sharedValues.numeric.headerDesktop}>
+                <StickyBox offsetTop={sharedValues.headerDesktop}>
                   {props.slotAside}
                 </StickyBox>
               </>
@@ -219,14 +219,14 @@ namespace $ {
       width: ${({ width }) => width}px;
       z-index: 0;
       display: none;
-      padding-top: ${sharedValues.numeric.headerMobile}px;
-      padding-bottom: ${sharedValues.numeric.bottomNavigationBar}px;
+      padding-top: ${sharedValues.headerMobile}px;
+      padding-bottom: ${sharedValues.bottomNavigationBar}px;
     }
     ${mq.at992} {
       position: sticky;
-      height: calc(100vh - ${sharedValues.numeric.headerDesktop}px);
+      height: calc(100vh - ${sharedValues.headerDesktop}px);
       width: 100%;
-      top: ${sharedValues.numeric.headerDesktop}px;
+      top: ${sharedValues.headerDesktop}px;
       overflow: auto;
     }
   `
@@ -248,11 +248,11 @@ namespace $ {
       width: ${({ width }) => width}px;
       height: 100vh;
       display: none;
-      padding-top: ${sharedValues.numeric.headerMobile}px;
-      padding-bottom: ${sharedValues.numeric.bottomNavigationBar}px;
+      padding-top: ${sharedValues.headerMobile}px;
+      padding-bottom: ${sharedValues.bottomNavigationBar}px;
     }
     ${mq.at992} {
-      margin-top: ${sharedValues.numeric.headerDesktop}px;
+      margin-top: ${sharedValues.headerDesktop}px;
     }
   `
   export namespace Aside {
@@ -284,18 +284,18 @@ namespace $ {
     ${mq.at992} {
       display: flex;
       width: 100%;
-      max-width: ${sharedValues.numeric.siteMaxWidth}px;
+      max-width: ${sharedValues.siteMaxWidth}px;
       margin: 0 auto;
-      padding: 0 ${sharedValues.numeric.spacer[16]}px;
+      padding: 0 ${sharedValues.spacer[16]}px;
       ${mq.at1200} {
-        padding: 0 ${sharedValues.numeric.spacer[40]}px;
+        padding: 0 ${sharedValues.spacer[40]}px;
       }
       ::before {
         top: 0;
         left: 0;
         width: 100vw;
         content: '';
-        height: ${sharedValues.numeric.headerDesktop}px;
+        height: ${sharedValues.headerDesktop}px;
         background: var(${Theme.HEADER_BACKGROUND});
         position: fixed;
       }
@@ -316,11 +316,11 @@ namespace $ {
     ${mq.to992} {
       position: relative;
       z-index: 2;
-      margin-top: ${sharedValues.numeric.headerMobile}px;
+      margin-top: ${sharedValues.headerMobile}px;
       height: calc(
         100svh -
-          ${sharedValues.numeric.headerMobile +
-          sharedValues.numeric.bottomNavigationBar}px
+          ${sharedValues.headerMobile +
+          sharedValues.bottomNavigationBar}px
       );
       background-color: var(${Theme.COLOR_NEUTRAL_25});
       ${({ withBorders }) =>
@@ -351,7 +351,7 @@ namespace $ {
     ${mq.at992} {
       flex: 1;
       transform: translateX(0px) !important;
-      margin-top: ${sharedValues.numeric.headerDesktop}px;
+      margin-top: ${sharedValues.headerDesktop}px;
     }
   `
   export namespace Main {
@@ -362,7 +362,7 @@ namespace $ {
         ::before {
           position: absolute;
           content: '';
-          height: ${sharedValues.numeric.appBar}px;
+          height: ${sharedValues.appBar}px;
           width: 100%;
           top: 0;
           left: 0;
@@ -371,7 +371,7 @@ namespace $ {
         }
       }
       ${mq.at992} {
-        min-height: calc(100vh - ${sharedValues.numeric.headerDesktop}px);
+        min-height: calc(100vh - ${sharedValues.headerDesktop}px);
       }
     `
     export namespace Inner {
@@ -386,7 +386,7 @@ namespace $ {
           opacity: 0;
           visibility: hidden;
           z-index: 1;
-          ${sharedValues.styles.transition[300]('opacity')};
+          ${s.transition[300]('opacity')};
           ${({ isEnabled }) =>
             isEnabled &&
             css`

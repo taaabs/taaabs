@@ -1,7 +1,8 @@
 import { sharedValues } from '@/constants'
-import { Theme } from '@/styles/GlobalStyles'
+import { Theme } from '@/styles/components/GlobalStyles'
 import styled from '@emotion/styled'
 import { Icon } from '../Icon'
+import { s } from '@/styles/constants'
 
 export namespace ButtonOutlinedText {
   export type Props = {
@@ -23,11 +24,11 @@ namespace $ {
   export const button = styled.button`
     display: flex;
     align-items: center;
-    ${sharedValues.styles.buttonHeight[34]}
-    ${sharedValues.styles.borderRadius[999]}
+    ${s.buttonHeight[34]}
+    ${s.borderRadius[999]}
     border: var(${Theme.BORDER_SECONDARY});
-    padding: 0 ${sharedValues.numeric.spacer[12]}px;
-    gap: ${sharedValues.numeric.spacer[8]}px;
+    padding: 0 ${sharedValues.spacer[12]}px;
+    gap: ${sharedValues.spacer[8]}px;
     > div > svg {
       height: 17px;
     }
@@ -38,7 +39,7 @@ namespace $ {
       }
     }
     span {
-      ${sharedValues.styles.fontWeight.inter.medium};
+      ${s.fontWeight.inter.medium};
     }
   `
 }
