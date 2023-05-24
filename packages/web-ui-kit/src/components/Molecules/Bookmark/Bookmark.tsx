@@ -104,7 +104,6 @@ namespace _ {
       ${s.borderRadius[10]}
       ${s.transition[150]('border-color')}
       grid-template-columns: 1fr auto;
-      grid-row-gap: ${sharedValues.spacer[16]}px;
     }
     @media (hover: hover) {
       :hover {
@@ -116,7 +115,7 @@ namespace _ {
     grid-area: main;
     display: flex;
     flex-direction: column;
-    row-gap: ${sharedValues.spacer[16]}px;
+    row-gap: ${sharedValues.spacer[12]}px;
   `
   export namespace Main {
     export const title = styled.div`
@@ -203,7 +202,8 @@ namespace _ {
     display: flex;
     align-items: center;
     ${mq.at992} {
-      padding-bottom: ${sharedValues.spacer[16]}px;
+      padding-top: ${sharedValues.spacer[12]}px;
+      padding-bottom: ${sharedValues.spacer[12]}px;
     }
     > div {
       margin: -0.3em 0;
