@@ -7,7 +7,7 @@ export default {
   component: LayoutRoot,
 } as Meta
 
-export const Standard = () => (
+export const Primary = () => (
   <LayoutRoot
     slotHeaderDesktop={<>header desktop</>}
     slotHeaderMobile={<>header mobile</>}

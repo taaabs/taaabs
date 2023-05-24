@@ -6,7 +6,7 @@ export default {
   component: _MobileTitleBar,
 } as Meta
 
-export const Standard = () => (
+export const Primary = () => (
   <_MobileTitleBar swipeLeftOnClick={() => {}} swipeRightOnClick={() => {}}>
     slot content
   </_MobileTitleBar>

@@ -1,12 +1,11 @@
 import { Ui } from '@/index'
-import { Meta } from '@storybook/react'
 import { LayoutLibrary, LayoutRoot } from '@/layouts'
 
 export default {
   title: 'previews/app/other user catalog',
-} as Meta
+}
 
-export const Standard = () => (
+export const Primary = () => (
   <LayoutRoot
     slotHeaderDesktop={
       <Ui.Molecues.HeaderDesktop

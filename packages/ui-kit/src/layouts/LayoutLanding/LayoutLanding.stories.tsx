@@ -7,4 +7,4 @@ export default {
   component: LayoutLanding,
 } as Meta
 
-export const Standard = () => <LayoutLanding>{loremIpsum.long}</LayoutLanding>
+export const Primary = () => <LayoutLanding>{loremIpsum.long}</LayoutLanding>

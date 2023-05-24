@@ -6,7 +6,7 @@ export default {
   component: LayoutLibrary,
 } as Meta
 
-export const Standard = () => (
+export const Primary = () => (
   <LayoutLibrary
     slotSidebar={<>slot sidebar</>}
     slotMain={<>slot main</>}

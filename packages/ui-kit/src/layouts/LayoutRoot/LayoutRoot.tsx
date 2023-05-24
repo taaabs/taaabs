@@ -30,6 +30,7 @@ export const LayoutRoot: React.FC<LayoutRoot.Props> = (props) => {
 namespace $ {
   export const header = styled.header`
     position: fixed;
+    z-index: 1;
     top: 0;
     width: 100%;
   `
