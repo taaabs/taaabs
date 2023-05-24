@@ -5,7 +5,9 @@ export const sharedValues = {
   bottomNavigationBar: 49,
   appBar: 63,
   spacer: {
+    5: 5,
     8: 8,
+    10: 10,
     12: 12,
     16: 16,
     20: 20,

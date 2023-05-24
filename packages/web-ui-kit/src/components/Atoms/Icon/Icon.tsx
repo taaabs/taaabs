@@ -6,6 +6,7 @@ import { ReactComponent as Search } from '@/assets/icons/search.svg'
 import { ReactComponent as StarFilled } from '@/assets/icons/star-filled.svg'
 import { ReactComponent as Star } from '@/assets/icons/star.svg'
 import { ReactComponent as Sun } from '@/assets/icons/sun.svg'
+import { ReactComponent as ThreeDots } from '@/assets/icons/three-dots.svg'
 import { ReactComponent as Logo } from '@/assets/icons/logo.svg'
 import { ReactComponent as MobileTitleBarMenu } from '@/assets/icons/mobile-title-bar-menu.svg'
 import { ReactComponent as MobileTitleBarViewOptions } from '@/assets/icons/mobile-title-bar-view-options.svg'
@@ -26,6 +27,7 @@ export namespace Icon {
     | 'STAR_FILLED'
     | 'STAR'
     | 'SUN'
+    | 'THREE_DOTS'
     | 'LOGO'
     | 'MOBILE_TITLE_BAR_MENU'
     | 'MOBILE_TITLE_BAR_VIEW_OPTIONS'
@@ -75,6 +77,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'SUN':
       icon = <Sun />
+      break
+    case 'THREE_DOTS':
+      icon = <ThreeDots />
       break
     case 'STAR_FILLED':
       icon = <StarFilled />

@@ -22,6 +22,13 @@ export const enum Theme {
   BORDER_SECONDARY = '--border-secondary',
   HEADER_BACKGROUND = '--header-background',
   HEADER_TRANSPARENT_BACKGROUND = '--header-transparent-background',
+  BOOKMARK_BACKGROUND = '--bookmark-background',
+  BOOKMARK_LINK = '--bookmark-link',
+  BOOKMARK_SITE = '--bookmark-site',
+  BOOKMARK_TAG = '--bookmark-tag',
+  BOOKMARK_NSFW = '--bookmark-nsfw',
+  BOOKMARK_STARRED_BACKGROUND = '--bookmark-starred-background',
+  BOOKMARK_STARRED_BORDER = '--bookmark-starred-border',
 }
 
 type ThemeMap = {
@@ -30,10 +37,10 @@ type ThemeMap = {
 
 export const lightTheme: ThemeMap = {
   [Theme.COLOR_WHITE]: '#FFF',
-  [Theme.COLOR_BLACK]: '#1F1F1F',
-  [Theme.COLOR_TEXT_NORMAL]: '#202020',
-  [Theme.COLOR_TEXT_VARIANT]: '#444746',
-  [Theme.COLOR_TEXT_DIMMED]: '#747474',
+  [Theme.COLOR_BLACK]: colors.neutral[950],
+  [Theme.COLOR_TEXT_NORMAL]: colors.neutral[900],
+  [Theme.COLOR_TEXT_VARIANT]: colors.neutral[700],
+  [Theme.COLOR_TEXT_DIMMED]: colors.neutral[500],
   [Theme.COLOR_PRIMARY_50]: '#EEF4FF',
   [Theme.COLOR_PRIMARY_800]: '#0944BA',
   [Theme.COLOR_PRIMARY_900]: '#023292',
@@ -41,13 +48,20 @@ export const lightTheme: ThemeMap = {
   [Theme.COLOR_NEUTRAL_50]: '#F1F1F1',
   [Theme.COLOR_NEUTRAL_100]: '#E6E6E6',
   [Theme.COLOR_NEUTRAL_200]: '#C3C3C3',
-  [Theme.COLOR_BRAND]: `var(${Theme.COLOR_PRIMARY_800})`,
-  [Theme.COLOR_BORDER_PRIMARY]: '#E7E7E7',
-  [Theme.COLOR_BORDER_SECONDARY]: '#F2F2F2',
+  [Theme.COLOR_BRAND]: colors.blue[800],
+  [Theme.COLOR_BORDER_PRIMARY]: colors.neutral[200],
+  [Theme.COLOR_BORDER_SECONDARY]: colors.neutral[100],
   [Theme.BORDER_PRIMARY]: `1px solid var(${Theme.COLOR_BORDER_PRIMARY})`,
   [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.COLOR_BORDER_SECONDARY})`,
-  [Theme.HEADER_BACKGROUND]: `${colors.white}`,
+  [Theme.HEADER_BACKGROUND]: colors.white,
   [Theme.HEADER_TRANSPARENT_BACKGROUND]: 'rgba(255, 255, 255, 0.8)',
+  [Theme.BOOKMARK_BACKGROUND]: colors.white,
+  [Theme.BOOKMARK_LINK]: colors.blue[800],
+  [Theme.BOOKMARK_SITE]: colors.orange[800],
+  [Theme.BOOKMARK_TAG]: colors.green[800],
+  [Theme.BOOKMARK_NSFW]: colors.red[600],
+  [Theme.BOOKMARK_STARRED_BACKGROUND]: colors.amber[50],
+  [Theme.BOOKMARK_STARRED_BORDER]: colors.amber[200],
 }
 
 export const globalStyles = css`
@@ -81,7 +95,7 @@ export const globalStyles = css`
 
   body {
     ${s.fontFamily.inter};
-    line-height: 1.5;
+    line-height: 1.4;
     font-size: 1.5rem;
     color: var(${Theme.COLOR_TEXT_NORMAL});
   }
@@ -102,6 +116,7 @@ export const globalStyles = css`
   a {
     color: inherit;
     text-decoration: none;
+    cursor: pointer;
   }
 
   a,
