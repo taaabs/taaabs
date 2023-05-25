@@ -10,10 +10,10 @@ export namespace Spacer {
 }
 
 export const Spacer: React.FC<Spacer.Props> = ({ size }) => {
-  return <$.container size={size} />
+  return <_.container size={size} />
 }
 
-namespace $ {
+namespace _ {
   type SizeMap = { [Key in Spacer.Size]: SerializedStyles }
 
   const sizeMap: SizeMap = {

@@ -42,14 +42,14 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
   )
 
   return (
-    <$.container>
+    <_.container>
       <Ui.Atoms.Wrapper>
-        <$.top>
-          <$.Top.left>
+        <_.top>
+          <_.Top.left>
             <LogoForHeader user={props.viewedUser} />
-          </$.Top.left>
-          <$.Top.right>
-            <$.Top.Right.nav>
+          </_.Top.left>
+          <_.Top.right>
+            <_.Top.Right.nav>
               <ul>
                 {props.navigation.map((link) => (
                   <li key={link.label}>
@@ -62,7 +62,7 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
                   </li>
                 ))}
               </ul>
-            </$.Top.Right.nav>
+            </_.Top.Right.nav>
             <Ui.Atoms.ButtonOutlinedIcon
               iconVariant="SEARCH"
               onClick={props.onClickSearch}
@@ -72,14 +72,14 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
               onClick={props.onClickTheme}
             />
             {userArea}
-          </$.Top.right>
-        </$.top>
+          </_.Top.right>
+        </_.top>
       </Ui.Atoms.Wrapper>
-    </$.container>
+    </_.container>
   )
 }
 
-namespace $ {
+namespace _ {
   export const container = styled.div`
     border-bottom: var(${Theme.BORDER_PRIMARY});
     background-color: var(${Theme.HEADER_TRANSPARENT_BACKGROUND});

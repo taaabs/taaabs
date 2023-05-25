@@ -6,6 +6,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import Link from 'next/link'
 
 dayjs.extend(relativeTime)
 
@@ -27,15 +28,17 @@ export namespace Bookmark {
 
 export const Bookmark: React.FC<Bookmark.Props> = (props) => {
   return (
-    <_.container href={props.url} isStarred={props.isStarred}>
+    <_.container isStarred={props.isStarred}>
       <_.main isStarred={props.isStarred}>
-        <_.Main.title>
-          <span>{props.title}</span>
-        </_.Main.title>
+        <_.Main.title href={props.url}>{props.title}</_.Main.title>
         <_.Main.siteAndTags>
-          <_.Main.SiteAndTags.site>example.com</_.Main.SiteAndTags.site>
+          <_.Main.SiteAndTags.site onClick={() => {}}>
+            example.com
+          </_.Main.SiteAndTags.site>
           {props.tags.map((tag) => (
-            <_.Main.SiteAndTags.tag>{tag}</_.Main.SiteAndTags.tag>
+            <_.Main.SiteAndTags.tag onClick={() => {}}>
+              {tag}
+            </_.Main.SiteAndTags.tag>
           ))}
         </_.Main.siteAndTags>
         {props.description && (
@@ -51,7 +54,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
         </_.Action.quickAction>
       </_.actions>
       <_.info>
-        <_.Info.dimmedText style={{ whiteSpace: 'nowrap' }}>
+        <_.Info.dimmedText>
           {dayjs(props.createdAt).fromNow()}
         </_.Info.dimmedText>
         {props.isNSFW && (
@@ -75,7 +78,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
 }
 
 namespace _ {
-  export const container = styled.a<{ isStarred?: boolean }>`
+  export const container = styled.div<{ isStarred?: boolean }>`
     display: grid;
     background-color: var(${Theme.BOOKMARK_BACKGROUND});
     border: var(${Theme.BORDER_SECONDARY});
@@ -116,7 +119,7 @@ namespace _ {
     grid-area: main;
     display: flex;
     flex-direction: column;
-    row-gap: ${sharedValues.spacer[14]}px;
+    row-gap: ${sharedValues.spacer[8]}px;
     ${mq.to992} {
       padding-bottom: ${sharedValues.spacer[14]}px;
       border-bottom: 1px solid var(${Theme.COLOR_BORDER_SECONDARY});
@@ -128,21 +131,19 @@ namespace _ {
     }
   `
   export namespace Main {
-    export const title = styled.div`
+    export const title = styled.a`
       display: flex;
       color: var(${Theme.BOOKMARK_LINK});
       ${s.fontWeight.inter.medium}
-      padding-top: ${sharedValues.spacer[16]}px;
+      padding-top: ${sharedValues.spacer[12]}px;
       padding-left: ${sharedValues.spacer[16]}px;
       ${mq.to992} {
         padding-right: ${sharedValues.spacer[16]}px;
       }
-      > span {
-        ${s.capsize.inter17.rem}
-        @media (hover: hover) {
-          :hover {
-            text-decoration: underline;
-          }
+      ${s.fontSize[17].rem}
+      @media (hover: hover) {
+        :hover {
+          text-decoration: underline;
         }
       }
     `
@@ -151,17 +152,22 @@ namespace _ {
       ${mq.to992} {
         padding-right: ${sharedValues.spacer[16]}px;
       }
-      ${s.capsize.inter15.rem};
-      > div {
-        display: inline-block;
+      display: flex;
+      flex-wrap: wrap;
+      > button {
+        @media (hover: hover) {
+          :hover {
+            text-decoration: underline;
+          }
+        }
       }
     `
     export namespace SiteAndTags {
-      export const site = styled.div`
+      export const site = styled.button`
         margin-right: ${sharedValues.spacer[10] / 10}rem;
         color: var(${Theme.BOOKMARK_SITE});
       `
-      export const tag = styled.div`
+      export const tag = styled.button`
         color: var(${Theme.BOOKMARK_TAG});
         padding-right: ${sharedValues.spacer[5] / 10}rem;
       `
@@ -169,7 +175,7 @@ namespace _ {
     export const description = styled.div`
       padding-left: ${sharedValues.spacer[16]}px;
       color: var(${Theme.COLOR_TEXT_VARIANT});
-      ${s.capsize.inter15.rem}
+      ${s.fontSize[15].rem}
       ${mq.to992} {
         padding-right: ${sharedValues.spacer[16]}px;
       }
@@ -179,7 +185,7 @@ namespace _ {
     grid-area: actions;
     display: flex;
     ${mq.to992} {
-      margin-right: ${sharedValues.spacer[5]};
+      margin-right: ${sharedValues.spacer[5]}px;
     }
     ${mq.at992} {
       flex-direction: column;
@@ -210,7 +216,7 @@ namespace _ {
     export const menu = styled.button`
       ${common}
       ${mq.at992} {
-        margin-top: 5px;
+        margin-top: 6px;
       }
     `
     export const quickAction = styled.button`
@@ -225,12 +231,10 @@ namespace _ {
     padding-left: ${sharedValues.spacer[16]}px;
     display: flex;
     align-items: center;
+    ${s.fontSize[13].rem}
     ${mq.at992} {
-      padding-top: ${sharedValues.spacer[14]}px;
-      padding-bottom: ${sharedValues.spacer[14]}px;
-    }
-    > div {
-      ${s.capsize.inter13.rem}
+      padding-top: ${sharedValues.spacer[8]}px;
+      padding-bottom: ${sharedValues.spacer[10]}px;
     }
   `
   export namespace Info {
@@ -243,12 +247,21 @@ namespace _ {
     `
     export const nsfw = styled.div`
       ${s.fontWeight.inter.semiBold};
-      color: var(${Theme.BOOKMARK_NSFW}) !important;
-      outline: 1px solid;
-      padding-top: 0.1rem;
-      outline-offset: 0.3rem;
-      border-radius: 2px;
+      color: var(${Theme.BOOKMARK_NSFW});
       transform: scale(0.85);
+      position: relative;
+      ::before {
+        content: '';
+        border: 1px solid var(${Theme.BOOKMARK_NSFW});
+        ${s.borderRadius[4]}
+        position: absolute;
+        width: 120%;
+        height: 110%;
+        top: 0;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-53%);
+      }
     `
   }
 }

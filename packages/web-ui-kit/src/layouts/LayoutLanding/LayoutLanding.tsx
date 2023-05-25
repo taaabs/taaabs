@@ -12,13 +12,13 @@ export namespace LayoutLanding {
 export const LayoutLanding: React.FC<LayoutLanding.Props> = (props) => {
   return (
     <>
-      <$.headerSpacer />
-      <$.content>{props.children}</$.content>
+      <_.headerSpacer />
+      <_.content>{props.children}</_.content>
     </>
   )
 }
 
-namespace $ {
+namespace _ {
   export const headerSpacer = styled.header`
     position: sticky;
     top: 0;

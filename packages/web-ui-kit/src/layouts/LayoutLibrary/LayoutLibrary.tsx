@@ -134,17 +134,17 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
   }, [windowWidth])
 
   return (
-    <$.container>
-      <$.content>
-        <$.sidebar
+    <_.container>
+      <_.content>
+        <_.sidebar
           ref={sidebarRef}
           width={slidableWidth}
           style={{ zIndex: !isSlideoutLeftDefinetelyClosed ? 1 : 0 }}
         >
-          <$.Sidebar.inner>{props.slotSidebar}</$.Sidebar.inner>
-        </$.sidebar>
+          <_.Sidebar.inner>{props.slotSidebar}</_.Sidebar.inner>
+        </_.sidebar>
 
-        <$.main
+        <_.main
           ref={mainRef}
           onClick={() => {
             isSlideoutLeftDefinetelyOpened && toggleLeftSlideout()
@@ -154,7 +154,7 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
             !isSlideoutLeftDefinetelyClosed || !isSlideoutRightDefinetelyClosed
           }
         >
-          <$.Main.inner
+          <_.Main.inner
             style={{
               pointerEvents:
                 !isSlideoutLeftDefinetelyClosed ||
@@ -163,13 +163,13 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
                   : 'all',
             }}
           >
-            <$.Main.Inner.mobileAlphaOverlay
+            <_.Main.Inner.mobileAlphaOverlay
               isEnabled={
                 isSlideoutLeftDefinetelyOpened ||
                 isSlideoutRightDefinetelyOpened
               }
             />
-            <$.Main.Inner.mobileTitleBar>
+            <_.Main.Inner.mobileTitleBar>
               <_MobileTitleBar
                 swipeLeftOnClick={
                   !isSlideoutLeftOpen ? toggleLeftSlideout : () => {}
@@ -180,17 +180,17 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
               >
                 {props.slotAppBar}
               </_MobileTitleBar>
-            </$.Main.Inner.mobileTitleBar>
+            </_.Main.Inner.mobileTitleBar>
             <div>{props.slotMain}</div>
-          </$.Main.inner>
-        </$.main>
+          </_.Main.inner>
+        </_.main>
 
-        <$.aside
+        <_.aside
           ref={mobileTabsPanelRef}
           width={slidableWidth}
           style={{ zIndex: !isSlideoutRightDefinetelyClosed ? 1 : 0 }}
         >
-          <$.Aside.inner>
+          <_.Aside.inner>
             {windowWidth && windowWidth >= 992 ? (
               <>
                 <StickyBox offsetTop={sharedValues.headerDesktop}>
@@ -200,14 +200,14 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
             ) : (
               props.slotAside
             )}
-          </$.Aside.inner>
-        </$.aside>
-      </$.content>
-    </$.container>
+          </_.Aside.inner>
+        </_.aside>
+      </_.content>
+    </_.container>
   )
 }
 
-namespace $ {
+namespace _ {
   export const container = styled.div`
     background: var(${Theme.COLOR_NEUTRAL_25});
   `

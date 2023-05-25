@@ -19,27 +19,27 @@ export const ButtonUnderlined: React.FC<ButtonUnderlined.Props> = (props) => {
   if (href != undefined) {
     return (
       <Link href={href} passHref legacyBehavior>
-        <$.link isActive={isActive}>
+        <_.link isActive={isActive}>
           <span>{children}</span>
-        </$.link>
+        </_.link>
       </Link>
     )
   } else if (onClick != undefined) {
     return (
-      <$.button onClick={onClick} isActive={isActive}>
+      <_.button onClick={onClick} isActive={isActive}>
         <span>{children}</span>
-      </$.button>
+      </_.button>
     )
   } else {
     return (
-      <$.button isActive={isActive} disabled>
+      <_.button isActive={isActive} disabled>
         <span>{children}</span>
-      </$.button>
+      </_.button>
     )
   }
 }
 
-namespace $ {
+namespace _ {
   const buttonBase = (isActive: boolean) => {
     const underlineHeight = 2.5
 

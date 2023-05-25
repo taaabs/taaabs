@@ -14,20 +14,20 @@ export namespace LayoutRoot {
 export const LayoutRoot: React.FC<LayoutRoot.Props> = (props) => {
   return (
     <>
-      <$.header>
-        <$.Header.desktop>{props.slotHeaderDesktop}</$.Header.desktop>
-        <$.Header.mobile>{props.slotHeaderMobile}</$.Header.mobile>
-      </$.header>
+      <_.header>
+        <_.Header.desktop>{props.slotHeaderDesktop}</_.Header.desktop>
+        <_.Header.mobile>{props.slotHeaderMobile}</_.Header.mobile>
+      </_.header>
       {props.children}
-      <$.footerDesktop>{props.slotFooterDesktop}</$.footerDesktop>
-      <$.mobileBottomNavigationBar>
+      <_.footerDesktop>{props.slotFooterDesktop}</_.footerDesktop>
+      <_.mobileBottomNavigationBar>
         {props.slotBottomNavigationBar}
-      </$.mobileBottomNavigationBar>
+      </_.mobileBottomNavigationBar>
     </>
   )
 }
 
-namespace $ {
+namespace _ {
   export const header = styled.header`
     position: fixed;
     z-index: 1;

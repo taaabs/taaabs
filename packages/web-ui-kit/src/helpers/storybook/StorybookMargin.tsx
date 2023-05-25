@@ -7,10 +7,10 @@ type MarginProps = {
 }
 
 export const StorybookMargin: React.FC<MarginProps> = ({ children }) => {
-  return <$.container>{children}</$.container>
+  return <_.container>{children}</_.container>
 }
 
-namespace $ {
+namespace _ {
   export const container = styled.div`
     margin: ${sharedValues.spacer[16]}px;
     ${mq.at768} {

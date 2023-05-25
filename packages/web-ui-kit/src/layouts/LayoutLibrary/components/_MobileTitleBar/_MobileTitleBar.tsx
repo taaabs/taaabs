@@ -15,25 +15,25 @@ export namespace _MobileTitleBar {
 
 export const _MobileTitleBar: React.FC<_MobileTitleBar.Props> = (props) => {
   return (
-    <$.container>
-      <$.swipe
+    <_.container>
+      <_.swipe
         onClick={props.swipeLeftOnClick}
         isVisible={props.swipeLeftOnClick != undefined}
       >
         <Ui.Atoms.Icon variant={'MOBILE_TITLE_BAR_MENU'} />
-      </$.swipe>
-      <$.content>{props.children}</$.content>
-      <$.swipe
+      </_.swipe>
+      <_.content>{props.children}</_.content>
+      <_.swipe
         onClick={props.swipeRightOnClick}
         isVisible={props.swipeRightOnClick != undefined}
       >
         <Ui.Atoms.Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
-      </$.swipe>
-    </$.container>
+      </_.swipe>
+    </_.container>
   )
 }
 
-namespace $ {
+namespace _ {
   export const container = styled.div`
     border-bottom: var(${Theme.BORDER_PRIMARY});
     display: flex;

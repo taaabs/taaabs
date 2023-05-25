@@ -21,28 +21,28 @@ export namespace LogoForHeader {
 
 export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
   return user ? (
-    <$.user>
-      <$.User.backArrow href={user.backHref}>
+    <_.user>
+      <_.User.backArrow href={user.backHref}>
         <Ui.Atoms.Icon variant="LESS_THAN" />
-      </$.User.backArrow>
-      <$.User.profile href={`/${user.username}`}>
+      </_.User.backArrow>
+      <_.User.profile href={`/${user.username}`}>
         <Ui.Atoms.ButtonOutlinedIcon
           avatar={user.avatar}
           iconVariant="USER"
           onClick={() => {}}
         />
-        <$.User.Profile.username>@{user.username}</$.User.Profile.username>
-      </$.User.profile>
-    </$.user>
+        <_.User.Profile.username>@{user.username}</_.User.Profile.username>
+      </_.User.profile>
+    </_.user>
   ) : (
-    <$.logo href="/">
+    <_.logo href="/">
       <Ui.Atoms.Icon variant="LOGO" />
       <span>taaabs</span>
-    </$.logo>
+    </_.logo>
   )
 }
 
-namespace $ {
+namespace _ {
   const logoTextLetterSpacing = '-0.06em'
 
   export const user = styled.div`
