@@ -1,4 +1,24 @@
 import { css } from '@emotion/react'
+import { createStyleObject } from '@capsizecss/core'
+import interMetrics from '@capsizecss/metrics/inter'
+
+const capsizeInter13 = createStyleObject({
+  fontSize: 13,
+  leading: 10,
+  fontMetrics: interMetrics,
+})
+
+const capsizeInter15 = createStyleObject({
+  fontSize: 15,
+  leading: 20,
+  fontMetrics: interMetrics,
+})
+
+const capsizeInter17 = createStyleObject({
+  fontSize: 17,
+  leading: 24,
+  fontMetrics: interMetrics,
+})
 
 export const s = {
   fontFamily: {
@@ -74,6 +94,17 @@ export const s = {
         font-weight: 700;
       `,
     },
+  },
+  capsize: {
+    inter13: css`
+      ${capsizeInter13}
+    `,
+    inter15: css`
+      ${capsizeInter15}
+    `,
+    inter17: css`
+      ${capsizeInter17}
+    `,
   },
   transition: {
     150: (transitionProperty: string) =>

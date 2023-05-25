@@ -15,6 +15,8 @@
     "find-deadcode": "ts-prune"
   },
   "dependencies": {
+    "@capsizecss/core": "^3.1.0",
+    "@capsizecss/metrics": "^1.1.1",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "blurhash": "^2.0.5",

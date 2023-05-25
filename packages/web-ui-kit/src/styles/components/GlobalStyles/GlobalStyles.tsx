@@ -29,6 +29,8 @@ export const enum Theme {
   BOOKMARK_NSFW = '--bookmark-nsfw',
   BOOKMARK_STARRED_BACKGROUND = '--bookmark-starred-background',
   BOOKMARK_STARRED_BORDER = '--bookmark-starred-border',
+  BOOKMARK_STARRED_BORDER_HOVER = '--bookmark-starred-border-hover',
+  BOOKMARK_ACTION_FILL = '--bookmark-action-fill',
 }
 
 type ThemeMap = {
@@ -62,6 +64,8 @@ export const lightTheme: ThemeMap = {
   [Theme.BOOKMARK_NSFW]: colors.red[600],
   [Theme.BOOKMARK_STARRED_BACKGROUND]: colors.amber[50],
   [Theme.BOOKMARK_STARRED_BORDER]: colors.amber[200],
+  [Theme.BOOKMARK_STARRED_BORDER_HOVER]: colors.amber[300],
+  [Theme.BOOKMARK_ACTION_FILL]: colors.neutral[400],
 }
 
 export const globalStyles = css`

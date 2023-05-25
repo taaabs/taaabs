@@ -5,6 +5,7 @@ import {
   PaginationOptions_Dto,
   SortBy,
   BookmarkVisibility,
+  NsfwBookmarks,
 } from '../../common'
 import { Type } from 'class-transformer'
 
@@ -12,6 +13,7 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   static defaultDateRange = DateRange.ANY
   static defaultSortBy = SortBy.DATE_ASC
   static defaultArchived = ArchivedBookmarks.EXCLUDE
+  static defaultNsfw = NsfwBookmarks.INCLUDE
   static defaultStarredOnly = false
   static defaultVisibility = BookmarkVisibility.ALL
 
@@ -42,6 +44,8 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
   starred_only?: boolean = BookmarksOnUser_Params_Dto.defaultStarredOnly
 
   archived?: ArchivedBookmarks = BookmarksOnUser_Params_Dto.defaultArchived
+
+  nsfw?: NsfwBookmarks = BookmarksOnUser_Params_Dto.defaultNsfw
 
   @Type()
   @ApiProperty({
