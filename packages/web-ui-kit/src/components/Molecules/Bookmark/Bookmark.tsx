@@ -259,7 +259,7 @@ namespace _ {
         top: 0;
         left: 50%;
         top: 50%;
-        transform: translateX(-50%) translateY(-53%);
+        transform: translateX(-50%) translateY(-50%);
       }
     `
   }
