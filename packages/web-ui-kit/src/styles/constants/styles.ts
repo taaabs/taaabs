@@ -4,19 +4,19 @@ import interMetrics from '@capsizecss/metrics/inter'
 
 const capsizeInter13 = createStyleObject({
   fontSize: 13,
-  leading: 10,
+  lineGap: 6,
   fontMetrics: interMetrics,
 })
 
 const capsizeInter15 = createStyleObject({
   fontSize: 15,
-  leading: 20,
+  lineGap: 10,
   fontMetrics: interMetrics,
 })
 
 const capsizeInter17 = createStyleObject({
   fontSize: 17,
-  leading: 24,
+  lineGap: 12,
   fontMetrics: interMetrics,
 })
 
@@ -96,15 +96,39 @@ export const s = {
     },
   },
   capsize: {
-    inter13: css`
-      ${capsizeInter13}
-    `,
-    inter15: css`
-      ${capsizeInter15}
-    `,
-    inter17: css`
-      ${capsizeInter17}
-    `,
+    inter13: {
+      px: css(capsizeInter13),
+      rem: css({
+        '::before': capsizeInter13['::before'],
+        '::after': capsizeInter13['::after'],
+        fontSize: `${parseFloat(capsizeInter13.fontSize.slice(0, -2)) / 10}rem`,
+        lineHeight: `${
+          parseFloat(capsizeInter13.lineHeight.slice(0, -2)) / 10
+        }rem`,
+      }),
+    },
+    inter15: {
+      px: css(capsizeInter15),
+      rem: css({
+        '::before': capsizeInter15['::before'],
+        '::after': capsizeInter15['::after'],
+        fontSize: `${parseFloat(capsizeInter15.fontSize.slice(0, -2)) / 10}rem`,
+        lineHeight: `${
+          parseFloat(capsizeInter15.lineHeight.slice(0, -2)) / 10
+        }rem`,
+      }),
+    },
+    inter17: {
+      px: css(capsizeInter17),
+      rem: css({
+        '::before': capsizeInter17['::before'],
+        '::after': capsizeInter17['::after'],
+        fontSize: `${parseFloat(capsizeInter17.fontSize.slice(0, -2)) / 10}rem`,
+        lineHeight: `${
+          parseFloat(capsizeInter17.lineHeight.slice(0, -2)) / 10
+        }rem`,
+      }),
+    },
   },
   transition: {
     150: (transitionProperty: string) =>

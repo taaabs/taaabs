@@ -20,6 +20,18 @@ export const Primary = () => (
       }}
     >
       <Bookmark
+        isStarred={true}
+        visibility="private"
+        title="Lorem ipsum dolor sit amet"
+        url="https://example.com/test/lorem_ipsum"
+        sitePath="test"
+        createdAt={new Date('2023-02-20')}
+        isNSFW={false}
+        isArchived={true}
+        tags={['lorem', 'ipsum']}
+      />
+      <StorybookSpacer />
+      <Bookmark
         isStarred={false}
         visibility="encrypted"
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
@@ -76,6 +88,8 @@ export const Primary = () => (
         isArchived={true}
         tags={['lorem', 'ipsum']}
       />
+
+      <StorybookSpacer />
     </div>
   </div>
 )

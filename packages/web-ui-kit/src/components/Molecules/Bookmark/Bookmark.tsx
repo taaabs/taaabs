@@ -2,7 +2,6 @@ import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/components/GlobalStyles'
 import { mq, s } from '@/styles/constants'
-
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import dayjs from 'dayjs'
@@ -117,7 +116,7 @@ namespace _ {
     grid-area: main;
     display: flex;
     flex-direction: column;
-    row-gap: ${sharedValues.spacer[14] / 10}rem;
+    row-gap: ${sharedValues.spacer[14]}px;
     ${mq.to992} {
       padding-bottom: ${sharedValues.spacer[14]}px;
       border-bottom: 1px solid var(${Theme.COLOR_BORDER_SECONDARY});
@@ -139,8 +138,7 @@ namespace _ {
         padding-right: ${sharedValues.spacer[16]}px;
       }
       > span {
-        ${s.capsize.inter17}
-        ${s.fontSize[17].rem}
+        ${s.capsize.inter17.rem}
         @media (hover: hover) {
           :hover {
             text-decoration: underline;
@@ -153,8 +151,7 @@ namespace _ {
       ${mq.to992} {
         padding-right: ${sharedValues.spacer[16]}px;
       }
-      ${s.capsize.inter15};
-      ${s.fontSize[15].rem}
+      ${s.capsize.inter15.rem};
       > div {
         display: inline-block;
       }
@@ -172,8 +169,7 @@ namespace _ {
     export const description = styled.div`
       padding-left: ${sharedValues.spacer[16]}px;
       color: var(${Theme.COLOR_TEXT_VARIANT});
-      ${s.capsize.inter15}
-      ${s.fontSize[15].rem}
+      ${s.capsize.inter15.rem}
       ${mq.to992} {
         padding-right: ${sharedValues.spacer[16]}px;
       }
@@ -230,12 +226,11 @@ namespace _ {
     display: flex;
     align-items: center;
     ${mq.at992} {
-      padding-top: ${sharedValues.spacer[14] / 10}rem;
+      padding-top: ${sharedValues.spacer[14]}px;
       padding-bottom: ${sharedValues.spacer[14]}px;
     }
     > div {
-      ${s.capsize.inter13}
-      ${s.fontSize[13].rem}
+      ${s.capsize.inter13.rem}
     }
   `
   export namespace Info {
@@ -247,24 +242,13 @@ namespace _ {
       color: var(${Theme.COLOR_TEXT_DIMMED});
     `
     export const nsfw = styled.div`
-      ${s.borderRadius[4]}
-      ${s.fontWeight.inter.semiBold}
+      ${s.fontWeight.inter.semiBold};
       color: var(${Theme.BOOKMARK_NSFW}) !important;
-      position: relative;
+      outline: 1px solid;
+      padding-top: 0.1rem;
+      outline-offset: 0.3rem;
+      border-radius: 2px;
       transform: scale(0.85);
-      ::before {
-        padding: 0.5rem 0.4rem;
-        border: 1px solid var(${Theme.BOOKMARK_NSFW});
-        ${s.borderRadius[4]}
-        box-sizing: content-box;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 50%;
-        top: 50%;
-        transform: translateX(-50%) translateY(-50%);
-      }
     `
   }
 }
