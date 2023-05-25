@@ -333,7 +333,7 @@ namespace _ {
             top: 0;
             left: 0;
             position: absolute;
-            z-index: 2;
+            z-index: 3;
           }
           ::after {
             content: '';
@@ -343,7 +343,7 @@ namespace _ {
             top: 0;
             right: 0;
             position: absolute;
-            z-index: 1;
+            z-index: 2;
           }
         `}
     }
@@ -384,7 +384,7 @@ namespace _ {
           background: var(${Theme.HEADER_BACKGROUND});
           opacity: 0;
           visibility: hidden;
-          z-index: 1;
+          z-index: 2;
           ${s.transition[300]('opacity')};
           ${({ isEnabled }) =>
             isEnabled &&
@@ -399,6 +399,7 @@ namespace _ {
           position: sticky;
           top: 0;
           width: 100%;
+          z-index: 1;
         }
         ${mq.at992} {
           display: none;
