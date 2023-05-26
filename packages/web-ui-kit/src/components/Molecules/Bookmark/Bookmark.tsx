@@ -29,7 +29,9 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
   return (
     <_.container isStarred={props.isStarred}>
       <_.main isStarred={props.isStarred}>
-        <_.Main.title href={props.url}>{props.title}</_.Main.title>
+        <div>
+          <_.Main.title href={props.url}>{props.title}</_.Main.title>
+        </div>
         <_.Main.siteAndTags>
           <_.Main.SiteAndTags.site onClick={() => {}}>
             example.com
@@ -131,11 +133,12 @@ namespace _ {
   `
   export namespace Main {
     export const title = styled.a`
-      display: flex;
-      color: var(${Theme.BOOKMARK_LINK});
-      ${s.fontWeight.inter.medium}
+      display: inline-flex;
       padding-top: ${sharedValues.distance[12]}px;
       padding-left: ${sharedValues.distance[16]}px;
+      color: var(${Theme.BOOKMARK_LINK});
+      ${s.fontWeight.inter.medium}
+
       ${mq.to992} {
         padding-right: ${sharedValues.distance[16]}px;
       }
