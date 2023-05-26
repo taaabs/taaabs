@@ -8,9 +8,9 @@ export const StorybookSpacer: React.FC = () => {
 
 namespace _ {
   export const container = styled.div`
-    height: ${sharedValues.spacer[16]}px;
+    height: ${sharedValues.distance[16]}px;
     ${mq.at768} {
-      height: ${sharedValues.spacer[40]}px;
+      height: ${sharedValues.distance[40]}px;
     }
   `
 }

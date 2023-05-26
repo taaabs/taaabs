@@ -99,13 +99,13 @@ namespace _ {
     export const right = styled.div`
       display: flex;
       align-items: center;
-      gap: ${sharedValues.spacer[8]}px;
+      gap: ${sharedValues.distance[8]}px;
       height: 100%;
     `
     export const left = styled.div`
       display: flex;
       align-items: center;
-      gap: ${sharedValues.spacer[20]}px;
+      gap: ${sharedValues.distance[20]}px;
     `
     export namespace Right {
       export const nav = styled.nav`

@@ -1,6 +1,7 @@
 import { ReactComponent as Add } from '@/assets/icons/add.svg'
 import { ReactComponent as Bookmark } from '@/assets/icons/bookmark.svg'
 import { ReactComponent as GreaterThan } from '@/assets/icons/greater-than.svg'
+import { ReactComponent as Info } from '@/assets/icons/info.svg'
 import { ReactComponent as LessThan } from '@/assets/icons/less-than.svg'
 import { ReactComponent as Search } from '@/assets/icons/search.svg'
 import { ReactComponent as StarFilled } from '@/assets/icons/star-filled.svg'
@@ -22,6 +23,7 @@ export namespace Icon {
     | 'ADD'
     | 'BOOKMARK'
     | 'GREATER_THAN'
+    | 'INFO'
     | 'LESS_THAN'
     | 'SEARCH'
     | 'STAR_FILLED'
@@ -53,6 +55,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'GREATER_THAN':
       icon = <GreaterThan />
+      break
+    case 'INFO':
+      icon = <Info />
       break
     case 'LESS_THAN':
       icon = <LessThan />

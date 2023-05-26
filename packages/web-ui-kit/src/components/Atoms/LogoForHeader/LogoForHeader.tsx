@@ -53,9 +53,9 @@ namespace _ {
     export const backArrow = styled(Link)`
       display: flex;
       align-items: center;
-      padding-right: ${sharedValues.spacer[24]}px;
-      padding-left: ${sharedValues.spacer[16]}px;
-      margin-left: calc(${sharedValues.spacer[16]}px * -1);
+      padding-right: ${sharedValues.distance[24]}px;
+      padding-left: ${sharedValues.distance[16]}px;
+      margin-left: calc(${sharedValues.distance[16]}px * -1);
       ${s.buttonHeight[34]}
       ${mq.at992} {
         ${s.buttonHeight[40]}

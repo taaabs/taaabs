@@ -149,6 +149,10 @@ export const s = {
       width: 24px;
       height: 24px;
     `,
+    26: css`
+      width: 26px;
+      height: 26px;
+    `,
   },
   buttonHeight: {
     34: css`

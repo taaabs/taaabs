@@ -4,8 +4,12 @@ export const sharedValues = {
   headerMobile: 45,
   bottomNavigationBar: 49,
   appBar: 63,
-  spacer: {
+  distance: {
+    2: 2,
+    3: 3,
+    4: 4,
     5: 5,
+    7: 7,
     8: 8,
     10: 10,
     12: 12,

@@ -12,9 +12,9 @@ export const StorybookMargin: React.FC<MarginProps> = ({ children }) => {
 
 namespace _ {
   export const container = styled.div`
-    margin: ${sharedValues.spacer[16]}px;
+    margin: ${sharedValues.distance[16]}px;
     ${mq.at768} {
-      margin: ${sharedValues.spacer[40]}px;
+      margin: ${sharedValues.distance[40]}px;
     }
   `
 }

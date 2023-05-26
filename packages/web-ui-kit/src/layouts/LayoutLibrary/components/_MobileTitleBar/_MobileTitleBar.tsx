@@ -16,19 +16,13 @@ export namespace _MobileTitleBar {
 export const _MobileTitleBar: React.FC<_MobileTitleBar.Props> = (props) => {
   return (
     <_.container>
-      <_.swipe
-        onClick={props.swipeLeftOnClick}
-        isVisible={props.swipeLeftOnClick != undefined}
-      >
+      <_.iconLeft onClick={props.swipeLeftOnClick}>
         <Ui.Atoms.Icon variant={'MOBILE_TITLE_BAR_MENU'} />
-      </_.swipe>
-      <_.content>{props.children}</_.content>
-      <_.swipe
-        onClick={props.swipeRightOnClick}
-        isVisible={props.swipeRightOnClick != undefined}
-      >
+      </_.iconLeft>
+      <_.title>{props.children}</_.title>
+      <_.iconRight onClick={props.swipeRightOnClick}>
         <Ui.Atoms.Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
-      </_.swipe>
+      </_.iconRight>
     </_.container>
   )
 }
@@ -42,25 +36,27 @@ namespace _ {
     background-color: var(${Theme.HEADER_TRANSPARENT_BACKGROUND});
     ${s.backdropFilter.desktopHeader}
   `
-  export const swipe = styled.button<{ isVisible: boolean }>`
+  const iconCommon = css`
     display: flex;
     align-items: center;
-    height: 100%;
-    padding: 0 ${sharedValues.spacer[16]}px;
-    ${({ isVisible }) =>
-      !isVisible &&
-      css`
-        pointer-events: none;
-        visibility: hidden;
-      `}
+    padding: 0 ${sharedValues.distance[16]}px;
+  `
+  export const iconLeft = styled.button`
+    ${iconCommon}
     > div > svg {
-      ${s.iconSize[24]}
+      ${s.iconSize[20]}
     }
   `
-  export const content = styled.div`
-    flex: 1;
+  export const iconRight = styled.button`
+    ${iconCommon}
+    > div > svg {
+      ${s.iconSize[26]}
+    }
+  `
+  export const title = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: red;
   `
 }

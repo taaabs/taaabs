@@ -34,7 +34,7 @@ namespace _ {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: ${sharedValues.spacer[16]}px;
+    padding-left: ${sharedValues.distance[16]}px;
     border-bottom: var(${Theme.BORDER_PRIMARY});
     height: ${sharedValues.headerMobile}px;
     background-color: var(${Theme.HEADER_BACKGROUND});
@@ -52,7 +52,7 @@ namespace _ {
     `
     export const theme = styled.button`
       ${baseButton}
-      padding: 0 ${sharedValues.spacer[8]}px;
+      padding: 0 ${sharedValues.distance[8]}px;
       > div > svg {
         height: 24px;
         width: 24px;
@@ -60,8 +60,8 @@ namespace _ {
     `
     export const hamburger = styled.button`
       ${baseButton}
-      padding-right: ${sharedValues.spacer[16]}px;
-      padding-left: ${sharedValues.spacer[8]}px;
+      padding-right: ${sharedValues.distance[16]}px;
+      padding-left: ${sharedValues.distance[8]}px;
     `
   }
 }

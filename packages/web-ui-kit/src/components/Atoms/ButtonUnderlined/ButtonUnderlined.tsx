@@ -51,7 +51,7 @@ namespace _ {
       width: 100%;
       align-items: center;
       justify-content: center;
-      padding: 0 ${sharedValues.spacer[16]}px;
+      padding: 0 ${sharedValues.distance[16]}px;
       position: relative;
       span {
         height: 100%;

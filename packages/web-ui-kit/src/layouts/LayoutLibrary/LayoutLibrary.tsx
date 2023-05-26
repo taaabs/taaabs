@@ -286,9 +286,9 @@ namespace _ {
       width: 100%;
       max-width: ${sharedValues.siteMaxWidth}px;
       margin: 0 auto;
-      padding: 0 ${sharedValues.spacer[16]}px;
+      padding: 0 ${sharedValues.distance[16]}px;
       ${mq.at1200} {
-        padding: 0 ${sharedValues.spacer[40]}px;
+        padding: 0 ${sharedValues.distance[40]}px;
       }
       ::before {
         top: 0;

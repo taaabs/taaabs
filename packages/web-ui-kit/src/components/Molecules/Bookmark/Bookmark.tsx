@@ -48,9 +48,9 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
         <_.Action.menu>
           <Ui.Atoms.Icon variant="THREE_DOTS" />
         </_.Action.menu>
-        <_.Action.quickAction>
-          <Ui.Atoms.Icon variant="STAR" />
-        </_.Action.quickAction>
+        <_.Action.info>
+          <Ui.Atoms.Icon variant="INFO" />
+        </_.Action.info>
       </_.actions>
       <_.info>
         <_.Info.dimmedText>
@@ -118,9 +118,9 @@ namespace _ {
     grid-area: main;
     display: flex;
     flex-direction: column;
-    row-gap: ${sharedValues.spacer[8]}px;
+    row-gap: ${sharedValues.distance[3]}px;
     ${mq.to992} {
-      padding-bottom: ${sharedValues.spacer[14]}px;
+      padding-bottom: ${sharedValues.distance[8]}px;
       border-bottom: 1px solid var(${Theme.COLOR_BORDER_SECONDARY});
       ${({ isStarred }) =>
         isStarred &&
@@ -134,12 +134,13 @@ namespace _ {
       display: flex;
       color: var(${Theme.BOOKMARK_LINK});
       ${s.fontWeight.inter.medium}
-      padding-top: ${sharedValues.spacer[12]}px;
-      padding-left: ${sharedValues.spacer[16]}px;
+      padding-top: ${sharedValues.distance[12]}px;
+      padding-left: ${sharedValues.distance[16]}px;
       ${mq.to992} {
-        padding-right: ${sharedValues.spacer[16]}px;
+        padding-right: ${sharedValues.distance[16]}px;
       }
       ${s.fontSize[17].rem}
+      margin-bottom: -0.2rem;
       @media (hover: hover) {
         :hover {
           text-decoration: underline;
@@ -147,9 +148,9 @@ namespace _ {
       }
     `
     export const siteAndTags = styled.div`
-      padding-left: ${sharedValues.spacer[16]}px;
+      padding-left: ${sharedValues.distance[16]}px;
       ${mq.to992} {
-        padding-right: ${sharedValues.spacer[16]}px;
+        padding-right: ${sharedValues.distance[16]}px;
       }
       display: flex;
       flex-wrap: wrap;
@@ -162,21 +163,29 @@ namespace _ {
       }
     `
     export namespace SiteAndTags {
+      const padding = css`
+        padding: 0.25rem 0;
+      `
       export const site = styled.button`
-        margin-right: ${sharedValues.spacer[10] / 10}rem;
+        ${padding}
+        margin-right: ${sharedValues.distance[10] / 10}rem;
         color: var(${Theme.BOOKMARK_SITE});
       `
       export const tag = styled.button`
+        ${padding}
         color: var(${Theme.BOOKMARK_TAG});
-        padding-right: ${sharedValues.spacer[5] / 10}rem;
+        padding-right: ${sharedValues.distance[5] / 10}rem;
       `
     }
     export const description = styled.div`
-      padding-left: ${sharedValues.spacer[16]}px;
+      padding-left: ${sharedValues.distance[16]}px;
       color: var(${Theme.COLOR_TEXT_VARIANT});
       ${s.fontSize[15].rem}
       ${mq.to992} {
-        padding-right: ${sharedValues.spacer[16]}px;
+        padding-right: ${sharedValues.distance[16]}px;
+      }
+      ${mq.at992} {
+        padding-bottom: ${sharedValues.distance[4]}px;
       }
     `
   }
@@ -184,10 +193,12 @@ namespace _ {
     grid-area: actions;
     display: flex;
     ${mq.to992} {
-      margin-right: ${sharedValues.spacer[5]}px;
+      margin-right: ${sharedValues.distance[5]}px;
     }
     ${mq.at992} {
       flex-direction: column;
+      justify-content: space-between;
+      margin: ${sharedValues.distance[4]}px 0;
     }
   `
   export namespace Action {
@@ -195,14 +206,9 @@ namespace _ {
       display: flex;
       align-items: center;
       justify-content: center;
-      ${mq.to992} {
-        ${s.buttonSize[40]}
-      }
-      ${mq.at992} {
-        ${s.buttonSize[34]}
-      }
+      ${s.buttonSize[40]}
       > div > svg {
-        height: 18px;
+        ${s.iconSize[20]}
         fill: var(${Theme.BOOKMARK_ACTION_FILL});
         ${s.transition[150]('fill')};
       }
@@ -214,11 +220,8 @@ namespace _ {
     `
     export const menu = styled.button`
       ${common}
-      ${mq.at992} {
-        margin-top: 6px;
-      }
     `
-    export const quickAction = styled.button`
+    export const info = styled.button`
       ${common}
       ${mq.to992} {
         order: -1;
@@ -227,18 +230,18 @@ namespace _ {
   }
   export const info = styled.div`
     grid-area: info;
-    padding-left: ${sharedValues.spacer[16]}px;
+    padding-left: ${sharedValues.distance[16]}px;
     display: flex;
     align-items: center;
     ${s.fontSize[13].rem}
     ${mq.at992} {
-      padding-top: ${sharedValues.spacer[8]}px;
-      padding-bottom: ${sharedValues.spacer[10]}px;
+      padding-top: ${sharedValues.distance[2]}px;
+      padding-bottom: ${sharedValues.distance[10]}px;
     }
   `
   export namespace Info {
     export const separator = styled.div`
-      padding: 0 ${sharedValues.spacer[5]}px;
+      padding: 0 ${sharedValues.distance[5]}px;
       color: var(${Theme.COLOR_TEXT_DIMMED});
     `
     export const dimmedText = styled.div`
@@ -255,11 +258,11 @@ namespace _ {
         ${s.borderRadius[4]}
         position: absolute;
         width: 120%;
-        height: 110%;
+        height: 115%;
         top: 0;
         left: 50%;
         top: 50%;
-        transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-53%);
       }
     `
   }
