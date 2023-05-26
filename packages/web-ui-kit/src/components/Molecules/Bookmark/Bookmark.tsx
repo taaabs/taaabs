@@ -10,7 +10,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
 
 export namespace Bookmark {
-  export type Visibility = 'private' | 'encrypted'
+  export type Visibility = 'unlisted' | 'secret'
   export type Props = {
     title: string
     description?: string
@@ -68,8 +68,8 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
           <>
             <_.Info.separator>·</_.Info.separator>
             <_.Info.dimmedText>
-              {props.visibility == 'private' && 'Private'}
-              {props.visibility == 'encrypted' && 'Encrypted'}
+              {props.visibility == 'unlisted' && 'Unlisted'}
+              {props.visibility == 'secret' && 'Secret'}
             </_.Info.dimmedText>
           </>
         )}
@@ -121,6 +121,11 @@ namespace _ {
     display: flex;
     flex-direction: column;
     row-gap: ${sharedValues.distance[3]}px;
+    padding-top: ${sharedValues.distance[12]}px;
+    padding-left: ${sharedValues.distance[16]}px;
+    ${mq.to992} {
+      padding-right: ${sharedValues.distance[16]}px;
+    }
     ${mq.to992} {
       padding-bottom: ${sharedValues.distance[8]}px;
       border-bottom: 1px solid var(${Theme.COLOR_BORDER_SECONDARY});
@@ -134,14 +139,8 @@ namespace _ {
   export namespace Main {
     export const title = styled.a`
       display: inline-flex;
-      padding-top: ${sharedValues.distance[12]}px;
-      padding-left: ${sharedValues.distance[16]}px;
       color: var(${Theme.BOOKMARK_LINK});
       ${s.fontWeight.inter.medium}
-
-      ${mq.to992} {
-        padding-right: ${sharedValues.distance[16]}px;
-      }
       ${s.fontSize[17].rem}
       margin-bottom: -0.2rem;
       @media (hover: hover) {
@@ -151,7 +150,6 @@ namespace _ {
       }
     `
     export const siteAndTags = styled.div`
-      padding-left: ${sharedValues.distance[16]}px;
       ${mq.to992} {
         padding-right: ${sharedValues.distance[16]}px;
       }
@@ -181,7 +179,6 @@ namespace _ {
       `
     }
     export const description = styled.div`
-      padding-left: ${sharedValues.distance[16]}px;
       color: var(${Theme.COLOR_TEXT_VARIANT});
       ${s.fontSize[15].rem}
       ${mq.to992} {

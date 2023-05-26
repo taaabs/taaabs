@@ -21,7 +21,7 @@ export const Primary = () => (
     >
       <Bookmark
         isStarred={true}
-        visibility="private"
+        visibility="unlisted"
         title="Lorem ipsum dolor sit amet"
         url="https://example.com/test/lorem_ipsum"
         sitePath="test"
@@ -33,7 +33,7 @@ export const Primary = () => (
       <StorybookSpacer />
       <Bookmark
         isStarred={false}
-        visibility="encrypted"
+        visibility="secret"
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odio sodal, euismod odio ac, fermentum metus."
         url="https://example.com/test/lorem_ipsum"
@@ -67,7 +67,7 @@ export const Primary = () => (
       <StorybookSpacer />
       <Bookmark
         isStarred={false}
-        visibility="encrypted"
+        visibility="unlisted"
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odio sodal, euismod odio ac, fermentum metus."
         url="https://example.com/test/lorem_ipsum"
@@ -92,7 +92,7 @@ export const Primary = () => (
       <StorybookSpacer />
       <Bookmark
         isStarred={true}
-        visibility="private"
+        visibility="secret"
         title="Lorem ipsum dolor sit amet"
         url="https://example.com/test/lorem_ipsum"
         sitePath="test"
