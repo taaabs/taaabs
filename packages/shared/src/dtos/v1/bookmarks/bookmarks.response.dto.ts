@@ -9,14 +9,14 @@ class Bookmark {
   tags?: string[]
   isStarred?: boolean
   sitePath?: string
+  isArchived?: boolean
 }
 
 class BookmarkOnOtherUser extends Bookmark {}
 
 class BookmarkOnCurrentUser extends Bookmark {
-  isPublic?: boolean
-  isArchived?: boolean
-  isEncrypted?: boolean
+  visibility!: 'public' | 'unlisted' | 'secret'
+  
 }
 
 export class BookmarksOnOtherUser_Response_Dto extends PaginatedResponse_Dto {

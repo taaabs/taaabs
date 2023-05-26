@@ -49,7 +49,7 @@ export class BookmarksOnUser_Params_Dto extends PaginationOptions_Dto {
 
   @Type()
   @ApiProperty({
-    description: 'Applies to authenticated requester only.',
+    description: 'Applies to bookmarks on requester only.',
   })
   visibility?: BookmarkVisibility = BookmarksOnUser_Params_Dto.defaultVisibility
 }

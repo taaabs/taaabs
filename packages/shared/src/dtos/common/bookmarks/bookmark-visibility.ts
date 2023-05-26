@@ -1,6 +1,6 @@
 export enum BookmarkVisibility {
   'ALL' = 'all',
   'PUBLIC_ONLY' = 'public_only',
-  'PRIVATE_ONLY' = 'private_only',
-  'ENCRYPTED_ONLY' = 'encrypted_only',
+  'UNLISTED_ONLY' = 'unlisted_only',
+  'SECRET_ONLY' = 'secret_only',
 }
