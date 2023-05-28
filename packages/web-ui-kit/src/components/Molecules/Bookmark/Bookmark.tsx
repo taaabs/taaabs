@@ -184,9 +184,6 @@ namespace _ {
       ${mq.to992} {
         padding-right: ${sharedValues.distance[16]}px;
       }
-      ${mq.at992} {
-        padding-bottom: ${sharedValues.distance[4]}px;
-      }
     `
   }
   export const actions = styled.div`
@@ -235,7 +232,7 @@ namespace _ {
     align-items: center;
     ${s.fontSize[13].rem}
     ${mq.at992} {
-      padding-top: ${sharedValues.distance[2]}px;
+      padding-top: ${sharedValues.distance[5]}px;
       padding-bottom: ${sharedValues.distance[10]}px;
     }
   `

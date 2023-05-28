@@ -133,7 +133,7 @@ export const s = {
   transition: {
     150: (transitionProperty: string) =>
       css`
-        transition: ${transitionProperty} 0.15s ease-in-out;
+        transition: ${transitionProperty} 0.1s ease-in-out;
       `,
     300: (transitionProperty: string) =>
       css`
