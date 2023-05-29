@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import {
   ArchivedBookmarks,
   DateRange,
-  PaginationOptionsDto,
+  PaginationQueryParamDto,
   SortBy,
   BookmarkVisibility,
   NsfwBookmarks,
@@ -11,7 +11,7 @@ import {
 import { Type } from 'class-transformer'
 
 export namespace BookmarksOnUserDto {
-  export class QueryParams extends PaginationOptionsDto {
+  export class QueryParams extends PaginationQueryParamDto {
     static defaultDateRange = DateRange.ANY
     static defaultSortBy = SortBy.DATE_ASC
     static defaultArchived = ArchivedBookmarks.EXCLUDE

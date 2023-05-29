@@ -1,5 +1,5 @@
 const apiConfig = require('./packages/api/jest.config')
-const uiKitConfig = require('./packages/ui-kit/jest.config')
+const uiKitConfig = require('./packages/web-ui-kit/jest.config')
 
 module.exports = {
   verbose: true,
@@ -18,7 +18,7 @@ module.exports = {
     },
     {
       displayName: 'ui-kit',
-      rootDir: '<rootDir>/packages/ui-kit',
+      rootDir: '<rootDir>/packages/web-ui-kit',
       ...uiKitConfig,
     },
   ],
