@@ -195,7 +195,7 @@ namespace _ {
     ${mq.at992} {
       flex-direction: column;
       justify-content: space-between;
-      margin: ${sharedValues.distance[4]}px 0;
+      margin: ${sharedValues.distance[6]}px 0;
     }
   `
   export namespace Action {
@@ -203,9 +203,9 @@ namespace _ {
       display: flex;
       align-items: center;
       justify-content: center;
-      ${s.buttonSize[40]}
+      ${s.buttonSize[34]}
       > div > svg {
-        ${s.iconSize[20]}
+        ${s.iconSize[18]}
         fill: var(${Theme.BOOKMARK_ACTION_FILL});
         ${s.transition[150]('fill')};
       }

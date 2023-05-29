@@ -133,7 +133,7 @@ export const s = {
   transition: {
     150: (transitionProperty: string) =>
       css`
-        transition: ${transitionProperty} 0.1s ease-in-out;
+        transition: ${transitionProperty} 0.15s linear;
       `,
     300: (transitionProperty: string) =>
       css`
@@ -141,6 +141,10 @@ export const s = {
       `,
   },
   iconSize: {
+    18: css`
+      width: 18px;
+      height: 18px;
+    `,
     20: css`
       width: 20px;
       height: 20px;
