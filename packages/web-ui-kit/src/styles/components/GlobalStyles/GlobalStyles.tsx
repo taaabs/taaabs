@@ -59,7 +59,7 @@ export const lightTheme: ThemeMap = {
   [Theme.HEADER_TRANSPARENT_BACKGROUND]: 'rgba(255, 255, 255, 0.8)',
   [Theme.BOOKMARK_BACKGROUND]: colors.white,
   [Theme.BOOKMARK_LINK]: colors.blue[800],
-  [Theme.BOOKMARK_SITE]: colors.orange[800],
+  [Theme.BOOKMARK_SITE]: colors.amber[800],
   [Theme.BOOKMARK_TAG]: colors.green[800],
   [Theme.BOOKMARK_NSFW]: colors.red[600],
   [Theme.BOOKMARK_STARRED_BACKGROUND]: colors.amber[50],
