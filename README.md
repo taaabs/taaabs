@@ -1,1 +1,1 @@
-Taaabs - blazing fast bookmark manager
+Taaabs - social bookmarking

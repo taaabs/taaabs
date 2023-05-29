@@ -31,6 +31,7 @@ export const enum Theme {
   BOOKMARK_STARRED_BORDER = '--bookmark-starred-border',
   BOOKMARK_STARRED_BORDER_HOVER = '--bookmark-starred-border-hover',
   BOOKMARK_ACTION_FILL = '--bookmark-action-fill',
+  BOOKMARK_ACTION_FILL_HOVER = '--bookmark-action-fill-hover',
 }
 
 type ThemeMap = {
@@ -66,6 +67,7 @@ export const lightTheme: ThemeMap = {
   [Theme.BOOKMARK_STARRED_BORDER]: colors.amber[200],
   [Theme.BOOKMARK_STARRED_BORDER_HOVER]: colors.amber[300],
   [Theme.BOOKMARK_ACTION_FILL]: colors.neutral[400],
+  [Theme.BOOKMARK_ACTION_FILL_HOVER]: colors.neutral[600],
 }
 
 export const globalStyles = css`

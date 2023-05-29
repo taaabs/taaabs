@@ -211,7 +211,7 @@ namespace _ {
       }
       @media (hover: hover) {
         :hover > div > svg {
-          fill: var(${Theme.COLOR_BLACK});
+          fill: var(${Theme.BOOKMARK_ACTION_FILL_HOVER});
         }
       }
     `
