@@ -195,7 +195,7 @@ namespace _ {
     ${mq.at992} {
       flex-direction: column;
       justify-content: space-between;
-      margin: ${sharedValues.distance[6]}px 0;
+      margin: ${sharedValues.distance[6]}px 0 ${sharedValues.distance[3]}px 0;
     }
   `
   export namespace Action {
