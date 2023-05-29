@@ -1,2 +1,1 @@
-export * from './bookmarks.params.dto'
-export * from './bookmarks.response.dto'
+export * from './bookmarks-on-user.dto'

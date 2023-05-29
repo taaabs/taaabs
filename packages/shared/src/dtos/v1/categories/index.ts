@@ -1,1 +1,1 @@
-export * from './sidebar-categories.dto'
+export * from './category-tree.dto'

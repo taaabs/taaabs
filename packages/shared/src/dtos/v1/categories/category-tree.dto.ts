@@ -1,8 +1,8 @@
-export namespace SidebarCategoriesDto {
+export namespace CategoryTreeDto {
   export class Category {
     id!: string
     name!: string
-    bookmarks?: number
+    order?: number
     children?: Array<Category>
   }
 

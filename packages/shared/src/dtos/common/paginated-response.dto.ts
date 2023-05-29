@@ -1,4 +1,4 @@
-export class PaginatedResponse_Dto {
+export class PaginatedResponseDto {
   pagination!: {
     hasMore: boolean
   }
