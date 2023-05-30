@@ -99,7 +99,7 @@ namespace _ {
     export const left = styled.div`
       display: flex;
       align-items: center;
-      gap: ${sharedValues.distance[12]}px;
+      gap: ${sharedValues.distance[16]}px;
       height: 100%;
     `
     export namespace Left {

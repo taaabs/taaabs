@@ -69,7 +69,7 @@ export const lightTheme: ThemeMap = {
   [Theme.HEADER_NAV_HOVER_BACKGROUND]: colors.neutral[50],
   [Theme.HEADER_NAV_HOVER_ACTIVE_BACKGROUND]: colors.blue[50],
   [Theme.BOOKMARK_BACKGROUND]: colors.white,
-  [Theme.BOOKMARK_SITE_FOREGROUND]: colors.amber[700],
+  [Theme.BOOKMARK_SITE_FOREGROUND]: colors.amber[800],
   [Theme.BOOKMARK_LINK]: colors.blue[800],
   [Theme.BOOKMARK_TAG_BORDER_COLOR]: colors.green[100],
   [Theme.BOOKMARK_TAG_BACKGROUND]: colors.green[50],

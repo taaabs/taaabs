@@ -26,14 +26,16 @@ export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
       <_.User.backArrow href={user.backHref}>
         <Ui.Atoms.Icon variant="LESS_THAN" />
       </_.User.backArrow>
-      <_.User.profile href={`/${user.username}`}>
+      <_.User.avatarAndUsername href={`/${user.username}`}>
         <Ui.Atoms.ButtonOutlinedIcon
           avatar={user.avatar}
           iconVariant="USER"
           onClick={() => {}}
         />
-        <_.User.Profile.username>{user.username}</_.User.Profile.username>
-      </_.User.profile>
+        <_.User.AvatarAndUsername.username>
+          {user.username}
+        </_.User.AvatarAndUsername.username>
+      </_.User.avatarAndUsername>
     </_.user>
   ) : (
     <_.logo href="/">
@@ -44,18 +46,11 @@ export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
 }
 
 namespace _ {
-  const logoTextLetterSpacing = '-0.06em'
+  const logoTextLetterSpacing = '-1.2px'
   const commonTextStyles = css`
     color: var(${Theme.COLOR_TEXT_NORMAL});
     ${s.fontFamily.plusJakartaSans};
-    ${s.fontWeight.plusJakartaSans.bold};
-    ${s.fontSize[22].px}
     letter-spacing: ${logoTextLetterSpacing};
-    padding-bottom: ${sharedValues.distance[1]}px;
-    ${mq.at992} {
-      ${s.fontSize[26].px}
-      margin-bottom: ${sharedValues.distance[2]}px;
-    }
   `
   export const user = styled.div`
     display: flex;
@@ -88,14 +83,21 @@ namespace _ {
         }
       }
     `
-    export const profile = styled(Link)`
+    export const avatarAndUsername = styled(Link)`
       display: flex;
       align-items: center;
     `
-    export namespace Profile {
+    export namespace AvatarAndUsername {
       export const username = styled.span`
         ${commonTextStyles}
         padding-left: ${sharedValues.distance[12]}px;
+        ${s.fontWeight.plusJakartaSans.semiBold}
+        ${s.fontSize[20].px}
+        margin-bottom: ${sharedValues.distance[1]}px;
+        ${mq.at992} {
+          ${s.fontSize[22].px}
+          margin-bottom: ${sharedValues.distance[2]}px;
+        }
       `
     }
   }
@@ -105,6 +107,13 @@ namespace _ {
     > span {
       ${commonTextStyles}
       padding-left: ${sharedValues.distance[10]}px;
+      ${s.fontWeight.plusJakartaSans.bold}
+      ${s.fontSize[22].px}
+      margin-bottom: ${sharedValues.distance[2]}px;
+      ${mq.at992} {
+        ${s.fontSize[26].px}
+        margin-bottom: ${sharedValues.distance[4]}px;
+      }
     }
     > div > svg {
       fill: var(${Theme.COLOR_BRAND});

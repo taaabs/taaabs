@@ -78,6 +78,14 @@ export const s = {
         font-size: 2.2rem;
       `,
     },
+    24: {
+      px: css`
+        font-size: 24px;
+      `,
+      rem: css`
+        font-size: 2.4rem;
+      `,
+    },
     26: {
       px: css`
         font-size: 26px;
