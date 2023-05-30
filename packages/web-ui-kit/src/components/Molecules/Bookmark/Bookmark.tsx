@@ -145,13 +145,10 @@ namespace _ {
       }
       display: flex;
       flex-wrap: wrap;
-      row-gap: ${sharedValues.distance[7]}px;
-      column-gap: ${sharedValues.distance[10]}px;
+      gap: ${sharedValues.distance[7]}px;
     `
     export namespace SiteAndTags {
       const common = css`
-        padding-top: ${sharedValues.distance[2]}px;
-        padding-bottom: ${sharedValues.distance[2]}px;
         ${s.fontSize[13].px}
         ${s.fontWeight.inter.medium}
       `
