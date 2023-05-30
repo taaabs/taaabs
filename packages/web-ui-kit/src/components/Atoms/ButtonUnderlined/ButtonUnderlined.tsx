@@ -63,42 +63,29 @@ namespace _ {
         display: inline-flex;
         align-items: center;
         position: relative;
-        color: var(${Theme.COLOR_TEXT_NORMAL});
+        ::after {
+          position: absolute;
+          content: '';
+          width: 100%;
+          height: ${underlineHeight}px;
+          bottom: 0;
+          left: 0;
+          margin-left: 50%;
+          transform: translateX(-50%);
+          border-top-right-radius: ${underlineHeight}px;
+          border-top-left-radius: ${underlineHeight}px;
+          ${s.transition[100]('background-color')}
+        }
         ${isActive &&
         css`
-          color: var(${Theme.COLOR_BRAND});
           ::after {
             background-color: var(${Theme.COLOR_BRAND});
-            position: absolute;
-            content: '';
-            width: 100%;
-            height: ${underlineHeight}px;
-            bottom: 0;
-            left: 0;
-            margin-left: 50%;
-            transform: translateX(-50%);
-            border-top-right-radius: ${underlineHeight}px;
-            border-top-left-radius: ${underlineHeight}px;
           }
         `};
       }
-      ::before {
-        ${s.transition[100]('background-color')};
-        position: absolute;
-        content: '';
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        z-index: -1;
-      }
       @media (hover: hover) {
-        :hover {
-          ::before {
-            background-color: ${isActive
-              ? `var(${Theme.HEADER_NAV_HOVER_ACTIVE_BACKGROUND})`
-              : `var(${Theme.HEADER_NAV_HOVER_BACKGROUND})`};
-          }
+        :hover span::after {
+          background-color: var(${Theme.COLOR_BRAND});
         }
       }
     `

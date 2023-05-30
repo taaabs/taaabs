@@ -22,8 +22,6 @@ export const enum Theme {
   BORDER_SECONDARY = '--border-secondary',
   HEADER_BACKGROUND = '--header-background',
   HEADER_TRANSPARENT_BACKGROUND = '--header-transparent-background',
-  HEADER_NAV_HOVER_BACKGROUND = '--header-nav-hover-background',
-  HEADER_NAV_HOVER_ACTIVE_BACKGROUND = '--header-nav-hover-active-background',
   BOOKMARK_BACKGROUND = '--bookmark-background',
   BOOKMARK_LINK = '--bookmark-link',
   BOOKMARK_SITE_FOREGROUND = '--bookmark-site-foreground',
@@ -66,8 +64,6 @@ export const lightTheme: ThemeMap = {
   [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.COLOR_BORDER_SECONDARY})`,
   [Theme.HEADER_BACKGROUND]: colors.white,
   [Theme.HEADER_TRANSPARENT_BACKGROUND]: 'rgba(255, 255, 255, 0.8)',
-  [Theme.HEADER_NAV_HOVER_BACKGROUND]: colors.neutral[50],
-  [Theme.HEADER_NAV_HOVER_ACTIVE_BACKGROUND]: colors.blue[50],
   [Theme.BOOKMARK_BACKGROUND]: colors.white,
   [Theme.BOOKMARK_SITE_FOREGROUND]: colors.amber[800],
   [Theme.BOOKMARK_LINK]: colors.blue[800],
@@ -118,7 +114,7 @@ export const globalStyles = css`
   body {
     ${s.fontFamily.inter};
     line-height: 1.4;
-    font-size: 1.5rem;
+    font-size: 15px;
     color: var(${Theme.COLOR_TEXT_NORMAL});
   }
 
