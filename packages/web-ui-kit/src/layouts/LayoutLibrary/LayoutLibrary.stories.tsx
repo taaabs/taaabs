@@ -11,7 +11,7 @@ export const Primary = () => (
     slotSidebar={<>slot sidebar</>}
     slotMain={<>slot main</>}
     slotAside={<>slot aside</>}
-    slotAppBar={<>slot appbar</>}
+    titleBar={{ primaryText: 'Lorem ipsum', secondaryText: 'lorem' }}
   />
 )
 
@@ -20,7 +20,7 @@ export const Scrolling = () => (
     slotSidebar={<div>{lorem}</div>}
     slotMain={<>{lorem + lorem + lorem + lorem + lorem}</>}
     slotAside={<>{lorem}</>}
-    slotAppBar={<>slot appbar</>}
+    titleBar={{ primaryText: 'Lorem ipsum', secondaryText: 'lorem' }}
   />
 )
 

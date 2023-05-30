@@ -9,7 +9,8 @@ export namespace _MobileTitleBar {
   export type Props = {
     swipeLeftOnClick?: () => void
     swipeRightOnClick?: () => void
-    children?: React.ReactNode
+    topLineText: string
+    bottomLineText: string
   }
 }
 
@@ -19,7 +20,10 @@ export const _MobileTitleBar: React.FC<_MobileTitleBar.Props> = (props) => {
       <_.iconLeft onClick={props.swipeLeftOnClick}>
         <Ui.Atoms.Icon variant={'MOBILE_TITLE_BAR_MENU'} />
       </_.iconLeft>
-      <_.title>{props.children}</_.title>
+      <_.title>
+        <span>{props.topLineText}</span>
+        <span>{props.bottomLineText}</span>
+      </_.title>
       <_.iconRight onClick={props.swipeRightOnClick}>
         <Ui.Atoms.Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
       </_.iconRight>
@@ -31,6 +35,7 @@ namespace _ {
   export const container = styled.div`
     border-bottom: var(${Theme.BORDER_PRIMARY});
     display: flex;
+    align-items: center;
     justify-content: space-between;
     height: ${sharedValues.appBar}px;
     background-color: var(${Theme.HEADER_TRANSPARENT_BACKGROUND});
@@ -40,6 +45,7 @@ namespace _ {
     display: flex;
     align-items: center;
     padding: 0 ${sharedValues.distance[16]}px;
+    align-self: stretch;
   `
   export const iconLeft = styled.button`
     ${iconCommon}
@@ -55,8 +61,24 @@ namespace _ {
   `
   export const title = styled.div`
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: red;
+    background-color: var(${Theme.TITLE_BAR_BACKGROUND});
+    padding: ${sharedValues.distance[3]}px ${sharedValues.distance[24]}px
+      ${sharedValues.distance[1]}px ${sharedValues.distance[24]}px;
+    border-radius: ${sharedValues.distance[999]}px;
+    span:first-of-type {
+      color: var(${Theme.TITLE_BAR_PRIMARY_TEXT});
+      ${s.fontSize[17].px};
+      ${s.fontFamily.plusJakartaSans}
+      ${s.fontWeight.plusJakartaSans.semiBold}
+    }
+    span:last-of-type {
+      color: var(${Theme.TITLE_BAR_SECONDARY_TEXT});
+      ${s.fontSize[13].px};
+      ${s.fontWeight.inter.medium}
+      margin-top: -1px;
+    }
   `
 }

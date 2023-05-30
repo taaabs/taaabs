@@ -13,7 +13,10 @@ export namespace LayoutLibrary {
     slotSidebar: React.ReactNode
     slotMain: React.ReactNode
     slotAside: React.ReactNode
-    slotAppBar: React.ReactNode
+    titleBar: {
+      primaryText: string
+      secondaryText: string
+    }
   }
 }
 
@@ -177,9 +180,9 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
                 swipeRightOnClick={
                   !isSlideoutRightOpen ? toggleRightSlideout : () => {}
                 }
-              >
-                {props.slotAppBar}
-              </_MobileTitleBar>
+                topLineText={props.titleBar.primaryText}
+                bottomLineText={props.titleBar.secondaryText}
+              />
             </_.Main.Inner.mobileTitleBar>
             <div>{props.slotMain}</div>
           </_.Main.inner>

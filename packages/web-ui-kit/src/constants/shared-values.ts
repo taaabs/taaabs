@@ -5,6 +5,7 @@ export const sharedValues = {
   bottomNavigationBar: 49,
   appBar: 63,
   distance: {
+    1: 1,
     2: 2,
     3: 3,
     4: 4,
@@ -20,5 +21,6 @@ export const sharedValues = {
     24: 24,
     40: 40,
     60: 60,
+    999: 999,
   },
 }

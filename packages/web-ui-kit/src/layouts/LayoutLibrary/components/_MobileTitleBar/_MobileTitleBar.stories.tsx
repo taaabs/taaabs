@@ -7,7 +7,10 @@ export default {
 } as Meta
 
 export const Primary = () => (
-  <_MobileTitleBar swipeLeftOnClick={() => {}} swipeRightOnClick={() => {}}>
-    slot content
-  </_MobileTitleBar>
+  <_MobileTitleBar
+    swipeLeftOnClick={() => {}}
+    swipeRightOnClick={() => {}}
+    topLineText="Lorem ipsum"
+    bottomLineText="lorem"
+  />
 )

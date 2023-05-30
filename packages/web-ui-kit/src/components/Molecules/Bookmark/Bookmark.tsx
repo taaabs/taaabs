@@ -27,10 +27,12 @@ export namespace Bookmark {
 
 export const Bookmark: React.FC<Bookmark.Props> = (props) => {
   return (
-    <_.container isStarred={props.isStarred}>
-      <_.main isStarred={props.isStarred}>
+    <_.container>
+      <_.main>
         <div>
-          <_.Main.title href={props.url}>{props.title}</_.Main.title>
+          <_.Main.title href={props.url} isStarred={props.isStarred}>
+            {props.title}
+          </_.Main.title>
         </div>
         <_.Main.siteAndTags>
           <_.Main.SiteAndTags.site onClick={() => {}}>
@@ -79,16 +81,10 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
 }
 
 namespace _ {
-  export const container = styled.div<{ isStarred?: boolean }>`
+  export const container = styled.div`
     display: grid;
     background-color: var(${Theme.BOOKMARK_BACKGROUND});
     border: var(${Theme.BORDER_SECONDARY});
-    ${({ isStarred }) =>
-      isStarred &&
-      css`
-        background-color: var(${Theme.BOOKMARK_STARRED_BACKGROUND});
-        border-color: var(${Theme.BOOKMARK_STARRED_BORDER});
-      `}
     ${mq.to992} {
       grid-template-areas:
         'main main'
@@ -108,11 +104,6 @@ namespace _ {
     @media (hover: hover) {
       :hover {
         border-color: var(${Theme.COLOR_BORDER_PRIMARY});
-        ${({ isStarred }) =>
-          isStarred &&
-          css`
-            border-color: var(${Theme.BOOKMARK_STARRED_BORDER_HOVER});
-          `}
       }
     }
   `
@@ -129,20 +120,19 @@ namespace _ {
     ${mq.to992} {
       padding-bottom: ${sharedValues.distance[8]}px;
       border-bottom: 1px solid var(${Theme.COLOR_BORDER_SECONDARY});
-      ${({ isStarred }) =>
-        isStarred &&
-        css`
-          border-bottom-color: var(${Theme.BOOKMARK_STARRED_BORDER});
-        `}
     }
   `
   export namespace Main {
-    export const title = styled.a`
-      display: inline-flex;
+    export const title = styled.a<{ isStarred?: boolean }>`
+      display: inline;
       color: var(${Theme.BOOKMARK_LINK});
       ${s.fontWeight.inter.medium}
       ${s.fontSize[17].rem}
-      margin-bottom: -0.2rem;
+      ${({ isStarred }) =>
+        isStarred &&
+        css`
+          background-color: var(${Theme.BOOKMARK_STARRED_TITLE_HIGHLIGHT});
+        `}
       @media (hover: hover) {
         :hover {
           text-decoration: underline;
@@ -155,27 +145,40 @@ namespace _ {
       }
       display: flex;
       flex-wrap: wrap;
-      > button {
+      row-gap: ${sharedValues.distance[7]}px;
+      column-gap: ${sharedValues.distance[10]}px;
+    `
+    export namespace SiteAndTags {
+      const common = css`
+        padding-top: ${sharedValues.distance[2]}px;
+        padding-bottom: ${sharedValues.distance[2]}px;
+        ${s.fontSize[13].px}
+        ${s.fontWeight.inter.medium}
+      `
+      export const site = styled.button`
+        ${common}
+        color: var(${Theme.BOOKMARK_SITE_FOREGROUND});
         @media (hover: hover) {
           :hover {
             text-decoration: underline;
           }
         }
-      }
-    `
-    export namespace SiteAndTags {
-      const padding = css`
-        padding: 0.25rem 0;
-      `
-      export const site = styled.button`
-        ${padding}
-        margin-right: ${sharedValues.distance[10] / 10}rem;
-        color: var(${Theme.BOOKMARK_SITE});
       `
       export const tag = styled.button`
-        ${padding}
-        color: var(${Theme.BOOKMARK_TAG});
-        padding-right: ${sharedValues.distance[5] / 10}rem;
+        ${common}
+        color: var(${Theme.BOOKMARK_TAG_FOREGROUND});
+        background-color: var(${Theme.BOOKMARK_TAG_BACKGROUND});
+        ${s.borderRadius[4]}
+        border: 1px solid var(${Theme.BOOKMARK_TAG_BORDER_COLOR});
+        padding-right: ${sharedValues.distance[4]}px;
+        padding-left: ${sharedValues.distance[4]}px;
+        @media (hover: hover) {
+          :hover {
+            border-color: var(${Theme.BOOKMARK_TAG_HOVER_BORDER_COLOR});
+            background-color: var(${Theme.BOOKMARK_TAG_HOVER_BACKGROUND});
+            color: var(${Theme.BOOKMARK_TAG_HOVER_FOREGROUND});
+          }
+        }
       `
     }
     export const description = styled.div`
@@ -230,7 +233,7 @@ namespace _ {
     padding-left: ${sharedValues.distance[16]}px;
     display: flex;
     align-items: center;
-    ${s.fontSize[13].rem}
+    ${s.fontSize[13].px}
     ${mq.at992} {
       padding-top: ${sharedValues.distance[5]}px;
       padding-bottom: ${sharedValues.distance[10]}px;

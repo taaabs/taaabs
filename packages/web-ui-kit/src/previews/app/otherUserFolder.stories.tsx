@@ -60,7 +60,7 @@ export const Primary = () => (
       }
       slotAside={<>aside</>}
       slotSidebar={<>sidebar</>}
-      slotAppBar={<>appbar</>}
+      titleBar={{ primaryText: 'All bookmarks', secondaryText: '3230 results' }}
     />
   </LayoutRoot>
 )
