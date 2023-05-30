@@ -2,11 +2,10 @@ import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/components/GlobalStyles'
 import { mq, s } from '@/styles/constants'
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 
-export namespace LogoForHeader {
+export namespace UserForHeader {
   export type User = {
     username: string
     avatar?: {
@@ -16,12 +15,12 @@ export namespace LogoForHeader {
     backHref: string
   }
   export type Props = {
-    user?: User
+    user: User
   }
 }
 
-export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
-  return user ? (
+export const UserForHeader: React.FC<UserForHeader.Props> = ({ user }) => {
+  return (
     <_.user>
       <_.User.backArrow href={user.backHref}>
         <Ui.Atoms.Icon variant="LESS_THAN" />
@@ -37,21 +36,10 @@ export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
         </_.User.AvatarAndUsername.username>
       </_.User.avatarAndUsername>
     </_.user>
-  ) : (
-    <_.logo href="/">
-      <Ui.Atoms.Icon variant="LOGO" />
-      <span>taaabs</span>
-    </_.logo>
   )
 }
 
 namespace _ {
-  const logoTextLetterSpacing = '-1.2px'
-  const commonTextStyles = css`
-    color: var(${Theme.COLOR_TEXT_NORMAL});
-    ${s.fontFamily.plusJakartaSans};
-    letter-spacing: ${logoTextLetterSpacing};
-  `
   export const user = styled.div`
     display: flex;
     align-items: center;
@@ -89,7 +77,9 @@ namespace _ {
     `
     export namespace AvatarAndUsername {
       export const username = styled.span`
-        ${commonTextStyles}
+        color: var(${Theme.COLOR_TEXT_NORMAL});
+        ${s.fontFamily.plusJakartaSans};
+        ${s.letterSpacing.logo};
         padding-left: ${sharedValues.distance[12]}px;
         ${s.fontWeight.plusJakartaSans.semiBold}
         ${s.fontSize[20].px}
@@ -101,28 +91,4 @@ namespace _ {
       `
     }
   }
-  export const logo = styled(Link)`
-    display: flex;
-    align-items: center;
-    > span {
-      ${commonTextStyles}
-      padding-left: ${sharedValues.distance[10]}px;
-      ${s.fontWeight.plusJakartaSans.bold}
-      ${s.fontSize[22].px}
-      margin-bottom: ${sharedValues.distance[2]}px;
-      ${mq.at992} {
-        ${s.fontSize[26].px}
-        margin-bottom: ${sharedValues.distance[4]}px;
-      }
-    }
-    > div > svg {
-      fill: var(${Theme.COLOR_BRAND});
-      height: 34px;
-      width: auto;
-      ${s.transition[100]('fill')}
-      ${mq.at992} {
-        height: 42px;
-      }
-    }
-  `
 }

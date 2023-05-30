@@ -9,7 +9,7 @@ export default {
 export const Primary = () => (
   <LayoutRoot
     slotHeaderDesktop={
-      <Ui.Molecues.HeaderDesktop
+      <Ui.Organisms.HeaderDesktop
         currentTheme="LIGHT"
         onClickSearch={() => {}}
         onClickTheme={() => {}}
@@ -20,16 +20,16 @@ export const Primary = () => (
           { label: 'About', href: '/about', isActive: false },
           { label: 'Pricing', href: '/pricing', isActive: false },
         ]}
-        viewedUser={{ username: 'lorem_ipsum', backHref: '/' }}
+        otherUserAccount={{ username: 'lorem_ipsum', backHref: '/' }}
       />
     }
     slotHeaderMobile={
-      <Ui.Molecues.HeaderMobile
+      <Ui.Organisms.HeaderMobile
         currentTheme="LIGHT"
         hamburgerIsToggled={false}
         onClickHamburger={() => {}}
         onClickTheme={() => {}}
-        viewedUser={{ username: 'lorem_ipsum', backHref: '/' }}
+        otherUserAccount={{ username: 'lorem_ipsum', backHref: '/' }}
         navigation={[]}
       />
     }

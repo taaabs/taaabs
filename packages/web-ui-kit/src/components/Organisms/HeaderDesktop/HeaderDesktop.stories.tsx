@@ -70,7 +70,7 @@ export const Primary = () => (
       onClickAdd={() => {}}
       loggedInUser={{ username: 'lorem', displayName: 'Lorem ipsum' }}
       navigation={navItemsLoggedInUser}
-      viewedUser={{
+      otherUserAccount={{
         backHref: '/',
         username: 'lorem',
         avatar: {

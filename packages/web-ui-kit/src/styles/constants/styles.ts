@@ -228,4 +228,9 @@ export const s = {
       backdrop-filter: saturate(180%) blur(5px);
     `,
   },
+  letterSpacing: {
+    logo: css`
+      letter-spacing: -1.2px;
+    `,
+  },
 }

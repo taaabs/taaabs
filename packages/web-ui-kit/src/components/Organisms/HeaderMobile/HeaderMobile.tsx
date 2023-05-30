@@ -1,8 +1,8 @@
-import { Icon, LogoForHeader } from '@/components/Atoms'
+import { LogoForHeader } from '@/components/Atoms'
+import { UserForHeader } from '@/components/Molecules'
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/components/GlobalStyles'
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 export namespace HeaderMobile {
@@ -16,7 +16,7 @@ export namespace HeaderMobile {
     onClickHamburger: () => void
     onClickTheme: () => void
     currentTheme: 'LIGHT' | 'DARK'
-    viewedUser?: LogoForHeader.User
+    otherUserAccount?: UserForHeader.User
     navigation: Navigation
   }
 }
@@ -24,7 +24,11 @@ export namespace HeaderMobile {
 export const HeaderMobile: React.FC<HeaderMobile.Props> = (props) => {
   return (
     <_.container>
-      <Ui.Atoms.LogoForHeader user={props.viewedUser} />
+      {props.otherUserAccount ? (
+        <UserForHeader user={props.otherUserAccount} />
+      ) : (
+        <LogoForHeader />
+      )}
       <_.right>
         <_.Right.nav>
           <ul>

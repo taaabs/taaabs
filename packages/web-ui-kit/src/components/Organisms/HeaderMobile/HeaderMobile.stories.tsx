@@ -23,7 +23,7 @@ export const Primary = () => (
       onClickHamburger={() => {}}
       currentTheme="LIGHT"
       onClickTheme={() => {}}
-      viewedUser={{
+      otherUserAccount={{
         backHref: '/',
         username: 'lorem',
         avatar: {

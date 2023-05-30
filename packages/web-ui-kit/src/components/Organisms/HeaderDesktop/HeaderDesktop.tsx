@@ -1,9 +1,10 @@
 import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import styled from '@emotion/styled'
-import { LogoForHeader } from '../../Atoms/LogoForHeader'
 import { Theme } from '@/styles/components/GlobalStyles'
 import { s } from '@/styles/constants'
+import { LogoForHeader } from '@/components/Atoms'
+import { UserForHeader } from '@/components/Molecules'
 
 export namespace HeaderDesktop {
   export type Navigation = Array<{
@@ -26,7 +27,7 @@ export namespace HeaderDesktop {
     onClickAdd: () => void
     navigation: Navigation
     currentTheme: 'LIGHT' | 'DARK'
-    viewedUser?: LogoForHeader.User
+    otherUserAccount?: UserForHeader.User
   }
 }
 
@@ -46,7 +47,11 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
       <Ui.Atoms.Wrapper>
         <_.top>
           <_.Top.left>
-            <LogoForHeader user={props.viewedUser} />
+            {props.otherUserAccount ? (
+              <UserForHeader user={props.otherUserAccount} />
+            ) : (
+              <LogoForHeader />
+            )}
             <_.Top.Left.nav>
               <ul>
                 {props.navigation.map((link) => (
