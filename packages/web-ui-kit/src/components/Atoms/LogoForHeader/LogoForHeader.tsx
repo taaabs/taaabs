@@ -2,6 +2,7 @@ import { sharedValues } from '@/constants'
 import { Ui } from '@/index'
 import { Theme } from '@/styles/components/GlobalStyles'
 import { mq, s } from '@/styles/constants'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 
@@ -31,7 +32,7 @@ export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
           iconVariant="USER"
           onClick={() => {}}
         />
-        <_.User.Profile.username>@{user.username}</_.User.Profile.username>
+        <_.User.Profile.username>{user.username}</_.User.Profile.username>
       </_.User.profile>
     </_.user>
   ) : (
@@ -44,6 +45,18 @@ export const LogoForHeader: React.FC<LogoForHeader.Props> = ({ user }) => {
 
 namespace _ {
   const logoTextLetterSpacing = '-0.06em'
+  const commonTextStyles = css`
+    color: var(${Theme.COLOR_TEXT_NORMAL});
+    ${s.fontFamily.plusJakartaSans};
+    ${s.fontWeight.plusJakartaSans.bold};
+    ${s.fontSize[22].px}
+    letter-spacing: ${logoTextLetterSpacing};
+    padding-left: ${sharedValues.distance[8]}px;
+    padding-bottom: ${sharedValues.distance[3]}px;
+    ${mq.at992} {
+      ${s.fontSize[26].px}
+    }
+  `
 
   export const user = styled.div`
     display: flex;
@@ -67,7 +80,7 @@ namespace _ {
       }
       > div > svg {
         fill: var(${Theme.COLOR_BRAND});
-        ${s.transition[150]('transform')}
+        ${s.transition[100]('transform')}
         height: 18px;
         width: 10px;
         ${mq.at992} {
@@ -82,20 +95,7 @@ namespace _ {
     `
     export namespace Profile {
       export const username = styled.span`
-        ${s.fontFamily.plusJakartaSans};
-        ${s.fontWeight.plusJakartaSans.medium};
-        letter-spacing: ${logoTextLetterSpacing};
-        color: var(${Theme.COLOR_BRAND});
-        padding-left: 0.4em;
-        font-size: 18px;
-        ${mq.at992} {
-          font-size: 22px;
-        }
-        @media (hover: hover) {
-          :hover {
-            text-decoration: underline;
-          }
-        }
+        ${commonTextStyles}
       `
     }
   }
@@ -103,33 +103,15 @@ namespace _ {
     display: flex;
     align-items: center;
     > span {
-      color: var(${Theme.COLOR_BRAND});
-      ${s.fontFamily.plusJakartaSans};
-      ${s.fontWeight.plusJakartaSans.medium};
-      font-size: 22px;
-      letter-spacing: ${logoTextLetterSpacing};
-      padding-left: 0.3em;
-      ${mq.at992} {
-        font-size: 24px;
-      }
-      @media (hover: hover) {
-        :hover {
-          text-decoration: underline;
-        }
-      }
+      ${commonTextStyles}
     }
     > div > svg {
-      fill: var(${Theme.COLOR_PRIMARY_800});
-      height: 36px;
+      fill: var(${Theme.COLOR_BRAND});
+      height: 34px;
       width: auto;
-      ${s.transition[150]('fill')}
+      ${s.transition[100]('fill')}
       ${mq.at992} {
         height: 42px;
-      }
-      @media (hover: hover) {
-        :hover {
-          fill: var(${Theme.COLOR_PRIMARY_900});
-        }
       }
     }
   `

@@ -98,7 +98,7 @@ namespace _ {
         'main actions'
         'info actions';
       ${s.borderRadius[10]}
-      ${s.transition[150]('border-color')}
+      ${s.transition[100]('border-color')}
       grid-template-columns: 1fr auto;
     }
     @media (hover: hover) {
@@ -207,7 +207,7 @@ namespace _ {
       > div > svg {
         ${s.iconSize[18]}
         fill: var(${Theme.BOOKMARK_ACTION_FILL});
-        ${s.transition[150]('fill')};
+        ${s.transition[100]('fill')};
       }
       @media (hover: hover) {
         :hover > div > svg {

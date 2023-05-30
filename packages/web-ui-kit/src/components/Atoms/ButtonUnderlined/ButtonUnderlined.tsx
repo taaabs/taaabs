@@ -78,7 +78,7 @@ namespace _ {
         `};
       }
       ::before {
-        ${s.transition[150]('background-color')};
+        ${s.transition[100]('background-color')};
         position: absolute;
         content: '';
         width: 100%;

@@ -139,7 +139,7 @@ export const globalStyles = css`
 
   a,
   button {
-    ${s.transition[150]('all')}
+    ${s.transition[100]('all')}
   }
 
   ol,

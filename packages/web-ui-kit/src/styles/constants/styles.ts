@@ -70,6 +70,22 @@ export const s = {
         font-size: 2rem;
       `,
     },
+    22: {
+      px: css`
+        font-size: 22px;
+      `,
+      rem: css`
+        font-size: 2.2rem;
+      `,
+    },
+    26: {
+      px: css`
+        font-size: 26px;
+      `,
+      rem: css`
+        font-size: 2.6rem;
+      `,
+    },
   },
   fontWeight: {
     inter: {
@@ -131,9 +147,9 @@ export const s = {
     },
   },
   transition: {
-    150: (transitionProperty: string) =>
+    100: (transitionProperty: string) =>
       css`
-        transition: ${transitionProperty} 0.1s ease-in-out;
+        transition: ${transitionProperty} 0.1s linear;
       `,
     300: (transitionProperty: string) =>
       css`

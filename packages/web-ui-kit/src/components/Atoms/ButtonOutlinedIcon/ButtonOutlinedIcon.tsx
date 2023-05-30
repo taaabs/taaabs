@@ -72,7 +72,7 @@ namespace _ {
     > img {
       width: 100%;
       height: 100%;
-      ${s.transition[150]('all')};
+      ${s.transition[100]('all')};
       z-index: 0;
     }
   `
