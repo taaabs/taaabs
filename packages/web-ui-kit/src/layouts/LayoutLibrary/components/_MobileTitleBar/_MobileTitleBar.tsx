@@ -77,7 +77,6 @@ namespace _ {
     span:last-of-type {
       color: var(${Theme.TITLE_BAR_SECONDARY_TEXT});
       ${s.fontSize[13].px};
-      ${s.fontWeight.inter.medium}
       margin-top: -1px;
     }
   `

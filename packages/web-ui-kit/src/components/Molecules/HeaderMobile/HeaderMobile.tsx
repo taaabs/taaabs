@@ -6,12 +6,18 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 export namespace HeaderMobile {
+  export type Navigation = Array<{
+    label: string
+    href: string
+    isActive: boolean
+  }>
   export type Props = {
     hamburgerIsToggled: boolean
     onClickHamburger: () => void
     onClickTheme: () => void
     currentTheme: 'LIGHT' | 'DARK'
     viewedUser?: LogoForHeader.User
+    navigation: Navigation
   }
 }
 
@@ -20,10 +26,20 @@ export const HeaderMobile: React.FC<HeaderMobile.Props> = (props) => {
     <_.container>
       <Ui.Atoms.LogoForHeader user={props.viewedUser} />
       <_.right>
-        <_.Right.theme onClick={props.onClickTheme}>
-          <Icon variant="SUN" />
-        </_.Right.theme>
-        <_.Right.hamburger onClick={props.onClickHamburger}></_.Right.hamburger>
+        <_.Right.nav>
+          <ul>
+            {props.navigation.map((link) => (
+              <li key={link.label}>
+                <Ui.Atoms.ButtonUnderlined
+                  href={link.href}
+                  isActive={link.isActive}
+                >
+                  {link.label}
+                </Ui.Atoms.ButtonUnderlined>
+              </li>
+            ))}
+          </ul>
+        </_.Right.nav>
       </_.right>
     </_.container>
   )
@@ -35,6 +51,7 @@ namespace _ {
     align-items: center;
     justify-content: space-between;
     padding-left: ${sharedValues.distance[16]}px;
+    padding-right: ${sharedValues.distance[10]}px;
     border-bottom: var(${Theme.BORDER_PRIMARY});
     height: ${sharedValues.headerMobile}px;
     background-color: var(${Theme.HEADER_BACKGROUND});
@@ -44,24 +61,15 @@ namespace _ {
     height: 100%;
   `
   export namespace Right {
-    const baseButton = css`
-      height: ${sharedValues.headerMobile}px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    `
-    export const theme = styled.button`
-      ${baseButton}
-      padding: 0 ${sharedValues.distance[8]}px;
-      > div > svg {
-        height: 24px;
-        width: 24px;
+    export const nav = styled.nav`
+      height: 100%;
+      ul {
+        height: 100%;
+        display: flex;
       }
-    `
-    export const hamburger = styled.button`
-      ${baseButton}
-      padding-right: ${sharedValues.distance[16]}px;
-      padding-left: ${sharedValues.distance[8]}px;
+      li {
+        height: 100%;
+      }
     `
   }
 }

@@ -51,13 +51,12 @@ namespace _ {
     ${s.fontWeight.plusJakartaSans.bold};
     ${s.fontSize[22].px}
     letter-spacing: ${logoTextLetterSpacing};
-    padding-left: ${sharedValues.distance[8]}px;
-    padding-bottom: ${sharedValues.distance[3]}px;
+    padding-bottom: ${sharedValues.distance[1]}px;
     ${mq.at992} {
       ${s.fontSize[26].px}
+      margin-bottom: ${sharedValues.distance[2]}px;
     }
   `
-
   export const user = styled.div`
     display: flex;
     align-items: center;
@@ -96,6 +95,7 @@ namespace _ {
     export namespace Profile {
       export const username = styled.span`
         ${commonTextStyles}
+        padding-left: ${sharedValues.distance[12]}px;
       `
     }
   }
@@ -104,6 +104,7 @@ namespace _ {
     align-items: center;
     > span {
       ${commonTextStyles}
+      padding-left: ${sharedValues.distance[10]}px;
     }
     > div > svg {
       fill: var(${Theme.COLOR_BRAND});

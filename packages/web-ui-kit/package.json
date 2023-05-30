@@ -1,5 +1,5 @@
 {
-  "name": "@taaabs/ui-kit",
+  "name": "@taaabs/web-ui-kit",
   "private": true,
   "scripts": {
     "storybook": "storybook dev -p 6006 --no-open",
@@ -26,8 +26,10 @@
     "react-blurhash": "^0.3.0",
     "react-dom": "18.2.0",
     "react-sticky-box": "^2.0.4",
+    "react-use-scroll-direction": "^0.1.0",
     "simplebar-react": "^3.2.4",
     "slideout": "^1.0.1",
+    "use-scroll-direction": "^1.1.4",
     "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {

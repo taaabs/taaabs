@@ -47,9 +47,7 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
         <_.top>
           <_.Top.left>
             <LogoForHeader user={props.viewedUser} />
-          </_.Top.left>
-          <_.Top.right>
-            <_.Top.Right.nav>
+            <_.Top.Left.nav>
               <ul>
                 {props.navigation.map((link) => (
                   <li key={link.label}>
@@ -62,7 +60,9 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
                   </li>
                 ))}
               </ul>
-            </_.Top.Right.nav>
+            </_.Top.Left.nav>
+          </_.Top.left>
+          <_.Top.right>
             <Ui.Atoms.ButtonOutlinedIcon
               iconVariant="SEARCH"
               onClick={props.onClickSearch}
@@ -96,18 +96,13 @@ namespace _ {
     height: 100%;
   `
   export namespace Top {
-    export const right = styled.div`
-      display: flex;
-      align-items: center;
-      gap: ${sharedValues.distance[8]}px;
-      height: 100%;
-    `
     export const left = styled.div`
       display: flex;
       align-items: center;
-      gap: ${sharedValues.distance[20]}px;
+      gap: ${sharedValues.distance[12]}px;
+      height: 100%;
     `
-    export namespace Right {
+    export namespace Left {
       export const nav = styled.nav`
         height: 100%;
         ul {
@@ -118,13 +113,12 @@ namespace _ {
           height: 100%;
         }
       `
-      export const blurHash = styled.div`
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-      `
     }
+    export const right = styled.div`
+      display: flex;
+      align-items: center;
+      gap: ${sharedValues.distance[8]}px;
+      height: 100%;
+    `
   }
 }

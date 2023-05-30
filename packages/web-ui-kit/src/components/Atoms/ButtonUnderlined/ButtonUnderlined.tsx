@@ -1,6 +1,6 @@
 import { sharedValues } from '@/constants'
 import { Theme } from '@/styles/components/GlobalStyles'
-import { s } from '@/styles/constants'
+import { mq, s } from '@/styles/constants'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
@@ -44,24 +44,29 @@ namespace _ {
     const underlineHeight = 2.5
 
     return css`
-      ${s.fontSize[16].px}
-      ${s.fontWeight.inter.medium};
+      ${s.fontFamily.plusJakartaSans}
+      ${s.fontWeight.inter.semiBold}
       display: inline-flex;
       height: 100%;
       width: 100%;
       align-items: center;
       justify-content: center;
-      padding: 0 ${sharedValues.distance[16]}px;
+      padding: 0 ${sharedValues.distance[6]}px;
       position: relative;
+      ${s.fontSize[15].px}
+      ${mq.at992} {
+        ${s.fontSize[16].px}
+        padding: 0 ${sharedValues.distance[12]}px;
+      }
       span {
         height: 100%;
         display: inline-flex;
         align-items: center;
         position: relative;
-        color: var(${Theme.COLOR_TEXT_VARIANT});
+        color: var(${Theme.COLOR_TEXT_NORMAL});
         ${isActive &&
         css`
-          color: var(${Theme.COLOR_TEXT_NORMAL});
+          color: var(${Theme.COLOR_BRAND});
           ::after {
             background-color: var(${Theme.COLOR_BRAND});
             position: absolute;
@@ -91,8 +96,8 @@ namespace _ {
         :hover {
           ::before {
             background-color: ${isActive
-              ? `var(${Theme.COLOR_PRIMARY_50})`
-              : `var(${Theme.COLOR_NEUTRAL_50})`};
+              ? `var(${Theme.HEADER_NAV_HOVER_ACTIVE_BACKGROUND})`
+              : `var(${Theme.HEADER_NAV_HOVER_BACKGROUND})`};
           }
         }
       }

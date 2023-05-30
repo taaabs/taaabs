@@ -1,12 +1,13 @@
 import styled from '@emotion/styled'
 import Slideout from 'slideout'
-import { useEffect, useRef, useLayoutEffect, useState } from 'react'
+import { useEffect, useRef, useState, LegacyRef } from 'react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@/constants'
 import { _MobileTitleBar } from './components/_MobileTitleBar'
 import { css } from '@emotion/react'
 import { mq, s } from '@/styles/constants'
 import { Theme } from '@/styles/components/GlobalStyles'
+import { useScrollDirection } from 'react-use-scroll-direction'
 
 export namespace LayoutLibrary {
   export type Props = {
@@ -20,21 +21,14 @@ export namespace LayoutLibrary {
   }
 }
 
-const useWindowWidth = () => {
-  const [width, setWidth] = useState<number | null>(null)
-  useLayoutEffect(() => {
-    const updateWidth = () => {
-      setWidth(window.innerWidth)
-    }
-    window.addEventListener('resize', updateWidth)
-    updateWidth()
-    return () => window.removeEventListener('resize', updateWidth)
-  })
-  return width
-}
+const SLIDABLE_WIDTH = 300
 
 export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
-  const windowWidth = useWindowWidth()
+  const {
+    isScrolling,
+    scrollTargetRef,
+  }: { isScrolling: boolean; scrollTargetRef: LegacyRef<HTMLDivElement> } =
+    useScrollDirection() as any // Fixes ref type error
   const [slideoutLeft, setSlideoutLeft] = useState<Slideout>()
   const [slideoutRight, setSlideoutRight] = useState<Slideout>()
   const [isSlideoutLeftOpen, setIsSlideoutLeftOpen] = useState(false)
@@ -50,15 +44,6 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
   const sidebarRef = useRef<HTMLDivElement>(null)
   const mainRef = useRef<HTMLDivElement>(null)
   const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
-
-  let slidableWidth: number
-  if (windowWidth == null) {
-    slidableWidth = 0
-  } else if (windowWidth >= 432) {
-    slidableWidth = 300
-  } else {
-    slidableWidth = windowWidth / 1.5
-  }
 
   const toggleRightSlideout = () => {
     if (!isSlideoutRightOpen) {
@@ -77,23 +62,18 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
     slideoutLeft?.toggle()
   }
 
-  useEffect(() => {
-    if (
-      !windowWidth ||
-      !sidebarRef.current ||
-      !mainRef.current ||
-      !mobileTabsPanelRef.current
-    )
+  const initializeSlideout = () => {
+    if (!sidebarRef.current || !mainRef.current || !mobileTabsPanelRef.current)
       return
     const slideoutLeftInstance = new Slideout({
       menu: sidebarRef.current,
       panel: mainRef.current,
-      padding: slidableWidth,
+      padding: SLIDABLE_WIDTH,
     })
     const slideoutRightInstance = new Slideout({
       menu: mobileTabsPanelRef.current,
       panel: mainRef.current,
-      padding: slidableWidth,
+      padding: SLIDABLE_WIDTH,
       side: 'right',
     })
     slideoutLeftInstance.on('beforeopen', () => {
@@ -128,20 +108,34 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
       setIsSlideoutRightDefinetelyClosed(false)
       setIsSlideoutRightDefinetelyOpened(false)
     })
-    setSlideoutLeft(slideoutLeftInstance)
-    setSlideoutRight(slideoutRightInstance)
-    return () => {
-      slideoutLeftInstance.destroy()
-      slideoutRightInstance.destroy()
+
+    return {
+      slideoutLeftInstance,
+      slideoutRightInstance,
     }
-  }, [windowWidth])
+  }
+
+  useEffect(() => {
+    if (isScrolling) {
+      slideoutLeft?.destroy()
+      slideoutRight?.destroy()
+    } else {
+      const slideoutInstances = initializeSlideout()
+      setSlideoutLeft(slideoutInstances?.slideoutLeftInstance)
+      setSlideoutRight(slideoutInstances?.slideoutRightInstance)
+      return () => {
+        slideoutInstances?.slideoutLeftInstance.destroy()
+        slideoutInstances?.slideoutRightInstance.destroy()
+      }
+    }
+  }, [isScrolling])
 
   return (
     <_.container>
       <_.content>
         <_.sidebar
           ref={sidebarRef}
-          width={slidableWidth}
+          width={SLIDABLE_WIDTH}
           style={{ zIndex: !isSlideoutLeftDefinetelyClosed ? 1 : 0 }}
         >
           <_.Sidebar.inner>{props.slotSidebar}</_.Sidebar.inner>
@@ -165,6 +159,7 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
                   ? 'none'
                   : 'all',
             }}
+            ref={scrollTargetRef}
           >
             <_.Main.Inner.mobileAlphaOverlay
               isEnabled={
@@ -190,19 +185,18 @@ export const LayoutLibrary: React.FC<LayoutLibrary.Props> = (props) => {
 
         <_.aside
           ref={mobileTabsPanelRef}
-          width={slidableWidth}
+          width={SLIDABLE_WIDTH}
           style={{ zIndex: !isSlideoutRightDefinetelyClosed ? 1 : 0 }}
         >
           <_.Aside.inner>
-            {windowWidth && windowWidth >= 992 ? (
+            <_.Aside.Inner.desktop>
               <>
                 <StickyBox offsetTop={sharedValues.headerDesktop}>
                   {props.slotAside}
                 </StickyBox>
               </>
-            ) : (
-              props.slotAside
-            )}
+            </_.Aside.Inner.desktop>
+            <_.Aside.Inner.mobile>{props.slotAside}</_.Aside.Inner.mobile>
           </_.Aside.inner>
         </_.aside>
       </_.content>
@@ -361,6 +355,7 @@ namespace _ {
       ${mq.to992} {
         overflow: auto;
         height: 100%;
+        touch-action: manipulation; // https://github.com/Mango/slideout/issues/205#issuecomment-823927561
         ::before {
           position: absolute;
           content: '';

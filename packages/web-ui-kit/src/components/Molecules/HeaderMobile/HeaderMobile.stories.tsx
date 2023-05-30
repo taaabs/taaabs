@@ -12,6 +12,10 @@ export const Primary = () => (
       onClickHamburger={() => {}}
       currentTheme="LIGHT"
       onClickTheme={() => {}}
+      navigation={[
+        { label: 'Lorem', href: '/', isActive: true },
+        { label: 'Ipsum', href: '/about', isActive: false },
+      ]}
     />
     <StorybookSpacer />
     <HeaderMobile
@@ -27,6 +31,10 @@ export const Primary = () => (
           blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',
         },
       }}
+      navigation={[
+        { label: 'Lorem', href: '/', isActive: true },
+        { label: 'Ipsum', href: '/about', isActive: false },
+      ]}
     />
   </div>
 )

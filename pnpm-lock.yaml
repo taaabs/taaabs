@@ -327,7 +327,7 @@ importers:
       '@taaabs/shared':
         specifier: workspace:*
         version: link:../shared
-      '@taaabs/ui-kit':
+      '@taaabs/web-ui-kit':
         specifier: workspace:*
         version: link:../ui-kit
       '@types/node':
@@ -518,7 +518,7 @@ importers:
       '@taaabs/shared':
         specifier: workspace:*
         version: link:../shared
-      '@taaabs/ui-kit':
+      '@taaabs/web-ui-kit':
         specifier: workspace:*
         version: link:../web-ui-kit
       '@types/node':
@@ -590,12 +590,18 @@ importers:
       react-sticky-box:
         specifier: ^2.0.4
         version: 2.0.4(react@18.2.0)
+      react-use-scroll-direction:
+        specifier: ^0.1.0
+        version: 0.1.0(react@18.2.0)
       simplebar-react:
         specifier: ^3.2.4
         version: 3.2.4(react@18.2.0)
       slideout:
         specifier: ^1.0.1
         version: 1.0.1
+      use-scroll-direction:
+        specifier: ^1.1.4
+        version: 1.1.4(react@18.2.0)
       vite-plugin-svgr:
         specifier: ^3.2.0
         version: 3.2.0(vite@4.3.7)
@@ -9829,6 +9835,12 @@ packages:
       value-equal: 0.4.0
     dev: false
 
+  /history@5.3.0:
+    resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
+    dependencies:
+      '@babel/runtime': 7.21.5
+    dev: false
+
   /hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
     dependencies:
@@ -11933,6 +11945,10 @@ packages:
 
   /lodash.sortby@4.7.0:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
+    dev: false
+
+  /lodash.throttle@4.1.1:
+    resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
     dev: false
 
   /lodash.uniq@4.5.0:
@@ -14344,6 +14360,16 @@ packages:
       react: 18.2.0
     dev: false
 
+  /react-use-scroll-direction@0.1.0(react@18.2.0):
+    resolution: {integrity: sha512-dOEC+rniLzeJLD5gaPhXUNp7Hd2uKqW4f246FJkCW9SS2pqIKEqBu89jxhXfaf27Vemn/UNBtNSsguDVZo7qPg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      history: 5.3.0
+      react: 18.2.0
+    dev: false
+
   /react@18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
     engines: {node: '>=0.10.0'}
@@ -16298,6 +16324,16 @@ packages:
     dependencies:
       querystringify: 2.2.0
       requires-port: 1.0.0
+
+  /use-scroll-direction@1.1.4(react@18.2.0):
+    resolution: {integrity: sha512-RffVEp3rI79fIP6jr4XYPRGr2KO1DkE6MV5AM/ak0sFxd63exKoyBCNg40LIJg5mIwvDphr/8Fcbk8FQyoZHqA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      lodash.throttle: 4.1.1
+      react: 18.2.0
+    dev: false
 
   /use-sync-external-store@1.2.0(react@18.2.0):
     resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}

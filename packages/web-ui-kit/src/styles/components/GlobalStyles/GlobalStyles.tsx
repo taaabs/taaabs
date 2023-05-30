@@ -22,6 +22,8 @@ export const enum Theme {
   BORDER_SECONDARY = '--border-secondary',
   HEADER_BACKGROUND = '--header-background',
   HEADER_TRANSPARENT_BACKGROUND = '--header-transparent-background',
+  HEADER_NAV_HOVER_BACKGROUND = '--header-nav-hover-background',
+  HEADER_NAV_HOVER_ACTIVE_BACKGROUND = '--header-nav-hover-active-background',
   BOOKMARK_BACKGROUND = '--bookmark-background',
   BOOKMARK_LINK = '--bookmark-link',
   BOOKMARK_SITE_FOREGROUND = '--bookmark-site-foreground',
@@ -64,6 +66,8 @@ export const lightTheme: ThemeMap = {
   [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.COLOR_BORDER_SECONDARY})`,
   [Theme.HEADER_BACKGROUND]: colors.white,
   [Theme.HEADER_TRANSPARENT_BACKGROUND]: 'rgba(255, 255, 255, 0.8)',
+  [Theme.HEADER_NAV_HOVER_BACKGROUND]: colors.neutral[50],
+  [Theme.HEADER_NAV_HOVER_ACTIVE_BACKGROUND]: colors.blue[50],
   [Theme.BOOKMARK_BACKGROUND]: colors.white,
   [Theme.BOOKMARK_SITE_FOREGROUND]: colors.amber[700],
   [Theme.BOOKMARK_LINK]: colors.blue[800],
@@ -79,7 +83,7 @@ export const lightTheme: ThemeMap = {
   [Theme.BOOKMARK_ACTION_FILL_HOVER]: colors.neutral[600],
   [Theme.TITLE_BAR_BACKGROUND]: colors.blue[50],
   [Theme.TITLE_BAR_PRIMARY_TEXT]: colors.blue[800],
-  [Theme.TITLE_BAR_SECONDARY_TEXT]: colors.blue[400],
+  [Theme.TITLE_BAR_SECONDARY_TEXT]: colors.blue[500],
 }
 
 export const globalStyles = css`
@@ -177,6 +181,7 @@ export const globalStyles = css`
   .slideout-open body,
   .slideout-open .slideout-panel {
     ${mq.to992} {
+      touch-action: manipulation; // https://github.com/Mango/slideout/issues/205#issuecomment-823927561
       overflow: hidden;
     }
   }
