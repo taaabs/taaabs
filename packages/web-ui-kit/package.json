@@ -29,7 +29,6 @@
     "react-use-scroll-direction": "^0.1.0",
     "simplebar-react": "^3.2.4",
     "slideout": "^1.0.1",
-    "use-scroll-direction": "^1.1.4",
     "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {
