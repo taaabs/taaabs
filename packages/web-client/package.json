@@ -1,5 +1,5 @@
 {
-  "name": "@taaabs/client-web",
+  "name": "@taaabs/web-client",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,23 +8,24 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@taaabs/web-ui-kit": "workspace:*",
-    "@taaabs/shared": "workspace:*",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@reduxjs/toolkit": "^1.9.5",
     "@taaabs/repositories": "workspace:*",
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
-    "@reduxjs/toolkit": "^1.9.2",
-    "@types/node": "18.11.18",
-    "@types/react": "18.0.27",
-    "@types/react-dom": "18.0.10",
-    "axios": "^1.3.2",
-    "eslint": "8.33.0",
-    "eslint-config-next": "13.1.6",
-    "next": "13.1.6",
+    "@taaabs/shared": "workspace:*",
+    "@taaabs/web-ui-kit": "workspace:*",
+    "@types/node": "20.2.5",
+    "@types/react": "18.2.7",
+    "@types/react-dom": "18.2.4",
+    "axios": "^1.4.0",
+    "eslint": "8.41.0",
+    "eslint-config-next": "13.4.4",
+    "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-redux": "^8.0.5",
-    "typescript": "4.9.5"
+    "react-redux": "^8.0.7",
+    "typescript": "5.0.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+  }
 }

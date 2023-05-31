@@ -17,10 +17,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@taaabs-fe/ui-kit": ["packages/ui-kit"]
+      "@taaabs/web-ui-kit": ["../web-ui-kit/src/index"]
     },
-    "jsxImportSource": "@emotion/react"
+    // "jsxImportSource": "@emotion/react"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]
 }

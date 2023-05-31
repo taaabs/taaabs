@@ -7,7 +7,7 @@ export default {
 }
 
 const navItemsLoggedInUser: HeaderDesktop.Navigation = [
-  { label: 'My Library', href: '/', isActive: true },
+  { label: 'My library', href: '/', isActive: true },
   { label: 'Notifications', href: '/notifications', isActive: false },
   { label: 'Explore', href: '/explore', isActive: false },
 ]

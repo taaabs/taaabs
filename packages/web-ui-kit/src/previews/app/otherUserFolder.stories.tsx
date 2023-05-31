@@ -1,6 +1,6 @@
 import { Bookmark } from '@/components/Molecules'
 import { Ui } from '@/index'
-import { LayoutLibrary, LayoutRoot } from '@/layouts'
+import { LayoutLibrary, LayoutRoot } from '@/components/Layouts'
 
 export default {
   title: 'previews/app/other user catalog',
