@@ -1,21 +1,19 @@
-import { Ui } from '@taaabs/web-ui-kit'
+import dynamic from 'next/dynamic'
+
+const UiLayoutLibrary = dynamic(
+  () => import('./layout-library/UiLayoutLibrary'),
+  {
+    loading: () => <p>Loading...</p>,
+    ssr: false,
+  },
+)
 
 type LayoutLibraryProps = {
   children: React.ReactNode
 }
 
 const LayoutLibrary: React.FC<LayoutLibraryProps> = (props) => {
-  return (
-    <Ui.Layouts.LayoutLibrary
-      slotAside={<></>}
-      slotMain={props.children}
-      slotSidebar={<></>}
-      titleBar={{
-        primaryText: 'x',
-        secondaryText: 'y',
-      }}
-    />
-  )
+  return <UiLayoutLibrary test='x' />
 }
 
 type GetLayoutParams = {

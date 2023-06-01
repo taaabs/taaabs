@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { Ui } from '@taaabs/web-ui-kit'
+import { Ui } from '@web-ui'
 
 type LayoutRootProps = {
   children: React.ReactNode
