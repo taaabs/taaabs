@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
 
+// swc can't be used because it doesn't support emotion's component selectors
+
 const nextConfig = {
   transpilePackages: ['@taaabs/web-ui'],
   typescript: {
     ignoreBuildErrors: true,
-  },
-  compiler: {
-    emotion: true,
   },
   webpack(config) {
     config.module.rules.push({

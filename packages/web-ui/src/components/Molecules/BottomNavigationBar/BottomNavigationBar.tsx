@@ -36,7 +36,7 @@ export const BottomNavigationBar: React.FC<BottomNavigationBarTypes.Props> = (
         }
       `}
     >
-      {/* <button onClick={props.onClickMyLibrary}>
+      <button onClick={props.onClickMyLibrary}>
         <Icon variant="ADD" />
       </button>
       <button onClick={props.onClickNotifications}>
@@ -47,7 +47,7 @@ export const BottomNavigationBar: React.FC<BottomNavigationBarTypes.Props> = (
       </button>
       <button onClick={props.onClickUser}>
         <Icon variant="USER" />
-      </button> */}
+      </button>
     </div>
   )
 }

@@ -3,10 +3,7 @@ import Slideout from 'slideout'
 import { useEffect, useRef, useState, LegacyRef } from 'react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@web-ui/constants'
-import {
-  _MobileTitleBar,
-  _MobileTitleBarTypes,
-} from './components/_MobileTitleBar'
+import { _MobileTitleBar } from './components/_MobileTitleBar'
 import { css } from '@emotion/react'
 import { mq, s } from '@web-ui/styles/constants'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
@@ -15,12 +12,12 @@ import { useScrollDirection } from 'react-use-scroll-direction'
 export namespace LibraryTypes {
   export type Props = {
     slotSidebar: React.ReactNode
-    slotMain: React.ReactNode
     slotAside: React.ReactNode
     titleBar: {
       primaryText: string
       secondaryText: string
     }
+    children: React.ReactNode
   }
 }
 
@@ -183,7 +180,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                 bottomLineText={props.titleBar.secondaryText}
               />
             </_.Main.Inner.mobileTitleBar>
-            <div>{props.slotMain}</div>
+            <div>{props.children}</div>
           </_.Main.inner>
         </_.main>
 

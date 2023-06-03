@@ -16,6 +16,8 @@ export const enum Theme {
   COLOR_NEUTRAL_100 = '--color-neutral-100',
   COLOR_NEUTRAL_200 = '--color-neutral-200',
   COLOR_BRAND = '--color-brand',
+  SELECTION_BACKGROUND = '--selection-background',
+  SELECTION_FOREGROUND = '--selection-foreground',
   COLOR_BORDER_PRIMARY = '--color-border-primary',
   COLOR_BORDER_SECONDARY = '--color-border-secondary',
   LOGO_BACKGROUND = '--logo-background',
@@ -62,6 +64,8 @@ export const lightTheme: ThemeMap = {
   [Theme.COLOR_NEUTRAL_100]: '#E6E6E6',
   [Theme.COLOR_NEUTRAL_200]: '#C3C3C3',
   [Theme.COLOR_BRAND]: colors.blue[800],
+  [Theme.SELECTION_BACKGROUND]: colors.blue[800],
+  [Theme.SELECTION_FOREGROUND]: colors.white,
   [Theme.COLOR_BORDER_PRIMARY]: colors.neutral[200],
   [Theme.COLOR_BORDER_SECONDARY]: colors.neutral[100],
   [Theme.LOGO_BACKGROUND]: colors.blue[800],
@@ -104,8 +108,8 @@ export const globalStyles = css`
   }
 
   ::selection {
-    background-color: var(${Theme.COLOR_BRAND});
-    color: var(${Theme.COLOR_WHITE});
+    background-color: var(${Theme.SELECTION_BACKGROUND});
+    color: var(${Theme.SELECTION_FOREGROUND});
   }
 
   html {

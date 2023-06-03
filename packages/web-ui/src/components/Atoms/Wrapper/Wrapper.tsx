@@ -11,7 +11,7 @@ export const Wrapper: React.FC<WrapperProps> = (props) => {
     <div
       css={css`
         width: 100%;
-        max-width: 1380px;
+        max-width: ${sharedValues.siteMaxWidth}px;
         margin: 0 auto;
         padding: 0 ${sharedValues.distance[16]}px;
         ${mq.at1200} {
