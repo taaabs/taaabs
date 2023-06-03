@@ -3,7 +3,7 @@ import { Bookmark } from '@web-ui/components/Molecules/Bookmark'
 import { BottomNavigationBar } from '@web-ui/components/Molecules/BottomNavigationBar'
 import { HeaderDesktop } from '@web-ui/components/Organisms/HeaderDesktop'
 import { HeaderMobile } from '@web-ui/components/Organisms/HeaderMobile'
-import { Library } from '@web-ui/components/Organisms/Library'
+import { Library } from '@web-ui/components/Templates/Library'
 
 export default {
   title: 'previews/app/other user catalog',
@@ -44,24 +44,23 @@ export const Primary = () => (
     }
   >
     <Library
-      slotMain={
-        <>
-          <br />
-          {bookmark}
-          <br />
-          {bookmark}
-          <br />
-          {bookmark}
-          <br />
-          {bookmark}
-          <br />
-          {bookmark}
-        </>
-      }
       slotAside={<>aside</>}
       slotSidebar={<>sidebar</>}
       titleBar={{ primaryText: 'All bookmarks', secondaryText: '3230 results' }}
-    />
+    >
+      <>
+        <br />
+        {bookmark}
+        <br />
+        {bookmark}
+        <br />
+        {bookmark}
+        <br />
+        {bookmark}
+        <br />
+        {bookmark}
+      </>
+    </Library>
   </LayoutDefault>
 )
 
