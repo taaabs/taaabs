@@ -34,6 +34,7 @@ module.exports = {
     )
     config.plugins.push(
       svgr({
+        exportAsDefault: true,
         svgrOptions: {},
       }),
     )

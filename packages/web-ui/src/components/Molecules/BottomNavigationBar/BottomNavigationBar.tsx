@@ -1,10 +1,10 @@
 import { sharedValues } from '@web-ui/constants'
-import { Ui } from '@web-ui/index'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
 import { s } from '@web-ui/styles/constants'
 import { css } from '@emotion/react'
+import { Icon } from '@web-ui/components/Atoms/Icon'
 
-export namespace BottomNavigationBar {
+export namespace BottomNavigationBarTypes {
   export type Props = {
     onClickSearch: () => void
     onClickUser: () => void
@@ -14,7 +14,7 @@ export namespace BottomNavigationBar {
   }
 }
 
-export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
+export const BottomNavigationBar: React.FC<BottomNavigationBarTypes.Props> = (
   props,
 ) => {
   return (
@@ -36,18 +36,18 @@ export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
         }
       `}
     >
-      <button onClick={props.onClickMyLibrary}>
-        <Ui.Atoms.Icon variant="ADD" />
+      {/* <button onClick={props.onClickMyLibrary}>
+        <Icon variant="ADD" />
       </button>
       <button onClick={props.onClickNotifications}>
-        <Ui.Atoms.Icon variant="SEARCH" />
+        <Icon variant="SEARCH" />
       </button>
       <button onClick={props.onClickAdd}>
-        <Ui.Atoms.Icon variant="NOTIFICATIONS" />
+        <Icon variant="NOTIFICATIONS" />
       </button>
       <button onClick={props.onClickUser}>
-        <Ui.Atoms.Icon variant="USER" />
-      </button>
+        <Icon variant="USER" />
+      </button> */}
     </div>
   )
 }

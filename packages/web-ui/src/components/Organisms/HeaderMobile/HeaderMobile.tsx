@@ -1,27 +1,26 @@
-import { LogoForHeader } from '@web-ui/components/Atoms'
-import { UserForHeader } from '@web-ui/components/Molecules'
 import { sharedValues } from '@web-ui/constants'
-import { Ui } from '@web-ui/index'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
 import styled from '@emotion/styled'
+import {
+  UserForHeader,
+  UserForHeaderTypes,
+} from '@web-ui/components/Molecules/UserForHeader'
+import { LogoForHeader } from '@web-ui/components/Molecules/LogoForHeader'
+import { ButtonUnderlined } from '@web-ui/components/Atoms/ButtonUnderlined'
 
-export namespace HeaderMobile {
+export namespace HeaderMobileTypes {
   export type Navigation = Array<{
     label: string
     href: string
     isActive: boolean
   }>
   export type Props = {
-    hamburgerIsToggled: boolean
-    onClickHamburger: () => void
-    onClickTheme: () => void
-    currentTheme: 'LIGHT' | 'DARK'
-    otherUserAccount?: UserForHeader.User
+    otherUserAccount?: UserForHeaderTypes.User
     navigation: Navigation
   }
 }
 
-export const HeaderMobile: React.FC<HeaderMobile.Props> = (props) => {
+export const HeaderMobile: React.FC<HeaderMobileTypes.Props> = (props) => {
   return (
     <_.container>
       {props.otherUserAccount ? (
@@ -34,12 +33,9 @@ export const HeaderMobile: React.FC<HeaderMobile.Props> = (props) => {
           <ul>
             {props.navigation.map((link) => (
               <li key={link.label}>
-                <Ui.Atoms.ButtonUnderlined
-                  href={link.href}
-                  isActive={link.isActive}
-                >
+                <ButtonUnderlined href={link.href} isActive={link.isActive}>
                   {link.label}
-                </Ui.Atoms.ButtonUnderlined>
+                </ButtonUnderlined>
               </li>
             ))}
           </ul>

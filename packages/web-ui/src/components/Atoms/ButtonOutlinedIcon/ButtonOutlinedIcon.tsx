@@ -1,14 +1,13 @@
 import styled from '@emotion/styled'
-import { Icon } from '../Icon'
+import { Icon, IconTypes } from '../Icon'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { Ui } from '@web-ui/index'
 import { Blurhash } from 'react-blurhash'
 import { mq, s } from '@web-ui/styles/constants'
 
-export namespace ButtonOutlinedIcon {
+export namespace ButtonOutlinedIconTypes {
   export type Props = {
     onClick: () => void
-    iconVariant?: Icon.Variant
+    iconVariant?: IconTypes.Variant
     avatar?: {
       url: string
       blurhash: string
@@ -16,7 +15,7 @@ export namespace ButtonOutlinedIcon {
   }
 }
 
-export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIcon.Props> = (
+export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIconTypes.Props> = (
   props,
 ) => {
   return (
@@ -32,7 +31,7 @@ export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIcon.Props> = (
         </>
       )}
       {!props.avatar && props.iconVariant && (
-        <Ui.Atoms.Icon variant={props.iconVariant} />
+        <Icon variant={props.iconVariant} />
       )}
     </_.circleButton>
   )

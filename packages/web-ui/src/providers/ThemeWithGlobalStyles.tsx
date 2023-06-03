@@ -5,13 +5,13 @@ interface ThemeWithGlobalStylesProps {
   children: React.ReactNode
 }
 
-export const ThemeWithGlobalStylesProvider: React.FC<
-  ThemeWithGlobalStylesProps
-> = ({ children }) => {
+export const ThemeWithGlobalStylesProvider = (
+  props: ThemeWithGlobalStylesProps,
+) => {
   return (
     <>
       <Global styles={globalStyles} />
-      {children}
+      {props.children}
     </>
   )
 }

@@ -5,7 +5,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 
-export namespace ButtonUnderlined {
+export namespace ButtonUnderlinedTypes {
   export type Props = {
     children: React.ReactNode
     href?: string
@@ -14,7 +14,7 @@ export namespace ButtonUnderlined {
   }
 }
 
-export const ButtonUnderlined: React.FC<ButtonUnderlined.Props> = (props) => {
+export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (props) => {
   const { children, href, onClick, isActive } = props
   if (href != undefined) {
     return (

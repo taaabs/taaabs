@@ -4,7 +4,7 @@ import { css, SerializedStyles } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 
-export namespace Button {
+export namespace ButtonTypes {
   export type Size = 'small' | 'default' | 'large'
   export type Props = {
     href?: string
@@ -17,7 +17,7 @@ export namespace Button {
   }
 }
 
-export const Button: React.FC<Button.Props> = (props) => {
+export const Button = (props: ButtonTypes.Props) => {
   if (props.type == 'submit') {
     return (
       <_.button size={props.size} type="submit">
@@ -50,14 +50,14 @@ namespace _ {
     display: inline-flex;
     align-items: center;
     color: var(${Theme.COLOR_WHITE});
-    background: var(${Theme.COLOR_BRAND});
+    background: var(${Theme.BUTTON_BACKGROUND});
     ${s.fontWeight.inter.medium};
     &:hover {
-      background: var(${Theme.COLOR_PRIMARY_900});
+      background: var(${Theme.BUTTON_BACKGROUND_HOVER});
     }
   `
   type SizeMap = {
-    [Key in Button.Size]: SerializedStyles
+    [Key in ButtonTypes.Size]: SerializedStyles
   }
   const sizeMap: SizeMap = {
     small: css`
@@ -80,13 +80,13 @@ namespace _ {
     `,
   }
 
-  type ButtonProps = Pick<Button.Props, 'size'>
+  type ButtonProps = Pick<ButtonTypes.Props, 'size'>
 
   export const button = styled.button<ButtonProps>`
     ${buttonBase}
     ${({ size = 'default' }) => sizeMap[size]}
   `
-  export const nextLink = styled(Link)<ButtonProps>`
+  export const nextLink = styled.a<ButtonProps>`
     ${buttonBase}
     ${({ size = 'default' }) => sizeMap[size]}
   `

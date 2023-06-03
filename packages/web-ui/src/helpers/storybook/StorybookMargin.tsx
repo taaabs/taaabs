@@ -6,8 +6,8 @@ type MarginProps = {
   children?: React.ReactNode
 }
 
-export const StorybookMargin: React.FC<MarginProps> = ({ children }) => {
-  return <_.container>{children}</_.container>
+export const StorybookMargin = (props: MarginProps) => {
+  return <_.container>{props.children}</_.container>
 }
 
 namespace _ {

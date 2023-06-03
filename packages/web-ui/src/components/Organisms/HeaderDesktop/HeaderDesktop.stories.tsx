@@ -1,12 +1,12 @@
 import { StorybookMargin } from '@web-ui/helpers/storybook/StorybookMargin'
 import { StorybookSpacer } from '@web-ui/helpers/storybook/StorybookSpacer'
-import { HeaderDesktop } from './HeaderDesktop'
+import { HeaderDesktop, HeaderDesktopTypes } from './HeaderDesktop'
 
 export default {
   component: HeaderDesktop,
 }
 
-const navItemsLoggedInUser: HeaderDesktop.Navigation = [
+const navItemsLoggedInUser: HeaderDesktopTypes.Navigation = [
   { label: 'My library', href: '/', isActive: true },
   { label: 'Notifications', href: '/notifications', isActive: false },
   { label: 'Explore', href: '/explore', isActive: false },

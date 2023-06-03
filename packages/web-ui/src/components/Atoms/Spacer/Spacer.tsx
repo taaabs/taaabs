@@ -2,19 +2,19 @@ import { mq } from '@web-ui/styles/constants'
 import { css, SerializedStyles } from '@emotion/react'
 import styled from '@emotion/styled'
 
-export namespace Spacer {
+export namespace SpacerTypes {
   export type Size = 'small' | 'medium' | 'large'
   export type Props = {
     size: Size
   }
 }
 
-export const Spacer: React.FC<Spacer.Props> = ({ size }) => {
+export const Spacer: React.FC<SpacerTypes.Props> = ({ size }) => {
   return <_.container size={size} />
 }
 
 namespace _ {
-  type SizeMap = { [Key in Spacer.Size]: SerializedStyles }
+  type SizeMap = { [Key in SpacerTypes.Size]: SerializedStyles }
 
   const sizeMap: SizeMap = {
     small: css`
@@ -46,7 +46,7 @@ namespace _ {
     `,
   }
 
-  export const container = styled.div<Pick<Spacer.Props, 'size'>>`
+  export const container = styled.div<Pick<SpacerTypes.Props, 'size'>>`
     ${({ size }) => sizeMap[size]}
   `
 }

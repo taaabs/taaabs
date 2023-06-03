@@ -17,10 +17,21 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@web-ui": ["../web-ui/src/index"],
-    }
-    // "jsxImportSource": "@emotion/react"
+      "@web-ui/*": ["../web-ui/src/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "jsxImportSource": "@emotion/react"
   },
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next/types/**/*.ts",
+    "../web-ui/src/**/*.tsx"
+  ],
   "exclude": ["node_modules"]
 }

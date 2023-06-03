@@ -8,10 +8,6 @@ export default {
 export const Primary = () => (
   <div css={{ maxWidth: '400px', width: '100%' }}>
     <HeaderMobile
-      hamburgerIsToggled={false}
-      onClickHamburger={() => {}}
-      currentTheme="LIGHT"
-      onClickTheme={() => {}}
       navigation={[
         { label: 'Lorem', href: '/', isActive: true },
         { label: 'Ipsum', href: '/about', isActive: false },
@@ -19,10 +15,6 @@ export const Primary = () => (
     />
     <StorybookSpacer />
     <HeaderMobile
-      hamburgerIsToggled={false}
-      onClickHamburger={() => {}}
-      currentTheme="LIGHT"
-      onClickTheme={() => {}}
       otherUserAccount={{
         backHref: '/',
         username: 'lorem',

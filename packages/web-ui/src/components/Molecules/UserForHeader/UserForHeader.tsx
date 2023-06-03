@@ -1,11 +1,12 @@
 import { sharedValues } from '@web-ui/constants'
-import { Ui } from '@web-ui/index'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
 import { mq, s } from '@web-ui/styles/constants'
 import styled from '@emotion/styled'
 import Link from 'next/link'
+import { Icon } from '@web-ui/components/Atoms/Icon'
+import { ButtonOutlinedIcon } from '@web-ui/components/Atoms/ButtonOutlinedIcon'
 
-export namespace UserForHeader {
+export namespace UserForHeaderTypes {
   export type User = {
     username: string
     avatar?: {
@@ -19,14 +20,14 @@ export namespace UserForHeader {
   }
 }
 
-export const UserForHeader: React.FC<UserForHeader.Props> = ({ user }) => {
+export const UserForHeader: React.FC<UserForHeaderTypes.Props> = ({ user }) => {
   return (
     <_.user>
       <_.User.backArrow href={user.backHref}>
-        <Ui.Atoms.Icon variant="LESS_THAN" />
+        <Icon variant="LESS_THAN" />
       </_.User.backArrow>
       <_.User.avatarAndUsername href={`/${user.username}`}>
-        <Ui.Atoms.ButtonOutlinedIcon
+        <ButtonOutlinedIcon
           avatar={user.avatar}
           iconVariant="USER"
           onClick={() => {}}

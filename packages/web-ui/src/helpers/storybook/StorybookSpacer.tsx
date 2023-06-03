@@ -2,7 +2,7 @@ import { sharedValues } from '@web-ui/constants'
 import { mq } from '@web-ui/styles/constants'
 import styled from '@emotion/styled'
 
-export const StorybookSpacer: React.FC = () => {
+export const StorybookSpacer = () => {
   return <_.container />
 }
 

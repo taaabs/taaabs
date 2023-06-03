@@ -1,7 +1,0 @@
-export * from './Button'
-export * from './ButtonOutlinedIcon'
-export * from './ButtonUnderlined'
-export * from './Icon'
-export * from '../Molecules/LogoForHeader'
-export * from './Spacer'
-export * from './Wrapper'

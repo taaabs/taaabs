@@ -1,14 +1,14 @@
 import { sharedValues } from '@web-ui/constants'
-import { Ui } from '@web-ui/index'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
 import { mq, s } from '@web-ui/styles/constants'
 import styled from '@emotion/styled'
 import Link from 'next/link'
+import { Icon } from '@web-ui/components/Atoms/Icon'
 
 export const LogoForHeader: React.FC = () => {
   return (
     <_.logo href="/">
-      <Ui.Atoms.Icon variant="LOGO" />
+      <Icon variant="LOGO" />
       <span>taaabs</span>
     </_.logo>
   )
@@ -18,7 +18,7 @@ namespace _ {
   export const logo = styled(Link)`
     display: flex;
     align-items: center;
-    > span {
+    span {
       color: var(${Theme.COLOR_TEXT_NORMAL});
       ${s.fontFamily.plusJakartaSans}
       ${s.letterSpacing.logo}
@@ -32,7 +32,7 @@ namespace _ {
       }
     }
     > div > svg {
-      fill: var(${Theme.COLOR_BRAND});
+      fill: var(${Theme.LOGO_BACKGROUND});
       height: 34px;
       width: auto;
       ${s.transition[100]('fill')}

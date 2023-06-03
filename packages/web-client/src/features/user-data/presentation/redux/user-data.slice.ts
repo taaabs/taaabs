@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { UserDataDto } from 'taaabs-types/dtos'
 import { UserData } from '../../../../../../repositories/src/user-data/domain/entities/UserData'
 
 import * as thunks from './action-creators'
@@ -20,9 +19,9 @@ const UserDataSlice = createSlice({
     setIsLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload
     },
-    setUserData(state, action: PayloadAction<UserDataDto>) {
-      state.userData = action.payload
-    },
+    // setUserData(state, action: PayloadAction<UserDataDto>) {
+    //   state.userData = action.payload
+    // },
   },
 })
 

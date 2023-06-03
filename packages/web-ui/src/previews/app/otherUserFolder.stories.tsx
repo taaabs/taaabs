@@ -1,15 +1,18 @@
-import { Bookmark } from '@web-ui/components/Molecules'
-import { Ui } from '@web-ui/index'
-import { LayoutLibrary, LayoutRoot } from '@web-ui/components/Layouts'
+import { LayoutDefault } from '@web-ui/components/Layouts/LayoutDefault'
+import { Bookmark } from '@web-ui/components/Molecules/Bookmark'
+import { BottomNavigationBar } from '@web-ui/components/Molecules/BottomNavigationBar'
+import { HeaderDesktop } from '@web-ui/components/Organisms/HeaderDesktop'
+import { HeaderMobile } from '@web-ui/components/Organisms/HeaderMobile'
+import { Library } from '@web-ui/components/Organisms/Library'
 
 export default {
   title: 'previews/app/other user catalog',
 }
 
 export const Primary = () => (
-  <LayoutRoot
+  <LayoutDefault
     slotHeaderDesktop={
-      <Ui.Organisms.HeaderDesktop
+      <HeaderDesktop
         currentTheme="LIGHT"
         onClickSearch={() => {}}
         onClickTheme={() => {}}
@@ -24,18 +27,14 @@ export const Primary = () => (
       />
     }
     slotHeaderMobile={
-      <Ui.Organisms.HeaderMobile
-        currentTheme="LIGHT"
-        hamburgerIsToggled={false}
-        onClickHamburger={() => {}}
-        onClickTheme={() => {}}
+      <HeaderMobile
         otherUserAccount={{ username: 'lorem_ipsum', backHref: '/' }}
         navigation={[]}
       />
     }
     slotFooterDesktop={<div style={{ height: 1000 }}>footer</div>}
     slotBottomNavigationBar={
-      <Ui.Molecues.BottomNavigationBar
+      <BottomNavigationBar
         onClickAdd={() => {}}
         onClickMyLibrary={() => {}}
         onClickNotifications={() => {}}
@@ -44,7 +43,7 @@ export const Primary = () => (
       />
     }
   >
-    <LayoutLibrary
+    <Library
       slotMain={
         <>
           <br />
@@ -63,7 +62,7 @@ export const Primary = () => (
       slotSidebar={<>sidebar</>}
       titleBar={{ primaryText: 'All bookmarks', secondaryText: '3230 results' }}
     />
-  </LayoutRoot>
+  </LayoutDefault>
 )
 
 const bookmark = (

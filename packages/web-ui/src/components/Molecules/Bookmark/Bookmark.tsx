@@ -1,15 +1,15 @@
 import { sharedValues } from '@web-ui/constants'
-import { Ui } from '@web-ui/index'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
 import { mq, s } from '@web-ui/styles/constants'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { Icon } from '@web-ui/components/Atoms/Icon'
 
 dayjs.extend(relativeTime)
 
-export namespace Bookmark {
+export namespace BookmarkTypes {
   export type Visibility = 'unlisted' | 'secret'
   export type Props = {
     title: string
@@ -25,7 +25,7 @@ export namespace Bookmark {
   }
 }
 
-export const Bookmark: React.FC<Bookmark.Props> = (props) => {
+export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
   return (
     <_.container>
       <_.main>
@@ -50,10 +50,10 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
       </_.main>
       <_.actions>
         <_.Action.menu>
-          <Ui.Atoms.Icon variant="THREE_DOTS" />
+          <Icon variant="THREE_DOTS" />
         </_.Action.menu>
         <_.Action.info>
-          <Ui.Atoms.Icon variant="INFO" />
+          <Icon variant="INFO" />
         </_.Action.info>
       </_.actions>
       <_.info>
@@ -85,6 +85,7 @@ namespace _ {
     display: grid;
     background-color: var(${Theme.BOOKMARK_BACKGROUND});
     border: var(${Theme.BORDER_SECONDARY});
+    ${s.transition[100]('border-color')}
     ${mq.to992} {
       grid-template-areas:
         'main main'
@@ -98,7 +99,7 @@ namespace _ {
         'main actions'
         'info actions';
       ${s.borderRadius[10]}
-      ${s.transition[100]('border-color')}
+
       grid-template-columns: 1fr auto;
     }
     @media (hover: hover) {
@@ -171,9 +172,9 @@ namespace _ {
         padding-left: ${sharedValues.distance[4]}px;
         @media (hover: hover) {
           :hover {
-            border-color: var(${Theme.BOOKMARK_TAG_HOVER_BORDER_COLOR});
-            background-color: var(${Theme.BOOKMARK_TAG_HOVER_BACKGROUND});
-            color: var(${Theme.BOOKMARK_TAG_HOVER_FOREGROUND});
+            border-color: var(${Theme.BOOKMARK_TAG_BORDER_COLOR_HOVER});
+            background-color: var(${Theme.BOOKMARK_TAG_BACKGROUND_HOVER});
+            color: var(${Theme.BOOKMARK_TAG_FOREGROUND_HOVER});
           }
         }
       `

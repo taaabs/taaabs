@@ -1,24 +1,24 @@
-import { ReactComponent as Add } from '@web-ui/assets/icons/add.svg'
-import { ReactComponent as Bookmark } from '@web-ui/assets/icons/bookmark.svg'
-import { ReactComponent as GreaterThan } from '@web-ui/assets/icons/greater-than.svg'
-import { ReactComponent as Info } from '@web-ui/assets/icons/info.svg'
-import { ReactComponent as LessThan } from '@web-ui/assets/icons/less-than.svg'
-import { ReactComponent as Search } from '@web-ui/assets/icons/search.svg'
-import { ReactComponent as StarFilled } from '@web-ui/assets/icons/star-filled.svg'
-import { ReactComponent as Star } from '@web-ui/assets/icons/star.svg'
-import { ReactComponent as Sun } from '@web-ui/assets/icons/sun.svg'
-import { ReactComponent as ThreeDots } from '@web-ui/assets/icons/three-dots.svg'
-import { ReactComponent as Logo } from '@web-ui/assets/icons/logo.svg'
-import { ReactComponent as MobileTitleBarMenu } from '@web-ui/assets/icons/mobile-title-bar-menu.svg'
-import { ReactComponent as MobileTitleBarViewOptions } from '@web-ui/assets/icons/mobile-title-bar-view-options.svg'
-import { ReactComponent as Notifications } from '@web-ui/assets/icons/notifications.svg'
-import { ReactComponent as UserAdd } from '@web-ui/assets/icons/user-add.svg'
-import { ReactComponent as UserRemove } from '@web-ui/assets/icons/user-remove.svg'
-import { ReactComponent as User } from '@web-ui/assets/icons/user.svg'
+import Add from '@web-ui/assets/icons/add.svg'
+import Bookmark from '@web-ui/assets/icons/bookmark.svg'
+import GreaterThan from '@web-ui/assets/icons/greater-than.svg'
+import Info from '@web-ui/assets/icons/info.svg'
+import LessThan from '@web-ui/assets/icons/less-than.svg'
+import Search from '@web-ui/assets/icons/search.svg'
+import StarFilled from '@web-ui/assets/icons/star-filled.svg'
+import Star from '@web-ui/assets/icons/star.svg'
+import Sun from '@web-ui/assets/icons/sun.svg'
+import ThreeDots from '@web-ui/assets/icons/three-dots.svg'
+import Logo from '@web-ui/assets/icons/logo.svg'
+import MobileTitleBarMenu from '@web-ui/assets/icons/mobile-title-bar-menu.svg'
+import MobileTitleBarViewOptions from '@web-ui/assets/icons/mobile-title-bar-view-options.svg'
+import Notifications from '@web-ui/assets/icons/notifications.svg'
+import UserAdd from '@web-ui/assets/icons/user-add.svg'
+import UserRemove from '@web-ui/assets/icons/user-remove.svg'
+import User from '@web-ui/assets/icons/user.svg'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
 import styled from '@emotion/styled'
 
-export namespace Icon {
+export namespace IconTypes {
   export type Variant =
     | 'ADD'
     | 'BOOKMARK'
@@ -43,7 +43,7 @@ export namespace Icon {
   }
 }
 
-export const Icon: React.FC<Icon.Props> = ({ variant }) => {
+export const Icon: React.FC<IconTypes.Props> = ({ variant }) => {
   let icon: JSX.Element
 
   switch (variant) {
@@ -105,7 +105,7 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
 namespace _ {
   export const iconWrapper = styled.div`
     display: inline-flex;
-    svg {
+    > svg {
       width: auto;
       height: auto;
       fill: var(${Theme.COLOR_BLACK});

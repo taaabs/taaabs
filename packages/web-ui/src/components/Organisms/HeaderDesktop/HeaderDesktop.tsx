@@ -1,12 +1,18 @@
 import { sharedValues } from '@web-ui/constants'
-import { Ui } from '@web-ui/index'
 import styled from '@emotion/styled'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
 import { s } from '@web-ui/styles/constants'
-import { LogoForHeader } from '@web-ui/components/Atoms'
-import { UserForHeader } from '@web-ui/components/Molecules'
+import {
+  UserForHeader,
+  UserForHeaderTypes,
+} from '@web-ui/components/Molecules/UserForHeader'
+import { ButtonOutlinedIcon } from '@web-ui/components/Atoms/ButtonOutlinedIcon'
+import { Wrapper } from '@web-ui/components/Atoms/Wrapper'
+import { LogoForHeader } from '@web-ui/components/Molecules/LogoForHeader'
+import { ButtonUnderlined } from '@web-ui/components/Atoms/ButtonUnderlined'
+import { Button } from '@web-ui/components/Atoms/Button'
 
-export namespace HeaderDesktop {
+export namespace HeaderDesktopTypes {
   export type Navigation = Array<{
     label: string
     href: string
@@ -27,15 +33,15 @@ export namespace HeaderDesktop {
     onClickAdd: () => void
     navigation: Navigation
     currentTheme: 'LIGHT' | 'DARK'
-    otherUserAccount?: UserForHeader.User
+    otherUserAccount?: UserForHeaderTypes.User
   }
 }
 
-export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
+export const HeaderDesktop = (props: HeaderDesktopTypes.Props) => {
   const userArea = !props.loggedInUser ? (
-    <Ui.Atoms.Button onClick={props.onClickSignIn}>Sign in</Ui.Atoms.Button>
+    <Button onClick={props.onClickSignIn}>Sign in</Button>
   ) : (
-    <Ui.Atoms.ButtonOutlinedIcon
+    <ButtonOutlinedIcon
       avatar={props.loggedInUser.avatar}
       iconVariant="USER"
       onClick={() => {}}
@@ -44,7 +50,7 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
 
   return (
     <_.container>
-      <Ui.Atoms.Wrapper>
+      <Wrapper>
         <_.top>
           <_.Top.left>
             {props.otherUserAccount ? (
@@ -56,30 +62,27 @@ export const HeaderDesktop: React.FC<HeaderDesktop.Props> = (props) => {
               <ul>
                 {props.navigation.map((link) => (
                   <li key={link.label}>
-                    <Ui.Atoms.ButtonUnderlined
-                      href={link.href}
-                      isActive={link.isActive}
-                    >
+                    <ButtonUnderlined href={link.href} isActive={link.isActive}>
                       {link.label}
-                    </Ui.Atoms.ButtonUnderlined>
+                    </ButtonUnderlined>
                   </li>
                 ))}
               </ul>
             </_.Top.Left.nav>
           </_.Top.left>
           <_.Top.right>
-            <Ui.Atoms.ButtonOutlinedIcon
+            <ButtonOutlinedIcon
               iconVariant="SEARCH"
               onClick={props.onClickSearch}
             />
-            <Ui.Atoms.ButtonOutlinedIcon
+            <ButtonOutlinedIcon
               iconVariant="SUN"
               onClick={props.onClickTheme}
             />
             {userArea}
           </_.Top.right>
         </_.top>
-      </Ui.Atoms.Wrapper>
+      </Wrapper>
     </_.container>
   )
 }

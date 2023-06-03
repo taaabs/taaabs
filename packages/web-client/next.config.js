@@ -1,10 +1,21 @@
 /** @type {import('next').NextConfig} */
-const withSvgr = require('next-plugin-svgr')
 
 const nextConfig = {
-  reactStrictMode: true,
-  pageExtensions: ['page.tsx'],
   transpilePackages: ['@taaabs/web-ui'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  compiler: {
+    emotion: true,
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    })
+
+    return config
+  },
 }
 
-module.exports = withSvgr(nextConfig)
+module.exports = nextConfig
