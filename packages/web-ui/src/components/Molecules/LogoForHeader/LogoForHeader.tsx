@@ -1,6 +1,6 @@
 import { sharedValues } from '@web-ui/constants'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { mq, s } from '@web-ui/styles/constants'
+import { mq, styles } from '@web-ui/styles/constants'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 import { Icon } from '@web-ui/components/Atoms/Icon'
@@ -20,14 +20,14 @@ namespace _ {
     align-items: center;
     span {
       color: var(${Theme.COLOR_TEXT_NORMAL});
-      ${s.fontFamily.plusJakartaSans}
-      ${s.letterSpacing.logo}
+      ${styles.fontFamily.plusJakartaSans}
+      ${styles.letterSpacing.logo}
       padding-left: ${sharedValues.distance[10]}px;
-      ${s.fontWeight.plusJakartaSans.bold}
-      ${s.fontSize[22].px}
+      ${styles.fontWeight.plusJakartaSans.bold}
+      ${styles.fontSize[22].px}
       margin-bottom: ${sharedValues.distance[2]}px;
       ${mq.at992} {
-        ${s.fontSize[26].px}
+        ${styles.fontSize[26].px}
         margin-bottom: ${sharedValues.distance[4]}px;
       }
     }
@@ -35,7 +35,7 @@ namespace _ {
       fill: var(${Theme.LOGO_BACKGROUND});
       height: 34px;
       width: auto;
-      ${s.transition[100]('fill')}
+      ${styles.transition[100]('fill')}
       ${mq.at992} {
         height: 42px;
       }

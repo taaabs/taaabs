@@ -1,6 +1,6 @@
 import { sharedValues } from '@web-ui/constants'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { s } from '@web-ui/styles/constants'
+import { styles } from '@web-ui/styles/constants'
 import { css } from '@emotion/react'
 import { Icon } from '@web-ui/components/Atoms/Icon'
 
@@ -26,7 +26,7 @@ export const BottomNavigationBar: React.FC<BottomNavigationBarTypes.Props> = (
         display: flex;
         justify-content: space-around;
         > * > div > svg {
-          ${s.iconSize[24]}
+          ${styles.iconSize[24]}
         }
         > * {
           width: 46px;

@@ -106,8 +106,6 @@ namespace _ {
   export const iconWrapper = styled.div`
     display: inline-flex;
     > svg {
-      width: auto;
-      height: auto;
       fill: var(${Theme.COLOR_BLACK});
     }
   `

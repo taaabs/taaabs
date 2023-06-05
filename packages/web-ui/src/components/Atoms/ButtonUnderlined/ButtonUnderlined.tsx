@@ -1,6 +1,6 @@
 import { sharedValues } from '@web-ui/constants'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { mq, s } from '@web-ui/styles/constants'
+import { mq, styles } from '@web-ui/styles/constants'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
@@ -14,7 +14,9 @@ export namespace ButtonUnderlinedTypes {
   }
 }
 
-export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (props) => {
+export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (
+  props,
+) => {
   const { children, href, onClick, isActive } = props
   if (href != undefined) {
     return (
@@ -44,8 +46,8 @@ namespace _ {
     const underlineHeight = 2.5
 
     return css`
-      ${s.fontFamily.plusJakartaSans}
-      ${s.fontWeight.inter.semiBold}
+      ${styles.fontFamily.plusJakartaSans}
+      ${styles.fontWeight.inter.semiBold}
       display: inline-flex;
       height: 100%;
       width: 100%;
@@ -53,9 +55,9 @@ namespace _ {
       justify-content: center;
       padding: 0 ${sharedValues.distance[6]}px;
       position: relative;
-      ${s.fontSize[15].px}
+      ${styles.fontSize[15].px}
       ${mq.at992} {
-        ${s.fontSize[16].px}
+        ${styles.fontSize[16].px}
         padding: 0 ${sharedValues.distance[12]}px;
       }
       span {
@@ -74,7 +76,7 @@ namespace _ {
           transform: translateX(-50%);
           border-top-right-radius: ${underlineHeight}px;
           border-top-left-radius: ${underlineHeight}px;
-          ${s.transition[100]('background-color')}
+          ${styles.transition[100]('background-color')}
         }
         ${isActive &&
         css`

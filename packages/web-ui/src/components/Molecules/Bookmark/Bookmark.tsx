@@ -1,6 +1,6 @@
 import { sharedValues } from '@web-ui/constants'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { mq, s } from '@web-ui/styles/constants'
+import { mq, styles } from '@web-ui/styles/constants'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import dayjs from 'dayjs'
@@ -85,7 +85,7 @@ namespace _ {
     display: grid;
     background-color: var(${Theme.BOOKMARK_BACKGROUND});
     border: var(${Theme.BORDER_SECONDARY});
-    ${s.transition[100]('border-color')}
+    ${styles.transition[100]('border-color')}
     ${mq.to992} {
       grid-template-areas:
         'main main'
@@ -98,13 +98,13 @@ namespace _ {
       grid-template-areas:
         'main actions'
         'info actions';
-      ${s.borderRadius[10]}
+      ${styles.borderRadius[10]}
 
       grid-template-columns: 1fr auto;
     }
     @media (hover: hover) {
       :hover {
-        border-color: var(${Theme.COLOR_BORDER_PRIMARY});
+        border-color: var(${Theme.BORDER_COLOR_PRIMARY});
       }
     }
   `
@@ -120,15 +120,15 @@ namespace _ {
     }
     ${mq.to992} {
       padding-bottom: ${sharedValues.distance[8]}px;
-      border-bottom: 1px solid var(${Theme.COLOR_BORDER_SECONDARY});
+      border-bottom: 1px solid var(${Theme.BORDER_COLOR_SECONDARY});
     }
   `
   export namespace Main {
     export const title = styled.a<{ isStarred?: boolean }>`
       display: inline;
       color: var(${Theme.BOOKMARK_LINK});
-      ${s.fontWeight.inter.medium}
-      ${s.fontSize[17].rem}
+      ${styles.fontWeight.inter.medium}
+      ${styles.fontSize[17].rem}
       ${({ isStarred }) =>
         isStarred &&
         css`
@@ -150,12 +150,12 @@ namespace _ {
     `
     export namespace SiteAndTags {
       const common = css`
-        ${s.fontSize[13].px}
-        ${s.fontWeight.inter.medium}
+        ${styles.fontSize[13].px}
       `
       export const site = styled.button`
         ${common}
         color: var(${Theme.BOOKMARK_SITE_FOREGROUND});
+        ${styles.fontWeight.inter.medium}
         @media (hover: hover) {
           :hover {
             text-decoration: underline;
@@ -166,10 +166,11 @@ namespace _ {
         ${common}
         color: var(${Theme.BOOKMARK_TAG_FOREGROUND});
         background-color: var(${Theme.BOOKMARK_TAG_BACKGROUND});
-        ${s.borderRadius[4]}
+        ${styles.borderRadius[4]}
         border: 1px solid var(${Theme.BOOKMARK_TAG_BORDER_COLOR});
         padding-right: ${sharedValues.distance[4]}px;
         padding-left: ${sharedValues.distance[4]}px;
+        ${styles.fontFamily.interTight}
         @media (hover: hover) {
           :hover {
             border-color: var(${Theme.BOOKMARK_TAG_BORDER_COLOR_HOVER});
@@ -181,7 +182,7 @@ namespace _ {
     }
     export const description = styled.div`
       color: var(${Theme.COLOR_TEXT_VARIANT});
-      ${s.fontSize[15].rem}
+      ${styles.fontSize[15].rem}
       ${mq.to992} {
         padding-right: ${sharedValues.distance[16]}px;
       }
@@ -204,11 +205,11 @@ namespace _ {
       display: flex;
       align-items: center;
       justify-content: center;
-      ${s.buttonSize[34]}
+      ${styles.buttonSize[34]}
       > div > svg {
-        ${s.iconSize[18]}
+        ${styles.iconSize[18]}
         fill: var(${Theme.BOOKMARK_ACTION_FILL});
-        ${s.transition[100]('fill')};
+        ${styles.transition[100]('fill')};
       }
       @media (hover: hover) {
         :hover > div > svg {
@@ -231,7 +232,7 @@ namespace _ {
     padding-left: ${sharedValues.distance[16]}px;
     display: flex;
     align-items: center;
-    ${s.fontSize[13].px}
+    ${styles.fontSize[13].px}
     ${mq.at992} {
       padding-top: ${sharedValues.distance[5]}px;
       padding-bottom: ${sharedValues.distance[10]}px;
@@ -246,14 +247,14 @@ namespace _ {
       color: var(${Theme.COLOR_TEXT_DIMMED});
     `
     export const nsfw = styled.div`
-      ${s.fontWeight.inter.semiBold};
+      ${styles.fontWeight.inter.semiBold};
       color: var(${Theme.BOOKMARK_NSFW});
       transform: scale(0.85);
       position: relative;
       ::before {
         content: '';
         border: 1px solid var(${Theme.BOOKMARK_NSFW});
-        ${s.borderRadius[4]}
+        ${styles.borderRadius[4]}
         position: absolute;
         width: 120%;
         height: 115%;

@@ -7,6 +7,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  output: 'export',
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,

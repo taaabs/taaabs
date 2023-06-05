@@ -1,11 +1,11 @@
 import React from 'react'
-import { ThemeWithGlobalStylesProvider } from '../src/providers'
+import { GlobalStylesProvider } from '../src/providers'
 
 export const decorators = [
   (Story) => (
-    <ThemeWithGlobalStylesProvider>
+    <GlobalStylesProvider>
       <Story />
-    </ThemeWithGlobalStylesProvider>
+    </GlobalStylesProvider>
   ),
 ]
 

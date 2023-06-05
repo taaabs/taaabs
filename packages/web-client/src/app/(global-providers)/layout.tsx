@@ -1,9 +1,9 @@
 'use client'
 
-import { ThemeWithGlobalStylesProvider } from '@web-ui/providers/ThemeWithGlobalStyles'
+import { GlobalStylesProvider } from '@web-ui/providers/GlobalStylesProvider'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeWithGlobalStylesProvider>{children}</ThemeWithGlobalStylesProvider>
+    <GlobalStylesProvider>{children}</GlobalStylesProvider>
   )
 }

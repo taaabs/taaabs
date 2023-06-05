@@ -1,1 +1,1 @@
-export * from './ThemeWithGlobalStyles'
+export * from './GlobalStylesProvider'

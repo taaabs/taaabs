@@ -1,9 +1,11 @@
 import { LayoutDefault } from '@web-ui/components/Layouts/LayoutDefault'
 import { Bookmark } from '@web-ui/components/Molecules/Bookmark'
 import { BottomNavigationBar } from '@web-ui/components/Molecules/BottomNavigationBar'
-import { HeaderDesktop } from '@web-ui/components/Organisms/HeaderDesktop'
-import { HeaderMobile } from '@web-ui/components/Organisms/HeaderMobile'
+import { HeaderDesktop } from '@web-ui/components/Templates/HeaderDesktop'
 import { Library } from '@web-ui/components/Templates/Library'
+import { LogoForHeader } from '@web-ui/components/Molecules/LogoForHeader'
+import { NavigationForHeader } from '@web-ui/components/Molecules/NavigationForHeader/NavigationForHeader'
+import { HeaderMobile } from '@web-ui/components/Templates/HeaderMobile'
 
 export default {
   title: 'previews/app/other user catalog',
@@ -13,23 +15,28 @@ export const Primary = () => (
   <LayoutDefault
     slotHeaderDesktop={
       <HeaderDesktop
-        currentTheme="LIGHT"
-        onClickSearch={() => {}}
-        onClickTheme={() => {}}
-        onClickSignIn={() => {}}
-        onClickAdd={() => {}}
-        navigation={[
-          { label: 'Explore', href: '/', isActive: true },
-          { label: 'About', href: '/about', isActive: false },
-          { label: 'Pricing', href: '/pricing', isActive: false },
-        ]}
-        otherUserAccount={{ username: 'lorem_ipsum', backHref: '/' }}
+        logoSlot={<LogoForHeader />}
+        navigationSlot={
+          <NavigationForHeader
+            navigation={[
+              { label: 'Lorem', href: '/lorem', isActive: false },
+              { label: 'Ipsum', href: '/ipsum', isActive: true },
+            ]}
+          />
+        }
       />
     }
     slotHeaderMobile={
       <HeaderMobile
-        otherUserAccount={{ username: 'lorem_ipsum', backHref: '/' }}
-        navigation={[]}
+        logoSlot={<LogoForHeader />}
+        navigationSlot={
+          <NavigationForHeader
+            navigation={[
+              { label: 'Lorem', href: '/lorem', isActive: false },
+              { label: 'Ipsum', href: '/ipsum', isActive: true },
+            ]}
+          />
+        }
       />
     }
     slotFooterDesktop={<div style={{ height: 1000 }}>footer</div>}

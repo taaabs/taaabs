@@ -1,6 +1,6 @@
 import { sharedValues } from '@web-ui/constants'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { mq, s } from '@web-ui/styles/constants'
+import { mq, styles } from '@web-ui/styles/constants'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 import { Icon } from '@web-ui/components/Atoms/Icon'
@@ -52,9 +52,9 @@ namespace _ {
       padding-right: ${sharedValues.distance[24]}px;
       padding-left: ${sharedValues.distance[16]}px;
       margin-left: calc(${sharedValues.distance[16]}px * -1);
-      ${s.buttonHeight[34]}
+      ${styles.buttonHeight[34]}
       ${mq.at992} {
-        ${s.buttonHeight[40]}
+        ${styles.buttonHeight[40]}
       }
       @media (hover: hover) {
         :hover > div > svg {
@@ -63,7 +63,7 @@ namespace _ {
       }
       > div > svg {
         fill: var(${Theme.COLOR_BRAND});
-        ${s.transition[100]('transform')}
+        ${styles.transition[100]('transform')}
         height: 18px;
         width: 10px;
         ${mq.at992} {
@@ -79,14 +79,14 @@ namespace _ {
     export namespace AvatarAndUsername {
       export const username = styled.span`
         color: var(${Theme.COLOR_TEXT_NORMAL});
-        ${s.fontFamily.plusJakartaSans};
-        ${s.letterSpacing.logo};
+        ${styles.fontFamily.plusJakartaSans};
+        ${styles.letterSpacing.logo};
         padding-left: ${sharedValues.distance[12]}px;
-        ${s.fontWeight.plusJakartaSans.semiBold}
-        ${s.fontSize[20].px}
+        ${styles.fontWeight.plusJakartaSans.semiBold}
+        ${styles.fontSize[20].px}
         margin-bottom: ${sharedValues.distance[1]}px;
         ${mq.at992} {
-          ${s.fontSize[22].px}
+          ${styles.fontSize[22].px}
           margin-bottom: ${sharedValues.distance[2]}px;
         }
       `

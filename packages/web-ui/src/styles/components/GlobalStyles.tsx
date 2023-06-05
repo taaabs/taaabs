@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
-import { mq } from '../../constants/mediaQueries'
-import { colors, s } from '@web-ui/styles/constants'
+import { mq } from '../constants/mediaQueries'
+import { colors, styles } from '@web-ui/styles/constants'
 
 export const enum Theme {
   COLOR_WHITE = '--color-white',
@@ -8,7 +8,6 @@ export const enum Theme {
   COLOR_TEXT_NORMAL = '--color-text--normal',
   COLOR_TEXT_VARIANT = '--color-text-variant',
   COLOR_TEXT_DIMMED = '--color-text-dimmed',
-  COLOR_PRIMARY_50 = '--color-primary-50',
   COLOR_PRIMARY_800 = '--color-primary-800',
   COLOR_PRIMARY_900 = '--color-primary-900',
   COLOR_NEUTRAL_25 = '--color-neutral-25',
@@ -18,16 +17,21 @@ export const enum Theme {
   COLOR_BRAND = '--color-brand',
   SELECTION_BACKGROUND = '--selection-background',
   SELECTION_FOREGROUND = '--selection-foreground',
-  COLOR_BORDER_PRIMARY = '--color-border-primary',
-  COLOR_BORDER_SECONDARY = '--color-border-secondary',
+  BORDER_COLOR_PRIMARY = '--border-color-primary',
+  BORDER_COLOR_SECONDARY = '--border-color-secondary',
   LOGO_BACKGROUND = '--logo-background',
   LOGO_BACKGROUND_HOVER = '--logo-background-hover',
   BUTTON_BACKGROUND = '--button-background',
   BUTTON_BACKGROUND_HOVER = '--button-background-hover',
+  BUTTON_OUTLINED_ICON_BACKGROUND = '--button-outlined-icon-background',
+  BUTTON_OUTLINED_ICON_BACKGROUND_HOVER = '--button-outlined-icon-background-hover',
   BORDER_PRIMARY = '--border-primary',
   BORDER_SECONDARY = '--border-secondary',
   HEADER_BACKGROUND = '--header-background',
   HEADER_TRANSPARENT_BACKGROUND = '--header-transparent-background',
+  SEARCH_BOX_BACKGROUND = '--search-box-background',
+  SEARCH_BOX_SHADOW = '--search-box-shadow',
+  SEARCH_BOX_SHADOW_HOVER = '--search-box-shadow-hover',
   BOOKMARK_BACKGROUND = '--bookmark-background',
   BOOKMARK_LINK = '--bookmark-link',
   BOOKMARK_SITE_FOREGROUND = '--bookmark-site-foreground',
@@ -51,12 +55,11 @@ type ThemeMap = {
 }
 
 export const lightTheme: ThemeMap = {
-  [Theme.COLOR_WHITE]: '#FFF',
+  [Theme.COLOR_WHITE]: colors.white,
   [Theme.COLOR_BLACK]: colors.neutral[950],
   [Theme.COLOR_TEXT_NORMAL]: colors.neutral[900],
   [Theme.COLOR_TEXT_VARIANT]: colors.neutral[700],
   [Theme.COLOR_TEXT_DIMMED]: colors.neutral[500],
-  [Theme.COLOR_PRIMARY_50]: '#EEF4FF',
   [Theme.COLOR_PRIMARY_800]: '#0944BA',
   [Theme.COLOR_PRIMARY_900]: '#023292',
   [Theme.COLOR_NEUTRAL_25]: '#FAFAFA',
@@ -66,16 +69,21 @@ export const lightTheme: ThemeMap = {
   [Theme.COLOR_BRAND]: colors.blue[800],
   [Theme.SELECTION_BACKGROUND]: colors.blue[800],
   [Theme.SELECTION_FOREGROUND]: colors.white,
-  [Theme.COLOR_BORDER_PRIMARY]: colors.neutral[200],
-  [Theme.COLOR_BORDER_SECONDARY]: colors.neutral[100],
+  [Theme.BORDER_COLOR_PRIMARY]: colors.neutral[200],
+  [Theme.BORDER_COLOR_SECONDARY]: colors.neutral[100],
   [Theme.LOGO_BACKGROUND]: colors.blue[800],
   [Theme.LOGO_BACKGROUND_HOVER]: colors.blue[900],
   [Theme.BUTTON_BACKGROUND]: colors.blue[800],
   [Theme.BUTTON_BACKGROUND_HOVER]: colors.blue[900],
-  [Theme.BORDER_PRIMARY]: `1px solid var(${Theme.COLOR_BORDER_PRIMARY})`,
-  [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.COLOR_BORDER_SECONDARY})`,
+  [Theme.BUTTON_OUTLINED_ICON_BACKGROUND]: colors.white,
+  [Theme.BUTTON_OUTLINED_ICON_BACKGROUND_HOVER]: colors.neutral[50],
+  [Theme.BORDER_PRIMARY]: `1px solid var(${Theme.BORDER_COLOR_PRIMARY})`,
+  [Theme.BORDER_SECONDARY]: `1px solid var(${Theme.BORDER_COLOR_SECONDARY})`,
   [Theme.HEADER_BACKGROUND]: colors.white,
   [Theme.HEADER_TRANSPARENT_BACKGROUND]: 'rgba(255, 255, 255, 0.8)',
+  [Theme.SEARCH_BOX_BACKGROUND]: colors.white,
+  [Theme.SEARCH_BOX_SHADOW]: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.03)',
+  [Theme.SEARCH_BOX_SHADOW_HOVER]: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.06)',
   [Theme.BOOKMARK_BACKGROUND]: colors.white,
   [Theme.BOOKMARK_SITE_FOREGROUND]: colors.amber[700],
   [Theme.BOOKMARK_LINK]: colors.blue[800],
@@ -95,7 +103,7 @@ export const lightTheme: ThemeMap = {
 }
 
 export const globalStyles = css`
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
   #__next {
     min-height: 100vh;
@@ -124,7 +132,7 @@ export const globalStyles = css`
   }
 
   body {
-    ${s.fontFamily.inter};
+    ${styles.fontFamily.inter};
     line-height: 1.4;
     font-size: 15px;
     color: var(${Theme.COLOR_TEXT_NORMAL});
@@ -147,11 +155,6 @@ export const globalStyles = css`
     color: inherit;
     text-decoration: none;
     cursor: pointer;
-  }
-
-  a,
-  button {
-    ${s.transition[100]('all')}
   }
 
   ol,

@@ -1,6 +1,6 @@
 import { sharedValues } from '@web-ui/constants'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { s } from '@web-ui/styles/constants'
+import { styles } from '@web-ui/styles/constants'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Icon } from '@web-ui/components/Atoms/Icon'
@@ -39,7 +39,7 @@ namespace _ {
     justify-content: space-between;
     height: ${sharedValues.appBar}px;
     background-color: var(${Theme.HEADER_TRANSPARENT_BACKGROUND});
-    ${s.backdropFilter.desktopHeader}
+    ${styles.backdropFilter.desktopHeader}
   `
   const iconCommon = css`
     display: flex;
@@ -50,13 +50,13 @@ namespace _ {
   export const iconLeft = styled.button`
     ${iconCommon}
     > div > svg {
-      ${s.iconSize[20]}
+      ${styles.iconSize[20]}
     }
   `
   export const iconRight = styled.button`
     ${iconCommon}
     > div > svg {
-      ${s.iconSize[26]}
+      ${styles.iconSize[26]}
     }
   `
   export const title = styled.div`
@@ -70,13 +70,13 @@ namespace _ {
     border-radius: ${sharedValues.distance[999]}px;
     span:first-of-type {
       color: var(${Theme.TITLE_BAR_PRIMARY_FOREGROUND});
-      ${s.fontSize[17].px};
-      ${s.fontFamily.plusJakartaSans}
-      ${s.fontWeight.plusJakartaSans.semiBold}
+      ${styles.fontSize[17].px};
+      ${styles.fontFamily.plusJakartaSans}
+      ${styles.fontWeight.plusJakartaSans.semiBold}
     }
     span:last-of-type {
       color: var(${Theme.TITLE_BAR_SECONDARY_FOREGROUND});
-      ${s.fontSize[13].px};
+      ${styles.fontSize[13].px};
       margin-top: -1px;
     }
   `

@@ -1,38 +1,23 @@
 import styled from '@emotion/styled'
-import { Icon, IconTypes } from '../Icon'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
 import { Blurhash } from 'react-blurhash'
 import { styles } from '@web-ui/styles/constants'
 
-export namespace ButtonOutlinedIconTypes {
+export namespace ButtonAvatarTypes {
   export type Props = {
     onClick: () => void
-    iconVariant?: IconTypes.Variant
-    avatar?: {
-      url: string
-      blurhash: string
-    }
+    url: string
+    blurhash: string
   }
 }
 
-export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIconTypes.Props> = (
-  props,
-) => {
+export const ButtonAvatar: React.FC<ButtonAvatarTypes.Props> = (props) => {
   return (
     <_.container onClick={props.onClick}>
-      {props.avatar && (
-        <>
-          {props.avatar && (
-            <_.blurHash>
-              <Blurhash hash={props.avatar.blurhash} />
-            </_.blurHash>
-          )}
-          <img src={props.avatar.url} />
-        </>
-      )}
-      {!props.avatar && props.iconVariant && (
-        <Icon variant={props.iconVariant} />
-      )}
+      <_.blurHash>
+        <Blurhash hash={props.blurhash} />
+      </_.blurHash>
+      <img src={props.url} />
     </_.container>
   )
 }
@@ -44,12 +29,10 @@ namespace _ {
     justify-content: center;
     flex-shrink: 0;
     border-radius: 50%;
-    border: var(${Theme.BORDER_SECONDARY});
     overflow: hidden;
     position: relative;
     ${styles.transition[100]('all')}
     ${styles.buttonSize[40]}
-    background-color: var(${Theme.BUTTON_OUTLINED_ICON_BACKGROUND});
     @media (hover: hover) {
       :hover {
         background-color: var(${Theme.BUTTON_OUTLINED_ICON_BACKGROUND_HOVER});
@@ -58,9 +41,6 @@ namespace _ {
           filter: brightness(90%);
         }
       }
-    }
-    > div > svg {
-      ${styles.iconSize[20]}
     }
     :has(img) {
       border: none;

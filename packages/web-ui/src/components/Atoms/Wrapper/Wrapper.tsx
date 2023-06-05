@@ -10,6 +10,7 @@ export const Wrapper: React.FC<WrapperProps> = (props) => {
   return (
     <div
       css={css`
+        height: 100%;
         width: 100%;
         max-width: ${sharedValues.siteMaxWidth}px;
         margin: 0 auto;

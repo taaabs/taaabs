@@ -5,7 +5,7 @@ import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@web-ui/constants'
 import { _MobileTitleBar } from './components/_MobileTitleBar'
 import { css } from '@emotion/react'
-import { mq, s } from '@web-ui/styles/constants'
+import { mq, styles } from '@web-ui/styles/constants'
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
 import { useScrollDirection } from 'react-use-scroll-direction'
 
@@ -327,7 +327,7 @@ namespace _ {
             content: '';
             width: 1px;
             height: 100%;
-            background-color: var(${Theme.COLOR_BORDER_PRIMARY});
+            background-color: var(${Theme.BORDER_COLOR_PRIMARY});
             top: 0;
             left: 0;
             position: absolute;
@@ -337,7 +337,7 @@ namespace _ {
             content: '';
             width: 1px;
             height: 100%;
-            background-color: var(${Theme.COLOR_BORDER_PRIMARY});
+            background-color: var(${Theme.BORDER_COLOR_PRIMARY});
             top: 0;
             right: 0;
             position: absolute;
@@ -384,7 +384,7 @@ namespace _ {
           opacity: 0;
           visibility: hidden;
           z-index: 2;
-          ${s.transition[300]('opacity')};
+          ${styles.transition[300]('opacity')};
           ${({ isEnabled }) =>
             isEnabled &&
             css`

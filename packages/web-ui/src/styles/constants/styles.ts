@@ -20,10 +20,13 @@ const capsizeInter17 = createStyleObject({
   fontMetrics: interMetrics,
 })
 
-export const s = {
+export const styles = {
   fontFamily: {
     inter: css`
       font-family: 'Inter', sans-serif;
+    `,
+    interTight: css`
+      font-family: 'Inter Tight', sans-serif;
     `,
     plusJakartaSans: css`
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -107,6 +110,11 @@ export const s = {
         font-weight: 700;
       `,
     },
+    interTight: {
+      medium: css`
+        font-weight: 500;
+      `,
+    },
     plusJakartaSans: {
       medium: css`
         font-weight: 500;
@@ -161,7 +169,7 @@ export const s = {
       `,
     300: (transitionProperty: string) =>
       css`
-        transition: ${transitionProperty} 0.3s ease-in-out;
+        transition: ${transitionProperty} 0.3s linear;
       `,
   },
   iconSize: {

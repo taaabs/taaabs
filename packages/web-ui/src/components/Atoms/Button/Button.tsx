@@ -1,5 +1,5 @@
 import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { s } from '@web-ui/styles/constants'
+import { styles } from '@web-ui/styles/constants'
 import { css, SerializedStyles } from '@emotion/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
@@ -49,9 +49,11 @@ namespace _ {
   const buttonBase = css`
     display: inline-flex;
     align-items: center;
+    flex-shrink: 0;
     color: var(${Theme.COLOR_WHITE});
     background: var(${Theme.BUTTON_BACKGROUND});
-    ${s.fontWeight.inter.medium};
+    ${styles.fontWeight.inter.medium};
+    ${styles.transition[100]('background')}
     &:hover {
       background: var(${Theme.BUTTON_BACKGROUND_HOVER});
     }
@@ -61,22 +63,22 @@ namespace _ {
   }
   const sizeMap: SizeMap = {
     small: css`
-      ${s.buttonHeight[34]};
-      ${s.fontSize[15].px};
+      ${styles.buttonHeight[34]};
+      ${styles.fontSize[15].px};
       padding: 0 10px;
-      ${s.borderRadius[8]}
+      ${styles.borderRadius[8]}
     `,
     default: css`
-      ${s.buttonHeight[40]};
-      ${s.fontSize[16].px};
+      ${styles.buttonHeight[40]};
+      ${styles.fontSize[16].px};
       padding: 0 14px;
-      ${s.borderRadius[10]}
+      ${styles.borderRadius[10]}
     `,
     large: css`
-      ${s.buttonHeight[46]};
+      ${styles.buttonHeight[46]};
       padding: 0 18px;
-      ${s.borderRadius[12]}
-      ${s.fontSize[17].px};
+      ${styles.borderRadius[12]}
+      ${styles.fontSize[17].px};
     `,
   }
 
@@ -86,7 +88,7 @@ namespace _ {
     ${buttonBase}
     ${({ size = 'default' }) => sizeMap[size]}
   `
-  export const nextLink = styled.a<ButtonProps>`
+  export const nextLink = styled(Link)<ButtonProps>`
     ${buttonBase}
     ${({ size = 'default' }) => sizeMap[size]}
   `
