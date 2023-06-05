@@ -10,7 +10,9 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@shared/*": [
+        "src/*"
+      ]
     }
   }
 }

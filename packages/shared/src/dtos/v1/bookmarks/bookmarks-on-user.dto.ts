@@ -1,14 +1,12 @@
+import { ArchivedBookmarks } from '@shared/dtos/common/bookmarks/archived-bookmarks'
 import { PaginatedResponseDto } from '../../common/paginated-response.dto'
 import { ApiProperty } from '@nestjs/swagger'
-import {
-  ArchivedBookmarks,
-  DateRange,
-  PaginationQueryParamDto,
-  SortBy,
-  BookmarkVisibility,
-  NsfwBookmarks,
-} from '../../common'
+import { DateRange } from '@shared/dtos/common/bookmarks/date-range'
+import { SortBy } from '@shared/dtos/common/bookmarks/sort-by'
+import { PaginationQueryParamDto } from '@shared/dtos/common/pagination-options.dto'
 import { Type } from 'class-transformer'
+import { NsfwBookmarks } from '@shared/dtos/common/bookmarks/nsfw-bookmarks'
+import { BookmarkVisibility } from '@shared/dtos/common/bookmarks/bookmark-visibility'
 
 export namespace BookmarksOnUserDto {
   export class QueryParams extends PaginationQueryParamDto {
@@ -60,7 +58,7 @@ export namespace BookmarksOnUserDto {
     class Bookmark {
       id!: string
       title!: string
-      description?: string
+      text?: string
       url!: string
       createdAt!: string
       tags?: string[]

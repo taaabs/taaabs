@@ -1,0 +1,1 @@
+When changes site data are detected we store multiple articles per URL.
