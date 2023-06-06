@@ -25,7 +25,7 @@ module.exports = {
             [
               '@emotion/babel-plugin',
               {
-                labelFormat: '[filename]-[local]',
+                labelFormat: '[dirname]-[filename]-[local]',
               },
             ],
           ],

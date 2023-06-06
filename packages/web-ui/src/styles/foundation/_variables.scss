@@ -1,0 +1,103 @@
+$siteMaxWidth: 1380px;
+$headerDesktopHeight: 63px;
+$headerMobileHeight: 45px;
+$bottomNavigationBarHeight: 49px;
+$appBarHeight: 63px;
+
+$pixels-1: 1px;
+$pixels-2: 2px;
+$pixels-3: 3px;
+$pixels-4: 4px;
+$pixels-5: 5px;
+$pixels-6: 6px;
+$pixels-7: 7px;
+$pixels-8: 8px;
+$pixels-10: 10px;
+$pixels-12: 12px;
+$pixels-14: 14px;
+$pixels-16: 16px;
+$pixels-20: 20px;
+$pixels-24: 24px;
+$pixels-40: 40px;
+$pixels-60: 60px;
+$pixels-999: 999px;
+
+$fontFamily-Inter: 'Inter', sans-serif;
+$fontFamily-InterTight: 'Inter Tight', sans-serif;
+$fontFamily-PlusJakartaSans: 'Plus Jakarta Sans', sans-serif;
+
+$fontSize-13-px: 13px;
+$fontSize-15-px: 15px;
+$fontSize-16-px: 16px;
+$fontSize-17-px: 17px;
+$fontSize-20-px: 20px;
+$fontSize-22-px: 22px;
+$fontSize-24-px: 24px;
+$fontSize-26-px: 26px;
+
+$fontSize-13-rem: 1.3rem;
+$fontSize-15-rem: 1.5rem;
+$fontSize-16-rem: 1.6rem;
+$fontSize-17-rem: 1.7rem;
+$fontSize-20-rem: 2rem;
+$fontSize-22-rem: 2.2rem;
+$fontSize-24-rem: 2.4rem;
+$fontSize-26-rem: 2.6rem;
+
+$fontWeight-inter-medium: 500;
+$fontWeight-inter-semiBold: 600;
+$fontWeight-inter-bold: 700;
+
+$fontWeight-interTight-medium: 500;
+
+$fontWeight-plusJakartaSans-medium: 500;
+$fontWeight-plusJakartaSans-semiBold: 600;
+$fontWeight-plusJakartaSans-bold: 700;
+
+@mixin transition-100($transitionProperty: all) {
+  transition: $transitionProperty 0.1s linear;
+}
+@mixin transition-300($transitionProperty: all) {
+  transition: $transitionProperty 0.3s linear;
+}
+
+@mixin iconSize-18 {
+  width: 18px;
+  height: 18px;
+}
+@mixin iconSize-20 {
+  width: 20px;
+  height: 20px;
+}
+@mixin iconSize-24 {
+  width: 24px;
+  height: 24px;
+}
+@mixin iconSize-26 {
+  width: 26px;
+  height: 26px;
+}
+
+$buttonHeight-34: 34px;
+$buttonHeight-40: 40px;
+$buttonHeight-46: 46px;
+
+@mixin buttonSize-34 {
+  height: 34px;
+  width: 34px;
+}
+@mixin buttonSize-40 {
+  height: 40px;
+  width: 40px;
+}
+
+$borderRadius-4: 4px;
+$borderRadius-8: 8px;
+$borderRadius-10: 10px;
+$borderRadius-12: 12px;
+$borderRadius-14: 14px;
+$borderRadius-999: 999px;
+
+$backdropFilter: saturate(180%) blur(5px);
+
+$letterSpacing-logo: -1.2px;

@@ -7,6 +7,8 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Icon } from '@web-ui/components/Atoms/Icon'
 
+import styless from './Bookmark.module.scss'
+
 dayjs.extend(relativeTime)
 
 export namespace BookmarkTypes {
@@ -28,6 +30,7 @@ export namespace BookmarkTypes {
 export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
   return (
     <_.container>
+      <div className={styless.container}>x</div>
       <_.main>
         <div>
           <_.Main.title href={props.url} isStarred={props.isStarred}>
@@ -117,8 +120,6 @@ namespace _ {
     padding-left: ${sharedValues.distance[16]}px;
     ${mq.to992} {
       padding-right: ${sharedValues.distance[16]}px;
-    }
-    ${mq.to992} {
       padding-bottom: ${sharedValues.distance[8]}px;
       border-bottom: 1px solid var(${Theme.BORDER_COLOR_SECONDARY});
     }

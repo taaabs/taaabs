@@ -1,5 +1,3 @@
-'use client'
-
 export default function Layout({ children }: { children: JSX.Element }) {
   return (
     <html lang="en">

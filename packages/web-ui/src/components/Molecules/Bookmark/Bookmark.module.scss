@@ -1,0 +1,9 @@
+// @type
+@use '../../../styles/foundation' as *;
+
+.container {
+  background: blue;
+  @include to992 {
+    background: var(--color-white);
+  }
+}

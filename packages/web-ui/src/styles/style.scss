@@ -1,0 +1,137 @@
+@use 'foundation' as *;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+#__next {
+  min-height: 100vh;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+::selection {
+  background-color: var(--selection-background);
+  color: var(--selection-foreground);
+}
+
+html {
+  font-size: 62.5%;
+  accent-color: var(--color-brand);
+  caret-color: var(--color-brand);
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --color-white: $white;
+  --color-black: $neutral950;
+  --color-text--normal: $neutral900;
+  --color-text-variant: $neutral700;
+  --color-text-dimmed: $neutral500;
+  --color-brand: $blue800;
+  --selection-background: $blue800;
+  --selection-foreground: $white;
+  --border-color-primary: $neutral200;
+  --border-color-secondary: $neutral100;
+  --logo-background: $blue800;
+  --button-background: $blue800;
+  --button-background-hover: $blue900;
+  --button-outlined-icon-background: $white;
+  --button-outlined-icon-background-hover: $neutral50;
+  --border-primary: 1px solid var(--border-color-primary);
+  --border-secondary: 1px solid var(--border-color-secondary);
+  --header-background: $white;
+  --header-transparent-background: 'rgba(255, 255, 255, 0.8)';
+  --search-box-background: $white;
+  --search-box-shadow: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.03)';
+  --search-box-shadow-hover: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.06)';
+  --bookmark-background: $white;
+  --bookmark-link: $blue800;
+  --bookmark-site-foreground: $amber700;
+  --bookmark-tag-border-color: $green100;
+  --bookmark-tag-background: $green50;
+  --bookmark-tag-foreground: $green600;
+  --bookmark-tag-border-color-hover: $green200;
+  --bookmark-tag-background-hover: $green100;
+  --bookmark-tag-foreground-hover: $green700;
+  --bookmark-nsfw: $red600;
+  --bookmark-starred-title-highlight: $amber100;
+  --bookmark-action-fill: $neutral400;
+  --bookmark-action-fill-hover: $neutral600;
+  --title-bar-background: $blue50;
+  --title-bar-primary-foreground: $blue800;
+  --title-bar-secondary-foreground: $blue500;
+}
+
+body {
+  font-family: $fontFamily-Inter;
+  line-height: 1.4;
+  font-size: 15px;
+  color: var(--color-text--normal);
+}
+
+body,
+h1,
+h1,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+ul {
+  margin: 0;
+  padding-inline-start: 0;
+}
+
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+// Slideout - start
+.slideout-open,
+.slideout-open body,
+.slideout-open .slideout-panel {
+  @include to992 {
+    touch-action: manipulation; // https://github.com/Mango/slideout/issues/205#issuecomment-823927561
+    overflow: hidden;
+  }
+}
+.slideout-open .slideout-menu {
+  @include to992 {
+    display: block;
+  }
+}
+// Slideout - end
