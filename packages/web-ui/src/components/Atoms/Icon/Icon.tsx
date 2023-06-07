@@ -1,3 +1,4 @@
+import styles from './Icon.module.scss'
 import Add from '@web-ui/assets/icons/add.svg'
 import Bookmark from '@web-ui/assets/icons/bookmark.svg'
 import GreaterThan from '@web-ui/assets/icons/greater-than.svg'
@@ -15,8 +16,6 @@ import Notifications from '@web-ui/assets/icons/notifications.svg'
 import UserAdd from '@web-ui/assets/icons/user-add.svg'
 import UserRemove from '@web-ui/assets/icons/user-remove.svg'
 import User from '@web-ui/assets/icons/user.svg'
-import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import styled from '@emotion/styled'
 
 export namespace IconTypes {
   export type Variant =
@@ -99,14 +98,6 @@ export const Icon: React.FC<IconTypes.Props> = ({ variant }) => {
       icon = <User />
       break
   }
-  return <_.iconWrapper>{icon}</_.iconWrapper>
-}
 
-namespace _ {
-  export const iconWrapper = styled.div`
-    display: inline-flex;
-    > svg {
-      fill: var(${Theme.COLOR_BLACK});
-    }
-  `
+  return <div className={styles.container}>{icon}</div>
 }

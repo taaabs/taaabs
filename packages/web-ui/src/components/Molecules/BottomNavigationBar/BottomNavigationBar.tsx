@@ -1,8 +1,5 @@
-import { sharedValues } from '@web-ui/constants'
-import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { styles } from '@web-ui/styles/constants'
-import { css } from '@emotion/react'
 import { Icon } from '@web-ui/components/Atoms/Icon'
+import styles from './BottomNavigationBar.module.scss'
 
 export namespace BottomNavigationBarTypes {
   export type Props = {
@@ -18,24 +15,7 @@ export const BottomNavigationBar: React.FC<BottomNavigationBarTypes.Props> = (
   props,
 ) => {
   return (
-    <div
-      css={css`
-        height: ${sharedValues.bottomNavigationBar}px;
-        border-top: var(${Theme.BORDER_PRIMARY});
-        background-color: var(${Theme.COLOR_WHITE});
-        display: flex;
-        justify-content: space-around;
-        > * > div > svg {
-          ${styles.iconSize[24]}
-        }
-        > * {
-          width: 46px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      `}
-    >
+    <div className={styles.container}>
       <button onClick={props.onClickMyLibrary}>
         <Icon variant="ADD" />
       </button>

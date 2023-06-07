@@ -56,8 +56,8 @@
   }
 }
 @mixin transition-100ms($transitionProperty: all) {
-  transition: $transitionProperty var(--transitionDuration-100ms) linear;
+  transition: $transitionProperty var(--transition-duration-100ms) linear;
 }
 @mixin transition-300ms($transitionProperty: all) {
-  transition: $transitionProperty var(--transitionDuration-300ms) linear;
+  transition: $transitionProperty var(--transition-duration-300ms) linear;
 }

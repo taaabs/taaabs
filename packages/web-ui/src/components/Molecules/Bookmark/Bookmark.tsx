@@ -26,21 +26,26 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.main}>
-        <a
-          className={cn(styles.main__title, {
-            [styles['main__title--starred']]: props.isStarred,
-          })}
-          href={props.url}
-        >
-          {props.title}
-        </a>
-        <div className={styles.main__siteAndTags}>
-          <button className={styles.main__siteAndTags__site} onClick={() => {}}>
+        <div>
+          <a
+            className={cn(styles.main__title, {
+              [styles['main__title--starred']]: props.isStarred,
+            })}
+            href={props.url}
+          >
+            {props.title}
+          </a>
+        </div>
+        <div className={styles['main__site-and-tags']}>
+          <button
+            className={styles['main__site-and-tags__site']}
+            onClick={() => {}}
+          >
             example.com
           </button>
           {props.tags.map((tag) => (
             <button
-              className={styles.main__siteAndTags__tag}
+              className={styles['main__site-and-tags__tag']}
               onClick={() => {}}
               key={tag}
             >
@@ -52,6 +57,7 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
           <div className={styles.main__description}>{props.description}</div>
         )}
       </div>
+
       <div className={styles.actions}>
         <button className={styles.actions__button}>
           <Icon variant="THREE_DOTS" />
@@ -60,8 +66,9 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
           <Icon variant="INFO" />
         </button>
       </div>
+
       <div className={styles.info}>
-        <div className={styles.info__dimmedText}>
+        <div className={styles['info__dimmed-text']}>
           {dayjs(props.createdAt).fromNow()}
         </div>
         {props.isNSFW && (
@@ -73,7 +80,7 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
         {props.visibility && (
           <>
             <div className={styles.info__separator}>·</div>
-            <div className={styles.info__dimmedText}>
+            <div className={styles['info__dimmed-text']}>
               {props.visibility == 'unlisted' && 'Unlisted'}
               {props.visibility == 'secret' && 'Secret'}
             </div>

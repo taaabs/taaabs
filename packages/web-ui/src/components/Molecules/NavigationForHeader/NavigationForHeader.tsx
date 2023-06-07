@@ -1,5 +1,5 @@
-import { css } from '@emotion/react'
 import { ButtonUnderlined } from '@web-ui/components/Atoms/ButtonUnderlined'
+import styles from './NavigationForHeader.module.scss'
 
 export namespace NavigationForHeaderTypes {
   export type NavigationItem = {
@@ -16,15 +16,7 @@ export const NavigationForHeader: React.FC<NavigationForHeaderTypes.Props> = ({
   navigation,
 }) => {
   return (
-    <div
-      css={css`
-        height: 100%;
-        ul {
-          height: 100%;
-          display: flex;
-        }
-      `}
-    >
+    <div className={styles.container}>
       <ul>
         {navigation.map((link) => (
           <li key={link.label}>

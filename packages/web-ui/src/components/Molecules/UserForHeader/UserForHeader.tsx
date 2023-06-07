@@ -1,10 +1,8 @@
-import { sharedValues } from '@web-ui/constants'
-import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { mq, styles } from '@web-ui/styles/constants'
-import styled from '@emotion/styled'
 import Link from 'next/link'
 import { Icon } from '@web-ui/components/Atoms/Icon'
 import { ButtonOutlinedIcon } from '@web-ui/components/Atoms/ButtonOutlinedIcon'
+import styles from './UserForHeader.module.scss'
+import { ButtonAvatar } from '@web-ui/components/Atoms/ButtonAvatar'
 
 export namespace UserForHeaderTypes {
   export type User = {
@@ -22,74 +20,28 @@ export namespace UserForHeaderTypes {
 
 export const UserForHeader: React.FC<UserForHeaderTypes.Props> = ({ user }) => {
   return (
-    <_.user>
-      <_.User.backArrow href={user.backHref}>
+    <div className={styles.container}>
+      <Link className={styles['back-arrow']} href={user.backHref}>
         <Icon variant="LESS_THAN" />
-      </_.User.backArrow>
-      <_.User.avatarAndUsername href={`/${user.username}`}>
-        <ButtonOutlinedIcon
-          avatar={user.avatar}
-          iconVariant="USER"
-          onClick={() => {}}
-        />
-        <_.User.AvatarAndUsername.username>
-          {user.username}
-        </_.User.AvatarAndUsername.username>
-      </_.User.avatarAndUsername>
-    </_.user>
-  )
-}
+      </Link>
+      <Link
+        className={styles['avatar-and-username']}
+        href={`/${user.username}`}
+      >
+        {user.avatar ? (
+          <ButtonAvatar
+            blurhash={user.avatar?.blurhash}
+            onClick={() => {}}
+            url={user.avatar.url}
+          />
+        ) : (
+          <ButtonOutlinedIcon iconVariant="USER" onClick={() => {}} />
+        )}
 
-namespace _ {
-  export const user = styled.div`
-    display: flex;
-    align-items: center;
-  `
-  export namespace User {
-    export const backArrow = styled(Link)`
-      display: flex;
-      align-items: center;
-      padding-right: ${sharedValues.distance[24]}px;
-      padding-left: ${sharedValues.distance[16]}px;
-      margin-left: calc(${sharedValues.distance[16]}px * -1);
-      ${styles.buttonHeight[34]}
-      ${mq.at992} {
-        ${styles.buttonHeight[40]}
-      }
-      @media (hover: hover) {
-        :hover > div > svg {
-          transform: translateX(-2px);
-        }
-      }
-      > div > svg {
-        fill: var(${Theme.COLOR_BRAND});
-        ${styles.transition[100]('transform')}
-        height: 18px;
-        width: 10px;
-        ${mq.at992} {
-          height: 20px;
-          width: 12px;
-        }
-      }
-    `
-    export const avatarAndUsername = styled(Link)`
-      display: flex;
-      align-items: center;
-    `
-    export namespace AvatarAndUsername {
-      export const username = styled.span`
-        color: var(${Theme.COLOR_TEXT_NORMAL});
-        ${styles.fontFamily.plusJakartaSans};
-        ${styles.letterSpacing.logo};
-        padding-left: ${sharedValues.distance[12]}px;
-        ${styles.fontWeight.plusJakartaSans.semiBold}
-        ${styles.fontSize[20].px}
-        margin-bottom: ${sharedValues.distance[1]}px;
-        ${mq.at992} {
-          ${styles.fontSize[22].px}
-          margin-bottom: ${sharedValues.distance[2]}px;
-        }
-      `
-    }
-  }
+        <span className={styles['avatar-and-username__username']}>
+          {user.username}
+        </span>
+      </Link>
+    </div>
+  )
 }

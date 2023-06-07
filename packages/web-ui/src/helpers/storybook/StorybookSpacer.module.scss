@@ -1,0 +1,9 @@
+// @type
+@use '../../styles/foundation' as *;
+
+.container {
+  height: var(--distance-16px);
+  @include at768 {
+    height: var(--distance-40px);
+  }
+}

@@ -1,17 +1,10 @@
-import styled from '@emotion/styled'
 import { Icon, IconTypes } from '../Icon'
-import { Theme } from '@web-ui/styles/components/GlobalStyles'
-import { Blurhash } from 'react-blurhash'
-import { styles } from '@web-ui/styles/constants'
+import styles from './ButtonOutlinedIcon.module.scss'
 
 export namespace ButtonOutlinedIconTypes {
   export type Props = {
     onClick: () => void
-    iconVariant?: IconTypes.Variant
-    avatar?: {
-      url: string
-      blurhash: string
-    }
+    iconVariant: IconTypes.Variant
   }
 }
 
@@ -19,64 +12,8 @@ export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIconTypes.Props> = (
   props,
 ) => {
   return (
-    <_.container onClick={props.onClick}>
-      {props.avatar && (
-        <>
-          {props.avatar && (
-            <_.blurHash>
-              <Blurhash hash={props.avatar.blurhash} />
-            </_.blurHash>
-          )}
-          <img src={props.avatar.url} />
-        </>
-      )}
-      {!props.avatar && props.iconVariant && (
-        <Icon variant={props.iconVariant} />
-      )}
-    </_.container>
+    <button className={styles.button} onClick={props.onClick}>
+      <Icon variant={props.iconVariant} />
+    </button>
   )
-}
-
-namespace _ {
-  export const container = styled.button`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    border-radius: 50%;
-    border: var(${Theme.BORDER_SECONDARY});
-    overflow: hidden;
-    position: relative;
-    ${styles.transition[100]('all')}
-    ${styles.buttonSize[40]}
-    background-color: var(${Theme.BUTTON_OUTLINED_ICON_BACKGROUND});
-    @media (hover: hover) {
-      :hover {
-        background-color: var(${Theme.BUTTON_OUTLINED_ICON_BACKGROUND_HOVER});
-        border-color: var(${Theme.BORDER_COLOR_PRIMARY});
-        > img {
-          filter: brightness(90%);
-        }
-      }
-    }
-    > div > svg {
-      ${styles.iconSize[20]}
-    }
-    :has(img) {
-      border: none;
-    }
-    > img {
-      width: 100%;
-      height: 100%;
-      ${styles.transition[100]('all')};
-      z-index: 0;
-    }
-  `
-  export const blurHash = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  `
 }

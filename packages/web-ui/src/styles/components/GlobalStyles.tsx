@@ -3,18 +3,18 @@ import { mq } from '../constants/mediaQueries'
 import { colors, styles } from '@web-ui/styles/constants'
 
 export const enum Theme {
-  COLOR_WHITE = '--color-white',
-  COLOR_BLACK = '--color-black',
+  COLOR_WHITE = '--white',
+  COLOR_BLACK = '--black',
   COLOR_TEXT_NORMAL = '--color-text--normal',
-  COLOR_TEXT_VARIANT = '--color-text-variant',
-  COLOR_TEXT_DIMMED = '--color-text-dimmed',
+  COLOR_TEXT_VARIANT = '--text-color-variant',
+  COLOR_TEXT_DIMMED = '--text-color-dimmed',
   COLOR_PRIMARY_800 = '--color-primary-800',
   COLOR_PRIMARY_900 = '--color-primary-900',
   COLOR_NEUTRAL_25 = '--color-neutral-25',
   COLOR_NEUTRAL_50 = '--color-neutral-50',
   COLOR_NEUTRAL_100 = '--color-neutral-100',
   COLOR_NEUTRAL_200 = '--color-neutral-200',
-  COLOR_BRAND = '--color-brand',
+  COLOR_BRAND = '--brand-color',
   SELECTION_BACKGROUND = '--selection-background',
   SELECTION_FOREGROUND = '--selection-foreground',
   BORDER_COLOR_PRIMARY = '--border-color-primary',

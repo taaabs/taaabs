@@ -1,0 +1,9 @@
+// @type
+@use '../../styles/foundation' as *;
+
+.container {
+  margin: var(--distance-16px);
+  @include at768 {
+    margin: var(--distance-40px);
+  }
+}

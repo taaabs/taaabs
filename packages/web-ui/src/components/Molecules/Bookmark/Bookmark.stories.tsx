@@ -54,26 +54,26 @@ export const Primary = () => (
         isNSFW={true}
         isArchived={true}
         tags={[
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
+          'lorem1',
+          'ipsum2',
+          'lorem3',
+          'ipsum4',
+          'lorem5',
+          'ipsum6',
+          'lorem7',
+          'ipsum8',
+          'lorem9',
+          'ipsum10',
+          'lorem11',
+          'ipsum12',
+          'lorem13',
+          'ipsum14',
+          'lorem15',
+          'ipsum16',
+          'lorem17',
+          'ipsum18',
+          'lorem19',
+          'ipsum20',
         ]}
       />
       <StorybookSpacer />
@@ -87,7 +87,7 @@ export const Primary = () => (
         createdAt={new Date('2023-02-20')}
         isNSFW={false}
         isArchived={true}
-        tags={['lorem', 'ipsum', 'lorem', 'ipsum']}
+        tags={['lorem1', 'ipsum1', 'lorem2', 'ipsum2']}
       />
       <StorybookSpacer />
       <Bookmark

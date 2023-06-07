@@ -18,8 +18,8 @@
 
 html {
   font-size: 62.5%;
-  accent-color: var(--color-brand);
-  caret-color: var(--color-brand);
+  accent-color: var(--brand-color);
+  caret-color: var(--brand-color);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -29,12 +29,12 @@ html {
 }
 
 :root {
-  --color-white: var(--white);
-  --color-black: var(--neutral950);
-  --color-text--normal: var(--neutral900);
-  --color-text-variant: var(--neutral700);
-  --color-text-dimmed: var(--neutral500);
-  --color-brand: var(--blue800);
+  --plain-white: var(--white);
+  --plain-black: var(--neutral950);
+  --text-color--normal: var(--neutral900);
+  --text-color-variant: var(--neutral700);
+  --text-color-dimmed: var(--neutral500);
+  --brand-color: var(--blue800);
   --selection-background: var(--blue800);
   --selection-foreground: var(--white);
   --border-color-primary: var(--neutral200);
@@ -48,6 +48,7 @@ html {
   --border-secondary: 1px solid var(--border-color-secondary);
   --header-background: var(--white);
   --header-transparent-background: 'rgba(255, 255, 255, 0.8)';
+  --bottom-navigation-bar-background: var(--white);
   --search-box-background: var(--white);
   --search-box-shadow: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.03)';
   --search-box-shadow-hover: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.06)';
@@ -70,7 +71,7 @@ html {
 }
 
 body {
-  font-family: var(--fontFamily-Inter);
+  font-family: var(--font-family-inter);
   line-height: 1.4;
   font-size: 15px;
   color: var(--color-text--normal);

@@ -18,7 +18,7 @@
     grid-template-areas:
       'main actions'
       'info actions';
-    border-radius: var(--borderRadius-10px);
+    border-radius: var(--border-radius-10px);
     grid-template-columns: 1fr auto;
   }
   @include hover {
@@ -40,8 +40,8 @@
   &__title {
     display: inline;
     color: var(--bookmark-link-foreground);
-    font-weight: var(--fontWeight-inter-medium);
-    font-size: var(--fontSize-1-7rem);
+    font-weight: var(--font-weight-inter-medium);
+    font-size: var(--font-size-1-7rem);
     @include hover {
       text-decoration: underline;
     }
@@ -49,7 +49,7 @@
       background-color: var(--bookmark-starred-title-foreground);
     }
   }
-  &__siteAndTags {
+  &__site-and-tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--distance-7px);
@@ -57,22 +57,22 @@
       padding-right: var(--distance-16px);
     }
     &__site {
-      font-size: var(--fontSize-13px);
+      font-size: var(--font-size-13px);
       color: var(--bookmark-site-foreground);
-      font-weight: var(--fontWeight-inter-medium);
+      font-weight: var(--font-weight-inter-medium);
       @include hover {
         text-decoration: underline;
       }
     }
     &__tag {
-      font-size: var(--fontSize-13px);
+      font-size: var(--font-size-13px);
       color: var(--bookmark-tag-foreground);
       background-color: var(--bookmark-tag-background);
-      border-radius: var(--borderRadius-4px);
+      border-radius: var(--border-radius-4px);
       border: 1px solid var(--bookmark-tag-border-color);
       padding-right: var(--distance-4px);
       padding-left: var(--distance-4px);
-      font-family: var(--fontFamily-InterTight);
+      font-family: var(--font-family-inter-tight);
       @include hover {
         border-color: var(--bookmark-tag-border-color-hover);
         background-color: var(--bookmark-tag-background-hover);
@@ -81,8 +81,8 @@
     }
   }
   &__description {
-    color: var(--color-text-variant);
-    font-size: var(--fontSize-1-5rem);
+    color: var(--text-color-variant);
+    font-size: var(--font-size-1-5rem);
     @include to992 {
       padding-right: var(--distance-16px);
     }
@@ -103,16 +103,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--buttonHeight-34px);
-    height: var(--buttonHeight-34px);
+    width: var(--button-dimension-34px);
+    height: var(--button-dimension-34px);
     &:last-of-type {
       @include to992 {
         order: -1;
       }
     }
     & > div > svg {
-      width: var(--iconDimension-18px);
-      height: var(--iconDimension-18px);
+      width: var(--icon-dimension-18px);
+      height: var(--icon-dimension-18px);
       fill: var(--bookmark-action-fill);
       @include transition-100ms(fill);
     }
@@ -128,27 +128,27 @@
   padding-left: var(--distance-16px);
   display: flex;
   align-items: center;
-  font-size: var(--fontSize-13px);
+  font-size: var(--font-size-13px);
   @include at992 {
     padding-top: var(--distance-5px);
     padding-bottom: var(--distance-10px);
   }
   &__separator {
     padding: 0 var(--distance-5px);
-    color: var(--color-text-dimmed);
+    color: var(--text-color-dimmed);
   }
-  &__dimmedText {
-    color: var(--color-text-dimmed);
+  &__dimmed-text {
+    color: var(--text-color-dimmed);
   }
   &__nsfw {
-    font-weight: var(--fontWeight-inter-semiBold);
+    font-weight: var(--font-weight-inter-semi-bold);
     color: var(--bookmark-nsfw-foreground);
     transform: scale(0.85);
     position: relative;
     &::before {
       content: '';
       border: 1px solid var(--bookmark-nsfw-foreground);
-      border-radius: var(--borderRadius-4px);
+      border-radius: var(--border-radius-4px);
       position: absolute;
       width: 120%;
       height: 115%;
