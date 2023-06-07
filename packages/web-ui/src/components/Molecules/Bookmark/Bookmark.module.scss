@@ -5,7 +5,7 @@
   display: grid;
   background-color: var(--bookmark-background);
   border: var(--border-secondary);
-  @include transition-100(border-color);
+  @include transition-100ms(border-color);
   @include to992 {
     grid-template-areas:
       'main main'
@@ -18,40 +18,144 @@
     grid-template-areas:
       'main actions'
       'info actions';
-    border-radius: $borderRadius-10;
+    border-radius: var(--borderRadius-10px);
     grid-template-columns: 1fr auto;
   }
-  @media (hover: hover) {
-    :hover {
-      border-color: var(--border-color-primary);
-    }
+  @include hover {
+    border-color: var(--border-color-primary);
   }
 }
-
 .main {
   grid-area: main;
   display: flex;
   flex-direction: column;
-  row-gap: $pixels-3;
-  padding-top: $pixels-12;
-  padding-left: $pixels-16;
+  row-gap: var(--distance-3px);
+  padding-top: var(--distance-12px);
+  padding-left: var(--distance-16px);
   @include to992 {
-    padding-right: $pixels-16;
-    padding-bottom: $pixels-8;
+    padding-right: var(--distance-16px);
+    padding-bottom: var(--distance-8px);
     border-bottom: 1px solid var(--border-color-secondary);
   }
   &__title {
     display: inline;
-    color: var(--bookmark-link);
-    font-weight: $fontWeight-inter-medium;
-    font-size: $fontSize-17-rem;
-    @media (hover: hover) {
-      :hover {
+    color: var(--bookmark-link-foreground);
+    font-weight: var(--fontWeight-inter-medium);
+    font-size: var(--fontSize-1-7rem);
+    @include hover {
+      text-decoration: underline;
+    }
+    &--starred {
+      background-color: var(--bookmark-starred-title-foreground);
+    }
+  }
+  &__siteAndTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--distance-7px);
+    @include to992 {
+      padding-right: var(--distance-16px);
+    }
+    &__site {
+      font-size: var(--fontSize-13px);
+      color: var(--bookmark-site-foreground);
+      font-weight: var(--fontWeight-inter-medium);
+      @include hover {
         text-decoration: underline;
       }
     }
-    &--starred {
-      background-color: var(--bookmark-starred-title-highlight);
+    &__tag {
+      font-size: var(--fontSize-13px);
+      color: var(--bookmark-tag-foreground);
+      background-color: var(--bookmark-tag-background);
+      border-radius: var(--borderRadius-4px);
+      border: 1px solid var(--bookmark-tag-border-color);
+      padding-right: var(--distance-4px);
+      padding-left: var(--distance-4px);
+      font-family: var(--fontFamily-InterTight);
+      @include hover {
+        border-color: var(--bookmark-tag-border-color-hover);
+        background-color: var(--bookmark-tag-background-hover);
+        color: var(--bookmark-tag-foreground-hover);
+      }
+    }
+  }
+  &__description {
+    color: var(--color-text-variant);
+    font-size: var(--fontSize-1-5rem);
+    @include to992 {
+      padding-right: var(--distance-16px);
+    }
+  }
+}
+.actions {
+  grid-area: actions;
+  display: flex;
+  @include to992 {
+    margin-right: var(--distance-5px);
+  }
+  @include at992 {
+    flex-direction: column;
+    justify-content: space-between;
+    margin: var(--distance-6px) 0 var(--distance-3px) 0;
+  }
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--buttonHeight-34px);
+    height: var(--buttonHeight-34px);
+    &:last-of-type {
+      @include to992 {
+        order: -1;
+      }
+    }
+    & > div > svg {
+      width: var(--iconDimension-18px);
+      height: var(--iconDimension-18px);
+      fill: var(--bookmark-action-fill);
+      @include transition-100ms(fill);
+    }
+    @include hover {
+      & > div > svg {
+        fill: var(--bookmark-action-fill-hover);
+      }
+    }
+  }
+}
+.info {
+  grid-area: info;
+  padding-left: var(--distance-16px);
+  display: flex;
+  align-items: center;
+  font-size: var(--fontSize-13px);
+  @include at992 {
+    padding-top: var(--distance-5px);
+    padding-bottom: var(--distance-10px);
+  }
+  &__separator {
+    padding: 0 var(--distance-5px);
+    color: var(--color-text-dimmed);
+  }
+  &__dimmedText {
+    color: var(--color-text-dimmed);
+  }
+  &__nsfw {
+    font-weight: var(--fontWeight-inter-semiBold);
+    color: var(--bookmark-nsfw-foreground);
+    transform: scale(0.85);
+    position: relative;
+    &::before {
+      content: '';
+      border: 1px solid var(--bookmark-nsfw-foreground);
+      border-radius: var(--borderRadius-4px);
+      position: absolute;
+      width: 120%;
+      height: 115%;
+      top: 0;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-53%);
     }
   }
 }

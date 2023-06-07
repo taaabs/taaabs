@@ -48,3 +48,16 @@
     @content;
   }
 }
+@mixin hover {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
+@mixin transition-100ms($transitionProperty: all) {
+  transition: $transitionProperty var(--transitionDuration-100ms) linear;
+}
+@mixin transition-300ms($transitionProperty: all) {
+  transition: $transitionProperty var(--transitionDuration-300ms) linear;
+}
