@@ -31,11 +31,6 @@
       "jest",
       "@testing-library/jest-dom"
     ],
-    "plugins": [
-      {
-        "name": "typescript-plugin-css-modules"
-      }
-    ]
   },
   "include": [
     "src/**/*.ts",
