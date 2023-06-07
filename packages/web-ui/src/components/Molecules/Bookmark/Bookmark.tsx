@@ -8,6 +8,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { Icon } from '@web-ui/components/Atoms/Icon'
 
 import styless from './Bookmark.module.scss'
+import cn from 'classnames'
 
 dayjs.extend(relativeTime)
 
@@ -29,13 +30,17 @@ export namespace BookmarkTypes {
 
 export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
   return (
-    <_.container>
-      <div className={styless.container}>x</div>
-      <_.main>
+    <div className={styless.container}>
+      <div className={styless.main}>
         <div>
-          <_.Main.title href={props.url} isStarred={props.isStarred}>
+          <a
+            className={cn(styless.main__title, {
+              [styless['main__title--starred']]: props.isStarred,
+            })}
+            href={props.url}
+          >
             {props.title}
-          </_.Main.title>
+          </a>
         </div>
         <_.Main.siteAndTags>
           <_.Main.SiteAndTags.site onClick={() => {}}>
@@ -50,7 +55,7 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
         {props.description && (
           <_.Main.description>{props.description}</_.Main.description>
         )}
-      </_.main>
+      </div>
       <_.actions>
         <_.Action.menu>
           <Icon variant="THREE_DOTS" />
@@ -79,51 +84,11 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
           </>
         )}
       </_.info>
-    </_.container>
+    </div>
   )
 }
 
 namespace _ {
-  export const container = styled.div`
-    display: grid;
-    background-color: var(${Theme.BOOKMARK_BACKGROUND});
-    border: var(${Theme.BORDER_SECONDARY});
-    ${styles.transition[100]('border-color')}
-    ${mq.to992} {
-      grid-template-areas:
-        'main main'
-        'info actions';
-      border-left-width: 0px;
-      border-right-width: 0px;
-      grid-template-columns: 1fr auto;
-    }
-    ${mq.at992} {
-      grid-template-areas:
-        'main actions'
-        'info actions';
-      ${styles.borderRadius[10]}
-
-      grid-template-columns: 1fr auto;
-    }
-    @media (hover: hover) {
-      :hover {
-        border-color: var(${Theme.BORDER_COLOR_PRIMARY});
-      }
-    }
-  `
-  export const main = styled.div<{ isStarred?: boolean }>`
-    grid-area: main;
-    display: flex;
-    flex-direction: column;
-    row-gap: ${sharedValues.distance[3]}px;
-    padding-top: ${sharedValues.distance[12]}px;
-    padding-left: ${sharedValues.distance[16]}px;
-    ${mq.to992} {
-      padding-right: ${sharedValues.distance[16]}px;
-      padding-bottom: ${sharedValues.distance[8]}px;
-      border-bottom: 1px solid var(${Theme.BORDER_COLOR_SECONDARY});
-    }
-  `
   export namespace Main {
     export const title = styled.a<{ isStarred?: boolean }>`
       display: inline;

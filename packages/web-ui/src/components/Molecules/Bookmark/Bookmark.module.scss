@@ -2,8 +2,56 @@
 @use '../../../styles/foundation' as *;
 
 .container {
-  background: blue;
+  display: grid;
+  background-color: var(--bookmark-background);
+  border: var(--border-secondary);
+  @include transition-100(border-color);
   @include to992 {
-    background: var(--color-white);
+    grid-template-areas:
+      'main main'
+      'info actions';
+    border-left-width: 0px;
+    border-right-width: 0px;
+    grid-template-columns: 1fr auto;
+  }
+  @include at992 {
+    grid-template-areas:
+      'main actions'
+      'info actions';
+    border-radius: $borderRadius-10;
+    grid-template-columns: 1fr auto;
+  }
+  @media (hover: hover) {
+    :hover {
+      border-color: var(--border-color-primary);
+    }
+  }
+}
+
+.main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  row-gap: $pixels-3;
+  padding-top: $pixels-12;
+  padding-left: $pixels-16;
+  @include to992 {
+    padding-right: $pixels-16;
+    padding-bottom: $pixels-8;
+    border-bottom: 1px solid var(--border-color-secondary);
+  }
+  &__title {
+    display: inline;
+    color: var(--bookmark-link);
+    font-weight: $fontWeight-inter-medium;
+    font-size: $fontSize-17-rem;
+    @media (hover: hover) {
+      :hover {
+        text-decoration: underline;
+      }
+    }
+    &--starred {
+      background-color: var(--bookmark-starred-title-highlight);
+    }
   }
 }

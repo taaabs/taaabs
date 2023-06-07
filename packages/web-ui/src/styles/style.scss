@@ -24,44 +24,44 @@ html {
 }
 
 :root {
-  --color-white: $white;
-  --color-black: $neutral950;
-  --color-text--normal: $neutral900;
-  --color-text-variant: $neutral700;
-  --color-text-dimmed: $neutral500;
-  --color-brand: $blue800;
-  --selection-background: $blue800;
-  --selection-foreground: $white;
-  --border-color-primary: $neutral200;
-  --border-color-secondary: $neutral100;
-  --logo-background: $blue800;
-  --button-background: $blue800;
-  --button-background-hover: $blue900;
-  --button-outlined-icon-background: $white;
-  --button-outlined-icon-background-hover: $neutral50;
+  --color-white: #{$white};
+  --color-black: #{$neutral950};
+  --color-text--normal: #{$neutral900};
+  --color-text-variant: #{$neutral700};
+  --color-text-dimmed: #{$neutral500};
+  --color-brand: #{$blue800};
+  --selection-background: #{$blue800};
+  --selection-foreground: #{$white};
+  --border-color-primary: #{$neutral200};
+  --border-color-secondary: #{$neutral100};
+  --logo-background: #{$blue800};
+  --button-background: #{$blue800};
+  --button-background-hover: #{$blue900};
+  --button-outlined-icon-background: #{$white};
+  --button-outlined-icon-background-hover: #{$neutral50};
   --border-primary: 1px solid var(--border-color-primary);
   --border-secondary: 1px solid var(--border-color-secondary);
-  --header-background: $white;
+  --header-background: #{$white};
   --header-transparent-background: 'rgba(255, 255, 255, 0.8)';
-  --search-box-background: $white;
+  --search-box-background: #{$white};
   --search-box-shadow: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.03)';
   --search-box-shadow-hover: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.06)';
-  --bookmark-background: $white;
-  --bookmark-link: $blue800;
-  --bookmark-site-foreground: $amber700;
-  --bookmark-tag-border-color: $green100;
-  --bookmark-tag-background: $green50;
-  --bookmark-tag-foreground: $green600;
-  --bookmark-tag-border-color-hover: $green200;
-  --bookmark-tag-background-hover: $green100;
-  --bookmark-tag-foreground-hover: $green700;
-  --bookmark-nsfw: $red600;
-  --bookmark-starred-title-highlight: $amber100;
-  --bookmark-action-fill: $neutral400;
-  --bookmark-action-fill-hover: $neutral600;
-  --title-bar-background: $blue50;
-  --title-bar-primary-foreground: $blue800;
-  --title-bar-secondary-foreground: $blue500;
+  --bookmark-background: #{$white};
+  --bookmark-link: #{$blue800};
+  --bookmark-site-foreground: #{$amber700};
+  --bookmark-tag-border-color: #{$green100};
+  --bookmark-tag-background: #{$green50};
+  --bookmark-tag-foreground: #{$green600};
+  --bookmark-tag-border-color-hover: #{$green200};
+  --bookmark-tag-background-hover: #{$green100};
+  --bookmark-tag-foreground-hover: #{$green700};
+  --bookmark-nsfw: #{$red600};
+  --bookmark-starred-title-highlight: #{$amber100};
+  --bookmark-action-fill: #{$neutral400};
+  --bookmark-action-fill-hover: #{$neutral600};
+  --title-bar-background: #{$blue50};
+  --title-bar-primary-foreground: #{$blue800};
+  --title-bar-secondary-foreground: #{$blue500};
 }
 
 body {

@@ -19,7 +19,7 @@
   }
 }
 @mixin at992 {
-  @media (min-width: 992) {
+  @media (min-width: 992px) {
     @content;
   }
 }
@@ -29,7 +29,7 @@
   }
 }
 @mixin at1200 {
-  @media (min-width: 1200) {
+  @media (min-width: 1200px) {
     @content;
   }
 }
@@ -39,7 +39,7 @@
   }
 }
 @mixin at1380 {
-  @media (min-width: 1380) {
+  @media (min-width: 1380px) {
     @content;
   }
 }
