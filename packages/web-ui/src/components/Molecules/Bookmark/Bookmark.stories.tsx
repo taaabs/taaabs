@@ -1,6 +1,5 @@
 import { StorybookSpacer } from '@web-ui/helpers/storybook/StorybookSpacer'
 import { Bookmark } from './Bookmark'
-import { colors } from '@web-ui/styles/constants'
 
 export default {
   component: Bookmark,
@@ -9,7 +8,7 @@ export default {
 export const Primary = () => (
   <div
     style={{
-      background: colors.neutral[25],
+      background: 'var(--library-background)',
     }}
   >
     <div

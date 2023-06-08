@@ -15,10 +15,6 @@
     "find-deadcode": "ts-prune"
   },
   "dependencies": {
-    "@capsizecss/core": "^3.1.0",
-    "@capsizecss/metrics": "^1.1.1",
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
     "blurhash": "^2.0.5",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.8",
@@ -34,7 +30,6 @@
     "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {
-    "@emotion/babel-plugin": "^11.11.0",
     "@storybook/client-api": "^7.0.18",
     "@storybook/client-logger": "^7.0.18",
     "@storybook/react": "^7.0.18",

@@ -1,0 +1,22 @@
+// @type
+@use '../../../styles/foundation' as *;
+
+.container {
+  border-bottom: var(--border-primary);
+  background-color: var(--header-transparent-background);
+  backdrop-filter: var(--backdrop-filter);
+  height: var(--header-desktop-height);
+}
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  gap: var(--distance-40px);
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: var(--distance-16px);
+    height: 100%;
+  }
+}

@@ -47,7 +47,7 @@ html {
   --border-primary: 1px solid var(--border-color-primary);
   --border-secondary: 1px solid var(--border-color-secondary);
   --header-background: var(--white);
-  --header-transparent-background: 'rgba(255, 255, 255, 0.8)';
+  --header-transparent-background: rgba(255, 255, 255, 0.8);
   --bottom-navigation-bar-background: var(--white);
   --search-box-background: var(--white);
   --search-box-shadow: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.03)';
@@ -68,6 +68,7 @@ html {
   --title-bar-background: var(--blue50);
   --title-bar-primary-foreground: var(--blue800);
   --title-bar-secondary-foreground: var(--blue500);
+  --library-background: var(--neutral25);
 }
 
 body {

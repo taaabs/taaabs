@@ -280,18 +280,6 @@ importers:
 
   packages/web-ui:
     dependencies:
-      '@capsizecss/core':
-        specifier: ^3.1.0
-        version: 3.1.0
-      '@capsizecss/metrics':
-        specifier: ^1.1.1
-        version: 1.1.1
-      '@emotion/react':
-        specifier: ^11.11.0
-        version: 11.11.0(@types/react@18.2.8)(react@18.2.0)
-      '@emotion/styled':
-        specifier: ^11.11.0
-        version: 11.11.0(@emotion/react@11.11.0)(@types/react@18.2.8)(react@18.2.0)
       blurhash:
         specifier: ^2.0.5
         version: 2.0.5
@@ -332,9 +320,6 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0(vite@4.3.9)
     devDependencies:
-      '@emotion/babel-plugin':
-        specifier: ^11.11.0
-        version: 11.11.0
       '@storybook/client-api':
         specifier: ^7.0.18
         version: 7.0.18
@@ -2813,16 +2798,6 @@ packages:
   /@bcoe/v8-coverage@0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
-
-  /@capsizecss/core@3.1.0:
-    resolution: {integrity: sha512-MoHbXUMqJtYL+idLVSQY57OPRyPaUBGN0o1Im0JElmfRVV+X1i1i5QsQTuEJpJgYFwi4jsck7A+jt6X7XB0p8w==}
-    dependencies:
-      csstype: 3.1.2
-    dev: false
-
-  /@capsizecss/metrics@1.1.1:
-    resolution: {integrity: sha512-YFONV2KvBPYr3FCJTMCZ5rkTHbaVCqO37VYJo9HrrzU2aLcWk5JPQln64yMmKtWUj5Pwi1vIqeFqCoYQxd20gg==}
-    dev: false
 
   /@colors/colors@1.5.0:
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}

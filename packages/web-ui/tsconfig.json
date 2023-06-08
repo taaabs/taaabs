@@ -19,7 +19,7 @@
     "incremental": true,
     "baseUrl": ".",
     "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react",
+    "jsxImportSource": "react",
     "paths": {
       "@web-ui/*": [
         "src/*"
@@ -27,7 +27,6 @@
     },
     "types": [
       "vite/client",
-      "@emotion/react/types/css-prop",
       "jest",
       "@testing-library/jest-dom"
     ],

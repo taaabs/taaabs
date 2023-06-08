@@ -1,8 +1,7 @@
-import { sharedValues } from '@web-ui/constants'
 import { ButtonOutlinedIcon } from '@web-ui/components/Atoms/ButtonOutlinedIcon'
 import { SearchBox } from '@web-ui/components/Molecules/SearchBox'
 import { ButtonAvatar } from '@web-ui/components/Atoms/ButtonAvatar'
-import { css } from '@emotion/react'
+import styles from './HeaderDesktopUserArea.module.scss'
 
 export namespace HeaderDesktopUserAreaTypes {
   export type Props = {
@@ -21,16 +20,7 @@ export const HeaderDesktopUserArea: React.FC<
   HeaderDesktopUserAreaTypes.Props
 > = (props) => {
   return (
-    <div
-      css={css`
-        display: flex;
-        align-items: center;
-        flex-grow: 1;
-        justify-content: flex-end;
-        gap: ${sharedValues.distance[8]}px;
-        height: 100%;
-      `}
-    >
+    <div className={styles.container}>
       <SearchBox onClick={() => {}} placeholder="Search anything..." />
       <ButtonOutlinedIcon iconVariant="SUN" onClick={props.onClickTheme} />
       <ButtonOutlinedIcon iconVariant="ADD" onClick={props.onClickAdd} />

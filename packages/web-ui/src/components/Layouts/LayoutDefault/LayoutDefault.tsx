@@ -1,5 +1,4 @@
-import { mq } from '@web-ui/styles/constants'
-import styled from '@emotion/styled'
+import styles from './LayouDefault.module.scss'
 
 export namespace LayoutDefaultTypes {
   export type Props = {
@@ -14,50 +13,15 @@ export namespace LayoutDefaultTypes {
 export const LayoutDefault: React.FC<LayoutDefaultTypes.Props> = (props) => {
   return (
     <>
-      <_.header>
-        <_.Header.desktop>{props.slotHeaderDesktop}</_.Header.desktop>
-        <_.Header.mobile>{props.slotHeaderMobile}</_.Header.mobile>
-      </_.header>
+      <div className={styles.header}>
+        <div className={styles.header__desktop}>{props.slotHeaderDesktop}</div>
+        <div className={styles.header__mobile}>{props.slotHeaderMobile}</div>
+      </div>
       {props.children}
-      <_.footerDesktop>{props.slotFooterDesktop}</_.footerDesktop>
-      <_.mobileBottomNavigationBar>
+      <div className={styles['footer-desktop']}>{props.slotFooterDesktop}</div>
+      <div className={styles['mobile-bottom-navigation-bar']}>
         {props.slotBottomNavigationBar}
-      </_.mobileBottomNavigationBar>
+      </div>
     </>
   )
-}
-
-namespace _ {
-  export const header = styled.header`
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    width: 100%;
-  `
-  export namespace Header {
-    export const desktop = styled.div`
-      ${mq.to992} {
-        display: none;
-      }
-    `
-    export const mobile = styled.div`
-      ${mq.at992} {
-        display: none;
-      }
-    `
-  }
-  export const footerDesktop = styled.div`
-    ${mq.to992} {
-      display: none;
-    }
-  `
-  export const mobileBottomNavigationBar = styled.div`
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 2;
-    ${mq.at992} {
-      display: none;
-    }
-  `
 }
