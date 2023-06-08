@@ -44,14 +44,15 @@ html {
   --button-background-hover: var(--blue900);
   --button-outlined-icon-background: var(--white);
   --button-outlined-icon-background-hover: var(--neutral50);
+  --button-underlined-background-hover: rgba(15, 20, 25, 0.05);
   --border-primary: 1px solid var(--border-color-primary);
   --border-secondary: 1px solid var(--border-color-secondary);
   --header-background: var(--white);
   --header-transparent-background: rgba(255, 255, 255, 0.8);
   --bottom-navigation-bar-background: var(--white);
   --search-box-background: var(--white);
-  --search-box-shadow: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.03)';
-  --search-box-shadow-hover: '0px 1.5px 5px 2px rgba(0, 0, 0, 0.06)';
+  --search-box-shadow: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.03);
+  --search-box-shadow-hover: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.06);
   --bookmark-background: var(--white);
   --bookmark-link-foreground: var(--blue800);
   --bookmark-site-foreground: var(--amber700);

@@ -24,7 +24,7 @@
         "name": "next"
       }
     ],
-    "jsxImportSource": "@emotion/react"
+    "jsxImportSource": "react"
   },
   "include": [
     "next-env.d.ts",

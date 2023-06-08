@@ -8,9 +8,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/cache": "^11.11.0",
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@svgr/webpack": "^8.0.1",
     "@taaabs/repositories": "workspace:*",
@@ -27,10 +24,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.1",
-    "@emotion/babel-plugin": "^11.11.0",
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
-    "@types/react-dom": "18.2.4",
-    "babel-plugin-module-resolver": "^5.0.0"
+    "@types/react-dom": "18.2.4"
   }
 }

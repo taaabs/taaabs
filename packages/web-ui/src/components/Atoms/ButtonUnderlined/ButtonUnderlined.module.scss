@@ -37,9 +37,7 @@ $underline-height: 2.5px;
     }
   }
   @include hover {
-    & span::after {
-      background-color: var(--brand-color);
-    }
+    background-color: var(--button-underlined-background-hover);
   }
   &--active {
     & span::after {

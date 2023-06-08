@@ -6,6 +6,7 @@ import { Library } from '@web-ui/components/Templates/Library'
 import { LogoForHeader } from '@web-ui/components/Molecules/LogoForHeader'
 import { NavigationForHeader } from '@web-ui/components/Molecules/NavigationForHeader/NavigationForHeader'
 import { HeaderMobile } from '@web-ui/components/Templates/HeaderMobile'
+import { HeaderDesktopUserArea } from '@web-ui/components/Organisms/HeaderDesktopUserArea/HeaderDesktopUserArea'
 
 export default {
   title: 'previews/app/other user catalog',
@@ -22,6 +23,14 @@ export const Primary = () => (
               { label: 'Lorem', href: '/lorem', isActive: false },
               { label: 'Ipsum', href: '/ipsum', isActive: true },
             ]}
+          />
+        }
+        rightSideSlot={
+          <HeaderDesktopUserArea
+            onClickAdd={() => {}}
+            onClickSearch={() => {}}
+            currentTheme="LIGHT"
+            onClickTheme={() => {}}
           />
         }
       />

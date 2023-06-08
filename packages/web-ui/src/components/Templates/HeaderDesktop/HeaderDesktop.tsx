@@ -5,7 +5,7 @@ export namespace HeaderDesktopTypes {
   export type Props = {
     logoSlot: React.ReactNode
     navigationSlot: React.ReactNode
-    rightSideSlot?: React.ReactNode
+    rightSideSlot: React.ReactNode
   }
 }
 

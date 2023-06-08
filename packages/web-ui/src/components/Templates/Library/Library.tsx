@@ -60,61 +60,65 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
     slideoutLeft?.toggle()
   }
 
-  const initializeSlideout = () => {
-    if (!sidebarRef.current || !mainRef.current || !mobileTabsPanelRef.current)
-      return
-
-    const slideoutLeftInstance = new Slideout({
-      menu: sidebarRef.current,
-      panel: mainRef.current,
-      padding: SLIDABLE_WIDTH,
-    })
-    const slideoutRightInstance = new Slideout({
-      menu: mobileTabsPanelRef.current,
-      panel: mainRef.current,
-      padding: SLIDABLE_WIDTH,
-      side: 'right',
-    })
-    slideoutLeftInstance.on('beforeopen', () => {
-      setIsSlideoutLeftOpen(true)
-      setIsSlideoutLeftDefinetelyOpened(true)
-    })
-    slideoutLeftInstance.on('beforeclose', () => {
-      setIsSlideoutLeftOpen(false)
-    })
-    slideoutLeftInstance.on('close', () => {
-      setIsSlideoutLeftOpen(false)
-      setIsSlideoutLeftDefinetelyClosed(true)
-      setIsSlideoutLeftDefinetelyOpened(false)
-    })
-    slideoutLeftInstance.on('translatestart', () => {
-      setIsSlideoutLeftDefinetelyClosed(false)
-      setIsSlideoutLeftDefinetelyOpened(false)
-    })
-    slideoutRightInstance.on('beforeopen', () => {
-      setIsSlideoutRightOpen(true)
-      setIsSlideoutRightDefinetelyOpened(true)
-    })
-    slideoutRightInstance.on('beforeclose', () => {
-      setIsSlideoutRightOpen(false)
-    })
-    slideoutRightInstance.on('close', () => {
-      setIsSlideoutRightOpen(false)
-      setIsSlideoutRightDefinetelyClosed(true)
-      setIsSlideoutRightDefinetelyOpened(false)
-    })
-    slideoutRightInstance.on('translatestart', () => {
-      setIsSlideoutRightDefinetelyClosed(false)
-      setIsSlideoutRightDefinetelyOpened(false)
-    })
-
-    return {
-      slideoutLeftInstance,
-      slideoutRightInstance,
-    }
-  }
-
   useEffect(() => {
+    const initializeSlideout = () => {
+      if (
+        !sidebarRef.current ||
+        !mainRef.current ||
+        !mobileTabsPanelRef.current
+      )
+        return
+
+      const slideoutLeftInstance = new Slideout({
+        menu: sidebarRef.current,
+        panel: mainRef.current,
+        padding: SLIDABLE_WIDTH,
+      })
+      const slideoutRightInstance = new Slideout({
+        menu: mobileTabsPanelRef.current,
+        panel: mainRef.current,
+        padding: SLIDABLE_WIDTH,
+        side: 'right',
+      })
+      slideoutLeftInstance.on('beforeopen', () => {
+        setIsSlideoutLeftOpen(true)
+        setIsSlideoutLeftDefinetelyOpened(true)
+      })
+      slideoutLeftInstance.on('beforeclose', () => {
+        setIsSlideoutLeftOpen(false)
+      })
+      slideoutLeftInstance.on('close', () => {
+        setIsSlideoutLeftOpen(false)
+        setIsSlideoutLeftDefinetelyClosed(true)
+        setIsSlideoutLeftDefinetelyOpened(false)
+      })
+      slideoutLeftInstance.on('translatestart', () => {
+        setIsSlideoutLeftDefinetelyClosed(false)
+        setIsSlideoutLeftDefinetelyOpened(false)
+      })
+      slideoutRightInstance.on('beforeopen', () => {
+        setIsSlideoutRightOpen(true)
+        setIsSlideoutRightDefinetelyOpened(true)
+      })
+      slideoutRightInstance.on('beforeclose', () => {
+        setIsSlideoutRightOpen(false)
+      })
+      slideoutRightInstance.on('close', () => {
+        setIsSlideoutRightOpen(false)
+        setIsSlideoutRightDefinetelyClosed(true)
+        setIsSlideoutRightDefinetelyOpened(false)
+      })
+      slideoutRightInstance.on('translatestart', () => {
+        setIsSlideoutRightDefinetelyClosed(false)
+        setIsSlideoutRightDefinetelyOpened(false)
+      })
+
+      return {
+        slideoutLeftInstance,
+        slideoutRightInstance,
+      }
+    }
+
     if (isScrolling) {
       slideoutLeft?.destroy()
       slideoutRight?.destroy()
@@ -205,9 +209,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                 </StickyBox>
               </>
             </div>
-            <div className={styles.aside__inner__mobile}>
-              {props.slotAside}
-            </div>
+            <div className={styles.aside__inner__mobile}>{props.slotAside}</div>
           </div>
         </div>
       </div>
