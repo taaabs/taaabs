@@ -1,6 +1,6 @@
-import styles from './LayouDefault.module.scss'
+import styles from './App.module.scss'
 
-export namespace LayoutDefaultTypes {
+export namespace AppTypes {
   export type Props = {
     slotHeaderDesktop: React.ReactNode
     slotHeaderMobile: React.ReactNode
@@ -10,7 +10,7 @@ export namespace LayoutDefaultTypes {
   }
 }
 
-export const LayoutDefault: React.FC<LayoutDefaultTypes.Props> = (props) => {
+export const App: React.FC<AppTypes.Props> = (props) => {
   return (
     <>
       <div className={styles.header}>

@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import { Icon } from '@web-ui/components/Atoms/Icon'
-import { ButtonOutlinedIcon } from '@web-ui/components/Atoms/ButtonOutlinedIcon'
 import styles from './UserForHeader.module.scss'
-import { ButtonAvatar } from '@web-ui/components/Atoms/ButtonAvatar'
+import { Blurhash } from 'react-blurhash'
 
 export namespace UserForHeaderTypes {
   export type User = {
@@ -24,24 +23,26 @@ export const UserForHeader: React.FC<UserForHeaderTypes.Props> = ({ user }) => {
       <Link className={styles['back-arrow']} href={user.backHref}>
         <Icon variant="LESS_THAN" />
       </Link>
-      <Link
-        className={styles['avatar-and-username']}
-        href={`/${user.username}`}
-      >
+      <div className={styles['avatar-and-username']}>
         {user.avatar ? (
-          <ButtonAvatar
-            blurhash={user.avatar?.blurhash}
-            onClick={() => {}}
-            url={user.avatar.url}
-          />
+          <div className={styles['avatar-and-username__avatar-image']}>
+            <div
+              className={styles['avatar-and-username__avatar-image__blurhash']}
+            >
+              <Blurhash hash={user.avatar.blurhash} />
+            </div>
+            <img src={user.avatar.url} />
+          </div>
         ) : (
-          <ButtonOutlinedIcon iconVariant="USER" onClick={() => {}} />
+          <div className={styles['avatar-and-username__abatar-icon']}>
+            <Icon variant="USER" />
+          </div>
         )}
 
         <span className={styles['avatar-and-username__username']}>
           {user.username}
         </span>
-      </Link>
+      </div>
     </div>
   )
 }

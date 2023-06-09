@@ -1,4 +1,4 @@
-import { LayoutDefault } from '@web-ui/components/Layouts/LayoutDefault'
+import { App } from '@web-ui/components/Templates/App'
 import { Bookmark } from '@web-ui/components/Molecules/Bookmark'
 import { BottomNavigationBar } from '@web-ui/components/Molecules/BottomNavigationBar'
 import { HeaderDesktop } from '@web-ui/components/Templates/HeaderDesktop'
@@ -9,11 +9,11 @@ import { HeaderMobile } from '@web-ui/components/Templates/HeaderMobile'
 import { HeaderDesktopUserArea } from '@web-ui/components/Organisms/HeaderDesktopUserArea/HeaderDesktopUserArea'
 
 export default {
-  title: 'previews/app/other user catalog',
+  title: 'page-previews/library',
 }
 
 export const Primary = () => (
-  <LayoutDefault
+  <App
     slotHeaderDesktop={
       <HeaderDesktop
         logoSlot={<LogoForHeader />}
@@ -31,6 +31,7 @@ export const Primary = () => (
             onClickSearch={() => {}}
             currentTheme="LIGHT"
             onClickTheme={() => {}}
+            onClickNotifications={() => {}}
           />
         }
       />
@@ -77,7 +78,7 @@ export const Primary = () => (
         {bookmark}
       </>
     </Library>
-  </LayoutDefault>
+  </App>
 )
 
 const bookmark = (

@@ -12,6 +12,7 @@ export namespace HeaderDesktopUserAreaTypes {
     onClickSearch: () => void
     onClickTheme: () => void
     onClickAdd: () => void
+    onClickNotifications: () => void
     currentTheme: 'LIGHT' | 'DARK'
   }
 }
@@ -22,8 +23,12 @@ export const HeaderDesktopUserArea: React.FC<
   return (
     <div className={styles.container}>
       <SearchBox onClick={() => {}} placeholder="Search anything..." />
-      <ButtonOutlinedIcon iconVariant="SUN" onClick={props.onClickTheme} />
       <ButtonOutlinedIcon iconVariant="ADD" onClick={props.onClickAdd} />
+      <ButtonOutlinedIcon
+        iconVariant="NOTIFICATIONS"
+        onClick={props.onClickNotifications}
+      />
+      <ButtonOutlinedIcon iconVariant="SUN" onClick={props.onClickTheme} />
       {props.avatar ? (
         <ButtonAvatar
           url={props.avatar.url}

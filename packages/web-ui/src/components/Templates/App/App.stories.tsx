@@ -1,17 +1,17 @@
 import { loremIpsum } from '@web-ui/helpers/storybook/lorem-ipsum'
-import { LayoutDefault } from './LayoutDefault'
+import { App } from './App'
 
 export default {
-  component: LayoutDefault,
+  component: App,
 }
 
 export const Primary = () => (
-  <LayoutDefault
+  <App
     slotHeaderDesktop={<>header desktop</>}
     slotHeaderMobile={<>header mobile</>}
     slotBottomNavigationBar={<>bottom navigation bar</>}
     slotFooterDesktop={<>footer desktop</>}
   >
     {loremIpsum.long}
-  </LayoutDefault>
+  </App>
 )

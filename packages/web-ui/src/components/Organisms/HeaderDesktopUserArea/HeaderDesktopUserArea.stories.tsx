@@ -14,12 +14,14 @@ export const Primary = () => {
         onClickSearch={() => {}}
         onClickTheme={() => {}}
         currentTheme="LIGHT"
+        onClickNotifications={() => {}}
       />
       <StorybookSpacer />
       <HeaderDesktopUserArea
         onClickAdd={() => {}}
         onClickSearch={() => {}}
         onClickTheme={() => {}}
+        onClickNotifications={() => {}}
         avatar={{
           url: 'https://picsum.photos/300',
           blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',

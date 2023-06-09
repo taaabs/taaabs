@@ -8,12 +8,13 @@
     color: var(--color-text--normal);
     font-family: var(--font-family-plus-jakarta-sans);
     letter-spacing: var(--letter-spacing-logo);
-    padding-left: var(--distance-10px);
+    padding-left: var(--distance-8px);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     font-size: var(--font-size-22px);
     margin-bottom: var(--distance-2px);
     @include at992 {
       font-size: var(--font-size-26px);
+      padding-left: var(--distance-10px);
       margin-bottom: var(--distance-4px);
     }
   }

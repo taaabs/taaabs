@@ -34,6 +34,45 @@
 .avatar-and-username {
   display: flex;
   align-items: center;
+  &__avatar-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    width: var(--button-dimension-40px);
+    height: var(--button-dimension-40px);
+    & > img {
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    &__blurhash {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+  &__abatar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    width: var(--button-dimension-40px);
+    height: var(--button-dimension-40px);
+    background-color: var(--user-for-header-icon-background);
+    & > div > svg {
+      width: var(--icon-dimension-20px);
+      height: var(--icon-dimension-20px);
+    }
+  }
   &__username {
     color: var(--text-color--normal);
     font-family: var(--font-family-plus-jakarta-sans);
