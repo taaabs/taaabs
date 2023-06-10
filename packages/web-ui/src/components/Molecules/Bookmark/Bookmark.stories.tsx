@@ -27,6 +27,31 @@ export const Primary = () => (
         createdAt={new Date('2023-02-20')}
         isNSFW={false}
         isArchived={true}
+        tags={[]}
+      />
+      <StorybookSpacer />
+      <Bookmark
+        isStarred={false}
+        visibility="unlisted"
+        title="Lorem ipsum dolor sit amet"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odio sodal, euismod odio ac, fermentum metus."
+        url="https://example.com/test/lorem_ipsum"
+        sitePath="test"
+        createdAt={new Date('2023-02-20')}
+        isNSFW={false}
+        isArchived={true}
+        tags={[]}
+      />
+      <StorybookSpacer />
+      <Bookmark
+        isStarred={false}
+        visibility="unlisted"
+        title="Lorem ipsum dolor sit amet"
+        url="https://example.com/test/lorem_ipsum"
+        sitePath="test"
+        createdAt={new Date('2023-02-20')}
+        isNSFW={false}
+        isArchived={true}
         tags={['lorem', 'ipsum']}
       />
       <StorybookSpacer />

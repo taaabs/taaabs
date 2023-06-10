@@ -184,8 +184,8 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                 swipeRightOnClick={
                   !isSlideoutRightOpen ? toggleRightSlideout : () => {}
                 }
-                topLineText={props.titleBar.primaryText}
-                bottomLineText={props.titleBar.secondaryText}
+                primaryText={props.titleBar.primaryText}
+                secondaryText={props.titleBar.secondaryText}
               />
             </div>
             <div>{props.children}</div>

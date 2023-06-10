@@ -3,6 +3,6 @@ declare const styles: {
   readonly icon: string
   readonly 'icon--left': string
   readonly 'icon--right': string
-  readonly title: string
+  readonly content: string
 }
 export = styles

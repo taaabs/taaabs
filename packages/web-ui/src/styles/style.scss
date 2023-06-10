@@ -32,7 +32,7 @@ html {
   --plain-white: var(--white);
   --plain-black: var(--neutral950);
   --text-color--normal: var(--neutral900);
-  --text-color-variant: var(--neutral700);
+  --text-color-variant: var(--neutral600);
   --text-color-dimmed: var(--neutral500);
   --brand-color: var(--blue800);
   --selection-background: var(--blue800);
@@ -66,7 +66,7 @@ html {
   --bookmark-nsfw-foreground: var(--red600);
   --bookmark-starred-title-foreground: var(--amber100);
   --bookmark-action-fill: var(--neutral400);
-  --bookmark-action-fill-hover: var(--neutral600);
+  --bookmark-action-fill-hover: var(--plain-black);
   --title-bar-background: var(--blue50);
   --title-bar-primary-foreground: var(--blue800);
   --title-bar-secondary-foreground: var(--blue500);

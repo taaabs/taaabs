@@ -20,7 +20,7 @@ export const Scrolling = () => (
     slotAside={<>{lorem}</>}
     titleBar={{ primaryText: 'Lorem ipsum', secondaryText: 'lorem' }}
   >
-    <>slot main</>
+    {lorem}
   </Library>
 )
 

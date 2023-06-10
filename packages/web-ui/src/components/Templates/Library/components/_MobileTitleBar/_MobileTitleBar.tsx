@@ -6,12 +6,14 @@ export namespace _MobileTitleBarTypes {
   export type Props = {
     swipeLeftOnClick?: () => void
     swipeRightOnClick?: () => void
-    topLineText: string
-    bottomLineText: string
+    primaryText: string
+    secondaryText: string
   }
 }
 
-export const _MobileTitleBar = (props: _MobileTitleBarTypes.Props) => {
+export const _MobileTitleBar: React.FC<_MobileTitleBarTypes.Props> = (
+  props,
+) => {
   return (
     <div className={styles.container}>
       <button
@@ -20,9 +22,9 @@ export const _MobileTitleBar = (props: _MobileTitleBarTypes.Props) => {
       >
         <Icon variant={'MOBILE_TITLE_BAR_MENU'} />
       </button>
-      <div className={styles.title}>
-        <span>{props.topLineText}</span>
-        <span>{props.bottomLineText}</span>
+      <div className={styles.content}>
+        <span>{props.primaryText}</span>
+        <span>{props.secondaryText}</span>
       </div>
       <button
         className={cn(styles.icon, styles['icon--right'])}

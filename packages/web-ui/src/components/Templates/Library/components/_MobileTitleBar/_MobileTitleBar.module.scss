@@ -28,7 +28,7 @@
     }
   }
 }
-.title {
+.content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,8 +40,7 @@
   & span:first-of-type {
     color: var(--title-bar-primary-foreground);
     font-size: var(--font-size-17px);
-    font-family: var(--font-family-plus-jakarta-sans);
-    font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
+    font-weight: var(--font-weight-inter-medium);
   }
   & span:last-of-type {
     color: var(--title-bar-secondary-foreground);

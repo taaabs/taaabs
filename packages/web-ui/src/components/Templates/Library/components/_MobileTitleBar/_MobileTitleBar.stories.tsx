@@ -8,7 +8,7 @@ export const Primary = () => (
   <_MobileTitleBar
     swipeLeftOnClick={() => {}}
     swipeRightOnClick={() => {}}
-    topLineText="Lorem ipsum"
-    bottomLineText="lorem"
+    primaryText="Lorem ipsum"
+    secondaryText="lorem"
   />
 )
