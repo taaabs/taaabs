@@ -6,6 +6,7 @@ import { _MobileTitleBar } from './components/_MobileTitleBar'
 import { useScrollDirection } from 'react-use-scroll-direction'
 import cn from 'classnames'
 import styles from './Library.module.scss'
+import useTouchEvents from 'beautiful-react-hooks/useTouchEvents'
 
 export namespace LibraryTypes {
   export type Props = {
@@ -22,11 +23,17 @@ export namespace LibraryTypes {
 const SLIDABLE_WIDTH = 300
 
 export const Library: React.FC<LibraryTypes.Props> = (props) => {
+  const sidebarRef = useRef<HTMLDivElement>(null)
+  const mainRef = useRef<HTMLDivElement>(null)
+  const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
+
   const {
     isScrolling,
     scrollTargetRef,
   }: { isScrolling: boolean; scrollTargetRef: LegacyRef<HTMLDivElement> } =
     useScrollDirection() as any // Fixes ref type error
+  const [touching, setTouching] = useState(false)
+  const { onTouchStart, onTouchEnd } = useTouchEvents(mainRef)
   const [slideoutLeft, setSlideoutLeft] = useState<Slideout>()
   const [slideoutRight, setSlideoutRight] = useState<Slideout>()
   const [isSlideoutLeftOpen, setIsSlideoutLeftOpen] = useState(false)
@@ -39,9 +46,6 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
     useState(false)
   const [isSlideoutRightDefinetelyOpened, setIsSlideoutRightDefinetelyOpened] =
     useState(false)
-  const sidebarRef = useRef<HTMLDivElement>(null)
-  const mainRef = useRef<HTMLDivElement>(null)
-  const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
 
   const toggleRightSlideout = () => {
     if (!isSlideoutRightOpen) {
@@ -60,76 +64,87 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
     slideoutLeft?.toggle()
   }
 
-  useEffect(() => {
-    const initializeSlideout = () => {
-      if (
-        !sidebarRef.current ||
-        !mainRef.current ||
-        !mobileTabsPanelRef.current
-      )
-        return
+  onTouchStart(() => {
+    setTouching(true)
+  })
 
-      const slideoutLeftInstance = new Slideout({
-        menu: sidebarRef.current,
-        panel: mainRef.current,
-        padding: SLIDABLE_WIDTH,
-      })
-      const slideoutRightInstance = new Slideout({
-        menu: mobileTabsPanelRef.current,
-        panel: mainRef.current,
-        padding: SLIDABLE_WIDTH,
-        side: 'right',
-      })
-      slideoutLeftInstance.on('beforeopen', () => {
-        setIsSlideoutLeftOpen(true)
-        setIsSlideoutLeftDefinetelyOpened(true)
-      })
-      slideoutLeftInstance.on('beforeclose', () => {
-        setIsSlideoutLeftOpen(false)
-      })
-      slideoutLeftInstance.on('close', () => {
-        setIsSlideoutLeftOpen(false)
-        setIsSlideoutLeftDefinetelyClosed(true)
-        setIsSlideoutLeftDefinetelyOpened(false)
-      })
-      slideoutLeftInstance.on('translatestart', () => {
-        setIsSlideoutLeftDefinetelyClosed(false)
-        setIsSlideoutLeftDefinetelyOpened(false)
-      })
-      slideoutRightInstance.on('beforeopen', () => {
-        setIsSlideoutRightOpen(true)
-        setIsSlideoutRightDefinetelyOpened(true)
-      })
-      slideoutRightInstance.on('beforeclose', () => {
-        setIsSlideoutRightOpen(false)
-      })
-      slideoutRightInstance.on('close', () => {
-        setIsSlideoutRightOpen(false)
-        setIsSlideoutRightDefinetelyClosed(true)
-        setIsSlideoutRightDefinetelyOpened(false)
-      })
-      slideoutRightInstance.on('translatestart', () => {
-        setIsSlideoutRightDefinetelyClosed(false)
-        setIsSlideoutRightDefinetelyOpened(false)
-      })
+  onTouchEnd(() => {
+    setTouching(false)
+  })
 
-      return {
-        slideoutLeftInstance,
-        slideoutRightInstance,
-      }
+  const getSlideoutInstances = () => {
+    if (!sidebarRef.current || !mainRef.current || !mobileTabsPanelRef.current)
+      return
+
+    const slideoutLeftInstance = new Slideout({
+      menu: sidebarRef.current,
+      panel: mainRef.current,
+      padding: SLIDABLE_WIDTH,
+    })
+    const slideoutRightInstance = new Slideout({
+      menu: mobileTabsPanelRef.current,
+      panel: mainRef.current,
+      padding: SLIDABLE_WIDTH,
+      side: 'right',
+    })
+    slideoutLeftInstance.on('beforeopen', () => {
+      setIsSlideoutLeftOpen(true)
+      setIsSlideoutLeftDefinetelyOpened(true)
+    })
+    slideoutLeftInstance.on('beforeclose', () => {
+      setIsSlideoutLeftOpen(false)
+    })
+    slideoutLeftInstance.on('close', () => {
+      setIsSlideoutLeftOpen(false)
+      setIsSlideoutLeftDefinetelyClosed(true)
+      setIsSlideoutLeftDefinetelyOpened(false)
+    })
+    slideoutLeftInstance.on('translatestart', () => {
+      setIsSlideoutLeftDefinetelyClosed(false)
+      setIsSlideoutLeftDefinetelyOpened(false)
+    })
+    slideoutRightInstance.on('beforeopen', () => {
+      setIsSlideoutRightOpen(true)
+      setIsSlideoutRightDefinetelyOpened(true)
+    })
+    slideoutRightInstance.on('beforeclose', () => {
+      setIsSlideoutRightOpen(false)
+    })
+    slideoutRightInstance.on('close', () => {
+      setIsSlideoutRightOpen(false)
+      setIsSlideoutRightDefinetelyClosed(true)
+      setIsSlideoutRightDefinetelyOpened(false)
+    })
+    slideoutRightInstance.on('translatestart', () => {
+      setIsSlideoutRightDefinetelyClosed(false)
+      setIsSlideoutRightDefinetelyOpened(false)
+    })
+
+    return {
+      slideoutLeftInstance,
+      slideoutRightInstance,
     }
+  }
 
+  useEffect(() => {
+    if (
+      !touching &&
+      isSlideoutLeftDefinetelyClosed &&
+      isSlideoutRightDefinetelyClosed &&
+      slideoutLeft == undefined
+    ) {
+      const slideoutInstances = getSlideoutInstances()
+      setSlideoutLeft(slideoutInstances?.slideoutLeftInstance)
+      setSlideoutRight(slideoutInstances?.slideoutRightInstance)
+    }
+  }, [touching])
+
+  useEffect(() => {
     if (isScrolling) {
       slideoutLeft?.destroy()
       slideoutRight?.destroy()
-    } else {
-      const slideoutInstances = initializeSlideout()
-      setSlideoutLeft(slideoutInstances?.slideoutLeftInstance)
-      setSlideoutRight(slideoutInstances?.slideoutRightInstance)
-      return () => {
-        slideoutInstances?.slideoutLeftInstance.destroy()
-        slideoutInstances?.slideoutRightInstance.destroy()
-      }
+      setSlideoutLeft(undefined)
+      setSlideoutRight(undefined)
     }
   }, [isScrolling])
 

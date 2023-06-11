@@ -23,8 +23,6 @@ export namespace BookmarkTypes {
 }
 
 export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
-  const separator = <div className={styles.info__inner__separator}>·</div>
-
   return (
     <div className={styles.container}>
       <div className={styles.main}>
@@ -69,25 +67,10 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
       <div className={styles.info}>
         <div className={styles.info__inner}>
           <button className={styles.info__inner__site}>{props.site}</button>
-          {separator}
+          <div className={styles.info__inner__separator}>·</div>
           <div className={styles['info__inner__dimmed-text']}>
             {dayjs(props.createdAt).fromNow()}
           </div>
-          {props.visibility && (
-            <>
-              <div className={styles.info__inner__separator}>·</div>
-              <div className={styles['info__inner__dimmed-text']}>
-                {props.visibility == 'unlisted' && 'unlisted'}
-                {props.visibility == 'secret' && 'secret'}
-              </div>
-            </>
-          )}
-          {props.isArchived && (
-            <>
-              <div className={styles.info__inner__separator}>·</div>
-              <div className={styles['info__inner__dimmed-text']}>archived</div>
-            </>
-          )}
         </div>
       </div>
     </div>

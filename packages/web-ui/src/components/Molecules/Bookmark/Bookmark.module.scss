@@ -32,18 +32,17 @@
   row-gap: var(--distance-6px);
   padding-top: var(--distance-12px);
   padding-left: var(--distance-16px);
-
   @include to992 {
     padding-right: var(--distance-16px);
     border-bottom: 1px solid var(--border-color-secondary);
-    padding-bottom: var(--distance-10px);
+    padding-bottom: var(--distance-8px);
   }
   @include at992 {
     padding-bottom: var(--distance-4px);
   }
   &__nsfw {
     display: inline-flex;
-    font-weight: var(--font-weight-inter-semi-bold);
+    font-weight: var(--font-weight-inter-bold);
     color: var(--bookmark-nsfw-foreground);
     transform: scale(0.82) translateY(-1px);
     position: relative;

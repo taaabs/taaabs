@@ -87,10 +87,11 @@ const bookmark = (
     title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
     description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odio sodal, euismod odio ac, fermentum metus."
     url="https://example.com/test/lorem_ipsum"
-    site="test"
+    site="example.com/test"
     createdAt={new Date('2023-02-20')}
     isNSFW={true}
     isArchived={true}
     tags={['lorem', 'ipsum']}
+    visibility="secret"
   />
 )

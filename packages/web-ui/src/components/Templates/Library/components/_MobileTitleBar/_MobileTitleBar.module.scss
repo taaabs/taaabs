@@ -38,9 +38,10 @@
     var(--distance-24px);
   border-radius: var(--border-radius-999px);
   & span:first-of-type {
+    font-family: var(--font-family-plus-jakarta-sans);
     color: var(--title-bar-primary-foreground);
     font-size: var(--font-size-17px);
-    font-weight: var(--font-weight-inter-medium);
+    font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
   }
   & span:last-of-type {
     color: var(--title-bar-secondary-foreground);
