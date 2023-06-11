@@ -93,7 +93,7 @@
       border: 1px solid var(--bookmark-tag-border-color);
       padding: 0 var(--distance-6px);
       height: var(--height);
-      font-family: var(--font-family-inter-tight);
+      font-weight: var(--font-weight-inter-medium);
       @include hover {
         border-color: var(--bookmark-tag-border-color-hover);
         background-color: var(--bookmark-tag-background-hover);
