@@ -23,16 +23,6 @@
       background: var(--header-background);
       position: fixed;
     }
-    & > .aside,
-    & > .sidebar {
-      width: 25vw;
-      @include at1200 {
-        width: 21.7vw;
-      }
-      @include at1380 {
-        width: 300px;
-      }
-    }
   }
 }
 .sidebar {

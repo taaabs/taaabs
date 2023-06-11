@@ -7,11 +7,11 @@ import styles from './Bookmark.module.scss'
 dayjs.extend(relativeTime)
 
 export namespace BookmarkTypes {
-  export type Visibility = 'unlisted' | 'secret'
+  export type Visibility = 'public' | 'unlisted' | 'secret'
   export type Props = {
     title: string
     description?: string
-    sitePath?: string
+    site: string
     url: string
     createdAt: Date
     visibility?: Visibility
@@ -23,10 +23,13 @@ export namespace BookmarkTypes {
 }
 
 export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
+  const separator = <div className={styles.info__inner__separator}>·</div>
+
   return (
     <div className={styles.container}>
       <div className={styles.main}>
         <div>
+          {props.isNSFW && <div className={styles.main__nsfw}>NSFW</div>}{' '}
           <a
             className={cn(styles.main__title, {
               [styles['main__title--starred']]: props.isStarred,
@@ -36,23 +39,19 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
             {props.title}
           </a>
         </div>
-        <div className={styles['main__site-and-tags']}>
-          <button
-            className={styles['main__site-and-tags__site']}
-            onClick={() => {}}
-          >
-            example.com
-          </button>
-          {props.tags.map((tag) => (
-            <button
-              className={styles['main__site-and-tags__tag']}
-              onClick={() => {}}
-              key={tag}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+        {props.tags.length > 0 && (
+          <div className={styles['main__tags']}>
+            {props.tags.map((tag) => (
+              <button
+                className={styles['main__tags__tag']}
+                onClick={() => {}}
+                key={tag}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
         {props.description && (
           <div className={styles.main__description}>{props.description}</div>
         )}
@@ -63,29 +62,32 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
           <Icon variant="THREE_DOTS" />
         </button>
         <button className={styles.actions__button}>
-          <Icon variant="INFO" />
+          <Icon variant="BOOKMARK" />
         </button>
       </div>
-
       <div className={styles.info}>
-        <div className={styles['info__dimmed-text']}>
-          {dayjs(props.createdAt).fromNow()}
+        <div className={styles.info__inner}>
+          <button className={styles.info__inner__site}>{props.site}</button>
+          {separator}
+          <div className={styles['info__inner__dimmed-text']}>
+            {dayjs(props.createdAt).fromNow()}
+          </div>
+          {props.visibility && (
+            <>
+              <div className={styles.info__inner__separator}>·</div>
+              <div className={styles['info__inner__dimmed-text']}>
+                {props.visibility == 'unlisted' && 'unlisted'}
+                {props.visibility == 'secret' && 'secret'}
+              </div>
+            </>
+          )}
+          {props.isArchived && (
+            <>
+              <div className={styles.info__inner__separator}>·</div>
+              <div className={styles['info__inner__dimmed-text']}>archived</div>
+            </>
+          )}
         </div>
-        {props.isNSFW && (
-          <>
-            <div className={styles.info__separator}>·</div>
-            <div className={styles.info__nsfw}>NSFW</div>
-          </>
-        )}
-        {props.visibility && (
-          <>
-            <div className={styles.info__separator}>·</div>
-            <div className={styles['info__dimmed-text']}>
-              {props.visibility == 'unlisted' && 'Unlisted'}
-              {props.visibility == 'secret' && 'Secret'}
-            </div>
-          </>
-        )}
       </div>
     </div>
   )

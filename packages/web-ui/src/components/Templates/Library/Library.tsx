@@ -141,6 +141,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
           ref={sidebarRef}
           style={{
             zIndex: !isSlideoutLeftDefinetelyClosed ? 1 : 0,
+            width: `${SLIDABLE_WIDTH}px`,
           }}
         >
           <div className={styles.sidebar__inner}>{props.slotSidebar}</div>
@@ -197,6 +198,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
           className={styles.aside}
           style={{
             zIndex: !isSlideoutRightDefinetelyClosed ? 1 : 0,
+            width: `${SLIDABLE_WIDTH}px`,
           }}
         >
           <div className={styles.aside__inner}>

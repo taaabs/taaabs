@@ -32,14 +32,34 @@
   row-gap: var(--distance-6px);
   padding-top: var(--distance-12px);
   padding-left: var(--distance-16px);
-  
+
   @include to992 {
     padding-right: var(--distance-16px);
     border-bottom: 1px solid var(--border-color-secondary);
-    padding-bottom: var(--distance-8px);
+    padding-bottom: var(--distance-10px);
   }
   @include at992 {
     padding-bottom: var(--distance-4px);
+  }
+  &__nsfw {
+    display: inline-flex;
+    font-weight: var(--font-weight-inter-semi-bold);
+    color: var(--bookmark-nsfw-foreground);
+    transform: scale(0.82) translateY(-1px);
+    position: relative;
+    font-size: var(--font-size-1-3rem);
+    &::before {
+      content: '';
+      border: 1px solid var(--bookmark-nsfw-foreground);
+      border-radius: var(--border-radius-4px);
+      position: absolute;
+      width: 120%;
+      height: 115%;
+      top: 0;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-53%);
+    }
   }
   &__title {
     display: inline;
@@ -53,22 +73,13 @@
       background-color: var(--bookmark-starred-title-foreground);
     }
   }
-  &__site-and-tags {
+  &__tags {
     --height: var(--button-dimension-28px);
     display: flex;
     flex-wrap: wrap;
     gap: var(--distance-7px);
     @include to992 {
       padding-right: var(--distance-16px);
-    }
-    &__site {
-      font-size: var(--font-size-13px);
-      color: var(--bookmark-site-foreground);
-      font-weight: var(--font-weight-inter-medium);
-      height: var(--height);
-      @include hover {
-        text-decoration: underline;
-      }
     }
     &__tag {
       font-size: var(--font-size-13px);
@@ -91,7 +102,6 @@
     font-size: var(--font-size-1-5rem);
     @include to992 {
       padding-right: var(--distance-16px);
-      padding-bottom: var(--distance-2px);
     }
   }
 }
@@ -103,28 +113,32 @@
   }
   @include at992 {
     flex-direction: column;
-    justify-content: space-between;
-    margin: var(--distance-6px) 0 var(--distance-3px) 0;
+    row-gap: var(--distance-3px);
+    margin-top: var(--distance-10px);
   }
   &__button {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--button-dimension-34px);
-    height: var(--button-dimension-34px);
+    width: var(--button-dimension-40px);
+    height: var(--button-dimension-40px);
+    @include at992 {
+      width: var(--button-dimension-34px);
+      height: var(--button-dimension-28px);
+    }
     &:last-of-type {
       @include to992 {
         order: -1;
       }
     }
-    & > div > svg {
+    & svg {
       width: var(--icon-dimension-18px);
       height: var(--icon-dimension-18px);
       fill: var(--bookmark-action-fill);
       @include transition-100ms(fill);
     }
     @include hover {
-      & > div > svg {
+      & svg {
         fill: var(--bookmark-action-fill-hover);
       }
     }
@@ -132,37 +146,43 @@
 }
 .info {
   grid-area: info;
-  padding-left: var(--distance-16px);
-  display: flex;
-  align-items: center;
-  font-size: var(--font-size-13px);
-  @include at992 {
-    padding-top: var(--distance-5px);
-    padding-bottom: var(--distance-10px);
+  position: relative;
+  overflow: hidden;
+  &::after {
+    position: absolute;
+    width: var(--distance-20px);
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    content: 'X';
+    color: transparent;
+    background: linear-gradient(to left, var(--header-background), transparent);
   }
-  &__separator {
-    padding: 0 var(--distance-5px);
-    color: var(--text-color-dimmed);
-  }
-  &__dimmed-text {
-    color: var(--text-color-dimmed);
-  }
-  &__nsfw {
-    font-weight: var(--font-weight-inter-semi-bold);
-    color: var(--bookmark-nsfw-foreground);
-    transform: scale(0.85);
-    position: relative;
-    &::before {
-      content: '';
-      border: 1px solid var(--bookmark-nsfw-foreground);
-      border-radius: var(--border-radius-4px);
-      position: absolute;
-      width: 120%;
-      height: 115%;
-      top: 0;
-      left: 50%;
-      top: 50%;
-      transform: translateX(-50%) translateY(-53%);
+  &__inner {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-13px);
+    overflow: auto;
+    padding: 0 var(--distance-16px);
+    height: 100%;
+    width: 100%;
+    @include at992 {
+      padding-top: var(--distance-5px);
+      padding-bottom: var(--distance-10px);
+    }
+    &__separator {
+      padding: 0 var(--distance-5px);
+      color: var(--text-color-dimmed);
+    }
+    &__dimmed-text {
+      color: var(--text-color-dimmed);
+      white-space: nowrap;
+    }
+    &__site {
+      color: var(--bookmark-site-foreground);
+      @include hover {
+        text-decoration: underline;
+      }
     }
   }
 }
