@@ -56,15 +56,16 @@ html {
   --search-box-shadow-hover: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.06);
   --bookmark-background: var(--white);
   --bookmark-link-foreground: var(--blue800);
-  --bookmark-site-foreground: var(--amber700);
+  --bookmark-site-foreground: var(--yellow700);
   --bookmark-tag-border-color: var(--green100);
   --bookmark-tag-background: var(--green50);
   --bookmark-tag-foreground: var(--green600);
   --bookmark-tag-border-color-hover: var(--green200);
   --bookmark-tag-background-hover: var(--green100);
   --bookmark-tag-foreground-hover: var(--green700);
-  --bookmark-nsfw-foreground: var(--red600);
-  --bookmark-starred-title-foreground: var(--amber200);
+  --bookmark-nsfw-foreground: var(--white);
+  --bookmark-nsfw-background: var(--red500);
+  --bookmark-starred-title-foreground: var(--yellow200);
   --bookmark-action-fill: var(--neutral400);
   --bookmark-action-fill-hover: var(--plain-black);
   --title-bar-background: var(--blue50);
@@ -75,7 +76,7 @@ html {
 
 body {
   font-family: var(--font-family-inter);
-  line-height: 1.4;
+  line-height: 1.3;
   font-size: 15px;
   color: var(--color-text--normal);
 }

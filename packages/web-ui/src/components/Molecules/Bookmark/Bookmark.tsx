@@ -29,13 +29,13 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
     <div className={styles.container}>
       <div className={styles.main}>
         <div>
-          {props.isNSFW && <div className={styles.main__nsfw}>NSFW</div>}{' '}
           <a
             className={cn(styles.main__title, {
               [styles['main__title--starred']]: props.isStarred,
             })}
             href={props.url}
           >
+            {props.isNSFW && <div className={styles.main__nsfw}>NSFW</div>}
             {props.title}
           </a>
         </div>
@@ -65,6 +65,7 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
           <Icon variant="BOOKMARK" />
         </button>
       </div>
+
       <div className={styles.info}>
         <div className={styles.info__inner}>
           <button className={styles.info__inner__site}>{props.site}</button>
