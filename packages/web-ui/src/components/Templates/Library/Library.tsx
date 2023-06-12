@@ -1,12 +1,12 @@
 import Slideout from 'slideout'
-import { useEffect, useRef, useState, LegacyRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@web-ui/constants'
 import { _MobileTitleBar } from './components/_MobileTitleBar'
-import { useScrollDirection } from 'react-use-scroll-direction'
 import cn from 'classnames'
 import styles from './Library.module.scss'
-import useTouchEvents from 'beautiful-react-hooks/useTouchEvents'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import useSwipe from 'beautiful-react-hooks/useSwipe'
 
 export namespace LibraryTypes {
   export type Props = {
@@ -25,15 +25,12 @@ const SLIDABLE_WIDTH = 300
 export const Library: React.FC<LibraryTypes.Props> = (props) => {
   const sidebarRef = useRef<HTMLDivElement>(null)
   const mainRef = useRef<HTMLDivElement>(null)
-  const mobileTabsPanelRef = useRef<HTMLDivElement>(null)
+  const asideRef = useRef<HTMLDivElement>(null)
 
-  const {
-    isScrolling,
-    scrollTargetRef,
-  }: { isScrolling: boolean; scrollTargetRef: LegacyRef<HTMLDivElement> } =
-    useScrollDirection() as any // Fixes ref type error
-  const [touching, setTouching] = useState(false)
-  const { onTouchStart, onTouchEnd } = useTouchEvents(mainRef)
+  const swipeState = useSwipe(mainRef, {
+    preventDefault: false,
+  })
+
   const [slideoutLeft, setSlideoutLeft] = useState<Slideout>()
   const [slideoutRight, setSlideoutRight] = useState<Slideout>()
   const [isSlideoutLeftOpen, setIsSlideoutLeftOpen] = useState(false)
@@ -64,28 +61,21 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
     slideoutLeft?.toggle()
   }
 
-  onTouchStart(() => {
-    setTouching(true)
-  })
-
-  onTouchEnd(() => {
-    setTouching(false)
-  })
-
   const getSlideoutInstances = () => {
-    if (!sidebarRef.current || !mainRef.current || !mobileTabsPanelRef.current)
-      return
+    if (!sidebarRef.current || !mainRef.current || !asideRef.current) return
 
     const slideoutLeftInstance = new Slideout({
       menu: sidebarRef.current,
       panel: mainRef.current,
       padding: SLIDABLE_WIDTH,
+      tolerance: 50,
     })
     const slideoutRightInstance = new Slideout({
-      menu: mobileTabsPanelRef.current,
+      menu: asideRef.current,
       panel: mainRef.current,
       padding: SLIDABLE_WIDTH,
       side: 'right',
+      tolerance: 50,
     })
     slideoutLeftInstance.on('beforeopen', () => {
       setIsSlideoutLeftOpen(true)
@@ -126,9 +116,19 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
     }
   }
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (
-      !touching &&
+      swipeState.swiping &&
+      (swipeState.direction == 'up' || swipeState.direction == 'down') &&
+      slideoutLeft != undefined &&
+      slideoutRight != undefined
+    ) {
+      slideoutLeft?.destroy()
+      slideoutRight?.destroy()
+      setSlideoutLeft(undefined)
+      setSlideoutRight(undefined)
+    } else if (
+      !swipeState.swiping &&
       isSlideoutLeftDefinetelyClosed &&
       isSlideoutRightDefinetelyClosed &&
       slideoutLeft == undefined &&
@@ -138,18 +138,12 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
       setSlideoutLeft(slideoutInstances?.slideoutLeftInstance)
       setSlideoutRight(slideoutInstances?.slideoutRightInstance)
     }
-  }, [touching])
+  }, [swipeState])
 
   useEffect(() => {
-    if (isScrolling && touching) {
-      slideoutLeft?.destroy()
-      slideoutRight?.destroy()
-      setSlideoutLeft(undefined)
-      setSlideoutRight(undefined)
-    }
-  }, [isScrolling])
-
-  useEffect(() => {
+    const slideoutInstances = getSlideoutInstances()
+    setSlideoutLeft(slideoutInstances?.slideoutLeftInstance)
+    setSlideoutRight(slideoutInstances?.slideoutRightInstance)
     return () => {
       slideoutLeft?.destroy()
       slideoutRight?.destroy()
@@ -191,7 +185,6 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                   ? 'none'
                   : 'all',
             }}
-            ref={scrollTargetRef}
           >
             <div
               className={cn(styles['main__inner__mobile-alpha-overlay'], {
@@ -217,8 +210,8 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
         </div>
 
         <div
-          ref={mobileTabsPanelRef}
           className={styles.aside}
+          ref={asideRef}
           style={{
             zIndex: !isSlideoutRightDefinetelyClosed ? 1 : 0,
             width: `${SLIDABLE_WIDTH}px`,
