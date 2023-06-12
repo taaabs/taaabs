@@ -92,6 +92,7 @@
       padding: 0 var(--distance-7px);
       height: var(--button-dimension-26px);
       font-weight: var(--font-weight-inter-medium);
+      @include transition-100ms(all);
       @include hover {
         border-color: var(--bookmark-tag-border-color-hover);
         background-color: var(--bookmark-tag-background-hover);

@@ -1,7 +1,6 @@
 Free
 
-- unlimited bookmarks
-- ads
+- unlimited bookmarks public/unlisted
 
 Pro
 
