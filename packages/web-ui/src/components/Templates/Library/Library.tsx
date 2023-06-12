@@ -131,7 +131,8 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
       !touching &&
       isSlideoutLeftDefinetelyClosed &&
       isSlideoutRightDefinetelyClosed &&
-      slideoutLeft == undefined
+      slideoutLeft == undefined &&
+      slideoutRight == undefined
     ) {
       const slideoutInstances = getSlideoutInstances()
       setSlideoutLeft(slideoutInstances?.slideoutLeftInstance)
@@ -140,13 +141,20 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
   }, [touching])
 
   useEffect(() => {
-    if (isScrolling) {
+    if (isScrolling && touching) {
       slideoutLeft?.destroy()
       slideoutRight?.destroy()
       setSlideoutLeft(undefined)
       setSlideoutRight(undefined)
     }
   }, [isScrolling])
+
+  useEffect(() => {
+    return () => {
+      slideoutLeft?.destroy()
+      slideoutRight?.destroy()
+    }
+  }, [])
 
   return (
     <div className={styles.container}>
