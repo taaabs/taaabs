@@ -1,6 +1,6 @@
 Free
 
-- unlimited bookmarks public/unlisted
+- unlimited bookmarks public/private
 
 Pro
 
@@ -9,7 +9,6 @@ Pro
 - starred only filter
 - categories
 - presets
-- secret bookmarks
 - related tags counts
 - dead links discovery
 - full text search

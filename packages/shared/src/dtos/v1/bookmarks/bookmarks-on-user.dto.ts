@@ -70,7 +70,7 @@ export namespace BookmarksOnUserDto {
     class BookmarkOnOtherUser extends Bookmark {}
 
     class BookmarkOnCurrentUser extends Bookmark {
-      visibility!: 'public' | 'unlisted' | 'secret'
+      visibility!: 'public' | 'private'
     }
 
     export class OtherUser extends PaginatedResponseDto {

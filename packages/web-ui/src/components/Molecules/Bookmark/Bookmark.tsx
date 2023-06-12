@@ -7,7 +7,7 @@ import styles from './Bookmark.module.scss'
 dayjs.extend(relativeTime)
 
 export namespace BookmarkTypes {
-  export type Visibility = 'public' | 'unlisted' | 'secret'
+  export type Visibility = 'public' | 'private'
   export type Props = {
     title: string
     description?: string
