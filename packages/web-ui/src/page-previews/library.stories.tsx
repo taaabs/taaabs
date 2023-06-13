@@ -92,6 +92,8 @@ const bookmark = (
     isNSFW={true}
     isArchived={true}
     tags={['lorem', 'ipsum']}
-    visibility="secret"
+    visibility="private"
+    saves={3400}
+    onSiteClick={() => {}}
   />
 )

@@ -28,6 +28,8 @@ export const Primary = () => (
         isNSFW={false}
         isArchived={true}
         tags={[]}
+        saves={2200}
+        onSiteClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -41,6 +43,8 @@ export const Primary = () => (
         isNSFW={false}
         isArchived={true}
         tags={[]}
+        saves={2200}
+        onSiteClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -53,6 +57,8 @@ export const Primary = () => (
         isNSFW={false}
         isArchived={true}
         tags={['lorem', 'ipsum']}
+        saves={2200}
+        onSiteClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -65,6 +71,8 @@ export const Primary = () => (
         isNSFW={false}
         isArchived={true}
         tags={['lorem', 'ipsum']}
+        saves={2200}
+        onSiteClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -98,6 +106,8 @@ export const Primary = () => (
           'lorem19',
           'ipsum20',
         ]}
+        saves={2200}
+        onSiteClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -110,6 +120,8 @@ export const Primary = () => (
         isNSFW={false}
         isArchived={true}
         tags={['lorem1', 'ipsum1', 'lorem2', 'ipsum2']}
+        saves={2200}
+        onSiteClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -122,6 +134,8 @@ export const Primary = () => (
         isNSFW={true}
         isArchived={true}
         tags={['lorem', 'ipsum']}
+        saves={2200}
+        onSiteClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -133,6 +147,8 @@ export const Primary = () => (
         isNSFW={true}
         isArchived={true}
         tags={['lorem', 'ipsum']}
+        saves={2200}
+        onSiteClick={() => {}}
       />
 
       <StorybookSpacer />
