@@ -65,6 +65,7 @@ export namespace BookmarksOnUserDto {
       isStarred?: boolean
       sitePath?: string
       isArchived?: boolean
+      saves!: number
     }
 
     class BookmarkOnOtherUser extends Bookmark {}
