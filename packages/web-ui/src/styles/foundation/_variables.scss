@@ -1,9 +1,9 @@
 @mixin variables {
   --site-max-width: 1380px;
-  --header-desktop-height: 63px;
+  --header-desktop-height: 62px;
   --header-mobile-height: 45px;
-  --bottom-navigation-bar-height: 49px;
-  --app-bar-height: 63px;
+  --bottom-navigation-bar-height: 48px;
+  --app-bar-height: 62px;
 
   --distance-1px: 1px;
   --distance-2px: 2px;
@@ -13,6 +13,7 @@
   --distance-6px: 6px;
   --distance-7px: 7px;
   --distance-8px: 8px;
+  --distance-9px: 9px;
   --distance-10px: 10px;
   --distance-12px: 12px;
   --distance-14px: 14px;
@@ -60,7 +61,10 @@
   --button-dimension-26px: 26px;
   --button-dimension-34px: 34px;
   --button-dimension-40px: 40px;
+  --button-dimension-48px: 48px;
   --button-dimension-52px: 52px;
+
+  --input-height-46px: 46px;
 
   --border-radius-4px: 4px;
   --border-radius-8px: 8px;
@@ -77,7 +81,7 @@
 
   --backdrop-filter: saturate(180%) blur(5px);
 
-  --letter-spacing-logo: -1.2px;
+  --letter-spacing-logo: -0.04em;
 
   --transition-duration-100ms: 0.1s;
   --transition-duration-300ms: 0.3s;

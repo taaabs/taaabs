@@ -7,10 +7,10 @@
   & span {
     color: var(--color-text--normal);
     font-family: var(--font-family-plus-jakarta-sans);
-    letter-spacing: var(--letter-spacing-logo);
-    padding-left: var(--distance-8px);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
+    letter-spacing: var(--letter-spacing-logo);
     font-size: var(--font-size-22px);
+    padding-left: var(--distance-8px);
     margin-bottom: var(--distance-2px);
     @include at992 {
       font-size: var(--font-size-26px);
@@ -18,12 +18,34 @@
       margin-bottom: var(--distance-4px);
     }
   }
-  & > div > svg {
+  & svg {
     fill: var(--logo-background);
     height: 34px;
-    width: auto;
     @include at992 {
       height: 42px;
+    }
+  }
+  &--large {
+    & span {
+      padding-left: var(--distance-9px);
+      font-size: 32px;
+      @include at992 {
+        padding-left: var(--distance-12px);
+        font-size: 38px;
+      }
+      @include at1200 {
+        padding-left: var(--distance-14px);
+        font-size: 42px;
+      }
+    }
+    & svg {
+      height: 48px;
+      @include at992 {
+        height: 55px;
+      }
+      @include at1200 {
+        height: 60px;
+      }
     }
   }
 }

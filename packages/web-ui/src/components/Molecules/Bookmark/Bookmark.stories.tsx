@@ -30,6 +30,9 @@ export const Primary = () => (
         tags={[]}
         saves={2200}
         onSiteClick={() => {}}
+        onDateClick={() => {}}
+        onSavesClick={() => {}}
+        onVisibilityClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -45,6 +48,8 @@ export const Primary = () => (
         tags={[]}
         saves={2200}
         onSiteClick={() => {}}
+        onDateClick={() => {}}
+        onSavesClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -59,6 +64,8 @@ export const Primary = () => (
         tags={['lorem', 'ipsum']}
         saves={2200}
         onSiteClick={() => {}}
+        onDateClick={() => {}}
+        onSavesClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -73,6 +80,8 @@ export const Primary = () => (
         tags={['lorem', 'ipsum']}
         saves={2200}
         onSiteClick={() => {}}
+        onDateClick={() => {}}
+        onSavesClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -108,6 +117,8 @@ export const Primary = () => (
         ]}
         saves={2200}
         onSiteClick={() => {}}
+        onDateClick={() => {}}
+        onSavesClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -122,6 +133,10 @@ export const Primary = () => (
         tags={['lorem1', 'ipsum1', 'lorem2', 'ipsum2']}
         saves={2200}
         onSiteClick={() => {}}
+        onDateClick={() => {}}
+        onSavesClick={() => {}}
+        onVisibilityClick={() => {}}
+        visibility="public"
       />
       <StorybookSpacer />
       <Bookmark
@@ -136,6 +151,8 @@ export const Primary = () => (
         tags={['lorem', 'ipsum']}
         saves={2200}
         onSiteClick={() => {}}
+        onDateClick={() => {}}
+        onSavesClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -149,8 +166,9 @@ export const Primary = () => (
         tags={['lorem', 'ipsum']}
         saves={2200}
         onSiteClick={() => {}}
+        onDateClick={() => {}}
+        onSavesClick={() => {}}
       />
-
       <StorybookSpacer />
     </div>
   </div>

@@ -1,9 +1,9 @@
 import { ButtonOutlinedIcon } from '@web-ui/components/Atoms/ButtonOutlinedIcon'
 import { SearchBox } from '@web-ui/components/Molecules/SearchBox'
 import { ButtonAvatar } from '@web-ui/components/Atoms/ButtonAvatar'
-import styles from './HeaderDesktopUserArea.module.scss'
+import styles from './DesktopUserAreaForAppHeader.module.scss'
 
-export namespace HeaderDesktopUserAreaTypes {
+export namespace DesktopUserAreaForAppHeaderTypes {
   export type Props = {
     avatar?: {
       url: string
@@ -17,8 +17,8 @@ export namespace HeaderDesktopUserAreaTypes {
   }
 }
 
-export const HeaderDesktopUserArea: React.FC<
-  HeaderDesktopUserAreaTypes.Props
+export const DesktopUserAreaForAppHeader: React.FC<
+  DesktopUserAreaForAppHeaderTypes.Props
 > = (props) => {
   return (
     <div className={styles.container}>

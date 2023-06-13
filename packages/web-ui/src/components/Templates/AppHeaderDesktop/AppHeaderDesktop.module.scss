@@ -6,6 +6,7 @@
   background-color: var(--header-transparent-background);
   backdrop-filter: var(--backdrop-filter);
   height: var(--header-desktop-height);
+  box-sizing: content-box;
 }
 .inner {
   display: flex;

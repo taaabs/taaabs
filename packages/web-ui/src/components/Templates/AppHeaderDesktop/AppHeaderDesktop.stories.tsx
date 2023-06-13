@@ -1,14 +1,14 @@
 import { StorybookMargin } from '@web-ui/helpers/storybook/StorybookMargin'
 import { StorybookSpacer } from '@web-ui/helpers/storybook/StorybookSpacer'
-import { HeaderDesktop } from './HeaderDesktop'
+import { AppHeaderDesktop } from './AppHeaderDesktop'
 
 export default {
-  component: HeaderDesktop,
+  component: AppHeaderDesktop,
 }
 
 export const Primary = () => (
   <StorybookMargin>
-    <HeaderDesktop
+    <AppHeaderDesktop
       logoSlot={<div>logo</div>}
       navigationSlot={<div>navigation</div>}
       rightSideSlot={<div>right side</div>}

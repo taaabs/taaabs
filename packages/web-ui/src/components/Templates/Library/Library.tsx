@@ -220,7 +220,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
           <div className={styles.aside__inner}>
             <div className={styles.aside__inner__desktop}>
               <>
-                <StickyBox offsetTop={sharedValues.headerDesktop}>
+                <StickyBox offsetTop={sharedValues.appHeaderDesktop}>
                   {props.slotAside}
                 </StickyBox>
               </>

@@ -3,8 +3,8 @@ import { LayoutDefault } from '@web-ui/components/Layouts/LayoutDefault'
 import { BottomNavigationBar } from '@web-ui/components/Molecules/BottomNavigationBar'
 import { LogoForHeader } from '@web-ui/components/Molecules/LogoForHeader'
 import { NavigationForHeader } from '@web-ui/components/Molecules/NavigationForHeader/NavigationForHeader'
-import { HeaderDesktop } from '@web-ui/components/Templates/HeaderDesktop'
-import { HeaderMobile } from '@web-ui/components/Templates/HeaderMobile'
+import { AppHeaderDesktop } from '@web-ui/components/Templates/AppHeaderDesktop'
+import { AppHeaderMobile } from '@web-ui/components/Templates/AppHeaderMobile'
 
 export default async function Layout({
   children,
@@ -13,8 +13,8 @@ export default async function Layout({
 }) {
   return (
     <LayoutDefault
-      slotHeaderDesktop={
-        <HeaderDesktop
+      slotAppHeaderDesktop={
+        <AppHeaderDesktop
           logoSlot={<LogoForHeader />}
           navigationSlot={
             <NavigationForHeader
@@ -23,8 +23,8 @@ export default async function Layout({
           }
         />
       }
-      slotHeaderMobile={
-        <HeaderMobile
+      slotAppHeaderMobile={
+        <AppHeaderMobile
           logoSlot={<LogoForHeader />}
           navigationSlot={
             <NavigationForHeader

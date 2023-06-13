@@ -1,12 +1,12 @@
 import { App } from '@web-ui/components/Templates/App'
 import { Bookmark } from '@web-ui/components/Molecules/Bookmark'
 import { BottomNavigationBar } from '@web-ui/components/Molecules/BottomNavigationBar'
-import { HeaderDesktop } from '@web-ui/components/Templates/HeaderDesktop'
+import { AppHeaderDesktop } from '@web-ui/components/Templates/AppHeaderDesktop'
 import { Library } from '@web-ui/components/Templates/Library'
 import { LogoForHeader } from '@web-ui/components/Molecules/LogoForHeader'
-import { NavigationForHeader } from '@web-ui/components/Molecules/NavigationForHeader/NavigationForHeader'
-import { HeaderMobile } from '@web-ui/components/Templates/HeaderMobile'
-import { HeaderDesktopUserArea } from '@web-ui/components/Organisms/HeaderDesktopUserArea/HeaderDesktopUserArea'
+import { NavigationForAppHeader } from '@web-ui/components/Molecules/NavigationForAppHeader'
+import { AppHeaderMobile } from '@web-ui/components/Templates/AppHeaderMobile'
+import { DesktopUserAreaForAppHeader } from '@web-ui/components/Organisms/DesktopUserAreaForAppHeader'
 
 export default {
   title: 'page-previews/library',
@@ -14,11 +14,11 @@ export default {
 
 export const Primary = () => (
   <App
-    slotHeaderDesktop={
-      <HeaderDesktop
+    slotAppHeaderDesktop={
+      <AppHeaderDesktop
         logoSlot={<LogoForHeader />}
         navigationSlot={
-          <NavigationForHeader
+          <NavigationForAppHeader
             navigation={[
               { label: 'Lorem', href: '/lorem', isActive: false },
               { label: 'Ipsum', href: '/ipsum', isActive: true },
@@ -26,7 +26,7 @@ export const Primary = () => (
           />
         }
         rightSideSlot={
-          <HeaderDesktopUserArea
+          <DesktopUserAreaForAppHeader
             onClickAdd={() => {}}
             onClickSearch={() => {}}
             currentTheme="LIGHT"
@@ -36,11 +36,11 @@ export const Primary = () => (
         }
       />
     }
-    slotHeaderMobile={
-      <HeaderMobile
+    slotAppHeaderMobile={
+      <AppHeaderMobile
         logoSlot={<LogoForHeader />}
         navigationSlot={
-          <NavigationForHeader
+          <NavigationForAppHeader
             navigation={[
               { label: 'Lorem', href: '/lorem', isActive: false },
               { label: 'Ipsum', href: '/ipsum', isActive: true },

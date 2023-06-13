@@ -1,14 +1,14 @@
 import { StorybookMargin } from '@web-ui/helpers/storybook/StorybookMargin'
 import {
-  NavigationForHeader,
-  NavigationForHeaderTypes,
-} from './NavigationForHeader'
+  NavigationForAppHeader,
+  NavigationForAppHeaderTypes,
+} from './NavigationForAppHeader'
 
 export default {
-  component: NavigationForHeader,
+  component: NavigationForAppHeader,
 }
 
-const navigation: NavigationForHeaderTypes.Props['navigation'] = [
+const navigation: NavigationForAppHeaderTypes.Props['navigation'] = [
   { label: 'Lorem', href: '/lorem', isActive: true },
   { label: 'Ipsum', href: '/ipsum', isActive: false },
 ]
@@ -17,7 +17,7 @@ export const Primary = () => {
   return (
     <StorybookMargin>
       <div style={{ height: '60px' }}>
-        <NavigationForHeader navigation={navigation} />
+        <NavigationForAppHeader navigation={navigation} />
       </div>
     </StorybookMargin>
   )

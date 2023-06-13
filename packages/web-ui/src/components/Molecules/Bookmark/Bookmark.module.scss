@@ -37,12 +37,10 @@
     border-bottom: 1px solid var(--border-color-secondary);
     padding-bottom: var(--distance-8px);
   }
-  @include at992 {
-    padding-bottom: var(--distance-4px);
-  }
-  &__top {
+  &__title {
     display: inline;
     color: var(--bookmark-link-foreground);
+    margin-right: var(--distance-5px);
     &--starred {
       padding: 0.3rem 0.35rem;
       background-color: var(--bookmark-starred-title-foreground);
@@ -71,28 +69,27 @@
         z-index: -1;
       }
     }
-    &__title {
+    &__text {
       font-weight: var(--font-weight-inter-medium);
       font-size: var(--font-size-1-7rem);
-      padding-right: var(--distance-5px);
       @include hover {
         text-decoration: underline;
       }
     }
-    &__site {
-      color: var(--text-color-dimmed);
-      font-size: var(--font-size-13px);
-      padding-top: 0.4rem;
-      @include hover {
-        text-decoration: underline;
-      }
+  }
+  &__site {
+    color: var(--text-color-dimmed);
+    font-size: var(--font-size-13px);
+    padding-top: 0.4rem;
+    @include hover {
+      text-decoration: underline;
     }
   }
   &__tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--distance-7px);
-    padding: var(--distance-2px) 0;
+    padding-bottom: var(--distance-2px);
     @include to992 {
       padding-right: var(--distance-16px);
     }
@@ -181,17 +178,30 @@
     align-items: center;
     font-size: var(--font-size-13px);
     overflow: auto;
-    padding: var(--distance-3px) var(--distance-16px) var(--distance-8px)
-      var(--distance-16px);
     height: 100%;
     width: 100%;
+    padding: 0 var(--distance-16px);
+    @include at992 {
+      padding: 0 var(--distance-16px);
+    }
     &__separator {
       padding: 0 var(--distance-5px);
+      @include at992 {
+        padding: var(--distance-6px) var(--distance-5px) var(--distance-8px)
+          var(--distance-5px);
+      }
       color: var(--text-color-dimmed);
     }
-    &__dimmed-text {
+    &__button {
+      height: 100%;
       color: var(--text-color-dimmed);
       white-space: nowrap;
+      @include hover {
+        text-decoration: underline;
+      }
+      @include at992 {
+        padding: var(--distance-6px) 0 var(--distance-8px) 0;
+      }
     }
   }
 }

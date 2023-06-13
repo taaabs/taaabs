@@ -5,7 +5,7 @@
   display: inline-flex;
   & > svg {
     fill: var(--plain-black);
-    width: var(--distance-40px);
-    height: var(--distance-40px);
+    width: auto;
+    height: auto;
   }
 }

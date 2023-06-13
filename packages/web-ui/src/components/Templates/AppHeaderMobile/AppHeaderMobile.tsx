@@ -1,13 +1,15 @@
-import styles from './HeaderMobile.module.scss'
+import styles from './AppHeaderMobile.module.scss'
 
-export namespace HeaderMobileTypes {
+export namespace AppHeaderMobileTypes {
   export type Props = {
     navigationSlot: React.ReactNode
     logoSlot: React.ReactNode
   }
 }
 
-export const HeaderMobile: React.FC<HeaderMobileTypes.Props> = (props) => {
+export const AppHeaderMobile: React.FC<AppHeaderMobileTypes.Props> = (
+  props,
+) => {
   return (
     <div className={styles.container}>
       {props.logoSlot}

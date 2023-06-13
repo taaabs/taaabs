@@ -7,8 +7,8 @@ export default {
 
 export const Primary = () => (
   <App
-    slotHeaderDesktop={<>header desktop</>}
-    slotHeaderMobile={<>header mobile</>}
+    slotAppHeaderDesktop={<>header desktop</>}
+    slotAppHeaderMobile={<>header mobile</>}
     slotBottomNavigationBar={<>bottom navigation bar</>}
     slotFooterDesktop={<>footer desktop</>}
   >

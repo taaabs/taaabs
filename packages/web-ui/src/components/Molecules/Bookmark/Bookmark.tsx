@@ -13,6 +13,9 @@ export namespace BookmarkTypes {
     description?: string
     site: string
     onSiteClick: () => void
+    onSavesClick: () => void
+    onDateClick: () => void
+    onVisibilityClick?: () => void
     url: string
     createdAt: Date
     visibility?: Visibility
@@ -30,23 +33,20 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
       <div className={styles.main}>
         <div>
           <div
-            className={cn(styles.main__top, {
-              [styles['main__top--starred']]: props.isStarred,
+            className={cn(styles.main__title, {
+              [styles['main__title--starred']]: props.isStarred,
             })}
           >
             {props.isNSFW && (
-              <span className={styles.main__top__nsfw}>NSFW</span>
+              <span className={styles.main__title__nsfw}>NSFW</span>
             )}
-            <a className={styles.main__top__title} href={props.url}>
+            <a className={styles.main__title__text} href={props.url}>
               {props.title}
             </a>
-            <button
-              className={styles.main__top__site}
-              onClick={props.onSiteClick}
-            >
-              ({props.site})
-            </button>
           </div>
+          <button className={styles.main__site} onClick={props.onSiteClick}>
+            ({props.site})
+          </button>
         </div>
         {props.tags.length > 0 && (
           <div
@@ -81,13 +81,31 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
 
       <div className={styles.info}>
         <div className={styles.info__inner}>
-          <div className={styles['info__inner__dimmed-text']}>
+          <button
+            className={styles['info__inner__button']}
+            onClick={props.onSavesClick}
+          >
             {props.saves} saves
-          </div>
+          </button>
           <div className={styles.info__inner__separator}>·</div>
-          <div className={styles['info__inner__dimmed-text']}>
+          <button
+            className={styles['info__inner__button']}
+            onClick={props.onDateClick}
+          >
             {dayjs(props.createdAt).fromNow()}
-          </div>
+          </button>
+          {props.visibility && props.onVisibilityClick && (
+            <>
+              <div className={styles.info__inner__separator}>·</div>
+              <button
+                className={styles['info__inner__button']}
+                onClick={props.onVisibilityClick}
+              >
+                {props.visibility == 'private' && 'Private'}
+                {props.visibility == 'public' && 'Public'}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

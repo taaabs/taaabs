@@ -1,15 +1,15 @@
 import { StorybookMargin } from '@web-ui/helpers/storybook/StorybookMargin'
-import { HeaderDesktopUserArea } from './HeaderDesktopUserArea'
+import { DesktopUserAreaForAppHeader } from './DesktopUserAreaForAppHeader'
 import { StorybookSpacer } from '@web-ui/helpers/storybook/StorybookSpacer'
 
 export default {
-  component: HeaderDesktopUserArea,
+  component: DesktopUserAreaForAppHeader,
 }
 
 export const Primary = () => {
   return (
     <StorybookMargin>
-      <HeaderDesktopUserArea
+      <DesktopUserAreaForAppHeader
         onClickAdd={() => {}}
         onClickSearch={() => {}}
         onClickTheme={() => {}}
@@ -17,7 +17,7 @@ export const Primary = () => {
         onClickNotifications={() => {}}
       />
       <StorybookSpacer />
-      <HeaderDesktopUserArea
+      <DesktopUserAreaForAppHeader
         onClickAdd={() => {}}
         onClickSearch={() => {}}
         onClickTheme={() => {}}

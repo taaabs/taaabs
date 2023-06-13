@@ -7,14 +7,14 @@
   background-color: var(--bottom-navigation-bar-background);
   display: flex;
   justify-content: space-around;
-  & > * {
-    width: var(--button-dimension-52px);
+  box-sizing: content-box;
+  & > button {
+    width: var(--button-dimension-48px);
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  & > * > div > svg {
-    height: var(--icon-dimension-24px);
-    width: var(--icon-dimension-24px);
+    & svg {
+      height: var(--icon-dimension-24px);
+    }
   }
 }

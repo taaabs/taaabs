@@ -2,13 +2,14 @@
 @use '../../../../../styles/foundation' as *;
 
 .container {
-  border-bottom: var(--border-primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: var(--app-bar-height);
+  border-bottom: var(--border-primary);
   background-color: var(--header-transparent-background);
   backdrop-filter: var(--backdrop-filter);
+  box-sizing: content-box;
 }
 .icon {
   display: flex;

@@ -1,11 +1,11 @@
 declare const styles: {
   readonly container: string
   readonly main: string
-  readonly main__top: string
-  readonly 'main__top--starred': string
-  readonly main__top__nsfw: string
-  readonly main__top__title: string
-  readonly main__top__site: string
+  readonly main__title: string
+  readonly 'main__title--starred': string
+  readonly main__title__nsfw: string
+  readonly main__title__text: string
+  readonly main__site: string
   readonly main__tags: string
   readonly 'main__tags--starred': string
   readonly main__tags__tag: string
@@ -15,6 +15,6 @@ declare const styles: {
   readonly info: string
   readonly info__inner: string
   readonly info__inner__separator: string
-  readonly 'info__inner__dimmed-text': string
+  readonly info__inner__button: string
 }
 export = styles
