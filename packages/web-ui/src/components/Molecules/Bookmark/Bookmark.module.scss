@@ -38,11 +38,11 @@
   &__title {
     display: inline;
     color: var(--bookmark-link-foreground);
-    margin-right: var(--distance-6px);
+    margin-right: var(--distance-0-6rem);
     &--starred {
-      padding: var(--distance-3px) var(--distance-4px);
-      margin-left: calc(var(--distance-4px) * -1);
-      margin-right: calc(var(--distance-6px) - var(--distance-4px));
+      padding: var(--distance-0-3rem) var(--distance-0-4rem);
+      margin-left: calc(var(--distance-0-4rem) * -1);
+      margin-right: calc(var(--distance-0-6rem) - var(--distance-0-4rem));
       background-color: var(--bookmark-starred-title-background);
       box-decoration-break: clone;
       -webkit-box-decoration-break: clone;
@@ -54,7 +54,7 @@
       transform: scale(0.82) translateY(-0.07rem);
       position: relative;
       font-size: var(--font-size-1-3rem);
-      margin-right: var(--distance-5px);
+      margin-right: var(--distance-0-5rem);
       &::before {
         content: '';
         border-radius: var(--border-radius-4px);
@@ -72,7 +72,7 @@
     &__text {
       font-weight: var(--font-weight-inter-medium);
       font-size: var(--font-size-1-7rem);
-      padding-bottom: var(--distance-8px);
+      padding-bottom: var(--distance-0-8rem);
       @include hover {
         text-decoration: underline;
       }
@@ -81,7 +81,7 @@
   &__site {
     color: var(--text-color-dimmed);
     font-size: var(--font-size-1-3rem);
-    padding: var(--distance-4px) 0 var(--distance-8px) 0;
+    padding: var(--distance-0-4rem) 0 var(--distance-0-8rem) 0;
     @include hover {
       & span {
         text-decoration: underline;
@@ -184,7 +184,7 @@
   &__inner {
     display: flex;
     align-items: center;
-    font-size: var(--font-size-13px);
+    font-size: var(--font-size-1-3rem);
     overflow: auto;
     height: 100%;
     width: 100%;
@@ -193,10 +193,10 @@
       padding: 0 var(--distance-16px);
     }
     &__separator {
-      padding: 0 var(--distance-5px);
+      padding: 0 var(--distance-0-5rem);
       @include at992 {
-        padding: var(--distance-6px) var(--distance-5px) var(--distance-8px)
-          var(--distance-5px);
+        padding: var(--distance-0-6rem) var(--distance-0-5rem)
+          var(--distance-0-8rem) var(--distance-0-5rem);
       }
       color: var(--text-color-dimmed);
     }
@@ -208,7 +208,7 @@
         text-decoration: underline;
       }
       @include at992 {
-        padding: var(--distance-8px) 0;
+        padding: var(--distance-0-8rem) 0;
       }
     }
   }
