@@ -7,8 +7,9 @@ declare const styles: {
   readonly main__title__text: string
   readonly main__site: string
   readonly main__tags: string
-  readonly 'main__tags--starred': string
   readonly main__tags__tag: string
+  readonly 'main__separator-middle': string
+  readonly 'main__separator-bottom': string
   readonly main__description: string
   readonly actions: string
   readonly actions__button: string

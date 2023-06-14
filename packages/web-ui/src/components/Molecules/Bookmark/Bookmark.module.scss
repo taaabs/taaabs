@@ -29,21 +29,21 @@
   grid-area: main;
   display: flex;
   flex-direction: column;
-  row-gap: var(--distance-6px);
   padding-top: var(--distance-12px);
   padding-left: var(--distance-16px);
   @include to992 {
     padding-right: var(--distance-16px);
     border-bottom: 1px solid var(--border-color-secondary);
-    padding-bottom: var(--distance-8px);
   }
   &__title {
     display: inline;
     color: var(--bookmark-link-foreground);
-    margin-right: var(--distance-5px);
+    margin-right: var(--distance-6px);
     &--starred {
-      padding: 0.3rem 0.35rem;
-      background-color: var(--bookmark-starred-title-foreground);
+      padding: var(--distance-3px) var(--distance-4px);
+      margin-left: calc(var(--distance-4px) * -1);
+      margin-right: calc(var(--distance-6px) - var(--distance-4px));
+      background-color: var(--bookmark-starred-title-background);
       box-decoration-break: clone;
       -webkit-box-decoration-break: clone;
     }
@@ -72,6 +72,7 @@
     &__text {
       font-weight: var(--font-weight-inter-medium);
       font-size: var(--font-size-1-7rem);
+      padding-bottom: var(--distance-8px);
       @include hover {
         text-decoration: underline;
       }
@@ -79,10 +80,12 @@
   }
   &__site {
     color: var(--text-color-dimmed);
-    font-size: var(--font-size-13px);
-    padding-top: 0.4rem;
+    font-size: var(--font-size-1-3rem);
+    padding: var(--distance-4px) 0 var(--distance-8px) 0;
     @include hover {
-      text-decoration: underline;
+      & span {
+        text-decoration: underline;
+      }
     }
   }
   &__tags {
@@ -93,9 +96,6 @@
     @include to992 {
       padding-right: var(--distance-16px);
     }
-    &--starred {
-      padding-top: var(--distance-4px);
-    }
     &__tag {
       font-size: var(--font-size-1-3rem);
       color: var(--bookmark-tag-foreground);
@@ -103,7 +103,7 @@
       border-radius: var(--border-radius-4px);
       border: 1px solid var(--bookmark-tag-border-color);
       padding: 0 var(--distance-7px);
-      height: var(--button-dimension-26px);
+      height: var(--button-dimension-28px);
       font-weight: var(--font-weight-inter-medium);
       @include transition-100ms(all);
       @include hover {
@@ -111,6 +111,14 @@
         background-color: var(--bookmark-tag-background-hover);
         color: var(--bookmark-tag-foreground-hover);
       }
+    }
+  }
+  &__separator-middle {
+    height: var(--distance-6px);
+  }
+  &__separator-bottom {
+    @include to992 {
+      height: var(--distance-8px);
     }
   }
   &__description {
@@ -139,7 +147,7 @@
     height: var(--button-dimension-40px);
     @include at992 {
       width: var(--button-dimension-34px);
-      height: var(--button-dimension-26px);
+      height: var(--button-dimension-28px);
     }
     &:last-of-type {
       @include to992 {
@@ -200,7 +208,7 @@
         text-decoration: underline;
       }
       @include at992 {
-        padding: var(--distance-6px) 0 var(--distance-8px) 0;
+        padding: var(--distance-8px) 0;
       }
     }
   }

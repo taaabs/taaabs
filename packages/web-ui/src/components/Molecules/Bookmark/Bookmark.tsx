@@ -45,15 +45,13 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
             </a>
           </div>
           <button className={styles.main__site} onClick={props.onSiteClick}>
-            ({props.site})
+            {'('}
+            <span>{props.site}</span>
+            {')'}
           </button>
         </div>
         {props.tags.length > 0 && (
-          <div
-            className={cn(styles['main__tags'], {
-              [styles['main__tags--starred']]: props.isStarred,
-            })}
-          >
+          <div className={styles['main__tags']}>
             {props.tags.map((tag) => (
               <button
                 className={styles['main__tags__tag']}
@@ -65,8 +63,14 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
             ))}
           </div>
         )}
+        {props.tags.length > 0 && props.description && (
+          <div className={styles['main__separator-middle']} />
+        )}
         {props.description && (
           <div className={styles.main__description}>{props.description}</div>
+        )}
+        {(props.tags.length > 0 || props.description) && (
+          <div className={styles['main__separator-bottom']} />
         )}
       </div>
 

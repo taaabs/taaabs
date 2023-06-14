@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { Icon } from '@web-ui/components/Atoms/Icon'
-import styles from './UserForHeader.module.scss'
+import styles from './UserForAppHeader.module.scss'
 import { Blurhash } from 'react-blurhash'
 
-export namespace UserForHeaderTypes {
+export namespace UserForAppHeaderTypes {
   export type User = {
     username: string
     avatar?: {
@@ -17,7 +17,9 @@ export namespace UserForHeaderTypes {
   }
 }
 
-export const UserForHeader: React.FC<UserForHeaderTypes.Props> = ({ user }) => {
+export const UserForAppHeader: React.FC<UserForAppHeaderTypes.Props> = ({
+  user,
+}) => {
   return (
     <div className={styles.container}>
       <Link className={styles['back-arrow']} href={user.backHref}>
