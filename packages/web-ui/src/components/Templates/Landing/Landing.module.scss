@@ -12,18 +12,28 @@
   height: 90px;
   @include at768 {
     padding: 0 var(--distance-40px);
-    height: 100px;
-  }
-  @include at992 {
     height: 110px;
   }
-  @include at1380 {
+  @include at992 {
     height: 120px;
+  }
+  @include at1380 {
+    height: 130px;
     max-width: 1380px;
     margin: 0 auto;
   }
   @media (min-width: 1600px) {
     max-width: 100%;
     padding: 0 140px;
+  }
+  &__desktopNavigation {
+    @include to992 {
+      display: none;
+    }
+  }
+  &__mobileNavigation {
+    @include at992 {
+      display: none;
+    }
   }
 }

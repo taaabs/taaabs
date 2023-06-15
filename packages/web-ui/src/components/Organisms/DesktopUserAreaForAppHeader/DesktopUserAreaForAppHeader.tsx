@@ -10,10 +10,8 @@ export namespace DesktopUserAreaForAppHeaderTypes {
       blurhash: string
     }
     onClickSearch: () => void
-    onClickTheme: () => void
     onClickAdd: () => void
     onClickNotifications: () => void
-    currentTheme: 'LIGHT' | 'DARK'
   }
 }
 
@@ -28,12 +26,12 @@ export const DesktopUserAreaForAppHeader: React.FC<
         iconVariant="NOTIFICATIONS"
         onClick={props.onClickNotifications}
       />
-      <ButtonOutlinedIcon iconVariant="SUN" onClick={props.onClickTheme} />
       {props.avatar ? (
         <ButtonAvatar
           url={props.avatar.url}
           blurhash={props.avatar.blurhash}
           onClick={() => {}}
+          alt="XYZ"
         />
       ) : (
         <ButtonOutlinedIcon iconVariant="USER" onClick={() => {}} />

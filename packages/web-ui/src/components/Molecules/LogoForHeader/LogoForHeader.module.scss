@@ -27,15 +27,18 @@
   }
   &--large {
     & span {
-      padding-left: var(--distance-9px);
-      font-size: 32px;
+      padding-left: var(--distance-10px);
+      font-size: 30px;
+      margin-bottom: var(--distance-4px);
       @include at992 {
         padding-left: var(--distance-12px);
         font-size: 38px;
+        margin-bottom: var(--distance-5px);
       }
       @include at1200 {
         padding-left: var(--distance-14px);
         font-size: 42px;
+        margin-bottom: var(--distance-6px);
       }
     }
     & svg {

@@ -8,8 +8,8 @@ export default {
 
 export const Primary = () => (
   <StorybookMargin>
-    <LogoForHeader />
+    <LogoForHeader href="" />
     <StorybookSpacer />
-    <LogoForHeader isLarge={true} />
+    <LogoForHeader href="" isLarge={true} />
   </StorybookMargin>
 )

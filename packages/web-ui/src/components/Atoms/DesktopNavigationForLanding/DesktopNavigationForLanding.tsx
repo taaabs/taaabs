@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import styles from './NavigationForLanding.module.scss'
+import styles from './DesktopNavigationForLanding.module.scss'
 import cn from 'classnames'
 
-export namespace NavigationForLandingTypes {
+export namespace DesktopNavigationForLandingTypes {
   type NavigationItem = {
     label: string
     href: string
@@ -13,9 +13,9 @@ export namespace NavigationForLandingTypes {
   }
 }
 
-export const NavigationForLanding: React.FC<NavigationForLandingTypes.Props> = (
-  props,
-) => {
+export const DesktopNavigationForLanding: React.FC<
+  DesktopNavigationForLandingTypes.Props
+> = (props) => {
   return (
     <nav className={styles.navigation}>
       {props.navigationItems.map((item, i) => (

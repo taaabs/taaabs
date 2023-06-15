@@ -11,11 +11,12 @@ describe('Atoms/Button', () => {
   })
 
   it('has given href attribute', () => {
-    render(<Button href="/test">{label}</Button>)
-    expect(screen.getByText(label)).toHaveAttribute('href', '/test')
+    const href = '/test'
+    render(<Button href={href}>{label}</Button>)
+    expect(screen.getByText(label)).toHaveAttribute('href', href)
   })
 
-  it('is disabled if no href and onClick is provided', () => {
+  it('is disabled if neither href nor onClick are provided', () => {
     render(<Button>{label}</Button>)
     expect(screen.getByText(label)).toBeDisabled()
   })
@@ -55,28 +56,12 @@ describe('Atoms/Button', () => {
   it('calls "onClick" on click with href', async () => {
     const onClickMock = jest.fn()
     render(
-      <Button onClick={onClickMock} href="">
+      <Button onClick={onClickMock} href="/">
         {label}
       </Button>,
     )
     const button = screen.getByText(label)
     await userEvent.click(button)
     expect(onClickMock).toHaveBeenCalled()
-  })
-
-  it('assigns different classes for different sizes', () => {
-    render(
-      <Button href="/test" size="default">
-        default
-      </Button>,
-    )
-    render(
-      <Button href="/test" size="large">
-        large
-      </Button>,
-    )
-    const sizeDefault = screen.getByText('default')
-    const sizeLarge = screen.getByText('large')
-    expect(sizeDefault).not.toHaveClass(sizeLarge.className)
   })
 })

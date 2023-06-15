@@ -7,8 +7,10 @@ export default {
 export const Primary = () => {
   return (
     <Landing
-      slotRightSide={<div>right side slot</div>}
-      footerSlot={<div>footer slot</div>}
+      slotMobileNavigation={<div>mobile nav</div>}
+      slotLogo={<div>logo</div>}
+      slotDesktopNavigation={<div>right side slot</div>}
+      slotFooter={<div>footer slot</div>}
     >
       children
     </Landing>

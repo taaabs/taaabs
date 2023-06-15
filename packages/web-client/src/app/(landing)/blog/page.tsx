@@ -1,11 +1,7 @@
 const Page: React.FC = () => {
   return (
     <div>
-      <br />
-      <br />
-      <br />
-      <br />
-      pricing
+      blog
     </div>
   )
 }

@@ -16,7 +16,7 @@ export const Primary = () => (
   <App
     slotAppHeaderDesktop={
       <AppHeaderDesktop
-        logoSlot={<LogoForHeader />}
+        logoSlot={<LogoForHeader href="" />}
         navigationSlot={
           <NavigationForAppHeader
             navigation={[
@@ -29,8 +29,6 @@ export const Primary = () => (
           <DesktopUserAreaForAppHeader
             onClickAdd={() => {}}
             onClickSearch={() => {}}
-            currentTheme="LIGHT"
-            onClickTheme={() => {}}
             onClickNotifications={() => {}}
           />
         }
@@ -38,7 +36,7 @@ export const Primary = () => (
     }
     slotAppHeaderMobile={
       <AppHeaderMobile
-        logoSlot={<LogoForHeader />}
+        logoSlot={<LogoForHeader href="" />}
         navigationSlot={
           <NavigationForAppHeader
             navigation={[
@@ -95,5 +93,8 @@ const bookmark = (
     visibility="private"
     saves={3400}
     onSiteClick={() => {}}
+    onDateClick={() => {}}
+    onSavesClick={() => {}}
+    onVisibilityClick={() => {}}
   />
 )

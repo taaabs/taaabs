@@ -1,13 +1,13 @@
 import React from 'react'
 import styles from './Landing.module.scss'
-import { LogoForHeader } from '@web-ui/components/Molecules/LogoForHeader'
 
 export namespace LandingTypes {
   export type Props = {
-    slotRightSide: React.ReactNode
+    slotDesktopNavigation: React.ReactNode
     slotMobileNavigation: React.ReactNode
+    slotLogo: React.ReactNode
     children?: React.ReactNode
-    footerSlot: React.ReactNode
+    slotFooter: React.ReactNode
   }
 }
 
@@ -16,12 +16,17 @@ export const Landing: React.FC<LandingTypes.Props> = (props) => {
     <>
       <div className={styles.container}>
         <header className={styles.header}>
-          <LogoForHeader isLarge={true} />
-          {props.slotRightSide}
+          {props.slotLogo}
+          <div className={styles.header__desktopNavigation}>
+            {props.slotDesktopNavigation}
+          </div>
+          <div className={styles.header__mobileNavigation}>
+            {props.slotMobileNavigation}
+          </div>
         </header>
         {props.children}
       </div>
-      {props.footerSlot}
+      {props.slotFooter}
     </>
   )
 }

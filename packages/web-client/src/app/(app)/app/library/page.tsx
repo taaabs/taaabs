@@ -5,7 +5,7 @@ const Page: React.FC = () => {
       <br />
       <br />
       <br />
-      pricing
+      app - library
     </div>
   )
 }
