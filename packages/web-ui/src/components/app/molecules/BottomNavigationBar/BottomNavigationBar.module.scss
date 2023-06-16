@@ -1,0 +1,20 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  height: var(--bottom-navigation-bar-height);
+  border-top: var(--border-primary);
+  background-color: var(--bottom-navigation-bar-background);
+  display: flex;
+  justify-content: space-around;
+  box-sizing: content-box;
+  & > button {
+    width: var(--button-dimension-48px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & svg {
+      height: var(--icon-dimension-24px);
+    }
+  }
+}

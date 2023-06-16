@@ -2,46 +2,23 @@
 import { BottomNavigationBar } from '@web-ui/components/Molecules/BottomNavigationBar'
 import { LogoForHeader } from '@web-ui/components/Molecules/LogoForHeader'
 import { NavigationForAppHeader } from '@web-ui/components/Molecules/NavigationForAppHeader'
-import { UserForAppHeader } from '@web-ui/components/Molecules/UserForAppHeader'
 import { DesktopUserAreaForAppHeader } from '@web-ui/components/Organisms/DesktopUserAreaForAppHeader'
 import { App } from '@web-ui/components/Templates/App'
 import { AppHeaderDesktop } from '@web-ui/components/Templates/AppHeaderDesktop'
 import { AppHeaderMobile } from '@web-ui/components/Templates/AppHeaderMobile'
-import { useParams, usePathname } from 'next/navigation'
-
-export const dynamic = 'force-static'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-  const params = useParams()
-  const pathname = usePathname()
-
-  let logoSlot: JSX.Element
-  if (params.username) {
-    logoSlot = (
-      <UserForAppHeader user={{ username: params.username, backHref: '/' }} />
-    )
-  } else {
-    logoSlot = <LogoForHeader href="/app" />
-  }
-
   return (
     <App
       slotAppHeaderDesktop={
         <AppHeaderDesktop
-          logoSlot={logoSlot}
+          logoSlot={<LogoForHeader href="" />}
           navigationSlot={
             <NavigationForAppHeader
               navigation={[
-                {
-                  label: 'Profile',
-                  href: `/${params.username}`,
-                  isActive: false,
-                },
-                {
-                  label: 'Library',
-                  href: `/${params.username}/library`,
-                  isActive: false,
-                },
+                { label: 'Library', href: '/app/library', isActive: false },
+                { label: 'Feed', href: '/app/Feed', isActive: false },
+                { label: 'Discover', href: '/app/discover', isActive: false },
               ]}
             />
           }

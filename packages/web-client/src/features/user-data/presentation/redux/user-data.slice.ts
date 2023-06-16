@@ -8,26 +8,26 @@ type UserDataState = {
   userData?: UserData
 }
 
-const initialUserDataState: UserDataState = {
+const initialState: UserDataState = {
   isLoading: true,
 }
 
-const UserDataSlice = createSlice({
+const userDataSlice = createSlice({
   name: 'user-data',
-  initialState: initialUserDataState,
+  initialState,
   reducers: {
     setIsLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload
     },
-    // setUserData(state, action: PayloadAction<UserDataDto>) {
-    //   state.userData = action.payload
-    // },
+    setUserData(state, action: PayloadAction<any>) {
+      state.userData = action.payload
+    },
   },
 })
 
 export const UserDataActions = {
-  ...UserDataSlice.actions,
+  ...userDataSlice.actions,
   ...thunks,
 }
 
-export default UserDataSlice
+export default userDataSlice

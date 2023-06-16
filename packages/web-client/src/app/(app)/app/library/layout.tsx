@@ -1,12 +1,12 @@
 import dynamic from 'next/dynamic'
-const Library = dynamic(() => import('./DynamicLibraryTemplate'), {
-  loading: () => <div>loading...</div>,
+const DynamicLibrary = dynamic(() => import('./_components/DynamicLibrary'), {
+  loading: () => <div>TODO loading skeleton...</div>,
   ssr: false,
 })
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
-    <Library
+    <DynamicLibrary
       titleBar={{
         primaryText: 'primary',
         secondaryText: 'secondary'
@@ -15,7 +15,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       slotSidebar={<div>slot sidebar</div>}
     >
       {children}
-    </Library>
+    </DynamicLibrary>
   )
 }
 

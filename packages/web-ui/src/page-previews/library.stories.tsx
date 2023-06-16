@@ -1,12 +1,12 @@
-import { App } from '@web-ui/components/Templates/App'
-import { Bookmark } from '@web-ui/components/Molecules/Bookmark'
-import { BottomNavigationBar } from '@web-ui/components/Molecules/BottomNavigationBar'
-import { AppHeaderDesktop } from '@web-ui/components/Templates/AppHeaderDesktop'
-import { Library } from '@web-ui/components/Templates/Library'
-import { LogoForHeader } from '@web-ui/components/Molecules/LogoForHeader'
-import { NavigationForAppHeader } from '@web-ui/components/Molecules/NavigationForAppHeader'
-import { AppHeaderMobile } from '@web-ui/components/Templates/AppHeaderMobile'
-import { DesktopUserAreaForAppHeader } from '@web-ui/components/Organisms/DesktopUserAreaForAppHeader'
+import { App } from '@web-ui/components/app/templates/App'
+import { Bookmark } from '@web-ui/components/app/molecules/Bookmark'
+import { BottomNavigationBar } from '@web-ui/components/app/molecules/BottomNavigationBar'
+import { AppHeaderDesktop } from '@web-ui/components/app/templates/AppHeaderDesktop'
+import { Library } from '@web-ui/components/app/templates/Library'
+import { LogoForHeader } from '@web-ui/components/common/molecules/LogoForHeader'
+import { NavigationForAppHeader } from '@web-ui/components/app/molecules/NavigationForAppHeader'
+import { AppHeaderMobile } from '@web-ui/components/app/templates/AppHeaderMobile'
+import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/DesktopUserAreaForAppHeader'
 
 export default {
   title: 'page-previews/library',

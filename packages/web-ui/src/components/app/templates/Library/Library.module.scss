@@ -1,0 +1,177 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  background: var(--library-background);
+}
+.content {
+  @include at992 {
+    display: flex;
+    width: 100%;
+    max-width: var(--site-max-width);
+    margin: 0 auto;
+    padding: 0 var(--distance-16px);
+    @include at1200 {
+      padding: 0 var(--distance-40px);
+    }
+    &::before {
+      top: 0;
+      left: 0;
+      width: 100vw;
+      content: '';
+      height: var(--header-desktop-height);
+      background: var(--header-background);
+      position: fixed;
+    }
+  }
+}
+.sidebar {
+  @include to992 {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    display: none;
+    padding-top: var(--header-mobile-height);
+    padding-bottom: var(--bottom-navigation-bar-height);
+  }
+  @include at992 {
+    position: sticky;
+    height: calc(100vh - var(--header-desktop-height));
+    width: 100%;
+    top: var(--header-desktop-height);
+    overflow: auto;
+  }
+  &__inner {
+    @include to992 {
+      height: 100%;
+      overflow: auto;
+      background-color: var(--library-background);
+    }
+  }
+}
+.aside {
+  @include to992 {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    height: 100vh;
+    display: none;
+    padding-top: var(--header-mobile-height);
+    padding-bottom: var(--bottom-navigation-bar-height);
+  }
+  @include at992 {
+    margin-top: var(--header-desktop-height);
+  }
+  &__inner {
+    @include to992 {
+      height: 100%;
+      overflow: auto;
+      background-color: var(--library-background);
+    }
+    @include at992 {
+      height: 100%;
+    }
+    &__mobile {
+      @include at992 {
+        display: none;
+      }
+    }
+    &__desktop {
+      @include to992 {
+        display: none;
+      }
+      height: 100%;
+    }
+  }
+}
+.main {
+  @include to992 {
+    position: relative;
+    z-index: 2;
+    margin-top: var(--header-mobile-height);
+    height: calc(
+      100svh - (var(--header-mobile-height) + var(--bottom-navigation-bar-height))
+    );
+    background-color: var(--library-background);
+  }
+  @include at992 {
+    flex: 1;
+    transform: translateX(0px) !important;
+    margin-top: var(--header-desktop-height);
+  }
+  &--borders {
+    @include to992 {
+      &::before {
+        content: '';
+        width: 1px;
+        height: 100%;
+        background-color: var(--border-color-primary);
+        top: 0;
+        left: 0;
+        position: absolute;
+        z-index: 3;
+      }
+      &::after {
+        content: '';
+        width: 1px;
+        height: 100%;
+        background-color: var(--border-color-primary);
+        top: 0;
+        right: 0;
+        position: absolute;
+        z-index: 2;
+      }
+    }
+  }
+  &__inner {
+    @include to992 {
+      overflow: auto;
+      height: 100%;
+      touch-action: manipulation; // https://github.com/Mango/slideout/issues/205#issuecomment-823927561
+      &::before {
+        position: absolute;
+        content: '';
+        height: var(--app-bar-height);
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        background-color: var(--header-background);
+      }
+    }
+    @include at992 {
+      min-height: calc(100vh - var(--header-desktop-height));
+    }
+    &__mobile-alpha-overlay {
+      @include to992 {
+        pointer-events: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        background: var(--header-background);
+        opacity: 0;
+        visibility: hidden;
+        z-index: 2;
+        @include transition-300ms(opacity);
+      }
+      &--enabled {
+        opacity: 0.6;
+        visibility: visible;
+      }
+    }
+    &__mobile-title-bar {
+      @include to992 {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        z-index: 1;
+      }
+      @include at992 {
+        display: none;
+      }
+    }
+  }
+}

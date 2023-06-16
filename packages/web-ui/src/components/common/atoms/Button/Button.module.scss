@@ -1,0 +1,32 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.button {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--plain-white);
+  background: var(--button-background);
+  font-weight: var(--font-weight-inter-semi-bold);
+  @include transition-100ms(background-color);
+  border-radius: var(--border-radius-999px);
+  @include hover {
+    background: var(--button-background-hover);
+  }
+  &--small {
+    height: var(--button-dimension-34px);
+    font-size: var(--font-size-13px);
+    padding: 0 var(--distance-14px);
+    
+  }
+  &--default {
+    height: var(--button-dimension-40px);
+    font-size: var(--font-size-15px);
+    padding: 0 var(--distance-16px);
+  }
+  &--large {
+    height: var(--button-dimension-52px);
+    font-size: var(--font-size-22px);
+    padding: 0 var(--distance-22px);
+  }
+}

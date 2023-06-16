@@ -1,0 +1,11 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: inline-flex;
+  & > svg {
+    fill: var(--plain-black);
+    width: auto;
+    height: auto;
+  }
+}

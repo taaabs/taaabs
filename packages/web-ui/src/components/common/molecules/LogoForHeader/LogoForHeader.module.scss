@@ -1,0 +1,54 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.logo {
+  display: flex;
+  align-items: center;
+  & span {
+    color: var(--color-text--normal);
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-bold);
+    letter-spacing: var(--letter-spacing-logo);
+    font-size: var(--font-size-22px);
+    padding-left: var(--distance-8px);
+    margin-bottom: var(--distance-2px);
+    @include at992 {
+      font-size: var(--font-size-26px);
+      padding-left: var(--distance-10px);
+      margin-bottom: var(--distance-4px);
+    }
+  }
+  & svg {
+    fill: var(--logo-background);
+    height: 34px;
+    @include at992 {
+      height: 42px;
+    }
+  }
+  &--large {
+    & span {
+      padding-left: var(--distance-10px);
+      font-size: 30px;
+      margin-bottom: var(--distance-4px);
+      @include at992 {
+        padding-left: var(--distance-12px);
+        font-size: 38px;
+        margin-bottom: var(--distance-5px);
+      }
+      @include at1200 {
+        padding-left: var(--distance-14px);
+        font-size: 42px;
+        margin-bottom: var(--distance-6px);
+      }
+    }
+    & svg {
+      height: 48px;
+      @include at992 {
+        height: 55px;
+      }
+      @include at1200 {
+        height: 60px;
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+$underline-height: 2.5px;
+
+.button {
+  font-family: var(--font-family-plus-jakarta-sans);
+  font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
+  display: inline-flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--distance-6px);
+  position: relative;
+  @include transition-100ms(background-color);
+  @include at992 {
+    font-size: var(--font-size-16px);
+    padding: 0 var(--distance-12px);
+  }
+  & span {
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    &::after {
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: $underline-height;
+      bottom: 0;
+      left: 0;
+      margin-left: 50%;
+      transform: translateX(-50%);
+      border-top-right-radius: $underline-height;
+      border-top-left-radius: $underline-height;
+      @include transition-100ms(background-color);
+    }
+  }
+  @include hover {
+    background-color: var(--button-underlined-background-hover);
+  }
+  &--active {
+    & span::after {
+      background-color: var(--brand-color);
+    }
+  }
+}
+.button-disabled {
+  &:disabled {
+    pointer-events: none;
+    span {
+      color: var(--text-color-dimmed);
+    }
+  }
+}

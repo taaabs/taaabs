@@ -1,14 +1,15 @@
+import { GlobalProviders } from '@/providers/GlobalProviders'
 import '@web-ui/styles/style.scss'
+import { ReduxInitializer } from './ReduxInitializer'
 
-/**
- * TODO:
- *   - redirect to proper language
- *   - set theme
- */
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <GlobalProviders>
+          <ReduxInitializer>{children}</ReduxInitializer>
+        </GlobalProviders>
+      </body>
     </html>
   )
 }
