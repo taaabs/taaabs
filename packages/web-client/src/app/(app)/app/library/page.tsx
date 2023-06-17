@@ -1,14 +1,9 @@
 'use client'
-import dynamic from 'next/dynamic'
-
-const DynamicLibrary = dynamic(() => import('./DynamicLibrary'), {
-  loading: () => <div><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>TODO loading skeleton...</div>,
-  ssr: false,
-})
+import { Library } from '@web-ui/components/app/templates/Library'
 
 const Page: React.FC = () => {
   return (
-    <DynamicLibrary
+    <Library
       titleBar={{
         primaryText: 'primary',
         secondaryText: 'secondary',
@@ -17,7 +12,7 @@ const Page: React.FC = () => {
       slotSidebar={<div>slot sidebar</div>}
     >
       render bookmarks here
-    </DynamicLibrary>
+    </Library>
   )
 }
 

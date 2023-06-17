@@ -61,8 +61,10 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
     slideoutLeft?.toggle()
   }
 
-  const getSlideoutInstances = () => {
+  const getSlideoutInstances = async () => {
     if (!sidebarRef.current || !mainRef.current || !asideRef.current) return
+
+    const Slideout = (await import('slideout')).default
 
     const slideoutLeftInstance = new Slideout({
       menu: sidebarRef.current,
@@ -116,6 +118,12 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
     }
   }
 
+  const setSlideoutInstances = async () => {
+    const slideoutInstances = await getSlideoutInstances()
+    setSlideoutLeft(slideoutInstances?.slideoutLeftInstance)
+    setSlideoutRight(slideoutInstances?.slideoutRightInstance)
+  }
+
   useUpdateEffect(() => {
     if (
       swipeState.swiping &&
@@ -134,16 +142,12 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
       slideoutLeft == undefined &&
       slideoutRight == undefined
     ) {
-      const slideoutInstances = getSlideoutInstances()
-      setSlideoutLeft(slideoutInstances?.slideoutLeftInstance)
-      setSlideoutRight(slideoutInstances?.slideoutRightInstance)
+      setSlideoutInstances()
     }
   }, [swipeState])
 
   useEffect(() => {
-    const slideoutInstances = getSlideoutInstances()
-    setSlideoutLeft(slideoutInstances?.slideoutLeftInstance)
-    setSlideoutRight(slideoutInstances?.slideoutRightInstance)
+    setSlideoutInstances()
     return () => {
       slideoutLeft?.destroy()
       slideoutRight?.destroy()
