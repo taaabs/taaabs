@@ -1,0 +1,12 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.skeleton {
+  border-radius: var(--border-radius-999px);
+  width: 110px;
+  height: var(--button-dimension-48px);
+  @include at1200 {
+    height: var(--button-dimension-52px);
+  }
+  
+}

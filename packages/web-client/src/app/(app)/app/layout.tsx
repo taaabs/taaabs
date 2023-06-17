@@ -1,11 +1,12 @@
 'use client'
-import { BottomNavigationBar } from '@web-ui/components/Molecules/BottomNavigationBar'
-import { LogoForHeader } from '@web-ui/components/Molecules/LogoForHeader'
-import { NavigationForAppHeader } from '@web-ui/components/Molecules/NavigationForAppHeader'
-import { DesktopUserAreaForAppHeader } from '@web-ui/components/Organisms/DesktopUserAreaForAppHeader'
-import { App } from '@web-ui/components/Templates/App'
-import { AppHeaderDesktop } from '@web-ui/components/Templates/AppHeaderDesktop'
-import { AppHeaderMobile } from '@web-ui/components/Templates/AppHeaderMobile'
+
+import { BottomNavigationBar } from '@web-ui/components/app/molecules/BottomNavigationBar'
+import { NavigationForAppHeader } from '@web-ui/components/app/molecules/NavigationForAppHeader'
+import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/DesktopUserAreaForAppHeader'
+import { App } from '@web-ui/components/app/templates/App'
+import { AppHeaderDesktop } from '@web-ui/components/app/templates/AppHeaderDesktop'
+import { AppHeaderMobile } from '@web-ui/components/app/templates/AppHeaderMobile'
+import { LogoForHeader } from '@web-ui/components/common/molecules/LogoForHeader'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (

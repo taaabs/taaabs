@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-const DynamicLibrary = dynamic(() => import('./_components/DynamicLibrary'), {
+const DynamicLibrary = dynamic(() => import('./DynamicLibrary'), {
   loading: () => <div>TODO loading skeleton...</div>,
   ssr: false,
 })

@@ -17,7 +17,6 @@
     height: var(--button-dimension-34px);
     font-size: var(--font-size-13px);
     padding: 0 var(--distance-14px);
-    
   }
   &--default {
     height: var(--button-dimension-40px);
@@ -25,8 +24,13 @@
     padding: 0 var(--distance-16px);
   }
   &--large {
-    height: var(--button-dimension-52px);
-    font-size: var(--font-size-22px);
-    padding: 0 var(--distance-22px);
+    height: var(--button-dimension-48px);
+    font-size: var(--font-size-20px);
+    padding: 0 var(--distance-20px);
+    @include at1200 {
+      height: var(--button-dimension-52px);
+      font-size: var(--font-size-22px);
+      padding: 0 var(--distance-22px);
+    }
   }
 }

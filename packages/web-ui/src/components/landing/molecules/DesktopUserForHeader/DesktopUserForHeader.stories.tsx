@@ -1,21 +1,21 @@
 import { StorybookMargin } from '@web-ui/helpers/storybook/StorybookMargin'
-import { HeaderDesktopUser } from './HeaderDesktopUser'
+import { DesktopUserForHeader } from './DesktopUserForHeader'
 import { StorybookSpacer } from '@web-ui/helpers/storybook/StorybookSpacer'
 
 export default {
-  component: HeaderDesktopUser,
+  component: DesktopUserForHeader,
 }
 
 export const Primary = () => {
   return (
     <StorybookMargin>
-      <HeaderDesktopUser
+      <DesktopUserForHeader
         buttonLabel="Lorem"
         buttonOnClick={() => {}}
         isLoading={false}
       />
       <StorybookSpacer />
-      <HeaderDesktopUser
+      <DesktopUserForHeader
         buttonLabel="Lorem"
         buttonOnClick={() => {}}
         isLoading={true}

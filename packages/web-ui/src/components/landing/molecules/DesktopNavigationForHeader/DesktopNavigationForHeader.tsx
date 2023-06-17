@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import styles from './HeaderDesktopNavigation.module.scss'
+import styles from './DesktopNavigationForHeader.module.scss'
 import cn from 'classnames'
 
-export namespace HeaderDesktopNavigationTypes {
+export namespace DesktopNavigationForHeaderTypes {
   type NavigationItem = {
     label: string
     href: string
@@ -13,8 +13,8 @@ export namespace HeaderDesktopNavigationTypes {
   }
 }
 
-export const HeaderDesktopNavigation: React.FC<
-  HeaderDesktopNavigationTypes.Props
+export const DesktopNavigationForHeader: React.FC<
+  DesktopNavigationForHeaderTypes.Props
 > = (props) => {
   return (
     <nav className={styles.navigation}>
