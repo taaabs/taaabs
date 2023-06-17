@@ -8,14 +8,16 @@
     gap: var(--distance-40px);
   }
   &__item {
+    position: relative;
     height: var(--button-dimension-52px);
     display: flex;
     align-items: center;
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
     @include transition-100ms(color);
+    color: var(--text-color-variant);
     @include hover {
-      color: var(--landing-navigation-item-foreground-hover);
+      color: var(--text-color--normal);
     }
     @include at992 {
       height: var(--button-dimension-48px);
@@ -25,20 +27,25 @@
       height: var(--button-dimension-52px);
       font-size: var(--font-size-22px);
     }
+    &::before {
+      content: '';
+      position: absolute;
+      background: transparent;
+      left: 50%;
+      bottom: -0.15em;
+      transform: translateX(-50%);
+      border-radius: var(--border-radius-999px);
+      width: 0.3em;
+      height: 0.3em;
+    }
     &--active {
+      color: var(--text-color--normal);
       position: relative;
       &::before {
-        content: '';
-        position: absolute;
-        background: var(
-          --landing-navigation-item-active-indicator-background
-        );
-        left: 50%;
-        bottom: 0;
-        transform: translateX(-50%);
-        border-radius: var(--border-radius-999px);
-        width: 0.3em;
-        height: 0.3em;
+        // transition is purposely on active modifier to avoid rendering
+        // two indicators at the same time (one fading out, another in)
+        @include transition-100ms(background-color);
+        background: var(--brand-color);
       }
     }
   }

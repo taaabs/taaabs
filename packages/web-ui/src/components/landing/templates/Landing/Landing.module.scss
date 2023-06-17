@@ -28,23 +28,12 @@
     max-width: 100%;
     padding: 0 140px;
   }
-  &__logo {
-    z-index: 1;
-  }
-  &__desktopNavigation {
-    position: absolute;
+  &__desktopNavAndUser {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    left: 0;
-    right: 0;
-    @include to992 {
-      display: none;
+    gap: var(--distance-24px);
+    @include at1200 {
+      gap: var(--distance-40px);
     }
-  }
-  &__desktopUser {
-    z-index: 1;
     @include to992 {
       display: none;
     }
