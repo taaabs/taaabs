@@ -73,6 +73,8 @@ html {
   --library-background: var(--neutral25);
   --landing-navigation-item-foreground-hover: var(--blue800);
   --landing-navigation-item-active-indicator-background: var(--blue800);
+  --skeleton-base-color: var(--neutral100);
+  --skeleton-highlight-color: var(--neutral25);
 }
 
 body {
@@ -146,3 +148,8 @@ button {
   }
 }
 // Slideout - end
+.react-loading-skeleton {
+  line-height: inherit;
+  --base-color: var(--skeleton-base-color);
+  --highlight-color: var(--skeleton-highlight-color);
+}

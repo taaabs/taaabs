@@ -3,10 +3,9 @@
 
 .skeleton {
   border-radius: var(--border-radius-999px);
-  width: 110px;
+  width: 120px;
   height: var(--button-dimension-48px);
   @include at1200 {
     height: var(--button-dimension-52px);
   }
-  
 }
