@@ -13,9 +13,9 @@
   @include transition-100ms(all);
   width: var(--button-dimension-40px);
   height: var(--button-dimension-40px);
-  background-color: var(--button-outlined-icon-background);
+  background: var(--button-outlined-icon-background);
   @include hover {
-    background-color: var(--button-outlined-icon-background-hover);
+    background: var(--button-outlined-icon-background-hover);
     border-color: var(--border-color-primary);
   }
   & svg {

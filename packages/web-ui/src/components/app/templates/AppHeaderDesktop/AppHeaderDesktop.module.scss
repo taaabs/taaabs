@@ -3,7 +3,7 @@
 
 .container {
   border-bottom: var(--border-primary);
-  background-color: var(--header-transparent-background);
+  background: var(--header-transparent-background);
   backdrop-filter: var(--backdrop-filter);
   height: var(--header-desktop-height);
   box-sizing: content-box;

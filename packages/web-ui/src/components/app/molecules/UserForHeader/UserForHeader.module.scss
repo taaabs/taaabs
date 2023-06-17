@@ -67,7 +67,7 @@
     position: relative;
     width: var(--button-dimension-40px);
     height: var(--button-dimension-40px);
-    background-color: var(--user-for-header-icon-background);
+    background: var(--user-for-header-icon-background);
     & > div > svg {
       width: var(--icon-dimension-20px);
       height: var(--icon-dimension-20px);

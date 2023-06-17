@@ -5,7 +5,7 @@
   display: flex;
   justify-content: space-between;
   padding: var(--distance-12px) var(--distance-4px);
-  background-color: var(--title-bar-background);
+  background: var(--title-bar-background);
   color: var(--title-bar-primary-foreground);
   border-radius: var(--border-radius-999px);
 }

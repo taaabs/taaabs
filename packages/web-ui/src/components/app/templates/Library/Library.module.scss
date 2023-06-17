@@ -46,7 +46,7 @@
     @include to992 {
       height: 100%;
       overflow: auto;
-      background-color: var(--library-background);
+      background: var(--library-background);
     }
   }
 }
@@ -68,7 +68,7 @@
     @include to992 {
       height: 100%;
       overflow: auto;
-      background-color: var(--library-background);
+      background: var(--library-background);
     }
     @include at992 {
       height: 100%;
@@ -94,7 +94,7 @@
     height: calc(
       100svh - (var(--header-mobile-height) + var(--bottom-navigation-bar-height))
     );
-    background-color: var(--library-background);
+    background: var(--library-background);
   }
   @include at992 {
     flex: 1;
@@ -107,7 +107,7 @@
         content: '';
         width: 1px;
         height: 100%;
-        background-color: var(--border-color-primary);
+        background: var(--border-color-secondary);
         top: 0;
         left: 0;
         position: absolute;
@@ -117,7 +117,7 @@
         content: '';
         width: 1px;
         height: 100%;
-        background-color: var(--border-color-primary);
+        background: var(--border-color-secondary);
         top: 0;
         right: 0;
         position: absolute;
@@ -138,7 +138,7 @@
         top: 0;
         left: 0;
         z-index: -1;
-        background-color: var(--header-background);
+        background: var(--header-background);
       }
     }
     @include at992 {

@@ -12,7 +12,7 @@
 }
 
 ::selection {
-  background-color: var(--selection-background);
+  background: var(--selection-background);
   color: var(--selection-foreground);
 }
 
@@ -64,10 +64,10 @@ html {
   --bookmark-tag-foreground-hover: var(--green700);
   --bookmark-nsfw-foreground: var(--white);
   --bookmark-nsfw-background: var(--red500);
-  --bookmark-starred-title-background: var(--yellow100);
+  --bookmark-starred-title-background: var(--yellow200);
   --bookmark-action-fill: var(--neutral400);
   --bookmark-action-fill-hover: var(--neutral500);
-  --title-bar-background: var(--blue50);
+  --title-bar-background-mobile: rgba(219, 234, 254, 0.5);
   --title-bar-primary-foreground: var(--blue800);
   --title-bar-secondary-foreground: var(--blue500);
   --library-background: var(--neutral25);

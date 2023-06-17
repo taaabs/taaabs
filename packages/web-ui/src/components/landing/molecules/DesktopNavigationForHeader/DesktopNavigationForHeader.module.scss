@@ -30,7 +30,7 @@
       &::before {
         content: '';
         position: absolute;
-        background-color: var(
+        background: var(
           --landing-navigation-item-active-indicator-background
         );
         left: 50%;

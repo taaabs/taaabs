@@ -4,8 +4,8 @@
 $underline-height: 2.5px;
 
 .button {
-  font-family: var(--font-family-plus-jakarta-sans);
-  font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
+  font-family: var(--font-family-inter);
+  font-weight: var(--font-weight-inter-medium);
   display: inline-flex;
   height: 100%;
   width: 100%;
@@ -13,6 +13,7 @@ $underline-height: 2.5px;
   justify-content: center;
   padding: 0 var(--distance-6px);
   position: relative;
+  color: var(--text-color-variant);
   @include transition-100ms(background-color);
   @include at992 {
     font-size: var(--font-size-16px);
@@ -38,11 +39,13 @@ $underline-height: 2.5px;
     }
   }
   @include hover {
-    background-color: var(--button-underlined-background-hover);
+    color: var(--text-color--normal);
+    background: var(--button-underlined-background-hover);
   }
   &--active {
+    color: var(--text-color--normal);
     & span::after {
-      background-color: var(--brand-color);
+      background: var(--brand-color);
     }
   }
 }
