@@ -1,7 +1,7 @@
 'use client'
 import { BottomNavigationBar } from '@web-ui/components/app/molecules/BottomNavigationBar'
-import { NavigationForAppHeader } from '@web-ui/components/app/molecules/NavigationForAppHeader'
-import { UserForAppHeader } from '@web-ui/components/app/molecules/UserForAppHeader'
+import { NavigationForHeader } from '@web-ui/components/app/molecules/NavigationForHeader'
+import { UserForHeader } from '@web-ui/components/app/molecules/UserForHeader'
 import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/DesktopUserAreaForAppHeader'
 import { App } from '@web-ui/components/app/templates/App'
 import { AppHeaderDesktop } from '@web-ui/components/app/templates/AppHeaderDesktop'
@@ -18,7 +18,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   let logoSlot: JSX.Element
   if (params.username) {
     logoSlot = (
-      <UserForAppHeader user={{ username: params.username, backHref: '/' }} />
+      <UserForHeader user={{ username: params.username, backHref: '/' }} />
     )
   } else {
     logoSlot = <LogoForHeader href="/app" />
@@ -30,7 +30,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <AppHeaderDesktop
           logoSlot={logoSlot}
           navigationSlot={
-            <NavigationForAppHeader
+            <NavigationForHeader
               navigation={[
                 {
                   label: 'Profile',
@@ -58,10 +58,18 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         <AppHeaderMobile
           logoSlot={<LogoForHeader href="" />}
           navigationSlot={
-            <NavigationForAppHeader
+            <NavigationForHeader
               navigation={[
-                { label: 'Library', href: '/app/library', isActive: false },
-                { label: 'Feed', href: '/app/Feed', isActive: false },
+                {
+                  label: 'Library',
+                  href: '/app/library',
+                  isActive: pathname == '/app/library' ? true : false,
+                },
+                {
+                  label: 'Feed',
+                  href: '/app/feed',
+                  isActive: pathname == '/app/feed' ? true : false,
+                },
               ]}
             />
           }

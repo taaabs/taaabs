@@ -1,16 +1,16 @@
 import { StorybookMargin } from '@web-ui/helpers/storybook/StorybookMargin'
-import { UserForAppHeader } from '.'
+import { UserForHeader } from '.'
 import { StorybookSpacer } from '@web-ui/helpers/storybook/StorybookSpacer'
 
 export default {
-  component: UserForAppHeader,
+  component: UserForHeader,
 }
 
 export const Primary = () => (
   <StorybookMargin>
-    <UserForAppHeader user={{ username: 'lorem', backHref: '/lorem' }} />
+    <UserForHeader user={{ username: 'lorem', backHref: '/lorem' }} />
     <StorybookSpacer />
-    <UserForAppHeader
+    <UserForHeader
       user={{
         username: 'lorem',
         backHref: '/lorem',

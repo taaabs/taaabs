@@ -4,7 +4,7 @@ import { BottomNavigationBar } from '@web-ui/components/app/molecules/BottomNavi
 import { AppHeaderDesktop } from '@web-ui/components/app/templates/AppHeaderDesktop'
 import { Library } from '@web-ui/components/app/templates/Library'
 import { LogoForHeader } from '@web-ui/components/common/molecules/LogoForHeader'
-import { NavigationForAppHeader } from '@web-ui/components/app/molecules/NavigationForAppHeader'
+import { NavigationForHeader } from '@web-ui/components/app/molecules/NavigationForHeader'
 import { AppHeaderMobile } from '@web-ui/components/app/templates/AppHeaderMobile'
 import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/DesktopUserAreaForAppHeader'
 
@@ -18,7 +18,7 @@ export const Primary = () => (
       <AppHeaderDesktop
         logoSlot={<LogoForHeader href="" />}
         navigationSlot={
-          <NavigationForAppHeader
+          <NavigationForHeader
             navigation={[
               { label: 'Lorem', href: '/lorem', isActive: false },
               { label: 'Ipsum', href: '/ipsum', isActive: true },
@@ -38,7 +38,7 @@ export const Primary = () => (
       <AppHeaderMobile
         logoSlot={<LogoForHeader href="" />}
         navigationSlot={
-          <NavigationForAppHeader
+          <NavigationForHeader
             navigation={[
               { label: 'Lorem', href: '/lorem', isActive: false },
               { label: 'Ipsum', href: '/ipsum', isActive: true },
