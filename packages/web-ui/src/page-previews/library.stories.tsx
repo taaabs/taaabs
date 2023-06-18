@@ -7,77 +7,92 @@ import { LogoForHeader } from '@web-ui/components/common/molecules/LogoForHeader
 import { NavigationForHeader } from '@web-ui/components/app/molecules/NavigationForHeader'
 import { AppHeaderMobile } from '@web-ui/components/app/templates/AppHeaderMobile'
 import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/DesktopUserAreaForAppHeader'
+import { useElementVisibleHeight } from '@web-ui/hooks/useElementVisibleHeight'
+import { useRef } from 'react'
 
 export default {
   title: 'page-previews/library',
 }
 
-export const Primary = () => (
-  <App
-    slotAppHeaderDesktop={
-      <AppHeaderDesktop
-        logoSlot={<LogoForHeader href="" />}
-        navigationSlot={
-          <NavigationForHeader
-            navigation={[
-              { label: 'Lorem', href: '/lorem', isActive: false },
-              { label: 'Ipsum', href: '/ipsum', isActive: true },
-            ]}
-          />
-        }
-        rightSideSlot={
-          <DesktopUserAreaForAppHeader
-            onClickAdd={() => {}}
-            onClickSearch={() => {}}
-            onClickNotifications={() => {}}
-          />
-        }
-      />
-    }
-    slotAppHeaderMobile={
-      <AppHeaderMobile
-        logoSlot={<LogoForHeader href="" />}
-        navigationSlot={
-          <NavigationForHeader
-            navigation={[
-              { label: 'Lorem', href: '/lorem', isActive: false },
-              { label: 'Ipsum', href: '/ipsum', isActive: true },
-            ]}
-          />
-        }
-      />
-    }
-    slotFooterDesktop={<div style={{ height: 1000 }}>footer</div>}
-    slotBottomNavigationBar={
-      <BottomNavigationBar
-        onClickAdd={() => {}}
-        onClickMyLibrary={() => {}}
-        onClickNotifications={() => {}}
-        onClickSearch={() => {}}
-        onClickUser={() => {}}
-      />
-    }
-  >
-    <Library
-      slotAside={<>aside</>}
-      slotSidebar={<>sidebar</>}
-      titleBar={{ primaryText: 'All bookmarks', secondaryText: '3230 results' }}
+export const Primary = () => {
+  const footer = useRef<HTMLDivElement>(null)
+  const footerVisibleHeight = useElementVisibleHeight(footer)
+
+  return (
+    <App
+      slotAppHeaderDesktop={
+        <AppHeaderDesktop
+          logoSlot={<LogoForHeader href="" />}
+          navigationSlot={
+            <NavigationForHeader
+              navigation={[
+                { label: 'Lorem', href: '/lorem', isActive: false },
+                { label: 'Ipsum', href: '/ipsum', isActive: true },
+              ]}
+            />
+          }
+          rightSideSlot={
+            <DesktopUserAreaForAppHeader
+              onClickAdd={() => {}}
+              onClickSearch={() => {}}
+              onClickNotifications={() => {}}
+            />
+          }
+        />
+      }
+      slotAppHeaderMobile={
+        <AppHeaderMobile
+          logoSlot={<LogoForHeader href="" />}
+          navigationSlot={
+            <NavigationForHeader
+              navigation={[
+                { label: 'Lorem', href: '/lorem', isActive: false },
+                { label: 'Ipsum', href: '/ipsum', isActive: true },
+              ]}
+            />
+          }
+        />
+      }
+      slotFooterDesktop={
+        <div style={{ height: 1000 }} ref={footer}>
+          footer
+        </div>
+      }
+      slotBottomNavigationBar={
+        <BottomNavigationBar
+          onClickAdd={() => {}}
+          onClickMyLibrary={() => {}}
+          onClickNotifications={() => {}}
+          onClickSearch={() => {}}
+          onClickUser={() => {}}
+        />
+      }
     >
-      <>
-        <br />
-        {bookmark}
-        <br />
-        {bookmark}
-        <br />
-        {bookmark}
-        <br />
-        {bookmark}
-        <br />
-        {bookmark}
-      </>
-    </Library>
-  </App>
-)
+      <Library
+        slotAside={<>aside</>}
+        slotSidebar={<>sidebar</>}
+        titleBar={{
+          primaryText: 'All bookmarks',
+          secondaryText: '3230 results',
+        }}
+        bottomOffset={footerVisibleHeight}
+      >
+        <>
+          <br />
+          {bookmark}
+          <br />
+          {bookmark}
+          <br />
+          {bookmark}
+          <br />
+          {bookmark}
+          <br />
+          {bookmark}
+        </>
+      </Library>
+    </App>
+  )
+}
 
 const bookmark = (
   <Bookmark

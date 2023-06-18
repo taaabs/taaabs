@@ -8,6 +8,10 @@ import styles from './Library.module.scss'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 
+/**
+ * Notes:
+ * "bottomOffset" is a visible height of footer scrolled into viewport
+ */
 export namespace LibraryTypes {
   export type Props = {
     slotSidebar: React.ReactNode
@@ -17,17 +21,18 @@ export namespace LibraryTypes {
       secondaryText: string
     }
     children: React.ReactNode
+    bottomOffset: number
   }
 }
 
 const SLIDABLE_WIDTH = 300
 
 export const Library: React.FC<LibraryTypes.Props> = (props) => {
-  const sidebarRef = useRef<HTMLDivElement>(null)
-  const mainRef = useRef<HTMLDivElement>(null)
-  const asideRef = useRef<HTMLDivElement>(null)
+  const sidebar = useRef<HTMLDivElement>(null)
+  const main = useRef<HTMLDivElement>(null)
+  const aside = useRef<HTMLDivElement>(null)
 
-  const swipeState = useSwipe(mainRef, {
+  const swipeState = useSwipe(main, {
     preventDefault: false,
   })
 
@@ -62,19 +67,19 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
   }
 
   const getSlideoutInstances = async () => {
-    if (!sidebarRef.current || !mainRef.current || !asideRef.current) return
+    if (!sidebar.current || !main.current || !aside.current) return
 
     const Slideout = (await import('slideout')).default
 
     const slideoutLeftInstance = new Slideout({
-      menu: sidebarRef.current,
-      panel: mainRef.current,
+      menu: sidebar.current,
+      panel: main.current,
       padding: SLIDABLE_WIDTH,
       tolerance: 50,
     })
     const slideoutRightInstance = new Slideout({
-      menu: asideRef.current,
-      panel: mainRef.current,
+      menu: aside.current,
+      panel: main.current,
       padding: SLIDABLE_WIDTH,
       side: 'right',
       tolerance: 50,
@@ -159,13 +164,23 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
       <div className={styles.content}>
         <div
           className={styles.sidebar}
-          ref={sidebarRef}
+          ref={sidebar}
           style={{
             zIndex: !isSlideoutLeftDefinetelyClosed ? 1 : 0,
             width: `${SLIDABLE_WIDTH}px`,
           }}
         >
-          <div className={styles.sidebar__inner}>{props.slotSidebar}</div>
+          <div
+            className={styles.sidebar__inner}
+            style={{
+              width: `${SLIDABLE_WIDTH}px`,
+              height: `calc(100vh - var(--header-desktop-height)${
+                props.bottomOffset ? ` - ${props.bottomOffset}px` : ``
+              })`,
+            }}
+          >
+            {props.slotSidebar}
+          </div>
         </div>
 
         <div
@@ -174,7 +189,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
               !isSlideoutLeftDefinetelyClosed ||
               !isSlideoutRightDefinetelyClosed,
           })}
-          ref={mainRef}
+          ref={main}
           onClick={() => {
             isSlideoutLeftDefinetelyOpened && toggleLeftSlideout()
             isSlideoutRightDefinetelyOpened && toggleRightSlideout()
@@ -215,7 +230,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
 
         <div
           className={styles.aside}
-          ref={asideRef}
+          ref={aside}
           style={{
             zIndex: !isSlideoutRightDefinetelyClosed ? 1 : 0,
             width: `${SLIDABLE_WIDTH}px`,
@@ -223,11 +238,9 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
         >
           <div className={styles.aside__inner}>
             <div className={styles.aside__inner__desktop}>
-              <>
-                <StickyBox offsetTop={sharedValues.appHeaderDesktop}>
-                  {props.slotAside}
-                </StickyBox>
-              </>
+              <StickyBox offsetTop={sharedValues.appHeaderDesktop}>
+                {props.slotAside}
+              </StickyBox>
             </div>
             <div className={styles.aside__inner__mobile}>{props.slotAside}</div>
           </div>

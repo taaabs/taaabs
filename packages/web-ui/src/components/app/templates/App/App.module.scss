@@ -18,6 +18,7 @@
   }
 }
 .footer-desktop {
+  position: relative;
   @include to992 {
     display: none;
   }

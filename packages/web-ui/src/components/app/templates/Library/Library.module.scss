@@ -35,18 +35,16 @@
     padding-top: var(--header-mobile-height);
     padding-bottom: var(--bottom-navigation-bar-height);
   }
-  @include at992 {
-    position: sticky;
-    height: calc(100vh - var(--header-desktop-height));
-    width: 100%;
-    top: var(--header-desktop-height);
-    overflow: auto;
-  }
   &__inner {
     @include to992 {
-      height: 100%;
+      height: 100% !important; // Overrides inline style intended for use at >992px
       overflow: auto;
       background: var(--library-background);
+    }
+    @include at992 {
+      top: var(--header-desktop-height);
+      position: fixed;
+      overflow: auto;
     }
   }
 }
@@ -92,7 +90,8 @@
     z-index: 2;
     margin-top: var(--header-mobile-height);
     height: calc(
-      100svh - (var(--header-mobile-height) + var(--bottom-navigation-bar-height))
+      100svh -
+        (var(--header-mobile-height) + var(--bottom-navigation-bar-height))
     );
     background: var(--library-background);
   }

@@ -7,11 +7,15 @@ import { App } from '@web-ui/components/app/templates/App'
 import { AppHeaderDesktop } from '@web-ui/components/app/templates/AppHeaderDesktop'
 import { AppHeaderMobile } from '@web-ui/components/app/templates/AppHeaderMobile'
 import { LogoForHeader } from '@web-ui/components/common/molecules/LogoForHeader'
+import { useElementVisibleHeight } from '@web-ui/hooks/useElementVisibleHeight'
 import { useParams, usePathname } from 'next/navigation'
+import { createContext, useRef } from 'react'
 
-export const dynamic = 'force-static'
+export const FooterVisibleHeightContext = createContext(0)
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+  const footer = useRef<HTMLDivElement>(null)
+  const footerVisibleHeight = useElementVisibleHeight(footer)
   const params = useParams()
   const pathname = usePathname()
 
@@ -84,9 +88,13 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           onClickUser={() => {}}
         />
       }
-      slotFooterDesktop={<div>slotFooterDesktop</div>}
+      slotFooterDesktop={<div ref={footer}>slotFooterDesktop</div>}
     >
-      {children}
+      <FooterVisibleHeightContext.Provider
+        value={footerVisibleHeight}
+      >
+        {children}
+      </FooterVisibleHeightContext.Provider>
     </App>
   )
 }
