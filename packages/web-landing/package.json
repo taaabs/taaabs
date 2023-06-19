@@ -1,5 +1,5 @@
 {
-  "name": "@taaabs/web-client",
+  "name": "@taaabs/web-landing",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,7 +11,6 @@
     "@taaabs/repositories": "workspace:*",
     "@taaabs/shared": "workspace:*",
     "@taaabs/web-ui": "workspace:*",
-    "@reduxjs/toolkit": "^1.9.5",
     "@svgr/webpack": "^8.0.1",
     "axios": "^1.4.0",
     "eslint": "8.41.0",

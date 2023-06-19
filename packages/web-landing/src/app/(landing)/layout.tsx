@@ -10,7 +10,16 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       slotDesktopUser={<DynamicDesktopUserForHeader />}
       slotDesktopNavigation={<DynamicDesktopNavigationForHeader />}
       slotMobileNavigation={<div>mobile nav</div>}
-      slotFooter={<div>footer<br/><br/><br/><br/><br/></div>}
+      slotFooter={
+        <div>
+          footer
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </div>
+      }
     >
       {children}
     </Landing>
