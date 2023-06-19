@@ -20,9 +20,11 @@ export const NavigationForHeader: React.FC<NavigationForHeaderTypes.Props> = ({
       <ul>
         {navigation.map((link) => (
           <li key={link.label}>
-            <ButtonUnderlined href={link.href} isActive={link.isActive}>
-              {link.label}
-            </ButtonUnderlined>
+            <ButtonUnderlined
+              href={link.href}
+              isActive={link.isActive}
+              label={link.label}
+            />
           </li>
         ))}
       </ul>

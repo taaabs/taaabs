@@ -4,8 +4,6 @@
 $underline-height: 2.5px;
 
 .button {
-  font-family: var(--font-family-inter);
-  font-weight: var(--font-weight-inter-medium);
   display: inline-flex;
   height: 100%;
   width: 100%;
@@ -19,11 +17,13 @@ $underline-height: 2.5px;
     font-size: var(--font-size-16px);
     padding: 0 var(--distance-12px);
   }
-  & span {
+  & > span {
     height: 100%;
     display: inline-flex;
     align-items: center;
     position: relative;
+    font-weight: var(--font-weight-inter-medium);
+    color: transparent;
     &::after {
       position: absolute;
       content: '';
@@ -39,12 +39,13 @@ $underline-height: 2.5px;
     }
   }
   @include hover {
-    color: var(--text-color--normal);
     background: var(--button-underlined-background-hover);
+    & .boldTextWidthFix {
+      color: var(--text-color--normal);
+    }
   }
   &--active {
-    color: var(--text-color--normal);
-    & span::after {
+    & > span::after {
       background: var(--brand-color);
     }
   }
@@ -55,5 +56,14 @@ $underline-height: 2.5px;
     span {
       color: var(--text-color-dimmed);
     }
+  }
+}
+.boldTextWidthFix {
+  position: absolute;
+  color: var(--text-color-dimmed);
+  @include transition-100ms(color);
+  &--active {
+    color: var(--text-color--normal);
+    font-weight: var(--font-weight-inter-medium);
   }
 }

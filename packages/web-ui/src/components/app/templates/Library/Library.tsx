@@ -11,7 +11,7 @@ import useSwipe from 'beautiful-react-hooks/useSwipe'
 
 /**
  * Notes:
- * "bottomOffset" is a visible height of footer scrolled into viewport
+ * "bottomOffset" is a footer visible height in the viewport
  */
 export namespace LibraryTypes {
   export type Props = {

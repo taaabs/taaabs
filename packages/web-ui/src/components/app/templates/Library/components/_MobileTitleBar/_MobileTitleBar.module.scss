@@ -14,15 +14,18 @@
 .icon {
   display: flex;
   align-items: center;
-  padding: 0 var(--distance-16px);
+  width: var(--app-bar-height);
   align-self: stretch;
   &--left {
+    padding-left: var(--distance-16px);
     & > div > svg {
-      width: var(--icon-dimension-20px);
-      height: var(--icon-dimension-20px);
+      width: var(--icon-dimension-21px);
+      height: var(--icon-dimension-21px);
     }
   }
   &--right {
+    padding-right: var(--distance-16px);
+    justify-content: flex-end;
     & > div > svg {
       width: var(--icon-dimension-28px);
       height: var(--icon-dimension-28px);

@@ -9,25 +9,25 @@ export default {
 export const Primary = () => (
   <StorybookMargin>
     <Wrapper>
-      <ButtonUnderlined isActive={true} href="/">
-        Lorem ispum
-      </ButtonUnderlined>
+      <ButtonUnderlined isActive={true} href="/" label="Lorem ispum" />
     </Wrapper>
     <StorybookSpacer />
     <Wrapper>
-      <ButtonUnderlined isActive={false} href="/">
-        Lorem ispum
-      </ButtonUnderlined>
+      <ButtonUnderlined isActive={false} href="/" label="Lorem ispum" />
+      Lorem ispum
     </Wrapper>
     <StorybookSpacer />
     <Wrapper>
-      <ButtonUnderlined isActive={true} onClick={() => {}}>
-        Lorem ispum
-      </ButtonUnderlined>
+      <ButtonUnderlined
+        isActive={true}
+        onClick={() => {}}
+        label="Lorem ispum"
+      />
+      Lorem ispum
     </Wrapper>
     <StorybookSpacer />
     <Wrapper>
-      <ButtonUnderlined isActive={false}>Lorem ispum</ButtonUnderlined>
+      <ButtonUnderlined isActive={false} label="Lorem ispum" />
     </Wrapper>
   </StorybookMargin>
 )

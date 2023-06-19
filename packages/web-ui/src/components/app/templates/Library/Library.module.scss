@@ -40,11 +40,14 @@
       height: 100% !important; // Overrides inline style intended for use at >992px
       overflow: auto;
       background: var(--library-background);
+      padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
+        var(--distance-16px);
     }
     @include at992 {
       top: var(--header-desktop-height);
       position: fixed;
       overflow: auto;
+      padding: var(--distance-16px) var(--distance-32px) var(--distance-16px) 0;
     }
   }
 }

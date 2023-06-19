@@ -4,7 +4,7 @@ import cn from 'classnames'
 
 export namespace ButtonUnderlinedTypes {
   export type Props = {
-    children: React.ReactNode
+    label: string
     href?: string
     onClick?: () => void
     isActive: boolean
@@ -14,6 +14,18 @@ export namespace ButtonUnderlinedTypes {
 export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (
   props,
 ) => {
+  const label = (
+    <>
+      <span>{props.label}</span>
+      <div
+        className={cn(styles.boldTextWidthFix, {
+          [styles['boldTextWidthFix--active']]: props.isActive,
+        })}
+      >
+        {props.label}
+      </div>
+    </>
+  )
   if (props.href != undefined) {
     return (
       <Link
@@ -22,7 +34,7 @@ export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (
         })}
         href={props.href}
       >
-        <span>{props.children}</span>
+        {label}
       </Link>
     )
   } else if (props.onClick != undefined) {
@@ -33,7 +45,7 @@ export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (
         })}
         onClick={props.onClick}
       >
-        <span>{props.children}</span>
+        {label}
       </button>
     )
   } else {
@@ -44,7 +56,7 @@ export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (
         })}
         disabled
       >
-        <span>{props.children}</span>
+        {label}
       </button>
     )
   }
