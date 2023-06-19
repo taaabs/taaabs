@@ -172,5 +172,15 @@
         display: none;
       }
     }
+    &__desktop-title-bar {
+      @include to992 {
+        display: none;
+      }
+    }
+    &__content {
+      @include to992 {
+        margin-top: var(--distance-8px);
+      }
+    }
   }
 }

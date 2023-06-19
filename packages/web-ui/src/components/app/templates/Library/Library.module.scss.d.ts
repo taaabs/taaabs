@@ -13,5 +13,7 @@ declare const styles: {
   readonly 'main__inner__mobile-alpha-overlay': string
   readonly 'main__inner__mobile-alpha-overlay--enabled': string
   readonly 'main__inner__mobile-title-bar': string
+  readonly 'main__inner__desktop-title-bar': string
+  readonly main__inner__content: string
 }
 export = styles

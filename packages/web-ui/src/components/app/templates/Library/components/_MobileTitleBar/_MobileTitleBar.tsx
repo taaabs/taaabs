@@ -23,8 +23,10 @@ export const _MobileTitleBar: React.FC<_MobileTitleBarTypes.Props> = (
         <Icon variant={'MOBILE_TITLE_BAR_MENU'} />
       </button>
       <div className={styles.content}>
-        <span>{props.primaryText}</span>
-        <span>{props.secondaryText}</span>
+        <span className={styles.content__primaryText}>{props.primaryText}</span>
+        <span className={styles.content__secondaryText}>
+          {props.secondaryText}
+        </span>
       </div>
       <button
         className={cn(styles.icon, styles['icon--right'])}

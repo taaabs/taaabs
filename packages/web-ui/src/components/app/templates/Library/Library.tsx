@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import StickyBox from 'react-sticky-box'
 import { sharedValues } from '@web-ui/constants'
 import { _MobileTitleBar } from './components/_MobileTitleBar'
+import { _DesktopTitleBar } from './components/_DesktopTitleBar'
 import cn from 'classnames'
 import styles from './Library.module.scss'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -130,6 +131,9 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
   }
 
   useUpdateEffect(() => {
+    if (!isSlideoutLeftDefinetelyClosed || !isSlideoutRightDefinetelyClosed)
+      return
+
     if (
       swipeState.swiping &&
       (swipeState.direction == 'up' || swipeState.direction == 'down') &&
@@ -142,8 +146,6 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
       setSlideoutRight(undefined)
     } else if (
       !swipeState.swiping &&
-      isSlideoutLeftDefinetelyClosed &&
-      isSlideoutRightDefinetelyClosed &&
       slideoutLeft == undefined &&
       slideoutRight == undefined
     ) {
@@ -224,7 +226,13 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                 secondaryText={props.titleBar.secondaryText}
               />
             </div>
-            <div>{props.children}</div>
+            <div className={styles['main__inner__desktop-title-bar']}>
+              <_DesktopTitleBar
+                primaryText={props.titleBar.primaryText}
+                secondaryText={props.titleBar.secondaryText}
+              />
+            </div>
+            <div className={styles.main__inner__content}>{props.children}</div>
           </div>
         </div>
 

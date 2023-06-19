@@ -4,5 +4,7 @@ declare const styles: {
   readonly 'icon--left': string
   readonly 'icon--right': string
   readonly content: string
+  readonly content__primaryText: string
+  readonly content__secondaryText: string
 }
 export = styles
