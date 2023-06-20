@@ -71,8 +71,25 @@
       overflow: auto;
       background: var(--library-background);
     }
+    @include at992 {
+    }
     &__stickybox {
-      height: 100%;
+      @include at992 {
+        height: 100%;
+      }
+      & > div {
+        @include to992 {
+          padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
+            var(--distance-16px);
+          // force override inline values coming from stickybox
+          position: relative !important;
+          top: 0 !important;
+        }
+        @include at992 {
+          padding: var(--distance-16px) 0 var(--distance-16px)
+            var(--distance-32px);
+        }
+      }
     }
   }
 }
