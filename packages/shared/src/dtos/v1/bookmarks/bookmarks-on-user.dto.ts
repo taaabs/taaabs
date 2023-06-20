@@ -9,49 +9,53 @@ import { NsfwBookmarks } from '@shared/dtos/common/bookmarks/nsfw-bookmarks'
 import { BookmarkVisibility } from '@shared/dtos/common/bookmarks/bookmark-visibility'
 
 export namespace BookmarksOnUserDto {
-  export class QueryParams extends PaginationQueryParamDto {
-    static defaultDateRange = DateRange.ANY
-    static defaultSortBy = SortBy.DATE_ASC
-    static defaultArchived = ArchivedBookmarks.EXCLUDE
-    static defaultNsfw = NsfwBookmarks.INCLUDE
-    static defaultStarredOnly = false
-    static defaultVisibility = BookmarkVisibility.ALL
+  export namespace QueryParams {
+    class QueryParams extends PaginationQueryParamDto {
+      static DEFAULT_DATE_RANGE = DateRange.ANY
+      static DEFAULT_SORT_BY = SortBy.DATE_ASC
+      static DEFAULT_ARCHIVED = ArchivedBookmarks.EXCLUDE
+      static DEFAULT_NSFW = NsfwBookmarks.INCLUDE
+      static DEFAULT_STARRED_ONLY = false
 
-    @ApiProperty({
-      description: 'Comma separated list of tags a bookmark must include.',
-      example: 'tagA,tagB,tagC',
-    })
-    tags?: string
+      @ApiProperty({
+        description: 'Comma separated list of tags a bookmark must include.',
+        example: 'tagA,tagB,tagC',
+      })
+      tags?: string
 
-    category_id?: string
+      category_id?: string
 
-    date_range?: DateRange = QueryParams.defaultDateRange
+      date_range?: DateRange = QueryParams.DEFAULT_DATE_RANGE
 
-    @ApiProperty({ description: 'Epoch timestamp in seconds.' })
-    @Type()
-    date_start?: number
+      @ApiProperty({ description: 'Epoch timestamp in seconds.' })
+      @Type()
+      date_start?: number
 
-    @ApiProperty({ description: 'Epoch timestamp in seconds.' })
-    @Type()
-    date_end?: number
+      @ApiProperty({ description: 'Epoch timestamp in seconds.' })
+      @Type()
+      date_end?: number
 
-    sort_by?: SortBy = QueryParams.defaultSortBy
+      sort_by?: SortBy = QueryParams.DEFAULT_SORT_BY
 
-    @Type()
-    @ApiProperty({
-      example: 'true',
-    })
-    starred_only?: boolean = QueryParams.defaultStarredOnly
+      @Type()
+      @ApiProperty({
+        example: 'true',
+      })
+      starred_only?: boolean = QueryParams.DEFAULT_STARRED_ONLY
 
-    archived?: ArchivedBookmarks = QueryParams.defaultArchived
+      archived?: ArchivedBookmarks = QueryParams.DEFAULT_ARCHIVED
 
-    nsfw?: NsfwBookmarks = QueryParams.defaultNsfw
+      nsfw?: NsfwBookmarks = QueryParams.DEFAULT_NSFW
+    }
 
-    @Type()
-    @ApiProperty({
-      description: 'Applies to bookmarks on requester only.',
-    })
-    visibility?: BookmarkVisibility = QueryParams.defaultVisibility
+    export class OnOtherUser extends QueryParams {}
+
+    export class OnCurrentUser extends QueryParams {
+      static readonly DEFAULT_VISIBILITY = BookmarkVisibility.ALL
+
+      @Type()
+      visibility?: BookmarkVisibility = OnCurrentUser.DEFAULT_VISIBILITY
+    }
   }
 
   export namespace Response {
@@ -62,23 +66,24 @@ export namespace BookmarksOnUserDto {
       url!: string
       createdAt!: string
       tags?: string[]
-      isStarred?: boolean
       sitePath?: string
+      isStarred?: boolean
       isArchived?: boolean
+      isNsfw?: boolean
       saves!: number
     }
 
     class BookmarkOnOtherUser extends Bookmark {}
 
     class BookmarkOnCurrentUser extends Bookmark {
-      visibility!: 'public' | 'private'
+      isPublic?: boolean
     }
 
-    export class OtherUser extends PaginatedResponseDto {
+    export class OnOtherUser extends PaginatedResponseDto {
       bookmarks!: BookmarkOnOtherUser[]
     }
 
-    export class CurrentUser extends PaginatedResponseDto {
+    export class OnCurrentUser extends PaginatedResponseDto {
       bookmarks!: BookmarkOnCurrentUser[]
     }
   }
