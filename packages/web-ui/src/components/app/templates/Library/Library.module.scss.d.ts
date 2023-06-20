@@ -5,8 +5,7 @@ declare const styles: {
   readonly sidebar__inner: string
   readonly aside: string
   readonly aside__inner: string
-  readonly aside__inner__mobile: string
-  readonly aside__inner__desktop: string
+  readonly aside__inner__stickybox: string
   readonly main: string
   readonly 'main--borders': string
   readonly main__inner: string

@@ -245,12 +245,11 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
           }}
         >
           <div className={styles.aside__inner}>
-            <div className={styles.aside__inner__desktop}>
+            <div className={styles.aside__inner__stickybox}>
               <StickyBox offsetTop={sharedValues.appHeaderDesktop}>
                 {props.slotAside}
               </StickyBox>
             </div>
-            <div className={styles.aside__inner__mobile}>{props.slotAside}</div>
           </div>
         </div>
       </div>

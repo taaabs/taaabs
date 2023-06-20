@@ -18,11 +18,11 @@ export const Primary = () => (
 export const Scrolling = () => (
   <Library
     slotSidebar={<div>{lorem}</div>}
-    slotAside={<>{lorem}</>}
+    slotAside={<div>{lorem}</div>}
     titleBar={{ primaryText: 'Lorem ipsum', secondaryText: 'lorem' }}
     bottomOffset={0}
   >
-    {lorem}
+    {lorem} {lorem} {lorem} {lorem}
   </Library>
 )
 

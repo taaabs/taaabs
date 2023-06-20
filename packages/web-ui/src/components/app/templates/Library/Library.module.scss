@@ -66,23 +66,12 @@
     margin-top: var(--header-desktop-height);
   }
   &__inner {
+    height: 100%;
     @include to992 {
-      height: 100%;
       overflow: auto;
       background: var(--library-background);
     }
-    @include at992 {
-      height: 100%;
-    }
-    &__mobile {
-      @include at992 {
-        display: none;
-      }
-    }
-    &__desktop {
-      @include to992 {
-        display: none;
-      }
+    &__stickybox {
       height: 100%;
     }
   }
