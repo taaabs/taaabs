@@ -11,11 +11,11 @@ import { BookmarkVisibility } from '@shared/dtos/common/bookmarks/bookmark-visib
 export namespace BookmarksOnUserDto {
   export namespace QueryParams {
     class QueryParams extends PaginationQueryParamDto {
-      static DEFAULT_DATE_RANGE = DateRange.ANY
-      static DEFAULT_SORT_BY = SortBy.DATE_ASC
-      static DEFAULT_ARCHIVED = ArchivedBookmarks.EXCLUDE
-      static DEFAULT_NSFW = NsfwBookmarks.INCLUDE
-      static DEFAULT_STARRED_ONLY = false
+      static readonly DEFAULT_DATE_RANGE = DateRange.ANY
+      static readonly DEFAULT_SORT_BY = SortBy.DATE_ASC
+      static readonly DEFAULT_ARCHIVED = ArchivedBookmarks.EXCLUDE
+      static readonly DEFAULT_NSFW = NsfwBookmarks.INCLUDE
+      static readonly DEFAULT_STARRED_ONLY = false
 
       @ApiProperty({
         description: 'Comma separated list of tags a bookmark must include.',
@@ -37,10 +37,10 @@ export namespace BookmarksOnUserDto {
 
       sort_by?: SortBy = QueryParams.DEFAULT_SORT_BY
 
-      @Type()
       @ApiProperty({
         example: 'true',
       })
+      @Type()
       starred_only?: boolean = QueryParams.DEFAULT_STARRED_ONLY
 
       archived?: ArchivedBookmarks = QueryParams.DEFAULT_ARCHIVED
@@ -53,7 +53,6 @@ export namespace BookmarksOnUserDto {
     export class OnCurrentUser extends QueryParams {
       static readonly DEFAULT_VISIBILITY = BookmarkVisibility.ALL
 
-      @Type()
       visibility?: BookmarkVisibility = OnCurrentUser.DEFAULT_VISIBILITY
     }
   }
