@@ -7,13 +7,12 @@
   &__item {
     display: flex;
     align-items: center;
-    height: var(--button-dimension-46px);
+    height: var(--button-dimension-48px);
     @include transition-100ms(color);
     color: var(--text-color-dimmed);
-    font-size: var(--font-size-18px);
+    font-size: var(--font-size-20px);
     @include at992 {
       height: var(--button-dimension-52px);
-      font-size: var(--font-size-20px);
     }
     @include hover {
       color: var(--text-color--normal);

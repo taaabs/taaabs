@@ -1,0 +1,4 @@
+/@*/:path.txt /username/:path.txt 200
+/@*.txt /username.txt 200
+/@:username https://:username.taaabs.com 301
+/@:username/* https://:username.taaabs.com/:splat 301

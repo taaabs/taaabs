@@ -79,10 +79,10 @@
     letter-spacing: var(--letter-spacing-logo);
     padding-left: var(--distance-12px);
     font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
-    font-size: var(--font-size-20px);
+    font-size: var(--font-size-21px);
     margin-bottom: var(--distance-1px);
     @include at992 {
-      font-size: (--font-size-22px);
+      font-size: (--font-size-24px);
       margin-bottom: var(--distance-2px);
     }
   }

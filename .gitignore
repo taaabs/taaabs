@@ -1,7 +1,6 @@
-node_modules
 /.vscode
+node_modules
 dist
 .env
 build
-storybook-static
 coverage

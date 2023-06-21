@@ -71,8 +71,6 @@
       overflow: auto;
       background: var(--library-background);
     }
-    @include at992 {
-    }
     &__stickybox {
       @include at992 {
         height: 100%;

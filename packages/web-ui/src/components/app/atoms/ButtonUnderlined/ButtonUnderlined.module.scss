@@ -1,20 +1,18 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
-$underline-height: 2.5px;
-
 .button {
   display: inline-flex;
   height: 100%;
   width: 100%;
   align-items: center;
   justify-content: center;
-  padding: 0 var(--distance-6px);
+  padding: 0 var(--distance-8px);
   position: relative;
   color: var(--text-color-variant);
+  font-size: var(--font-size-16px);
   @include transition-100ms(background-color);
   @include at992 {
-    font-size: var(--font-size-16px);
     padding: 0 var(--distance-12px);
   }
   & > span {
@@ -25,16 +23,23 @@ $underline-height: 2.5px;
     font-weight: var(--font-weight-inter-medium);
     color: transparent;
     &::after {
+      $underline-height: 2.7px;
+      height: $underline-height;
+      border-top-right-radius: $underline-height;
+      border-top-left-radius: $underline-height;
+      @include at992 {
+        $underline-height: 3px;
+        height: $underline-height;
+        border-top-right-radius: $underline-height;
+        border-top-left-radius: $underline-height;
+      }
       position: absolute;
       content: '';
       width: 100%;
-      height: $underline-height;
       bottom: 0;
       left: 0;
       margin-left: 50%;
       transform: translateX(-50%);
-      border-top-right-radius: $underline-height;
-      border-top-left-radius: $underline-height;
       @include transition-100ms(background-color);
     }
   }
