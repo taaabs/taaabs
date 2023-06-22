@@ -83,7 +83,7 @@
     font-size: var(--font-size-1-3rem);
     padding: var(--distance-0-4rem) 0 var(--distance-0-8rem) 0;
     @include hover {
-      & span {
+      span {
         text-decoration: underline;
       }
     }
@@ -157,14 +157,14 @@
         order: -1;
       }
     }
-    & > div > svg {
+    svg {
       width: var(--icon-dimension-16px);
       height: var(--icon-dimension-16px);
       fill: var(--bookmark-action-fill);
       @include transition-100ms(fill);
     }
     @include hover {
-      & svg {
+      svg {
         fill: var(--bookmark-action-fill-hover);
       }
     }

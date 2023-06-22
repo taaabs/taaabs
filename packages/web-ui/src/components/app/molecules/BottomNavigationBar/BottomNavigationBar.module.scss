@@ -8,12 +8,12 @@
   display: flex;
   justify-content: space-around;
   box-sizing: content-box;
-  & > button {
+  button {
     width: var(--button-dimension-48px);
     display: flex;
     align-items: center;
     justify-content: center;
-    & svg {
+    svg {
       height: var(--icon-dimension-24px);
     }
   }

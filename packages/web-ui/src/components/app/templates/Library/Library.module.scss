@@ -75,7 +75,7 @@
       @include at992 {
         height: 100%;
       }
-      & > div {
+      > div {
         @include to992 {
           padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
             var(--distance-16px);

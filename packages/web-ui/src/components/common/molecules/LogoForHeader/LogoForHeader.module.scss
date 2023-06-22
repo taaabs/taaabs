@@ -4,7 +4,7 @@
 .logo {
   display: flex;
   align-items: center;
-  & span {
+  span {
     color: var(--color-text--normal);
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
@@ -18,7 +18,7 @@
       margin-bottom: var(--distance-4px);
     }
   }
-  & svg {
+  svg {
     fill: var(--logo-background);
     height: 34px;
     @include at992 {
@@ -26,7 +26,7 @@
     }
   }
   &--large {
-    & span {
+    span {
       padding-left: var(--distance-10px);
       font-size: 30px;
       margin-bottom: var(--distance-4px);
@@ -41,7 +41,7 @@
         margin-bottom: var(--distance-6px);
       }
     }
-    & svg {
+    svg {
       height: 48px;
       @include at992 {
         height: 55px;
