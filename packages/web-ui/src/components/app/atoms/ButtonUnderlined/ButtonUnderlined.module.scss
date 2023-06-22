@@ -9,13 +9,21 @@
   justify-content: center;
   padding: 0 var(--distance-8px);
   position: relative;
-  color: var(--text-color-variant);
   font-size: var(--font-size-16px);
   @include transition-100ms(background-color);
   @include at992 {
     padding: 0 var(--distance-12px);
   }
-  & > span {
+  &::before {
+    content: attr(title);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  @include hover {
+    background: var(--button-underlined-background-hover);
+  }
+  span {
     height: 100%;
     display: inline-flex;
     align-items: center;
@@ -43,28 +51,24 @@
       @include transition-100ms(background-color);
     }
   }
-  @include hover {
-    background: var(--button-underlined-background-hover);
-  }
   &--active {
-    & > span::after {
-      background: var(--brand-color);
+    &::before {
+      color: transparent;
+    }
+    span {
+      color: inherit;
+      &::after {
+        background: var(--brand-color);
+      }
     }
   }
-}
-.button-disabled {
   &:disabled {
     pointer-events: none;
-    span {
+    &::before {
       color: var(--text-color-dimmed);
     }
-  }
-}
-.boldTextWidthFix {
-  position: absolute;
-  color: var(--text-color--normal);
-  @include transition-100ms(color);
-  &--active {
-    font-weight: var(--font-weight-inter-medium);
+    span {
+      color: transparent;
+    }
   }
 }

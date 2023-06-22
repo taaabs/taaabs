@@ -14,18 +14,6 @@ export namespace ButtonUnderlinedTypes {
 export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (
   props,
 ) => {
-  const label = (
-    <>
-      <span>{props.label}</span>
-      <div
-        className={cn(styles.boldTextWidthFix, {
-          [styles['boldTextWidthFix--active']]: props.isActive,
-        })}
-      >
-        {props.label}
-      </div>
-    </>
-  )
   if (props.href != undefined) {
     return (
       <Link
@@ -33,30 +21,22 @@ export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (
           [styles['button--active']]: props.isActive,
         })}
         href={props.href}
+        title={props.label}
       >
-        {label}
+        <span>{props.label}</span>
       </Link>
-    )
-  } else if (props.onClick != undefined) {
-    return (
-      <button
-        className={cn(styles.button, styles['button-disabled'], {
-          [styles['button--active']]: props.isActive,
-        })}
-        onClick={props.onClick}
-      >
-        {label}
-      </button>
     )
   } else {
     return (
       <button
-        className={cn(styles.button, styles['button-disabled'], {
+        className={cn(styles.button, {
           [styles['button--active']]: props.isActive,
         })}
-        disabled
+        onClick={props.onClick}
+        title={props.label}
+        disabled={!props.onClick && true}
       >
-        {label}
+        <span>{props.label}</span>
       </button>
     )
   }

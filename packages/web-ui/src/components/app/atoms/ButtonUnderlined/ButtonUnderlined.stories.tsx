@@ -8,30 +8,22 @@ export default {
 
 export const Primary = () => (
   <StorybookMargin>
-    <Wrapper>
+    <_Wrapper>
       <ButtonUnderlined isActive={true} href="/" label="Lorem ispum" />
-    </Wrapper>
-    <StorybookSpacer />
-    <Wrapper>
+      <StorybookSpacer />
       <ButtonUnderlined isActive={false} href="/" label="Lorem ispum" />
-      Lorem ispum
-    </Wrapper>
-    <StorybookSpacer />
-    <Wrapper>
+      <StorybookSpacer />
       <ButtonUnderlined
         isActive={true}
         onClick={() => {}}
         label="Lorem ispum"
       />
-      Lorem ispum
-    </Wrapper>
-    <StorybookSpacer />
-    <Wrapper>
+      <StorybookSpacer />
       <ButtonUnderlined isActive={false} label="Lorem ispum" />
-    </Wrapper>
+    </_Wrapper>
   </StorybookMargin>
 )
 
-const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const _Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <div style={{ height: '50px', width: '200px' }}>{children}</div>
 }
