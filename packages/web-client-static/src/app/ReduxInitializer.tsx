@@ -11,5 +11,6 @@ export const ReduxInitializer: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     dispatch(UserDataActions.fetchUserData())
   })
+
   return <>{children}</>
 }

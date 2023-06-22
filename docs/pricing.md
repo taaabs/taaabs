@@ -1,6 +1,6 @@
 Free
 
-- unlimited bookmarks public/private
+- unlimited bookmarks (public and private)
 
 Pro
 

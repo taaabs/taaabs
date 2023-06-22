@@ -44,7 +44,6 @@
     ".next/types/**/*.ts",
     "../web-ui/src/**/*.ts",
     "../repositories/src/**/*.ts",
-    "src/app/(app)/username/library"
   ],
   "exclude": [
     "node_modules",
