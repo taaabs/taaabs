@@ -1,5 +1,0 @@
-Envirioments:
-
-- develop
-- staging
-- prod

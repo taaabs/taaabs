@@ -1,8 +1,8 @@
-Free
+### Free
 
 - unlimited bookmarks (public and private)
 
-Pro
+### Pro
 
 - date range selector
 - nsfw exclusive/excluded filter
@@ -14,11 +14,3 @@ Pro
 - full text search
 
 Cost: $3 monthly
-
-Pro+
-
-- all urls are copied
-- website update notifications
-- 2FA
-
-Cost: $5 monthly

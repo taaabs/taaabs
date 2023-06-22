@@ -11,6 +11,6 @@
 
 Stored urls must not have them. Websites redirecting to trailing slash should be marked with a boolean value and logic should be added to avoid redirects upon website visit.
 
-4. All query parameters must be ordered alphabetically, repeated params' values must be ordered as well/
+4. To ensure equal URL hases, all query parameters should be ordered alphabetically, repeated params' values must be ordered as well.
 
 5. Some query parameters should be stripped off the link, e.g. "ref".
