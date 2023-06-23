@@ -7,7 +7,7 @@ describe('GetBookmarksOnCurrentUser', () => {
     const bookmarksRepositoryMock = new BookmarksRepositoryMock()
     bookmarksRepositoryMock.getBookmarksOnCurrentUser = jest.fn()
     const sut = new GetBookmarksOnCurrentUser(bookmarksRepositoryMock)
-    sut.invoke({ params: {} })
+    sut.invoke({})
     expect(bookmarksRepositoryMock.getBookmarksOnCurrentUser).toHaveBeenCalled()
   })
 })

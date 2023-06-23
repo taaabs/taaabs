@@ -1,7 +1,7 @@
-import { BookmarksRepository } from '@/bookmarks/domain/repositories/bookmarks.repository'
+import { BookmarksRepository } from '@/modules/bookmarks/domain/repositories/bookmarks.repository'
 import { BookmarksDataSource } from '../datasources/bookmarks-data-source'
 import { BookmarksDto } from '@shared/dtos/v1/bookmarks/bookmarks-on-user.dto'
-import { BookmarksRo } from '@/bookmarks/domain/types/bookmarks.ro'
+import { BookmarksRo } from '@/modules/bookmarks/domain/types/bookmarks.ro'
 
 export class BookmarksRepositoryImpl implements BookmarksRepository {
   constructor(private _bookmarksDataSource: BookmarksDataSource) {}
@@ -18,8 +18,8 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
       bookmarks: bookmarks.map((bookmark) => {
         return {
           id: bookmark.id,
-          createdAt: bookmark.createdAt,
-          text: bookmark.text,
+          createdAt: new Date(bookmark.createdAt),
+          text: bookmark.text || null,
           title: bookmark.title,
           isArchived: bookmark.isArchived || false,
           isNsfw: bookmark.isNsfw || false,
@@ -27,7 +27,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
           saves: bookmark.saves,
           tags: bookmark.tags || [],
           url: bookmark.url,
-          sitePath: bookmark.sitePath,
+          sitePath: bookmark.sitePath || null,
           isPublic: bookmark.isPublic || false,
         }
       }),
@@ -53,8 +53,8 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
     return {
       bookmarks: bookmarks.map((bookmark) => ({
         id: bookmark.id,
-        createdAt: bookmark.createdAt,
-        text: bookmark.text,
+        createdAt: new Date(bookmark.createdAt),
+        text: bookmark.text || null,
         title: bookmark.title,
         isArchived: bookmark.isArchived || false,
         isNsfw: bookmark.isNsfw || false,
@@ -62,7 +62,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
         saves: bookmark.saves,
         tags: bookmark.tags || [],
         url: bookmark.url,
-        sitePath: bookmark.sitePath,
+        sitePath: bookmark.sitePath || null,
       })),
       pagination: {
         hasMore: pagination.hasMore,
