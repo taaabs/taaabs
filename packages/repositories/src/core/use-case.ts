@@ -3,3 +3,4 @@ export abstract class UseCase<T, P> {
 }
 
 export type NoParams = {}
+export type NoPlaceholders = {}

@@ -12,14 +12,14 @@
       "@/*": [
         "src/*"
       ],
-      "@repositories/*": [
-        "../repositories/src/*"
+      "@shared/*": [
+        "../shared/src/*"
       ]
     }
   },
   "include": [
     "src/**/*.ts",
-    "../repositories/src/**/*.ts"
+    "../shared/src/**/*.ts"
   ],
   "exclude": [
     "node_modules"

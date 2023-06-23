@@ -179,6 +179,9 @@ importers:
       '@taaabs/shared':
         specifier: workspace:*
         version: link:../shared
+      axios:
+        specifier: ^1.4.0
+        version: 1.4.0
     devDependencies:
       '@types/jest':
         specifier: ^29.4.0

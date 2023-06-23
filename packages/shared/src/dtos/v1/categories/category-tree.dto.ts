@@ -3,10 +3,10 @@ export namespace CategoryTreeDto {
     id!: string
     name!: string
     order?: number
-    children?: Array<Category>
+    children?: Category[]
   }
 
   export class Response {
-    categories!: Array<Category>
+    categories!: Category[]
   }
 }

@@ -8,7 +8,7 @@ import { Type } from 'class-transformer'
 import { NsfwBookmarks } from '@shared/dtos/common/bookmarks/nsfw-bookmarks'
 import { BookmarkVisibility } from '@shared/dtos/common/bookmarks/bookmark-visibility'
 
-export namespace BookmarksOnUserDto {
+export namespace BookmarksDto {
   export namespace QueryParams {
     class QueryParams extends PaginationQueryParamDto {
       static readonly DEFAULT_DATE_RANGE = DateRange.ANY
@@ -48,13 +48,13 @@ export namespace BookmarksOnUserDto {
       nsfw?: NsfwBookmarks = QueryParams.DEFAULT_NSFW
     }
 
-    export class OnOtherUser extends QueryParams {}
-
     export class OnCurrentUser extends QueryParams {
       static readonly DEFAULT_VISIBILITY = BookmarkVisibility.ALL
 
       visibility?: BookmarkVisibility = OnCurrentUser.DEFAULT_VISIBILITY
     }
+
+    export class OnOtherUser extends QueryParams {}
   }
 
   export namespace Response {
@@ -72,18 +72,18 @@ export namespace BookmarksOnUserDto {
       saves!: number
     }
 
-    class BookmarkOnOtherUser extends Bookmark {}
-
     class BookmarkOnCurrentUser extends Bookmark {
       isPublic?: boolean
     }
 
-    export class OnOtherUser extends PaginatedResponseDto {
-      bookmarks!: BookmarkOnOtherUser[]
-    }
+    class BookmarkOnOtherUser extends Bookmark {}
 
     export class OnCurrentUser extends PaginatedResponseDto {
       bookmarks!: BookmarkOnCurrentUser[]
+    }
+
+    export class OnOtherUser extends PaginatedResponseDto {
+      bookmarks!: BookmarkOnOtherUser[]
     }
   }
 }
