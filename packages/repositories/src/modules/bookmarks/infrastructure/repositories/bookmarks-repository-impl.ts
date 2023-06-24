@@ -4,7 +4,7 @@ import { BookmarksDto } from '@shared/dtos/v1/bookmarks/bookmarks-on-user.dto'
 import { BookmarksRo } from '@/modules/bookmarks/domain/types/bookmarks.ro'
 
 export class BookmarksRepositoryImpl implements BookmarksRepository {
-  constructor(private _bookmarksDataSource: BookmarksDataSource) {}
+  constructor(private readonly _bookmarksDataSource: BookmarksDataSource) {}
 
   async getBookmarksOnCurrentUser({
     params,

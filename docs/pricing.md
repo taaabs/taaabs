@@ -9,7 +9,6 @@
 - starred only filter
 - categories
 - presets
-- related tags counts
 - dead links discovery
 - full text search
 

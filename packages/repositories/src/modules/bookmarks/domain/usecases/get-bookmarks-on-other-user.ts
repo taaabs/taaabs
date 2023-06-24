@@ -8,7 +8,7 @@ type Params = BookmarksDto.QueryParams.OnOtherUser & { username: string }
 export class GetBookmarksOnOtherUser
   implements UseCase<Promise<BookmarksRo.OnOtherUser>, Params>
 {
-  constructor(private repository: BookmarksRepository) {}
+  constructor(private readonly repository: BookmarksRepository) {}
 
   async invoke(params: Params) {
     return this.repository.getBookmarksOnOtherUser({

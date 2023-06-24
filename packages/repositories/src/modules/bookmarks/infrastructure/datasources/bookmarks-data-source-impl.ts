@@ -3,7 +3,7 @@ import { BookmarksDataSource } from './bookmarks-data-source'
 import { BookmarksDto } from '@shared/dtos/v1/bookmarks/bookmarks-on-user.dto'
 
 export class BookmarksDataSourceImpl implements BookmarksDataSource {
-  constructor(private axios: AxiosInstance) {}
+  constructor(private readonly axios: AxiosInstance) {}
 
   async getBookmarksOnCurrentUser({
     params,

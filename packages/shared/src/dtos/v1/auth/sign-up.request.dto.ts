@@ -4,10 +4,10 @@ import { systemValues } from '@shared/constants/system-values'
 
 export class SignUp_Request_Dto {
   @MinLength(systemValues.usernameMinLength)
-  username!: string
+  username: string
 
   @IsEmail()
-  email!: string
+  email: string
 
   @MinLength(systemValues.passwordLength)
   @MaxLength(systemValues.passwordLength)
@@ -15,5 +15,5 @@ export class SignUp_Request_Dto {
     description:
       'Passwords sent over the network are SHA256 hashes made of concatenated email and password',
   })
-  password!: string
+  password: string
 }

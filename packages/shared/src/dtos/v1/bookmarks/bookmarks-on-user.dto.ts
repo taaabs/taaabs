@@ -8,14 +8,14 @@ import { Type } from 'class-transformer'
 import { NsfwBookmarks } from '@shared/dtos/common/bookmarks/nsfw-bookmarks'
 import { BookmarkVisibility } from '@shared/dtos/common/bookmarks/bookmark-visibility'
 
-export namespace BookmarksDto {
+export namespace BookmarksOnUserDto {
   export namespace QueryParams {
     class QueryParams extends PaginationQueryParamDto {
-      static readonly DEFAULT_DATE_RANGE = DateRange.ANY
-      static readonly DEFAULT_SORT_BY = SortBy.DATE_ASC
-      static readonly DEFAULT_ARCHIVED = ArchivedBookmarks.EXCLUDE
-      static readonly DEFAULT_NSFW = NsfwBookmarks.INCLUDE
-      static readonly DEFAULT_STARRED_ONLY = false
+      static DEFAULT_DATE_RANGE = DateRange.ANY
+      static DEFAULT_SORT_BY = SortBy.DATE_ASC
+      static DEFAULT_ARCHIVED = ArchivedBookmarks.EXCLUDE
+      static DEFAULT_NSFW = NsfwBookmarks.INCLUDE
+      static DEFAULT_STARRED_ONLY = false
 
       @ApiProperty({
         description: 'Comma separated list of tags a bookmark must include.',
@@ -49,7 +49,7 @@ export namespace BookmarksDto {
     }
 
     export class OnCurrentUser extends QueryParams {
-      static readonly DEFAULT_VISIBILITY = BookmarkVisibility.ALL
+      static DEFAULT_VISIBILITY = BookmarkVisibility.ALL
 
       visibility?: BookmarkVisibility = OnCurrentUser.DEFAULT_VISIBILITY
     }
@@ -59,31 +59,29 @@ export namespace BookmarksDto {
 
   export namespace Response {
     class Bookmark {
-      id!: string
-      title!: string
+      id: string
+      title: string
       text?: string
-      url!: string
-      createdAt!: string
+      url: string
+      createdAt: string
       tags?: string[]
       sitePath?: string
       isStarred?: boolean
       isArchived?: boolean
       isNsfw?: boolean
-      saves!: number
+      saves?: number
     }
 
     class BookmarkOnCurrentUser extends Bookmark {
       isPublic?: boolean
     }
-
     class BookmarkOnOtherUser extends Bookmark {}
 
     export class OnCurrentUser extends PaginatedResponseDto {
-      bookmarks!: BookmarkOnCurrentUser[]
+      bookmarks: BookmarkOnCurrentUser[]
     }
-
     export class OnOtherUser extends PaginatedResponseDto {
-      bookmarks!: BookmarkOnOtherUser[]
+      bookmarks: BookmarkOnOtherUser[]
     }
   }
 }
