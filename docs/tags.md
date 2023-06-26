@@ -69,3 +69,10 @@ The objective is to list in the aside all tags occuring on visible bookmarks wit
 | 7      | 11    |
 
 Counting occurences of each tag gives number of bookmarks that are going to be shown upon its selection.
+
+
+# What characters are allowed in tag names?
+
+https://meta.stackexchange.com/a/298981
+
+a-z 0-9 + # - .

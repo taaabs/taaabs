@@ -2,7 +2,7 @@ import { IsEmail, MaxLength, MinLength } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 import { systemValues } from '@shared/constants/system-values'
 
-export class SignUp_Request_Dto {
+export class SignUpRequestDto {
   @MinLength(systemValues.usernameMinLength)
   username: string
 

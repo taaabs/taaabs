@@ -4,6 +4,7 @@
 
 ### Pro
 
+- sorting by popularity
 - date range selector
 - nsfw exclusive/excluded filter
 - starred only filter

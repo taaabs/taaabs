@@ -63,25 +63,25 @@ export namespace BookmarksOnUserDto {
       title: string
       text?: string
       url: string
-      createdAt: string
+      created_at: string
       tags?: string[]
-      sitePath?: string
-      isStarred?: boolean
-      isArchived?: boolean
-      isNsfw?: boolean
+      site_path?: string
+      is_starred?: boolean
+      is_archived?: boolean
+      is_nsfw?: boolean
       saves?: number
     }
 
-    class BookmarkOnCurrentUser extends Bookmark {
-      isPublic?: boolean
+    class BookmarkAll extends Bookmark {
+      is_public?: boolean
     }
-    class BookmarkOnOtherUser extends Bookmark {}
+    class BookmarkPublic extends Bookmark {}
 
-    export class OnCurrentUser extends PaginatedResponseDto {
-      bookmarks: BookmarkOnCurrentUser[]
+    export class All extends PaginatedResponseDto {
+      bookmarks: BookmarkAll[]
     }
-    export class OnOtherUser extends PaginatedResponseDto {
-      bookmarks: BookmarkOnOtherUser[]
+    export class Public extends PaginatedResponseDto {
+      bookmarks: BookmarkPublic[]
     }
   }
 }
