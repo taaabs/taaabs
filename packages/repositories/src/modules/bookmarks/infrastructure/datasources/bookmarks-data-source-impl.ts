@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosResponse } from 'axios'
 import { BookmarksDataSource } from './bookmarks-data-source'
-import { BookmarksDto } from '@shared/dtos/v1/bookmarks/bookmarks-on-user.dto'
+import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-user.dto'
 
 export class BookmarksDataSourceImpl implements BookmarksDataSource {
   constructor(private readonly axios: AxiosInstance) {}
@@ -8,9 +8,9 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
   async getBookmarksOnCurrentUser({
     params,
   }: {
-    params: BookmarksDto.QueryParams.OnCurrentUser
-  }): Promise<BookmarksDto.Response.OnCurrentUser> {
-    const response: AxiosResponse<BookmarksDto.Response.OnCurrentUser> =
+    params: BookmarksOnUserDto.QueryParams.OnCurrentUser
+  }): Promise<BookmarksOnUserDto.Response.All> {
+    const response: AxiosResponse<BookmarksOnUserDto.Response.All> =
       await this.axios.get('/v1/bookmarks', { params })
 
     return response.data
@@ -21,9 +21,9 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
     params,
   }: {
     username: string
-    params: BookmarksDto.QueryParams.OnOtherUser
-  }): Promise<BookmarksDto.Response.OnOtherUser> {
-    const response: AxiosResponse<BookmarksDto.Response.OnOtherUser> =
+    params: BookmarksOnUserDto.QueryParams.OnOtherUser
+  }): Promise<BookmarksOnUserDto.Response.Public> {
+    const response: AxiosResponse<BookmarksOnUserDto.Response.Public> =
       await this.axios.get(`/v1/bookmarks/${username}`, { params })
 
     return response.data

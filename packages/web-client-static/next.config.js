@@ -4,7 +4,6 @@
 
 const nextConfig = {
   output: 'export',
-  // trailingSlash: true,
   transpilePackages: ['@taaabs/web-ui', '@taaabs/repositories'],
   typescript: {
     ignoreBuildErrors: true,

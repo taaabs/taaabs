@@ -1,7 +1,7 @@
 import { BookmarksRepository } from '@/modules/bookmarks/domain/repositories/bookmarks.repository'
 import { BookmarksDataSource } from '../datasources/bookmarks-data-source'
-import { BookmarksDto } from '@shared/dtos/v1/bookmarks/bookmarks-on-user.dto'
 import { BookmarksRo } from '@/modules/bookmarks/domain/types/bookmarks.ro'
+import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-user.dto'
 
 export class BookmarksRepositoryImpl implements BookmarksRepository {
   constructor(private readonly _bookmarksDataSource: BookmarksDataSource) {}
@@ -9,7 +9,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
   async getBookmarksOnCurrentUser({
     params,
   }: {
-    params: BookmarksDto.QueryParams.OnCurrentUser
+    params: BookmarksOnUserDto.QueryParams.OnCurrentUser
   }): Promise<BookmarksRo.OnCurrentUser> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.getBookmarksOnCurrentUser({ params })
@@ -18,17 +18,17 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
       bookmarks: bookmarks.map((bookmark) => {
         return {
           id: bookmark.id,
-          createdAt: new Date(bookmark.createdAt),
+          createdAt: new Date(bookmark.created_at),
           text: bookmark.text || null,
           title: bookmark.title,
-          isArchived: bookmark.isArchived || false,
-          isNsfw: bookmark.isNsfw || false,
-          isStarred: bookmark.isStarred || false,
-          saves: bookmark.saves,
+          isArchived: bookmark.is_archived || false,
+          isNsfw: bookmark.is_nsfw || false,
+          isStarred: bookmark.is_starred || false,
+          saves: bookmark.saves || 0,
           tags: bookmark.tags || [],
           url: bookmark.url,
-          sitePath: bookmark.sitePath || null,
-          isPublic: bookmark.isPublic || false,
+          sitePath: bookmark.site_path || null,
+          isPublic: bookmark.is_public || false,
         }
       }),
       pagination: {
@@ -42,7 +42,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
     params,
   }: {
     username: string
-    params: BookmarksDto.QueryParams.OnOtherUser
+    params: BookmarksOnUserDto.QueryParams.OnOtherUser
   }): Promise<BookmarksRo.OnOtherUser> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.getBookmarksOnOtherUser({
@@ -53,16 +53,16 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
     return {
       bookmarks: bookmarks.map((bookmark) => ({
         id: bookmark.id,
-        createdAt: new Date(bookmark.createdAt),
+        createdAt: new Date(bookmark.created_at),
         text: bookmark.text || null,
         title: bookmark.title,
-        isArchived: bookmark.isArchived || false,
-        isNsfw: bookmark.isNsfw || false,
-        isStarred: bookmark.isStarred || false,
-        saves: bookmark.saves,
+        isArchived: bookmark.is_archived || false,
+        isNsfw: bookmark.is_nsfw || false,
+        isStarred: bookmark.is_starred || false,
+        saves: bookmark.saves || 0,
         tags: bookmark.tags || [],
         url: bookmark.url,
-        sitePath: bookmark.sitePath || null,
+        sitePath: bookmark.site_path || null,
       })),
       pagination: {
         hasMore: pagination.hasMore,
