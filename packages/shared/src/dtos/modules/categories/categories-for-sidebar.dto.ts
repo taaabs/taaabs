@@ -5,22 +5,22 @@ export namespace CategoriesForSidebarDto {
     order?: number
   }
 
-  export class CategoryOnCurrentUser extends Category {
-    children?: CategoryOnCurrentUser[]
+  export class CategoryAuthorized extends Category {
+    children?: CategoryAuthorized[]
     isPublic?: boolean
   }
 
-  export class CategoryOnOtherUser extends Category {
+  export class CategoryPublic extends Category {
     children?: Category[]
   }
 
   export namespace Response {
-    export class All {
-      categories: CategoryOnCurrentUser[]
+    export class Authorized {
+      categories: CategoryAuthorized[]
     }
 
     export class Public {
-      categories: CategoryOnOtherUser[]
+      categories: CategoryPublic[]
     }
   }
 }
