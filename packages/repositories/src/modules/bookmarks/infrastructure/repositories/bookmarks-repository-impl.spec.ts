@@ -23,7 +23,7 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-      const ro: BookmarksRo.OnCurrentUser = {
+      const ro: BookmarksRo.Authorized = {
         bookmarks: [
           {
             id: '1',
@@ -51,7 +51,7 @@ describe('BookmarksRepositoryImpl', () => {
         () => new Promise((resolve) => resolve(dto)),
       )
       const sut = new BookmarksRepositoryImpl(mockBookmarksDataSource)
-      const result = await sut.getBookmarksOnCurrentUser({ params: {} })
+      const result = await sut.getAuthorizedBookmarks({ params: {} })
       expect(result).toStrictEqual(ro)
     })
   })
@@ -72,7 +72,7 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-      const ro: BookmarksRo.OnOtherUser = {
+      const ro: BookmarksRo.Public = {
         bookmarks: [
           {
             id: '1',
@@ -99,7 +99,7 @@ describe('BookmarksRepositoryImpl', () => {
         () => new Promise((resolve) => resolve(dto)),
       )
       const sut = new BookmarksRepositoryImpl(mockBookmarksDataSource)
-      const result = await sut.getBookmarksOnOtherUser({
+      const result = await sut.getPublicBookmarks({
         params: {},
         username: '',
       })

@@ -6,12 +6,12 @@ import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-
 type Params = BookmarksOnUserDto.QueryParams.Public & { username: string }
 
 export class GetBookmarksOnOtherUser
-  implements UseCase<Promise<BookmarksRo.OnOtherUser>, Params>
+  implements UseCase<Promise<BookmarksRo.Public>, Params>
 {
   constructor(private readonly repository: BookmarksRepository) {}
 
   async invoke(params: Params) {
-    return this.repository.getBookmarksOnOtherUser({
+    return this.repository.getPublicBookmarks({
       params,
       username: params.username,
     })

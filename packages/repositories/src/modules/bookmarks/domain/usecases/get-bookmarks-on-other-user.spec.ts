@@ -5,9 +5,9 @@ describe('GetBookmarksOnOtherUser', () => {
   it('calls correct method from repository', () => {
     const BookmarksRepositoryMock = jest.fn<BookmarksRepository, []>()
     const bookmarksRepositoryMock = new BookmarksRepositoryMock()
-    bookmarksRepositoryMock.getBookmarksOnOtherUser = jest.fn()
+    bookmarksRepositoryMock.getPublicBookmarks = jest.fn()
     const sut = new GetBookmarksOnOtherUser(bookmarksRepositoryMock)
     sut.invoke({ username: '' })
-    expect(bookmarksRepositoryMock.getBookmarksOnOtherUser).toHaveBeenCalled()
+    expect(bookmarksRepositoryMock.getPublicBookmarks).toHaveBeenCalled()
   })
 })

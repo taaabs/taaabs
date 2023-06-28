@@ -1,12 +1,13 @@
-export namespace UserProfileEntity {
+export namespace UserMetadataEntity {
   type User = {
     username: string
     displayName: string | null
   }
 
-  export type CurrentUser = User & {
+  export type Authorized = User & {
     email: string
     isEmailConfirmed: boolean
   }
-  export type OtherUser = User
+
+  export type Public = User
 }

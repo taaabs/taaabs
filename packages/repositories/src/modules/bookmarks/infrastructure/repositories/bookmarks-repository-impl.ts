@@ -6,11 +6,11 @@ import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-
 export class BookmarksRepositoryImpl implements BookmarksRepository {
   constructor(private readonly _bookmarksDataSource: BookmarksDataSource) {}
 
-  async getBookmarksOnCurrentUser({
+  async getAuthorizedBookmarks({
     params,
   }: {
     params: BookmarksOnUserDto.QueryParams.Authorized
-  }): Promise<BookmarksRo.OnCurrentUser> {
+  }): Promise<BookmarksRo.Authorized> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.getBookmarksOnCurrentUser({ params })
 
@@ -37,13 +37,13 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
     }
   }
 
-  async getBookmarksOnOtherUser({
+  async getPublicBookmarks({
     username,
     params,
   }: {
     username: string
     params: BookmarksOnUserDto.QueryParams.Public
-  }): Promise<BookmarksRo.OnOtherUser> {
+  }): Promise<BookmarksRo.Public> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.getBookmarksOnOtherUser({
         username,
