@@ -5,7 +5,7 @@ export namespace UserMetadataDto {
       display_name?: string
     }
 
-    export class All extends BaseMetadata {
+    export class Authorized extends BaseMetadata {
       registered_at: string
       is_email_confirmed: boolean
     }
