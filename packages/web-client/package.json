@@ -1,17 +1,18 @@
 {
-  "name": "@taaabs/web-client-dynamic",
+  "name": "@taaabs/web-client",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
+    "@svgr/webpack": "^8.0.1",
     "@taaabs/repositories": "workspace:*",
     "@taaabs/shared": "workspace:*",
     "@taaabs/web-ui": "workspace:*",
-    "@svgr/webpack": "^8.0.1",
     "axios": "^1.4.0",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
