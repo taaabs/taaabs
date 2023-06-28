@@ -1,4 +1,4 @@
-export namespace CategoriesForSidebarDto {
+export namespace CategoryTreeDto {
   class Category {
     id: string
     name: string
