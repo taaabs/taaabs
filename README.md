@@ -42,16 +42,16 @@ Routing
 
 #### User routes:
 
-- www.taaabs.com/home [logged in user]
-- www.taaabs.com/my-library [logged in user]
+- taaabs.com/home [logged in user]
+- taaabs.com/my-library [logged in user]
 
 #### Public routes:
 
-- www.taaabs.com
-- www.taaabs.com/pricing
-- www.taaabs.com/[username]
-- www.taaabs.com/[username]/library?tags=a,b,c
-- www.taaabs.com/[username]/about
+- taaabs.com
+- taaabs.com/pricing
+- taaabs.com/@[username]
+- taaabs.com/@[username]/library?tags=a,b,c
+- taaabs.com/@[username]/about
 - [username].taaabs.com
 - [username].taaabs.com/library?tags=a,b,c
 - [username].taaabs.com/about
