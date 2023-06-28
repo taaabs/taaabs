@@ -8,9 +8,9 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
   async getBookmarksOnCurrentUser({
     params,
   }: {
-    params: BookmarksOnUserDto.QueryParams.OnCurrentUser
-  }): Promise<BookmarksOnUserDto.Response.All> {
-    const response: AxiosResponse<BookmarksOnUserDto.Response.All> =
+    params: BookmarksOnUserDto.QueryParams.Authorized
+  }): Promise<BookmarksOnUserDto.Response.Authorized> {
+    const response: AxiosResponse<BookmarksOnUserDto.Response.Authorized> =
       await this.axios.get('/v1/bookmarks', { params })
 
     return response.data
@@ -21,7 +21,7 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
     params,
   }: {
     username: string
-    params: BookmarksOnUserDto.QueryParams.OnOtherUser
+    params: BookmarksOnUserDto.QueryParams.Public
   }): Promise<BookmarksOnUserDto.Response.Public> {
     const response: AxiosResponse<BookmarksOnUserDto.Response.Public> =
       await this.axios.get(`/v1/bookmarks/${username}`, { params })

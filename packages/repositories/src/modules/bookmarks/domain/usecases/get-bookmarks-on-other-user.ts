@@ -3,7 +3,7 @@ import { UseCase } from '@/core/use-case'
 import { BookmarksRo } from '../types/bookmarks.ro'
 import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-user.dto'
 
-type Params = BookmarksOnUserDto.QueryParams.OnOtherUser & { username: string }
+type Params = BookmarksOnUserDto.QueryParams.Public & { username: string }
 
 export class GetBookmarksOnOtherUser
   implements UseCase<Promise<BookmarksRo.OnOtherUser>, Params>

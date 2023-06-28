@@ -9,7 +9,7 @@ const exampleUrl = 'https://example.com/test'
 describe('BookmarksRepositoryImpl', () => {
   describe('getBookmarksOnCurrentUser', () => {
     it('should correctly parse dto', async () => {
-      const dto: BookmarksOnUserDto.Response.All = {
+      const dto: BookmarksOnUserDto.Response.Authorized = {
         bookmarks: [
           {
             id: '1',

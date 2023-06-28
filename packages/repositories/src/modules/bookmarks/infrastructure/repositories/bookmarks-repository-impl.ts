@@ -9,7 +9,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
   async getBookmarksOnCurrentUser({
     params,
   }: {
-    params: BookmarksOnUserDto.QueryParams.OnCurrentUser
+    params: BookmarksOnUserDto.QueryParams.Authorized
   }): Promise<BookmarksRo.OnCurrentUser> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.getBookmarksOnCurrentUser({ params })
@@ -42,7 +42,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
     params,
   }: {
     username: string
-    params: BookmarksOnUserDto.QueryParams.OnOtherUser
+    params: BookmarksOnUserDto.QueryParams.Public
   }): Promise<BookmarksRo.OnOtherUser> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.getBookmarksOnOtherUser({

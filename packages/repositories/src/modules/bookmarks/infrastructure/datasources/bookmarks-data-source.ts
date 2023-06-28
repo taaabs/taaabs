@@ -4,14 +4,14 @@ export type BookmarksDataSource = {
   getBookmarksOnCurrentUser({
     params,
   }: {
-    params: BookmarksOnUserDto.QueryParams.OnCurrentUser
-  }): Promise<BookmarksOnUserDto.Response.All>
+    params: BookmarksOnUserDto.QueryParams.Authorized
+  }): Promise<BookmarksOnUserDto.Response.Authorized>
 
   getBookmarksOnOtherUser({
     username,
     params,
   }: {
     username: string
-    params: BookmarksOnUserDto.QueryParams.OnOtherUser
+    params: BookmarksOnUserDto.QueryParams.Public
   }): Promise<BookmarksOnUserDto.Response.Public>
 }

@@ -7,6 +7,7 @@ import { PaginationQueryParamsDto } from '@shared/dtos/common/pagination-options
 import { Type } from 'class-transformer'
 import { NsfwBookmarks } from '@shared/dtos/common/bookmarks/nsfw-bookmarks'
 import { BookmarkVisibility } from '@shared/dtos/common/bookmarks/bookmark-visibility'
+import { ToBoolean } from '@shared/decorators/to-boolean'
 
 export namespace BookmarksOnUserDto {
   export namespace QueryParams {
@@ -37,10 +38,7 @@ export namespace BookmarksOnUserDto {
 
       sort_by?: SortBy = QueryParams.DEFAULT_SORT_BY
 
-      @ApiProperty({
-        example: 'true',
-      })
-      @Type()
+      @ToBoolean()
       starred_only?: boolean = QueryParams.DEFAULT_STARRED_ONLY
 
       archived?: ArchivedBookmarks = QueryParams.DEFAULT_ARCHIVED
