@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class PaginationQueryParamDto {
+export class PaginationQueryParamsDto {
   @ApiProperty({
     description: 'Item id.',
   })

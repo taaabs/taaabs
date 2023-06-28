@@ -3,14 +3,14 @@ import { PaginatedResponseDto } from '../../common/paginated-response.dto'
 import { ApiProperty } from '@nestjs/swagger'
 import { DateRange } from '@shared/dtos/common/bookmarks/date-range'
 import { SortBy } from '@shared/dtos/common/bookmarks/sort-by'
-import { PaginationQueryParamDto } from '@shared/dtos/common/pagination-options.dto'
+import { PaginationQueryParamsDto } from '@shared/dtos/common/pagination-options.dto'
 import { Type } from 'class-transformer'
 import { NsfwBookmarks } from '@shared/dtos/common/bookmarks/nsfw-bookmarks'
 import { BookmarkVisibility } from '@shared/dtos/common/bookmarks/bookmark-visibility'
 
 export namespace BookmarksOnUserDto {
   export namespace QueryParams {
-    class QueryParams extends PaginationQueryParamDto {
+    class QueryParams extends PaginationQueryParamsDto {
       static DEFAULT_DATE_RANGE = DateRange.ANY
       static DEFAULT_SORT_BY = SortBy.DATE_ASC
       static DEFAULT_ARCHIVED = ArchivedBookmarks.EXCLUDE
@@ -48,13 +48,13 @@ export namespace BookmarksOnUserDto {
       nsfw?: NsfwBookmarks = QueryParams.DEFAULT_NSFW
     }
 
-    export class OnCurrentUser extends QueryParams {
+    export class Authorized extends QueryParams {
       static DEFAULT_VISIBILITY = BookmarkVisibility.ALL
 
-      visibility?: BookmarkVisibility = OnCurrentUser.DEFAULT_VISIBILITY
+      visibility?: BookmarkVisibility = Authorized.DEFAULT_VISIBILITY
     }
 
-    export class OnOtherUser extends QueryParams {}
+    export class Public extends QueryParams {}
   }
 
   export namespace Response {
@@ -77,7 +77,7 @@ export namespace BookmarksOnUserDto {
     }
     class BookmarkPublic extends Bookmark {}
 
-    export class All extends PaginatedResponseDto {
+    export class Authorized extends PaginatedResponseDto {
       bookmarks: BookmarkAll[]
     }
     export class Public extends PaginatedResponseDto {
