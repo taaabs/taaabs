@@ -1,9 +1,9 @@
 import { BookmarksRepository } from '../repositories/bookmarks.repository'
 import { UseCase } from '@/core/use-case'
 import { BookmarksRo } from '../types/bookmarks.ro'
-import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-user.dto'
+import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
 
-type Params = BookmarksOnUserDto.QueryParams.Authorized
+type Params = BookmarksDto.QueryParams.Authorized
 
 export class GetAuthorizedBookmarks
   implements UseCase<Promise<BookmarksRo.Authorized>, Params>

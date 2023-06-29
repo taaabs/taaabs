@@ -9,7 +9,7 @@ import { NsfwBookmarks } from '@shared/dtos/modules/bookmarks/nsfw-bookmarks'
 import { BookmarkVisibility } from '@shared/dtos/modules/bookmarks/bookmark-visibility'
 import { ToBoolean } from '@shared/decorators/to-boolean'
 
-export namespace BookmarksOnUserDto {
+export namespace BookmarksDto {
   export namespace QueryParams {
     class QueryParams extends PaginationQueryParamsDto {
       static DEFAULT_DATE_RANGE = DateRange.ANY

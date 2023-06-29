@@ -1,7 +1,7 @@
 import { BookmarksRepository } from '@/modules/bookmarks/domain/repositories/bookmarks.repository'
 import { BookmarksDataSource } from '../datasources/bookmarks-data-source'
 import { BookmarksRo } from '@/modules/bookmarks/domain/types/bookmarks.ro'
-import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-user.dto'
+import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
 
 export class BookmarksRepositoryImpl implements BookmarksRepository {
   constructor(private readonly _bookmarksDataSource: BookmarksDataSource) {}
@@ -9,7 +9,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
   async getAuthorizedBookmarks({
     params,
   }: {
-    params: BookmarksOnUserDto.QueryParams.Authorized
+    params: BookmarksDto.QueryParams.Authorized
   }): Promise<BookmarksRo.Authorized> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.getBookmarksOnCurrentUser({ params })
@@ -42,7 +42,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
     params,
   }: {
     username: string
-    params: BookmarksOnUserDto.QueryParams.Public
+    params: BookmarksDto.QueryParams.Public
   }): Promise<BookmarksRo.Public> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.getBookmarksOnOtherUser({

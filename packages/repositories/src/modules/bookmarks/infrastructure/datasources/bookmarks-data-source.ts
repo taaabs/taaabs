@@ -1,17 +1,17 @@
-import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-user.dto'
+import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
 
 export type BookmarksDataSource = {
   getBookmarksOnCurrentUser({
     params,
   }: {
-    params: BookmarksOnUserDto.QueryParams.Authorized
-  }): Promise<BookmarksOnUserDto.Response.Authorized>
+    params: BookmarksDto.QueryParams.Authorized
+  }): Promise<BookmarksDto.Response.Authorized>
 
   getBookmarksOnOtherUser({
     username,
     params,
   }: {
     username: string
-    params: BookmarksOnUserDto.QueryParams.Public
-  }): Promise<BookmarksOnUserDto.Response.Public>
+    params: BookmarksDto.QueryParams.Public
+  }): Promise<BookmarksDto.Response.Public>
 }

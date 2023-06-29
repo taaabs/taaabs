@@ -1,9 +1,9 @@
 import { BookmarksRepository } from '../repositories/bookmarks.repository'
 import { UseCase } from '@/core/use-case'
 import { BookmarksRo } from '../types/bookmarks.ro'
-import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-user.dto'
+import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
 
-type Params = BookmarksOnUserDto.QueryParams.Public & { username: string }
+type Params = BookmarksDto.QueryParams.Public & { username: string }
 
 export class GetPublicBookmarks
   implements UseCase<Promise<BookmarksRo.Public>, Params>

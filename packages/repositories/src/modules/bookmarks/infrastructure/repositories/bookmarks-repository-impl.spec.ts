@@ -1,7 +1,7 @@
 import { BookmarksDataSource } from '../datasources/bookmarks-data-source'
 import { BookmarksRo } from '../../domain/types/bookmarks.ro'
 import { BookmarksRepositoryImpl } from './bookmarks-repository-impl'
-import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-user.dto'
+import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
 
 const exampleDate = '2023-06-20T12:31:14.176Z'
 const exampleUrl = 'https://example.com/test'
@@ -9,7 +9,7 @@ const exampleUrl = 'https://example.com/test'
 describe('BookmarksRepositoryImpl', () => {
   describe('getBookmarksOnCurrentUser', () => {
     it('should correctly parse dto', async () => {
-      const dto: BookmarksOnUserDto.Response.Authorized = {
+      const dto: BookmarksDto.Response.Authorized = {
         bookmarks: [
           {
             id: '1',
@@ -58,7 +58,7 @@ describe('BookmarksRepositoryImpl', () => {
 
   describe('getBookmarksOnOtherUser', () => {
     it('should correclty parse dto', async () => {
-      const dto: BookmarksOnUserDto.Response.Public = {
+      const dto: BookmarksDto.Response.Public = {
         bookmarks: [
           {
             id: '1',
