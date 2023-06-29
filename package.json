@@ -1,7 +1,6 @@
 {
   "name": "taaabs",
   "description": "Next-gen social bookmarking",
-  "private": true,
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
