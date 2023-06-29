@@ -5,7 +5,7 @@ import { BookmarksOnUserDto } from '@shared/dtos/modules/bookmarks/bookmarks-on-
 
 type Params = BookmarksOnUserDto.QueryParams.Authorized
 
-export class GetBookmarksOnCurrentUser
+export class GetAuthorizedBookmarks
   implements UseCase<Promise<BookmarksRo.Authorized>, Params>
 {
   constructor(private readonly repository: BookmarksRepository) {}

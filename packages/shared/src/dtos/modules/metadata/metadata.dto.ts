@@ -1,4 +1,4 @@
-export namespace UserMetadataDto {
+export namespace MetadataDto {
   export namespace Response {
     class BaseMetadata {
       username: string
