@@ -1,16 +1,15 @@
 import { BookmarksRepository } from '../repositories/bookmarks.repository'
 import { UseCase } from '@/core/use-case'
 import { BookmarksRo } from '../types/bookmarks.ro'
-import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
-
-type Params = BookmarksDto.QueryParams.Authorized
+import { BookmarksParams } from '../types/bookmarks.params'
 
 export class GetAuthorizedBookmarks
-  implements UseCase<Promise<BookmarksRo.Authorized>, Params>
+  implements
+    UseCase<Promise<BookmarksRo.Authorized>, BookmarksParams.Authorized>
 {
-  constructor(private readonly repository: BookmarksRepository) {}
+  constructor(private readonly _bookmarksRepository: BookmarksRepository) {}
 
-  async invoke(params: Params) {
-    return this.repository.getAuthorizedBookmarks({ params })
+  public invoke(params: BookmarksParams.Authorized) {
+    return this._bookmarksRepository.getAuthorized(params)
   }
 }

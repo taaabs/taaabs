@@ -1,6 +1,5 @@
 {
   "name": "@taaabs/repositories",
-  "private": true,
   "scripts": {},
   "typesVersions": {
     "*": {

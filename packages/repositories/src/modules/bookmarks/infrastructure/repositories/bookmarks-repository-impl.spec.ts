@@ -47,11 +47,11 @@ describe('BookmarksRepositoryImpl', () => {
 
       const MockBookmarksDataSource = jest.fn<BookmarksDataSource, []>()
       const mockBookmarksDataSource = new MockBookmarksDataSource()
-      mockBookmarksDataSource.getBookmarksOnCurrentUser = jest.fn(
+      mockBookmarksDataSource.getAuthorized = jest.fn(
         () => new Promise((resolve) => resolve(dto)),
       )
       const sut = new BookmarksRepositoryImpl(mockBookmarksDataSource)
-      const result = await sut.getAuthorizedBookmarks({ params: {} })
+      const result = await sut.getAuthorized({})
       expect(result).toStrictEqual(ro)
     })
   })
@@ -95,12 +95,11 @@ describe('BookmarksRepositoryImpl', () => {
 
       const MockBookmarksDataSource = jest.fn<BookmarksDataSource, []>()
       const mockBookmarksDataSource = new MockBookmarksDataSource()
-      mockBookmarksDataSource.getBookmarksOnOtherUser = jest.fn(
+      mockBookmarksDataSource.getPublic = jest.fn(
         () => new Promise((resolve) => resolve(dto)),
       )
       const sut = new BookmarksRepositoryImpl(mockBookmarksDataSource)
-      const result = await sut.getPublicBookmarks({
-        params: {},
+      const result = await sut.getPublic({
         username: '',
       })
       expect(result).toStrictEqual(ro)

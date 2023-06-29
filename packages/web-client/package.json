@@ -1,6 +1,5 @@
 {
   "name": "@taaabs/web-client",
-  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",

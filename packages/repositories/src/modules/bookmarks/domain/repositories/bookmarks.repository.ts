@@ -1,18 +1,10 @@
-import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
 import { BookmarksRo } from '../types/bookmarks.ro'
+import { BookmarksParams } from '../types/bookmarks.params'
 
 export type BookmarksRepository = {
-  getAuthorizedBookmarks({
-    params,
-  }: {
-    params: BookmarksDto.QueryParams.Authorized
-  }): Promise<BookmarksRo.Authorized>
+  getAuthorized(
+    params: BookmarksParams.Authorized,
+  ): Promise<BookmarksRo.Authorized>
 
-  getPublicBookmarks({
-    username,
-    params,
-  }: {
-    username: string
-    params: BookmarksDto.QueryParams.Public
-  }): Promise<BookmarksRo.Public>
+  getPublic(params: BookmarksParams.Public): Promise<BookmarksRo.Public>
 }

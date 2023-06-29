@@ -1,6 +1,5 @@
 export abstract class UseCase<T, P> {
-  abstract invoke(params: P): T
+  public abstract invoke(params: P): T
 }
 
-export type NoParams = {}
-export type NoPlaceholders = {}
+export type NoParams = Record<string, never>

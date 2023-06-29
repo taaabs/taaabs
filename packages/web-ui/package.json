@@ -1,6 +1,5 @@
 {
   "name": "@taaabs/web-ui",
-  "private": true,
   "scripts": {
     "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build",

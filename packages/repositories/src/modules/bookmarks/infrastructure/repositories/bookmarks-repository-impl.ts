@@ -1,18 +1,16 @@
 import { BookmarksRepository } from '@/modules/bookmarks/domain/repositories/bookmarks.repository'
 import { BookmarksDataSource } from '../datasources/bookmarks-data-source'
 import { BookmarksRo } from '@/modules/bookmarks/domain/types/bookmarks.ro'
-import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
+import { BookmarksParams } from '../../domain/types/bookmarks.params'
 
 export class BookmarksRepositoryImpl implements BookmarksRepository {
   constructor(private readonly _bookmarksDataSource: BookmarksDataSource) {}
 
-  async getAuthorizedBookmarks({
-    params,
-  }: {
-    params: BookmarksDto.QueryParams.Authorized
-  }): Promise<BookmarksRo.Authorized> {
+  public async getAuthorized(
+    params: BookmarksParams.Authorized,
+  ): Promise<BookmarksRo.Authorized> {
     const { bookmarks, pagination } =
-      await this._bookmarksDataSource.getBookmarksOnCurrentUser({ params })
+      await this._bookmarksDataSource.getAuthorized(params)
 
     return {
       bookmarks: bookmarks.map((bookmark) => {
@@ -37,18 +35,12 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
     }
   }
 
-  async getPublicBookmarks({
-    username,
-    params,
-  }: {
-    username: string
-    params: BookmarksDto.QueryParams.Public
-  }): Promise<BookmarksRo.Public> {
-    const { bookmarks, pagination } =
-      await this._bookmarksDataSource.getBookmarksOnOtherUser({
-        username,
-        params,
-      })
+  public async getPublic(
+    params: BookmarksParams.Public,
+  ): Promise<BookmarksRo.Public> {
+    const { bookmarks, pagination } = await this._bookmarksDataSource.getPublic(
+      params,
+    )
 
     return {
       bookmarks: bookmarks.map((bookmark) => ({

@@ -9,10 +9,6 @@ import styles from './Library.module.scss'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 
-/**
- * Notes:
- * "bottomOffset" is a footer visible height in the viewport
- */
 export namespace LibraryTypes {
   export type Props = {
     slotSidebar: React.ReactNode
@@ -22,7 +18,7 @@ export namespace LibraryTypes {
       secondaryText: string
     }
     children: React.ReactNode
-    bottomOffset: number
+    bottomOffset: number // A footer visible height in the viewport.
   }
 }
 

@@ -1,6 +1,5 @@
 {
   "name": "@taaabs/shared",
-  "private": true,
   "scripts": {},
   "dependencies": {
     "@nestjs/swagger": "^6.2.1",
