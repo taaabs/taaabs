@@ -1,5 +1,5 @@
 export namespace BookmarkEntity {
-  type Bookmark = {
+  type BookmarkBase = {
     id: string
     title: string
     text: string | null
@@ -13,8 +13,8 @@ export namespace BookmarkEntity {
     saves: number
   }
 
-  export type Authorized = Bookmark & {
+  export type Authorized = BookmarkBase & {
     isPublic: boolean
   }
-  export type Public = Bookmark
+  export type Public = BookmarkBase
 }

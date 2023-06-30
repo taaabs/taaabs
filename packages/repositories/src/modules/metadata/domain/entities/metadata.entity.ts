@@ -1,14 +1,14 @@
 export namespace MetadataEntity {
-  type Metadata = {
+  type MetadataBase = {
     username: string
     displayName: string | null
   }
 
-  export type Authorized = Metadata & {
+  export type Authorized = MetadataBase & {
     registeredAt: Date
     isEmailConfirmed: boolean
   }
-  export type Public = Metadata & {
+  export type Public = MetadataBase & {
     metaDescription: string
   }
 }
