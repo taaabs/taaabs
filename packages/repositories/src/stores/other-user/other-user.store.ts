@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { metadataSlice } from './slices/metadata/metadata.slice'
+import { librarySlice } from './slices/library/library.slice'
 
 const store = configureStore({
   reducer: {
     metadata: metadataSlice.reducer,
+    library: librarySlice.reducer,
   },
 })
 
