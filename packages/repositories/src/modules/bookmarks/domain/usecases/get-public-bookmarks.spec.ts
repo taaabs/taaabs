@@ -2,7 +2,7 @@ import { BookmarksRepository } from '../repositories/bookmarks.repository'
 import { GetPublicBookmarks } from './get-public-bookmarks'
 
 describe('GetPublicBookmarks', () => {
-  it('calls correct method from repository', () => {
+  it('calls correct method on repository', () => {
     const BookmarksRepositoryMock = jest.fn<BookmarksRepository, []>()
     const bookmarksRepositoryMock = new BookmarksRepositoryMock()
     bookmarksRepositoryMock.getPublic = jest.fn()

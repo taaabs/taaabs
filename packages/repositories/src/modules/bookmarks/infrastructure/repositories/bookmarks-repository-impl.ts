@@ -1,5 +1,5 @@
 import { BookmarksRepository } from '@/modules/bookmarks/domain/repositories/bookmarks.repository'
-import { BookmarksDataSource } from '../datasources/bookmarks-data-source'
+import { BookmarksDataSource } from '../data-sources/bookmarks-data-source'
 import { BookmarksRo } from '@/modules/bookmarks/domain/types/bookmarks.ro'
 import { BookmarksParams } from '../../domain/types/bookmarks.params'
 

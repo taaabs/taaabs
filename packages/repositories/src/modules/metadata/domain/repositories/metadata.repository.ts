@@ -1,10 +1,7 @@
-import { MetadataEntity } from '../entities/metadata.entity'
+import { MetadataParams } from '../types/metadata.params'
+import { MetadataRo } from '../types/metadata.ro'
 
 export type MetadataRepository = {
-  getAuthorizedMetadata(): Promise<MetadataEntity.Authorized>
-  getPublicMetadata({
-    username,
-  }: {
-    username: string
-  }): Promise<MetadataEntity.Public>
+  getAuthorized(): Promise<MetadataRo.Authorized>
+  getPublic(params: MetadataParams.Public): Promise<MetadataRo.Public>
 }

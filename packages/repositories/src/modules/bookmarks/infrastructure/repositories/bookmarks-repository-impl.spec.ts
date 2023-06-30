@@ -1,19 +1,30 @@
-import { BookmarksDataSource } from '../datasources/bookmarks-data-source'
+import { BookmarksDataSource } from '../data-sources/bookmarks-data-source'
 import { BookmarksRo } from '../../domain/types/bookmarks.ro'
 import { BookmarksRepositoryImpl } from './bookmarks-repository-impl'
 import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
+import { MockProxy, mock, mockReset } from 'jest-mock-extended'
 
-const exampleDate = '2023-06-20T12:31:14.176Z'
+const now = new Date()
 const exampleUrl = 'https://example.com/test'
 
 describe('BookmarksRepositoryImpl', () => {
-  describe('getBookmarksOnCurrentUser', () => {
+  let bookmarksDataSourceMock: MockProxy<BookmarksDataSource>
+
+  beforeAll(() => {
+    bookmarksDataSourceMock = mock<BookmarksDataSource>()
+  })
+
+  beforeEach(() => {
+    mockReset(bookmarksDataSourceMock)
+  })
+
+  describe('getAuthorized', () => {
     it('should correctly parse dto', async () => {
       const dto: BookmarksDto.Response.Authorized = {
         bookmarks: [
           {
             id: '1',
-            created_at: exampleDate,
+            created_at: now.toISOString(),
             saves: 1,
             title: 'test',
             url: exampleUrl,
@@ -27,7 +38,7 @@ describe('BookmarksRepositoryImpl', () => {
         bookmarks: [
           {
             id: '1',
-            createdAt: new Date(exampleDate),
+            createdAt: now,
             isArchived: false,
             isNsfw: false,
             isPublic: false,
@@ -44,25 +55,20 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-
-      const MockBookmarksDataSource = jest.fn<BookmarksDataSource, []>()
-      const mockBookmarksDataSource = new MockBookmarksDataSource()
-      mockBookmarksDataSource.getAuthorized = jest.fn(
-        () => new Promise((resolve) => resolve(dto)),
-      )
-      const sut = new BookmarksRepositoryImpl(mockBookmarksDataSource)
+      bookmarksDataSourceMock.getAuthorized.mockResolvedValue(dto)
+      const sut = new BookmarksRepositoryImpl(bookmarksDataSourceMock)
       const result = await sut.getAuthorized({})
       expect(result).toStrictEqual(ro)
     })
   })
 
-  describe('getBookmarksOnOtherUser', () => {
+  describe('getPublic', () => {
     it('should correclty parse dto', async () => {
       const dto: BookmarksDto.Response.Public = {
         bookmarks: [
           {
             id: '1',
-            created_at: exampleDate,
+            created_at: now.toISOString(),
             saves: 1,
             title: 'test',
             url: exampleUrl,
@@ -76,7 +82,7 @@ describe('BookmarksRepositoryImpl', () => {
         bookmarks: [
           {
             id: '1',
-            createdAt: new Date(exampleDate),
+            createdAt: now,
             isArchived: false,
             isNsfw: false,
             isStarred: false,
@@ -92,13 +98,8 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-
-      const MockBookmarksDataSource = jest.fn<BookmarksDataSource, []>()
-      const mockBookmarksDataSource = new MockBookmarksDataSource()
-      mockBookmarksDataSource.getPublic = jest.fn(
-        () => new Promise((resolve) => resolve(dto)),
-      )
-      const sut = new BookmarksRepositoryImpl(mockBookmarksDataSource)
+      bookmarksDataSourceMock.getPublic.mockResolvedValue(dto)
+      const sut = new BookmarksRepositoryImpl(bookmarksDataSourceMock)
       const result = await sut.getPublic({
         username: '',
       })
