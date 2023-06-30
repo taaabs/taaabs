@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@taaabs/shared": "workspace:*",
-    "axios": "^1.4.0"
+    "axios": "^1.4.0",
+    "@reduxjs/toolkit": "^1.9.5"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
