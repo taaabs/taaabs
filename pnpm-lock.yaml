@@ -197,6 +197,9 @@ importers:
       axios:
         specifier: ^1.4.0
         version: 1.4.0
+      react-redux:
+        specifier: ^8.0.7
+        version: 8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.2.4)(@types/react@18.2.8)(react-dom@18.2.0)(react@18.2.0)(redux@4.2.1)
     devDependencies:
       '@types/jest':
         specifier: ^29.4.0

@@ -1,6 +1,6 @@
 'use client'
 
-import store from '@/store'
+import store from '@repositories/stores/root/root.store'
 import { Provider } from 'react-redux'
 
 export const GlobalProviders: React.FC<{ children: React.ReactNode }> = ({
