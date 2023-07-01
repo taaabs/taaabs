@@ -1,6 +1,6 @@
 'use client'
-import { useRootSelector } from '@repositories/hooks/store'
-import { DesktopUserForHeader } from '@web-ui/components/landing/molecules/DesktopUserForHeader'
+import { useGlobalSelector } from '@repositories/hooks/store'
+import { DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
 import { useRouter } from 'next/navigation'
 
 export const DynamicDesktopUserForHeader: React.FC = () => {

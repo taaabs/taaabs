@@ -1,5 +1,5 @@
 'use client'
-import { DesktopNavigationForHeader } from '@web-ui/components/landing/atoms/DesktopNavigationForHeader'
+import { DesktopNavigationForHeader } from '@web-ui/components/landing/atoms/desktop-navigation-for-header'
 import { usePathname } from 'next/navigation'
 
 export const DynamicDesktopNavigationForHeader: React.FC = () => {

@@ -3,8 +3,8 @@ import {
   State as OtherUserState,
 } from '@repositories/stores/other-user/other-user.store'
 import {
-  Dispatch as GlobalDispatch,
-  State as GlobalState,
+  GlobalDispatch as GlobalDispatch,
+  GlobalState as GlobalState,
 } from '@repositories/stores/global/global.store'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 

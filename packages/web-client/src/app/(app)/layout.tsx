@@ -1,13 +1,13 @@
 'use client'
-import { BottomNavigationBar } from '@web-ui/components/app/molecules/BottomNavigationBar'
-import { NavigationForHeader } from '@web-ui/components/app/molecules/NavigationForHeader'
-import { UserForHeader } from '@web-ui/components/app/molecules/UserForHeader'
-import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/DesktopUserAreaForAppHeader'
-import { App } from '@web-ui/components/app/templates/App'
-import { AppHeaderDesktop } from '@web-ui/components/app/templates/AppHeaderDesktop'
-import { AppHeaderMobile } from '@web-ui/components/app/templates/AppHeaderMobile'
-import { LogoForHeader } from '@web-ui/components/common/molecules/LogoForHeader'
-import { useElementVisibleHeight } from '@web-ui/hooks/useElementVisibleHeight'
+import { BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
+import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
+import { UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
+import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
+import { App } from '@web-ui/components/app/templates/app'
+import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
+import { AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
+import { LogoForHeader } from '@web-ui/components/common/molecules/logo-for-header'
+import { useElementVisibleHeight } from '@web-ui/hooks/use-element-visible-height'
 import { useParams, usePathname } from 'next/navigation'
 import { createContext, useRef } from 'react'
 
@@ -58,7 +58,6 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           }
         />
       }
-      
       slotAppHeaderMobile={
         <AppHeaderMobile
           logoSlot={<LogoForHeader href="" />}
@@ -91,9 +90,7 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       }
       slotFooterDesktop={<div ref={footer}>slotFooterDesktop</div>}
     >
-      <FooterVisibleHeightContext.Provider
-        value={footerVisibleHeight}
-      >
+      <FooterVisibleHeightContext.Provider value={footerVisibleHeight}>
         {children}
       </FooterVisibleHeightContext.Provider>
     </App>
