@@ -1,4 +1,4 @@
-import { BookmarkEntity } from '@/modules/bookmarks/domain/entities/bookmark.entity'
+import { BookmarkEntity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 type LibraryState = {

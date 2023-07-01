@@ -1,5 +1,5 @@
-import { GlobalProviders } from '@/providers/GlobalProviders'
-import { ReduxInitializer } from './ReduxInitializer'
+import { GlobalProviders } from '@/providers/global-providers'
+import { ReduxInitializer } from './redux-initializer'
 
 import 'react-loading-skeleton/dist/skeleton.css'
 import '@web-ui/styles/style.scss'

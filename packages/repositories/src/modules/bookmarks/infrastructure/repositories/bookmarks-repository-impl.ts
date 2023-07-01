@@ -1,6 +1,6 @@
-import { BookmarksRepository } from '@/modules/bookmarks/domain/repositories/bookmarks.repository'
+import { BookmarksRepository } from '@repositories/modules/bookmarks/domain/repositories/bookmarks.repository'
 import { BookmarksDataSource } from '../data-sources/bookmarks-data-source'
-import { BookmarksRo } from '@/modules/bookmarks/domain/types/bookmarks.ro'
+import { BookmarksRo } from '@repositories/modules/bookmarks/domain/types/bookmarks.ro'
 import { BookmarksParams } from '../../domain/types/bookmarks.params'
 
 export class BookmarksRepositoryImpl implements BookmarksRepository {

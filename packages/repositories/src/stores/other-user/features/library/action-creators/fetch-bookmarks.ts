@@ -1,8 +1,8 @@
-import { BookmarksParams } from '@/modules/bookmarks/domain/types/bookmarks.params'
-import { GetPublicBookmarks } from '@/modules/bookmarks/domain/usecases/get-public-bookmarks'
-import { BookmarksDataSourceImpl } from '@/modules/bookmarks/infrastructure/data-sources/bookmarks-data-source-impl'
-import { BookmarksRepositoryImpl } from '@/modules/bookmarks/infrastructure/repositories/bookmarks-repository-impl'
-import { Dispatch } from '@/stores/other-user/other-user.store'
+import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
+import { GetPublicBookmarks } from '@repositories/modules/bookmarks/domain/usecases/get-public-bookmarks'
+import { BookmarksDataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks-data-source-impl'
+import { BookmarksRepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks-repository-impl'
+import { Dispatch } from '@repositories/stores/other-user/other-user.store'
 import axios from 'axios'
 import { libraryActions } from '../library.slice'
 

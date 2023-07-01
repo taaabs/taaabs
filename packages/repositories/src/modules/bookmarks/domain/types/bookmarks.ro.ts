@@ -1,4 +1,4 @@
-import { Pagination } from '@/core/pagination'
+import { Pagination } from '@repositories/core/pagination'
 import { BookmarkEntity } from '../entities/bookmark.entity'
 
 export namespace BookmarksRo {

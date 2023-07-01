@@ -1,16 +1,16 @@
 import {
   Dispatch as OtherUserDispatch,
   State as OtherUserState,
-} from '@/stores/other-user/other-user.store'
+} from '@repositories/stores/other-user/other-user.store'
 import {
-  Dispatch as RootDispatch,
-  State as RootState,
-} from '@/stores/root/root.store'
+  Dispatch as GlobalDispatch,
+  State as GlobalState,
+} from '@repositories/stores/global/global.store'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
 // Root store
-export const useRootDispatch = () => useDispatch<RootDispatch>()
-export const useRootSelector: TypedUseSelectorHook<RootState> = useSelector
+export const useGlobalDispatch = () => useDispatch<GlobalDispatch>()
+export const useGlobalSelector: TypedUseSelectorHook<GlobalState> = useSelector
 
 // Other user store
 export const useOtherUserDispatch = () => useDispatch<OtherUserDispatch>()

@@ -1,5 +1,5 @@
 import { BookmarksRepository } from '../repositories/bookmarks.repository'
-import { UseCase } from '@/core/use-case'
+import { UseCase } from '@repositories/core/use-case'
 import { BookmarksRo } from '../types/bookmarks.ro'
 import { BookmarksParams } from '../types/bookmarks.params'
 

@@ -1,7 +1,7 @@
-import { GetPublicMetadata } from '@/modules/metadata/domain/usecases/get-public-metadata'
-import { MetadataDataSourceImpl } from '@/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
-import { MetadataRepositoryImpl } from '@/modules/metadata/infrastructure/repositories/metadata-repository-impl'
-import { Dispatch } from '@/stores/other-user/other-user.store'
+import { GetPublicMetadata } from '@repositories/modules/metadata/domain/usecases/get-public-metadata'
+import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
+import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
+import { Dispatch } from '@repositories/stores/other-user/other-user.store'
 import axios from 'axios'
 import { metadataActions } from '../metadata.slice'
 

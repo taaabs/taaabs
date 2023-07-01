@@ -1,4 +1,4 @@
-import { MetadataRo } from '@/modules/metadata/domain/types/metadata.ro'
+import { MetadataRo } from '@repositories/modules/metadata/domain/types/metadata.ro'
 import * as thunks from './action-creators'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 

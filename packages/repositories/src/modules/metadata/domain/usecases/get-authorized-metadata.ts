@@ -1,4 +1,4 @@
-import { NoParams, UseCase } from '@/core/use-case'
+import { NoParams, UseCase } from '@repositories/core/use-case'
 import { MetadataRo } from '../types/metadata.ro'
 import { MetadataRepository } from '../repositories/metadata.repository'
 
