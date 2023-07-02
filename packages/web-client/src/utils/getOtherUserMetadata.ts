@@ -9,7 +9,7 @@ export const getOtherUserMetadata = cache(
     const dataSource = new MetadataDataSourceImpl(axiosInstance)
     const repository = new MetadataRepositoryImpl(dataSource)
     const getMetadata = new GetPublicMetadata(repository)
-
-    return await getMetadata.invoke({ username })
+    const metadata = await getMetadata.invoke({ username })
+    return metadata
   },
 )

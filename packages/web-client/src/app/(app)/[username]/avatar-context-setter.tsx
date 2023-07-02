@@ -1,4 +1,5 @@
 'use client'
+
 import { OtherUserAvatarContext } from '../other-user-avatar-provider'
 import { useContext, useEffect } from 'react'
 
@@ -18,7 +19,9 @@ export const AvatarContextSetter: React.FC<Props> = (props) => {
         url: props.avatar.url,
         blurhash: props.avatar.blurhash,
       })
-    } else {
+    }
+
+    return () => {
       otherUserAvatar?.setAvatar(null)
     }
   }, [])

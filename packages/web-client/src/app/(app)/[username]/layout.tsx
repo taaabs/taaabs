@@ -1,16 +1,19 @@
 import { OtherUserStoreProvider } from './other-user-store-provider'
 import { OtherUserStoreInitializer } from './other-user-store-initializer'
 import { Metadata } from 'next'
-import { getOtherUserMetadata } from '@/utils/getOtherUserMetadata'
 import { AvatarContextSetter } from './avatar-context-setter'
+import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
+import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
+import { GetPublicMetadata } from '@repositories/modules/metadata/domain/usecases/get-public-metadata'
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 const Layout: React.FC<{
   children: React.ReactNode
   params: { username: string }
-}> = async (props) => {
-  const metadata = await getOtherUserMetadata({
-    username: props.params.username,
-  })
+}> = async ({ children, params }) => {
+  const metadata = await _getMetadata({ username: params.username })
+
   return (
     <OtherUserStoreProvider>
       <AvatarContextSetter
@@ -23,7 +26,7 @@ const Layout: React.FC<{
             : undefined
         }
       />
-      <OtherUserStoreInitializer>{props.children}</OtherUserStoreInitializer>
+      <OtherUserStoreInitializer>{children}</OtherUserStoreInitializer>
     </OtherUserStoreProvider>
   )
 }
@@ -35,8 +38,7 @@ export async function generateMetadata({
 }: {
   params: { username: string }
 }): Promise<Metadata> {
-  const username = params.username
-  const metadata = await getOtherUserMetadata({ username })
+  const metadata = await _getMetadata({ username: params.username })
 
   return {
     title: {
@@ -44,4 +46,11 @@ export async function generateMetadata({
       template: `%s - ${metadata.displayName} (@${metadata.username}) | Taaabs`,
     },
   }
+}
+
+async function _getMetadata({ username }: { username: string }) {
+  const dataSource = new MetadataDataSourceImpl(fetch, apiUrl)
+  const repository = new MetadataRepositoryImpl(dataSource)
+  const getMetadata = new GetPublicMetadata(repository)
+  return await getMetadata.invoke({ username })
 }

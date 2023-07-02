@@ -1,34 +1,21 @@
-import { AxiosInstance } from 'axios'
-import { MockProxy, mock, mockReset } from 'jest-mock-extended'
 import { MetadataDataSourceImpl } from './metadata-data-source-impl'
 
 describe('MetadataDataSourceImpl', () => {
-  let axiosInstanceMock: MockProxy<AxiosInstance>
-
-  beforeAll(() => {
-    axiosInstanceMock = mock<AxiosInstance>()
-  })
-
-  beforeEach(() => {
-    mockReset(axiosInstanceMock)
-    axiosInstanceMock.get.mockResolvedValue({ data: {} })
-  })
-
   describe('getAuthorized', () => {
     it('should call proper endpoint via GET request', () => {
-      const sut = new MetadataDataSourceImpl(axiosInstanceMock)
+      const sut = new MetadataDataSourceImpl(fetch, 'http://example.com')
       sut.getAuthorized()
-      expect(axiosInstanceMock.get).toHaveBeenCalledWith('/v1/metadata')
+      expect(fetch).toHaveBeenCalledWith('http://example.com/v1/metadata')
     })
   })
 
   describe('getPublic', () => {
     it('should call proper endpoint via GET request', () => {
-      const sut = new MetadataDataSourceImpl(axiosInstanceMock)
+      const sut = new MetadataDataSourceImpl(fetch, 'http://example.com')
       const username = 'test'
       sut.getPublic({ username })
-      expect(axiosInstanceMock.get).toHaveBeenCalledWith(
-        `/v1/metadata/${username}`,
+      expect(fetch).toHaveBeenCalledWith(
+        `http://example.com/v1/metadata/${username}`,
       )
     })
   })

@@ -1,5 +1,6 @@
 const apiConfig = require('./packages/api/jest.config')
-const uiKitConfig = require('./packages/web-ui/jest.config')
+const webUiConfig = require('./packages/web-ui/jest.config')
+const repositoriesConfig = require('./packages/repositories/jest.config')
 
 module.exports = {
   verbose: true,
@@ -15,11 +16,12 @@ module.exports = {
       rootDir: '<rootDir>/packages/repositories',
       preset: 'ts-jest',
       testEnvironment: 'node',
+      ...repositoriesConfig,
     },
     {
       displayName: 'ui',
       rootDir: '<rootDir>/packages/web-ui',
-      ...uiKitConfig,
+      ...webUiConfig,
     },
   ],
 }

@@ -1,4 +1,3 @@
-import styles from './icon.module.scss'
 import Add from '@web-ui/assets/icons/add.svg'
 import Bookmark from '@web-ui/assets/icons/bookmark.svg'
 import GreaterThan from '@web-ui/assets/icons/greater-than.svg'
@@ -99,5 +98,5 @@ export const Icon: React.FC<IconTypes.Props> = ({ variant }) => {
       break
   }
 
-  return <div className={styles.container}>{icon}</div>
+  return <>{icon}</>
 }
