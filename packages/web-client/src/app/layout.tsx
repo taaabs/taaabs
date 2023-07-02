@@ -1,5 +1,5 @@
 import { GlobalStoreInitializer } from './global-store-initializer'
-import { GlobalStoreProvider } from './global-store-provider'
+// import { GlobalStoreProvider } from './global-store-provider'
 import { Metadata } from 'next'
 
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -12,7 +12,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <html lang="en">
       <body>
         {/* <GlobalStoreProvider> */}
-          <GlobalStoreInitializer>{children}</GlobalStoreInitializer>
+        <GlobalStoreInitializer>{children}</GlobalStoreInitializer>
         {/* </GlobalStoreProvider> */}
       </body>
     </html>
