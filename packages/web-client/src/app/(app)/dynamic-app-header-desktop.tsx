@@ -9,16 +9,30 @@ import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/de
 import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
 import { LogoForHeader } from '@web-ui/components/common/molecules/logo-for-header'
 import { useParams, usePathname } from 'next/navigation'
+import { OtherUserAvatarContext } from './other-user-avatar-provider'
+import { useContext } from 'react'
 
 export const DynamicAppHeaderDesktop: React.FC = () => {
   const params = useParams()
   const pathname = usePathname()
+  const otherUserAvatar = useContext(OtherUserAvatarContext)
 
   let logoSlot: JSX.Element
   // TODO: backHref should be smarter :^)
   if (params.username) {
     logoSlot = (
-      <UserForHeader user={{ username: params.username, backHref: '/' }} />
+      <UserForHeader
+        user={{
+          username: params.username,
+          backHref: '/',
+          avatar: otherUserAvatar?.avatar
+            ? {
+                url: otherUserAvatar.avatar.url,
+                blurhash: otherUserAvatar.avatar.blurhash,
+              }
+            : undefined,
+        }}
+      />
     )
   } else {
     logoSlot = <LogoForHeader href="/" />
@@ -36,6 +50,11 @@ export const DynamicAppHeaderDesktop: React.FC = () => {
         label: 'Library',
         href: `/${params.username}/library`,
         isActive: pathname == `/${params.username}/library`,
+      },
+      {
+        label: 'About',
+        href: `/${params.username}/about`,
+        isActive: pathname == `/${params.username}/about`,
       },
     ]
   } else {

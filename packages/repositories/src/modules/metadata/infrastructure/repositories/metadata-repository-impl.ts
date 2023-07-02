@@ -14,6 +14,12 @@ export class MetadataRepositoryImpl implements MetadataRepository {
       displayName: response.display_name || null,
       isEmailConfirmed: response.is_email_confirmed,
       registeredAt: new Date(response.registered_at),
+      avatar: response.avatar
+        ? {
+            url: response.avatar.url,
+            blurhash: response.avatar.blurhash,
+          }
+        : null,
     }
   }
 
@@ -28,6 +34,12 @@ export class MetadataRepositoryImpl implements MetadataRepository {
       username: response.username,
       displayName: response.display_name || null,
       metaDescription: response.meta_description || null,
+      avatar: response.avatar
+        ? {
+            url: response.avatar.url,
+            blurhash: response.avatar.blurhash,
+          }
+        : null,
     }
   }
 }

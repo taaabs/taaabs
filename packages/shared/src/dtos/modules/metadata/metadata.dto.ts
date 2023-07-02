@@ -3,6 +3,10 @@ export namespace MetadataDto {
     class BaseMetadata {
       username: string
       display_name?: string
+      avatar?: {
+        url: string
+        blurhash: string
+      }
     }
 
     export class Authorized extends BaseMetadata {
