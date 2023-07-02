@@ -5,9 +5,9 @@ import { sharedValues } from '@web-ui/constants'
 import { _MobileTitleBar } from './components/_mobile-title-bar'
 import { _DesktopTitleBar } from './components/_desktop-title-bar'
 import cn from 'classnames'
-import styles from './library.module.scss'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
+import styles from './library.module.scss'
 
 export namespace LibraryTypes {
   export type Props = {
@@ -18,7 +18,7 @@ export namespace LibraryTypes {
       secondaryText: string
     }
     children: React.ReactNode
-    bottomOffset: number // A footer visible height in the viewport.
+    // bottomOffset: number // A footer visible height in the viewport.
   }
 }
 
@@ -172,9 +172,6 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
             className={styles.sidebar__inner}
             style={{
               width: `${SLIDABLE_WIDTH}px`,
-              height: `calc(100vh - var(--header-desktop-height)${
-                props.bottomOffset ? ` - ${props.bottomOffset}px` : ``
-              })`,
             }}
           >
             {props.slotSidebar}

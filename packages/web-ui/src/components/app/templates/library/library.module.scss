@@ -37,13 +37,14 @@
   }
   &__inner {
     @include to992 {
-      height: 100% !important; // Overrides inline style intended for use at >992px
+      height: 100%;
       overflow: auto;
       background: var(--library-background);
       padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
         var(--distance-16px);
     }
     @include at992 {
+      height: calc(100vh - var(--header-desktop-height));
       top: var(--header-desktop-height);
       position: fixed;
       overflow: auto;

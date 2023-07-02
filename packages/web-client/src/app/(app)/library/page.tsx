@@ -1,10 +1,10 @@
 'use client'
-import { Library } from '@web-ui/components/app/templates/Library'
-import { useContext } from 'react'
-import { FooterVisibleHeightContext } from '../layout'
+// import { useContext } from 'react'
+// import { FooterVisibleHeightContext } from '../layout'
+import { Library } from '@web-ui/components/app/templates/library'
 
 const Page: React.FC = () => {
-  const footerVisibleHeight = useContext(FooterVisibleHeightContext)
+  // const footerVisibleHeight = useContext(FooterVisibleHeightContext)
   return (
     <Library
       titleBar={{
@@ -13,7 +13,6 @@ const Page: React.FC = () => {
       }}
       slotAside={<div>slot aside</div>}
       slotSidebar={<div>slot sidebar</div>}
-      bottomOffset={footerVisibleHeight}
     >
       render bookmarks here
     </Library>

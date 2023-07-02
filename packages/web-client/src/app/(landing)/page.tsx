@@ -3,9 +3,11 @@ import Link from 'next/link'
 const Page: React.FC = () => {
   return (
     <div>
-      <Link href="/@alicia">alicia</Link>
-      <Link href="/@alicia/library?sdf=dsf">alicia library</Link>
-      <Link href="/@tom/">tom</Link>
+      <Link href="/test_user">test_user</Link>
+      <br />
+      <Link href="/test_user/library?sdf=dsf">test_user library</Link>
+      <br />
+      <Link href="/unknown_user">unknown_user</Link>
     </div>
   )
 }

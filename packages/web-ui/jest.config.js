@@ -2,7 +2,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/src/utils/testUtils.tsx'],
+  setupFilesAfterEnv: ['<rootDir>/src/utils/test-utils.tsx'],
   moduleNameMapper: {
     '.svg': '<rootDir>/src/__mocks__/svg.ts',
     '.scss': '<rootDir>/src/__mocks__/scss.ts',

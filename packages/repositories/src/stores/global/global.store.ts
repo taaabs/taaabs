@@ -1,7 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+
+const rootReducer = combineReducers({})
 
 export const globalStore = configureStore({
-  reducer: {},
+  reducer: rootReducer,
 })
 
 export type GlobalState = ReturnType<typeof globalStore.getState>

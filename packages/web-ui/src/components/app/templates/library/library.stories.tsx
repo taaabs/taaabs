@@ -9,7 +9,6 @@ export const Primary = () => (
     slotSidebar={<>slot sidebar</>}
     slotAside={<>slot aside</>}
     titleBar={{ primaryText: 'Lorem ipsum', secondaryText: 'lorem' }}
-    bottomOffset={0}
   >
     <>slot main</>
   </Library>
@@ -20,7 +19,6 @@ export const Scrolling = () => (
     slotSidebar={<div>{lorem}</div>}
     slotAside={<div>{lorem}</div>}
     titleBar={{ primaryText: 'Lorem ipsum', secondaryText: 'lorem' }}
-    bottomOffset={0}
   >
     {lorem} {lorem} {lorem} {lorem}
   </Library>
