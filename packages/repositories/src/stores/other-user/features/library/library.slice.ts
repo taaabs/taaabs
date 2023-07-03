@@ -7,15 +7,15 @@ type LibraryState = {
   hasMoreBookmarks: boolean | null
 }
 
-const initialLibraryState: LibraryState = {
+const initialState: LibraryState = {
   isFetchingBookmarks: false,
   bookmarks: null,
   hasMoreBookmarks: null,
 }
 
 export const librarySlice = createSlice({
-  name: 'library',
-  initialState: initialLibraryState,
+  name: 'other-user-library',
+  initialState,
   reducers: {
     setIsFetchingBookmarks(state, action: PayloadAction<boolean>) {
       state.isFetchingBookmarks = action.payload

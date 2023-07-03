@@ -1,12 +1,8 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { metadataSlice } from './features/metadata/metadata.slice'
+import { configureStore } from '@reduxjs/toolkit'
 import { librarySlice } from './features/library/library.slice'
-
-// const rootReducer = combineReducers({})
 
 export const otherUserStore = configureStore({
   reducer: {
-    metadata: metadataSlice.reducer,
     library: librarySlice.reducer,
   },
 })
