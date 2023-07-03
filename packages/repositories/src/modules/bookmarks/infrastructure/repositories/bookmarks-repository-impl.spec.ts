@@ -4,7 +4,7 @@ import { BookmarksRepositoryImpl } from './bookmarks-repository-impl'
 import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
 import { MockProxy, mock, mockReset } from 'jest-mock-extended'
 
-const now = new Date()
+const now = new Date().toISOString()
 const exampleUrl = 'https://example.com/test'
 
 describe('BookmarksRepositoryImpl', () => {
@@ -24,7 +24,7 @@ describe('BookmarksRepositoryImpl', () => {
         bookmarks: [
           {
             id: '1',
-            created_at: now.toISOString(),
+            created_at: now,
             saves: 1,
             title: 'test',
             url: exampleUrl,
@@ -68,7 +68,7 @@ describe('BookmarksRepositoryImpl', () => {
         bookmarks: [
           {
             id: '1',
-            created_at: now.toISOString(),
+            created_at: now,
             saves: 1,
             title: 'test',
             url: exampleUrl,

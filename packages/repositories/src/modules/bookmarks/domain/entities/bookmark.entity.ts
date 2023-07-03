@@ -4,7 +4,7 @@ export namespace BookmarkEntity {
     title: string
     text: string | null
     url: string
-    createdAt: Date
+    createdAt: string
     tags: string[]
     sitePath: string | null
     isStarred: boolean

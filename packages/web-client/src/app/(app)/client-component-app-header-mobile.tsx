@@ -8,16 +8,32 @@ import { UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
 import { AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
 import { LogoForHeader } from '@web-ui/components/common/molecules/logo-for-header'
 import { useParams, usePathname } from 'next/navigation'
+import { useContext, useEffect, useState } from 'react'
+import { OtherUserAvatarContext } from './other-user-avatar-provider'
 
-export const DynamicAppHeaderMobile: React.FC = () => {
+export const ClientComponentAppHeaderMobile: React.FC = () => {
   const pathname = usePathname()
   const params = useParams()
+  const otherUserAvatar = useContext(OtherUserAvatarContext)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   let logoSlot: JSX.Element
   // TODO: backHref should be smarter :^)
   if (params.username) {
     logoSlot = (
-      <UserForHeader user={{ username: params.username, backHref: '/' }} />
+      <UserForHeader
+        user={{
+          username: params.username,
+          backHref: '/',
+          avatar: otherUserAvatar?.avatar
+            ? {
+                url: otherUserAvatar.avatar.url,
+                blurhash: otherUserAvatar.avatar.blurhash,
+              }
+            : undefined,
+        }}
+        isLoadingAvatar={!isHydrated}
+      />
     )
   } else {
     logoSlot = <LogoForHeader href="/" />
@@ -51,6 +67,10 @@ export const DynamicAppHeaderMobile: React.FC = () => {
       },
     ]
   }
+
+  useEffect(() => {
+    setIsHydrated(true)
+  }, [])
 
   return (
     <AppHeaderMobile

@@ -8,7 +8,7 @@ import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation
 import { AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
 import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
 import { useRef } from 'react'
-import { NavigationForSidebar } from '@web-ui/components/app/atoms/navigation-for-sidebar'
+import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
 import { useElementVisibleHeight } from '@web-ui/hooks/use-element-visible-height'
 
 export default {
@@ -72,7 +72,7 @@ export const Primary = () => {
       <Library
         slotAside={<>aside</>}
         slotSidebar={
-          <NavigationForSidebar
+          <NavigationForLibrarySidebar
             navigationItems={[
               { label: 'All bookmarks', isActive: true, onClick: () => {} },
               { label: 'Categories', isActive: false, onClick: () => {} },

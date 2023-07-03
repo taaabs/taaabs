@@ -12,7 +12,7 @@ import { useParams, usePathname } from 'next/navigation'
 import { OtherUserAvatarContext } from './other-user-avatar-provider'
 import { useContext, useEffect, useState } from 'react'
 
-export const DynamicAppHeaderDesktop: React.FC = () => {
+export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const params = useParams()
   const pathname = usePathname()
   const otherUserAvatar = useContext(OtherUserAvatarContext)

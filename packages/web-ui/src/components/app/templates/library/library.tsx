@@ -13,12 +13,11 @@ export namespace LibraryTypes {
   export type Props = {
     slotSidebar: React.ReactNode
     slotAside: React.ReactNode
-    titleBar: {
+    titleBar?: {
       primaryText: string
       secondaryText: string
     }
     children: React.ReactNode
-    // bottomOffset: number // A footer visible height in the viewport.
   }
 }
 
@@ -215,14 +214,26 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                 swipeRightOnClick={
                   !isSlideoutRightOpen ? toggleRightSlideout : () => {}
                 }
-                primaryText={props.titleBar.primaryText}
-                secondaryText={props.titleBar.secondaryText}
+                text={
+                  props.titleBar
+                    ? {
+                        primary: props.titleBar.primaryText,
+                        secondary: props.titleBar.secondaryText,
+                      }
+                    : undefined
+                }
               />
             </div>
             <div className={styles['main__inner__desktop-title-bar']}>
               <_DesktopTitleBar
-                primaryText={props.titleBar.primaryText}
-                secondaryText={props.titleBar.secondaryText}
+                text={
+                  props.titleBar
+                    ? {
+                        primary: props.titleBar.primaryText,
+                        secondary: props.titleBar.secondaryText,
+                      }
+                    : undefined
+                }
               />
             </div>
             <div className={styles.main__inner__content}>{props.children}</div>

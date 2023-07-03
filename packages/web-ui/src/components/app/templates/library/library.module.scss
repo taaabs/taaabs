@@ -3,6 +3,9 @@
 
 .container {
   background: var(--library-background);
+  @include at992 {
+    min-height: 100vh;
+  }
 }
 .content {
   @include at992 {
@@ -147,9 +150,6 @@
         z-index: -1;
         background: var(--header-background);
       }
-    }
-    @include at992 {
-      min-height: calc(100vh - var(--header-desktop-height));
     }
     &__mobile-alpha-overlay {
       @include to992 {

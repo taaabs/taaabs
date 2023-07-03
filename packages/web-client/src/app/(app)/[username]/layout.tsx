@@ -1,5 +1,4 @@
 import { OtherUserStoreProvider } from './other-user-store-provider'
-import { OtherUserStoreInitializer } from './other-user-store-initializer'
 import { Metadata } from 'next'
 import { AvatarContextSetter } from './avatar-context-setter'
 import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
@@ -26,7 +25,7 @@ const Layout: React.FC<{
             : undefined
         }
       />
-      <OtherUserStoreInitializer>{children}</OtherUserStoreInitializer>
+      {children}
     </OtherUserStoreProvider>
   )
 }

@@ -1,6 +1,8 @@
 import { BookmarkEntity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import * as thunks from './action-creators'
+
 type LibraryState = {
   isFetchingBookmarks: boolean
   bookmarks: Array<BookmarkEntity.Public> | null
@@ -31,4 +33,5 @@ export const librarySlice = createSlice({
 
 export const libraryActions = {
   ...librarySlice.actions,
+  ...thunks,
 }

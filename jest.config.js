@@ -19,7 +19,7 @@ module.exports = {
       ...repositoriesConfig,
     },
     {
-      displayName: 'ui',
+      displayName: 'web-ui',
       rootDir: '<rootDir>/packages/web-ui',
       ...webUiConfig,
     },

@@ -1,7 +1,7 @@
 import { App } from '@web-ui/components/app/templates/app'
-import { DynamicAppHeaderDesktop } from './dynamic-app-header-desktop'
-import { DynamicAppHeaderMobile } from './dynamic-app-header-mobile'
-import { DynamicBottomNavigationBar } from './dynamic-bottom-navigation-bar'
+import { ClientComponentAppHeaderDesktop } from './client-component-app-header-desktop'
+import { ClientComponentAppHeaderMobile } from './client-component-app-header-mobile'
+import { ClientComponentBottomNavigationBar } from './client-component-bottom-navigation-bar'
 import { OtherUserAvatarProvider } from './other-user-avatar-provider'
 
 const Layout: React.FC<{
@@ -10,9 +10,9 @@ const Layout: React.FC<{
   return (
     <OtherUserAvatarProvider>
       <App
-        slotAppHeaderDesktop={<DynamicAppHeaderDesktop />}
-        slotAppHeaderMobile={<DynamicAppHeaderMobile />}
-        slotBottomNavigationBar={<DynamicBottomNavigationBar />}
+        slotAppHeaderDesktop={<ClientComponentAppHeaderDesktop />}
+        slotAppHeaderMobile={<ClientComponentAppHeaderMobile />}
+        slotBottomNavigationBar={<ClientComponentBottomNavigationBar />}
       >
         {children}
       </App>

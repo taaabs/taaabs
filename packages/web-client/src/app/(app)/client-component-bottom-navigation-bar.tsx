@@ -2,7 +2,7 @@
 
 import { BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
 
-export const DynamicBottomNavigationBar: React.FC = () => {
+export const ClientComponentBottomNavigationBar: React.FC = () => {
   return (
     <BottomNavigationBar
       onClickAdd={() => {}}

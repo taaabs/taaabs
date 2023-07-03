@@ -6,6 +6,7 @@
   background: var(--bookmark-background);
   border: var(--border-secondary);
   @include transition-100ms(border-color);
+  margin-bottom: var(--distance-8px);
   @include to992 {
     grid-template-areas:
       'main main'

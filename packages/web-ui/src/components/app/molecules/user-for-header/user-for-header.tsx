@@ -44,10 +44,9 @@ export const UserForHeader: React.FC<UserForHeaderTypes.Props> = ({
       </Link>
       <div className={styles['avatar-and-username']}>
         {isLoadingAvatar ? (
-          <Skeleton
-            circle={true}
-            className={styles['avatar-and-username__skeleton']}
-          />
+          <div className={styles['avatar-and-username__skeleton']}>
+            <Skeleton circle={true} />
+          </div>
         ) : (
           avatar
         )}
