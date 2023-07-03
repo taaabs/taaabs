@@ -34,6 +34,14 @@
 .avatar-and-username {
   display: flex;
   align-items: center;
+  &__skeleton {
+    width: var(--distance-32px);
+    height: var(--distance-32px);
+    @include at992 {
+      width: var(--distance-40px);
+      height: var(--distance-40px);
+    }
+  }
   &__avatar-image {
     display: flex;
     align-items: center;
@@ -42,8 +50,12 @@
     border-radius: 50%;
     overflow: hidden;
     position: relative;
-    width: var(--button-dimension-40px);
-    height: var(--button-dimension-40px);
+    width: var(--distance-32px);
+    height: var(--distance-32px);
+    @include at992 {
+      width: var(--distance-40px);
+      height: var(--distance-40px);
+    }
     img {
       width: 100%;
       height: 100%;
@@ -57,7 +69,7 @@
       bottom: 0;
     }
   }
-  &__abatar-icon {
+  &__avatar-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -65,25 +77,34 @@
     border-radius: 50%;
     overflow: hidden;
     position: relative;
-    width: var(--button-dimension-40px);
-    height: var(--button-dimension-40px);
     background: var(--user-for-header-icon-background);
+    width: var(--distance-32px);
+    height: var(--distance-32px);
+    @include at992 {
+      width: var(--distance-40px);
+      height: var(--distance-40px);
+    }
     svg {
-      width: var(--icon-dimension-20px);
-      height: var(--icon-dimension-20px);
+      width: var(--icon-dimension-16px);
+      height: var(--icon-dimension-16px);
+      @include at992 {
+        width: var(--icon-dimension-20px);
+        height: var(--icon-dimension-20px);
+      }
     }
   }
   &__username {
     color: var(--text-color--normal);
     font-family: var(--font-family-plus-jakarta-sans);
     letter-spacing: var(--letter-spacing-logo);
-    padding-left: var(--distance-12px);
+    padding-left: var(--distance-10px);
     font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
-    font-size: var(--font-size-21px);
-    margin-bottom: var(--distance-1px);
+    font-size: var(--font-size-20px);
+    margin-bottom: var(--distance-2px);
     @include at992 {
+      padding-left: var(--distance-12px);
       font-size: var(--font-size-24px);
-      margin-bottom: var(--distance-2px);
+      margin-bottom: var(--distance-3px);
     }
   }
 }

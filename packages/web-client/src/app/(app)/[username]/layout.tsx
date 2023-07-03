@@ -49,8 +49,9 @@ export async function generateMetadata({
 }
 
 async function _getMetadata({ username }: { username: string }) {
-  const dataSource = new MetadataDataSourceImpl(fetch, apiUrl)
+  const dataSource = new MetadataDataSourceImpl(apiUrl)
   const repository = new MetadataRepositoryImpl(dataSource)
   const getMetadata = new GetPublicMetadata(repository)
-  return await getMetadata.invoke({ username })
+  const metadata = await getMetadata.invoke({ username })
+  return metadata
 }

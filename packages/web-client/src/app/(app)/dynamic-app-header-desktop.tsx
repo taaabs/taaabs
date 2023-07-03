@@ -10,12 +10,13 @@ import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-de
 import { LogoForHeader } from '@web-ui/components/common/molecules/logo-for-header'
 import { useParams, usePathname } from 'next/navigation'
 import { OtherUserAvatarContext } from './other-user-avatar-provider'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 export const DynamicAppHeaderDesktop: React.FC = () => {
   const params = useParams()
   const pathname = usePathname()
   const otherUserAvatar = useContext(OtherUserAvatarContext)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   let logoSlot: JSX.Element
   // TODO: backHref should be smarter :^)
@@ -32,6 +33,7 @@ export const DynamicAppHeaderDesktop: React.FC = () => {
               }
             : undefined,
         }}
+        isLoadingAvatar={!isHydrated}
       />
     )
   } else {
@@ -76,6 +78,10 @@ export const DynamicAppHeaderDesktop: React.FC = () => {
       },
     ]
   }
+
+  useEffect(() => {
+    setIsHydrated(true)
+  }, [])
 
   return (
     <AppHeaderDesktop

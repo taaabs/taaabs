@@ -5,7 +5,7 @@ import { Metadata } from 'next'
 import 'react-loading-skeleton/dist/skeleton.css'
 import '@web-ui/styles/style.scss'
 
-export const revalidate = 10
+export const revalidate = 0
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (

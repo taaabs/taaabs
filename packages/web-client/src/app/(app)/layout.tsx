@@ -4,7 +4,9 @@ import { DynamicAppHeaderMobile } from './dynamic-app-header-mobile'
 import { DynamicBottomNavigationBar } from './dynamic-bottom-navigation-bar'
 import { OtherUserAvatarProvider } from './other-user-avatar-provider'
 
-const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+const Layout: React.FC<{
+  children?: React.ReactNode
+}> = ({ children }) => {
   return (
     <OtherUserAvatarProvider>
       <App
