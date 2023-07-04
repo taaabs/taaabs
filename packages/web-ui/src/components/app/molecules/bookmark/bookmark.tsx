@@ -45,16 +45,20 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
             </a>
           </div>
           <button className={styles.main__site} onClick={props.onSiteClick}>
-            {'('}
             <span>{props.site}</span>
-            {')'}
           </button>
         </div>
         {props.tags.length > 0 && (
           <div className={styles['main__tags']}>
             {props.tags.map((tag) => (
               <button
-                className={styles['main__tags__tag']}
+                className={cn([
+                  styles['main__tags__tag'],
+                  {
+                    [styles['main__tags__tag--condensed']]:
+                      props.tags.length >= 4,
+                  },
+                ])}
                 onClick={() => {}}
                 key={tag}
               >
@@ -86,21 +90,20 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
       <div className={styles.info}>
         <div className={styles.info__inner}>
           <button
-            className={styles['info__inner__button']}
+            className={styles['info__inner__saves']}
             onClick={props.onSavesClick}
           >
-            {props.saves} saves
+            {props.saves}
           </button>
-          <div className={styles.info__inner__separator}>·</div>
-          <button
-            className={styles['info__inner__button']}
+          <div className={styles.info__inner__separator} />
+          <div
+            className={styles['info__inner__date']}
             onClick={props.onDateClick}
           >
             {dayjs(props.createdAt).fromNow()}
-          </button>
-          {props.visibility && props.onVisibilityClick && (
+          </div>
+          {/* {props.visibility && props.onVisibilityClick && (
             <>
-              <div className={styles.info__inner__separator}>·</div>
               <button
                 className={styles['info__inner__button']}
                 onClick={props.onVisibilityClick}
@@ -108,8 +111,9 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
                 {props.visibility == 'private' && 'Private'}
                 {props.visibility == 'public' && 'Public'}
               </button>
+              <div className={styles.info__inner__separator} />
             </>
-          )}
+          )} */}
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ declare const styles: {
   readonly main__site: string
   readonly main__tags: string
   readonly main__tags__tag: string
+  readonly 'main__tags__tag--condensed': string
   readonly 'main__separator-middle': string
   readonly 'main__separator-bottom': string
   readonly main__description: string
@@ -16,6 +17,7 @@ declare const styles: {
   readonly info: string
   readonly info__inner: string
   readonly info__inner__separator: string
-  readonly info__inner__button: string
+  readonly info__inner__saves: string
+  readonly info__inner__date: string
 }
 export = styles

@@ -82,7 +82,22 @@
   &__site {
     color: var(--text-color-dimmed);
     font-size: var(--font-size-1-3rem);
-    padding: var(--distance-0-4rem) 0 var(--distance-0-8rem) 0;
+    padding: var(--distance-8px) 0 var(--distance-10px) 0;
+    @include at992 {
+      padding: var(--distance-4px) 0 var(--distance-8px) 0;
+    }
+    @include to992 {
+      display: block;
+      font-weight: var(--font-weight-inter-medium);
+    }
+    @include at992 {
+      &::before {
+        content: '(';
+      }
+      &::after {
+        content: ')';
+      }
+    }
     @include hover {
       span {
         text-decoration: underline;
@@ -94,11 +109,8 @@
     flex-wrap: wrap;
     gap: var(--distance-7px);
     padding-bottom: var(--distance-2px);
-    @include to992 {
-      padding-right: var(--distance-16px);
-    }
     &__tag {
-      font-size: var(--font-size-1-3rem);
+      font-size: var(--font-size-13px);
       color: var(--bookmark-tag-foreground);
       background: var(--bookmark-tag-background);
       border-radius: var(--border-radius-4px);
@@ -107,13 +119,16 @@
       height: var(--button-dimension-28px);
       font-weight: var(--font-weight-inter-medium);
       @include transition-100ms(all);
-      @include to992 {
-        font-family: var(--font-family-inter-tight);
-      }
+
       @include hover {
         border-color: var(--bookmark-tag-border-color-hover);
         background: var(--bookmark-tag-background-hover);
         color: var(--bookmark-tag-foreground-hover);
+      }
+      &--condensed {
+        @include to992 {
+          font-family: var(--font-family-inter-tight);
+        }
       }
     }
   }
@@ -137,7 +152,7 @@
   grid-area: actions;
   display: flex;
   @include to992 {
-    margin-right: var(--distance-5px);
+    margin-right: var(--distance-10px);
   }
   @include at992 {
     flex-direction: column;
@@ -159,10 +174,14 @@
       }
     }
     svg {
-      width: var(--icon-dimension-16px);
-      height: var(--icon-dimension-16px);
+      width: var(--icon-dimension-18px);
+      height: var(--icon-dimension-18px);
       fill: var(--bookmark-action-fill);
       @include transition-100ms(fill);
+      @include at992 {
+        width: var(--icon-dimension-16px);
+        height: var(--icon-dimension-16px);
+      }
     }
     @include hover {
       svg {
@@ -174,46 +193,47 @@
 .info {
   grid-area: info;
   position: relative;
-  overflow: hidden;
-  &::after {
-    position: absolute;
-    width: var(--distance-20px);
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    content: 'X';
-    color: transparent;
-    background: linear-gradient(to left, var(--header-background), transparent);
-  }
   &__inner {
     display: flex;
-    align-items: center;
-    font-size: var(--font-size-1-3rem);
-    overflow: auto;
+
     height: 100%;
     width: 100%;
     padding: 0 var(--distance-16px);
-    @include at992 {
-      padding: 0 var(--distance-16px);
-    }
     &__separator {
-      padding: 0 var(--distance-0-5rem);
-      @include at992 {
-        padding: var(--distance-0-6rem) var(--distance-0-5rem)
-          var(--distance-0-8rem) var(--distance-0-5rem);
+      @include to992 {
+        margin: 0 var(--distance-12px);
+        background: var(--border-color-secondary);
+        width: var(--distance-1px);
+        height: 100%;
       }
-      color: var(--text-color-dimmed);
+      @include at992 {
+        display: flex;
+        align-items: center;
+        color: var(--text-color-dimmed);
+        padding: 0 var(--distance-5px);
+        &::after {
+          content: '·';
+        }
+      }
     }
-    &__button {
+    &__saves {
+      font-size: var(--font-size-15px);
       height: 100%;
       color: var(--text-color-dimmed);
-      white-space: nowrap;
+      font-weight: var(--font-weight-inter-medium);
       @include hover {
         text-decoration: underline;
       }
       @include at992 {
         padding: var(--distance-0-8rem) 0;
       }
+    }
+    &__date {
+      font-size: var(--font-size-13px);
+      display: flex;
+      align-items: center;
+      height: 100%;
+      color: var(--text-color-dimmed);
     }
   }
 }
