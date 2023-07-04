@@ -2,8 +2,8 @@ import { GlobalStoreInitializer } from './global-store-initializer'
 // import { GlobalStoreProvider } from './global-store-provider'
 import { Metadata } from 'next'
 
-import 'react-loading-skeleton/dist/skeleton.css'
 import '@web-ui/styles/style.scss'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export const revalidate = 0
 

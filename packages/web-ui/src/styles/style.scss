@@ -127,7 +127,6 @@ button {
   cursor: pointer;
 }
 
-// Slideout - start
 .slideout-open,
 .slideout-open body,
 .slideout-open .slideout-panel {
@@ -136,14 +135,15 @@ button {
     overflow: hidden;
   }
 }
+
 .slideout-open .slideout-menu {
   @include to992 {
     display: block;
   }
 }
-// Slideout - end
+
 .react-loading-skeleton {
-  line-height: inherit;
-  --base-color: var(--skeleton-base-color);
-  --highlight-color: var(--skeleton-highlight-color);
+  line-height: inherit !important;
+  --base-color: var(--skeleton-base-color) !important;
+  --highlight-color: var(--skeleton-highlight-color) !important;
 }
