@@ -80,15 +80,15 @@
     }
   }
   &__site {
-    color: var(--text-color-dimmed);
-    font-size: var(--font-size-1-3rem);
-    padding: var(--distance-8px) 0 var(--distance-10px) 0;
+    color: var(--bookmark-site-foreground);
+    font-size: var(--font-size-1-5rem);
+    padding: var(--distance-7px) 0 var(--distance-11px) 0;
     @include at992 {
       padding: var(--distance-4px) 0 var(--distance-8px) 0;
+      font-size: var(--font-size-1-3rem);
     }
     @include to992 {
       display: block;
-      font-weight: var(--font-weight-inter-medium);
     }
     @include at992 {
       &::before {
@@ -195,7 +195,6 @@
   position: relative;
   &__inner {
     display: flex;
-
     height: 100%;
     width: 100%;
     padding: 0 var(--distance-16px);
@@ -213,14 +212,15 @@
         padding: 0 var(--distance-5px);
         &::after {
           content: '·';
+          color: var(--text-color-dimmed);
+          font-size: var(--font-size-13px);
         }
       }
     }
     &__saves {
-      font-size: var(--font-size-15px);
+      font-size: var(--font-size-1-3rem);
       height: 100%;
-      color: var(--text-color-dimmed);
-      font-weight: var(--font-weight-inter-medium);
+      color: var(--text-color-variant);
       @include hover {
         text-decoration: underline;
       }

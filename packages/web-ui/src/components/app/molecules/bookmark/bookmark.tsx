@@ -93,7 +93,7 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
             className={styles['info__inner__saves']}
             onClick={props.onSavesClick}
           >
-            {props.saves}
+            {props.saves} saves
           </button>
           <div className={styles.info__inner__separator} />
           <div

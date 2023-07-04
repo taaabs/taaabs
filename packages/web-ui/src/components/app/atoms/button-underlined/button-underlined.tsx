@@ -34,7 +34,7 @@ export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (
         })}
         onClick={props.onClick}
         title={props.label}
-        disabled={!props.onClick && true}
+        disabled={!props.onClick}
       >
         <span>{props.label}</span>
       </button>
