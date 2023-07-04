@@ -7,12 +7,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
+    "@svgr/webpack": "^8.0.1",
     "@taaabs/repositories": "workspace:*",
     "@taaabs/shared": "workspace:*",
     "@taaabs/web-ui": "workspace:*",
-    "@reduxjs/toolkit": "^1.9.5",
-    "@svgr/webpack": "^8.0.1",
     "axios": "^1.4.0",
+    "beautiful-react-hooks": "^4.3.0",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.7",
     "next": "13.4.7",

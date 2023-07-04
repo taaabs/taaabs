@@ -1,4 +1,5 @@
 'use client'
+
 import { useOtherUserDispatch, useOtherUserSelector } from '@/hooks/redux'
 import { libraryActions } from '@repositories/stores/other-user/features/library/library.slice'
 import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
@@ -6,6 +7,8 @@ import { Bookmark } from '@web-ui/components/app/molecules/bookmark'
 import { Library } from '@web-ui/components/app/templates/library'
 import { useSearchParams, useRouter, useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { useSessionScrollY } from '@/hooks/useSessionScrollY'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -14,12 +17,14 @@ const Page: React.FC = () => {
   const router = useRouter()
   const params = useParams()
   const [isHydrated, setIsHydrated] = useState(false)
+  useSessionScrollY()
+  const [scrollTo, setScrollTo] = useState<number | null>(null)
   const dispatch = useOtherUserDispatch()
   const { bookmarks, isFetchingBookmarks } = useOtherUserSelector(
     (state) => state.library,
   )
 
-  const bookmarksList =
+  const bookmarkList =
     bookmarks && bookmarks.length ? (
       bookmarks.map((bookmark) => (
         <Bookmark
@@ -39,22 +44,46 @@ const Page: React.FC = () => {
       <div>nothing to show</div>
     )
 
-  useEffect(() => {
-    let tags: string[] = []
-    const queryTags = queryParams.get('tags')
-    if (queryTags) {
-      tags = queryTags.split(',')
-    }
+  useUpdateEffect(() => {
+    // let tags: string[] = []
+    // const queryTags = queryParams.get('tags')
+    // if (queryTags) {
+    //   tags = queryTags.split(',')
+    // }
     dispatch(
-      libraryActions.fetchBookmarks(
-        { username: params.username, tags },
-        apiUrl,
-      ),
+      libraryActions.fetchBookmarks({ username: params.username }, apiUrl),
     )
   }, [queryParams])
 
+  useUpdateEffect(() => {
+    sessionStorage.setItem('bookmarks', JSON.stringify(bookmarks))
+  }, [bookmarks])
+
+  useUpdateEffect(() => {
+    if (scrollTo) {
+      window.scrollTo(0, scrollTo)
+      setScrollTo(null)
+    }
+  }, [scrollTo])
+
   useEffect(() => {
     setIsHydrated(true)
+    const bookmarks = sessionStorage.getItem('bookmarks')
+    const scrollY = sessionStorage.getItem('scrollY')
+    if (bookmarks) {
+      dispatch(libraryActions.setBookmarks(JSON.parse(bookmarks)))
+      if (scrollY) {
+        setScrollTo(parseInt(scrollY))
+      }
+    } else {
+      dispatch(
+        libraryActions.fetchBookmarks({ username: params.username }, apiUrl),
+      )
+    }
+    return () => {
+      sessionStorage.removeItem('bookmarks')
+      sessionStorage.removeItem('scrollY')
+    }
   }, [])
 
   return (
@@ -89,7 +118,13 @@ const Page: React.FC = () => {
         />
       }
     >
-      {isHydrated && !isFetchingBookmarks ? bookmarksList : <div>skeleton</div>}
+      <div style={{ visibility: scrollTo ? 'hidden' : 'visible' }}>
+        {isHydrated && !isFetchingBookmarks ? (
+          bookmarkList
+        ) : (
+          <div>skeleton</div>
+        )}
+      </div>
     </Library>
   )
 }
