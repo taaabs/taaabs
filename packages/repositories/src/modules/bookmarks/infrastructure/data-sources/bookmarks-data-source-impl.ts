@@ -1,7 +1,6 @@
 import { BookmarksDataSource } from './bookmarks-data-source'
 import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
 import { BookmarksParams } from '../../domain/types/bookmarks.params'
-import queryString from 'query-string'
 
 export class BookmarksDataSourceImpl implements BookmarksDataSource {
   constructor(private readonly _apiUrl: string) {}
@@ -9,7 +8,7 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
   public async getAuthorized(
     params: BookmarksParams.Authorized,
   ): Promise<BookmarksDto.Response.Authorized> {
-    const queryParams: BookmarksDto.QueryParams.Public = {
+    const queryParams = {
       tags: params.tags?.join(','),
       category_id: params.categoryId,
       after: params.after,
@@ -24,7 +23,9 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
     }
 
     const response = await fetch(
-      `${this._apiUrl}/v1/bookmarks?${queryString.stringify(queryParams)}`,
+      `${this._apiUrl}/v1/bookmarks?${new URLSearchParams(
+        JSON.parse(JSON.stringify(queryParams)),
+      ).toString()}`,
     )
 
     return await response.json()
@@ -46,10 +47,11 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       // date_start:
       // sort_by:
     }
+
     const response = await fetch(
-      `${this._apiUrl}/v1/bookmarks/${params.username}?${queryString.stringify(
-        queryParams,
-      )}`,
+      `${this._apiUrl}/v1/bookmarks/${params.username}?${new URLSearchParams(
+        JSON.parse(JSON.stringify(queryParams)),
+      ).toString()}`,
     )
 
     return await response.json()

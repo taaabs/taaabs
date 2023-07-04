@@ -1,13 +1,14 @@
 'use client'
 
 import { useOtherUserDispatch, useOtherUserSelector } from '@/hooks/redux'
-import { libraryActions } from '@repositories/stores/other-user/features/library/library.slice'
+import { otherUserLibraryActions } from '@repositories/stores/other-user/features/library/library.slice'
 import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
 import { Bookmark } from '@web-ui/components/app/molecules/bookmark'
 import { Library } from '@web-ui/components/app/templates/library'
 import { useSearchParams, useRouter, useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -41,15 +42,28 @@ const Page: React.FC = () => {
       <div>nothing to show</div>
     )
 
-  useUpdateEffect(() => {
-    // let tags: string[] = []
-    // const queryTags = queryParams.get('tags')
-    // if (queryTags) {
-    //   tags = queryTags.split(',')
-    // }
+  const fetchBookmarks = () => {
+    const fetchBookmarksParams: BookmarksParams.Public = {
+      username: params.username,
+    }
+
+    const queryTags = queryParams.get('tags')
+    if (queryTags) {
+      fetchBookmarksParams.tags = queryTags.split(',')
+    }
+
+    const queryCategoryId = queryParams.get('category_id')
+    if (queryCategoryId) {
+      fetchBookmarksParams.categoryId = queryCategoryId
+    }
+
     dispatch(
-      libraryActions.fetchBookmarks({ username: params.username }, apiUrl),
+      otherUserLibraryActions.fetchBookmarks(fetchBookmarksParams, apiUrl),
     )
+  }
+
+  useUpdateEffect(() => {
+    fetchBookmarks()
   }, [queryParams])
 
   useUpdateEffect(() => {
@@ -60,11 +74,9 @@ const Page: React.FC = () => {
     setIsHydrated(true)
     const bookmarks = sessionStorage.getItem('bookmarks')
     if (bookmarks) {
-      dispatch(libraryActions.setBookmarks(JSON.parse(bookmarks)))
+      dispatch(otherUserLibraryActions.setBookmarks(JSON.parse(bookmarks)))
     } else {
-      dispatch(
-        libraryActions.fetchBookmarks({ username: params.username }, apiUrl),
-      )
+      fetchBookmarks()
     }
     return () => {
       sessionStorage.removeItem('bookmarks')

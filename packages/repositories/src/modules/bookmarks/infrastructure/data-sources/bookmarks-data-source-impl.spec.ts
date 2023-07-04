@@ -5,21 +5,20 @@ describe('BookmarksDataSourceImpl', () => {
     it('should call proper endpoint via GET request', () => {
       const sut = new BookmarksDataSourceImpl('http://example.com')
       sut.getAuthorized({})
-      expect(fetch).toHaveBeenCalledWith('http://example.com/v1/bookmarks', {
-        params: {},
-      })
+      expect(fetch).toHaveBeenCalledWith('http://example.com/v1/bookmarks?')
     })
   })
 
   describe('getPublic', () => {
     describe('query parameters are provided', () => {
-      it('passes stringified tags', () => {
+      it('should provide stringified tags', () => {
         const sut = new BookmarksDataSourceImpl('http://example.com')
         const username = 'test'
         sut.getPublic({ username: username, tags: ['a', 'b', 'c'] })
         expect(fetch).toHaveBeenCalledWith(
-          `http://example.com/v1/bookmarks/${username}`,
-          { params: { tags: 'a,b,c' } },
+          `http://example.com/v1/bookmarks/${username}?tags=${encodeURIComponent(
+            'a,b,c',
+          )}`,
         )
       })
     })

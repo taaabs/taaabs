@@ -27,12 +27,13 @@ export const useSessionScrollRestoration = (
   })
 
   useEffect(() => {
-    mainInnerRef.current?.addEventListener('scroll', () => {
+    const listener = () => {
       const scrollTop = mainInnerRef.current?.scrollTop
       if (scrollTop != undefined) {
         setScrollY(scrollTop)
       }
-    })
+    }
+    mainInnerRef.current?.addEventListener('scroll', listener)
 
     const scrollY = sessionStorage.getItem('scrollY')
     if (scrollY) {
@@ -41,6 +42,7 @@ export const useSessionScrollRestoration = (
 
     return () => {
       sessionStorage.removeItem('scrollY')
+      mainInnerRef.current?.removeEventListener('scroll', listener)
     }
   }, [])
 
@@ -52,5 +54,5 @@ export const useSessionScrollRestoration = (
     }
   }, [scrollTo])
 
-  return { isRestoringScrollPosition: scrollTo != null }
+  return { isRestoringScrollPosition: scrollTo != null && scrollTo != 0 }
 }

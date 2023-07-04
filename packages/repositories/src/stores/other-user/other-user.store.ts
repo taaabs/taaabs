@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { librarySlice } from './features/library/library.slice'
+import { otherUserLibrarySlice } from './features/library/library.slice'
 
 export const otherUserStore = configureStore({
   reducer: {
-    library: librarySlice.reducer,
+    library: otherUserLibrarySlice.reducer,
   },
 })
 

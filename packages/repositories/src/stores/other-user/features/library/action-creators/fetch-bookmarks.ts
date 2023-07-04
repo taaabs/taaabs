@@ -3,7 +3,7 @@ import { GetPublicBookmarks } from '@repositories/modules/bookmarks/domain/useca
 import { BookmarksDataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks-data-source-impl'
 import { BookmarksRepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks-repository-impl'
 import { OtherUserDispatch } from '@repositories/stores/other-user/other-user.store'
-import { libraryActions } from '../library.slice'
+import { otherUserLibraryActions } from '../library.slice'
 
 export const fetchBookmarks = (
   params: BookmarksParams.Public,
@@ -14,10 +14,10 @@ export const fetchBookmarks = (
     const repository = new BookmarksRepositoryImpl(dataSource)
     const getBookmarks = new GetPublicBookmarks(repository)
 
-    dispatch(libraryActions.setIsFetchingBookmarks(true))
+    dispatch(otherUserLibraryActions.setIsFetchingBookmarks(true))
     const { bookmarks, pagination } = await getBookmarks.invoke(params)
-    dispatch(libraryActions.setBookmarks(bookmarks))
-    dispatch(libraryActions.setHasMoreBookmarks(pagination.hasMore))
-    dispatch(libraryActions.setIsFetchingBookmarks(false))
+    dispatch(otherUserLibraryActions.setBookmarks(bookmarks))
+    dispatch(otherUserLibraryActions.setHasMoreBookmarks(pagination.hasMore))
+    dispatch(otherUserLibraryActions.setIsFetchingBookmarks(false))
   }
 }

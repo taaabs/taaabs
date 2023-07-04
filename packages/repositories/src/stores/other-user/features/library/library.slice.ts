@@ -15,7 +15,7 @@ const initialState: LibraryState = {
   hasMoreBookmarks: null,
 }
 
-export const librarySlice = createSlice({
+export const otherUserLibrarySlice = createSlice({
   name: 'other-user-library',
   initialState,
   reducers: {
@@ -31,7 +31,7 @@ export const librarySlice = createSlice({
   },
 })
 
-export const libraryActions = {
-  ...librarySlice.actions,
+export const otherUserLibraryActions = {
+  ...otherUserLibrarySlice.actions,
   ...thunks,
 }

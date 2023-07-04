@@ -154,6 +154,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
 
   useEffect(() => {
     setSlideoutInstances()
+
     return () => {
       slideoutLeft?.destroy()
       slideoutRight?.destroy()
