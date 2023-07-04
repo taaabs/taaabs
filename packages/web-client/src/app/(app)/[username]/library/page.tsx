@@ -8,7 +8,6 @@ import { Library } from '@web-ui/components/app/templates/library'
 import { useSearchParams, useRouter, useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useSessionScrollY } from '@/hooks/useSessionScrollY'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -17,8 +16,6 @@ const Page: React.FC = () => {
   const router = useRouter()
   const params = useParams()
   const [isHydrated, setIsHydrated] = useState(false)
-  useSessionScrollY()
-  const [scrollTo, setScrollTo] = useState<number | null>(null)
   const dispatch = useOtherUserDispatch()
   const { bookmarks, isFetchingBookmarks } = useOtherUserSelector(
     (state) => state.library,
@@ -59,22 +56,11 @@ const Page: React.FC = () => {
     sessionStorage.setItem('bookmarks', JSON.stringify(bookmarks))
   }, [bookmarks])
 
-  useUpdateEffect(() => {
-    if (scrollTo) {
-      window.scrollTo(0, scrollTo)
-      setScrollTo(null)
-    }
-  }, [scrollTo])
-
   useEffect(() => {
     setIsHydrated(true)
     const bookmarks = sessionStorage.getItem('bookmarks')
-    const scrollY = sessionStorage.getItem('scrollY')
     if (bookmarks) {
       dispatch(libraryActions.setBookmarks(JSON.parse(bookmarks)))
-      if (scrollY) {
-        setScrollTo(parseInt(scrollY))
-      }
     } else {
       dispatch(
         libraryActions.fetchBookmarks({ username: params.username }, apiUrl),
@@ -82,7 +68,6 @@ const Page: React.FC = () => {
     }
     return () => {
       sessionStorage.removeItem('bookmarks')
-      sessionStorage.removeItem('scrollY')
     }
   }, [])
 
@@ -118,13 +103,7 @@ const Page: React.FC = () => {
         />
       }
     >
-      <div style={{ visibility: scrollTo ? 'hidden' : 'visible' }}>
-        {isHydrated && !isFetchingBookmarks ? (
-          bookmarkList
-        ) : (
-          <div>skeleton</div>
-        )}
-      </div>
+      {isHydrated && !isFetchingBookmarks ? bookmarkList : <div>skeleton</div>}
     </Library>
   )
 }

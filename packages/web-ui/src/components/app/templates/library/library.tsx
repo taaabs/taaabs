@@ -8,6 +8,7 @@ import cn from 'classnames'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import styles from './library.module.scss'
+import { useSessionScrollRestoration } from './hooks/use-session-scroll-restoration'
 
 export namespace LibraryTypes {
   export type Props = {
@@ -26,7 +27,10 @@ const SLIDABLE_WIDTH = 300
 export const Library: React.FC<LibraryTypes.Props> = (props) => {
   const sidebar = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLDivElement>(null)
+  const mainInner = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLDivElement>(null)
+
+  const { isRestoringScrollPosition } = useSessionScrollRestoration(mainInner)
 
   const swipeState = useSwipe(main, {
     preventDefault: false,
@@ -198,6 +202,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                   ? 'none'
                   : 'all',
             }}
+            ref={mainInner}
           >
             <div
               className={cn(styles['main__inner__mobile-alpha-overlay'], {
@@ -224,19 +229,27 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                 }
               />
             </div>
-            <div className={styles['main__inner__desktop-title-bar']}>
-              <_DesktopTitleBar
-                text={
-                  props.titleBar
-                    ? {
-                        primary: props.titleBar.primaryText,
-                        secondary: props.titleBar.secondaryText,
-                      }
-                    : undefined
-                }
-              />
+            <div
+              style={{
+                visibility: isRestoringScrollPosition ? 'hidden' : 'visible',
+              }}
+            >
+              <div className={styles['main__inner__desktop-title-bar']}>
+                <_DesktopTitleBar
+                  text={
+                    props.titleBar
+                      ? {
+                          primary: props.titleBar.primaryText,
+                          secondary: props.titleBar.secondaryText,
+                        }
+                      : undefined
+                  }
+                />
+              </div>
+              <div className={styles.main__inner__content}>
+                {props.children}
+              </div>
             </div>
-            <div className={styles.main__inner__content}>{props.children}</div>
           </div>
         </div>
 
