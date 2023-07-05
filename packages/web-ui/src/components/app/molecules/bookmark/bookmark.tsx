@@ -102,6 +102,7 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
           >
             {dayjs(props.createdAt).fromNow()}
           </div>
+          <div className={styles.info__inner__separator} />
           {/* {props.visibility && props.onVisibilityClick && (
             <>
               <button
