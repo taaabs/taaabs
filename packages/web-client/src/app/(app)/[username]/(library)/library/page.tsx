@@ -4,7 +4,8 @@ import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/naviga
 import { Bookmark } from '@web-ui/components/app/molecules/bookmark'
 import { Library } from '@web-ui/components/app/templates/library'
 import { useSearchParams, useRouter, useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useIsHydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { bookmarksActions } from '@repositories/stores/other-user/library/bookmarks/bookmarks.slice'
@@ -16,7 +17,7 @@ const Page: React.FC = () => {
   const queryParams = useSearchParams()
   const router = useRouter()
   const params = useParams()
-  const [isHydrated, setIsHydrated] = useState(false)
+  const isHydrated = useIsHydrated()
   const dispatch = useLibraryDispatch()
   const {
     bookmarks,
@@ -30,12 +31,12 @@ const Page: React.FC = () => {
       username: params.username,
     }
 
-    const queryTags = queryParams.get('tags')
+    const queryTags = queryParams.get('t')
     if (queryTags) {
       fetchBookmarksParams.tags = queryTags.split(',')
     }
 
-    const queryCategoryId = queryParams.get('category_id')
+    const queryCategoryId = queryParams.get('c')
     if (queryCategoryId) {
       fetchBookmarksParams.categoryId = queryCategoryId
     }
@@ -63,7 +64,6 @@ const Page: React.FC = () => {
   }, [bookmarks])
 
   useEffect(() => {
-    setIsHydrated(true)
     const bookmarks = sessionStorage.getItem('bookmarks')
     if (bookmarks) {
       dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
