@@ -21,34 +21,34 @@ const Page: React.FC = () => {
   const dispatch = useLibraryDispatch()
   const {
     bookmarks,
-    isGettingFirstBookmarks: isFetchingFirstBookmarks,
-    isGettingMoreBookmarks: isFetchingMoreBookmarks,
+    isGettingFirstBookmarks,
+    isGettingMoreBookmarks,
     hasMoreBookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
 
   const getBookmarks = ({ getNextPage }: { getNextPage?: boolean }) => {
-    const fetchBookmarksParams: BookmarksParams.Public = {
+    const getBookmarksParams: BookmarksParams.Public = {
       username: params.username,
     }
 
     const queryTags = queryParams.get('t')
     if (queryTags) {
-      fetchBookmarksParams.tags = queryTags.split(',')
+      getBookmarksParams.tags = queryTags.split(',')
     }
 
     const queryCategoryId = queryParams.get('c')
     if (queryCategoryId) {
-      fetchBookmarksParams.categoryId = queryCategoryId
+      getBookmarksParams.categoryId = queryCategoryId
     }
 
     if (getNextPage) {
       if (!bookmarks) throw 'Bookmarks should be there.'
-      fetchBookmarksParams.after = bookmarks.slice(-1)[0].id
+      getBookmarksParams.after = bookmarks.slice(-1)[0].id
     }
 
     dispatch(
       bookmarksActions.getBookmarks({
-        params: fetchBookmarksParams,
+        params: getBookmarksParams,
         apiUrl,
       }),
     )
@@ -113,8 +113,8 @@ const Page: React.FC = () => {
           ]}
         />
       }
-      isGettingFirstBookmarks={isFetchingFirstBookmarks}
-      isGettingMoreBookmarks={isFetchingMoreBookmarks}
+      isGettingFirstBookmarks={isGettingFirstBookmarks}
+      isGettingMoreBookmarks={isGettingMoreBookmarks}
       hasMoreBookmarks={hasMoreBookmarks || false}
       getMoreBookmarks={() => {
         getBookmarks({ getNextPage: true })

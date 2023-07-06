@@ -20,7 +20,7 @@ export namespace LibraryTypes {
       primaryText: string
       secondaryText: string
     }
-    bookmarks: React.ReactNode[]
+    bookmarks: React.ReactNode
     isGettingFirstBookmarks: boolean
     isGettingMoreBookmarks: boolean
     hasMoreBookmarks: boolean

@@ -7,18 +7,13 @@ import { LogoForHeader } from '@web-ui/components/common/molecules/logo-for-head
 import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
 import { AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
 import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
-import { useRef } from 'react'
 import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
-import { useElementVisibleHeight } from '@web-ui/hooks/use-element-visible-height'
 
 export default {
   title: 'page-previews/library',
 }
 
 export const Primary = () => {
-  const footer = useRef<HTMLDivElement>(null)
-  const footerVisibleHeight = useElementVisibleHeight(footer)
-
   return (
     <App
       slotAppHeaderDesktop={
@@ -54,11 +49,6 @@ export const Primary = () => {
           }
         />
       }
-      slotFooterDesktop={
-        <div style={{ height: 1000 }} ref={footer}>
-          footer
-        </div>
-      }
       slotBottomNavigationBar={
         <BottomNavigationBar
           onClickAdd={() => {}}
@@ -83,14 +73,20 @@ export const Primary = () => {
           primaryText: 'All bookmarks',
           secondaryText: '3230 results',
         }}
-        bottomOffset={footerVisibleHeight}
-      >
-        {bookmark}
-        {bookmark}
-        {bookmark}
-        {bookmark}
-        {bookmark}
-      </Library>
+        getMoreBookmarks={() => {}}
+        hasMoreBookmarks={false}
+        isGettingFirstBookmarks={false}
+        isGettingMoreBookmarks={false}
+        bookmarks={
+          <>
+            {bookmark}
+            {bookmark}
+            {bookmark}
+            {bookmark}
+            {bookmark}
+          </>
+        }
+      ></Library>
     </App>
   )
 }

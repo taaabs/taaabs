@@ -26,6 +26,10 @@ const config: StorybookConfig = {
             find: '@web-ui',
             replacement: path.resolve(__dirname, '../src'),
           },
+          {
+            find: '@shared',
+            replacement: path.resolve(__dirname, '../../shared/src'),
+          },
         ],
       },
       // https://github.com/storybookjs/storybook/issues/18920
