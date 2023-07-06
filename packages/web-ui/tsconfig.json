@@ -23,6 +23,9 @@
     "paths": {
       "@web-ui/*": [
         "src/*"
+      ],
+      "@shared/*": [
+        "../shared/src/*"
       ]
     },
     "types": [
@@ -34,6 +37,7 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
+    "../shared/src/**/*.ts"
   ],
   "exclude": [
     "node_modules"

@@ -10,6 +10,7 @@ import useSwipe from 'beautiful-react-hooks/useSwipe'
 import styles from './library.module.scss'
 import { useSessionScrollRestoration } from './hooks/use-session-scroll-restoration'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
+import { useIsHydrated } from '@shared/hooks'
 
 export namespace LibraryTypes {
   export type Props = {
@@ -35,7 +36,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
   const mainInner = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLDivElement>(null)
   const pagination = useRef<HTMLDivElement>(null)
-  const [isHydrated, setIsHydrated] = useState(false)
+  const isHydrated = useIsHydrated()
 
   const { isRestoringScrollPosition } = useSessionScrollRestoration(mainInner)
   const isPaginationVisible = useViewportSpy(pagination)
@@ -171,7 +172,6 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
   }, [isPaginationVisible])
 
   useEffect(() => {
-    setIsHydrated(true)
     setSlideoutInstances()
 
     return () => {

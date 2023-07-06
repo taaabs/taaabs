@@ -47,7 +47,7 @@
     ".next/types/**/*.ts",
     "../web-ui/src/**/*.ts",
     "../repositories/src/**/*.ts",
-    "src/app/(app)/@user/pag1e.tsx1",
+    "../shared/src/**/*.ts"
   ],
   "exclude": [
     "node_modules",

@@ -308,6 +308,9 @@ importers:
 
   packages/web-ui:
     dependencies:
+      '@taaabs/shared':
+        specifier: workspace:*
+        version: link:../shared
       beautiful-react-hooks:
         specifier: ^4.3.0
         version: 4.3.0(react-dom@18.2.0)(react-router-dom@6.12.1)(react@18.2.0)(rxjs@7.8.1)
