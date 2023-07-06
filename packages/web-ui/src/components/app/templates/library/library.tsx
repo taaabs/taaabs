@@ -9,6 +9,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import styles from './library.module.scss'
 import { useSessionScrollRestoration } from './hooks/use-session-scroll-restoration'
+import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 
 export namespace LibraryTypes {
   export type Props = {
@@ -18,7 +19,11 @@ export namespace LibraryTypes {
       primaryText: string
       secondaryText: string
     }
-    children: React.ReactNode
+    bookmarks: React.ReactNode[]
+    isGettingFirstBookmarks: boolean
+    isGettingMoreBookmarks: boolean
+    hasMoreBookmarks: boolean
+    getMoreBookmarks: () => void
   }
 }
 
@@ -29,8 +34,11 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
   const main = useRef<HTMLDivElement>(null)
   const mainInner = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLDivElement>(null)
+  const pagination = useRef<HTMLDivElement>(null)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   const { isRestoringScrollPosition } = useSessionScrollRestoration(mainInner)
+  const isPaginationVisible = useViewportSpy(pagination)
 
   const swipeState = useSwipe(main, {
     preventDefault: false,
@@ -152,7 +160,18 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
     }
   }, [swipeState])
 
+  useUpdateEffect(() => {
+    if (
+      isPaginationVisible &&
+      props.hasMoreBookmarks &&
+      !props.isGettingMoreBookmarks
+    ) {
+      props.getMoreBookmarks()
+    }
+  }, [isPaginationVisible])
+
   useEffect(() => {
+    setIsHydrated(true)
     setSlideoutInstances()
 
     return () => {
@@ -232,7 +251,10 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
             </div>
             <div
               style={{
-                visibility: isRestoringScrollPosition ? 'hidden' : 'visible',
+                visibility:
+                  isRestoringScrollPosition || !isHydrated
+                    ? 'hidden'
+                    : 'visible',
               }}
             >
               <div className={styles['main__inner__desktop-title-bar']}>
@@ -247,8 +269,22 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                   }
                 />
               </div>
-              <div className={styles.main__inner__content}>
-                {props.children}
+              <div className={styles.main__inner__bookmarks}>
+                {props.bookmarks}
+              </div>
+              <div
+                className={cn([
+                  styles['main__inner__pagination'],
+                  {
+                    [styles['main__inner__pagination--hidden']]:
+                      props.isGettingFirstBookmarks,
+                  },
+                ])}
+                ref={pagination}
+              >
+                {props.hasMoreBookmarks
+                  ? 'Loading more results...'
+                  : 'No more results'}
               </div>
             </div>
           </div>

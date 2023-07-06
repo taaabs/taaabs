@@ -1,7 +1,5 @@
 'use client'
 
-import { useOtherUserDispatch, useOtherUserSelector } from '@/hooks/redux'
-import { otherUserLibraryActions } from '@repositories/stores/other-user/features/library/library.slice'
 import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
 import { Bookmark } from '@web-ui/components/app/molecules/bookmark'
 import { Library } from '@web-ui/components/app/templates/library'
@@ -9,6 +7,8 @@ import { useSearchParams, useRouter, useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
+import { bookmarksActions } from '@repositories/stores/other-user/library/bookmarks/bookmarks.slice'
+import { useLibraryDispatch, useLibrarySelector } from './hooks'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -17,32 +17,15 @@ const Page: React.FC = () => {
   const router = useRouter()
   const params = useParams()
   const [isHydrated, setIsHydrated] = useState(false)
-  const dispatch = useOtherUserDispatch()
-  const { bookmarks, isFetchingBookmarks } = useOtherUserSelector(
-    (state) => state.library,
-  )
+  const dispatch = useLibraryDispatch()
+  const {
+    bookmarks,
+    isGettingFirstBookmarks: isFetchingFirstBookmarks,
+    isGettingMoreBookmarks: isFetchingMoreBookmarks,
+    hasMoreBookmarks,
+  } = useLibrarySelector((state) => state.bookmarks)
 
-  const bookmarkList =
-    bookmarks && bookmarks.length ? (
-      bookmarks.map((bookmark) => (
-        <Bookmark
-          title={bookmark.title}
-          site="site"
-          onSiteClick={() => {}}
-          onSavesClick={() => {}}
-          onDateClick={() => {}}
-          url={bookmark.url}
-          createdAt={new Date(bookmark.createdAt)}
-          saves={bookmark.saves}
-          tags={bookmark.tags}
-          key={bookmark.id}
-        />
-      ))
-    ) : (
-      <div>nothing to show</div>
-    )
-
-  const fetchBookmarks = () => {
+  const getBookmarks = ({ getNextPage }: { getNextPage?: boolean }) => {
     const fetchBookmarksParams: BookmarksParams.Public = {
       username: params.username,
     }
@@ -57,29 +40,45 @@ const Page: React.FC = () => {
       fetchBookmarksParams.categoryId = queryCategoryId
     }
 
+    if (getNextPage) {
+      if (!bookmarks) throw 'Bookmarks should be there.'
+      fetchBookmarksParams.after = bookmarks.slice(-1)[0].id
+    }
+
     dispatch(
-      otherUserLibraryActions.fetchBookmarks(fetchBookmarksParams, apiUrl),
+      bookmarksActions.getBookmarks({
+        params: fetchBookmarksParams,
+        apiUrl,
+      }),
     )
   }
 
   useUpdateEffect(() => {
-    fetchBookmarks()
+    getBookmarks({})
   }, [queryParams])
 
   useUpdateEffect(() => {
     sessionStorage.setItem('bookmarks', JSON.stringify(bookmarks))
+    sessionStorage.setItem('hasMoreBookmarks', JSON.stringify(hasMoreBookmarks))
   }, [bookmarks])
 
   useEffect(() => {
     setIsHydrated(true)
     const bookmarks = sessionStorage.getItem('bookmarks')
     if (bookmarks) {
-      dispatch(otherUserLibraryActions.setBookmarks(JSON.parse(bookmarks)))
+      dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
+      const hasMoreBookmarks = sessionStorage.getItem('hasMoreBookmarks')
+      if (hasMoreBookmarks) {
+        dispatch(
+          bookmarksActions.setHasMoreBookmarks(hasMoreBookmarks == 'true'),
+        )
+      }
     } else {
-      fetchBookmarks()
+      getBookmarks({})
     }
     return () => {
       sessionStorage.removeItem('bookmarks')
+      sessionStorage.removeItem('hasMoreBookmarks')
     }
   }, [])
 
@@ -114,9 +113,31 @@ const Page: React.FC = () => {
           ]}
         />
       }
-    >
-      {isHydrated && !isFetchingBookmarks ? bookmarkList : <div>skeleton</div>}
-    </Library>
+      isGettingFirstBookmarks={isFetchingFirstBookmarks}
+      isGettingMoreBookmarks={isFetchingMoreBookmarks}
+      hasMoreBookmarks={hasMoreBookmarks || false}
+      getMoreBookmarks={() => {
+        getBookmarks({ getNextPage: true })
+      }}
+      bookmarks={
+        bookmarks && bookmarks.length
+          ? bookmarks.map((bookmark) => (
+              <Bookmark
+                title={bookmark.title}
+                site="site"
+                onSiteClick={() => {}}
+                onSavesClick={() => {}}
+                onDateClick={() => {}}
+                url={bookmark.url}
+                createdAt={new Date(bookmark.createdAt)}
+                saves={bookmark.saves}
+                tags={bookmark.tags}
+                key={bookmark.id}
+              />
+            ))
+          : []
+      }
+    />
   )
 }
 

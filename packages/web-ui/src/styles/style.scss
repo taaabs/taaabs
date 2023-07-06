@@ -76,6 +76,7 @@ html {
 body {
   font: 15px/1.3 var(--font-family-inter);
   color: var(--color-text--normal);
+  overflow-y: scroll;
 }
 
 body,

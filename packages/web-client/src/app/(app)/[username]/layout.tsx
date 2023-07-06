@@ -1,4 +1,3 @@
-import { OtherUserStoreProvider } from './other-user-store-provider'
 import { Metadata } from 'next'
 import { AvatarContextSetter } from './avatar-context-setter'
 import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
@@ -14,7 +13,7 @@ const Layout: React.FC<{
   const metadata = await _getMetadata({ username: params.username })
 
   return (
-    <OtherUserStoreProvider>
+    <>
       <AvatarContextSetter
         avatar={
           metadata.avatar
@@ -26,7 +25,7 @@ const Layout: React.FC<{
         }
       />
       {children}
-    </OtherUserStoreProvider>
+    </>
   )
 }
 

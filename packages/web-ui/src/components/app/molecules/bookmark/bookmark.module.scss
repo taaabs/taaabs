@@ -6,7 +6,6 @@
   background: var(--bookmark-background);
   border: var(--border-secondary);
   @include transition-100ms(border-color);
-  margin-bottom: var(--distance-8px);
   @include to992 {
     grid-template-areas:
       'main main'
@@ -73,7 +72,7 @@
     &__text {
       font-weight: var(--font-weight-inter-medium);
       font-size: var(--font-size-1-8rem);
-      padding-bottom: var(--distance-0-8rem);
+      margin-bottom: var(--distance-0-8rem);
       @include hover {
         text-decoration: underline;
       }
@@ -82,13 +81,13 @@
   &__site {
     color: var(--bookmark-site-foreground);
     font-size: var(--font-size-1-5rem);
-    padding: var(--distance-7px) 0 var(--distance-11px) 0;
-    @include at992 {
-      padding: var(--distance-4px) 0 var(--distance-8px) 0;
-      font-size: var(--font-size-1-3rem);
-    }
     @include to992 {
       display: block;
+      padding: var(--distance-7px) 0 var(--distance-11px) 0;
+    }
+    @include at992 {
+      margin: var(--distance-4px) 0 var(--distance-8px) 0;
+      font-size: var(--font-size-1-3rem);
     }
     @include at992 {
       &::before {
@@ -197,19 +196,24 @@
     display: flex;
     height: 100%;
     width: 100%;
-    padding: 0 var(--distance-16px);
+    padding-left: var(--distance-16px);
+    @include at992 {
+      padding: var(--distance-8px) var(--distance-16px);
+    }
     &__separator {
       @include to992 {
         margin: 0 var(--distance-12px);
         background: var(--border-color-secondary);
         width: var(--distance-1px);
-        height: 100%;
       }
       @include at992 {
         display: flex;
         align-items: center;
         color: var(--text-color-dimmed);
         padding: 0 var(--distance-5px);
+        &:last-of-type {
+          display: none;
+        }
         &::after {
           content: '·';
           color: var(--text-color-dimmed);
@@ -219,21 +223,18 @@
     }
     &__saves {
       font-size: var(--font-size-1-3rem);
-      height: 100%;
       color: var(--text-color-variant);
       @include hover {
         text-decoration: underline;
       }
-      @include at992 {
-        padding: var(--distance-0-8rem) 0;
-      }
     }
     &__date {
       font-size: var(--font-size-13px);
-      display: flex;
-      align-items: center;
-      height: 100%;
       color: var(--text-color-dimmed);
+      @include to992 {
+        display: flex;
+        align-items: center;
+      }
     }
   }
 }

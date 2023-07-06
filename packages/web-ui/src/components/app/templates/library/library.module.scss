@@ -185,9 +185,23 @@
         display: none;
       }
     }
-    &__content {
+    &__bookmarks {
       @include to992 {
         margin-top: var(--distance-8px);
+      }
+      > div {
+        margin-bottom: var(--distance-8px);
+      }
+    }
+    &__pagination {
+      display: flex;
+      padding: var(--distance-40px);
+      justify-content: center;
+      color: var(--text-color-dimmed);
+      width: 100%;
+      font-size: var(--font-size-13px);
+      &--hidden {
+        visibility: hidden;
       }
     }
   }
