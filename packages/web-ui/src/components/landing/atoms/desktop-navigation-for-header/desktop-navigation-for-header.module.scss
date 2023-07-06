@@ -17,7 +17,7 @@
     @include transition-100ms(color);
     color: var(--text-color-variant);
     @include hover {
-      color: var(--text-color--normal);
+      color: var(--text-color-normal);
     }
     @include at992 {
       height: var(--button-dimension-48px);
@@ -39,7 +39,7 @@
       height: 0.3em;
     }
     &--active {
-      color: var(--text-color--normal);
+      color: var(--text-color-normal);
       position: relative;
       &::before {
         // transition is purposely on active modifier to avoid rendering

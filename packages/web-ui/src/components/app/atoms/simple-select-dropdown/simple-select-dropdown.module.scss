@@ -1,0 +1,27 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  width: 100%;
+  border-radius: var(--border-radius-10px);
+  background-color: var(--simple-select-dropdown-background);
+  display: flex;
+  flex-direction: column;
+  border: var(--border-primary);
+  box-shadow: var(--simple-select-dropdown-box-shadow);
+  overflow: hidden;
+}
+.item {
+  padding: var(--distance-8px) var(--distance-16px);
+  border-bottom: var(--border-secondary);
+  border-width: 1px;
+  display: flex;
+  font-weight: var(--font-weight-inter-medium);
+  &:last-of-type {
+    border-width: 0;
+  }
+  @include transition-100ms(background-color);
+  @include hover {
+    background-color: var(--simple-select-dropdown-background-hover);
+  }
+}

@@ -15,10 +15,10 @@
       height: var(--button-dimension-52px);
     }
     @include hover {
-      color: var(--text-color--normal);
+      color: var(--text-color-normal);
     }
     &--active {
-      color: var(--text-color--normal);
+      color: var(--text-color-normal);
       font-weight: var(--font-weight-inter-medium);
     }
   }

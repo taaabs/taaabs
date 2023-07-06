@@ -1,0 +1,42 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--button-dimension-46px);
+  width: 100%;
+  border-radius: var(--border-radius-10px);
+  border: var(--border-secondary);
+  padding: 0 var(--distance-12px);
+  @include transition-100ms(border-color);
+  @include hover {
+    border-color: var(--border-color-primary);
+  }
+  &--toggled {
+    border-color: var(--border-color-primary);
+  }
+}
+.inner {
+  display: flex;
+  flex-direction: column;
+  span:first-child {
+    font-size: var(--font-size-13px);
+    color: var(--text-color-dimmed);
+  }
+  span:last-child {
+    font-weight: var(--font-weight-inter-medium);
+  }
+}
+.arrow {
+  @include transition-100ms(transform);
+  svg {
+    transform: rotate(-90deg);
+    width: var(--icon-dimension-12px);
+    height: var(--icon-dimension-12px);
+  }
+  &--toggled {
+    transform: rotate(180deg);
+  }
+}
