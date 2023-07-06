@@ -89,19 +89,19 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
 
       <div className={styles.info}>
         <div className={styles.info__inner}>
-          <button
-            className={styles['info__inner__saves']}
-            onClick={props.onSavesClick}
-          >
-            {props.saves} saves
-          </button>
-          <div className={styles.info__inner__separator} />
           <div
             className={styles['info__inner__date']}
             onClick={props.onDateClick}
           >
             {dayjs(props.createdAt).fromNow()}
           </div>
+          <div className={styles.info__inner__separator} />
+          <button
+            className={styles['info__inner__saves']}
+            onClick={props.onSavesClick}
+          >
+            {props.saves} saved
+          </button>
           <div className={styles.info__inner__separator} />
           {/* {props.visibility && props.onVisibilityClick && (
             <>
