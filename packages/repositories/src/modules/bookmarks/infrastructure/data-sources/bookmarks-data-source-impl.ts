@@ -41,11 +41,11 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       archived: params.archived,
       nsfw: params.nsfw,
       starred_only: params.starredOnly,
+      sort_by: params.sortBy,
       // TODO: pass remaining params
       // date_end:
       // date_range:
       // date_start:
-      // sort_by:
     }
 
     const response = await fetch(

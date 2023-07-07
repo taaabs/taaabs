@@ -10,11 +10,13 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { bookmarksActions } from '@repositories/stores/other-user/library/bookmarks/bookmarks.slice'
-import { useLibraryDispatch, useLibrarySelector } from './hooks'
+import { useLibraryDispatch, useLibrarySelector } from './_hooks/store'
 import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
 import { ButtonSelect } from '@web-ui/components/app/atoms/button-select'
 import { SimpleSelectDropdown } from '@web-ui/components/app/atoms/simple-select-dropdown'
 import OutsideClickHandler from 'react-outside-click-handler'
+import { SortOption, useSortOptions } from './_hooks/use-sort-options'
+import { SortBy } from '@shared/dtos/modules/bookmarks/sort-by'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -30,6 +32,9 @@ const Page: React.FC = () => {
     isGettingMoreBookmarks,
     hasMoreBookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
+  const { selectedSortOption, setSelectedSortOption } = useSortOptions(
+    queryParams.get('s') == 'asc' ? 'oldest-to-newest' : 'newest-to-oldest',
+  )
 
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
   const [isSortDropdownVisible, toggleSortDropdown] = useToggle(false)
@@ -47,6 +52,17 @@ const Page: React.FC = () => {
     const queryCategoryId = queryParams.get('c')
     if (queryCategoryId) {
       getBookmarksParams.categoryId = queryCategoryId
+    }
+
+    const querySortBy = queryParams.get('s')
+    if (querySortBy) {
+      let sortBy: SortBy
+      if (querySortBy == 'asc') {
+        sortBy = SortBy.DATE_ASC
+      } else {
+        sortBy = SortBy.DATE_DESC
+      }
+      getBookmarksParams.sortBy = sortBy
     }
 
     if (getNextPage) {
@@ -69,11 +85,15 @@ const Page: React.FC = () => {
   useUpdateEffect(() => {
     sessionStorage.setItem('bookmarks', JSON.stringify(bookmarks))
     sessionStorage.setItem('hasMoreBookmarks', JSON.stringify(hasMoreBookmarks))
+    sessionStorage.setItem('queryParams', queryParams.toString())
   }, [bookmarks])
 
   useEffect(() => {
     const bookmarks = sessionStorage.getItem('bookmarks')
-    if (bookmarks) {
+    if (
+      bookmarks &&
+      queryParams.toString() == sessionStorage.getItem('queryParams')
+    ) {
       dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
       const hasMoreBookmarks = sessionStorage.getItem('hasMoreBookmarks')
       if (hasMoreBookmarks) {
@@ -87,6 +107,7 @@ const Page: React.FC = () => {
     return () => {
       sessionStorage.removeItem('bookmarks')
       sessionStorage.removeItem('hasMoreBookmarks')
+      sessionStorage.removeItem('queryParams')
     }
   }, [])
 
@@ -157,7 +178,7 @@ const Page: React.FC = () => {
             button: (
               <ButtonSelect
                 label="Sort"
-                currentValue="Newest to Oldest"
+                currentValue={_sortOptionToLabel(selectedSortOption)}
                 isActive={isSortDropdownVisible}
                 onClick={toggleSortDropdown}
               />
@@ -170,14 +191,22 @@ const Page: React.FC = () => {
                 <SimpleSelectDropdown
                   items={[
                     {
-                      label: 'Newest to Oldest',
-                      onClick: () => {},
-                      isSelected: true,
+                      label: _sortOptionToLabel('newest-to-oldest'),
+                      onClick: () => {
+                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                          return
+                        setSelectedSortOption('newest-to-oldest')
+                      },
+                      isSelected: selectedSortOption == 'newest-to-oldest',
                     },
                     {
-                      label: 'Oldest to Newest',
-                      onClick: () => {},
-                      isSelected: false,
+                      label: _sortOptionToLabel('oldest-to-newest'),
+                      onClick: () => {
+                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                          return
+                        setSelectedSortOption('oldest-to-newest')
+                      },
+                      isSelected: selectedSortOption == 'oldest-to-newest',
                     },
                   ]}
                 />
@@ -234,3 +263,10 @@ const Page: React.FC = () => {
 }
 
 export default Page
+
+function _sortOptionToLabel(sortOption: SortOption): string {
+  if (sortOption == 'newest-to-oldest') {
+    return 'Newest to Oldest'
+  }
+  return 'Oldest to Newest'
+}

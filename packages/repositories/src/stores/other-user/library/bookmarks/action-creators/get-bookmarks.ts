@@ -26,6 +26,8 @@ export const getBookmarks = ({
       dispatch(bookmarksActions.setIsGettingMoreBookmarks(true))
     } else {
       dispatch(bookmarksActions.setIsGettingFirstBookmarks(true))
+      dispatch(bookmarksActions.setBookmarks(null))
+      dispatch(bookmarksActions.setHasMoreBookmarks(null))
     }
     const { bookmarks, pagination } = await getBookmarks.invoke(params)
     if (params.after) {

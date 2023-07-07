@@ -165,7 +165,8 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
     if (
       isPaginationVisible &&
       props.hasMoreBookmarks &&
-      !props.isGettingMoreBookmarks
+      !props.isGettingMoreBookmarks &&
+      !props.isGettingFirstBookmarks
     ) {
       props.getMoreBookmarks()
     }

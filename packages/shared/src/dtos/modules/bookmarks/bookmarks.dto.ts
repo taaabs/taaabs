@@ -12,44 +12,44 @@ import { ToBoolean } from '@shared/decorators/to-boolean'
 export namespace BookmarksDto {
   export namespace QueryParams {
     class QueryParams extends PaginationQueryParamsDto {
-      static DEFAULT_DATE_RANGE = DateRange.ANY
-      static DEFAULT_SORT_BY = SortBy.DATE_ASC
-      static DEFAULT_ARCHIVED = ArchivedBookmarks.EXCLUDE
-      static DEFAULT_NSFW = NsfwBookmarks.INCLUDE
-      static DEFAULT_STARRED_ONLY = false
+      public static DEFAULT_DATE_RANGE = DateRange.ANY
+      public static DEFAULT_SORT_BY = SortBy.DATE_DESC
+      public static DEFAULT_ARCHIVED = ArchivedBookmarks.EXCLUDE
+      public static DEFAULT_NSFW = NsfwBookmarks.INCLUDE
+      public static DEFAULT_STARRED_ONLY = false
 
       @ApiProperty({
         description: 'Comma separated list of tags a bookmark must include.',
         example: 'tagA,tagB,tagC',
       })
-      tags?: string
+      public tags?: string
 
-      category_id?: string
+      public category_id?: string
 
-      date_range?: DateRange = QueryParams.DEFAULT_DATE_RANGE
-
-      @ApiProperty({ description: 'Epoch timestamp in seconds.' })
-      @Type()
-      date_start?: number
+      public date_range?: DateRange = QueryParams.DEFAULT_DATE_RANGE
 
       @ApiProperty({ description: 'Epoch timestamp in seconds.' })
       @Type()
-      date_end?: number
+      public date_start?: number
 
-      sort_by?: SortBy = QueryParams.DEFAULT_SORT_BY
+      @ApiProperty({ description: 'Epoch timestamp in seconds.' })
+      @Type()
+      public date_end?: number
+
+      public sort_by?: SortBy = QueryParams.DEFAULT_SORT_BY
 
       @ToBoolean()
-      starred_only?: boolean = QueryParams.DEFAULT_STARRED_ONLY
+      public starred_only?: boolean = QueryParams.DEFAULT_STARRED_ONLY
 
-      archived?: ArchivedBookmarks = QueryParams.DEFAULT_ARCHIVED
+      public archived?: ArchivedBookmarks = QueryParams.DEFAULT_ARCHIVED
 
-      nsfw?: NsfwBookmarks = QueryParams.DEFAULT_NSFW
+      public nsfw?: NsfwBookmarks = QueryParams.DEFAULT_NSFW
     }
 
     export class Authorized extends QueryParams {
-      static DEFAULT_VISIBILITY = BookmarkVisibility.ALL
+      public static DEFAULT_VISIBILITY = BookmarkVisibility.ALL
 
-      visibility?: BookmarkVisibility = Authorized.DEFAULT_VISIBILITY
+      public visibility?: BookmarkVisibility = Authorized.DEFAULT_VISIBILITY
     }
 
     export class Public extends QueryParams {}
@@ -57,29 +57,29 @@ export namespace BookmarksDto {
 
   export namespace Response {
     class Bookmark {
-      id: string
-      title: string
-      text?: string
-      url: string
-      created_at: string
-      tags?: string[]
-      site_path?: string
-      is_starred?: boolean
-      is_archived?: boolean
-      is_nsfw?: boolean
-      saves?: number
+      public id: string
+      public title: string
+      public text?: string
+      public url: string
+      public created_at: string
+      public tags?: string[]
+      public site_path?: string
+      public is_starred?: boolean
+      public is_archived?: boolean
+      public is_nsfw?: boolean
+      public saves?: number
     }
 
     class BookmarkAuthorized extends Bookmark {
-      is_public?: boolean
+      public is_public?: boolean
     }
     class BookmarkPublic extends Bookmark {}
 
     export class Authorized extends PaginatedResponseDto {
-      bookmarks: BookmarkAuthorized[]
+      public bookmarks: BookmarkAuthorized[]
     }
     export class Public extends PaginatedResponseDto {
-      bookmarks: BookmarkPublic[]
+      public bookmarks: BookmarkPublic[]
     }
   }
 }
