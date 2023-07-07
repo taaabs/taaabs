@@ -77,6 +77,7 @@
     }
     &__stickybox {
       @include at992 {
+        display: flex;
         height: 100%;
       }
       > div {
@@ -88,6 +89,7 @@
           top: 0 !important;
         }
         @include at992 {
+          width: 100%;
           padding: var(--distance-16px) 0 var(--distance-16px)
             var(--distance-32px);
         }
@@ -101,8 +103,7 @@
     z-index: 2;
     margin-top: var(--header-mobile-height);
     height: calc(
-      100svh -
-        (var(--header-mobile-height) + var(--BottomNavigationBar-height))
+      100svh - (var(--header-mobile-height) + var(--BottomNavigationBar-height))
     );
     background: var(--Library-background);
   }

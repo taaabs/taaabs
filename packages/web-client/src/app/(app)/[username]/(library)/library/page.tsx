@@ -196,6 +196,7 @@ const Page: React.FC = () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
                         setSelectedSortOption('newest-to-oldest')
+                        toggleSortDropdown()
                       },
                       isSelected: selectedSortOption == 'newest-to-oldest',
                     },
@@ -205,6 +206,7 @@ const Page: React.FC = () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
                         setSelectedSortOption('oldest-to-newest')
+                        toggleSortDropdown()
                       },
                       isSelected: selectedSortOption == 'oldest-to-newest',
                     },
