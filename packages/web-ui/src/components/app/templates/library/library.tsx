@@ -20,7 +20,7 @@ export namespace LibraryTypes {
       primaryText: string
       secondaryText: string
     }
-    bookmarks: React.ReactNode
+    slotBookmarks: React.ReactNode
     isGettingFirstBookmarks: boolean
     isGettingMoreBookmarks: boolean
     hasMoreBookmarks: boolean
@@ -270,7 +270,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                 />
               </div>
               <div className={styles.main__inner__bookmarks}>
-                {props.bookmarks}
+                {props.slotBookmarks}
               </div>
               <div
                 className={cn([

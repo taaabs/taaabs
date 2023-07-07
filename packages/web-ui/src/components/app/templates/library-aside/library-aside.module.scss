@@ -1,0 +1,28 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  margin-top: 68px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--distance-8px);
+}
+.button {
+  position: relative;
+  &__dropdown {
+    position: absolute;
+    height: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    opacity: 1;
+    @include transition-100ms;
+    transform: translateY(0);
+    &--hidden {
+      opacity: 0;
+      transform: translateY(calc(var(--distance-4px) * -1));
+      pointer-events: none;
+      transition: none;
+    }
+  }
+}

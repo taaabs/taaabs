@@ -11,9 +11,9 @@ export const Primary = () => {
       <div style={{ width: 300 }}>
         <SimpleSelectDropdown
           items={[
-            { label: 'Lorem', onClick: () => {} },
-            { label: 'Lorem', onClick: () => {} },
-            { label: 'Lorem', onClick: () => {} },
+            { label: 'Lorem', onClick: () => {}, isSelected: false },
+            { label: 'Lorem', onClick: () => {}, isSelected: true },
+            { label: 'Lorem', onClick: () => {}, isSelected: false },
           ]}
         />
       </div>

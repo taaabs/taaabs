@@ -37,19 +37,19 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--title-bar-background-mobile);
+  background: var(--TitleBar-background-mobile);
   padding: var(--distance-4px) var(--distance-24px) var(--distance-3px)
     var(--distance-24px);
   border-radius: var(--border-radius-999px);
   &__primaryText {
     font-family: var(--font-family-plus-jakarta-sans);
-    color: var(--title-bar-primary-foreground);
+    color: var(--TitleBar-primary-foreground);
     font-size: var(--font-size-20px);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     line-height: 1.25;
   }
   &__secondaryText {
-    color: var(--title-bar-secondary-foreground);
+    color: var(--TitleBar-secondary-foreground);
     font-size: var(--font-size-13px);
   }
 }

@@ -2,7 +2,7 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  background: var(--library-background);
+  background: var(--Library-background);
   @include at992 {
     min-height: 100vh;
   }
@@ -36,13 +36,13 @@
     z-index: 0;
     display: none;
     padding-top: var(--header-mobile-height);
-    padding-bottom: var(--bottom-navigation-bar-height);
+    padding-bottom: var(--BottomNavigationBar-height);
   }
   &__inner {
     @include to992 {
       height: 100%;
       overflow: auto;
-      background: var(--library-background);
+      background: var(--Library-background);
       padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
         var(--distance-16px);
     }
@@ -64,7 +64,7 @@
     height: 100vh;
     display: none;
     padding-top: var(--header-mobile-height);
-    padding-bottom: var(--bottom-navigation-bar-height);
+    padding-bottom: var(--BottomNavigationBar-height);
   }
   @include at992 {
     margin-top: var(--header-desktop-height);
@@ -73,7 +73,7 @@
     height: 100%;
     @include to992 {
       overflow: auto;
-      background: var(--library-background);
+      background: var(--Library-background);
     }
     &__stickybox {
       @include at992 {
@@ -102,9 +102,9 @@
     margin-top: var(--header-mobile-height);
     height: calc(
       100svh -
-        (var(--header-mobile-height) + var(--bottom-navigation-bar-height))
+        (var(--header-mobile-height) + var(--BottomNavigationBar-height))
     );
-    background: var(--library-background);
+    background: var(--Library-background);
   }
   @include at992 {
     flex: 1;

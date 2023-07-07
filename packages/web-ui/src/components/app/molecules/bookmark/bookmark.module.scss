@@ -3,7 +3,7 @@
 
 .container {
   display: grid;
-  background: var(--bookmark-background);
+  background: var(--Bookmark-background);
   border: var(--border-secondary);
   @include transition-100ms(border-color);
   @include to992 {
@@ -37,20 +37,20 @@
   }
   &__title {
     display: inline;
-    color: var(--bookmark-link-foreground);
+    color: var(--Bookmark-link-foreground);
     margin-right: var(--distance-0-6rem);
     &--starred {
       padding: var(--distance-0-5rem) var(--distance-0-4rem) var(--distance-0-3rem) var(--distance-0-4rem);
       margin-left: calc(var(--distance-0-4rem) * -1);
       margin-right: calc(var(--distance-0-6rem) - var(--distance-0-4rem));
-      background: var(--bookmark-starred-title-background);
+      background: var(--Bookmark-starred-title-background);
       box-decoration-break: clone;
       -webkit-box-decoration-break: clone;
     }
     &__nsfw {
       display: inline-flex;
       font-weight: var(--font-weight-inter-bold);
-      color: var(--bookmark-nsfw-foreground);
+      color: var(--Bookmark-nsfw-foreground);
       transform: scale(0.82) translateY(-0.07rem);
       position: relative;
       font-size: var(--font-size-1-3rem);
@@ -65,7 +65,7 @@
         left: 50%;
         top: 50%;
         transform: translateX(-50%) translateY(-53%);
-        background: var(--bookmark-nsfw-background);
+        background: var(--Bookmark-nsfw-background);
         z-index: -1;
       }
     }
@@ -79,7 +79,7 @@
     }
   }
   &__site {
-    color: var(--bookmark-site-foreground);
+    color: var(--Bookmark-site-foreground);
     font-size: var(--font-size-1-5rem);
     @include to992 {
       display: block;
@@ -110,19 +110,19 @@
     padding-bottom: var(--distance-2px);
     &__tag {
       font-size: var(--font-size-13px);
-      color: var(--bookmark-tag-foreground);
-      background: var(--bookmark-tag-background);
+      color: var(--Bookmark-tag-foreground);
+      background: var(--Bookmark-tag-background);
       border-radius: var(--border-radius-4px);
-      border: 1px solid var(--bookmark-tag-border-color);
+      border: 1px solid var(--Bookmark-tag-border-color);
       padding: 0 var(--distance-7px);
       height: var(--button-dimension-28px);
       font-weight: var(--font-weight-inter-medium);
       @include transition-100ms(all);
 
       @include hover {
-        border-color: var(--bookmark-tag-border-color-hover);
-        background: var(--bookmark-tag-background-hover);
-        color: var(--bookmark-tag-foreground-hover);
+        border-color: var(--Bookmark-tag-border-color-hover);
+        background: var(--Bookmark-tag-background-hover);
+        color: var(--Bookmark-tag-foreground-hover);
       }
       &--condensed {
         @include to992 {
@@ -175,7 +175,7 @@
     svg {
       width: var(--icon-dimension-18px);
       height: var(--icon-dimension-18px);
-      fill: var(--bookmark-action-fill);
+      fill: var(--Bookmark-action-fill);
       @include transition-100ms(fill);
       @include at992 {
         width: var(--icon-dimension-16px);
@@ -184,14 +184,13 @@
     }
     @include hover {
       svg {
-        fill: var(--bookmark-action-fill-hover);
+        fill: var(--Bookmark-action-fill-hover);
       }
     }
   }
 }
 .info {
   grid-area: info;
-  position: relative;
   &__inner {
     display: flex;
     height: 100%;

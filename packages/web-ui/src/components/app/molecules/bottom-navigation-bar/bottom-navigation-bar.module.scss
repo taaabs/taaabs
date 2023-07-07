@@ -2,9 +2,9 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  height: var(--bottom-navigation-bar-height);
+  height: var(--BottomNavigationBar-height);
   border-top: var(--border-primary);
-  background: var(--bottom-navigation-bar-background);
+  background: var(--BottomNavigationBar-background);
   display: flex;
   justify-content: space-around;
   box-sizing: content-box;

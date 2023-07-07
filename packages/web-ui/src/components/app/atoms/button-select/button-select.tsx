@@ -1,35 +1,32 @@
 import { Icon } from '@web-ui/components/common/atoms/icon'
-import styles from './select.module.scss'
+import styles from './button-select.module.scss'
 import cn from 'classnames'
 
-export namespace SelectTypes {
+export namespace ButtonSelectTypes {
   export type Props = {
     label: string
     currentValue: string
     isActive?: boolean
+    onClick: () => void
   }
 }
 
-export const Select: React.FC<SelectTypes.Props> = (props) => {
+export const ButtonSelect: React.FC<ButtonSelectTypes.Props> = (props) => {
   return (
-    <div
+    <button
       className={cn([
         styles.container,
         { [styles['container--toggled']]: props.isActive },
       ])}
+      onClick={props.onClick}
     >
       <div className={styles.inner}>
-        <span>{props.label}</span>
-        <span>{props.currentValue}</span>
+        <div>{props.label}</div>
+        <div>{props.currentValue}</div>
       </div>
-      <div
-        className={cn([
-          styles.arrow,
-          { [styles['arrow--toggled']]: props.isActive },
-        ])}
-      >
+      <div className={styles.arrow}>
         <Icon variant="LESS_THAN" />
       </div>
-    </div>
+    </button>
   )
 }

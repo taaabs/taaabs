@@ -4,6 +4,7 @@ import GreaterThan from '@web-ui/assets/icons/greater-than.svg'
 import Info from '@web-ui/assets/icons/info.svg'
 import LessThan from '@web-ui/assets/icons/less-than.svg'
 import Search from '@web-ui/assets/icons/search.svg'
+import Selected from '@web-ui/assets/icons/selected.svg'
 import StarFilled from '@web-ui/assets/icons/star-filled.svg'
 import Star from '@web-ui/assets/icons/star.svg'
 import Sun from '@web-ui/assets/icons/sun.svg'
@@ -24,6 +25,7 @@ export namespace IconTypes {
     | 'INFO'
     | 'LESS_THAN'
     | 'SEARCH'
+    | 'SELECTED'
     | 'STAR_FILLED'
     | 'STAR'
     | 'SUN'
@@ -74,6 +76,9 @@ export const Icon: React.FC<IconTypes.Props> = ({ variant }) => {
       break
     case 'SEARCH':
       icon = <Search />
+      break
+    case 'SELECTED':
+      icon = <Selected />
       break
     case 'STAR':
       icon = <Star />

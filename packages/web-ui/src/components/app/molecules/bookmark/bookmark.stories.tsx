@@ -8,7 +8,7 @@ export default {
 export const Primary = () => (
   <div
     style={{
-      background: 'var(--library-background)',
+      background: 'var(--Library-background)',
     }}
   >
     <div

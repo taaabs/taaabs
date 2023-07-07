@@ -77,7 +77,7 @@ export const Primary = () => {
         hasMoreBookmarks={false}
         isGettingFirstBookmarks={false}
         isGettingMoreBookmarks={false}
-        bookmarks={
+        slotBookmarks={
           <>
             {bookmark}
             {bookmark}

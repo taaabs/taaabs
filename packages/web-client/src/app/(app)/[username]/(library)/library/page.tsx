@@ -7,9 +7,14 @@ import { useSearchParams, useRouter, useParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useIsHydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import useToggle from 'beautiful-react-hooks/useToggle'
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { bookmarksActions } from '@repositories/stores/other-user/library/bookmarks/bookmarks.slice'
 import { useLibraryDispatch, useLibrarySelector } from './hooks'
+import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
+import { ButtonSelect } from '@web-ui/components/app/atoms/button-select'
+import { SimpleSelectDropdown } from '@web-ui/components/app/atoms/simple-select-dropdown'
+import OutsideClickHandler from 'react-outside-click-handler'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -25,6 +30,9 @@ const Page: React.FC = () => {
     isGettingMoreBookmarks,
     hasMoreBookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
+
+  const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
+  const [isSortDropdownVisible, toggleSortDropdown] = useToggle(false)
 
   const getBookmarks = ({ getNextPage }: { getNextPage?: boolean }) => {
     const getBookmarksParams: BookmarksParams.Public = {
@@ -94,7 +102,78 @@ const Page: React.FC = () => {
             }
           : undefined
       }
-      slotAside={<div>slot aside</div>}
+      slotAside={
+        <LibraryAside
+          slotFilter={{
+            button: (
+              <ButtonSelect
+                label="s"
+                currentValue="x"
+                isActive={isFilterDropdownVisible}
+                onClick={toggleFilterDropdown}
+              />
+            ),
+            dropdown: (
+              <OutsideClickHandler
+                onOutsideClick={() => {
+                  if (isFilterDropdownVisible) toggleFilterDropdown()
+                }}
+              >
+                <SimpleSelectDropdown
+                  items={[
+                    {
+                      label: 'Newest to Oldest',
+                      onClick: () => {},
+                      isSelected: true,
+                    },
+                    {
+                      label: 'Oldest to Newest',
+                      onClick: () => {},
+                      isSelected: false,
+                    },
+                  ]}
+                  toggle={toggleFilterDropdown}
+                />
+              </OutsideClickHandler>
+            ),
+            isDropdownVisible: isFilterDropdownVisible,
+          }}
+          slotSort={{
+            button: (
+              <ButtonSelect
+                label="Sort"
+                currentValue="Newest to Oldest"
+                isActive={isSortDropdownVisible}
+                onClick={toggleSortDropdown}
+              />
+            ),
+            dropdown: (
+              <OutsideClickHandler
+                onOutsideClick={() => {
+                  if (isSortDropdownVisible) toggleSortDropdown()
+                }}
+              >
+                <SimpleSelectDropdown
+                  items={[
+                    {
+                      label: 'Newest to Oldest',
+                      onClick: () => {},
+                      isSelected: true,
+                    },
+                    {
+                      label: 'Oldest to Newest',
+                      onClick: () => {},
+                      isSelected: false,
+                    },
+                  ]}
+                  toggle={toggleSortDropdown}
+                />
+              </OutsideClickHandler>
+            ),
+            isDropdownVisible: isSortDropdownVisible,
+          }}
+        />
+      }
       slotSidebar={
         <NavigationForLibrarySidebar
           navigationItems={[
@@ -119,7 +198,7 @@ const Page: React.FC = () => {
       getMoreBookmarks={() => {
         getBookmarks({ getNextPage: true })
       }}
-      bookmarks={
+      slotBookmarks={
         bookmarks && bookmarks.length
           ? bookmarks.map((bookmark) => (
               <Bookmark
