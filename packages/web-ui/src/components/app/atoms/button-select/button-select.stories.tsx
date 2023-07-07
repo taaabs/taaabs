@@ -10,12 +10,17 @@ export const Primary = () => {
   return (
     <StorybookMargin>
       <div style={{ width: '300px' }}>
-        <ButtonSelect label="Lorem ipsum" currentValue="Lorem ipsum" />
+        <ButtonSelect
+          label="Lorem ipsum"
+          currentValue="Lorem ipsum"
+          onClick={() => {}}
+        />
         <StorybookSpacer />
         <ButtonSelect
           label="Lorem ipsum"
           currentValue="Lorem ipsum"
           isActive={true}
+          onClick={() => {}}
         />
       </div>
     </StorybookMargin>

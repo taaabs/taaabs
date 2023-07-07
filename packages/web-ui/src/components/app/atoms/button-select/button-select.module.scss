@@ -17,13 +17,14 @@
   }
   &--toggled {
     border-color: var(--border-color-primary);
+    pointer-events: none;
   }
 }
 .inner {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   div:first-child {
-    display: flex;
     font-size: var(--font-size-13px);
     color: var(--text-color-dimmed);
   }

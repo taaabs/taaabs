@@ -30,17 +30,45 @@
   @include hover {
     background-color: var(--SimpleSelectDropdown-background-hover);
   }
-  &__icon {
-    margin-right: var(--distance-8px);
+  &__tick {
+    margin-right: var(--distance-10px);
     display: flex;
     align-items: center;
-    opacity: 0;
+    visibility: hidden;
     svg {
       width: var(--icon-dimension-12px);
       height: var(--icon-dimension-12px);
     }
     &--selected {
-      opacity: 1;
+      visibility: visible;
+    }
+  }
+  &--with-checkbox {
+    padding: var(--distance-8px) var(--distance-16px) var(--distance-8px)
+      var(--distance-8px);
+  }
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  &__checkbox {
+    margin-right: var(--distance-6px);
+    display: flex;
+    align-items: center;
+    border: 1px solid;
+    border-color: var(--SimpleSelectDropdown-checkbox-border-color);
+    border-radius: var(--border-radius-4px);
+    background-color: var(--SimpleSelectDropdown-checkbox-background);
+    padding: var(--distance-3px);
+    svg {
+      visibility: hidden;
+      width: var(--icon-dimension-12px);
+      height: var(--icon-dimension-12px);
+    }
+    &--selected {
+      svg {
+        visibility: visible;
+      }
     }
   }
 }

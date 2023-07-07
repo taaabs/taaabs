@@ -107,32 +107,47 @@ const Page: React.FC = () => {
           slotFilter={{
             button: (
               <ButtonSelect
-                label="s"
-                currentValue="x"
+                label="Filter"
+                currentValue="All"
                 isActive={isFilterDropdownVisible}
                 onClick={toggleFilterDropdown}
               />
             ),
             dropdown: (
               <OutsideClickHandler
-                onOutsideClick={() => {
-                  if (isFilterDropdownVisible) toggleFilterDropdown()
-                }}
+                onOutsideClick={toggleFilterDropdown}
+                disabled={!isFilterDropdownVisible}
               >
                 <SimpleSelectDropdown
                   items={[
                     {
-                      label: 'Newest to Oldest',
+                      label: 'All',
                       onClick: () => {},
                       isSelected: true,
                     },
                     {
-                      label: 'Oldest to Newest',
+                      label: 'Starred only',
+                      onClick: () => {},
+                      isSelected: false,
+                    },
+                    {
+                      label: 'NSFW only',
+                      onClick: () => {},
+                      isSelected: false,
+                    },
+                    {
+                      label: 'Archived only',
                       onClick: () => {},
                       isSelected: false,
                     },
                   ]}
-                  toggle={toggleFilterDropdown}
+                  checkboxes={[
+                    {
+                      label: 'Include archived',
+                      onClick: () => {},
+                      isSelected: true,
+                    },
+                  ]}
                 />
               </OutsideClickHandler>
             ),
@@ -149,9 +164,8 @@ const Page: React.FC = () => {
             ),
             dropdown: (
               <OutsideClickHandler
-                onOutsideClick={() => {
-                  if (isSortDropdownVisible) toggleSortDropdown()
-                }}
+                onOutsideClick={toggleSortDropdown}
+                disabled={!isSortDropdownVisible}
               >
                 <SimpleSelectDropdown
                   items={[
@@ -166,7 +180,6 @@ const Page: React.FC = () => {
                       isSelected: false,
                     },
                   ]}
-                  toggle={toggleSortDropdown}
                 />
               </OutsideClickHandler>
             ),

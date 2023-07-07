@@ -15,6 +15,19 @@ export const Primary = () => {
             { label: 'Lorem', onClick: () => {}, isSelected: true },
             { label: 'Lorem', onClick: () => {}, isSelected: false },
           ]}
+          checkboxes={[
+            {
+              label: 'Lorem',
+              onClick: () => {},
+              isSelected: true,
+            },
+            {
+              label: 'Lorem',
+              onClick: () => {},
+              isSelected: false,
+              isDisabled: true,
+            },
+          ]}
         />
       </div>
     </StorybookMargin>
