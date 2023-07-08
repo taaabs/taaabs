@@ -1,7 +1,10 @@
 declare const styles: {
   readonly container: string
-  readonly button: string
-  readonly button__dropdown: string
-  readonly 'button__dropdown--hidden': string
+  readonly toolbar: string
+  readonly toolbar__menu: string
+  readonly 'sort-and-filtering': string
+  readonly 'sort-and-filtering__button': string
+  readonly 'sort-and-filtering__button__dropdown': string
+  readonly 'sort-and-filtering__button__dropdown--hidden': string
 }
 export = styles

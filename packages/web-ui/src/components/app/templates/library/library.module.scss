@@ -11,6 +11,7 @@
   @include at992 {
     display: flex;
     width: 100%;
+    min-height: 100vh;
     max-width: var(--site-max-width);
     margin: 0 auto;
     padding: 0 var(--distance-16px);
@@ -52,48 +53,6 @@
       position: fixed;
       overflow: auto;
       padding: var(--distance-16px) var(--distance-32px) var(--distance-16px) 0;
-    }
-  }
-}
-.aside {
-  @include to992 {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    height: 100vh;
-    display: none;
-    padding-top: var(--header-mobile-height);
-    padding-bottom: var(--BottomNavigationBar-height);
-  }
-  @include at992 {
-    margin-top: var(--header-desktop-height);
-  }
-  &__inner {
-    height: 100%;
-    @include to992 {
-      overflow: auto;
-      background: var(--Library-background);
-    }
-    &__stickybox {
-      @include at992 {
-        display: flex;
-        height: 100%;
-      }
-      > div {
-        @include to992 {
-          padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
-            var(--distance-16px);
-          // force override inline values coming from stickybox
-          position: relative !important;
-          top: 0 !important;
-        }
-        @include at992 {
-          width: 100%;
-          padding: var(--distance-16px) 0 var(--distance-16px)
-            var(--distance-32px);
-        }
-      }
     }
   }
 }
@@ -203,6 +162,46 @@
       font-size: var(--font-size-13px);
       &--hidden {
         visibility: hidden;
+      }
+    }
+  }
+}
+.aside {
+  @include to992 {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    height: 100vh;
+    display: none;
+    padding-top: var(--header-mobile-height);
+    padding-bottom: var(--BottomNavigationBar-height);
+  }
+  @include at992 {
+    margin-top: var(--header-desktop-height);
+  }
+  &__inner {
+    height: 100%;
+    @include to992 {
+      overflow: auto;
+      background: var(--Library-background);
+    }
+    &__stickybox {
+      @include at992 {
+        height: 100%;
+      }
+      > div {
+        @include to992 {
+          padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
+            var(--distance-16px);
+          // Override inline values coming from stickybox.
+          position: relative !important;
+          top: 0 !important;
+        }
+        @include at992 {
+          padding: var(--distance-16px) 0 var(--distance-16px)
+            var(--distance-32px);
+        }
       }
     }
   }

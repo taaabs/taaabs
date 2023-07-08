@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { LibraryStoreProvider } from './library-store-provider'
 
 const Layout: React.FC<{
@@ -7,3 +8,7 @@ const Layout: React.FC<{
 }
 
 export default Layout
+
+export const metadata: Metadata = {
+  title: 'Library',
+}
