@@ -174,6 +174,13 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
     }
   }, [isPaginationVisible])
 
+  useUpdateEffect(() => {
+    if (!props.isGettingFirstBookmarks) {
+      window.scrollTo(0, 0)
+      mainInner.current?.scrollTo(0, 0)
+    }
+  }, [props.isGettingFirstBookmarks])
+
   useEffect(() => {
     setSlideoutInstances()
 

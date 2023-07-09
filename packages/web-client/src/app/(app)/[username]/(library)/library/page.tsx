@@ -13,7 +13,6 @@ import OutsideClickHandler from 'react-outside-click-handler'
 import { SortOption, useSortOptions } from './_hooks/use-sort-options'
 import { useBookmarks } from './_hooks/use-bookmarks'
 import { FilterOption, useFilterOptions } from './_hooks/use-filter-options'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 const Page: React.FC = () => {
   const queryParams = useSearchParams()
@@ -42,12 +41,6 @@ const Page: React.FC = () => {
 
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
   const [isSortDropdownVisible, toggleSortDropdown] = useToggle(false)
-
-  useUpdateEffect(() => {
-    if (!isGettingFirstBookmarks) {
-      window.scrollTo(0, 0)
-    }
-  }, [isGettingFirstBookmarks])
 
   return (
     <Library
