@@ -26,6 +26,7 @@ export namespace LibraryTypes {
     hasMoreBookmarks: boolean
     noResults: boolean
     getMoreBookmarks: () => void
+    showBookmarksSkeleton: boolean
   }
 }
 
@@ -264,7 +265,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                   }
                 />
               </div>
-              {!isHydrated && <div>loading</div>}
+              {props.showBookmarksSkeleton && <div>skeleton</div>}
               <div
                 className={cn([
                   styles.main__inner__bookmarks,
@@ -287,13 +288,10 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                   styles['main__inner__pagination'],
                   {
                     [styles['main__inner__pagination--hidden']]:
-                      props.isGettingFirstBookmarks,
+                      props.showBookmarksSkeleton,
                   },
                 ])}
                 ref={pagination}
-                style={{
-                  visibility: !isHydrated ? 'hidden' : 'visible',
-                }}
               >
                 {props.isGettingFirstBookmarks
                   ? 'Loading...'

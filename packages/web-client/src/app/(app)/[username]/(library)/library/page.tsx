@@ -4,7 +4,6 @@ import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/naviga
 import { Bookmark } from '@web-ui/components/app/molecules/bookmark'
 import { Library } from '@web-ui/components/app/templates/library'
 import { useSearchParams, useRouter, useParams } from 'next/navigation'
-import { useIsHydrated } from '@shared/hooks'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { useLibrarySelector } from './_hooks/store'
 import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
@@ -19,7 +18,6 @@ const Page: React.FC = () => {
   const queryParams = useSearchParams()
   const router = useRouter()
   const params = useParams()
-  const isHydrated = useIsHydrated()
   const {
     bookmarks,
     isGettingFirstBookmarks,
@@ -46,8 +44,9 @@ const Page: React.FC = () => {
 
   return (
     <Library
+      showBookmarksSkeleton={bookmarks == null}
       titleBar={
-        isHydrated
+        bookmarks != null
           ? {
               primaryText: queryParams.get('categoryId')
                 ? '[category_name]'

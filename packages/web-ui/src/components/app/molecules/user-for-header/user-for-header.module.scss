@@ -53,7 +53,7 @@
     justify-content: center;
     flex-shrink: 0;
     border-radius: 50%;
-    overflow: hidden;
+    overflow: hidden; // For some reason it stops working after route change.
     position: relative;
     width: var(--distance-32px);
     height: var(--distance-32px);
@@ -70,11 +70,11 @@
       position: absolute;
       top: 0;
       > div {
-        width: var(--distance-32px)!important;
-        height: var(--distance-32px)!important;
+        width: var(--distance-32px) !important;
+        height: var(--distance-32px) !important;
         @include at992 {
-          width: var(--distance-40px)!important;
-          height: var(--distance-40px)!important;
+          width: var(--distance-40px) !important;
+          height: var(--distance-40px) !important;
         }
       }
     }

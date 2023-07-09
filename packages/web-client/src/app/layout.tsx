@@ -3,7 +3,6 @@ import { GlobalStoreInitializer } from './global-store-initializer'
 import { Metadata } from 'next'
 
 import '@web-ui/styles/style.scss'
-import 'react-loading-skeleton/dist/skeleton.css'
 
 export const revalidate = 0
 
