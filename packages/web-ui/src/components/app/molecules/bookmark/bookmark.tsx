@@ -19,7 +19,7 @@ export namespace BookmarkTypes {
     url: string
     createdAt: Date
     visibility?: Visibility
-    isNSFW?: boolean
+    isNsfw?: boolean
     isArchived?: boolean
     isStarred?: boolean
     tags: string[]
@@ -37,7 +37,7 @@ export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
               [styles['main__title--starred']]: props.isStarred,
             })}
           >
-            {props.isNSFW && (
+            {props.isNsfw && (
               <span className={styles.main__title__nsfw}>NSFW</span>
             )}
             <a className={styles.main__title__text} href={props.url}>

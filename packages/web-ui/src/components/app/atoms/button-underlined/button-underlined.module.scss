@@ -14,8 +14,9 @@
   @include transition-100ms(background-color);
   @include at992 {
     padding: 0 var(--distance-12px);
-  font-size: var(--font-size-16px);
+    font-size: var(--font-size-16px);
   }
+  overflow: hidden;
   &::before {
     content: attr(title);
     position: absolute;
@@ -49,8 +50,8 @@
       bottom: 0;
       left: 0;
       margin-left: 50%;
-      transform: translateX(-50%);
-      @include transition-100ms(background-color);
+      transform: translateX(-50%) translateY(100%);
+      @include transition-100ms;
     }
   }
   &--active {
@@ -60,6 +61,7 @@
     span {
       color: inherit;
       &::after {
+        transform: translateX(-50%) translateY(0);
         background: var(--brand-color);
       }
     }

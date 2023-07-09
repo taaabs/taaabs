@@ -2,6 +2,7 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
+  position: relative;
   background: var(--Library-background);
   @include at992 {
     min-height: 100vh;

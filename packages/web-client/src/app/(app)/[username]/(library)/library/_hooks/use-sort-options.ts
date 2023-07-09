@@ -1,11 +1,7 @@
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import {
-  ReadonlyURLSearchParams,
-  useParams,
-  useRouter,
-  useSearchParams,
-} from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { updateQueryParam } from '@/utils/update-query-param'
 
 export type SortOption = 'newest-to-oldest' | 'oldest-to-newest'
 
@@ -17,7 +13,7 @@ export const useSortOptions = (initSortOption: SortOption) => {
     useState<SortOption>(initSortOption)
 
   useUpdateEffect(() => {
-    const updatedQueryParams = _updateQueryParam(
+    const updatedQueryParams = updateQueryParam(
       queryParams,
       's',
       _sortOptionToQueryParam(selectedSortOption),
@@ -33,17 +29,4 @@ function _sortOptionToQueryParam(sortOption: SortOption) {
     return 'desc'
   }
   return 'asc'
-}
-
-function _updateQueryParam(
-  queryParams: ReadonlyURLSearchParams,
-  param: string,
-  value: string,
-) {
-  const currentSearchParams = new URLSearchParams(
-    Array.from(queryParams.entries()),
-  )
-  currentSearchParams.set(param, value)
-
-  return currentSearchParams
 }

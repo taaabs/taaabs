@@ -18,16 +18,20 @@
 .item {
   padding: var(--distance-8px) var(--distance-16px) var(--distance-8px)
     var(--distance-12px);
-  border-bottom: var(--border-secondary);
+  border-top: var(--border-secondary);
   border-width: 1px;
   display: flex;
   align-items: center;
-  &:last-of-type {
-    border-width: 0;
-  }
-  @include transition-100ms(background-color);
+  @include transition-100ms;
   @include hover {
     background-color: var(--SimpleSelectDropdown-background-hover);
+    border-top: var(--border-primary);
+    & + .item {
+      border-top: var(--border-primary);
+    }
+  }
+  &:first-of-type {
+    border-top: none;
   }
   &__tick {
     margin-right: var(--distance-10px);
@@ -45,21 +49,24 @@
   &--with-checkbox {
     padding: var(--distance-8px) var(--distance-16px) var(--distance-8px)
       var(--distance-8px);
+    @include hover {
+    }
   }
   &--disabled {
-    opacity: 0.5;
     pointer-events: none;
+    > * {
+      opacity: 0.4;
+    }
   }
   &__checkbox {
     margin-right: var(--distance-6px);
     display: flex;
     align-items: center;
-    border: 1px solid;
-    border-color: var(--SimpleSelectDropdown-checkbox-border-color);
     border-radius: var(--border-radius-4px);
     background-color: var(--SimpleSelectDropdown-checkbox-background);
-    padding: var(--distance-3px);
+    padding: var(--distance-4px);
     svg {
+      fill: var(--SimpleSelectDropdown-checkbox-foreground);
       visibility: hidden;
       width: var(--icon-dimension-12px);
       height: var(--icon-dimension-12px);

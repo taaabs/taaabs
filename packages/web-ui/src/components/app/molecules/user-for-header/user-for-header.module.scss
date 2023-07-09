@@ -69,9 +69,14 @@
     &__blurhash {
       position: absolute;
       top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      > div {
+        width: var(--distance-32px)!important;
+        height: var(--distance-32px)!important;
+        @include at992 {
+          width: var(--distance-40px)!important;
+          height: var(--distance-40px)!important;
+        }
+      }
     }
   }
   &__avatar-icon {

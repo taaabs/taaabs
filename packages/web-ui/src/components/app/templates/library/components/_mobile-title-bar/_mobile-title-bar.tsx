@@ -1,6 +1,7 @@
 import { Icon } from '@web-ui/components/common/atoms/icon'
 import styles from './_mobile-title-bar.module.scss'
 import cn from 'classnames'
+import Skeleton from 'react-loading-skeleton'
 
 export namespace _MobileTitleBarTypes {
   export type Props = {
@@ -35,7 +36,9 @@ export const _MobileTitleBar: React.FC<_MobileTitleBarTypes.Props> = (
           </span>
         </div>
       ) : (
-        <div>[SKELETON]</div>
+        <div className={styles.skeleton}>
+          <Skeleton borderRadius={999} width={180} />
+        </div>
       )}
 
       <button

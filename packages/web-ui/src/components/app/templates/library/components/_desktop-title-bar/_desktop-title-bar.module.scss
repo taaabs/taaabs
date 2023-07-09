@@ -22,3 +22,11 @@
 .secondaryText {
   color: var(--TitleBar-secondary-foreground);
 }
+.skeleton {
+  margin: var(--distance-16px) 0;
+  transform: translateX(calc(var(--distance-16px) * -1));
+  > span > span {
+    width: calc(100% + (var(--distance-16px) * 2));
+    height: var(--button-dimension-52px);
+  }
+}

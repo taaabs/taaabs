@@ -38,8 +38,8 @@
   align-items: center;
   justify-content: center;
   background: var(--TitleBar-background-mobile);
-  padding: var(--distance-4px) var(--distance-24px) var(--distance-3px)
-    var(--distance-24px);
+  height: var(--button-dimension-48px);
+  padding: 0 var(--distance-20px);
   border-radius: var(--border-radius-999px);
   &__primaryText {
     font-family: var(--font-family-plus-jakarta-sans);
@@ -51,5 +51,10 @@
   &__secondaryText {
     color: var(--TitleBar-secondary-foreground);
     font-size: var(--font-size-13px);
+  }
+}
+.skeleton {
+  > span > span {
+    height: var(--button-dimension-48px);
   }
 }

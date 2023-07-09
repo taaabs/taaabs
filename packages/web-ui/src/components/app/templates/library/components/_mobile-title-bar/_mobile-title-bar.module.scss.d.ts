@@ -6,5 +6,6 @@ declare const styles: {
   readonly content: string
   readonly content__primaryText: string
   readonly content__secondaryText: string
+  readonly skeleton: string
 }
 export = styles

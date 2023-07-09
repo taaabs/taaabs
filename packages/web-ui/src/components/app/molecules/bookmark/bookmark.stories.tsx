@@ -25,7 +25,7 @@ export const Primary = () => (
         url="https://example.com/test/lorem_ipsum"
         site="example.com/test"
         createdAt={new Date('2023-02-20')}
-        isNSFW={false}
+        isNsfw={false}
         isArchived={true}
         tags={[]}
         saves={2200}
@@ -43,7 +43,7 @@ export const Primary = () => (
         url="https://example.com/test/lorem_ipsum"
         site="example.com/test"
         createdAt={new Date('2023-02-20')}
-        isNSFW={false}
+        isNsfw={false}
         isArchived={true}
         tags={[]}
         saves={2200}
@@ -59,7 +59,7 @@ export const Primary = () => (
         url="https://example.com/test/lorem_ipsum"
         site="example.com/test"
         createdAt={new Date('2023-02-20')}
-        isNSFW={false}
+        isNsfw={false}
         isArchived={true}
         tags={['lorem', 'ipsum']}
         saves={2200}
@@ -75,7 +75,7 @@ export const Primary = () => (
         url="https://example.com/test/lorem_ipsum"
         site="example.com/test"
         createdAt={new Date('2023-02-20')}
-        isNSFW={false}
+        isNsfw={false}
         isArchived={true}
         tags={['lorem', 'ipsum']}
         saves={2200}
@@ -91,7 +91,7 @@ export const Primary = () => (
         url="https://example.com/test/lorem_ipsum"
         site="example.com/test"
         createdAt={new Date('2023-02-20')}
-        isNSFW={true}
+        isNsfw={true}
         isArchived={true}
         tags={[
           'lorem1',
@@ -128,7 +128,7 @@ export const Primary = () => (
         url="https://example.com/test/lorem_ipsum"
         site="example.com/test"
         createdAt={new Date('2023-02-20')}
-        isNSFW={false}
+        isNsfw={false}
         isArchived={true}
         tags={['lorem1', 'ipsum1', 'lorem2', 'ipsum2']}
         saves={2200}
@@ -146,7 +146,7 @@ export const Primary = () => (
         url="https://example.com/test/lorem_ipsum"
         site="example.com/test"
         createdAt={new Date('2023-02-20')}
-        isNSFW={true}
+        isNsfw={true}
         isArchived={true}
         tags={['lorem', 'ipsum']}
         saves={2200}
@@ -161,7 +161,7 @@ export const Primary = () => (
         url="https://example.com/test/lorem_ipsum"
         site="example.com/test"
         createdAt={new Date('2023-02-20')}
-        isNSFW={true}
+        isNsfw={true}
         isArchived={true}
         tags={['lorem', 'ipsum']}
         saves={2200}

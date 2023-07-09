@@ -1,6 +1,6 @@
 export const sharedValues = {
   siteMaxWidth: 1380,
-  appHeaderDesktop: 63,
+  appHeaderDesktop: 62,
   appHeaderMobile: 45,
   bottomNavigationBar: 49,
   appBar: 63,

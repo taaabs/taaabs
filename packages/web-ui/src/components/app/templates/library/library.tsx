@@ -24,6 +24,7 @@ export namespace LibraryTypes {
     isGettingFirstBookmarks: boolean
     isGettingMoreBookmarks: boolean
     hasMoreBookmarks: boolean
+    noResults: boolean
     getMoreBookmarks: () => void
   }
 }
@@ -250,14 +251,7 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                 }
               />
             </div>
-            <div
-              style={{
-                visibility:
-                  isRestoringScrollPosition || !isHydrated
-                    ? 'hidden'
-                    : 'visible',
-              }}
-            >
+            <div>
               <div className={styles['main__inner__desktop-title-bar']}>
                 <_DesktopTitleBar
                   text={
@@ -270,7 +264,20 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                   }
                 />
               </div>
-              <div className={styles.main__inner__bookmarks}>
+              {(!isHydrated || props.isGettingFirstBookmarks) && (
+                <div>loading</div>
+              )}
+              <div
+                className={styles.main__inner__bookmarks}
+                style={{
+                  visibility:
+                    isRestoringScrollPosition ||
+                    !isHydrated ||
+                    props.isGettingFirstBookmarks
+                      ? 'hidden'
+                      : 'visible',
+                }}
+              >
                 {props.slotBookmarks}
               </div>
               <div
@@ -282,10 +289,18 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                   },
                 ])}
                 ref={pagination}
+                style={{
+                  visibility:
+                    !isHydrated || props.isGettingFirstBookmarks
+                      ? 'hidden'
+                      : 'visible',
+                }}
               >
-                {props.hasMoreBookmarks
+                {props.noResults
+                  ? 'No results'
+                  : props.hasMoreBookmarks
                   ? 'Loading more results...'
-                  : 'No more results'}
+                  : 'End of results'}
               </div>
             </div>
           </div>

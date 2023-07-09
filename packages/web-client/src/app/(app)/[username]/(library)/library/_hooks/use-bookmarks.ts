@@ -5,6 +5,9 @@ import { useLibraryDispatch, useLibrarySelector } from './store'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { bookmarksActions } from '@repositories/stores/other-user/library/bookmarks/bookmarks.slice'
 import { useEffect } from 'react'
+import { FilterOption } from './use-filter-options'
+import { ArchivedBookmarks } from '@shared/dtos/modules/bookmarks/archived-bookmarks'
+import { NsfwBookmarks } from '@shared/dtos/modules/bookmarks/nsfw-bookmarks'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -40,6 +43,46 @@ export const useBookmarks = () => {
         sortBy = SortBy.DATE_DESC
       }
       getBookmarksParams.sortBy = sortBy
+    }
+
+    const queryFilter = parseInt(
+      queryParams.get('f') || FilterOption['all'].toString(),
+    )
+    if (queryFilter != FilterOption['all']) {
+      if (queryFilter == FilterOption['all-with-archived']) {
+        getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
+      } else if (
+        queryFilter == FilterOption['all-with-archived-without-nsfw']
+      ) {
+        getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
+        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
+      } else if (queryFilter == FilterOption['all-without-nsfw']) {
+        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
+      } else if (queryFilter == FilterOption['starred-only']) {
+        getBookmarksParams.starredOnly = true
+      } else if (queryFilter == FilterOption['starred-only-with-archived']) {
+        getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
+        getBookmarksParams.starredOnly = true
+      } else if (
+        queryFilter == FilterOption['starred-only-with-archived-without-nsfw']
+      ) {
+        getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
+        getBookmarksParams.starredOnly = true
+        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
+      } else if (queryFilter == FilterOption['starred-only-without-nsfw']) {
+        getBookmarksParams.starredOnly = true
+        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
+      } else if (queryFilter == FilterOption['nsfw-only']) {
+        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUSIVE
+      } else if (queryFilter == FilterOption['nsfw-only-with-archived']) {
+        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUSIVE
+        getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
+      } else if (queryFilter == FilterOption['archived-only']) {
+        getBookmarksParams.archived = ArchivedBookmarks.EXCLUSIVE
+      } else if (queryFilter == FilterOption['archived-only-without-nsfw']) {
+        getBookmarksParams.archived = ArchivedBookmarks.EXCLUSIVE
+        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
+      }
     }
 
     if (getNextPage) {
