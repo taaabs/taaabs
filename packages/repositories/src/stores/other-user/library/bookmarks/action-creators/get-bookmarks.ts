@@ -28,7 +28,9 @@ export const getBookmarks = ({
       dispatch(bookmarksActions.setIsGettingFirstBookmarks(true))
       dispatch(bookmarksActions.setHasMoreBookmarks(null))
     }
+
     const { bookmarks, pagination } = await getBookmarks.invoke(params)
+
     if (params.after) {
       if (state.bookmarks == null) {
         throw 'Bookmarks should not be null.'
