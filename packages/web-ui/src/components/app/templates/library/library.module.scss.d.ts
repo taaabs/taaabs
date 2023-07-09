@@ -11,6 +11,7 @@ declare const styles: {
   readonly 'main__inner__mobile-title-bar': string
   readonly 'main__inner__desktop-title-bar': string
   readonly main__inner__bookmarks: string
+  readonly 'main__inner__bookmarks--loading': string
   readonly main__inner__pagination: string
   readonly 'main__inner__pagination--hidden': string
   readonly aside: string

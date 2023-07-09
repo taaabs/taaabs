@@ -264,16 +264,18 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                   }
                 />
               </div>
-              {(!isHydrated || props.isGettingFirstBookmarks) && (
-                <div>loading</div>
-              )}
+              {!isHydrated && <div>loading</div>}
               <div
-                className={styles.main__inner__bookmarks}
+                className={cn([
+                  styles.main__inner__bookmarks,
+                  {
+                    [styles['main__inner__bookmarks--loading']]:
+                      props.isGettingFirstBookmarks,
+                  },
+                ])}
                 style={{
                   visibility:
-                    isRestoringScrollPosition ||
-                    !isHydrated ||
-                    props.isGettingFirstBookmarks
+                    isRestoringScrollPosition || !isHydrated
                       ? 'hidden'
                       : 'visible',
                 }}
@@ -290,13 +292,12 @@ export const Library: React.FC<LibraryTypes.Props> = (props) => {
                 ])}
                 ref={pagination}
                 style={{
-                  visibility:
-                    !isHydrated || props.isGettingFirstBookmarks
-                      ? 'hidden'
-                      : 'visible',
+                  visibility: !isHydrated ? 'hidden' : 'visible',
                 }}
               >
-                {props.noResults
+                {props.isGettingFirstBookmarks
+                  ? 'Loading...'
+                  : props.noResults
                   ? 'No results'
                   : props.hasMoreBookmarks
                   ? 'Loading more results...'

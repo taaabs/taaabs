@@ -153,6 +153,10 @@
       > div {
         margin-bottom: var(--distance-8px);
       }
+      &--loading {
+        opacity: 0.5;
+        pointer-events: none;
+      }
     }
     &__pagination {
       display: flex;

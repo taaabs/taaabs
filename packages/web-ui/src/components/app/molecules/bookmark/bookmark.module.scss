@@ -51,7 +51,7 @@
       display: inline-flex;
       font-weight: var(--font-weight-inter-bold);
       color: var(--Bookmark-nsfw-foreground);
-      transform: scale(0.82) translateY(-0.07rem);
+      transform: scale(0.82) translateY(-0.18rem);
       position: relative;
       font-size: var(--font-size-1-3rem);
       margin-right: var(--distance-0-5rem);
@@ -109,13 +109,13 @@
     gap: var(--distance-7px);
     padding-bottom: var(--distance-2px);
     &__tag {
-      font-size: var(--font-size-13px);
+      font-size: var(--font-size-1-3rem);
       color: var(--Bookmark-tag-foreground);
       background: var(--Bookmark-tag-background);
       border-radius: var(--border-radius-4px);
       border: 1px solid var(--Bookmark-tag-border-color);
-      padding: 0 var(--distance-7px);
-      height: var(--button-dimension-28px);
+      padding: 0 var(--distance-0-7rem);
+      height: var(--distance-2-8rem);
       font-weight: var(--font-weight-inter-medium);
       @include transition-100ms(all);
 
@@ -216,7 +216,7 @@
         &::after {
           content: '·';
           color: var(--text-color-dimmed);
-          font-size: var(--font-size-13px);
+          font-size: var(--font-size-1-3rem);
         }
       }
     }
@@ -228,7 +228,7 @@
       }
     }
     &__date {
-      font-size: var(--font-size-13px);
+      font-size: var(--font-size-1-3rem);
       color: var(--text-color-dimmed);
       @include to992 {
         display: flex;

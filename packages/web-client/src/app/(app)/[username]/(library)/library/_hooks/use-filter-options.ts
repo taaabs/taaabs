@@ -47,7 +47,9 @@ export const useFilterOptions = (initFilterOption: FilterOption) => {
       'f',
       selectedFilterOption.toString(),
     )
-    router.push(`/${params.username}/library?${updatedQueryParams}`)
+    router.push(`/${params.username}/library?${updatedQueryParams}`, {
+      scroll: false,
+    })
   }, [selectedFilterOption])
 
   useUpdateEffect(() => {

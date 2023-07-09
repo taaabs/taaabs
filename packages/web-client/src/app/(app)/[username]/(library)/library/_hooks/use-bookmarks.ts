@@ -103,6 +103,7 @@ export const useBookmarks = () => {
   }, [queryParams])
 
   useUpdateEffect(() => {
+    window.scrollTo(0, 0)
     sessionStorage.setItem('bookmarks', JSON.stringify(bookmarks))
     sessionStorage.setItem('hasMoreBookmarks', JSON.stringify(hasMoreBookmarks))
     sessionStorage.setItem('queryParams', queryParams.toString())

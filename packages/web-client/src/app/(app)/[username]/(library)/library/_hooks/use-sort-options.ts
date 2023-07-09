@@ -18,7 +18,9 @@ export const useSortOptions = (initSortOption: SortOption) => {
       's',
       _sortOptionToQueryParam(selectedSortOption),
     )
-    router.push(`/${params.username}/library?${updatedQueryParams}`)
+    router.push(`/${params.username}/library?${updatedQueryParams}`, {
+      scroll: false,
+    })
   }, [selectedSortOption])
 
   return { selectedSortOption, setSelectedSortOption }
