@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import { FilterOption } from './use-filter-options'
 import { ArchivedBookmarks } from '@shared/dtos/modules/bookmarks/archived-bookmarks'
 import { NsfwBookmarks } from '@shared/dtos/modules/bookmarks/nsfw-bookmarks'
+import { SortOption } from './use-sort-options'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -37,7 +38,7 @@ export const useBookmarks = () => {
     const querySortBy = queryParams.get('s')
     if (querySortBy) {
       let sortBy: SortBy
-      if (querySortBy == 'asc') {
+      if (querySortBy == SortOption.OldestToNewest.toString()) {
         sortBy = SortBy.DATE_ASC
       } else {
         sortBy = SortBy.DATE_DESC
@@ -51,9 +52,7 @@ export const useBookmarks = () => {
     if (queryFilter != FilterOption.All) {
       if (queryFilter == FilterOption.AllWithArchived) {
         getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
-      } else if (
-        queryFilter == FilterOption.AllWithArchivedWithoutNsfw
-      ) {
+      } else if (queryFilter == FilterOption.AllWithArchivedWithoutNsfw) {
         getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
         getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
       } else if (queryFilter == FilterOption.AllWithoutNsfw) {

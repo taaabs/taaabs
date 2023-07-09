@@ -26,7 +26,7 @@ const Page: React.FC = () => {
   } = useLibrarySelector((state) => state.bookmarks)
   const { getBookmarks } = useBookmarks()
   const { selectedSortOption, setSelectedSortOption } = useSortOptions(
-    queryParams.get('s') == 'asc' ? 'oldest-to-newest' : 'newest-to-oldest',
+    parseInt(queryParams.get('s') || SortOption.NewestToOldest.toString()),
   )
   const {
     selectedFilterOption,
@@ -221,24 +221,26 @@ const Page: React.FC = () => {
                 <SimpleSelectDropdown
                   items={[
                     {
-                      label: _sortOptionToLabel('newest-to-oldest'),
+                      label: _sortOptionToLabel(SortOption.NewestToOldest),
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
-                        setSelectedSortOption('newest-to-oldest')
+                        setSelectedSortOption(SortOption.NewestToOldest)
                         toggleSortDropdown()
                       },
-                      isSelected: selectedSortOption == 'newest-to-oldest',
+                      isSelected:
+                        selectedSortOption == SortOption.NewestToOldest,
                     },
                     {
-                      label: _sortOptionToLabel('oldest-to-newest'),
+                      label: _sortOptionToLabel(SortOption.OldestToNewest),
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
-                        setSelectedSortOption('oldest-to-newest')
+                        setSelectedSortOption(SortOption.OldestToNewest)
                         toggleSortDropdown()
                       },
-                      isSelected: selectedSortOption == 'oldest-to-newest',
+                      isSelected:
+                        selectedSortOption == SortOption.OldestToNewest,
                     },
                   ]}
                 />
@@ -300,7 +302,7 @@ const Page: React.FC = () => {
 export default Page
 
 function _sortOptionToLabel(sortOption: SortOption): string {
-  if (sortOption == 'newest-to-oldest') {
+  if (sortOption == SortOption.NewestToOldest) {
     return 'Newest to Oldest'
   }
   return 'Oldest to Newest'

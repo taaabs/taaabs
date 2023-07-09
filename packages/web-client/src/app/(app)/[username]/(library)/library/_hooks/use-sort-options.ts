@@ -3,7 +3,10 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { updateQueryParam } from '@/utils/update-query-param'
 
-export type SortOption = 'newest-to-oldest' | 'oldest-to-newest'
+export enum SortOption {
+  NewestToOldest,
+  OldestToNewest,
+}
 
 export const useSortOptions = (initSortOption: SortOption) => {
   const queryParams = useSearchParams()
@@ -16,7 +19,7 @@ export const useSortOptions = (initSortOption: SortOption) => {
     const updatedQueryParams = updateQueryParam(
       queryParams,
       's',
-      _sortOptionToQueryParam(selectedSortOption),
+      selectedSortOption.toString(),
     )
     router.push(`/${params.username}/library?${updatedQueryParams}`, {
       scroll: false,
@@ -24,11 +27,4 @@ export const useSortOptions = (initSortOption: SortOption) => {
   }, [selectedSortOption])
 
   return { selectedSortOption, setSelectedSortOption }
-}
-
-function _sortOptionToQueryParam(sortOption: SortOption) {
-  if (sortOption == 'newest-to-oldest') {
-    return 'desc'
-  }
-  return 'asc'
 }
