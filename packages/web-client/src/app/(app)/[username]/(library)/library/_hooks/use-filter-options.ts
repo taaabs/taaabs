@@ -4,18 +4,18 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
 export enum FilterOption {
-  'all',
-  'all-with-archived',
-  'all-with-archived-without-nsfw',
-  'all-without-nsfw',
-  'starred-only',
-  'starred-only-with-archived',
-  'starred-only-with-archived-without-nsfw',
-  'starred-only-without-nsfw',
-  'nsfw-only',
-  'nsfw-only-with-archived',
-  'archived-only',
-  'archived-only-without-nsfw',
+  All,
+  'AllWithArchived',
+  'AllWithArchivedWithoutNsfw',
+  'AllWithoutNsfw',
+  'StarredOnly',
+  'StarredOnlyWithArchived',
+  'StarredOnlyWithArchivedWithoutNsfw',
+  'StarredOnlyWithoutNsfw',
+  'NsfwOnly',
+  'NsfwOnlyWithArchived',
+  'ArchivedOnly',
+  'ArchivedOnlyWithoutNsfw',
 }
 
 export const useFilterOptions = (initFilterOption: FilterOption) => {
@@ -23,20 +23,18 @@ export const useFilterOptions = (initFilterOption: FilterOption) => {
   const router = useRouter()
   const params = useParams()
   const [withArchived, setWithArchived] = useState(
-    initFilterOption == FilterOption['all-with-archived'] ||
-      initFilterOption == FilterOption['all-with-archived-without-nsfw'] ||
-      initFilterOption == FilterOption['starred-only-with-archived'] ||
-      initFilterOption ==
-        FilterOption['starred-only-with-archived-without-nsfw'] ||
-      initFilterOption == FilterOption['nsfw-only-with-archived'],
+    initFilterOption == FilterOption.AllWithArchived ||
+      initFilterOption == FilterOption.AllWithArchivedWithoutNsfw ||
+      initFilterOption == FilterOption.StarredOnlyWithArchived ||
+      initFilterOption == FilterOption.StarredOnlyWithArchivedWithoutNsfw ||
+      initFilterOption == FilterOption.NsfwOnlyWithArchived,
   )
   const [withoutNsfw, setWithoutNsfw] = useState(
-    initFilterOption == FilterOption['all-with-archived-without-nsfw'] ||
-      initFilterOption == FilterOption['all-without-nsfw'] ||
-      initFilterOption ==
-        FilterOption['starred-only-with-archived-without-nsfw'] ||
-      initFilterOption == FilterOption['starred-only-without-nsfw'] ||
-      initFilterOption == FilterOption['archived-only-without-nsfw'],
+    initFilterOption == FilterOption.AllWithArchivedWithoutNsfw ||
+      initFilterOption == FilterOption.AllWithoutNsfw ||
+      initFilterOption == FilterOption.StarredOnlyWithArchivedWithoutNsfw ||
+      initFilterOption == FilterOption.StarredOnlyWithoutNsfw ||
+      initFilterOption == FilterOption.ArchivedOnlyWithoutNsfw,
   )
   const [selectedFilterOption, setSelectedFilterOption] =
     useState<FilterOption>(initFilterOption)
@@ -56,128 +54,120 @@ export const useFilterOptions = (initFilterOption: FilterOption) => {
     if (withArchived) {
       if (withoutNsfw) {
         switch (selectedFilterOption) {
-          case FilterOption.all:
+          case FilterOption.All:
+            setSelectedFilterOption(FilterOption.AllWithArchivedWithoutNsfw)
+            break
+          case FilterOption.AllWithArchived:
+            setSelectedFilterOption(FilterOption.AllWithArchivedWithoutNsfw)
+            break
+          case FilterOption.AllWithoutNsfw:
+            setSelectedFilterOption(FilterOption.AllWithArchivedWithoutNsfw)
+            break
+          case FilterOption.StarredOnly:
             setSelectedFilterOption(
-              FilterOption['all-with-archived-without-nsfw'],
+              FilterOption.StarredOnlyWithArchivedWithoutNsfw,
             )
             break
-          case FilterOption['all-with-archived']:
+          case FilterOption.StarredOnlyWithArchived:
             setSelectedFilterOption(
-              FilterOption['all-with-archived-without-nsfw'],
+              FilterOption.StarredOnlyWithArchivedWithoutNsfw,
             )
             break
-          case FilterOption['all-without-nsfw']:
+          case FilterOption.StarredOnlyWithoutNsfw:
             setSelectedFilterOption(
-              FilterOption['all-with-archived-without-nsfw'],
+              FilterOption.StarredOnlyWithArchivedWithoutNsfw,
             )
             break
-          case FilterOption['starred-only']:
-            setSelectedFilterOption(
-              FilterOption['starred-only-with-archived-without-nsfw'],
-            )
+          case FilterOption.ArchivedOnly:
+            setSelectedFilterOption(FilterOption.ArchivedOnlyWithoutNsfw)
             break
-          case FilterOption['starred-only-with-archived']:
-            setSelectedFilterOption(
-              FilterOption['starred-only-with-archived-without-nsfw'],
-            )
+          case FilterOption.NsfwOnlyWithArchived:
+            setSelectedFilterOption(FilterOption.NsfwOnly)
             break
-          case FilterOption['starred-only-without-nsfw']:
-            setSelectedFilterOption(
-              FilterOption['starred-only-with-archived-without-nsfw'],
-            )
-            break
-          case FilterOption['archived-only']:
-            setSelectedFilterOption(FilterOption['archived-only-without-nsfw'])
-            break
-          case FilterOption['nsfw-only-with-archived']:
-            setSelectedFilterOption(FilterOption['nsfw-only'])
-            break
-          case FilterOption['nsfw-only']:
-            setSelectedFilterOption(FilterOption['nsfw-only-with-archived'])
+          case FilterOption.NsfwOnly:
+            setSelectedFilterOption(FilterOption.NsfwOnlyWithArchived)
             break
         }
       } else {
         switch (selectedFilterOption) {
-          case FilterOption.all:
-            setSelectedFilterOption(FilterOption['all-with-archived'])
+          case FilterOption.All:
+            setSelectedFilterOption(FilterOption.AllWithArchived)
             break
-          case FilterOption['all-without-nsfw']:
+          case FilterOption.AllWithoutNsfw:
+            setSelectedFilterOption(FilterOption.AllWithArchivedWithoutNsfw)
+            break
+          case FilterOption.AllWithArchivedWithoutNsfw:
+            setSelectedFilterOption(FilterOption.AllWithArchived)
+            break
+          case FilterOption.StarredOnly:
+            setSelectedFilterOption(FilterOption.StarredOnlyWithArchived)
+            break
+          case FilterOption.StarredOnlyWithoutNsfw:
             setSelectedFilterOption(
-              FilterOption['all-with-archived-without-nsfw'],
+              FilterOption.StarredOnlyWithArchivedWithoutNsfw,
             )
             break
-          case FilterOption['all-with-archived-without-nsfw']:
-            setSelectedFilterOption(FilterOption['all-with-archived'])
+          case FilterOption.StarredOnlyWithArchivedWithoutNsfw:
+            setSelectedFilterOption(FilterOption.StarredOnlyWithArchived)
             break
-          case FilterOption['starred-only']:
-            setSelectedFilterOption(FilterOption['starred-only-with-archived'])
+          case FilterOption.NsfwOnly:
+            setSelectedFilterOption(FilterOption.NsfwOnlyWithArchived)
             break
-          case FilterOption['starred-only-without-nsfw']:
-            setSelectedFilterOption(
-              FilterOption['starred-only-with-archived-without-nsfw'],
-            )
-            break
-          case FilterOption['starred-only-with-archived-without-nsfw']:
-            setSelectedFilterOption(FilterOption['starred-only-with-archived'])
-            break
-          case FilterOption['nsfw-only']:
-            setSelectedFilterOption(FilterOption['nsfw-only-with-archived'])
-            break
-          case FilterOption['archived-only-without-nsfw']:
-            setSelectedFilterOption(FilterOption['archived-only'])
+          case FilterOption.ArchivedOnlyWithoutNsfw:
+            setSelectedFilterOption(FilterOption.ArchivedOnly)
             break
         }
       }
     } else {
       if (withoutNsfw) {
         switch (selectedFilterOption) {
-          case FilterOption['all']:
-            setSelectedFilterOption(FilterOption['all-without-nsfw'])
+          case FilterOption.All:
+            setSelectedFilterOption(FilterOption.AllWithoutNsfw)
             break
-          case FilterOption['all-with-archived-without-nsfw']:
-            setSelectedFilterOption(FilterOption['all-without-nsfw'])
+          case FilterOption.AllWithArchivedWithoutNsfw:
+            setSelectedFilterOption(FilterOption.AllWithoutNsfw)
             break
-          case FilterOption['starred-only-with-archived-without-nsfw']:
-            setSelectedFilterOption(FilterOption['starred-only-without-nsfw'])
+          case FilterOption.StarredOnlyWithArchivedWithoutNsfw:
+            setSelectedFilterOption(FilterOption.StarredOnlyWithoutNsfw)
             break
-          case FilterOption['starred-only']:
-            setSelectedFilterOption(FilterOption['starred-only-without-nsfw'])
+          case FilterOption.StarredOnly:
+            setSelectedFilterOption(FilterOption.StarredOnlyWithoutNsfw)
             break
-          case FilterOption['archived-only']:
-            setSelectedFilterOption(FilterOption['archived-only-without-nsfw'])
+          case FilterOption.ArchivedOnly:
+            setSelectedFilterOption(FilterOption.ArchivedOnlyWithoutNsfw)
             break
-          case FilterOption['nsfw-only-with-archived']:
-            setSelectedFilterOption(FilterOption['nsfw-only'])
+          case FilterOption.NsfwOnlyWithArchived:
+            setSelectedFilterOption(FilterOption.NsfwOnly)
             break
         }
       } else {
         switch (selectedFilterOption) {
-          case FilterOption['all-with-archived']:
-            setSelectedFilterOption(FilterOption['all'])
+          case FilterOption.AllWithArchived:
+            setSelectedFilterOption(FilterOption.All)
             break
-          case FilterOption['all-with-archived-without-nsfw']:
-            setSelectedFilterOption(FilterOption['all'])
+          case FilterOption.AllWithArchivedWithoutNsfw:
+            setSelectedFilterOption(FilterOption.All)
             break
-          case FilterOption['all-without-nsfw']:
-            setSelectedFilterOption(FilterOption['all'])
+          case FilterOption.AllWithoutNsfw:
+            setSelectedFilterOption(FilterOption.All)
             break
-          case FilterOption['starred-only-with-archived']:
-            setSelectedFilterOption(FilterOption['starred-only'])
+          case FilterOption.StarredOnlyWithArchived:
+            setSelectedFilterOption(FilterOption.StarredOnly)
             break
-          case FilterOption['starred-only-with-archived-without-nsfw']:
-            setSelectedFilterOption(FilterOption['starred-only'])
+          case FilterOption.StarredOnlyWithArchivedWithoutNsfw:
+            setSelectedFilterOption(FilterOption.StarredOnly)
             break
-          case FilterOption['starred-only-without-nsfw']:
-            setSelectedFilterOption(FilterOption['starred-only'])
+          case FilterOption.StarredOnlyWithoutNsfw:
+            setSelectedFilterOption(FilterOption.StarredOnly)
             break
-          case FilterOption['nsfw-only-with-archived']:
-            setSelectedFilterOption(FilterOption['nsfw-only'])
+          case FilterOption.NsfwOnlyWithArchived:
+            setSelectedFilterOption(FilterOption.NsfwOnly)
             break
-          case FilterOption['archived-only-without-nsfw']:
-            setSelectedFilterOption(FilterOption['archived-only'])
+          case FilterOption.ArchivedOnlyWithoutNsfw:
+            setSelectedFilterOption(FilterOption.ArchivedOnly)
             break
-          case FilterOption['archived-only']:
-            setSelectedFilterOption(FilterOption['archived-only-without-nsfw'])
+          case FilterOption.ArchivedOnly:
+            setSelectedFilterOption(FilterOption.ArchivedOnlyWithoutNsfw)
             break
         }
       }

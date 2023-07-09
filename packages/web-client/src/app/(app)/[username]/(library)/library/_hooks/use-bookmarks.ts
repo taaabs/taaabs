@@ -46,40 +46,40 @@ export const useBookmarks = () => {
     }
 
     const queryFilter = parseInt(
-      queryParams.get('f') || FilterOption['all'].toString(),
+      queryParams.get('f') || FilterOption.All.toString(),
     )
-    if (queryFilter != FilterOption['all']) {
-      if (queryFilter == FilterOption['all-with-archived']) {
+    if (queryFilter != FilterOption.All) {
+      if (queryFilter == FilterOption.AllWithArchived) {
         getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
       } else if (
-        queryFilter == FilterOption['all-with-archived-without-nsfw']
+        queryFilter == FilterOption.AllWithArchivedWithoutNsfw
       ) {
         getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
         getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
-      } else if (queryFilter == FilterOption['all-without-nsfw']) {
+      } else if (queryFilter == FilterOption.AllWithoutNsfw) {
         getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
-      } else if (queryFilter == FilterOption['starred-only']) {
+      } else if (queryFilter == FilterOption.StarredOnly) {
         getBookmarksParams.starredOnly = true
-      } else if (queryFilter == FilterOption['starred-only-with-archived']) {
+      } else if (queryFilter == FilterOption.StarredOnlyWithArchived) {
         getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
         getBookmarksParams.starredOnly = true
       } else if (
-        queryFilter == FilterOption['starred-only-with-archived-without-nsfw']
+        queryFilter == FilterOption.StarredOnlyWithArchivedWithoutNsfw
       ) {
         getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
         getBookmarksParams.starredOnly = true
         getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
-      } else if (queryFilter == FilterOption['starred-only-without-nsfw']) {
+      } else if (queryFilter == FilterOption.StarredOnlyWithoutNsfw) {
         getBookmarksParams.starredOnly = true
         getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
-      } else if (queryFilter == FilterOption['nsfw-only']) {
+      } else if (queryFilter == FilterOption.NsfwOnly) {
         getBookmarksParams.nsfw = NsfwBookmarks.EXCLUSIVE
-      } else if (queryFilter == FilterOption['nsfw-only-with-archived']) {
+      } else if (queryFilter == FilterOption.NsfwOnlyWithArchived) {
         getBookmarksParams.nsfw = NsfwBookmarks.EXCLUSIVE
         getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
-      } else if (queryFilter == FilterOption['archived-only']) {
+      } else if (queryFilter == FilterOption.ArchivedOnly) {
         getBookmarksParams.archived = ArchivedBookmarks.EXCLUSIVE
-      } else if (queryFilter == FilterOption['archived-only-without-nsfw']) {
+      } else if (queryFilter == FilterOption.ArchivedOnlyWithoutNsfw) {
         getBookmarksParams.archived = ArchivedBookmarks.EXCLUSIVE
         getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
       }
