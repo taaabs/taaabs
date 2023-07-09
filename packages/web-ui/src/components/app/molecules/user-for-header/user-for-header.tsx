@@ -28,7 +28,6 @@ export const UserForHeader: React.FC<UserForHeaderTypes.Props> = ({
       <div className={styles['avatar-and-username__avatar-image__blurhash']}>
         <Blurhash hash={user.avatar.blurhash} />
       </div>
-
       <img src={user.avatar.url} />
     </div>
   ) : (
