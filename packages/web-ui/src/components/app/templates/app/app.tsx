@@ -1,6 +1,6 @@
 import styles from './app.module.scss'
 
-export namespace AppTypes {
+export namespace App {
   export type Props = {
     slotAppHeaderDesktop: React.ReactNode
     slotAppHeaderMobile: React.ReactNode
@@ -9,7 +9,7 @@ export namespace AppTypes {
   }
 }
 
-export const App: React.FC<AppTypes.Props> = (props) => {
+export const App: React.FC<App.Props> = (props) => {
   return (
     <>
       <div className={styles.header}>

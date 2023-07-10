@@ -1,14 +1,11 @@
 import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
-import {
-  NavigationForHeader,
-  NavigationForHeaderTypes,
-} from './navigation-for-header'
+import { NavigationForHeader } from './navigation-for-header'
 
 export default {
   component: NavigationForHeader,
 }
 
-const navigation: NavigationForHeaderTypes.Props['navigation'] = [
+const navigation: NavigationForHeader.Props['navigation'] = [
   { label: 'Lorem', href: '/lorem', isActive: true },
   { label: 'Lorem', href: '/ipsum', isActive: false },
 ]

@@ -12,7 +12,7 @@ import { useSessionScrollRestoration } from './hooks/use-session-scroll-restorat
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import { useIsHydrated } from '@shared/hooks'
 
-export namespace LibraryTypes {
+export namespace Library {
   export type Props = {
     slotSidebar: React.ReactNode
     slotAside: React.ReactNode
@@ -32,7 +32,7 @@ export namespace LibraryTypes {
 
 const SLIDABLE_WIDTH = 300
 
-export const Library: React.FC<LibraryTypes.Props> = (props) => {
+export const Library: React.FC<Library.Props> = (props) => {
   const sidebar = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLDivElement>(null)
   const mainInner = useRef<HTMLDivElement>(null)

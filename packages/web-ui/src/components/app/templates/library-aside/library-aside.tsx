@@ -2,7 +2,7 @@ import { Icon } from '@web-ui/components/common/atoms/icon'
 import styles from './library-aside.module.scss'
 import cn from 'classnames'
 
-export namespace LibraryAsideTypes {
+export namespace LibraryAside {
   export type Props = {
     slotFilter?: {
       button: React.ReactNode
@@ -19,7 +19,7 @@ export namespace LibraryAsideTypes {
   }
 }
 
-export const LibraryAside: React.FC<LibraryAsideTypes.Props> = (props) => {
+export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.toolbar}>

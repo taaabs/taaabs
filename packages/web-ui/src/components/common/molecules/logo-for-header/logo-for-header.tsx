@@ -3,14 +3,14 @@ import { Icon } from '@web-ui/components/common/atoms/icon'
 import styles from './logo-for-header.module.scss'
 import cn from 'classnames'
 
-export namespace LogoForHeaderTypes {
+export namespace LogoForHeader {
   export type Props = {
     isLarge?: boolean
     href: string
   }
 }
 
-export const LogoForHeader: React.FC<LogoForHeaderTypes.Props> = (props) => {
+export const LogoForHeader: React.FC<LogoForHeader.Props> = (props) => {
   return (
     <Link
       className={cn(styles.logo, { [styles['logo--large']]: props.isLarge })}

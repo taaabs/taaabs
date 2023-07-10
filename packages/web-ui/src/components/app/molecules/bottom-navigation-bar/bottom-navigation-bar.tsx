@@ -1,7 +1,7 @@
 import { Icon } from '@web-ui/components/common/atoms/icon'
 import styles from './bottom-navigation-bar.module.scss'
 
-export namespace BottomNavigationBarTypes {
+export namespace BottomNavigationBar {
   export type Props = {
     onClickSearch: () => void
     onClickUser: () => void
@@ -11,7 +11,7 @@ export namespace BottomNavigationBarTypes {
   }
 }
 
-export const BottomNavigationBar: React.FC<BottomNavigationBarTypes.Props> = (
+export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
   props,
 ) => {
   return (

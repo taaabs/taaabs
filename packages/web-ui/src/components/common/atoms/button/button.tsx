@@ -2,7 +2,7 @@ import Link from 'next/link'
 import styles from './button.module.scss'
 import cn from 'classnames'
 
-export namespace ButtonTypes {
+export namespace Button {
   export type Size = 'small' | 'default' | 'large'
   export type Props = {
     href?: string
@@ -15,7 +15,7 @@ export namespace ButtonTypes {
   }
 }
 
-export const Button = (props: ButtonTypes.Props) => {
+export const Button = (props: Button.Props) => {
   if (props.type == 'submit') {
     return (
       <button

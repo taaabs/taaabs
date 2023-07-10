@@ -1,15 +1,15 @@
-import { Icon, IconTypes } from '@web-ui/components/common/atoms/icon'
+import { Icon } from '@web-ui/components/common/atoms/icon'
 import styles from './button-outlined-icon.module.scss'
 
-export namespace ButtonOutlinedIconTypes {
+export namespace ButtonOutlinedIcon {
   export type Props = {
     onClick: () => void
-    iconVariant: IconTypes.Variant
+    iconVariant: Icon.Variant
     testId?: string
   }
 }
 
-export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIconTypes.Props> = (
+export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIcon.Props> = (
   props,
 ) => {
   return (

@@ -2,7 +2,7 @@ import { Icon } from '@web-ui/components/common/atoms/icon'
 import styles from './button-select.module.scss'
 import cn from 'classnames'
 
-export namespace ButtonSelectTypes {
+export namespace ButtonSelect {
   export type Props = {
     label: string
     currentValue: string
@@ -11,7 +11,7 @@ export namespace ButtonSelectTypes {
   }
 }
 
-export const ButtonSelect: React.FC<ButtonSelectTypes.Props> = (props) => {
+export const ButtonSelect: React.FC<ButtonSelect.Props> = (props) => {
   return (
     <button
       className={cn([

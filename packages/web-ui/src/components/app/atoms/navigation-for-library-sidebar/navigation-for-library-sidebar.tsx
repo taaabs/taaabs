@@ -1,7 +1,7 @@
 import styles from './navigation-for-library-sidebar.module.scss'
 import cn from 'classnames'
 
-export namespace NavigationForLibrarySidebarTypes {
+export namespace NavigationForLibrarySidebar {
   type NavigationItem = {
     label: string
     onClick: () => void
@@ -13,7 +13,7 @@ export namespace NavigationForLibrarySidebarTypes {
 }
 
 export const NavigationForLibrarySidebar: React.FC<
-  NavigationForLibrarySidebarTypes.Props
+  NavigationForLibrarySidebar.Props
 > = (props) => {
   return (
     <nav className={styles.navigation}>

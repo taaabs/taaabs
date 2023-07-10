@@ -1,7 +1,7 @@
 import { ButtonUnderlined } from '@web-ui/components/app/atoms/button-underlined'
 import styles from './navigation-for-header.module.scss'
 
-export namespace NavigationForHeaderTypes {
+export namespace NavigationForHeader {
   export type NavigationItem = {
     label: string
     href: string
@@ -12,7 +12,7 @@ export namespace NavigationForHeaderTypes {
   }
 }
 
-export const NavigationForHeader: React.FC<NavigationForHeaderTypes.Props> = ({
+export const NavigationForHeader: React.FC<NavigationForHeader.Props> = ({
   navigation,
 }) => {
   return (

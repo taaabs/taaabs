@@ -4,7 +4,7 @@ import styles from './user-for-header.module.scss'
 import { Blurhash } from 'react-blurhash'
 import Skeleton from 'react-loading-skeleton'
 
-export namespace UserForHeaderTypes {
+export namespace UserForHeader {
   export type User = {
     username: string
     avatar?: {
@@ -19,7 +19,7 @@ export namespace UserForHeaderTypes {
   }
 }
 
-export const UserForHeader: React.FC<UserForHeaderTypes.Props> = ({
+export const UserForHeader: React.FC<UserForHeader.Props> = ({
   user,
   isLoadingAvatar,
 }) => {

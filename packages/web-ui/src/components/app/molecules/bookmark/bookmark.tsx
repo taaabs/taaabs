@@ -6,7 +6,7 @@ import styles from './bookmark.module.scss'
 
 dayjs.extend(relativeTime)
 
-export namespace BookmarkTypes {
+export namespace Bookmark {
   export type Visibility = 'public' | 'private'
   export type Props = {
     title: string
@@ -27,7 +27,7 @@ export namespace BookmarkTypes {
   }
 }
 
-export const Bookmark: React.FC<BookmarkTypes.Props> = (props) => {
+export const Bookmark: React.FC<Bookmark.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.main}>

@@ -2,7 +2,7 @@ import { Icon } from '@web-ui/components/common/atoms/icon'
 import styles from './simple-select-dropdown.module.scss'
 import cn from 'classnames'
 
-export namespace SimpleSelectDropdownTypes {
+export namespace SimpleSelectDropdown {
   type Checkbox = {
     label: string
     onClick: () => void
@@ -20,7 +20,7 @@ export namespace SimpleSelectDropdownTypes {
   }
 }
 
-export const SimpleSelectDropdown: React.FC<SimpleSelectDropdownTypes.Props> = (
+export const SimpleSelectDropdown: React.FC<SimpleSelectDropdown.Props> = (
   props,
 ) => {
   return (

@@ -1,13 +1,13 @@
 import { Button } from '@web-ui/components/common/atoms/button'
 
-export namespace DesktopUserForHeaderTypes {
+export namespace DesktopUserForHeader {
   export type Props = {
     buttonLabel: string
     buttonOnClick: () => void
   }
 }
 
-export const DesktopUserForHeader: React.FC<DesktopUserForHeaderTypes.Props> = (
+export const DesktopUserForHeader: React.FC<DesktopUserForHeader.Props> = (
   props,
 ) => {
   return (

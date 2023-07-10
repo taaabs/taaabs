@@ -3,7 +3,7 @@ import { ButtonAvatar } from '@web-ui/components/app/atoms/button-avatar'
 import styles from './desktop-user-area-for-app-header.module.scss'
 import { ButtonOutlinedIcon } from '../../atoms/button-outlined-icon'
 
-export namespace DesktopUserAreaForAppHeaderTypes {
+export namespace DesktopUserAreaForAppHeader {
   export type Props = {
     avatar?: {
       url: string
@@ -16,7 +16,7 @@ export namespace DesktopUserAreaForAppHeaderTypes {
 }
 
 export const DesktopUserAreaForAppHeader: React.FC<
-  DesktopUserAreaForAppHeaderTypes.Props
+  DesktopUserAreaForAppHeader.Props
 > = (props) => {
   return (
     <div className={styles.container}>

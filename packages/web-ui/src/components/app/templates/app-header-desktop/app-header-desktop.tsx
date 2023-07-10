@@ -1,7 +1,7 @@
 import { Wrapper } from '@web-ui/components/app/atoms/wrapper'
 import styles from './app-header-desktop.module.scss'
 
-export namespace AppHeaderDesktopTypes {
+export namespace AppHeaderDesktop {
   export type Props = {
     logoSlot: React.ReactNode
     navigationSlot: React.ReactNode
@@ -9,7 +9,7 @@ export namespace AppHeaderDesktopTypes {
   }
 }
 
-export const AppHeaderDesktop = (props: AppHeaderDesktopTypes.Props) => {
+export const AppHeaderDesktop = (props: AppHeaderDesktop.Props) => {
   return (
     <div className={styles.container}>
       <Wrapper>

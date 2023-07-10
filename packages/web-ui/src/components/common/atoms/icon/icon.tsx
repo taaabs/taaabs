@@ -17,7 +17,7 @@ import UserAdd from '@web-ui/assets/icons/user-add.svg'
 import UserRemove from '@web-ui/assets/icons/user-remove.svg'
 import User from '@web-ui/assets/icons/user.svg'
 
-export namespace IconTypes {
+export namespace Icon {
   export type Variant =
     | 'ADD'
     | 'BOOKMARK'
@@ -43,7 +43,7 @@ export namespace IconTypes {
   }
 }
 
-export const Icon: React.FC<IconTypes.Props> = ({ variant }) => {
+export const Icon: React.FC<Icon.Props> = ({ variant }) => {
   let icon: JSX.Element
 
   switch (variant) {

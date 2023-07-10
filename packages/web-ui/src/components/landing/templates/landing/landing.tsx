@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './landing.module.scss'
 
-export namespace LandingTypes {
+export namespace Landing {
   export type Props = {
     slotLogo: React.ReactNode
     slotDesktopNavigation: React.ReactNode
@@ -11,7 +11,7 @@ export namespace LandingTypes {
   }
 }
 
-export const Landing: React.FC<LandingTypes.Props> = (props) => {
+export const Landing: React.FC<Landing.Props> = (props) => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
