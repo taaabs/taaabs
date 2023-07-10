@@ -1,7 +1,7 @@
 import { Blurhash } from 'react-blurhash'
 import styles from './button-avatar.module.scss'
 
-export namespace ButtonAvatarTypes {
+export namespace ButtonAvatar {
   export type Props = {
     onClick: () => void
     alt: string
@@ -11,7 +11,7 @@ export namespace ButtonAvatarTypes {
   }
 }
 
-export const ButtonAvatar: React.FC<ButtonAvatarTypes.Props> = (props) => {
+export const ButtonAvatar: React.FC<ButtonAvatar.Props> = (props) => {
   return (
     <button
       className={styles.button}

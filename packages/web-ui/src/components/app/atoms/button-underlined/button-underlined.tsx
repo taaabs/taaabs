@@ -2,7 +2,7 @@ import Link from 'next/link'
 import styles from './button-underlined.module.scss'
 import cn from 'classnames'
 
-export namespace ButtonUnderlinedTypes {
+export namespace ButtonUnderlined {
   export type Props = {
     label: string
     href?: string
@@ -11,9 +11,7 @@ export namespace ButtonUnderlinedTypes {
   }
 }
 
-export const ButtonUnderlined: React.FC<ButtonUnderlinedTypes.Props> = (
-  props,
-) => {
+export const ButtonUnderlined: React.FC<ButtonUnderlined.Props> = (props) => {
   if (props.href != undefined) {
     return (
       <Link
