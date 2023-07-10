@@ -47,7 +47,7 @@ export namespace BookmarksDto {
     }
 
     export class Authorized extends QueryParams {
-      public static DEFAULT_VISIBILITY = BookmarkVisibility.ALL
+      public static DEFAULT_VISIBILITY = BookmarkVisibility.All
 
       public visibility?: BookmarkVisibility = Authorized.DEFAULT_VISIBILITY
     }

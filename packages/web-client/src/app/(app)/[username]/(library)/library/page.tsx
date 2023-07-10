@@ -31,8 +31,6 @@ const Page: React.FC = () => {
   const {
     selectedFilterOption,
     setSelectedFilterOption,
-    withArchived,
-    setWithArchived,
     withoutNsfw,
     setWithoutNsfw,
   } = useFilterOptions(
@@ -78,14 +76,8 @@ const Page: React.FC = () => {
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
-                        if (withArchived && !withoutNsfw) {
-                          setSelectedFilterOption(FilterOption.AllWithArchived)
-                        } else if (withoutNsfw && !withArchived) {
+                        if (withoutNsfw) {
                           setSelectedFilterOption(FilterOption.AllWithoutNsfw)
-                        } else if (withoutNsfw && withArchived) {
-                          setSelectedFilterOption(
-                            FilterOption.AllWithArchivedWithoutNsfw,
-                          )
                         } else {
                           setSelectedFilterOption(FilterOption.All)
                         }
@@ -93,9 +85,6 @@ const Page: React.FC = () => {
                       },
                       isSelected:
                         selectedFilterOption == FilterOption.All ||
-                        selectedFilterOption == FilterOption.AllWithArchived ||
-                        selectedFilterOption ==
-                          FilterOption.AllWithArchivedWithoutNsfw ||
                         selectedFilterOption == FilterOption.AllWithoutNsfw,
                     },
                     {
@@ -103,17 +92,9 @@ const Page: React.FC = () => {
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
-                        if (withArchived && !withoutNsfw) {
-                          setSelectedFilterOption(
-                            FilterOption.StarredOnlyWithArchived,
-                          )
-                        } else if (withoutNsfw && !withArchived) {
+                        if (withoutNsfw) {
                           setSelectedFilterOption(
                             FilterOption.StarredOnlyWithoutNsfw,
-                          )
-                        } else if (withoutNsfw && withArchived) {
-                          setSelectedFilterOption(
-                            FilterOption['StarredOnlyWithArchivedWithoutNsfw'],
                           )
                         } else {
                           setSelectedFilterOption(FilterOption.StarredOnly)
@@ -123,31 +104,7 @@ const Page: React.FC = () => {
                       isSelected:
                         selectedFilterOption == FilterOption.StarredOnly ||
                         selectedFilterOption ==
-                          FilterOption.StarredOnlyWithArchived ||
-                        selectedFilterOption ==
-                          FilterOption['StarredOnlyWithArchivedWithoutNsfw'] ||
-                        selectedFilterOption ==
                           FilterOption.StarredOnlyWithoutNsfw,
-                    },
-                    {
-                      label: 'NSFW only',
-                      onClick: () => {
-                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
-                          return
-
-                        if (withArchived) {
-                          setSelectedFilterOption(
-                            FilterOption.NsfwOnlyWithArchived,
-                          )
-                        } else {
-                          setSelectedFilterOption(FilterOption.NsfwOnly)
-                        }
-                        toggleFilterDropdown()
-                      },
-                      isSelected:
-                        selectedFilterOption == FilterOption.NsfwOnly ||
-                        selectedFilterOption ==
-                          FilterOption.NsfwOnlyWithArchived,
                     },
                     {
                       label: 'Archived only',
@@ -171,20 +128,6 @@ const Page: React.FC = () => {
                   ]}
                   checkboxes={[
                     {
-                      label: 'Include archived',
-                      onClick: () => {
-                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
-                          return
-                        setWithArchived(!withArchived)
-                        toggleFilterDropdown()
-                      },
-                      isSelected: withArchived,
-                      isDisabled:
-                        selectedFilterOption == FilterOption.ArchivedOnly ||
-                        selectedFilterOption ==
-                          FilterOption.ArchivedOnlyWithoutNsfw,
-                    },
-                    {
                       label: 'Exclude NSFW',
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
@@ -193,10 +136,6 @@ const Page: React.FC = () => {
                         toggleFilterDropdown()
                       },
                       isSelected: withoutNsfw,
-                      isDisabled:
-                        selectedFilterOption == FilterOption.NsfwOnly ||
-                        selectedFilterOption ==
-                          FilterOption.NsfwOnlyWithArchived,
                     },
                   ]}
                 />
@@ -312,29 +251,15 @@ function _filterOptionToLabel(filterOption: FilterOption): string {
   switch (filterOption) {
     case FilterOption.All:
       return 'All'
-    case FilterOption.AllWithArchived:
-      return 'All + archived'
-    case FilterOption.AllWithArchivedWithoutNsfw:
-      return 'All + archived - nsfw'
     case FilterOption.AllWithoutNsfw:
-      return 'All - nsfw'
+      return 'All without nsfw'
     case FilterOption.StarredOnly:
       return 'Starred only'
-    case FilterOption.StarredOnlyWithArchived:
-      return 'Starred only + archived'
-    case FilterOption.StarredOnlyWithArchivedWithoutNsfw:
-      return 'Starred only + archived - nsfw'
     case FilterOption.StarredOnlyWithoutNsfw:
-      return 'Starred only - nsfw'
-    case FilterOption.NsfwOnly:
-      return 'NSFW only'
-    case FilterOption.NsfwOnlyWithArchived:
-      return 'NSFW only + archived'
-    case FilterOption.NsfwOnlyWithArchived:
-      return 'NSFW only + archived'
+      return 'Starred only without nsfw'
     case FilterOption.ArchivedOnly:
       return 'Archived only'
     case FilterOption.ArchivedOnlyWithoutNsfw:
-      return 'Archived only - nsfw'
+      return 'Archived only without nsfw'
   }
 }
