@@ -1,4 +1,4 @@
-import { MetadataDto } from '@shared/dtos/modules/metadata/metadata.dto'
+import { MetadataDto } from '@shared/types/modules/metadata/metadata.dto'
 import { MetadataParams } from '../../domain/types/metadata.params'
 
 export type MetadataDataSource = {

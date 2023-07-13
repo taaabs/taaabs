@@ -1,6 +1,6 @@
 import { MockProxy, mock, mockReset } from 'jest-mock-extended'
 import { MetadataDataSource } from '../data-sources/metadata-data-source'
-import { MetadataDto } from '@shared/dtos/modules/metadata/metadata.dto'
+import { MetadataDto } from '@shared/types/modules/metadata/metadata.dto'
 import { MetadataRo } from '../../domain/types/metadata.ro'
 import { MetadataRepositoryImpl } from './metadata-repository-impl'
 

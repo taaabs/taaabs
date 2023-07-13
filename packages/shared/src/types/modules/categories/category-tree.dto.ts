@@ -1,26 +1,26 @@
 export namespace CategoryTreeDto {
   class Category {
-    id: string
-    name: string
-    order?: number
+    public id: string
+    public name: string
+    public order?: number
   }
 
   export class CategoryAuthorized extends Category {
-    children?: CategoryAuthorized[]
-    isPublic?: boolean
+    public children?: CategoryAuthorized[]
+    public isPublic?: boolean
   }
 
   export class CategoryPublic extends Category {
-    children?: Category[]
+    public children?: Category[]
   }
 
   export namespace Response {
     export class Authorized {
-      categories: CategoryAuthorized[]
+      public categories: CategoryAuthorized[]
     }
 
     export class Public {
-      categories: CategoryPublic[]
+      public categories: CategoryPublic[]
     }
   }
 }

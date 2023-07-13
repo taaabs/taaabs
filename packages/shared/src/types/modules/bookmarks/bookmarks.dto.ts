@@ -1,12 +1,12 @@
-import { ArchivedBookmarks } from '@shared/dtos/modules/bookmarks/archived-bookmarks'
+import { ArchivedBookmarks } from '@shared/types/modules/bookmarks/archived-bookmarks'
 import { PaginatedResponseDto } from '../../common/paginated-response.dto'
 import { ApiProperty } from '@nestjs/swagger'
-import { DateRange } from '@shared/dtos/modules/bookmarks/date-range'
-import { SortBy } from '@shared/dtos/modules/bookmarks/sort-by'
-import { PaginationQueryParamsDto } from '@shared/dtos/common/pagination-options.dto'
+import { DateRange } from '@shared/types/modules/bookmarks/date-range'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
+import { PaginationQueryParamsDto } from '@shared/types/common/pagination-options.dto'
 import { Type } from 'class-transformer'
-import { NsfwBookmarks } from '@shared/dtos/modules/bookmarks/nsfw-bookmarks'
-import { BookmarkVisibility } from '@shared/dtos/modules/bookmarks/bookmark-visibility'
+import { NsfwBookmarks } from '@shared/types/modules/bookmarks/nsfw-bookmarks'
+import { BookmarkVisibility } from '@shared/types/modules/bookmarks/bookmark-visibility'
 import { ToBoolean } from '@shared/decorators/to-boolean'
 
 export namespace BookmarksDto {
@@ -52,7 +52,7 @@ export namespace BookmarksDto {
       public visibility?: BookmarkVisibility = Authorized.DEFAULT_VISIBILITY
     }
 
-    export class Public extends QueryParams {}
+    export class OtherUser extends QueryParams {}
   }
 
   export namespace Response {
@@ -78,7 +78,7 @@ export namespace BookmarksDto {
     export class Authorized extends PaginatedResponseDto {
       public bookmarks: BookmarkAuthorized[]
     }
-    export class Public extends PaginatedResponseDto {
+    export class OtherUser extends PaginatedResponseDto {
       public bookmarks: BookmarkPublic[]
     }
   }

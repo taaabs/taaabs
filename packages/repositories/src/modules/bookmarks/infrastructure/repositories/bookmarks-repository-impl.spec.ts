@@ -1,7 +1,7 @@
 import { BookmarksDataSource } from '../data-sources/bookmarks-data-source'
 import { BookmarksRo } from '../../domain/types/bookmarks.ro'
 import { BookmarksRepositoryImpl } from './bookmarks-repository-impl'
-import { BookmarksDto } from '@shared/dtos/modules/bookmarks/bookmarks.dto'
+import { BookmarksDto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { MockProxy, mock, mockReset } from 'jest-mock-extended'
 
 const now = new Date().toISOString()

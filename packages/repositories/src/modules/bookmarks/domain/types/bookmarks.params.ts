@@ -1,7 +1,7 @@
-import { ArchivedBookmarks } from '@shared/dtos/modules/bookmarks/archived-bookmarks'
-import { BookmarkVisibility } from '@shared/dtos/modules/bookmarks/bookmark-visibility'
-import { NsfwBookmarks } from '@shared/dtos/modules/bookmarks/nsfw-bookmarks'
-import { SortBy } from '@shared/dtos/modules/bookmarks/sort-by'
+import { ArchivedBookmarks } from '@shared/types/modules/bookmarks/archived-bookmarks'
+import { BookmarkVisibility } from '@shared/types/modules/bookmarks/bookmark-visibility'
+import { NsfwBookmarks } from '@shared/types/modules/bookmarks/nsfw-bookmarks'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 
 export namespace BookmarksParams {
   type Common = {

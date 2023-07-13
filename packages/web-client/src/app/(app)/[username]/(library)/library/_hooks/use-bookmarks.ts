@@ -1,13 +1,13 @@
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
-import { SortBy } from '@shared/dtos/modules/bookmarks/sort-by'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useLibraryDispatch, useLibrarySelector } from './store'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { bookmarksActions } from '@repositories/stores/other-user/library/bookmarks/bookmarks.slice'
 import { useEffect } from 'react'
 import { FilterOption } from './use-filter-options'
-import { ArchivedBookmarks } from '@shared/dtos/modules/bookmarks/archived-bookmarks'
-import { NsfwBookmarks } from '@shared/dtos/modules/bookmarks/nsfw-bookmarks'
+import { ArchivedBookmarks } from '@shared/types/modules/bookmarks/archived-bookmarks'
+import { NsfwBookmarks } from '@shared/types/modules/bookmarks/nsfw-bookmarks'
 import { SortOption } from './use-sort-options'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
