@@ -1,4 +1,4 @@
-import { Months } from './months-json'
+import { Months } from './months'
 
 export namespace MonthsDto {
   export class QueryParams {

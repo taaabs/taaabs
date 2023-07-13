@@ -4,7 +4,6 @@ export namespace Months {
     yields: number
   }
   export type Month = {
-    yymm: string
     tags: Tag[]
     bookmarksCount: number
     publicCount?: number
@@ -23,8 +22,16 @@ export namespace Months {
     ArchivedOnly = 'archived-only',
     ArchivedOnlyNsfwExcluded = 'archived-only-nsfw-excluded',
   }
-  export type Key = `${Audience} ${string} ${Filter} ${string}`
+  export type Key = `${Audience} ${string /** category id */} ${Filter} ${
+    string /** tags */
+  }`
+  export type Months = {
+    [yymm: string]: Month
+  }
   export type Json = {
-    [key: Key]: Month[]
+    [key: Key]: {
+      monthsOfBookmarksCreation: Months
+      monthsOfUrlsCreation: Months
+    }
   }
 }
