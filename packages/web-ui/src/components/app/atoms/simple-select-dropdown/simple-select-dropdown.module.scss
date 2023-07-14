@@ -17,7 +17,7 @@
 }
 .item {
   padding: var(--distance-8px) var(--distance-16px) var(--distance-8px)
-    var(--distance-14px);
+    var(--distance-13px);
   border-top: var(--border-secondary);
   border-width: 1px;
   display: flex;
@@ -34,7 +34,7 @@
     border-top: none;
   }
   &__tick {
-    margin-right: var(--distance-10px);
+    margin-right: var(--distance-11px);
     display: flex;
     align-items: center;
     visibility: hidden;
