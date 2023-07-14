@@ -158,13 +158,18 @@
         pointer-events: none;
       }
     }
-    &__pagination {
+    &__end-of-bookmarks {
       display: flex;
-      padding: var(--distance-40px);
       justify-content: center;
+      padding-top: var(--distance-40px);
       color: var(--text-color-dimmed);
       width: 100%;
       font-size: var(--font-size-13px);
+      height: 25vh;
+      @include at992 {
+      height: 43vh;
+        
+      }
       &--hidden {
         visibility: hidden;
       }

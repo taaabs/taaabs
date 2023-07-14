@@ -12,8 +12,8 @@ declare const styles: {
   readonly 'main__inner__desktop-title-bar': string
   readonly main__inner__bookmarks: string
   readonly 'main__inner__bookmarks--loading': string
-  readonly main__inner__pagination: string
-  readonly 'main__inner__pagination--hidden': string
+  readonly 'main__inner__end-of-bookmarks': string
+  readonly 'main__inner__end-of-bookmarks--hidden': string
   readonly aside: string
   readonly aside__inner: string
   readonly aside__inner__stickybox: string

@@ -37,11 +37,11 @@ export const Library: React.FC<Library.Props> = (props) => {
   const main = useRef<HTMLDivElement>(null)
   const mainInner = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLDivElement>(null)
-  const pagination = useRef<HTMLDivElement>(null)
+  const endOfBookmarks = useRef<HTMLDivElement>(null)
   const isHydrated = useIsHydrated()
 
   const { isRestoringScrollPosition } = useSessionScrollRestoration(mainInner)
-  const isPaginationVisible = useViewportSpy(pagination)
+  const isEndOfBookmarksVisible = useViewportSpy(endOfBookmarks)
 
   const swipeState = useSwipe(main, {
     preventDefault: false,
@@ -165,14 +165,14 @@ export const Library: React.FC<Library.Props> = (props) => {
 
   useUpdateEffect(() => {
     if (
-      isPaginationVisible &&
+      isEndOfBookmarksVisible &&
       props.hasMoreBookmarks &&
       !props.isGettingMoreBookmarks &&
       !props.isGettingFirstBookmarks
     ) {
       props.getMoreBookmarks()
     }
-  }, [isPaginationVisible])
+  }, [isEndOfBookmarksVisible])
 
   useUpdateEffect(() => {
     if (!props.isGettingFirstBookmarks) {
@@ -292,13 +292,13 @@ export const Library: React.FC<Library.Props> = (props) => {
               </div>
               <div
                 className={cn([
-                  styles['main__inner__pagination'],
+                  styles['main__inner__end-of-bookmarks'],
                   {
-                    [styles['main__inner__pagination--hidden']]:
+                    [styles['main__inner__end-of-bookmarks--hidden']]:
                       props.showBookmarksSkeleton,
                   },
                 ])}
-                ref={pagination}
+                ref={endOfBookmarks}
               >
                 {props.isGettingFirstBookmarks
                   ? 'Loading...'
