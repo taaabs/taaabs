@@ -1,10 +1,10 @@
-import { Months } from './months'
+import { LibraryFilter } from '@shared/types/common/library-filter'
 
 export namespace MonthsDto {
   export class QueryParams {
     public category_id: string
     public tags: string
-    public filter: Months.Filter
+    public filter: LibraryFilter
   }
   export namespace QueryParams {}
   class Tag {

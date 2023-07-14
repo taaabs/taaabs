@@ -5,16 +5,14 @@ import { BookmarksParams } from '../../domain/types/bookmarks.params'
 export class BookmarksDataSourceImpl implements BookmarksDataSource {
   constructor(private readonly _apiUrl: string) {}
 
-  public async getAuthorized(
-    params: BookmarksParams.Authorized,
-  ): Promise<BookmarksDto.Response.Authorized> {
-    const queryParams = {
+  public async getBookmarksOnAuthorizedUser(
+    params: BookmarksParams.AuthorizedUser,
+  ): Promise<BookmarksDto.Response.AuthorizedUser> {
+    const queryParams: BookmarksDto.QueryParams.AuthorizedUser = {
       tags: params.tags?.join(','),
       category_id: params.categoryId,
       after: params.after,
-      archived: params.archived,
-      nsfw: params.nsfw,
-      starred_only: params.starredOnly,
+      public_only: params.publicOnly,
       // TODO: pass remaining params
       // date_end:
       // date_range:
@@ -31,17 +29,16 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
     return await response.json()
   }
 
-  public async getPublic(
-    params: BookmarksParams.Public,
-  ): Promise<BookmarksDto.Response.Public> {
-    const queryParams: BookmarksDto.QueryParams.Public = {
+  public async getBookmarksOnOtherUser(
+    params: BookmarksParams.OtherUser,
+  ): Promise<BookmarksDto.Response.OtherUser> {
+    const queryParams: BookmarksDto.QueryParams.OtherUser = {
       tags: params.tags?.join(','),
       category_id: params.categoryId,
       after: params.after,
-      archived: params.archived,
-      nsfw: params.nsfw,
-      starred_only: params.starredOnly,
-      sort_by: params.sortBy,
+      filter: params.filter,
+      order_by: params.orderBy,
+      order: params.order,
       // TODO: pass remaining params
       // date_end:
       // date_range:

@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  transpilePackages: ['@taaabs/web-ui', '@taaabs/repositories'],
+  transpilePackages: [
+    '@taaabs/web-ui',
+    '@taaabs/repositories',
+    '@taaabs/shared',
+  ],
   typescript: {
     ignoreBuildErrors: true,
   },

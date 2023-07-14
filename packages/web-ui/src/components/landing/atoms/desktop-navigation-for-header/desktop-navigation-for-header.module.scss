@@ -14,10 +14,9 @@
     align-items: center;
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
-    @include transition-100ms(color);
-    color: var(--text-color-variant);
+    color: var(--text-color-normal);
     @include hover {
-      color: var(--text-color-normal);
+      color: var(--text-color-variant);
     }
     @include at992 {
       height: var(--button-dimension-48px);

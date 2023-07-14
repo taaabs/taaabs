@@ -1,14 +1,12 @@
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
-import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useLibraryDispatch, useLibrarySelector } from './store'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { bookmarksActions } from '@repositories/stores/other-user/library/bookmarks/bookmarks.slice'
 import { useEffect } from 'react'
-import { FilterOption } from './use-filter-options'
-import { ArchivedBookmarks } from '@shared/types/modules/bookmarks/archived-bookmarks'
-import { NsfwBookmarks } from '@shared/types/modules/bookmarks/nsfw-bookmarks'
-import { SortOption } from './use-sort-options'
+import { LibraryFilter } from '@shared/types/common/library-filter'
+import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
+import { Order } from '@shared/types/modules/bookmarks/order'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -21,7 +19,7 @@ export const useBookmarks = () => {
   )
 
   const getBookmarks = ({ getNextPage }: { getNextPage?: boolean }) => {
-    const getBookmarksParams: BookmarksParams.Public = {
+    const getBookmarksParams: BookmarksParams.OtherUser = {
       username: params.username,
     }
 
@@ -35,53 +33,22 @@ export const useBookmarks = () => {
       getBookmarksParams.categoryId = queryCategoryId
     }
 
-    const querySortBy = queryParams.get('s')
-    if (querySortBy) {
-      let sortBy: SortBy
-      if (querySortBy == SortOption.OldestToNewest.toString()) {
-        sortBy = SortBy.DATE_ASC
-      } else {
-        sortBy = SortBy.DATE_DESC
-      }
-      getBookmarksParams.sortBy = sortBy
+    const queryFilter =
+      (queryParams.get('f') as LibraryFilter) || LibraryFilter.All
+    if (queryFilter != LibraryFilter.All) {
+      getBookmarksParams.filter =
+        Object.values(LibraryFilter)[parseInt(queryFilter)]
     }
 
-    const queryFilter = parseInt(
-      queryParams.get('f') || FilterOption.All.toString(),
-    )
-    if (queryFilter != FilterOption.All) {
-      if (queryFilter == FilterOption.AllWithArchived) {
-        getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
-      } else if (queryFilter == FilterOption.AllWithArchivedWithoutNsfw) {
-        getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
-        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
-      } else if (queryFilter == FilterOption.AllWithoutNsfw) {
-        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
-      } else if (queryFilter == FilterOption.StarredOnly) {
-        getBookmarksParams.starredOnly = true
-      } else if (queryFilter == FilterOption.StarredOnlyWithArchived) {
-        getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
-        getBookmarksParams.starredOnly = true
-      } else if (
-        queryFilter == FilterOption.StarredOnlyWithArchivedWithoutNsfw
-      ) {
-        getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
-        getBookmarksParams.starredOnly = true
-        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
-      } else if (queryFilter == FilterOption.StarredOnlyWithoutNsfw) {
-        getBookmarksParams.starredOnly = true
-        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
-      } else if (queryFilter == FilterOption.NsfwOnly) {
-        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUSIVE
-      } else if (queryFilter == FilterOption.NsfwOnlyWithArchived) {
-        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUSIVE
-        getBookmarksParams.archived = ArchivedBookmarks.INCLUDE
-      } else if (queryFilter == FilterOption.ArchivedOnly) {
-        getBookmarksParams.archived = ArchivedBookmarks.EXCLUSIVE
-      } else if (queryFilter == FilterOption.ArchivedOnlyWithoutNsfw) {
-        getBookmarksParams.archived = ArchivedBookmarks.EXCLUSIVE
-        getBookmarksParams.nsfw = NsfwBookmarks.EXCLUDE
-      }
+    const queryOrderBy = queryParams.get('b')
+    if (queryOrderBy) {
+      getBookmarksParams.orderBy =
+        Object.values(OrderBy)[parseInt(queryOrderBy)]
+    }
+
+    const queryOrder = queryParams.get('o')
+    if (queryOrder) {
+      getBookmarksParams.order = Object.values(Order)[parseInt(queryOrder)]
     }
 
     if (getNextPage) {

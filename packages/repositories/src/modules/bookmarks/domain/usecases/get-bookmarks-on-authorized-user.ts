@@ -3,13 +3,16 @@ import { UseCase } from '@repositories/core/use-case'
 import { BookmarksRo } from '../types/bookmarks.ro'
 import { BookmarksParams } from '../types/bookmarks.params'
 
-export class GetAuthorizedBookmarks
+export class GetBookmarksOnAuthorizedUser
   implements
-    UseCase<Promise<BookmarksRo.Authorized>, BookmarksParams.Authorized>
+    UseCase<
+      Promise<BookmarksRo.AuthorizedUser>,
+      BookmarksParams.AuthorizedUser
+    >
 {
   constructor(private readonly _bookmarksRepository: BookmarksRepository) {}
 
-  public invoke(params: BookmarksParams.Authorized) {
-    return this._bookmarksRepository.getAuthorized(params)
+  public invoke(params: BookmarksParams.AuthorizedUser) {
+    return this._bookmarksRepository.getBookmarksOnAuthorizedUser(params)
   }
 }

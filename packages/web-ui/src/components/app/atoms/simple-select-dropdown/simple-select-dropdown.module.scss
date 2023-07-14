@@ -17,7 +17,7 @@
 }
 .item {
   padding: var(--distance-8px) var(--distance-16px) var(--distance-8px)
-    var(--distance-12px);
+    var(--distance-14px);
   border-top: var(--border-secondary);
   border-width: 1px;
   display: flex;
@@ -65,6 +65,7 @@
     border-radius: var(--border-radius-4px);
     background-color: var(--SimpleSelectDropdown-checkbox-background);
     padding: var(--distance-4px);
+    border: 1px solid var(--SimpleSelectDropdown-checkbox-border-color);
     svg {
       fill: var(--SimpleSelectDropdown-checkbox-foreground);
       visibility: hidden;

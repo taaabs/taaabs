@@ -4,5 +4,5 @@ export class PaginationQueryParamsDto {
   @ApiProperty({
     description: 'Item id.',
   })
-  after?: string
+  public after?: string
 }

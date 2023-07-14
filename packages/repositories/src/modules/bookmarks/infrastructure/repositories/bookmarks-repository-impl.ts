@@ -6,11 +6,11 @@ import { BookmarksParams } from '../../domain/types/bookmarks.params'
 export class BookmarksRepositoryImpl implements BookmarksRepository {
   constructor(private readonly _bookmarksDataSource: BookmarksDataSource) {}
 
-  public async getAuthorized(
-    params: BookmarksParams.Authorized,
-  ): Promise<BookmarksRo.Authorized> {
+  public async getBookmarksOnAuthorizedUser(
+    params: BookmarksParams.AuthorizedUser,
+  ): Promise<BookmarksRo.AuthorizedUser> {
     const { bookmarks, pagination } =
-      await this._bookmarksDataSource.getAuthorized(params)
+      await this._bookmarksDataSource.getBookmarksOnAuthorizedUser(params)
 
     return {
       bookmarks: bookmarks.map((bookmark) => {
@@ -35,12 +35,11 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
     }
   }
 
-  public async getPublic(
-    params: BookmarksParams.Public,
-  ): Promise<BookmarksRo.Public> {
-    const { bookmarks, pagination } = await this._bookmarksDataSource.getPublic(
-      params,
-    )
+  public async getBookmarksOnOtherUser(
+    params: BookmarksParams.OtherUser,
+  ): Promise<BookmarksRo.OtherUser> {
+    const { bookmarks, pagination } =
+      await this._bookmarksDataSource.getBookmarksOnOtherUser(params)
 
     return {
       bookmarks: bookmarks.map((bookmark) => ({

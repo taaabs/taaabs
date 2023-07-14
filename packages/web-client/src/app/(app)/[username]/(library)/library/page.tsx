@@ -10,9 +10,13 @@ import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
 import { ButtonSelect } from '@web-ui/components/app/atoms/button-select'
 import { SimpleSelectDropdown } from '@web-ui/components/app/atoms/simple-select-dropdown'
 import OutsideClickHandler from 'react-outside-click-handler'
-import { SortOption, useSortOptions } from './_hooks/use-sort-options'
+import { useOrderOptions } from './_hooks/use-order-options'
 import { useBookmarks } from './_hooks/use-bookmarks'
-import { FilterOption, useFilterOptions } from './_hooks/use-filter-options'
+import { useFilterOptions } from './_hooks/use-filter-options'
+import { LibraryFilter } from '@shared/types/common/library-filter'
+import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
+import { Order } from '@shared/types/modules/bookmarks/order'
+import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 
 const Page: React.FC = () => {
   const queryParams = useSearchParams()
@@ -25,20 +29,41 @@ const Page: React.FC = () => {
     hasMoreBookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
   const { getBookmarks } = useBookmarks()
-  const { selectedSortOption, setSelectedSortOption } = useSortOptions(
-    parseInt(queryParams.get('s') || SortOption.NewestToOldest.toString()),
-  )
-  const {
-    selectedFilterOption,
-    setSelectedFilterOption,
-    withoutNsfw,
-    setWithoutNsfw,
-  } = useFilterOptions(
-    parseInt(queryParams.get('f') || FilterOption.All.toString()),
-  )
+  const { orderBy, setOrderBy, order, setOrder } = useOrderOptions({
+    initOrderBy:
+      Object.values(OrderBy)[
+        parseInt(
+          queryParams.get('b') ||
+            Object.values(OrderBy)
+              .indexOf(BookmarksFetchingDefaults.Common.orderBy)
+              .toString(),
+        )
+      ],
+    initOrder:
+      Object.values(Order)[
+        parseInt(
+          queryParams.get('o') ||
+            Object.values(Order)
+              .indexOf(BookmarksFetchingDefaults.Common.order)
+              .toString(),
+        )
+      ],
+  })
+  const { selectedFilter, setFilter, isNsfwExcluded, toggleExcludeNsfw } =
+    useFilterOptions(
+      Object.values(LibraryFilter)[
+        parseInt(
+          queryParams.get('f') ||
+            Object.values(LibraryFilter)
+              .indexOf(BookmarksFetchingDefaults.Common.filter)
+              .toString(),
+        )
+      ],
+    )
 
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
-  const [isSortDropdownVisible, toggleSortDropdown] = useToggle(false)
+  const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
+  const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)
 
   return (
     <Library
@@ -59,7 +84,7 @@ const Page: React.FC = () => {
             button: (
               <ButtonSelect
                 label="Filter"
-                currentValue={_filterOptionToLabel(selectedFilterOption)}
+                currentValue={_filterOptionToLabel(selectedFilter)}
                 isActive={isFilterDropdownVisible}
                 onClick={toggleFilterDropdown}
               />
@@ -76,54 +101,49 @@ const Page: React.FC = () => {
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
-                        if (withoutNsfw) {
-                          setSelectedFilterOption(FilterOption.AllWithoutNsfw)
+                        if (isNsfwExcluded) {
+                          setFilter(LibraryFilter.AllNsfwExcluded)
                         } else {
-                          setSelectedFilterOption(FilterOption.All)
+                          setFilter(LibraryFilter.All)
                         }
                         toggleFilterDropdown()
                       },
                       isSelected:
-                        selectedFilterOption == FilterOption.All ||
-                        selectedFilterOption == FilterOption.AllWithoutNsfw,
+                        selectedFilter == LibraryFilter.All ||
+                        selectedFilter == LibraryFilter.AllNsfwExcluded,
                     },
                     {
                       label: 'Starred only',
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
-                        if (withoutNsfw) {
-                          setSelectedFilterOption(
-                            FilterOption.StarredOnlyWithoutNsfw,
-                          )
+                        if (isNsfwExcluded) {
+                          setFilter(LibraryFilter.StarredOnlyNsfwExcluded)
                         } else {
-                          setSelectedFilterOption(FilterOption.StarredOnly)
+                          setFilter(LibraryFilter.StarredOnly)
                         }
                         toggleFilterDropdown()
                       },
                       isSelected:
-                        selectedFilterOption == FilterOption.StarredOnly ||
-                        selectedFilterOption ==
-                          FilterOption.StarredOnlyWithoutNsfw,
+                        selectedFilter == LibraryFilter.StarredOnly ||
+                        selectedFilter == LibraryFilter.StarredOnlyNsfwExcluded,
                     },
                     {
                       label: 'Archived only',
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
-                        if (withoutNsfw) {
-                          setSelectedFilterOption(
-                            FilterOption.ArchivedOnlyWithoutNsfw,
-                          )
+                        if (isNsfwExcluded) {
+                          setFilter(LibraryFilter.ArchivedOnlyNsfwExcluded)
                         } else {
-                          setSelectedFilterOption(FilterOption.ArchivedOnly)
+                          setFilter(LibraryFilter.ArchivedOnly)
                         }
                         toggleFilterDropdown()
                       },
                       isSelected:
-                        selectedFilterOption == FilterOption.ArchivedOnly ||
-                        selectedFilterOption ==
-                          FilterOption.ArchivedOnlyWithoutNsfw,
+                        selectedFilter == LibraryFilter.ArchivedOnly ||
+                        selectedFilter ==
+                          LibraryFilter.ArchivedOnlyNsfwExcluded,
                     },
                   ]}
                   checkboxes={[
@@ -132,10 +152,10 @@ const Page: React.FC = () => {
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
-                        setWithoutNsfw(!withoutNsfw)
+                        toggleExcludeNsfw()
                         toggleFilterDropdown()
                       },
-                      isSelected: withoutNsfw,
+                      isSelected: isNsfwExcluded,
                     },
                   ]}
                 />
@@ -143,49 +163,91 @@ const Page: React.FC = () => {
             ),
             isDropdownVisible: isFilterDropdownVisible,
           }}
-          slotSort={{
+          slotOrderBy={{
             button: (
               <ButtonSelect
-                label="Sort"
-                currentValue={_sortOptionToLabel(selectedSortOption)}
-                isActive={isSortDropdownVisible}
-                onClick={toggleSortDropdown}
+                label="Order by"
+                currentValue={_orderByOptionToLabel(orderBy)}
+                isActive={isOrderByDropdownVisible}
+                onClick={toggleOrderByDropdown}
               />
             ),
+            isDropdownVisible: isOrderByDropdownVisible,
             dropdown: (
               <OutsideClickHandler
-                onOutsideClick={toggleSortDropdown}
-                disabled={!isSortDropdownVisible}
+                onOutsideClick={toggleOrderByDropdown}
+                disabled={!isOrderByDropdownVisible}
               >
                 <SimpleSelectDropdown
                   items={[
                     {
-                      label: _sortOptionToLabel(SortOption.NewestToOldest),
+                      label: _orderByOptionToLabel(
+                        OrderBy.BookmarkCreationDate,
+                      ),
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
-                        setSelectedSortOption(SortOption.NewestToOldest)
-                        toggleSortDropdown()
+                        setOrderBy(OrderBy.BookmarkCreationDate)
+                        toggleOrderByDropdown()
                       },
-                      isSelected:
-                        selectedSortOption == SortOption.NewestToOldest,
+                      isSelected: orderBy == OrderBy.BookmarkCreationDate,
                     },
                     {
-                      label: _sortOptionToLabel(SortOption.OldestToNewest),
+                      label: _orderByOptionToLabel(OrderBy.UrlCreationDate),
                       onClick: () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
-                        setSelectedSortOption(SortOption.OldestToNewest)
-                        toggleSortDropdown()
+                        setOrderBy(OrderBy.UrlCreationDate)
+                        toggleOrderByDropdown()
                       },
-                      isSelected:
-                        selectedSortOption == SortOption.OldestToNewest,
+                      isSelected: orderBy == OrderBy.UrlCreationDate,
                     },
                   ]}
                 />
               </OutsideClickHandler>
             ),
-            isDropdownVisible: isSortDropdownVisible,
+          }}
+          slotOrder={{
+            button: (
+              <ButtonSelect
+                label="Order"
+                currentValue={_orderOptionToLabel(order)}
+                isActive={isOrderDropdownVisible}
+                onClick={toggleOrderDropdown}
+              />
+            ),
+            isDropdownVisible: isOrderDropdownVisible,
+            dropdown: (
+              <OutsideClickHandler
+                onOutsideClick={toggleOrderDropdown}
+                disabled={!isOrderDropdownVisible}
+              >
+                <SimpleSelectDropdown
+                  items={[
+                    {
+                      label: _orderOptionToLabel(Order.Desc),
+                      onClick: () => {
+                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                          return
+                        setOrder(Order.Desc)
+                        toggleOrderDropdown()
+                      },
+                      isSelected: order == Order.Desc,
+                    },
+                    {
+                      label: _orderOptionToLabel(Order.Asc),
+                      onClick: () => {
+                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                          return
+                        setOrder(Order.Asc)
+                        toggleOrderDropdown()
+                      },
+                      isSelected: order == Order.Asc,
+                    },
+                  ]}
+                />
+              </OutsideClickHandler>
+            ),
           }}
         />
       }
@@ -240,26 +302,37 @@ const Page: React.FC = () => {
 
 export default Page
 
-function _sortOptionToLabel(sortOption: SortOption): string {
-  if (sortOption == SortOption.NewestToOldest) {
-    return 'Newest to Oldest'
+function _orderByOptionToLabel(orderByOption: OrderBy): string {
+  switch (orderByOption) {
+    case OrderBy.BookmarkCreationDate:
+      return 'Bookmarked at'
+    case OrderBy.UrlCreationDate:
+      return 'Link first seen at'
   }
-  return 'Oldest to Newest'
 }
 
-function _filterOptionToLabel(filterOption: FilterOption): string {
-  switch (filterOption) {
-    case FilterOption.All:
+function _orderOptionToLabel(orderOption: Order): string {
+  switch (orderOption) {
+    case Order.Desc:
+      return 'Newest to Oldest'
+    case Order.Asc:
+      return 'Oldest to Newest'
+  }
+}
+
+function _filterOptionToLabel(filter: LibraryFilter): string {
+  switch (filter) {
+    case LibraryFilter.All:
       return 'All'
-    case FilterOption.AllWithoutNsfw:
+    case LibraryFilter.AllNsfwExcluded:
       return 'All without nsfw'
-    case FilterOption.StarredOnly:
+    case LibraryFilter.StarredOnly:
       return 'Starred only'
-    case FilterOption.StarredOnlyWithoutNsfw:
+    case LibraryFilter.StarredOnlyNsfwExcluded:
       return 'Starred only without nsfw'
-    case FilterOption.ArchivedOnly:
+    case LibraryFilter.ArchivedOnly:
       return 'Archived only'
-    case FilterOption.ArchivedOnlyWithoutNsfw:
+    case LibraryFilter.ArchivedOnlyNsfwExcluded:
       return 'Archived only without nsfw'
   }
 }

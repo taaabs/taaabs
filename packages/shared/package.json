@@ -1,6 +1,13 @@
 {
   "name": "@taaabs/shared",
   "scripts": {},
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*"
+      ]
+    }
+  },
   "dependencies": {
     "@nestjs/swagger": "^6.2.1",
     "class-transformer": "^0.5.1",
@@ -9,6 +16,7 @@
     "react": "18.2.0"
   },
   "devDependencies": {
-    "@types/react": "18.2.14"
+    "@types/react": "18.2.14",
+    "typescript": "^4.9.5"
   }
 }

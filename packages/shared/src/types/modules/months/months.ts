@@ -1,3 +1,5 @@
+import { LibraryFilter } from '@shared/types/common/library-filter'
+
 export namespace Months {
   export type Tag = {
     tag: string
@@ -14,17 +16,9 @@ export namespace Months {
     Authorized = 'authorized',
     OtherUser = 'otherUser',
   }
-  export enum Filter {
-    All = 'all',
-    AllNsfwExcluded = 'all-nsfw-excluded',
-    StarredOnly = 'starred-only',
-    StarredOnlyNsfwExcluded = 'starred-ony-nsfw-excluded',
-    ArchivedOnly = 'archived-only',
-    ArchivedOnlyNsfwExcluded = 'archived-only-nsfw-excluded',
-  }
-  export type Key = `${Audience} ${string /** category id */} ${Filter} ${
-    string /** tags */
-  }`
+  export type Key = `${Audience} ${
+    string /** category id */
+  } ${LibraryFilter} ${string /** comma separated tags */}`
   export type Months = {
     [yymm: string]: Month
   }

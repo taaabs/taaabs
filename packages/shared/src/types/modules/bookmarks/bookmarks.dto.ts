@@ -1,23 +1,17 @@
-import { ArchivedBookmarks } from '@shared/types/modules/bookmarks/archived-bookmarks'
 import { PaginatedResponseDto } from '../../common/paginated-response.dto'
 import { ApiProperty } from '@nestjs/swagger'
 import { DateRange } from '@shared/types/modules/bookmarks/date-range'
-import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
+import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
+import { Order } from '@shared/types/modules/bookmarks/order'
 import { PaginationQueryParamsDto } from '@shared/types/common/pagination-options.dto'
 import { Type } from 'class-transformer'
-import { NsfwBookmarks } from '@shared/types/modules/bookmarks/nsfw-bookmarks'
-import { BookmarkVisibility } from '@shared/types/modules/bookmarks/bookmark-visibility'
 import { ToBoolean } from '@shared/decorators/to-boolean'
+import { LibraryFilter } from '@shared/types/common/library-filter'
+import { BookmarksFetchingDefaults } from './bookmarks-fetching-defaults'
 
 export namespace BookmarksDto {
   export namespace QueryParams {
-    class QueryParams extends PaginationQueryParamsDto {
-      public static DEFAULT_DATE_RANGE = DateRange.ANY
-      public static DEFAULT_SORT_BY = SortBy.DATE_DESC
-      public static DEFAULT_ARCHIVED = ArchivedBookmarks.EXCLUDE
-      public static DEFAULT_NSFW = NsfwBookmarks.INCLUDE
-      public static DEFAULT_STARRED_ONLY = false
-
+    export class Base extends PaginationQueryParamsDto {
       @ApiProperty({
         description: 'Comma separated list of tags a bookmark must include.',
         example: 'tagA,tagB,tagC',
@@ -26,7 +20,7 @@ export namespace BookmarksDto {
 
       public category_id?: string
 
-      public date_range?: DateRange = QueryParams.DEFAULT_DATE_RANGE
+      public date_range?: DateRange = BookmarksFetchingDefaults.Common.dateRange
 
       @ApiProperty({ description: 'Epoch timestamp in seconds.' })
       @Type()
@@ -36,23 +30,19 @@ export namespace BookmarksDto {
       @Type()
       public date_end?: number
 
-      public sort_by?: SortBy = QueryParams.DEFAULT_SORT_BY
+      public order_by?: OrderBy = BookmarksFetchingDefaults.Common.orderBy
 
+      public order?: Order = BookmarksFetchingDefaults.Common.order
+
+      public filter?: LibraryFilter = BookmarksFetchingDefaults.Common.filter
+    }
+
+    export class AuthorizedUser extends Base {
       @ToBoolean()
-      public starred_only?: boolean = QueryParams.DEFAULT_STARRED_ONLY
-
-      public archived?: ArchivedBookmarks = QueryParams.DEFAULT_ARCHIVED
-
-      public nsfw?: NsfwBookmarks = QueryParams.DEFAULT_NSFW
+      public public_only?: boolean = BookmarksFetchingDefaults.AuthorizedUser.publicOnly
     }
 
-    export class Authorized extends QueryParams {
-      public static DEFAULT_VISIBILITY = BookmarkVisibility.All
-
-      public visibility?: BookmarkVisibility = Authorized.DEFAULT_VISIBILITY
-    }
-
-    export class OtherUser extends QueryParams {}
+    export class OtherUser extends Base {}
   }
 
   export namespace Response {
@@ -75,7 +65,7 @@ export namespace BookmarksDto {
     }
     class BookmarkPublic extends Bookmark {}
 
-    export class Authorized extends PaginatedResponseDto {
+    export class AuthorizedUser extends PaginatedResponseDto {
       public bookmarks: BookmarkAuthorized[]
     }
     export class OtherUser extends PaginatedResponseDto {

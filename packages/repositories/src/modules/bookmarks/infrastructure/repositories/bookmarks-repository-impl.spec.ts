@@ -20,7 +20,7 @@ describe('BookmarksRepositoryImpl', () => {
 
   describe('getAuthorized', () => {
     it('should correctly parse dto', async () => {
-      const dto: BookmarksDto.Response.Authorized = {
+      const dto: BookmarksDto.Response.AuthorizedUser = {
         bookmarks: [
           {
             id: '1',
@@ -34,7 +34,7 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-      const ro: BookmarksRo.Authorized = {
+      const ro: BookmarksRo.AuthorizedUser = {
         bookmarks: [
           {
             id: '1',
@@ -55,16 +55,16 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-      bookmarksDataSourceMock.getAuthorized.mockResolvedValue(dto)
+      bookmarksDataSourceMock.getBookmarksOnAuthorizedUser.mockResolvedValue(dto)
       const sut = new BookmarksRepositoryImpl(bookmarksDataSourceMock)
-      const result = await sut.getAuthorized({})
+      const result = await sut.getBookmarksOnAuthorizedUser({})
       expect(result).toStrictEqual(ro)
     })
   })
 
   describe('getPublic', () => {
     it('should correclty parse dto', async () => {
-      const dto: BookmarksDto.Response.Public = {
+      const dto: BookmarksDto.Response.OtherUser = {
         bookmarks: [
           {
             id: '1',
@@ -78,7 +78,7 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-      const ro: BookmarksRo.Public = {
+      const ro: BookmarksRo.OtherUser = {
         bookmarks: [
           {
             id: '1',
@@ -98,9 +98,9 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-      bookmarksDataSourceMock.getPublic.mockResolvedValue(dto)
+      bookmarksDataSourceMock.getBookmarksOnOtherUser.mockResolvedValue(dto)
       const sut = new BookmarksRepositoryImpl(bookmarksDataSourceMock)
-      const result = await sut.getPublic({
+      const result = await sut.getBookmarksOnOtherUser({
         username: '',
       })
       expect(result).toStrictEqual(ro)

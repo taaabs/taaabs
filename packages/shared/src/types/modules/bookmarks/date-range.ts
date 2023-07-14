@@ -1,4 +1,4 @@
 export enum DateRange {
-  ANY = 'any',
-  CUSTOM = 'custom',
+  Any = 'any',
+  Custom = 'custom',
 }
