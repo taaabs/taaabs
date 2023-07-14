@@ -146,6 +146,20 @@
         display: none;
       }
     }
+    &__skeleton {
+      display: flex;
+      flex-direction: column;
+      gap: var(--distance-8px);
+      position: relative;
+      z-index: 0;
+      > span > span {
+        height: 153px;
+        @include at992 {
+          height: 107px;
+          border-radius: var(--border-radius-10px);
+        }
+      }
+    }
     &__bookmarks {
       @include to992 {
         margin-top: var(--distance-8px);
@@ -161,14 +175,13 @@
     &__end-of-bookmarks {
       display: flex;
       justify-content: center;
-      padding-top: var(--distance-40px);
+      align-items: center;
       color: var(--text-color-dimmed);
       width: 100%;
       font-size: var(--font-size-13px);
-      height: 25vh;
+      height: 27vh;
       @include at992 {
-      height: 43vh;
-        
+        height: 36vh;
       }
       &--hidden {
         visibility: hidden;

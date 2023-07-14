@@ -11,6 +11,7 @@ import styles from './library.module.scss'
 import { useSessionScrollRestoration } from './hooks/use-session-scroll-restoration'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import { useIsHydrated } from '@shared/hooks'
+import Skeleton from 'react-loading-skeleton'
 
 export namespace Library {
   export type Props = {
@@ -272,7 +273,13 @@ export const Library: React.FC<Library.Props> = (props) => {
                   }
                 />
               </div>
-              {props.showBookmarksSkeleton && <div>skeleton</div>}
+              {props.showBookmarksSkeleton && (
+                <div className={styles['main__inner__skeleton']}>
+                  {[...Array(20)].map(() => (
+                    <Skeleton />
+                  ))}
+                </div>
+              )}
               <div
                 className={cn([
                   styles.main__inner__bookmarks,

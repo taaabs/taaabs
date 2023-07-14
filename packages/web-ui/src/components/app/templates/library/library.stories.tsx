@@ -6,14 +6,16 @@ export default {
 
 export const Primary = () => (
   <Library
-    slotSidebar={<>slot sidebar</>}
-    slotAside={<>slot aside</>}
+    slotSidebar={<>[SIDEBAR]</>}
+    slotAside={<>[ASIDE]</>}
     titleBar={{ primaryText: 'Lorem ipsum', secondaryText: 'lorem' }}
     getMoreBookmarks={() => {}}
     hasMoreBookmarks={false}
     isGettingFirstBookmarks={false}
     isGettingMoreBookmarks={false}
-    slotBookmarks={<>slot bookmarks</>}
+    slotBookmarks={<>[BOOKMARKS]</>}
+    noResults={false}
+    showBookmarksSkeleton={false}
   />
 )
 
@@ -31,6 +33,23 @@ export const Scrolling = () => (
         {lorem} {lorem} {lorem} {lorem}
       </>
     }
+    noResults={false}
+    showBookmarksSkeleton={false}
+  />
+)
+
+export const Loading = () => (
+  <Library
+    slotSidebar={<>slot sidebar</>}
+    slotAside={<>slot aside</>}
+    titleBar={{ primaryText: 'Lorem ipsum', secondaryText: 'lorem' }}
+    getMoreBookmarks={() => {}}
+    hasMoreBookmarks={false}
+    isGettingFirstBookmarks={false}
+    isGettingMoreBookmarks={false}
+    slotBookmarks={<>slot bookmarks</>}
+    noResults={false}
+    showBookmarksSkeleton={true}
   />
 )
 
