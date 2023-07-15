@@ -39,7 +39,8 @@ export namespace BookmarksDto {
 
     export class AuthorizedUser extends Base {
       @ToBoolean()
-      public public_only?: boolean = BookmarksFetchingDefaults.AuthorizedUser.publicOnly
+      public public_only?: boolean =
+        BookmarksFetchingDefaults.AuthorizedUser.publicOnly
     }
 
     export class OtherUser extends Base {}
