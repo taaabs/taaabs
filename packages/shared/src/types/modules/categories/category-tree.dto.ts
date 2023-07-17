@@ -5,22 +5,22 @@ export namespace CategoryTreeDto {
     public order?: number
   }
 
-  export class CategoryAuthorized extends Category {
-    public children?: CategoryAuthorized[]
+  export class AuthorizedCategory extends Category {
+    public children?: AuthorizedCategory[]
     public isPublic?: boolean
   }
 
-  export class CategoryPublic extends Category {
+  export class PublicCategory extends Category {
     public children?: Category[]
   }
 
   export namespace Response {
     export class Authorized {
-      public categories: CategoryAuthorized[]
+      public categories: AuthorizedCategory[]
     }
 
     export class Public {
-      public categories: CategoryPublic[]
+      public categories: PublicCategory[]
     }
   }
 }

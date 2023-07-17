@@ -2,13 +2,13 @@ import { App } from '@web-ui/components/app/templates/app'
 import { ClientComponentAppHeaderDesktop } from './client-component-app-header-desktop'
 import { ClientComponentAppHeaderMobile } from './client-component-app-header-mobile'
 import { ClientComponentBottomNavigationBar } from './client-component-bottom-navigation-bar'
-import { OtherUserAvatarProvider } from './other-user-avatar-provider'
+import { PublicUserAvatarProvider } from './public-user-avatar-provider'
 
 const Layout: React.FC<{
   children?: React.ReactNode
 }> = ({ children }) => {
   return (
-    <OtherUserAvatarProvider>
+    <PublicUserAvatarProvider>
       <App
         slotAppHeaderDesktop={<ClientComponentAppHeaderDesktop />}
         slotAppHeaderMobile={<ClientComponentAppHeaderMobile />}
@@ -16,7 +16,7 @@ const Layout: React.FC<{
       >
         {children}
       </App>
-    </OtherUserAvatarProvider>
+    </PublicUserAvatarProvider>
   )
 }
 

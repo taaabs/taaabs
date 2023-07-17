@@ -3,10 +3,10 @@ import { BookmarksParams } from '../types/bookmarks.params'
 
 export type BookmarksRepository = {
   getBookmarksOnAuthorizedUser(
-    params: BookmarksParams.AuthorizedUser,
-  ): Promise<BookmarksRo.AuthorizedUser>
+    params: BookmarksParams.Authorized,
+  ): Promise<BookmarksRo.Authorized>
 
-  getBookmarksOnOtherUser(
-    params: BookmarksParams.OtherUser,
-  ): Promise<BookmarksRo.OtherUser>
+  getBookmarksOnPublicUser(
+    params: BookmarksParams.Public,
+  ): Promise<BookmarksRo.Public>
 }

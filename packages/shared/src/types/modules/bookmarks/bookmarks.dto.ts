@@ -37,13 +37,13 @@ export namespace BookmarksDto {
       public filter?: LibraryFilter = BookmarksFetchingDefaults.Common.filter
     }
 
-    export class AuthorizedUser extends Base {
+    export class Authorized extends Base {
       @ToBoolean()
       public public_only?: boolean =
-        BookmarksFetchingDefaults.AuthorizedUser.publicOnly
+        BookmarksFetchingDefaults.Authorized.publicOnly
     }
 
-    export class OtherUser extends Base {}
+    export class Public extends Base {}
   }
 
   export namespace Response {
@@ -61,16 +61,16 @@ export namespace BookmarksDto {
       public saves?: number
     }
 
-    class BookmarkAuthorized extends Bookmark {
+    class AuthorizedBookmark extends Bookmark {
       public is_public?: boolean
     }
-    class BookmarkPublic extends Bookmark {}
+    class PublicBookmark extends Bookmark {}
 
-    export class AuthorizedUser extends PaginatedResponseDto {
-      public bookmarks: BookmarkAuthorized[]
+    export class Authorized extends PaginatedResponseDto {
+      public bookmarks: AuthorizedBookmark[]
     }
-    export class OtherUser extends PaginatedResponseDto {
-      public bookmarks: BookmarkPublic[]
+    export class Public extends PaginatedResponseDto {
+      public bookmarks: PublicBookmark[]
     }
   }
 }

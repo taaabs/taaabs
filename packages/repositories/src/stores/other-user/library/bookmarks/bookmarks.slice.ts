@@ -6,7 +6,7 @@ import * as thunks from './action-creators'
 type BookmarksState = {
   isGettingFirstBookmarks: boolean
   isGettingMoreBookmarks: boolean
-  bookmarks: Array<BookmarkEntity.OtherUser> | null
+  bookmarks: Array<BookmarkEntity.Public> | null
   hasMoreBookmarks: boolean | null
 }
 

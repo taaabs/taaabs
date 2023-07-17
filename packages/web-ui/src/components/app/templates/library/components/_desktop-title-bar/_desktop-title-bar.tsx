@@ -1,7 +1,7 @@
 import Skeleton from 'react-loading-skeleton'
 import styles from './_desktop-title-bar.module.scss'
 
-export namespace _DesktopTitleBarTypes {
+export namespace _DesktopTitleBar {
   export type Props = {
     text?: {
       primary: string
@@ -10,9 +10,7 @@ export namespace _DesktopTitleBarTypes {
   }
 }
 
-export const _DesktopTitleBar: React.FC<_DesktopTitleBarTypes.Props> = (
-  props,
-) => {
+export const _DesktopTitleBar: React.FC<_DesktopTitleBar.Props> = (props) => {
   return props.text ? (
     <div className={styles.container}>
       <span className={styles.primaryText}>{props.text.primary}</span>

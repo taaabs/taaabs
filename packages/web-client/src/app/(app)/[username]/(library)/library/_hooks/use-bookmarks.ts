@@ -19,7 +19,7 @@ export const useBookmarks = () => {
   )
 
   const getBookmarks = ({ getNextPage }: { getNextPage?: boolean }) => {
-    const getBookmarksParams: BookmarksParams.OtherUser = {
+    const getBookmarksParams: BookmarksParams.Public = {
       username: params.username,
     }
 

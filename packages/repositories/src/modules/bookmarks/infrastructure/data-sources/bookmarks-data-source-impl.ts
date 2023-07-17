@@ -6,9 +6,9 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
   constructor(private readonly _apiUrl: string) {}
 
   public async getBookmarksOnAuthorizedUser(
-    params: BookmarksParams.AuthorizedUser,
-  ): Promise<BookmarksDto.Response.AuthorizedUser> {
-    const queryParams: BookmarksDto.QueryParams.AuthorizedUser = {
+    params: BookmarksParams.Authorized,
+  ): Promise<BookmarksDto.Response.Authorized> {
+    const queryParams: BookmarksDto.QueryParams.Authorized = {
       tags: params.tags?.join(','),
       category_id: params.categoryId,
       after: params.after,
@@ -29,10 +29,10 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
     return await response.json()
   }
 
-  public async getBookmarksOnOtherUser(
-    params: BookmarksParams.OtherUser,
-  ): Promise<BookmarksDto.Response.OtherUser> {
-    const queryParams: BookmarksDto.QueryParams.OtherUser = {
+  public async getBookmarksOnPublicUser(
+    params: BookmarksParams.Public,
+  ): Promise<BookmarksDto.Response.Public> {
+    const queryParams: BookmarksDto.QueryParams.Public = {
       tags: params.tags?.join(','),
       category_id: params.categoryId,
       after: params.after,

@@ -5,14 +5,11 @@ import { BookmarksParams } from '../types/bookmarks.params'
 
 export class GetBookmarksOnAuthorizedUser
   implements
-    UseCase<
-      Promise<BookmarksRo.AuthorizedUser>,
-      BookmarksParams.AuthorizedUser
-    >
+    UseCase<Promise<BookmarksRo.Authorized>, BookmarksParams.Authorized>
 {
   constructor(private readonly _bookmarksRepository: BookmarksRepository) {}
 
-  public invoke(params: BookmarksParams.AuthorizedUser) {
+  public invoke(params: BookmarksParams.Authorized) {
     return this._bookmarksRepository.getBookmarksOnAuthorizedUser(params)
   }
 }

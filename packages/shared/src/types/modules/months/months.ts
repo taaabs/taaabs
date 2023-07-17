@@ -14,18 +14,19 @@ export namespace Months {
   }
   export enum Audience {
     Authorized = 'authorized',
-    OtherUser = 'otherUser',
+    Public = 'public',
   }
-  export type Key = `${Audience} ${
+  export type JsonKey = `${Audience} ${
     string /** category id */
   } ${LibraryFilter} ${string /** comma separated tags */}`
   export type Months = {
     [yymm: string]: Month
   }
+  export type JsonValue = {
+    monthsOfBookmarkCreation: Months
+    monthsOfUrlCreation: Months
+  }
   export type Json = {
-    [key: Key]: {
-      monthsOfBookmarksCreation: Months
-      monthsOfUrlsCreation: Months
-    }
+    [key: JsonKey]: JsonValue
   }
 }

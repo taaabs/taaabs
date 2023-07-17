@@ -20,7 +20,7 @@ describe('BookmarksRepositoryImpl', () => {
 
   describe('getAuthorized', () => {
     it('should correctly parse dto', async () => {
-      const dto: BookmarksDto.Response.AuthorizedUser = {
+      const dto: BookmarksDto.Response.Authorized = {
         bookmarks: [
           {
             id: '1',
@@ -34,7 +34,7 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-      const ro: BookmarksRo.AuthorizedUser = {
+      const ro: BookmarksRo.Authorized = {
         bookmarks: [
           {
             id: '1',
@@ -64,7 +64,7 @@ describe('BookmarksRepositoryImpl', () => {
 
   describe('getPublic', () => {
     it('should correclty parse dto', async () => {
-      const dto: BookmarksDto.Response.OtherUser = {
+      const dto: BookmarksDto.Response.Public = {
         bookmarks: [
           {
             id: '1',
@@ -78,7 +78,7 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-      const ro: BookmarksRo.OtherUser = {
+      const ro: BookmarksRo.Public = {
         bookmarks: [
           {
             id: '1',
@@ -98,9 +98,9 @@ describe('BookmarksRepositoryImpl', () => {
           hasMore: false,
         },
       }
-      bookmarksDataSourceMock.getBookmarksOnOtherUser.mockResolvedValue(dto)
+      bookmarksDataSourceMock.getBookmarksOnPublicUser.mockResolvedValue(dto)
       const sut = new BookmarksRepositoryImpl(bookmarksDataSourceMock)
-      const result = await sut.getBookmarksOnOtherUser({
+      const result = await sut.getBookmarksOnPublicUser({
         username: '',
       })
       expect(result).toStrictEqual(ro)

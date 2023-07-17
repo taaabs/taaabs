@@ -1,7 +1,7 @@
 import { BookmarksRepository } from '../repositories/bookmarks.repository'
 import { GetBookmarksOnAuthorizedUser } from './get-bookmarks-on-authorized-user'
 
-describe('GetAuthorizedBookmarks', () => {
+describe('GetBookmarksOnAuthorizedUser', () => {
   it('calls correct method on the repository', () => {
     const BookmarksRepositoryMock = jest.fn<BookmarksRepository, []>()
     const bookmarksRepositoryMock = new BookmarksRepositoryMock()

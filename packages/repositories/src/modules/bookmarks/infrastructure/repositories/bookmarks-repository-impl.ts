@@ -7,8 +7,8 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
   constructor(private readonly _bookmarksDataSource: BookmarksDataSource) {}
 
   public async getBookmarksOnAuthorizedUser(
-    params: BookmarksParams.AuthorizedUser,
-  ): Promise<BookmarksRo.AuthorizedUser> {
+    params: BookmarksParams.Authorized,
+  ): Promise<BookmarksRo.Authorized> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.getBookmarksOnAuthorizedUser(params)
 
@@ -35,11 +35,11 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
     }
   }
 
-  public async getBookmarksOnOtherUser(
-    params: BookmarksParams.OtherUser,
-  ): Promise<BookmarksRo.OtherUser> {
+  public async getBookmarksOnPublicUser(
+    params: BookmarksParams.Public,
+  ): Promise<BookmarksRo.Public> {
     const { bookmarks, pagination } =
-      await this._bookmarksDataSource.getBookmarksOnOtherUser(params)
+      await this._bookmarksDataSource.getBookmarksOnPublicUser(params)
 
     return {
       bookmarks: bookmarks.map((bookmark) => ({

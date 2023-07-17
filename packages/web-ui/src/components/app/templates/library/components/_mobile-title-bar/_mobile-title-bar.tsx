@@ -3,7 +3,7 @@ import styles from './_mobile-title-bar.module.scss'
 import cn from 'classnames'
 import Skeleton from 'react-loading-skeleton'
 
-export namespace _MobileTitleBarTypes {
+export namespace _MobileTitleBar {
   export type Props = {
     swipeLeftOnClick?: () => void
     swipeRightOnClick?: () => void
@@ -14,9 +14,7 @@ export namespace _MobileTitleBarTypes {
   }
 }
 
-export const _MobileTitleBar: React.FC<_MobileTitleBarTypes.Props> = (
-  props,
-) => {
+export const _MobileTitleBar: React.FC<_MobileTitleBar.Props> = (props) => {
   return (
     <div className={styles.container}>
       <button

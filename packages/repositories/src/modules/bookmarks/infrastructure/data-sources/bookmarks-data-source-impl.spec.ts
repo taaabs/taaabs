@@ -9,12 +9,12 @@ describe('BookmarksDataSourceImpl', () => {
     })
   })
 
-  describe('getBookmarksOnOtherUser', () => {
+  describe('getBookmarksOnPublicUser', () => {
     describe('query parameters are provided', () => {
       it('should provide stringified tags', () => {
         const sut = new BookmarksDataSourceImpl('http://example.com')
         const username = 'test'
-        sut.getBookmarksOnOtherUser({
+        sut.getBookmarksOnPublicUser({
           username: username,
           tags: ['a', 'b', 'c'],
         })

@@ -1,21 +1,21 @@
 export namespace MetadataDto {
   export namespace Response {
-    class BaseMetadata {
-      username: string
-      display_name?: string
-      avatar?: {
+    class Base {
+      public username: string
+      public display_name?: string
+      public avatar?: {
         url: string
         blurhash: string
       }
     }
 
-    export class Authorized extends BaseMetadata {
-      registered_at: string
-      is_email_confirmed: boolean
+    export class Authorized extends Base {
+      public registered_at: string
+      public is_email_confirmed: boolean
     }
 
-    export class Public extends BaseMetadata {
-      meta_description?: string // Used for SEO on server-side generated user pages
+    export class Public extends Base {
+      public meta_description?: string
     }
   }
 }

@@ -1,21 +1,18 @@
 'use client'
 
-import {
-  NavigationForHeader,
-  NavigationForHeaderTypes,
-} from '@web-ui/components/app/molecules/navigation-for-header'
+import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
 import { UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
 import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
 import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
 import { LogoForHeader } from '@web-ui/components/common/molecules/logo-for-header'
 import { useParams, usePathname } from 'next/navigation'
-import { OtherUserAvatarContext } from './other-user-avatar-provider'
+import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { useContext, useEffect, useState } from 'react'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const params = useParams()
   const pathname = usePathname()
-  const otherUserAvatar = useContext(OtherUserAvatarContext)
+  const publicUserAvatar = useContext(PublicUserAvatarContext)
   const [isHydrated, setIsHydrated] = useState(false)
 
   let logoSlot: JSX.Element
@@ -26,10 +23,10 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         user={{
           username: params.username,
           backHref: '/',
-          avatar: otherUserAvatar?.avatar
+          avatar: publicUserAvatar?.avatar
             ? {
-                url: otherUserAvatar.avatar.url,
-                blurhash: otherUserAvatar.avatar.blurhash,
+                url: publicUserAvatar.avatar.url,
+                blurhash: publicUserAvatar.avatar.blurhash,
               }
             : undefined,
         }}
@@ -40,7 +37,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
     logoSlot = <LogoForHeader href="/" />
   }
 
-  let navigation: NavigationForHeaderTypes.Props['navigation']
+  let navigation: NavigationForHeader.Props['navigation']
   if (params.username) {
     navigation = [
       {

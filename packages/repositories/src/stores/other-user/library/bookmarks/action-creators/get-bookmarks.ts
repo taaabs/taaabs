@@ -6,13 +6,13 @@ import {
   LibraryState,
 } from '@repositories/stores/other-user/library/library.store'
 import { bookmarksActions } from '../bookmarks.slice'
-import { GetBookmarksOnOtherUser } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-other-user'
+import { GetBookmarksOnPublicUser } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-public-user'
 
 export const getBookmarks = ({
   params,
   apiUrl,
 }: {
-  params: BookmarksParams.OtherUser
+  params: BookmarksParams.Public
   apiUrl: string
 }) => {
   return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
@@ -20,7 +20,7 @@ export const getBookmarks = ({
 
     const dataSource = new BookmarksDataSourceImpl(apiUrl)
     const repository = new BookmarksRepositoryImpl(dataSource)
-    const getBookmarks = new GetBookmarksOnOtherUser(repository)
+    const getBookmarks = new GetBookmarksOnPublicUser(repository)
 
     if (params.after) {
       dispatch(bookmarksActions.setIsGettingMoreBookmarks(true))

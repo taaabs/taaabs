@@ -3,10 +3,10 @@ import { BookmarksParams } from '../../domain/types/bookmarks.params'
 
 export type BookmarksDataSource = {
   getBookmarksOnAuthorizedUser(
-    params: BookmarksParams.AuthorizedUser,
-  ): Promise<BookmarksDto.Response.AuthorizedUser>
+    params: BookmarksParams.Authorized,
+  ): Promise<BookmarksDto.Response.Authorized>
 
-  getBookmarksOnOtherUser(
-    params: BookmarksParams.OtherUser,
-  ): Promise<BookmarksDto.Response.OtherUser>
+  getBookmarksOnPublicUser(
+    params: BookmarksParams.Public,
+  ): Promise<BookmarksDto.Response.Public>
 }

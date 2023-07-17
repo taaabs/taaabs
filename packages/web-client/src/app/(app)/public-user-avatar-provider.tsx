@@ -2,7 +2,7 @@
 
 import { createContext, useState } from 'react'
 
-export const OtherUserAvatarContext = createContext<{
+export const PublicUserAvatarContext = createContext<{
   avatar: Avatar | null
   setAvatar: (avatar: Avatar | null) => void
 } | null>(null)
@@ -16,12 +16,12 @@ type Props = {
   children?: React.ReactNode
 }
 
-export const OtherUserAvatarProvider: React.FC<Props> = (props) => {
+export const PublicUserAvatarProvider: React.FC<Props> = (props) => {
   const [avatar, setAvatar] = useState<Avatar | null>(null)
 
   return (
-    <OtherUserAvatarContext.Provider value={{ avatar, setAvatar }}>
+    <PublicUserAvatarContext.Provider value={{ avatar, setAvatar }}>
       {props.children}
-    </OtherUserAvatarContext.Provider>
+    </PublicUserAvatarContext.Provider>
   )
 }

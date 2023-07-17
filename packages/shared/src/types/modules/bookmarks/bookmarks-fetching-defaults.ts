@@ -11,7 +11,7 @@ export namespace BookmarksFetchingDefaults {
     export const filter = LibraryFilter.All
   }
 
-  export namespace AuthorizedUser {
+  export namespace Authorized {
     export const publicOnly = false
   }
 }
