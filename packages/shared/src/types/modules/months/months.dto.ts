@@ -5,7 +5,7 @@ import { ToBoolean } from '@shared/decorators/to-boolean'
 export namespace MonthsDto {
   export namespace QueryParams {
     class Base {
-      public filter?: LibraryFilter = MonthsFetchingDefaults.Common.filter
+      public filter: LibraryFilter = MonthsFetchingDefaults.Common.filter
       public category_id?: string
       public tags?: string
     }
