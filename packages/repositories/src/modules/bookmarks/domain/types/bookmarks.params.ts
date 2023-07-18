@@ -11,11 +11,10 @@ export namespace BookmarksParams {
     after?: string
     filter?: LibraryFilter
   }
-  export type Authorized = {
+  export type Authorized = Base & {
     publicOnly?: boolean
-  } & Base
-
-  export type Public = {
+  }
+  export type Public = Base & {
     username: string
-  } & Base
+  }
 }

@@ -20,13 +20,11 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       // sort_by:
     }
 
-    const response = await fetch(
+    return fetch(
       `${this._apiUrl}/v1/bookmarks?${new URLSearchParams(
         JSON.parse(JSON.stringify(queryParams)),
       ).toString()}`,
-    )
-
-    return await response.json()
+    ).then((r) => r.json())
   }
 
   public async getBookmarksOnPublicUser(
@@ -45,12 +43,10 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       // date_start:
     }
 
-    const response = await fetch(
+    return fetch(
       `${this._apiUrl}/v1/bookmarks/${params.username}?${new URLSearchParams(
         JSON.parse(JSON.stringify(queryParams)),
       ).toString()}`,
-    )
-
-    return await response.json()
+    ).then((r) => r.json())
   }
 }

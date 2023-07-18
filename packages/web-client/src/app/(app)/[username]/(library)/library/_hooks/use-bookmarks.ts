@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { useLibraryDispatch, useLibrarySelector } from './store'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { bookmarksActions } from '@repositories/stores/other-user/library/bookmarks/bookmarks.slice'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
@@ -17,6 +17,11 @@ export const useBookmarks = () => {
   const { bookmarks, hasMoreBookmarks } = useLibrarySelector(
     (state) => state.bookmarks,
   )
+  const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
+  const [lastQueryCatId, setLastQueryCatId] = useState<string | null>(null)
+  const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
+  const [lastQueryOrderBy, setLastQueryOrderBy] = useState<string | null>(null)
+  const [lastQueryOrder, setLastQueryOrder] = useState<string | null>(null)
 
   const getBookmarks = ({ getNextPage }: { getNextPage?: boolean }) => {
     const getBookmarksParams: BookmarksParams.Public = {
@@ -25,29 +30,33 @@ export const useBookmarks = () => {
 
     const queryTags = queryParams.get('t')
     if (queryTags) {
+      setLastQueryTags(queryTags)
       getBookmarksParams.tags = queryTags.split(',')
     }
 
     const queryCategoryId = queryParams.get('c')
     if (queryCategoryId) {
+      setLastQueryCatId(queryCategoryId)
       getBookmarksParams.categoryId = queryCategoryId
     }
 
-    const queryFilter =
-      (queryParams.get('f') as LibraryFilter) || LibraryFilter.All
-    if (queryFilter != LibraryFilter.All) {
+    const queryFilter = queryParams.get('f')
+    if (queryFilter) {
+      setLastQueryFilter(queryFilter)
       getBookmarksParams.filter =
         Object.values(LibraryFilter)[parseInt(queryFilter)]
     }
 
     const queryOrderBy = queryParams.get('b')
     if (queryOrderBy) {
+      setLastQueryOrderBy(queryOrderBy)
       getBookmarksParams.orderBy =
         Object.values(OrderBy)[parseInt(queryOrderBy)]
     }
 
     const queryOrder = queryParams.get('o')
     if (queryOrder) {
+      setLastQueryOrder(queryOrder)
       getBookmarksParams.order = Object.values(Order)[parseInt(queryOrder)]
     }
 
@@ -65,7 +74,20 @@ export const useBookmarks = () => {
   }
 
   useUpdateEffect(() => {
-    getBookmarks({})
+    const queryTags = queryParams.get('t')
+    const queryCategoryId = queryParams.get('c')
+    const queryFilter = queryParams.get('f')
+    const queryOrderBy = queryParams.get('b')
+    const queryOrder = queryParams.get('o')
+    if (
+      queryTags != lastQueryTags ||
+      queryCategoryId != lastQueryCatId ||
+      queryFilter != lastQueryFilter ||
+      queryOrderBy != lastQueryOrderBy ||
+      queryOrder != lastQueryOrder
+    ) {
+      getBookmarks({})
+    }
   }, [queryParams])
 
   useUpdateEffect(() => {
@@ -76,10 +98,7 @@ export const useBookmarks = () => {
 
   useEffect(() => {
     const bookmarks = sessionStorage.getItem('bookmarks')
-    if (
-      bookmarks &&
-      queryParams.toString() == sessionStorage.getItem('queryParams')
-    ) {
+    if (bookmarks) {
       dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
       const hasMoreBookmarks = sessionStorage.getItem('hasMoreBookmarks')
       if (hasMoreBookmarks) {
@@ -93,7 +112,6 @@ export const useBookmarks = () => {
     return () => {
       sessionStorage.removeItem('bookmarks')
       sessionStorage.removeItem('hasMoreBookmarks')
-      sessionStorage.removeItem('queryParams')
     }
   }, [])
 

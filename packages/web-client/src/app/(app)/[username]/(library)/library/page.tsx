@@ -17,6 +17,7 @@ import { LibraryFilter } from '@shared/types/common/library-filter'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
+import { useMonths } from './_hooks/use-months'
 
 const Page: React.FC = () => {
   const queryParams = useSearchParams()
@@ -28,7 +29,11 @@ const Page: React.FC = () => {
     isGettingMoreBookmarks,
     hasMoreBookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
+  // const { isGettingData: isGettingMonthsData } = useLibrarySelector(
+  //   (state) => state.months,
+  // )
   const { getBookmarks } = useBookmarks()
+  useMonths()
   const { orderBy, setOrderBy, order, setOrder } = useOrderOptions({
     initOrderBy:
       Object.values(OrderBy)[

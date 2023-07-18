@@ -1,12 +1,8 @@
 import { LibraryFilter } from '@shared/types/common/library-filter'
 
 export namespace Months {
-  export type Tag = {
-    tag: string
-    yields: number
-  }
   export type Month = {
-    tags: Tag[]
+    tags: [string, number][]
     bookmarksCount: number
     publicCount?: number
     starredCount?: number

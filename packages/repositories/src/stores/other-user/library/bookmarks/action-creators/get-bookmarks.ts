@@ -1,12 +1,9 @@
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { BookmarksDataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks-data-source-impl'
 import { BookmarksRepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks-repository-impl'
-import {
-  LibraryDispatch,
-  LibraryState,
-} from '@repositories/stores/other-user/library/library.store'
 import { bookmarksActions } from '../bookmarks.slice'
 import { GetBookmarksOnPublicUser } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-public-user'
+import { LibraryDispatch, LibraryState } from '../../library.store'
 
 export const getBookmarks = ({
   params,

@@ -276,8 +276,8 @@ export const Library: React.FC<Library.Props> = (props) => {
               {props.showBookmarksSkeleton && (
                 <div className={styles['main__inner__skeleton']}>
                   {/* We render 100 items to ensure "DestkopTitleBar" is not visible when user scrolls a bit and reloads tab */}
-                  {[...Array(100)].map(() => (
-                    <Skeleton />
+                  {[...Array(100)].map((_, i) => (
+                    <Skeleton key={i} />
                   ))}
                 </div>
               )}

@@ -1,11 +1,12 @@
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { MonthsFetchingDefaults } from './months-fetching-defaults'
 import { ToBoolean } from '@shared/decorators/to-boolean'
+import { ApiProperty } from '@nestjs/swagger'
 
 export namespace MonthsDto {
   export namespace QueryParams {
     class Base {
-      public filter: LibraryFilter = MonthsFetchingDefaults.Common.filter
+      public filter?: LibraryFilter = MonthsFetchingDefaults.Common.filter
       public category_id?: string
       public tags?: string
     }
@@ -17,13 +18,10 @@ export namespace MonthsDto {
     export class Public extends Base {}
   }
   export namespace Response {
-    class Tag {
-      public tag: string
-      public yields: number
-    }
     class Month {
       public yymm: number
-      public tags: Array<Tag>
+      @ApiProperty({ type: () => [String] })
+      public tags: [string, number][]
       public bookmarks_count: number
       public starred_count?: number
       public nsfw_count?: number
