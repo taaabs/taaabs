@@ -93,7 +93,6 @@ export const useBookmarks = () => {
   useUpdateEffect(() => {
     sessionStorage.setItem('bookmarks', JSON.stringify(bookmarks))
     sessionStorage.setItem('hasMoreBookmarks', JSON.stringify(hasMoreBookmarks))
-    sessionStorage.setItem('queryParams', queryParams.toString())
   }, [bookmarks])
 
   useEffect(() => {

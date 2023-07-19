@@ -1,9 +1,12 @@
+import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { LibraryDispatch, LibraryState } from '../../library.store'
 
 export const processTags = ({
+  orderBy,
   yymmStart,
   yymmEnd,
 }: {
+  orderBy: OrderBy
   yymmStart?: number
   yymmEnd?: number
 }) => {
@@ -12,7 +15,7 @@ export const processTags = ({
     if (!monthsData) {
       throw 'Months data should be there.'
     }
-    // It's not important whether we work on "of bookmarks" or "of url"
+    let months = 
     const months = monthsData.monthsOfBookmarkCreation
     // filter out months out of yymmStart and yymmEnd
     // sum tags

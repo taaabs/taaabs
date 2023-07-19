@@ -51,7 +51,7 @@
       display: inline-flex;
       font-weight: var(--font-weight-inter-bold);
       color: var(--Bookmark-nsfw-foreground);
-      transform: scale(0.82) translateY(-0.27rem);
+      transform: scale(0.82) translateY(-0.20rem);
       position: relative;
       font-size: var(--font-size-1-3rem);
       margin-right: var(--distance-0-5rem);
@@ -64,7 +64,7 @@
         top: 0;
         left: 50%;
         top: 50%;
-        transform: translateX(-50%) translateY(-53%);
+        transform: translateX(-50%) translateY(-52%);
         background: var(--Bookmark-nsfw-background);
         z-index: -1;
       }

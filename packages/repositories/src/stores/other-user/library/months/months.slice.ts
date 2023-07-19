@@ -4,16 +4,17 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 type Months = {
   yymm: number
-  bookmarksCount: number
+  bookmarkCount: number
+  starredCount: number | null
+  nsfwCount: number | null
 }[]
-
-type Tags = [string, number][]
+export type Tags = Record<string, number>
 
 export type MonthsState = {
   isGettingData: boolean
   data: MonthsRo.Public | null
-  monthsOfBookmarkCreation: Months | null
-  monthsOfUrlCreation: Months | null
+  monthsOfBookmarkCreation: Months
+  monthsOfUrlCreation: Months
   yymmStart: number | null
   yymmEnd: number | null
   tags: Tags | null
@@ -22,8 +23,8 @@ export type MonthsState = {
 const initialState: MonthsState = {
   isGettingData: false,
   data: null,
-  monthsOfBookmarkCreation: null,
-  monthsOfUrlCreation: null,
+  monthsOfBookmarkCreation: [],
+  monthsOfUrlCreation: [],
   yymmStart: null,
   yymmEnd: null,
   tags: null,
@@ -39,18 +40,25 @@ export const monthsSlice = createSlice({
     setData(state, action: PayloadAction<MonthsRo.Public>) {
       state.data = action.payload
 
-      state.monthsOfBookmarkCreation =
-        action.payload.monthsOfBookmarkCreation.map((month) => ({
-          yymm: month.yymm,
-          bookmarksCount: month.bookmarkCount,
-        }))
-
-      state.monthsOfUrlCreation = action.payload.monthsOfUrlCreation.map(
-        (month) => ({
-          yymm: month.yymm,
-          bookmarksCount: month.bookmarkCount,
-        }),
+      Object.entries(action.payload.monthsOfBookmarkCreation).forEach(
+        ([k, v]) => {
+          state.monthsOfBookmarkCreation.push({
+            yymm: parseInt(k),
+            bookmarkCount: v.bookmarkCount,
+            starredCount: v.starredCount,
+            nsfwCount: v.nsfwCount,
+          })
+        },
       )
+
+      Object.entries(action.payload.monthsOfUrlCreation).forEach(([k, v]) => {
+        state.monthsOfUrlCreation.push({
+          yymm: parseInt(k),
+          bookmarkCount: v.bookmarkCount,
+          starredCount: v.starredCount,
+          nsfwCount: v.nsfwCount,
+        })
+      })
     },
     setYymmStart(state, action: PayloadAction<number>) {
       state.yymmStart = action.payload

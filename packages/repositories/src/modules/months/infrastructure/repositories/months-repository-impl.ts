@@ -12,24 +12,36 @@ export class MonthsRepositoryImpl implements MonthsRepository {
     const data = await this._monthsDataSource.getMonthsOnAuthorizedUser(params)
 
     return {
-      monthsOfBookmarkCreation: data.months_of_bookmark_creation.map(
-        (month) => ({
-          yymm: month.yymm,
-          tags: month.tags,
-          bookmarkCount: month.bookmarks_count,
-          nsfwCount: month.nsfw_count || null,
-          publicCount: month.public_count || null,
-          starredCount: month.starred_count || null,
+      monthsOfBookmarkCreation: Object.entries(
+        data.months_of_bookmark_creation,
+      ).reduce<MonthsRo.Authorized['monthsOfBookmarkCreation']>(
+        (acc, [k, v]) => ({
+          ...acc,
+          [k]: {
+            tags: { ...v.tags },
+            bookmarkCount: v.bookmarks_count,
+            starredCount: v.starred_count || null,
+            nsfwCount: v.nsfw_count || null,
+            publicCount: v.public_count || null,
+          },
         }),
+        {},
       ),
-      monthsOfUrlCreation: data.months_of_url_creation.map((month) => ({
-        yymm: month.yymm,
-        tags: month.tags,
-        bookmarkCount: month.bookmarks_count,
-        nsfwCount: month.nsfw_count || null,
-        publicCount: month.public_count || null,
-        starredCount: month.starred_count || null,
-      })),
+      monthsOfUrlCreation: Object.entries(data.months_of_url_creation).reduce<
+        MonthsRo.Authorized['monthsOfUrlCreation']
+      >(
+        (acc, [k, v]) => ({
+          ...acc,
+          [k]: {
+            tags: { ...v.tags },
+            bookmarkCount: v.bookmarks_count,
+            starredCount: v.starred_count || null,
+            nsfwCount: v.nsfw_count || null,
+            publicCount: v.public_count || null,
+          },
+        }),
+        {},
+      ),
       isMonthsUpdateScheduled: data.is_months_update_scheduled,
     }
   }
@@ -40,22 +52,34 @@ export class MonthsRepositoryImpl implements MonthsRepository {
     const data = await this._monthsDataSource.getMonthsOnPublicUser(params)
 
     return {
-      monthsOfBookmarkCreation: data.months_of_bookmark_creation.map(
-        (month) => ({
-          yymm: month.yymm,
-          tags: month.tags,
-          bookmarkCount: month.bookmarks_count,
-          nsfwCount: month.nsfw_count || null,
-          starredCount: month.starred_count || null,
+      monthsOfBookmarkCreation: Object.entries(
+        data.months_of_bookmark_creation,
+      ).reduce<MonthsRo.Public['monthsOfBookmarkCreation']>(
+        (acc, [k, v]) => ({
+          ...acc,
+          [k]: {
+            tags: { ...v.tags },
+            bookmarkCount: v.bookmarks_count,
+            starredCount: v.starred_count || null,
+            nsfwCount: v.nsfw_count || null,
+          },
         }),
+        {},
       ),
-      monthsOfUrlCreation: data.months_of_bookmark_creation.map((month) => ({
-        yymm: month.yymm,
-        tags: month.tags,
-        bookmarkCount: month.bookmarks_count,
-        nsfwCount: month.nsfw_count || null,
-        starredCount: month.starred_count || null,
-      })),
+      monthsOfUrlCreation: Object.entries(data.months_of_url_creation).reduce<
+        MonthsRo.Public['monthsOfUrlCreation']
+      >(
+        (acc, [k, v]) => ({
+          ...acc,
+          [k]: {
+            tags: { ...v.tags },
+            bookmarkCount: v.bookmarks_count,
+            starredCount: v.starred_count || null,
+            nsfwCount: v.nsfw_count || null,
+          },
+        }),
+        {},
+      ),
       isMonthsUpdateScheduled: data.is_months_update_scheduled,
     }
   }

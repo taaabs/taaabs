@@ -46,7 +46,9 @@ export const useMonths = () => {
   }, [queryParams])
 
   useUpdateEffect(() => {
-    sessionStorage.setItem('monthsData', JSON.stringify(data))
+    if (data) {
+      sessionStorage.setItem('monthsData', JSON.stringify(data))
+    }
   }, [data])
 
   useEffect(() => {
@@ -58,7 +60,7 @@ export const useMonths = () => {
     }
 
     return () => {
-      sessionStorage.removeItem('months')
+      sessionStorage.removeItem('monthsData')
     }
   }, [])
 }

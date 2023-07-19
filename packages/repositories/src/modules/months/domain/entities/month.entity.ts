@@ -1,7 +1,6 @@
 export namespace MonthEntity {
   type Base = {
-    yymm: number
-    tags: [string, number][]
+    tags: Record<string, number>
     bookmarkCount: number
     starredCount: number | null
     nsfwCount: number | null
