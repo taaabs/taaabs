@@ -15,8 +15,6 @@ export type MonthsState = {
   data: MonthsRo.Public | null
   monthsOfBookmarkCreation: Months
   monthsOfUrlCreation: Months
-  yymmStart: number | null
-  yymmEnd: number | null
   tags: Tags | null
 }
 
@@ -25,8 +23,6 @@ const initialState: MonthsState = {
   data: null,
   monthsOfBookmarkCreation: [],
   monthsOfUrlCreation: [],
-  yymmStart: null,
-  yymmEnd: null,
   tags: null,
 }
 
@@ -59,12 +55,6 @@ export const monthsSlice = createSlice({
           nsfwCount: v.nsfwCount,
         })
       })
-    },
-    setYymmStart(state, action: PayloadAction<number>) {
-      state.yymmStart = action.payload
-    },
-    setYymmEnd(state, action: PayloadAction<number>) {
-      state.yymmEnd = action.payload
     },
     setTags(state, action: PayloadAction<Tags>) {
       state.tags = action.payload

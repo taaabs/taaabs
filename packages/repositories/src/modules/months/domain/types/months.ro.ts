@@ -5,11 +5,11 @@ export namespace MonthsRo {
     isMonthsUpdateScheduled: boolean
   }
   export type Authorized = Base & {
-    monthsOfBookmarkCreation: Record<number, MonthEntity.Authorized>
-    monthsOfUrlCreation: Record<number, MonthEntity.Authorized>
+    monthsOfBookmarkCreation: Record<string, MonthEntity.Authorized>
+    monthsOfUrlCreation: Record<string, MonthEntity.Authorized>
   }
   export type Public = Base & {
-    monthsOfBookmarkCreation: Record<number, MonthEntity.Public>
-    monthsOfUrlCreation: Record<number, MonthEntity.Public>
+    monthsOfBookmarkCreation: Record<string, MonthEntity.Public>
+    monthsOfUrlCreation: Record<string, MonthEntity.Public>
   }
 }

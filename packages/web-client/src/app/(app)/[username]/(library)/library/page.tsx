@@ -18,6 +18,7 @@ import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useMonths } from './_hooks/use-months'
+import { useTags } from './_hooks/use-tags'
 
 const Page: React.FC = () => {
   const queryParams = useSearchParams()
@@ -34,6 +35,7 @@ const Page: React.FC = () => {
   // )
   const { getBookmarks } = useBookmarks()
   useMonths()
+  useTags()
   const { orderBy, setOrderBy, order, setOrder } = useOrderOptions({
     initOrderBy:
       Object.values(OrderBy)[
