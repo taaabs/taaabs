@@ -65,7 +65,7 @@ export const Months: React.FC<Months.Props> = (props) => {
           <Area
             type="basis"
             dataKey="nsfwCount"
-            strokeWidth={1}
+            strokeWidth={2}
             stroke="var(--Months-chart-nsfw-stroke)"
             fill="transparent"
             animationDuration={0}

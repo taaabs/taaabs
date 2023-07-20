@@ -24,6 +24,20 @@ export const useTags = ({
   const [lastQueryOrderBy, setLastQueryOrderBy] = useState<string | null>(null)
 
   useUpdateEffect(() => {
+    if (yyyymmGte && yyyymmLte) {
+      const queryYyyymmGte = queryParams.get('gte')
+      if (!queryYyyymmGte) {
+        setYyyymmGte(null)
+      }
+
+      const queryYyyymmLte = queryParams.get('lte')
+      if (!queryYyyymmLte) {
+        setYyyymmLte(null)
+      }
+    }
+  }, [queryParams])
+
+  useUpdateEffect(() => {
     let updatedQueryParams: any
     if (yyyymmGte && yyyymmLte) {
       updatedQueryParams = updateQueryParam(queryParams, 'gte', `${yyyymmGte}`)

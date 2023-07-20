@@ -196,8 +196,6 @@ const Page: React.FC = () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
                         setOrderBy(OrderBy.BookmarkCreationDate)
-                        setYyyymmGte(null)
-                        setYyyymmLte(null)
                         toggleOrderByDropdown()
                       },
                       isSelected: orderBy == OrderBy.BookmarkCreationDate,
@@ -208,8 +206,6 @@ const Page: React.FC = () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
                         setOrderBy(OrderBy.UrlCreationDate)
-                        setYyyymmGte(null)
-                        setYyyymmLte(null)
                         toggleOrderByDropdown()
                       },
                       isSelected: orderBy == OrderBy.UrlCreationDate,

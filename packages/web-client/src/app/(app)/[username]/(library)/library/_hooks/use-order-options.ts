@@ -31,7 +31,12 @@ export const useOrderOptions = ({
     if (queryParams.get('e')) {
       updatedQueryParams = updateQueryParam(updatedQueryParams, 'e', '')
     }
-
+    if (queryParams.get('gte')) {
+      updatedQueryParams = updateQueryParam(updatedQueryParams, 'gte', '')
+    }
+    if (queryParams.get('lte')) {
+      updatedQueryParams = updateQueryParam(updatedQueryParams, 'lte', '')
+    }
     router.push(`/${params.username}/library?${updatedQueryParams}`, {
       scroll: false,
     })

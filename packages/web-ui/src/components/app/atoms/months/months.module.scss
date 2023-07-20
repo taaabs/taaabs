@@ -25,7 +25,7 @@
       rx: var(--border-radius-999px);
     }
     > g > line {
-      opacity: 0;
+      visibility: hidden;
     }
   }
 }
