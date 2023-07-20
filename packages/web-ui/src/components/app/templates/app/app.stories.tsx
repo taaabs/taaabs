@@ -10,7 +10,6 @@ export const Primary = () => (
     slotAppHeaderDesktop={<>header desktop</>}
     slotAppHeaderMobile={<>header mobile</>}
     slotBottomNavigationBar={<>bottom navigation bar</>}
-    slotFooterDesktop={<>footer desktop</>}
   >
     {loremIpsum.long}
   </App>

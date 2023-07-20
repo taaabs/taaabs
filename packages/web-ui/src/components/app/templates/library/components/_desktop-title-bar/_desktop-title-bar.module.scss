@@ -3,7 +3,6 @@
 
 .container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 0 var(--distance-24px);
   height: var(--button-dimension-52px);
@@ -13,14 +12,11 @@
   transform: translateX(calc(var(--distance-16px) * -1));
   margin: var(--distance-16px) 0;
 }
-.primaryText {
+.text {
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
-  font-size: var(--font-size-22px);
+  font-size: var(--font-size-24px);
   color: var(--TitleBar-primary-foreground);
-}
-.secondaryText {
-  color: var(--TitleBar-secondary-foreground);
 }
 .skeleton {
   margin: var(--distance-16px) 0;

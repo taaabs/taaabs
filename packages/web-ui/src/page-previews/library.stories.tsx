@@ -69,10 +69,7 @@ export const Primary = () => {
             ]}
           />
         }
-        titleBar={{
-          primaryText: 'All bookmarks',
-          secondaryText: '3230 results',
-        }}
+        titleBar="All bookmarks"
         getMoreBookmarks={() => {}}
         hasMoreBookmarks={false}
         isGettingFirstBookmarks={false}
@@ -86,6 +83,8 @@ export const Primary = () => {
             {bookmark}
           </>
         }
+        noResults={false}
+        showBookmarksSkeleton={false}
       ></Library>
     </App>
   )

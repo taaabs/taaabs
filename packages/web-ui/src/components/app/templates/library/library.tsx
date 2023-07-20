@@ -17,10 +17,7 @@ export namespace Library {
   export type Props = {
     slotSidebar: React.ReactNode
     slotAside: React.ReactNode
-    titleBar?: {
-      primaryText: string
-      secondaryText: string
-    }
+    titleBar?: string
     slotBookmarks: React.ReactNode
     isGettingFirstBookmarks: boolean
     isGettingMoreBookmarks: boolean
@@ -250,27 +247,13 @@ export const Library: React.FC<Library.Props> = (props) => {
                 swipeRightOnClick={
                   !isSlideoutRightOpen ? toggleRightSlideout : () => {}
                 }
-                text={
-                  props.titleBar
-                    ? {
-                        primary: props.titleBar.primaryText,
-                        secondary: props.titleBar.secondaryText,
-                      }
-                    : undefined
-                }
+                text={props.titleBar ? props.titleBar : undefined}
               />
             </div>
             <div>
               <div className={styles['main__inner__desktop-title-bar']}>
                 <_DesktopTitleBar
-                  text={
-                    props.titleBar
-                      ? {
-                          primary: props.titleBar.primaryText,
-                          secondary: props.titleBar.secondaryText,
-                        }
-                      : undefined
-                  }
+                  text={props.titleBar ? props.titleBar : undefined}
                 />
               </div>
               {props.showBookmarksSkeleton && (

@@ -1,4 +1,4 @@
-import { Area, AreaChart, Brush, ResponsiveContainer, YAxis } from 'recharts'
+import { Area, AreaChart, Brush, ResponsiveContainer } from 'recharts'
 import styles from './months.module.scss'
 
 export namespace Months {
@@ -74,8 +74,8 @@ export const Months: React.FC<Months.Props> = (props) => {
                 : undefined
             }
             height={24}
-            travellerWidth={8}
-            fill="var(--Months-chart-brush-background)"
+            travellerWidth={20}
+            fill="transparent"
             onChange={({ startIndex, endIndex }) => {
               if (startIndex == undefined || endIndex == undefined) return
               props.onYymmChange({

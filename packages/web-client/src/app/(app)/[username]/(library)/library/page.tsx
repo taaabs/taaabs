@@ -81,12 +81,9 @@ const Page: React.FC = () => {
       showBookmarksSkeleton={bookmarks == null}
       titleBar={
         bookmarks != null
-          ? {
-              primaryText: queryParams.get('categoryId')
-                ? '[category_name]'
-                : 'All bookmarks',
-              secondaryText: '1234',
-            }
+          ? queryParams.get('categoryId')
+            ? '[category_name]'
+            : 'All bookmarks'
           : undefined
       }
       slotAside={

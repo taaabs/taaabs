@@ -82,10 +82,8 @@ html {
   --Months-chart-fill: #bfdbfe; // Values must be passed directly for chart.
   --Months-chart-stroke: #3b82f6;
   --Months-chart-starred-fill: #fff545;
-  --Months-chart-nsfw-stroke: #EF4444;
-  --Months-chart-brush-selection-fill: var(--neutral200);
+  --Months-chart-nsfw-stroke: #ef4444;
   --Months-chart-brush-handle-fill: var(--blue600);
-  --Months-chart-brush-background: #FBFBFB;
 }
 
 body {
@@ -226,6 +224,5 @@ button {
   display: none;
 }
 .recharts-brush-slide {
-  fill: var(--Months-chart-brush-selection-fill);
-  fill-opacity: 1;
+  fill-opacity: 0;
 }

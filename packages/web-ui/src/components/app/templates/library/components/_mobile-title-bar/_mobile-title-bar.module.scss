@@ -39,19 +39,15 @@
   justify-content: center;
   background: var(--TitleBar-background-mobile);
   height: var(--button-dimension-48px);
-  padding: 0 var(--distance-20px);
+  padding: 0 var(--distance-22px);
   border-radius: var(--border-radius-999px);
-  &__primaryText {
+  &__text {
     font-family: var(--font-family-plus-jakarta-sans);
     color: var(--TitleBar-primary-foreground);
-    font-size: var(--font-size-20px);
+    font-size: var(--font-size-22px);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
-    line-height: 1.25;
   }
-  &__secondaryText {
-    color: var(--TitleBar-secondary-foreground);
-    font-size: var(--font-size-13px);
-  }
+  
 }
 .skeleton {
   > span > span {

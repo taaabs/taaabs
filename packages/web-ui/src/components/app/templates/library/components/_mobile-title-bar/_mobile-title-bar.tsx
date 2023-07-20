@@ -7,10 +7,7 @@ export namespace _MobileTitleBar {
   export type Props = {
     swipeLeftOnClick?: () => void
     swipeRightOnClick?: () => void
-    text?: {
-      primary: string
-      secondary: string
-    }
+    text?: string
   }
 }
 
@@ -26,12 +23,7 @@ export const _MobileTitleBar: React.FC<_MobileTitleBar.Props> = (props) => {
 
       {props.text ? (
         <div className={styles.content}>
-          <span className={styles.content__primaryText}>
-            {props.text.primary}
-          </span>
-          <span className={styles.content__secondaryText}>
-            {props.text.secondary}
-          </span>
+          <span className={styles.content__text}>{props.text}</span>
         </div>
       ) : (
         <div className={styles.skeleton}>
