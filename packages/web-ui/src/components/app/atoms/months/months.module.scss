@@ -8,24 +8,37 @@
   background: var(--Months-background);
   border: var(--border-secondary);
   overflow: hidden;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   @include transition-100ms(border-color);
   @include hover {
     border: var(--border-primary);
   }
+  &__too-few-months {
+    color: var(--text-color-dimmed);
+    text-align: center;
+    font-size: var(--font-size-13px);
+    padding: 0 var(--distance-16px);
+  }
   & svg {
-    transform: translateY(28px);
+    transform: translateY(40px);
   }
   &__brush {
-    transform: translateY(-28px);
+    transform: translateY(-46px) scale(0.9);
+    transform-origin: center;
     > rect:first-of-type {
       stroke: none;
     }
     > g > rect {
       fill: var(--Months-chart-brush-handle-fill);
-      rx: var(--border-radius-999px);
+      rx: var(--border-radius-8px);
+      stroke: var(--Months-chart-brush-handle-stroke);
     }
     > g > line {
-      visibility: hidden;
+      stroke: var(--Months-chart-brush-handle-lines);
     }
   }
 }

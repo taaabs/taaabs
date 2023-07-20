@@ -40,7 +40,8 @@
     color: var(--Bookmark-link-foreground);
     margin-right: var(--distance-0-6rem);
     &--starred {
-      padding: var(--distance-0-5rem) var(--distance-0-4rem) var(--distance-0-3rem) var(--distance-0-4rem);
+      padding: var(--distance-0-5rem) var(--distance-0-4rem)
+        var(--distance-0-3rem) var(--distance-0-4rem);
       margin-left: calc(var(--distance-0-4rem) * -1);
       margin-right: calc(var(--distance-0-6rem) - var(--distance-0-4rem));
       background: var(--Bookmark-starred-title-background);
@@ -51,7 +52,7 @@
       display: inline-flex;
       font-weight: var(--font-weight-inter-bold);
       color: var(--Bookmark-nsfw-foreground);
-      transform: scale(0.82) translateY(-0.20rem);
+      transform: scale(0.82) translateY(-0.2rem);
       position: relative;
       font-size: var(--font-size-1-3rem);
       margin-right: var(--distance-0-5rem);
@@ -71,10 +72,13 @@
     }
     &__text {
       font-weight: var(--font-weight-inter-medium);
-      font-size: var(--font-size-1-8rem);
+      font-size: var(--font-size-2rem);
       margin-bottom: var(--distance-0-8rem);
       @include hover {
         text-decoration: underline;
+      }
+      @include at992 {
+        font-size: var(--font-size-1-8rem);
       }
     }
   }

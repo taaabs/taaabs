@@ -13,16 +13,16 @@ export type Tags = Record<string, number>
 export type MonthsState = {
   isGettingData: boolean
   data: MonthsRo.Public | null
-  monthsOfBookmarkCreation: Months
-  monthsOfUrlCreation: Months
+  monthsOfBookmarkCreation: Months | null
+  monthsOfUrlCreation: Months | null
   tags: Tags | null
 }
 
 const initialState: MonthsState = {
   isGettingData: false,
   data: null,
-  monthsOfBookmarkCreation: [],
-  monthsOfUrlCreation: [],
+  monthsOfBookmarkCreation: null,
+  monthsOfUrlCreation: null,
   tags: null,
 }
 
@@ -35,12 +35,13 @@ export const monthsSlice = createSlice({
     },
     setData(state, action: PayloadAction<MonthsRo.Public>) {
       state.data = action.payload
-      state.monthsOfBookmarkCreation = []
-      state.monthsOfUrlCreation = []
+
+      const monthsOfBookmarkCreation: Months = []
+      const monthsOfUrlCreation: Months = []
 
       Object.entries(action.payload.monthsOfBookmarkCreation).forEach(
         ([k, v]) => {
-          state.monthsOfBookmarkCreation.push({
+          monthsOfBookmarkCreation.push({
             yyyymm: parseInt(k),
             bookmarkCount: v.bookmarkCount,
             starredCount: v.starredCount || 0,
@@ -48,15 +49,17 @@ export const monthsSlice = createSlice({
           })
         },
       )
-
       Object.entries(action.payload.monthsOfUrlCreation).forEach(([k, v]) => {
-        state.monthsOfUrlCreation.push({
+        monthsOfUrlCreation.push({
           yyyymm: parseInt(k),
           bookmarkCount: v.bookmarkCount,
           starredCount: v.starredCount || 0,
           nsfwCount: v.nsfwCount || 0,
         })
       })
+
+      state.monthsOfBookmarkCreation = monthsOfBookmarkCreation
+      state.monthsOfUrlCreation = monthsOfUrlCreation
     },
     setTags(state, action: PayloadAction<Tags>) {
       state.tags = action.payload

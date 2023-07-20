@@ -83,7 +83,9 @@ html {
   --Months-chart-stroke: #3b82f6;
   --Months-chart-starred-fill: #fff545;
   --Months-chart-nsfw-stroke: #ef4444;
-  --Months-chart-brush-handle-fill: var(--blue600);
+  --Months-chart-brush-handle-fill: #fff;
+  --Months-chart-brush-handle-lines:  var(--neutral300);
+  --Months-chart-brush-handle-stroke:  var(--neutral300);
 }
 
 body {
