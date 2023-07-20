@@ -309,6 +309,8 @@ export const Library: React.FC<Library.Props> = (props) => {
           style={{
             zIndex: !isSlideoutRightDefinetelyClosed ? 1 : 0,
             width: `${SLIDABLE_WIDTH}px`,
+            visibility:
+              isRestoringScrollPosition || !isHydrated ? 'hidden' : 'visible',
           }}
         >
           <div className={styles.aside__inner}>

@@ -1,6 +1,5 @@
 import { PaginatedResponseDto } from '../../common/paginated-response.dto'
 import { ApiProperty } from '@nestjs/swagger'
-import { DateRange } from '@shared/types/modules/bookmarks/date-range'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { PaginationQueryParamsDto } from '@shared/types/common/pagination-options.dto'
@@ -20,15 +19,13 @@ export namespace BookmarksDto {
 
       public category_id?: string
 
-      public date_range?: DateRange = BookmarksFetchingDefaults.Common.dateRange
+      @ApiProperty({ description: 'Epoch timestamp in seconds.' })
+      @Type()
+      public epoch_gte?: number
 
       @ApiProperty({ description: 'Epoch timestamp in seconds.' })
       @Type()
-      public date_start?: number
-
-      @ApiProperty({ description: 'Epoch timestamp in seconds.' })
-      @Type()
-      public date_end?: number
+      public epoch_lte?: number
 
       public order_by?: OrderBy = BookmarksFetchingDefaults.Common.orderBy
 

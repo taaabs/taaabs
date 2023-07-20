@@ -3,19 +3,26 @@
 
 .graph {
   border-radius: var(--border-radius-10px);
+  border-bottom-left-radius: 13px;
+  border-bottom-right-radius: 13px;
   background: var(--Months-background);
   border: var(--border-secondary);
+  overflow: hidden;
   @include transition-100ms(border-color);
   @include hover {
     border: var(--border-primary);
   }
+  & svg {
+    transform: translateY(25px);
+  }
   &__brush {
+    transform: translateY(-25px);
     > rect:first-of-type {
       stroke: none;
     }
     > g > rect {
       fill: var(--Months-chart-brush-handle-fill);
-      rx: var(--border-radius-4px);
+      rx: var(--border-radius-999px);
     }
     > g > line {
       opacity: 0;

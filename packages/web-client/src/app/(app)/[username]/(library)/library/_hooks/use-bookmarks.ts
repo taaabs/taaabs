@@ -22,6 +22,12 @@ export const useBookmarks = () => {
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
   const [lastQueryOrderBy, setLastQueryOrderBy] = useState<string | null>(null)
   const [lastQueryOrder, setLastQueryOrder] = useState<string | null>(null)
+  const [lastQueryYyyymmGte, setLastQueryYyyymmGte] = useState<string | null>(
+    null,
+  )
+  const [lastQueryYyyymmLte, setLastQueryYyyymmLte] = useState<string | null>(
+    null,
+  )
 
   const getBookmarks = ({ getNextPage }: { getNextPage?: boolean }) => {
     const getBookmarksParams: BookmarksParams.Public = {
@@ -60,6 +66,18 @@ export const useBookmarks = () => {
       getBookmarksParams.order = Object.values(Order)[parseInt(queryOrder)]
     }
 
+    const queryYyyymmGte = queryParams.get('gte')
+    if (queryYyyymmGte) {
+      setLastQueryYyyymmGte(queryYyyymmGte)
+      getBookmarksParams.yyyymmGte = parseInt(queryYyyymmGte)
+    }
+
+    const queryYyyymmLte = queryParams.get('lte')
+    if (queryYyyymmLte) {
+      setLastQueryYyyymmLte(queryYyyymmLte)
+      getBookmarksParams.yyyymmLte = parseInt(queryYyyymmLte)
+    }
+
     if (getNextPage) {
       if (!bookmarks) throw 'Bookmarks should be there.'
       getBookmarksParams.after = bookmarks.slice(-1)[0].id
@@ -79,12 +97,17 @@ export const useBookmarks = () => {
     const queryFilter = queryParams.get('f')
     const queryOrderBy = queryParams.get('b')
     const queryOrder = queryParams.get('o')
+    const queryYyyyGte = queryParams.get('gte')
+    const queryYyyyLte = queryParams.get('lte')
+
     if (
       queryTags != lastQueryTags ||
       queryCategoryId != lastQueryCatId ||
       queryFilter != lastQueryFilter ||
       queryOrderBy != lastQueryOrderBy ||
-      queryOrder != lastQueryOrder
+      queryOrder != lastQueryOrder ||
+      queryYyyyGte != lastQueryYyyymmGte ||
+      queryYyyyLte != lastQueryYyyymmLte
     ) {
       getBookmarks({})
     }

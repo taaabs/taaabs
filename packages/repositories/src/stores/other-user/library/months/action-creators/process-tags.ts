@@ -4,12 +4,12 @@ import { Tags, monthsActions } from '../months.slice'
 
 export const processTags = ({
   orderBy,
-  yymmStart,
-  yymmEnd,
+  yyyymmGte,
+  yyyymmLte,
 }: {
   orderBy: OrderBy
-  yymmStart?: number
-  yymmEnd?: number
+  yyyymmGte?: number
+  yyyymmLte?: number
 }) => {
   return (dispatch: LibraryDispatch, getState: () => LibraryState) => {
     const monthsData = getState().months.data
@@ -27,18 +27,18 @@ export const processTags = ({
         break
     }
 
-    // Filter out months out of yymmStart and yymmEnd range.
+    // Filter out months out of yyyymmGte and yyyymmLte range.
     months = Object.keys(months).reduce((acc, val) => {
-      const yymm = parseInt(val)
+      const yyyymm = parseInt(val)
       let shouldReturnVal = true
 
-      if (yymmStart && yymmEnd) {
-        if (yymm < yymmStart || yymm > yymmEnd) {
+      if (yyyymmGte && yyyymmLte) {
+        if (yyyymm < yyyymmGte || yyyymm > yyyymmLte) {
           shouldReturnVal = false
         }
-      } else if (yymmStart && yymm < yymmStart) {
+      } else if (yyyymmGte && yyyymm < yyyymmGte) {
         shouldReturnVal = false
-      } else if (yymmEnd && yymm > yymmEnd) {
+      } else if (yyyymmLte && yyyymm > yyyymmLte) {
         shouldReturnVal = false
       }
 

@@ -3,7 +3,7 @@ import * as thunks from './action-creators'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 type Months = {
-  yymm: number
+  yyyymm: number
   bookmarkCount: number
   starredCount: number
   nsfwCount: number
@@ -41,7 +41,7 @@ export const monthsSlice = createSlice({
       Object.entries(action.payload.monthsOfBookmarkCreation).forEach(
         ([k, v]) => {
           state.monthsOfBookmarkCreation.push({
-            yymm: parseInt(k),
+            yyyymm: parseInt(k),
             bookmarkCount: v.bookmarkCount,
             starredCount: v.starredCount || 0,
             nsfwCount: v.nsfwCount || 0,
@@ -51,7 +51,7 @@ export const monthsSlice = createSlice({
 
       Object.entries(action.payload.monthsOfUrlCreation).forEach(([k, v]) => {
         state.monthsOfUrlCreation.push({
-          yymm: parseInt(k),
+          yyyymm: parseInt(k),
           bookmarkCount: v.bookmarkCount,
           starredCount: v.starredCount || 0,
           nsfwCount: v.nsfwCount || 0,

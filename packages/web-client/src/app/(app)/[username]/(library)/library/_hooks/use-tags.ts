@@ -8,29 +8,29 @@ import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookm
 import { updateQueryParam } from '@/utils/update-query-param'
 
 export const useTags = ({
-  initYymmStart,
-  initYymmEnd,
+  initYyyymmGte,
+  initYyyymmLte,
 }: {
-  initYymmStart: number | null
-  initYymmEnd: number | null
+  initYyyymmGte: number | null
+  initYyyymmLte: number | null
 }) => {
   const router = useRouter()
   const params = useParams()
   const queryParams = useSearchParams()
   const dispatch = useLibraryDispatch()
   const { data, tags } = useLibrarySelector((state) => state.months)
-  const [yymmStart, setYymmStart] = useState<number | null>(initYymmStart)
-  const [yymmEnd, setYymmEnd] = useState<number | null>(initYymmEnd)
+  const [yyyymmGte, setYyyymmGte] = useState<number | null>(initYyyymmGte)
+  const [yyyymmLte, setYyyymmLte] = useState<number | null>(initYyyymmLte)
   const [lastQueryOrderBy, setLastQueryOrderBy] = useState<string | null>(null)
 
   useUpdateEffect(() => {
     let updatedQueryParams: any
-    if (yymmStart && yymmEnd) {
-      updatedQueryParams = updateQueryParam(queryParams, 's', `${yymmStart}`)
+    if (yyyymmGte && yyyymmLte) {
+      updatedQueryParams = updateQueryParam(queryParams, 'gte', `${yyyymmGte}`)
       updatedQueryParams = updateQueryParam(
         updatedQueryParams,
-        'e',
-        `${yymmEnd}`,
+        'lte',
+        `${yyyymmLte}`,
       )
 
       router.push(`/${params.username}/library?${updatedQueryParams}`, {
@@ -43,14 +43,14 @@ export const useTags = ({
           : undefined,
       })
     }
-  }, [yymmStart, yymmEnd])
+  }, [yyyymmGte, yyyymmLte])
 
   const processTags = ({ orderBy }: { orderBy?: OrderBy }) => {
     dispatch(
       monthsActions.processTags({
         orderBy: orderBy ? orderBy : BookmarksFetchingDefaults.Common.orderBy,
-        yymmStart: yymmStart || undefined,
-        yymmEnd: yymmEnd || undefined,
+        yyyymmGte: yyyymmGte || undefined,
+        yyyymmLte: yyyymmLte || undefined,
       }),
     )
   }
@@ -84,5 +84,5 @@ export const useTags = ({
     }
   }, [])
 
-  return { yymmStart, setYymmStart, yymmEnd, setYymmEnd }
+  return { yyyymmGte, setYyyymmGte, yyyymmLte, setYyyymmLte }
 }

@@ -36,9 +36,9 @@ const Page: React.FC = () => {
   // )
   const { getBookmarks } = useBookmarks()
   const { monthsOfBookmarkCreation, monthsOfUrlCreation } = useMonths()
-  const { yymmStart, setYymmStart, yymmEnd, setYymmEnd } = useTags({
-    initYymmStart: parseInt(queryParams.get('s') || '0') || null,
-    initYymmEnd: parseInt(queryParams.get('e') || '0') || null,
+  const { yyyymmGte, setYyyymmGte, yyyymmLte, setYyyymmLte } = useTags({
+    initYyyymmGte: parseInt(queryParams.get('s') || '0') || null,
+    initYyyymmLte: parseInt(queryParams.get('e') || '0') || null,
   })
   const { orderBy, setOrderBy, order, setOrder } = useOrderOptions({
     initOrderBy:
@@ -196,8 +196,8 @@ const Page: React.FC = () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
                         setOrderBy(OrderBy.BookmarkCreationDate)
-                        setYymmStart(null)
-                        setYymmEnd(null)
+                        setYyyymmGte(null)
+                        setYyyymmLte(null)
                         toggleOrderByDropdown()
                       },
                       isSelected: orderBy == OrderBy.BookmarkCreationDate,
@@ -208,8 +208,8 @@ const Page: React.FC = () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
                         setOrderBy(OrderBy.UrlCreationDate)
-                        setYymmStart(null)
-                        setYymmEnd(null)
+                        setYyyymmGte(null)
+                        setYyyymmLte(null)
                         toggleOrderByDropdown()
                       },
                       isSelected: orderBy == OrderBy.UrlCreationDate,
@@ -268,12 +268,12 @@ const Page: React.FC = () => {
                   ? monthsOfBookmarkCreation
                   : monthsOfUrlCreation
               }
-              onYymmChange={({ yymmStart, yymmEnd }) => {
-                setYymmStart(yymmStart)
-                setYymmEnd(yymmEnd)
+              onYymmChange={({ yyyymmGte, yyyymmLte }) => {
+                setYyyymmGte(yyyymmGte)
+                setYyyymmLte(yyyymmLte)
               }}
-              initYymmStart={yymmStart || undefined}
-              initYymmEnd={yymmEnd || undefined}
+              initYyyymmGte={yyyymmGte || undefined}
+              initYyyymmLte={yyyymmLte || undefined}
             />
           }
         />

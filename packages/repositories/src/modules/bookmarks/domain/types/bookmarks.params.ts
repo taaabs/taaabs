@@ -10,6 +10,8 @@ export namespace BookmarksParams {
     categoryId?: string
     after?: string
     filter?: LibraryFilter
+    yyyymmGte?: number
+    yyyymmLte?: number
   }
   export type Authorized = Base & {
     publicOnly?: boolean

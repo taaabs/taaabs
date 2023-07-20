@@ -5,19 +5,19 @@ import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 export namespace Months {
   export type Props = {
     months: {
-      yymm: number
+      yyyymm: number
       bookmarkCount: number
       starredCount: number
       nsfwCount: number
     }[]
-    initYymmStart?: number
-    initYymmEnd?: number
+    initYyyymmGte?: number
+    initYyyymmLte?: number
     onYymmChange: ({
-      yymmStart,
-      yymmEnd,
+      yyyymmGte,
+      yyyymmLte,
     }: {
-      yymmStart: number
-      yymmEnd: number
+      yyyymmGte: number
+      yyyymmLte: number
     }) => void
   }
 }
@@ -26,18 +26,18 @@ export const Months: React.FC<Months.Props> = (props) => {
   const onBrushDrag = useDebouncedCallback(
     ({ startIndex, endIndex }: { startIndex: number; endIndex: number }) => {
       props.onYymmChange({
-        yymmStart: props.months[startIndex].yymm,
-        yymmEnd: props.months[endIndex].yymm,
+        yyyymmGte: props.months[startIndex].yyyymm,
+        yyyymmLte: props.months[endIndex].yyyymm,
       })
     },
     [props.onYymmChange],
-    300,
+    200,
   )
 
   return (
     <div className={styles.graph}>
       <ResponsiveContainer width={'100%'} height={160}>
-        <AreaChart margin={{ left: 0, top: 16 }} data={props.months}>
+        <AreaChart margin={{ left: 0 }} data={props.months}>
           <Area
             type="basis"
             dataKey="bookmarkCount"
@@ -72,21 +72,21 @@ export const Months: React.FC<Months.Props> = (props) => {
           />
           <Brush
             startIndex={
-              props.initYymmStart
+              props.initYyyymmGte
                 ? props.months.findIndex(
-                    (month) => month.yymm == props.initYymmStart,
+                    (month) => month.yyyymm == props.initYyyymmGte,
                   )
                 : undefined
             }
             endIndex={
-              props.initYymmEnd
+              props.initYyyymmLte
                 ? props.months.findIndex(
-                    (month) => month.yymm == props.initYymmEnd,
+                    (month) => month.yyyymm == props.initYyyymmLte,
                   )
                 : undefined
             }
             height={24}
-            travellerWidth={20}
+            travellerWidth={24}
             fill="transparent"
             onChange={({ startIndex, endIndex }) => {
               if (startIndex == undefined || endIndex == undefined) return

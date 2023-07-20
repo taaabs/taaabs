@@ -12,12 +12,22 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       tags: params.tags?.join(','),
       category_id: params.categoryId,
       after: params.after,
+      filter: params.filter,
+      order_by: params.orderBy,
+      order: params.order,
+      epoch_gte: params.yyyymmGte
+        ? new Date(
+            parseInt(params.yyyymmGte.toString().substring(0, 4)),
+            parseInt(params.yyyymmGte.toString().substring(4, 6)) - 1,
+          ).getTime() / 1000
+        : undefined,
+      epoch_lte: params.yyyymmLte
+        ? new Date(
+            parseInt(params.yyyymmLte.toString().substring(0, 4)),
+            parseInt(params.yyyymmLte.toString().substring(4, 6)),
+          ).getTime() / 1000
+        : undefined,
       public_only: params.publicOnly,
-      // TODO: pass remaining params
-      // date_end:
-      // date_range:
-      // date_start:
-      // sort_by:
     }
 
     return fetch(
@@ -37,10 +47,18 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       filter: params.filter,
       order_by: params.orderBy,
       order: params.order,
-      // TODO: pass remaining params
-      // date_end:
-      // date_range:
-      // date_start:
+      epoch_gte: params.yyyymmGte
+        ? new Date(
+            parseInt(params.yyyymmGte.toString().substring(0, 4)),
+            parseInt(params.yyyymmGte.toString().substring(4, 6)) - 1,
+          ).getTime() / 1000
+        : undefined,
+      epoch_lte: params.yyyymmLte
+        ? new Date(
+            parseInt(params.yyyymmLte.toString().substring(0, 4)),
+            parseInt(params.yyyymmLte.toString().substring(4, 6)) + 1,
+          ).getTime() / 1000
+        : undefined,
     }
 
     return fetch(
