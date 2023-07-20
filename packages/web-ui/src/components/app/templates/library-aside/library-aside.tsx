@@ -19,7 +19,7 @@ export namespace LibraryAside {
       dropdown: React.ReactNode
       isDropdownVisible: boolean
     }
-    slotDateRange?: React.ReactNode
+    slotMonths?: React.ReactNode
     slotTags?: React.ReactNode
   }
 }
@@ -82,6 +82,7 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
             </div>
           </div>
         )}
+        {props.slotMonths}
       </div>
     </div>
   )

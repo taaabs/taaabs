@@ -14,8 +14,8 @@
     "find-deadcode": "ts-prune"
   },
   "dependencies": {
-    "beautiful-react-hooks": "^4.3.0",
     "@taaabs/shared": "workspace:*",
+    "beautiful-react-hooks": "^4.3.0",
     "blurhash": "^2.0.5",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.8",
@@ -25,6 +25,7 @@
     "react-dom": "18.2.0",
     "react-loading-skeleton": "^3.3.1",
     "react-sticky-box": "^2.0.4",
+    "recharts": "^2.7.2",
     "slideout": "^1.0.1",
     "vite-plugin-svgr": "^3.2.0"
   },

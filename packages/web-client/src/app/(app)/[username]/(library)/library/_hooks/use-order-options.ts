@@ -19,11 +19,19 @@ export const useOrderOptions = ({
   const [order, setOrder] = useState<Order>(initOrder)
 
   useUpdateEffect(() => {
-    const updatedQueryParams = updateQueryParam(
+    let updatedQueryParams: any
+    updatedQueryParams = updateQueryParam(
       queryParams,
       'b',
       Object.values(OrderBy).indexOf(orderBy).toString(),
     )
+    if (queryParams.get('s')) {
+      updatedQueryParams = updateQueryParam(updatedQueryParams, 's', '')
+    }
+    if (queryParams.get('e')) {
+      updatedQueryParams = updateQueryParam(updatedQueryParams, 'e', '')
+    }
+
     router.push(`/${params.username}/library?${updatedQueryParams}`, {
       scroll: false,
     })
@@ -35,6 +43,7 @@ export const useOrderOptions = ({
       'o',
       Object.values(Order).indexOf(order).toString(),
     )
+
     router.push(`/${params.username}/library?${updatedQueryParams}`, {
       scroll: false,
     })

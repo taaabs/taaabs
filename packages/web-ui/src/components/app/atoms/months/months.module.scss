@@ -1,0 +1,17 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.graph {
+  border-radius: var(--border-radius-10px);
+  background: var(--Months-background);
+  box-shadow: inset 0px 0px 0px 1px var(--border-color-secondary);
+  &__brush {
+    > rect:first-of-type {
+      stroke: none;
+    }
+    > g > rect {
+      fill: var(--Months-chart-brush-handle-fill);
+      rx: var(--border-radius-3px);
+    }
+  }
+}

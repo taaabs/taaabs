@@ -22,6 +22,7 @@ export const useFilterOptions = (initFilter: LibraryFilter) => {
       'f',
       Object.values(LibraryFilter).indexOf(selectedFilter).toString(),
     )
+
     router.push(`/${params.username}/library?${updatedQueryParams}`, {
       scroll: false,
     })

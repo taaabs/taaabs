@@ -19,6 +19,7 @@ import { Order } from '@shared/types/modules/bookmarks/order'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useMonths } from './_hooks/use-months'
 import { useTags } from './_hooks/use-tags'
+import { Months } from '@web-ui/components/app/atoms/months'
 
 const Page: React.FC = () => {
   const queryParams = useSearchParams()
@@ -34,8 +35,11 @@ const Page: React.FC = () => {
   //   (state) => state.months,
   // )
   const { getBookmarks } = useBookmarks()
-  useMonths()
-  useTags()
+  const { monthsOfBookmarkCreation, monthsOfUrlCreation } = useMonths()
+  const { yymmStart, setYymmStart, yymmEnd, setYymmEnd } = useTags({
+    initYymmStart: parseInt(queryParams.get('s') || '0') || null,
+    initYymmEnd: parseInt(queryParams.get('e') || '0') || null,
+  })
   const { orderBy, setOrderBy, order, setOrder } = useOrderOptions({
     initOrderBy:
       Object.values(OrderBy)[
@@ -195,6 +199,8 @@ const Page: React.FC = () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
                         setOrderBy(OrderBy.BookmarkCreationDate)
+                        setYymmStart(null)
+                        setYymmEnd(null)
                         toggleOrderByDropdown()
                       },
                       isSelected: orderBy == OrderBy.BookmarkCreationDate,
@@ -205,6 +211,8 @@ const Page: React.FC = () => {
                         if (isGettingFirstBookmarks || isGettingMoreBookmarks)
                           return
                         setOrderBy(OrderBy.UrlCreationDate)
+                        setYymmStart(null)
+                        setYymmEnd(null)
                         toggleOrderByDropdown()
                       },
                       isSelected: orderBy == OrderBy.UrlCreationDate,
@@ -256,6 +264,21 @@ const Page: React.FC = () => {
               </OutsideClickHandler>
             ),
           }}
+          slotMonths={
+            <Months
+              months={
+                orderBy == OrderBy.BookmarkCreationDate
+                  ? monthsOfBookmarkCreation
+                  : monthsOfUrlCreation
+              }
+              onYymmChange={({ yymmStart, yymmEnd }) => {
+                setYymmStart(yymmStart)
+                setYymmEnd(yymmEnd)
+              }}
+              initYymmStart={yymmStart || undefined}
+              initYymmEnd={yymmEnd || undefined}
+            />
+          }
         />
       }
       slotSidebar={

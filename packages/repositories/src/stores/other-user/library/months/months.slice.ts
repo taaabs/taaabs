@@ -5,8 +5,8 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 type Months = {
   yymm: number
   bookmarkCount: number
-  starredCount: number | null
-  nsfwCount: number | null
+  starredCount: number
+  nsfwCount: number
 }[]
 export type Tags = Record<string, number>
 
@@ -35,14 +35,16 @@ export const monthsSlice = createSlice({
     },
     setData(state, action: PayloadAction<MonthsRo.Public>) {
       state.data = action.payload
+      state.monthsOfBookmarkCreation = []
+      state.monthsOfUrlCreation = []
 
       Object.entries(action.payload.monthsOfBookmarkCreation).forEach(
         ([k, v]) => {
           state.monthsOfBookmarkCreation.push({
             yymm: parseInt(k),
             bookmarkCount: v.bookmarkCount,
-            starredCount: v.starredCount,
-            nsfwCount: v.nsfwCount,
+            starredCount: v.starredCount || 0,
+            nsfwCount: v.nsfwCount || 0,
           })
         },
       )
@@ -51,8 +53,8 @@ export const monthsSlice = createSlice({
         state.monthsOfUrlCreation.push({
           yymm: parseInt(k),
           bookmarkCount: v.bookmarkCount,
-          starredCount: v.starredCount,
-          nsfwCount: v.nsfwCount,
+          starredCount: v.starredCount || 0,
+          nsfwCount: v.nsfwCount || 0,
         })
       })
     },

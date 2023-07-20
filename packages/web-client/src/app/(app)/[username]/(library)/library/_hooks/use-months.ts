@@ -12,7 +12,8 @@ export const useMonths = () => {
   const queryParams = useSearchParams()
   const params = useParams()
   const dispatch = useLibraryDispatch()
-  const { data } = useLibrarySelector((state) => state.months)
+  const { data, monthsOfBookmarkCreation, monthsOfUrlCreation } =
+    useLibrarySelector((state) => state.months)
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
 
@@ -63,4 +64,6 @@ export const useMonths = () => {
       sessionStorage.removeItem('monthsData')
     }
   }, [])
+
+  return { monthsOfBookmarkCreation, monthsOfUrlCreation }
 }
