@@ -1,5 +1,6 @@
 import { Area, AreaChart, Brush, ResponsiveContainer } from 'recharts'
 import styles from './months.module.scss'
+import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 
 export namespace Months {
   export type Props = {
@@ -22,6 +23,17 @@ export namespace Months {
 }
 
 export const Months: React.FC<Months.Props> = (props) => {
+  const onBrushDrag = useDebouncedCallback(
+    ({ startIndex, endIndex }: { startIndex: number; endIndex: number }) => {
+      props.onYymmChange({
+        yymmStart: props.months[startIndex].yymm,
+        yymmEnd: props.months[endIndex].yymm,
+      })
+    },
+    [props.onYymmChange],
+    300,
+  )
+
   return (
     <div className={styles.graph}>
       <ResponsiveContainer width={'100%'} height={160}>
@@ -50,14 +62,14 @@ export const Months: React.FC<Months.Props> = (props) => {
             fill="transparent"
             animationDuration={0}
           />
-          {/* <Area
+          <Area
             type="basis"
             dataKey="nsfwCount"
             strokeWidth={1}
             stroke="var(--Months-chart-nsfw-stroke)"
             fill="transparent"
             animationDuration={0}
-          /> */}
+          />
           <Brush
             startIndex={
               props.initYymmStart
@@ -78,10 +90,7 @@ export const Months: React.FC<Months.Props> = (props) => {
             fill="transparent"
             onChange={({ startIndex, endIndex }) => {
               if (startIndex == undefined || endIndex == undefined) return
-              props.onYymmChange({
-                yymmStart: props.months[startIndex].yymm,
-                yymmEnd: props.months[endIndex].yymm,
-              })
+              onBrushDrag({ startIndex, endIndex })
             }}
             className={styles.graph__brush}
           />
