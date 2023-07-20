@@ -37,8 +37,8 @@ const Page: React.FC = () => {
   const { getBookmarks } = useBookmarks()
   const { monthsOfBookmarkCreation, monthsOfUrlCreation } = useMonths()
   const { yyyymmGte, setYyyymmGte, yyyymmLte, setYyyymmLte } = useTags({
-    initYyyymmGte: parseInt(queryParams.get('s') || '0') || null,
-    initYyyymmLte: parseInt(queryParams.get('e') || '0') || null,
+    initYyyymmGte: parseInt(queryParams.get('gte') || '0') || null,
+    initYyyymmLte: parseInt(queryParams.get('lte') || '0') || null,
   })
   const { orderBy, setOrderBy, order, setOrder } = useOrderOptions({
     initOrderBy:
@@ -268,8 +268,8 @@ const Page: React.FC = () => {
                 setYyyymmGte(yyyymmGte)
                 setYyyymmLte(yyyymmLte)
               }}
-              initYyyymmGte={yyyymmGte || undefined}
-              initYyyymmLte={yyyymmLte || undefined}
+              currentYyyymmGte={yyyymmGte || undefined}
+              currentYyyymmLte={yyyymmLte || undefined}
             />
           }
         />

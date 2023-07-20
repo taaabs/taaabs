@@ -13,10 +13,10 @@
     border: var(--border-primary);
   }
   & svg {
-    transform: translateY(25px);
+    transform: translateY(28px);
   }
   &__brush {
-    transform: translateY(-25px);
+    transform: translateY(-28px);
     > rect:first-of-type {
       stroke: none;
     }

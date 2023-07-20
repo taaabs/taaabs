@@ -9,8 +9,8 @@ export const Primary = () => (
   <StorybookMargin>
     <div style={{ width: 260 }}>
       <Months
-        initYyyymmGte={2303}
-        initYyyymmLte={2309}
+        currentYyyymmGte={2303}
+        currentYyyymmLte={2309}
         months={[
           { yyyymm: 2302, bookmarkCount: 30, starredCount: 0, nsfwCount: 0 },
           { yyyymm: 2303, bookmarkCount: 5, starredCount: 0, nsfwCount: 0 },

@@ -10,8 +10,8 @@ export namespace Months {
       starredCount: number
       nsfwCount: number
     }[]
-    initYyyymmGte?: number
-    initYyyymmLte?: number
+    currentYyyymmGte?: number
+    currentYyyymmLte?: number
     onYymmChange: ({
       yyyymmGte,
       yyyymmLte,
@@ -37,7 +37,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   return (
     <div className={styles.graph}>
       <ResponsiveContainer width={'100%'} height={160}>
-        <AreaChart margin={{ left: 0 }} data={props.months}>
+        <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
           <Area
             type="basis"
             dataKey="bookmarkCount"
@@ -72,16 +72,16 @@ export const Months: React.FC<Months.Props> = (props) => {
           />
           <Brush
             startIndex={
-              props.initYyyymmGte
+              props.currentYyyymmGte
                 ? props.months.findIndex(
-                    (month) => month.yyyymm == props.initYyyymmGte,
+                    (month) => month.yyyymm == props.currentYyyymmGte,
                   )
                 : undefined
             }
             endIndex={
-              props.initYyyymmLte
+              props.currentYyyymmLte
                 ? props.months.findIndex(
-                    (month) => month.yyyymm == props.initYyyymmLte,
+                    (month) => month.yyyymm == props.currentYyyymmLte,
                   )
                 : undefined
             }
