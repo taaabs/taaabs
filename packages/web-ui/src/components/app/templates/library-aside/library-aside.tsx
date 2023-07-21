@@ -83,6 +83,7 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
           </div>
         )}
         {props.slotMonths}
+        {props.slotTags}
       </div>
     </div>
   )

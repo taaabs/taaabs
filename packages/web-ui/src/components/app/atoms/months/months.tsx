@@ -1,7 +1,6 @@
 import { Area, AreaChart, Brush, ResponsiveContainer } from 'recharts'
 import styles from './months.module.scss'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
-import { useIsHydrated } from '@shared/hooks'
 
 export namespace Months {
   export type Props = {
@@ -26,8 +25,6 @@ export namespace Months {
 }
 
 export const Months: React.FC<Months.Props> = (props) => {
-  const isHydrated = useIsHydrated()
-
   const onBrushDrag = useDebouncedCallback(
     ({ startIndex, endIndex }: { startIndex: number; endIndex: number }) => {
       if (!props.months) throw 'Months should be set.'
@@ -81,16 +78,32 @@ export const Months: React.FC<Months.Props> = (props) => {
             <Brush
               startIndex={
                 props.currentYyyymmGte
-                  ? props.months.findIndex(
+                  ? props.months.find(
                       (month) => month.yyyymm == props.currentYyyymmGte,
                     )
+                    ? props.months.findIndex(
+                        (month) => month.yyyymm == props.currentYyyymmGte,
+                      )
+                    : props.months.findIndex(
+                        (month) =>
+                          month.yyyymm ==
+                          Math.min(...props.months!.map((m) => m.yyyymm)),
+                      )
                   : undefined
               }
               endIndex={
                 props.currentYyyymmLte
-                  ? props.months.findIndex(
+                  ? props.months.find(
                       (month) => month.yyyymm == props.currentYyyymmLte,
                     )
+                    ? props.months.findIndex(
+                        (month) => month.yyyymm == props.currentYyyymmLte,
+                      )
+                    : props.months.findIndex(
+                        (month) =>
+                          month.yyyymm ==
+                          Math.max(...props.months!.map((m) => m.yyyymm)),
+                      )
                   : undefined
               }
               height={40}
@@ -105,13 +118,15 @@ export const Months: React.FC<Months.Props> = (props) => {
           </AreaChart>
         </ResponsiveContainer>
       )}
-      {isHydrated && props.months && props.months.length == 1 && (
+      {props.months && props.months.length == 1 && (
         <div className={styles['graph__too-few-months']}>
-          All bookmarks are within one month.
+          All bookmarks are within one month
         </div>
       )}
-      {isHydrated && !props.months && (
-        <div className={styles['graph__too-few-months']}>No data to plot.</div>
+      {props.months && props.months.length == 0 && (
+        <div className={styles['graph__too-few-months']}>
+          Nothing to plot here...
+        </div>
       )}
     </div>
   )

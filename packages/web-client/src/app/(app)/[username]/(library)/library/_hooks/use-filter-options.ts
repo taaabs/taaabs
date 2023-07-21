@@ -17,18 +17,11 @@ export const useFilterOptions = (initFilter: LibraryFilter) => {
   const [selectedFilter, setFilter] = useState<LibraryFilter>(initFilter)
 
   useUpdateEffect(() => {
-    let updatedQueryParams: any
-    updatedQueryParams = updateQueryParam(
+    const updatedQueryParams = updateQueryParam(
       queryParams,
       'f',
       Object.values(LibraryFilter).indexOf(selectedFilter).toString(),
     )
-    if (queryParams.get('gte')) {
-      updatedQueryParams = updateQueryParam(updatedQueryParams, 'gte', '')
-    }
-    if (queryParams.get('lte')) {
-      updatedQueryParams = updateQueryParam(updatedQueryParams, 'lte', '')
-    }
     router.push(`/${params.username}/library?${updatedQueryParams}`, {
       scroll: false,
     })

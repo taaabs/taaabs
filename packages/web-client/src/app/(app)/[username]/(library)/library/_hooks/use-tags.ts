@@ -23,6 +23,20 @@ export const useTags = ({
   const [yyyymmLte, setYyyymmLte] = useState<number | null>(initYyyymmLte)
   const [lastQueryOrderBy, setLastQueryOrderBy] = useState<string | null>(null)
 
+  const addTagToQueryParams = (tag: string) => {
+    let tags = ''
+    const queryTags = queryParams.get('t')
+    if (queryTags) {
+      tags = queryTags + `,${tag}`
+    } else {
+      tags = tag
+    }
+    const updatedQueryParams = updateQueryParam(queryParams, 't', tags)
+    router.push(`/${params.username}/library?${updatedQueryParams}`, {
+      scroll: false,
+    })
+  }
+
   useUpdateEffect(() => {
     if (yyyymmGte && yyyymmLte) {
       const queryYyyymmGte = queryParams.get('gte')
@@ -98,5 +112,12 @@ export const useTags = ({
     }
   }, [])
 
-  return { yyyymmGte, setYyyymmGte, yyyymmLte, setYyyymmLte }
+  return {
+    yyyymmGte,
+    setYyyymmGte,
+    yyyymmLte,
+    setYyyymmLte,
+    tags,
+    addTagToQueryParams,
+  }
 }

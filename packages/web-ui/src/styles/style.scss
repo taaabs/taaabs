@@ -1,5 +1,5 @@
 @use 'foundation' as *;
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 *,
 *::before,
@@ -84,8 +84,15 @@ html {
   --Months-chart-starred-fill: #fff545;
   --Months-chart-nsfw-stroke: #ef4444;
   --Months-chart-brush-handle-fill: #fff;
-  --Months-chart-brush-handle-lines:  var(--neutral300);
-  --Months-chart-brush-handle-stroke:  var(--neutral300);
+  --Months-chart-brush-handle-lines: var(--neutral300);
+  --Months-chart-brush-handle-stroke: var(--neutral300);
+  --Tags-tag-foreground: var(--neutral500);
+  --Tags-tag-foreground-hover: var(--neutral700);
+  --Tags-yields-foreground: var(--neutral400);
+  --Tags-background: var(--plain-white);
+  --Tags-background-hover: var(--neutral200);
+  --Tags-border-color: var(--neutral200);
+  --Tags-tag-border-color-hover: var(--neutral300);
 }
 
 body {

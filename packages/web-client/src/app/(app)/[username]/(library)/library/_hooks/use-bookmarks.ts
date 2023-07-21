@@ -109,6 +109,7 @@ export const useBookmarks = () => {
       queryYyyyGte != lastQueryYyyymmGte ||
       queryYyyyLte != lastQueryYyyymmLte
     ) {
+      console.log('xxx')
       getBookmarks({})
     }
   }, [queryParams])

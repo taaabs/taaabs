@@ -1,0 +1,32 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--distance-6px);
+  justify-content: space-between;
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--distance-4px);
+    font-family: var(--font-family-inter-tight);
+    font-size: var(--font-size-13px);
+    height: var(--button-dimension-28px);
+    @include transition-100ms(all);
+    @include hover {
+      border-color: var(--Tags-tag-border-color-hover);
+      > span:first-child {
+        color: var(--Tags-tag-foreground-hover);
+      }
+    }
+    > span:first-child {
+      @include transition-100ms(all);
+      color: var(--Tags-tag-foreground);
+      font-weight: var(--font-weight-inter-tight-medium);
+    }
+    > span:last-child {
+      color: var(--Tags-yields-foreground);
+    }
+  }
+}

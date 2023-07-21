@@ -66,6 +66,12 @@ export const processTags = ({
       })
     })
 
-    dispatch(monthsActions.setTags(tags))
+    const sortedTags = Object.fromEntries(
+      Object.keys(tags)
+        .sort()
+        .map((key) => [key, tags[key]]),
+    )
+
+    dispatch(monthsActions.setTags(sortedTags))
   }
 }

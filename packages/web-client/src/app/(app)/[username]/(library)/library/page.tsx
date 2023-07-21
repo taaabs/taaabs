@@ -20,6 +20,7 @@ import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookm
 import { useMonths } from './_hooks/use-months'
 import { useTags } from './_hooks/use-tags'
 import { Months } from '@web-ui/components/app/atoms/months'
+import { Tags } from '@web-ui/components/app/atoms/tags'
 
 const Page: React.FC = () => {
   const queryParams = useSearchParams()
@@ -36,7 +37,14 @@ const Page: React.FC = () => {
   // )
   const { getBookmarks } = useBookmarks()
   const { monthsOfBookmarkCreation, monthsOfUrlCreation } = useMonths()
-  const { yyyymmGte, setYyyymmGte, yyyymmLte, setYyyymmLte } = useTags({
+  const {
+    yyyymmGte,
+    setYyyymmGte,
+    yyyymmLte,
+    setYyyymmLte,
+    tags,
+    addTagToQueryParams,
+  } = useTags({
     initYyyymmGte: parseInt(queryParams.get('gte') || '0') || null,
     initYyyymmLte: parseInt(queryParams.get('lte') || '0') || null,
   })
@@ -272,6 +280,7 @@ const Page: React.FC = () => {
               currentYyyymmLte={yyyymmLte || undefined}
             />
           }
+          slotTags={tags && <Tags tags={tags} onClick={addTagToQueryParams} />}
         />
       }
       slotSidebar={

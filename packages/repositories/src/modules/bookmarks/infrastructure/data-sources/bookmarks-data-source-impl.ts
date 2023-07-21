@@ -18,13 +18,13 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       epoch_gte: params.yyyymmGte
         ? new Date(
             parseInt(params.yyyymmGte.toString().substring(0, 4)),
-            parseInt(params.yyyymmGte.toString().substring(4, 6)) - 1,
+            parseInt(params.yyyymmGte.toString().substring(4, 6)),
           ).getTime() / 1000
         : undefined,
       epoch_lte: params.yyyymmLte
         ? new Date(
             parseInt(params.yyyymmLte.toString().substring(0, 4)),
-            parseInt(params.yyyymmLte.toString().substring(4, 6)),
+            parseInt(params.yyyymmLte.toString().substring(4, 6)) + 1,
           ).getTime() / 1000
         : undefined,
       public_only: params.publicOnly,
@@ -50,13 +50,13 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       epoch_gte: params.yyyymmGte
         ? new Date(
             parseInt(params.yyyymmGte.toString().substring(0, 4)),
-            parseInt(params.yyyymmGte.toString().substring(4, 6)) - 1,
+            parseInt(params.yyyymmGte.toString().substring(4, 6)),
           ).getTime() / 1000
         : undefined,
       epoch_lte: params.yyyymmLte
         ? new Date(
             parseInt(params.yyyymmLte.toString().substring(0, 4)),
-            parseInt(params.yyyymmLte.toString().substring(4, 6)) + 1,
+            parseInt(params.yyyymmLte.toString().substring(4, 6)) + 2,
           ).getTime() / 1000
         : undefined,
     }
