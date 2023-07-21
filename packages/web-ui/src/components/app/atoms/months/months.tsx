@@ -107,7 +107,7 @@ export const Months: React.FC<Months.Props> = (props) => {
                   : undefined
               }
               height={40}
-              travellerWidth={32}
+              travellerWidth={24}
               fill="transparent"
               onChange={({ startIndex, endIndex }) => {
                 if (startIndex == undefined || endIndex == undefined) return
@@ -124,9 +124,7 @@ export const Months: React.FC<Months.Props> = (props) => {
         </div>
       )}
       {props.months && props.months.length == 0 && (
-        <div className={styles['graph__too-few-months']}>
-          Nothing to plot here...
-        </div>
+        <div className={styles['graph__too-few-months']}>Nothing to plot</div>
       )}
     </div>
   )

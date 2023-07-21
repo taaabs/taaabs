@@ -24,10 +24,10 @@
     padding: 0 var(--distance-16px);
   }
   & svg {
-    transform: translateY(40px);
+    transform: translateY(43px);
   }
   &__brush {
-    transform: translateY(-46px) scale(0.9);
+    transform: translateY(-49px) scale(0.9);
     transform-origin: center;
     > rect:first-of-type {
       stroke: none;
