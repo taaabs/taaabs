@@ -35,7 +35,7 @@ export const Months: React.FC<Months.Props> = (props) => {
       })
     },
     [props.onYymmChange],
-    200,
+    300,
   )
 
   return (

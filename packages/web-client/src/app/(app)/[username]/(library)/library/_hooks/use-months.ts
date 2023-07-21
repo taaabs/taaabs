@@ -23,12 +23,13 @@ export const useMonths = () => {
     }
 
     const queryTags = queryParams.get('t')
+    setLastQueryTags(queryTags)
     if (queryTags) {
-      setLastQueryTags(queryTags)
       getMonthsParams.tags = queryTags.split(',')
     }
 
     const queryFilter = queryParams.get('f')
+    setLastQueryFilter(queryFilter)
     if (queryFilter) {
       setLastQueryFilter(queryFilter)
       getMonthsParams.filter =

@@ -35,46 +35,46 @@ export const useBookmarks = () => {
     }
 
     const queryTags = queryParams.get('t')
+    setLastQueryTags(queryTags)
     if (queryTags) {
-      setLastQueryTags(queryTags)
       getBookmarksParams.tags = queryTags.split(',')
     }
 
     const queryCategoryId = queryParams.get('c')
+    setLastQueryCatId(queryCategoryId)
     if (queryCategoryId) {
-      setLastQueryCatId(queryCategoryId)
       getBookmarksParams.categoryId = queryCategoryId
     }
 
     const queryFilter = queryParams.get('f')
+    setLastQueryFilter(queryFilter)
     if (queryFilter) {
-      setLastQueryFilter(queryFilter)
       getBookmarksParams.filter =
         Object.values(LibraryFilter)[parseInt(queryFilter)]
     }
 
     const queryOrderBy = queryParams.get('b')
+    setLastQueryOrderBy(queryOrderBy)
     if (queryOrderBy) {
-      setLastQueryOrderBy(queryOrderBy)
       getBookmarksParams.orderBy =
         Object.values(OrderBy)[parseInt(queryOrderBy)]
     }
 
     const queryOrder = queryParams.get('o')
+    setLastQueryOrder(queryOrder)
     if (queryOrder) {
-      setLastQueryOrder(queryOrder)
       getBookmarksParams.order = Object.values(Order)[parseInt(queryOrder)]
     }
 
     const queryYyyymmGte = queryParams.get('gte')
+    setLastQueryYyyymmGte(queryYyyymmGte)
     if (queryYyyymmGte) {
-      setLastQueryYyyymmGte(queryYyyymmGte)
       getBookmarksParams.yyyymmGte = parseInt(queryYyyymmGte)
     }
 
     const queryYyyymmLte = queryParams.get('lte')
+    setLastQueryYyyymmLte(queryYyyymmLte)
     if (queryYyyymmLte) {
-      setLastQueryYyyymmLte(queryYyyymmLte)
       getBookmarksParams.yyyymmLte = parseInt(queryYyyymmLte)
     }
 
