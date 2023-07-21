@@ -36,7 +36,11 @@ const Page: React.FC = () => {
   //   (state) => state.months,
   // )
   const { getBookmarks } = useBookmarks()
-  const { monthsOfBookmarkCreation, monthsOfUrlCreation } = useMonths()
+  const {
+    monthsOfBookmarkCreation,
+    monthsOfUrlCreation,
+    isGettingData: isGettingMonthsData,
+  } = useMonths()
   const {
     yyyymmGte,
     setYyyymmGte,
@@ -115,7 +119,11 @@ const Page: React.FC = () => {
                     {
                       label: 'All',
                       onClick: () => {
-                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
                           return
                         if (isNsfwExcluded) {
                           setFilter(LibraryFilter.AllNsfwExcluded)
@@ -131,7 +139,11 @@ const Page: React.FC = () => {
                     {
                       label: 'Starred only',
                       onClick: () => {
-                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
                           return
                         if (isNsfwExcluded) {
                           setFilter(LibraryFilter.StarredOnlyNsfwExcluded)
@@ -147,7 +159,11 @@ const Page: React.FC = () => {
                     {
                       label: 'Archived only',
                       onClick: () => {
-                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
                           return
                         if (isNsfwExcluded) {
                           setFilter(LibraryFilter.ArchivedOnlyNsfwExcluded)
@@ -166,7 +182,11 @@ const Page: React.FC = () => {
                     {
                       label: 'Exclude NSFW',
                       onClick: () => {
-                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
                           return
                         toggleExcludeNsfw()
                         toggleFilterDropdown()
@@ -201,7 +221,11 @@ const Page: React.FC = () => {
                         OrderBy.BookmarkCreationDate,
                       ),
                       onClick: () => {
-                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
                           return
                         setOrderBy(OrderBy.BookmarkCreationDate)
                         toggleOrderByDropdown()
@@ -211,7 +235,11 @@ const Page: React.FC = () => {
                     {
                       label: _orderByOptionToLabel(OrderBy.UrlCreationDate),
                       onClick: () => {
-                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
                           return
                         setOrderBy(OrderBy.UrlCreationDate)
                         toggleOrderByDropdown()
@@ -243,7 +271,11 @@ const Page: React.FC = () => {
                     {
                       label: _orderOptionToLabel(Order.Desc),
                       onClick: () => {
-                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
                           return
                         setOrder(Order.Desc)
                         toggleOrderDropdown()
@@ -253,7 +285,11 @@ const Page: React.FC = () => {
                     {
                       label: _orderOptionToLabel(Order.Asc),
                       onClick: () => {
-                        if (isGettingFirstBookmarks || isGettingMoreBookmarks)
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
                           return
                         setOrder(Order.Asc)
                         toggleOrderDropdown()
@@ -266,21 +302,47 @@ const Page: React.FC = () => {
             ),
           }}
           slotMonths={
-            <Months
-              months={
-                orderBy == OrderBy.BookmarkCreationDate
-                  ? monthsOfBookmarkCreation
-                  : monthsOfUrlCreation
-              }
-              onYymmChange={({ yyyymmGte, yyyymmLte }) => {
-                setYyyymmGte(yyyymmGte)
-                setYyyymmLte(yyyymmLte)
+            <div
+              style={{
+                pointerEvents:
+                  isGettingFirstBookmarks ||
+                  isGettingMoreBookmarks ||
+                  isGettingMonthsData
+                    ? 'none'
+                    : 'all',
               }}
-              currentYyyymmGte={yyyymmGte || undefined}
-              currentYyyymmLte={yyyymmLte || undefined}
-            />
+            >
+              <Months
+                months={
+                  orderBy == OrderBy.BookmarkCreationDate
+                    ? monthsOfBookmarkCreation
+                    : monthsOfUrlCreation
+                }
+                onYymmChange={({ yyyymmGte, yyyymmLte }) => {
+                  setYyyymmGte(yyyymmGte)
+                  setYyyymmLte(yyyymmLte)
+                }}
+                currentYyyymmGte={yyyymmGte || undefined}
+                currentYyyymmLte={yyyymmLte || undefined}
+              />
+            </div>
           }
-          slotTags={tags && <Tags tags={tags} onClick={addTagToQueryParams} />}
+          slotTags={
+            tags && (
+              <div
+                style={{
+                  pointerEvents:
+                    isGettingFirstBookmarks ||
+                    isGettingMoreBookmarks ||
+                    isGettingMonthsData
+                      ? 'none'
+                      : 'all',
+                }}
+              >
+                <Tags tags={tags} onClick={addTagToQueryParams} />
+              </div>
+            )
+          }
         />
       }
       slotSidebar={

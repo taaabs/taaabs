@@ -12,7 +12,7 @@ export const useMonths = () => {
   const queryParams = useSearchParams()
   const params = useParams()
   const dispatch = useLibraryDispatch()
-  const { data, monthsOfBookmarkCreation, monthsOfUrlCreation } =
+  const { data, monthsOfBookmarkCreation, monthsOfUrlCreation, isGettingData } =
     useLibrarySelector((state) => state.months)
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
@@ -66,5 +66,5 @@ export const useMonths = () => {
     }
   }, [])
 
-  return { monthsOfBookmarkCreation, monthsOfUrlCreation }
+  return { monthsOfBookmarkCreation, monthsOfUrlCreation, isGettingData }
 }
