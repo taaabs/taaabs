@@ -124,7 +124,9 @@ export const Months: React.FC<Months.Props> = (props) => {
         </div>
       )}
       {props.months && props.months.length == 0 && (
-        <div className={styles['graph__too-few-months']}>Nothing to plot</div>
+        <div className={styles['graph__too-few-months']}>
+          There is nothing to plot
+        </div>
       )}
     </div>
   )
