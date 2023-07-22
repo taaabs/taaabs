@@ -2,7 +2,7 @@ import { MonthsRo } from '@repositories/modules/months/domain/types/months.ro'
 import * as thunks from './action-creators'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-type Months = {
+export type Months = {
   yyyymm: number
   bookmarkCount: number
   starredCount: number
@@ -15,7 +15,8 @@ export type MonthsState = {
   data: MonthsRo.Public | null
   monthsOfBookmarkCreation: Months | null
   monthsOfUrlCreation: Months | null
-  tags: Tags | null
+  tagsOfBookmarkCreation: Tags | null
+  tagsOfUrlCreation: Tags | null
 }
 
 const initialState: MonthsState = {
@@ -23,7 +24,8 @@ const initialState: MonthsState = {
   data: null,
   monthsOfBookmarkCreation: null,
   monthsOfUrlCreation: null,
-  tags: null,
+  tagsOfBookmarkCreation: null,
+  tagsOfUrlCreation: null,
 }
 
 export const monthsSlice = createSlice({
@@ -61,8 +63,11 @@ export const monthsSlice = createSlice({
       state.monthsOfBookmarkCreation = monthsOfBookmarkCreation
       state.monthsOfUrlCreation = monthsOfUrlCreation
     },
-    setTags(state, action: PayloadAction<Tags>) {
-      state.tags = action.payload
+    setTagsOfBookmarkCreation(state, action: PayloadAction<Tags>) {
+      state.tagsOfBookmarkCreation = action.payload
+    },
+    setTagsOfUrlCreation(state, action: PayloadAction<Tags>) {
+      state.tagsOfUrlCreation = action.payload
     },
   },
 })

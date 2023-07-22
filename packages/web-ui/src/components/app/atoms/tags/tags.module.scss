@@ -16,16 +16,15 @@
     @include transition-100ms(all);
     @include hover {
       span:first-child {
-        color: var(--Tags-tag-foreground-hover);
+        text-decoration: underline;
       }
     }
     span:first-child {
       @include transition-100ms(all);
-      color: var(--Tags-tag-foreground);
-      font-weight: var(--font-weight-inter-tight-medium);
+      color: var(--text-color-variant);
     }
     span:last-child {
-      color: var(--Tags-yields-foreground);
+      color: var(--text-color-dimmed);
     }
   }
 }

@@ -32,9 +32,7 @@ const Page: React.FC = () => {
     isGettingMoreBookmarks,
     hasMoreBookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
-  // const { isGettingData: isGettingMonthsData } = useLibrarySelector(
-  //   (state) => state.months,
-  // )
+
   const { getBookmarks } = useBookmarks()
   const {
     monthsOfBookmarkCreation,
@@ -42,32 +40,18 @@ const Page: React.FC = () => {
     isGettingData: isGettingMonthsData,
   } = useMonths()
   const {
-    yyyymmGte,
-    setYyyymmGte,
-    yyyymmLte,
-    setYyyymmLte,
-    tags,
+    setGteLteQueryParams,
+    tagsOfBookmarkCreation,
+    tagsOfUrlCreation,
     addTagToQueryParams,
-  } = useTags({
-    initYyyymmGte: parseInt(queryParams.get('gte') || '0') || null,
-    initYyyymmLte: parseInt(queryParams.get('lte') || '0') || null,
-  })
-  const { orderBy, setOrderBy, order, setOrder } = useOrderOptions({
+  } = useTags()
+  const { orderBy, setOrderBy, setOrderQueryParam } = useOrderOptions({
     initOrderBy:
       Object.values(OrderBy)[
         parseInt(
           queryParams.get('b') ||
             Object.values(OrderBy)
               .indexOf(BookmarksFetchingDefaults.Common.orderBy)
-              .toString(),
-        )
-      ],
-    initOrder:
-      Object.values(Order)[
-        parseInt(
-          queryParams.get('o') ||
-            Object.values(Order)
-              .indexOf(BookmarksFetchingDefaults.Common.order)
               .toString(),
         )
       ],
@@ -255,7 +239,16 @@ const Page: React.FC = () => {
             button: (
               <ButtonSelect
                 label="Order"
-                currentValue={_orderOptionToLabel(order)}
+                currentValue={_orderOptionToLabel(
+                  Object.values(Order)[
+                    parseInt(
+                      queryParams.get('o') ||
+                        Object.values(Order)
+                          .indexOf(BookmarksFetchingDefaults.Common.order)
+                          .toString(),
+                    )
+                  ],
+                )}
                 isActive={isOrderDropdownVisible}
                 onClick={toggleOrderDropdown}
               />
@@ -277,10 +270,17 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setOrder(Order.Desc)
+                        setOrderQueryParam(Order.Desc)
                         toggleOrderDropdown()
                       },
-                      isSelected: order == Order.Desc,
+
+                      isSelected:
+                        parseInt(
+                          queryParams.get('o') ||
+                            Object.values(Order)
+                              .indexOf(BookmarksFetchingDefaults.Common.order)
+                              .toString(),
+                        ) == Object.values(Order).indexOf(Order.Desc),
                     },
                     {
                       label: _orderOptionToLabel(Order.Asc),
@@ -291,10 +291,16 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setOrder(Order.Asc)
+                        setOrderQueryParam(Order.Asc)
                         toggleOrderDropdown()
                       },
-                      isSelected: order == Order.Asc,
+                      isSelected:
+                        parseInt(
+                          queryParams.get('o') ||
+                            Object.values(Order)
+                              .indexOf(BookmarksFetchingDefaults.Common.order)
+                              .toString(),
+                        ) == Object.values(Order).indexOf(Order.Asc),
                     },
                   ]}
                 />
@@ -314,21 +320,32 @@ const Page: React.FC = () => {
             >
               <Months
                 months={
-                  orderBy == OrderBy.BookmarkCreationDate
-                    ? monthsOfBookmarkCreation
-                    : monthsOfUrlCreation
+                  bookmarks
+                    ? bookmarks.length >= 2
+                      ? orderBy == OrderBy.BookmarkCreationDate
+                        ? monthsOfBookmarkCreation
+                        : monthsOfUrlCreation
+                      : []
+                    : null
                 }
-                onYymmChange={({ yyyymmGte, yyyymmLte }) => {
-                  setYyyymmGte(yyyymmGte)
-                  setYyyymmLte(yyyymmLte)
+                onYyyymmChange={({ gte, lte }) => {
+                  setGteLteQueryParams({ gte, lte })
                 }}
-                currentYyyymmGte={yyyymmGte || undefined}
-                currentYyyymmLte={yyyymmLte || undefined}
+                currentGte={
+                  parseInt(queryParams.get('gte') || '0') || undefined
+                }
+                currentLte={
+                  parseInt(queryParams.get('lte') || '0') || undefined
+                }
+                selectedTags={queryParams.get('t') || undefined}
               />
             </div>
           }
           slotTags={
-            tags && (
+            tagsOfBookmarkCreation &&
+            tagsOfUrlCreation &&
+            bookmarks &&
+            bookmarks.length >= 2 && (
               <div
                 style={{
                   pointerEvents:
@@ -339,7 +356,14 @@ const Page: React.FC = () => {
                       : 'all',
                 }}
               >
-                <Tags tags={tags} onClick={addTagToQueryParams} />
+                <Tags
+                  tags={
+                    orderBy == OrderBy.BookmarkCreationDate
+                      ? tagsOfBookmarkCreation
+                      : tagsOfUrlCreation
+                  }
+                  onClick={addTagToQueryParams}
+                />
               </div>
             )
           }

@@ -31,7 +31,7 @@ export const useBookmarks = () => {
 
   const getBookmarks = ({ getNextPage }: { getNextPage?: boolean }) => {
     const getBookmarksParams: BookmarksParams.Public = {
-      username: params.username,
+      username: params.username as string,
     }
 
     const queryTags = queryParams.get('t')

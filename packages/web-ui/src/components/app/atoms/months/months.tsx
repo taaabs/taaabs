@@ -1,6 +1,7 @@
 import { Area, AreaChart, Brush, ResponsiveContainer } from 'recharts'
 import styles from './months.module.scss'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
+import { useEffect, useState } from 'react'
 
 export namespace Months {
   export type Props = {
@@ -12,36 +13,53 @@ export namespace Months {
           nsfwCount: number
         }[]
       | null
-    currentYyyymmGte?: number
-    currentYyyymmLte?: number
-    onYymmChange: ({
-      yyyymmGte,
-      yyyymmLte,
-    }: {
-      yyyymmGte: number
-      yyyymmLte: number
-    }) => void
+    currentGte?: number
+    currentLte?: number
+    onYyyymmChange: ({ gte, lte }: { gte: number; lte: number }) => void
+    selectedTags?: string
   }
 }
 
 export const Months: React.FC<Months.Props> = (props) => {
+  const [key, setKey] = useState('')
+  const [draggedGte, setDraggedGte] = useState<number | null>(null)
+  const [draggedLte, setDraggedLte] = useState<number | null>(null)
+  const [selectedTags, setSelectedTags] = useState<string | null>(null)
+
   const onBrushDrag = useDebouncedCallback(
     ({ startIndex, endIndex }: { startIndex: number; endIndex: number }) => {
-      if (!props.months) throw 'Months should be set.'
+      if (!props.months || !props.months[startIndex] || !props.months[endIndex])
+        return
 
-      props.onYymmChange({
-        yyyymmGte: props.months[startIndex].yyyymm,
-        yyyymmLte: props.months[endIndex].yyyymm,
+      setDraggedGte(props.months[startIndex].yyyymm)
+      setDraggedLte(props.months[endIndex].yyyymm)
+
+      props.onYyyymmChange({
+        gte: props.months[startIndex].yyyymm,
+        lte: props.months[endIndex].yyyymm,
       })
     },
-    [props.onYymmChange],
-    300,
+    [props.onYyyymmChange],
+    200,
   )
+
+  useEffect(() => {
+    if (
+      props.currentGte != draggedGte ||
+      props.currentLte != draggedLte ||
+      props.selectedTags != selectedTags
+    ) {
+      setSelectedTags(props.selectedTags || null)
+      setKey(
+        `${props.currentGte}${props.currentLte}${props.selectedTags || ''}`,
+      )
+    }
+  }, [props.currentGte, props.currentLte, props.selectedTags])
 
   return (
     <div className={styles.graph}>
       {props.months && props.months.length >= 2 && (
-        <ResponsiveContainer width={'100%'} height={160}>
+        <ResponsiveContainer width={'100%'} height={160} key={key}>
           <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
             <Area
               type="basis"
@@ -74,35 +92,50 @@ export const Months: React.FC<Months.Props> = (props) => {
               stroke="var(--Months-chart-nsfw-stroke)"
               fill="transparent"
               animationDuration={0}
+              strokeOpacity={1}
             />
             <Brush
               startIndex={
-                props.currentYyyymmGte
+                props.months && props.currentGte
                   ? props.months.find(
-                      (month) => month.yyyymm == props.currentYyyymmGte,
+                      (month) => month.yyyymm == props.currentGte,
                     )
                     ? props.months.findIndex(
-                        (month) => month.yyyymm == props.currentYyyymmGte,
+                        (month) => month.yyyymm == props.currentGte,
                       )
                     : props.months.findIndex(
                         (month) =>
                           month.yyyymm ==
-                          Math.min(...props.months!.map((m) => m.yyyymm)),
+                          props
+                            .months!.map((m) => m.yyyymm)
+                            .reduce((prev, curr) =>
+                              Math.abs(curr - props.currentGte!) <
+                              Math.abs(prev - props.currentGte!)
+                                ? curr
+                                : prev,
+                            ),
                       )
                   : undefined
               }
               endIndex={
-                props.currentYyyymmLte
+                props.months && props.currentLte
                   ? props.months.find(
-                      (month) => month.yyyymm == props.currentYyyymmLte,
+                      (month) => month.yyyymm == props.currentLte,
                     )
                     ? props.months.findIndex(
-                        (month) => month.yyyymm == props.currentYyyymmLte,
+                        (month) => month.yyyymm == props.currentLte,
                       )
                     : props.months.findIndex(
                         (month) =>
                           month.yyyymm ==
-                          Math.max(...props.months!.map((m) => m.yyyymm)),
+                          props
+                            .months!.map((m) => m.yyyymm)
+                            .reduce((prev, curr) =>
+                              Math.abs(curr - props.currentLte!) <
+                              Math.abs(prev - props.currentLte!)
+                                ? curr
+                                : prev,
+                            ),
                       )
                   : undefined
               }

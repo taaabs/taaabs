@@ -19,7 +19,7 @@ export const useMonths = () => {
 
   const getMonths = () => {
     const getMonthsParams: MonthsParams.Public = {
-      username: params.username,
+      username: params.username as string,
     }
 
     const queryTags = queryParams.get('t')

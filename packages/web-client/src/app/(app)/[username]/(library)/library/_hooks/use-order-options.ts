@@ -5,18 +5,11 @@ import { updateQueryParam } from '@/utils/update-query-param'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 
-export const useOrderOptions = ({
-  initOrderBy,
-  initOrder,
-}: {
-  initOrderBy: OrderBy
-  initOrder: Order
-}) => {
+export const useOrderOptions = ({ initOrderBy }: { initOrderBy: OrderBy }) => {
   const queryParams = useSearchParams()
   const router = useRouter()
   const params = useParams()
   const [orderBy, setOrderBy] = useState<OrderBy>(initOrderBy)
-  const [order, setOrder] = useState<Order>(initOrder)
 
   useUpdateEffect(() => {
     let updatedQueryParams: any
@@ -42,7 +35,7 @@ export const useOrderOptions = ({
     })
   }, [orderBy])
 
-  useUpdateEffect(() => {
+  const setOrderQueryParam = (order: Order) => {
     const updatedQueryParams = updateQueryParam(
       queryParams,
       'o',
@@ -52,7 +45,7 @@ export const useOrderOptions = ({
     router.push(`/${params.username}/library?${updatedQueryParams}`, {
       scroll: false,
     })
-  }, [order])
+  }
 
-  return { orderBy, setOrderBy, order, setOrder }
+  return { orderBy, setOrderBy, setOrderQueryParam }
 }

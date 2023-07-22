@@ -22,7 +22,7 @@ export const Primary = () => (
           { yyyymm: 2309, bookmarkCount: 10, starredCount: 0, nsfwCount: 4 },
           { yyyymm: 2310, bookmarkCount: 80, starredCount: 12, nsfwCount: 0 },
         ]}
-        onYymmChange={() => {}}
+        onYyyymmChange={() => {}}
       />
     </div>
   </StorybookMargin>
