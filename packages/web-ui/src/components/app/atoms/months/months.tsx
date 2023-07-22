@@ -3,16 +3,16 @@ import styles from './months.module.scss'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import { useEffect, useState } from 'react'
 
+type Months = {
+  yyyymm: number
+  bookmarkCount: number
+  starredCount: number
+  nsfwCount: number
+}[]
+
 export namespace Months {
   export type Props = {
-    months:
-      | {
-          yyyymm: number
-          bookmarkCount: number
-          starredCount: number
-          nsfwCount: number
-        }[]
-      | null
+    months: Months | null
     currentGte?: number
     currentLte?: number
     onYyyymmChange: ({ gte, lte }: { gte: number; lte: number }) => void
@@ -27,16 +27,21 @@ export const Months: React.FC<Months.Props> = (props) => {
   const [selectedTags, setSelectedTags] = useState<string | null>(null)
 
   const onBrushDrag = useDebouncedCallback(
-    ({ startIndex, endIndex }: { startIndex: number; endIndex: number }) => {
-      if (!props.months || !props.months[startIndex] || !props.months[endIndex])
-        return
-
-      setDraggedGte(props.months[startIndex].yyyymm)
-      setDraggedLte(props.months[endIndex].yyyymm)
+    ({
+      months,
+      startIndex,
+      endIndex,
+    }: {
+      months: Months
+      startIndex: number
+      endIndex: number
+    }) => {
+      setDraggedGte(months[startIndex].yyyymm)
+      setDraggedLte(months[endIndex].yyyymm)
 
       props.onYyyymmChange({
-        gte: props.months[startIndex].yyyymm,
-        lte: props.months[endIndex].yyyymm,
+        gte: months[startIndex].yyyymm,
+        lte: months[endIndex].yyyymm,
       })
     },
     [props.onYyyymmChange],
@@ -107,7 +112,8 @@ export const Months: React.FC<Months.Props> = (props) => {
                         (month) =>
                           month.yyyymm ==
                           props
-                            .months!.map((m) => m.yyyymm)
+                            .months!.filter((m) => m.yyyymm > props.currentGte!)
+                            .map((m) => m.yyyymm)
                             .reduce((prev, curr) =>
                               Math.abs(curr - props.currentGte!) <
                               Math.abs(prev - props.currentGte!)
@@ -129,7 +135,8 @@ export const Months: React.FC<Months.Props> = (props) => {
                         (month) =>
                           month.yyyymm ==
                           props
-                            .months!.map((m) => m.yyyymm)
+                            .months!.filter((m) => m.yyyymm < props.currentLte!)
+                            .map((m) => m.yyyymm)
                             .reduce((prev, curr) =>
                               Math.abs(curr - props.currentLte!) <
                               Math.abs(prev - props.currentLte!)
@@ -143,8 +150,14 @@ export const Months: React.FC<Months.Props> = (props) => {
               travellerWidth={24}
               fill="transparent"
               onChange={({ startIndex, endIndex }) => {
-                if (startIndex == undefined || endIndex == undefined) return
-                onBrushDrag({ startIndex, endIndex })
+                if (
+                  startIndex == undefined ||
+                  endIndex == undefined ||
+                  !props.months
+                )
+                  return
+
+                onBrushDrag({ months: props.months, startIndex, endIndex })
               }}
               className={styles.graph__brush}
             />

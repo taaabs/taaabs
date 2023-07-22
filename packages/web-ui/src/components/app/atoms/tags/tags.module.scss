@@ -13,14 +13,13 @@
     font-family: var(--font-family-inter-tight);
     font-size: var(--font-size-13px);
     height: var(--button-dimension-28px);
-    @include transition-100ms(all);
     @include hover {
       span:first-child {
-        text-decoration: underline;
+        text-decoration: none;
       }
     }
     span:first-child {
-      @include transition-100ms(all);
+      text-decoration: underline;
       color: var(--text-color-variant);
     }
     span:last-child {

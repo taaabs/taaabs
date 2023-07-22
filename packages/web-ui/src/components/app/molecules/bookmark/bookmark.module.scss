@@ -227,8 +227,9 @@
     &__saves {
       font-size: var(--font-size-1-3rem);
       color: var(--text-color-variant);
+      text-decoration: underline;
       @include hover {
-        text-decoration: underline;
+        text-decoration: none;
       }
     }
     &__date {

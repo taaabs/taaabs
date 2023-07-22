@@ -1,39 +1,24 @@
-import { useState } from 'react'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { updateQueryParam } from '@/utils/update-query-param'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 
-export const useOrderOptions = ({ initOrderBy }: { initOrderBy: OrderBy }) => {
+export const useOrderOptions = () => {
   const queryParams = useSearchParams()
   const router = useRouter()
   const params = useParams()
-  const [orderBy, setOrderBy] = useState<OrderBy>(initOrderBy)
 
-  useUpdateEffect(() => {
-    let updatedQueryParams: any
-    updatedQueryParams = updateQueryParam(
+  const setOrderByQueryParam = (orderBy: OrderBy) => {
+    const updatedQueryParam = updateQueryParam(
       queryParams,
       'b',
       Object.values(OrderBy).indexOf(orderBy).toString(),
     )
-    if (queryParams.get('s')) {
-      updatedQueryParams = updateQueryParam(updatedQueryParams, 's', '')
-    }
-    if (queryParams.get('e')) {
-      updatedQueryParams = updateQueryParam(updatedQueryParams, 'e', '')
-    }
-    if (queryParams.get('gte')) {
-      updatedQueryParams = updateQueryParam(updatedQueryParams, 'gte', '')
-    }
-    if (queryParams.get('lte')) {
-      updatedQueryParams = updateQueryParam(updatedQueryParams, 'lte', '')
-    }
-    router.push(`/${params.username}/library?${updatedQueryParams}`, {
+
+    router.push(`/${params.username}/library?${updatedQueryParam}`, {
       scroll: false,
     })
-  }, [orderBy])
+  }
 
   const setOrderQueryParam = (order: Order) => {
     const updatedQueryParams = updateQueryParam(
@@ -47,5 +32,5 @@ export const useOrderOptions = ({ initOrderBy }: { initOrderBy: OrderBy }) => {
     })
   }
 
-  return { orderBy, setOrderBy, setOrderQueryParam }
+  return { setOrderByQueryParam, setOrderQueryParam }
 }

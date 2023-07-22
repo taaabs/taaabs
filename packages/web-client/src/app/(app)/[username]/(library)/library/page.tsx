@@ -45,17 +45,7 @@ const Page: React.FC = () => {
     tagsOfUrlCreation,
     addTagToQueryParams,
   } = useTags()
-  const { orderBy, setOrderBy, setOrderQueryParam } = useOrderOptions({
-    initOrderBy:
-      Object.values(OrderBy)[
-        parseInt(
-          queryParams.get('b') ||
-            Object.values(OrderBy)
-              .indexOf(BookmarksFetchingDefaults.Common.orderBy)
-              .toString(),
-        )
-      ],
-  })
+  const { setOrderByQueryParam, setOrderQueryParam } = useOrderOptions()
   const { selectedFilter, setFilter, isNsfwExcluded, toggleExcludeNsfw } =
     useFilterOptions(
       Object.values(LibraryFilter)[
@@ -187,7 +177,16 @@ const Page: React.FC = () => {
             button: (
               <ButtonSelect
                 label="Order by"
-                currentValue={_orderByOptionToLabel(orderBy)}
+                currentValue={_orderByOptionToLabel(
+                  Object.values(OrderBy)[
+                    parseInt(
+                      queryParams.get('b') ||
+                        Object.values(OrderBy)
+                          .indexOf(BookmarksFetchingDefaults.Common.orderBy)
+                          .toString(),
+                    )
+                  ],
+                )}
                 isActive={isOrderByDropdownVisible}
                 onClick={toggleOrderByDropdown}
               />
@@ -211,10 +210,19 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setOrderBy(OrderBy.BookmarkCreationDate)
+                        setOrderByQueryParam(OrderBy.BookmarkCreationDate)
                         toggleOrderByDropdown()
                       },
-                      isSelected: orderBy == OrderBy.BookmarkCreationDate,
+                      isSelected:
+                        parseInt(
+                          queryParams.get('b') ||
+                            Object.values(OrderBy)
+                              .indexOf(BookmarksFetchingDefaults.Common.orderBy)
+                              .toString(),
+                        ) ==
+                        Object.values(OrderBy).indexOf(
+                          OrderBy.BookmarkCreationDate,
+                        ),
                     },
                     {
                       label: _orderByOptionToLabel(OrderBy.UrlCreationDate),
@@ -225,10 +233,17 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setOrderBy(OrderBy.UrlCreationDate)
+                        setOrderByQueryParam(OrderBy.UrlCreationDate)
                         toggleOrderByDropdown()
                       },
-                      isSelected: orderBy == OrderBy.UrlCreationDate,
+                      isSelected:
+                        parseInt(
+                          queryParams.get('b') ||
+                            Object.values(OrderBy)
+                              .indexOf(BookmarksFetchingDefaults.Common.orderBy)
+                              .toString(),
+                        ) ==
+                        Object.values(OrderBy).indexOf(OrderBy.UrlCreationDate),
                     },
                   ]}
                 />
@@ -320,13 +335,16 @@ const Page: React.FC = () => {
             >
               <Months
                 months={
-                  bookmarks
-                    ? bookmarks.length >= 2
-                      ? orderBy == OrderBy.BookmarkCreationDate
-                        ? monthsOfBookmarkCreation
-                        : monthsOfUrlCreation
-                      : []
-                    : null
+                  Object.values(OrderBy)[
+                    parseInt(
+                      queryParams.get('b') ||
+                        Object.values(OrderBy)
+                          .indexOf(BookmarksFetchingDefaults.Common.orderBy)
+                          .toString(),
+                    )
+                  ] == OrderBy.BookmarkCreationDate
+                    ? monthsOfBookmarkCreation
+                    : monthsOfUrlCreation
                 }
                 onYyyymmChange={({ gte, lte }) => {
                   setGteLteQueryParams({ gte, lte })
@@ -354,11 +372,24 @@ const Page: React.FC = () => {
                     isGettingMonthsData
                       ? 'none'
                       : 'all',
+                  opacity:
+                    isGettingFirstBookmarks ||
+                    isGettingMoreBookmarks ||
+                    isGettingMonthsData
+                      ? '0.3'
+                      : '1',
                 }}
               >
                 <Tags
                   tags={
-                    orderBy == OrderBy.BookmarkCreationDate
+                    Object.values(OrderBy)[
+                      parseInt(
+                        queryParams.get('b') ||
+                          Object.values(OrderBy)
+                            .indexOf(BookmarksFetchingDefaults.Common.orderBy)
+                            .toString(),
+                      )
+                    ] == OrderBy.BookmarkCreationDate
                       ? tagsOfBookmarkCreation
                       : tagsOfUrlCreation
                   }
