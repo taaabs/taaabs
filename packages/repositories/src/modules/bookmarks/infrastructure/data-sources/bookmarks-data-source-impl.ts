@@ -18,7 +18,7 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       epoch_gte: params.yyyymmGte
         ? new Date(
             parseInt(params.yyyymmGte.toString().substring(0, 4)),
-            parseInt(params.yyyymmGte.toString().substring(4, 6)) - 1,
+            parseInt(params.yyyymmGte.toString().substring(4, 6)),
           ).getTime() / 1000
         : undefined,
       epoch_lte: params.yyyymmLte
