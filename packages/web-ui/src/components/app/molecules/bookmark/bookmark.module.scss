@@ -85,6 +85,7 @@
   &__site {
     color: var(--Bookmark-site-foreground);
     font-size: var(--font-size-1-5rem);
+
     @include to992 {
       display: block;
       padding: var(--distance-7px) 0 var(--distance-11px) 0;
@@ -101,9 +102,12 @@
         content: ')';
       }
     }
+    span {
+      text-decoration: underline;
+    }
     @include hover {
       span {
-        text-decoration: underline;
+        text-decoration: none;
       }
     }
   }

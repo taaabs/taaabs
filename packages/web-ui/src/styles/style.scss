@@ -67,7 +67,6 @@ html {
   --TitleBar-background-desktop: var(--blue50);
   --TitleBar-background-mobile: rgba(219, 234, 254, 0.5);
   --TitleBar-primary-foreground: var(--blue800);
-  --TitleBar-secondary-foreground: var(--blue500);
   --Library-background: var(--neutral25);
   --skeleton-base-color: var(--neutral100);
   --skeleton-highlight-color: var(--neutral25);
@@ -86,9 +85,8 @@ html {
   --Months-chart-brush-handle-fill: #fff;
   --Months-chart-brush-handle-lines: var(--neutral300);
   --Months-chart-brush-handle-stroke: var(--neutral300);
-  --Tags-tag-foreground: var(--neutral500);
-  --Tags-tag-foreground-hover: var(--neutral700);
-  --Tags-yields-foreground: var(--neutral400);
+  --Tags-first-char-background: var(--blue50);
+  --Tags-first-char-foreground: var(--blue800);
 }
 
 body {

@@ -5,7 +5,26 @@
   display: flex;
   flex-wrap: wrap;
   column-gap: var(--distance-6px);
+  row-gap: var(--distance-4px);
   justify-content: space-between;
+  &::after {
+    content: '';
+    flex: auto;
+  }
+  &__firstChar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-14px);
+    height: var(--button-dimension-28px);
+    width: var(--button-dimension-28px);
+    border-radius: var(--border-radius-999px);
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-bold);
+    background: var(--Tags-first-char-background);
+    color: var(--Tags-first-char-foreground);
+    text-transform: uppercase;
+  }
   &__tag {
     display: inline-flex;
     align-items: center;
