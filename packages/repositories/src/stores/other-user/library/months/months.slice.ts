@@ -11,8 +11,8 @@ export type Months = {
 export type Tags = Record<string, number>
 
 export type MonthsState = {
-  isGettingData: boolean
-  data: MonthsRo.Public | null
+  isGettingMonthsData: boolean
+  monthsData: MonthsRo.Public | null
   monthsOfBookmarkCreation: Months | null
   monthsOfUrlCreation: Months | null
   tagsOfBookmarkCreation: Tags | null
@@ -20,8 +20,8 @@ export type MonthsState = {
 }
 
 const initialState: MonthsState = {
-  isGettingData: false,
-  data: null,
+  isGettingMonthsData: false,
+  monthsData: null,
   monthsOfBookmarkCreation: null,
   monthsOfUrlCreation: null,
   tagsOfBookmarkCreation: null,
@@ -33,10 +33,10 @@ export const monthsSlice = createSlice({
   initialState,
   reducers: {
     setIsGettingData(state, action: PayloadAction<boolean>) {
-      state.isGettingData = action.payload
+      state.isGettingMonthsData = action.payload
     },
     setData(state, action: PayloadAction<MonthsRo.Public>) {
-      state.data = action.payload
+      state.monthsData = action.payload
 
       const monthsOfBookmarkCreation: Months = []
       const monthsOfUrlCreation: Months = []

@@ -12,8 +12,12 @@ export const useMonths = () => {
   const queryParams = useSearchParams()
   const params = useParams()
   const dispatch = useLibraryDispatch()
-  const { data, monthsOfBookmarkCreation, monthsOfUrlCreation, isGettingData } =
-    useLibrarySelector((state) => state.months)
+  const {
+    monthsData,
+    monthsOfBookmarkCreation,
+    monthsOfUrlCreation,
+    isGettingMonthsData,
+  } = useLibrarySelector((state) => state.months)
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
 
@@ -48,10 +52,10 @@ export const useMonths = () => {
   }, [queryParams])
 
   useUpdateEffect(() => {
-    if (data) {
-      sessionStorage.setItem('monthsData', JSON.stringify(data))
+    if (monthsData) {
+      sessionStorage.setItem('monthsData', JSON.stringify(monthsData))
     }
-  }, [data])
+  }, [monthsData])
 
   useEffect(() => {
     const monthsData = sessionStorage.getItem('monthsData')
@@ -66,5 +70,5 @@ export const useMonths = () => {
     }
   }, [])
 
-  return { monthsOfBookmarkCreation, monthsOfUrlCreation, isGettingData }
+  return { monthsOfBookmarkCreation, monthsOfUrlCreation, isGettingMonthsData }
 }

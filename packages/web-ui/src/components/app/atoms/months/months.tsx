@@ -61,6 +61,10 @@ export const Months: React.FC<Months.Props> = (props) => {
     }
   }, [props.currentGte, props.currentLte, props.selectedTags])
 
+  useEffect(() => {
+    console.log(props.months)
+  }, [props.months])
+
   return (
     <div className={styles.graph}>
       {props.months && props.months.length >= 2 && (

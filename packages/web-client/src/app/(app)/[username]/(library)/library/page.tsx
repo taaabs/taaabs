@@ -34,11 +34,8 @@ const Page: React.FC = () => {
   } = useLibrarySelector((state) => state.bookmarks)
 
   const { getBookmarks } = useBookmarks()
-  const {
-    monthsOfBookmarkCreation,
-    monthsOfUrlCreation,
-    isGettingData: isGettingMonthsData,
-  } = useMonths()
+  const { monthsOfBookmarkCreation, monthsOfUrlCreation, isGettingMonthsData } =
+    useMonths()
   const {
     setGteLteQueryParams,
     tagsOfBookmarkCreation,
