@@ -85,7 +85,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   useEffect(() => {
     calculateCounts({ months: props.months, startIndex, endIndex })
     setKey(`${startIndex || ''}${endIndex || ''}${props.selectedTags || ''}`)
-  }, [startIndex, endIndex, props.selectedTags])
+  }, [startIndex, endIndex, props.selectedTags, props.months])
 
   useEffect(() => {
     setStartIndex(
