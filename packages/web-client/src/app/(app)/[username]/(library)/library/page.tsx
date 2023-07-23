@@ -358,9 +358,7 @@ const Page: React.FC = () => {
           }
           slotTags={
             tagsOfBookmarkCreation &&
-            tagsOfUrlCreation &&
-            bookmarks &&
-            bookmarks.length >= 2 && (
+            tagsOfUrlCreation && (
               <div
                 style={{
                   pointerEvents:

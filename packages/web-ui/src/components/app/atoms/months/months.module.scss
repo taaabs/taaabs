@@ -16,7 +16,7 @@
   @include hover {
     box-shadow: inset 0px 0px 0px 1px var(--border-color-primary);
   }
-  &__too-few-months {
+  &__info {
     color: var(--text-color-dimmed);
     text-align: center;
     font-size: var(--font-size-13px);
