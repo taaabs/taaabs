@@ -20,154 +20,120 @@ export const Primary = () => (
     >
       <Bookmark
         isStarred={false}
-        visibility="private"
         title="Lorem ipsum dolor sit amet"
-        url="https://example.com/test/lorem_ipsum"
-        site="example.com/test"
-        createdAt={new Date('2023-02-20')}
+        url="https://example.com/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum"
         isNsfw={false}
         isArchived={true}
         tags={[]}
         saves={2200}
-        onSiteClick={() => {}}
-        onDateClick={() => {}}
-        onSavesClick={() => {}}
-        onVisibilityClick={() => {}}
+        onClick={() => {}}
+        onMenuClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         isStarred={false}
-        visibility="private"
         title="Lorem ipsum dolor sit amet"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odio sodal, euismod odio ac, fermentum metus."
         url="https://example.com/test/lorem_ipsum"
-        site="example.com/test"
-        createdAt={new Date('2023-02-20')}
         isNsfw={false}
         isArchived={true}
         tags={[]}
         saves={2200}
-        onSiteClick={() => {}}
-        onDateClick={() => {}}
-        onSavesClick={() => {}}
+        onClick={() => {}}
+        onMenuClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         isStarred={false}
-        visibility="private"
         title="Lorem ipsum dolor sit amet"
         url="https://example.com/test/lorem_ipsum"
-        site="example.com/test"
-        createdAt={new Date('2023-02-20')}
         isNsfw={false}
         isArchived={true}
-        tags={['lorem', 'ipsum']}
+        tags={[
+          { name: 'lorem', yields: 8 },
+          { name: 'ipsum', yields: 2, isSelected: true },
+        ]}
         saves={2200}
-        onSiteClick={() => {}}
-        onDateClick={() => {}}
-        onSavesClick={() => {}}
+        onClick={() => {}}
+        onMenuClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         isStarred={true}
-        visibility="private"
         title="Lorem ipsum dolor sit amet"
         url="https://example.com/test/lorem_ipsum"
-        site="example.com/test"
-        createdAt={new Date('2023-02-20')}
         isNsfw={false}
         isArchived={true}
-        tags={['lorem', 'ipsum']}
+        tags={[
+          { name: 'lorem', yields: 8 },
+          { name: 'ipsum', yields: 2 },
+        ]}
         saves={2200}
-        onSiteClick={() => {}}
-        onDateClick={() => {}}
-        onSavesClick={() => {}}
+        onClick={() => {}}
+        onMenuClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         isStarred={false}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odio sodal, euismod odio ac, fermentum metus."
         url="https://example.com/test/lorem_ipsum"
-        site="example.com/test"
-        createdAt={new Date('2023-02-20')}
         isNsfw={true}
         isArchived={true}
         tags={[
-          'lorem1',
-          'ipsum2',
-          'lorem3',
-          'ipsum4',
-          'lorem5',
-          'ipsum6',
-          'lorem7',
-          'ipsum8',
-          'lorem9',
-          'ipsum10',
-          'lorem11',
-          'ipsum12',
-          'lorem13',
-          'ipsum14',
-          'lorem15',
-          'ipsum16',
-          'lorem17',
-          'ipsum18',
-          'lorem19',
-          'ipsum20',
+          { name: 'lorem', yields: 8 },
+          { name: 'lorem1', yields: 8 },
+          { name: 'lorem2', yields: 8 },
+          { name: 'lorem3', yields: 8 },
+          { name: 'lorem4', yields: 8 },
+          { name: 'ipsum', yields: 2 },
         ]}
         saves={2200}
-        onSiteClick={() => {}}
-        onDateClick={() => {}}
-        onSavesClick={() => {}}
+        onClick={() => {}}
+        onMenuClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         isStarred={false}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odio sodal, euismod odio ac, fermentum metus."
         url="https://example.com/test/lorem_ipsum"
-        site="example.com/test"
-        createdAt={new Date('2023-02-20')}
         isNsfw={false}
         isArchived={true}
-        tags={['lorem1', 'ipsum1', 'lorem2', 'ipsum2']}
+        tags={[
+          { name: 'lorem', yields: 8 },
+          { name: 'ipsum', yields: 2 },
+        ]}
         saves={2200}
-        onSiteClick={() => {}}
-        onDateClick={() => {}}
-        onSavesClick={() => {}}
-        onVisibilityClick={() => {}}
-        visibility="public"
+        onClick={() => {}}
+        onMenuClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         isStarred={true}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odio sodal, euismod odio ac, fermentum metus."
         url="https://example.com/test/lorem_ipsum"
-        site="example.com/test"
-        createdAt={new Date('2023-02-20')}
         isNsfw={true}
         isArchived={true}
-        tags={['lorem', 'ipsum']}
+        tags={[
+          { name: 'lorem', yields: 8 },
+          { name: 'ipsum', yields: 2 },
+        ]}
         saves={2200}
-        onSiteClick={() => {}}
-        onDateClick={() => {}}
-        onSavesClick={() => {}}
+        onClick={() => {}}
+        onMenuClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         isStarred={true}
         title="Lorem ipsum dolor sit amet"
         url="https://example.com/test/lorem_ipsum"
-        site="example.com/test"
-        createdAt={new Date('2023-02-20')}
         isNsfw={true}
         isArchived={true}
-        tags={['lorem', 'ipsum']}
+        tags={[
+          { name: 'lorem', yields: 8 },
+          { name: 'ipsum', yields: 2 },
+        ]}
         saves={2200}
-        onSiteClick={() => {}}
-        onDateClick={() => {}}
-        onSavesClick={() => {}}
+        onClick={() => {}}
+        onMenuClick={() => {}}
       />
       <StorybookSpacer />
     </div>

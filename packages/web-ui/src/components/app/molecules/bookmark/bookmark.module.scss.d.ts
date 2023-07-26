@@ -1,23 +1,19 @@
 declare const styles: {
   readonly container: string
   readonly main: string
+  readonly 'main--has-tags': string
   readonly main__title: string
   readonly 'main__title--starred': string
+  readonly main__title__saves: string
   readonly main__title__nsfw: string
   readonly main__title__text: string
-  readonly main__site: string
   readonly main__tags: string
   readonly main__tags__tag: string
   readonly 'main__tags__tag--condensed': string
-  readonly 'main__separator-middle': string
-  readonly 'main__separator-bottom': string
-  readonly main__description: string
   readonly actions: string
   readonly actions__button: string
-  readonly info: string
-  readonly info__inner: string
-  readonly info__inner__separator: string
-  readonly info__inner__saves: string
-  readonly info__inner__date: string
+  readonly link: string
+  readonly link__inner: string
+  readonly link__inner__element: string
 }
 export = styles

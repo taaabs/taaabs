@@ -5,7 +5,6 @@
   display: flex;
   flex-wrap: wrap;
   column-gap: var(--distance-6px);
-  row-gap: var(--distance-4px);
   justify-content: space-between;
   &::after {
     content: '';
@@ -14,16 +13,20 @@
   &__firstChar {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-14px);
-    height: var(--button-dimension-28px);
-    width: var(--button-dimension-28px);
-    border-radius: var(--border-radius-999px);
-    font-family: var(--font-family-plus-jakarta-sans);
-    font-weight: var(--font-weight-plus-jakarta-sans-bold);
-    background: var(--Tags-first-char-background);
-    color: var(--Tags-first-char-foreground);
-    text-transform: uppercase;
+    &__inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-14px);
+      height: var(--button-dimension-28px);
+      width: var(--button-dimension-28px);
+      border-radius: var(--border-radius-999px);
+      font-family: var(--font-family-plus-jakarta-sans);
+      font-weight: var(--font-weight-plus-jakarta-sans-bold);
+      background: var(--Tags-first-char-background);
+      color: var(--Tags-first-char-foreground);
+      text-transform: uppercase;
+    }
   }
   &__tag {
     display: inline-flex;
@@ -31,15 +34,15 @@
     gap: var(--distance-4px);
     font-family: var(--font-family-inter-tight);
     font-size: var(--font-size-13px);
-    height: var(--button-dimension-28px);
+    height: var(--button-dimension-34px);
     @include hover {
       span:first-child {
-        text-decoration: none;
+        text-decoration: underline;
       }
     }
     span:first-child {
-      text-decoration: underline;
-      color: var(--text-color-variant);
+      color: var(--Tags-tag-foreground);
+      font-weight: var(--font-weight-inter-tight-medium);
     }
     span:last-child {
       color: var(--text-color-dimmed);

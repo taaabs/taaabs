@@ -1,5 +1,5 @@
 @use 'foundation' as *;
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 *,
 *::before,
@@ -50,20 +50,18 @@ html {
   --SearchBox-background: var(--white);
   --SearchBox-shadow: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.03);
   --SearchBox-shadow-hover: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.06);
-  --Bookmark-background: var(--white);
+  --Bookmark-background: var(--plain-white);
   --Bookmark-link-foreground: var(--blue800);
-  --Bookmark-site-foreground: var(--yellow800);
-  --Bookmark-tag-border-color: var(--green100);
-  --Bookmark-tag-background: var(--green50);
-  --Bookmark-tag-foreground: var(--green600);
-  --Bookmark-tag-border-color-hover: var(--green200);
-  --Bookmark-tag-background-hover: var(--green100);
-  --Bookmark-tag-foreground-hover: var(--green700);
+  --Bookmark-link-visited-foreground: var(--purple800);
+  --Bookmark-title-foreground-hover: var(--blue800);
+  --Bookmark-tag-foreground: var(--green700);
   --Bookmark-nsfw-foreground: var(--white);
   --Bookmark-nsfw-background: var(--red500);
   --Bookmark-starred-title-background: var(--hightlight);
-  --Bookmark-action-fill: var(--neutral400);
-  --Bookmark-action-fill-hover: var(--neutral500);
+  --Bookmark-action-fill: var(--neutral300);
+  --Bookmark-action-fill-hover: var(--neutral400);
+  --Bookmark-saves-background: var(--blue100);
+  --Bookmark-saves-foreground: var(--blue800);
   --TitleBar-background-desktop: var(--blue50);
   --TitleBar-background-mobile: rgba(219, 234, 254, 0.5);
   --TitleBar-primary-foreground: var(--blue800);
@@ -85,8 +83,9 @@ html {
   --Months-chart-brush-handle-fill: #fff;
   --Months-chart-brush-handle-lines: var(--neutral300);
   --Months-chart-brush-handle-stroke: var(--neutral300);
+  --Tags-tag-foreground: var(--green700);
   --Tags-first-char-background: var(--blue50);
-  --Tags-first-char-foreground: var(--blue800);
+  --Tags-first-char-foreground: var(--blue600);
 }
 
 body {

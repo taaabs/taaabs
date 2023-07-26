@@ -367,12 +367,6 @@ const Page: React.FC = () => {
                     isGettingMonthsData
                       ? 'none'
                       : 'all',
-                  opacity:
-                    isGettingFirstBookmarks ||
-                    isGettingMoreBookmarks ||
-                    isGettingMonthsData
-                      ? '0.3'
-                      : '1',
                 }}
               >
                 <Tags

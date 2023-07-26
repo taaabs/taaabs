@@ -5,11 +5,12 @@
   display: grid;
   background: var(--Bookmark-background);
   border: var(--border-secondary);
+  cursor: pointer;
   @include transition-100ms(border-color);
   @include to992 {
     grid-template-areas:
       'main main'
-      'info actions';
+      'link actions';
     border-left-width: 0px;
     border-right-width: 0px;
     grid-template-columns: 1fr auto;
@@ -17,7 +18,7 @@
   @include at992 {
     grid-template-areas:
       'main actions'
-      'info actions';
+      'link actions';
     border-radius: var(--border-radius-10px);
     grid-template-columns: 1fr auto;
   }
@@ -31,127 +32,104 @@
   flex-direction: column;
   padding-top: var(--distance-12px);
   padding-left: var(--distance-16px);
+  padding-bottom: var(--distance-10px);
   @include to992 {
     padding-right: var(--distance-16px);
     border-bottom: 1px solid var(--border-color-secondary);
   }
+  &--has-tags {
+    @include to992 {
+      padding-bottom: var(--distance-2px);
+    }
+    @include at992 {
+      padding-bottom: 0;
+    }
+  }
   &__title {
     display: inline;
-    color: var(--Bookmark-link-foreground);
+    color: var(--text-color-normal);
     margin-right: var(--distance-0-6rem);
     &--starred {
-      padding: var(--distance-0-5rem) var(--distance-0-4rem)
-        var(--distance-0-3rem) var(--distance-0-4rem);
+      padding: var(--distance-0-6rem) var(--distance-0-4rem) 0.22rem
+        var(--distance-0-4rem);
       margin-left: calc(var(--distance-0-4rem) * -1);
       margin-right: calc(var(--distance-0-6rem) - var(--distance-0-4rem));
       background: var(--Bookmark-starred-title-background);
       box-decoration-break: clone;
       -webkit-box-decoration-break: clone;
     }
+    &__saves {
+      display: inline-flex;
+      align-items: center;
+      transform: translateY(-0.2rem);
+      border-radius: var(--border-radius-999px);
+      font-family: var(--font-family-plus-jakarta-sans);
+      font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
+      background: var(--Bookmark-saves-background);
+      color: var(--Bookmark-saves-foreground);
+      font-size: var(--font-size-1-4rem);
+      padding: 0 var(--distance-0-8rem);
+      height: var(--distance-2-0rem);
+      margin-right: var(--distance-0-6rem);
+    }
     &__nsfw {
       display: inline-flex;
-      font-weight: var(--font-weight-inter-bold);
+      align-items: center;
       color: var(--Bookmark-nsfw-foreground);
-      transform: scale(0.82) translateY(-0.2rem);
+      transform: translateY(-0.25rem);
       position: relative;
-      font-size: var(--font-size-1-3rem);
+      font-size: var(--font-size-1-2rem);
       margin-right: var(--distance-0-5rem);
-      &::before {
-        content: '';
-        border-radius: var(--border-radius-4px);
-        position: absolute;
-        width: 120%;
-        height: 120%;
-        top: 0;
-        left: 50%;
-        top: 50%;
-        transform: translateX(-50%) translateY(-52%);
-        background: var(--Bookmark-nsfw-background);
-        z-index: -1;
-      }
+      height: var(--distance-2-0rem);
+      background: var(--Bookmark-nsfw-background);
+      padding: 0 var(--distance-0-4rem);
+      border-radius: var(--border-radius-4px);
+      font-family: var(--font-family-plus-jakarta-sans);
+      font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
     }
     &__text {
+      display: inline;
       font-weight: var(--font-weight-inter-medium);
-      font-size: var(--font-size-2rem);
+      font-size: var(--font-size-1-9rem);
       margin-bottom: var(--distance-0-8rem);
       @include hover {
-        text-decoration: underline;
-      }
-      @include at992 {
-        font-size: var(--font-size-1-8rem);
-      }
-    }
-  }
-  &__site {
-    color: var(--Bookmark-site-foreground);
-    font-size: var(--font-size-1-5rem);
-
-    @include to992 {
-      display: block;
-      padding: var(--distance-7px) 0 var(--distance-11px) 0;
-    }
-    @include at992 {
-      margin: var(--distance-4px) 0 var(--distance-8px) 0;
-      font-size: var(--font-size-1-3rem);
-    }
-    @include at992 {
-      &::before {
-        content: '(';
-      }
-      &::after {
-        content: ')';
-      }
-    }
-    span {
-      text-decoration: underline;
-    }
-    @include hover {
-      span {
-        text-decoration: none;
+        color: var(--Bookmark-title-foreground-hover);
       }
     }
   }
   &__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--distance-7px);
-    padding-bottom: var(--distance-2px);
+    gap: var(--distance-0-8rem);
     &__tag {
-      font-size: var(--font-size-1-3rem);
-      color: var(--Bookmark-tag-foreground);
-      background: var(--Bookmark-tag-background);
-      border-radius: var(--border-radius-4px);
-      border: 1px solid var(--Bookmark-tag-border-color);
-      padding: 0 var(--distance-0-7rem);
-      height: var(--distance-2-8rem);
-      font-weight: var(--font-weight-inter-medium);
-      @include transition-100ms(all);
-
+      display: flex;
+      align-items: center;
+      gap: var(--distance-0-4rem);
+      height: var(--button-dimension-34px);
       @include hover {
-        border-color: var(--Bookmark-tag-border-color-hover);
-        background: var(--Bookmark-tag-background-hover);
-        color: var(--Bookmark-tag-foreground-hover);
+        > div > span:first-child {
+          text-decoration: underline;
+        }
+      }
+      > div > span:first-child {
+        font-size: var(--font-size-1-5rem);
+        color: var(--Bookmark-tag-foreground);
+        font-weight: var(--font-weight-inter-medium);
+      }
+      > div > span:last-child {
+        color: var(--text-color-dimmed);
+        font-size: var(--font-size-1-3rem);
+        margin-left: var(--distance-0-3rem);
       }
       &--condensed {
         @include to992 {
           font-family: var(--font-family-inter-tight);
+          > span:first-child {
+            color: var(--Bookmark-tag-foreground);
+            font-weight: var(--font-weight-inter-medium);
+          }
         }
       }
-    }
-  }
-  &__separator-middle {
-    height: var(--distance-6px);
-  }
-  &__separator-bottom {
-    @include to992 {
-      height: var(--distance-8px);
-    }
-  }
-  &__description {
-    color: var(--text-color-variant);
-    font-size: var(--font-size-1-5rem);
-    @include to992 {
-      padding-right: var(--distance-16px);
     }
   }
 }
@@ -159,21 +137,24 @@
   grid-area: actions;
   display: flex;
   @include to992 {
-    margin-right: var(--distance-10px);
+    margin-right: var(--distance-9px);
   }
   @include at992 {
     flex-direction: column;
-    margin-top: var(--distance-9px);
+    margin-top: var(--distance-7px);
+    margin-left: var(--distance-8px);
   }
   &__button {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--button-dimension-40px);
-    height: var(--button-dimension-40px);
+    @include to992 {
+      width: var(--button-dimension-48px);
+      height: var(--button-dimension-48px);
+    }
     @include at992 {
-      width: var(--button-dimension-34px);
-      height: var(--button-dimension-28px);
+      width: var(--button-dimension-40px);
+      height: var(--button-dimension-34px);
     }
     &:last-of-type {
       @include to992 {
@@ -185,10 +166,6 @@
       height: var(--icon-dimension-18px);
       fill: var(--Bookmark-action-fill);
       @include transition-100ms(fill);
-      @include at992 {
-        width: var(--icon-dimension-16px);
-        height: var(--icon-dimension-16px);
-      }
     }
     @include hover {
       svg {
@@ -197,51 +174,64 @@
     }
   }
 }
-.info {
-  grid-area: info;
-  &__inner {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    padding-left: var(--distance-16px);
-    @include at992 {
-      padding: var(--distance-8px) var(--distance-16px);
+.link {
+  grid-area: link;
+  position: relative;
+  @include at992 {
+    margin-bottom: var(--distance-12px);
+  }
+  @include to992 {
+    overflow: hidden;
+    &::after {
+      position: absolute;
+      width: var(--distance-60px);
+      right: 0;
+      top: 0;
+      height: 100%;
+      content: '';
+      color: transparent;
+      background: linear-gradient(
+        to left,
+        var(--Bookmark-background),
+        transparent
+      );
     }
-    &__separator {
+  }
+  &__inner {
+    padding-left: var(--distance-16px);
+    display: flex;
+    @include to992 {
+      align-items: center;
+      height: 100%;
+      overflow-x: scroll;
+    }
+    &::before {
+      content: '↪';
+      transform: translateY(var(--distance-0-1rem));
+      padding-right: var(--distance-0-3rem);
+      font-weight: var(--font-weight-inter-semi-bold);
+      color: var(--text-color-normal);
+      font-size: var(--font-size-1-5rem);
+    }
+    &__element {
+      display: inline-flex;
+      color: var(--text-color-variant);
+      font-size: var(--font-size-1-5rem);
+      color: var(--Bookmark-link-foreground);
+      text-decoration: underline;
       @include to992 {
-        margin: 0 var(--distance-12px);
-        background: var(--border-color-secondary);
-        width: var(--distance-1px);
+        padding-right: var(--distance-60px);
       }
       @include at992 {
-        display: flex;
-        align-items: center;
-        color: var(--text-color-dimmed);
-        padding: 0 var(--distance-5px);
-        &:last-of-type {
-          display: none;
-        }
-        &::after {
-          content: '·';
-          color: var(--text-color-dimmed);
-          font-size: var(--font-size-1-3rem);
-        }
+        overflow-wrap: anywhere;
       }
-    }
-    &__saves {
-      font-size: var(--font-size-1-3rem);
-      color: var(--text-color-variant);
-      text-decoration: underline;
       @include hover {
         text-decoration: none;
       }
-    }
-    &__date {
-      font-size: var(--font-size-1-3rem);
-      color: var(--text-color-dimmed);
-      @include to992 {
-        display: flex;
-        align-items: center;
+      &:visited {
+        span {
+          color: var(--Bookmark-link-visited-foreground);
+        }
       }
     }
   }

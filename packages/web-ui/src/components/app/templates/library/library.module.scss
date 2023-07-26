@@ -173,14 +173,14 @@
       }
     }
     &__end-of-bookmarks {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: var(--text-color-dimmed);
-      width: 100%;
-      font-size: var(--font-size-13px);
-      height: 27vh;
+      display: none;
       @include at992 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-color-dimmed);
+        width: 100%;
+        font-size: var(--font-size-13px);
         height: 36vh;
       }
       &--hidden {
@@ -195,7 +195,7 @@
     top: 0;
     bottom: 0;
     right: 0;
-    height: 100vh;
+    height: 100svh;
     display: none;
     padding-top: var(--header-mobile-height);
     padding-bottom: var(--BottomNavigationBar-height);
