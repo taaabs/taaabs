@@ -39,7 +39,7 @@
   }
   &--has-tags {
     @include to992 {
-      padding-bottom: var(--distance-2px);
+      padding-bottom: var(--distance-3px);
     }
     @include at992 {
       padding-bottom: 0;
@@ -50,9 +50,9 @@
     color: var(--text-color-normal);
     margin-right: var(--distance-0-6rem);
     &--starred {
-      padding: var(--distance-0-6rem) var(--distance-0-4rem) 0.22rem
-        var(--distance-0-4rem);
-      margin-left: calc(var(--distance-0-4rem) * -1);
+      padding: var(--distance-0-7rem) var(--distance-0-5rem) 0.22rem
+        var(--distance-0-5rem);
+      margin-left: calc(var(--distance-0-5rem) * -1);
       margin-right: calc(var(--distance-0-6rem) - var(--distance-0-4rem));
       background: var(--Bookmark-starred-title-background);
       box-decoration-break: clone;
@@ -92,15 +92,12 @@
       font-weight: var(--font-weight-inter-medium);
       font-size: var(--font-size-1-9rem);
       margin-bottom: var(--distance-0-8rem);
-      @include hover {
-        color: var(--Bookmark-title-foreground-hover);
-      }
     }
   }
   &__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--distance-0-8rem);
+    column-gap: var(--distance-0-8rem);
     &__tag {
       display: flex;
       align-items: center;
@@ -184,12 +181,12 @@
     overflow: hidden;
     &::after {
       position: absolute;
-      width: var(--distance-60px);
+      width: var(--distance-40px);
       right: 0;
       top: 0;
       height: 100%;
       content: '';
-      color: transparent;
+      pointer-events: none;
       background: linear-gradient(
         to left,
         var(--Bookmark-background),
@@ -203,15 +200,6 @@
     @include to992 {
       align-items: center;
       height: 100%;
-      overflow-x: scroll;
-    }
-    &::before {
-      content: '↪';
-      transform: translateY(var(--distance-0-1rem));
-      padding-right: var(--distance-0-3rem);
-      font-weight: var(--font-weight-inter-semi-bold);
-      color: var(--text-color-normal);
-      font-size: var(--font-size-1-5rem);
     }
     &__element {
       display: inline-flex;
@@ -220,7 +208,8 @@
       color: var(--Bookmark-link-foreground);
       text-decoration: underline;
       @include to992 {
-        padding-right: var(--distance-60px);
+        height: 100%;
+        align-items: center;
       }
       @include at992 {
         overflow-wrap: anywhere;
@@ -229,9 +218,7 @@
         text-decoration: none;
       }
       &:visited {
-        span {
-          color: var(--Bookmark-link-visited-foreground);
-        }
+        color: var(--Bookmark-link-visited-foreground);
       }
     }
   }
