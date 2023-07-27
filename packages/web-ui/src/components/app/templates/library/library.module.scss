@@ -172,19 +172,18 @@
         pointer-events: none;
       }
     }
-    &__end-of-bookmarks {
-      display: none;
-      @include at992 {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: var(--text-color-dimmed);
-        width: 100%;
-        font-size: var(--font-size-13px);
-        height: 36vh;
+    &__info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--text-color-dimmed);
+      width: 100%;
+      font-size: var(--font-size-13px);
+      @include to992 {
+        height: 20vh;
       }
-      &--hidden {
-        visibility: hidden;
+      @include at992 {
+        height: 36vh;
       }
     }
   }

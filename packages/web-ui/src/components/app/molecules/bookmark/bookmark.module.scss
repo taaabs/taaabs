@@ -50,7 +50,7 @@
     color: var(--text-color-normal);
     margin-right: var(--distance-0-6rem);
     &--starred {
-      padding: var(--distance-0-7rem) var(--distance-0-5rem) 0.22rem
+      padding: var(--distance-0-7rem) var(--distance-0-5rem) 0.28rem
         var(--distance-0-5rem);
       margin-left: calc(var(--distance-0-5rem) * -1);
       margin-right: calc(var(--distance-0-6rem) - var(--distance-0-4rem));
@@ -76,7 +76,7 @@
       display: inline-flex;
       align-items: center;
       color: var(--Bookmark-nsfw-foreground);
-      transform: scale(0.9) translateY(-0.3rem);
+      transform: scale(0.9) translateY(-0.33rem);
       transform-origin: left;
       position: relative;
       font-size: var(--font-size-1-2rem);
@@ -172,47 +172,24 @@
 }
 .link {
   grid-area: link;
-  position: relative;
   @include at992 {
     margin-bottom: var(--distance-12px);
   }
   @include to992 {
     overflow: hidden;
-    &::after {
-      position: absolute;
-      width: var(--distance-40px);
-      right: 0;
-      top: 0;
-      height: 100%;
-      content: '';
-      pointer-events: none;
-      background: linear-gradient(
-        to left,
-        var(--Bookmark-background),
-        transparent
-      );
-    }
   }
   &__inner {
-    padding-left: var(--distance-16px);
     display: flex;
+    padding-left: var(--distance-16px);
     @include to992 {
-      align-items: center;
       height: 100%;
+      align-items: center;
     }
     &__element {
-      display: inline-flex;
-      color: var(--text-color-variant);
+      word-break: break-all;
       font-size: var(--font-size-1-5rem);
       color: var(--Bookmark-link-foreground);
       @include text-decoration-underline;
-      @include to992 {
-        height: 100%;
-        align-items: center;
-      }
-      @include at992 {
-        overflow-wrap: anywhere;
-      }
       @include hover {
         text-decoration: none;
       }

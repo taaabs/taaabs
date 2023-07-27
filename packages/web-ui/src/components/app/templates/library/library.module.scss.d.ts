@@ -13,8 +13,7 @@ declare const styles: {
   readonly main__inner__skeleton: string
   readonly main__inner__bookmarks: string
   readonly 'main__inner__bookmarks--loading': string
-  readonly 'main__inner__end-of-bookmarks': string
-  readonly 'main__inner__end-of-bookmarks--hidden': string
+  readonly main__inner__info: string
   readonly aside: string
   readonly aside__inner: string
   readonly aside__inner__stickybox: string

@@ -256,14 +256,6 @@ export const Library: React.FC<Library.Props> = (props) => {
                   text={props.titleBar ? props.titleBar : undefined}
                 />
               </div>
-              {props.showBookmarksSkeleton && (
-                <div className={styles['main__inner__skeleton']}>
-                  {/* We render 100 items to ensure "DestkopTitleBar" is not visible when user scrolls a bit and reloads tab */}
-                  {[...Array(100)].map((_, i) => (
-                    <Skeleton key={i} />
-                  ))}
-                </div>
-              )}
               <div
                 className={cn([
                   styles.main__inner__bookmarks,
@@ -281,24 +273,26 @@ export const Library: React.FC<Library.Props> = (props) => {
               >
                 {props.slotBookmarks}
               </div>
-              <div
-                className={cn([
-                  styles['main__inner__end-of-bookmarks'],
-                  {
-                    [styles['main__inner__end-of-bookmarks--hidden']]:
-                      props.showBookmarksSkeleton,
-                  },
-                ])}
-                ref={endOfBookmarks}
-              >
-                {props.isGettingFirstBookmarks
-                  ? 'Loading...'
-                  : props.noResults
-                  ? 'No results'
-                  : props.hasMoreBookmarks
-                  ? 'Loading more results...'
-                  : 'End of results'}
-              </div>
+              <div ref={endOfBookmarks} />
+              {!props.showBookmarksSkeleton &&
+                !props.isGettingMoreBookmarks && (
+                  <div className={styles['main__inner__info']}>
+                    {props.isGettingFirstBookmarks
+                      ? 'Loading...'
+                      : props.noResults
+                      ? 'No results'
+                      : 'End of results'}
+                  </div>
+                )}
+              {(props.showBookmarksSkeleton ||
+                props.isGettingMoreBookmarks) && (
+                <div className={styles['main__inner__skeleton']}>
+                  {/* We render 100 items to ensure "DestkopTitleBar" is not visible when user scrolls a bit and reloads a tab */}
+                  {[...Array(100)].map((_, i) => (
+                    <Skeleton key={i} />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

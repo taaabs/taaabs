@@ -1,4 +1,5 @@
 import { Icon } from '@web-ui/components/common/atoms/icon'
+import TextTruncate from 'react-text-truncate'
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
 
@@ -107,7 +108,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
             }}
             href={props.url}
           >
-            {props.url}
+            <TextTruncate line={2} truncateText="…" text={props.url} />
           </a>
         </div>
       </div>

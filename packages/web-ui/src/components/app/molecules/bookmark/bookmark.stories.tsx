@@ -21,7 +21,7 @@ export const Primary = () => (
       <Bookmark
         isStarred={false}
         title="Lorem ipsum dolor sit amet"
-        url="https://example.com/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum"
+        url="https://example.com/test/lorem_ipsum/test/lorem_ipsum/test/test/lorem_ipsum/test/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum"
         isNsfw={false}
         tags={[]}
         saves={2200}
