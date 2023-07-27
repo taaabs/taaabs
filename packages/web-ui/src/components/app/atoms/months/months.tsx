@@ -1,9 +1,10 @@
 import { Area, AreaChart, Brush, ResponsiveContainer } from 'recharts'
 import styles from './months.module.scss'
-import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import useThrottledCallback from 'beautiful-react-hooks/useThrottledCallback'
-import { useEffect, useState } from 'react'
+import useSwipe from 'beautiful-react-hooks/useSwipe'
+import { useEffect, useRef, useState } from 'react'
 import { useIsHydrated } from '@shared/hooks'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 type Months = {
   yyyymm: number
@@ -24,31 +25,38 @@ export namespace Months {
 
 export const Months: React.FC<Months.Props> = (props) => {
   const isHydrated = useIsHydrated()
+  const graph = useRef(null)
+  const { swiping: isSwiping } = useSwipe(graph, {
+    preventDefault: false,
+    passive: false,
+  })
   const [key, setKey] = useState('')
   const [startIndex, setStartIndex] = useState<number | undefined>(undefined)
   const [endIndex, setEndIndex] = useState<number | undefined>(undefined)
+  const [draggedStartIndex, setDraggedStartIndex] = useState<
+    number | undefined
+  >(undefined)
+  const [draggedEndIndex, setDraggedEndIndex] = useState<number | undefined>(
+    undefined,
+  )
   const [bookmarkCount, setBookmarkCount] = useState<number | null>(null)
   const [starredCount, setStarredCount] = useState<number | null>(null)
   const [nsfwCount, setNsfwCount] = useState<number | null>(null)
 
-  const onBrushDrag = useDebouncedCallback(
-    ({
-      months,
-      startIndex,
-      endIndex,
-    }: {
-      months: Months
-      startIndex: number
-      endIndex: number
-    }) => {
-      props.onYyyymmChange({
-        gte: months[startIndex].yyyymm,
-        lte: months[endIndex].yyyymm,
-      })
-    },
-    [props.onYyyymmChange],
-    200,
-  )
+  useUpdateEffect(() => {
+    if (
+      isSwiping ||
+      !props.months ||
+      draggedStartIndex == undefined ||
+      draggedEndIndex == undefined
+    )
+      return
+
+    props.onYyyymmChange({
+      gte: props.months[draggedStartIndex].yyyymm,
+      lte: props.months[draggedEndIndex].yyyymm,
+    })
+  }, [isSwiping])
 
   const calculateCounts = ({
     months,
@@ -80,7 +88,11 @@ export const Months: React.FC<Months.Props> = (props) => {
     setNsfwCount(nsfwCount)
   }
 
-  const calculateCountsThrottled = useThrottledCallback(calculateCounts, [], 50)
+  const calculateCountsThrottled = useThrottledCallback(
+    calculateCounts,
+    [],
+    100,
+  )
 
   useEffect(() => {
     calculateCounts({ months: props.months, startIndex, endIndex })
@@ -152,7 +164,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   }, [props.currentGte, props.currentLte, props.months])
 
   return (
-    <div className={styles.graph}>
+    <div className={styles.graph} ref={graph}>
       {isHydrated && props.months && props.months.length >= 2 && (
         <ResponsiveContainer width={'100%'} height={160} key={key}>
           <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
@@ -209,7 +221,8 @@ export const Months: React.FC<Months.Props> = (props) => {
                   startIndex,
                   endIndex,
                 })
-                onBrushDrag({ months: props.months, startIndex, endIndex })
+                setDraggedStartIndex(startIndex)
+                setDraggedEndIndex(endIndex)
               }}
               className={styles.graph__brush}
             />
