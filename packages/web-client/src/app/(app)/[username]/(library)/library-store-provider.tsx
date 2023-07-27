@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { configureLibraryStore } from '@repositories/stores/other-user/library/library.store'
 import { Provider } from 'react-redux'
 

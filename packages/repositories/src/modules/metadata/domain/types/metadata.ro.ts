@@ -1,11 +1,11 @@
 export namespace MetadataRo {
   type MetadataBase = {
     username: string
-    displayName: string | null
-    avatar: {
+    displayName?: string
+    avatar?: {
       url: string
       blurhash: string
-    } | null
+    }
   }
 
   export type Authorized = {
@@ -14,6 +14,6 @@ export namespace MetadataRo {
   } & MetadataBase
 
   export type Public = {
-    metaDescription: string | null
+    metaDescription?: string
   } & MetadataBase
 }

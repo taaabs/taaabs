@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { globalStore } from '@repositories/stores/global/global.store'
 import { Provider } from 'react-redux'
 

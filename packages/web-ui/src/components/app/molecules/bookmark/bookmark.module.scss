@@ -172,9 +172,6 @@
 }
 .link {
   grid-area: link;
-  @include at992 {
-    margin-bottom: var(--distance-12px);
-  }
   @include to992 {
     overflow: hidden;
   }
@@ -186,6 +183,7 @@
       align-items: center;
     }
     &__element {
+      position: relative;
       word-break: break-all;
       font-size: var(--font-size-1-5rem);
       color: var(--Bookmark-link-foreground);
@@ -193,8 +191,29 @@
       @include hover {
         text-decoration: none;
       }
+      @include to992 {
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+      @include at992 {
+        padding-bottom: var(--distance-12px);
+      }
       &:visited {
         color: var(--Bookmark-link-visited-foreground);
+      }
+      > div > span {
+        position: relative;
+      }
+      > div > span::before {
+        content: '↪';
+        position: absolute;
+        font-family: var(--font-family-inter);
+        padding-right: var(--distance-0-3rem);
+        font-weight: var(--font-weight-inter-bold);
+        color: var(--text-color-normal);
+        font-size: var(--font-size-1-5rem);
+        background: var(--Bookmark-background);
       }
     }
   }

@@ -108,7 +108,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
             }}
             href={props.url}
           >
-            <TextTruncate line={2} truncateText="…" text={props.url} />
+            <TextTruncate line={2} text={'⠀⠀' + props.url} truncateText="…" />
           </a>
         </div>
       </div>
