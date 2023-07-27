@@ -2,11 +2,11 @@ export namespace BookmarkEntity {
   type Base = {
     id: string
     title: string
-    text: string | null
+    text?: string
     url: string
     createdAt: string
     tags: string[]
-    sitePath: string | null
+    sitePath?: string
     isStarred: boolean
     isArchived: boolean
     isNsfw: boolean

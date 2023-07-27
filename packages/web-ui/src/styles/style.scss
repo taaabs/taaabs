@@ -54,13 +54,14 @@ html {
   --Bookmark-link-foreground: var(--blue800);
   --Bookmark-link-visited-foreground: var(--purple800);
   --Bookmark-tag-foreground: var(--green700);
+  --Bookmark-tag-selected-foreground: var(--yellow800);
   --Bookmark-nsfw-foreground: var(--white);
   --Bookmark-nsfw-background: var(--red500);
   --Bookmark-starred-title-background: var(--hightlight);
   --Bookmark-action-fill: var(--neutral400);
   --Bookmark-action-fill-hover: var(--neutral500);
   --Bookmark-saves-background: var(--blue100);
-  --Bookmark-saves-foreground: var(--blue800);
+  --Bookmark-saves-foreground: var(--blue700);
   --TitleBar-background-desktop: var(--blue50);
   --TitleBar-background-mobile: rgba(219, 234, 254, 0.5);
   --TitleBar-primary-foreground: var(--blue800);
@@ -84,7 +85,7 @@ html {
   --Months-chart-brush-handle-stroke: var(--neutral300);
   --Tags-tag-foreground: var(--green700);
   --Tags-first-char-background: var(--blue50);
-  --Tags-first-char-foreground: var(--blue600);
+  --Tags-first-char-foreground: var(--blue800);
 }
 
 body {

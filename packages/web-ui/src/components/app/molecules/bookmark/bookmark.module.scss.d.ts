@@ -10,6 +10,9 @@ declare const styles: {
   readonly main__tags: string
   readonly main__tags__tag: string
   readonly 'main__tags__tag--condensed': string
+  readonly main__tags__tag__name: string
+  readonly 'main__tags__tag__name--selected': string
+  readonly main__tags__tag__yields: string
   readonly actions: string
   readonly actions__button: string
   readonly link: string

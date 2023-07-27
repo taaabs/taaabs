@@ -68,7 +68,7 @@
       background: var(--Bookmark-saves-background);
       color: var(--Bookmark-saves-foreground);
       font-size: var(--font-size-1-4rem);
-      padding: 0 var(--distance-0-8rem);
+      padding: 0 var(--distance-0-9rem);
       height: var(--distance-2-0rem);
       margin-right: var(--distance-0-6rem);
     }
@@ -76,10 +76,11 @@
       display: inline-flex;
       align-items: center;
       color: var(--Bookmark-nsfw-foreground);
-      transform: translateY(-0.25rem);
+      transform: scale(0.9) translateY(-0.3rem);
+      transform-origin: left;
       position: relative;
       font-size: var(--font-size-1-2rem);
-      margin-right: var(--distance-0-5rem);
+      margin-right: var(--distance-0-1rem);
       height: var(--distance-2-0rem);
       background: var(--Bookmark-nsfw-background);
       padding: 0 var(--distance-0-4rem);
@@ -105,27 +106,25 @@
       height: var(--button-dimension-34px);
       @include hover {
         > div > span:first-child {
-          text-decoration: underline;
+          @include text-decoration-underline;
         }
-      }
-      > div > span:first-child {
-        font-size: var(--font-size-1-5rem);
-        color: var(--Bookmark-tag-foreground);
-        font-weight: var(--font-weight-inter-medium);
-      }
-      > div > span:last-child {
-        color: var(--text-color-dimmed);
-        font-size: var(--font-size-1-3rem);
-        margin-left: var(--distance-0-3rem);
       }
       &--condensed {
         @include to992 {
           font-family: var(--font-family-inter-tight);
-          > span:first-child {
-            color: var(--Bookmark-tag-foreground);
-            font-weight: var(--font-weight-inter-medium);
-          }
         }
+      }
+      &__name {
+        font-size: var(--font-size-1-5rem);
+        color: var(--Bookmark-tag-foreground);
+        font-weight: var(--font-weight-inter-medium);
+        &--selected {
+          color: var(--Bookmark-tag-selected-foreground);
+        }
+      }
+      &__yields {
+        color: var(--text-color-dimmed);
+        margin-left: var(--distance-0-3rem);
       }
     }
   }
@@ -206,7 +205,7 @@
       color: var(--text-color-variant);
       font-size: var(--font-size-1-5rem);
       color: var(--Bookmark-link-foreground);
-      text-decoration: underline;
+      @include text-decoration-underline;
       @include to992 {
         height: 100%;
         align-items: center;

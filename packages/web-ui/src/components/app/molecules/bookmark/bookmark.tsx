@@ -12,7 +12,6 @@ export namespace Bookmark {
     onClick: () => void
     onMenuClick: () => void
     isNsfw?: boolean
-    isArchived?: boolean
     isStarred?: boolean
   }
 }
@@ -23,7 +22,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
       <div
         className={cn([
           styles.main,
-          { [styles['main--has-tags']]: props.tags.length >= 1 },
+          { [styles['main--has-tags']]: props.tags.length > 0 },
         ])}
       >
         <div>
@@ -34,12 +33,12 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
           >
             <div className={styles.main__title__saves}>{props.saves}</div>
             {props.isNsfw && (
-              <span className={styles.main__title__nsfw}>NSFW</span>
+              <div className={styles.main__title__nsfw}>NSFW</div>
             )}
             <div className={styles.main__title__text}>{props.title}</div>
           </div>
         </div>
-        {props.tags.length >= 1 && (
+        {props.tags.length > 0 && (
           <div className={styles['main__tags']}>
             {props.tags.map((tag) => (
               <button
@@ -52,12 +51,31 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
                 ])}
                 onClick={(e) => {
                   e.stopPropagation()
+                  if (!tag.isSelected) {
+                    // remove tag from selected
+                  } else if (tag.yields) {
+                    // select tag
+                  }
                 }}
                 key={tag.name}
               >
                 <div>
-                  <span>{tag.name}</span>
-                  {tag.yields && <span>{tag.yields}</span>}
+                  <span
+                    className={cn([
+                      styles.main__tags__tag__name,
+                      {
+                        [styles['main__tags__tag__name--selected']]:
+                          tag.isSelected,
+                      },
+                    ])}
+                  >
+                    {tag.name}
+                  </span>
+                  {tag.yields && (
+                    <span className={styles.main__tags__tag__yields}>
+                      {tag.yields}
+                    </span>
+                  )}
                 </div>
               </button>
             ))}

@@ -42,7 +42,8 @@ const Page: React.FC = () => {
     tagsOfUrlCreation,
     addTagToQueryParams,
   } = useTags()
-  const { setOrderByQueryParam, setOrderQueryParam } = useOrderOptions()
+  const { currentOrderBy, setOrderByQueryParam, setOrderQueryParam } =
+    useOrderOptions()
   const { selectedFilter, setFilter, isNsfwExcluded, toggleExcludeNsfw } =
     useFilterOptions(
       Object.values(LibraryFilter)[
@@ -174,16 +175,7 @@ const Page: React.FC = () => {
             button: (
               <ButtonSelect
                 label="Order by"
-                currentValue={_orderByOptionToLabel(
-                  Object.values(OrderBy)[
-                    parseInt(
-                      queryParams.get('b') ||
-                        Object.values(OrderBy)
-                          .indexOf(BookmarksFetchingDefaults.Common.orderBy)
-                          .toString(),
-                    )
-                  ],
-                )}
+                currentValue={_orderByOptionToLabel(currentOrderBy)}
                 isActive={isOrderByDropdownVisible}
                 onClick={toggleOrderByDropdown}
               />
@@ -332,14 +324,7 @@ const Page: React.FC = () => {
             >
               <Months
                 months={
-                  Object.values(OrderBy)[
-                    parseInt(
-                      queryParams.get('b') ||
-                        Object.values(OrderBy)
-                          .indexOf(BookmarksFetchingDefaults.Common.orderBy)
-                          .toString(),
-                    )
-                  ] == OrderBy.BookmarkCreationDate
+                  currentOrderBy == OrderBy.BookmarkCreationDate
                     ? monthsOfBookmarkCreation
                     : monthsOfUrlCreation
                 }
@@ -371,14 +356,7 @@ const Page: React.FC = () => {
               >
                 <Tags
                   tags={
-                    Object.values(OrderBy)[
-                      parseInt(
-                        queryParams.get('b') ||
-                          Object.values(OrderBy)
-                            .indexOf(BookmarksFetchingDefaults.Common.orderBy)
-                            .toString(),
-                      )
-                    ] == OrderBy.BookmarkCreationDate
+                    currentOrderBy == OrderBy.BookmarkCreationDate
                       ? tagsOfBookmarkCreation
                       : tagsOfUrlCreation
                   }
@@ -419,17 +397,26 @@ const Page: React.FC = () => {
           ? bookmarks.map((bookmark) => (
               <Bookmark
                 title={bookmark.title}
-                site="site"
-                onSiteClick={() => {}}
-                onSavesClick={() => {}}
-                onDateClick={() => {}}
+                onClick={() => {}}
+                onMenuClick={() => {}}
                 url={bookmark.url}
-                createdAt={new Date(bookmark.createdAt)}
                 saves={bookmark.saves}
-                tags={bookmark.tags}
+                tags={bookmark.tags.map((tag) => {
+                  const tags =
+                    currentOrderBy == OrderBy.BookmarkCreationDate
+                      ? tagsOfBookmarkCreation
+                      : tagsOfUrlCreation
+
+                  return {
+                    name: tag,
+                    isSelected: false,
+                    yields: tags != null && tags[tag] ? tags[tag] : undefined,
+                  }
+                })}
                 isNsfw={bookmark.isNsfw}
                 isStarred={bookmark.isStarred}
                 key={bookmark.id}
+                sitePath={bookmark.sitePath}
               />
             ))
           : []

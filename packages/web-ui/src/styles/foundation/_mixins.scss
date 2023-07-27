@@ -61,3 +61,8 @@
 @mixin transition-300ms($transitionProperty: all) {
   transition: $transitionProperty var(--transition-duration-300ms) linear;
 }
+@mixin text-decoration-underline {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}

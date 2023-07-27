@@ -17,7 +17,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
         return {
           id: bookmark.id,
           createdAt: bookmark.created_at,
-          text: bookmark.text || null,
+          text: bookmark.text,
           title: bookmark.title,
           isArchived: bookmark.is_archived || false,
           isNsfw: bookmark.is_nsfw || false,
@@ -25,7 +25,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
           saves: bookmark.saves || 0,
           tags: bookmark.tags || [],
           url: bookmark.url,
-          sitePath: bookmark.site_path || null,
+          sitePath: bookmark.site_path,
           isPublic: bookmark.is_public || false,
         }
       }),
@@ -45,7 +45,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
       bookmarks: bookmarks.map((bookmark) => ({
         id: bookmark.id,
         createdAt: bookmark.created_at,
-        text: bookmark.text || null,
+        text: bookmark.text,
         title: bookmark.title,
         isArchived: bookmark.is_archived || false,
         isNsfw: bookmark.is_nsfw || false,
@@ -53,7 +53,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
         saves: bookmark.saves || 0,
         tags: bookmark.tags || [],
         url: bookmark.url,
-        sitePath: bookmark.site_path || null,
+        sitePath: bookmark.site_path,
       })),
       pagination: {
         hasMore: pagination.hasMore,

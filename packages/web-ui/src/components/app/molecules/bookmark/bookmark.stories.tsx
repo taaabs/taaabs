@@ -23,7 +23,6 @@ export const Primary = () => (
         title="Lorem ipsum dolor sit amet"
         url="https://example.com/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum"
         isNsfw={false}
-        isArchived={true}
         tags={[]}
         saves={2200}
         onClick={() => {}}
@@ -35,7 +34,6 @@ export const Primary = () => (
         title="Lorem ipsum dolor sit amet"
         url="https://example.com/test/lorem_ipsum"
         isNsfw={false}
-        isArchived={true}
         tags={[]}
         saves={2200}
         onClick={() => {}}
@@ -47,7 +45,6 @@ export const Primary = () => (
         title="Lorem ipsum dolor sit amet"
         url="https://example.com/test/lorem_ipsum"
         isNsfw={false}
-        isArchived={true}
         tags={[
           { name: 'lorem', yields: 8 },
           { name: 'ipsum', yields: 2, isSelected: true },
@@ -62,7 +59,6 @@ export const Primary = () => (
         title="Lorem ipsum dolor sit amet"
         url="https://example.com/test/lorem_ipsum"
         isNsfw={false}
-        isArchived={true}
         tags={[
           { name: 'lorem', yields: 8 },
           { name: 'ipsum', yields: 2 },
@@ -77,7 +73,6 @@ export const Primary = () => (
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         url="https://example.com/test/lorem_ipsum"
         isNsfw={true}
-        isArchived={true}
         tags={[
           { name: 'lorem', yields: 8 },
           { name: 'lorem1', yields: 8 },
@@ -96,7 +91,6 @@ export const Primary = () => (
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         url="https://example.com/test/lorem_ipsum"
         isNsfw={false}
-        isArchived={true}
         tags={[
           { name: 'lorem', yields: 8 },
           { name: 'ipsum', yields: 2 },
@@ -111,7 +105,6 @@ export const Primary = () => (
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         url="https://example.com/test/lorem_ipsum"
         isNsfw={true}
-        isArchived={true}
         tags={[
           { name: 'lorem', yields: 8 },
           { name: 'ipsum', yields: 2 },
@@ -126,7 +119,6 @@ export const Primary = () => (
         title="Lorem ipsum dolor sit amet"
         url="https://example.com/test/lorem_ipsum"
         isNsfw={true}
-        isArchived={true}
         tags={[
           { name: 'lorem', yields: 8 },
           { name: 'ipsum', yields: 2 },
