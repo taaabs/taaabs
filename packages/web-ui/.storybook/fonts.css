@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800');
+
+html {
+  --font-family-inter: 'Inter', 'Roboto', sans-serif;
+  --font-family-inter-tight: 'Inter Tight', sans-serif;
+  --font-family-plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;
+}
