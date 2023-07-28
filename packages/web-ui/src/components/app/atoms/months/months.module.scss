@@ -2,6 +2,7 @@
 @use '../../../../styles/foundation' as *;
 
 .graph {
+  position: relative;
   border-radius: var(--border-radius-10px);
   border-bottom-left-radius: 13px;
   border-bottom-right-radius: 13px;
@@ -16,7 +17,26 @@
   @include hover {
     box-shadow: inset 0px 0px 0px 1px var(--border-color-primary);
   }
+  &__details {
+    position: absolute;
+    z-index: 1;
+    top: var(--distance-5px);
+    left: var(--distance-13px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    &__title {
+      font-size: var(--font-size-13px);
+      color: var(--text-color-dimmed);
+    }
+    &__current-range {
+      font-weight: var(--font-weight-inter-medium);
+    }
+  }
   &__info {
+    height: 100%;
+    display: flex;
+    align-items: center;
     color: var(--text-color-dimmed);
     text-align: center;
     font-size: var(--font-size-13px);

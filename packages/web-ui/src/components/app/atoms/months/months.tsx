@@ -2,9 +2,10 @@ import { Area, AreaChart, Brush, ResponsiveContainer } from 'recharts'
 import styles from './months.module.scss'
 import useThrottledCallback from 'beautiful-react-hooks/useThrottledCallback'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useIsHydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import dayjs from 'dayjs'
 
 type Months = {
   yyyymm: number
@@ -25,8 +26,7 @@ export namespace Months {
 
 export const Months: React.FC<Months.Props> = (props) => {
   const isHydrated = useIsHydrated()
-  const graph = useRef(null)
-  const { swiping: isSwiping } = useSwipe(graph, {
+  const { swiping: isSwiping } = useSwipe(undefined, {
     preventDefault: false,
     passive: false,
   })
@@ -68,7 +68,6 @@ export const Months: React.FC<Months.Props> = (props) => {
     endIndex?: number
   }) => {
     if (!months) return
-
     let monthsSliced: Months = []
     if (startIndex != undefined && endIndex != undefined) {
       monthsSliced = months.slice(startIndex, endIndex + 1)
@@ -88,6 +87,106 @@ export const Months: React.FC<Months.Props> = (props) => {
     setNsfwCount(nsfwCount)
   }
 
+  const possibleStartIndex = ({
+    months,
+    currentGte,
+  }: {
+    months: Months
+    currentGte: number
+  }) => {
+    const startIndex =
+      months && currentGte
+        ? months.find((month) => month.yyyymm == currentGte)
+          ? months.findIndex((month) => month.yyyymm == currentGte)
+          : months.findIndex((month) => {
+              const monthsFiltered = months!.filter(
+                (m) => m.yyyymm > currentGte!,
+              )
+              return monthsFiltered.length
+                ? month.yyyymm ==
+                    monthsFiltered
+                      .map((m) => m.yyyymm)
+                      .reduce((prev, curr) =>
+                        Math.abs(curr - currentGte!) <
+                        Math.abs(prev - currentGte!)
+                          ? curr
+                          : prev,
+                      )
+                : month.yyyymm ==
+                    props
+                      .months!.map((m) => m.yyyymm)
+                      .reduce((prev, curr) =>
+                        Math.abs(curr - currentGte!) <
+                        Math.abs(prev - currentGte!)
+                          ? curr
+                          : prev,
+                      )
+            })
+        : undefined
+
+    return startIndex != -1 ? startIndex : undefined
+  }
+
+  const possibleEndIndex = ({
+    months,
+    currentLte,
+  }: {
+    months: Months
+    currentLte: number
+  }) => {
+    const endIndex =
+      months && currentLte
+        ? months.find((month) => month.yyyymm == currentLte)
+          ? months.findIndex((month) => month.yyyymm == currentLte)
+          : months.findIndex((month) => {
+              const monthsFiltered = months!.filter(
+                (m) => m.yyyymm < currentLte!,
+              )
+              return monthsFiltered.length
+                ? month.yyyymm ==
+                    monthsFiltered
+                      .map((m) => m.yyyymm)
+                      .reduce((prev, curr) =>
+                        Math.abs(curr - currentLte!) <
+                        Math.abs(prev - currentLte!)
+                          ? curr
+                          : prev,
+                      )
+                : month.yyyymm ==
+                    props
+                      .months!.map((m) => m.yyyymm)
+                      .reduce((prev, curr) =>
+                        Math.abs(curr - currentLte!) <
+                        Math.abs(prev - currentLte!)
+                          ? curr
+                          : prev,
+                      )
+            })
+        : undefined
+
+    return endIndex != -1 ? endIndex : undefined
+  }
+
+  const setStartAndEndIndex = ({
+    months,
+    currentGte,
+    currentLte,
+  }: {
+    months: Months
+    currentGte: number
+    currentLte: number
+  }) => {
+    setStartIndex(possibleStartIndex({ months, currentGte }))
+
+    setEndIndex(possibleEndIndex({ months, currentLte }))
+  }
+
+  const setStartAndEndIndexThrottled = useThrottledCallback(
+    setStartAndEndIndex,
+    [setStartIndex, setEndIndex],
+    100,
+  )
+
   const calculateCountsThrottled = useThrottledCallback(
     calculateCounts,
     [],
@@ -96,75 +195,96 @@ export const Months: React.FC<Months.Props> = (props) => {
 
   useEffect(() => {
     calculateCounts({ months: props.months, startIndex, endIndex })
+    if (isSwiping) return
     setKey(`${startIndex || ''}${endIndex || ''}${props.selectedTags || ''}`)
-  }, [startIndex, endIndex, props.selectedTags, props.months])
+  }, [isSwiping, startIndex, endIndex])
+
+  useUpdateEffect(() => {
+    if (
+      !props.months ||
+      draggedStartIndex == undefined ||
+      draggedEndIndex == undefined
+    )
+      return
+
+    setStartAndEndIndexThrottled({
+      months: props.months,
+      currentGte: props.months[draggedStartIndex].yyyymm,
+      currentLte: props.months[draggedEndIndex].yyyymm,
+    })
+
+    calculateCountsThrottled({
+      months: props.months,
+      startIndex: draggedStartIndex,
+      endIndex: draggedEndIndex,
+    })
+  }, [draggedStartIndex, draggedEndIndex])
 
   useEffect(() => {
-    setStartIndex(
-      props.months && props.currentGte
-        ? props.months.find((month) => month.yyyymm == props.currentGte)
-          ? props.months.findIndex((month) => month.yyyymm == props.currentGte)
-          : props.months.findIndex((month) => {
-              const monthsFiltered = props.months!.filter(
-                (m) => m.yyyymm > props.currentGte!,
-              )
-              return monthsFiltered.length
-                ? month.yyyymm ==
-                    monthsFiltered
-                      .map((m) => m.yyyymm)
-                      .reduce((prev, curr) =>
-                        Math.abs(curr - props.currentGte!) <
-                        Math.abs(prev - props.currentGte!)
-                          ? curr
-                          : prev,
-                      )
-                : month.yyyymm ==
-                    props
-                      .months!.map((m) => m.yyyymm)
-                      .reduce((prev, curr) =>
-                        Math.abs(curr - props.currentGte!) <
-                        Math.abs(prev - props.currentGte!)
-                          ? curr
-                          : prev,
-                      )
-            })
-        : undefined,
-    )
+    if (!props.months || !props.currentGte || !props.currentLte) {
+      setStartIndex(undefined)
+      setEndIndex(undefined)
 
-    setEndIndex(
-      props.months && props.currentLte
-        ? props.months.find((month) => month.yyyymm == props.currentLte)
-          ? props.months.findIndex((month) => month.yyyymm == props.currentLte)
-          : props.months.findIndex((month) => {
-              const monthsFiltered = props.months!.filter(
-                (m) => m.yyyymm < props.currentLte!,
-              )
-              return monthsFiltered.length
-                ? month.yyyymm ==
-                    monthsFiltered
-                      .map((m) => m.yyyymm)
-                      .reduce((prev, curr) =>
-                        Math.abs(curr - props.currentLte!) <
-                        Math.abs(prev - props.currentLte!)
-                          ? curr
-                          : prev,
-                      )
-                : month.yyyymm ==
-                    props
-                      .months!.map((m) => m.yyyymm)
-                      .reduce((prev, curr) =>
-                        Math.abs(curr - props.currentLte!) <
-                        Math.abs(prev - props.currentLte!)
-                          ? curr
-                          : prev,
-                      )
-            })
-        : undefined,
+      return
+    }
+
+    setStartAndEndIndex({
+      months: props.months,
+      currentGte: props.currentGte,
+      currentLte: props.currentLte,
+    })
+
+    calculateCounts({
+      months: props.months,
+      startIndex: draggedStartIndex,
+      endIndex: draggedEndIndex,
+    })
+  }, [props.currentGte, props.currentLte, props.months, props.selectedTags])
+
+  useEffect(() => {
+    if (
+      !props.months ||
+      props.currentGte ||
+      props.currentLte ||
+      draggedStartIndex != undefined ||
+      draggedEndIndex != undefined
     )
-  }, [props.currentGte, props.currentLte, props.months])
+      return
+
+    calculateCounts({
+      months: props.months,
+      startIndex: 0,
+      endIndex: props.months.length - 1,
+    })
+  }, [props.months])
 
   return (
-    <div className={styles.graph} ref={graph}>
+    <div className={styles.graph}>
+      {props.months && props.months.length > 1 && (
+        <div className={styles.graph__details}>
+          <div className={styles.graph__details__title}>Date range</div>
+          <div className={styles['graph__details__current-range']}>
+            {((!props.currentGte &&
+              !props.currentLte &&
+              draggedStartIndex == undefined &&
+              draggedEndIndex == undefined) ||
+              props.months.length == 0) &&
+              'Everything'}
+
+            {startIndex != undefined &&
+              props.months[startIndex] &&
+              endIndex != undefined &&
+              props.months[endIndex] &&
+              _yyyymmToDisplay(props.months[startIndex].yyyymm) +
+                (endIndex != startIndex
+                  ? ` - ${_yyyymmToDisplay(props.months[endIndex].yyyymm)}`
+                  : '')}
+          </div>
+          <div>
+            {bookmarkCount}/{starredCount}/{nsfwCount}
+          </div>
+        </div>
+      )}
       {isHydrated && props.months && props.months.length >= 2 && (
         <ResponsiveContainer width={'100%'} height={160} key={key}>
           <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
@@ -216,11 +336,6 @@ export const Months: React.FC<Months.Props> = (props) => {
                 )
                   return
 
-                calculateCountsThrottled({
-                  months: props.months,
-                  startIndex,
-                  endIndex,
-                })
                 setDraggedStartIndex(startIndex)
                 setDraggedEndIndex(endIndex)
               }}
@@ -240,4 +355,13 @@ export const Months: React.FC<Months.Props> = (props) => {
       {!props.months && <div className={styles.graph__info}>Loading...</div>}
     </div>
   )
+}
+
+function _yyyymmToDisplay(yyyymm: number) {
+  return dayjs(
+    new Date(
+      parseInt(yyyymm.toString().substring(0, 4)),
+      parseInt(yyyymm.toString().substring(4, 6)) - 1,
+    ),
+  ).format('MMM YYYY')
 }
