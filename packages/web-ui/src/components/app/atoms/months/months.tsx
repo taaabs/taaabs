@@ -29,6 +29,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   const { swiping: isSwiping } = useSwipe(undefined, {
     preventDefault: false,
     passive: false,
+    threshold: 0,
   })
   const [key, setKey] = useState('')
   const [startIndex, setStartIndex] = useState<number | undefined>(undefined)
@@ -187,17 +188,7 @@ export const Months: React.FC<Months.Props> = (props) => {
     100,
   )
 
-  const calculateCountsThrottled = useThrottledCallback(
-    calculateCounts,
-    [],
-    100,
-  )
-
-  useEffect(() => {
-    calculateCounts({ months: props.months, startIndex, endIndex })
-    if (isSwiping) return
-    setKey(`${startIndex || ''}${endIndex || ''}${props.selectedTags || ''}`)
-  }, [isSwiping, startIndex, endIndex])
+  const calculateCountsThrottled = useThrottledCallback(calculateCounts, [], 50)
 
   useUpdateEffect(() => {
     if (
@@ -220,8 +211,20 @@ export const Months: React.FC<Months.Props> = (props) => {
     })
   }, [draggedStartIndex, draggedEndIndex])
 
+  useUpdateEffect(() => {
+    calculateCounts({
+      months: props.months,
+      startIndex: startIndex,
+      endIndex: endIndex,
+    })
+    if (!isSwiping) {
+      setKey(`${startIndex || ''}${endIndex || ''}${props.selectedTags || ''}`)
+    }
+  }, [startIndex, endIndex])
+
   useEffect(() => {
     if (!props.months || !props.currentGte || !props.currentLte) {
+      setKey(`${startIndex || ''}${endIndex || ''}${props.selectedTags || ''}`)
       setStartIndex(undefined)
       setEndIndex(undefined)
 
@@ -232,12 +235,6 @@ export const Months: React.FC<Months.Props> = (props) => {
       months: props.months,
       currentGte: props.currentGte,
       currentLte: props.currentLte,
-    })
-
-    calculateCounts({
-      months: props.months,
-      startIndex: draggedStartIndex,
-      endIndex: draggedEndIndex,
     })
   }, [props.currentGte, props.currentLte, props.months, props.selectedTags])
 
@@ -264,21 +261,15 @@ export const Months: React.FC<Months.Props> = (props) => {
         <div className={styles.graph__details}>
           <div className={styles.graph__details__title}>Date range</div>
           <div className={styles['graph__details__current-range']}>
-            {((!props.currentGte &&
-              !props.currentLte &&
-              draggedStartIndex == undefined &&
-              draggedEndIndex == undefined) ||
-              props.months.length == 0) &&
-              'Everything'}
-
             {startIndex != undefined &&
-              props.months[startIndex] &&
-              endIndex != undefined &&
-              props.months[endIndex] &&
-              _yyyymmToDisplay(props.months[startIndex].yyyymm) +
+            props.months[startIndex] &&
+            endIndex != undefined &&
+            props.months[endIndex]
+              ? _yyyymmToDisplay(props.months[startIndex].yyyymm) +
                 (endIndex != startIndex
                   ? ` - ${_yyyymmToDisplay(props.months[endIndex].yyyymm)}`
-                  : '')}
+                  : '')
+              : 'All history'}
           </div>
           <div className={styles.graph__details__counts}>
             <div className={styles.graph__details__counts__total}>

@@ -2,6 +2,7 @@ import { Icon } from '@web-ui/components/common/atoms/icon'
 import TextTruncate from 'react-text-truncate'
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
+import useWindowResize from 'beautiful-react-hooks/useWindowResize';
 
 export namespace Bookmark {
   export type Props = {

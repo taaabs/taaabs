@@ -33,9 +33,10 @@
       font-weight: var(--font-weight-inter-medium);
     }
     &__counts {
+      position: absolute;
       display: flex;
-      gap: var(--distance-8px);
-      margin-top: var(--distance-12px);
+      gap: var(--distance-6px);
+      margin-top: 50px;
       background-color: var(--Months-chart-counts-background);
       padding: var(--distance-1px) var(--distance-8px) var(--distance-1px)
         var(--distance-6px);
@@ -45,7 +46,7 @@
       font-weight: var(--font-weight-inter-medium);
       > div {
         position: relative;
-        padding-left: var(--distance-10px);
+        padding-left: var(--distance-12px);
       }
       > div::before {
         position: absolute;
@@ -53,24 +54,19 @@
         left: 0;
         transform: translateY(-50%);
         content: '';
-        width: 5px;
-        height: 5px;
-        border-radius: 5px;
+        width: 6px;
+        height: 6px;
+        border-radius: 6px;
       }
-      &__total {
-        &::before {
-          background: var(--Months-chart-stroke);
-        }
+      &__total::before {
+        background: var(--Months-chart-stroke);
       }
-      &__starred {
-        &::before {
-          background: var(--Months-chart-starred-fill);
-        }
+
+      &__starred::before {
+        background: var(--Months-chart-starred-fill);
       }
-      &__nsfw {
-        &::before {
-          background: var(--Months-chart-nsfw-stroke);
-        }
+      &__nsfw::before {
+        background: var(--Months-chart-nsfw-stroke);
       }
     }
   }
