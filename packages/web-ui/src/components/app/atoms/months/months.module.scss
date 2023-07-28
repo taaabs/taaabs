@@ -35,14 +35,14 @@
     &__counts {
       display: flex;
       gap: var(--distance-8px);
-      margin-top: var(--distance-10px);
-      background-color: var(--Months-background);
-      padding: var(--distance-2px) var(--distance-8px) var(--distance-2px)
-        var(--distance-8px);
-      border-radius: var(--border-radius-8px);
+      margin-top: var(--distance-12px);
+      background-color: var(--Months-chart-counts-background);
+      padding: var(--distance-1px) var(--distance-8px) var(--distance-1px)
+        var(--distance-6px);
+      border-radius: var(--border-radius-4px);
       font-size: var(--font-size-13px);
+      transform: translateX(calc(var(--distance-5px) * -1));
       font-weight: var(--font-weight-inter-medium);
-      border: 1px solid var(--Months-chart-brush-handle-stroke);
       > div {
         position: relative;
         padding-left: var(--distance-10px);
