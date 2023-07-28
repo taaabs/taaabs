@@ -280,8 +280,20 @@ export const Months: React.FC<Months.Props> = (props) => {
                   ? ` - ${_yyyymmToDisplay(props.months[endIndex].yyyymm)}`
                   : '')}
           </div>
-          <div>
-            {bookmarkCount}/{starredCount}/{nsfwCount}
+          <div className={styles.graph__details__counts}>
+            <div className={styles.graph__details__counts__total}>
+              {bookmarkCount}
+            </div>
+            {starredCount != undefined && starredCount > 0 && (
+              <div className={styles.graph__details__counts__starred}>
+                {starredCount}
+              </div>
+            )}
+            {nsfwCount != undefined && nsfwCount > 0 && (
+              <div className={styles.graph__details__counts__nsfw}>
+                {nsfwCount}
+              </div>
+            )}
           </div>
         </div>
       )}
