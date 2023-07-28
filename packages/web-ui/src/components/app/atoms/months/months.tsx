@@ -185,7 +185,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   const setStartAndEndIndexThrottled = useThrottledCallback(
     setStartAndEndIndex,
     [setStartIndex, setEndIndex],
-    100,
+    50,
   )
 
   const calculateCountsThrottled = useThrottledCallback(calculateCounts, [], 50)
