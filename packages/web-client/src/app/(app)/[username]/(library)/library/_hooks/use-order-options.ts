@@ -3,7 +3,8 @@ import { updateQueryParam } from '@/utils/update-query-param'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export const useOrderOptions = () => {
   const queryParams = useSearchParams()
@@ -20,14 +21,22 @@ export const useOrderOptions = () => {
     ],
   )
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     const queryOrderBy = queryParams.get('b')
 
     if (
-      queryOrderBy &&
-      Object.values(OrderBy)[parseInt(queryOrderBy)] != currentOrderBy
+      queryOrderBy != Object.values(OrderBy).indexOf(currentOrderBy).toString()
     ) {
-      setCurrentOrderBy(Object.values(OrderBy)[parseInt(queryOrderBy)])
+      setCurrentOrderBy(
+        Object.values(OrderBy)[
+          parseInt(
+            queryOrderBy ||
+              Object.values(OrderBy)
+                .indexOf(BookmarksFetchingDefaults.Common.orderBy)
+                .toString(),
+          )
+        ],
+      )
     }
   }, [queryParams])
 

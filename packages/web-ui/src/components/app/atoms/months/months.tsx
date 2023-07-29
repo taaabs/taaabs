@@ -49,7 +49,9 @@ export const Months: React.FC<Months.Props> = (props) => {
       isSwiping ||
       !props.months ||
       draggedStartIndex == undefined ||
-      draggedEndIndex == undefined
+      draggedEndIndex == undefined ||
+      !props.months[draggedStartIndex] ||
+      !props.months[draggedEndIndex]
     )
       return
 
@@ -217,10 +219,11 @@ export const Months: React.FC<Months.Props> = (props) => {
       startIndex: startIndex,
       endIndex: endIndex,
     })
+
     if (!isSwiping) {
       setKey(`${startIndex || ''}${endIndex || ''}${props.selectedTags || ''}`)
     }
-  }, [startIndex, endIndex])
+  }, [startIndex, endIndex, props.months])
 
   useEffect(() => {
     if (!props.months || !props.currentGte || !props.currentLte) {

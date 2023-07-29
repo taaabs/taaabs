@@ -44,17 +44,13 @@ const Page: React.FC = () => {
   } = useTags()
   const { currentOrderBy, setOrderByQueryParam, setOrderQueryParam } =
     useOrderOptions()
-  const { selectedFilter, setFilter, isNsfwExcluded, toggleExcludeNsfw } =
-    useFilterOptions(
-      Object.values(LibraryFilter)[
-        parseInt(
-          queryParams.get('f') ||
-            Object.values(LibraryFilter)
-              .indexOf(BookmarksFetchingDefaults.Common.filter)
-              .toString(),
-        )
-      ],
-    )
+  const {
+    currentFilter,
+    setFilterQueryParam,
+    excludeNsfw,
+    includeNsfw,
+    isNsfwExcluded,
+  } = useFilterOptions()
 
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
   const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
@@ -76,7 +72,7 @@ const Page: React.FC = () => {
             button: (
               <ButtonSelect
                 label="Filter"
-                currentValue={_filterOptionToLabel(selectedFilter)}
+                currentValue={_filterOptionToLabel(currentFilter)}
                 isActive={isFilterDropdownVisible}
                 onClick={toggleFilterDropdown}
               />
@@ -98,15 +94,15 @@ const Page: React.FC = () => {
                         )
                           return
                         if (isNsfwExcluded) {
-                          setFilter(LibraryFilter.AllNsfwExcluded)
+                          setFilterQueryParam(LibraryFilter.AllNsfwExcluded)
                         } else {
-                          setFilter(LibraryFilter.All)
+                          setFilterQueryParam(LibraryFilter.All)
                         }
                         toggleFilterDropdown()
                       },
                       isSelected:
-                        selectedFilter == LibraryFilter.All ||
-                        selectedFilter == LibraryFilter.AllNsfwExcluded,
+                        currentFilter == LibraryFilter.All ||
+                        currentFilter == LibraryFilter.AllNsfwExcluded,
                     },
                     {
                       label: 'Starred only',
@@ -118,15 +114,17 @@ const Page: React.FC = () => {
                         )
                           return
                         if (isNsfwExcluded) {
-                          setFilter(LibraryFilter.StarredOnlyNsfwExcluded)
+                          setFilterQueryParam(
+                            LibraryFilter.StarredOnlyNsfwExcluded,
+                          )
                         } else {
-                          setFilter(LibraryFilter.StarredOnly)
+                          setFilterQueryParam(LibraryFilter.StarredOnly)
                         }
                         toggleFilterDropdown()
                       },
                       isSelected:
-                        selectedFilter == LibraryFilter.StarredOnly ||
-                        selectedFilter == LibraryFilter.StarredOnlyNsfwExcluded,
+                        currentFilter == LibraryFilter.StarredOnly ||
+                        currentFilter == LibraryFilter.StarredOnlyNsfwExcluded,
                     },
                     {
                       label: 'Archived only',
@@ -138,16 +136,17 @@ const Page: React.FC = () => {
                         )
                           return
                         if (isNsfwExcluded) {
-                          setFilter(LibraryFilter.ArchivedOnlyNsfwExcluded)
+                          setFilterQueryParam(
+                            LibraryFilter.ArchivedOnlyNsfwExcluded,
+                          )
                         } else {
-                          setFilter(LibraryFilter.ArchivedOnly)
+                          setFilterQueryParam(LibraryFilter.ArchivedOnly)
                         }
                         toggleFilterDropdown()
                       },
                       isSelected:
-                        selectedFilter == LibraryFilter.ArchivedOnly ||
-                        selectedFilter ==
-                          LibraryFilter.ArchivedOnlyNsfwExcluded,
+                        currentFilter == LibraryFilter.ArchivedOnly ||
+                        currentFilter == LibraryFilter.ArchivedOnlyNsfwExcluded,
                     },
                   ]}
                   checkboxes={[
@@ -160,7 +159,8 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        toggleExcludeNsfw()
+
+                        isNsfwExcluded ? includeNsfw() : excludeNsfw()
                         toggleFilterDropdown()
                       },
                       isSelected: isNsfwExcluded,
