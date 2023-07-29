@@ -40,6 +40,16 @@ export const useTags = () => {
     })
   }
 
+  const clearGteLteQueryParams = () => {
+    let updatedQueryParams: any
+    updatedQueryParams = updateQueryParam(queryParams, 'gte', '')
+    updatedQueryParams = updateQueryParam(updatedQueryParams, 'lte', '')
+
+    router.push(`/${params.username}/library?${updatedQueryParams}`, {
+      scroll: false,
+    })
+  }
+
   useUpdateEffect(() => {
     const queryYyyymmGte = queryParams.get('gte')
     const queryYyyymmLte = queryParams.get('lte')
@@ -105,6 +115,7 @@ export const useTags = () => {
 
   return {
     setGteLteQueryParams,
+    clearGteLteQueryParams,
     tagsOfBookmarkCreation,
     tagsOfUrlCreation,
     addTagToQueryParams,

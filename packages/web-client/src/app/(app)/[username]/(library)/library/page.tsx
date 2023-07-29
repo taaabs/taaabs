@@ -38,6 +38,7 @@ const Page: React.FC = () => {
     useMonths()
   const {
     setGteLteQueryParams,
+    clearGteLteQueryParams,
     tagsOfBookmarkCreation,
     tagsOfUrlCreation,
     addTagToQueryParams,
@@ -330,6 +331,9 @@ const Page: React.FC = () => {
                 }
                 onYyyymmChange={({ gte, lte }) => {
                   setGteLteQueryParams({ gte, lte })
+                }}
+                clearDateRange={() => {
+                  clearGteLteQueryParams()
                 }}
                 currentGte={
                   parseInt(queryParams.get('gte') || '0') || undefined

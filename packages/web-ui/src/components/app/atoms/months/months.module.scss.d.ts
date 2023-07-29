@@ -8,6 +8,8 @@ declare const styles: {
   readonly graph__details__counts__starred: string
   readonly graph__details__counts__nsfw: string
   readonly graph__info: string
-  readonly graph__brush: string
+  readonly graph__clear: string
+  readonly graph__inner: string
+  readonly graph__inner__brush: string
 }
 export = styles

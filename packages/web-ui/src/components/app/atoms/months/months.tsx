@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { useIsHydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
+import { Icon } from '@web-ui/components/common/atoms/icon'
 
 type Months = {
   yyyymm: number
@@ -20,6 +21,7 @@ export namespace Months {
     currentGte?: number
     currentLte?: number
     onYyyymmChange: ({ gte, lte }: { gte: number; lte: number }) => void
+    clearDateRange: () => void
     selectedTags?: string
   }
 }
@@ -272,7 +274,7 @@ export const Months: React.FC<Months.Props> = (props) => {
                 (endIndex != startIndex
                   ? ` - ${_yyyymmToDisplay(props.months[endIndex].yyyymm)}`
                   : '')
-              : 'All history'}
+              : 'From the beginning'}
           </div>
           <div className={styles.graph__details__counts}>
             <div className={styles.graph__details__counts__total}>
@@ -291,64 +293,71 @@ export const Months: React.FC<Months.Props> = (props) => {
           </div>
         </div>
       )}
+      {startIndex != undefined && endIndex != undefined && (
+        <button className={styles.graph__clear} onClick={props.clearDateRange}>
+          <Icon variant="ADD" />
+        </button>
+      )}
       {isHydrated && props.months && props.months.length >= 2 && (
-        <ResponsiveContainer width={'100%'} height={160} key={key}>
-          <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
-            <Area
-              type="basis"
-              dataKey="bookmarkCount"
-              strokeWidth={0}
-              fill="var(--Months-chart-fill)"
-              fillOpacity={bookmarkCount == 0 ? 0 : 1}
-              animationDuration={0}
-            />
-            <Area
-              type="basis"
-              dataKey="starredCount"
-              strokeWidth={0}
-              fill="var(--Months-chart-starred-fill)"
-              fillOpacity={starredCount == 0 ? 0 : 1}
-              animationDuration={0}
-            />
-            <Area
-              type="basis"
-              dataKey="bookmarkCount"
-              strokeWidth={2}
-              stroke="var(--Months-chart-stroke)"
-              fill="transparent"
-              animationDuration={0}
-              strokeOpacity={bookmarkCount == 0 ? 0 : 1}
-            />
-            <Area
-              type="basis"
-              dataKey="nsfwCount"
-              strokeWidth={2}
-              stroke="var(--Months-chart-nsfw-stroke)"
-              fill="transparent"
-              animationDuration={0}
-              strokeOpacity={nsfwCount == 0 ? 0 : 1}
-            />
-            <Brush
-              startIndex={startIndex}
-              endIndex={endIndex}
-              height={40}
-              travellerWidth={24}
-              fill="transparent"
-              onChange={({ startIndex, endIndex }) => {
-                if (
-                  startIndex == undefined ||
-                  endIndex == undefined ||
-                  !props.months
-                )
-                  return
+        <div className={styles.graph__inner}>
+          <ResponsiveContainer width={'100%'} height={160} key={key}>
+            <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
+              <Area
+                type="basis"
+                dataKey="bookmarkCount"
+                strokeWidth={0}
+                fill="var(--Months-chart-fill)"
+                fillOpacity={bookmarkCount == 0 ? 0 : 1}
+                animationDuration={0}
+              />
+              <Area
+                type="basis"
+                dataKey="starredCount"
+                strokeWidth={0}
+                fill="var(--Months-chart-starred-fill)"
+                fillOpacity={starredCount == 0 ? 0 : 1}
+                animationDuration={0}
+              />
+              <Area
+                type="basis"
+                dataKey="bookmarkCount"
+                strokeWidth={2}
+                stroke="var(--Months-chart-stroke)"
+                fill="transparent"
+                animationDuration={0}
+                strokeOpacity={bookmarkCount == 0 ? 0 : 1}
+              />
+              <Area
+                type="basis"
+                dataKey="nsfwCount"
+                strokeWidth={2}
+                stroke="var(--Months-chart-nsfw-stroke)"
+                fill="transparent"
+                animationDuration={0}
+                strokeOpacity={nsfwCount == 0 ? 0 : 1}
+              />
+              <Brush
+                startIndex={startIndex}
+                endIndex={endIndex}
+                height={40}
+                travellerWidth={24}
+                fill="transparent"
+                onChange={({ startIndex, endIndex }) => {
+                  if (
+                    startIndex == undefined ||
+                    endIndex == undefined ||
+                    !props.months
+                  )
+                    return
 
-                setDraggedStartIndex(startIndex)
-                setDraggedEndIndex(endIndex)
-              }}
-              className={styles.graph__brush}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+                  setDraggedStartIndex(startIndex)
+                  setDraggedEndIndex(endIndex)
+                }}
+                className={styles.graph__inner__brush}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       )}
       {props.months && props.months.length == 1 && (
         <div className={styles.graph__info}>

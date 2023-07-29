@@ -79,22 +79,39 @@
     font-size: var(--font-size-13px);
     padding: 0 var(--distance-16px);
   }
-  & svg {
-    transform: translateY(41px);
+  &__clear {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    height: var(--button-dimension-48px);
+    width: var(--button-dimension-40px);
+    margin-top: var(--distance-2px);
+    svg {
+      width: var(--icon-dimension-16px);
+      height: var(--icon-dimension-16px);
+      transform: rotate(45deg);
+    }
   }
-  &__brush {
-    transform: translateY(-47px) scale(0.9);
-    transform-origin: center;
-    > rect:first-of-type {
-      stroke: none;
+  &__inner {
+    width: 100%;
+    svg {
+      transform: translateY(41px);
     }
-    > g > rect {
-      fill: var(--Months-chart-brush-handle-fill);
-      rx: var(--border-radius-8px);
-      stroke: var(--Months-chart-brush-handle-stroke);
-    }
-    > g > line {
-      stroke: var(--Months-chart-brush-handle-lines);
+    &__brush {
+      transform: translateY(-47px) scale(0.9);
+      transform-origin: center;
+      > rect:first-of-type {
+        stroke: none;
+      }
+      > g > rect {
+        fill: var(--Months-chart-brush-handle-fill);
+        rx: var(--border-radius-8px);
+        stroke: var(--Months-chart-brush-handle-stroke);
+      }
+      > g > line {
+        stroke: var(--Months-chart-brush-handle-lines);
+      }
     }
   }
 }
