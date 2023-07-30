@@ -21,9 +21,6 @@
       'link actions';
     border-radius: var(--border-radius-10px);
     grid-template-columns: 1fr auto;
-    padding-bottom: var(--distance-12px);
-  }
-  @include at992 {
     @include hover {
       border-color: var(--border-color-hover);
     }
@@ -165,6 +162,10 @@
         height: var(--icon-dimension-18px);
         fill: var(--Bookmark-action-fill) !important;
         @include transition-100ms(fill);
+        @include at992 {
+          width: var(--icon-dimension-16px);
+          height: var(--icon-dimension-16px);
+        }
       }
       @include hover {
         svg {
@@ -184,6 +185,9 @@
       @include to992 {
         height: 100%;
         align-items: center;
+      }
+      @include at992 {
+        padding-bottom: var(--distance-12px);
       }
       &__element {
         position: relative;
@@ -207,7 +211,7 @@
         }
         > div > span::after {
           content: '';
-          top: 0.2rem;
+          top: 0.25rem;
           left: 0;
           width: 2.1rem;
           height: 1.7rem;

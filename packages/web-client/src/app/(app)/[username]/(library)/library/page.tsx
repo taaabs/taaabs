@@ -21,6 +21,7 @@ import { useMonths } from './_hooks/use-months'
 import { useTags } from './_hooks/use-tags'
 import { Months } from '@web-ui/components/app/atoms/months'
 import { Tags } from '@web-ui/components/app/atoms/tags'
+import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 
 const Page: React.FC = () => {
   const queryParams = useSearchParams()
@@ -68,6 +69,24 @@ const Page: React.FC = () => {
             ? '[category_name]'
             : 'All bookmarks'
           : undefined
+      }
+      slotSidebar={
+        <NavigationForLibrarySidebar
+          navigationItems={[
+            {
+              label: 'All bookmarks',
+              onClick: () => {
+                router.push(`/${params.username}/library`)
+              },
+              isActive: queryParams.get('categoryId') ? false : true,
+            },
+            {
+              label: 'Categories',
+              onClick: () => {},
+              isActive: queryParams.get('categoryId') ? true : false,
+            },
+          ]}
+        />
       }
       slotAside={
         <LibraryAside
@@ -314,93 +333,76 @@ const Page: React.FC = () => {
               </OutsideClickHandler>
             ),
           }}
-          slotMonths={
+        >
+          <div
+            style={{
+              pointerEvents:
+                isGettingFirstBookmarks ||
+                isGettingMoreBookmarks ||
+                isGettingMonthsData
+                  ? 'none'
+                  : 'all',
+            }}
+          >
+            <Months
+              months={
+                currentOrderBy == OrderBy.BookmarkCreationDate
+                  ? monthsOfBookmarkCreation
+                  : monthsOfUrlCreation
+              }
+              onYyyymmChange={({ gte, lte }) => {
+                setGteLteQueryParams({ gte, lte })
+              }}
+              clearDateRange={() => {
+                clearGteLteQueryParams()
+              }}
+              currentGte={parseInt(queryParams.get('gte') || '0') || undefined}
+              currentLte={parseInt(queryParams.get('lte') || '0') || undefined}
+              selectedTags={queryParams.get('t') || undefined}
+              hasResults={
+                bookmarks != undefined && !isGettingMonthsData
+                  ? bookmarks.length
+                    ? true
+                    : false
+                  : undefined
+              }
+              isGettingData={isGettingMonthsData}
+            />
+          </div>
+          <div
+            style={{
+              pointerEvents:
+                isGettingFirstBookmarks ||
+                isGettingMoreBookmarks ||
+                isGettingMonthsData
+                  ? 'none'
+                  : undefined,
+            }}
+          >
+            <SelectedTags
+              selectedTags={selectedTags}
+              onSelectedTagClick={removeTagFromQueryParams}
+            />
+          </div>
+          {!isGettingFirstBookmarks && !isGettingMonthsData && (
             <div
               style={{
-                pointerEvents:
-                  isGettingFirstBookmarks ||
-                  isGettingMoreBookmarks ||
-                  isGettingMonthsData
-                    ? 'none'
-                    : 'all',
+                pointerEvents: isGettingMoreBookmarks ? 'none' : undefined,
               }}
             >
-              <Months
-                months={
-                  currentOrderBy == OrderBy.BookmarkCreationDate
-                    ? monthsOfBookmarkCreation
-                    : monthsOfUrlCreation
+              <Tags
+                tags={
+                  tagsOfBookmarkCreation && tagsOfUrlCreation
+                    ? currentOrderBy == OrderBy.BookmarkCreationDate
+                      ? tagsOfBookmarkCreation
+                      : tagsOfUrlCreation
+                    : {}
                 }
-                onYyyymmChange={({ gte, lte }) => {
-                  setGteLteQueryParams({ gte, lte })
-                }}
-                clearDateRange={() => {
-                  clearGteLteQueryParams()
-                }}
-                currentGte={
-                  parseInt(queryParams.get('gte') || '0') || undefined
-                }
-                currentLte={
-                  parseInt(queryParams.get('lte') || '0') || undefined
-                }
-                selectedTags={queryParams.get('t') || undefined}
-                hasResults={
-                  bookmarks != undefined && !isGettingMonthsData
-                    ? bookmarks.length
-                      ? true
-                      : false
-                    : undefined
-                }
+                onClick={addTagToQueryParams}
               />
             </div>
-          }
-          slotTags={
-            !isGettingFirstBookmarks &&
-            !isGettingMonthsData && (
-              <div
-                style={{
-                  pointerEvents:
-                    isGettingFirstBookmarks ||
-                    isGettingMoreBookmarks ||
-                    isGettingMonthsData
-                      ? 'none'
-                      : 'all',
-                }}
-              >
-                <Tags
-                  tags={
-                    tagsOfBookmarkCreation && tagsOfUrlCreation
-                      ? currentOrderBy == OrderBy.BookmarkCreationDate
-                        ? tagsOfBookmarkCreation
-                        : tagsOfUrlCreation
-                      : {}
-                  }
-                  onClick={addTagToQueryParams}
-                  selectedTags={selectedTags}
-                  onSelectedTagClick={removeTagFromQueryParams}
-                />
-              </div>
-            )
-          }
-        />
-      }
-      slotSidebar={
-        <NavigationForLibrarySidebar
-          navigationItems={[
-            {
-              label: 'All bookmarks',
-              onClick: () => {
-                router.push(`/${params.username}/library`)
-              },
-              isActive: queryParams.get('categoryId') ? false : true,
-            },
-            {
-              label: 'Categories',
-              onClick: () => {},
-              isActive: queryParams.get('categoryId') ? true : false,
-            },
-          ]}
-        />
+          )}
+        </LibraryAside>
       }
       isGettingFirstBookmarks={isGettingFirstBookmarks}
       isGettingMoreBookmarks={isGettingMoreBookmarks}

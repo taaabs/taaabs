@@ -74,10 +74,8 @@
     text-align: center;
     font-size: var(--font-size-13px);
     padding: 0 var(--distance-16px);
-    &--bottom {
-      align-items: flex-end;
-      padding-bottom: var(--distance-24px);
-    }
+    align-items: flex-end;
+    padding-bottom: 30px;
   }
   &__clear {
     position: absolute;

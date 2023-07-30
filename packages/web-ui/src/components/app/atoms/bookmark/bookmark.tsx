@@ -84,7 +84,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
                     </span>
                   )}
                   {tag.isSelected && (
-                    <span className={styles.main__tags__tag__yields}>✗</span>
+                    <span className={styles.main__tags__tag__yields}>×</span>
                   )}
                 </div>
               </button>
@@ -104,7 +104,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
           <Icon variant="THREE_DOTS" />
         </button>
         <button className={styles.actions__button}>
-          <Icon variant="INFO" />
+          <Icon variant="BOOKMARK" />
         </button>
       </div>
 

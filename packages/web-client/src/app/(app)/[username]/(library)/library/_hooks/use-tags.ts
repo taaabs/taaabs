@@ -76,7 +76,9 @@ export const useTags = () => {
     } else {
       dispatch(monthsActions.processTags({}))
     }
+  }, [queryParams])
 
+  useEffect(() => {
     const queryTags = queryParams.get('t')
     if (!queryTags && selectedTags.length > 0) {
       setSelectedTags([])

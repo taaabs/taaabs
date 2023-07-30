@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
 import { Icon } from '@web-ui/components/common/atoms/icon'
-import cn from 'classnames'
 
 type Months = {
   yyyymm: number
@@ -24,6 +23,7 @@ export namespace Months {
     clearDateRange: () => void
     selectedTags?: string
     hasResults?: boolean
+    isGettingData: boolean
   }
 }
 
@@ -271,14 +271,20 @@ export const Months: React.FC<Months.Props> = (props) => {
         <div className={styles.graph__details}>
           <div className={styles.graph__details__title}>Date range</div>
           <div className={styles['graph__details__current-range']}>
-            {startIndex != undefined &&
-            props.months[startIndex] &&
-            endIndex != undefined &&
-            props.months[endIndex]
-              ? _yyyymmToDisplay(props.months[startIndex].yyyymm) +
-                (endIndex != startIndex
-                  ? ` - ${_yyyymmToDisplay(props.months[endIndex].yyyymm)}`
-                  : '')
+            {props.months.length > 0
+              ? startIndex != undefined &&
+                props.months[startIndex] &&
+                endIndex != undefined &&
+                props.months[endIndex]
+                ? _yyyymmToDisplay(props.months[startIndex].yyyymm) +
+                  (endIndex != startIndex
+                    ? ` - ${_yyyymmToDisplay(props.months[endIndex].yyyymm)}`
+                    : '')
+                : 'All history'
+              : props.currentGte && props.currentLte
+              ? `${_yyyymmToDisplay(props.currentGte)} - ${_yyyymmToDisplay(
+                  props.currentLte,
+                )}`
               : 'All history'}
           </div>
           {props.hasResults && bookmarkCount && bookmarkCount > 0 ? (
@@ -303,13 +309,13 @@ export const Months: React.FC<Months.Props> = (props) => {
         </div>
       )}
 
-      {startIndex != undefined && endIndex != undefined && (
+      {props.currentGte && props.currentLte && (
         <button className={styles.graph__clear} onClick={props.clearDateRange}>
           <Icon variant="ADD" />
         </button>
       )}
 
-      {props.hasResults && props.months && props.months.length >= 2 && (
+      {!props.isGettingData && props.months && props.months.length >= 2 && (
         <div className={styles.graph__recharts}>
           <ResponsiveContainer width={'100%'} height={160} key={key}>
             <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
@@ -372,22 +378,16 @@ export const Months: React.FC<Months.Props> = (props) => {
       )}
 
       {props.hasResults && props.months && props.months.length <= 1 && (
-        <div
-          className={cn([styles.graph__info, styles['graph__info--bottom']])}
-        >
-          All results fit in one month
-        </div>
+        <div className={styles.graph__info}>All results fit in one month.</div>
       )}
 
       {props.hasResults == false && (
-        <div
-          className={cn([styles.graph__info, styles['graph__info--bottom']])}
-        >
-          There is nothing to plot
-        </div>
+        <div className={styles.graph__info}>There is nothing to plot.</div>
       )}
 
-      {!props.months && <div className={styles.graph__info}>Loading...</div>}
+      {props.isGettingData && (
+        <div className={styles.graph__info}>Loading...</div>
+      )}
     </div>
   )
 }

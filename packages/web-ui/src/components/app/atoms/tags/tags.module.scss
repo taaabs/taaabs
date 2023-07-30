@@ -3,41 +3,6 @@
 
 .container {
   display: flex;
-  flex-direction: column;
-  gap: var(--distance-8px);
-}
-.selected {
-  display: flex;
-  gap: var(--distance-6px);
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: var(--distance-4px) 0;
-  &::after {
-    content: '';
-    flex: auto;
-  }
-  &__tag {
-    font-family: var(--font-family-inter-tight);
-    font-size: var(--font-size-14px);
-    overflow-wrap: anywhere;
-    text-align: left;
-    @include hover {
-      span:first-child {
-        text-decoration: underline;
-      }
-    }
-    span:first-child {
-      color: var(--Tags-selected-foreground);
-      font-weight: var(--font-weight-inter-tight-medium);
-    }
-    span:last-child {
-      color: var(--text-color-dimmed);
-      margin-left: var(--distance-3px);
-    }
-  }
-}
-.unselected {
-  display: flex;
   flex-wrap: wrap;
   gap: var(--distance-6px);
   justify-content: space-between;
