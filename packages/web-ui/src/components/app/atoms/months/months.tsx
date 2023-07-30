@@ -24,6 +24,7 @@ export namespace Months {
     onYyyymmChange: ({ gte, lte }: { gte: number; lte: number }) => void
     clearDateRange: () => void
     selectedTags?: string
+    hasResults?: boolean
   }
 }
 
@@ -363,6 +364,23 @@ export const Months: React.FC<Months.Props> = (props) => {
           </ResponsiveContainer>
         </div>
       )}
+
+      {props.hasResults && props.months && props.months.length <= 1 && (
+        <div
+          className={cn([styles.graph__info, styles['graph__info--bottom']])}
+        >
+          Results fit in one month
+        </div>
+      )}
+
+      {props.hasResults == false && (
+        <div
+          className={cn([styles.graph__info, styles['graph__info--bottom']])}
+        >
+          There is nothing to plot
+        </div>
+      )}
+
       {!props.months && <div className={styles.graph__info}>Loading...</div>}
     </div>
   )

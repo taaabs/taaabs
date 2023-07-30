@@ -41,13 +41,22 @@ export const useOrderOptions = () => {
   }, [queryParams])
 
   const setOrderByQueryParam = (orderBy: OrderBy) => {
-    const updatedQueryParam = updateQueryParam(
+    let updatedQueryParams: any
+    updatedQueryParams = updateQueryParam(
       queryParams,
       'b',
       Object.values(OrderBy).indexOf(orderBy).toString(),
     )
 
-    router.push(`/${params.username}/library?${updatedQueryParam}`, {
+    if (queryParams.get('gte')) {
+      updatedQueryParams = updateQueryParam(updatedQueryParams, 'gte', '')
+    }
+
+    if (queryParams.get('lte')) {
+      updatedQueryParams = updateQueryParam(updatedQueryParams, 'lte', '')
+    }
+
+    router.push(`/${params.username}/library?${updatedQueryParams}`, {
       scroll: false,
     })
   }

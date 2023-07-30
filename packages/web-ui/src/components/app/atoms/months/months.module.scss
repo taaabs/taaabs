@@ -86,16 +86,10 @@
     align-items: center;
     justify-content: center;
     top: var(--distance-8px);
-    right: var(--distance-8px);
+    right: var(--distance-3px);
     height: var(--button-dimension-34px);
     width: var(--button-dimension-34px);
-    background: var(--Months-clear-background);
-    border: var(--border-secondary);
-    border-radius: var(--border-radius-999px);
     @include transition-100ms(border-color);
-    @include hover {
-      border-color: var(--border-color-hover);
-    }
     svg {
       width: var(--icon-dimension-16px);
       height: var(--icon-dimension-16px);

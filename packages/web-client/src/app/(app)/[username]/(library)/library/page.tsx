@@ -342,6 +342,13 @@ const Page: React.FC = () => {
                   parseInt(queryParams.get('lte') || '0') || undefined
                 }
                 selectedTags={queryParams.get('t') || undefined}
+                hasResults={
+                  bookmarks != undefined
+                    ? bookmarks.length
+                      ? true
+                      : false
+                    : undefined
+                }
               />
             </div>
           }
