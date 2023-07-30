@@ -9,7 +9,7 @@ export const processTags = ({
   yyyymmLte?: number
 }) => {
   return (dispatch: LibraryDispatch, getState: () => LibraryState) => {
-    const monthsData = getState().months.monthsData
+    const { monthsData } = getState().months
     if (!monthsData) {
       throw 'Months data should be there.'
     }

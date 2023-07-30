@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useLibraryDispatch, useLibrarySelector } from './store'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -15,6 +15,7 @@ export const useTags = () => {
     tagsOfBookmarkCreation,
     tagsOfUrlCreation,
   } = useLibrarySelector((state) => state.months)
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
 
   const addTagToQueryParams = (tag: string) => {
     let tags = ''
@@ -25,6 +26,18 @@ export const useTags = () => {
       tags = tag
     }
     const updatedQueryParams = updateQueryParam(queryParams, 't', tags)
+    router.push(`/${params.username}/library?${updatedQueryParams}`, {
+      scroll: false,
+    })
+  }
+
+  const removeTagFromQueryParams = (tag: string) => {
+    const updatedQueryParams = updateQueryParam(
+      queryParams,
+      't',
+      selectedTags.filter((t) => t != tag).join(','),
+    )
+
     router.push(`/${params.username}/library?${updatedQueryParams}`, {
       scroll: false,
     })
@@ -63,6 +76,13 @@ export const useTags = () => {
     } else {
       dispatch(monthsActions.processTags({}))
     }
+
+    const queryTags = queryParams.get('t')
+    if (!queryTags && selectedTags.length > 0) {
+      setSelectedTags([])
+    } else if (queryTags && queryTags != selectedTags.join(',')) {
+      setSelectedTags(queryTags.split(','))
+    }
   }, [queryParams])
 
   useUpdateEffect(() => {
@@ -88,8 +108,6 @@ export const useTags = () => {
       )
     }
   }, [tagsOfBookmarkCreation, tagsOfUrlCreation])
-
-  useUpdateEffect(() => {}, [queryParams])
 
   useEffect(() => {
     const tagsOfBookmarkCreation = sessionStorage.getItem(
@@ -119,5 +137,7 @@ export const useTags = () => {
     tagsOfBookmarkCreation,
     tagsOfUrlCreation,
     addTagToQueryParams,
+    selectedTags,
+    removeTagFromQueryParams,
   }
 }

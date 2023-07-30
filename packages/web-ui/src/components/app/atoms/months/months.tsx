@@ -3,7 +3,6 @@ import styles from './months.module.scss'
 import useThrottledCallback from 'beautiful-react-hooks/useThrottledCallback'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import { useEffect, useState } from 'react'
-import { useIsHydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
 import { Icon } from '@web-ui/components/common/atoms/icon'
@@ -29,7 +28,6 @@ export namespace Months {
 }
 
 export const Months: React.FC<Months.Props> = (props) => {
-  const isHydrated = useIsHydrated()
   const { swiping: isSwiping } = useSwipe(undefined, {
     preventDefault: false,
     passive: false,
@@ -244,6 +242,12 @@ export const Months: React.FC<Months.Props> = (props) => {
     })
   }, [props.currentGte, props.currentLte, props.months, props.selectedTags])
 
+  useUpdateEffect(() => {
+    if (props.hasResults == undefined) {
+      setBookmarkCount(null)
+    }
+  }, [props.hasResults])
+
   useEffect(() => {
     if (
       !props.months ||
@@ -277,7 +281,7 @@ export const Months: React.FC<Months.Props> = (props) => {
                   : '')
               : 'All history'}
           </div>
-          {bookmarkCount && bookmarkCount > 0 ? (
+          {props.hasResults && bookmarkCount && bookmarkCount > 0 ? (
             <div className={styles.graph__details__counts}>
               <div className={styles.graph__details__counts__total}>
                 {bookmarkCount}
@@ -298,12 +302,14 @@ export const Months: React.FC<Months.Props> = (props) => {
           )}
         </div>
       )}
+
       {startIndex != undefined && endIndex != undefined && (
         <button className={styles.graph__clear} onClick={props.clearDateRange}>
           <Icon variant="ADD" />
         </button>
       )}
-      {isHydrated && props.months && props.months.length >= 2 && (
+
+      {props.hasResults && props.months && props.months.length >= 2 && (
         <div className={styles.graph__recharts}>
           <ResponsiveContainer width={'100%'} height={160} key={key}>
             <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
@@ -369,7 +375,7 @@ export const Months: React.FC<Months.Props> = (props) => {
         <div
           className={cn([styles.graph__info, styles['graph__info--bottom']])}
         >
-          Results fit in one month
+          All results fit in one month
         </div>
       )}
 

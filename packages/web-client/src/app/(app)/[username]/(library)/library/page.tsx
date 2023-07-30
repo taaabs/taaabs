@@ -41,7 +41,9 @@ const Page: React.FC = () => {
     clearGteLteQueryParams,
     tagsOfBookmarkCreation,
     tagsOfUrlCreation,
+    selectedTags,
     addTagToQueryParams,
+    removeTagFromQueryParams,
   } = useTags()
   const { currentOrderBy, setOrderByQueryParam, setOrderQueryParam } =
     useOrderOptions()
@@ -343,7 +345,7 @@ const Page: React.FC = () => {
                 }
                 selectedTags={queryParams.get('t') || undefined}
                 hasResults={
-                  bookmarks != undefined
+                  bookmarks != undefined && !isGettingMonthsData
                     ? bookmarks.length
                       ? true
                       : false
@@ -353,8 +355,8 @@ const Page: React.FC = () => {
             </div>
           }
           slotTags={
-            tagsOfBookmarkCreation &&
-            tagsOfUrlCreation && (
+            !isGettingFirstBookmarks &&
+            !isGettingMonthsData && (
               <div
                 style={{
                   pointerEvents:
@@ -367,11 +369,15 @@ const Page: React.FC = () => {
               >
                 <Tags
                   tags={
-                    currentOrderBy == OrderBy.BookmarkCreationDate
-                      ? tagsOfBookmarkCreation
-                      : tagsOfUrlCreation
+                    tagsOfBookmarkCreation && tagsOfUrlCreation
+                      ? currentOrderBy == OrderBy.BookmarkCreationDate
+                        ? tagsOfBookmarkCreation
+                        : tagsOfUrlCreation
+                      : {}
                   }
                   onClick={addTagToQueryParams}
+                  selectedTags={selectedTags}
+                  onSelectedTagClick={removeTagFromQueryParams}
                 />
               </div>
             )
@@ -418,16 +424,27 @@ const Page: React.FC = () => {
                       ? tagsOfBookmarkCreation
                       : tagsOfUrlCreation
 
+                  const isSelected =
+                    selectedTags.find((t) => t == tag) != undefined
+
                   return {
                     name: tag,
-                    isSelected: false,
-                    yields: tags != null && tags[tag] ? tags[tag] : undefined,
+                    isSelected,
+                    yields:
+                      !isSelected && tags
+                        ? tags[tag]
+                          ? tags[tag]
+                          : 1
+                        : undefined,
                   }
                 })}
+                areTagsHidden={isGettingFirstBookmarks || isGettingMonthsData}
                 isNsfw={bookmark.isNsfw}
                 isStarred={bookmark.isStarred}
                 key={bookmark.id}
                 sitePath={bookmark.sitePath}
+                onTagClick={addTagToQueryParams}
+                onSelectedTagClick={removeTagFromQueryParams}
               />
             ))
           : []

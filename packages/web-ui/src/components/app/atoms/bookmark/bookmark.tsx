@@ -8,7 +8,10 @@ export namespace Bookmark {
     title: string
     url: string
     sitePath?: string
+    onTagClick: (tag: string) => void
+    onSelectedTagClick: (tag: string) => void
     tags: { name: string; yields?: number; isSelected?: boolean }[]
+    areTagsHidden: boolean
     saves: number
     onClick: () => void
     onMenuClick: () => void
@@ -40,7 +43,10 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
           </div>
         </div>
         {props.tags.length > 0 && (
-          <div className={styles['main__tags']}>
+          <div
+            className={styles['main__tags']}
+            style={{ visibility: props.areTagsHidden ? 'hidden' : undefined }}
+          >
             {props.tags.map((tag) => (
               <button
                 className={cn([
@@ -52,10 +58,10 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
                 ])}
                 onClick={(e) => {
                   e.stopPropagation()
-                  if (!tag.isSelected) {
-                    // remove tag from selected
-                  } else if (tag.yields) {
-                    // select tag
+                  if (tag.isSelected) {
+                    props.onSelectedTagClick(tag.name)
+                  } else {
+                    props.onTagClick(tag.name)
                   }
                 }}
                 key={tag.name}
@@ -76,6 +82,9 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
                     <span className={styles.main__tags__tag__yields}>
                       {tag.yields}
                     </span>
+                  )}
+                  {tag.isSelected && (
+                    <span className={styles.main__tags__tag__yields}>✗</span>
                   )}
                 </div>
               </button>
