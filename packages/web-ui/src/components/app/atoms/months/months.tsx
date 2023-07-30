@@ -7,6 +7,7 @@ import { useIsHydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
 import { Icon } from '@web-ui/components/common/atoms/icon'
+import cn from 'classnames'
 
 type Months = {
   yyyymm: number
@@ -182,7 +183,6 @@ export const Months: React.FC<Months.Props> = (props) => {
     currentLte: number
   }) => {
     setStartIndex(possibleStartIndex({ months, currentGte }))
-
     setEndIndex(possibleEndIndex({ months, currentLte }))
   }
 
@@ -262,7 +262,7 @@ export const Months: React.FC<Months.Props> = (props) => {
 
   return (
     <div className={styles.graph}>
-      {props.months && props.months.length > 1 && (
+      {props.months && (
         <div className={styles.graph__details}>
           <div className={styles.graph__details__title}>Date range</div>
           <div className={styles['graph__details__current-range']}>
@@ -274,23 +274,27 @@ export const Months: React.FC<Months.Props> = (props) => {
                 (endIndex != startIndex
                   ? ` - ${_yyyymmToDisplay(props.months[endIndex].yyyymm)}`
                   : '')
-              : 'From the beginning'}
+              : 'All history'}
           </div>
-          <div className={styles.graph__details__counts}>
-            <div className={styles.graph__details__counts__total}>
-              {bookmarkCount}
+          {bookmarkCount && bookmarkCount > 0 ? (
+            <div className={styles.graph__details__counts}>
+              <div className={styles.graph__details__counts__total}>
+                {bookmarkCount}
+              </div>
+              {starredCount != undefined && starredCount > 0 && (
+                <div className={styles.graph__details__counts__starred}>
+                  {starredCount}
+                </div>
+              )}
+              {nsfwCount != undefined && nsfwCount > 0 && (
+                <div className={styles.graph__details__counts__nsfw}>
+                  {nsfwCount}
+                </div>
+              )}
             </div>
-            {starredCount != undefined && starredCount > 0 && (
-              <div className={styles.graph__details__counts__starred}>
-                {starredCount}
-              </div>
-            )}
-            {nsfwCount != undefined && nsfwCount > 0 && (
-              <div className={styles.graph__details__counts__nsfw}>
-                {nsfwCount}
-              </div>
-            )}
-          </div>
+          ) : (
+            ''
+          )}
         </div>
       )}
       {startIndex != undefined && endIndex != undefined && (
@@ -299,7 +303,7 @@ export const Months: React.FC<Months.Props> = (props) => {
         </button>
       )}
       {isHydrated && props.months && props.months.length >= 2 && (
-        <div className={styles.graph__inner}>
+        <div className={styles.graph__recharts}>
           <ResponsiveContainer width={'100%'} height={160} key={key}>
             <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
               <Area
@@ -353,19 +357,11 @@ export const Months: React.FC<Months.Props> = (props) => {
                   setDraggedStartIndex(startIndex)
                   setDraggedEndIndex(endIndex)
                 }}
-                className={styles.graph__inner__brush}
+                className={styles.graph__recharts__brush}
               />
             </AreaChart>
           </ResponsiveContainer>
         </div>
-      )}
-      {props.months && props.months.length == 1 && (
-        <div className={styles.graph__info}>
-          All bookmarks are within one month
-        </div>
-      )}
-      {props.months && props.months.length == 0 && (
-        <div className={styles.graph__info}>There is nothing to plot</div>
       )}
       {!props.months && <div className={styles.graph__info}>Loading...</div>}
     </div>

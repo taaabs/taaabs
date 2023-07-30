@@ -13,10 +13,10 @@
   background-color: var(--ButtonSelect-background);
   @include transition-100ms(border-color);
   @include hover {
-    border-color: var(--border-color-primary);
+    border-color: var(--border-color-hover);
   }
   &--toggled {
-    border-color: var(--border-color-primary);
+    border-color: var(--border-color-hover);
     pointer-events: none;
   }
 }

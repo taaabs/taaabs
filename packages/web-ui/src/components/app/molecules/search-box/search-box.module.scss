@@ -18,7 +18,7 @@
   cursor: text;
   overflow: hidden;
   @include hover {
-    border: var(--border-primary);
+    border-color: var(--border-color-hover);
     box-shadow: var(--SearchBox-shadow-hover);
   }
   svg {

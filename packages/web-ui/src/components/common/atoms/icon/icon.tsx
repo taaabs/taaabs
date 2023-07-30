@@ -48,60 +48,60 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
 
   switch (variant) {
     case 'ADD':
-      icon = <Add />
+      icon = <Add style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'BOOKMARK':
-      icon = <Bookmark />
+      icon = <Bookmark style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'GREATER_THAN':
-      icon = <GreaterThan />
+      icon = <GreaterThan style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'INFO':
-      icon = <Info />
+      icon = <Info style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'LESS_THAN':
-      icon = <LessThan />
+      icon = <LessThan style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'LOGO':
-      icon = <Logo />
+      icon = <Logo style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'MOBILE_TITLE_BAR_MENU':
-      icon = <MobileTitleBarMenu />
+      icon = <MobileTitleBarMenu style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'MOBILE_TITLE_BAR_VIEW_OPTIONS':
-      icon = <MobileTitleBarViewOptions />
+      icon = <MobileTitleBarViewOptions style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'NOTIFICATIONS':
-      icon = <Notifications />
+      icon = <Notifications style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'SEARCH':
-      icon = <Search />
+      icon = <Search style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'SELECTED':
-      icon = <Selected />
+      icon = <Selected style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'STAR':
-      icon = <Star />
+      icon = <Star style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'SUN':
-      icon = <Sun />
+      icon = <Sun style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'THREE_DOTS':
-      icon = <ThreeDots />
+      icon = <ThreeDots style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'STAR_FILLED':
-      icon = <StarFilled />
+      icon = <StarFilled style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'USER_ADD':
-      icon = <UserAdd />
+      icon = <UserAdd style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'USER_REMOVE':
-      icon = <UserRemove />
+      icon = <UserRemove style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'USER':
-      icon = <User />
+      icon = <User style={{ fill: 'var(--Icon-fill)' }} />
       break
   }
 
-  return <>{icon}</>
+  return icon
 }

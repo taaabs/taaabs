@@ -1,5 +1,5 @@
 import { App } from '@web-ui/components/app/templates/app'
-import { Bookmark } from '@web-ui/components/app/molecules/bookmark'
+import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
 import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
 import { Library } from '@web-ui/components/app/templates/library'

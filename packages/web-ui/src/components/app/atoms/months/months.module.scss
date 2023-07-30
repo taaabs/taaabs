@@ -6,7 +6,6 @@
   border-radius: var(--border-radius-10px);
   border-bottom-left-radius: 13px;
   border-bottom-right-radius: 13px;
-  background: var(--Months-background);
   box-shadow: inset 0px 0px 0px 1px var(--border-color-secondary);
   overflow: hidden;
   height: 160px;
@@ -14,9 +13,6 @@
   align-items: center;
   justify-content: center;
   @include transition-100ms(box-shadow);
-  @include hover {
-    box-shadow: inset 0px 0px 0px 1px var(--border-color-primary);
-  }
   &__details {
     position: absolute;
     z-index: 1;
@@ -38,7 +34,7 @@
       gap: var(--distance-6px);
       margin-top: 48px;
       background-color: var(--Months-chart-counts-background);
-      padding: var(--distance-1px) var(--distance-8px) var(--distance-1px)
+      padding: var(--distance-1px) var(--distance-6px) var(--distance-1px)
         var(--distance-6px);
       border-radius: var(--border-radius-4px);
       font-size: var(--font-size-13px);
@@ -78,22 +74,35 @@
     text-align: center;
     font-size: var(--font-size-13px);
     padding: 0 var(--distance-16px);
+    &--bottom {
+      align-items: flex-end;
+      padding-bottom: var(--distance-24px);
+    }
   }
   &__clear {
     position: absolute;
     z-index: 1;
-    top: 0;
-    right: 0;
-    height: var(--button-dimension-48px);
-    width: var(--button-dimension-40px);
-    margin-top: var(--distance-2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: var(--distance-8px);
+    right: var(--distance-8px);
+    height: var(--button-dimension-34px);
+    width: var(--button-dimension-34px);
+    background: var(--Months-clear-background);
+    border: var(--border-secondary);
+    border-radius: var(--border-radius-999px);
+    @include transition-100ms(border-color);
+    @include hover {
+      border-color: var(--border-color-hover);
+    }
     svg {
       width: var(--icon-dimension-16px);
       height: var(--icon-dimension-16px);
       transform: rotate(45deg);
     }
   }
-  &__inner {
+  &__recharts {
     width: 100%;
     svg {
       transform: translateY(41px);
@@ -101,16 +110,32 @@
     &__brush {
       transform: translateY(-47px) scale(0.9);
       transform-origin: center;
+      @include hover {
+        > g > rect {
+          stroke: var(--Months-chart-brush-handle-hover);
+        }
+        > g > line {
+          stroke: var(--Months-chart-brush-handle-hover);
+        }
+      }
       > rect:first-of-type {
         stroke: none;
       }
       > g > rect {
+        @include transition-100ms(stroke);
         fill: var(--Months-chart-brush-handle-fill);
         rx: var(--border-radius-8px);
-        stroke: var(--Months-chart-brush-handle-stroke);
+        stroke: var(--Months-chart-brush-handle);
       }
       > g > line {
-        stroke: var(--Months-chart-brush-handle-lines);
+        @include transition-100ms(stroke);
+        stroke: var(--Months-chart-brush-handle);
+        &:first-of-type {
+          transform: translateY(-0.6px);
+        }
+        &:last-of-type {
+          transform: translateY(0.6px);
+        }
       }
     }
   }
