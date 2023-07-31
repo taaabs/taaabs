@@ -17,23 +17,20 @@ export const Tags: React.FC<Tags.Props> = (props) => {
         )
 
         return (
-          <>
+          <div className={styles.item} key={tag}>
             {firstTagOfChar == tag && (
-              <div className={styles.container__firstChar}>
-                <div className={styles.container__firstChar__inner}>
-                  {firstChar}
-                </div>
+              <div className={styles.item__firstChar}>
+                <div className={styles.item__firstChar__inner}>{firstChar}</div>
               </div>
             )}
             <button
-              className={styles.container__tag}
+              className={styles.item__tag}
               onClick={() => props.onClick(tag)}
-              key={tag}
             >
               <span>{tag}</span>
               <span>{yields}</span>
             </button>
-          </>
+          </div>
         )
       })}
     </div>

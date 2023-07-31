@@ -22,6 +22,7 @@ export const useMonths = () => {
     tagsOfBookmarkCreation,
     tagsOfUrlCreation,
   } = useLibrarySelector((state) => state.months)
+  const { bookmarks } = useLibrarySelector((state) => state.bookmarks)
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
@@ -122,7 +123,6 @@ export const useMonths = () => {
       dispatch(
         monthsActions.setYyyymmLte(parseInt(queryYyyyLte || '0') || null),
       )
-      dispatch(monthsActions.processTags())
     }
   }, [queryParams])
 
@@ -133,7 +133,7 @@ export const useMonths = () => {
     } else if (queryTags && queryTags != selectedTags.join(',')) {
       setSelectedTags(queryTags.split(','))
     }
-  }, [queryParams])
+  }, [bookmarks])
 
   useUpdateEffect(() => {
     if (monthsData) {

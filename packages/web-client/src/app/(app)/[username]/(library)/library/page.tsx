@@ -377,6 +377,7 @@ const Page: React.FC = () => {
                 isGettingMonthsData
                   ? 'none'
                   : undefined,
+              opacity: isGettingFirstBookmarks ? 0.5 : undefined,
             }}
           >
             <SelectedTags
@@ -384,10 +385,14 @@ const Page: React.FC = () => {
               onSelectedTagClick={removeTagFromQueryParams}
             />
           </div>
-          {!isGettingFirstBookmarks && !isGettingMonthsData && (
+          {!isGettingMonthsData && (
             <div
               style={{
-                pointerEvents: isGettingMoreBookmarks ? 'none' : undefined,
+                pointerEvents:
+                  isGettingMoreBookmarks || isGettingFirstBookmarks
+                    ? 'none'
+                    : undefined,
+                opacity: isGettingFirstBookmarks ? 0.5 : undefined,
               }}
             >
               <Tags

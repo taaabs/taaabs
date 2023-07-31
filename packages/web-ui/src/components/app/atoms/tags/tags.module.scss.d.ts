@@ -1,7 +1,8 @@
 declare const styles: {
   readonly container: string
-  readonly container__firstChar: string
-  readonly container__firstChar__inner: string
-  readonly container__tag: string
+  readonly item: string
+  readonly item__firstChar: string
+  readonly item__firstChar__inner: string
+  readonly item__tag: string
 }
 export = styles

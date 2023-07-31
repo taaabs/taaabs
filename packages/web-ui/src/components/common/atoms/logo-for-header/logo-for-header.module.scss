@@ -19,7 +19,7 @@
     }
   }
   svg {
-    fill: var(--logo-background);
+    fill: var(--logo-background) !important;
     height: 34px;
     @include at992 {
       height: 42px;

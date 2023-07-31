@@ -22,7 +22,7 @@
     }
   }
   svg {
-    fill: var(--brand-color);
+    fill: var(--brand-color) !important;
     @include transition-100ms(transform);
     height: 18px;
     width: 10px;
