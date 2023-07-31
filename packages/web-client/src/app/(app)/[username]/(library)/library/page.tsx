@@ -18,7 +18,6 @@ import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useMonths } from './_hooks/use-months'
-import { useTags } from './_hooks/use-tags'
 import { Months } from '@web-ui/components/app/atoms/months'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
@@ -35,9 +34,10 @@ const Page: React.FC = () => {
   } = useLibrarySelector((state) => state.bookmarks)
 
   const { getBookmarks } = useBookmarks()
-  const { monthsOfBookmarkCreation, monthsOfUrlCreation, isGettingMonthsData } =
-    useMonths()
   const {
+    monthsOfBookmarkCreation,
+    monthsOfUrlCreation,
+    isGettingMonthsData,
     setGteLteQueryParams,
     clearGteLteQueryParams,
     tagsOfBookmarkCreation,
@@ -45,7 +45,7 @@ const Page: React.FC = () => {
     selectedTags,
     addTagToQueryParams,
     removeTagFromQueryParams,
-  } = useTags()
+  } = useMonths()
   const { currentOrderBy, setOrderByQueryParam, setOrderQueryParam } =
     useOrderOptions()
   const {
@@ -433,14 +433,13 @@ const Page: React.FC = () => {
                     name: tag,
                     isSelected,
                     yields:
-                      !isSelected && tags
+                      !isSelected && tags && Object.values(tags).length
                         ? tags[tag]
                           ? tags[tag]
                           : 1
                         : undefined,
                   }
                 })}
-                areTagsHidden={isGettingFirstBookmarks || isGettingMonthsData}
                 isNsfw={bookmark.isNsfw}
                 isStarred={bookmark.isStarred}
                 key={bookmark.id}

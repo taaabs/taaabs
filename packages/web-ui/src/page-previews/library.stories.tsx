@@ -3,7 +3,7 @@ import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
 import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
 import { Library } from '@web-ui/components/app/templates/library'
-import { LogoForHeader } from '@web-ui/components/common/molecules/logo-for-header'
+import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
 import { AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
 import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
@@ -95,19 +95,15 @@ const bookmark = (
     <Bookmark
       isStarred={false}
       title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odio sodal, euismod odio ac, fermentum metus."
       url="https://example.com/test/lorem_ipsum"
-      site="example.com/test"
-      createdAt={new Date('2023-02-20')}
       isNsfw={true}
-      isArchived={true}
-      tags={['lorem', 'ipsum']}
-      visibility="private"
+      tags={[]}
       saves={3400}
-      onSiteClick={() => {}}
-      onDateClick={() => {}}
-      onSavesClick={() => {}}
-      onVisibilityClick={() => {}}
+      areTagsHidden={false}
+      onTagClick={() => {}}
+      onClick={() => {}}
+      onMenuClick={() => {}}
+      onSelectedTagClick={() => {}}
     />
   </div>
 )

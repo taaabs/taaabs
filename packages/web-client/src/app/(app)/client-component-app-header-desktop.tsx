@@ -4,7 +4,7 @@ import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation
 import { UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
 import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
 import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
-import { LogoForHeader } from '@web-ui/components/common/molecules/logo-for-header'
+import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { useParams, usePathname } from 'next/navigation'
 import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { useContext, useEffect, useState } from 'react'
@@ -21,7 +21,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
     logoSlot = (
       <UserForHeader
         user={{
-          username: params.username,
+          username: params.username as string,
           backHref: '/',
           avatar: publicUserAvatar?.avatar
             ? {

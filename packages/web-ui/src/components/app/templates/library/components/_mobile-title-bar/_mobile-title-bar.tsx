@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/atoms/icon'
+import { Icon } from '@web-ui/components/common/particles/icon'
 import styles from './_mobile-title-bar.module.scss'
 import cn from 'classnames'
 import Skeleton from 'react-loading-skeleton'

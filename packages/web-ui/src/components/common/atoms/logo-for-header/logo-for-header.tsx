@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Icon } from '@web-ui/components/common/atoms/icon'
+import { Icon } from '@web-ui/components/common/particles/icon'
 import styles from './logo-for-header.module.scss'
 import cn from 'classnames'
 

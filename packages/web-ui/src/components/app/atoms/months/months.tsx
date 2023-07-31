@@ -5,7 +5,7 @@ import useSwipe from 'beautiful-react-hooks/useSwipe'
 import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
-import { Icon } from '@web-ui/components/common/atoms/icon'
+import { Icon } from '@web-ui/components/common/particles/icon'
 
 type Months = {
   yyyymm: number

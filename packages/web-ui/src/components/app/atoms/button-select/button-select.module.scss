@@ -33,10 +33,15 @@
   }
 }
 .arrow {
-  // @include transition-100ms(transform);
   svg {
     transform: rotate(-90deg);
+    @include transition-100ms(transform);
     width: var(--icon-dimension-12px);
     height: var(--icon-dimension-12px);
+  }
+  &--toggled {
+    svg {
+      transform:  rotate(-90deg) scaleX(-1);
+    }
   }
 }

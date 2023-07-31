@@ -3,7 +3,7 @@
 import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
 import { UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
 import { AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
-import { LogoForHeader } from '@web-ui/components/common/molecules/logo-for-header'
+import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { useParams, usePathname } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { PublicUserAvatarContext } from './public-user-avatar-provider'
@@ -20,7 +20,7 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
     logoSlot = (
       <UserForHeader
         user={{
-          username: params.username,
+          username: params.username as string,
           backHref: '/',
           avatar: publicUserAvatar?.avatar
             ? {

@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/atoms/icon'
+import { Icon } from '@web-ui/components/common/particles/icon'
 import TextTruncate from 'react-text-truncate'
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
@@ -11,7 +11,6 @@ export namespace Bookmark {
     onTagClick: (tag: string) => void
     onSelectedTagClick: (tag: string) => void
     tags: { name: string; yields?: number; isSelected?: boolean }[]
-    areTagsHidden: boolean
     saves: number
     onClick: () => void
     onMenuClick: () => void
@@ -43,10 +42,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
           </div>
         </div>
         {props.tags.length > 0 && (
-          <div
-            className={styles['main__tags']}
-            style={{ visibility: props.areTagsHidden ? 'hidden' : undefined }}
-          >
+          <div className={styles['main__tags']}>
             {props.tags.map((tag) => (
               <button
                 className={cn([
@@ -117,10 +113,43 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
             }}
             href={props.url}
           >
-            <TextTruncate line={2} text={'⠀⠀' + props.url} truncateText="…" />
+            <TextTruncate
+              line={2}
+              text={'⠀⠀' + _displayUrl(props.url)}
+              truncateText="…"
+            />
           </a>
         </div>
       </div>
     </div>
   )
+}
+
+function _displayUrl(url: string): string {
+  let parsedUrl = ''
+  if (url.substring(0, 12) == 'https://www.') {
+    parsedUrl = url.substring(12)
+  } else if (url.substring(0, 11) == 'http://www.') {
+    parsedUrl = url.substring(11)
+  } else if (url.substring(0, 8) == 'https://') {
+    parsedUrl = url.substring(8)
+  } else if (url.substring(0, 7) == 'http://') {
+    parsedUrl = url.substring(7)
+  } else {
+    parsedUrl = url
+  }
+
+  if (parsedUrl.substring(parsedUrl.length - 1, parsedUrl.length) == '/') {
+    parsedUrl = parsedUrl.substring(0, parsedUrl.length - 1)
+  }
+
+  if (parsedUrl.substring(parsedUrl.length - 5, parsedUrl.length) == '.html') {
+    parsedUrl = parsedUrl.substring(0, parsedUrl.length - 5)
+  } else if (
+    parsedUrl.substring(parsedUrl.length - 4, parsedUrl.length) == '.htm'
+  ) {
+    parsedUrl = parsedUrl.substring(0, parsedUrl.length - 4)
+  }
+
+  return parsedUrl.split('?')[0].split('/').join(' › ')
 }

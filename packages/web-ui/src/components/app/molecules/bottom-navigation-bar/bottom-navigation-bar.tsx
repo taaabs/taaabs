@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/atoms/icon'
+import { Icon } from '@web-ui/components/common/particles/icon'
 import styles from './bottom-navigation-bar.module.scss'
 
 export namespace BottomNavigationBar {

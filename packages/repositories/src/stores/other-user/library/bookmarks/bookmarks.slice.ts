@@ -4,15 +4,19 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import * as thunks from './action-creators'
 
 type BookmarksState = {
+  isGettingData: boolean
   isGettingFirstBookmarks: boolean
   isGettingMoreBookmarks: boolean
+  incomingBookmarks: Array<BookmarkEntity.Public> | null
   bookmarks: Array<BookmarkEntity.Public> | null
   hasMoreBookmarks: boolean | null
 }
 
 const initialState: BookmarksState = {
+  isGettingData: false,
   isGettingFirstBookmarks: false,
   isGettingMoreBookmarks: false,
+  incomingBookmarks: null,
   bookmarks: null,
   hasMoreBookmarks: null,
 }
@@ -21,11 +25,20 @@ export const bookmarksSlice = createSlice({
   name: 'bookmarks',
   initialState,
   reducers: {
+    setIsGettingData(state, action: PayloadAction<boolean>) {
+      state.isGettingData = action.payload
+    },
     setIsGettingFirstBookmarks(state, action: PayloadAction<boolean>) {
       state.isGettingFirstBookmarks = action.payload
     },
     setIsGettingMoreBookmarks(state, action: PayloadAction<boolean>) {
       state.isGettingMoreBookmarks = action.payload
+    },
+    setIncomingBookmarks(
+      state,
+      action: PayloadAction<BookmarksState['bookmarks']>,
+    ) {
+      state.incomingBookmarks = action.payload
     },
     setBookmarks(state, action: PayloadAction<BookmarksState['bookmarks']>) {
       state.bookmarks = action.payload

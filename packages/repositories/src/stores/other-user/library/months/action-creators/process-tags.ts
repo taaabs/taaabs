@@ -1,15 +1,9 @@
 import { LibraryDispatch, LibraryState } from '../../library.store'
 import { Tags, monthsActions } from '../months.slice'
 
-export const processTags = ({
-  yyyymmGte,
-  yyyymmLte,
-}: {
-  yyyymmGte?: number
-  yyyymmLte?: number
-}) => {
+export const processTags = () => {
   return (dispatch: LibraryDispatch, getState: () => LibraryState) => {
-    const { monthsData } = getState().months
+    const { monthsData, yyyymmGte, yyyymmLte } = getState().months
     if (!monthsData) {
       throw 'Months data should be there.'
     }

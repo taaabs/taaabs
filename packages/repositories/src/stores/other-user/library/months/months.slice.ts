@@ -17,6 +17,8 @@ export type MonthsState = {
   monthsOfUrlCreation: Months | null
   tagsOfBookmarkCreation: Tags | null
   tagsOfUrlCreation: Tags | null
+  yyyymmGte: number | null
+  yyyymmLte: number | null
 }
 
 const initialState: MonthsState = {
@@ -26,6 +28,8 @@ const initialState: MonthsState = {
   monthsOfUrlCreation: null,
   tagsOfBookmarkCreation: null,
   tagsOfUrlCreation: null,
+  yyyymmGte: null,
+  yyyymmLte: null,
 }
 
 export const monthsSlice = createSlice({
@@ -68,6 +72,12 @@ export const monthsSlice = createSlice({
     },
     setTagsOfUrlCreation(state, action: PayloadAction<Tags>) {
       state.tagsOfUrlCreation = action.payload
+    },
+    setYyyymmGte(state, action: PayloadAction<number | null>) {
+      state.yyyymmGte = action.payload
+    },
+    setYyyymmLte(state, action: PayloadAction<number | null>) {
+      state.yyyymmLte = action.payload
     },
   },
 })

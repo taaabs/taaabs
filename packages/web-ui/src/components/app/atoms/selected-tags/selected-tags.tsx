@@ -8,7 +8,7 @@ export namespace Tags {
 }
 
 export const SelectedTags: React.FC<Tags.Props> = (props) => {
-  return (
+  return props.selectedTags.length ? (
     <div className={styles.container}>
       {props.selectedTags.map((tag) => (
         <button
@@ -20,5 +20,7 @@ export const SelectedTags: React.FC<Tags.Props> = (props) => {
         </button>
       ))}
     </div>
+  ) : (
+    <></>
   )
 }

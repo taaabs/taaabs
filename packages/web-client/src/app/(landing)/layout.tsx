@@ -1,6 +1,6 @@
 import { Landing } from '@web-ui/components/landing/templates/landing'
 import { DynamicDesktopNavigationForHeader } from './DynamicDesktopNavigationForHeader'
-import { LogoForHeader } from '@web-ui/components/common/molecules/logo-for-header'
+import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { DynamicDesktopUserForHeader } from './DynamicDesktopUserForHeader'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {

@@ -27,17 +27,23 @@ export const Primary = () => (
         saves={2200}
         onClick={() => {}}
         onMenuClick={() => {}}
+        areTagsHidden={false}
+        onSelectedTagClick={() => {}}
+        onTagClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         isStarred={false}
         title="Lorem ipsum dolor sit amet"
-        url="https://example.com/test/lorem_ipsum"
+        url="https://example.com/test/lorem_ipsum?test=lorem"
         isNsfw={false}
         tags={[]}
         saves={2200}
         onClick={() => {}}
         onMenuClick={() => {}}
+        areTagsHidden={false}
+        onSelectedTagClick={() => {}}
+        onTagClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -47,11 +53,14 @@ export const Primary = () => (
         isNsfw={false}
         tags={[
           { name: 'lorem', yields: 8 },
-          { name: 'ipsum', yields: 2, isSelected: true },
+          { name: 'ipsum', isSelected: true },
         ]}
         saves={2200}
         onClick={() => {}}
         onMenuClick={() => {}}
+        areTagsHidden={false}
+        onSelectedTagClick={() => {}}
+        onTagClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -66,6 +75,9 @@ export const Primary = () => (
         saves={2200}
         onClick={() => {}}
         onMenuClick={() => {}}
+        areTagsHidden={false}
+        onSelectedTagClick={() => {}}
+        onTagClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -84,6 +96,9 @@ export const Primary = () => (
         saves={2200}
         onClick={() => {}}
         onMenuClick={() => {}}
+        areTagsHidden={false}
+        onSelectedTagClick={() => {}}
+        onTagClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -98,6 +113,9 @@ export const Primary = () => (
         saves={2200}
         onClick={() => {}}
         onMenuClick={() => {}}
+        areTagsHidden={false}
+        onSelectedTagClick={() => {}}
+        onTagClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -112,6 +130,9 @@ export const Primary = () => (
         saves={2200}
         onClick={() => {}}
         onMenuClick={() => {}}
+        areTagsHidden={false}
+        onSelectedTagClick={() => {}}
+        onTagClick={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -126,6 +147,9 @@ export const Primary = () => (
         saves={2200}
         onClick={() => {}}
         onMenuClick={() => {}}
+        areTagsHidden={false}
+        onSelectedTagClick={() => {}}
+        onTagClick={() => {}}
       />
       <StorybookSpacer />
     </div>

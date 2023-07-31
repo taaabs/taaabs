@@ -133,7 +133,7 @@
     grid-area: actions;
     display: flex;
     @include to992 {
-      margin-right: var(--distance-9px);
+      margin: 0 var(--distance-9px);
     }
     @include at992 {
       flex-direction: column;

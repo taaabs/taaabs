@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Icon } from '@web-ui/components/common/atoms/icon'
+import { Icon } from '@web-ui/components/common/particles/icon'
 import styles from './user-for-header.module.scss'
 import { Blurhash } from 'react-blurhash'
 import Skeleton from 'react-loading-skeleton'
