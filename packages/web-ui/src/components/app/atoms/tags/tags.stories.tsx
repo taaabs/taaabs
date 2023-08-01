@@ -29,8 +29,6 @@ export const Primary = () => (
           drawing: 3,
         }}
         onClick={() => {}}
-        onSelectedTagClick={() => {}}
-        selectedTags={[]}
       />
       <StorybookSpacer />
       <Tags
@@ -54,21 +52,6 @@ export const Primary = () => (
           drawing: 3,
         }}
         onClick={() => {}}
-        onSelectedTagClick={() => {}}
-        selectedTags={[
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-        ]}
       />
     </div>
   </StorybookMargin>

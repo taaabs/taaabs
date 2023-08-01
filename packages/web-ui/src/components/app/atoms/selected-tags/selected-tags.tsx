@@ -14,6 +14,7 @@ export const SelectedTags: React.FC<Tags.Props> = (props) => {
         <button
           className={styles.container__tag}
           onClick={() => props.onSelectedTagClick(tag)}
+          key={tag}
         >
           <span>{tag}</span>
           <span>×</span>

@@ -28,6 +28,7 @@ export const getBookmarks = ({
       dispatch(bookmarksActions.setIsGettingFirstBookmarks(true))
       dispatch(bookmarksActions.setHasMoreBookmarks(null))
     }
+
     const { bookmarks, pagination } = await getBookmarks.invoke(params)
 
     dispatch(bookmarksActions.setIsGettingData(false))
@@ -45,13 +46,12 @@ export const getBookmarks = ({
       dispatch(bookmarksActions.setIsGettingMoreBookmarks(false))
     } else {
       dispatch(bookmarksActions.setIncomingBookmarks(bookmarks))
+      if (!getState().months.isGettingMonthsData) {
+        dispatch(bookmarksActions.setBookmarks(bookmarks))
+        dispatch(monthsActions.processTags())
+        dispatch(bookmarksActions.setIsGettingFirstBookmarks(false))
+      }
     }
     dispatch(bookmarksActions.setHasMoreBookmarks(pagination.hasMore))
-
-    if (!getState().months.isGettingMonthsData) {
-      dispatch(bookmarksActions.setBookmarks(bookmarks))
-      dispatch(monthsActions.processTags())
-      dispatch(bookmarksActions.setIsGettingFirstBookmarks(false))
-    }
   }
 }

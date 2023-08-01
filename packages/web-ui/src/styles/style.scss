@@ -1,5 +1,4 @@
 @use 'foundation' as *;
-// @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800');
 
 *,
 *::before,
@@ -37,7 +36,7 @@ html {
   --border-color-primary: var(--neutral200);
   --border-color-secondary: var(--neutral100);
   --border-color-hover: var(--neutral300);
-  --logo-background: var(--blue800);
+  --logo-background: var(--blue700);
   --button-background: var(--blue800);
   --button-background-hover: var(--blue900);
   --button-outlined-icon-background: var(--plain-white);
@@ -61,7 +60,7 @@ html {
   --Bookmark-nsfw-background: var(--red500);
   --Bookmark-starred-title-background: var(--hightlight);
   --Bookmark-action-fill: var(--neutral400);
-  --Bookmark-action-fill-hover: var(--neutral500);
+  --Bookmark-action-fill-hover: var(--plain-black);
   --Bookmark-saves-background: var(--blue100);
   --Bookmark-saves-foreground: var(--blue700);
   --TitleBar-background-desktop: var(--blue50);
@@ -77,9 +76,10 @@ html {
   --SimpleSelectDropdown-checkbox-background: var(--blue100);
   --SimpleSelectDropdown-checkbox-border-color: var(--blue300);
   --SimpleSelectDropdown-checkbox-foreground: var(--blue800);
+  --Months-background: var(--plain-white);
   --Months-clear-background: var(--plain-white);
-  --Months-chart-fill: #bfdbfe; // Values must be passed directly for chart.
-  --Months-chart-stroke: #3b82f6;
+  --Months-chart-fill: #dbeafe; // Values must be passed directly for chart.
+  --Months-chart-stroke: #1d4ed8;
   --Months-chart-starred-fill: #fff545;
   --Months-chart-nsfw-stroke: #ef4444;
   --Months-chart-brush-handle-fill: #fff;

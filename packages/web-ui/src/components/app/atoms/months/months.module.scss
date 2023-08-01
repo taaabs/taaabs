@@ -12,6 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--Months-background);
   @include transition-100ms(box-shadow);
   &__details {
     position: absolute;

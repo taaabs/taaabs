@@ -21,9 +21,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: var(--font-size-15px);
-        height: var(--button-dimension-28px);
-        width: var(--button-dimension-28px);
+        font-size: var(--font-size-13px);
+        height: var(--distance-22px);
+        width: var(--distance-22px);
+        line-height: 0;
         border-radius: var(--border-radius-999px);
         font-family: var(--font-family-plus-jakarta-sans);
         font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
@@ -50,7 +51,7 @@
       }
       span:last-child {
         color: var(--text-color-dimmed);
-        margin-left: var(--distance-3px);
+        margin-left: var(--distance-4px);
       }
     }
   }
