@@ -25,7 +25,7 @@ export const Tags: React.FC<Tags.Props> = (props) => {
               className={styles.item__tag}
               onClick={() => props.onClick(tag)}
             >
-              <span>{tag.replace('-', ' ')}</span>
+              <span>{tag.replaceAll('-', ' ')}</span>
               <span>{yields}</span>
             </button>
           </div>

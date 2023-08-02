@@ -66,7 +66,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
                       },
                     ])}
                   >
-                    {tag.name.replace('-', ' ')}
+                    {tag.name.replaceAll('-', ' ')}
                   </span>
                   {tag.yields && (
                     <span className={styles.main__tags__tag__yields}>

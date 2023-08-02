@@ -337,15 +337,6 @@ export const Months: React.FC<Months.Props> = (props) => {
               />
               <Area
                 type="basis"
-                dataKey="bookmarkCount"
-                strokeWidth={2}
-                stroke="var(--Months-chart-stroke)"
-                fill="transparent"
-                animationDuration={0}
-                strokeOpacity={bookmarkCount == 0 ? 0 : 1}
-              />
-              <Area
-                type="basis"
                 dataKey="nsfwCount"
                 strokeWidth={2}
                 stroke="var(--Months-chart-nsfw-stroke)"
@@ -353,6 +344,16 @@ export const Months: React.FC<Months.Props> = (props) => {
                 animationDuration={0}
                 strokeOpacity={nsfwCount == 0 ? 0 : 1}
               />
+              <Area
+                type="basis"
+                dataKey="bookmarkCount"
+                strokeWidth={2}
+                stroke="var(--Months-chart-stroke)"
+                fill="transparent"
+                animationDuration={0}
+                strokeOpacity={bookmarkCount == 0 ? 0 : 1}
+              />
+
               <Brush
                 startIndex={startIndex}
                 endIndex={endIndex}

@@ -284,8 +284,7 @@ export const Library: React.FC<Library.Props> = (props) => {
                       : 'End of results'}
                   </div>
                 )}
-              {(props.showBookmarksSkeleton ||
-                props.isGettingMoreBookmarks) && (
+              {props.showBookmarksSkeleton && (
                 <div className={styles['main__inner__skeleton']}>
                   {/* We render 100 items to ensure "DestkopTitleBar" is not visible when user scrolls a bit and reloads a tab */}
                   {[...Array(100)].map((_, i) => (

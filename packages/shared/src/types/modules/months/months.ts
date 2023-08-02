@@ -8,13 +8,9 @@ export namespace Months {
     starredCount?: number
     nsfwCount?: number
   }
-  export enum Audience {
-    Authorized = 'authorized',
-    Public = 'public',
-  }
-  export type JsonKey = `${Audience} ${
-    string /** category id */
-  } ${LibraryFilter} ${string /** comma separated tags */}`
+  export type JsonKey = `${string /** category id */} ${LibraryFilter} ${
+    string /** comma separated tags */
+  }`
   export type Months = Record<string, Month>
   export type JsonValue = {
     monthsOfBookmarkCreation: Months
