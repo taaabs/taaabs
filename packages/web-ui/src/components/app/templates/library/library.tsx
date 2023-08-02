@@ -277,7 +277,7 @@ export const Library: React.FC<Library.Props> = (props) => {
               {!props.showBookmarksSkeleton &&
                 !props.isGettingMoreBookmarks && (
                   <div className={styles['main__inner__info']}>
-                    {props.isGettingFirstBookmarks
+                    {props.isGettingFirstBookmarks || props.hasMoreBookmarks
                       ? 'Loading...'
                       : props.noResults
                       ? 'No results'

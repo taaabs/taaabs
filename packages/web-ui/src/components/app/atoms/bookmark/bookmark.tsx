@@ -45,13 +45,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
           <div className={styles['main__tags']}>
             {props.tags.map((tag) => (
               <button
-                className={cn([
-                  styles['main__tags__tag'],
-                  {
-                    [styles['main__tags__tag--condensed']]:
-                      props.tags.length >= 4,
-                  },
-                ])}
+                className={styles['main__tags__tag']}
                 onClick={(e) => {
                   e.stopPropagation()
                   if (tag.isSelected) {
@@ -72,7 +66,7 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
                       },
                     ])}
                   >
-                    {tag.name}
+                    {tag.name.replace('-', ' ')}
                   </span>
                   {tag.yields && (
                     <span className={styles.main__tags__tag__yields}>

@@ -385,28 +385,26 @@ const Page: React.FC = () => {
               onSelectedTagClick={removeTagFromQueryParams}
             />
           </div>
-          {!isGettingMonthsData && (
-            <div
-              style={{
-                pointerEvents:
-                  isGettingMoreBookmarks || isGettingFirstBookmarks
-                    ? 'none'
-                    : undefined,
-                opacity: isGettingFirstBookmarks ? 0.5 : undefined,
-              }}
-            >
-              <Tags
-                tags={
-                  tagsOfBookmarkCreation && tagsOfUrlCreation
-                    ? currentOrderBy == OrderBy.BookmarkCreationDate
-                      ? tagsOfBookmarkCreation
-                      : tagsOfUrlCreation
-                    : {}
-                }
-                onClick={addTagToQueryParams}
-              />
-            </div>
-          )}
+          <div
+            style={{
+              pointerEvents:
+                isGettingMoreBookmarks || isGettingFirstBookmarks
+                  ? 'none'
+                  : undefined,
+              opacity: isGettingFirstBookmarks ? 0.5 : undefined,
+            }}
+          >
+            <Tags
+              tags={
+                tagsOfBookmarkCreation && tagsOfUrlCreation
+                  ? currentOrderBy == OrderBy.BookmarkCreationDate
+                    ? tagsOfBookmarkCreation
+                    : tagsOfUrlCreation
+                  : {}
+              }
+              onClick={addTagToQueryParams}
+            />
+          </div>
         </LibraryAside>
       }
       isGettingFirstBookmarks={isGettingFirstBookmarks}

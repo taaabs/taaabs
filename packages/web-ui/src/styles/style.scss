@@ -36,7 +36,7 @@ html {
   --border-color-primary: var(--neutral200);
   --border-color-secondary: var(--neutral100);
   --border-color-hover: var(--neutral300);
-  --logo-background: var(--blue700);
+  --logo-background: var(--blue800);
   --button-background: var(--blue800);
   --button-background-hover: var(--blue900);
   --button-outlined-icon-background: var(--plain-white);
@@ -60,7 +60,7 @@ html {
   --Bookmark-nsfw-background: var(--red500);
   --Bookmark-starred-title-background: var(--hightlight);
   --Bookmark-action-fill: var(--neutral400);
-  --Bookmark-action-fill-hover: var(--plain-black);
+  --Bookmark-action-fill-hover: var(--neutral500);
   --Bookmark-saves-background: var(--blue100);
   --Bookmark-saves-foreground: var(--blue700);
   --TitleBar-background-desktop: var(--blue50);
@@ -78,14 +78,14 @@ html {
   --SimpleSelectDropdown-checkbox-foreground: var(--blue800);
   --Months-background: var(--plain-white);
   --Months-clear-background: var(--plain-white);
-  --Months-chart-fill: #dbeafe; // Values must be passed directly for chart.
+  --Months-chart-fill: #bfdbfe; // Values must be passed directly for chart.
   --Months-chart-stroke: #1d4ed8;
   --Months-chart-starred-fill: #fff545;
   --Months-chart-nsfw-stroke: #ef4444;
   --Months-chart-brush-handle-fill: #fff;
   --Months-chart-brush-handle: var(--neutral300);
   --Months-chart-brush-handle-hover: var(--neutral350);
-  --Months-chart-counts-background: rgba(251, 251, 251, 0.7);
+  --Months-chart-counts-background: rgba(255, 255, 255, 0.7);
   --Tags-selected-foreground: var(--yellow800);
   --Tags-tag-foreground: var(--green700);
   --Tags-first-char-background: var(--blue50);

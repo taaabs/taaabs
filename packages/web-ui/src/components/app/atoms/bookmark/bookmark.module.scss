@@ -88,6 +88,7 @@
         font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
       }
       &__text {
+        position: relative;
         display: inline;
         font-weight: var(--font-weight-inter-medium);
         font-size: var(--font-size-1-9rem);
@@ -97,20 +98,16 @@
     &__tags {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--distance-0-8rem);
+      gap: var(--distance-8px);
       margin: var(--distance-6px) 0 var(--distance-8px) 0;
       &__tag {
         display: flex;
         align-items: center;
         gap: var(--distance-0-4rem);
+        font-family: var(--font-family-inter-tight);
         @include hover {
           > div > span:first-child {
             @include text-decoration-underline;
-          }
-        }
-        &--condensed {
-          @include to992 {
-            font-family: var(--font-family-inter-tight);
           }
         }
         &__name {

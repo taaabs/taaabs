@@ -384,10 +384,6 @@ export const Months: React.FC<Months.Props> = (props) => {
       {props.hasResults == false && (
         <div className={styles.graph__info}>There is nothing to plot.</div>
       )}
-
-      {props.isGettingData && (
-        <div className={styles.graph__info}>Loading...</div>
-      )}
     </div>
   )
 }

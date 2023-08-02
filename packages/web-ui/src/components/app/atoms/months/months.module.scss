@@ -76,7 +76,7 @@
     font-size: var(--font-size-13px);
     padding: 0 var(--distance-16px);
     align-items: flex-end;
-    padding-bottom: 30px;
+    padding-bottom: var(--distance-32px);
   }
   &__clear {
     position: absolute;
