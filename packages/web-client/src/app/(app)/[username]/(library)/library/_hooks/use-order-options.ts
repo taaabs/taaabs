@@ -1,15 +1,13 @@
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { updateQueryParam } from '@/utils/update-query-param'
+import { updateSearchParam } from '@/utils/update-query-param'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 
 export const useOrderOptions = () => {
-  const queryParams = useSearchParams()
-  const router = useRouter()
-  const params = useParams()
+  const queryParams = useShallowSearchParams()
   const [currentOrderBy, setCurrentOrderBy] = useState<OrderBy>(
     Object.values(OrderBy)[
       parseInt(
@@ -42,35 +40,39 @@ export const useOrderOptions = () => {
 
   const setOrderByQueryParam = (orderBy: OrderBy) => {
     let updatedQueryParams: any
-    updatedQueryParams = updateQueryParam(
+    updatedQueryParams = updateSearchParam(
       queryParams,
       'b',
       Object.values(OrderBy).indexOf(orderBy).toString(),
     )
 
     if (queryParams.get('gte')) {
-      updatedQueryParams = updateQueryParam(updatedQueryParams, 'gte', '')
+      updatedQueryParams = updateSearchParam(updatedQueryParams, 'gte', '')
     }
 
     if (queryParams.get('lte')) {
-      updatedQueryParams = updateQueryParam(updatedQueryParams, 'lte', '')
+      updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte', '')
     }
 
-    router.push(`/${params.username}/library?${updatedQueryParams}`, {
-      scroll: false,
-    })
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updatedQueryParams,
+    )
   }
 
   const setOrderQueryParam = (order: Order) => {
-    const updatedQueryParams = updateQueryParam(
+    const updatedQueryParams = updateSearchParam(
       queryParams,
       'o',
       Object.values(Order).indexOf(order).toString(),
     )
 
-    router.push(`/${params.username}/library?${updatedQueryParams}`, {
-      scroll: false,
-    })
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updatedQueryParams,
+    )
   }
 
   return { currentOrderBy, setOrderByQueryParam, setOrderQueryParam }

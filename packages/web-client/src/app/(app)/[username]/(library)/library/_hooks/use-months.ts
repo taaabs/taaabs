@@ -5,13 +5,13 @@ import { useEffect, useState } from 'react'
 import { MonthsParams } from '@repositories/modules/months/domain/types/months.params'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { updateQueryParam } from '@/utils/update-query-param'
+import { updateSearchParam } from '@/utils/update-query-param'
+import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 export const useMonths = () => {
-  const router = useRouter()
-  const queryParams = useSearchParams()
+  const queryParams = useShallowSearchParams()
   const params = useParams()
   const dispatch = useLibraryDispatch()
   const {
@@ -63,42 +63,57 @@ export const useMonths = () => {
     } else {
       tags = tag
     }
-    const updatedQueryParams = updateQueryParam(queryParams, 't', tags)
-    router.push(`/${params.username}/library?${updatedQueryParams}`, {
-      scroll: false,
-    })
+    const updatedQueryParams = updateSearchParam(queryParams, 't', tags)
+    // router.push(`/${params.username}/library?${updatedQueryParams}`, {
+    //   scroll: false,
+    // })
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updatedQueryParams,
+    )
   }
 
   const removeTagFromQueryParams = (tag: string) => {
-    const updatedQueryParams = updateQueryParam(
+    const updatedQueryParams = updateSearchParam(
       queryParams,
       't',
       selectedTags.filter((t) => t != tag).join(','),
     )
 
-    router.push(`/${params.username}/library?${updatedQueryParams}`, {
-      scroll: false,
-    })
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updatedQueryParams,
+    )
   }
 
   const setGteLteQueryParams = ({ gte, lte }: { gte: number; lte: number }) => {
-    let updatedQueryParams: any
-    updatedQueryParams = updateQueryParam(queryParams, 'gte', `${gte}`)
-    updatedQueryParams = updateQueryParam(updatedQueryParams, 'lte', `${lte}`)
+    const queryParams = new URLSearchParams(window.location.search)
 
-    router.push(`/${params.username}/library?${updatedQueryParams}`, {
-      scroll: false,
-    })
+    let updatedQueryParams: any
+    updatedQueryParams = updateSearchParam(queryParams, 'gte', `${gte}`)
+    updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte', `${lte}`)
+
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updatedQueryParams,
+    )
   }
 
   const clearGteLteQueryParams = () => {
-    let updatedQueryParams: any
-    updatedQueryParams = updateQueryParam(queryParams, 'gte', '')
-    updatedQueryParams = updateQueryParam(updatedQueryParams, 'lte', '')
+    const queryParams = new URLSearchParams(window.location.search)
 
-    router.push(`/${params.username}/library?${updatedQueryParams}`, {
-      scroll: false,
-    })
+    let updatedQueryParams: any
+    updatedQueryParams = updateSearchParam(queryParams, 'gte', '')
+    updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte', '')
+
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updatedQueryParams,
+    )
   }
 
   useUpdateEffect(() => {
@@ -127,6 +142,8 @@ export const useMonths = () => {
   }, [queryParams])
 
   useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search)
+
     const queryTags = queryParams.get('t')
     if (!queryTags && selectedTags.length > 0) {
       setSelectedTags([])

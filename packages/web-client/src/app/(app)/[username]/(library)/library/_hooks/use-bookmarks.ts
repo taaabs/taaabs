@@ -7,11 +7,12 @@ import { useEffect, useState } from 'react'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
+import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 export const useBookmarks = () => {
-  const queryParams = useSearchParams()
+  const queryParams = useShallowSearchParams()
   const params = useParams()
   const dispatch = useLibraryDispatch()
   const { bookmarks, hasMoreBookmarks } = useLibrarySelector(

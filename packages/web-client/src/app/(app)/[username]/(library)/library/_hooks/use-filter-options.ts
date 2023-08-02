@@ -1,14 +1,12 @@
-import { updateQueryParam } from '@/utils/update-query-param'
+import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { updateSearchParam } from '@/utils/update-query-param'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
 export const useFilterOptions = () => {
-  const queryParams = useSearchParams()
-  const router = useRouter()
-  const params = useParams()
+  const queryParams = useShallowSearchParams()
   const [currentFilter, setCurrentFilter] = useState<LibraryFilter>(
     Object.values(LibraryFilter)[
       parseInt(
@@ -46,15 +44,17 @@ export const useFilterOptions = () => {
   }, [queryParams])
 
   const setFilterQueryParam = (filter: LibraryFilter) => {
-    const updatedQueryParam = updateQueryParam(
+    const updatedQueryParams = updateSearchParam(
       queryParams,
       'f',
       Object.values(LibraryFilter).indexOf(filter).toString(),
     )
 
-    router.push(`/${params.username}/library?${updatedQueryParam}`, {
-      scroll: false,
-    })
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updatedQueryParams,
+    )
   }
 
   useUpdateEffect(() => {

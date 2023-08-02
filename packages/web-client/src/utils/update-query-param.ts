@@ -1,16 +1,14 @@
-import { ReadonlyURLSearchParams } from 'next/navigation'
-
-function updateQueryParam(
-  queryParams: ReadonlyURLSearchParams,
+function updateSearchParam(
+  searchParams: URLSearchParams,
   param: string,
   value: string,
 ) {
   const currentSearchParams = new URLSearchParams(
-    Array.from(queryParams.entries()),
+    Array.from(searchParams.entries()),
   )
   currentSearchParams.set(param, value)
 
   return currentSearchParams
 }
 
-export { updateQueryParam }
+export { updateSearchParam }

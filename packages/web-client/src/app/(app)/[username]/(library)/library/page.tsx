@@ -3,7 +3,7 @@
 import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
 import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Library } from '@web-ui/components/app/templates/library'
-import { useSearchParams, useRouter, useParams } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { useLibrarySelector } from './_hooks/store'
 import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
@@ -21,9 +21,10 @@ import { useMonths } from './_hooks/use-months'
 import { Months } from '@web-ui/components/app/atoms/months'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
+import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 
 const Page: React.FC = () => {
-  const queryParams = useSearchParams()
+  const queryParams = useShallowSearchParams()
   const router = useRouter()
   const params = useParams()
   const {
