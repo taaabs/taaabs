@@ -50,11 +50,6 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         href: `/${params.username}/library`,
         isActive: pathname == `/${params.username}/library`,
       },
-      {
-        label: 'About',
-        href: `/${params.username}/about`,
-        isActive: pathname == `/${params.username}/about`,
-      },
     ]
   } else {
     navigation = [
