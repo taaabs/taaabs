@@ -14,20 +14,18 @@ export namespace NavigationForLibrarySidebar {
 
 export const NavigationForLibrarySidebar: React.FC<
   NavigationForLibrarySidebar.Props
-> = (props) => {
-  return (
-    <nav className={styles.navigation}>
-      {props.navigationItems.map((item, i) => (
-        <button
-          onClick={item.onClick}
-          className={cn(styles.navigation__item, {
-            [styles['navigation__item--active']]: item.isActive,
-          })}
-          key={i}
-        >
-          {item.label}
-        </button>
-      ))}
-    </nav>
-  )
-}
+> = (props) => (
+  <nav className={styles.navigation}>
+    {props.navigationItems.map((item, i) => (
+      <button
+        onClick={item.onClick}
+        className={cn(styles.navigation__item, {
+          [styles['navigation__item--active']]: item.isActive,
+        })}
+        key={i}
+      >
+        {item.label}
+      </button>
+    ))}
+  </nav>
+)

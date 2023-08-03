@@ -14,8 +14,6 @@ export const getBookmarks = ({
   apiUrl: string
 }) => {
   return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
-    const state = getState()
-
     const dataSource = new BookmarksDataSourceImpl(apiUrl)
     const repository = new BookmarksRepositoryImpl(dataSource)
     const getBookmarks = new GetBookmarksOnPublicUser(repository)
@@ -34,15 +32,7 @@ export const getBookmarks = ({
     dispatch(bookmarksActions.setIsGettingData(false))
 
     if (params.after) {
-      if (state.bookmarks.bookmarks == null) {
-        throw 'Bookmarks should not be null.'
-      }
-      dispatch(
-        bookmarksActions.setBookmarks([
-          ...state.bookmarks.bookmarks,
-          ...bookmarks,
-        ]),
-      )
+      dispatch(bookmarksActions.setMoreBookmarks(bookmarks))
       dispatch(bookmarksActions.setIsGettingMoreBookmarks(false))
     } else {
       dispatch(bookmarksActions.setIncomingBookmarks(bookmarks))

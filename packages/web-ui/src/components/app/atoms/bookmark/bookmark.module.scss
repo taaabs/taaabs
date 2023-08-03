@@ -93,6 +93,7 @@
         font-weight: var(--font-weight-inter-medium);
         font-size: var(--font-size-1-9rem);
         margin-bottom: var(--distance-0-8rem);
+        overflow-wrap: anywhere;
       }
     }
     &__tags {

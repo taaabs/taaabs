@@ -1,0 +1,18 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--distance-8px);
+  &::after {
+    content: '';
+    flex: auto;
+  }
+  > span > span {
+    height: 20px;
+    border-radius: var(--border-radius-4px);
+  }
+}

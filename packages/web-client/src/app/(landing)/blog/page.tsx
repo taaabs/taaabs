@@ -1,9 +1,5 @@
 const Page: React.FC = () => {
-  return (
-    <div>
-      blogs
-    </div>
-  )
+  return <div>blogs</div>
 }
 
 export default Page

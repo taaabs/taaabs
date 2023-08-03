@@ -273,17 +273,6 @@ export const Library: React.FC<Library.Props> = (props) => {
               >
                 {props.slotBookmarks}
               </div>
-              <div ref={endOfBookmarks} />
-              {!props.showBookmarksSkeleton &&
-                !props.isGettingMoreBookmarks && (
-                  <div className={styles['main__inner__info']}>
-                    {props.isGettingFirstBookmarks || props.hasMoreBookmarks
-                      ? 'Loading...'
-                      : props.noResults
-                      ? 'No results'
-                      : 'End of results'}
-                  </div>
-                )}
               {props.showBookmarksSkeleton && (
                 <div className={styles['main__inner__skeleton']}>
                   {/* We render 100 items to ensure "DestkopTitleBar" is not visible when user scrolls a bit and reloads a tab */}
@@ -292,6 +281,13 @@ export const Library: React.FC<Library.Props> = (props) => {
                   ))}
                 </div>
               )}
+              <div className={styles['main__inner__info']} ref={endOfBookmarks}>
+                {props.isGettingFirstBookmarks || props.hasMoreBookmarks
+                  ? 'Loading...'
+                  : props.noResults
+                  ? 'No results'
+                  : 'End of results'}
+              </div>
             </div>
           </div>
         </div>

@@ -18,15 +18,25 @@ import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useMonths } from './_hooks/use-months'
-import { Months } from '@web-ui/components/app/atoms/months'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
+import { TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
+
+const Months = dynamic(() => import('./dynamic-months'), {
+  ssr: false,
+  loading: () => <MonthsSkeleton />,
+})
 
 const Page: React.FC = () => {
   const queryParams = useShallowSearchParams()
   const router = useRouter()
   const params = useParams()
+  const [showMonthsAndTags, setShowMonthsAndTags] = useState(false)
   const {
     bookmarks,
     isGettingFirstBookmarks,
@@ -60,6 +70,21 @@ const Page: React.FC = () => {
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
   const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
   const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)
+
+  useUpdateEffect(() => {
+    sessionStorage.setItem('queryParams', queryParams.toString())
+    return () => {
+      sessionStorage.removeItem('queryParams')
+    }
+  }, [queryParams])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowMonthsAndTags(true)
+    }, 500)
+
+    return () => clearTimeout(timeout)
+  }, [])
 
   return (
     <Library
@@ -334,84 +359,104 @@ const Page: React.FC = () => {
               </OutsideClickHandler>
             ),
           }}
-        >
-          <div
-            style={{
-              pointerEvents:
-                isGettingFirstBookmarks ||
-                isGettingMoreBookmarks ||
-                isGettingMonthsData
-                  ? 'none'
-                  : 'all',
-            }}
-          >
-            <Months
-              months={
-                currentOrderBy == OrderBy.BookmarkCreationDate
-                  ? monthsOfBookmarkCreation
-                  : monthsOfUrlCreation
-              }
-              onYyyymmChange={({ gte, lte }) => {
-                setGteLteQueryParams({ gte, lte })
-              }}
-              clearDateRange={() => {
-                clearGteLteQueryParams()
-              }}
-              currentGte={parseInt(queryParams.get('gte') || '0') || undefined}
-              currentLte={parseInt(queryParams.get('lte') || '0') || undefined}
-              selectedTags={queryParams.get('t') || undefined}
-              hasResults={
-                bookmarks != undefined && !isGettingMonthsData
-                  ? bookmarks.length
-                    ? true
-                    : false
-                  : undefined
-              }
-              isGettingData={isGettingMonthsData}
-            />
-          </div>
-          <div
-            style={{
-              pointerEvents:
-                isGettingFirstBookmarks ||
-                isGettingMoreBookmarks ||
-                isGettingMonthsData
-                  ? 'none'
-                  : undefined,
-              opacity: isGettingFirstBookmarks ? 0.5 : undefined,
-            }}
-          >
-            <SelectedTags
-              selectedTags={selectedTags}
-              onSelectedTagClick={removeTagFromQueryParams}
-            />
-          </div>
-          <div
-            style={{
-              pointerEvents:
-                isGettingMoreBookmarks || isGettingFirstBookmarks
-                  ? 'none'
-                  : undefined,
-              opacity: isGettingFirstBookmarks ? 0.5 : undefined,
-            }}
-          >
-            <Tags
-              tags={
-                tagsOfBookmarkCreation && tagsOfUrlCreation
-                  ? currentOrderBy == OrderBy.BookmarkCreationDate
-                    ? tagsOfBookmarkCreation
-                    : tagsOfUrlCreation
-                  : {}
-              }
-              onClick={addTagToQueryParams}
-            />
-          </div>
-        </LibraryAside>
+          slotMonths={
+            showMonthsAndTags ? (
+              <div
+                style={{
+                  pointerEvents:
+                    isGettingFirstBookmarks ||
+                    isGettingMoreBookmarks ||
+                    isGettingMonthsData
+                      ? 'none'
+                      : 'all',
+                }}
+              >
+                <Months
+                  months={
+                    currentOrderBy == OrderBy.BookmarkCreationDate
+                      ? monthsOfBookmarkCreation
+                      : monthsOfUrlCreation
+                  }
+                  onYyyymmChange={({ gte, lte }) => {
+                    setGteLteQueryParams({ gte, lte })
+                  }}
+                  clearDateRange={() => {
+                    clearGteLteQueryParams()
+                  }}
+                  currentGte={
+                    parseInt(queryParams.get('gte') || '0') || undefined
+                  }
+                  currentLte={
+                    parseInt(queryParams.get('lte') || '0') || undefined
+                  }
+                  selectedTags={queryParams.get('t') || undefined}
+                  hasResults={
+                    bookmarks != undefined && !isGettingMonthsData
+                      ? bookmarks.length
+                        ? true
+                        : false
+                      : undefined
+                  }
+                  isGettingData={isGettingMonthsData}
+                />
+              </div>
+            ) : (
+              <MonthsSkeleton />
+            )
+          }
+          slotTags={
+            showMonthsAndTags ? (
+              <>
+                {selectedTags.length > 0 && (
+                  <div
+                    style={{
+                      pointerEvents:
+                        isGettingFirstBookmarks ||
+                        isGettingMoreBookmarks ||
+                        isGettingMonthsData
+                          ? 'none'
+                          : undefined,
+                    }}
+                  >
+                    <SelectedTags
+                      selectedTags={selectedTags}
+                      onSelectedTagClick={removeTagFromQueryParams}
+                    />
+                  </div>
+                )}
+                <div
+                  style={{
+                    pointerEvents:
+                      isGettingFirstBookmarks ||
+                      isGettingMoreBookmarks ||
+                      isGettingMonthsData
+                        ? 'none'
+                        : undefined,
+                    opacity: isGettingFirstBookmarks ? 0.5 : undefined,
+                  }}
+                >
+                  <Tags
+                    tags={
+                      tagsOfBookmarkCreation && tagsOfUrlCreation
+                        ? currentOrderBy == OrderBy.BookmarkCreationDate
+                          ? tagsOfBookmarkCreation
+                          : tagsOfUrlCreation
+                        : {}
+                    }
+                    onClick={addTagToQueryParams}
+                  />
+                </div>
+              </>
+            ) : (
+              <TagsSkeleton />
+            )
+          }
+        ></LibraryAside>
       }
       isGettingFirstBookmarks={isGettingFirstBookmarks}
       isGettingMoreBookmarks={isGettingMoreBookmarks}
       hasMoreBookmarks={hasMoreBookmarks || false}
-      noResults={!bookmarks || !bookmarks.length}
+      noResults={!bookmarks || bookmarks.length == 0}
       getMoreBookmarks={() => {
         getBookmarks({ getNextPage: true })
       }}

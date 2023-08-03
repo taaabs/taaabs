@@ -1,0 +1,9 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  > span > span {
+    height: 160px;
+    border-radius: var(--border-radius-10px);
+  }
+}

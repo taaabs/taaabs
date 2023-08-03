@@ -1,4 +1,4 @@
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useLibraryDispatch, useLibrarySelector } from './store'
 import { monthsActions } from '@repositories/stores/other-user/library/months/months.slice'
 import { useEffect, useState } from 'react'
@@ -64,9 +64,6 @@ export const useMonths = () => {
       tags = tag
     }
     const updatedQueryParams = updateSearchParam(queryParams, 't', tags)
-    // router.push(`/${params.username}/library?${updatedQueryParams}`, {
-    //   scroll: false,
-    // })
     window.history.pushState(
       {},
       '',
@@ -170,8 +167,10 @@ export const useMonths = () => {
   }, [monthsData, tagsOfBookmarkCreation, tagsOfUrlCreation])
 
   useEffect(() => {
+    const qp = sessionStorage.getItem('queryParams') // Is set in "use-bookmarks" hook
     const monthsData = sessionStorage.getItem('monthsData')
-    if (monthsData) {
+
+    if (queryParams.toString() == qp && monthsData) {
       dispatch(monthsActions.setData(JSON.parse(monthsData)))
     } else {
       getMonths()

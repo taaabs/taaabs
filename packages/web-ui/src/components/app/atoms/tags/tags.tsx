@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import styles from './tags.module.scss'
 
 export namespace Tags {
@@ -7,30 +8,37 @@ export namespace Tags {
   }
 }
 
-export const Tags: React.FC<Tags.Props> = (props) => {
-  return (
-    <div className={styles.container}>
-      {Object.entries(props.tags).map(([tag, yields]) => {
-        const firstChar = tag.substring(0, 1)
-        const firstTagOfChar = Object.keys(props.tags).find(
-          (tag) => tag.substring(0, 1) == firstChar,
-        )
+export const Tags: React.FC<Tags.Props> = memo(
+  (props) => {
+    const renderedFirstChars: Set<string> = new Set([])
 
-        return (
-          <div className={styles.item} key={tag}>
-            {firstTagOfChar == tag && (
-              <div className={styles.item__firstChar}>{firstChar}</div>
-            )}
-            <button
-              className={styles.item__tag}
-              onClick={() => props.onClick(tag)}
-            >
-              <span>{tag.replaceAll('-', ' ')}</span>
-              <span>{yields}</span>
-            </button>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
+    return (
+      <div className={styles.container}>
+        {Object.entries(props.tags).map(([tag, yields]) => {
+          let displayFirstChar = false
+          const firstChar = tag.substring(0, 1)
+          if (!renderedFirstChars.has(firstChar)) {
+            renderedFirstChars.add(firstChar)
+            displayFirstChar = true
+          }
+
+          return (
+            <div className={styles.item} key={tag}>
+              {displayFirstChar && (
+                <div className={styles.item__firstChar}>{firstChar}</div>
+              )}
+              <button
+                className={styles.item__tag}
+                onClick={() => props.onClick(tag)}
+              >
+                <span>{tag.replaceAll('-', ' ')}</span>
+                <span>{yields}</span>
+              </button>
+            </div>
+          )
+        })}
+      </div>
+    )
+  },
+  (o, n) => Object.keys(o.tags).length == Object.keys(n.tags).length,
+)

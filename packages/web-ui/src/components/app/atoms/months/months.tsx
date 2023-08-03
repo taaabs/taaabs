@@ -2,7 +2,7 @@ import { Area, AreaChart, Brush, ResponsiveContainer } from 'recharts'
 import styles from './months.module.scss'
 import useThrottledCallback from 'beautiful-react-hooks/useThrottledCallback'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
 import { Icon } from '@web-ui/components/common/particles/icon'
@@ -337,15 +337,6 @@ export const Months: React.FC<Months.Props> = (props) => {
               />
               <Area
                 type="basis"
-                dataKey="nsfwCount"
-                strokeWidth={2}
-                stroke="var(--Months-chart-nsfw-stroke)"
-                fill="transparent"
-                animationDuration={0}
-                strokeOpacity={nsfwCount == 0 ? 0 : 1}
-              />
-              <Area
-                type="basis"
                 dataKey="bookmarkCount"
                 strokeWidth={2}
                 stroke="var(--Months-chart-stroke)"
@@ -353,7 +344,15 @@ export const Months: React.FC<Months.Props> = (props) => {
                 animationDuration={0}
                 strokeOpacity={bookmarkCount == 0 ? 0 : 1}
               />
-
+              <Area
+                type="basis"
+                dataKey="nsfwCount"
+                strokeWidth={2}
+                stroke="var(--Months-chart-nsfw-stroke)"
+                fill="transparent"
+                animationDuration={0}
+                strokeOpacity={nsfwCount == 0 ? 0 : 1}
+              />
               <Brush
                 startIndex={startIndex}
                 endIndex={endIndex}

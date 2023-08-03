@@ -43,6 +43,14 @@ export const bookmarksSlice = createSlice({
     setBookmarks(state, action: PayloadAction<BookmarksState['bookmarks']>) {
       state.bookmarks = action.payload
     },
+    setMoreBookmarks(
+      state,
+      action: PayloadAction<BookmarksState['bookmarks']>,
+    ) {
+      if (!state.bookmarks || !action.payload)
+        throw 'Some bookmarks should be there.'
+      state.bookmarks!.push(...action.payload)
+    },
     setHasMoreBookmarks(
       state,
       action: PayloadAction<BookmarksState['hasMoreBookmarks']>,

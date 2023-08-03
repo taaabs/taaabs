@@ -5,6 +5,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--distance-6px);
+  row-gap: var(--distance-8px);
+  column-gap: var(--distance-6px);
   justify-content: space-between;
   align-items: center;
   &::after {
