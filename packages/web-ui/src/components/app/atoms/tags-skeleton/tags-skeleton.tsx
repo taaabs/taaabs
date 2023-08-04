@@ -6,7 +6,7 @@ export const TagsSkeleton = memo(() => {
   return (
     <div className={styles.container}>
       {[...new Array(40)].map(() => (
-        <Skeleton width={_getRandomArbitrary(30, 70)} />
+        <Skeleton width={_getRandomArbitrary(40, 90)} />
       ))}
     </div>
   )

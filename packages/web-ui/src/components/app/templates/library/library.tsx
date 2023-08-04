@@ -38,7 +38,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   const endOfBookmarks = useRef<HTMLDivElement>(null)
   const isHydrated = useIsHydrated()
 
-  const { isRestoringScrollPosition } = useSessionScrollRestoration(mainInner)
+  useSessionScrollRestoration(mainInner)
   const isEndOfBookmarksVisible = useViewportSpy(endOfBookmarks)
 
   const swipeState = useSwipe(main, {
@@ -265,18 +265,14 @@ export const Library: React.FC<Library.Props> = (props) => {
                   },
                 ])}
                 style={{
-                  visibility:
-                    isRestoringScrollPosition || !isHydrated
-                      ? 'hidden'
-                      : 'visible',
+                  visibility: isHydrated ? 'visible' : 'hidden',
                 }}
               >
                 {props.slotBookmarks}
               </div>
               {props.showBookmarksSkeleton && (
                 <div className={styles['main__inner__skeleton']}>
-                  {/* We render 100 items to ensure "DestkopTitleBar" is not visible when user scrolls a bit and reloads a tab */}
-                  {[...Array(100)].map((_, i) => (
+                  {[...Array(30)].map((_, i) => (
                     <Skeleton key={i} />
                   ))}
                 </div>

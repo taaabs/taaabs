@@ -120,9 +120,12 @@ export const useBookmarks = () => {
   }, [bookmarks])
 
   useEffect(() => {
-    const qp = sessionStorage.getItem('queryParams')
+    const sessionQueryParams = sessionStorage.getItem('queryParams')
     const bookmarks = sessionStorage.getItem('bookmarks')
-    if (queryParams.toString() == qp && bookmarks) {
+    if (
+      (queryParams.toString() == sessionQueryParams || !sessionQueryParams) &&
+      bookmarks
+    ) {
       dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
       const hasMoreBookmarks = sessionStorage.getItem('hasMoreBookmarks')
       if (hasMoreBookmarks) {

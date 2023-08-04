@@ -2,7 +2,7 @@ import { Area, AreaChart, Brush, ResponsiveContainer } from 'recharts'
 import styles from './months.module.scss'
 import useThrottledCallback from 'beautiful-react-hooks/useThrottledCallback'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
-import { memo, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
 import { Icon } from '@web-ui/components/common/particles/icon'
@@ -28,7 +28,8 @@ export namespace Months {
 }
 
 export const Months: React.FC<Months.Props> = (props) => {
-  const { swiping: isSwiping } = useSwipe(undefined, {
+  const graph = useRef<HTMLDivElement>(null)
+  const { swiping: isSwiping } = useSwipe(graph, {
     preventDefault: false,
     passive: false,
     threshold: 0,
@@ -266,7 +267,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   }, [props.months])
 
   return (
-    <div className={styles.graph}>
+    <div className={styles.graph} ref={graph}>
       {props.months && (
         <div className={styles.graph__details}>
           <div className={styles.graph__details__title}>Date range</div>

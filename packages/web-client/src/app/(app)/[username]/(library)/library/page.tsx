@@ -81,7 +81,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowMonthsAndTags(true)
-    }, 500)
+    }, 1000)
 
     return () => clearTimeout(timeout)
   }, [])
@@ -451,7 +451,7 @@ const Page: React.FC = () => {
               <TagsSkeleton />
             )
           }
-        ></LibraryAside>
+        />
       }
       isGettingFirstBookmarks={isGettingFirstBookmarks}
       isGettingMoreBookmarks={isGettingMoreBookmarks}

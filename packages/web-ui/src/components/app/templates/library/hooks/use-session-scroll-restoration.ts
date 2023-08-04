@@ -5,8 +5,7 @@ import { RefObject, useEffect, useState } from 'react'
 
 export const useSessionScrollRestoration = (
   mainInnerRef: RefObject<HTMLDivElement>,
-): { isRestoringScrollPosition: boolean } => {
-  const [scrollTo, setScrollTo] = useState<number | null>(null)
+) => {
   const [scrollY, setScrollY] = useState(0)
   const onWindowScroll = useWindowScroll()
 
@@ -37,7 +36,11 @@ export const useSessionScrollRestoration = (
 
     const scrollY = sessionStorage.getItem('scrollY')
     if (scrollY) {
-      setScrollTo(parseInt(scrollY))
+      // It's important to scroll in the next frame, as bookmarks from
+      // session storage have to be fetched first.
+      setTimeout(() => {
+        mainInnerRef.current?.scrollTo(0, parseInt(scrollY))
+      }, 0)
     }
 
     return () => {
@@ -45,14 +48,4 @@ export const useSessionScrollRestoration = (
       mainInnerRef.current?.removeEventListener('scroll', listener)
     }
   }, [])
-
-  useEffect(() => {
-    if (scrollTo) {
-      window.scrollTo(0, scrollTo)
-      mainInnerRef.current?.scrollTo(0, scrollTo)
-      setScrollTo(null)
-    }
-  }, [scrollTo])
-
-  return { isRestoringScrollPosition: scrollTo != null && scrollTo != 0 }
 }
