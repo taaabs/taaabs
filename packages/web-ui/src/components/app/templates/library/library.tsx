@@ -8,7 +8,7 @@ import cn from 'classnames'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import styles from './library.module.scss'
-import { useSessionScrollRestoration } from './hooks/use-session-scroll-restoration'
+import { useMobileScrollRestore } from './hooks/use-mobile-scroll-restore'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import { useIsHydrated } from '@shared/hooks'
 import Skeleton from 'react-loading-skeleton'
@@ -38,7 +38,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   const endOfBookmarks = useRef<HTMLDivElement>(null)
   const isHydrated = useIsHydrated()
 
-  useSessionScrollRestoration(mainInner)
+  useMobileScrollRestore(mainInner)
   const isEndOfBookmarksVisible = useViewportSpy(endOfBookmarks)
 
   const swipeState = useSwipe(main, {

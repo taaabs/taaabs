@@ -3,7 +3,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useWindowScroll from 'beautiful-react-hooks/useWindowScroll'
 import { RefObject, useEffect, useState } from 'react'
 
-export const useSessionScrollRestoration = (
+export const useMobileScrollRestore = (
   mainInnerRef: RefObject<HTMLDivElement>,
 ) => {
   const [scrollY, setScrollY] = useState(0)

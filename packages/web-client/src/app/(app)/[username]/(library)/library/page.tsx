@@ -21,7 +21,6 @@ import { useMonths } from './_hooks/use-months'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
@@ -71,17 +70,10 @@ const Page: React.FC = () => {
   const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
   const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)
 
-  useUpdateEffect(() => {
-    sessionStorage.setItem('queryParams', queryParams.toString())
-    return () => {
-      sessionStorage.removeItem('queryParams')
-    }
-  }, [queryParams])
-
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowMonthsAndTags(true)
-    }, 1000)
+    }, 500)
 
     return () => clearTimeout(timeout)
   }, [])

@@ -1,5 +1,5 @@
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useLibraryDispatch, useLibrarySelector } from './store'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { bookmarksActions } from '@repositories/stores/other-user/library/bookmarks/bookmarks.slice'
@@ -120,12 +120,8 @@ export const useBookmarks = () => {
   }, [bookmarks])
 
   useEffect(() => {
-    const sessionQueryParams = sessionStorage.getItem('queryParams')
     const bookmarks = sessionStorage.getItem('bookmarks')
-    if (
-      (queryParams.toString() == sessionQueryParams || !sessionQueryParams) &&
-      bookmarks
-    ) {
+    if (bookmarks) {
       dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
       const hasMoreBookmarks = sessionStorage.getItem('hasMoreBookmarks')
       if (hasMoreBookmarks) {
