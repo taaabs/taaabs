@@ -8,7 +8,9 @@ export const processTags = () => {
       throw 'Months data should be there.'
     }
 
-    const getTags = (months: typeof monthsData.monthsOfBookmarkCreation) => {
+    const calculateTags = (
+      months: typeof monthsData.monthsOfBookmarkCreation,
+    ) => {
       const monthsFiltered: typeof monthsData.monthsOfBookmarkCreation =
         Object.keys(months).reduce((acc, val) => {
           const yyyymm = parseInt(val)
@@ -59,15 +61,12 @@ export const processTags = () => {
       return sortedTags
     }
 
-    dispatch(
-      monthsActions.setTagsOfBookmarkCreation(
-        getTags(monthsData.monthsOfBookmarkCreation),
-      ),
+    const tagsOfBookmarkCreation = calculateTags(
+      monthsData.monthsOfBookmarkCreation,
     )
-    dispatch(
-      monthsActions.setTagsOfUrlCreation(
-        getTags(monthsData.monthsOfUrlCreation),
-      ),
-    )
+    const tagsOfUrlCreation = calculateTags(monthsData.monthsOfUrlCreation)
+
+    dispatch(monthsActions.setTagsOfBookmarkCreation(tagsOfBookmarkCreation))
+    dispatch(monthsActions.setTagsOfUrlCreation(tagsOfUrlCreation))
   }
 }

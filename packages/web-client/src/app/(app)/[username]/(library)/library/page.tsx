@@ -21,10 +21,11 @@ import { useMonths } from './_hooks/use-months'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
 import { TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -70,13 +71,9 @@ const Page: React.FC = () => {
   const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
   const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowMonthsAndTags(true)
-    }, 500)
-
-    return () => clearTimeout(timeout)
-  }, [])
+  useUpdateEffect(() => {
+    if (!showMonthsAndTags) setShowMonthsAndTags(true)
+  }, [bookmarks])
 
   return (
     <Library
