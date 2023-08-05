@@ -26,6 +26,9 @@ export const useMonths = () => {
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [incomingSelectedTags, setIncomingSelectedTags] = useState<string[]>(
+    queryParams.get('t')?.split(',') || [],
+  )
   const [lastQueryYyyymmGte, setLastQueryYyyymmGte] = useState<string | null>(
     null,
   )
@@ -56,14 +59,13 @@ export const useMonths = () => {
   }
 
   const addTagToQueryParams = (tag: string) => {
-    let tags = ''
-    const queryTags = queryParams.get('t')
-    if (queryTags) {
-      tags = queryTags + `,${tag}`
-    } else {
-      tags = tag
-    }
-    const updatedQueryParams = updateSearchParam(queryParams, 't', tags)
+    setIncomingSelectedTags([...incomingSelectedTags, tag])
+
+    const updatedQueryParams = updateSearchParam(
+      queryParams,
+      't',
+      [...incomingSelectedTags, tag].join(','),
+    )
     window.history.pushState(
       {},
       '',
@@ -72,12 +74,13 @@ export const useMonths = () => {
   }
 
   const removeTagFromQueryParams = (tag: string) => {
+    setIncomingSelectedTags(incomingSelectedTags.filter((t) => t != tag))
+
     const updatedQueryParams = updateSearchParam(
       queryParams,
       't',
-      selectedTags.filter((t) => t != tag).join(','),
+      incomingSelectedTags.filter((t) => t != tag).join(','),
     )
-
     window.history.pushState(
       {},
       '',
@@ -139,13 +142,12 @@ export const useMonths = () => {
   }, [queryParams])
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search)
-
     const queryTags = queryParams.get('t')
     if (!queryTags && selectedTags.length > 0) {
       setSelectedTags([])
     } else if (queryTags && queryTags != selectedTags.join(',')) {
-      setSelectedTags(queryTags.split(','))
+      const selectedTags = queryTags.split(',')
+      setSelectedTags(selectedTags)
     }
   }, [bookmarks])
 
@@ -167,28 +169,33 @@ export const useMonths = () => {
   }, [monthsData, tagsOfBookmarkCreation, tagsOfUrlCreation])
 
   useEffect(() => {
-    const qp = sessionStorage.getItem('queryParams') // Is set in "use-bookmarks" hook
-    const monthsData = sessionStorage.getItem('monthsData')
+    const previousQueryParams = sessionStorage.getItem('queryParams')
 
-    if (queryParams.toString() == qp && monthsData) {
-      dispatch(monthsActions.setData(JSON.parse(monthsData)))
+    if (queryParams.toString() == previousQueryParams) {
+      const monthsData = sessionStorage.getItem('monthsData')
+      if (monthsData) {
+        dispatch(monthsActions.setData(JSON.parse(monthsData)))
+
+        const tagsOfBookmarkCreation = sessionStorage.getItem(
+          'tagsOfBookmarkCreation',
+        )
+        const tagsOfUrlCreation = sessionStorage.getItem('tagsOfUrlCreation')
+
+        if (tagsOfBookmarkCreation && tagsOfUrlCreation) {
+          dispatch(
+            monthsActions.setTagsOfBookmarkCreation(
+              JSON.parse(tagsOfBookmarkCreation),
+            ),
+          )
+          dispatch(
+            monthsActions.setTagsOfUrlCreation(JSON.parse(tagsOfUrlCreation)),
+          )
+        }
+      } else {
+        getMonths()
+      }
     } else {
       getMonths()
-    }
-
-    const tagsOfBookmarkCreation = sessionStorage.getItem(
-      'tagsOfBookmarkCreation',
-    )
-    const tagsOfUrlCreation = sessionStorage.getItem('tagsOfUrlCreation')
-    if (tagsOfBookmarkCreation && tagsOfUrlCreation) {
-      dispatch(
-        monthsActions.setTagsOfBookmarkCreation(
-          JSON.parse(tagsOfBookmarkCreation),
-        ),
-      )
-      dispatch(
-        monthsActions.setTagsOfUrlCreation(JSON.parse(tagsOfUrlCreation)),
-      )
     }
 
     return () => {
@@ -208,6 +215,7 @@ export const useMonths = () => {
     tagsOfUrlCreation,
     addTagToQueryParams,
     selectedTags,
+    incomingSelectedTags,
     removeTagFromQueryParams,
   }
 }

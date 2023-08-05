@@ -29,39 +29,39 @@ export namespace Months {
 
 export const Months: React.FC<Months.Props> = (props) => {
   const graph = useRef<HTMLDivElement>(null)
-  const { swiping: isSwiping } = useSwipe(graph, {
+  const { swiping: isSwiping } = useSwipe(undefined, {
     preventDefault: false,
     passive: false,
     threshold: 0,
   })
   const [key, setKey] = useState('')
-  const [startIndex, setStartIndex] = useState<number | undefined>(undefined)
-  const [endIndex, setEndIndex] = useState<number | undefined>(undefined)
-  const [draggedStartIndex, setDraggedStartIndex] = useState<
-    number | undefined
-  >(undefined)
-  const [draggedEndIndex, setDraggedEndIndex] = useState<number | undefined>(
-    undefined,
+  const [startIndex, setStartIndex] = useState<number | null>(null)
+  const [endIndex, setEndIndex] = useState<number | null>(null)
+  const [draggedStartIndex, setDraggedStartIndex] = useState<number | null>(
+    null,
   )
+  const [draggedEndIndex, setDraggedEndIndex] = useState<number | null>(null)
   const [bookmarkCount, setBookmarkCount] = useState<number | null>(null)
   const [starredCount, setStarredCount] = useState<number | null>(null)
   const [nsfwCount, setNsfwCount] = useState<number | null>(null)
 
   useUpdateEffect(() => {
     if (
-      isSwiping ||
-      !props.months ||
-      draggedStartIndex == undefined ||
-      draggedEndIndex == undefined ||
-      !props.months[draggedStartIndex] ||
-      !props.months[draggedEndIndex]
-    )
-      return
+      !isSwiping &&
+      props.months &&
+      draggedStartIndex != undefined &&
+      draggedEndIndex != undefined &&
+      props.months[draggedStartIndex] &&
+      props.months[draggedEndIndex]
+    ) {
+      props.onYyyymmChange({
+        gte: props.months[draggedStartIndex].yyyymm,
+        lte: props.months[draggedEndIndex].yyyymm,
+      })
 
-    props.onYyyymmChange({
-      gte: props.months[draggedStartIndex].yyyymm,
-      lte: props.months[draggedEndIndex].yyyymm,
-    })
+      setDraggedStartIndex(null)
+      setDraggedEndIndex(null)
+    }
   }, [isSwiping])
 
   const calculateCounts = ({
@@ -99,7 +99,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   }: {
     months: Months
     currentGte: number
-  }) => {
+  }): number | null => {
     const startIndex =
       months && currentGte
         ? months.find((month) => month.yyyymm == currentGte)
@@ -128,9 +128,9 @@ export const Months: React.FC<Months.Props> = (props) => {
                           : prev,
                       )
             })
-        : undefined
+        : null
 
-    return startIndex != -1 ? startIndex : undefined
+    return startIndex != -1 ? startIndex : null
   }
 
   const possibleEndIndex = ({
@@ -139,7 +139,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   }: {
     months: Months
     currentLte: number
-  }) => {
+  }): number | null => {
     const endIndex =
       months && currentLte
         ? months.find((month) => month.yyyymm == currentLte)
@@ -168,9 +168,9 @@ export const Months: React.FC<Months.Props> = (props) => {
                           : prev,
                       )
             })
-        : undefined
+        : null
 
-    return endIndex != -1 ? endIndex : undefined
+    return endIndex != -1 ? endIndex : null
   }
 
   const setStartAndEndIndex = ({
@@ -218,8 +218,8 @@ export const Months: React.FC<Months.Props> = (props) => {
   useUpdateEffect(() => {
     calculateCounts({
       months: props.months,
-      startIndex: startIndex,
-      endIndex: endIndex,
+      startIndex: startIndex != null ? startIndex : undefined,
+      endIndex: endIndex != null ? endIndex : undefined,
     })
 
     if (!isSwiping) {
@@ -230,8 +230,8 @@ export const Months: React.FC<Months.Props> = (props) => {
   useEffect(() => {
     if (!props.months || !props.currentGte || !props.currentLte) {
       setKey(`${startIndex || ''}${endIndex || ''}${props.selectedTags || ''}`)
-      setStartIndex(undefined)
-      setEndIndex(undefined)
+      setStartIndex(null)
+      setEndIndex(null)
 
       return
     }
@@ -355,8 +355,8 @@ export const Months: React.FC<Months.Props> = (props) => {
                 strokeOpacity={nsfwCount == 0 ? 0 : 1}
               />
               <Brush
-                startIndex={startIndex}
-                endIndex={endIndex}
+                startIndex={startIndex != null ? startIndex : undefined}
+                endIndex={endIndex != null ? endIndex : undefined}
                 height={40}
                 travellerWidth={24}
                 fill="transparent"

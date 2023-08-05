@@ -21,7 +21,7 @@ import { useMonths } from './_hooks/use-months'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
 import { TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
@@ -36,7 +36,8 @@ const Page: React.FC = () => {
   const queryParams = useShallowSearchParams()
   const router = useRouter()
   const params = useParams()
-  const [showMonthsAndTags, setShowMonthsAndTags] = useState(false)
+  const [showMonths, setShowMonths] = useState(false)
+  const [showTags, setShowTags] = useState(false)
   const {
     bookmarks,
     isGettingFirstBookmarks,
@@ -54,6 +55,7 @@ const Page: React.FC = () => {
     tagsOfBookmarkCreation,
     tagsOfUrlCreation,
     selectedTags,
+    incomingSelectedTags,
     addTagToQueryParams,
     removeTagFromQueryParams,
   } = useMonths()
@@ -72,8 +74,17 @@ const Page: React.FC = () => {
   const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)
 
   useUpdateEffect(() => {
-    if (!showMonthsAndTags) setShowMonthsAndTags(true)
+    if (!showMonths) setShowMonths(true)
+    if (!showTags) setShowTags(true)
   }, [bookmarks])
+
+  useEffect(() => {
+    sessionStorage.setItem('queryParams', queryParams.toString())
+
+    return () => {
+      sessionStorage.removeItem('queryParams')
+    }
+  }, [queryParams])
 
   return (
     <Library
@@ -349,7 +360,7 @@ const Page: React.FC = () => {
             ),
           }}
           slotMonths={
-            showMonthsAndTags ? (
+            showMonths ? (
               <div
                 style={{
                   pointerEvents:
@@ -394,25 +405,28 @@ const Page: React.FC = () => {
             )
           }
           slotTags={
-            showMonthsAndTags ? (
-              <>
-                {selectedTags.length > 0 && (
-                  <div
-                    style={{
-                      pointerEvents:
-                        isGettingFirstBookmarks ||
-                        isGettingMoreBookmarks ||
-                        isGettingMonthsData
-                          ? 'none'
-                          : undefined,
+            <>
+              {selectedTags.length > 0 && (
+                <div
+                  style={{
+                    pointerEvents:
+                      isGettingFirstBookmarks ||
+                      isGettingMoreBookmarks ||
+                      isGettingMonthsData
+                        ? 'none'
+                        : undefined,
+                  }}
+                >
+                  <SelectedTags
+                    selectedTags={incomingSelectedTags}
+                    onSelectedTagClick={(tag) => {
+                      setShowTags(false)
+                      removeTagFromQueryParams(tag)
                     }}
-                  >
-                    <SelectedTags
-                      selectedTags={selectedTags}
-                      onSelectedTagClick={removeTagFromQueryParams}
-                    />
-                  </div>
-                )}
+                  />
+                </div>
+              )}
+              {showTags ? (
                 <div
                   style={{
                     pointerEvents:
@@ -432,13 +446,16 @@ const Page: React.FC = () => {
                           : tagsOfUrlCreation
                         : {}
                     }
-                    onClick={addTagToQueryParams}
+                    onClick={(tag) => {
+                      setShowTags(false)
+                      addTagToQueryParams(tag)
+                    }}
                   />
                 </div>
-              </>
-            ) : (
-              <TagsSkeleton />
-            )
+              ) : (
+                <TagsSkeleton />
+              )}
+            </>
           }
         />
       }
@@ -464,8 +481,9 @@ const Page: React.FC = () => {
                       ? tagsOfBookmarkCreation
                       : tagsOfUrlCreation
 
-                  const isSelected =
-                    selectedTags.find((t) => t == tag) != undefined
+                  const isSelected = isGettingFirstBookmarks
+                    ? selectedTags.find((t) => t == tag) != undefined
+                    : incomingSelectedTags.find((t) => t == tag) != undefined
 
                   return {
                     name: tag,
@@ -482,8 +500,14 @@ const Page: React.FC = () => {
                 isStarred={bookmark.isStarred}
                 key={bookmark.id}
                 sitePath={bookmark.sitePath}
-                onTagClick={addTagToQueryParams}
-                onSelectedTagClick={removeTagFromQueryParams}
+                onTagClick={(tag) => {
+                  setShowTags(false)
+                  addTagToQueryParams(tag)
+                }}
+                onSelectedTagClick={(tag) => {
+                  setShowTags(false)
+                  removeTagFromQueryParams(tag)
+                }}
               />
             ))
           : []

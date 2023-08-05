@@ -120,18 +120,25 @@ export const useBookmarks = () => {
   }, [bookmarks])
 
   useEffect(() => {
-    const bookmarks = sessionStorage.getItem('bookmarks')
-    if (bookmarks) {
-      dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
-      const hasMoreBookmarks = sessionStorage.getItem('hasMoreBookmarks')
-      if (hasMoreBookmarks) {
-        dispatch(
-          bookmarksActions.setHasMoreBookmarks(hasMoreBookmarks == 'true'),
-        )
+    const previousQueryParams = sessionStorage.getItem('queryParams')
+    if (queryParams.toString() == previousQueryParams) {
+      const bookmarks = sessionStorage.getItem('bookmarks')
+
+      if (bookmarks) {
+        dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
+        const hasMoreBookmarks = sessionStorage.getItem('hasMoreBookmarks')
+        if (hasMoreBookmarks) {
+          dispatch(
+            bookmarksActions.setHasMoreBookmarks(hasMoreBookmarks == 'true'),
+          )
+        }
+      } else {
+        getBookmarks({})
       }
     } else {
       getBookmarks({})
     }
+
     return () => {
       sessionStorage.removeItem('bookmarks')
       sessionStorage.removeItem('hasMoreBookmarks')
