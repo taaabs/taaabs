@@ -16,16 +16,16 @@
   .item {
     display: inline-flex;
     gap: var(--distance-4px);
+    font-family: var(--font-family-inter-tight);
+    font-size: var(--font-size-1-3rem);
     &__firstChar {
-      font-size: var(--font-size-13px);
+      font-size: var(--font-size-1-3rem);
       font-weight: var(--font-weight-inter-bold);
       color: var(--text-color-normal);
       text-transform: uppercase;
     }
     &__tag {
       display: inline;
-      font-family: var(--font-family-inter-tight);
-      font-size: var(--font-size-13px);
       overflow-wrap: anywhere;
       text-align: left;
       @include hover {

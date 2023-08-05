@@ -24,8 +24,8 @@ import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
-import { TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -38,6 +38,7 @@ const Page: React.FC = () => {
   const params = useParams()
   const [showMonths, setShowMonths] = useState(false)
   const [showTags, setShowTags] = useState(false)
+  const [showTagsSkeleton, setShowTagsSkeleton] = useState(true)
   const {
     bookmarks,
     isGettingFirstBookmarks,
@@ -76,6 +77,7 @@ const Page: React.FC = () => {
   useUpdateEffect(() => {
     if (!showMonths) setShowMonths(true)
     if (!showTags) setShowTags(true)
+    if (showTagsSkeleton) setShowTagsSkeleton(false)
   }, [bookmarks])
 
   useEffect(() => {
@@ -378,9 +380,11 @@ const Page: React.FC = () => {
                       : monthsOfUrlCreation
                   }
                   onYyyymmChange={({ gte, lte }) => {
+                    setShowTags(false)
                     setGteLteQueryParams({ gte, lte })
                   }}
                   clearDateRange={() => {
+                    setShowTags(false)
                     clearGteLteQueryParams()
                   }}
                   currentGte={
@@ -426,35 +430,22 @@ const Page: React.FC = () => {
                   />
                 </div>
               )}
-              {showTags ? (
-                <div
-                  style={{
-                    pointerEvents:
-                      isGettingFirstBookmarks ||
-                      isGettingMoreBookmarks ||
-                      isGettingMonthsData
-                        ? 'none'
-                        : undefined,
-                    opacity: isGettingFirstBookmarks ? 0.5 : undefined,
+              {showTags && (
+                <Tags
+                  tags={
+                    tagsOfBookmarkCreation && tagsOfUrlCreation
+                      ? currentOrderBy == OrderBy.BookmarkCreationDate
+                        ? tagsOfBookmarkCreation
+                        : tagsOfUrlCreation
+                      : {}
+                  }
+                  onClick={(tag) => {
+                    setShowTags(false)
+                    addTagToQueryParams(tag)
                   }}
-                >
-                  <Tags
-                    tags={
-                      tagsOfBookmarkCreation && tagsOfUrlCreation
-                        ? currentOrderBy == OrderBy.BookmarkCreationDate
-                          ? tagsOfBookmarkCreation
-                          : tagsOfUrlCreation
-                        : {}
-                    }
-                    onClick={(tag) => {
-                      setShowTags(false)
-                      addTagToQueryParams(tag)
-                    }}
-                  />
-                </div>
-              ) : (
-                <TagsSkeleton />
+                />
               )}
+              {showTagsSkeleton && <TagsSkeleton />}
             </>
           }
         />

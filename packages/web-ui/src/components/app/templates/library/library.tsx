@@ -242,10 +242,10 @@ export const Library: React.FC<Library.Props> = (props) => {
             <div className={styles['main__inner__mobile-title-bar']}>
               <_MobileTitleBar
                 swipeLeftOnClick={
-                  !isSlideoutLeftOpen ? toggleLeftSlideout : () => {}
+                  !isSlideoutLeftOpen ? toggleLeftSlideout : undefined
                 }
                 swipeRightOnClick={
-                  !isSlideoutRightOpen ? toggleRightSlideout : () => {}
+                  !isSlideoutRightOpen ? toggleRightSlideout : undefined
                 }
                 text={props.titleBar ? props.titleBar : undefined}
               />
