@@ -19,7 +19,7 @@ export const useFilterOptions = () => {
   )
   const [isNsfwExcluded, setIsNsfwExcluded] = useState<boolean>(
     currentFilter == LibraryFilter.AllNsfwExcluded ||
-      currentFilter == LibraryFilter.ArchivedOnlyNsfwExcluded ||
+      currentFilter == LibraryFilter.ArchivedNsfwExcluded ||
       currentFilter == LibraryFilter.StarredOnlyNsfwExcluded,
   )
 
@@ -60,7 +60,7 @@ export const useFilterOptions = () => {
   useUpdateEffect(() => {
     if (
       currentFilter == LibraryFilter.AllNsfwExcluded ||
-      currentFilter == LibraryFilter.ArchivedOnlyNsfwExcluded ||
+      currentFilter == LibraryFilter.ArchivedNsfwExcluded ||
       currentFilter == LibraryFilter.StarredOnlyNsfwExcluded
     ) {
       setIsNsfwExcluded(true)
@@ -77,8 +77,8 @@ export const useFilterOptions = () => {
       case LibraryFilter.StarredOnly:
         setFilterQueryParam(LibraryFilter.StarredOnlyNsfwExcluded)
         break
-      case LibraryFilter.ArchivedOnly:
-        setFilterQueryParam(LibraryFilter.ArchivedOnlyNsfwExcluded)
+      case LibraryFilter.Archived:
+        setFilterQueryParam(LibraryFilter.ArchivedNsfwExcluded)
         break
     }
   }
@@ -91,8 +91,8 @@ export const useFilterOptions = () => {
       case LibraryFilter.StarredOnlyNsfwExcluded:
         setFilterQueryParam(LibraryFilter.StarredOnly)
         break
-      case LibraryFilter.ArchivedOnlyNsfwExcluded:
-        setFilterQueryParam(LibraryFilter.ArchivedOnly)
+      case LibraryFilter.ArchivedNsfwExcluded:
+        setFilterQueryParam(LibraryFilter.Archived)
         break
     }
   }

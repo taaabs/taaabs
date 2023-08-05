@@ -177,7 +177,7 @@ const Page: React.FC = () => {
                         currentFilter == LibraryFilter.StarredOnlyNsfwExcluded,
                     },
                     {
-                      label: 'Archived only',
+                      label: 'Archived',
                       onClick: () => {
                         if (
                           isGettingFirstBookmarks ||
@@ -187,16 +187,16 @@ const Page: React.FC = () => {
                           return
                         if (isNsfwExcluded) {
                           setFilterQueryParam(
-                            LibraryFilter.ArchivedOnlyNsfwExcluded,
+                            LibraryFilter.ArchivedNsfwExcluded,
                           )
                         } else {
-                          setFilterQueryParam(LibraryFilter.ArchivedOnly)
+                          setFilterQueryParam(LibraryFilter.Archived)
                         }
                         toggleFilterDropdown()
                       },
                       isSelected:
-                        currentFilter == LibraryFilter.ArchivedOnly ||
-                        currentFilter == LibraryFilter.ArchivedOnlyNsfwExcluded,
+                        currentFilter == LibraryFilter.Archived ||
+                        currentFilter == LibraryFilter.ArchivedNsfwExcluded,
                     },
                   ]}
                   checkboxes={[
@@ -537,9 +537,9 @@ function _filterOptionToLabel(filter: LibraryFilter): string {
       return 'Starred only'
     case LibraryFilter.StarredOnlyNsfwExcluded:
       return 'Starred only without nsfw'
-    case LibraryFilter.ArchivedOnly:
-      return 'Archived only'
-    case LibraryFilter.ArchivedOnlyNsfwExcluded:
-      return 'Archived only without nsfw'
+    case LibraryFilter.Archived:
+      return 'Archived'
+    case LibraryFilter.ArchivedNsfwExcluded:
+      return 'Archived without nsfw'
   }
 }
