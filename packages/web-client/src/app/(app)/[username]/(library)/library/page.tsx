@@ -75,9 +75,11 @@ const Page: React.FC = () => {
   const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)
 
   useUpdateEffect(() => {
-    if (!showMonths) setShowMonths(true)
-    if (!showTags) setShowTags(true)
-    if (showTagsSkeleton) setShowTagsSkeleton(false)
+    setTimeout(() => {
+      if (!showMonths) setShowMonths(true)
+      if (!showTags) setShowTags(true)
+      if (showTagsSkeleton) setShowTagsSkeleton(false)
+    }, 0)
   }, [bookmarks])
 
   useEffect(() => {
@@ -504,7 +506,7 @@ const Page: React.FC = () => {
                 })}
                 isNsfw={bookmark.isNsfw}
                 isStarred={bookmark.isStarred}
-                key={bookmark.id + selectedTags.join('')}
+                key={bookmark.id}
                 sitePath={bookmark.sitePath}
                 onTagClick={(tag) => {
                   setShowTags(false)
