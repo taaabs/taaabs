@@ -120,9 +120,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       </div>
     )
   },
-  (o, n) => {
-    return JSON.stringify(o.tags) == JSON.stringify(n.tags) && o.url == n.url
-  },
+  () => true,
 )
 
 function _displayUrl(url: string): string {

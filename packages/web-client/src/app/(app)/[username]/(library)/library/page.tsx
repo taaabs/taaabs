@@ -457,6 +457,7 @@ const Page: React.FC = () => {
                     setShowTags(false)
                     addTagToQueryParams(tag)
                   }}
+                  key={queryParams.toString()}
                 />
               )}
               {showTagsSkeleton && <TagsSkeleton />}
@@ -503,7 +504,7 @@ const Page: React.FC = () => {
                 })}
                 isNsfw={bookmark.isNsfw}
                 isStarred={bookmark.isStarred}
-                key={bookmark.id}
+                key={bookmark.id + selectedTags.join('')}
                 sitePath={bookmark.sitePath}
                 onTagClick={(tag) => {
                   setShowTags(false)
@@ -535,11 +536,11 @@ function _orderByOptionToLabel(orderByOption: OrderBy): string {
 function _orderOptionToLabel(orderOption: Order): string {
   switch (orderOption) {
     case Order.Desc:
-      return 'Newest to Oldest'
+      return 'Newest to oldest'
     case Order.Asc:
-      return 'Oldest to Newest'
+      return 'Oldest to newest'
     case Order.MostPopular:
-      return 'Most Popular'
+      return 'Most popular'
   }
 }
 
