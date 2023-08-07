@@ -356,6 +356,26 @@ const Page: React.FC = () => {
                               .toString(),
                         ) == Object.values(Order).indexOf(Order.Asc),
                     },
+                    {
+                      label: _orderOptionToLabel(Order.MostPopular),
+                      onClick: () => {
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
+                          return
+                        setOrderQueryParam(Order.MostPopular)
+                        toggleOrderDropdown()
+                      },
+                      isSelected:
+                        parseInt(
+                          queryParams.get('o') ||
+                            Object.values(Order)
+                              .indexOf(BookmarksFetchingDefaults.Common.order)
+                              .toString(),
+                        ) == Object.values(Order).indexOf(Order.MostPopular),
+                    },
                   ]}
                 />
               </OutsideClickHandler>
@@ -379,14 +399,8 @@ const Page: React.FC = () => {
                       ? monthsOfBookmarkCreation
                       : monthsOfUrlCreation
                   }
-                  onYyyymmChange={({ gte, lte }) => {
-                    setShowTags(false)
-                    setGteLteQueryParams({ gte, lte })
-                  }}
-                  clearDateRange={() => {
-                    setShowTags(false)
-                    clearGteLteQueryParams()
-                  }}
+                  onYyyymmChange={setGteLteQueryParams}
+                  clearDateRange={clearGteLteQueryParams}
                   currentGte={
                     parseInt(queryParams.get('gte') || '0') || undefined
                   }
@@ -524,6 +538,8 @@ function _orderOptionToLabel(orderOption: Order): string {
       return 'Newest to Oldest'
     case Order.Asc:
       return 'Oldest to Newest'
+    case Order.MostPopular:
+      return 'Most Popular'
   }
 }
 
