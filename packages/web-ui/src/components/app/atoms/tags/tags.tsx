@@ -40,5 +40,5 @@ export const Tags: React.FC<Tags.Props> = memo(
       </div>
     )
   },
-  (o, n) => true,
+  () => true,
 )
