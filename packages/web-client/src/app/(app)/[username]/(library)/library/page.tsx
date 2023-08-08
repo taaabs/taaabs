@@ -56,7 +56,7 @@ const Page: React.FC = () => {
     tagsOfBookmarkCreation,
     tagsOfUrlCreation,
     selectedTags,
-    incomingSelectedTags,
+    actualSelectedTags,
     addTagToQueryParams,
     removeTagFromQueryParams,
   } = useMonths()
@@ -438,7 +438,7 @@ const Page: React.FC = () => {
                   }}
                 >
                   <SelectedTags
-                    selectedTags={incomingSelectedTags}
+                    selectedTags={actualSelectedTags}
                     onSelectedTagClick={(tag) => {
                       setShowTags(false)
                       removeTagFromQueryParams(tag)
@@ -491,7 +491,7 @@ const Page: React.FC = () => {
 
                   const isSelected = isGettingFirstBookmarks
                     ? selectedTags.find((t) => t == tag) != undefined
-                    : incomingSelectedTags.find((t) => t == tag) != undefined
+                    : actualSelectedTags.find((t) => t == tag) != undefined
 
                   return {
                     name: tag,

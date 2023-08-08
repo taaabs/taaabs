@@ -26,8 +26,8 @@ export const useMonths = () => {
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
-  const [incomingSelectedTags, setIncomingSelectedTags] = useState<string[]>(
-    queryParams.get('t')?.split(',') || [],
+  const [actualSelectedTags, setActualSelectedTags] = useState<string[]>(
+    queryParams.get('t') ? queryParams.get('t')!.split(',') : [],
   )
   const [lastQueryYyyymmGte, setLastQueryYyyymmGte] = useState<string | null>(
     null,
@@ -59,12 +59,12 @@ export const useMonths = () => {
   }
 
   const addTagToQueryParams = (tag: string) => {
-    setIncomingSelectedTags([...incomingSelectedTags, tag])
+    setActualSelectedTags([...actualSelectedTags, tag])
 
     const updatedQueryParams = updateSearchParam(
       queryParams,
       't',
-      [...incomingSelectedTags, tag].join(','),
+      [...actualSelectedTags, tag].join(','),
     )
     window.history.pushState(
       {},
@@ -74,12 +74,12 @@ export const useMonths = () => {
   }
 
   const removeTagFromQueryParams = (tag: string) => {
-    setIncomingSelectedTags(incomingSelectedTags.filter((t) => t != tag))
+    setActualSelectedTags(actualSelectedTags.filter((t) => t != tag))
 
     const updatedQueryParams = updateSearchParam(
       queryParams,
       't',
-      incomingSelectedTags.filter((t) => t != tag).join(','),
+      actualSelectedTags.filter((t) => t != tag).join(','),
     )
     window.history.pushState(
       {},
@@ -215,7 +215,7 @@ export const useMonths = () => {
     tagsOfUrlCreation,
     addTagToQueryParams,
     selectedTags,
-    incomingSelectedTags,
+    actualSelectedTags,
     removeTagFromQueryParams,
   }
 }
