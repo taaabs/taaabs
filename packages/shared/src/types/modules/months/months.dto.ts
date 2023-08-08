@@ -19,7 +19,7 @@ export namespace MonthsDto {
   export namespace Response {
     class Month {
       public tags: Record<string, number>
-      public bookmarks_count: number
+      public bookmark_count: number
       public starred_count?: number
       public nsfw_count?: number
     }

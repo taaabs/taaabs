@@ -19,7 +19,7 @@ export class MonthsRepositoryImpl implements MonthsRepository {
           ...acc,
           [k]: {
             tags: { ...v.tags },
-            bookmarkCount: v.bookmarks_count,
+            bookmarkCount: v.bookmark_count,
             starredCount: v.starred_count || null,
             nsfwCount: v.nsfw_count || null,
             publicCount: v.public_count || null,
@@ -34,7 +34,7 @@ export class MonthsRepositoryImpl implements MonthsRepository {
           ...acc,
           [k]: {
             tags: { ...v.tags },
-            bookmarkCount: v.bookmarks_count,
+            bookmarkCount: v.bookmark_count,
             starredCount: v.starred_count || null,
             nsfwCount: v.nsfw_count || null,
             publicCount: v.public_count || null,
@@ -59,7 +59,7 @@ export class MonthsRepositoryImpl implements MonthsRepository {
           ...acc,
           [k]: {
             tags: { ...v.tags },
-            bookmarkCount: v.bookmarks_count,
+            bookmarkCount: v.bookmark_count,
             starredCount: v.starred_count || null,
             nsfwCount: v.nsfw_count || null,
           },
@@ -73,7 +73,7 @@ export class MonthsRepositoryImpl implements MonthsRepository {
           ...acc,
           [k]: {
             tags: { ...v.tags },
-            bookmarkCount: v.bookmarks_count,
+            bookmarkCount: v.bookmark_count,
             starredCount: v.starred_count || null,
             nsfwCount: v.nsfw_count || null,
           },

@@ -538,9 +538,9 @@ function _orderByOptionToLabel(orderByOption: OrderBy): string {
 function _orderOptionToLabel(orderOption: Order): string {
   switch (orderOption) {
     case Order.Desc:
-      return 'Newest to oldest'
+      return 'Newest first'
     case Order.Asc:
-      return 'Oldest to newest'
+      return 'Oldest first'
     case Order.MostPopular:
       return 'Most popular'
   }
