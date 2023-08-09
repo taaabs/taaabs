@@ -1,0 +1,71 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--distance-30px);
+  border-radius: var(--border-radius-30px);
+  background: var(--PricingTier-background);
+  padding: var(--distance-40px);
+}
+.top {
+  display: flex;
+  flex-direction: column;
+  &__name {
+    color: var(--brand-color);
+    font-size: var(--font-size-34px);
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-bold);
+  }
+  &__description {
+    color: var(--text-color-variant);
+    font-size: var(--font-size-17px);
+  }
+}
+.price {
+  display: flex;
+  flex-direction: column;
+  &__costPerMonth {
+    display: flex;
+    align-items: center;
+    gap: var(--distance-6px);
+    > div:first-child {
+      font-size: var(--font-size-40px);
+      font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
+      color: var(--brand-color);
+    }
+    > div:last-child {
+      color: var(--text-color-dimmed);
+      font-size: var(--font-size-19px);
+    }
+  }
+  &__info {
+    font-size: var(--font-size-19px);
+  }
+}
+.bullets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--distance-14px);
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: var(--distance-10px);
+    font-size: var(--font-size-19px);
+    font-weight: var(--font-weight-inter-medium);
+    &__check {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--distance-30px);
+      height: var(--distance-30px);
+      background: var(--brand-color);
+      border-radius: var(--border-radius-999px);
+      > svg {
+        fill: var(--plain-white) !important;
+        width: var(--icon-dimension-16px);
+      }
+    }
+  }
+}

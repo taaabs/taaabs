@@ -1,10 +1,11 @@
 import Add from '@web-ui/assets/icons/add.svg'
 import Bookmark from '@web-ui/assets/icons/bookmark.svg'
 import GreaterThan from '@web-ui/assets/icons/greater-than.svg'
-import Info from '@web-ui/assets/icons/info.svg'
+import Info from '@web-ui/assets/icons/info.svg' 
 import LessThan from '@web-ui/assets/icons/less-than.svg'
 import Search from '@web-ui/assets/icons/search.svg'
 import Selected from '@web-ui/assets/icons/selected.svg'
+import SelectedBold from '@web-ui/assets/icons/selected-bold.svg'
 import StarFilled from '@web-ui/assets/icons/star-filled.svg'
 import Star from '@web-ui/assets/icons/star.svg'
 import Sun from '@web-ui/assets/icons/sun.svg'
@@ -26,6 +27,7 @@ export namespace Icon {
     | 'LESS_THAN'
     | 'SEARCH'
     | 'SELECTED'
+    | 'SELECTED_BOLD'
     | 'STAR_FILLED'
     | 'STAR'
     | 'SUN'
@@ -79,6 +81,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'SELECTED':
       icon = <Selected style={{ fill: 'var(--Icon-fill)' }} />
+      break
+    case 'SELECTED_BOLD':
+      icon = <SelectedBold style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'STAR':
       icon = <Star style={{ fill: 'var(--Icon-fill)' }} />

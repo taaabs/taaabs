@@ -11,12 +11,12 @@
   position: relative;
   font-size: var(--font-size-15px);
   white-space: nowrap;
+  overflow: hidden;
   @include transition-100ms(background-color);
   @include at992 {
     padding: 0 var(--distance-12px);
     font-size: var(--font-size-16px);
   }
-  overflow: hidden;
   &::before {
     content: attr(title);
     position: absolute;
@@ -24,7 +24,7 @@
     transform: translateX(-50%);
   }
   @include hover {
-    background: var(--button-underlined-background-hover);
+    background: var(--ButtonUnderlined-background-hover);
   }
   span {
     height: 100%;
@@ -62,7 +62,7 @@
       color: inherit;
       &::after {
         transform: translateX(-50%) translateY(0);
-        background: var(--brand-color);
+        background: var(--ButtonUnderlined-active-bar-color);
       }
     }
   }

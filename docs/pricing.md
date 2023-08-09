@@ -1,15 +1,16 @@
 ### Free
 
-- unlimited bookmarks (public and private)
+- unlimited public and private bookmarks
+- unlimited folders
+- one category
+- basic sorting and filtering for private bookmarks
+  - DISABLED FILTERS: starred only, nsfw exclusion,
+  - DISABLED ORDER BY: link first seen at
+  - DISABLED ORDER: most popular
 
-### Pro
+### Plus
 
-- date range selector
-- nsfw exclusive/excluded filter
-- starred only filter
-- categories
-- presets
-- dead links discovery
-- full text search
+- full featured sorting and filtering on private bookmarks
+- unlimited categories
 
-Cost: $3 monthly
+Cost: $10 yearly

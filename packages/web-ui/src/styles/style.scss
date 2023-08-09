@@ -26,26 +26,34 @@ html {
 :root {
   --plain-white: var(--white);
   --plain-black: var(--neutral950);
+
+  // Text
   --text-color-normal: var(--neutral900);
   --text-color-variant: var(--neutral600);
   --text-color-dimmed: var(--neutral500);
-  --Icon-fill: var(--plain-black);
-  --brand-color: var(--blue800);
-  --selection-background: var(--blue800);
+
+  --brand-color: var(--blue700);
+
+  // Shared
+  --selection-background: var(--brand-color);
   --selection-foreground: var(--white);
   --border-color-primary: var(--neutral200);
   --border-color-secondary: var(--neutral100);
   --border-color-hover: var(--neutral300);
-  --logo-background: var(--blue800);
-  --button-background: var(--blue800);
-  --button-background-hover: var(--blue900);
-  --button-outlined-icon-background: var(--plain-white);
-  --button-underlined-background-hover: rgba(15, 20, 25, 0.05);
+  --logo-background: var(--brand-color);
   --border-primary: 1px solid var(--border-color-primary);
   --border-secondary: 1px solid var(--border-color-secondary);
   --border-hover: 1px solid var(--border-color-hover);
   --header-background: var(--white);
   --header-transparent-background: rgba(255, 255, 255, 0.8);
+
+  // Components
+  --Icon-fill: var(--plain-black);
+  --Button-background: var(--brand-color);
+  --Button-background-hover: var(--blue800);
+  --ButtonOutlined-icon-background: var(--plain-white);
+  --ButtonUnderlined-background-hover: rgba(15, 20, 25, 0.05);
+  --ButtonUnderlined-active-bar-color: var(--brand-color);
   --UserForHeader-icon-background: var(--neutral100);
   --BottomNavigationBar-background: var(--white);
   --SearchBox-background: var(--white);
@@ -59,13 +67,13 @@ html {
   --Bookmark-nsfw-foreground: var(--white);
   --Bookmark-nsfw-background: var(--red500);
   --Bookmark-starred-title-background: var(--hightlight);
-  --Bookmark-action-fill: var(--neutral400);
-  --Bookmark-action-fill-hover: var(--neutral500);
+  --Bookmark-action-fill: var(--neutral300);
+  --Bookmark-action-fill-hover: var(--neutral400);
   --Bookmark-saves-background: var(--blue100);
-  --Bookmark-saves-foreground: var(--blue700);
+  --Bookmark-saves-foreground: var(--brand-color);
   --TitleBar-background-desktop: var(--blue50);
   --TitleBar-background-mobile: rgba(219, 234, 254, 0.5);
-  --TitleBar-primary-foreground: var(--blue800);
+  --TitleBar-primary-foreground: var(--brand-color);
   --Library-background: var(--neutral25);
   --skeleton-base-color: var(--neutral100);
   --skeleton-highlight-color: var(--neutral25);
@@ -88,8 +96,7 @@ html {
   --Months-chart-counts-background: rgba(255, 255, 255, 0.7);
   --Tags-selected-foreground: var(--yellow800);
   --Tags-tag-foreground: var(--green700);
-  --Tags-first-char-background: var(--blue50);
-  --Tags-first-char-foreground: var(--blue800);
+  --PricingTier-background: var(--blue50);
 }
 
 body {
