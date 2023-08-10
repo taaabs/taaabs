@@ -48,6 +48,11 @@
     @content;
   }
 }
+@mixin at1600 {
+  @media (min-width: 1600px) {
+    @content;
+  }
+}
 @mixin hover {
   @media (hover: hover) and (pointer: fine) {
     &:hover {

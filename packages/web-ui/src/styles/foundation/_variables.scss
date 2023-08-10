@@ -31,6 +31,9 @@
   --distance-32px: 32px;
   --distance-40px: 40px;
   --distance-60px: 60px;
+  --distance-120px: 120px;
+  --distance-210px: 210px;
+  --distance-900px: 900px;
 
   --distance-0-1rem: 0.1rem;
   --distance-0-2rem: 0.2rem;
@@ -69,6 +72,8 @@
   --font-size-28px: 28px;
   --font-size-34px: 34px;
   --font-size-40px: 40px;
+  --font-size-64px: 64px;
+  --font-size-80px: 80px;
 
   --font-size-1-2rem: 1.2rem;
   --font-size-1-3rem: 1.3rem;
@@ -119,7 +124,8 @@
 
   --backdrop-filter: saturate(180%) blur(5px);
 
-  --letter-spacing-logo: -0.04em;
+  --letter-spacing-logo: -1.5px;
+  --letter-spacing-landing-heading: 1.5px;
 
   --transition-duration-100ms: 0.1s;
   --transition-duration-300ms: 0.3s;

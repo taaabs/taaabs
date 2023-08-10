@@ -1,29 +1,9 @@
 @use 'foundation' as *;
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-::selection {
-  background: var(--selection-background);
-  color: var(--selection-foreground);
-}
-
-html {
-  font-size: 62.5%;
-  accent-color: var(--brand-color);
-  caret-color: var(--brand-color);
-  -webkit-tap-highlight-color: transparent;
-}
-
 :root {
   @include variables;
   @include colors;
-}
 
-:root {
   --plain-white: var(--white);
   --plain-black: var(--neutral950);
 
@@ -31,10 +11,12 @@ html {
   --text-color-normal: var(--neutral900);
   --text-color-variant: var(--neutral600);
   --text-color-dimmed: var(--neutral500);
-
+  
+  // Accent
   --brand-color: var(--blue700);
 
   // Shared
+  --background: var(--neutral25);
   --selection-background: var(--brand-color);
   --selection-foreground: var(--white);
   --border-color-primary: var(--neutral200);
@@ -74,7 +56,6 @@ html {
   --TitleBar-background-desktop: var(--blue50);
   --TitleBar-background-mobile: rgba(219, 234, 254, 0.5);
   --TitleBar-primary-foreground: var(--brand-color);
-  --Library-background: var(--neutral25);
   --skeleton-base-color: var(--neutral100);
   --skeleton-highlight-color: var(--neutral25);
   --ButtonSelect-background: var(--plain-white);
@@ -97,6 +78,20 @@ html {
   --Tags-selected-foreground: var(--yellow800);
   --Tags-tag-foreground: var(--green700);
   --PricingTier-background: var(--blue50);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  accent-color: var(--brand-color);
+  caret-color: var(--brand-color);
+  -webkit-tap-highlight-color: transparent;
+  background: var(--background);
 }
 
 body {
@@ -152,6 +147,11 @@ button {
   border: none;
   padding: 0;
   cursor: pointer;
+}
+
+::selection {
+  background: var(--selection-background);
+  color: var(--selection-foreground);
 }
 
 .slideout-open,

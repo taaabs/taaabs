@@ -1,0 +1,36 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  background: var(--header-background);
+  border-bottom: var(--border-primary);
+}
+.inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--distance-30px);
+  padding: var(--distance-210px) 0 var(--distance-120px) 0;
+  text-align: center;
+  > h1 {
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
+    font-size: var(--font-size-80px);
+    letter-spacing: var(--letter-spacing-landing-heading);
+  }
+  &__subheading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--distance-12px);
+    > p {
+      margin: 0 auto;
+      font-size: var(--font-size-23px);
+      white-space: pre-wrap;
+      max-width: var(--distance-900px);
+      > span {
+        font-style: italic;
+        font-weight: var(--font-weight-inter-medium);
+      }
+    }
+  }
+}

@@ -15,12 +15,14 @@ export const Landing: React.FC<Landing.Props> = (props) => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        {props.slotLogo}
-        <div className={styles.header__desktopNavAndUser}>
-          {props.slotDesktopNavigation}
-          {props.slotDesktopUser}
+        <div className={styles.header__inner}>
+          {props.slotLogo}
+          <div className={styles.header__inner__desktopNavAndUser}>
+            {props.slotDesktopNavigation}
+            {props.slotDesktopUser}
+          </div>
+          <div className={styles.header__inner__burger}>[BURGER]</div>
         </div>
-        <div className={styles.header__burger}>[BURGER]</div>
       </header>
       {props.children}
     </div>

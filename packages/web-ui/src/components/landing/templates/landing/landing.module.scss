@@ -3,45 +3,48 @@
 
 .container {
   min-height: 100vh;
+  position: relative;
 }
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
+  position: absolute;
   width: 100%;
-  padding: 0 var(--distance-16px);
-  height: 90px;
-  @include at768 {
-    padding: 0 var(--distance-40px);
-    height: 110px;
-  }
-  @include at992 {
-    height: 120px;
-  }
-  @include at1380 {
-    height: 130px;
-    max-width: 1380px;
-    margin: 0 auto;
-  }
-  @media (min-width: 1600px) {
-    max-width: 100%;
-    padding: 0 140px;
-  }
-  &__desktopNavAndUser {
+  &__inner {
     display: flex;
-    gap: var(--distance-24px);
-    @include at1200 {
-      gap: var(--distance-40px);
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--distance-16px);
+    height: 90px;
+    @include at768 {
+      padding: 0 var(--distance-40px);
+      height: 110px;
     }
-    @include to992 {
-      display: none;
-    }
-  }
-  &__burger {
-    z-index: 1;
     @include at992 {
-      display: none;
+      height: 120px;
+    }
+    @include at1380 {
+      height: 130px;
+      max-width: 1380px;
+      margin: 0 auto;
+    }
+    @include at1600 {
+      max-width: 100%;
+      padding: 0 140px;
+    }
+    &__desktopNavAndUser {
+      display: flex;
+      gap: var(--distance-24px);
+      @include at1200 {
+        gap: var(--distance-40px);
+      }
+      @include to992 {
+        display: none;
+      }
+    }
+    &__burger {
+      z-index: 1;
+      @include at992 {
+        display: none;
+      }
     }
   }
 }
