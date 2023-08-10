@@ -26,7 +26,7 @@
   @include hover {
     background: var(--ButtonUnderlined-background-hover);
   }
-  span {
+  > span {
     height: 100%;
     display: flex;
     align-items: center;
@@ -34,16 +34,6 @@
     font-weight: var(--font-weight-inter-medium);
     color: transparent;
     &::after {
-      $underline-height: 2.7px;
-      height: $underline-height;
-      border-top-right-radius: $underline-height;
-      border-top-left-radius: $underline-height;
-      @include at992 {
-        $underline-height: 3px;
-        height: $underline-height;
-        border-top-right-radius: $underline-height;
-        border-top-left-radius: $underline-height;
-      }
       position: absolute;
       content: '';
       width: 100%;
@@ -52,13 +42,25 @@
       margin-left: 50%;
       transform: translateX(-50%) translateY(100%);
       @include transition-100ms;
+      @include to992 {
+        $underline-height: 2.7px;
+        height: $underline-height;
+        border-top-right-radius: $underline-height;
+        border-top-left-radius: $underline-height;
+      }
+      @include at992 {
+        $underline-height: 3px;
+        height: $underline-height;
+        border-top-right-radius: $underline-height;
+        border-top-left-radius: $underline-height;
+      }
     }
   }
   &--active {
     &::before {
       color: transparent;
     }
-    span {
+    > span {
       color: inherit;
       &::after {
         transform: translateX(-50%) translateY(0);
@@ -71,7 +73,7 @@
     &::before {
       color: var(--text-color-dimmed);
     }
-    span {
+    > span {
       color: transparent;
     }
   }

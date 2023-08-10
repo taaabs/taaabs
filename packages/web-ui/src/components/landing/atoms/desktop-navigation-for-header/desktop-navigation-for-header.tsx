@@ -25,8 +25,9 @@ export const DesktopNavigationForHeader: React.FC<
             [styles['navigation__item--active']]: item.isActive,
           })}
           key={i}
+          title={item.label}
         >
-          {item.label}
+          <span>{item.label}</span>
         </Link>
       ))}
     </nav>

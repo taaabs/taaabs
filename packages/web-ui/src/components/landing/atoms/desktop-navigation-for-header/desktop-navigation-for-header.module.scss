@@ -13,11 +13,7 @@
     display: flex;
     align-items: center;
     font-family: var(--font-family-plus-jakarta-sans);
-    font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
-    color: var(--text-color-normal);
-    @include hover {
-      color: var(--text-color-variant);
-    }
+    font-weight: var(--font-weight-plus-jakarta-sans-medium);
     @include at992 {
       height: var(--button-dimension-48px);
       font-size: var(--font-size-20px);
@@ -26,7 +22,16 @@
       height: var(--button-dimension-52px);
       font-size: var(--font-size-22px);
     }
+    @include hover {
+      text-decoration: underline;
+    }
     &::before {
+      content: attr(title);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    &::after {
       content: '';
       position: absolute;
       background: transparent;
@@ -37,12 +42,23 @@
       width: 0.3em;
       height: 0.3em;
     }
+    > span {
+      font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
+      color: transparent;
+    }
     &--active {
-      color: var(--text-color-normal);
-      position: relative;
+      @include hover {
+        text-decoration: none;
+      }
+      > span {
+        color: var(--text-color-normal);
+      }
       &::before {
-        // transition is purposely on active modifier to avoid rendering
-        // two indicators at the same time (one fading out, another in)
+        color: transparent;
+      }
+      &::after {
+        // Transition is purposely on active modifier to avoid rendering
+        // two indicators at the same time (one fading out, another in).
         @include transition-100ms(background-color);
         background: var(--brand-color);
       }
