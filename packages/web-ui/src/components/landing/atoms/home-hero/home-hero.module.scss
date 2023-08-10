@@ -4,6 +4,7 @@
 .container {
   background: var(--header-background);
   border-bottom: var(--border-primary);
+  animation: var(--animation-move-from-top);
 }
 .inner {
   display: flex;
@@ -17,11 +18,13 @@
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
     font-size: var(--font-size-80px);
     letter-spacing: var(--letter-spacing-landing-heading);
+    animation: var(--animation-fade-in);
   }
   &__subheading {
     display: flex;
     flex-direction: column;
     gap: var(--distance-12px);
+    animation: var(--animation-fade-in-move-from-top-delayed);
     > p {
       margin: 0 auto;
       font-size: var(--font-size-23px);

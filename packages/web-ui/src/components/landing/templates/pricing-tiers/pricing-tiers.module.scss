@@ -1,0 +1,17 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  padding: var(--distance-120px) 0;
+}
+.inner {
+  display: flex;
+  justify-content: center;
+  gap: var(--distance-60px);
+  @include to768 {
+    flex-direction: column;
+  }
+  > div {
+    width: 520px;
+  }
+}

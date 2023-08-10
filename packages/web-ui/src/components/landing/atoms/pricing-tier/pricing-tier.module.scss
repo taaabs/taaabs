@@ -4,14 +4,15 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--distance-30px);
+  gap: var(--distance-20px);
   border-radius: var(--border-radius-30px);
   background: var(--PricingTier-background);
-  padding: var(--distance-40px);
+  padding: var(--distance-32px) var(--distance-40px);
 }
 .top {
   display: flex;
   flex-direction: column;
+  gap: var(--distance-10px);
   &__name {
     color: var(--brand-color);
     font-size: var(--font-size-34px);
@@ -48,6 +49,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--distance-14px);
+  margin-top: var(--distance-10px);
   &__item {
     display: flex;
     align-items: center;

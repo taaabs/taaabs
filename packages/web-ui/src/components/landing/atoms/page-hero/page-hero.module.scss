@@ -4,6 +4,7 @@
 .container {
   background: var(--header-background);
   border-bottom: var(--border-primary);
+  animation: var(--animation-move-from-top);
 }
 .inner {
   display: flex;
@@ -17,11 +18,13 @@
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
     font-size: var(--font-size-64px);
     letter-spacing: var(--letter-spacing-landing-heading);
+    animation: var(--animation-fade-in);
   }
   > p {
     font-size: var(--font-size-23px);
     white-space: pre-wrap;
     margin: 0 auto;
     max-width: var(--distance-900px);
+    animation: var(--animation-fade-in-move-from-top-delayed);
   }
 }
