@@ -97,9 +97,11 @@ const bookmark = (
       title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
       url="https://example.com/test/lorem_ipsum"
       isNsfw={true}
-      tags={[]}
+      tags={[
+        { name: 'foo', yields: 100 },
+        { name: 'bar', isSelected: true },
+      ]}
       saves={3400}
-      areTagsHidden={false}
       onTagClick={() => {}}
       onClick={() => {}}
       onMenuClick={() => {}}

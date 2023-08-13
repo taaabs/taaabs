@@ -115,6 +115,7 @@
   --border-radius-999px: 999px;
 
   --icon-dimension-12px: 12px;
+  --icon-dimension-15px: 15px;
   --icon-dimension-16px: 16px;
   --icon-dimension-18px: 18px;
   --icon-dimension-20px: 20px;
@@ -124,13 +125,14 @@
 
   --backdrop-filter: saturate(180%) blur(5px);
 
-  --letter-spacing-logo: -1.5px;
+  --letter-spacing-logo: -0.04em;
   --letter-spacing-landing-heading: 1.5px;
 
   --transition-duration-100ms: 0.1s;
   --transition-duration-300ms: 0.3s;
 
   --animation-fade-in: fade-in 1s ease 0s 1 normal backwards running;
-  --animation-fade-in-move-from-top-delayed: fade-in-move-from-top 1.2s ease 0.4s 1 normal backwards running;
+  --animation-fade-in-move-from-top-delayed: fade-in-move-from-top 1.2s ease
+    0.4s 1 normal backwards running;
   --animation-move-from-top: move-from-top 1s ease 0s 1 normal backwards running;
 }

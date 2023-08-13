@@ -10,14 +10,10 @@ import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
 import { ButtonSelect } from '@web-ui/components/app/atoms/button-select'
 import { SimpleSelectDropdown } from '@web-ui/components/app/atoms/simple-select-dropdown'
 import OutsideClickHandler from 'react-outside-click-handler'
-import { useOrderOptions } from './_hooks/use-order-options'
 import { useBookmarks } from './_hooks/use-bookmarks'
-import { useFilterOptions } from './_hooks/use-filter-options'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
-import { useMonths } from './_hooks/use-months'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
@@ -26,6 +22,12 @@ import dynamic from 'next/dynamic'
 import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
+import { useMonths } from './_hooks/use-months'
+import { useFilterViewOptions } from '@/hooks/library/use-filter-view-options'
+import { useTagViewOptions } from '@/hooks/library/use-tag-view-options'
+import { useDateViewOptions } from '@/hooks/library/use-date-view-options'
+import { useOrderByViewOptions } from '@/hooks/library/use-order-by-view-options copy'
+import { useOrderViewOptions } from '@/hooks/library/use-order-view-options'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -51,24 +53,22 @@ const Page: React.FC = () => {
     monthsOfBookmarkCreation,
     monthsOfUrlCreation,
     isGettingMonthsData,
-    setGteLteQueryParams,
-    clearGteLteQueryParams,
     tagsOfBookmarkCreation,
     tagsOfUrlCreation,
     selectedTags,
-    actualSelectedTags,
-    addTagToQueryParams,
-    removeTagFromQueryParams,
   } = useMonths()
-  const { currentOrderBy, setOrderByQueryParam, setOrderQueryParam } =
-    useOrderOptions()
+  const { addTagToQueryParams, removeTagFromQueryParams, actualSelectedTags } =
+    useTagViewOptions()
+  const { setGteLteQueryParams, clearGteLteQueryParams } = useDateViewOptions()
+  const { currentOrderBy, setOrderByQueryParam } = useOrderByViewOptions()
+  const { currentOrder, setOrderQueryParam } = useOrderViewOptions()
   const {
     currentFilter,
     setFilterQueryParam,
     excludeNsfw,
     includeNsfw,
     isNsfwExcluded,
-  } = useFilterOptions()
+  } = useFilterViewOptions()
 
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
   const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
@@ -255,15 +255,7 @@ const Page: React.FC = () => {
                         toggleOrderByDropdown()
                       },
                       isSelected:
-                        parseInt(
-                          queryParams.get('b') ||
-                            Object.values(OrderBy)
-                              .indexOf(BookmarksFetchingDefaults.Common.orderBy)
-                              .toString(),
-                        ) ==
-                        Object.values(OrderBy).indexOf(
-                          OrderBy.BookmarkCreationDate,
-                        ),
+                        currentOrderBy == OrderBy.BookmarkCreationDate,
                     },
                     {
                       label: _orderByOptionToLabel(OrderBy.UrlCreationDate),
@@ -277,14 +269,7 @@ const Page: React.FC = () => {
                         setOrderByQueryParam(OrderBy.UrlCreationDate)
                         toggleOrderByDropdown()
                       },
-                      isSelected:
-                        parseInt(
-                          queryParams.get('b') ||
-                            Object.values(OrderBy)
-                              .indexOf(BookmarksFetchingDefaults.Common.orderBy)
-                              .toString(),
-                        ) ==
-                        Object.values(OrderBy).indexOf(OrderBy.UrlCreationDate),
+                      isSelected: currentOrderBy == OrderBy.UrlCreationDate,
                     },
                   ]}
                 />
@@ -295,16 +280,7 @@ const Page: React.FC = () => {
             button: (
               <ButtonSelect
                 label="Order"
-                currentValue={_orderOptionToLabel(
-                  Object.values(Order)[
-                    parseInt(
-                      queryParams.get('o') ||
-                        Object.values(Order)
-                          .indexOf(BookmarksFetchingDefaults.Common.order)
-                          .toString(),
-                    )
-                  ],
-                )}
+                currentValue={_orderOptionToLabel(currentOrder)}
                 isActive={isOrderDropdownVisible}
                 onClick={toggleOrderDropdown}
               />
@@ -330,13 +306,7 @@ const Page: React.FC = () => {
                         toggleOrderDropdown()
                       },
 
-                      isSelected:
-                        parseInt(
-                          queryParams.get('o') ||
-                            Object.values(Order)
-                              .indexOf(BookmarksFetchingDefaults.Common.order)
-                              .toString(),
-                        ) == Object.values(Order).indexOf(Order.Desc),
+                      isSelected: currentOrder == Order.Desc,
                     },
                     {
                       label: _orderOptionToLabel(Order.Asc),
@@ -350,13 +320,7 @@ const Page: React.FC = () => {
                         setOrderQueryParam(Order.Asc)
                         toggleOrderDropdown()
                       },
-                      isSelected:
-                        parseInt(
-                          queryParams.get('o') ||
-                            Object.values(Order)
-                              .indexOf(BookmarksFetchingDefaults.Common.order)
-                              .toString(),
-                        ) == Object.values(Order).indexOf(Order.Asc),
+                      isSelected: currentOrder == Order.Asc,
                     },
                     {
                       label: _orderOptionToLabel(Order.MostPopular),
@@ -370,13 +334,7 @@ const Page: React.FC = () => {
                         setOrderQueryParam(Order.MostPopular)
                         toggleOrderDropdown()
                       },
-                      isSelected:
-                        parseInt(
-                          queryParams.get('o') ||
-                            Object.values(Order)
-                              .indexOf(BookmarksFetchingDefaults.Common.order)
-                              .toString(),
-                        ) == Object.values(Order).indexOf(Order.MostPopular),
+                      isSelected: currentOrder == Order.MostPopular,
                     },
                   ]}
                 />

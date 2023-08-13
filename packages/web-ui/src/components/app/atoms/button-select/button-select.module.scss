@@ -11,12 +11,14 @@
   border: var(--border-secondary);
   padding: 0 var(--distance-13px) 0 var(--distance-12px);
   background-color: var(--ButtonSelect-background);
-  @include transition-100ms(border-color);
+  @include transition-100ms;
   @include hover {
     border-color: var(--border-color-hover);
+    background: var(--ButtonSelect-background-hover);
   }
   &--toggled {
     border-color: var(--border-color-hover);
+    background: var(--ButtonSelect-background-hover);
     pointer-events: none;
   }
 }
@@ -41,7 +43,7 @@
   }
   &--toggled {
     svg {
-      transform:  rotate(-90deg) scaleX(-1);
+      transform: rotate(-90deg) scaleX(-1);
     }
   }
 }

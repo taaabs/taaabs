@@ -1,6 +1,6 @@
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { MonthsRo } from '@repositories/modules/months/domain/types/months.ro'
 import * as thunks from './action-creators'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export type Months = {
   yyyymm: number
@@ -39,7 +39,7 @@ export const monthsSlice = createSlice({
     setIsGettingData(state, action: PayloadAction<boolean>) {
       state.isGettingMonthsData = action.payload
     },
-    setData(state, action: PayloadAction<MonthsRo.Public>) {
+    setData(state, action: PayloadAction<MonthsRo.Authorized>) {
       state.monthsData = action.payload
 
       const monthsOfBookmarkCreation: Months = []
@@ -73,10 +73,10 @@ export const monthsSlice = createSlice({
     setTagsOfUrlCreation(state, action: PayloadAction<Tags>) {
       state.tagsOfUrlCreation = action.payload
     },
-    setYyyymmGte(state, action: PayloadAction<number | null>) {
+    setYyyymmGte(state, action: PayloadAction<MonthsState['yyyymmGte']>) {
       state.yyyymmGte = action.payload
     },
-    setYyyymmLte(state, action: PayloadAction<number | null>) {
+    setYyyymmLte(state, action: PayloadAction<MonthsState['yyyymmLte']>) {
       state.yyyymmLte = action.payload
     },
   },

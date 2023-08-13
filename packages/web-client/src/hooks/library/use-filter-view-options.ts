@@ -5,7 +5,7 @@ import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookm
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useState } from 'react'
 
-export const useFilterOptions = () => {
+export const useFilterViewOptions = () => {
   const queryParams = useShallowSearchParams()
   const [currentFilter, setCurrentFilter] = useState<LibraryFilter>(
     Object.values(LibraryFilter)[

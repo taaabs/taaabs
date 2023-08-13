@@ -1,5 +1,6 @@
 declare const styles: {
   readonly container: string
+  readonly link__inner__element: string
   readonly main: string
   readonly 'main--has-tags': string
   readonly main__title: string
@@ -16,6 +17,5 @@ declare const styles: {
   readonly actions__button: string
   readonly link: string
   readonly link__inner: string
-  readonly link__inner__element: string
 }
 export = styles

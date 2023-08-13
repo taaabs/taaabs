@@ -106,6 +106,7 @@ export const Library: React.FC<Library.Props> = (props) => {
       setIsSlideoutLeftDefinetelyOpened(false)
     })
     slideoutLeftInstance.on('translatestart', () => {
+      setIsSlideoutLeftOpen(true)
       setIsSlideoutLeftDefinetelyClosed(false)
       setIsSlideoutLeftDefinetelyOpened(false)
     })
@@ -122,6 +123,7 @@ export const Library: React.FC<Library.Props> = (props) => {
       setIsSlideoutRightDefinetelyOpened(false)
     })
     slideoutRightInstance.on('translatestart', () => {
+      setIsSlideoutRightOpen(true)
       setIsSlideoutRightDefinetelyClosed(false)
       setIsSlideoutRightDefinetelyOpened(false)
     })
@@ -195,8 +197,12 @@ export const Library: React.FC<Library.Props> = (props) => {
           className={styles.sidebar}
           ref={sidebar}
           style={{
-            zIndex: !isSlideoutLeftDefinetelyClosed ? 1 : 0,
             width: `${SLIDABLE_WIDTH}px`,
+            zIndex: !isSlideoutRightDefinetelyClosed ? undefined : 1,
+            visibility: !isSlideoutRightDefinetelyClosed ? 'hidden' : undefined,
+            pointerEvents: !isSlideoutRightDefinetelyClosed
+              ? 'none'
+              : undefined,
           }}
         >
           <div
@@ -292,7 +298,6 @@ export const Library: React.FC<Library.Props> = (props) => {
           className={styles.aside}
           ref={aside}
           style={{
-            zIndex: !isSlideoutRightDefinetelyClosed ? 1 : 0,
             width: `${SLIDABLE_WIDTH}px`,
           }}
         >

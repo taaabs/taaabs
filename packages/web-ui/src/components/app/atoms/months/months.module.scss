@@ -30,11 +30,9 @@
       font-weight: var(--font-weight-inter-medium);
     }
     &__counts {
-      position: absolute;
       display: flex;
       gap: var(--distance-6px);
-      margin-top: 48px;
-      background-color: var(--Months-chart-counts-background);
+      margin-top: var(--distance-4px);
       padding: var(--distance-1px) var(--distance-6px) var(--distance-1px)
         var(--distance-6px);
       border-radius: var(--border-radius-4px);
@@ -98,7 +96,7 @@
   &__recharts {
     width: 100%;
     svg {
-      transform: translateY(41px);
+      transform: translateY(54px);
     }
     &__brush {
       transform: translateY(-47px) scale(0.9);

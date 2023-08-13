@@ -1,12 +1,11 @@
 import { useParams } from 'next/navigation'
 import { useLibraryDispatch, useLibrarySelector } from './store'
-import { monthsActions } from '@repositories/stores/other-user/library/months/months.slice'
 import { useEffect, useState } from 'react'
 import { MonthsParams } from '@repositories/modules/months/domain/types/months.params'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { updateSearchParam } from '@/utils/update-query-param'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { monthsActions } from '@repositories/stores/user-public/library/months/months.slice'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -26,9 +25,6 @@ export const useMonths = () => {
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
-  const [actualSelectedTags, setActualSelectedTags] = useState<string[]>(
-    queryParams.get('t') ? queryParams.get('t')!.split(',') : [],
-  )
   const [lastQueryYyyymmGte, setLastQueryYyyymmGte] = useState<string | null>(
     null,
   )
@@ -56,64 +52,6 @@ export const useMonths = () => {
     }
 
     dispatch(monthsActions.getMonths({ apiUrl, params: getMonthsParams }))
-  }
-
-  const addTagToQueryParams = (tag: string) => {
-    setActualSelectedTags([...actualSelectedTags, tag])
-
-    const updatedQueryParams = updateSearchParam(
-      queryParams,
-      't',
-      [...actualSelectedTags, tag].join(','),
-    )
-    window.history.pushState(
-      {},
-      '',
-      window.location.pathname + '?' + updatedQueryParams,
-    )
-  }
-
-  const removeTagFromQueryParams = (tag: string) => {
-    setActualSelectedTags(actualSelectedTags.filter((t) => t != tag))
-
-    const updatedQueryParams = updateSearchParam(
-      queryParams,
-      't',
-      actualSelectedTags.filter((t) => t != tag).join(','),
-    )
-    window.history.pushState(
-      {},
-      '',
-      window.location.pathname + '?' + updatedQueryParams,
-    )
-  }
-
-  const setGteLteQueryParams = ({ gte, lte }: { gte: number; lte: number }) => {
-    const queryParams = new URLSearchParams(window.location.search)
-
-    let updatedQueryParams: any
-    updatedQueryParams = updateSearchParam(queryParams, 'gte', `${gte}`)
-    updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte', `${lte}`)
-
-    window.history.pushState(
-      {},
-      '',
-      window.location.pathname + '?' + updatedQueryParams,
-    )
-  }
-
-  const clearGteLteQueryParams = () => {
-    const queryParams = new URLSearchParams(window.location.search)
-
-    let updatedQueryParams: any
-    updatedQueryParams = updateSearchParam(queryParams, 'gte', '')
-    updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte', '')
-
-    window.history.pushState(
-      {},
-      '',
-      window.location.pathname + '?' + updatedQueryParams,
-    )
   }
 
   useUpdateEffect(() => {
@@ -209,13 +147,8 @@ export const useMonths = () => {
     monthsOfBookmarkCreation,
     monthsOfUrlCreation,
     isGettingMonthsData,
-    setGteLteQueryParams,
-    clearGteLteQueryParams,
     tagsOfBookmarkCreation,
     tagsOfUrlCreation,
-    addTagToQueryParams,
     selectedTags,
-    actualSelectedTags,
-    removeTagFromQueryParams,
   }
 }

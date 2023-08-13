@@ -6,7 +6,7 @@
   background: var(--Bookmark-background);
   border: var(--border-secondary);
   cursor: pointer;
-  @include transition-100ms(border-color);
+  @include transition-100ms;
   @include to992 {
     grid-template-areas:
       'main main'
@@ -23,6 +23,10 @@
     grid-template-columns: 1fr auto;
     @include hover {
       border-color: var(--border-color-hover);
+      background: var(--Bookmark-background-hover);
+      .link__inner__element > div > span::after {
+        background-color: var(--Bookmark-background-hover);
+      }
     }
   }
   .main {
@@ -135,20 +139,24 @@
     }
     @include at992 {
       flex-direction: column;
-      margin-top: var(--distance-7px);
+      margin-top: var(--distance-10px);
       margin-left: var(--distance-8px);
+      margin-right: var(--distance-6px);
+      gap: var(--distance-2px);
     }
     &__button {
       display: flex;
       align-items: center;
       justify-content: center;
+      border-radius: var(--border-radius-999px);
+      @include transition-100ms(background-color);
       @include to992 {
         width: var(--button-dimension-48px);
         height: var(--button-dimension-48px);
       }
       @include at992 {
-        width: var(--button-dimension-40px);
-        height: var(--button-dimension-34px);
+        width: var(--button-dimension-28px);
+        height: var(--button-dimension-28px);
       }
       &:last-of-type {
         @include to992 {
@@ -156,18 +164,23 @@
         }
       }
       svg {
-        width: var(--icon-dimension-18px);
-        height: var(--icon-dimension-18px);
         fill: var(--Bookmark-action-fill) !important;
         @include transition-100ms(fill);
+        @include to992 {
+          width: var(--icon-dimension-18px);
+          height: var(--icon-dimension-18px);
+        }
         @include at992 {
-          width: var(--icon-dimension-16px);
-          height: var(--icon-dimension-16px);
+          width: var(--icon-dimension-15px);
+          height: var(--icon-dimension-15px);
         }
       }
-      @include hover {
-        svg {
-          fill: var(--Bookmark-action-fill-hover) !important;
+      @include at992 {
+        @include hover {
+          background: var(--Bookmark-action-background-hover);
+          svg {
+            fill: var(--Bookmark-action-fill-hover) !important;
+          }
         }
       }
     }
@@ -218,6 +231,7 @@
           background-size: 1.55rem;
           background-repeat: no-repeat;
           position: absolute;
+          @include transition-100ms(background-color);
         }
       }
     }

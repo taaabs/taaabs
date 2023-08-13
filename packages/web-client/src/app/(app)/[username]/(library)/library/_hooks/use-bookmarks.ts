@@ -2,12 +2,12 @@ import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bo
 import { useParams } from 'next/navigation'
 import { useLibraryDispatch, useLibrarySelector } from './store'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { bookmarksActions } from '@repositories/stores/other-user/library/bookmarks/bookmarks.slice'
 import { useEffect, useState } from 'react'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { bookmarksActions } from '@repositories/stores/user-public/library/bookmarks/bookmarks.slice'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 

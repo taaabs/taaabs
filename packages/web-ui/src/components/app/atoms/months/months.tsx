@@ -1,4 +1,4 @@
-import { Area, AreaChart, Brush, ResponsiveContainer } from 'recharts'
+import { Area, AreaChart, Brush, ResponsiveContainer, YAxis } from 'recharts'
 import styles from './months.module.scss'
 import useThrottledCallback from 'beautiful-react-hooks/useThrottledCallback'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
@@ -318,7 +318,7 @@ export const Months: React.FC<Months.Props> = (props) => {
 
       {!props.isGettingData && props.months && props.months.length >= 2 && (
         <div className={styles.graph__recharts}>
-          <ResponsiveContainer width={'100%'} height={160} key={key}>
+          <ResponsiveContainer width={'100%'} height={135} key={key}>
             <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
               <Area
                 type="basis"
@@ -354,6 +354,7 @@ export const Months: React.FC<Months.Props> = (props) => {
                 animationDuration={0}
                 strokeOpacity={nsfwCount == 0 ? 0 : 1}
               />
+              <YAxis tickCount={1} width={0} />
               <Brush
                 startIndex={startIndex != null ? startIndex : undefined}
                 endIndex={endIndex != null ? endIndex : undefined}

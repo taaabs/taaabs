@@ -1,14 +1,13 @@
 import { BookmarkEntity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-
 import * as thunks from './action-creators'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 type BookmarksState = {
   isGettingData: boolean
   isGettingFirstBookmarks: boolean
   isGettingMoreBookmarks: boolean
-  incomingBookmarks: Array<BookmarkEntity.Public> | null
-  bookmarks: Array<BookmarkEntity.Public> | null
+  incomingBookmarks: Array<BookmarkEntity.Authorized> | null
+  bookmarks: Array<BookmarkEntity.Authorized> | null
   hasMoreBookmarks: boolean | null
 }
 
@@ -36,7 +35,7 @@ export const bookmarksSlice = createSlice({
     },
     setIncomingBookmarks(
       state,
-      action: PayloadAction<BookmarksState['bookmarks']>,
+      action: PayloadAction<BookmarksState['incomingBookmarks']>,
     ) {
       state.incomingBookmarks = action.payload
     },
@@ -49,7 +48,7 @@ export const bookmarksSlice = createSlice({
     ) {
       if (!state.bookmarks || !action.payload)
         throw 'Some bookmarks should be there.'
-      state.bookmarks!.push(...action.payload)
+      state.bookmarks!.push
     },
     setHasMoreBookmarks(
       state,

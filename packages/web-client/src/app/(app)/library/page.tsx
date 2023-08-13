@@ -1,21 +1,49 @@
 'use client'
-// import { useContext } from 'react'
-// import { FooterVisibleHeightContext } from '../layout'
+
+import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
 import { Library } from '@web-ui/components/app/templates/library'
+import dynamic from 'next/dynamic'
+import { useParams, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+const Months = dynamic(() => import('./dynamic-months'), {
+  ssr: false,
+  loading: () => <MonthsSkeleton />,
+})
+
 
 const Page: React.FC = () => {
-  // const footerVisibleHeight = useContext(FooterVisibleHeightContext)
+  const queryParams = useShallowSearchParams()
+  const router = useRouter()
+  const params = useParams()
+  const [showMonths, setShowMonths] = useState(false)
+  const [showTags, setShowTags] = useState(false)
+  const [showTagsSkeleton, setShowTagsSkeleton] = useState(true)
+
+
+  useEffect(() => {
+    sessionStorage.setItem('queryParams', queryParams.toString())
+
+    return () => {
+      sessionStorage.removeItem('queryParams')
+    }
+  }, [queryParams])
+
   return (
     <Library
-      titleBar={{
-        primaryText: 'primary',
-        secondaryText: 'secondary',
-      }}
-      slotAside={<div>slot aside</div>}
+      titleBar={
+        bookmarks != null
+          ? queryParams.get('categoryId')
+            ? '[category_name]'
+            : 'All bookmarks'
+          : undefined
+      }
       slotSidebar={<div>slot sidebar</div>}
-    >
-      render bookmarks here
-    </Library>
+      slotAside={<div>slot aside</div>}
+      
+    />
+     
   )
 }
 

@@ -43,7 +43,7 @@
     @include to992 {
       height: 100%;
       overflow: auto;
-      background: var(--Library-background);
+      background: var(--background);
       padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
         var(--distance-16px);
     }
@@ -64,7 +64,7 @@
     height: calc(
       100svh - (var(--header-mobile-height) + var(--BottomNavigationBar-height))
     );
-    background: var(--Library-background);
+    background: var(--background);
   }
   @include at992 {
     flex: 1;

@@ -34,14 +34,16 @@
   --Button-background: var(--brand-color);
   --Button-background-hover: var(--blue800);
   --ButtonOutlined-icon-background: var(--plain-white);
-  --ButtonUnderlined-background-hover: rgba(15, 20, 25, 0.05);
+  --ButtonOutlined-icon-background-hover: var(--neutral50);
   --ButtonUnderlined-active-bar-color: var(--brand-color);
   --UserForHeader-icon-background: var(--neutral100);
   --BottomNavigationBar-background: var(--white);
-  --SearchBox-background: var(--white);
+  --SearchBox-background: var(--plain-white);
+  --SearchBox-background-hover: var(--neutral50);
   --SearchBox-shadow: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.03);
   --SearchBox-shadow-hover: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.07);
   --Bookmark-background: var(--plain-white);
+  --Bookmark-background-hover: var(--neutral50);
   --Bookmark-link-foreground: var(--blue800);
   --Bookmark-link-visited-foreground: var(--purple800);
   --Bookmark-tag-foreground: var(--green700);
@@ -49,8 +51,9 @@
   --Bookmark-nsfw-foreground: var(--white);
   --Bookmark-nsfw-background: var(--red500);
   --Bookmark-starred-title-background: var(--hightlight);
-  --Bookmark-action-fill: var(--plain-black);
-  --Bookmark-action-fill-hover: var(--blue700);
+  --Bookmark-action-fill: var(--neutral350);
+  --Bookmark-action-fill-hover: var(--neutral600);
+  --Bookmark-action-background-hover: var(--neutral200);
   --Bookmark-saves-background: var(--blue100);
   --Bookmark-saves-foreground: var(--brand-color);
   --TitleBar-background-desktop: var(--blue50);
@@ -59,6 +62,7 @@
   --skeleton-base-color: var(--neutral100);
   --skeleton-highlight-color: var(--neutral25);
   --ButtonSelect-background: var(--plain-white);
+  --ButtonSelect-background-hover: var(--neutral50);
   --SimpleSelectDropdown-background: var(--plain-white);
   --SimpleSelectDropdown-background-hover: var(--neutral50);
   --SimpleSelectDropdown-box-shadow: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.06);
@@ -67,14 +71,13 @@
   --SimpleSelectDropdown-checkbox-foreground: var(--blue800);
   --Months-background: var(--plain-white);
   --Months-clear-background: var(--plain-white);
-  --Months-chart-fill: #bfdbfe; // Values must be passed directly for chart.
+  --Months-chart-fill: #bfdbfe; // Values for the chart must be passed directly.
   --Months-chart-stroke: #1d4ed8;
   --Months-chart-starred-fill: #fff545;
   --Months-chart-nsfw-stroke: #ef4444;
   --Months-chart-brush-handle-fill: #fff;
   --Months-chart-brush-handle: var(--neutral300);
   --Months-chart-brush-handle-hover: var(--neutral350);
-  --Months-chart-counts-background: rgba(255, 255, 255, 0.7);
   --Tags-selected-foreground: var(--yellow800);
   --Tags-tag-foreground: var(--green700);
   --PricingTier-background: var(--blue50);

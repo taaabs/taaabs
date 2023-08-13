@@ -12,7 +12,6 @@
   font-size: var(--font-size-15px);
   white-space: nowrap;
   overflow: hidden;
-  @include transition-100ms(background-color);
   @include at992 {
     padding: 0 var(--distance-12px);
     font-size: var(--font-size-16px);
@@ -24,7 +23,9 @@
     transform: translateX(-50%);
   }
   @include hover {
-    background: var(--ButtonUnderlined-background-hover);
+    &::before {
+      text-decoration: underline;
+    }
   }
   > span {
     height: 100%;

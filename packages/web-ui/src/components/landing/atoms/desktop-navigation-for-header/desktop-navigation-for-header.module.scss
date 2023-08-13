@@ -23,7 +23,9 @@
       font-size: var(--font-size-22px);
     }
     @include hover {
-      text-decoration: underline;
+      &::before {
+        text-decoration: underline;
+      }
     }
     &::before {
       content: attr(title);
@@ -37,19 +39,17 @@
       background: transparent;
       left: 50%;
       bottom: -0.15em;
-      transform: translateX(-50%);
+      transform: translateX(-50%) translateY(5px);
       border-radius: var(--border-radius-999px);
-      width: 0.3em;
-      height: 0.3em;
+      width: 7px;
+      height: 7px;
+      @include transition-100ms;
     }
     > span {
       font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
       color: transparent;
     }
     &--active {
-      @include hover {
-        text-decoration: none;
-      }
       > span {
         color: var(--text-color-normal);
       }
@@ -59,8 +59,9 @@
       &::after {
         // Transition is purposely on active modifier to avoid rendering
         // two indicators at the same time (one fading out, another in).
-        @include transition-100ms(background-color);
+        @include transition-300ms;
         background: var(--brand-color);
+        transform: translateX(-50%);
       }
     }
   }
