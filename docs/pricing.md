@@ -12,5 +12,6 @@
 
 - full featured sorting and filtering on private bookmarks
 - unlimited categories
+- select more than 2 tags at a time
 
 Cost: $10 yearly

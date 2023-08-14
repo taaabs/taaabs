@@ -47,7 +47,6 @@ const Page: React.FC = () => {
     isGettingMoreBookmarks,
     hasMoreBookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
-
   const { getBookmarks } = useBookmarks()
   const {
     monthsOfBookmarkCreation,
@@ -69,17 +68,14 @@ const Page: React.FC = () => {
     includeNsfw,
     isNsfwExcluded,
   } = useFilterViewOptions()
-
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
   const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
   const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)
 
   useUpdateEffect(() => {
-    setTimeout(() => {
-      if (!showMonths) setShowMonths(true)
-      if (!showTags) setShowTags(true)
-      if (showTagsSkeleton) setShowTagsSkeleton(false)
-    }, 0)
+    if (!showMonths) setShowMonths(true)
+    if (!showTags) setShowTags(true)
+    if (showTagsSkeleton) setShowTagsSkeleton(false)
   }, [bookmarks])
 
   useEffect(() => {
@@ -397,10 +393,7 @@ const Page: React.FC = () => {
                 >
                   <SelectedTags
                     selectedTags={actualSelectedTags}
-                    onSelectedTagClick={(tag) => {
-                      setShowTags(false)
-                      removeTagFromQueryParams(tag)
-                    }}
+                    onSelectedTagClick={removeTagFromQueryParams}
                   />
                 </div>
               )}
@@ -413,10 +406,7 @@ const Page: React.FC = () => {
                         : tagsOfUrlCreation
                       : {}
                   }
-                  onClick={(tag) => {
-                    setShowTags(false)
-                    addTagToQueryParams(tag)
-                  }}
+                  onClick={addTagToQueryParams}
                   key={queryParams.toString()}
                 />
               )}
@@ -430,7 +420,7 @@ const Page: React.FC = () => {
       hasMoreBookmarks={hasMoreBookmarks || false}
       noResults={!bookmarks || bookmarks.length == 0}
       getMoreBookmarks={() => {
-        getBookmarks({ getNextPage: true })
+        getBookmarks({ shouldGetNextPage: true })
       }}
       slotBookmarks={
         bookmarks && bookmarks.length
@@ -466,14 +456,8 @@ const Page: React.FC = () => {
                 isStarred={bookmark.isStarred}
                 key={bookmark.id}
                 sitePath={bookmark.sitePath}
-                onTagClick={(tag) => {
-                  setShowTags(false)
-                  addTagToQueryParams(tag)
-                }}
-                onSelectedTagClick={(tag) => {
-                  setShowTags(false)
-                  removeTagFromQueryParams(tag)
-                }}
+                onTagClick={addTagToQueryParams}
+                onSelectedTagClick={removeTagFromQueryParams}
               />
             ))
           : []

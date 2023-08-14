@@ -82,15 +82,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    top: var(--distance-8px);
-    right: var(--distance-3px);
-    height: var(--button-dimension-34px);
-    width: var(--button-dimension-34px);
-    @include transition-100ms(border-color);
+    top: var(--distance-10px);
+    right: var(--distance-6px);
+    height: var(--button-dimension-28px);
+    width: var(--button-dimension-28px);
+    @include transition-100ms(background-color);
+    border-radius: var(--border-radius-999px);
+    @include hover {
+      background: var(--Months-clear-background-hover);
+    }
     svg {
       width: var(--icon-dimension-16px);
       height: var(--icon-dimension-16px);
       transform: rotate(45deg);
+      @include transition-100ms(fill);
     }
   }
   &__recharts {

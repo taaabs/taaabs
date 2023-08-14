@@ -7,7 +7,12 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 import { monthsActions } from '@repositories/stores/user-public/library/months/months.slice'
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL
+enum SessionStorageKey {
+  QueryParams = 'queryParams',
+  MonthsData = 'monthsData',
+  TagsOfBookmarkCreation = 'tagsOfBookmarkCreation',
+  TagsOfUrlCreation = 'tagsOfUrlCreation',
+}
 
 export const useMonths = () => {
   const queryParams = useShallowSearchParams()
@@ -51,7 +56,12 @@ export const useMonths = () => {
         Object.values(LibraryFilter)[parseInt(queryFilter)]
     }
 
-    dispatch(monthsActions.getMonths({ apiUrl, params: getMonthsParams }))
+    dispatch(
+      monthsActions.getMonths({
+        params: getMonthsParams,
+        apiUrl: process.env.NEXT_PUBLIC_API_URL,
+      }),
+    )
   }
 
   useUpdateEffect(() => {
@@ -91,33 +101,40 @@ export const useMonths = () => {
 
   useUpdateEffect(() => {
     if (monthsData) {
-      sessionStorage.setItem('monthsData', JSON.stringify(monthsData))
+      sessionStorage.setItem(
+        SessionStorageKey.MonthsData,
+        JSON.stringify(monthsData),
+      )
     }
 
     if (tagsOfBookmarkCreation) {
       sessionStorage.setItem(
-        'tagsOfBookmarkCreation',
+        SessionStorageKey.TagsOfBookmarkCreation,
         JSON.stringify(tagsOfBookmarkCreation),
       )
       sessionStorage.setItem(
-        'tagsOfUrlCreation',
+        SessionStorageKey.TagsOfUrlCreation,
         JSON.stringify(tagsOfUrlCreation),
       )
     }
   }, [monthsData, tagsOfBookmarkCreation, tagsOfUrlCreation])
 
   useEffect(() => {
-    const previousQueryParams = sessionStorage.getItem('queryParams')
+    const previousQueryParams = sessionStorage.getItem(
+      SessionStorageKey.QueryParams,
+    )
 
     if (queryParams.toString() == previousQueryParams) {
-      const monthsData = sessionStorage.getItem('monthsData')
+      const monthsData = sessionStorage.getItem(SessionStorageKey.MonthsData)
       if (monthsData) {
         dispatch(monthsActions.setData(JSON.parse(monthsData)))
 
         const tagsOfBookmarkCreation = sessionStorage.getItem(
-          'tagsOfBookmarkCreation',
+          SessionStorageKey.TagsOfBookmarkCreation,
         )
-        const tagsOfUrlCreation = sessionStorage.getItem('tagsOfUrlCreation')
+        const tagsOfUrlCreation = sessionStorage.getItem(
+          SessionStorageKey.TagsOfUrlCreation,
+        )
 
         if (tagsOfBookmarkCreation && tagsOfUrlCreation) {
           dispatch(
@@ -137,9 +154,9 @@ export const useMonths = () => {
     }
 
     return () => {
-      sessionStorage.removeItem('monthsData')
-      sessionStorage.removeItem('tagsOfBookmarkCreation')
-      sessionStorage.removeItem('tagsOfUrlCreation')
+      sessionStorage.removeItem(SessionStorageKey.MonthsData)
+      sessionStorage.removeItem(SessionStorageKey.TagsOfBookmarkCreation)
+      sessionStorage.removeItem(SessionStorageKey.TagsOfUrlCreation)
     }
   }, [])
 

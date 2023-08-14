@@ -9,7 +9,11 @@ import { Order } from '@shared/types/modules/bookmarks/order'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 import { bookmarksActions } from '@repositories/stores/user-public/library/bookmarks/bookmarks.slice'
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL
+enum SessionStorageKey {
+  Bookmarks = 'bookmarks',
+  HasMoreBookmarks = 'hasMoreBookmarks',
+  QueryParams = 'queryParams',
+}
 
 export const useBookmarks = () => {
   const queryParams = useShallowSearchParams()
@@ -30,7 +34,11 @@ export const useBookmarks = () => {
     null,
   )
 
-  const getBookmarks = ({ getNextPage }: { getNextPage?: boolean }) => {
+  const getBookmarks = ({
+    shouldGetNextPage,
+  }: {
+    shouldGetNextPage?: boolean
+  }) => {
     const getBookmarksParams: BookmarksParams.Public = {
       username: params.username as string,
     }
@@ -79,15 +87,15 @@ export const useBookmarks = () => {
       getBookmarksParams.yyyymmLte = parseInt(queryYyyymmLte)
     }
 
-    if (getNextPage) {
+    if (shouldGetNextPage) {
       if (!bookmarks) throw 'Bookmarks should be there.'
-      getBookmarksParams.after = bookmarks.slice(-1)[0].id
+      getBookmarksParams.after = bookmarks[bookmarks.length - 1].id
     }
 
     dispatch(
       bookmarksActions.getBookmarks({
         params: getBookmarksParams,
-        apiUrl,
+        apiUrl: process.env.NEXT_PUBLIC_API_URL,
       }),
     )
   }
@@ -115,18 +123,28 @@ export const useBookmarks = () => {
   }, [queryParams])
 
   useUpdateEffect(() => {
-    sessionStorage.setItem('bookmarks', JSON.stringify(bookmarks))
-    sessionStorage.setItem('hasMoreBookmarks', JSON.stringify(hasMoreBookmarks))
+    sessionStorage.setItem(
+      SessionStorageKey.Bookmarks,
+      JSON.stringify(bookmarks),
+    )
+    sessionStorage.setItem(
+      SessionStorageKey.HasMoreBookmarks,
+      JSON.stringify(hasMoreBookmarks),
+    )
   }, [bookmarks])
 
   useEffect(() => {
-    const previousQueryParams = sessionStorage.getItem('queryParams')
+    const previousQueryParams = sessionStorage.getItem(
+      SessionStorageKey.QueryParams,
+    )
     if (queryParams.toString() == previousQueryParams) {
-      const bookmarks = sessionStorage.getItem('bookmarks')
+      const bookmarks = sessionStorage.getItem(SessionStorageKey.Bookmarks)
 
       if (bookmarks) {
         dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
-        const hasMoreBookmarks = sessionStorage.getItem('hasMoreBookmarks')
+        const hasMoreBookmarks = sessionStorage.getItem(
+          SessionStorageKey.HasMoreBookmarks,
+        )
         if (hasMoreBookmarks) {
           dispatch(
             bookmarksActions.setHasMoreBookmarks(hasMoreBookmarks == 'true'),
@@ -140,8 +158,8 @@ export const useBookmarks = () => {
     }
 
     return () => {
-      sessionStorage.removeItem('bookmarks')
-      sessionStorage.removeItem('hasMoreBookmarks')
+      sessionStorage.removeItem(SessionStorageKey.Bookmarks)
+      sessionStorage.removeItem(SessionStorageKey.HasMoreBookmarks)
     }
   }, [])
 

@@ -6,12 +6,12 @@ import { Library } from '@web-ui/components/app/templates/library'
 import dynamic from 'next/dynamic'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useLibrarySelector } from './_hooks/store'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
   loading: () => <MonthsSkeleton />,
 })
-
 
 const Page: React.FC = () => {
   const queryParams = useShallowSearchParams()
@@ -20,7 +20,13 @@ const Page: React.FC = () => {
   const [showMonths, setShowMonths] = useState(false)
   const [showTags, setShowTags] = useState(false)
   const [showTagsSkeleton, setShowTagsSkeleton] = useState(true)
-
+  const {
+    bookmarks,
+    isGettingFirstBookmarks,
+    isGettingMoreBookmarks,
+    hasMoreBookmarks,
+  } = useLibrarySelector((state) => state.bookmarks)
+  const {} = useBookmarks()
 
   useEffect(() => {
     sessionStorage.setItem('queryParams', queryParams.toString())
@@ -41,9 +47,7 @@ const Page: React.FC = () => {
       }
       slotSidebar={<div>slot sidebar</div>}
       slotAside={<div>slot aside</div>}
-      
     />
-     
   )
 }
 
