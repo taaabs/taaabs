@@ -380,29 +380,29 @@ const Page: React.FC = () => {
           }
           slotTags={
             <>
-              <div
-                style={{
-                  pointerEvents:
-                    isGettingFirstBookmarks ||
-                    isGettingMoreBookmarks ||
-                    isGettingMonthsData
-                      ? 'none'
-                      : undefined,
-                  opacity:
-                    isGettingFirstBookmarks ||
-                    isGettingMoreBookmarks ||
-                    isGettingMonthsData
-                      ? 0.6
-                      : undefined,
-                }}
-              >
-                {selectedTags.length > 0 && (
-                  <SelectedTags
-                    selectedTags={selectedTags}
-                    onSelectedTagClick={removeTagFromQueryParams}
-                  />
-                )}
-                {showTags && (
+              {showTags && (
+                <div
+                  style={{
+                    pointerEvents:
+                      isGettingFirstBookmarks ||
+                      isGettingMoreBookmarks ||
+                      isGettingMonthsData
+                        ? 'none'
+                        : undefined,
+                    opacity:
+                      isGettingFirstBookmarks ||
+                      isGettingMoreBookmarks ||
+                      isGettingMonthsData
+                        ? 0.6
+                        : undefined,
+                  }}
+                >
+                  {selectedTags.length > 0 && (
+                    <SelectedTags
+                      selectedTags={selectedTags}
+                      onSelectedTagClick={removeTagFromQueryParams}
+                    />
+                  )}
                   <Tags
                     tags={
                       tagsOfBookmarkCreation && tagsOfUrlCreation
@@ -422,8 +422,8 @@ const Page: React.FC = () => {
                     onClick={addTagToQueryParams}
                     key={queryParams.toString()}
                   />
-                )}
-              </div>
+                </div>
+              )}
               {showTagsSkeleton && <TagsSkeleton />}
             </>
           }
