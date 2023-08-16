@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import styles from './tags.module.scss'
+import cn from 'classnames'
 
 export namespace Tags {
   export type Props = {
@@ -23,18 +24,23 @@ export const Tags: React.FC<Tags.Props> = memo(
           }
 
           return (
-            <div className={styles.item} key={tag}>
-              {displayFirstChar && (
-                <div className={styles.item__firstChar}>{firstChar}</div>
+            <>
+              {displayFirstChar && renderedFirstChars.size > 1 && (
+                <div className={styles.break} />
               )}
-              <button
-                className={styles.item__tag}
-                onClick={() => props.onClick(tag)}
-              >
-                <span>{tag.replaceAll('-', ' ')}</span>
-                <span>{yields}</span>
-              </button>
-            </div>
+              <div className={styles.item} key={tag}>
+                {displayFirstChar && (
+                  <div className={styles.item__firstChar}>{firstChar}</div>
+                )}
+                <button
+                  className={styles.item__tag}
+                  onClick={() => props.onClick(tag)}
+                >
+                  <span>{tag.replaceAll('-', ' ')}</span>
+                  <span>{yields}</span>
+                </button>
+              </div>
+            </>
           )
         })}
       </div>

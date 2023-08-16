@@ -2,7 +2,7 @@ export namespace BookmarkEntity {
   type Base = {
     id: string
     title: string
-    text?: string
+    note?: string
     url: string
     createdAt: string
     tags: string[]

@@ -363,8 +363,8 @@ importers:
         specifier: ^2.7.2
         version: 2.7.2(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
       slideout:
-        specifier: git+https://github.com/robertpiosi/slideout.git#0.0.7
-        version: github.com/robertpiosi/slideout/72ad5c75261e83ae5291e7fe54071b314dcedd9a
+        specifier: git+https://github.com/robertpiosi/slideout.git#0.0.11
+        version: github.com/robertpiosi/slideout/03310d084d67f59108b48695368d9de94e86896a
       sortablejs:
         specifier: ^1.15.0
         version: 1.15.0
@@ -14668,8 +14668,8 @@ packages:
     version: 0.0.7
     dev: false
 
-  github.com/robertpiosi/slideout/72ad5c75261e83ae5291e7fe54071b314dcedd9a:
-    resolution: {tarball: https://codeload.github.com/robertpiosi/slideout/tar.gz/72ad5c75261e83ae5291e7fe54071b314dcedd9a}
+  github.com/robertpiosi/slideout/03310d084d67f59108b48695368d9de94e86896a:
+    resolution: {tarball: https://codeload.github.com/robertpiosi/slideout/tar.gz/03310d084d67f59108b48695368d9de94e86896a}
     name: slideout
     version: 1.0.1
     dependencies:

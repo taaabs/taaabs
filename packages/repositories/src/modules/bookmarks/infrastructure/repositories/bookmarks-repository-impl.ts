@@ -17,7 +17,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
         return {
           id: bookmark.id,
           createdAt: bookmark.created_at,
-          text: bookmark.text,
+          text: bookmark.note,
           title: bookmark.title,
           isArchived: bookmark.is_archived || false,
           isNsfw: bookmark.is_nsfw || false,
@@ -45,7 +45,7 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
       bookmarks: bookmarks.map((bookmark) => ({
         id: bookmark.id,
         createdAt: bookmark.created_at,
-        text: bookmark.text,
+        note: bookmark.note,
         title: bookmark.title,
         isArchived: bookmark.is_archived || false,
         isNsfw: bookmark.is_nsfw || false,

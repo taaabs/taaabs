@@ -25,8 +25,8 @@ const Page: React.FC = () => {
             bullets={[
               'Unlimited public/private bookmarks',
               'Unlimited tags and folders',
-              'One parent, one child category',
-              'Essential view options with private links',
+              '2 categories',
+              'Essential library view options',
             ]}
           />
         }
@@ -34,12 +34,12 @@ const Page: React.FC = () => {
           <PricingTier
             name="Plus"
             description="Create ∞ categories and get the most ouf of taaabs with your private bookmarks"
-            price="Less than $2"
-            priceInfo="$22 billed annually"
+            price="Less than $1"
+            priceInfo="$11 billed annually"
             bullets={[
               'Everything in Free',
               'Unlimited categories',
-              'Fully-featured view options with private links',
+              'Fully-featured library view options',
               "It's free if you cannot afford it*",
             ]}
           />

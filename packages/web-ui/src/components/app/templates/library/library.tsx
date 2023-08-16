@@ -1,17 +1,18 @@
-import Slideout from 'slideout'
-import { useEffect, useRef, useState } from 'react'
-import StickyBox from 'react-sticky-box'
-import { sharedValues } from '@web-ui/constants'
-import { _MobileTitleBar } from './components/_mobile-title-bar'
-import { _DesktopTitleBar } from './components/_desktop-title-bar'
-import cn from 'classnames'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import useSwipe from 'beautiful-react-hooks/useSwipe'
-import styles from './library.module.scss'
-import { useMobileScrollRestore } from './hooks/use-mobile-scroll-restore'
-import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import { useIsHydrated } from '@shared/hooks'
+import { sharedValues } from '@web-ui/constants'
+import useSwipe from 'beautiful-react-hooks/useSwipe'
+import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
+import cn from 'classnames'
+import { useEffect, useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
+import StickyBox from 'react-sticky-box'
+import Slideout from 'slideout'
+import { _DesktopTitleBar } from './components/_desktop-title-bar'
+import { _MobileTitleBar } from './components/_mobile-title-bar'
+import { useMobileScrollRestore } from './hooks/use-mobile-scroll-restore'
+import styles from './library.module.scss'
 
 export namespace Library {
   export type Props = {
@@ -41,6 +42,9 @@ export const Library: React.FC<Library.Props> = (props) => {
   useMobileScrollRestore(mainInner)
   const isEndOfBookmarksVisible = useViewportSpy(endOfBookmarks)
 
+  const { onSwipeStart } = useSwipeEvents(undefined, {
+    preventDefault: false,
+  })
   const swipeState = useSwipe(main, {
     preventDefault: false,
   })
@@ -57,6 +61,25 @@ export const Library: React.FC<Library.Props> = (props) => {
     useState(false)
   const [isSlideoutRightDefinetelyOpened, setIsSlideoutRightDefinetelyOpened] =
     useState(false)
+
+  useUpdateEffect(() => {
+    if (swipeState.direction == 'left' || swipeState.direction == 'right') {
+      main.current?.dispatchEvent(
+        new CustomEvent('touchmoveSlideout', {
+          detail: {
+            touches: [{ clientX: swipeState.alphaX * -1 }], // Mimics default touchmove event.
+          },
+        }),
+      )
+    }
+    if (!swipeState.swiping) {
+      main.current?.dispatchEvent(new Event('touchendSlideout'))
+    }
+  }, [swipeState])
+
+  onSwipeStart(() => {
+    main.current?.dispatchEvent(new CustomEvent('touchstartSlideout'))
+  })
 
   const toggleRightSlideout = () => {
     if (!isSlideoutRightOpen) {
@@ -75,20 +98,18 @@ export const Library: React.FC<Library.Props> = (props) => {
     slideoutLeft?.toggle()
   }
 
-  const getSlideoutInstances = async () => {
-    if (!sidebar.current || !main.current || !aside.current) return
-
+  const setSlideoutInstances = async () => {
     const Slideout = (await import('slideout')).default
 
     const slideoutLeftInstance = new Slideout({
-      menu: sidebar.current,
-      panel: main.current,
+      menu: sidebar.current!,
+      panel: main.current!,
       padding: SLIDABLE_WIDTH,
       tolerance: 50,
     })
     const slideoutRightInstance = new Slideout({
-      menu: aside.current,
-      panel: main.current,
+      menu: aside.current!,
+      panel: main.current!,
       padding: SLIDABLE_WIDTH,
       side: 'right',
       tolerance: 50,
@@ -128,40 +149,9 @@ export const Library: React.FC<Library.Props> = (props) => {
       setIsSlideoutRightDefinetelyOpened(false)
     })
 
-    return {
-      slideoutLeftInstance,
-      slideoutRightInstance,
-    }
+    setSlideoutLeft(slideoutLeftInstance)
+    setSlideoutRight(slideoutRightInstance)
   }
-
-  const setSlideoutInstances = async () => {
-    const slideoutInstances = await getSlideoutInstances()
-    setSlideoutLeft(slideoutInstances?.slideoutLeftInstance)
-    setSlideoutRight(slideoutInstances?.slideoutRightInstance)
-  }
-
-  useUpdateEffect(() => {
-    if (!isSlideoutLeftDefinetelyClosed || !isSlideoutRightDefinetelyClosed)
-      return
-
-    if (
-      swipeState.swiping &&
-      (swipeState.direction == 'up' || swipeState.direction == 'down') &&
-      slideoutLeft != undefined &&
-      slideoutRight != undefined
-    ) {
-      slideoutLeft?.destroy()
-      slideoutRight?.destroy()
-      setSlideoutLeft(undefined)
-      setSlideoutRight(undefined)
-    } else if (
-      !swipeState.swiping &&
-      slideoutLeft == undefined &&
-      slideoutRight == undefined
-    ) {
-      setSlideoutInstances()
-    }
-  }, [swipeState])
 
   useUpdateEffect(() => {
     if (

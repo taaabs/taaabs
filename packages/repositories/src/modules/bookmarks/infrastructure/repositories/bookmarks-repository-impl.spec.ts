@@ -48,7 +48,7 @@ describe('BookmarksRepositoryImpl', () => {
             title: 'test',
             url: exampleUrl,
             sitePath: null,
-            text: null,
+            note: null,
           },
         ],
         pagination: {
@@ -91,7 +91,7 @@ describe('BookmarksRepositoryImpl', () => {
             title: 'test',
             url: exampleUrl,
             sitePath: null,
-            text: null,
+            note: null,
           },
         ],
         pagination: {

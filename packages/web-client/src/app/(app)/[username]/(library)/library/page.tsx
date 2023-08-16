@@ -56,11 +56,6 @@ const Page: React.FC = () => {
     tagsOfUrlCreation,
     selectedTags,
   } = useMonths()
-  const { addTagToQueryParams, removeTagFromQueryParams, actualSelectedTags } =
-    useTagViewOptions()
-  const { setGteLteQueryParams, clearGteLteQueryParams } = useDateViewOptions()
-  const { currentOrderBy, setOrderByQueryParam } = useOrderByViewOptions()
-  const { currentOrder, setOrderQueryParam } = useOrderViewOptions()
   const {
     currentFilter,
     setFilterQueryParam,
@@ -68,6 +63,11 @@ const Page: React.FC = () => {
     includeNsfw,
     isNsfwExcluded,
   } = useFilterViewOptions()
+  const { currentOrderBy, setOrderByQueryParam } = useOrderByViewOptions()
+  const { currentOrder, setOrderQueryParam } = useOrderViewOptions()
+  const { addTagToQueryParams, removeTagFromQueryParams, actualSelectedTags } =
+    useTagViewOptions()
+  const { setGteLteQueryParams, clearGteLteQueryParams } = useDateViewOptions()
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
   const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
   const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)

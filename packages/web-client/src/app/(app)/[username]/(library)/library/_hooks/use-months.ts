@@ -51,7 +51,6 @@ export const useMonths = () => {
     const queryFilter = queryParams.get('f')
     setLastQueryFilter(queryFilter)
     if (queryFilter) {
-      setLastQueryFilter(queryFilter)
       getMonthsParams.filter =
         Object.values(LibraryFilter)[parseInt(queryFilter)]
     }
@@ -71,20 +70,20 @@ export const useMonths = () => {
       getMonths()
     }
 
-    const queryYyyyGte = queryParams.get('gte')
-    const queryYyyyLte = queryParams.get('lte')
+    const queryYyyymmGte = queryParams.get('gte')
+    const queryYyyymmLte = queryParams.get('lte')
 
     if (
-      queryYyyyGte != lastQueryYyyymmGte ||
-      queryYyyyLte != lastQueryYyyymmLte
+      queryYyyymmGte != lastQueryYyyymmGte ||
+      queryYyyymmLte != lastQueryYyyymmLte
     ) {
-      setLastQueryYyyymmGte(queryYyyyGte)
-      setLastQueryYyyymmLte(queryYyyyLte)
+      setLastQueryYyyymmGte(queryYyyymmGte)
+      setLastQueryYyyymmLte(queryYyyymmLte)
       dispatch(
-        monthsActions.setYyyymmGte(parseInt(queryYyyyGte || '0') || null),
+        monthsActions.setYyyymmGte(parseInt(queryYyyymmGte || '0') || null),
       )
       dispatch(
-        monthsActions.setYyyymmLte(parseInt(queryYyyyLte || '0') || null),
+        monthsActions.setYyyymmLte(parseInt(queryYyyymmLte || '0') || null),
       )
     }
   }, [queryParams])
