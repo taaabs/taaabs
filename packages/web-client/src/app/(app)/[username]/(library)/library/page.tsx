@@ -402,8 +402,16 @@ const Page: React.FC = () => {
                   tags={
                     tagsOfBookmarkCreation && tagsOfUrlCreation
                       ? currentOrderBy == OrderBy.BookmarkCreationDate
-                        ? tagsOfBookmarkCreation
-                        : tagsOfUrlCreation
+                        ? Object.fromEntries(
+                            Object.entries(tagsOfBookmarkCreation).filter(
+                              ([k]) => !selectedTags.includes(k),
+                            ),
+                          )
+                        : Object.fromEntries(
+                            Object.entries(tagsOfUrlCreation).filter(
+                              ([k]) => !selectedTags.includes(k),
+                            ),
+                          )
                       : {}
                   }
                   onClick={addTagToQueryParams}
