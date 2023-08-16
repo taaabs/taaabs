@@ -5,12 +5,7 @@
   display: flex;
   gap: var(--distance-6px);
   flex-wrap: wrap;
-  justify-content: space-between;
-  // padding: var(--distance-8px) 0 var(--distance-4px) 0;
-  &::after {
-    content: '';
-    flex: auto;
-  }
+  margin-bottom: var(--distance-16px);
   &__tag {
     display: inline-flex;
     font-family: var(--font-family-inter-tight);

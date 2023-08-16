@@ -380,44 +380,50 @@ const Page: React.FC = () => {
           }
           slotTags={
             <>
-              {selectedTags.length > 0 && (
-                <div
-                  style={{
-                    pointerEvents:
-                      isGettingFirstBookmarks ||
-                      isGettingMoreBookmarks ||
-                      isGettingMonthsData
-                        ? 'none'
-                        : undefined,
-                  }}
-                >
+              <div
+                style={{
+                  pointerEvents:
+                    isGettingFirstBookmarks ||
+                    isGettingMoreBookmarks ||
+                    isGettingMonthsData
+                      ? 'none'
+                      : undefined,
+                  opacity:
+                    isGettingFirstBookmarks ||
+                    isGettingMoreBookmarks ||
+                    isGettingMonthsData
+                      ? 0.6
+                      : undefined,
+                }}
+              >
+                {selectedTags.length > 0 && (
                   <SelectedTags
-                    selectedTags={actualSelectedTags}
+                    selectedTags={selectedTags}
                     onSelectedTagClick={removeTagFromQueryParams}
                   />
-                </div>
-              )}
-              {showTags && (
-                <Tags
-                  tags={
-                    tagsOfBookmarkCreation && tagsOfUrlCreation
-                      ? currentOrderBy == OrderBy.BookmarkCreationDate
-                        ? Object.fromEntries(
-                            Object.entries(tagsOfBookmarkCreation).filter(
-                              ([k]) => !selectedTags.includes(k),
-                            ),
-                          )
-                        : Object.fromEntries(
-                            Object.entries(tagsOfUrlCreation).filter(
-                              ([k]) => !selectedTags.includes(k),
-                            ),
-                          )
-                      : {}
-                  }
-                  onClick={addTagToQueryParams}
-                  key={queryParams.toString()}
-                />
-              )}
+                )}
+                {showTags && (
+                  <Tags
+                    tags={
+                      tagsOfBookmarkCreation && tagsOfUrlCreation
+                        ? currentOrderBy == OrderBy.BookmarkCreationDate
+                          ? Object.fromEntries(
+                              Object.entries(tagsOfBookmarkCreation).filter(
+                                ([k]) => !selectedTags.includes(k),
+                              ),
+                            )
+                          : Object.fromEntries(
+                              Object.entries(tagsOfUrlCreation).filter(
+                                ([k]) => !selectedTags.includes(k),
+                              ),
+                            )
+                        : {}
+                    }
+                    onClick={addTagToQueryParams}
+                    key={queryParams.toString()}
+                  />
+                )}
+              </div>
               {showTagsSkeleton && <TagsSkeleton />}
             </>
           }

@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import styles from './tags.module.scss'
-import cn from 'classnames'
 
 export namespace Tags {
   export type Props = {

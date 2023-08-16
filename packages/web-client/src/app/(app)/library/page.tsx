@@ -7,6 +7,15 @@ import dynamic from 'next/dynamic'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useLibrarySelector } from './_hooks/store'
+import { useBookmarks } from './_hooks/use-bookmarks'
+import { useMonths } from './_hooks/use-months'
+import { useTagViewOptions } from '@/hooks/library/use-tag-view-options'
+import { useDateViewOptions } from '@/hooks/library/use-date-view-options'
+import { useOrderByViewOptions } from '@/hooks/library/use-order-by-view-options copy'
+import { useOrderViewOptions } from '@/hooks/library/use-order-view-options'
+import useToggle from 'beautiful-react-hooks/useToggle'
+import { useFilterViewOptions } from '@/hooks/library/use-filter-view-options'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -26,7 +35,36 @@ const Page: React.FC = () => {
     isGettingMoreBookmarks,
     hasMoreBookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
-  const {} = useBookmarks()
+  const { getBookmarks } = useBookmarks()
+  const {
+    monthsOfBookmarkCreation,
+    monthsOfUrlCreation,
+    isGettingMonthsData,
+    tagsOfBookmarkCreation,
+    tagsOfUrlCreation,
+    selectedTags,
+  } = useMonths()
+  const {
+    currentFilter,
+    setFilterQueryParam,
+    excludeNsfw,
+    includeNsfw,
+    isNsfwExcluded,
+  } = useFilterViewOptions()
+  const { currentOrderBy, setOrderByQueryParam } = useOrderByViewOptions()
+  const { currentOrder, setOrderQueryParam } = useOrderViewOptions()
+  const { addTagToQueryParams, removeTagFromQueryParams, actualSelectedTags } =
+    useTagViewOptions()
+  const { setGteLteQueryParams, clearGteLteQueryParams } = useDateViewOptions()
+  const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
+  const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
+  const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)
+
+  useUpdateEffect(() => {
+    if (!showMonths) setShowMonths(true)
+    if (!showTags) setShowTags(true)
+    if (showTagsSkeleton) setShowTagsSkeleton(false)
+  }, [bookmarks])
 
   useEffect(() => {
     sessionStorage.setItem('queryParams', queryParams.toString())
@@ -38,6 +76,7 @@ const Page: React.FC = () => {
 
   return (
     <Library
+      showBookmarksSkeleton={bookmarks == null}
       titleBar={
         bookmarks != null
           ? queryParams.get('categoryId')
