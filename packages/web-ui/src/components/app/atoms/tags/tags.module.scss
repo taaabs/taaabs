@@ -5,6 +5,7 @@
   display: flex;
   flex-wrap: wrap;
   column-gap: var(--distance-6px);
+  row-gap: var(--distance-8px);
   align-items: center;
   .break {
     flex-basis: 100%;
@@ -14,7 +15,6 @@
     gap: var(--distance-4px);
     font-family: var(--font-family-inter-tight);
     font-size: var(--font-size-1-3rem);
-    margin-bottom: var(--distance-10px);
     &__firstChar {
       position: relative;
       display: flex;
