@@ -25,7 +25,7 @@ const Page: React.FC = () => {
             bullets={[
               'Unlimited public/private bookmarks',
               'Unlimited tags and folders',
-              '2 categories',
+              'Unlimited public categories',
               'Essential library view options',
             ]}
           />
@@ -38,7 +38,7 @@ const Page: React.FC = () => {
             priceInfo="$11 billed annually"
             bullets={[
               'Everything in Free',
-              'Unlimited categories',
+              'Unlimited private categories',
               'Fully-featured library view options',
               "It's free if you cannot afford it*",
             ]}
