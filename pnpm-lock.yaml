@@ -58,6 +58,9 @@ importers:
       '@taaabs/shared':
         specifier: workspace:*
         version: link:../shared
+      '@tirke/node-cache-manager-ioredis':
+        specifier: ^3.4.0
+        version: 3.4.0
       argon2:
         specifier: ^0.30.3
         version: 0.30.3
@@ -85,6 +88,9 @@ importers:
       fastify:
         specifier: ^4.21.0
         version: 4.21.0
+      ioredis:
+        specifier: ^5.3.2
+        version: 5.3.2
       jsonwebtoken:
         specifier: ^9.0.1
         version: 9.0.1
@@ -5135,6 +5141,15 @@ packages:
     dependencies:
       '@testing-library/dom': 9.3.0
     dev: true
+
+  /@tirke/node-cache-manager-ioredis@3.4.0:
+    resolution: {integrity: sha512-MLMkIm7dk8FxdCNbGWNwf7gku2vC3aYMzxeICnsoWQ3qpmo/f9s/1vDkXOmS8J3XaOX4kOOUkDfELDmaT+OgvA==}
+    engines: {node: '>=14.20'}
+    dependencies:
+      ioredis: 5.3.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
