@@ -33,7 +33,7 @@ const Page: React.FC = () => {
         rightSlot={
           <PricingTier
             name="Plus"
-            description="Create ∞ categories and get the most ouf of taaabs with your private bookmarks"
+            description="Get the most ouf of taaabs with your private bookmarks"
             price="Less than $1"
             priceInfo="$11 billed annually"
             bullets={[

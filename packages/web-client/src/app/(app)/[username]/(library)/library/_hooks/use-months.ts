@@ -63,7 +63,7 @@ export const useMonths = () => {
     )
   }
 
-  useUpdateEffect(() => {
+  useEffect(() => {
     const queryTags = queryParams.get('t')
     const queryFilter = queryParams.get('f')
     if (queryTags != lastQueryTags || queryFilter != lastQueryFilter) {

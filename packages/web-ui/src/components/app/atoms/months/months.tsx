@@ -380,11 +380,11 @@ export const Months: React.FC<Months.Props> = (props) => {
       )}
 
       {props.hasResults && props.months && props.months.length <= 1 && (
-        <div className={styles.graph__info}>All results fit in one month.</div>
+        <div className={styles.graph__info}>All results fit in one month</div>
       )}
 
       {props.hasResults == false && (
-        <div className={styles.graph__info}>There is nothing to plot.</div>
+        <div className={styles.graph__info}>There is nothing to plot</div>
       )}
     </div>
   )
