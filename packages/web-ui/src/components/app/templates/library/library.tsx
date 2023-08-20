@@ -105,14 +105,14 @@ export const Library: React.FC<Library.Props> = (props) => {
       menu: sidebar.current!,
       panel: main.current!,
       padding: SLIDABLE_WIDTH,
-      tolerance: 50,
+      tolerance: -1,
     })
     const slideoutRightInstance = new Slideout({
       menu: aside.current!,
       panel: main.current!,
       padding: SLIDABLE_WIDTH,
       side: 'right',
-      tolerance: 50,
+      tolerance: -1,
     })
     slideoutLeftInstance.on('beforeopen', () => {
       setIsSlideoutLeftOpen(true)

@@ -461,8 +461,6 @@ const Page: React.FC = () => {
                     yields:
                       !isSelected && tags && Object.values(tags).length
                         ? tags[tag]
-                          ? tags[tag]
-                          : 1
                         : undefined,
                   }
                 })}
