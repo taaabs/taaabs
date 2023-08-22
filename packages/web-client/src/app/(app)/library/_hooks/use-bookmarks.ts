@@ -69,7 +69,7 @@ export const useBookmarks = () => {
         Object.values(OrderBy)[parseInt(queryOrderBy)]
     }
 
-    const queryOrder = queryParams.get('o')
+    const queryOrder = queryParams.get('s')
     setLastQueryOrder(queryOrder)
     if (queryOrder) {
       getBookmarksParams.order = Object.values(Order)[parseInt(queryOrder)]
@@ -105,7 +105,7 @@ export const useBookmarks = () => {
     const queryCategoryId = queryParams.get('c')
     const queryFilter = queryParams.get('f')
     const queryOrderBy = queryParams.get('b')
-    const queryOrder = queryParams.get('o')
+    const queryOrder = queryParams.get('s')
     const queryYyyyGte = queryParams.get('gte')
     const queryYyyyLte = queryParams.get('lte')
 

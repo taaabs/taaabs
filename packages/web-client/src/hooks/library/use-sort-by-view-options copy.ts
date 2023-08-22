@@ -1,35 +1,35 @@
 import { updateSearchParam } from '@/utils/update-query-param'
-import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 
-export const useOrderByViewOptions = () => {
+export const useSortByViewOptions = () => {
   const queryParams = useShallowSearchParams()
-  const [currentOrderBy, setCurrentOrderBy] = useState<OrderBy>(
-    Object.values(OrderBy)[
+  const [currentSortBy, setCurrentSortBy] = useState<SortBy>(
+    Object.values(SortBy)[
       parseInt(
         queryParams.get('b') ||
-          Object.values(OrderBy)
-            .indexOf(BookmarksFetchingDefaults.Common.orderBy)
+          Object.values(SortBy)
+            .indexOf(BookmarksFetchingDefaults.Common.sortBy)
             .toString(),
       )
     ],
   )
 
   useUpdateEffect(() => {
-    const queryOrderBy = queryParams.get('b')
+    const querySortBy = queryParams.get('b')
 
     if (
-      queryOrderBy != Object.values(OrderBy).indexOf(currentOrderBy).toString()
+      querySortBy != Object.values(SortBy).indexOf(currentSortBy).toString()
     ) {
-      setCurrentOrderBy(
-        Object.values(OrderBy)[
+      setCurrentSortBy(
+        Object.values(SortBy)[
           parseInt(
-            queryOrderBy ||
-              Object.values(OrderBy)
-                .indexOf(BookmarksFetchingDefaults.Common.orderBy)
+            querySortBy ||
+              Object.values(SortBy)
+                .indexOf(BookmarksFetchingDefaults.Common.sortBy)
                 .toString(),
           )
         ],
@@ -37,12 +37,12 @@ export const useOrderByViewOptions = () => {
     }
   }, [queryParams])
 
-  const setOrderByQueryParam = (orderBy: OrderBy) => {
+  const setSortByQueryParam = (sortBy: SortBy) => {
     let updatedQueryParams: any
     updatedQueryParams = updateSearchParam(
       queryParams,
       'b',
-      Object.values(OrderBy).indexOf(orderBy).toString(),
+      Object.values(SortBy).indexOf(sortBy).toString(),
     )
 
     if (queryParams.get('gte')) {
@@ -60,5 +60,5 @@ export const useOrderByViewOptions = () => {
     )
   }
 
-  return { currentOrderBy, setOrderByQueryParam }
+  return { currentSortBy, setSortByQueryParam }
 }
