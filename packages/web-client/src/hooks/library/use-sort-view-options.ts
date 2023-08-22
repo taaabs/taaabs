@@ -1,33 +1,33 @@
 import { updateSearchParam } from '@/utils/update-query-param'
-import { Order } from '@shared/types/modules/bookmarks/order'
+import { Sort } from '@shared/types/modules/bookmarks/sort'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 
-export const useOrderViewOptions = () => {
+export const useSortViewOptions = () => {
   const queryParams = useShallowSearchParams()
-  const [currentOrder, setCurrentOrder] = useState<Order>(
-    Object.values(Order)[
+  const [currentSort, setCurrentSort] = useState<Sort>(
+    Object.values(Sort)[
       parseInt(
-        queryParams.get('o') ||
-          Object.values(Order)
-            .indexOf(BookmarksFetchingDefaults.Common.order)
+        queryParams.get('s') ||
+          Object.values(Sort)
+            .indexOf(BookmarksFetchingDefaults.Common.sort)
             .toString(),
       )
     ],
   )
 
   useUpdateEffect(() => {
-    const queryOrder = queryParams.get('o')
+    const querySort = queryParams.get('s')
 
-    if (queryOrder != Object.values(Order).indexOf(currentOrder).toString()) {
-      setCurrentOrder(
-        Object.values(Order)[
+    if (querySort != Object.values(Sort).indexOf(currentSort).toString()) {
+      setCurrentSort(
+        Object.values(Sort)[
           parseInt(
-            queryOrder ||
-              Object.values(Order)
-                .indexOf(BookmarksFetchingDefaults.Common.order)
+            querySort ||
+              Object.values(Sort)
+                .indexOf(BookmarksFetchingDefaults.Common.sort)
                 .toString(),
           )
         ],
@@ -35,11 +35,11 @@ export const useOrderViewOptions = () => {
     }
   }, [queryParams])
 
-  const setOrderQueryParam = (order: Order) => {
+  const setSortQueryParam = (sort: Sort) => {
     const updatedQueryParams = updateSearchParam(
       queryParams,
-      'o',
-      Object.values(Order).indexOf(order).toString(),
+      's',
+      Object.values(Sort).indexOf(sort).toString(),
     )
 
     window.history.pushState(
@@ -49,5 +49,5 @@ export const useOrderViewOptions = () => {
     )
   }
 
-  return { currentOrder, setOrderQueryParam }
+  return { currentSort, setSortQueryParam }
 }

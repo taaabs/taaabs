@@ -4,8 +4,8 @@ import { useLibraryDispatch, useLibrarySelector } from './store'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
 import { LibraryFilter } from '@shared/types/common/library-filter'
-import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
-import { Order } from '@shared/types/modules/bookmarks/order'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
+import { Sort } from '@shared/types/modules/bookmarks/sort'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 import { bookmarksActions } from '@repositories/stores/user-public/library/bookmarks/bookmarks.slice'
 
@@ -65,14 +65,13 @@ export const useBookmarks = () => {
     const queryOrderBy = queryParams.get('b')
     setLastQueryOrderBy(queryOrderBy)
     if (queryOrderBy) {
-      getBookmarksParams.orderBy =
-        Object.values(OrderBy)[parseInt(queryOrderBy)]
+      getBookmarksParams.sortBy = Object.values(SortBy)[parseInt(queryOrderBy)]
     }
 
-    const queryOrder = queryParams.get('o')
+    const queryOrder = queryParams.get('s')
     setLastQueryOrder(queryOrder)
     if (queryOrder) {
-      getBookmarksParams.order = Object.values(Order)[parseInt(queryOrder)]
+      getBookmarksParams.sort = Object.values(Sort)[parseInt(queryOrder)]
     }
 
     const queryYyyymmGte = queryParams.get('gte')
@@ -105,7 +104,7 @@ export const useBookmarks = () => {
     const queryCategoryId = queryParams.get('c')
     const queryFilter = queryParams.get('f')
     const queryOrderBy = queryParams.get('b')
-    const queryOrder = queryParams.get('o')
+    const queryOrder = queryParams.get('s')
     const queryYyyyGte = queryParams.get('gte')
     const queryYyyyLte = queryParams.get('lte')
 
