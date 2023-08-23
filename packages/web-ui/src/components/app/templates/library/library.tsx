@@ -1,4 +1,4 @@
-import { useIsHydrated } from '@shared/hooks'
+import { useIsHydrated } from '@shared/hooks/use-is-hydrated'
 import { sharedValues } from '@web-ui/constants'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'

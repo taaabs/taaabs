@@ -6,7 +6,7 @@
   background: var(--Bookmark-background);
   border: var(--border-secondary);
   cursor: pointer;
-  @include transition-100ms;
+  @include transition-100ms(border-color);
   @include to992 {
     grid-template-areas:
       'main main'
@@ -23,10 +23,6 @@
     grid-template-columns: 1fr auto;
     @include hover {
       border-color: var(--border-color-hover);
-      background: var(--Bookmark-background-hover);
-      .link__inner__element > div > span::after {
-        background-color: var(--Bookmark-background-hover);
-      }
     }
   }
   .main {

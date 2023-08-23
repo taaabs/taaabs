@@ -20,7 +20,6 @@
   @include hover {
     border-color: var(--border-color-hover);
     box-shadow: var(--SearchBox-shadow-hover);
-    background: var(--SearchBox-background-hover);
   }
   svg {
     height: var(--icon-dimension-20px);

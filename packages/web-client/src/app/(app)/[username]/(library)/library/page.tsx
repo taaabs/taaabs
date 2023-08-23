@@ -12,8 +12,8 @@ import { SimpleSelectDropdown } from '@web-ui/components/app/atoms/simple-select
 import OutsideClickHandler from 'react-outside-click-handler'
 import { useBookmarks } from './_hooks/use-bookmarks'
 import { LibraryFilter } from '@shared/types/common/library-filter'
-import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
-import { Order } from '@shared/types/modules/bookmarks/order'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
+import { Sort } from '@shared/types/modules/bookmarks/sort'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
@@ -26,8 +26,8 @@ import { useMonths } from './_hooks/use-months'
 import { useFilterViewOptions } from '@/hooks/library/use-filter-view-options'
 import { useTagViewOptions } from '@/hooks/library/use-tag-view-options'
 import { useDateViewOptions } from '@/hooks/library/use-date-view-options'
-import { useOrderByViewOptions } from '@/hooks/library/use-order-by-view-options copy'
-import { useOrderViewOptions } from '@/hooks/library/use-order-view-options'
+import { useSortByViewOptions } from '@/hooks/library/use-sort-by-view-options copy'
+import { useSortViewOptions } from '@/hooks/library/use-sort-view-options'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -63,14 +63,14 @@ const Page: React.FC = () => {
     includeNsfw,
     isNsfwExcluded,
   } = useFilterViewOptions()
-  const { currentOrderBy, setOrderByQueryParam } = useOrderByViewOptions()
-  const { currentOrder, setOrderQueryParam } = useOrderViewOptions()
+  const { currentSortBy, setSortByQueryParam } = useSortByViewOptions()
+  const { currentSort, setSortQueryParam } = useSortViewOptions()
   const { addTagToQueryParams, removeTagFromQueryParams, actualSelectedTags } =
     useTagViewOptions()
   const { setGteLteQueryParams, clearGteLteQueryParams } = useDateViewOptions()
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
-  const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
-  const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)
+  const [isSortByDropdownVisible, toggleSortByDropdown] = useToggle(false)
+  const [isSortDropdownVisible, toggleSortDropdown] = useToggle(false)
 
   useUpdateEffect(() => {
     if (!showMonths) setShowMonths(true)
@@ -106,11 +106,11 @@ const Page: React.FC = () => {
               },
               isActive: queryParams.get('categoryId') ? false : true,
             },
-            {
-              label: 'Categories',
-              onClick: () => {},
-              isActive: queryParams.get('categoryId') ? true : false,
-            },
+            // {
+            //   label: 'Categories',
+            //   onClick: () => {},
+            //   isActive: queryParams.get('categoryId') ? true : false,
+            // },
           ]}
         />
       }
@@ -219,27 +219,25 @@ const Page: React.FC = () => {
             ),
             isDropdownVisible: isFilterDropdownVisible,
           }}
-          slotOrderBy={{
+          slotSortBy={{
             button: (
               <ButtonSelect
-                label="Order by"
-                currentValue={_orderByOptionToLabel(currentOrderBy)}
-                isActive={isOrderByDropdownVisible}
-                onClick={toggleOrderByDropdown}
+                label="Sort by"
+                currentValue={_orderByOptionToLabel(currentSortBy)}
+                isActive={isSortByDropdownVisible}
+                onClick={toggleSortByDropdown}
               />
             ),
-            isDropdownVisible: isOrderByDropdownVisible,
+            isDropdownVisible: isSortByDropdownVisible,
             dropdown: (
               <OutsideClickHandler
-                onOutsideClick={toggleOrderByDropdown}
-                disabled={!isOrderByDropdownVisible}
+                onOutsideClick={toggleSortByDropdown}
+                disabled={!isSortByDropdownVisible}
               >
                 <SimpleSelectDropdown
                   items={[
                     {
-                      label: _orderByOptionToLabel(
-                        OrderBy.BookmarkCreationDate,
-                      ),
+                      label: _orderByOptionToLabel(SortBy.BookmarkCreationDate),
                       onClick: () => {
                         if (
                           isGettingFirstBookmarks ||
@@ -247,14 +245,13 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setOrderByQueryParam(OrderBy.BookmarkCreationDate)
-                        toggleOrderByDropdown()
+                        setSortByQueryParam(SortBy.BookmarkCreationDate)
+                        toggleSortByDropdown()
                       },
-                      isSelected:
-                        currentOrderBy == OrderBy.BookmarkCreationDate,
+                      isSelected: currentSortBy == SortBy.BookmarkCreationDate,
                     },
                     {
-                      label: _orderByOptionToLabel(OrderBy.UrlCreationDate),
+                      label: _orderByOptionToLabel(SortBy.UrlCreationDate),
                       onClick: () => {
                         if (
                           isGettingFirstBookmarks ||
@@ -262,35 +259,35 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setOrderByQueryParam(OrderBy.UrlCreationDate)
-                        toggleOrderByDropdown()
+                        setSortByQueryParam(SortBy.UrlCreationDate)
+                        toggleSortByDropdown()
                       },
-                      isSelected: currentOrderBy == OrderBy.UrlCreationDate,
+                      isSelected: currentSortBy == SortBy.UrlCreationDate,
                     },
                   ]}
                 />
               </OutsideClickHandler>
             ),
           }}
-          slotOrder={{
+          slotSort={{
             button: (
               <ButtonSelect
-                label="Order"
-                currentValue={_orderOptionToLabel(currentOrder)}
-                isActive={isOrderDropdownVisible}
-                onClick={toggleOrderDropdown}
+                label="Sort"
+                currentValue={_orderOptionToLabel(currentSort)}
+                isActive={isSortDropdownVisible}
+                onClick={toggleSortDropdown}
               />
             ),
-            isDropdownVisible: isOrderDropdownVisible,
+            isDropdownVisible: isSortDropdownVisible,
             dropdown: (
               <OutsideClickHandler
-                onOutsideClick={toggleOrderDropdown}
-                disabled={!isOrderDropdownVisible}
+                onOutsideClick={toggleSortDropdown}
+                disabled={!isSortDropdownVisible}
               >
                 <SimpleSelectDropdown
                   items={[
                     {
-                      label: _orderOptionToLabel(Order.Desc),
+                      label: _orderOptionToLabel(Sort.Latest),
                       onClick: () => {
                         if (
                           isGettingFirstBookmarks ||
@@ -298,14 +295,14 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setOrderQueryParam(Order.Desc)
-                        toggleOrderDropdown()
+                        setSortQueryParam(Sort.Latest)
+                        toggleSortDropdown()
                       },
 
-                      isSelected: currentOrder == Order.Desc,
+                      isSelected: currentSort == Sort.Latest,
                     },
                     {
-                      label: _orderOptionToLabel(Order.Asc),
+                      label: _orderOptionToLabel(Sort.Oldest),
                       onClick: () => {
                         if (
                           isGettingFirstBookmarks ||
@@ -313,13 +310,13 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setOrderQueryParam(Order.Asc)
-                        toggleOrderDropdown()
+                        setSortQueryParam(Sort.Oldest)
+                        toggleSortDropdown()
                       },
-                      isSelected: currentOrder == Order.Asc,
+                      isSelected: currentSort == Sort.Oldest,
                     },
                     {
-                      label: _orderOptionToLabel(Order.MostPopular),
+                      label: _orderOptionToLabel(Sort.Popular),
                       onClick: () => {
                         if (
                           isGettingFirstBookmarks ||
@@ -327,10 +324,10 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setOrderQueryParam(Order.MostPopular)
-                        toggleOrderDropdown()
+                        setSortQueryParam(Sort.Popular)
+                        toggleSortDropdown()
                       },
-                      isSelected: currentOrder == Order.MostPopular,
+                      isSelected: currentSort == Sort.Popular,
                     },
                   ]}
                 />
@@ -351,7 +348,7 @@ const Page: React.FC = () => {
               >
                 <Months
                   months={
-                    currentOrderBy == OrderBy.BookmarkCreationDate
+                    currentSortBy == SortBy.BookmarkCreationDate
                       ? monthsOfBookmarkCreation
                       : monthsOfUrlCreation
                   }
@@ -406,7 +403,7 @@ const Page: React.FC = () => {
                   <Tags
                     tags={
                       tagsOfBookmarkCreation && tagsOfUrlCreation
-                        ? currentOrderBy == OrderBy.BookmarkCreationDate
+                        ? currentSortBy == SortBy.BookmarkCreationDate
                           ? Object.fromEntries(
                               Object.entries(tagsOfBookmarkCreation).filter(
                                 ([k]) => !selectedTags.includes(k),
@@ -447,7 +444,7 @@ const Page: React.FC = () => {
                 saves={bookmark.saves}
                 tags={bookmark.tags.map((tag) => {
                   const tags =
-                    currentOrderBy == OrderBy.BookmarkCreationDate
+                    currentSortBy == SortBy.BookmarkCreationDate
                       ? tagsOfBookmarkCreation
                       : tagsOfUrlCreation
 
@@ -480,23 +477,23 @@ const Page: React.FC = () => {
 
 export default Page
 
-function _orderByOptionToLabel(orderByOption: OrderBy): string {
+function _orderByOptionToLabel(orderByOption: SortBy): string {
   switch (orderByOption) {
-    case OrderBy.BookmarkCreationDate:
+    case SortBy.BookmarkCreationDate:
       return 'Bookmarked at'
-    case OrderBy.UrlCreationDate:
+    case SortBy.UrlCreationDate:
       return 'Link first seen at'
   }
 }
 
-function _orderOptionToLabel(orderOption: Order): string {
+function _orderOptionToLabel(orderOption: Sort): string {
   switch (orderOption) {
-    case Order.Desc:
+    case Sort.Latest:
       return 'Newest first'
-    case Order.Asc:
+    case Sort.Oldest:
       return 'Oldest first'
-    case Order.MostPopular:
-      return 'Most popular'
+    case Sort.Popular:
+      return 'Popular'
   }
 }
 

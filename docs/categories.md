@@ -1,4 +1,4 @@
-Category is a union of tags and tag groups. Tag group is a list of required tags on a bookmark.
+Category is a union/intersection of tags.
 
 Example:
-`tag1 OR tag2 OR (tag3 AND tag4) or tag5`
+`tag1 OR tag2 OR (tag3 AND tag4) OR tag5`

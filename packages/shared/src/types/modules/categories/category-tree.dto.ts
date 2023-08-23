@@ -2,7 +2,6 @@ export namespace CategoryTreeDto {
   class Category {
     public id: string
     public name: string
-    public order?: number
   }
 
   export class AuthorizedCategory extends Category {

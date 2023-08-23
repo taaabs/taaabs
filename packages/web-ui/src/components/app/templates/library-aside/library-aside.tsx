@@ -9,12 +9,12 @@ export namespace LibraryAside {
       dropdown: React.ReactNode
       isDropdownVisible: boolean
     }
-    slotOrderBy?: {
+    slotSortBy?: {
       button: React.ReactNode
       dropdown: React.ReactNode
       isDropdownVisible: boolean
     }
-    slotOrder?: {
+    slotSort?: {
       button: React.ReactNode
       dropdown: React.ReactNode
       isDropdownVisible: boolean
@@ -50,35 +50,35 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
             </div>
           </div>
         )}
-        {props.slotOrderBy && (
+        {props.slotSortBy && (
           <div className={styles['sort-and-filtering__button']}>
-            {props.slotOrderBy.button}
+            {props.slotSortBy.button}
             <div
               className={cn([
                 styles['sort-and-filtering__button__dropdown'],
                 {
                   [styles['sort-and-filtering__button__dropdown--hidden']]:
-                    !props.slotOrderBy.isDropdownVisible,
+                    !props.slotSortBy.isDropdownVisible,
                 },
               ])}
             >
-              {props.slotOrderBy.dropdown}
+              {props.slotSortBy.dropdown}
             </div>
           </div>
         )}
-        {props.slotOrder && (
+        {props.slotSort && (
           <div className={styles['sort-and-filtering__button']}>
-            {props.slotOrder.button}
+            {props.slotSort.button}
             <div
               className={cn([
                 styles['sort-and-filtering__button__dropdown'],
                 {
                   [styles['sort-and-filtering__button__dropdown--hidden']]:
-                    !props.slotOrder.isDropdownVisible,
+                    !props.slotSort.isDropdownVisible,
                 },
               ])}
             >
-              {props.slotOrder.dropdown}
+              {props.slotSort.dropdown}
             </div>
           </div>
         )}
