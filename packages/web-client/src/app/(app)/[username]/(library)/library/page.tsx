@@ -219,6 +219,71 @@ const Page: React.FC = () => {
             ),
             isDropdownVisible: isFilterDropdownVisible,
           }}
+          slotSort={{
+            button: (
+              <ButtonSelect
+                label="Sort"
+                currentValue={_orderOptionToLabel(currentSort)}
+                isActive={isSortDropdownVisible}
+                onClick={toggleSortDropdown}
+              />
+            ),
+            isDropdownVisible: isSortDropdownVisible,
+            dropdown: (
+              <OutsideClickHandler
+                onOutsideClick={toggleSortDropdown}
+                disabled={!isSortDropdownVisible}
+              >
+                <SimpleSelectDropdown
+                  items={[
+                    {
+                      label: _orderOptionToLabel(Sort.Latest),
+                      onClick: () => {
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
+                          return
+                        setSortQueryParam(Sort.Latest)
+                        toggleSortDropdown()
+                      },
+
+                      isSelected: currentSort == Sort.Latest,
+                    },
+                    {
+                      label: _orderOptionToLabel(Sort.Popular),
+                      onClick: () => {
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
+                          return
+                        setSortQueryParam(Sort.Popular)
+                        toggleSortDropdown()
+                      },
+                      isSelected: currentSort == Sort.Popular,
+                    },
+                    {
+                      label: _orderOptionToLabel(Sort.Oldest),
+                      onClick: () => {
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
+                          return
+                        setSortQueryParam(Sort.Oldest)
+                        toggleSortDropdown()
+                      },
+                      isSelected: currentSort == Sort.Oldest,
+                    },
+                  ]}
+                />
+              </OutsideClickHandler>
+            ),
+          }}
           slotSortBy={{
             button: (
               <ButtonSelect
@@ -263,71 +328,6 @@ const Page: React.FC = () => {
                         toggleSortByDropdown()
                       },
                       isSelected: currentSortBy == SortBy.UrlCreationDate,
-                    },
-                  ]}
-                />
-              </OutsideClickHandler>
-            ),
-          }}
-          slotSort={{
-            button: (
-              <ButtonSelect
-                label="Sort"
-                currentValue={_orderOptionToLabel(currentSort)}
-                isActive={isSortDropdownVisible}
-                onClick={toggleSortDropdown}
-              />
-            ),
-            isDropdownVisible: isSortDropdownVisible,
-            dropdown: (
-              <OutsideClickHandler
-                onOutsideClick={toggleSortDropdown}
-                disabled={!isSortDropdownVisible}
-              >
-                <SimpleSelectDropdown
-                  items={[
-                    {
-                      label: _orderOptionToLabel(Sort.Latest),
-                      onClick: () => {
-                        if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
-                          isGettingMonthsData
-                        )
-                          return
-                        setSortQueryParam(Sort.Latest)
-                        toggleSortDropdown()
-                      },
-
-                      isSelected: currentSort == Sort.Latest,
-                    },
-                    {
-                      label: _orderOptionToLabel(Sort.Oldest),
-                      onClick: () => {
-                        if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
-                          isGettingMonthsData
-                        )
-                          return
-                        setSortQueryParam(Sort.Oldest)
-                        toggleSortDropdown()
-                      },
-                      isSelected: currentSort == Sort.Oldest,
-                    },
-                    {
-                      label: _orderOptionToLabel(Sort.Popular),
-                      onClick: () => {
-                        if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
-                          isGettingMonthsData
-                        )
-                          return
-                        setSortQueryParam(Sort.Popular)
-                        toggleSortDropdown()
-                      },
-                      isSelected: currentSort == Sort.Popular,
                     },
                   ]}
                 />
@@ -480,18 +480,18 @@ export default Page
 function _orderByOptionToLabel(orderByOption: SortBy): string {
   switch (orderByOption) {
     case SortBy.BookmarkCreationDate:
-      return 'Bookmarked at'
+      return 'Bookmark date'
     case SortBy.UrlCreationDate:
-      return 'Link first seen at'
+      return 'Link date'
   }
 }
 
 function _orderOptionToLabel(orderOption: Sort): string {
   switch (orderOption) {
     case Sort.Latest:
-      return 'Newest first'
+      return 'Latest'
     case Sort.Oldest:
-      return 'Oldest first'
+      return 'Oldest'
     case Sort.Popular:
       return 'Popular'
   }

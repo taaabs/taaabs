@@ -26,7 +26,7 @@ const Page: React.FC = () => {
               'Unlimited public/private bookmarks',
               'Unlimited tags',
               'Essential library features',
-              'Tracking & Ad free library',
+              'Privacy first - no cookies',
               'Always free',
             ]}
           />

@@ -53,7 +53,6 @@ export namespace BookmarksDto {
       public tags?: string[]
       public site_path?: string
       public is_starred?: boolean
-      public is_archived?: boolean
       public is_nsfw?: boolean
       public saves?: number
     }
