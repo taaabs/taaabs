@@ -26,10 +26,11 @@
       display: none;
     }
     @include at992 {
-      position: relative;
+      position: sticky;
+      top: 0;
       flex: 1;
       justify-content: flex-end;
-      min-height: 100vh;
+      height: 100vh;
       border-right: var(--border-primary);
       background: var(--header-background);
       &::before {
@@ -48,12 +49,20 @@
   }
   &__main {
     display: flex;
+    flex-direction: column;
+    @include to992 {
+      gap: var(--distance-16px);
+    }
     @include at992 {
       flex: 1.5;
+      gap: var(--distance-40px);
+      padding: var(--distance-80px) var(--distance-24px);
+    }
+    @include at1200 {
+      flex: 1.9;
       padding: var(--distance-80px) var(--distance-40px);
     }
     @include at1380 {
-      flex: 2.2;
       padding: var(--distance-80px) var(--distance-60px);
     }
   }

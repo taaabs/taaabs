@@ -3,6 +3,10 @@
 
 .container {
   height: var(--header-mobile-height);
+  @include to992 {
+    background: var(--header-background);
+    border-bottom: var(--border-primary);
+  }
   @include at992 {
     height: var(--header-desktop-height);
   }

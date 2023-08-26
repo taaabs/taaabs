@@ -39,7 +39,7 @@ const Page: React.FC = () => {
             bullets={[
               'Tag counts',
               'Categories',
-              'Sort on bookmark counts',
+              'Order by saves count',
               'Short username',
             ]}
           />

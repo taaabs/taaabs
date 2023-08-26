@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  align-self: flex-start;
   color: var(--plain-white);
   background: var(--Button-background);
   font-weight: var(--font-weight-inter-semi-bold);

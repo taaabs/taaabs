@@ -493,7 +493,7 @@ function _orderByOptionToLabel(orderByOption: OrderBy): string {
     case OrderBy.Asc:
       return 'Oldest'
     case OrderBy.Popular:
-      return 'Bookmark counts'
+      return 'Saves count'
   }
 }
 
