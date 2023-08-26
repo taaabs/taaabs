@@ -237,7 +237,7 @@ const Page: React.FC = () => {
                 <SimpleSelectDropdown
                   items={[
                     {
-                      label: _orderOptionToLabel(Sort.Latest),
+                      label: _orderOptionToLabel(Sort.Desc),
                       onClick: () => {
                         if (
                           isGettingFirstBookmarks ||
@@ -245,11 +245,11 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setSortQueryParam(Sort.Latest)
+                        setSortQueryParam(Sort.Desc)
                         toggleSortDropdown()
                       },
 
-                      isSelected: currentSort == Sort.Latest,
+                      isSelected: currentSort == Sort.Desc,
                     },
                     {
                       label: _orderOptionToLabel(Sort.Popular),
@@ -266,7 +266,7 @@ const Page: React.FC = () => {
                       isSelected: currentSort == Sort.Popular,
                     },
                     {
-                      label: _orderOptionToLabel(Sort.Oldest),
+                      label: _orderOptionToLabel(Sort.Asc),
                       onClick: () => {
                         if (
                           isGettingFirstBookmarks ||
@@ -274,10 +274,10 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setSortQueryParam(Sort.Oldest)
+                        setSortQueryParam(Sort.Asc)
                         toggleSortDropdown()
                       },
-                      isSelected: currentSort == Sort.Oldest,
+                      isSelected: currentSort == Sort.Asc,
                     },
                   ]}
                 />
@@ -302,7 +302,7 @@ const Page: React.FC = () => {
                 <SimpleSelectDropdown
                   items={[
                     {
-                      label: _orderByOptionToLabel(SortBy.BookmarkCreationDate),
+                      label: _orderByOptionToLabel(SortBy.BookmarkedAt),
                       onClick: () => {
                         if (
                           isGettingFirstBookmarks ||
@@ -310,13 +310,13 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setSortByQueryParam(SortBy.BookmarkCreationDate)
+                        setSortByQueryParam(SortBy.BookmarkedAt)
                         toggleSortByDropdown()
                       },
-                      isSelected: currentSortBy == SortBy.BookmarkCreationDate,
+                      isSelected: currentSortBy == SortBy.BookmarkedAt,
                     },
                     {
-                      label: _orderByOptionToLabel(SortBy.UrlCreationDate),
+                      label: _orderByOptionToLabel(SortBy.PublishedAt),
                       onClick: () => {
                         if (
                           isGettingFirstBookmarks ||
@@ -324,10 +324,10 @@ const Page: React.FC = () => {
                           isGettingMonthsData
                         )
                           return
-                        setSortByQueryParam(SortBy.UrlCreationDate)
+                        setSortByQueryParam(SortBy.PublishedAt)
                         toggleSortByDropdown()
                       },
-                      isSelected: currentSortBy == SortBy.UrlCreationDate,
+                      isSelected: currentSortBy == SortBy.PublishedAt,
                     },
                   ]}
                 />
@@ -348,7 +348,7 @@ const Page: React.FC = () => {
               >
                 <Months
                   months={
-                    currentSortBy == SortBy.BookmarkCreationDate
+                    currentSortBy == SortBy.BookmarkedAt
                       ? monthsOfBookmarkCreation
                       : monthsOfUrlCreation
                   }
@@ -403,7 +403,7 @@ const Page: React.FC = () => {
                   <Tags
                     tags={
                       tagsOfBookmarkCreation && tagsOfUrlCreation
-                        ? currentSortBy == SortBy.BookmarkCreationDate
+                        ? currentSortBy == SortBy.BookmarkedAt
                           ? Object.fromEntries(
                               Object.entries(tagsOfBookmarkCreation).filter(
                                 ([k]) => !selectedTags.includes(k),
@@ -444,7 +444,7 @@ const Page: React.FC = () => {
                 saves={bookmark.saves}
                 tags={bookmark.tags.map((tag) => {
                   const tags =
-                    currentSortBy == SortBy.BookmarkCreationDate
+                    currentSortBy == SortBy.BookmarkedAt
                       ? tagsOfBookmarkCreation
                       : tagsOfUrlCreation
 
@@ -479,21 +479,21 @@ export default Page
 
 function _orderByOptionToLabel(orderByOption: SortBy): string {
   switch (orderByOption) {
-    case SortBy.BookmarkCreationDate:
-      return 'Bookmark date'
-    case SortBy.UrlCreationDate:
-      return 'Link date'
+    case SortBy.BookmarkedAt:
+      return 'Bookmarked at'
+    case SortBy.PublishedAt:
+      return 'Published at'
   }
 }
 
 function _orderOptionToLabel(orderOption: Sort): string {
   switch (orderOption) {
-    case Sort.Latest:
-      return 'Latest'
-    case Sort.Oldest:
+    case Sort.Desc:
+      return 'Most recent'
+    case Sort.Asc:
       return 'Oldest'
     case Sort.Popular:
-      return 'Popular'
+      return 'Bookmark counts'
   }
 }
 

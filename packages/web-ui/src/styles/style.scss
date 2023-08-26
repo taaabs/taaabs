@@ -18,15 +18,15 @@
   // Shared
   --background: var(--neutral25);
   --selection-background: var(--brand-color);
-  --selection-foreground: var(--white);
+  --selection-foreground: var(--plain-white);
   --border-color-primary: var(--neutral200);
   --border-color-secondary: var(--neutral100);
-  --border-color-hover: var(--neutral300);
+  --border-color-hover: var(--neutral250);
   --logo-background: var(--brand-color);
   --border-primary: 1px solid var(--border-color-primary);
   --border-secondary: 1px solid var(--border-color-secondary);
   --border-hover: 1px solid var(--border-color-hover);
-  --header-background: var(--white);
+  --header-background: var(--plain-white);
   --header-transparent-background: rgba(255, 255, 255, 0.8);
 
   // Components
@@ -34,7 +34,6 @@
   --Button-background: var(--brand-color);
   --Button-background-hover: var(--blue800);
   --ButtonOutlined-icon-background: var(--plain-white);
-  --ButtonUnderlined-active-bar-color: var(--brand-color);
   --UserForHeader-icon-background: var(--neutral100);
   --BottomNavigationBar-background: var(--white);
   --SearchBox-background: var(--plain-white);
@@ -72,8 +71,8 @@
   --Months-chart-starred-fill: #fff545;
   --Months-chart-nsfw-stroke: #ef4444;
   --Months-chart-brush-handle-fill: #fff;
-  --Months-chart-brush-handle: var(--neutral300);
-  --Months-chart-brush-handle-hover: var(--neutral350);
+  --Months-chart-brush-handle: var(--neutral350);
+  --Months-chart-brush-handle-hover: var(--neutral400);
   --Tags-selected-foreground: var(--yellow800);
   --Tags-tag-foreground: var(--green700);
   --Tags-firstChar-foregrouond: var(--brand-color);

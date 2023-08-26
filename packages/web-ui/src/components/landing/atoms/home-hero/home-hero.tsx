@@ -1,4 +1,4 @@
-import { Wrapper } from '@web-ui/components/app/atoms/wrapper'
+import { Wrapper } from '@web-ui/components/common/particles/wrapper'
 import styles from './home-hero.module.scss'
 
 export namespace HomeHero {

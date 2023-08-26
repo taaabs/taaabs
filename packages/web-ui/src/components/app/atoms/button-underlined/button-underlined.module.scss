@@ -65,7 +65,7 @@
       color: inherit;
       &::after {
         transform: translateX(-50%) translateY(0);
-        background: var(--ButtonUnderlined-active-bar-color);
+        background: var(--brand-color);
       }
     }
   }

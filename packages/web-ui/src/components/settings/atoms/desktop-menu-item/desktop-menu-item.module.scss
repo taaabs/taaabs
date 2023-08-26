@@ -1,0 +1,73 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  position: relative;
+  padding-right: var(--distance-24px);
+  height: var(--button-dimension-48px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  &::after {
+    position: absolute;
+    content: '';
+    height: var(--distance-20px);
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    @include transition-100ms;
+    $bar-width: 3px;
+    width: $bar-width;
+    border-top-left-radius: $bar-width;
+    border-bottom-left-radius: $bar-width;
+  }
+  &--active {
+    &::after {
+      background: var(--brand-color);
+    }
+  }
+}
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  white-space: nowrap;
+  font-size: var(--font-size-18px);
+  &::before {
+    content: attr(title);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  @include hover {
+    &::before {
+      text-decoration: underline;
+    }
+  }
+  > span {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-weight: var(--font-weight-inter-medium);
+    color: transparent;
+  }
+  &--active {
+    &::before {
+      color: transparent;
+    }
+    > span {
+      color: inherit;
+    }
+  }
+  &:disabled {
+    pointer-events: none;
+    &::before {
+      color: var(--text-color-dimmed);
+    }
+    > span {
+      color: transparent;
+    }
+  }
+}

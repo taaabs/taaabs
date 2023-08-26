@@ -10,15 +10,21 @@ export const Primary = () => (
   <StorybookMargin>
     <Wrapper>
       <ButtonUnderlined isActive={true} href="/" label="Lorem ispum" />
-      <StorybookSpacer />
+    </Wrapper>
+    <StorybookSpacer />
+    <Wrapper>
       <ButtonUnderlined isActive={false} href="/" label="Lorem ispum" />
-      <StorybookSpacer />
+    </Wrapper>
+    <StorybookSpacer />
+    <Wrapper>
       <ButtonUnderlined
         isActive={true}
         onClick={() => {}}
         label="Lorem ispum"
       />
-      <StorybookSpacer />
+    </Wrapper>
+    <StorybookSpacer />
+    <Wrapper>
       <ButtonUnderlined isActive={false} label="Lorem ispum" />
     </Wrapper>
   </StorybookMargin>

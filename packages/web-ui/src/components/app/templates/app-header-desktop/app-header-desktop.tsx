@@ -1,4 +1,4 @@
-import { Wrapper } from '@web-ui/components/app/atoms/wrapper'
+import { Wrapper } from '@web-ui/components/common/particles/wrapper'
 import styles from './app-header-desktop.module.scss'
 
 export namespace AppHeaderDesktop {

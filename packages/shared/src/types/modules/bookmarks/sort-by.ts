@@ -1,4 +1,4 @@
 export enum SortBy {
-  BookmarkCreationDate = 'bookmark_creation_date',
-  UrlCreationDate = 'url_creation_date',
+  BookmarkedAt = 'bookmarked_at',
+  PublishedAt = 'published_at',
 }

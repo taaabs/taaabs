@@ -1,4 +1,4 @@
-import { Wrapper } from '@web-ui/components/app/atoms/wrapper'
+import { Wrapper } from '@web-ui/components/common/particles/wrapper'
 import styles from './pricing-tiers.module.scss'
 
 export namespace PricingTiers {

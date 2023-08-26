@@ -1,5 +1,5 @@
 export enum Sort {
-  Latest = 'latest',
+  Desc = 'desc',
   Popular = 'popular',
-  Oldest = 'oldest',
+  Asc = 'asc',
 }

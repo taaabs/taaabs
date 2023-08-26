@@ -25,24 +25,22 @@ const Page: React.FC = () => {
             bullets={[
               'Unlimited public/private bookmarks',
               'Unlimited tags',
-              'Essential library features',
-              'Privacy first - no cookies',
-              'Always free',
+              'All essential features',
+              'No cookies policy',
             ]}
           />
         }
         rightSlot={
           <PricingTier
             name="Plus"
-            description="Get the most ouf of taaabs with additional features"
+            description="Take your bookmarking experience to the next level"
             price="Less than $1"
             priceInfo="$11 billed annually"
             bullets={[
-              'Library feature: Categories',
-              'Library feature: Sort by saves count',
-              'Library feature: Tag counts',
-              'Account: Shorter username',
-              "It's free if you cannot afford it",
+              'Categorize your bookmarks',
+              'Sort your library by bookmark counts',
+              'Tag counts',
+              'Short username',
             ]}
           />
         }

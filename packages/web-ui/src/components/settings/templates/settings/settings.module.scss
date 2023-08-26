@@ -1,0 +1,66 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.header {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  width: 100%;
+}
+.content {
+  background: var(--background);
+  @include to992 {
+    padding-top: var(--header-mobile-height);
+  }
+  @include at992 {
+    display: flex;
+  }
+  &__mobile-nav {
+    @include at992 {
+      display: none;
+    }
+  }
+  &__sidebar {
+    display: flex;
+    @include to992 {
+      display: none;
+    }
+    @include at992 {
+      position: relative;
+      flex: 1;
+      justify-content: flex-end;
+      min-height: 100vh;
+      border-right: var(--border-primary);
+      background: var(--header-background);
+      &::before {
+        position: absolute;
+        content: '';
+        height: 100vh;
+        width: 100vw;
+        left: 0;
+        transform: translateX(-100%);
+        background: var(--header-background);
+      }
+    }
+    &__inner {
+      padding-top: var(--distance-90px);
+    }
+  }
+  &__main {
+    display: flex;
+    @include at992 {
+      flex: 1.5;
+      padding: var(--distance-80px) var(--distance-40px);
+    }
+    @include at1380 {
+      flex: 2.2;
+      padding: var(--distance-80px) var(--distance-60px);
+    }
+  }
+  &__aside {
+    display: flex;
+    @include at992 {
+      flex: 1;
+    }
+  }
+}

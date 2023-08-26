@@ -1,0 +1,55 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  height: var(--header-mobile-height);
+  @include at992 {
+    height: var(--header-desktop-height);
+  }
+}
+.inner {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  &__back-arrow {
+    display: flex;
+    align-items: center;
+    padding-right: var(--distance-16px);
+    padding-left: var(--distance-16px);
+    margin-left: calc(var(--distance-16px) * -1);
+    height: var(--button-dimension-34px);
+    @include at992 {
+      padding-right: var(--distance-24px);
+      height: var(--button-dimension-40px);
+    }
+    @include hover {
+      svg {
+        transform: translateX(-2px);
+      }
+    }
+    svg {
+      fill: var(--brand-color) !important;
+      @include transition-100ms(transform);
+      height: 18px;
+      width: 10px;
+      @include at992 {
+        height: 20px;
+        width: 12px;
+      }
+    }
+  }
+  &__title {
+    color: var(--color-text--normal);
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-bold);
+    letter-spacing: var(--letter-spacing-logo);
+    font-size: var(--font-size-23px);
+    padding-left: var(--distance-7px);
+    margin-bottom: var(--distance-2px);
+    @include at992 {
+      font-size: var(--font-size-28px);
+      padding-left: var(--distance-9px);
+      margin-bottom: var(--distance-4px);
+    }
+  }
+}
