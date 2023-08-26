@@ -37,9 +37,9 @@ const Page: React.FC = () => {
             price="Less than $1"
             priceInfo="$11 billed annually"
             bullets={[
-              'Categorize your bookmarks',
-              'Sort your library by bookmark counts',
               'Tag counts',
+              'Categories',
+              'Sort on bookmark counts',
               'Short username',
             ]}
           />

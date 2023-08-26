@@ -28,6 +28,7 @@
   --border-hover: 1px solid var(--border-color-hover);
   --header-background: var(--plain-white);
   --header-transparent-background: rgba(255, 255, 255, 0.8);
+  --blue-box-background: var(--blue50);
 
   // Components
   --Icon-fill: var(--plain-black);
@@ -77,7 +78,9 @@
   --Tags-tag-foreground: var(--green700);
   --Tags-firstChar-foregrouond: var(--brand-color);
   --Tags-firstChar-background: var(--blue50);
-  --PricingTier-background: var(--blue50);
+  --Input-background: var(--blue100);
+  --Input-border: 1px solid var(--blue200);
+  --Input-border-color-focus: var(--blue400);
 }
 
 *,
@@ -110,7 +113,7 @@ body {
 
 body,
 h1,
-h1,
+h2,
 h3,
 h4,
 p,

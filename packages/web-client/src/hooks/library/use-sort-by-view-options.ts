@@ -10,7 +10,7 @@ export const useSortByViewOptions = () => {
   const [currentSortBy, setCurrentSortBy] = useState<SortBy>(
     Object.values(SortBy)[
       parseInt(
-        queryParams.get('b') ||
+        queryParams.get('s') ||
           Object.values(SortBy)
             .indexOf(BookmarksFetchingDefaults.Common.sortBy)
             .toString(),
@@ -19,7 +19,7 @@ export const useSortByViewOptions = () => {
   )
 
   useUpdateEffect(() => {
-    const querySortBy = queryParams.get('b')
+    const querySortBy = queryParams.get('s')
 
     if (
       querySortBy != Object.values(SortBy).indexOf(currentSortBy).toString()
@@ -41,7 +41,7 @@ export const useSortByViewOptions = () => {
     let updatedQueryParams: any
     updatedQueryParams = updateSearchParam(
       queryParams,
-      'b',
+      's',
       Object.values(SortBy).indexOf(sortBy).toString(),
     )
 

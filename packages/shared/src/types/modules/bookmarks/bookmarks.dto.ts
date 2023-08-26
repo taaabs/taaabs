@@ -1,7 +1,7 @@
 import { PaginatedResponseDto } from '../../common/paginated-response.dto'
 import { ApiProperty } from '@nestjs/swagger'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
-import { Sort } from '@shared/types/modules/bookmarks/sort'
+import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { PaginationQueryParamsDto } from '@shared/types/common/pagination-options.dto'
 import { Type } from 'class-transformer'
 import { ToBoolean } from '@shared/decorators/to-boolean'
@@ -29,7 +29,7 @@ export namespace BookmarksDto {
 
       public sort_by?: SortBy = BookmarksFetchingDefaults.Common.sortBy
 
-      public sort?: Sort = BookmarksFetchingDefaults.Common.sort
+      public order_by?: OrderBy = BookmarksFetchingDefaults.Common.orderBy
 
       public filter?: LibraryFilter = BookmarksFetchingDefaults.Common.filter
     }

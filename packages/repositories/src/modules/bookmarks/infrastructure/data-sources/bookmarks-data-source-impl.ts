@@ -14,7 +14,7 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       after: params.after,
       filter: params.filter,
       sort_by: params.sortBy,
-      sort: params.sort,
+      order_by: params.orderBy,
       epoch_gte: params.yyyymmGte
         ? new Date(
             parseInt(params.yyyymmGte.toString().substring(0, 4)),
@@ -46,7 +46,7 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
       after: params.after,
       filter: params.filter,
       sort_by: params.sortBy,
-      sort: params.sort,
+      order_by: params.orderBy,
       epoch_gte: params.yyyymmGte
         ? new Date(
             parseInt(params.yyyymmGte.toString().substring(0, 4)),

@@ -1,0 +1,17 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--distance-6px);
+  h2 {
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-bold);
+    font-size: var(--font-size-22px);
+    color: var(--brand-color);
+  }
+  p {
+    color: var(--text-color-variant);
+  }
+}

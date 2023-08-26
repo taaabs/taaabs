@@ -1,0 +1,11 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  background: var(--blue-box-background);
+  border-radius: var(--border-radius-20px);
+  padding: var(--distance-16px);
+  @include at992 {
+    padding: var(--distance-40px);
+  }
+}

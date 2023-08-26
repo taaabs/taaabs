@@ -1,0 +1,15 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.input {
+  border: var(--Input-border);
+  background: var(--Input-background);
+  border-radius: var(--border-radius-10px);
+  height: var(--input-height-46px);
+  padding: 0 var(--distance-16px);
+  @include transition-100ms(border-color);
+  &:focus {
+    border-color: var(--Input-border-color-focus);
+    outline: none;
+  }
+}

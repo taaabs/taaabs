@@ -1,33 +1,35 @@
 import { updateSearchParam } from '@/utils/update-query-param'
-import { Sort } from '@shared/types/modules/bookmarks/sort'
+import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
 
-export const useSortViewOptions = () => {
+export const useOrderByViewOptions = () => {
   const queryParams = useShallowSearchParams()
-  const [currentSort, setCurrentSort] = useState<Sort>(
-    Object.values(Sort)[
+  const [currentOrderBy, setCurrentOrderBy] = useState<OrderBy>(
+    Object.values(OrderBy)[
       parseInt(
         queryParams.get('s') ||
-          Object.values(Sort)
-            .indexOf(BookmarksFetchingDefaults.Common.sort)
+          Object.values(OrderBy)
+            .indexOf(BookmarksFetchingDefaults.Common.orderBy)
             .toString(),
       )
     ],
   )
 
   useUpdateEffect(() => {
-    const querySort = queryParams.get('s')
+    const queryOrderBy = queryParams.get('o')
 
-    if (querySort != Object.values(Sort).indexOf(currentSort).toString()) {
-      setCurrentSort(
-        Object.values(Sort)[
+    if (
+      queryOrderBy != Object.values(OrderBy).indexOf(currentOrderBy).toString()
+    ) {
+      setCurrentOrderBy(
+        Object.values(OrderBy)[
           parseInt(
-            querySort ||
-              Object.values(Sort)
-                .indexOf(BookmarksFetchingDefaults.Common.sort)
+            queryOrderBy ||
+              Object.values(OrderBy)
+                .indexOf(BookmarksFetchingDefaults.Common.orderBy)
                 .toString(),
           )
         ],
@@ -35,11 +37,11 @@ export const useSortViewOptions = () => {
     }
   }, [queryParams])
 
-  const setSortQueryParam = (sort: Sort) => {
+  const setOrderByQueryParam = (orderBy: OrderBy) => {
     const updatedQueryParams = updateSearchParam(
       queryParams,
-      's',
-      Object.values(Sort).indexOf(sort).toString(),
+      'o',
+      Object.values(OrderBy).indexOf(orderBy).toString(),
     )
 
     window.history.pushState(
@@ -49,5 +51,5 @@ export const useSortViewOptions = () => {
     )
   }
 
-  return { currentSort, setSortQueryParam }
+  return { currentOrderBy, setOrderByQueryParam }
 }
