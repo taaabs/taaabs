@@ -106,6 +106,9 @@
     &__brush {
       transform: translateY(-47px) scale(0.9);
       transform-origin: center;
+      :focus {
+        outline: none;
+      }
       @include hover {
         > g > rect {
           stroke: var(--Months-chart-brush-handle-hover);
