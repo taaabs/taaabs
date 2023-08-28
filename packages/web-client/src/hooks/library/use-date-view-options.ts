@@ -18,8 +18,8 @@ export const useDateViewOptions = () => {
 
   const clearGteLteQueryParams = () => {
     let updatedQueryParams: any
-    updatedQueryParams = updateSearchParam(queryParams, 'gte', '')
-    updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte', '')
+    updatedQueryParams = updateSearchParam(queryParams, 'gte')
+    updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte')
 
     window.history.pushState(
       {},

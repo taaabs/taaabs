@@ -1,4 +1,5 @@
 'use client'
+
 import { DesktopNavigationForHeader } from '@web-ui/components/landing/atoms/desktop-navigation-for-header'
 import { usePathname } from 'next/navigation'
 

@@ -41,7 +41,9 @@ export const useOrderByViewOptions = () => {
     const updatedQueryParams = updateSearchParam(
       queryParams,
       'o',
-      Object.values(OrderBy).indexOf(orderBy).toString(),
+      orderBy == BookmarksFetchingDefaults.Common.orderBy
+        ? undefined
+        : Object.values(OrderBy).indexOf(orderBy).toString(),
     )
 
     window.history.pushState(

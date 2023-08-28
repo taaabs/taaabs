@@ -48,9 +48,11 @@ export const useFilterViewOptions = () => {
     updatedQueryParams = updateSearchParam(
       queryParams,
       'f',
-      Object.values(LibraryFilter).indexOf(filter).toString(),
+      filter == BookmarksFetchingDefaults.Common.filter
+        ? undefined
+        : Object.values(LibraryFilter).indexOf(filter).toString(),
     )
-    updatedQueryParams = updateSearchParam(updatedQueryParams, 't', '')
+    updatedQueryParams = updateSearchParam(updatedQueryParams, 't')
 
     window.history.pushState(
       {},

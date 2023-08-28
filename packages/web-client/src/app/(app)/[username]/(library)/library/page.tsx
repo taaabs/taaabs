@@ -5,7 +5,7 @@ import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Library } from '@web-ui/components/app/templates/library'
 import { useRouter, useParams } from 'next/navigation'
 import useToggle from 'beautiful-react-hooks/useToggle'
-import { useLibrarySelector } from './_hooks/store'
+import { useLibraryDispatch, useLibrarySelector } from './_hooks/store'
 import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
 import { ButtonSelect } from '@web-ui/components/app/atoms/button-select'
 import { SimpleSelectDropdown } from '@web-ui/components/app/atoms/simple-select-dropdown'
@@ -28,6 +28,7 @@ import { useTagViewOptions } from '@/hooks/library/use-tag-view-options'
 import { useDateViewOptions } from '@/hooks/library/use-date-view-options'
 import { useSortByViewOptions } from '@/hooks/library/use-sort-by-view-options'
 import { useOrderByViewOptions } from '@/hooks/library/use-order-by-view-options'
+import { bookmarksActions } from '@repositories/stores/user-public/library/bookmarks/bookmarks.slice'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -47,6 +48,7 @@ const Page: React.FC = () => {
     isGettingMoreBookmarks,
     hasMoreBookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
+  const dispatch = useLibraryDispatch()
   const { getBookmarks } = useBookmarks()
   const {
     monthsOfBookmarkCreation,
@@ -404,7 +406,7 @@ const Page: React.FC = () => {
                 >
                   {selectedTags.length > 0 && (
                     <SelectedTags
-                      selectedTags={[...selectedTags].map((id) => {
+                      selectedTags={[...actualSelectedTags].map((id) => {
                         if (!tagsOfBookmarkCreation || !tagsOfUrlCreation)
                           throw new Error('Tags should be there.')
 
@@ -461,7 +463,7 @@ const Page: React.FC = () => {
       }}
       slotBookmarks={
         bookmarks && bookmarks.length
-          ? bookmarks.map((bookmark) => (
+          ? bookmarks.map((bookmark, index) => (
               <Bookmark
                 title={bookmark.title}
                 onClick={() => {}}
@@ -499,6 +501,15 @@ const Page: React.FC = () => {
                 sitePath={bookmark.sitePath}
                 onTagClick={addTagToQueryParams}
                 onSelectedTagClick={removeTagFromQueryParams}
+                renderHeight={bookmark.renderHeight}
+                setRenderHeight={(height) => {
+                  dispatch(
+                    bookmarksActions.setBookmarkRenderHeight({
+                      index,
+                      height,
+                    }),
+                  )
+                }}
               />
             ))
           : []
@@ -521,11 +532,11 @@ function _sortByOptionToLabel(sortByOption: SortBy): string {
 function _orderByOptionToLabel(orderByOption: OrderBy): string {
   switch (orderByOption) {
     case OrderBy.Desc:
-      return 'Most recent'
+      return 'Newest first'
     case OrderBy.Asc:
-      return 'Oldest'
+      return 'Oldest first'
     case OrderBy.Popular:
-      return 'Saves count'
+      return 'Popularity'
   }
 }
 

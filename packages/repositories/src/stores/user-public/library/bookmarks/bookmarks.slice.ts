@@ -57,6 +57,13 @@ export const bookmarksSlice = createSlice({
     ) {
       state.hasMoreBookmarks = action.payload
     },
+    setBookmarkRenderHeight(
+      state,
+      action: PayloadAction<{ index: number; height: number }>,
+    ) {
+      if (!state.bookmarks) return
+      state.bookmarks[action.payload.index].renderHeight = action.payload.height
+    },
   },
 })
 

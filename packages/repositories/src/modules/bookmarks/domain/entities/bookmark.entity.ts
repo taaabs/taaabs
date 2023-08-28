@@ -10,6 +10,7 @@ export namespace BookmarkEntity {
     isStarred: boolean
     isNsfw: boolean
     saves: number
+    renderHeight?: number
   }
 
   export type Authorized = Base & {

@@ -42,15 +42,17 @@ export const useSortByViewOptions = () => {
     updatedQueryParams = updateSearchParam(
       queryParams,
       's',
-      Object.values(SortBy).indexOf(sortBy).toString(),
+      sortBy == BookmarksFetchingDefaults.Common.sortBy
+        ? undefined
+        : Object.values(SortBy).indexOf(sortBy).toString(),
     )
 
     if (queryParams.get('gte')) {
-      updatedQueryParams = updateSearchParam(updatedQueryParams, 'gte', '')
+      updatedQueryParams = updateSearchParam(updatedQueryParams, 'gte')
     }
 
     if (queryParams.get('lte')) {
-      updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte', '')
+      updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte')
     }
 
     window.history.pushState(

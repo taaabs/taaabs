@@ -8,13 +8,14 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  overflow: hidden;
   &::after {
     position: absolute;
     content: '';
     height: var(--distance-20px);
     top: 50%;
     right: 0;
-    transform: translateY(-50%);
+    transform: translateY(-50%) translateX(100%);
     @include transition-100ms;
     $bar-width: 3px;
     width: $bar-width;
@@ -24,6 +25,7 @@
   &--active {
     &::after {
       background: var(--brand-color);
+      transform: translateY(-50%) translateX(0);
     }
   }
 }

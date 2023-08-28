@@ -8,11 +8,11 @@ const Page: React.FC = () => {
       <PageHero
         heading="Pricing"
         subheading={
-          <p>
+          <>
             Embrace the Web without breaking your bank.
             <br />
             Start free, upgrade anytime. No credit card required.
-          </p>
+          </>
         }
       />
       <PricingTiers
@@ -26,7 +26,8 @@ const Page: React.FC = () => {
               'Unlimited public/private bookmarks',
               'Unlimited tags',
               'All essential features',
-              'No cookies policy',
+              'Free of third-party tracking',
+              'Free of ads',
             ]}
           />
         }
@@ -39,8 +40,9 @@ const Page: React.FC = () => {
             bullets={[
               'Tag counts',
               'Categories',
-              'Order by saves count',
-              'Short username',
+              'Additional ordering and sorting options',
+              'Claim shorter username',
+              "It's free if you cannot afford it",
             ]}
           />
         }
