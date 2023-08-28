@@ -9,9 +9,9 @@ export namespace Bookmark {
     title: string
     url: string
     sitePath?: string
-    onTagClick: (tag: string) => void
-    onSelectedTagClick: (tag: string) => void
-    tags: { name: string; yields?: number; isSelected?: boolean }[]
+    onTagClick: (tagId: number) => void
+    onSelectedTagClick: (tagId: number) => void
+    tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
     saves: number
     onClick: () => void
     onMenuClick: () => void
@@ -51,9 +51,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   onClick={(e) => {
                     e.stopPropagation()
                     if (tag.isSelected) {
-                      props.onSelectedTagClick(tag.name)
+                      props.onSelectedTagClick(tag.id)
                     } else {
-                      props.onTagClick(tag.name)
+                      props.onTagClick(tag.id)
                     }
                   }}
                   key={tag.name}

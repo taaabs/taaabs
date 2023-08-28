@@ -4,17 +4,22 @@ import { useState } from 'react'
 
 export const useTagViewOptions = () => {
   const queryParams = useShallowSearchParams()
-  const [actualSelectedTags, setActualSelectedTags] = useState<string[]>(
-    queryParams.get('t') ? queryParams.get('t')!.split(',') : [],
+  const [actualSelectedTags, setActualSelectedTags] = useState<number[]>(
+    queryParams.get('t')
+      ? queryParams
+          .get('t')!
+          .split(',')
+          .map((t) => parseInt(t))
+      : [],
   )
 
-  const addTagToQueryParams = (tag: string) => {
-    setActualSelectedTags([...actualSelectedTags, tag])
+  const addTagToQueryParams = (tagId: number) => {
+    setActualSelectedTags([...actualSelectedTags, tagId])
 
     const updatedQueryParams = updateSearchParam(
       queryParams,
       't',
-      [...actualSelectedTags, tag].join(','),
+      [...actualSelectedTags, tagId].join(','),
     )
     window.history.pushState(
       {},
@@ -23,13 +28,12 @@ export const useTagViewOptions = () => {
     )
   }
 
-  const removeTagFromQueryParams = (tag: string) => {
-    setActualSelectedTags(actualSelectedTags.filter((t) => t != tag))
-
+  const removeTagFromQueryParams = (tagId: number) => {
+    setActualSelectedTags(actualSelectedTags.filter((t) => t != tagId))
     const updatedQueryParams = updateSearchParam(
       queryParams,
       't',
-      actualSelectedTags.filter((t) => t != tag).join(','),
+      actualSelectedTags.filter((t) => t != tagId).join(','),
     )
     window.history.pushState(
       {},
@@ -42,5 +46,6 @@ export const useTagViewOptions = () => {
     addTagToQueryParams,
     removeTagFromQueryParams,
     actualSelectedTags,
+    setActualSelectedTags,
   }
 }

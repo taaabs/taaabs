@@ -5,10 +5,9 @@ export namespace BookmarkEntity {
     note?: string
     url: string
     createdAt: string
-    tags: string[]
+    tags?: { name: string; id: number }[]
     sitePath?: string
     isStarred: boolean
-    isArchived: boolean
     isNsfw: boolean
     saves: number
   }

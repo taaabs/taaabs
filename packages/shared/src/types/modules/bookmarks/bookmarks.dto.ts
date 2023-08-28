@@ -44,13 +44,18 @@ export namespace BookmarksDto {
   }
 
   export namespace Response {
+    class Tag {
+      public name: string
+      public id: number
+    }
+
     class Bookmark {
       public id: string
       public title: string
       public note?: string
       public url: string
       public created_at: string
-      public tags?: string[]
+      public tags?: Tag[]
       public site_path?: string
       public is_starred?: boolean
       public is_nsfw?: boolean

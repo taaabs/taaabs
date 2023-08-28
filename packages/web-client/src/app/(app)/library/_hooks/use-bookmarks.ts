@@ -4,8 +4,8 @@ import { useLibraryDispatch, useLibrarySelector } from './store'
 import { useEffect, useState } from 'react'
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { LibraryFilter } from '@shared/types/common/library-filter'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
-import { Order } from '@shared/types/modules/bookmarks/order'
 import { bookmarksActions } from '@repositories/stores/user-authorized/library/bookmarks/bookmarks.slice'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
@@ -25,8 +25,8 @@ export const useBookmarks = () => {
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
   const [lastQueryCatId, setLastQueryCatId] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
+  const [lastQuerySortBy, setLastQuerySortBy] = useState<string | null>(null)
   const [lastQueryOrderBy, setLastQueryOrderBy] = useState<string | null>(null)
-  const [lastQueryOrder, setLastQueryOrder] = useState<string | null>(null)
   const [lastQueryYyyymmGte, setLastQueryYyyymmGte] = useState<string | null>(
     null,
   )
@@ -62,17 +62,17 @@ export const useBookmarks = () => {
         Object.values(LibraryFilter)[parseInt(queryFilter)]
     }
 
-    const queryOrderBy = queryParams.get('b')
+    const querySortBy = queryParams.get('s')
+    setLastQuerySortBy(querySortBy)
+    if (querySortBy) {
+      getBookmarksParams.sortBy = Object.values(SortBy)[parseInt(querySortBy)]
+    }
+
+    const queryOrderBy = queryParams.get('o')
     setLastQueryOrderBy(queryOrderBy)
     if (queryOrderBy) {
       getBookmarksParams.orderBy =
         Object.values(OrderBy)[parseInt(queryOrderBy)]
-    }
-
-    const queryOrder = queryParams.get('s')
-    setLastQueryOrder(queryOrder)
-    if (queryOrder) {
-      getBookmarksParams.order = Object.values(Order)[parseInt(queryOrder)]
     }
 
     const queryYyyymmGte = queryParams.get('gte')
@@ -104,8 +104,8 @@ export const useBookmarks = () => {
     const queryTags = queryParams.get('t')
     const queryCategoryId = queryParams.get('c')
     const queryFilter = queryParams.get('f')
-    const queryOrderBy = queryParams.get('b')
-    const queryOrder = queryParams.get('s')
+    const querySortBy = queryParams.get('b')
+    const queryOrderBy = queryParams.get('s')
     const queryYyyyGte = queryParams.get('gte')
     const queryYyyyLte = queryParams.get('lte')
 
@@ -113,8 +113,8 @@ export const useBookmarks = () => {
       queryTags != lastQueryTags ||
       queryCategoryId != lastQueryCatId ||
       queryFilter != lastQueryFilter ||
+      querySortBy != lastQuerySortBy ||
       queryOrderBy != lastQueryOrderBy ||
-      queryOrder != lastQueryOrder ||
       queryYyyyGte != lastQueryYyyymmGte ||
       queryYyyyLte != lastQueryYyyymmLte
     ) {

@@ -11,8 +11,8 @@ import { useBookmarks } from './_hooks/use-bookmarks'
 import { useMonths } from './_hooks/use-months'
 import { useTagViewOptions } from '@/hooks/library/use-tag-view-options'
 import { useDateViewOptions } from '@/hooks/library/use-date-view-options'
-import { useOrderByViewOptions } from '@/hooks/library/use-order-by-view-options copy'
-import { useOrderViewOptions } from '@/hooks/library/use-order-view-options'
+import { useOrderByViewOptions } from '@/hooks/library/use-order-by-view-options'
+import { useSortByViewOptions } from '@/hooks/library/use-sort-by-view-options'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { useFilterViewOptions } from '@/hooks/library/use-filter-view-options'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -52,7 +52,7 @@ const Page: React.FC = () => {
     isNsfwExcluded,
   } = useFilterViewOptions()
   const { currentOrderBy, setOrderByQueryParam } = useOrderByViewOptions()
-  const { currentOrder, setOrderQueryParam } = useOrderViewOptions()
+  const { currentSortBy, setSortByQueryParam } = useSortByViewOptions()
   const { addTagToQueryParams, removeTagFromQueryParams, actualSelectedTags } =
     useTagViewOptions()
   const { setGteLteQueryParams, clearGteLteQueryParams } = useDateViewOptions()

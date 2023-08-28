@@ -29,7 +29,7 @@ export const useMonths = () => {
   const { bookmarks } = useLibrarySelector((state) => state.bookmarks)
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [selectedTags, setSelectedTags] = useState<number[]>([])
   const [lastQueryYyyymmGte, setLastQueryYyyymmGte] = useState<string | null>(
     null,
   )
@@ -93,7 +93,7 @@ export const useMonths = () => {
     if (!queryTags && selectedTags.length > 0) {
       setSelectedTags([])
     } else if (queryTags && queryTags != selectedTags.join(',')) {
-      const selectedTags = queryTags.split(',')
+      const selectedTags = queryTags.split(',').map((t) => parseInt(t))
       setSelectedTags(selectedTags)
     }
   }, [bookmarks])
