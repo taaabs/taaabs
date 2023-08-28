@@ -39,23 +39,22 @@ describe('BookmarksRepositoryImpl', () => {
           {
             id: '1',
             createdAt: now,
-            isArchived: false,
             isNsfw: false,
             isPublic: false,
             isStarred: false,
             saves: 1,
-            tags: [],
+            tags: {},
             title: 'test',
             url: exampleUrl,
-            sitePath: null,
-            note: null,
           },
         ],
         pagination: {
           hasMore: false,
         },
       }
-      bookmarksDataSourceMock.getBookmarksOnAuthorizedUser.mockResolvedValue(dto)
+      bookmarksDataSourceMock.getBookmarksOnAuthorizedUser.mockResolvedValue(
+        dto,
+      )
       const sut = new BookmarksRepositoryImpl(bookmarksDataSourceMock)
       const result = await sut.getBookmarksOnAuthorizedUser({})
       expect(result).toStrictEqual(ro)
@@ -83,15 +82,12 @@ describe('BookmarksRepositoryImpl', () => {
           {
             id: '1',
             createdAt: now,
-            isArchived: false,
             isNsfw: false,
             isStarred: false,
             saves: 1,
-            tags: [],
+            tags: {},
             title: 'test',
             url: exampleUrl,
-            sitePath: null,
-            note: null,
           },
         ],
         pagination: {

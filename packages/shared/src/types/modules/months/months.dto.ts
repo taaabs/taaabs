@@ -17,8 +17,10 @@ export namespace MonthsDto {
     export class Public extends Base {}
   }
   export namespace Response {
+    type TagName = string
+
     class Month {
-      public tags: Record<string, number>
+      public tags: Record<TagName, { yields: number; id: number }>
       public bookmark_count: number
       public starred_count?: number
       public nsfw_count?: number
@@ -30,13 +32,13 @@ export namespace MonthsDto {
     class PublicMonth extends Month {}
 
     export class Authorized {
-      public months_of_bookmark_creation: Record<number, AuthorizedMonth>
-      public months_of_url_creation: Record<number, AuthorizedMonth>
+      public months_of_bookmark_creation: Record<string, AuthorizedMonth>
+      public months_of_url_creation: Record<string, AuthorizedMonth>
       public is_months_update_scheduled: boolean
     }
     export class Public {
-      public months_of_bookmark_creation: Record<number, PublicMonth>
-      public months_of_url_creation: Record<number, PublicMonth>
+      public months_of_bookmark_creation: Record<string, PublicMonth>
+      public months_of_url_creation: Record<string, PublicMonth>
       public is_months_update_scheduled: boolean
     }
   }

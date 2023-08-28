@@ -44,11 +44,13 @@ export const useFilterViewOptions = () => {
   }, [queryParams])
 
   const setFilterQueryParam = (filter: LibraryFilter) => {
-    const updatedQueryParams = updateSearchParam(
+    let updatedQueryParams: any
+    updatedQueryParams = updateSearchParam(
       queryParams,
       'f',
       Object.values(LibraryFilter).indexOf(filter).toString(),
     )
+    updatedQueryParams = updateSearchParam(updatedQueryParams, 't', '')
 
     window.history.pushState(
       {},

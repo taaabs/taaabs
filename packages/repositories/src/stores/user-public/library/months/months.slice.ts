@@ -8,7 +8,7 @@ export type Months = {
   starredCount: number
   nsfwCount: number
 }[]
-export type Tags = Record<string, number>
+export type Tags = Record<string, { id: number; yields: number }>
 
 export type MonthsState = {
   isGettingMonthsData: boolean

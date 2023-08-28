@@ -65,8 +65,12 @@ const Page: React.FC = () => {
   } = useFilterViewOptions()
   const { currentSortBy, setSortByQueryParam } = useSortByViewOptions()
   const { currentOrderBy, setOrderByQueryParam } = useOrderByViewOptions()
-  const { addTagToQueryParams, removeTagFromQueryParams, actualSelectedTags } =
-    useTagViewOptions()
+  const {
+    addTagToQueryParams,
+    removeTagFromQueryParams,
+    actualSelectedTags,
+    setActualSelectedTags,
+  } = useTagViewOptions()
   const { setGteLteQueryParams, clearGteLteQueryParams } = useDateViewOptions()
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
   const [isSortByDropdownVisible, toggleSortByDropdown] = useToggle(false)
@@ -146,6 +150,7 @@ const Page: React.FC = () => {
                         } else {
                           setFilterQueryParam(LibraryFilter.All)
                         }
+                        setActualSelectedTags([])
                         toggleFilterDropdown()
                       },
                       isSelected:
@@ -168,6 +173,7 @@ const Page: React.FC = () => {
                         } else {
                           setFilterQueryParam(LibraryFilter.StarredOnly)
                         }
+                        setActualSelectedTags([])
                         toggleFilterDropdown()
                       },
                       isSelected:
@@ -190,6 +196,7 @@ const Page: React.FC = () => {
                         } else {
                           setFilterQueryParam(LibraryFilter.Archived)
                         }
+                        setActualSelectedTags([])
                         toggleFilterDropdown()
                       },
                       isSelected:
@@ -209,6 +216,7 @@ const Page: React.FC = () => {
                           return
 
                         isNsfwExcluded ? includeNsfw() : excludeNsfw()
+                        setActualSelectedTags([])
                         toggleFilterDropdown()
                       },
                       isSelected: isNsfwExcluded,
@@ -396,7 +404,23 @@ const Page: React.FC = () => {
                 >
                   {selectedTags.length > 0 && (
                     <SelectedTags
-                      selectedTags={selectedTags}
+                      selectedTags={[...selectedTags].map((id) => {
+                        if (!tagsOfBookmarkCreation || !tagsOfUrlCreation)
+                          throw new Error('Tags should be there.')
+
+                        const name = SortBy.BookmarkedAt
+                          ? Object.entries(tagsOfBookmarkCreation).find(
+                              (tag) => tag[1].id == id,
+                            )?.[0]
+                          : Object.entries(tagsOfUrlCreation).find(
+                              (tag) => tag[1].id == id,
+                            )?.[0]
+
+                        return {
+                          id,
+                          name: name || '—',
+                        }
+                      })}
                       onSelectedTagClick={removeTagFromQueryParams}
                     />
                   )}
@@ -405,13 +429,15 @@ const Page: React.FC = () => {
                       tagsOfBookmarkCreation && tagsOfUrlCreation
                         ? currentSortBy == SortBy.BookmarkedAt
                           ? Object.fromEntries(
-                              Object.entries(tagsOfBookmarkCreation).filter(
-                                ([k]) => !selectedTags.includes(k),
+                              [
+                                ...Object.entries(tagsOfBookmarkCreation),
+                              ].filter(
+                                (tag) => !selectedTags.includes(tag[1].id),
                               ),
                             )
                           : Object.fromEntries(
-                              Object.entries(tagsOfUrlCreation).filter(
-                                ([k]) => !selectedTags.includes(k),
+                              [...Object.entries(tagsOfUrlCreation)].filter(
+                                (tag) => !selectedTags.includes(tag[1].id),
                               ),
                             )
                         : {}
@@ -442,25 +468,31 @@ const Page: React.FC = () => {
                 onMenuClick={() => {}}
                 url={bookmark.url}
                 saves={bookmark.saves}
-                tags={bookmark.tags.map((tag) => {
-                  const tags =
-                    currentSortBy == SortBy.BookmarkedAt
-                      ? tagsOfBookmarkCreation
-                      : tagsOfUrlCreation
+                tags={
+                  bookmark.tags
+                    ? bookmark.tags.map((tag) => {
+                        const tags =
+                          currentSortBy == SortBy.BookmarkedAt
+                            ? tagsOfBookmarkCreation
+                            : tagsOfUrlCreation
 
-                  const isSelected = isGettingFirstBookmarks
-                    ? selectedTags.find((t) => t == tag) != undefined
-                    : actualSelectedTags.find((t) => t == tag) != undefined
+                        const isSelected = isGettingFirstBookmarks
+                          ? selectedTags.find((t) => t == tag.id) != undefined
+                          : actualSelectedTags.find((t) => t == tag.id) !=
+                            undefined
 
-                  return {
-                    name: tag,
-                    isSelected,
-                    yields:
-                      !isSelected && tags && Object.values(tags).length
-                        ? tags[tag]
-                        : undefined,
-                  }
-                })}
+                        return {
+                          name: tag.name,
+                          isSelected,
+                          id: tag.id,
+                          yields:
+                            !isSelected && tags && Object.values(tags).length
+                              ? tags[tag.name].yields
+                              : undefined,
+                        }
+                      })
+                    : []
+                }
                 isNsfw={bookmark.isNsfw}
                 isStarred={bookmark.isStarred}
                 key={bookmark.id}

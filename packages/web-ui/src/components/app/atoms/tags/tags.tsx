@@ -3,8 +3,8 @@ import styles from './tags.module.scss'
 
 export namespace Tags {
   export type Props = {
-    tags: Record<string, number>
-    onClick: (tag: string) => void
+    tags: Record<string, { id: number; yields: number }>
+    onClick: (tag: number) => void
   }
 }
 
@@ -14,7 +14,7 @@ export const Tags: React.FC<Tags.Props> = memo(
 
     return (
       <div className={styles.container}>
-        {Object.entries(props.tags).map(([tag, yields]) => {
+        {Object.entries(props.tags).map(([tag, details]) => {
           let displayFirstChar = false
           const firstChar = tag.substring(0, 1)
           if (!renderedFirstChars.has(firstChar)) {
@@ -33,10 +33,10 @@ export const Tags: React.FC<Tags.Props> = memo(
                 )}
                 <button
                   className={styles.item__tag}
-                  onClick={() => props.onClick(tag)}
+                  onClick={() => props.onClick(details.id)}
                 >
-                  <span>{tag.replaceAll('-', ' ')}</span>
-                  <span>{yields}</span>
+                  <span>{tag}</span>
+                  <span>{details.yields}</span>
                 </button>
               </div>
             </>
