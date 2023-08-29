@@ -5,7 +5,7 @@ import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Library } from '@web-ui/components/app/templates/library'
 import { useRouter, useParams } from 'next/navigation'
 import useToggle from 'beautiful-react-hooks/useToggle'
-import { useLibraryDispatch, useLibrarySelector } from './_hooks/store'
+import { useLibrarySelector } from './_hooks/store'
 import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
 import { ButtonSelect } from '@web-ui/components/app/atoms/button-select'
 import { SimpleSelectDropdown } from '@web-ui/components/app/atoms/simple-select-dropdown'
@@ -28,7 +28,6 @@ import { useTagViewOptions } from '@/hooks/library/use-tag-view-options'
 import { useDateViewOptions } from '@/hooks/library/use-date-view-options'
 import { useSortByViewOptions } from '@/hooks/library/use-sort-by-view-options'
 import { useOrderByViewOptions } from '@/hooks/library/use-order-by-view-options'
-import { bookmarksActions } from '@repositories/stores/user-public/library/bookmarks/bookmarks.slice'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -48,7 +47,6 @@ const Page: React.FC = () => {
     isGettingMoreBookmarks,
     hasMoreBookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
-  const dispatch = useLibraryDispatch()
   const { getBookmarks } = useBookmarks()
   const {
     monthsOfBookmarkCreation,
@@ -89,6 +87,11 @@ const Page: React.FC = () => {
 
     return () => {
       sessionStorage.removeItem('queryParams')
+      for (const key in sessionStorage) {
+        if (key.substring(0, 12) == 'renderHeight') {
+          sessionStorage.removeItem(key)
+        }
+      }
     }
   }, [queryParams])
 
@@ -406,23 +409,25 @@ const Page: React.FC = () => {
                 >
                   {selectedTags.length > 0 && (
                     <SelectedTags
-                      selectedTags={[...actualSelectedTags].map((id) => {
-                        if (!tagsOfBookmarkCreation || !tagsOfUrlCreation)
-                          throw new Error('Tags should be there.')
+                      selectedTags={[...actualSelectedTags]
+                        .filter((id) => {
+                          if (!bookmarks) return false
+                          return (
+                            bookmarks[0].tags?.findIndex(
+                              (tag) => tag.id == id,
+                            ) != -1
+                          )
+                        })
+                        .map((id) => {
+                          const name = bookmarks![0].tags!.find(
+                            (tag) => tag.id == id,
+                          )!.name
 
-                        const name = SortBy.BookmarkedAt
-                          ? Object.entries(tagsOfBookmarkCreation).find(
-                              (tag) => tag[1].id == id,
-                            )?.[0]
-                          : Object.entries(tagsOfUrlCreation).find(
-                              (tag) => tag[1].id == id,
-                            )?.[0]
-
-                        return {
-                          id,
-                          name: name || '—',
-                        }
-                      })}
+                          return {
+                            id,
+                            name,
+                          }
+                        })}
                       onSelectedTagClick={removeTagFromQueryParams}
                     />
                   )}
@@ -463,8 +468,9 @@ const Page: React.FC = () => {
       }}
       slotBookmarks={
         bookmarks && bookmarks.length
-          ? bookmarks.map((bookmark, index) => (
+          ? bookmarks.map((bookmark) => (
               <Bookmark
+                id={bookmark.id}
                 title={bookmark.title}
                 onClick={() => {}}
                 onMenuClick={() => {}}
@@ -488,7 +494,7 @@ const Page: React.FC = () => {
                           isSelected,
                           id: tag.id,
                           yields:
-                            !isSelected && tags && Object.values(tags).length
+                            !isSelected && tags && tags[tag.name]
                               ? tags[tag.name].yields
                               : undefined,
                         }
@@ -501,15 +507,12 @@ const Page: React.FC = () => {
                 sitePath={bookmark.sitePath}
                 onTagClick={addTagToQueryParams}
                 onSelectedTagClick={removeTagFromQueryParams}
-                renderHeight={bookmark.renderHeight}
-                setRenderHeight={(height) => {
-                  dispatch(
-                    bookmarksActions.setBookmarkRenderHeight({
-                      index,
-                      height,
-                    }),
-                  )
-                }}
+                renderHeight={
+                  parseInt(
+                    sessionStorage.getItem(`renderHeight_${bookmark.id}`) ||
+                      '0',
+                  ) || undefined
+                }
               />
             ))
           : []

@@ -5,13 +5,13 @@ import { memo } from 'react'
 export const TagsSkeleton = memo(() => {
   return (
     <div className={styles.container}>
-      {[...new Array(40)].map(() => (
-        <Skeleton width={_getRandomArbitrary(40, 90)} />
+      {[...new Array(40)].map((_, i) => (
+        <Skeleton width={_getRandomNumberInBetween(40, 90)} key={i} />
       ))}
     </div>
   )
 })
 
-function _getRandomArbitrary(min: number, max: number) {
+function _getRandomNumberInBetween(min: number, max: number) {
   return Math.random() * (max - min) + min
 }

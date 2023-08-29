@@ -132,6 +132,7 @@
     display: flex;
     @include to992 {
       margin: 0 var(--distance-9px);
+      align-items: flex-end;
     }
     @include at992 {
       flex-direction: column;
@@ -199,6 +200,7 @@
       &__element {
         position: relative;
         word-break: break-all;
+        line-height: 1.2;
         font-size: var(--font-size-1-5rem);
         color: var(--Bookmark-link-foreground);
         @include text-decoration-underline;

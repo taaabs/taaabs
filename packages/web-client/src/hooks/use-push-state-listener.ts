@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 
 export const useShallowSearchParams = () => {
   const [searchParams, setSearchParams] = useState(
-    new URLSearchParams(new URLSearchParams(window.location.search)),
+    new URLSearchParams(
+      typeof window != 'undefined'
+        ? new URLSearchParams(window.location.search)
+        : undefined,
+    ),
   )
 
   const listenToPopstate = () => {

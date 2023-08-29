@@ -1,9 +1,9 @@
-import { Name } from './header'
+import { Header } from './header'
 
 export default {
-  component: Name,
+  component: Header,
 }
 
 export const Primary = () => {
-  return <Name title="lorem" backHref="" />
+  return <Header title="lorem" backHref="" />
 }
