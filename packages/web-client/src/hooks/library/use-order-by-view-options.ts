@@ -3,7 +3,7 @@ import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
 
 export const useOrderByViewOptions = () => {
   const queryParams = useShallowSearchParams()

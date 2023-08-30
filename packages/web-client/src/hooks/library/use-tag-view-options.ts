@@ -1,5 +1,5 @@
 import { updateSearchParam } from '@/utils/update-query-param'
-import { useShallowSearchParams } from '../use-push-state-listener'
+import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
 import { useState } from 'react'
 
 export const useTagViewOptions = () => {

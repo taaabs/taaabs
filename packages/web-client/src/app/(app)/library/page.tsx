@@ -1,6 +1,6 @@
 'use client'
 
-import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
 import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
 import { Library } from '@web-ui/components/app/templates/library'
 import dynamic from 'next/dynamic'

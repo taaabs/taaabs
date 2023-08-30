@@ -11,7 +11,7 @@ import StickyBox from 'react-sticky-box'
 import Slideout from 'slideout'
 import { _DesktopTitleBar } from './components/_desktop-title-bar'
 import { _MobileTitleBar } from './components/_mobile-title-bar'
-import { useMobileScrollRestore } from './hooks/use-mobile-scroll-restore'
+import { useScrollRestore } from './hooks/use-scroll-restore'
 import styles from './library.module.scss'
 
 export namespace Library {
@@ -39,7 +39,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   const endOfBookmarks = useRef<HTMLDivElement>(null)
   const isHydrated = useIsHydrated()
 
-  useMobileScrollRestore(mainInner)
+  useScrollRestore(mainInner)
   const isEndOfBookmarksVisible = useViewportSpy(endOfBookmarks)
 
   const { onSwipeStart } = useSwipeEvents(undefined, {

@@ -16,7 +16,7 @@ import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
-import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
@@ -83,17 +83,20 @@ const Page: React.FC = () => {
   }, [bookmarks])
 
   useEffect(() => {
-    sessionStorage.setItem('queryParams', queryParams.toString())
+    // Automatic scroll restoration works great when
+    // reloading, but not at all when navigating back/forward.
+    window.history.scrollRestoration = 'manual'
 
     return () => {
-      sessionStorage.removeItem('queryParams')
+      window.history.scrollRestoration = 'auto'
+
       for (const key in sessionStorage) {
         if (key.substring(0, 12) == 'renderHeight') {
           sessionStorage.removeItem(key)
         }
       }
     }
-  }, [queryParams])
+  }, [])
 
   return (
     <Library
@@ -409,7 +412,7 @@ const Page: React.FC = () => {
                 >
                   {selectedTags.length > 0 && (
                     <SelectedTags
-                      selectedTags={[...actualSelectedTags]
+                      selectedTags={[...selectedTags]
                         .filter((id) => {
                           if (!bookmarks) return false
                           return (

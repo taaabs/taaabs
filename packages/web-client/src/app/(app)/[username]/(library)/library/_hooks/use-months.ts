@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { MonthsParams } from '@repositories/modules/months/domain/types/months.params'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
 import { monthsActions } from '@repositories/stores/user-public/library/months/months.slice'
 
 enum SessionStorageKey {
@@ -101,61 +101,64 @@ export const useMonths = () => {
   useUpdateEffect(() => {
     if (monthsData) {
       sessionStorage.setItem(
-        SessionStorageKey.MonthsData,
+        `monthsData_${queryParams.toString()}`,
         JSON.stringify(monthsData),
       )
     }
 
     if (tagsOfBookmarkCreation) {
       sessionStorage.setItem(
-        SessionStorageKey.TagsOfBookmarkCreation,
+        `tagsOfBookmarkCreation_${queryParams.toString()}`,
         JSON.stringify(tagsOfBookmarkCreation),
       )
       sessionStorage.setItem(
-        SessionStorageKey.TagsOfUrlCreation,
+        `tagsOfUrlCreation_${queryParams.toString()}`,
         JSON.stringify(tagsOfUrlCreation),
       )
     }
   }, [monthsData, tagsOfBookmarkCreation, tagsOfUrlCreation])
 
   useEffect(() => {
-    const previousQueryParams = sessionStorage.getItem(
-      SessionStorageKey.QueryParams,
+    const monthsData = sessionStorage.getItem(
+      `monthsData_${queryParams.toString()}`,
     )
+    if (monthsData) {
+      dispatch(monthsActions.setData(JSON.parse(monthsData)))
 
-    if (queryParams.toString() == previousQueryParams) {
-      const monthsData = sessionStorage.getItem(SessionStorageKey.MonthsData)
-      if (monthsData) {
-        dispatch(monthsActions.setData(JSON.parse(monthsData)))
+      const tagsOfBookmarkCreation = sessionStorage.getItem(
+        `tagsOfBookmarkCreation_${queryParams.toString()}`,
+      )
+      const tagsOfUrlCreation = sessionStorage.getItem(
+        `tagsOfUrlCreation_${queryParams.toString()}`,
+      )
 
-        const tagsOfBookmarkCreation = sessionStorage.getItem(
-          SessionStorageKey.TagsOfBookmarkCreation,
+      if (tagsOfBookmarkCreation && tagsOfUrlCreation) {
+        dispatch(
+          monthsActions.setTagsOfBookmarkCreation(
+            JSON.parse(tagsOfBookmarkCreation),
+          ),
         )
-        const tagsOfUrlCreation = sessionStorage.getItem(
-          SessionStorageKey.TagsOfUrlCreation,
+        dispatch(
+          monthsActions.setTagsOfUrlCreation(JSON.parse(tagsOfUrlCreation)),
         )
-
-        if (tagsOfBookmarkCreation && tagsOfUrlCreation) {
-          dispatch(
-            monthsActions.setTagsOfBookmarkCreation(
-              JSON.parse(tagsOfBookmarkCreation),
-            ),
-          )
-          dispatch(
-            monthsActions.setTagsOfUrlCreation(JSON.parse(tagsOfUrlCreation)),
-          )
-        }
-      } else {
-        getMonths()
       }
     } else {
       getMonths()
     }
 
     return () => {
-      sessionStorage.removeItem(SessionStorageKey.MonthsData)
-      sessionStorage.removeItem(SessionStorageKey.TagsOfBookmarkCreation)
-      sessionStorage.removeItem(SessionStorageKey.TagsOfUrlCreation)
+      // sessionStorage.removeItem(SessionStorageKey.MonthsData)
+      // sessionStorage.removeItem(SessionStorageKey.TagsOfBookmarkCreation)
+      // sessionStorage.removeItem(SessionStorageKey.TagsOfUrlCreation)
+      for (const key in sessionStorage) {
+        if (key.substring(0, 10) == 'monthsData') {
+          sessionStorage.removeItem(key)
+        } else if (key.substring(0, 22) == 'tagsOfBookmarkCreation') {
+          sessionStorage.removeItem(key)
+        } else if (key.substring(0, 17) == 'tagsOfUrlCreation') {
+          sessionStorage.removeItem(key)
+        }
+      }
     }
   }, [])
 

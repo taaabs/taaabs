@@ -1,5 +1,5 @@
 export class PaginatedResponseDto {
-  pagination: {
+  public pagination: {
     hasMore: boolean
   }
 }

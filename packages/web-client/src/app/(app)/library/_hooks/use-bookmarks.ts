@@ -1,4 +1,4 @@
-import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
 import { useParams } from 'next/navigation'
 import { useLibraryDispatch, useLibrarySelector } from './store'
 import { useEffect, useState } from 'react'

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
-import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
 import { bookmarksActions } from '@repositories/stores/user-public/library/bookmarks/bookmarks.slice'
 
 enum SessionStorageKey {
@@ -124,42 +124,44 @@ export const useBookmarks = () => {
 
   useUpdateEffect(() => {
     sessionStorage.setItem(
-      SessionStorageKey.Bookmarks,
+      `bookmarks_${queryParams.toString()}`,
       JSON.stringify(bookmarks),
     )
     sessionStorage.setItem(
-      SessionStorageKey.HasMoreBookmarks,
+      `hasMoreBookmarks_${queryParams.toString()}`,
       JSON.stringify(hasMoreBookmarks),
     )
   }, [bookmarks])
 
   useEffect(() => {
-    const previousQueryParams = sessionStorage.getItem(
-      SessionStorageKey.QueryParams,
+    const bookmarks = sessionStorage.getItem(
+      `bookmarks_${queryParams.toString()}`,
     )
-    if (queryParams.toString() == previousQueryParams) {
-      const bookmarks = sessionStorage.getItem(SessionStorageKey.Bookmarks)
 
-      if (bookmarks) {
-        dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
-        const hasMoreBookmarks = sessionStorage.getItem(
-          SessionStorageKey.HasMoreBookmarks,
+    if (bookmarks) {
+      dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
+      const hasMoreBookmarks = sessionStorage.getItem(
+        `hasMoreBookmarks_${queryParams.toString()}`,
+      )
+      if (hasMoreBookmarks) {
+        dispatch(
+          bookmarksActions.setHasMoreBookmarks(hasMoreBookmarks == 'true'),
         )
-        if (hasMoreBookmarks) {
-          dispatch(
-            bookmarksActions.setHasMoreBookmarks(hasMoreBookmarks == 'true'),
-          )
-        }
-      } else {
-        getBookmarks({})
       }
     } else {
       getBookmarks({})
     }
 
     return () => {
-      sessionStorage.removeItem(SessionStorageKey.Bookmarks)
-      sessionStorage.removeItem(SessionStorageKey.HasMoreBookmarks)
+      // sessionStorage.removeItem(SessionStorageKey.Bookmarks)
+      // sessionStorage.removeItem(SessionStorageKey.HasMoreBookmarks)
+      for (const key in sessionStorage) {
+        if (key.substring(0, 9) == 'bookmarks') {
+          sessionStorage.removeItem(key)
+        } else if (key.substring(0, 16) == 'hasMoreBookmarks') {
+          sessionStorage.removeItem(key)
+        }
+      }
     }
   }, [])
 

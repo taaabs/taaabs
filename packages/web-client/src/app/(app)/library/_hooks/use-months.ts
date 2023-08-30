@@ -1,4 +1,4 @@
-import { useShallowSearchParams } from '@/hooks/use-push-state-listener'
+import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
 import { useLibraryDispatch, useLibrarySelector } from './store'
 import { MonthsParams } from '@repositories/modules/months/domain/types/months.params'
 import { useEffect, useState } from 'react'
