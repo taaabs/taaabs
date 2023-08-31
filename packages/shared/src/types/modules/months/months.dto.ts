@@ -16,6 +16,7 @@ export namespace MonthsDto {
     }
     export class Public extends Base {}
   }
+
   export namespace Response {
     type TagName = string
 

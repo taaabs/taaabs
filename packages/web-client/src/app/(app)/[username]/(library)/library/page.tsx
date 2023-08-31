@@ -268,20 +268,6 @@ const Page: React.FC = () => {
                       isSelected: currentOrderBy == OrderBy.Desc,
                     },
                     {
-                      label: _orderByOptionToLabel(OrderBy.Popular),
-                      onClick: () => {
-                        if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
-                          isGettingMonthsData
-                        )
-                          return
-                        setOrderByQueryParam(OrderBy.Popular)
-                        toggleOrderByDropdown()
-                      },
-                      isSelected: currentOrderBy == OrderBy.Popular,
-                    },
-                    {
                       label: _orderByOptionToLabel(OrderBy.Asc),
                       onClick: () => {
                         if (
@@ -294,6 +280,20 @@ const Page: React.FC = () => {
                         toggleOrderByDropdown()
                       },
                       isSelected: currentOrderBy == OrderBy.Asc,
+                    },
+                    {
+                      label: _orderByOptionToLabel(OrderBy.Popular),
+                      onClick: () => {
+                        if (
+                          isGettingFirstBookmarks ||
+                          isGettingMoreBookmarks ||
+                          isGettingMonthsData
+                        )
+                          return
+                        setOrderByQueryParam(OrderBy.Popular)
+                        toggleOrderByDropdown()
+                      },
+                      isSelected: currentOrderBy == OrderBy.Popular,
                     },
                   ]}
                 />
@@ -538,9 +538,9 @@ function _sortByOptionToLabel(sortByOption: SortBy): string {
 function _orderByOptionToLabel(orderByOption: OrderBy): string {
   switch (orderByOption) {
     case OrderBy.Desc:
-      return 'Newest first'
+      return 'Date ↓'
     case OrderBy.Asc:
-      return 'Oldest first'
+      return 'Date ↑'
     case OrderBy.Popular:
       return 'Popularity'
   }
