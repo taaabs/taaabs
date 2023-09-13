@@ -168,7 +168,6 @@
           &__url {
             display: flex;
             flex-direction: column;
-            width: 100%;
             overflow: hidden;
             @include hover {
               @include text-decoration-underline;

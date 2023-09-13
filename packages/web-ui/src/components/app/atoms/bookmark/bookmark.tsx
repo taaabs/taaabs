@@ -95,7 +95,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 </button>
               </div>
               <div className={styles['bookmark__info']}>
-                <span>{props.index + 1}</span>
+                <span>#{props.index + 1}</span>
                 <span>·</span>
                 <span>{dayjs(props.date).fromNow()}</span>
 
