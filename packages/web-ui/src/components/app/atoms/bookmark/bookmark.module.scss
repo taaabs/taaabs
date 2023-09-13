@@ -2,110 +2,115 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  display: grid;
   background: var(--Bookmark-background);
   border: var(--border-secondary);
-  cursor: pointer;
   @include transition-100ms(border-color);
   @include to992 {
-    grid-template-areas:
-      'main main'
-      'link actions';
-    border-left-width: 0px;
-    border-right-width: 0px;
-    grid-template-columns: 1fr auto;
+    border-left: 0;
+    border-right: 0;
   }
   @include at992 {
-    grid-template-areas:
-      'main actions'
-      'link actions';
     border-radius: var(--border-radius-10px);
-    grid-template-columns: 1fr auto;
+    overflow: hidden;
     @include hover {
       border-color: var(--border-color-hover);
     }
   }
-  .main {
-    grid-area: main;
-    display: flex;
-    flex-direction: column;
-    padding-top: var(--distance-12px);
-    padding-left: var(--distance-16px);
-    padding-bottom: var(--distance-10px);
-    @include to992 {
-      padding-right: var(--distance-16px);
-      border-bottom: 1px solid var(--border-color-secondary);
-    }
-    &--has-tags {
-      @include to992 {
-        padding-bottom: var(--distance-3px);
-      }
-      @include at992 {
-        padding-bottom: 0;
-      }
-    }
+  .bookmark {
+    display: grid;
+    grid-template-areas:
+      'title menu'
+      'info info'
+      'links links';
+    grid-template-columns: 1fr auto;
     &__title {
-      display: inline;
-      color: var(--text-color-normal);
-      margin-right: var(--distance-0-6rem);
-      &--starred {
-        padding: var(--distance-0-7rem) var(--distance-0-5rem) 0.28rem
-          var(--distance-0-5rem);
-        margin-left: calc(var(--distance-0-5rem) * -1);
-        margin-right: calc(var(--distance-0-6rem) - var(--distance-0-4rem));
-        background: var(--Bookmark-starred-title-background);
-        box-decoration-break: clone;
-        -webkit-box-decoration-break: clone;
-      }
-      &__saves {
-        display: inline-flex;
-        align-items: center;
-        transform: translateY(-0.2rem);
-        border-radius: var(--border-radius-999px);
-        font-family: var(--font-family-plus-jakarta-sans);
-        font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-        background: var(--Bookmark-saves-background);
-        color: var(--Bookmark-saves-foreground);
-        font-size: var(--font-size-1-4rem);
-        padding: 0 var(--distance-0-9rem);
-        height: var(--distance-2-0rem);
-        margin-right: var(--distance-0-6rem);
-      }
-      &__nsfw {
-        display: inline-flex;
-        align-items: center;
-        color: var(--Bookmark-nsfw-foreground);
-        transform: scale(0.9) translateY(-0.33rem);
-        transform-origin: left;
-        position: relative;
-        font-size: var(--font-size-1-2rem);
-        margin-right: var(--distance-0-1rem);
-        height: var(--distance-2-0rem);
-        background: var(--Bookmark-nsfw-background);
-        padding: 0 var(--distance-0-4rem);
-        border-radius: var(--border-radius-4px);
-        font-family: var(--font-family-plus-jakarta-sans);
-        font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-      }
-      &__text {
-        position: relative;
+      grid-area: title;
+      padding-top: var(--distance-12px);
+      padding-left: var(--distance-16px);
+      &__inner {
         display: inline;
-        font-weight: var(--font-weight-inter-medium);
-        font-size: var(--font-size-1-9rem);
-        margin-bottom: var(--distance-0-8rem);
-        overflow-wrap: anywhere;
+        color: var(--text-color-normal);
+        margin-right: var(--distance-0-6rem);
+        &--starred {
+          padding: var(--distance-0-7rem) var(--distance-0-5rem) 0.28rem
+            var(--distance-0-5rem);
+          margin-left: calc(var(--distance-0-5rem) * -1);
+          margin-right: calc(var(--distance-0-6rem) - var(--distance-0-4rem));
+          background: var(--Bookmark-starred-title-background);
+          box-decoration-break: clone;
+          -webkit-box-decoration-break: clone;
+        }
+        &__nsfw {
+          display: inline-flex;
+          align-items: center;
+          color: var(--Bookmark-nsfw-foreground);
+          transform: scale(0.9) translateY(-0.33rem);
+          transform-origin: left;
+          position: relative;
+          font-size: var(--font-size-1-2rem);
+          margin-right: var(--distance-0-1rem);
+          height: var(--distance-2-0rem);
+          background: var(--Bookmark-nsfw-background);
+          padding: 0 var(--distance-0-4rem);
+          border-radius: var(--border-radius-4px);
+          font-family: var(--font-family-plus-jakarta-sans);
+          font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
+        }
+        &__text {
+          position: relative;
+          display: inline;
+          font-weight: var(--font-weight-inter-medium);
+          font-size: var(--font-size-1-9rem);
+          margin-bottom: var(--distance-0-8rem);
+          overflow-wrap: anywhere;
+          cursor: pointer;
+          @include hover {
+            @include text-decoration-thick-underline;
+          }
+        }
       }
     }
-    &__tags {
+    &__menu {
+      grid-area: menu;
       display: flex;
-      flex-wrap: wrap;
-      gap: var(--distance-8px);
-      margin: var(--distance-6px) 0 var(--distance-8px) 0;
-      &__tag {
+      flex-direction: column;
+      margin-left: var(--distance-8px);
+      margin-right: var(--distance-8px);
+      margin-top: var(--distance-11px);
+      &__button {
         display: flex;
         align-items: center;
-        gap: var(--distance-0-4rem);
-        font-family: var(--font-family-inter-tight);
+        justify-content: center;
+        border-radius: var(--border-radius-999px);
+        @include transition-100ms(background-color);
+        width: var(--button-dimension-28px);
+        height: var(--button-dimension-28px);
+        svg {
+          fill: var(--Bookmark-action-fill) !important;
+          @include transition-100ms(fill);
+          width: var(--icon-dimension-16px);
+          height: var(--icon-dimension-16px);
+        }
+        @include hover {
+          background: var(--Bookmark-action-background-hover);
+          svg {
+            fill: var(--Bookmark-action-fill-hover) !important;
+          }
+        }
+      }
+    }
+    &__info {
+      grid-area: info;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--distance-0-6rem) var(--distance-0-8rem);
+      font-family: var(--font-family-inter-tight);
+      margin: var(--distance-8px) 0 var(--distance-12px) 0;
+      padding: 0 var(--distance-16px);
+      > span {
+        color: var(--text-color-dimmed);
+      }
+      &__tag {
         @include hover {
           > div > span:first-child {
             @include text-decoration-underline;
@@ -126,110 +131,126 @@
         }
       }
     }
-  }
-  .actions {
-    grid-area: actions;
-    display: flex;
-    @include to992 {
-      margin: 0 var(--distance-9px);
-      align-items: flex-end;
-    }
-    @include at992 {
-      flex-direction: column;
-      margin-top: var(--distance-10px);
-      margin-left: var(--distance-8px);
-      margin-right: var(--distance-6px);
-      gap: var(--distance-2px);
-    }
-    &__button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--border-radius-999px);
-      @include transition-100ms(background-color);
-      @include to992 {
-        width: var(--button-dimension-48px);
-        height: var(--button-dimension-48px);
-      }
-      @include at992 {
-        width: var(--button-dimension-28px);
-        height: var(--button-dimension-28px);
-      }
-      &:last-of-type {
-        @include to992 {
-          order: -1;
-        }
-      }
-      svg {
-        fill: var(--Bookmark-action-fill) !important;
-        @include transition-100ms(fill);
-        @include to992 {
-          width: var(--icon-dimension-18px);
-          height: var(--icon-dimension-18px);
-        }
-        @include at992 {
-          width: var(--icon-dimension-16px);
-          height: var(--icon-dimension-16px);
-        }
-      }
-      @include at992 {
-        @include hover {
-          background: var(--Bookmark-action-background-hover);
-          svg {
-            fill: var(--Bookmark-action-fill-hover) !important;
-          }
-        }
-      }
-    }
-  }
-  .link {
-    grid-area: link;
-    @include to992 {
-      overflow: hidden;
-    }
-    &__inner {
-      display: flex;
-      padding-left: var(--distance-16px);
-      @include to992 {
-        height: 100%;
-        align-items: center;
-      }
-      @include at992 {
-        padding-bottom: var(--distance-12px);
-      }
-      &__element {
-        position: relative;
-        word-break: break-all;
-        line-height: 1.2;
-        font-size: var(--font-size-1-5rem);
-        color: var(--Bookmark-link-foreground);
-        @include text-decoration-underline;
-        @include hover {
-          text-decoration: none;
-        }
-        @include to992 {
-          height: 100%;
+    &__links {
+      grid-area: links;
+      &__item {
+        display: flex;
+        gap: var(--distance-8px);
+        justify-content: space-between;
+        padding: var(--distance-10px) var(--distance-12px);
+        background-color: var(--Bookmark-link-background);
+        border-top: var(--border-secondary);
+        &__site {
+          flex: 1;
           display: flex;
           align-items: center;
+          gap: var(--distance-8px);
+          overflow: hidden;
+          &__favicon {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            width: var(--distance-32px);
+            height: var(--distance-32px);
+            background-color: var(--outlined-button-background);
+            border-radius: var(--border-radius-999px);
+            border: var(--border-secondary);
+            @include transition-100ms(border-color);
+            @include hover {
+              border-color: var(--border-color-hover);
+            }
+            > img {
+              width: var(--distance-16px);
+              height: var(--distance-16px);
+            }
+          }
+          &__url {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            overflow: hidden;
+            @include hover {
+              @include text-decoration-underline;
+              text-decoration-color: var(--text-color-dimmed);
+            }
+            span {
+              text-overflow: ellipsis;
+              overflow: hidden;
+            }
+            > span:first-child {
+              color: var(--text-color-normal);
+            }
+            > span:last-child {
+              word-wrap: break-word;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              color: var(--text-color-variant);
+              font-size: var(--font-size-13px);
+            }
+            &:visited {
+              > span:first-child {
+                color: var(--text-color-dimmed);
+              }
+              > span:last-child {
+                color: var(--text-color-dimmed);
+              }
+            }
+          }
         }
-        &:visited {
-          color: var(--Bookmark-link-visited-foreground);
-        }
-        > div > span {
-          position: relative;
-        }
-        > div > span::after {
-          content: '';
-          top: 0.25rem;
-          left: 0;
-          width: 2.1rem;
-          height: 1.7rem;
-          background: url('data:image/svg+xml;utf8,<svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.12431 8.12749C3.4496 8.12749 2.8317 7.96236 2.27062 7.6321C1.71309 7.2983 1.26742 6.85263 0.933616 6.2951C0.60336 5.73402 0.438232 5.11435 0.438232 4.43608C0.438232 3.92827 0.534113 3.45241 0.725874 3.00852C0.917636 2.56108 1.1822 2.16868 1.51955 1.83132C1.85691 1.49396 2.24754 1.2294 2.69143 1.03764C3.13887 0.845881 3.6165 0.75 4.12431 0.75H4.82744V2.55043H4.12431C3.77985 2.55043 3.4638 2.63565 3.17616 2.80611C2.89207 2.97656 2.66479 3.20383 2.49434 3.48793C2.32389 3.77202 2.23866 4.08807 2.23866 4.43608C2.23866 4.78409 2.32211 5.10192 2.48901 5.38956C2.65947 5.67365 2.88674 5.90092 3.17083 6.07138C3.45847 6.24183 3.7763 6.32706 4.12431 6.32706H13.1584V8.12749H4.12431ZM9.94107 12.2024L8.71593 10.9666L12.4606 7.22727L8.71593 3.47727L9.94107 2.25213L14.9162 7.22727L9.94107 12.2024Z" fill="%23171717"/></svg>');
-          background-color: var(--Bookmark-background);
-          background-size: 1.55rem;
-          background-repeat: no-repeat;
-          position: absolute;
-          @include transition-100ms(background-color);
+        &__actions {
+          display: flex;
+          align-items: center;
+          gap: var(--distance-8px);
+          &__open {
+            display: flex;
+            align-items: center;
+            gap: var(--distance-4px);
+            > button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: var(--border-radius-999px);
+              @include transition-100ms(background-color);
+              width: var(--button-dimension-28px);
+              height: var(--button-dimension-28px);
+              svg {
+                fill: var(--Bookmark-link-new-tab-fill) !important;
+                @include transition-100ms(fill);
+                width: var(--icon-dimension-12px);
+              }
+              @include hover {
+                background: var(--Bookmark-link-new-tab-background-hover);
+                svg {
+                  fill: var(--Bookmark-link-new-tab-fill-hover) !important;
+                }
+              }
+            }
+          }
+          &__bookmark {
+            display: flex;
+            gap: var(--distance-6px);
+            align-items: center;
+            height: var(--button-dimension-34px);
+            padding: 0 var(--distance-12px) 0 var(--distance-11px);
+            background-color: var(--Bookmark-saves-background);
+            border-radius: var(--border-radius-999px);
+            @include transition-100ms(background-color);
+            @include hover {
+              background-color: var(--Bookmark-saves-background-hover);
+            }
+            span {
+              color: var(--Bookmark-saves-foreground);
+              font-family: var(--font-family-plus-jakarta-sans);
+              font-weight: var(--font-weight-plus-jakarta-sans-bold);
+              font-size: var(--font-size-14px);
+            }
+            svg {
+              height: var(--icon-dimension-16px);
+              fill: var(--Bookmark-saves-foreground) !important;
+            }
+          }
         }
       }
     }

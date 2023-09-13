@@ -93,19 +93,19 @@ export const Primary = () => {
 const bookmark = (
   <div style={{ marginBottom: 'var(--distance-8px)' }}>
     <Bookmark
-      isStarred={false}
+      is_starred={false}
       title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
       url="https://example.com/test/lorem_ipsum"
-      isNsfw={true}
+      is_nsfw={true}
       tags={[
         { name: 'foo', yields: 100 },
         { name: 'bar', isSelected: true },
       ]}
       saves={3400}
-      onTagClick={() => {}}
-      onClick={() => {}}
-      onMenuClick={() => {}}
-      onSelectedTagClick={() => {}}
+      on_tag_click={() => {}}
+      on_click={() => {}}
+      on_menu_click={() => {}}
+      on_selected_tag_click={() => {}}
     />
   </div>
 )

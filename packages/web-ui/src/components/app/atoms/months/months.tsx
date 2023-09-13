@@ -332,13 +332,32 @@ export const Months: React.FC<Months.Props> = memo(
           <div className={styles.graph__recharts}>
             <ResponsiveContainer width={'100%'} height={135} key={key}>
               <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
+                <defs>
+                  <linearGradient
+                    id="bookmarkCount"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop
+                      offset="5%"
+                      stopColor="var(--Months-chart-fill)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--Months-chart-fill)"
+                      stopOpacity={0}
+                    />
+                  </linearGradient>
+                </defs>
                 <Area
                   type="basis"
                   dataKey="bookmarkCount"
                   strokeWidth={0}
-                  fill="var(--Months-chart-fill)"
-                  fillOpacity={bookmarkCount == 0 ? 0 : 1}
-                  animationDuration={0}
+                  fill="url(#bookmarkCount)"
+                  isAnimationActive={false}
                 />
                 <Area
                   type="basis"
@@ -346,15 +365,15 @@ export const Months: React.FC<Months.Props> = memo(
                   strokeWidth={0}
                   fill="var(--Months-chart-starred-fill)"
                   fillOpacity={starredCount == 0 ? 0 : 1}
-                  animationDuration={0}
+                  isAnimationActive={false}
                 />
                 <Area
                   type="basis"
                   dataKey="bookmarkCount"
                   strokeWidth={2}
                   stroke="var(--Months-chart-stroke)"
+                  isAnimationActive={false}
                   fill="transparent"
-                  animationDuration={0}
                   strokeOpacity={bookmarkCount == 0 ? 0 : 1}
                 />
                 <Area
@@ -363,7 +382,7 @@ export const Months: React.FC<Months.Props> = memo(
                   strokeWidth={2}
                   stroke="var(--Months-chart-nsfw-stroke)"
                   fill="transparent"
-                  animationDuration={0}
+                  isAnimationActive={false}
                   strokeOpacity={nsfwCount == 0 ? 0 : 1}
                 />
                 <YAxis tickCount={1} width={0} />

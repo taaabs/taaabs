@@ -14,6 +14,7 @@ import ThreeDots from '@web-ui/assets/icons/three-dots.svg'
 import Logo from '@web-ui/assets/icons/logo.svg'
 import MobileTitleBarMenu from '@web-ui/assets/icons/mobile-title-bar-menu.svg'
 import MobileTitleBarViewOptions from '@web-ui/assets/icons/mobile-title-bar-view-options.svg'
+import NewTab from '@web-ui/assets/icons/new-tab.svg'
 import Notifications from '@web-ui/assets/icons/notifications.svg'
 import UserAdd from '@web-ui/assets/icons/user-add.svg'
 import UserRemove from '@web-ui/assets/icons/user-remove.svg'
@@ -37,6 +38,7 @@ export namespace Icon {
     | 'LOGO'
     | 'MOBILE_TITLE_BAR_MENU'
     | 'MOBILE_TITLE_BAR_VIEW_OPTIONS'
+    | 'NEW_TAB'
     | 'NOTIFICATIONS'
     | 'USER_ADD'
     | 'USER_REMOVE'
@@ -77,6 +79,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'MOBILE_TITLE_BAR_VIEW_OPTIONS':
       icon = <MobileTitleBarViewOptions style={{ fill: 'var(--Icon-fill)' }} />
+      break
+    case 'NEW_TAB':
+      icon = <NewTab style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'NOTIFICATIONS':
       icon = <Notifications style={{ fill: 'var(--Icon-fill)' }} />

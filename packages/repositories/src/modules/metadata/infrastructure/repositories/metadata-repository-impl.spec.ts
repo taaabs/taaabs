@@ -30,7 +30,6 @@ describe('MetadataRepositoryImpl', () => {
         isEmailConfirmed: true,
         registeredAt: now,
         displayName: 'Test',
-        avatar: null,
       }
       metadataDataSourceMock.getAuthorized.mockResolvedValue(dto)
       const sut = new MetadataRepositoryImpl(metadataDataSourceMock)
@@ -47,10 +46,10 @@ describe('MetadataRepositoryImpl', () => {
         meta_description: 'Test test',
       }
       const ro: MetadataRo.Public = {
+        avatar: undefined,
         username: 'test',
         displayName: 'Test',
         metaDescription: 'Test test',
-        avatar: null,
       }
       metadataDataSourceMock.getPublic.mockResolvedValue(dto)
       const sut = new MetadataRepositoryImpl(metadataDataSourceMock)

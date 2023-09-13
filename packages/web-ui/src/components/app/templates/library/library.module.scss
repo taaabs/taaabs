@@ -148,13 +148,18 @@
     &__skeleton {
       display: flex;
       flex-direction: column;
-      gap: var(--distance-8px);
       position: relative;
       z-index: 0;
+      @include to992 {
+        gap: var(--distance-8px);
+      }
+      @include at992 {
+        gap: var(--distance-16px);
+      }
       > span > span {
-        height: 153px;
+        height: 158px;
         @include at992 {
-          height: 107px;
+          height: 136px;
           border-radius: var(--border-radius-10px);
         }
       }
@@ -164,7 +169,12 @@
         margin-top: var(--distance-8px);
       }
       > div {
-        margin-bottom: var(--distance-8px);
+        @include to992 {
+          margin-bottom: var(--distance-8px);
+        }
+        @include at992 {
+          margin-bottom: var(--distance-16px);
+        }
       }
       &--loading {
         opacity: 0.5;

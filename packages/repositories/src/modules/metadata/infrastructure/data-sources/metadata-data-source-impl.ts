@@ -6,16 +6,14 @@ export class MetadataDataSourceImpl implements MetadataDataSource {
   constructor(private readonly _apiUrl: string) {}
 
   public async getAuthorized(): Promise<MetadataDto.Response.Authorized> {
-    const response = await fetch(`${this._apiUrl}/v1/metadata`)
-    return await response.json()
+    return fetch(`${this._apiUrl}/v1/metadata`).then((r) => r.json())
   }
 
   public async getPublic(
     params: MetadataParams.Public,
   ): Promise<MetadataDto.Response.Public> {
-    const response = await fetch(
-      `${this._apiUrl}/v1/metadata/${params.username}`,
+    return fetch(`${this._apiUrl}/v1/metadata/${params.username}`).then((r) =>
+      r.json(),
     )
-    return await response.json()
   }
 }

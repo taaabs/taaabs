@@ -1,7 +1,7 @@
 import { PaginatedResponseDto } from '../../common/paginated-response.dto'
 import { ApiProperty } from '@nestjs/swagger'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
-import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
+import { Order } from '@shared/types/modules/bookmarks/order'
 import { PaginationQueryParamsDto } from '@shared/types/common/pagination-options.dto'
 import { Type } from 'class-transformer'
 import { ToBoolean } from '@shared/decorators/to-boolean'
@@ -29,7 +29,7 @@ export namespace BookmarksDto {
 
       public sort_by?: SortBy = BookmarksFetchingDefaults.Common.sortBy
 
-      public order_by?: OrderBy = BookmarksFetchingDefaults.Common.orderBy
+      public order?: Order = BookmarksFetchingDefaults.Common.order
 
       public filter?: LibraryFilter = BookmarksFetchingDefaults.Common.filter
     }
@@ -44,6 +44,11 @@ export namespace BookmarksDto {
   }
 
   export namespace Response {
+    class Link {
+      public url: string
+      public saves: number
+    }
+
     class Tag {
       public name: string
       public id: number
@@ -52,14 +57,13 @@ export namespace BookmarksDto {
     class Bookmark {
       public id: string
       public title: string
+      public links: Link[]
       public note?: string
-      public url: string
       public created_at: string
-      public tags?: Tag[]
-      public site_path?: string
+      public updated_at: string
+      public tags: Tag[]
       public is_starred?: boolean
       public is_nsfw?: boolean
-      public saves?: number
     }
 
     class AuthorizedBookmark extends Bookmark {

@@ -17,14 +17,16 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
         return {
           id: bookmark.id,
           createdAt: bookmark.created_at,
-          text: bookmark.note,
+          updatedAt: bookmark.updated_at,
+          note: bookmark.note,
           title: bookmark.title,
           isNsfw: bookmark.is_nsfw || false,
           isStarred: bookmark.is_starred || false,
-          saves: bookmark.saves || 0,
-          tags: bookmark.tags,
-          url: bookmark.url,
-          sitePath: bookmark.site_path,
+          tags: bookmark.tags.map((tag) => ({ id: tag.id, name: tag.name })),
+          links: bookmark.links.map((link) => ({
+            url: link.url,
+            saves: link.saves,
+          })),
           isPublic: bookmark.is_public || false,
         }
       }),
@@ -44,14 +46,16 @@ export class BookmarksRepositoryImpl implements BookmarksRepository {
       bookmarks: bookmarks.map((bookmark) => ({
         id: bookmark.id,
         createdAt: bookmark.created_at,
+        updatedAt: bookmark.updated_at,
         note: bookmark.note,
         title: bookmark.title,
         isNsfw: bookmark.is_nsfw || false,
         isStarred: bookmark.is_starred || false,
-        saves: bookmark.saves || 0,
-        tags: bookmark.tags,
-        url: bookmark.url,
-        sitePath: bookmark.site_path,
+        tags: bookmark.tags.map((tag) => ({ id: tag.id, name: tag.name })),
+        links: bookmark.links.map((link) => ({
+          url: link.url,
+          saves: link.saves,
+        })),
       })),
       pagination: {
         hasMore: pagination.hasMore,

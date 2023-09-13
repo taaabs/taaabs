@@ -49,11 +49,9 @@
     letter-spacing: var(--letter-spacing-logo);
     font-size: var(--font-size-23px);
     padding-left: var(--distance-7px);
-    margin-bottom: var(--distance-2px);
     @include at992 {
       font-size: var(--font-size-28px);
       padding-left: var(--distance-9px);
-      margin-bottom: var(--distance-4px);
     }
   }
 }

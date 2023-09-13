@@ -7,13 +7,6 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
 import { monthsActions } from '@repositories/stores/user-public/library/months/months.slice'
 
-enum SessionStorageKey {
-  QueryParams = 'queryParams',
-  MonthsData = 'monthsData',
-  TagsOfBookmarkCreation = 'tagsOfBookmarkCreation',
-  TagsOfUrlCreation = 'tagsOfUrlCreation',
-}
-
 export const useMonths = () => {
   const queryParams = useShallowSearchParams()
   const params = useParams()
@@ -21,10 +14,8 @@ export const useMonths = () => {
   const {
     monthsData,
     monthsOfBookmarkCreation,
-    monthsOfUrlCreation,
     isGettingMonthsData,
     tagsOfBookmarkCreation,
-    tagsOfUrlCreation,
   } = useLibrarySelector((state) => state.months)
   const { bookmarks } = useLibrarySelector((state) => state.bookmarks)
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
@@ -111,12 +102,8 @@ export const useMonths = () => {
         `tagsOfBookmarkCreation_${queryParams.toString()}`,
         JSON.stringify(tagsOfBookmarkCreation),
       )
-      sessionStorage.setItem(
-        `tagsOfUrlCreation_${queryParams.toString()}`,
-        JSON.stringify(tagsOfUrlCreation),
-      )
     }
-  }, [monthsData, tagsOfBookmarkCreation, tagsOfUrlCreation])
+  }, [monthsData, tagsOfBookmarkCreation])
 
   useEffect(() => {
     const monthsData = sessionStorage.getItem(
@@ -132,14 +119,11 @@ export const useMonths = () => {
         `tagsOfUrlCreation_${queryParams.toString()}`,
       )
 
-      if (tagsOfBookmarkCreation && tagsOfUrlCreation) {
+      if (tagsOfBookmarkCreation) {
         dispatch(
           monthsActions.setTagsOfBookmarkCreation(
             JSON.parse(tagsOfBookmarkCreation),
           ),
-        )
-        dispatch(
-          monthsActions.setTagsOfUrlCreation(JSON.parse(tagsOfUrlCreation)),
         )
       }
     } else {
@@ -147,9 +131,6 @@ export const useMonths = () => {
     }
 
     return () => {
-      // sessionStorage.removeItem(SessionStorageKey.MonthsData)
-      // sessionStorage.removeItem(SessionStorageKey.TagsOfBookmarkCreation)
-      // sessionStorage.removeItem(SessionStorageKey.TagsOfUrlCreation)
       for (const key in sessionStorage) {
         if (key.substring(0, 10) == 'monthsData') {
           sessionStorage.removeItem(key)
@@ -164,10 +145,8 @@ export const useMonths = () => {
 
   return {
     monthsOfBookmarkCreation,
-    monthsOfUrlCreation,
     isGettingMonthsData,
     tagsOfBookmarkCreation,
-    tagsOfUrlCreation,
     selectedTags,
   }
 }

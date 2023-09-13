@@ -33,13 +33,13 @@ export namespace MonthsDto {
     class PublicMonth extends Month {}
 
     export class Authorized {
-      public months_of_bookmark_creation: Record<string, AuthorizedMonth>
-      public months_of_url_creation: Record<string, AuthorizedMonth>
+      public created_at: Record<string, AuthorizedMonth>
+      public updated_at: Record<string, AuthorizedMonth>
       public is_months_update_scheduled: boolean
     }
     export class Public {
-      public months_of_bookmark_creation: Record<string, PublicMonth>
-      public months_of_url_creation: Record<string, PublicMonth>
+      public created_at: Record<string, PublicMonth>
+      public updated_at: Record<string, PublicMonth>
       public is_months_update_scheduled: boolean
     }
   }

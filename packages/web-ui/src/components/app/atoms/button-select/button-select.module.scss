@@ -10,7 +10,7 @@
   border-radius: var(--border-radius-10px);
   border: var(--border-secondary);
   padding: 0 var(--distance-13px) 0 var(--distance-12px);
-  background-color: var(--ButtonSelect-background);
+  background-color: var(--outlined-button-background);
   @include transition-100ms(border-color);
   @include hover {
     border-color: var(--border-color-hover);

@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import { LibraryStoreProvider } from './library-store-provider'
+import { ReactNode } from 'react'
 
 const Layout: React.FC<{
-  children: React.ReactNode
+  children: ReactNode
 }> = async ({ children }) => {
   return <LibraryStoreProvider>{children}</LibraryStoreProvider>
 }

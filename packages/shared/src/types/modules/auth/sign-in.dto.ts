@@ -1,10 +1,10 @@
 export namespace SignInDto {
   export class Request {
-    email: string
-    password: string
+    public email: string
+    public password: string
   }
 
   export class Response {
-    accessToken: string
+    public access_token: string
   }
 }

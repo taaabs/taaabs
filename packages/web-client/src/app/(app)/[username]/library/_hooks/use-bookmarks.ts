@@ -5,15 +5,9 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
-import { OrderBy } from '@shared/types/modules/bookmarks/order-by'
+import { Order } from '@shared/types/modules/bookmarks/order'
 import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
 import { bookmarksActions } from '@repositories/stores/user-public/library/bookmarks/bookmarks.slice'
-
-enum SessionStorageKey {
-  Bookmarks = 'bookmarks',
-  HasMoreBookmarks = 'hasMoreBookmarks',
-  QueryParams = 'queryParams',
-}
 
 export const useBookmarks = () => {
   const queryParams = useShallowSearchParams()
@@ -26,7 +20,7 @@ export const useBookmarks = () => {
   const [lastQueryCatId, setLastQueryCatId] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
   const [lastQueryOrderBy, setLastQuerySortBy] = useState<string | null>(null)
-  const [lastQueryOrder, setLastQueryOrderBy] = useState<string | null>(null)
+  const [lastQueryOrder, setLastQueryOrder] = useState<string | null>(null)
   const [lastQueryYyyymmGte, setLastQueryYyyymmGte] = useState<string | null>(
     null,
   )
@@ -68,11 +62,10 @@ export const useBookmarks = () => {
       getBookmarksParams.sortBy = Object.values(SortBy)[parseInt(querySortBy)]
     }
 
-    const queryOrderBy = queryParams.get('o')
-    setLastQueryOrderBy(queryOrderBy)
-    if (queryOrderBy) {
-      getBookmarksParams.orderBy =
-        Object.values(OrderBy)[parseInt(queryOrderBy)]
+    const queryOrder = queryParams.get('o')
+    setLastQueryOrder(queryOrder)
+    if (queryOrder) {
+      getBookmarksParams.order = Object.values(Order)[parseInt(queryOrder)]
     }
 
     const queryYyyymmGte = queryParams.get('gte')
@@ -105,16 +98,17 @@ export const useBookmarks = () => {
     const queryCategoryId = queryParams.get('c')
     const queryFilter = queryParams.get('f')
     const querySortBy = queryParams.get('s')
-    const queryOrderBy = queryParams.get('o')
+    const queryOrder = queryParams.get('o')
     const queryYyyyGte = queryParams.get('gte')
     const queryYyyyLte = queryParams.get('lte')
 
     if (
+      queryParams.size == 0 ||
       queryTags != lastQueryTags ||
       queryCategoryId != lastQueryCatId ||
       queryFilter != lastQueryFilter ||
       querySortBy != lastQueryOrderBy ||
-      queryOrderBy != lastQueryOrder ||
+      queryOrder != lastQueryOrder ||
       queryYyyyGte != lastQueryYyyymmGte ||
       queryYyyyLte != lastQueryYyyymmLte
     ) {
@@ -153,8 +147,6 @@ export const useBookmarks = () => {
     }
 
     return () => {
-      // sessionStorage.removeItem(SessionStorageKey.Bookmarks)
-      // sessionStorage.removeItem(SessionStorageKey.HasMoreBookmarks)
       for (const key in sessionStorage) {
         if (key.substring(0, 9) == 'bookmarks') {
           sessionStorage.removeItem(key)

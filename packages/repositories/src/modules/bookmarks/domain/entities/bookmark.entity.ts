@@ -3,13 +3,12 @@ export namespace BookmarkEntity {
     id: string
     title: string
     note?: string
-    url: string
     createdAt: string
-    tags?: { name: string; id: number }[]
-    sitePath?: string
+    updatedAt: string
+    tags: { name: string; id: number }[]
+    links: { url: string; saves: number }[]
     isStarred: boolean
     isNsfw: boolean
-    saves: number
     renderHeight?: number
   }
 

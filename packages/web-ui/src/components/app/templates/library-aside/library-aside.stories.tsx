@@ -4,6 +4,6 @@ export default {
   component: LibraryAside,
 }
 
-// export const Primary = () => {
-//   return <LibraryAside />
-// }
+export const Primary = () => {
+  return <LibraryAside />
+}

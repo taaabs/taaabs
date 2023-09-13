@@ -13,7 +13,7 @@ export default {
 export const Primary = () => {
   return (
     <Settings
-      headerSlot={<Header title="settings" backHref="" />}
+      headerSlot={<Header title="Settings" backHref="" />}
       desktopNavigationSlot={
         <>
           <DesktopMenuItem href="" isActive={true} label="Account" />

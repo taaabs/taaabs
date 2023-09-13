@@ -6,7 +6,7 @@
   border-radius: var(--border-radius-10px);
   border-bottom-left-radius: 13px;
   border-bottom-right-radius: 13px;
-  box-shadow: inset 0px 0px 0px 1px var(--border-color-secondary);
+  border: var(--border-secondary);
   overflow: hidden;
   height: 160px;
   display: flex;

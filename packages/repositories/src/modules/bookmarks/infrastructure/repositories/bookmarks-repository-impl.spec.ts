@@ -25,9 +25,10 @@ describe('BookmarksRepositoryImpl', () => {
           {
             id: '1',
             created_at: now,
-            saves: 1,
+            updated_at: now,
             title: 'test',
-            url: exampleUrl,
+            links: [],
+            tags: [],
           },
         ],
         pagination: {
@@ -39,13 +40,14 @@ describe('BookmarksRepositoryImpl', () => {
           {
             id: '1',
             createdAt: now,
+            updatedAt: now,
             isNsfw: false,
             isPublic: false,
             isStarred: false,
-            saves: 1,
-            tags: {},
             title: 'test',
-            url: exampleUrl,
+            note: undefined,
+            tags: [],
+            links: [],
           },
         ],
         pagination: {
@@ -68,9 +70,10 @@ describe('BookmarksRepositoryImpl', () => {
           {
             id: '1',
             created_at: now,
-            saves: 1,
+            updated_at: now,
             title: 'test',
-            url: exampleUrl,
+            links: [],
+            tags: [],
           },
         ],
         pagination: {
@@ -82,12 +85,13 @@ describe('BookmarksRepositoryImpl', () => {
           {
             id: '1',
             createdAt: now,
+            updatedAt: now,
             isNsfw: false,
             isStarred: false,
-            saves: 1,
-            tags: {},
             title: 'test',
-            url: exampleUrl,
+            note: undefined,
+            tags: [],
+            links: [],
           },
         ],
         pagination: {

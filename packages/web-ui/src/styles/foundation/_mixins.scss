@@ -71,3 +71,8 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 0.13em;
 }
+@mixin text-decoration-thick-underline {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.13em;
+}

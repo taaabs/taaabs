@@ -8,7 +8,8 @@
   align-self: flex-start;
   color: var(--plain-white);
   background: var(--Button-background);
-  font-weight: var(--font-weight-inter-semi-bold);
+  font-family: var(--font-family-plus-jakarta-sans);
+  font-weight: var(--font-weight-plus-jakarta-sans-bold);
   @include transition-100ms(background-color);
   border-radius: var(--border-radius-999px);
   @include hover {

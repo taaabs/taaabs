@@ -10,16 +10,8 @@ const Page: React.FC = () => {
     <>
       <SettingBox>
         <SettingHeading
-          heading="Email"
-          subheading="This is the email we will use to send you notifications."
-        />
-        <Input value="Lorem ipsum" onChange={(e) => {}} />
-        <Button size="default">Save</Button>
-      </SettingBox>
-      <SettingBox>
-        <SettingHeading
           heading="Username"
-          subheading="The username determines the default link of your Taaabs profile."
+          subheading="The username determines the default link of your public profile."
         />
         <Input value="Lorem ipsum" onChange={(e) => {}} />
         <Button size="default">Save</Button>

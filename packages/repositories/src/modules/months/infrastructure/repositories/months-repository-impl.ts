@@ -13,7 +13,7 @@ export class MonthsRepositoryImpl implements MonthsRepository {
 
     return {
       monthsOfBookmarkCreation: Object.entries(
-        data.months_of_bookmark_creation,
+        data.created_at,
       ).reduce<MonthsRo.Authorized['monthsOfBookmarkCreation']>(
         (acc, [k, v]) => ({
           ...acc,
@@ -27,7 +27,7 @@ export class MonthsRepositoryImpl implements MonthsRepository {
         }),
         {},
       ),
-      monthsOfUrlCreation: Object.entries(data.months_of_url_creation).reduce<
+      monthsOfUrlCreation: Object.entries(data.updated_at).reduce<
         MonthsRo.Authorized['monthsOfUrlCreation']
       >(
         (acc, [k, v]) => ({
@@ -53,7 +53,7 @@ export class MonthsRepositoryImpl implements MonthsRepository {
 
     return {
       monthsOfBookmarkCreation: Object.entries(
-        data.months_of_bookmark_creation,
+        data.created_at,
       ).reduce<MonthsRo.Public['monthsOfBookmarkCreation']>(
         (acc, [k, v]) => ({
           ...acc,
@@ -66,7 +66,7 @@ export class MonthsRepositoryImpl implements MonthsRepository {
         }),
         {},
       ),
-      monthsOfUrlCreation: Object.entries(data.months_of_url_creation).reduce<
+      monthsOfUrlCreation: Object.entries(data.updated_at).reduce<
         MonthsRo.Public['monthsOfUrlCreation']
       >(
         (acc, [k, v]) => ({

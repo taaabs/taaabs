@@ -1,25 +1,28 @@
 import { Icon } from '@web-ui/components/common/particles/icon'
-import TextTruncate from 'react-text-truncate'
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
-import { memo, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
 
 export namespace Bookmark {
   export type Props = {
+    index: number
     id: string
     title: string
-    url: string
-    sitePath?: string
-    onTagClick: (tagId: number) => void
-    onSelectedTagClick: (tagId: number) => void
+    date: Date
+    on_tag_click: (tagId: number) => void
+    on_selected_tag_click: (tagId: number) => void
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
-    saves: number
-    onClick: () => void
-    onMenuClick: () => void
-    isNsfw?: boolean
-    isStarred?: boolean
-    renderHeight?: number
+    on_click: () => void
+    on_menu_click: () => void
+    is_nsfw?: boolean
+    is_starred?: boolean
+    links: { url: string; sitePath?: string; saves: number }[]
+    render_height?: number
   }
 }
 
@@ -31,14 +34,24 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
     const isVisible = useViewportSpy(ref)
 
+    useEffect(() => {
+      if (renderHeight) return
+
+      setRenderHeight(ref.current!.clientHeight)
+      sessionStorage.setItem(
+        `renderHeight_${props.id}`,
+        ref.current!.clientHeight.toString(),
+      )
+    }, [])
+
     return (
       <div
         ref={ref}
         style={{
           height: renderHeight
             ? renderHeight
-            : props.renderHeight
-            ? props.renderHeight
+            : props.render_height
+            ? props.render_height
             : undefined,
         }}
       >
@@ -46,108 +59,147 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           <div
             className={styles.container}
             role="button"
-            onClick={props.onClick}
+            onClick={props.on_click}
           >
-            <div
-              className={cn([
-                styles.main,
-                { [styles['main--has-tags']]: props.tags.length > 0 },
-              ])}
-            >
-              <div>
+            <div className={styles.bookmark}>
+              <div className={styles.bookmark__title}>
                 <div
-                  className={cn(styles.main__title, {
-                    [styles['main__title--starred']]: props.isStarred,
+                  className={cn(styles.bookmark__title__inner, {
+                    [styles['bookmark__title__inner--starred']]:
+                      props.is_starred,
                   })}
                 >
-                  <div className={styles.main__title__saves}>{props.saves}</div>
-                  {props.isNsfw && (
-                    <div className={styles.main__title__nsfw}>NSFW</div>
+                  {props.is_nsfw && (
+                    <div className={styles.bookmark__title__inner__nsfw}>
+                      NSFW
+                    </div>
                   )}
-                  <div className={styles.main__title__text}>{props.title}</div>
+                  <div
+                    className={styles.bookmark__title__inner__text}
+                    role="button"
+                    onClick={() => {}}
+                  >
+                    {props.title}
+                  </div>
                 </div>
               </div>
-              {props.tags.length > 0 && (
-                <div className={styles['main__tags']}>
-                  {props.tags.map((tag) => (
-                    <button
-                      className={styles['main__tags__tag']}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        if (tag.isSelected) {
-                          props.onSelectedTagClick(tag.id)
-                        } else {
-                          props.onTagClick(tag.id)
-                        }
-                      }}
-                      key={tag.id}
-                    >
-                      <div>
-                        <span
-                          className={cn([
-                            styles.main__tags__tag__name,
-                            {
-                              [styles['main__tags__tag__name--selected']]:
-                                tag.isSelected,
-                            },
-                          ])}
-                        >
-                          {tag.name.replaceAll('-', ' ')}
-                        </span>
-                        {tag.yields && (
-                          <span className={styles.main__tags__tag__yields}>
-                            {tag.yields}
-                          </span>
-                        )}
-                        {tag.isSelected && (
-                          <span className={styles.main__tags__tag__yields}>
-                            ×
-                          </span>
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className={styles.actions}>
-              <button
-                className={styles.actions__button}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  props.onMenuClick()
-                }}
-              >
-                <Icon variant="THREE_DOTS" />
-              </button>
-              <button className={styles.actions__button}>
-                <Icon variant="BOOKMARK" />
-              </button>
-            </div>
-
-            <div className={styles.link}>
-              <div className={styles.link__inner}>
-                <a
-                  className={styles.link__inner__element}
+              <div className={styles.bookmark__menu}>
+                <button
+                  className={styles.bookmark__menu__button}
                   onClick={(e) => {
                     e.stopPropagation()
+                    props.on_menu_click()
                   }}
-                  href={props.url}
                 >
-                  <TextTruncateMemo
-                    text={'⠀⠀' + _displayUrl(props.url)}
-                    onCalculated={() => {
-                      if (renderHeight) return
+                  <Icon variant="THREE_DOTS" />
+                </button>
+              </div>
+              <div className={styles['bookmark__info']}>
+                <span>{props.index + 1}</span>
+                <span>·</span>
+                <span>{dayjs(props.date).fromNow()}</span>
 
-                      setRenderHeight(ref.current!.clientHeight)
-                      sessionStorage.setItem(
-                        `renderHeight_${props.id}`,
-                        ref.current!.clientHeight.toString(),
-                      )
-                    }}
-                  />
-                </a>
+                {props.tags.length > 0 && (
+                  <>
+                    <span>·</span>
+                    {props.tags.map((tag) => (
+                      <button
+                        className={styles['bookmark__info__tag']}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (tag.isSelected) {
+                            props.on_selected_tag_click(tag.id)
+                          } else {
+                            props.on_tag_click(tag.id)
+                          }
+                        }}
+                        key={tag.id}
+                      >
+                        <div>
+                          <span
+                            className={cn([
+                              styles['bookmark__info__tag__name'],
+                              {
+                                [styles['bookmark__info__tag__name--selected']]:
+                                  tag.isSelected,
+                              },
+                            ])}
+                          >
+                            {tag.name.replaceAll('-', ' ')}
+                          </span>
+                          {tag.yields && (
+                            <span
+                              className={styles['bookmark__info__tag__yields']}
+                            >
+                              {tag.yields}
+                            </span>
+                          )}
+                          {tag.isSelected && (
+                            <span
+                              className={styles['bookmark__info__tag__yields']}
+                            >
+                              ×
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </>
+                )}
+              </div>
+              <div className={styles.bookmark__links}>
+                {props.links.map((link) => (
+                  <div className={styles.bookmark__links__item}>
+                    <div className={styles.bookmark__links__item__site}>
+                      <button
+                        className={styles.bookmark__links__item__site__favicon}
+                      >
+                        <img
+                          src={`https://icons.bitwarden.net/${_urlDomain(
+                            link.url,
+                          )}/icon.png`}
+                        />
+                      </button>
+                      <a
+                        className={styles.bookmark__links__item__site__url}
+                        href={link.url}
+                      >
+                        <span>
+                          {`${_urlDomain(link.url)} ${
+                            link.sitePath ? `› ${link.sitePath}` : ''
+                          }`}
+                        </span>
+                        <span>
+                          {_urlPath({
+                            url: link.url,
+                            sitePath: link.sitePath,
+                          })}
+                        </span>
+                      </a>
+                    </div>
+                    <div className={styles.bookmark__links__item__actions}>
+                      <div
+                        className={styles.bookmark__links__item__actions__open}
+                      >
+                        <button
+                          onClick={() => {
+                            window.open(link.url, '_blank')
+                          }}
+                        >
+                          <Icon variant="NEW_TAB" />
+                        </button>
+                      </div>
+                      <button
+                        className={
+                          styles.bookmark__links__item__actions__bookmark
+                        }
+                      >
+                        <span>{link.saves}</span>
+                        <Icon variant="BOOKMARK" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -157,25 +209,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       </div>
     )
   },
-  (o, n) => o.url == n.url && JSON.stringify(o.tags) == JSON.stringify(n.tags),
+  (o, n) => JSON.stringify(o.tags) == JSON.stringify(n.tags),
 )
 
-const TextTruncateMemo: React.FC<{ onCalculated: () => void; text: string }> =
-  memo(
-    (props) => {
-      return (
-        <TextTruncate
-          line={2}
-          text={props.text}
-          truncateText="…"
-          onCalculated={props.onCalculated}
-        />
-      )
-    },
-    (o, n) => o.text == n.text,
-  )
-
-function _displayUrl(url: string): string {
+function _urlDomain(url: string): string {
   let parsedUrl = ''
   if (url.substring(0, 12) == 'https://www.') {
     parsedUrl = url.substring(12)
@@ -189,11 +226,28 @@ function _displayUrl(url: string): string {
     parsedUrl = url
   }
 
+  return parsedUrl.split('/')[0]
+}
+
+function _urlPath(params: { url: string; sitePath?: string }): string {
+  let parsedUrl = params.url.replace('://', '').split('?')[0]
+
   if (parsedUrl.substring(parsedUrl.length - 1, parsedUrl.length) == '/') {
     parsedUrl = parsedUrl.substring(0, parsedUrl.length - 1)
   }
 
-  if (parsedUrl.substring(parsedUrl.length - 5, parsedUrl.length) == '.html') {
+  if (
+    parsedUrl.substring(parsedUrl.length - 11, parsedUrl.length) ==
+    '/index.html'
+  ) {
+    parsedUrl = parsedUrl.substring(0, parsedUrl.length - 11)
+  } else if (
+    parsedUrl.substring(parsedUrl.length - 10, parsedUrl.length) == '/index.htm'
+  ) {
+    parsedUrl = parsedUrl.substring(0, parsedUrl.length - 10)
+  } else if (
+    parsedUrl.substring(parsedUrl.length - 5, parsedUrl.length) == '.html'
+  ) {
     parsedUrl = parsedUrl.substring(0, parsedUrl.length - 5)
   } else if (
     parsedUrl.substring(parsedUrl.length - 4, parsedUrl.length) == '.htm'
@@ -201,5 +255,14 @@ function _displayUrl(url: string): string {
     parsedUrl = parsedUrl.substring(0, parsedUrl.length - 4)
   }
 
-  return parsedUrl.split('?')[0].split('/').join(' › ')
+  const parsedUrlArr = parsedUrl.split('/')
+  parsedUrlArr.shift()
+
+  parsedUrl = parsedUrlArr.join('/')
+
+  if (params.sitePath && parsedUrl.startsWith(params.sitePath)) {
+    parsedUrl = parsedUrl.substring(params.sitePath.length + 1)
+  }
+
+  return parsedUrl.split('/').join(' › ')
 }

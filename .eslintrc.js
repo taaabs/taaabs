@@ -27,25 +27,25 @@ module.exports = {
       },
     ],
     'no-console': ['warn'],
-    '@typescript-eslint/naming-convention': [
-      'warn',
-      {
-        selector: 'memberLike',
-        modifiers: ['private'],
-        format: ['camelCase'],
-        leadingUnderscore: 'require',
-      },
-      {
-        selector: 'function',
-        format: ['camelCase'],
-        leadingUnderscore: 'require',
-      },
-      {
-        selector: 'function',
-        modifiers: ['exported'],
-        format: ['camelCase'],
-        leadingUnderscore: 'forbid',
-      },
-    ],
+    // '@typescript-eslint/naming-convention': [
+    //   'warn',
+    //   {
+    //     selector: 'memberLike',
+    //     modifiers: ['private'],
+    //     format: ['camelCase'],
+    //     leadingUnderscore: 'require',
+    //   },
+    //   {
+    //     selector: 'function',
+    //     format: ['camelCase'],
+    //     leadingUnderscore: 'require',
+    //   },
+    //   {
+    //     selector: 'function',
+    //     modifiers: ['exported'],
+    //     format: ['camelCase'],
+    //     leadingUnderscore: 'forbid',
+    //   },
+    // ],
   },
 }

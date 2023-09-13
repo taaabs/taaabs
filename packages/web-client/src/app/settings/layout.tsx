@@ -5,7 +5,7 @@ import { DynamicDesktopNavigation } from './DynamicDesktopNavigation'
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
     <Settings
-      headerSlot={<Header backHref="/" title="settings" />}
+      headerSlot={<Header backHref="/" title="Settings" />}
       desktopNavigationSlot={<DynamicDesktopNavigation />}
       mobileNavigationSlot={'nav'}
       mainSlot={children}

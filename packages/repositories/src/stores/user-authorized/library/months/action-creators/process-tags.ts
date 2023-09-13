@@ -43,11 +43,11 @@ export const processTags = () => {
       const tags: Tags = {}
 
       Object.values(monthsFiltered).forEach((month) => {
-        Object.entries(month.tags).forEach(([name, count]) => {
+        Object.entries(month.tags).forEach(([name, details]) => {
           if (tags[name]) {
-            tags[name] += count
+            tags[name] += details.yields
           } else {
-            tags[name] = count
+            tags[name] = details.yields
           }
         })
       })

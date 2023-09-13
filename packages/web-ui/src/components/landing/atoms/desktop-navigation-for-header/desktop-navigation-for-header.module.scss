@@ -12,8 +12,6 @@
     height: var(--button-dimension-52px);
     display: flex;
     align-items: center;
-    font-family: var(--font-family-plus-jakarta-sans);
-    font-weight: var(--font-weight-plus-jakarta-sans-medium);
     @include at992 {
       height: var(--button-dimension-48px);
       font-size: var(--font-size-20px);
@@ -46,7 +44,7 @@
       @include transition-100ms;
     }
     > span {
-      font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
+      font-weight: var(--font-weight-inter-medium);
       color: transparent;
     }
     &--active {

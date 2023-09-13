@@ -19,137 +19,176 @@ export const Primary = () => (
       }}
     >
       <Bookmark
-        isStarred={false}
+        index={22}
+        id="1"
+        is_starred={false}
         title="Lorem ipsum dolor sit amet"
-        url="https://example.com/test/lorem_ipsum/test/lorem_ipsum/test/test/lorem_ipsum/test/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum/test/lorem_ipsum"
-        isNsfw={false}
+        is_nsfw={false}
         tags={[]}
-        saves={2200}
-        onClick={() => {}}
-        onMenuClick={() => {}}
-        areTagsHidden={false}
-        onSelectedTagClick={() => {}}
-        onTagClick={() => {}}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={() => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          {
+            url: 'https://foooooooooooooooooooooooooooooooooooooooo.com/baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar',
+            saves: 99,
+          },
+          { url: 'https://foo.com/bar/baz', sitePath: 'bar', saves: 99 },
+          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+        ]}
       />
       <StorybookSpacer />
       <Bookmark
-        isStarred={false}
+        index={22}
+        id="1"
+        is_starred={false}
         title="Lorem ipsum dolor sit amet"
-        url="https://example.com/test/lorem_ipsum?test=lorem"
-        isNsfw={false}
+        is_nsfw={false}
         tags={[]}
-        saves={2200}
-        onClick={() => {}}
-        onMenuClick={() => {}}
-        areTagsHidden={false}
-        onSelectedTagClick={() => {}}
-        onTagClick={() => {}}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={() => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          { url: 'https://foo.com', saves: 99 },
+          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+        ]}
       />
       <StorybookSpacer />
       <Bookmark
-        isStarred={false}
+        index={22}
+        id="1"
+        is_starred={false}
         title="Lorem ipsum dolor sit amet"
-        url="https://example.com/test/lorem_ipsum"
-        isNsfw={false}
+        is_nsfw={false}
         tags={[
-          { name: 'lorem', yields: 8 },
-          { name: 'ipsum', isSelected: true },
+          { id: 1, name: 'lorem', yields: 8 },
+          { id: 1, name: 'ipsum', isSelected: true },
         ]}
-        saves={2200}
-        onClick={() => {}}
-        onMenuClick={() => {}}
-        areTagsHidden={false}
-        onSelectedTagClick={() => {}}
-        onTagClick={() => {}}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={() => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          { url: 'https://foo.com', saves: 99 },
+          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+        ]}
       />
       <StorybookSpacer />
       <Bookmark
-        isStarred={true}
+        index={22}
+        id="1"
+        is_starred={true}
         title="Lorem ipsum dolor sit amet"
-        url="https://example.com/test/lorem_ipsum"
-        isNsfw={false}
+        is_nsfw={false}
         tags={[
-          { name: 'lorem', yields: 8 },
-          { name: 'ipsum', yields: 2 },
+          { id: 1, name: 'lorem', yields: 8 },
+          { id: 1, name: 'ipsum', yields: 2 },
         ]}
-        saves={2200}
-        onClick={() => {}}
-        onMenuClick={() => {}}
-        areTagsHidden={false}
-        onSelectedTagClick={() => {}}
-        onTagClick={() => {}}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={() => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          { url: 'https://foo.com', saves: 99 },
+          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+        ]}
       />
       <StorybookSpacer />
       <Bookmark
-        isStarred={false}
+        index={22}
+        id="1"
+        is_starred={false}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        url="https://example.com/test/lorem_ipsum"
-        isNsfw={true}
+        is_nsfw={true}
         tags={[
-          { name: 'lorem', yields: 8 },
-          { name: 'lorem1', yields: 8 },
-          { name: 'lorem2', yields: 8 },
-          { name: 'lorem3', yields: 8 },
-          { name: 'lorem4', yields: 8 },
-          { name: 'ipsum', yields: 2 },
+          { id: 1, name: 'lorem', yields: 8 },
+          { id: 1, name: 'lorem1', yields: 8 },
+          { id: 1, name: 'lorem2', yields: 8 },
+          { id: 1, name: 'lorem3', yields: 8 },
+          { id: 1, name: 'lorem4', yields: 8 },
+          { id: 1, name: 'ipsum', yields: 2 },
+          { id: 1, name: 'lorem3', yields: 8 },
+          { id: 1, name: 'lorem4', yields: 8 },
+          { id: 1, name: 'ipsum', yields: 2 },
         ]}
-        saves={2200}
-        onClick={() => {}}
-        onMenuClick={() => {}}
-        areTagsHidden={false}
-        onSelectedTagClick={() => {}}
-        onTagClick={() => {}}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={() => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          { url: 'https://foo.com', saves: 99 },
+          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+        ]}
       />
       <StorybookSpacer />
       <Bookmark
-        isStarred={false}
+        index={22}
+        id="1"
+        is_starred={false}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        url="https://example.com/test/lorem_ipsum"
-        isNsfw={false}
+        is_nsfw={false}
         tags={[
-          { name: 'lorem', yields: 8 },
-          { name: 'ipsum', yields: 2 },
+          { id: 1, name: 'lorem', yields: 8 },
+          { id: 1, name: 'ipsum', yields: 2 },
         ]}
-        saves={2200}
-        onClick={() => {}}
-        onMenuClick={() => {}}
-        areTagsHidden={false}
-        onSelectedTagClick={() => {}}
-        onTagClick={() => {}}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={() => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          { url: 'https://foo.com', saves: 99 },
+          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+        ]}
       />
       <StorybookSpacer />
       <Bookmark
-        isStarred={true}
+        index={22}
+        id="1"
+        is_starred={true}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        url="https://example.com/test/lorem_ipsum"
-        isNsfw={true}
+        is_nsfw={true}
         tags={[
-          { name: 'lorem', yields: 8 },
-          { name: 'ipsum', yields: 2 },
+          { id: 1, name: 'lorem', yields: 8 },
+          { id: 1, name: 'ipsum', yields: 2 },
         ]}
-        saves={2200}
-        onClick={() => {}}
-        onMenuClick={() => {}}
-        areTagsHidden={false}
-        onSelectedTagClick={() => {}}
-        onTagClick={() => {}}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={() => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          { url: 'https://foo.com', saves: 99 },
+          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+        ]}
       />
       <StorybookSpacer />
       <Bookmark
-        isStarred={true}
+        index={22}
+        id="1"
+        is_starred={true}
         title="Lorem ipsum dolor sit amet"
-        url="https://example.com/test/lorem_ipsum"
-        isNsfw={true}
+        is_nsfw={true}
         tags={[
-          { name: 'lorem', yields: 8 },
-          { name: 'ipsum', yields: 2 },
+          { id: 1, name: 'lorem', yields: 8 },
+          { id: 1, name: 'ipsum', yields: 2 },
         ]}
-        saves={2200}
-        onClick={() => {}}
-        onMenuClick={() => {}}
-        areTagsHidden={false}
-        onSelectedTagClick={() => {}}
-        onTagClick={() => {}}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={() => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          { url: 'https://foo.com', saves: 99 },
+          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+        ]}
       />
       <StorybookSpacer />
     </div>

@@ -11,7 +11,7 @@ import { useBookmarks } from './_hooks/use-bookmarks'
 import { useMonths } from './_hooks/use-months'
 import { useTagViewOptions } from '@/hooks/library/use-tag-view-options'
 import { useDateViewOptions } from '@/hooks/library/use-date-view-options'
-import { useOrderByViewOptions } from '@/hooks/library/use-order-by-view-options'
+import { useOrderViewOptions } from '@/hooks/library/use-order-view-options'
 import { useSortByViewOptions } from '@/hooks/library/use-sort-by-view-options'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { useFilterViewOptions } from '@/hooks/library/use-filter-view-options'
@@ -51,7 +51,7 @@ const Page: React.FC = () => {
     includeNsfw,
     isNsfwExcluded,
   } = useFilterViewOptions()
-  const { currentOrderBy, setOrderByQueryParam } = useOrderByViewOptions()
+  const { currentOrder, setOrderQueryParam } = useOrderViewOptions()
   const { currentSortBy, setSortByQueryParam } = useSortByViewOptions()
   const { addTagToQueryParams, removeTagFromQueryParams, actualSelectedTags } =
     useTagViewOptions()
@@ -75,18 +75,20 @@ const Page: React.FC = () => {
   }, [queryParams])
 
   return (
-    <Library
-      showBookmarksSkeleton={bookmarks == null}
-      titleBar={
-        bookmarks != null
-          ? queryParams.get('categoryId')
-            ? '[category_name]'
-            : 'All bookmarks'
-          : undefined
-      }
-      slotSidebar={<div>slot sidebar</div>}
-      slotAside={<div>slot aside</div>}
-    />
+    <></>
+    // <Library
+    //   showBookmarksSkeleton={bookmarks == null}
+    //   titleBar={
+    //     bookmarks != null
+    //       ? queryParams.get('categoryId')
+    //         ? '[category_name]'
+    //         : 'All bookmarks'
+    //       : undefined
+    //   }
+    //   slotSidebar={<div>slot sidebar</div>}
+    //   slotAside={<div>slot aside</div>}
+
+    // />
   )
 }
 
