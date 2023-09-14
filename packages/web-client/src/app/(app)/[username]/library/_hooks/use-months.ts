@@ -146,11 +146,11 @@ export const use_months = () => {
 
     return () => {
       for (const key in sessionStorage) {
-        if (key.substring(0, 10) == 'months_data') {
+        if (key.substring(0, 11) == 'months_data') {
           sessionStorage.removeItem(key)
-        } else if (key.substring(0, 22) == 'tags_of_bookmark_creation') {
+        } else if (key.substring(0, 25) == 'tags_of_bookmark_creation') {
           sessionStorage.removeItem(key)
-        } else if (key.substring(0, 17) == 'tags_of_url_creation') {
+        } else if (key.substring(0, 20) == 'tags_of_url_creation') {
           sessionStorage.removeItem(key)
         }
       }

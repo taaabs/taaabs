@@ -90,7 +90,7 @@ const Page: React.FC = () => {
       window.history.scrollRestoration = 'auto'
 
       for (const key in sessionStorage) {
-        if (key.substring(0, 12) == 'renderHeight') {
+        if (key.substring(0, 2) == 'b_') {
           sessionStorage.removeItem(key)
         }
       }
@@ -480,10 +480,8 @@ const Page: React.FC = () => {
                 on_tag_click={add_tag_to_query_params}
                 on_selected_tag_click={remove_tag_from_query_params}
                 render_height={
-                  parseInt(
-                    sessionStorage.getItem(`renderHeight_${bookmark.id}`) ||
-                      '0',
-                  ) || undefined
+                  parseInt(sessionStorage.getItem(`b_${bookmark.id}`) || '0') ||
+                  undefined
                 }
               />
             ))

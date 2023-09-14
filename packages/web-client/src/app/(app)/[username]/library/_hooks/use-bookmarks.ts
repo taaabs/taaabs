@@ -159,7 +159,7 @@ export const use_bookmarks = () => {
       for (const key in sessionStorage) {
         if (key.substring(0, 9) == 'bookmarks') {
           sessionStorage.removeItem(key)
-        } else if (key.substring(0, 16) == 'has_more_bookmarks') {
+        } else if (key.substring(0, 18) == 'has_more_bookmarks') {
           sessionStorage.removeItem(key)
         }
       }

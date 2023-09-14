@@ -7,7 +7,7 @@ const reducer = {
   months: months_slice.reducer,
 }
 
-export const configureLibraryStore = () => {
+export const configure_library_store = () => {
   return configureStore({
     reducer,
   })

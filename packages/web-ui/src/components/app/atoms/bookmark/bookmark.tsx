@@ -39,7 +39,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
       set_render_height(ref.current!.clientHeight)
       sessionStorage.setItem(
-        `renderHeight_${props.id}`,
+        `b_${props.id.substring(0, 8)}`,
         ref.current!.clientHeight.toString(),
       )
     }, [])
@@ -55,7 +55,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             : undefined,
         }}
       >
-        {is_visible || !render_height ? (
+        {is_visible == undefined || is_visible || !render_height ? (
           <div
             className={styles.container}
             role="button"

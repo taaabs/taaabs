@@ -54,7 +54,7 @@ export const use_scroll_restore = (
 
     return () => {
       for (const key in sessionStorage) {
-        if (key.substring(0, 7) == 'scroll_y') {
+        if (key.substring(0, 8) == 'scroll_y') {
           sessionStorage.removeItem(key)
         }
       }
