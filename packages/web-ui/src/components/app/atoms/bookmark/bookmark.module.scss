@@ -6,7 +6,7 @@
   border: var(--border-secondary);
   @include transition-100ms(border-color);
   @include to992 {
-    border: var(--border-primary);
+    border-top: var(--border-primary);
     border-left: 0;
     border-right: 0;
   }
@@ -178,17 +178,23 @@
             flex-direction: column;
             overflow: hidden;
             @include hover {
-              @include text-decoration-underline;
-              text-decoration-color: var(--text-color-dimmed);
+              span {
+                text-decoration: none;
+              }
             }
             span {
               text-overflow: ellipsis;
               overflow: hidden;
+              text-decoration: underline;
+              text-decoration-thickness: 1px;
+              text-underline-offset: 0.13em;
             }
             > span:first-child {
               color: var(--text-color-normal);
+              text-decoration-color: var(--neutral400);
             }
             > span:last-child {
+              text-decoration-color: var(--neutral350);
               word-wrap: break-word;
               display: -webkit-box;
               -webkit-line-clamp: 2;
@@ -199,8 +205,10 @@
             &:visited {
               > span:first-child {
                 color: var(--text-color-dimmed);
+                text-decoration-color: var(--neutral350);
               }
               > span:last-child {
+                text-decoration-color: var(--neutral300);
                 color: var(--text-color-dimmed);
               }
             }
