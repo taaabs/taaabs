@@ -43,21 +43,21 @@ export const use_filter_view_options = () => {
     }
   }, [query_params])
 
-  const setFilterQueryParam = (filter: LibraryFilter) => {
-    let updatedQueryParams: any
-    updatedQueryParams = updateSearchParam(
+  const set_filter_query_param = (filter: LibraryFilter) => {
+    let updated_query_params: any
+    updated_query_params = updateSearchParam(
       query_params,
       'f',
       filter == BookmarksFetchingDefaults.Common.filter
         ? undefined
         : Object.values(LibraryFilter).indexOf(filter).toString(),
     )
-    updatedQueryParams = updateSearchParam(updatedQueryParams, 't')
+    updated_query_params = updateSearchParam(updated_query_params, 't')
 
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updatedQueryParams,
+      window.location.pathname + '?' + updated_query_params,
     )
   }
 
@@ -73,39 +73,39 @@ export const use_filter_view_options = () => {
     }
   }, [current_filter])
 
-  const excludeNsfw = () => {
+  const exclude_nsfw = () => {
     switch (current_filter) {
       case LibraryFilter.All:
-        setFilterQueryParam(LibraryFilter.AllNsfwExcluded)
+        set_filter_query_param(LibraryFilter.AllNsfwExcluded)
         break
       case LibraryFilter.StarredOnly:
-        setFilterQueryParam(LibraryFilter.StarredOnlyNsfwExcluded)
+        set_filter_query_param(LibraryFilter.StarredOnlyNsfwExcluded)
         break
       case LibraryFilter.Archived:
-        setFilterQueryParam(LibraryFilter.ArchivedNsfwExcluded)
+        set_filter_query_param(LibraryFilter.ArchivedNsfwExcluded)
         break
     }
   }
 
-  const includeNsfw = () => {
+  const include_nsfw = () => {
     switch (current_filter) {
       case LibraryFilter.AllNsfwExcluded:
-        setFilterQueryParam(LibraryFilter.All)
+        set_filter_query_param(LibraryFilter.All)
         break
       case LibraryFilter.StarredOnlyNsfwExcluded:
-        setFilterQueryParam(LibraryFilter.StarredOnly)
+        set_filter_query_param(LibraryFilter.StarredOnly)
         break
       case LibraryFilter.ArchivedNsfwExcluded:
-        setFilterQueryParam(LibraryFilter.Archived)
+        set_filter_query_param(LibraryFilter.Archived)
         break
     }
   }
 
   return {
-    currentFilter: current_filter,
-    setFilterQueryParam,
-    excludeNsfw,
-    includeNsfw,
-    isNsfwExcluded: is_nsfw_excluded,
+    current_filter,
+    set_filter_query_param,
+    exclude_nsfw,
+    include_nsfw,
+    is_nsfw_excluded,
   }
 }

@@ -4,14 +4,14 @@ import { useLibraryDispatch, useLibrarySelector } from './store'
 import { useEffect, useState } from 'react'
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { LibraryFilter } from '@shared/types/common/library-filter'
-import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
+import { Sortby } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { bookmarksActions } from '@repositories/stores/user-authorized/library/bookmarks/bookmarks.slice'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 enum SessionStorageKey {
   Bookmarks = 'bookmarks',
-  HasMoreBookmarks = 'hasMoreBookmarks',
+  HasMoreBookmarks = 'has_more_bookmarks',
   QueryParams = 'queryParams',
 }
 
@@ -19,7 +19,7 @@ export const useBookmarks = () => {
   const queryParams = use_shallow_search_params()
   const params = useParams()
   const dispatch = useLibraryDispatch()
-  const { bookmarks, hasMoreBookmarks } = useLibrarySelector(
+  const { bookmarks, has_more_bookmarks } = useLibrarySelector(
     (state) => state.bookmarks,
   )
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
@@ -65,7 +65,7 @@ export const useBookmarks = () => {
     const querySortBy = queryParams.get('s')
     setLastQuerySortBy(querySortBy)
     if (querySortBy) {
-      getBookmarksParams.sort_by = Object.values(SortBy)[parseInt(querySortBy)]
+      getBookmarksParams.sort_by = Object.values(Sortby)[parseInt(querySortBy)]
     }
 
     const queryOrder = queryParams.get('o')
@@ -129,7 +129,7 @@ export const useBookmarks = () => {
     )
     sessionStorage.setItem(
       SessionStorageKey.HasMoreBookmarks,
-      JSON.stringify(hasMoreBookmarks),
+      JSON.stringify(has_more_bookmarks),
     )
   }, [bookmarks])
 
@@ -142,12 +142,12 @@ export const useBookmarks = () => {
 
       if (bookmarks) {
         dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
-        const hasMoreBookmarks = sessionStorage.getItem(
+        const has_more_bookmarks = sessionStorage.getItem(
           SessionStorageKey.HasMoreBookmarks,
         )
-        if (hasMoreBookmarks) {
+        if (has_more_bookmarks) {
           dispatch(
-            bookmarksActions.setHasMoreBookmarks(hasMoreBookmarks == 'true'),
+            bookmarksActions.setHasMoreBookmarks(has_more_bookmarks == 'true'),
           )
         }
       } else {

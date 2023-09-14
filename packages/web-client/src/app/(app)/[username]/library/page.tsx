@@ -12,7 +12,7 @@ import { SimpleSelectDropdown } from '@web-ui/components/app/atoms/simple-select
 import OutsideClickHandler from 'react-outside-click-handler'
 import { use_bookmarks } from './_hooks/use-bookmarks'
 import { LibraryFilter } from '@shared/types/common/library-filter'
-import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
+import { Sortby } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
@@ -24,10 +24,10 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
 import { use_months } from './_hooks/use-months'
 import { use_filter_view_options } from '@/hooks/library/use-filter-view-options'
-import { useTagViewOptions } from '@/hooks/library/use-tag-view-options'
-import { useDateViewOptions } from '@/hooks/library/use-date-view-options'
-import { useSortByViewOptions } from '@/hooks/library/use-sort-by-view-options'
-import { useOrderViewOptions } from '@/hooks/library/use-order-view-options'
+import { use_tag_view_options } from '@/hooks/library/use-tag-view-options'
+import { use_date_view_options } from '@/hooks/library/use-date-view-options'
+import { use_sortby_view_options } from '@/hooks/library/use-sortby-view-options'
+import { use_order_view_options } from '@/hooks/library/use-order-view-options'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -43,36 +43,37 @@ const Page: React.FC = () => {
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
   const {
     bookmarks,
-    is_getting_first_bookmarks: isGettingFirstBookmarks,
-    is_getting_more_bookmarks: isGettingMoreBookmarks,
-    has_more_bookmarks: hasMoreBookmarks,
+    is_getting_first_bookmarks,
+    is_getting_more_bookmarks,
+    has_more_bookmarks,
   } = use_library_selector((state) => state.bookmarks)
   const { get_bookmarks } = use_bookmarks()
   const {
     months_of_bookmark_creation,
     is_getting_months_data,
     tags_of_bookmark_creation,
-    selectedTags,
+    selected_tags,
   } = use_months()
   const {
-    currentFilter,
-    setFilterQueryParam,
-    excludeNsfw,
-    includeNsfw,
-    isNsfwExcluded,
+    current_filter,
+    set_filter_query_param,
+    exclude_nsfw,
+    include_nsfw,
+    is_nsfw_excluded,
   } = use_filter_view_options()
-  const { currentSortBy, setSortByQueryParam } = useSortByViewOptions()
-  const { currentOrder, setOrderQueryParam } = useOrderViewOptions()
+  const { current_sortby, set_sortby_query_param } = use_sortby_view_options()
+  const { current_order, set_order_query_param } = use_order_view_options()
   const {
-    addTagToQueryParams,
-    removeTagFromQueryParams,
-    actualSelectedTags,
-    setActualSelectedTags,
-  } = useTagViewOptions()
-  const { setGteLteQueryParams, clearGteLteQueryParams } = useDateViewOptions()
-  const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
-  const [isSortByDropdownVisible, toggleSortByDropdown] = useToggle(false)
-  const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)
+    add_tag_to_query_params,
+    remove_tag_from_query_params,
+    actual_selected_tags,
+    set_actual_selected_tags,
+  } = use_tag_view_options()
+  const { set_gte_lte_query_params, clear_gte_lte_query_params } =
+    use_date_view_options()
+  const [is_filter_dropdown_visible, toggle_filter_dropdown] = useToggle(false)
+  const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
+  const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
 
   useUpdateEffect(() => {
     if (!show_months) set_show_months(true)
@@ -130,15 +131,15 @@ const Page: React.FC = () => {
             button: (
               <ButtonSelect
                 label="Filter"
-                current_value={_filter_option_to_label(currentFilter)}
-                is_active={isFilterDropdownVisible}
-                on_click={toggleFilterDropdown}
+                current_value={_filter_option_to_label(current_filter)}
+                is_active={is_filter_dropdown_visible}
+                on_click={toggle_filter_dropdown}
               />
             ),
             dropdown: (
               <OutsideClickHandler
-                onOutsideClick={toggleFilterDropdown}
-                disabled={!isFilterDropdownVisible}
+                onOutsideClick={toggle_filter_dropdown}
+                disabled={!is_filter_dropdown_visible}
               >
                 <SimpleSelectDropdown
                   items={[
@@ -146,68 +147,68 @@ const Page: React.FC = () => {
                       label: 'All',
                       on_click: () => {
                         if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
-                        if (isNsfwExcluded) {
-                          setFilterQueryParam(LibraryFilter.AllNsfwExcluded)
+                        if (is_nsfw_excluded) {
+                          set_filter_query_param(LibraryFilter.AllNsfwExcluded)
                         } else {
-                          setFilterQueryParam(LibraryFilter.All)
+                          set_filter_query_param(LibraryFilter.All)
                         }
-                        setActualSelectedTags([])
-                        toggleFilterDropdown()
+                        set_actual_selected_tags([])
+                        toggle_filter_dropdown()
                       },
                       is_selected:
-                        currentFilter == LibraryFilter.All ||
-                        currentFilter == LibraryFilter.AllNsfwExcluded,
+                        current_filter == LibraryFilter.All ||
+                        current_filter == LibraryFilter.AllNsfwExcluded,
                     },
                     {
                       label: 'Starred only',
                       on_click: () => {
                         if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
-                        if (isNsfwExcluded) {
-                          setFilterQueryParam(
+                        if (is_nsfw_excluded) {
+                          set_filter_query_param(
                             LibraryFilter.StarredOnlyNsfwExcluded,
                           )
                         } else {
-                          setFilterQueryParam(LibraryFilter.StarredOnly)
+                          set_filter_query_param(LibraryFilter.StarredOnly)
                         }
-                        setActualSelectedTags([])
-                        toggleFilterDropdown()
+                        set_actual_selected_tags([])
+                        toggle_filter_dropdown()
                       },
                       is_selected:
-                        currentFilter == LibraryFilter.StarredOnly ||
-                        currentFilter == LibraryFilter.StarredOnlyNsfwExcluded,
+                        current_filter == LibraryFilter.StarredOnly ||
+                        current_filter == LibraryFilter.StarredOnlyNsfwExcluded,
                     },
                     {
                       label: 'Archived',
                       on_click: () => {
                         if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
-                        if (isNsfwExcluded) {
-                          setFilterQueryParam(
+                        if (is_nsfw_excluded) {
+                          set_filter_query_param(
                             LibraryFilter.ArchivedNsfwExcluded,
                           )
                         } else {
-                          setFilterQueryParam(LibraryFilter.Archived)
+                          set_filter_query_param(LibraryFilter.Archived)
                         }
-                        setActualSelectedTags([])
-                        toggleFilterDropdown()
+                        set_actual_selected_tags([])
+                        toggle_filter_dropdown()
                       },
                       is_selected:
-                        currentFilter == LibraryFilter.Archived ||
-                        currentFilter == LibraryFilter.ArchivedNsfwExcluded,
+                        current_filter == LibraryFilter.Archived ||
+                        current_filter == LibraryFilter.ArchivedNsfwExcluded,
                     },
                   ]}
                   checkboxes={[
@@ -215,38 +216,38 @@ const Page: React.FC = () => {
                       label: 'Exclude NSFW',
                       on_click: () => {
                         if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
 
-                        isNsfwExcluded ? includeNsfw() : excludeNsfw()
-                        setActualSelectedTags([])
-                        toggleFilterDropdown()
+                        is_nsfw_excluded ? include_nsfw() : exclude_nsfw()
+                        set_actual_selected_tags([])
+                        toggle_filter_dropdown()
                       },
-                      is_selected: isNsfwExcluded,
+                      is_selected: is_nsfw_excluded,
                     },
                   ]}
                 />
               </OutsideClickHandler>
             ),
-            is_dropdown_visible: isFilterDropdownVisible,
+            is_dropdown_visible: is_filter_dropdown_visible,
           }}
           slot_order={{
             button: (
               <ButtonSelect
                 label="Order"
-                current_value={_order_option_to_label(currentOrder)}
-                is_active={isOrderDropdownVisible}
-                on_click={toggleOrderDropdown}
+                current_value={_order_option_to_label(current_order)}
+                is_active={is_order_dropdown_visible}
+                on_click={toggle_order_dropdown}
               />
             ),
-            is_dropdown_visible: isOrderDropdownVisible,
+            is_dropdown_visible: is_order_dropdown_visible,
             dropdown: (
               <OutsideClickHandler
-                onOutsideClick={toggleOrderDropdown}
-                disabled={!isOrderDropdownVisible}
+                onOutsideClick={toggle_order_dropdown}
+                disabled={!is_order_dropdown_visible}
               >
                 <SimpleSelectDropdown
                   items={[
@@ -254,30 +255,30 @@ const Page: React.FC = () => {
                       label: _order_option_to_label(Order.Desc),
                       on_click: () => {
                         if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
-                        setOrderQueryParam(Order.Desc)
-                        toggleOrderDropdown()
+                        set_order_query_param(Order.Desc)
+                        toggle_order_dropdown()
                       },
 
-                      is_selected: currentOrder == Order.Desc,
+                      is_selected: current_order == Order.Desc,
                     },
                     {
                       label: _order_option_to_label(Order.Asc),
                       on_click: () => {
                         if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
-                        setOrderQueryParam(Order.Asc)
-                        toggleOrderDropdown()
+                        set_order_query_param(Order.Asc)
+                        toggle_order_dropdown()
                       },
-                      is_selected: currentOrder == Order.Asc,
+                      is_selected: current_order == Order.Asc,
                     },
                   ]}
                 />
@@ -288,46 +289,46 @@ const Page: React.FC = () => {
             button: (
               <ButtonSelect
                 label="Sort by"
-                current_value={_sortby_option_to_label(currentSortBy)}
-                is_active={isSortByDropdownVisible}
-                on_click={toggleSortByDropdown}
+                current_value={_sortby_option_to_label(current_sortby)}
+                is_active={is_sortby_dropdown_visible}
+                on_click={toggle_sortby_dropdown}
               />
             ),
-            is_dropdown_visible: isSortByDropdownVisible,
+            is_dropdown_visible: is_sortby_dropdown_visible,
             dropdown: (
               <OutsideClickHandler
-                onOutsideClick={toggleSortByDropdown}
-                disabled={!isSortByDropdownVisible}
+                onOutsideClick={toggle_sortby_dropdown}
+                disabled={!is_sortby_dropdown_visible}
               >
                 <SimpleSelectDropdown
                   items={[
                     {
-                      label: _sortby_option_to_label(SortBy.CreatedAt),
+                      label: _sortby_option_to_label(Sortby.CreatedAt),
                       on_click: () => {
                         if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
-                        setSortByQueryParam(SortBy.CreatedAt)
-                        toggleSortByDropdown()
+                        set_sortby_query_param(Sortby.CreatedAt)
+                        toggle_sortby_dropdown()
                       },
-                      is_selected: currentSortBy == SortBy.CreatedAt,
+                      is_selected: current_sortby == Sortby.CreatedAt,
                     },
                     {
-                      label: _sortby_option_to_label(SortBy.UpdatedAt),
+                      label: _sortby_option_to_label(Sortby.UpdatedAt),
                       on_click: () => {
                         if (
-                          isGettingFirstBookmarks ||
-                          isGettingMoreBookmarks ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
-                        setSortByQueryParam(SortBy.UpdatedAt)
-                        toggleSortByDropdown()
+                        set_sortby_query_param(Sortby.UpdatedAt)
+                        toggle_sortby_dropdown()
                       },
-                      is_selected: currentSortBy == SortBy.UpdatedAt,
+                      is_selected: current_sortby == Sortby.UpdatedAt,
                     },
                   ]}
                 />
@@ -339,8 +340,8 @@ const Page: React.FC = () => {
               <div
                 style={{
                   pointerEvents:
-                    isGettingFirstBookmarks ||
-                    isGettingMoreBookmarks ||
+                    is_getting_first_bookmarks ||
+                    is_getting_more_bookmarks ||
                     is_getting_months_data
                       ? 'none'
                       : 'all',
@@ -348,8 +349,8 @@ const Page: React.FC = () => {
               >
                 <Months
                   months={months_of_bookmark_creation}
-                  on_yyyymm_change={setGteLteQueryParams}
-                  clear_date_range={clearGteLteQueryParams}
+                  on_yyyymm_change={set_gte_lte_query_params}
+                  clear_date_range={clear_gte_lte_query_params}
                   current_gte={
                     parseInt(query_params.get('gte') || '0') || undefined
                   }
@@ -377,16 +378,16 @@ const Page: React.FC = () => {
                 <div
                   style={{
                     pointerEvents:
-                      isGettingFirstBookmarks ||
-                      isGettingMoreBookmarks ||
+                      is_getting_first_bookmarks ||
+                      is_getting_more_bookmarks ||
                       is_getting_months_data
                         ? 'none'
                         : undefined,
                   }}
                 >
-                  {selectedTags.length > 0 && (
+                  {selected_tags.length > 0 && (
                     <SelectedTags
-                      selected_tags={[...selectedTags]
+                      selected_tags={[...selected_tags]
                         .filter((id) => {
                           if (!bookmarks) return false
                           return (
@@ -405,7 +406,7 @@ const Page: React.FC = () => {
                             name,
                           }
                         })}
-                      on_selected_tag_click={removeTagFromQueryParams}
+                      on_selected_tag_click={remove_tag_from_query_params}
                     />
                   )}
                   <Tags
@@ -414,14 +415,14 @@ const Page: React.FC = () => {
                         ? Object.fromEntries(
                             Object.entries(tags_of_bookmark_creation).filter(
                               (tag) =>
-                                isGettingFirstBookmarks
-                                  ? !selectedTags.includes(tag[1].id)
-                                  : !actualSelectedTags.includes(tag[1].id),
+                                is_getting_first_bookmarks
+                                  ? !selected_tags.includes(tag[1].id)
+                                  : !actual_selected_tags.includes(tag[1].id),
                             ),
                           )
                         : {}
                     }
-                    on_click={addTagToQueryParams}
+                    on_click={add_tag_to_query_params}
                   />
                 </div>
               )}
@@ -430,12 +431,12 @@ const Page: React.FC = () => {
           }
         />
       }
-      is_getting_first_bookmarks={isGettingFirstBookmarks}
-      is_getting_more_bookmarks={isGettingMoreBookmarks}
-      has_more_bookmarks={hasMoreBookmarks || false}
+      is_getting_first_bookmarks={is_getting_first_bookmarks}
+      is_getting_more_bookmarks={is_getting_more_bookmarks}
+      has_more_bookmarks={has_more_bookmarks || false}
       no_results={!bookmarks || bookmarks.length == 0}
       get_more_bookmarks={() => {
-        get_bookmarks({ shouldGetNextPage: true })
+        get_bookmarks({ should_get_next_page: true })
       }}
       slot_bookmarks={
         bookmarks && bookmarks.length
@@ -454,9 +455,9 @@ const Page: React.FC = () => {
                 tags={
                   bookmark.tags
                     ? bookmark.tags.map((tag) => {
-                        const isSelected = isGettingFirstBookmarks
-                          ? selectedTags.find((t) => t == tag.id) != undefined
-                          : actualSelectedTags.find((t) => t == tag.id) !=
+                        const isSelected = is_getting_first_bookmarks
+                          ? selected_tags.find((t) => t == tag.id) != undefined
+                          : actual_selected_tags.find((t) => t == tag.id) !=
                             undefined
 
                         return {
@@ -476,8 +477,8 @@ const Page: React.FC = () => {
                 is_nsfw={bookmark.is_nsfw}
                 is_starred={bookmark.is_starred}
                 key={bookmark.id}
-                on_tag_click={addTagToQueryParams}
-                on_selected_tag_click={removeTagFromQueryParams}
+                on_tag_click={add_tag_to_query_params}
+                on_selected_tag_click={remove_tag_from_query_params}
                 render_height={
                   parseInt(
                     sessionStorage.getItem(`renderHeight_${bookmark.id}`) ||
@@ -494,11 +495,11 @@ const Page: React.FC = () => {
 
 export default Page
 
-function _sortby_option_to_label(sortby_option: SortBy): string {
+function _sortby_option_to_label(sortby_option: Sortby): string {
   switch (sortby_option) {
-    case SortBy.CreatedAt:
+    case Sortby.CreatedAt:
       return 'Created at'
-    case SortBy.UpdatedAt:
+    case Sortby.UpdatedAt:
       return 'Updated at'
   }
 }

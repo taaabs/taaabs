@@ -18,32 +18,34 @@ export const use_months = () => {
     tags_of_bookmark_creation,
   } = use_library_selector((state) => state.months)
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
-  const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
-  const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
-  const [selectedTags, setSelectedTags] = useState<number[]>([])
-  const [lastQueryYyyymmGte, setLastQueryYyyymmGte] = useState<string | null>(
+  const [last_query_tags, set_last_query_tags] = useState<string | null>(null)
+  const [last_query_filter, set_last_query_filter] = useState<string | null>(
     null,
   )
-  const [lastQueryYyyymmLte, setLastQueryYyyymmLte] = useState<string | null>(
-    null,
-  )
+  const [selected_tags, set_selected_tags] = useState<number[]>([])
+  const [last_query_yyyymm_gte, set_last_query_yyyymm_gte] = useState<
+    string | null
+  >(null)
+  const [last_query_yyyymm_lte, set_last_query_yyyymm_lte] = useState<
+    string | null
+  >(null)
 
   const get_months = () => {
     const get_monthsParams: MonthsParams.Public = {
       username: params.username as string,
     }
 
-    const queryTags = query_params.get('t')
-    setLastQueryTags(queryTags)
-    if (queryTags) {
-      get_monthsParams.tags = queryTags.split(',')
+    const query_tags = query_params.get('t')
+    set_last_query_tags(query_tags)
+    if (query_tags) {
+      get_monthsParams.tags = query_tags.split(',')
     }
 
-    const queryFilter = query_params.get('f')
-    setLastQueryFilter(queryFilter)
-    if (queryFilter) {
+    const query_filter = query_params.get('f')
+    set_last_query_filter(query_filter)
+    if (query_filter) {
       get_monthsParams.filter =
-        Object.values(LibraryFilter)[parseInt(queryFilter)]
+        Object.values(LibraryFilter)[parseInt(query_filter)]
     }
 
     dispatch(
@@ -55,37 +57,41 @@ export const use_months = () => {
   }
 
   useEffect(() => {
-    const queryTags = query_params.get('t')
-    const queryFilter = query_params.get('f')
-    if (queryTags != lastQueryTags || queryFilter != lastQueryFilter) {
+    const query_tags = query_params.get('t')
+    const query_filter = query_params.get('f')
+    if (query_tags != last_query_tags || query_filter != last_query_filter) {
       get_months()
     }
 
-    const queryYyyymmGte = query_params.get('gte')
-    const queryYyyymmLte = query_params.get('lte')
+    const query_yyyymm_gte = query_params.get('gte')
+    const query_yyyymm_lte = query_params.get('lte')
 
     if (
-      queryYyyymmGte != lastQueryYyyymmGte ||
-      queryYyyymmLte != lastQueryYyyymmLte
+      query_yyyymm_gte != last_query_yyyymm_gte ||
+      query_yyyymm_lte != last_query_yyyymm_lte
     ) {
-      setLastQueryYyyymmGte(queryYyyymmGte)
-      setLastQueryYyyymmLte(queryYyyymmLte)
+      set_last_query_yyyymm_gte(query_yyyymm_gte)
+      set_last_query_yyyymm_lte(query_yyyymm_lte)
       dispatch(
-        months_actions.set_yyyymm_gte(parseInt(queryYyyymmGte || '0') || null),
+        months_actions.set_yyyymm_gte(
+          parseInt(query_yyyymm_gte || '0') || null,
+        ),
       )
       dispatch(
-        months_actions.set_yyyymm_lte(parseInt(queryYyyymmLte || '0') || null),
+        months_actions.set_yyyymm_lte(
+          parseInt(query_yyyymm_lte || '0') || null,
+        ),
       )
     }
   }, [query_params])
 
   useEffect(() => {
-    const queryTags = query_params.get('t')
-    if (!queryTags && selectedTags.length > 0) {
-      setSelectedTags([])
-    } else if (queryTags && queryTags != selectedTags.join(',')) {
-      const selectedTags = queryTags.split(',').map((t) => parseInt(t))
-      setSelectedTags(selectedTags)
+    const query_tags = query_params.get('t')
+    if (!query_tags && selected_tags.length > 0) {
+      set_selected_tags([])
+    } else if (query_tags && query_tags != selected_tags.join(',')) {
+      const selected_tags = query_tags.split(',').map((t) => parseInt(t))
+      set_selected_tags(selected_tags)
     }
   }, [bookmarks])
 
@@ -155,6 +161,6 @@ export const use_months = () => {
     months_of_bookmark_creation,
     is_getting_months_data,
     tags_of_bookmark_creation,
-    selectedTags,
+    selected_tags,
   }
 }

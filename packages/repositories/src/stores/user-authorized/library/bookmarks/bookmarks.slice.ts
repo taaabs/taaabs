@@ -4,20 +4,20 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 type BookmarksState = {
   isGettingData: boolean
-  isGettingFirstBookmarks: boolean
-  isGettingMoreBookmarks: boolean
+  is_getting_first_bookmarks: boolean
+  is_getting_more_bookmarks: boolean
   incomingBookmarks: Array<BookmarkEntity.Authorized> | null
   bookmarks: Array<BookmarkEntity.Authorized> | null
-  hasMoreBookmarks: boolean | null
+  has_more_bookmarks: boolean | null
 }
 
 const initialState: BookmarksState = {
   isGettingData: false,
-  isGettingFirstBookmarks: false,
-  isGettingMoreBookmarks: false,
+  is_getting_first_bookmarks: false,
+  is_getting_more_bookmarks: false,
   incomingBookmarks: null,
   bookmarks: null,
-  hasMoreBookmarks: null,
+  has_more_bookmarks: null,
 }
 
 export const bookmarksSlice = createSlice({
@@ -28,10 +28,10 @@ export const bookmarksSlice = createSlice({
       state.isGettingData = action.payload
     },
     setIsGettingFirstBookmarks(state, action: PayloadAction<boolean>) {
-      state.isGettingFirstBookmarks = action.payload
+      state.is_getting_first_bookmarks = action.payload
     },
     setIsGettingMoreBookmarks(state, action: PayloadAction<boolean>) {
-      state.isGettingMoreBookmarks = action.payload
+      state.is_getting_more_bookmarks = action.payload
     },
     setIncomingBookmarks(
       state,
@@ -52,9 +52,9 @@ export const bookmarksSlice = createSlice({
     },
     setHasMoreBookmarks(
       state,
-      action: PayloadAction<BookmarksState['hasMoreBookmarks']>,
+      action: PayloadAction<BookmarksState['has_more_bookmarks']>,
     ) {
-      state.hasMoreBookmarks = action.payload
+      state.has_more_bookmarks = action.payload
     },
   },
 })

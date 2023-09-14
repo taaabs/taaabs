@@ -25,7 +25,7 @@ export const getMonths = (params: {
     const state = getState()
     if (
       !state.bookmarks.isGettingData &&
-      state.bookmarks.isGettingFirstBookmarks
+      state.bookmarks.is_getting_first_bookmarks
     ) {
       dispatch(months_actions.process_tags())
       dispatch(bookmarksActions.setBookmarks(state.bookmarks.incomingBookmarks))

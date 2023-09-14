@@ -2,50 +2,50 @@ import { updateSearchParam } from '@/utils/update-query-param'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { useState } from 'react'
 
-export const useTagViewOptions = () => {
-  const queryParams = use_shallow_search_params()
-  const [actualSelectedTags, setActualSelectedTags] = useState<number[]>(
-    queryParams.get('t')
-      ? queryParams
+export const use_tag_view_options = () => {
+  const query_params = use_shallow_search_params()
+  const [actual_selected_tags, set_actual_selected_tags] = useState<number[]>(
+    query_params.get('t')
+      ? query_params
           .get('t')!
           .split(',')
           .map((t) => parseInt(t))
       : [],
   )
 
-  const addTagToQueryParams = (tagId: number) => {
-    setActualSelectedTags([...actualSelectedTags, tagId])
+  const add_tag_to_query_params = (tagId: number) => {
+    set_actual_selected_tags([...actual_selected_tags, tagId])
 
-    const updatedQueryParams = updateSearchParam(
-      queryParams,
+    const updated_query_params = updateSearchParam(
+      query_params,
       't',
-      [...actualSelectedTags, tagId].join(','),
+      [...actual_selected_tags, tagId].join(','),
     )
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updatedQueryParams,
+      window.location.pathname + '?' + updated_query_params,
     )
   }
 
-  const removeTagFromQueryParams = (tagId: number) => {
-    setActualSelectedTags(actualSelectedTags.filter((t) => t != tagId))
-    const updatedQueryParams = updateSearchParam(
-      queryParams,
+  const remove_tag_from_query_params = (tagId: number) => {
+    set_actual_selected_tags(actual_selected_tags.filter((t) => t != tagId))
+    const updated_query_params = updateSearchParam(
+      query_params,
       't',
-      actualSelectedTags.filter((t) => t != tagId).join(','),
+      actual_selected_tags.filter((t) => t != tagId).join(','),
     )
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updatedQueryParams,
+      window.location.pathname + '?' + updated_query_params,
     )
   }
 
   return {
-    addTagToQueryParams,
-    removeTagFromQueryParams,
-    actualSelectedTags,
-    setActualSelectedTags,
+    add_tag_to_query_params,
+    remove_tag_from_query_params,
+    actual_selected_tags,
+    set_actual_selected_tags,
   }
 }

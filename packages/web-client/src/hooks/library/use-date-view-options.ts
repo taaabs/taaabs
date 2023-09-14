@@ -1,32 +1,42 @@
 import { updateSearchParam } from '@/utils/update-query-param'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 
-export const useDateViewOptions = () => {
-  const queryParams = use_shallow_search_params()
+export const use_date_view_options = () => {
+  const query_params = use_shallow_search_params()
 
-  const setGteLteQueryParams = ({ gte, lte }: { gte: number; lte: number }) => {
-    let updatedQueryParams: any
-    updatedQueryParams = updateSearchParam(queryParams, 'gte', `${gte}`)
-    updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte', `${lte}`)
+  const set_gte_lte_query_params = ({
+    gte,
+    lte,
+  }: {
+    gte: number
+    lte: number
+  }) => {
+    let updated_query_params: any
+    updated_query_params = updateSearchParam(query_params, 'gte', `${gte}`)
+    updated_query_params = updateSearchParam(
+      updated_query_params,
+      'lte',
+      `${lte}`,
+    )
 
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updatedQueryParams,
+      window.location.pathname + '?' + updated_query_params,
     )
   }
 
-  const clearGteLteQueryParams = () => {
-    let updatedQueryParams: any
-    updatedQueryParams = updateSearchParam(queryParams, 'gte')
-    updatedQueryParams = updateSearchParam(updatedQueryParams, 'lte')
+  const clear_gte_lte_query_params = () => {
+    let updated_query_params: any
+    updated_query_params = updateSearchParam(query_params, 'gte')
+    updated_query_params = updateSearchParam(updated_query_params, 'lte')
 
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updatedQueryParams,
+      window.location.pathname + '?' + updated_query_params,
     )
   }
 
-  return { setGteLteQueryParams, clearGteLteQueryParams }
+  return { set_gte_lte_query_params, clear_gte_lte_query_params }
 }

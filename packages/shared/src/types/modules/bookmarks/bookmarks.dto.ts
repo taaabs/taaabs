@@ -1,6 +1,6 @@
 import { PaginatedResponseDto } from '../../common/paginated-response.dto'
 import { ApiProperty } from '@nestjs/swagger'
-import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
+import { Sortby } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { PaginationQueryParamsDto } from '@shared/types/common/pagination-options.dto'
 import { Type } from 'class-transformer'
@@ -27,7 +27,7 @@ export namespace BookmarksDto {
       @Type()
       public epoch_lte?: number
 
-      public sort_by?: SortBy = BookmarksFetchingDefaults.Common.sortBy
+      public sort_by?: Sortby = BookmarksFetchingDefaults.Common.sortBy
 
       public order?: Order = BookmarksFetchingDefaults.Common.order
 

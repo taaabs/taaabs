@@ -9,10 +9,10 @@ import { useEffect, useState } from 'react'
 import { useLibrarySelector } from './_hooks/store'
 import { useBookmarks } from './_hooks/use-bookmarks'
 import { useMonths } from './_hooks/use-months'
-import { useTagViewOptions } from '@/hooks/library/use-tag-view-options'
-import { useDateViewOptions } from '@/hooks/library/use-date-view-options'
-import { useOrderViewOptions } from '@/hooks/library/use-order-view-options'
-import { useSortByViewOptions } from '@/hooks/library/use-sort-by-view-options'
+import { use_tag_view_options } from '@/hooks/library/use-tag-view-options'
+import { use_date_view_options } from '@/hooks/library/use-date-view-options'
+import { use_order_view_options } from '@/hooks/library/use-order-view-options'
+import { use_sortby_view_options } from '@/hooks/library/use-sortby-view-options'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_filter_view_options } from '@/hooks/library/use-filter-view-options'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -31,9 +31,9 @@ const Page: React.FC = () => {
   const [showTagsSkeleton, setShowTagsSkeleton] = useState(true)
   const {
     bookmarks,
-    isGettingFirstBookmarks,
-    isGettingMoreBookmarks,
-    hasMoreBookmarks,
+    is_getting_first_bookmarks,
+    is_getting_more_bookmarks,
+    has_more_bookmarks,
   } = useLibrarySelector((state) => state.bookmarks)
   const { getBookmarks } = useBookmarks()
   const {
@@ -45,17 +45,17 @@ const Page: React.FC = () => {
     selectedTags,
   } = useMonths()
   const {
-    currentFilter,
-    setFilterQueryParam,
-    excludeNsfw,
-    includeNsfw,
-    isNsfwExcluded,
+    current_filter,
+    set_filter_query_param,
+    exclude_nsfw,
+    include_nsfw,
+    is_nsfw_excluded,
   } = use_filter_view_options()
-  const { currentOrder, setOrderQueryParam } = useOrderViewOptions()
-  const { currentSortBy, setSortByQueryParam } = useSortByViewOptions()
-  const { addTagToQueryParams, removeTagFromQueryParams, actualSelectedTags } =
-    useTagViewOptions()
-  const { setGteLteQueryParams, clearGteLteQueryParams } = useDateViewOptions()
+  const { current_order, setOrderQueryParam } = use_order_view_options()
+  const { current_sortby, set_sortby_query_param } = use_sortby_view_options()
+  const { add_tag_to_query_params, remove_tag_from_query_params, actual_selected_tags  } =
+    use_tag_view_options()
+  const { setGteLteQueryParams, clearGteLteQueryParams } = use_date_view_options()
   const [isFilterDropdownVisible, toggleFilterDropdown] = useToggle(false)
   const [isOrderByDropdownVisible, toggleOrderByDropdown] = useToggle(false)
   const [isOrderDropdownVisible, toggleOrderDropdown] = useToggle(false)

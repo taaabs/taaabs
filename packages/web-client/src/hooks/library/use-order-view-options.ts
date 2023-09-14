@@ -5,12 +5,12 @@ import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 
-export const useOrderViewOptions = () => {
-  const queryParams = use_shallow_search_params()
-  const [currentOrder, setCurrentOrder] = useState<Order>(
+export const use_order_view_options = () => {
+  const query_params = use_shallow_search_params()
+  const [current_order, set_current_order] = useState<Order>(
     Object.values(Order)[
       parseInt(
-        queryParams.get('o') ||
+        query_params.get('o') ||
           Object.values(Order)
             .indexOf(BookmarksFetchingDefaults.Common.order)
             .toString(),
@@ -19,13 +19,13 @@ export const useOrderViewOptions = () => {
   )
 
   useUpdateEffect(() => {
-    const queryOrder = queryParams.get('o')
+    const query_order = query_params.get('o')
 
-    if (queryOrder != Object.values(Order).indexOf(currentOrder).toString()) {
-      setCurrentOrder(
+    if (query_order != Object.values(Order).indexOf(current_order).toString()) {
+      set_current_order(
         Object.values(Order)[
           parseInt(
-            queryOrder ||
+            query_order ||
               Object.values(Order)
                 .indexOf(BookmarksFetchingDefaults.Common.order)
                 .toString(),
@@ -33,11 +33,11 @@ export const useOrderViewOptions = () => {
         ],
       )
     }
-  }, [queryParams])
+  }, [query_params])
 
-  const setOrderQueryParam = (orderBy: Order) => {
-    const updatedQueryParams = updateSearchParam(
-      queryParams,
+  const set_order_query_param = (orderBy: Order) => {
+    const updated_query_params = updateSearchParam(
+      query_params,
       'o',
       orderBy == BookmarksFetchingDefaults.Common.order
         ? undefined
@@ -47,9 +47,9 @@ export const useOrderViewOptions = () => {
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updatedQueryParams,
+      window.location.pathname + '?' + updated_query_params,
     )
   }
 
-  return { currentOrder, setOrderQueryParam }
+  return { current_order, set_order_query_param }
 }
