@@ -6,6 +6,7 @@
   border: var(--border-secondary);
   @include transition-100ms(border-color);
   @include to992 {
+    border: var(--border-primary);
     border-left: 0;
     border-right: 0;
   }
@@ -75,8 +76,15 @@
       display: flex;
       flex-direction: column;
       margin-left: var(--distance-8px);
-      margin-right: var(--distance-8px);
       margin-top: var(--distance-11px);
+      @include to992 {
+        margin-right: var(--distance-16px);
+        margin-left: var(--distance-16px);
+      }
+      @include at992 {
+        margin-right: var(--distance-8px);
+        margin-left: var(--distance-8px);
+      }
       &__button {
         display: flex;
         align-items: center;

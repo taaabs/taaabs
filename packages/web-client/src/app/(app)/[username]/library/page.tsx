@@ -480,8 +480,11 @@ const Page: React.FC = () => {
                 on_tag_click={add_tag_to_query_params}
                 on_selected_tag_click={remove_tag_from_query_params}
                 render_height={
-                  parseInt(sessionStorage.getItem(`b_${bookmark.id}`) || '0') ||
-                  undefined
+                  parseInt(
+                    sessionStorage.getItem(
+                      `b_${bookmark.id.substring(0, 8)}`,
+                    ) || '0',
+                  ) || undefined
                 }
               />
             ))

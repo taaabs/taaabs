@@ -1,4 +1,3 @@
-import { use_is_hydrated } from '@shared/hooks/use-is-hydrated'
 import { sharedValues } from '@web-ui/constants'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
@@ -13,6 +12,7 @@ import { _DesktopTitleBar } from './components/_desktop-title-bar'
 import { _MobileTitleBar } from './components/_mobile-title-bar'
 import { use_scroll_restore } from './hooks/use-scroll-restore'
 import styles from './library.module.scss'
+import { use_is_hydrated } from '@shared/hooks'
 
 export namespace Library {
   export type Props = {
@@ -247,7 +247,12 @@ export const Library: React.FC<Library.Props> = (props) => {
               />
             </div>
             <div>
-              <div className={styles['main__inner__desktop-title-bar']}>
+              <div
+                className={styles['main__inner__desktop-title-bar']}
+                style={{
+                  visibility: is_hydrated ? 'visible' : 'hidden',
+                }}
+              >
                 <_DesktopTitleBar
                   text={props.title_bar ? props.title_bar : undefined}
                 />

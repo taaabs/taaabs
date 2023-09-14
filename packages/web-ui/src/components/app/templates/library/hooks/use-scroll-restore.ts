@@ -1,4 +1,3 @@
-import { use_is_hydrated } from '@shared/hooks'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -11,7 +10,6 @@ export const use_scroll_restore = (
   const [scroll_y, set_scroll_y] = useState(0)
   const on_window_scroll = useWindowScroll()
   const query_params = use_shallow_search_params()
-  const is_hydrated = use_is_hydrated()
 
   const on_scroll_y = useDebouncedCallback(
     (scrollY: number, queryParams: URLSearchParams) => {
@@ -37,11 +35,14 @@ export const use_scroll_restore = (
       `scroll_y_${query_params.toString()}`,
     )
     if (scroll_y) {
-      const y = parseInt(scroll_y)
-      main_inner_ref.current?.scrollTo(0, y)
-      window.scrollTo(0, y)
+      // Ensures triggering scroll position change in a first idle frame.
+      setTimeout(() => {
+        const y = parseInt(scroll_y)
+        main_inner_ref.current?.scrollTo(0, y)
+        window.scrollTo(0, y)
+      }, 0)
     }
-  }, [is_hydrated])
+  }, [])
 
   useEffect(() => {
     const listener = () => {
