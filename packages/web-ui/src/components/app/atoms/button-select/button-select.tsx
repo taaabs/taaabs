@@ -5,9 +5,9 @@ import cn from 'classnames'
 export namespace ButtonSelect {
   export type Props = {
     label: string
-    currentValue: string
-    isActive?: boolean
-    onClick: () => void
+    current_value: string
+    is_active?: boolean
+    on_click: () => void
   }
 }
 
@@ -16,18 +16,18 @@ export const ButtonSelect: React.FC<ButtonSelect.Props> = (props) => {
     <button
       className={cn([
         styles.container,
-        { [styles['container--toggled']]: props.isActive },
+        { [styles['container--toggled']]: props.is_active },
       ])}
-      onClick={props.onClick}
+      onClick={props.on_click}
     >
       <div className={styles.inner}>
         <div>{props.label}</div>
-        <div>{props.currentValue}</div>
+        <div>{props.current_value}</div>
       </div>
       <div
         className={cn([
           styles.arrow,
-          { [styles['arrow--toggled']]: props.isActive },
+          { [styles['arrow--toggled']]: props.is_active },
         ])}
       >
         <Icon variant="LESS_THAN" />

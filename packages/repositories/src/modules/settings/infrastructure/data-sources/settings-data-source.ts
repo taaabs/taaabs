@@ -1,8 +1,8 @@
 import { UsernameAvailabilityDto } from '@shared/types/modules/users/username-availability.dto'
-import { UsernameAvailabilityParams } from '../../domain/types/username-availability.params'
+import { UsernameAvailability } from '../../domain/types/username-availability'
 
 export type SettingsDataSource = {
-  checkUsernameAvailability(
-    params: UsernameAvailabilityParams,
+  check_username_availability(
+    params: UsernameAvailability.Params,
   ): Promise<UsernameAvailabilityDto.Response>
 }

@@ -6,9 +6,9 @@ import { MetadataRepository } from '../repositories/metadata.repository'
 export class GetPublicMetadata
   implements UseCase<Promise<MetadataRo.Public>, MetadataParams.Public>
 {
-  constructor(private readonly _metadataRepository: MetadataRepository) {}
+  constructor(private readonly _metadata_repository: MetadataRepository) {}
 
   public invoke(params: MetadataParams.Public): Promise<MetadataRo.Public> {
-    return this._metadataRepository.getPublic(params)
+    return this._metadata_repository.get_public(params)
   }
 }

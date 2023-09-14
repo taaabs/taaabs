@@ -4,85 +4,83 @@ import * as thunks from './action-creators'
 
 export type Months = {
   yyyymm: number
-  bookmarkCount: number
-  starredCount: number
-  nsfwCount: number
+  bookmark_count: number
+  starred_count: number
+  nsfw_count: number
 }[]
 export type Tags = Record<string, number>
 
 export type MonthsState = {
-  isGettingMonthsData: boolean
-  monthsData: MonthsRo.Public | null
-  monthsOfBookmarkCreation: Months | null
-  monthsOfUrlCreation: Months | null
-  tagsOfBookmarkCreation: Tags | null
-  tagsOfUrlCreation: Tags | null
-  yyyymmGte: number | null
-  yyyymmLte: number | null
+  is_getting_months_data: boolean
+  months_data: MonthsRo.Public | null
+  months_of_bookmark_creation: Months | null
+  months_of_url_creation: Months | null
+  tags_of_bookmark_creation: Tags | null
+  tags_of_url_creation: Tags | null
+  yyyymm_gte: number | null
+  yyyymm_lte: number | null
 }
 
-const initialState: MonthsState = {
-  isGettingMonthsData: false,
-  monthsData: null,
-  monthsOfBookmarkCreation: null,
-  monthsOfUrlCreation: null,
-  tagsOfBookmarkCreation: null,
-  tagsOfUrlCreation: null,
-  yyyymmGte: null,
-  yyyymmLte: null,
+const initial_state: MonthsState = {
+  is_getting_months_data: false,
+  months_data: null,
+  months_of_bookmark_creation: null,
+  months_of_url_creation: null,
+  tags_of_bookmark_creation: null,
+  tags_of_url_creation: null,
+  yyyymm_gte: null,
+  yyyymm_lte: null,
 }
 
-export const monthsSlice = createSlice({
+export const months_slice = createSlice({
   name: 'months',
-  initialState,
+  initialState: initial_state,
   reducers: {
-    setIsGettingData(state, action: PayloadAction<boolean>) {
-      state.isGettingMonthsData = action.payload
+    set_is_getting_data(state, action: PayloadAction<boolean>) {
+      state.is_getting_months_data = action.payload
     },
-    setData(state, action: PayloadAction<MonthsRo.Authorized>) {
-      state.monthsData = action.payload
+    set_data(state, action: PayloadAction<MonthsRo.Authorized>) {
+      state.months_data = action.payload
 
-      const monthsOfBookmarkCreation: Months = []
-      const monthsOfUrlCreation: Months = []
+      const months_of_bookmark_creation: Months = []
+      const months_of_url_creation: Months = []
 
-      Object.entries(action.payload.monthsOfBookmarkCreation).forEach(
-        ([k, v]) => {
-          monthsOfBookmarkCreation.push({
-            yyyymm: parseInt(k),
-            bookmarkCount: v.bookmarkCount,
-            starredCount: v.starredCount || 0,
-            nsfwCount: v.nsfwCount || 0,
-          })
-        },
-      )
-      Object.entries(action.payload.monthsOfUrlCreation).forEach(([k, v]) => {
-        monthsOfUrlCreation.push({
+      Object.entries(action.payload.created_at).forEach(([k, v]) => {
+        months_of_bookmark_creation.push({
           yyyymm: parseInt(k),
-          bookmarkCount: v.bookmarkCount,
-          starredCount: v.starredCount || 0,
-          nsfwCount: v.nsfwCount || 0,
+          bookmark_count: v.bookmark_count,
+          starred_count: v.starred_count || 0,
+          nsfw_count: v.nsfw_count || 0,
+        })
+      })
+      Object.entries(action.payload.updated_at).forEach(([k, v]) => {
+        months_of_url_creation.push({
+          yyyymm: parseInt(k),
+          bookmark_count: v.bookmark_count,
+          starred_count: v.starred_count || 0,
+          nsfw_count: v.nsfw_count || 0,
         })
       })
 
-      state.monthsOfBookmarkCreation = monthsOfBookmarkCreation
-      state.monthsOfUrlCreation = monthsOfUrlCreation
+      state.months_of_bookmark_creation = months_of_bookmark_creation
+      state.months_of_url_creation = months_of_url_creation
     },
-    setTagsOfBookmarkCreation(state, action: PayloadAction<Tags>) {
-      state.tagsOfBookmarkCreation = action.payload
+    set_tags_of_bookmark_creation(state, action: PayloadAction<Tags>) {
+      state.tags_of_bookmark_creation = action.payload
     },
-    setTagsOfUrlCreation(state, action: PayloadAction<Tags>) {
-      state.tagsOfUrlCreation = action.payload
+    set_tags_of_url_creation(state, action: PayloadAction<Tags>) {
+      state.tags_of_url_creation = action.payload
     },
-    setYyyymmGte(state, action: PayloadAction<MonthsState['yyyymmGte']>) {
-      state.yyyymmGte = action.payload
+    set_yyyymm_gte(state, action: PayloadAction<MonthsState['yyyymm_gte']>) {
+      state.yyyymm_gte = action.payload
     },
-    setYyyymmLte(state, action: PayloadAction<MonthsState['yyyymmLte']>) {
-      state.yyyymmLte = action.payload
+    set_yyyymm_lte(state, action: PayloadAction<MonthsState['yyyymm_lte']>) {
+      state.yyyymm_lte = action.payload
     },
   },
 })
 
-export const monthsActions = {
-  ...monthsSlice.actions,
+export const months_actions = {
+  ...months_slice.actions,
   ...thunks,
 }

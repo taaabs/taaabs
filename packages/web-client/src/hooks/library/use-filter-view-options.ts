@@ -1,39 +1,39 @@
-import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
+import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { updateSearchParam } from '@/utils/update-query-param'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useState } from 'react'
 
-export const useFilterViewOptions = () => {
-  const queryParams = useShallowSearchParams()
-  const [currentFilter, setCurrentFilter] = useState<LibraryFilter>(
+export const use_filter_view_options = () => {
+  const query_params = use_shallow_search_params()
+  const [current_filter, set_current_filter] = useState<LibraryFilter>(
     Object.values(LibraryFilter)[
       parseInt(
-        queryParams.get('f') ||
+        query_params.get('f') ||
           Object.values(LibraryFilter)
             .indexOf(BookmarksFetchingDefaults.Common.filter)
             .toString(),
       )
     ],
   )
-  const [isNsfwExcluded, setIsNsfwExcluded] = useState<boolean>(
-    currentFilter == LibraryFilter.AllNsfwExcluded ||
-      currentFilter == LibraryFilter.ArchivedNsfwExcluded ||
-      currentFilter == LibraryFilter.StarredOnlyNsfwExcluded,
+  const [is_nsfw_excluded, set_is_nsfw_excluded] = useState<boolean>(
+    current_filter == LibraryFilter.AllNsfwExcluded ||
+      current_filter == LibraryFilter.ArchivedNsfwExcluded ||
+      current_filter == LibraryFilter.StarredOnlyNsfwExcluded,
   )
 
   useUpdateEffect(() => {
-    const queryFilter = queryParams.get('f')
+    const query_filter = query_params.get('f')
 
     if (
-      queryFilter !=
-      Object.values(LibraryFilter).indexOf(currentFilter).toString()
+      query_filter !=
+      Object.values(LibraryFilter).indexOf(current_filter).toString()
     ) {
-      setCurrentFilter(
+      set_current_filter(
         Object.values(LibraryFilter)[
           parseInt(
-            queryFilter ||
+            query_filter ||
               Object.values(LibraryFilter)
                 .indexOf(BookmarksFetchingDefaults.Common.filter)
                 .toString(),
@@ -41,12 +41,12 @@ export const useFilterViewOptions = () => {
         ],
       )
     }
-  }, [queryParams])
+  }, [query_params])
 
   const setFilterQueryParam = (filter: LibraryFilter) => {
     let updatedQueryParams: any
     updatedQueryParams = updateSearchParam(
-      queryParams,
+      query_params,
       'f',
       filter == BookmarksFetchingDefaults.Common.filter
         ? undefined
@@ -63,18 +63,18 @@ export const useFilterViewOptions = () => {
 
   useUpdateEffect(() => {
     if (
-      currentFilter == LibraryFilter.AllNsfwExcluded ||
-      currentFilter == LibraryFilter.ArchivedNsfwExcluded ||
-      currentFilter == LibraryFilter.StarredOnlyNsfwExcluded
+      current_filter == LibraryFilter.AllNsfwExcluded ||
+      current_filter == LibraryFilter.ArchivedNsfwExcluded ||
+      current_filter == LibraryFilter.StarredOnlyNsfwExcluded
     ) {
-      setIsNsfwExcluded(true)
+      set_is_nsfw_excluded(true)
     } else {
-      setIsNsfwExcluded(false)
+      set_is_nsfw_excluded(false)
     }
-  }, [currentFilter])
+  }, [current_filter])
 
   const excludeNsfw = () => {
-    switch (currentFilter) {
+    switch (current_filter) {
       case LibraryFilter.All:
         setFilterQueryParam(LibraryFilter.AllNsfwExcluded)
         break
@@ -88,7 +88,7 @@ export const useFilterViewOptions = () => {
   }
 
   const includeNsfw = () => {
-    switch (currentFilter) {
+    switch (current_filter) {
       case LibraryFilter.AllNsfwExcluded:
         setFilterQueryParam(LibraryFilter.All)
         break
@@ -102,10 +102,10 @@ export const useFilterViewOptions = () => {
   }
 
   return {
-    currentFilter,
+    currentFilter: current_filter,
     setFilterQueryParam,
     excludeNsfw,
     includeNsfw,
-    isNsfwExcluded,
+    isNsfwExcluded: is_nsfw_excluded,
   }
 }

@@ -3,16 +3,16 @@ import { SettingsDataSource } from './settings-data-source'
 import { UsernameAvailability } from '../../domain/types/username-availability'
 
 export class SettingsDataSourceImpl implements SettingsDataSource {
-  constructor(private readonly _apiUrl: string) {}
+  constructor(private readonly _api_url: string) {}
 
-  public async checkUsernameAvailability(
+  public async check_username_availability(
     params: UsernameAvailability.Params,
   ): Promise<UsernameAvailabilityDto.Response> {
     const body: UsernameAvailabilityDto.Body = {
       username: params.username,
     }
 
-    return fetch(`${this._apiUrl}/v1/users/username-availability`, {
+    return fetch(`${this._api_url}/v1/users/username-availability`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization:

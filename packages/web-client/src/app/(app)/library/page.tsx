@@ -1,6 +1,6 @@
 'use client'
 
-import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
+import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
 import { Library } from '@web-ui/components/app/templates/library'
 import dynamic from 'next/dynamic'
@@ -14,7 +14,7 @@ import { useDateViewOptions } from '@/hooks/library/use-date-view-options'
 import { useOrderViewOptions } from '@/hooks/library/use-order-view-options'
 import { useSortByViewOptions } from '@/hooks/library/use-sort-by-view-options'
 import useToggle from 'beautiful-react-hooks/useToggle'
-import { useFilterViewOptions } from '@/hooks/library/use-filter-view-options'
+import { use_filter_view_options } from '@/hooks/library/use-filter-view-options'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 const Months = dynamic(() => import('./dynamic-months'), {
@@ -23,7 +23,7 @@ const Months = dynamic(() => import('./dynamic-months'), {
 })
 
 const Page: React.FC = () => {
-  const queryParams = useShallowSearchParams()
+  const queryParams = use_shallow_search_params()
   const router = useRouter()
   const params = useParams()
   const [showMonths, setShowMonths] = useState(false)
@@ -50,7 +50,7 @@ const Page: React.FC = () => {
     excludeNsfw,
     includeNsfw,
     isNsfwExcluded,
-  } = useFilterViewOptions()
+  } = use_filter_view_options()
   const { currentOrder, setOrderQueryParam } = useOrderViewOptions()
   const { currentSortBy, setSortByQueryParam } = useSortByViewOptions()
   const { addTagToQueryParams, removeTagFromQueryParams, actualSelectedTags } =

@@ -21,20 +21,20 @@ export const DesktopUserAreaForAppHeader: React.FC<
   return (
     <div className={styles.container}>
       <SearchBox onClick={() => {}} placeholder="Search anything..." />
-      <ButtonOutlinedIcon iconVariant="ADD" onClick={props.onClickAdd} />
+      <ButtonOutlinedIcon icon_variant="ADD" on_click={props.onClickAdd} />
       <ButtonOutlinedIcon
-        iconVariant="NOTIFICATIONS"
-        onClick={props.onClickNotifications}
+        icon_variant="NOTIFICATIONS"
+        on_click={props.onClickNotifications}
       />
       {props.avatar ? (
         <ButtonAvatar
           url={props.avatar.url}
           blurhash={props.avatar.blurhash}
-          onClick={() => {}}
+          on_click={() => {}}
           alt="XYZ"
         />
       ) : (
-        <ButtonOutlinedIcon iconVariant="USER" onClick={() => {}} />
+        <ButtonOutlinedIcon icon_variant="USER" on_click={() => {}} />
       )}
     </div>
   )

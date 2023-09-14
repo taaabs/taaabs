@@ -1,5 +1,5 @@
 import { useIsHydrated } from '@shared/hooks'
-import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
+import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useWindowScroll from 'beautiful-react-hooks/useWindowScroll'
@@ -8,7 +8,7 @@ import { RefObject, useEffect, useState } from 'react'
 export const useScrollRestore = (mainInnerRef: RefObject<HTMLDivElement>) => {
   const [scrollY, setScrollY] = useState(0)
   const onWindowScroll = useWindowScroll()
-  const queryParams = useShallowSearchParams()
+  const queryParams = use_shallow_search_params()
   const isHydrated = useIsHydrated()
 
   const onScrollY = useDebouncedCallback(

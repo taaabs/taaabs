@@ -11,7 +11,7 @@ export const Primary = () => (
       url="https://picsum.photos/300"
       blurhash="KGF5?xYk^6@-5c,1@[or[Q"
       alt="XYZ"
-      onClick={() => {}}
+      on_click={() => {}}
     />
   </StorybookMargin>
 )

@@ -3,11 +3,11 @@ import styles from './button-avatar.module.scss'
 
 export namespace ButtonAvatar {
   export type Props = {
-    onClick: () => void
+    on_click: () => void
     alt: string
     url: string
     blurhash: string
-    testId?: string
+    test_id?: string
   }
 }
 
@@ -15,8 +15,8 @@ export const ButtonAvatar: React.FC<ButtonAvatar.Props> = (props) => {
   return (
     <button
       className={styles.button}
-      onClick={props.onClick}
-      data-testid={props.testId}
+      onClick={props.on_click}
+      data-testid={props.test_id}
     >
       <div className={styles.blurhash}>
         <Blurhash hash={props.blurhash} />

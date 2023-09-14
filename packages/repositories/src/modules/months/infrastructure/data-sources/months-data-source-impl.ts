@@ -5,13 +5,13 @@ import { MonthsDataSource } from './months-data-source'
 export class MonthsDataSourceImpl implements MonthsDataSource {
   constructor(private readonly _apiUrl: string) {}
 
-  public async getMonthsOnAuthorizedUser(
+  public async get_months_on_authorized_user(
     params: MonthsParams.Authorized,
   ): Promise<MonthsDto.Response.Authorized> {
     const queryParams: MonthsDto.QueryParams.Authorized = {
       filter: params.filter,
-      category_id: params.categoryId,
-      public_only: params.publicOnly,
+      category_id: params.category_id,
+      public_only: params.public_only,
       tags: params.tags?.join(','),
     }
 
@@ -22,12 +22,12 @@ export class MonthsDataSourceImpl implements MonthsDataSource {
     ).then((r) => r.json())
   }
 
-  public async getMonthsOnPublicUser(
+  public async get_months_on_public_user(
     params: MonthsParams.Public,
   ): Promise<MonthsDto.Response.Public> {
     const queryParams: MonthsDto.QueryParams.Public = {
       filter: params.filter,
-      category_id: params.categoryId,
+      category_id: params.category_id,
       tags: params.tags?.join(','),
     }
 

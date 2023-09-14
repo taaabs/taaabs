@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-export const useShallowSearchParams = () => {
-  const [searchParams, setSearchParams] = useState(
+export const use_shallow_search_params = () => {
+  const [search_params, set_search_params] = useState(
     new URLSearchParams(
       typeof window != 'undefined'
         ? new URLSearchParams(window.location.search)
@@ -9,27 +9,27 @@ export const useShallowSearchParams = () => {
     ),
   )
 
-  const listenToPopstate = () => {
+  const listen_to_popstate = () => {
     location.reload()
   }
 
   useEffect(() => {
-    const originalPushState = history.pushState
+    const original_push_state = history.pushState
 
     history.pushState = function (data, title, url) {
-      originalPushState.apply(history, [data, title, url])
+      original_push_state.apply(history, [data, title, url])
       if (typeof url == 'string') {
-        setSearchParams(new URLSearchParams(url.split('?')[1]))
+        set_search_params(new URLSearchParams(url.split('?')[1]))
       }
     }
 
-    window.addEventListener('popstate', listenToPopstate)
+    window.addEventListener('popstate', listen_to_popstate)
 
     return () => {
-      history.pushState = originalPushState
-      window.removeEventListener('popstate', listenToPopstate)
+      history.pushState = original_push_state
+      window.removeEventListener('popstate', listen_to_popstate)
     }
   }, [])
 
-  return searchParams
+  return search_params
 }

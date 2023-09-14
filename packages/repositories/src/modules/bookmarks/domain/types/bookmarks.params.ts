@@ -4,17 +4,17 @@ import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 
 export namespace BookmarksParams {
   type Base = {
-    sortBy?: SortBy
+    sort_by?: SortBy
     order?: Order
     tags?: string[]
-    categoryId?: string
+    category_id?: string
     after?: string
     filter?: LibraryFilter
-    yyyymmGte?: number
-    yyyymmLte?: number
+    yyyymm_gte?: number
+    yyyymm_lte?: number
   }
   export type Authorized = Base & {
-    publicOnly?: boolean
+    public_only?: boolean
   }
   export type Public = Base & {
     username: string

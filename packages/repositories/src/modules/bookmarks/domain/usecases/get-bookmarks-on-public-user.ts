@@ -6,9 +6,9 @@ import { BookmarksParams } from '../types/bookmarks.params'
 export class GetBookmarksOnPublicUser
   implements UseCase<Promise<BookmarksRo.Public>, BookmarksParams.Public>
 {
-  constructor(private readonly _bookmarksRepository: BookmarksRepository) {}
+  constructor(private readonly _bookmarks_repository: BookmarksRepository) {}
 
   public invoke(params: BookmarksParams.Public) {
-    return this._bookmarksRepository.getBookmarksOnPublicUser(params)
+    return this._bookmarks_repository.get_bookmarks_on_public_user(params)
   }
 }

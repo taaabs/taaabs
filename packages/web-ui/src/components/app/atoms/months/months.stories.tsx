@@ -11,75 +11,75 @@ export const Primary = () => (
     <div style={{ width: 260 }}>
       <Months
         months={[
-          { yyyymm: 202302, bookmarkCount: 30, starredCount: 0, nsfwCount: 0 },
-          { yyyymm: 202303, bookmarkCount: 5, starredCount: 0, nsfwCount: 0 },
-          { yyyymm: 202304, bookmarkCount: 20, starredCount: 5, nsfwCount: 10 },
-          { yyyymm: 202305, bookmarkCount: 50, starredCount: 9, nsfwCount: 10 },
-          { yyyymm: 202306, bookmarkCount: 10, starredCount: 10, nsfwCount: 1 },
-          { yyyymm: 202307, bookmarkCount: 80, starredCount: 40, nsfwCount: 0 },
+          { yyyymm: 202302, bookmark_count: 30, starred_count: 0, nsfw_count: 0 },
+          { yyyymm: 202303, bookmark_count: 5, starred_count: 0, nsfw_count: 0 },
+          { yyyymm: 202304, bookmark_count: 20, starred_count: 5, nsfw_count: 10 },
+          { yyyymm: 202305, bookmark_count: 50, starred_count: 9, nsfw_count: 10 },
+          { yyyymm: 202306, bookmark_count: 10, starred_count: 10, nsfw_count: 1 },
+          { yyyymm: 202307, bookmark_count: 80, starred_count: 40, nsfw_count: 0 },
           {
             yyyymm: 202308,
-            bookmarkCount: 50,
-            starredCount: 10,
-            nsfwCount: 12,
+            bookmark_count: 50,
+            starred_count: 10,
+            nsfw_count: 12,
           },
-          { yyyymm: 202309, bookmarkCount: 10, starredCount: 0, nsfwCount: 4 },
-          { yyyymm: 202310, bookmarkCount: 80, starredCount: 12, nsfwCount: 0 },
+          { yyyymm: 202309, bookmark_count: 10, starred_count: 0, nsfw_count: 4 },
+          { yyyymm: 202310, bookmark_count: 80, starred_count: 12, nsfw_count: 0 },
         ]}
-        onYyyymmChange={() => {}}
-        clearDateRange={() => {}}
-        isGettingData={false}
-        hasResults={true}
+        on_yyyymm_change={() => {}}
+        clear_date_range={() => {}}
+        is_getting_data={false}
+        has_results={true}
       />
       <StorybookSpacer />
       <Months
         months={[
-          { yyyymm: 202302, bookmarkCount: 30, starredCount: 0, nsfwCount: 0 },
-          { yyyymm: 202303, bookmarkCount: 5, starredCount: 0, nsfwCount: 0 },
-          { yyyymm: 202304, bookmarkCount: 20, starredCount: 5, nsfwCount: 10 },
-          { yyyymm: 202305, bookmarkCount: 50, starredCount: 9, nsfwCount: 10 },
-          { yyyymm: 202306, bookmarkCount: 10, starredCount: 10, nsfwCount: 1 },
-          { yyyymm: 202307, bookmarkCount: 80, starredCount: 40, nsfwCount: 0 },
+          { yyyymm: 202302, bookmark_count: 30, starred_count: 0, nsfw_count: 0 },
+          { yyyymm: 202303, bookmark_count: 5, starred_count: 0, nsfw_count: 0 },
+          { yyyymm: 202304, bookmark_count: 20, starred_count: 5, nsfw_count: 10 },
+          { yyyymm: 202305, bookmark_count: 50, starred_count: 9, nsfw_count: 10 },
+          { yyyymm: 202306, bookmark_count: 10, starred_count: 10, nsfw_count: 1 },
+          { yyyymm: 202307, bookmark_count: 80, starred_count: 40, nsfw_count: 0 },
           {
             yyyymm: 202308,
-            bookmarkCount: 50,
-            starredCount: 10,
-            nsfwCount: 12,
+            bookmark_count: 50,
+            starred_count: 10,
+            nsfw_count: 12,
           },
-          { yyyymm: 202309, bookmarkCount: 10, starredCount: 0, nsfwCount: 4 },
-          { yyyymm: 202310, bookmarkCount: 80, starredCount: 12, nsfwCount: 0 },
+          { yyyymm: 202309, bookmark_count: 10, starred_count: 0, nsfw_count: 4 },
+          { yyyymm: 202310, bookmark_count: 80, starred_count: 12, nsfw_count: 0 },
         ]}
-        onYyyymmChange={() => {}}
-        clearDateRange={() => {}}
-        currentGte={202303}
-        currentLte={202305}
-        isGettingData={false}
-        hasResults={true}
+        on_yyyymm_change={() => {}}
+        clear_date_range={() => {}}
+        current_gte={202303}
+        current_lte={202305}
+        is_getting_data={false}
+        has_results={true}
       />
       <StorybookSpacer />
       <Months
         months={[
-          { yyyymm: 202302, bookmarkCount: 30, starredCount: 0, nsfwCount: 0 },
-          { yyyymm: 202303, bookmarkCount: 5, starredCount: 0, nsfwCount: 0 },
-          { yyyymm: 202304, bookmarkCount: 20, starredCount: 5, nsfwCount: 10 },
-          { yyyymm: 202305, bookmarkCount: 50, starredCount: 9, nsfwCount: 10 },
-          { yyyymm: 202306, bookmarkCount: 10, starredCount: 10, nsfwCount: 1 },
-          { yyyymm: 202307, bookmarkCount: 80, starredCount: 40, nsfwCount: 0 },
+          { yyyymm: 202302, bookmark_count: 30, starred_count: 0, nsfw_count: 0 },
+          { yyyymm: 202303, bookmark_count: 5, starred_count: 0, nsfw_count: 0 },
+          { yyyymm: 202304, bookmark_count: 20, starred_count: 5, nsfw_count: 10 },
+          { yyyymm: 202305, bookmark_count: 50, starred_count: 9, nsfw_count: 10 },
+          { yyyymm: 202306, bookmark_count: 10, starred_count: 10, nsfw_count: 1 },
+          { yyyymm: 202307, bookmark_count: 80, starred_count: 40, nsfw_count: 0 },
           {
             yyyymm: 202308,
-            bookmarkCount: 50,
-            starredCount: 10,
-            nsfwCount: 12,
+            bookmark_count: 50,
+            starred_count: 10,
+            nsfw_count: 12,
           },
-          { yyyymm: 202309, bookmarkCount: 10, starredCount: 0, nsfwCount: 4 },
-          { yyyymm: 202310, bookmarkCount: 80, starredCount: 12, nsfwCount: 0 },
+          { yyyymm: 202309, bookmark_count: 10, starred_count: 0, nsfw_count: 4 },
+          { yyyymm: 202310, bookmark_count: 80, starred_count: 12, nsfw_count: 0 },
         ]}
-        onYyyymmChange={() => {}}
-        clearDateRange={() => {}}
-        currentGte={202303}
-        currentLte={202305}
-        isGettingData={true}
-        hasResults={true}
+        on_yyyymm_change={() => {}}
+        clear_date_range={() => {}}
+        current_gte={202303}
+        current_lte={202305}
+        is_getting_data={true}
+        has_results={true}
       />
     </div>
   </StorybookMargin>

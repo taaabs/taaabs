@@ -12,8 +12,8 @@ describe('Atoms/ButtonAvatar', () => {
         url=""
         blurhash=""
         alt=""
-        onClick={onClickMock}
-        testId={testId}
+        on_click={onClickMock}
+        test_id={testId}
       />,
     )
     const el = screen.getByTestId(testId)
@@ -25,7 +25,7 @@ describe('Atoms/ButtonAvatar', () => {
     const altText = 'test'
     const url = 'test.img'
     render(
-      <ButtonAvatar url={url} blurhash="" alt={altText} onClick={() => {}} />,
+      <ButtonAvatar url={url} blurhash="" alt={altText} on_click={() => {}} />,
     )
     const el = screen.getByAltText(altText)
     expect(el).toHaveAttribute('src', url)

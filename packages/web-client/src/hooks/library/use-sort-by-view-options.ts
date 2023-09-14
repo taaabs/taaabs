@@ -3,10 +3,10 @@ import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
+import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 
 export const useSortByViewOptions = () => {
-  const queryParams = useShallowSearchParams()
+  const queryParams = use_shallow_search_params()
   const [currentSortBy, setCurrentSortBy] = useState<SortBy>(
     Object.values(SortBy)[
       parseInt(

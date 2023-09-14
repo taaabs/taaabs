@@ -9,61 +9,63 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 
 type Months = {
   yyyymm: number
-  bookmarkCount: number
-  starredCount: number
-  nsfwCount: number
+  bookmark_count: number
+  starred_count: number
+  nsfw_count: number
 }[]
 
 export namespace Months {
   export type Props = {
     months: Months | null
-    currentGte?: number
-    currentLte?: number
-    onYyyymmChange: ({ gte, lte }: { gte: number; lte: number }) => void
-    clearDateRange: () => void
-    selectedTags?: string
-    hasResults?: boolean
-    isGettingData: boolean
+    current_gte?: number
+    current_lte?: number
+    on_yyyymm_change: ({ gte, lte }: { gte: number; lte: number }) => void
+    clear_date_range: () => void
+    selected_tags?: string
+    has_results?: boolean
+    is_getting_data: boolean
   }
 }
 
 export const Months: React.FC<Months.Props> = memo(
   (props) => {
     const graph = useRef<HTMLDivElement>(null)
-    const { swiping: isSwiping } = useSwipe(undefined, {
+    const { swiping: is_swiping } = useSwipe(undefined, {
       preventDefault: false,
       passive: false,
       threshold: 0,
     })
-    const [key, setKey] = useState('')
-    const [startIndex, setStartIndex] = useState<number | null>(null)
-    const [endIndex, setEndIndex] = useState<number | null>(null)
-    const [draggedStartIndex, setDraggedStartIndex] = useState<number | null>(
+    const [key, set_key] = useState('')
+    const [start_index, set_start_index] = useState<number | null>(null)
+    const [end_index, set_end_index] = useState<number | null>(null)
+    const [dragged_start_index, set_dragged_start_index] = useState<
+      number | null
+    >(null)
+    const [dragged_end_index, set_dragged_end_index] = useState<number | null>(
       null,
     )
-    const [draggedEndIndex, setDraggedEndIndex] = useState<number | null>(null)
-    const [bookmarkCount, setBookmarkCount] = useState<number | null>(null)
-    const [starredCount, setStarredCount] = useState<number | null>(null)
-    const [nsfwCount, setNsfwCount] = useState<number | null>(null)
+    const [bookmark_count, set_bookmark_count] = useState<number | null>(null)
+    const [starred_count, set_starred_count] = useState<number | null>(null)
+    const [nsfw_count, set_nsfw_count] = useState<number | null>(null)
 
     useUpdateEffect(() => {
       if (
-        !isSwiping &&
+        !is_swiping &&
         props.months &&
-        draggedStartIndex != undefined &&
-        draggedEndIndex != undefined &&
-        props.months[draggedStartIndex] &&
-        props.months[draggedEndIndex]
+        dragged_start_index != undefined &&
+        dragged_end_index != undefined &&
+        props.months[dragged_start_index] &&
+        props.months[dragged_end_index]
       ) {
-        props.onYyyymmChange({
-          gte: props.months[draggedStartIndex].yyyymm,
-          lte: props.months[draggedEndIndex].yyyymm,
+        props.on_yyyymm_change({
+          gte: props.months[dragged_start_index].yyyymm,
+          lte: props.months[dragged_end_index].yyyymm,
         })
 
-        setDraggedStartIndex(null)
-        setDraggedEndIndex(null)
+        set_dragged_start_index(null)
+        set_dragged_end_index(null)
       }
-    }, [isSwiping])
+    }, [is_swiping])
 
     const calculateCounts = ({
       months,
@@ -85,37 +87,37 @@ export const Months: React.FC<Months.Props> = memo(
       let starredCount = 0
       let nsfwCount = 0
       monthsSliced.forEach((month) => {
-        bookmarkCount += month.bookmarkCount
-        starredCount += month.starredCount
-        nsfwCount += month.nsfwCount
+        bookmarkCount += month.bookmark_count
+        starredCount += month.starred_count
+        nsfwCount += month.nsfw_count
       })
-      setBookmarkCount(bookmarkCount)
-      setStarredCount(starredCount)
-      setNsfwCount(nsfwCount)
+      set_bookmark_count(bookmarkCount)
+      set_starred_count(starredCount)
+      set_nsfw_count(nsfwCount)
     }
 
-    const possibleStartIndex = ({
+    const possible_start_index = ({
       months,
-      currentGte,
+      current_gte,
     }: {
       months: Months
-      currentGte: number
+      current_gte: number
     }): number | null => {
-      const startIndex =
-        months && currentGte
-          ? months.find((month) => month.yyyymm == currentGte)
-            ? months.findIndex((month) => month.yyyymm == currentGte)
+      const start_index =
+        months && current_gte
+          ? months.find((month) => month.yyyymm == current_gte)
+            ? months.findIndex((month) => month.yyyymm == current_gte)
             : months.findIndex((month) => {
                 const monthsFiltered = months!.filter(
-                  (m) => m.yyyymm > currentGte!,
+                  (m) => m.yyyymm > current_gte!,
                 )
                 return monthsFiltered.length
                   ? month.yyyymm ==
                       monthsFiltered
                         .map((m) => m.yyyymm)
                         .reduce((prev, curr) =>
-                          Math.abs(curr - currentGte!) <
-                          Math.abs(prev - currentGte!)
+                          Math.abs(curr - current_gte!) <
+                          Math.abs(prev - current_gte!)
                             ? curr
                             : prev,
                         )
@@ -123,39 +125,39 @@ export const Months: React.FC<Months.Props> = memo(
                       props
                         .months!.map((m) => m.yyyymm)
                         .reduce((prev, curr) =>
-                          Math.abs(curr - currentGte!) <
-                          Math.abs(prev - currentGte!)
+                          Math.abs(curr - current_gte!) <
+                          Math.abs(prev - current_gte!)
                             ? curr
                             : prev,
                         )
               })
           : null
 
-      return startIndex != -1 ? startIndex : null
+      return start_index != -1 ? start_index : null
     }
 
     const possibleEndIndex = ({
       months,
-      currentLte,
+      current_lte,
     }: {
       months: Months
-      currentLte: number
+      current_lte: number
     }): number | null => {
       const endIndex =
-        months && currentLte
-          ? months.find((month) => month.yyyymm == currentLte)
-            ? months.findIndex((month) => month.yyyymm == currentLte)
+        months && current_lte
+          ? months.find((month) => month.yyyymm == current_lte)
+            ? months.findIndex((month) => month.yyyymm == current_lte)
             : months.findIndex((month) => {
                 const monthsFiltered = months!.filter(
-                  (m) => m.yyyymm < currentLte!,
+                  (m) => m.yyyymm < current_lte!,
                 )
                 return monthsFiltered.length
                   ? month.yyyymm ==
                       monthsFiltered
                         .map((m) => m.yyyymm)
                         .reduce((prev, curr) =>
-                          Math.abs(curr - currentLte!) <
-                          Math.abs(prev - currentLte!)
+                          Math.abs(curr - current_lte!) <
+                          Math.abs(prev - current_lte!)
                             ? curr
                             : prev,
                         )
@@ -163,8 +165,8 @@ export const Months: React.FC<Months.Props> = memo(
                       props
                         .months!.map((m) => m.yyyymm)
                         .reduce((prev, curr) =>
-                          Math.abs(curr - currentLte!) <
-                          Math.abs(prev - currentLte!)
+                          Math.abs(curr - current_lte!) <
+                          Math.abs(prev - current_lte!)
                             ? curr
                             : prev,
                         )
@@ -174,22 +176,22 @@ export const Months: React.FC<Months.Props> = memo(
       return endIndex != -1 ? endIndex : null
     }
 
-    const setStartAndEndIndex = ({
+    const set_start_and_end_index = ({
       months,
-      currentGte,
-      currentLte,
+      current_gte,
+      current_lte,
     }: {
       months: Months
-      currentGte: number
-      currentLte: number
+      current_gte: number
+      current_lte: number
     }) => {
-      setStartIndex(possibleStartIndex({ months, currentGte }))
-      setEndIndex(possibleEndIndex({ months, currentLte }))
+      set_start_index(possible_start_index({ months, current_gte }))
+      set_end_index(possibleEndIndex({ months, current_lte }))
     }
 
     const setStartAndEndIndexThrottled = useThrottledCallback(
-      setStartAndEndIndex,
-      [setStartIndex, setEndIndex],
+      set_start_and_end_index,
+      [set_start_index, set_end_index],
       50,
     )
 
@@ -202,69 +204,74 @@ export const Months: React.FC<Months.Props> = memo(
     useUpdateEffect(() => {
       if (
         !props.months ||
-        draggedStartIndex == undefined ||
-        draggedEndIndex == undefined
+        dragged_start_index == undefined ||
+        dragged_end_index == undefined
       )
         return
 
       setStartAndEndIndexThrottled({
         months: props.months,
-        currentGte: props.months[draggedStartIndex].yyyymm,
-        currentLte: props.months[draggedEndIndex].yyyymm,
+        current_gte: props.months[dragged_start_index].yyyymm,
+        current_lte: props.months[dragged_end_index].yyyymm,
       })
 
       calculateCountsThrottled({
         months: props.months,
-        startIndex: draggedStartIndex,
-        endIndex: draggedEndIndex,
+        startIndex: dragged_start_index,
+        endIndex: dragged_end_index,
       })
-    }, [draggedStartIndex, draggedEndIndex])
+    }, [dragged_start_index, dragged_end_index])
 
     useUpdateEffect(() => {
       calculateCounts({
         months: props.months,
-        startIndex: startIndex != null ? startIndex : undefined,
-        endIndex: endIndex != null ? endIndex : undefined,
+        startIndex: start_index != null ? start_index : undefined,
+        endIndex: end_index != null ? end_index : undefined,
       })
 
-      if (!isSwiping) {
-        setKey(
-          `${startIndex || ''}${endIndex || ''}${props.selectedTags || ''}`,
+      if (!is_swiping) {
+        set_key(
+          `${start_index || ''}${end_index || ''}${props.selected_tags || ''}`,
         )
       }
-    }, [startIndex, endIndex, props.months])
+    }, [start_index, end_index, props.months])
 
     useEffect(() => {
-      if (!props.months || !props.currentGte || !props.currentLte) {
-        setKey(
-          `${startIndex || ''}${endIndex || ''}${props.selectedTags || ''}`,
+      if (!props.months || !props.current_gte || !props.current_lte) {
+        set_key(
+          `${start_index || ''}${end_index || ''}${props.selected_tags || ''}`,
         )
-        setStartIndex(null)
-        setEndIndex(null)
+        set_start_index(null)
+        set_end_index(null)
 
         return
       }
 
-      setStartAndEndIndex({
+      set_start_and_end_index({
         months: props.months,
-        currentGte: props.currentGte,
-        currentLte: props.currentLte,
+        current_gte: props.current_gte,
+        current_lte: props.current_lte,
       })
-    }, [props.currentGte, props.currentLte, props.months, props.selectedTags])
+    }, [
+      props.current_gte,
+      props.current_lte,
+      props.months,
+      props.selected_tags,
+    ])
 
     useUpdateEffect(() => {
-      if (props.hasResults == undefined) {
-        setBookmarkCount(null)
+      if (props.has_results == undefined) {
+        set_bookmark_count(null)
       }
-    }, [props.hasResults])
+    }, [props.has_results])
 
     useEffect(() => {
       if (
         !props.months ||
-        props.currentGte ||
-        props.currentLte ||
-        draggedStartIndex != undefined ||
-        draggedEndIndex != undefined
+        props.current_gte ||
+        props.current_lte ||
+        dragged_start_index != undefined ||
+        dragged_end_index != undefined
       )
         return
 
@@ -282,34 +289,34 @@ export const Months: React.FC<Months.Props> = memo(
             <div className={styles.graph__details__title}>Date range</div>
             <div className={styles['graph__details__current-range']}>
               {props.months.length > 0
-                ? startIndex != undefined &&
-                  props.months[startIndex] &&
-                  endIndex != undefined &&
-                  props.months[endIndex]
-                  ? _yyyymmToDisplay(props.months[startIndex].yyyymm) +
-                    (endIndex != startIndex
-                      ? ` - ${_yyyymmToDisplay(props.months[endIndex].yyyymm)}`
+                ? start_index != undefined &&
+                  props.months[start_index] &&
+                  end_index != undefined &&
+                  props.months[end_index]
+                  ? _yyyymmToDisplay(props.months[start_index].yyyymm) +
+                    (end_index != start_index
+                      ? ` - ${_yyyymmToDisplay(props.months[end_index].yyyymm)}`
                       : '')
                   : 'All history'
-                : props.currentGte && props.currentLte
-                ? `${_yyyymmToDisplay(props.currentGte)} - ${_yyyymmToDisplay(
-                    props.currentLte,
+                : props.current_gte && props.current_lte
+                ? `${_yyyymmToDisplay(props.current_gte)} - ${_yyyymmToDisplay(
+                    props.current_lte,
                   )}`
                 : 'All history'}
             </div>
-            {props.hasResults && bookmarkCount && bookmarkCount > 0 ? (
+            {props.has_results && bookmark_count && bookmark_count > 0 ? (
               <div className={styles.graph__details__counts}>
                 <div className={styles.graph__details__counts__total}>
-                  {bookmarkCount}
+                  {bookmark_count}
                 </div>
-                {starredCount != undefined && starredCount > 0 && (
+                {starred_count != undefined && starred_count > 0 && (
                   <div className={styles.graph__details__counts__starred}>
-                    {starredCount}
+                    {starred_count}
                   </div>
                 )}
-                {nsfwCount != undefined && nsfwCount > 0 && (
+                {nsfw_count != undefined && nsfw_count > 0 && (
                   <div className={styles.graph__details__counts__nsfw}>
-                    {nsfwCount}
+                    {nsfw_count}
                   </div>
                 )}
               </div>
@@ -319,16 +326,16 @@ export const Months: React.FC<Months.Props> = memo(
           </div>
         )}
 
-        {props.currentGte && props.currentLte && (
+        {props.current_gte && props.current_lte && (
           <button
             className={styles.graph__clear}
-            onClick={props.clearDateRange}
+            onClick={props.clear_date_range}
           >
             <Icon variant="ADD" />
           </button>
         )}
 
-        {!props.isGettingData && props.months && props.months.length >= 2 && (
+        {!props.is_getting_data && props.months && props.months.length >= 2 && (
           <div className={styles.graph__recharts}>
             <ResponsiveContainer width={'100%'} height={135} key={key}>
               <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
@@ -354,41 +361,41 @@ export const Months: React.FC<Months.Props> = memo(
                 </defs>
                 <Area
                   type="basis"
-                  dataKey="bookmarkCount"
+                  dataKey="bookmark_count"
                   strokeWidth={0}
                   fill="url(#bookmarkCount)"
                   isAnimationActive={false}
                 />
                 <Area
                   type="basis"
-                  dataKey="starredCount"
+                  dataKey="starred_count"
                   strokeWidth={0}
                   fill="var(--Months-chart-starred-fill)"
-                  fillOpacity={starredCount == 0 ? 0 : 1}
+                  fillOpacity={starred_count == 0 ? 0 : 1}
                   isAnimationActive={false}
                 />
                 <Area
                   type="basis"
-                  dataKey="bookmarkCount"
+                  dataKey="bookmark_count"
                   strokeWidth={2}
                   stroke="var(--Months-chart-stroke)"
                   isAnimationActive={false}
                   fill="transparent"
-                  strokeOpacity={bookmarkCount == 0 ? 0 : 1}
+                  strokeOpacity={bookmark_count == 0 ? 0 : 1}
                 />
                 <Area
                   type="basis"
-                  dataKey="nsfwCount"
+                  dataKey="nsfw_count"
                   strokeWidth={2}
                   stroke="var(--Months-chart-nsfw-stroke)"
                   fill="transparent"
                   isAnimationActive={false}
-                  strokeOpacity={nsfwCount == 0 ? 0 : 1}
+                  strokeOpacity={nsfw_count == 0 ? 0 : 1}
                 />
                 <YAxis tickCount={1} width={0} />
                 <Brush
-                  startIndex={startIndex != null ? startIndex : undefined}
-                  endIndex={endIndex != null ? endIndex : undefined}
+                  startIndex={start_index != null ? start_index : undefined}
+                  endIndex={end_index != null ? end_index : undefined}
                   height={40}
                   travellerWidth={24}
                   fill="transparent"
@@ -400,8 +407,8 @@ export const Months: React.FC<Months.Props> = memo(
                     )
                       return
 
-                    setDraggedStartIndex(startIndex)
-                    setDraggedEndIndex(endIndex)
+                    set_dragged_start_index(startIndex)
+                    set_dragged_end_index(endIndex)
                   }}
                   className={styles.graph__recharts__brush}
                 />
@@ -410,19 +417,19 @@ export const Months: React.FC<Months.Props> = memo(
           </div>
         )}
 
-        {props.hasResults && props.months && props.months.length <= 1 && (
+        {props.has_results && props.months && props.months.length <= 1 && (
           <div className={styles.graph__info}>All results fit in one month</div>
         )}
 
-        {props.hasResults == false && (
+        {props.has_results == false && (
           <div className={styles.graph__info}>There is nothing to plot</div>
         )}
       </div>
     )
   },
   (o, n) =>
-    o.isGettingData == n.isGettingData &&
-    o.clearDateRange == n.clearDateRange &&
+    o.is_getting_data == n.is_getting_data &&
+    o.clear_date_range == n.clear_date_range &&
     JSON.stringify(o.months) == JSON.stringify(n.months),
 )
 

@@ -3,36 +3,35 @@ import { LibraryDispatch, LibraryState } from '../../library.store'
 import { MonthsDataSourceImpl } from '@repositories/modules/months/infrastructure/data-sources/months-data-source-impl'
 import { MonthsRepositoryImpl } from '@repositories/modules/months/infrastructure/repositories/months-repository-impl'
 import { GetMonthsOnPublicUser } from '@repositories/modules/months/domain/usecases/get-months-on-public-user'
-import { monthsActions } from '../months.slice'
-import { bookmarksActions } from '../../bookmarks/bookmarks.slice'
+import { months_actions } from '../months.slice'
+import { bookmarks_actions } from '../../bookmarks/bookmarks.slice'
 
-export const getMonths = ({
-  params,
-  apiUrl,
-}: {
-  params: MonthsParams.Public
-  apiUrl: string
+export const get_months = (params: {
+  query_params: MonthsParams.Public
+  api_url: string
 }) => {
   return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
-    const dataSource = new MonthsDataSourceImpl(apiUrl)
-    const repository = new MonthsRepositoryImpl(dataSource)
-    const getMonths = new GetMonthsOnPublicUser(repository)
+    const data_source = new MonthsDataSourceImpl(params.api_url)
+    const repository = new MonthsRepositoryImpl(data_source)
+    const get_months = new GetMonthsOnPublicUser(repository)
 
-    dispatch(monthsActions.setIsGettingData(true))
+    dispatch(months_actions.set_is_getting_data(true))
 
-    const result = await getMonths.invoke(params)
+    const result = await get_months.invoke(params.query_params)
 
-    dispatch(monthsActions.setData(result))
-    dispatch(monthsActions.setIsGettingData(false))
+    dispatch(months_actions.set_data(result))
+    dispatch(months_actions.set_is_getting_data(false))
 
     const state = getState()
     if (
-      !state.bookmarks.isGettingData &&
-      state.bookmarks.isGettingFirstBookmarks
+      !state.bookmarks.is_getting_data &&
+      state.bookmarks.is_getting_first_bookmarks
     ) {
-      dispatch(monthsActions.processTags())
-      dispatch(bookmarksActions.setBookmarks(state.bookmarks.incomingBookmarks))
-      dispatch(bookmarksActions.setIsGettingFirstBookmarks(false))
+      dispatch(months_actions.process_tags())
+      dispatch(
+        bookmarks_actions.set_bookmarks(state.bookmarks.incoming_bookmarks),
+      )
+      dispatch(bookmarks_actions.set_is_getting_first_bookmarks(false))
     }
   }
 }

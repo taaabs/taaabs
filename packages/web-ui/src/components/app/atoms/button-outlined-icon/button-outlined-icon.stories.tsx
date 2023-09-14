@@ -7,6 +7,6 @@ export default {
 
 export const Primary = () => (
   <StorybookMargin>
-    <ButtonOutlinedIcon iconVariant="ADD" onClick={() => {}} />
+    <ButtonOutlinedIcon icon_variant="ADD" on_click={() => {}} />
   </StorybookMargin>
 )

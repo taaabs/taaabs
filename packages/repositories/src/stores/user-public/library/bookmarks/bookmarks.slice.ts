@@ -4,46 +4,46 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import * as thunks from './action-creators'
 
 type BookmarksState = {
-  isGettingData: boolean
-  isGettingFirstBookmarks: boolean
-  isGettingMoreBookmarks: boolean
-  incomingBookmarks: Array<BookmarkEntity.Public> | null
+  is_getting_data: boolean
+  is_getting_first_bookmarks: boolean
+  is_getting_more_bookmarks: boolean
+  incoming_bookmarks: Array<BookmarkEntity.Public> | null
   bookmarks: Array<BookmarkEntity.Public> | null
-  hasMoreBookmarks: boolean | null
+  has_more_bookmarks: boolean | null
 }
 
-const initialState: BookmarksState = {
-  isGettingData: false,
-  isGettingFirstBookmarks: false,
-  isGettingMoreBookmarks: false,
-  incomingBookmarks: null,
+const initial_state: BookmarksState = {
+  is_getting_data: false,
+  is_getting_first_bookmarks: false,
+  is_getting_more_bookmarks: false,
+  incoming_bookmarks: null,
   bookmarks: null,
-  hasMoreBookmarks: null,
+  has_more_bookmarks: null,
 }
 
-export const bookmarksSlice = createSlice({
+export const bookmarks_slice = createSlice({
   name: 'bookmarks',
-  initialState,
+  initialState: initial_state,
   reducers: {
-    setIsGettingData(state, action: PayloadAction<boolean>) {
-      state.isGettingData = action.payload
+    set_is_getting_data(state, action: PayloadAction<boolean>) {
+      state.is_getting_data = action.payload
     },
-    setIsGettingFirstBookmarks(state, action: PayloadAction<boolean>) {
-      state.isGettingFirstBookmarks = action.payload
+    set_is_getting_first_bookmarks(state, action: PayloadAction<boolean>) {
+      state.is_getting_first_bookmarks = action.payload
     },
-    setIsGettingMoreBookmarks(state, action: PayloadAction<boolean>) {
-      state.isGettingMoreBookmarks = action.payload
+    set_is_getting_more_bookmarks(state, action: PayloadAction<boolean>) {
+      state.is_getting_more_bookmarks = action.payload
     },
-    setIncomingBookmarks(
+    set_incoming_bookmarks(
       state,
-      action: PayloadAction<BookmarksState['incomingBookmarks']>,
+      action: PayloadAction<BookmarksState['incoming_bookmarks']>,
     ) {
-      state.incomingBookmarks = action.payload
+      state.incoming_bookmarks = action.payload
     },
-    setBookmarks(state, action: PayloadAction<BookmarksState['bookmarks']>) {
+    set_bookmarks(state, action: PayloadAction<BookmarksState['bookmarks']>) {
       state.bookmarks = action.payload
     },
-    setMoreBookmarks(
+    set_more_bookmarks(
       state,
       action: PayloadAction<BookmarksState['bookmarks']>,
     ) {
@@ -51,23 +51,24 @@ export const bookmarksSlice = createSlice({
         throw 'Some bookmarks should be there.'
       state.bookmarks.push(...action.payload)
     },
-    setHasMoreBookmarks(
+    set_has_more_bookmarks(
       state,
-      action: PayloadAction<BookmarksState['hasMoreBookmarks']>,
+      action: PayloadAction<BookmarksState['has_more_bookmarks']>,
     ) {
-      state.hasMoreBookmarks = action.payload
+      state.has_more_bookmarks = action.payload
     },
-    setBookmarkRenderHeight(
+    set_bookmark_render_height(
       state,
       action: PayloadAction<{ index: number; height: number }>,
     ) {
       if (!state.bookmarks) return
-      state.bookmarks[action.payload.index].renderHeight = action.payload.height
+      state.bookmarks[action.payload.index].render_height =
+        action.payload.height
     },
   },
 })
 
-export const bookmarksActions = {
-  ...bookmarksSlice.actions,
+export const bookmarks_actions = {
+  ...bookmarks_slice.actions,
   ...thunks,
 }

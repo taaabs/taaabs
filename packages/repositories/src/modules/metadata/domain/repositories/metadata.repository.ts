@@ -2,6 +2,6 @@ import { MetadataParams } from '../types/metadata.params'
 import { MetadataRo } from '../types/metadata.ro'
 
 export type MetadataRepository = {
-  getAuthorized(): Promise<MetadataRo.Authorized>
-  getPublic(params: MetadataParams.Public): Promise<MetadataRo.Public>
+  get_authorized(): Promise<MetadataRo.Authorized>
+  get_public(params: MetadataParams.Public): Promise<MetadataRo.Public>
 }

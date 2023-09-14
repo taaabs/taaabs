@@ -9,9 +9,9 @@ export const Primary = () => {
   return (
     <StorybookMargin>
       <NavigationForLibrarySidebar
-        navigationItems={[
-          { label: 'All bookmarks', onClick: () => {}, isActive: true },
-          { label: 'Categories', onClick: () => {}, isActive: false },
+        navigation_items={[
+          { label: 'All bookmarks', on_click: () => {}, is_active: true },
+          { label: 'Categories', on_click: () => {}, is_active: false },
         ]}
       />
     </StorybookMargin>

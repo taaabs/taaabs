@@ -1,13 +1,13 @@
 export namespace MonthEntity {
   type Base = {
     tags: Record<string, { id: number; yields: number }>
-    bookmarkCount: number
-    starredCount: number | null
-    nsfwCount: number | null
+    bookmark_count: number
+    starred_count: number | null
+    nsfw_count: number | null
   }
 
   export type Authorized = Base & {
-    publicCount: number | null
+    public_count: number | null
   }
   export type Public = Base
 }

@@ -1,4 +1,4 @@
-import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
+import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { useParams } from 'next/navigation'
 import { useLibraryDispatch, useLibrarySelector } from './store'
 import { useEffect, useState } from 'react'
@@ -16,7 +16,7 @@ enum SessionStorageKey {
 }
 
 export const useBookmarks = () => {
-  const queryParams = useShallowSearchParams()
+  const queryParams = use_shallow_search_params()
   const params = useParams()
   const dispatch = useLibraryDispatch()
   const { bookmarks, hasMoreBookmarks } = useLibrarySelector(
@@ -52,7 +52,7 @@ export const useBookmarks = () => {
     const queryCategoryId = queryParams.get('c')
     setLastQueryCatId(queryCategoryId)
     if (queryCategoryId) {
-      getBookmarksParams.categoryId = queryCategoryId
+      getBookmarksParams.category_id = queryCategoryId
     }
 
     const queryFilter = queryParams.get('f')
@@ -65,7 +65,7 @@ export const useBookmarks = () => {
     const querySortBy = queryParams.get('s')
     setLastQuerySortBy(querySortBy)
     if (querySortBy) {
-      getBookmarksParams.sortBy = Object.values(SortBy)[parseInt(querySortBy)]
+      getBookmarksParams.sort_by = Object.values(SortBy)[parseInt(querySortBy)]
     }
 
     const queryOrder = queryParams.get('o')
@@ -77,13 +77,13 @@ export const useBookmarks = () => {
     const queryYyyymmGte = queryParams.get('gte')
     setLastQueryYyyymmGte(queryYyyymmGte)
     if (queryYyyymmGte) {
-      getBookmarksParams.yyyymmGte = parseInt(queryYyyymmGte)
+      getBookmarksParams.yyyymm_gte = parseInt(queryYyyymmGte)
     }
 
     const queryYyyymmLte = queryParams.get('lte')
     setLastQueryYyyymmLte(queryYyyymmLte)
     if (queryYyyymmLte) {
-      getBookmarksParams.yyyymmLte = parseInt(queryYyyymmLte)
+      getBookmarksParams.yyyymm_lte = parseInt(queryYyyymmLte)
     }
 
     if (shouldGetNextPage) {
@@ -92,9 +92,9 @@ export const useBookmarks = () => {
     }
 
     dispatch(
-      bookmarksActions.getBookmarks({
-        params: getBookmarksParams,
-        apiUrl: process.env.NEXT_PUBLIC_API_URL,
+      bookmarksActions.get_bookmarks({
+        query_params: getBookmarksParams,
+        api_url: process.env.NEXT_PUBLIC_API_URL,
       }),
     )
   }

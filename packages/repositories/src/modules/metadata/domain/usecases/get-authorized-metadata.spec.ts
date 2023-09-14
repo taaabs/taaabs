@@ -5,9 +5,9 @@ describe('GetAuthorizedMetadata', () => {
   it('calls correct method on repository', () => {
     const MetadataRepositoryMock = jest.fn<MetadataRepository, []>()
     const metadataRepositoryMock = new MetadataRepositoryMock()
-    metadataRepositoryMock.getAuthorized = jest.fn()
+    metadataRepositoryMock.get_authorized = jest.fn()
     const sut = new GetAuthorizedMetadata(metadataRepositoryMock)
     sut.invoke()
-    expect(metadataRepositoryMock.getAuthorized).toHaveBeenCalled()
+    expect(metadataRepositoryMock.get_authorized).toHaveBeenCalled()
   })
 })

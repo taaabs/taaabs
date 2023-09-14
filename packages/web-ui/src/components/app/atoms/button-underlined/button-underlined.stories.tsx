@@ -9,23 +9,23 @@ export default {
 export const Primary = () => (
   <StorybookMargin>
     <Wrapper>
-      <ButtonUnderlined isActive={true} href="/" label="Lorem ispum" />
+      <ButtonUnderlined is_active={true} href="/" label="Lorem ispum" />
     </Wrapper>
     <StorybookSpacer />
     <Wrapper>
-      <ButtonUnderlined isActive={false} href="/" label="Lorem ispum" />
+      <ButtonUnderlined is_active={false} href="/" label="Lorem ispum" />
     </Wrapper>
     <StorybookSpacer />
     <Wrapper>
       <ButtonUnderlined
-        isActive={true}
-        onClick={() => {}}
+        is_active={true}
+        on_click={() => {}}
         label="Lorem ispum"
       />
     </Wrapper>
     <StorybookSpacer />
     <Wrapper>
-      <ButtonUnderlined isActive={false} label="Lorem ispum" />
+      <ButtonUnderlined is_active={false} label="Lorem ispum" />
     </Wrapper>
   </StorybookMargin>
 )

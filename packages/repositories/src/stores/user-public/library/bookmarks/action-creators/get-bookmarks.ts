@@ -1,46 +1,45 @@
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { BookmarksDataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks-data-source-impl'
 import { BookmarksRepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks-repository-impl'
-import { bookmarksActions } from '../bookmarks.slice'
+import { bookmarks_actions } from '../bookmarks.slice'
 import { GetBookmarksOnPublicUser } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-public-user'
 import { LibraryDispatch, LibraryState } from '../../library.store'
-import { monthsActions } from '../../months/months.slice'
+import { months_actions } from '../../months/months.slice'
 
-export const getBookmarks = ({
-  params,
-  apiUrl,
-}: {
-  params: BookmarksParams.Public
-  apiUrl: string
+export const get_bookmarks = (params: {
+  query_params: BookmarksParams.Public
+  api_url: string
 }) => {
   return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
-    const dataSource = new BookmarksDataSourceImpl(apiUrl)
-    const repository = new BookmarksRepositoryImpl(dataSource)
-    const getBookmarks = new GetBookmarksOnPublicUser(repository)
+    const data_source = new BookmarksDataSourceImpl(params.api_url)
+    const repository = new BookmarksRepositoryImpl(data_source)
+    const get_bookmarks = new GetBookmarksOnPublicUser(repository)
 
-    dispatch(bookmarksActions.setIsGettingData(true))
+    dispatch(bookmarks_actions.set_is_getting_data(true))
 
-    if (params.after) {
-      dispatch(bookmarksActions.setIsGettingMoreBookmarks(true))
+    if (params.query_params.after) {
+      dispatch(bookmarks_actions.set_is_getting_more_bookmarks(true))
     } else {
-      dispatch(bookmarksActions.setIsGettingFirstBookmarks(true))
-      dispatch(bookmarksActions.setHasMoreBookmarks(null))
+      dispatch(bookmarks_actions.set_is_getting_first_bookmarks(true))
+      dispatch(bookmarks_actions.set_has_more_bookmarks(null))
     }
 
-    const { bookmarks, pagination } = await getBookmarks.invoke(params)
+    const { bookmarks, pagination } = await get_bookmarks.invoke(
+      params.query_params,
+    )
 
-    dispatch(bookmarksActions.setIsGettingData(false))
-    dispatch(bookmarksActions.setHasMoreBookmarks(pagination.hasMore))
+    dispatch(bookmarks_actions.set_is_getting_data(false))
+    dispatch(bookmarks_actions.set_has_more_bookmarks(pagination.has_more))
 
-    if (params.after) {
-      dispatch(bookmarksActions.setMoreBookmarks(bookmarks))
-      dispatch(bookmarksActions.setIsGettingMoreBookmarks(false))
+    if (params.query_params.after) {
+      dispatch(bookmarks_actions.set_more_bookmarks(bookmarks))
+      dispatch(bookmarks_actions.set_is_getting_more_bookmarks(false))
     } else {
-      dispatch(bookmarksActions.setIncomingBookmarks(bookmarks))
-      if (!getState().months.isGettingMonthsData) {
-        dispatch(bookmarksActions.setBookmarks(bookmarks))
-        dispatch(monthsActions.processTags())
-        dispatch(bookmarksActions.setIsGettingFirstBookmarks(false))
+      dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks))
+      if (!getState().months.is_getting_months_data) {
+        dispatch(bookmarks_actions.set_bookmarks(bookmarks))
+        dispatch(months_actions.process_tags())
+        dispatch(bookmarks_actions.set_is_getting_first_bookmarks(false))
       }
     }
   }

@@ -3,11 +3,11 @@ import { LibraryFilter } from '@shared/types/common/library-filter'
 export namespace MonthsParams {
   type Base = {
     filter?: LibraryFilter
-    categoryId?: string
+    category_id?: string
     tags?: string[]
   }
   export type Authorized = Base & {
-    publicOnly?: boolean
+    public_only?: boolean
   }
   export type Public = Base & {
     username: string

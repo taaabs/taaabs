@@ -22,7 +22,7 @@ export const NavigationForHeader: React.FC<NavigationForHeader.Props> = ({
           <li key={link.label}>
             <ButtonUnderlined
               href={link.href}
-              isActive={link.isActive}
+              is_active={link.isActive}
               label={link.label}
             />
           </li>

@@ -4,7 +4,7 @@ describe('MetadataDataSourceImpl', () => {
   describe('getAuthorized', () => {
     it('should call proper endpoint via GET request', () => {
       const sut = new MetadataDataSourceImpl('http://example.com')
-      sut.getAuthorized()
+      sut.get_authorized()
       expect(fetch).toHaveBeenCalledWith('http://example.com/v1/metadata')
     })
   })
@@ -13,7 +13,7 @@ describe('MetadataDataSourceImpl', () => {
     it('should call proper endpoint via GET request', () => {
       const sut = new MetadataDataSourceImpl('http://example.com')
       const username = 'test'
-      sut.getPublic({ username })
+      sut.get_public({ username })
       expect(fetch).toHaveBeenCalledWith(
         `http://example.com/v1/metadata/${username}`,
       )

@@ -9,11 +9,11 @@ export class CheckUsernameAvailability
       UsernameAvailability.Params
     >
 {
-  constructor(private readonly _settingsRepository: SettingsRepository) {}
+  constructor(private readonly _settings_repository: SettingsRepository) {}
 
   public invoke(
     params: UsernameAvailability.Params,
   ): Promise<UsernameAvailability.Response> {
-    return this._settingsRepository.checkUsernameAvailability(params)
+    return this._settings_repository.check_username_availability(params)
   }
 }

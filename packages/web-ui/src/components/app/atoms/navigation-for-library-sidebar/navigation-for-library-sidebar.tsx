@@ -4,11 +4,11 @@ import cn from 'classnames'
 export namespace NavigationForLibrarySidebar {
   type NavigationItem = {
     label: string
-    onClick: () => void
-    isActive: boolean
+    on_click: () => void
+    is_active: boolean
   }
   export type Props = {
-    navigationItems: NavigationItem[]
+    navigation_items: NavigationItem[]
   }
 }
 
@@ -16,11 +16,11 @@ export const NavigationForLibrarySidebar: React.FC<
   NavigationForLibrarySidebar.Props
 > = (props) => (
   <nav className={styles.navigation}>
-    {props.navigationItems.map((item, i) => (
+    {props.navigation_items.map((item, i) => (
       <button
-        onClick={item.onClick}
+        onClick={item.on_click}
         className={cn(styles.navigation__item, {
-          [styles['navigation__item--active']]: item.isActive,
+          [styles['navigation__item--active']]: item.is_active,
         })}
         key={i}
       >

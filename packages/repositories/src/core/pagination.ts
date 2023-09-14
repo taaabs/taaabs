@@ -1,3 +1,3 @@
 export type Pagination = {
-  pagination: { hasMore: boolean }
+  pagination: { has_more: boolean }
 }

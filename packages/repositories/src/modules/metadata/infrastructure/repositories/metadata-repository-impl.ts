@@ -6,14 +6,14 @@ import { MetadataDataSource } from '../data-sources/metadata-data-source'
 export class MetadataRepositoryImpl implements MetadataRepository {
   constructor(private readonly _metadataDataSource: MetadataDataSource) {}
 
-  public async getAuthorized(): Promise<MetadataRo.Authorized> {
-    const response = await this._metadataDataSource.getAuthorized()
+  public async get_authorized(): Promise<MetadataRo.Authorized> {
+    const response = await this._metadataDataSource.get_authorized()
 
     return {
       username: response.username,
-      displayName: response.display_name,
-      isEmailConfirmed: response.is_email_confirmed,
-      registeredAt: new Date(response.registered_at),
+      display_name: response.display_name,
+      is_email_confirmed: response.is_email_confirmed,
+      registered_at: new Date(response.registered_at),
       avatar: response.avatar
         ? {
             url: response.avatar.url,
@@ -23,17 +23,17 @@ export class MetadataRepositoryImpl implements MetadataRepository {
     }
   }
 
-  public async getPublic(
+  public async get_public(
     params: MetadataParams.Public,
   ): Promise<MetadataRo.Public> {
-    const response = await this._metadataDataSource.getPublic({
+    const response = await this._metadataDataSource.get_public({
       username: params.username,
     })
 
     return {
       username: response.username,
-      displayName: response.display_name,
-      metaDescription: response.meta_description,
+      display_name: response.display_name,
+      meta_description: response.meta_description,
       avatar: response.avatar
         ? {
             url: response.avatar.url,

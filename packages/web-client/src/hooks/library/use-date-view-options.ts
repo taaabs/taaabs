@@ -1,8 +1,8 @@
 import { updateSearchParam } from '@/utils/update-query-param'
-import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
+import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 
 export const useDateViewOptions = () => {
-  const queryParams = useShallowSearchParams()
+  const queryParams = use_shallow_search_params()
 
   const setGteLteQueryParams = ({ gte, lte }: { gte: number; lte: number }) => {
     let updatedQueryParams: any

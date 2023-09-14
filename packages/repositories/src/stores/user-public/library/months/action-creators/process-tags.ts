@@ -1,44 +1,43 @@
 import { LibraryDispatch, LibraryState } from '../../library.store'
-import { Tags, monthsActions } from '../months.slice'
+import { Tags, months_actions } from '../months.slice'
 
-export const processTags = () => {
+export const process_tags = () => {
   return (dispatch: LibraryDispatch, getState: () => LibraryState) => {
-    const { monthsData, yyyymmGte, yyyymmLte } = getState().months
-    if (!monthsData) {
+    const { months_data, yyyymm_gte, yyyymm_lte } = getState().months
+    if (!months_data) {
       throw 'Months data should be there.'
     }
 
-    const calculateTags = (
-      months: typeof monthsData.monthsOfBookmarkCreation,
-    ) => {
-      const monthsFiltered: typeof monthsData.monthsOfBookmarkCreation =
-        Object.keys(months).reduce((acc, val) => {
-          const yyyymm = parseInt(val)
-          let shouldReturnVal = false
+    const calculate_tags = (months: typeof months_data.created_at) => {
+      const monthsFiltered: typeof months_data.created_at = Object.keys(
+        months,
+      ).reduce((acc, val) => {
+        const yyyymm = parseInt(val)
+        let shouldReturnVal = false
 
-          if (yyyymmGte && yyyymmLte) {
-            if (yyyymm >= yyyymmGte && yyyymm <= yyyymmLte) {
-              shouldReturnVal = true
-            }
-          } else if (yyyymmGte && yyyymm >= yyyymmGte) {
-            shouldReturnVal = true
-          } else if (yyyymmLte && yyyymm <= yyyymmLte) {
-            shouldReturnVal = true
-          } else {
+        if (yyyymm_gte && yyyymm_lte) {
+          if (yyyymm >= yyyymm_gte && yyyymm <= yyyymm_lte) {
             shouldReturnVal = true
           }
+        } else if (yyyymm_gte && yyyymm >= yyyymm_gte) {
+          shouldReturnVal = true
+        } else if (yyyymm_lte && yyyymm <= yyyymm_lte) {
+          shouldReturnVal = true
+        } else {
+          shouldReturnVal = true
+        }
 
-          if (shouldReturnVal) {
-            return {
-              ...acc,
-              [val]: months[val],
-            }
-          } else {
-            return {
-              ...acc,
-            }
+        if (shouldReturnVal) {
+          return {
+            ...acc,
+            [val]: months[val],
           }
-        }, {})
+        } else {
+          return {
+            ...acc,
+          }
+        }
+      }, {})
 
       const tags: Tags = {}
 
@@ -61,12 +60,12 @@ export const processTags = () => {
       return sortedTags
     }
 
-    const tagsOfBookmarkCreation = calculateTags(
-      monthsData.monthsOfBookmarkCreation,
-    )
-    const tagsOfUrlCreation = calculateTags(monthsData.monthsOfUrlCreation)
+    const tags_of_bookmark_creation = calculate_tags(months_data.created_at)
+    const tags_of_url_creation = calculate_tags(months_data.updated_at)
 
-    dispatch(monthsActions.setTagsOfBookmarkCreation(tagsOfBookmarkCreation))
-    dispatch(monthsActions.setTagsOfUrlCreation(tagsOfUrlCreation))
+    dispatch(
+      months_actions.set_tags_of_bookmark_creation(tags_of_bookmark_creation),
+    )
+    dispatch(months_actions.set_tags_of_url_creation(tags_of_url_creation))
   }
 }

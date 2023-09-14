@@ -3,9 +3,9 @@ import styles from './button-outlined-icon.module.scss'
 
 export namespace ButtonOutlinedIcon {
   export type Props = {
-    onClick: () => void
-    iconVariant: Icon.Variant
-    testId?: string
+    on_click: () => void
+    icon_variant: Icon.Variant
+    test_id?: string
   }
 }
 
@@ -15,10 +15,10 @@ export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIcon.Props> = (
   return (
     <button
       className={styles.button}
-      onClick={props.onClick}
-      data-testid={props.testId}
+      onClick={props.on_click}
+      data-testid={props.test_id}
     >
-      <Icon variant={props.iconVariant} />
+      <Icon variant={props.icon_variant} />
     </button>
   )
 }

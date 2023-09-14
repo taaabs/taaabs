@@ -21,7 +21,7 @@ export namespace Bookmark {
     on_menu_click: () => void
     is_nsfw?: boolean
     is_starred?: boolean
-    links: { url: string; sitePath?: string; saves: number }[]
+    links: { url: string; site_path?: string; saves: number }[]
     render_height?: number
   }
 }
@@ -29,15 +29,15 @@ export namespace Bookmark {
 export const Bookmark: React.FC<Bookmark.Props> = memo(
   (props) => {
     const ref = useRef<HTMLDivElement>(null)
-    const [renderHeight, setRenderHeight] = useState<number | undefined>(
+    const [render_height, set_render_height] = useState<number | undefined>(
       undefined,
     )
-    const isVisible = useViewportSpy(ref)
+    const is_visible = useViewportSpy(ref)
 
     useEffect(() => {
-      if (renderHeight) return
+      if (render_height) return
 
-      setRenderHeight(ref.current!.clientHeight)
+      set_render_height(ref.current!.clientHeight)
       sessionStorage.setItem(
         `renderHeight_${props.id}`,
         ref.current!.clientHeight.toString(),
@@ -48,14 +48,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       <div
         ref={ref}
         style={{
-          height: renderHeight
-            ? renderHeight
+          height: render_height
+            ? render_height
             : props.render_height
             ? props.render_height
             : undefined,
         }}
       >
-        {isVisible || !renderHeight ? (
+        {is_visible || !render_height ? (
           <div
             className={styles.container}
             role="button"
@@ -155,7 +155,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         className={styles.bookmark__links__item__site__favicon}
                       >
                         <img
-                          src={`https://icons.bitwarden.net/${_urlDomain(
+                          src={`https://icons.bitwarden.net/${_url_domain(
                             link.url,
                           )}/icon.png`}
                         />
@@ -165,14 +165,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         href={link.url}
                       >
                         <span>
-                          {`${_urlDomain(link.url)} ${
-                            link.sitePath ? `› ${link.sitePath}` : ''
+                          {`${_url_domain(link.url)} ${
+                            link.site_path ? `› ${link.site_path}` : ''
                           }`}
                         </span>
                         <span>
-                          {_urlPath({
+                          {_url_path({
                             url: link.url,
-                            sitePath: link.sitePath,
+                            site_path: link.site_path,
                           })}
                         </span>
                       </a>
@@ -212,57 +212,57 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
   (o, n) => JSON.stringify(o.tags) == JSON.stringify(n.tags),
 )
 
-function _urlDomain(url: string): string {
-  let parsedUrl = ''
+function _url_domain(url: string): string {
+  let parsed_url = ''
   if (url.substring(0, 12) == 'https://www.') {
-    parsedUrl = url.substring(12)
+    parsed_url = url.substring(12)
   } else if (url.substring(0, 11) == 'http://www.') {
-    parsedUrl = url.substring(11)
+    parsed_url = url.substring(11)
   } else if (url.substring(0, 8) == 'https://') {
-    parsedUrl = url.substring(8)
+    parsed_url = url.substring(8)
   } else if (url.substring(0, 7) == 'http://') {
-    parsedUrl = url.substring(7)
+    parsed_url = url.substring(7)
   } else {
-    parsedUrl = url
+    parsed_url = url
   }
 
-  return parsedUrl.split('/')[0]
+  return parsed_url.split('/')[0]
 }
 
-function _urlPath(params: { url: string; sitePath?: string }): string {
-  let parsedUrl = params.url.replace('://', '').split('?')[0]
+function _url_path(params: { url: string; site_path?: string }): string {
+  let parsed_url = params.url.replace('://', '').split('?')[0]
 
-  if (parsedUrl.substring(parsedUrl.length - 1, parsedUrl.length) == '/') {
-    parsedUrl = parsedUrl.substring(0, parsedUrl.length - 1)
+  if (parsed_url.substring(parsed_url.length - 1, parsed_url.length) == '/') {
+    parsed_url = parsed_url.substring(0, parsed_url.length - 1)
   }
 
   if (
-    parsedUrl.substring(parsedUrl.length - 11, parsedUrl.length) ==
+    parsed_url.substring(parsed_url.length - 11, parsed_url.length) ==
     '/index.html'
   ) {
-    parsedUrl = parsedUrl.substring(0, parsedUrl.length - 11)
+    parsed_url = parsed_url.substring(0, parsed_url.length - 11)
   } else if (
-    parsedUrl.substring(parsedUrl.length - 10, parsedUrl.length) == '/index.htm'
+    parsed_url.substring(parsed_url.length - 10, parsed_url.length) == '/index.htm'
   ) {
-    parsedUrl = parsedUrl.substring(0, parsedUrl.length - 10)
+    parsed_url = parsed_url.substring(0, parsed_url.length - 10)
   } else if (
-    parsedUrl.substring(parsedUrl.length - 5, parsedUrl.length) == '.html'
+    parsed_url.substring(parsed_url.length - 5, parsed_url.length) == '.html'
   ) {
-    parsedUrl = parsedUrl.substring(0, parsedUrl.length - 5)
+    parsed_url = parsed_url.substring(0, parsed_url.length - 5)
   } else if (
-    parsedUrl.substring(parsedUrl.length - 4, parsedUrl.length) == '.htm'
+    parsed_url.substring(parsed_url.length - 4, parsed_url.length) == '.htm'
   ) {
-    parsedUrl = parsedUrl.substring(0, parsedUrl.length - 4)
+    parsed_url = parsed_url.substring(0, parsed_url.length - 4)
   }
 
-  const parsedUrlArr = parsedUrl.split('/')
-  parsedUrlArr.shift()
+  const parsed_url_arr = parsed_url.split('/')
+  parsed_url_arr.shift()
 
-  parsedUrl = parsedUrlArr.join('/')
+  parsed_url = parsed_url_arr.join('/')
 
-  if (params.sitePath && parsedUrl.startsWith(params.sitePath)) {
-    parsedUrl = parsedUrl.substring(params.sitePath.length + 1)
+  if (params.site_path && parsed_url.startsWith(params.site_path)) {
+    parsed_url = parsed_url.substring(params.site_path.length + 1)
   }
 
-  return parsedUrl.split('/').join(' › ')
+  return parsed_url.split('/').join(' › ')
 }

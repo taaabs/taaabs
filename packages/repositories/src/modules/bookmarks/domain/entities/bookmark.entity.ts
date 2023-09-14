@@ -3,17 +3,17 @@ export namespace BookmarkEntity {
     id: string
     title: string
     note?: string
-    createdAt: string
-    updatedAt: string
+    created_at: string
+    updated_at: string
     tags: { name: string; id: number }[]
     links: { url: string; saves: number }[]
-    isStarred: boolean
-    isNsfw: boolean
-    renderHeight?: number
+    is_starred: boolean
+    is_nsfw: boolean
+    render_height?: number
   }
 
   export type Authorized = Base & {
-    isPublic: boolean
+    is_public: boolean
   }
   export type Public = Base
 }

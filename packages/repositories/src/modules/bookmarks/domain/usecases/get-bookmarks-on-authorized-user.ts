@@ -7,9 +7,9 @@ export class GetBookmarksOnAuthorizedUser
   implements
     UseCase<Promise<BookmarksRo.Authorized>, BookmarksParams.Authorized>
 {
-  constructor(private readonly _bookmarksRepository: BookmarksRepository) {}
+  constructor(private readonly _bookmarks_repository: BookmarksRepository) {}
 
   public invoke(params: BookmarksParams.Authorized) {
-    return this._bookmarksRepository.getBookmarksOnAuthorizedUser(params)
+    return this._bookmarks_repository.get_bookmarks_on_authorized_user(params)
   }
 }

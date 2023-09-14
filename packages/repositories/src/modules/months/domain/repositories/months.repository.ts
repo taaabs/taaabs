@@ -2,9 +2,11 @@ import { MonthsParams } from '../types/months.params'
 import { MonthsRo } from '../types/months.ro'
 
 export type MonthsRepository = {
-  getMonthsOnAuthorizedUser(
+  get_months_on_authorized_user(
     params: MonthsParams.Authorized,
   ): Promise<MonthsRo.Authorized>
 
-  getMonthsOnPublicUser(params: MonthsParams.Public): Promise<MonthsRo.Public>
+  get_months_on_public_user(
+    params: MonthsParams.Public,
+  ): Promise<MonthsRo.Public>
 }

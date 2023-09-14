@@ -63,9 +63,9 @@ export const Primary = () => {
         slotAside={<>aside</>}
         slotSidebar={
           <NavigationForLibrarySidebar
-            navigationItems={[
-              { label: 'All bookmarks', isActive: true, onClick: () => {} },
-              { label: 'Categories', isActive: false, onClick: () => {} },
+            navigation_items={[
+              { label: 'All bookmarks', is_active: true, on_click: () => {} },
+              { label: 'Categories', is_active: false, on_click: () => {} },
             ]}
           />
         }

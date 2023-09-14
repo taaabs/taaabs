@@ -1,19 +1,19 @@
 import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { useParams } from 'next/navigation'
-import { useLibraryDispatch, useLibrarySelector } from './store'
+import { use_library_dispatch, use_library_selector } from './store'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
-import { bookmarksActions } from '@repositories/stores/user-public/library/bookmarks/bookmarks.slice'
+import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
+import { bookmarks_actions } from '@repositories/stores/user-public/library/bookmarks/bookmarks.slice'
 
-export const useBookmarks = () => {
-  const queryParams = useShallowSearchParams()
+export const use_bookmarks = () => {
+  const queryParams = use_shallow_search_params()
   const params = useParams()
-  const dispatch = useLibraryDispatch()
-  const { bookmarks, hasMoreBookmarks } = useLibrarySelector(
+  const dispatch = use_library_dispatch()
+  const { bookmarks, has_more_bookmarks } = use_library_selector(
     (state) => state.bookmarks,
   )
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
@@ -28,7 +28,7 @@ export const useBookmarks = () => {
     null,
   )
 
-  const getBookmarks = ({
+  const get_bookmarks = ({
     shouldGetNextPage,
   }: {
     shouldGetNextPage?: boolean
@@ -46,7 +46,7 @@ export const useBookmarks = () => {
     const queryCategoryId = queryParams.get('c')
     setLastQueryCatId(queryCategoryId)
     if (queryCategoryId) {
-      getBookmarksParams.categoryId = queryCategoryId
+      getBookmarksParams.category_id = queryCategoryId
     }
 
     const queryFilter = queryParams.get('f')
@@ -59,7 +59,7 @@ export const useBookmarks = () => {
     const querySortBy = queryParams.get('s')
     setLastQuerySortBy(querySortBy)
     if (querySortBy) {
-      getBookmarksParams.sortBy = Object.values(SortBy)[parseInt(querySortBy)]
+      getBookmarksParams.sort_by = Object.values(SortBy)[parseInt(querySortBy)]
     }
 
     const queryOrder = queryParams.get('o')
@@ -71,13 +71,13 @@ export const useBookmarks = () => {
     const queryYyyymmGte = queryParams.get('gte')
     setLastQueryYyyymmGte(queryYyyymmGte)
     if (queryYyyymmGte) {
-      getBookmarksParams.yyyymmGte = parseInt(queryYyyymmGte)
+      getBookmarksParams.yyyymm_gte = parseInt(queryYyyymmGte)
     }
 
     const queryYyyymmLte = queryParams.get('lte')
     setLastQueryYyyymmLte(queryYyyymmLte)
     if (queryYyyymmLte) {
-      getBookmarksParams.yyyymmLte = parseInt(queryYyyymmLte)
+      getBookmarksParams.yyyymm_lte = parseInt(queryYyyymmLte)
     }
 
     if (shouldGetNextPage) {
@@ -86,9 +86,9 @@ export const useBookmarks = () => {
     }
 
     dispatch(
-      bookmarksActions.getBookmarks({
-        params: getBookmarksParams,
-        apiUrl: process.env.NEXT_PUBLIC_API_URL,
+      bookmarks_actions.get_bookmarks({
+        query_params: getBookmarksParams,
+        api_url: process.env.NEXT_PUBLIC_API_URL,
       }),
     )
   }
@@ -112,7 +112,7 @@ export const useBookmarks = () => {
       queryYyyyGte != lastQueryYyyymmGte ||
       queryYyyyLte != lastQueryYyyymmLte
     ) {
-      getBookmarks({})
+      get_bookmarks({})
     }
   }, [queryParams])
 
@@ -123,7 +123,7 @@ export const useBookmarks = () => {
     )
     sessionStorage.setItem(
       `hasMoreBookmarks_${queryParams.toString()}`,
-      JSON.stringify(hasMoreBookmarks),
+      JSON.stringify(has_more_bookmarks),
     )
   }, [bookmarks])
 
@@ -133,17 +133,17 @@ export const useBookmarks = () => {
     )
 
     if (bookmarks) {
-      dispatch(bookmarksActions.setBookmarks(JSON.parse(bookmarks)))
+      dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
       const hasMoreBookmarks = sessionStorage.getItem(
         `hasMoreBookmarks_${queryParams.toString()}`,
       )
       if (hasMoreBookmarks) {
         dispatch(
-          bookmarksActions.setHasMoreBookmarks(hasMoreBookmarks == 'true'),
+          bookmarks_actions.set_has_more_bookmarks(hasMoreBookmarks == 'true'),
         )
       }
     } else {
-      getBookmarks({})
+      get_bookmarks({})
     }
 
     return () => {
@@ -157,5 +157,5 @@ export const useBookmarks = () => {
     }
   }, [])
 
-  return { getBookmarks }
+  return { get_bookmarks }
 }

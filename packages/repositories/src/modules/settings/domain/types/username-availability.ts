@@ -3,6 +3,6 @@ export namespace UsernameAvailability {
     username: string
   }
   export type Response = {
-    isAvailable: boolean
+    is_available: boolean
   }
 }

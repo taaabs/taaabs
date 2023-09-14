@@ -1,23 +1,23 @@
 import { useParams } from 'next/navigation'
-import { useLibraryDispatch, useLibrarySelector } from './store'
+import { use_library_dispatch, use_library_selector } from './store'
 import { useEffect, useState } from 'react'
 import { MonthsParams } from '@repositories/modules/months/domain/types/months.params'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
-import { monthsActions } from '@repositories/stores/user-public/library/months/months.slice'
+import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
+import { months_actions } from '@repositories/stores/user-public/library/months/months.slice'
 
-export const useMonths = () => {
-  const queryParams = useShallowSearchParams()
+export const use_months = () => {
+  const query_params = use_shallow_search_params()
   const params = useParams()
-  const dispatch = useLibraryDispatch()
+  const dispatch = use_library_dispatch()
   const {
-    monthsData,
-    monthsOfBookmarkCreation,
-    isGettingMonthsData,
-    tagsOfBookmarkCreation,
-  } = useLibrarySelector((state) => state.months)
-  const { bookmarks } = useLibrarySelector((state) => state.bookmarks)
+    months_data,
+    months_of_bookmark_creation,
+    is_getting_months_data,
+    tags_of_bookmark_creation,
+  } = use_library_selector((state) => state.months)
+  const { bookmarks } = use_library_selector((state) => state.bookmarks)
   const [lastQueryTags, setLastQueryTags] = useState<string | null>(null)
   const [lastQueryFilter, setLastQueryFilter] = useState<string | null>(null)
   const [selectedTags, setSelectedTags] = useState<number[]>([])
@@ -28,41 +28,41 @@ export const useMonths = () => {
     null,
   )
 
-  const getMonths = () => {
-    const getMonthsParams: MonthsParams.Public = {
+  const get_months = () => {
+    const get_monthsParams: MonthsParams.Public = {
       username: params.username as string,
     }
 
-    const queryTags = queryParams.get('t')
+    const queryTags = query_params.get('t')
     setLastQueryTags(queryTags)
     if (queryTags) {
-      getMonthsParams.tags = queryTags.split(',')
+      get_monthsParams.tags = queryTags.split(',')
     }
 
-    const queryFilter = queryParams.get('f')
+    const queryFilter = query_params.get('f')
     setLastQueryFilter(queryFilter)
     if (queryFilter) {
-      getMonthsParams.filter =
+      get_monthsParams.filter =
         Object.values(LibraryFilter)[parseInt(queryFilter)]
     }
 
     dispatch(
-      monthsActions.getMonths({
-        params: getMonthsParams,
-        apiUrl: process.env.NEXT_PUBLIC_API_URL,
+      months_actions.get_months({
+        query_params: get_monthsParams,
+        api_url: process.env.NEXT_PUBLIC_API_URL,
       }),
     )
   }
 
   useEffect(() => {
-    const queryTags = queryParams.get('t')
-    const queryFilter = queryParams.get('f')
+    const queryTags = query_params.get('t')
+    const queryFilter = query_params.get('f')
     if (queryTags != lastQueryTags || queryFilter != lastQueryFilter) {
-      getMonths()
+      get_months()
     }
 
-    const queryYyyymmGte = queryParams.get('gte')
-    const queryYyyymmLte = queryParams.get('lte')
+    const queryYyyymmGte = query_params.get('gte')
+    const queryYyyymmLte = query_params.get('lte')
 
     if (
       queryYyyymmGte != lastQueryYyyymmGte ||
@@ -71,16 +71,16 @@ export const useMonths = () => {
       setLastQueryYyyymmGte(queryYyyymmGte)
       setLastQueryYyyymmLte(queryYyyymmLte)
       dispatch(
-        monthsActions.setYyyymmGte(parseInt(queryYyyymmGte || '0') || null),
+        months_actions.set_yyyymm_gte(parseInt(queryYyyymmGte || '0') || null),
       )
       dispatch(
-        monthsActions.setYyyymmLte(parseInt(queryYyyymmLte || '0') || null),
+        months_actions.set_yyyymm_lte(parseInt(queryYyyymmLte || '0') || null),
       )
     }
-  }, [queryParams])
+  }, [query_params])
 
   useEffect(() => {
-    const queryTags = queryParams.get('t')
+    const queryTags = query_params.get('t')
     if (!queryTags && selectedTags.length > 0) {
       setSelectedTags([])
     } else if (queryTags && queryTags != selectedTags.join(',')) {
@@ -90,53 +90,61 @@ export const useMonths = () => {
   }, [bookmarks])
 
   useUpdateEffect(() => {
-    if (monthsData) {
+    if (months_data) {
       sessionStorage.setItem(
-        `monthsData_${queryParams.toString()}`,
-        JSON.stringify(monthsData),
+        `months_data_${query_params.toString()}`,
+        JSON.stringify(months_data),
       )
     }
 
-    if (tagsOfBookmarkCreation) {
+    if (tags_of_bookmark_creation) {
       sessionStorage.setItem(
-        `tagsOfBookmarkCreation_${queryParams.toString()}`,
-        JSON.stringify(tagsOfBookmarkCreation),
+        `tags_of_bookmark_creation_${query_params.toString()}`,
+        JSON.stringify(tags_of_bookmark_creation),
       )
     }
-  }, [monthsData, tagsOfBookmarkCreation])
+  }, [months_data, tags_of_bookmark_creation])
 
   useEffect(() => {
-    const monthsData = sessionStorage.getItem(
-      `monthsData_${queryParams.toString()}`,
+    const months_data = sessionStorage.getItem(
+      `months_data_${query_params.toString()}`,
     )
-    if (monthsData) {
-      dispatch(monthsActions.setData(JSON.parse(monthsData)))
+    if (months_data) {
+      dispatch(months_actions.set_data(JSON.parse(months_data)))
 
-      const tagsOfBookmarkCreation = sessionStorage.getItem(
-        `tagsOfBookmarkCreation_${queryParams.toString()}`,
+      const tags_of_bookmark_creation = sessionStorage.getItem(
+        `tags_of_bookmark_creation_${query_params.toString()}`,
       )
-      const tagsOfUrlCreation = sessionStorage.getItem(
-        `tagsOfUrlCreation_${queryParams.toString()}`,
+      const tags_of_url_creation = sessionStorage.getItem(
+        `tags_of_url_creation_${query_params.toString()}`,
       )
 
-      if (tagsOfBookmarkCreation) {
+      if (tags_of_bookmark_creation) {
         dispatch(
-          monthsActions.setTagsOfBookmarkCreation(
-            JSON.parse(tagsOfBookmarkCreation),
+          months_actions.set_tags_of_bookmark_creation(
+            JSON.parse(tags_of_bookmark_creation),
+          ),
+        )
+      }
+
+      if (tags_of_url_creation) {
+        dispatch(
+          months_actions.set_tags_of_url_creation(
+            JSON.parse(tags_of_url_creation),
           ),
         )
       }
     } else {
-      getMonths()
+      get_months()
     }
 
     return () => {
       for (const key in sessionStorage) {
-        if (key.substring(0, 10) == 'monthsData') {
+        if (key.substring(0, 10) == 'months_data') {
           sessionStorage.removeItem(key)
-        } else if (key.substring(0, 22) == 'tagsOfBookmarkCreation') {
+        } else if (key.substring(0, 22) == 'tags_of_bookmark_creation') {
           sessionStorage.removeItem(key)
-        } else if (key.substring(0, 17) == 'tagsOfUrlCreation') {
+        } else if (key.substring(0, 17) == 'tags_of_url_creation') {
           sessionStorage.removeItem(key)
         }
       }
@@ -144,9 +152,9 @@ export const useMonths = () => {
   }, [])
 
   return {
-    monthsOfBookmarkCreation,
-    isGettingMonthsData,
-    tagsOfBookmarkCreation,
+    months_of_bookmark_creation,
+    is_getting_months_data,
+    tags_of_bookmark_creation,
     selectedTags,
   }
 }

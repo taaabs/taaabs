@@ -6,8 +6,8 @@ export namespace ButtonUnderlined {
   export type Props = {
     label: string
     href?: string
-    onClick?: () => void
-    isActive: boolean
+    on_click?: () => void
+    is_active: boolean
   }
 }
 
@@ -16,7 +16,7 @@ export const ButtonUnderlined: React.FC<ButtonUnderlined.Props> = (props) => {
     return (
       <Link
         className={cn(styles.button, {
-          [styles['button--active']]: props.isActive,
+          [styles['button--active']]: props.is_active,
         })}
         href={props.href}
         title={props.label}
@@ -28,11 +28,11 @@ export const ButtonUnderlined: React.FC<ButtonUnderlined.Props> = (props) => {
     return (
       <button
         className={cn(styles.button, {
-          [styles['button--active']]: props.isActive,
+          [styles['button--active']]: props.is_active,
         })}
-        onClick={props.onClick}
+        onClick={props.on_click}
         title={props.label}
-        disabled={!props.onClick}
+        disabled={!props.on_click}
       >
         <span>{props.label}</span>
       </button>

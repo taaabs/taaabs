@@ -1,7 +1,7 @@
 import { UsernameAvailability } from '../types/username-availability'
 
 export type SettingsRepository = {
-  checkUsernameAvailability(
+  check_username_availability(
     params: UsernameAvailability.Params,
   ): Promise<UsernameAvailability.Response>
 }

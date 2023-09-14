@@ -1,9 +1,9 @@
 import { updateSearchParam } from '@/utils/update-query-param'
-import { useShallowSearchParams } from '@web-ui/hooks/use-shallow-search-params'
+import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { useState } from 'react'
 
 export const useTagViewOptions = () => {
-  const queryParams = useShallowSearchParams()
+  const queryParams = use_shallow_search_params()
   const [actualSelectedTags, setActualSelectedTags] = useState<number[]>(
     queryParams.get('t')
       ? queryParams

@@ -7,17 +7,17 @@ import { MetadataRepositoryImpl } from './metadata-repository-impl'
 const now = new Date()
 
 describe('MetadataRepositoryImpl', () => {
-  let metadataDataSourceMock: MockProxy<MetadataDataSource>
+  let metadata_data_source_mock: MockProxy<MetadataDataSource>
 
   beforeAll(() => {
-    metadataDataSourceMock = mock<MetadataDataSource>()
+    metadata_data_source_mock = mock<MetadataDataSource>()
   })
 
   beforeEach(() => {
-    mockReset(metadataDataSourceMock)
+    mockReset(metadata_data_source_mock)
   })
 
-  describe('getAuthorized', () => {
+  describe('get_authorized', () => {
     it('should correctly parse dto', async () => {
       const dto: MetadataDto.Response.Authorized = {
         username: 'test',
@@ -27,18 +27,18 @@ describe('MetadataRepositoryImpl', () => {
       }
       const ro: MetadataRo.Authorized = {
         username: 'test',
-        isEmailConfirmed: true,
-        registeredAt: now,
-        displayName: 'Test',
+        is_email_confirmed: true,
+        registered_at: now,
+        display_name: 'Test',
       }
-      metadataDataSourceMock.getAuthorized.mockResolvedValue(dto)
-      const sut = new MetadataRepositoryImpl(metadataDataSourceMock)
-      const result = await sut.getAuthorized()
+      metadata_data_source_mock.get_authorized.mockResolvedValue(dto)
+      const sut = new MetadataRepositoryImpl(metadata_data_source_mock)
+      const result = await sut.get_authorized()
       expect(result).toEqual(ro)
     })
   })
 
-  describe('getPublic', () => {
+  describe('get_public', () => {
     it('should correctly parse dto', async () => {
       const dto: MetadataDto.Response.Public = {
         username: 'test',
@@ -48,12 +48,12 @@ describe('MetadataRepositoryImpl', () => {
       const ro: MetadataRo.Public = {
         avatar: undefined,
         username: 'test',
-        displayName: 'Test',
-        metaDescription: 'Test test',
+        display_name: 'Test',
+        meta_description: 'Test test',
       }
-      metadataDataSourceMock.getPublic.mockResolvedValue(dto)
-      const sut = new MetadataRepositoryImpl(metadataDataSourceMock)
-      const result = await sut.getPublic({ username: '' })
+      metadata_data_source_mock.get_public.mockResolvedValue(dto)
+      const sut = new MetadataRepositoryImpl(metadata_data_source_mock)
+      const result = await sut.get_public({ username: '' })
       expect(result).toStrictEqual(ro)
     })
   })
