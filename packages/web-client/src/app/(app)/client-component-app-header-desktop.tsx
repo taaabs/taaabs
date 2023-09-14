@@ -30,7 +30,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
               }
             : undefined,
         }}
-        isLoadingAvatar={!isHydrated}
+        is_loading_avatar={!isHydrated}
       />
     )
   } else {
@@ -43,12 +43,12 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
       {
         label: 'Profile',
         href: `/${params.username}`,
-        isActive: pathname == `/${params.username}`,
+        is_active: pathname == `/${params.username}`,
       },
       {
         label: 'Library',
         href: `/${params.username}/library`,
-        isActive: pathname == `/${params.username}/library`,
+        is_active: pathname == `/${params.username}/library`,
       },
     ]
   } else {
@@ -56,17 +56,17 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
       {
         label: 'Inbox',
         href: '/inbox',
-        isActive: pathname == '/inbox',
+        is_active: pathname == '/inbox',
       },
       {
         label: 'Library',
         href: '/library',
-        isActive: pathname == '/library',
+        is_active: pathname == '/library',
       },
       {
         label: 'Discover',
         href: '/discover',
-        isActive: pathname == '/discover',
+        is_active: pathname == '/discover',
       },
     ]
   }
@@ -77,13 +77,15 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
 
   return (
     <AppHeaderDesktop
-      logoSlot={logoSlot}
-      navigationSlot={<NavigationForHeader navigation={navigation} />}
-      rightSideSlot={
+      slot_left_side_logo={logoSlot}
+      slot_left_side_navigation={
+        <NavigationForHeader navigation={navigation} />
+      }
+      slot_right_side={
         <DesktopUserAreaForAppHeader
-          onClickAdd={() => {}}
-          onClickSearch={() => {}}
-          onClickNotifications={() => {}}
+          add_on_click={() => {}}
+          search_on_click={() => {}}
+          notificatios_on_click={() => {}}
         />
       }
     />

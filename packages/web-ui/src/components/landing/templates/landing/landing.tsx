@@ -3,10 +3,10 @@ import styles from './landing.module.scss'
 
 export namespace Landing {
   export type Props = {
-    slotLogo: React.ReactNode
-    slotDesktopNavigation: React.ReactNode
-    slotDesktopUser: React.ReactNode
-    slotMobileNavigation: React.ReactNode
+    slot_logo: React.ReactNode
+    slot_desktop_navigation: React.ReactNode
+    slot_desktop_user: React.ReactNode
+    slot_mobile_navigation: React.ReactNode
     children?: React.ReactNode
   }
 }
@@ -16,10 +16,10 @@ export const Landing: React.FC<Landing.Props> = (props) => {
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.header__inner}>
-          {props.slotLogo}
+          {props.slot_logo}
           <div className={styles.header__inner__desktopNavAndUser}>
-            {props.slotDesktopNavigation}
-            {props.slotDesktopUser}
+            {props.slot_desktop_navigation}
+            {props.slot_desktop_user}
           </div>
           <div className={styles.header__inner__burger}>[BURGER]</div>
         </div>

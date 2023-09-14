@@ -8,14 +8,14 @@ export const DynamicDesktopNavigationForHeader: React.FC = () => {
 
   return (
     <DesktopNavigationForHeader
-      navigationItems={[
-        { label: 'Home', href: '/', isActive: pathname == '/' },
-        { label: 'Docs', href: '/docs', isActive: pathname == '/docs' },
-        { label: 'Blog', href: '/blog', isActive: pathname == '/blog' },
+      navigation_items={[
+        { label: 'Home', href: '/', is_active: pathname == '/' },
+        { label: 'Docs', href: '/docs', is_active: pathname == '/docs' },
+        { label: 'Blog', href: '/blog', is_active: pathname == '/blog' },
         {
           label: 'Pricing',
           href: '/pricing',
-          isActive: pathname == '/pricing',
+          is_active: pathname == '/pricing',
         },
       ]}
     />

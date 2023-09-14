@@ -2,18 +2,18 @@ import styles from './selected-tags.module.scss'
 
 export namespace Tags {
   export type Props = {
-    selectedTags: { name: string; id: number }[]
-    onSelectedTagClick: (tagId: number) => void
+    selected_tags: { name: string; id: number }[]
+    on_selected_tag_click: (tagId: number) => void
   }
 }
 
 export const SelectedTags: React.FC<Tags.Props> = (props) => {
-  return props.selectedTags.length ? (
+  return props.selected_tags.length ? (
     <div className={styles.container}>
-      {props.selectedTags.map((tag) => (
+      {props.selected_tags.map((tag) => (
         <button
           className={styles.container__tag}
-          onClick={() => props.onSelectedTagClick(tag.id)}
+          onClick={() => props.on_selected_tag_click(tag.id)}
           key={tag.id}
         >
           <span>{tag.name}</span>

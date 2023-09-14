@@ -4,23 +4,23 @@ import cn from 'classnames'
 
 export namespace LibraryAside {
   export type Props = {
-    slotFilter?: {
+    slot_filter?: {
       button: React.ReactNode
       dropdown: React.ReactNode
-      isDropdownVisible: boolean
+      is_dropdown_visible: boolean
     }
-    slotSortBy?: {
+    slot_sortby?: {
       button: React.ReactNode
       dropdown: React.ReactNode
-      isDropdownVisible: boolean
+      is_dropdown_visible: boolean
     }
-    slotOrder?: {
+    slot_order?: {
       button: React.ReactNode
       dropdown: React.ReactNode
-      isDropdownVisible: boolean
+      is_dropdown_visible: boolean
     }
-    slotMonths?: React.ReactNode
-    slotTags?: React.ReactNode
+    slot_months?: React.ReactNode
+    slot_tags?: React.ReactNode
   }
 }
 
@@ -34,56 +34,56 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
         </button>
       </div>
       <div className={styles['sort-and-filtering']}>
-        {props.slotFilter && (
+        {props.slot_filter && (
           <div className={styles['sort-and-filtering__button']}>
-            {props.slotFilter.button}
+            {props.slot_filter.button}
             <div
               className={cn([
                 styles['sort-and-filtering__button__dropdown'],
                 {
                   [styles['sort-and-filtering__button__dropdown--hidden']]:
-                    !props.slotFilter.isDropdownVisible,
+                    !props.slot_filter.is_dropdown_visible,
                 },
               ])}
             >
-              {props.slotFilter.dropdown}
+              {props.slot_filter.dropdown}
             </div>
           </div>
         )}
-        {props.slotSortBy && (
+        {props.slot_sortby && (
           <div className={styles['sort-and-filtering__button']}>
-            {props.slotSortBy.button}
+            {props.slot_sortby.button}
             <div
               className={cn([
                 styles['sort-and-filtering__button__dropdown'],
                 {
                   [styles['sort-and-filtering__button__dropdown--hidden']]:
-                    !props.slotSortBy.isDropdownVisible,
+                    !props.slot_sortby.is_dropdown_visible,
                 },
               ])}
             >
-              {props.slotSortBy.dropdown}
+              {props.slot_sortby.dropdown}
             </div>
           </div>
         )}
-        {props.slotOrder && (
+        {props.slot_order && (
           <div className={styles['sort-and-filtering__button']}>
-            {props.slotOrder.button}
+            {props.slot_order.button}
             <div
               className={cn([
                 styles['sort-and-filtering__button__dropdown'],
                 {
                   [styles['sort-and-filtering__button__dropdown--hidden']]:
-                    !props.slotOrder.isDropdownVisible,
+                    !props.slot_order.is_dropdown_visible,
                 },
               ])}
             >
-              {props.slotOrder.dropdown}
+              {props.slot_order.dropdown}
             </div>
           </div>
         )}
-        {props.slotMonths}
-        <div className={styles.tags}>{props.slotTags}</div>
+        {props.slot_months}
+        <div className={styles.tags}>{props.slot_tags}</div>
       </div>
     </div>
   )

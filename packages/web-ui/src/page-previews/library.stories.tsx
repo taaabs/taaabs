@@ -16,52 +16,52 @@ export default {
 export const Primary = () => {
   return (
     <App
-      slotAppHeaderDesktop={
+      slot_AppHeaderDesktop={
         <AppHeaderDesktop
-          logoSlot={<LogoForHeader href="" />}
-          navigationSlot={
+          slot_left_side_logo={<LogoForHeader href="" />}
+          slot_left_side_navigation={
             <NavigationForHeader
               navigation={[
-                { label: 'Lorem', href: '/lorem', isActive: false },
-                { label: 'Ipsum', href: '/ipsum', isActive: true },
+                { label: 'Lorem', href: '/lorem', is_active: false },
+                { label: 'Ipsum', href: '/ipsum', is_active: true },
               ]}
             />
           }
-          rightSideSlot={
+          slot_right_side={
             <DesktopUserAreaForAppHeader
-              onClickAdd={() => {}}
-              onClickSearch={() => {}}
-              onClickNotifications={() => {}}
+              add_on_click={() => {}}
+              search_on_click={() => {}}
+              notificatios_on_click={() => {}}
             />
           }
         />
       }
-      slotAppHeaderMobile={
+      slot_AppHeaderMobile={
         <AppHeaderMobile
-          logoSlot={<LogoForHeader href="" />}
-          navigationSlot={
+          slot_logo={<LogoForHeader href="" />}
+          slot_navigation={
             <NavigationForHeader
               navigation={[
-                { label: 'Lorem', href: '/lorem', isActive: false },
-                { label: 'Ipsum', href: '/ipsum', isActive: true },
+                { label: 'Lorem', href: '/lorem', is_active: false },
+                { label: 'Ipsum', href: '/ipsum', is_active: true },
               ]}
             />
           }
         />
       }
-      slotBottomNavigationBar={
+      slot_BottomNavigationBar={
         <BottomNavigationBar
-          onClickAdd={() => {}}
-          onClickMyLibrary={() => {}}
-          onClickNotifications={() => {}}
-          onClickSearch={() => {}}
-          onClickUser={() => {}}
+          add_on_click={() => {}}
+          my_library_on_click={() => {}}
+          notifications_on_click={() => {}}
+          search_on_click={() => {}}
+          user_on_click={() => {}}
         />
       }
     >
       <Library
-        slotAside={<>aside</>}
-        slotSidebar={
+        slot_aside={<>aside</>}
+        slot_sidebar={
           <NavigationForLibrarySidebar
             navigation_items={[
               { label: 'All bookmarks', is_active: true, on_click: () => {} },
@@ -69,12 +69,12 @@ export const Primary = () => {
             ]}
           />
         }
-        titleBar="All bookmarks"
-        getMoreBookmarks={() => {}}
-        hasMoreBookmarks={false}
-        isGettingFirstBookmarks={false}
-        isGettingMoreBookmarks={false}
-        slotBookmarks={
+        title_bar="All bookmarks"
+        get_more_bookmarks={() => {}}
+        has_more_bookmarks={false}
+        is_getting_first_bookmarks={false}
+        is_getting_more_bookmarks={false}
+        slot_bookmarks={
           <>
             {bookmark}
             {bookmark}
@@ -83,8 +83,8 @@ export const Primary = () => {
             {bookmark}
           </>
         }
-        noResults={false}
-        showBookmarksSkeleton={false}
+        no_results={false}
+        show_bookmarks_skeleton={false}
       ></Library>
     </App>
   )
@@ -93,15 +93,17 @@ export const Primary = () => {
 const bookmark = (
   <div style={{ marginBottom: 'var(--distance-8px)' }}>
     <Bookmark
+      id="1"
+      index={1}
+      date={new Date()}
       is_starred={false}
+      links={[]}
       title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-      url="https://example.com/test/lorem_ipsum"
       is_nsfw={true}
       tags={[
-        { name: 'foo', yields: 100 },
-        { name: 'bar', isSelected: true },
+        { id: 1, name: 'foo', yields: 100 },
+        { id: 2, name: 'bar', isSelected: true },
       ]}
-      saves={3400}
       on_tag_click={() => {}}
       on_click={() => {}}
       on_menu_click={() => {}}

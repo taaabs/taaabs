@@ -11,21 +11,21 @@ export const Primary = () => {
       <div style={{ width: 300 }}>
         <SimpleSelectDropdown
           items={[
-            { label: 'Lorem', onClick: () => {}, isSelected: false },
-            { label: 'Lorem', onClick: () => {}, isSelected: true },
-            { label: 'Lorem', onClick: () => {}, isSelected: false },
+            { label: 'Lorem', on_click: () => {}, is_selected: false },
+            { label: 'Lorem', on_click: () => {}, is_selected: true },
+            { label: 'Lorem', on_click: () => {}, is_selected: false },
           ]}
           checkboxes={[
             {
               label: 'Lorem',
-              onClick: () => {},
-              isSelected: true,
+              on_click: () => {},
+              is_selected: true,
             },
             {
               label: 'Lorem',
-              onClick: () => {},
-              isSelected: false,
-              isDisabled: true,
+              on_click: () => {},
+              is_selected: false,
+              is_disabled: true,
             },
           ]}
         />

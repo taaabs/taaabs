@@ -9,10 +9,10 @@ export const Primary = () => {
   return (
     <StorybookMargin>
       <DesktopNavigationForHeader
-        navigationItems={[
-          { label: 'Pricing', href: '/', isActive: false },
-          { label: 'Help', href: '/', isActive: true },
-          { label: 'Forum', href: '/', isActive: false },
+        navigation_items={[
+          { label: 'Pricing', href: '/', is_active: false },
+          { label: 'Help', href: '/', is_active: true },
+          { label: 'Forum', href: '/', is_active: false },
         ]}
       />
     </StorybookMargin>

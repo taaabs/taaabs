@@ -8,7 +8,7 @@ export default {
 export const Primary = () => {
   return (
     <StorybookMargin>
-      <PricingTiers leftSlot={<div>left</div>} rightSlot={<div>right</div>} />
+      <PricingTiers slot_left_side={<div>left</div>} slot_right_side={<div>right</div>} />
     </StorybookMargin>
   )
 }

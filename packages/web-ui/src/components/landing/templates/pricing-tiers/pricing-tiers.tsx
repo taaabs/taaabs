@@ -3,8 +3,8 @@ import styles from './pricing-tiers.module.scss'
 
 export namespace PricingTiers {
   export type Props = {
-    leftSlot: React.ReactNode
-    rightSlot: React.ReactNode
+    slot_left_side: React.ReactNode
+    slot_right_side: React.ReactNode
   }
 }
 
@@ -13,8 +13,8 @@ export const PricingTiers: React.FC<PricingTiers.Props> = (props) => {
     <section className={styles.container}>
       <Wrapper>
         <div className={styles.inner}>
-          {props.leftSlot}
-          {props.rightSlot}
+          {props.slot_left_side}
+          {props.slot_right_side}
         </div>
       </Wrapper>
     </section>

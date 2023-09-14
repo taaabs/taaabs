@@ -1,4 +1,4 @@
-import { useIsHydrated } from '@shared/hooks/use-is-hydrated'
+import { use_is_hydrated } from '@shared/hooks/use-is-hydrated'
 import { sharedValues } from '@web-ui/constants'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
@@ -11,21 +11,21 @@ import StickyBox from 'react-sticky-box'
 import Slideout from 'slideout'
 import { _DesktopTitleBar } from './components/_desktop-title-bar'
 import { _MobileTitleBar } from './components/_mobile-title-bar'
-import { useScrollRestore } from './hooks/use-scroll-restore'
+import { use_scroll_restore } from './hooks/use-scroll-restore'
 import styles from './library.module.scss'
 
 export namespace Library {
   export type Props = {
-    slotSidebar: React.ReactNode
-    slotAside: React.ReactNode
-    titleBar?: string
-    slotBookmarks: React.ReactNode
-    isGettingFirstBookmarks: boolean
-    isGettingMoreBookmarks: boolean
-    hasMoreBookmarks: boolean
-    noResults: boolean
-    getMoreBookmarks: () => void
-    showBookmarksSkeleton: boolean
+    slot_sidebar: React.ReactNode
+    slot_aside: React.ReactNode
+    title_bar?: string
+    slot_bookmarks: React.ReactNode
+    is_getting_first_bookmarks: boolean
+    is_getting_more_bookmarks: boolean
+    has_more_bookmarks: boolean
+    no_results: boolean
+    get_more_bookmarks: () => void
+    show_bookmarks_skeleton: boolean
   }
 }
 
@@ -34,13 +34,13 @@ const SLIDABLE_WIDTH = 300
 export const Library: React.FC<Library.Props> = (props) => {
   const sidebar = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLDivElement>(null)
-  const mainInner = useRef<HTMLDivElement>(null)
+  const main_inner = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLDivElement>(null)
-  const endOfBookmarks = useRef<HTMLDivElement>(null)
-  const isHydrated = useIsHydrated()
+  const end_of_bookmarks = useRef<HTMLDivElement>(null)
+  const is_hydrated = use_is_hydrated()
 
-  useScrollRestore(mainInner)
-  const isEndOfBookmarksVisible = useViewportSpy(endOfBookmarks)
+  use_scroll_restore(main_inner)
+  const isEndOfBookmarksVisible = useViewportSpy(end_of_bookmarks)
 
   const { onSwipeStart } = useSwipeEvents(undefined, {
     preventDefault: false,
@@ -156,20 +156,20 @@ export const Library: React.FC<Library.Props> = (props) => {
   useUpdateEffect(() => {
     if (
       isEndOfBookmarksVisible &&
-      props.hasMoreBookmarks &&
-      !props.isGettingMoreBookmarks &&
-      !props.isGettingFirstBookmarks
+      props.has_more_bookmarks &&
+      !props.is_getting_more_bookmarks &&
+      !props.is_getting_first_bookmarks
     ) {
-      props.getMoreBookmarks()
+      props.get_more_bookmarks()
     }
   }, [isEndOfBookmarksVisible])
 
   useUpdateEffect(() => {
-    if (!props.isGettingFirstBookmarks) {
+    if (!props.is_getting_first_bookmarks) {
       window.scrollTo(0, 0)
-      mainInner.current?.scrollTo(0, 0)
+      main_inner.current?.scrollTo(0, 0)
     }
-  }, [props.isGettingFirstBookmarks])
+  }, [props.is_getting_first_bookmarks])
 
   useEffect(() => {
     setSlideoutInstances()
@@ -201,7 +201,7 @@ export const Library: React.FC<Library.Props> = (props) => {
               width: `${SLIDABLE_WIDTH}px`,
             }}
           >
-            {props.slotSidebar}
+            {props.slot_sidebar}
           </div>
         </div>
 
@@ -226,7 +226,7 @@ export const Library: React.FC<Library.Props> = (props) => {
                   ? 'none'
                   : 'all',
             }}
-            ref={mainInner}
+            ref={main_inner}
           >
             <div
               className={cn(styles['main__inner__mobile-alpha-overlay'], {
@@ -237,19 +237,19 @@ export const Library: React.FC<Library.Props> = (props) => {
             />
             <div className={styles['main__inner__mobile-title-bar']}>
               <_MobileTitleBar
-                swipeLeftOnClick={
+                swipe_left_on_click={
                   !isSlideoutLeftOpen ? toggleLeftSlideout : undefined
                 }
-                swipeRightOnClick={
+                swipe_right_on_click={
                   !isSlideoutRightOpen ? toggleRightSlideout : undefined
                 }
-                text={props.titleBar ? props.titleBar : undefined}
+                text={props.title_bar ? props.title_bar : undefined}
               />
             </div>
             <div>
               <div className={styles['main__inner__desktop-title-bar']}>
                 <_DesktopTitleBar
-                  text={props.titleBar ? props.titleBar : undefined}
+                  text={props.title_bar ? props.title_bar : undefined}
                 />
               </div>
               <div
@@ -257,26 +257,29 @@ export const Library: React.FC<Library.Props> = (props) => {
                   styles.main__inner__bookmarks,
                   {
                     [styles['main__inner__bookmarks--loading']]:
-                      props.isGettingFirstBookmarks,
+                      props.is_getting_first_bookmarks,
                   },
                 ])}
                 style={{
-                  visibility: isHydrated ? 'visible' : 'hidden',
+                  visibility: is_hydrated ? 'visible' : 'hidden',
                 }}
               >
-                {props.slotBookmarks}
+                {props.slot_bookmarks}
               </div>
-              {props.showBookmarksSkeleton && (
+              {props.show_bookmarks_skeleton && (
                 <div className={styles['main__inner__skeleton']}>
                   {[...Array(30)].map((_, i) => (
                     <Skeleton key={i} />
                   ))}
                 </div>
               )}
-              <div className={styles['main__inner__info']} ref={endOfBookmarks}>
-                {props.isGettingFirstBookmarks || props.hasMoreBookmarks
+              <div
+                className={styles['main__inner__info']}
+                ref={end_of_bookmarks}
+              >
+                {props.is_getting_first_bookmarks || props.has_more_bookmarks
                   ? 'Loading...'
-                  : props.noResults
+                  : props.no_results
                   ? 'No results'
                   : 'End of results'}
               </div>
@@ -294,7 +297,7 @@ export const Library: React.FC<Library.Props> = (props) => {
           <div className={styles.aside__inner}>
             <div className={styles.aside__inner__stickybox}>
               <StickyBox offsetTop={sharedValues.appHeaderDesktop}>
-                {props.slotAside}
+                {props.slot_aside}
               </StickyBox>
             </div>
           </div>

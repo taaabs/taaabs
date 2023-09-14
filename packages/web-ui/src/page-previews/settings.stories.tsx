@@ -13,40 +13,40 @@ export default {
 export const Primary = () => {
   return (
     <Settings
-      headerSlot={<Header title="Settings" backHref="" />}
-      desktopNavigationSlot={
+      slot_header={<Header title="Settings" back_href="" />}
+      slot_desktop_navigation={
         <>
-          <DesktopMenuItem href="" isActive={true} label="Account" />
-          <DesktopMenuItem href="" isActive={false} label="Billing & plans" />
-          <DesktopMenuItem href="" isActive={false} label="Import bookmarks" />
+          <DesktopMenuItem href="" is_active={true} label="Account" />
+          <DesktopMenuItem href="" is_active={false} label="Billing & plans" />
+          <DesktopMenuItem href="" is_active={false} label="Import bookmarks" />
         </>
       }
-      mobileNavigationSlot={'nav'}
-      mainSlot={
+      slot_mobile_navigation={'nav'}
+      slot_main={
         <>
           <SettingBox>
             <SettingHeading heading="Lorem" subheading="Ipsum" />
-            <Input value="Lorem ipsum" onChange={() => {}} />
+            <Input value="Lorem ipsum" on_change={() => {}} />
             <Button size="default">Lorem</Button>
           </SettingBox>
           <SettingBox>
             <SettingHeading heading="Lorem" subheading="Ipsum" />
-            <Input value="Lorem ipsum" onChange={() => {}} />
+            <Input value="Lorem ipsum" on_change={() => {}} />
             <Button size="default">Lorem</Button>
           </SettingBox>
           <SettingBox>
             <SettingHeading heading="Lorem" subheading="Ipsum" />
-            <Input value="Lorem ipsum" onChange={() => {}} />
+            <Input value="Lorem ipsum" on_change={() => {}} />
             <Button size="default">Lorem</Button>
           </SettingBox>
           <SettingBox>
             <SettingHeading heading="Lorem" subheading="Ipsum" />
-            <Input value="Lorem ipsum" onChange={() => {}} />
+            <Input value="Lorem ipsum" on_change={() => {}} />
             <Button size="default">Lorem</Button>
           </SettingBox>
           <SettingBox>
             <SettingHeading heading="Lorem" subheading="Ipsum" />
-            <Input value="Lorem ipsum" onChange={() => {}} />
+            <Input value="Lorem ipsum" on_change={() => {}} />
             <Button size="default">Lorem</Button>
           </SettingBox>
         </>

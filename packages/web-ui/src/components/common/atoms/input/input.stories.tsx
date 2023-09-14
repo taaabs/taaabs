@@ -8,7 +8,7 @@ export default {
 export const Primary = () => {
   return (
     <StorybookMargin>
-      <Input onChange={() => {}} value="Lorem" />
+      <Input on_change={() => {}} value="Lorem" />
     </StorybookMargin>
   )
 }

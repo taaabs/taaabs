@@ -9,9 +9,9 @@ export default {
 export const Primary = () => {
   return (
     <StorybookMargin>
-      <DesktopUserForHeader buttonLabel="Lorem" buttonOnClick={() => {}} />
+      <DesktopUserForHeader button_label="Lorem" button_on_click={() => {}} />
       <StorybookSpacer />
-      <DesktopUserForHeader buttonLabel="Lorem" buttonOnClick={() => {}} />
+      <DesktopUserForHeader button_label="Lorem" button_on_click={() => {}} />
     </StorybookMargin>
   )
 }

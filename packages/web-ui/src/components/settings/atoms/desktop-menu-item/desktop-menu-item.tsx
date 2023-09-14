@@ -6,7 +6,7 @@ export namespace DesktopMenuItem {
   export type Props = {
     label: string
     href: string
-    isActive: boolean
+    is_active: boolean
   }
 }
 
@@ -14,12 +14,12 @@ export const DesktopMenuItem: React.FC<DesktopMenuItem.Props> = (props) => {
   return (
     <div
       className={cn(styles.container, {
-        [styles['container--active']]: props.isActive,
+        [styles['container--active']]: props.is_active,
       })}
     >
       <Link
         className={cn(styles.link, {
-          [styles['link--active']]: props.isActive,
+          [styles['link--active']]: props.is_active,
         })}
         href={props.href}
         title={props.label}

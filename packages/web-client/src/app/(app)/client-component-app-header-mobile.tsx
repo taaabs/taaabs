@@ -29,7 +29,7 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
               }
             : undefined,
         }}
-        isLoadingAvatar={!isHydrated}
+        is_loading_avatar={!isHydrated}
       />
     )
   } else {
@@ -42,12 +42,12 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
       {
         label: 'Profile',
         href: `/${params.username}`,
-        isActive: pathname == `/${params.username}`,
+        is_active: pathname == `/${params.username}`,
       },
       {
         label: 'Library',
         href: `/${params.username}/library`,
-        isActive: pathname == `/${params.username}/library`,
+        is_active: pathname == `/${params.username}/library`,
       },
     ]
   } else {
@@ -55,12 +55,12 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
       {
         label: 'Inbox',
         href: '/inbox',
-        isActive: pathname == '/inbox',
+        is_active: pathname == '/inbox',
       },
       {
         label: 'Library',
         href: '/library',
-        isActive: pathname == '/library',
+        is_active: pathname == '/library',
       },
     ]
   }
@@ -71,8 +71,8 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
 
   return (
     <AppHeaderMobile
-      logoSlot={logoSlot}
-      navigationSlot={<NavigationForHeader navigation={navigation} />}
+      slot_logo={logoSlot}
+      slot_navigation={<NavigationForHeader navigation={navigation} />}
     />
   )
 }

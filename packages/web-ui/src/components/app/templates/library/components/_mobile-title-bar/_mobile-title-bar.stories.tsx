@@ -6,8 +6,8 @@ export default {
 
 export const Primary = () => (
   <_MobileTitleBar
-    swipeLeftOnClick={() => {}}
-    swipeRightOnClick={() => {}}
+    swipe_left_on_click={() => {}}
+    swipe_right_on_click={() => {}}
     primaryText="Lorem ipsum"
     secondaryText="lorem"
   />

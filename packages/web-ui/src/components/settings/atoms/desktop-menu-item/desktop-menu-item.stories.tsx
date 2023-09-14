@@ -11,9 +11,9 @@ export const Primary = () => {
   return (
     <StorybookMargin>
       <Wrapper>
-        <DesktopMenuItem isActive={true} href="" label="Lorem ipsum" />
+        <DesktopMenuItem is_active={true} href="" label="Lorem ipsum" />
         <StorybookSpacer />
-        <DesktopMenuItem isActive={false} href="" label="Lorem ipsum" />
+        <DesktopMenuItem is_active={false} href="" label="Lorem ipsum" />
       </Wrapper>
     </StorybookMargin>
   )

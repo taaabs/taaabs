@@ -3,9 +3,9 @@ import styles from './app-header-desktop.module.scss'
 
 export namespace AppHeaderDesktop {
   export type Props = {
-    logoSlot: React.ReactNode
-    navigationSlot: React.ReactNode
-    rightSideSlot: React.ReactNode
+    slot_left_side_logo: React.ReactNode
+    slot_left_side_navigation: React.ReactNode
+    slot_right_side: React.ReactNode
   }
 }
 
@@ -15,10 +15,10 @@ export const AppHeaderDesktop = (props: AppHeaderDesktop.Props) => {
       <Wrapper>
         <div className={styles.inner}>
           <div className={styles.inner__left}>
-            {props.logoSlot}
-            {props.navigationSlot}
+            {props.slot_left_side_logo}
+            {props.slot_left_side_navigation}
           </div>
-          {props.rightSideSlot}
+          {props.slot_right_side}
         </div>
       </Wrapper>
     </div>

@@ -9,8 +9,8 @@ export const Primary = () => (
   <StorybookMargin>
     <div style={{ width: 260 }}>
       <SelectedTags
-        onSelectedTagClick={() => {}}
-        selectedTags={[
+        on_selected_tag_click={() => {}}
+        selected_tags={[
           'lorem',
           'ipsum',
           'lorem',

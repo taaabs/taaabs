@@ -9,9 +9,9 @@ export default {
 export const Primary = () => (
   <StorybookMargin>
     <AppHeaderDesktop
-      logoSlot={<div>logo</div>}
-      navigationSlot={<div>navigation</div>}
-      rightSideSlot={<div>right side</div>}
+      slot_left_side_logo={<div>logo</div>}
+      slot_left_side_navigation={<div>navigation</div>}
+      slot_right_side={<div>right side</div>}
     />
     <StorybookSpacer />
   </StorybookMargin>

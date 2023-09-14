@@ -5,8 +5,8 @@ import Skeleton from 'react-loading-skeleton'
 
 export namespace _MobileTitleBar {
   export type Props = {
-    swipeLeftOnClick?: () => void
-    swipeRightOnClick?: () => void
+    swipe_left_on_click?: () => void
+    swipe_right_on_click?: () => void
     text?: string
   }
 }
@@ -16,7 +16,7 @@ export const _MobileTitleBar: React.FC<_MobileTitleBar.Props> = (props) => {
     <div className={styles.container}>
       <button
         className={cn(styles.icon, styles['icon--left'])}
-        onClick={props.swipeLeftOnClick}
+        onClick={props.swipe_left_on_click}
       >
         <Icon variant={'MOBILE_TITLE_BAR_MENU'} />
       </button>
@@ -33,7 +33,7 @@ export const _MobileTitleBar: React.FC<_MobileTitleBar.Props> = (props) => {
 
       <button
         className={cn(styles.icon, styles['icon--right'])}
-        onClick={props.swipeRightOnClick}
+        onClick={props.swipe_right_on_click}
       >
         <Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
       </button>

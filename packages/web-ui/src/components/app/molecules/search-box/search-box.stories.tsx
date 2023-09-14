@@ -7,6 +7,6 @@ export default {
 
 export const Primary = () => (
   <StorybookMargin>
-    <SearchBox onClick={() => {}} placeholder="Search anything..." />
+    <SearchBox on_click={() => {}} placeholder="Search anything..." />
   </StorybookMargin>
 )

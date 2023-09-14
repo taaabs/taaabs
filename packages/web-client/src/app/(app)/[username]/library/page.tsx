@@ -98,15 +98,15 @@ const Page: React.FC = () => {
 
   return (
     <Library
-      showBookmarksSkeleton={bookmarks == null}
-      titleBar={
+      show_bookmarks_skeleton={bookmarks == null}
+      title_bar={
         bookmarks != null
           ? query_params.get('c')
             ? '[category_name]'
             : 'All bookmarks'
           : undefined
       }
-      slotSidebar={
+      slot_sidebar={
         <NavigationForLibrarySidebar
           navigation_items={[
             {
@@ -124,9 +124,9 @@ const Page: React.FC = () => {
           ]}
         />
       }
-      slotAside={
+      slot_aside={
         <LibraryAside
-          slotFilter={{
+          slot_filter={{
             button: (
               <ButtonSelect
                 label="Filter"
@@ -144,7 +144,7 @@ const Page: React.FC = () => {
                   items={[
                     {
                       label: 'All',
-                      onClick: () => {
+                      on_click: () => {
                         if (
                           isGettingFirstBookmarks ||
                           isGettingMoreBookmarks ||
@@ -159,13 +159,13 @@ const Page: React.FC = () => {
                         setActualSelectedTags([])
                         toggleFilterDropdown()
                       },
-                      isSelected:
+                      is_selected:
                         currentFilter == LibraryFilter.All ||
                         currentFilter == LibraryFilter.AllNsfwExcluded,
                     },
                     {
                       label: 'Starred only',
-                      onClick: () => {
+                      on_click: () => {
                         if (
                           isGettingFirstBookmarks ||
                           isGettingMoreBookmarks ||
@@ -182,13 +182,13 @@ const Page: React.FC = () => {
                         setActualSelectedTags([])
                         toggleFilterDropdown()
                       },
-                      isSelected:
+                      is_selected:
                         currentFilter == LibraryFilter.StarredOnly ||
                         currentFilter == LibraryFilter.StarredOnlyNsfwExcluded,
                     },
                     {
                       label: 'Archived',
-                      onClick: () => {
+                      on_click: () => {
                         if (
                           isGettingFirstBookmarks ||
                           isGettingMoreBookmarks ||
@@ -205,7 +205,7 @@ const Page: React.FC = () => {
                         setActualSelectedTags([])
                         toggleFilterDropdown()
                       },
-                      isSelected:
+                      is_selected:
                         currentFilter == LibraryFilter.Archived ||
                         currentFilter == LibraryFilter.ArchivedNsfwExcluded,
                     },
@@ -213,7 +213,7 @@ const Page: React.FC = () => {
                   checkboxes={[
                     {
                       label: 'Exclude NSFW',
-                      onClick: () => {
+                      on_click: () => {
                         if (
                           isGettingFirstBookmarks ||
                           isGettingMoreBookmarks ||
@@ -225,15 +225,15 @@ const Page: React.FC = () => {
                         setActualSelectedTags([])
                         toggleFilterDropdown()
                       },
-                      isSelected: isNsfwExcluded,
+                      is_selected: isNsfwExcluded,
                     },
                   ]}
                 />
               </OutsideClickHandler>
             ),
-            isDropdownVisible: isFilterDropdownVisible,
+            is_dropdown_visible: isFilterDropdownVisible,
           }}
-          slotOrder={{
+          slot_order={{
             button: (
               <ButtonSelect
                 label="Order"
@@ -242,7 +242,7 @@ const Page: React.FC = () => {
                 on_click={toggleOrderDropdown}
               />
             ),
-            isDropdownVisible: isOrderDropdownVisible,
+            is_dropdown_visible: isOrderDropdownVisible,
             dropdown: (
               <OutsideClickHandler
                 onOutsideClick={toggleOrderDropdown}
@@ -252,7 +252,7 @@ const Page: React.FC = () => {
                   items={[
                     {
                       label: _order_option_to_label(Order.Desc),
-                      onClick: () => {
+                      on_click: () => {
                         if (
                           isGettingFirstBookmarks ||
                           isGettingMoreBookmarks ||
@@ -263,11 +263,11 @@ const Page: React.FC = () => {
                         toggleOrderDropdown()
                       },
 
-                      isSelected: currentOrder == Order.Desc,
+                      is_selected: currentOrder == Order.Desc,
                     },
                     {
                       label: _order_option_to_label(Order.Asc),
-                      onClick: () => {
+                      on_click: () => {
                         if (
                           isGettingFirstBookmarks ||
                           isGettingMoreBookmarks ||
@@ -277,14 +277,14 @@ const Page: React.FC = () => {
                         setOrderQueryParam(Order.Asc)
                         toggleOrderDropdown()
                       },
-                      isSelected: currentOrder == Order.Asc,
+                      is_selected: currentOrder == Order.Asc,
                     },
                   ]}
                 />
               </OutsideClickHandler>
             ),
           }}
-          slotSortBy={{
+          slot_sortby={{
             button: (
               <ButtonSelect
                 label="Sort by"
@@ -293,7 +293,7 @@ const Page: React.FC = () => {
                 on_click={toggleSortByDropdown}
               />
             ),
-            isDropdownVisible: isSortByDropdownVisible,
+            is_dropdown_visible: isSortByDropdownVisible,
             dropdown: (
               <OutsideClickHandler
                 onOutsideClick={toggleSortByDropdown}
@@ -303,7 +303,7 @@ const Page: React.FC = () => {
                   items={[
                     {
                       label: _sortby_option_to_label(SortBy.CreatedAt),
-                      onClick: () => {
+                      on_click: () => {
                         if (
                           isGettingFirstBookmarks ||
                           isGettingMoreBookmarks ||
@@ -313,11 +313,11 @@ const Page: React.FC = () => {
                         setSortByQueryParam(SortBy.CreatedAt)
                         toggleSortByDropdown()
                       },
-                      isSelected: currentSortBy == SortBy.CreatedAt,
+                      is_selected: currentSortBy == SortBy.CreatedAt,
                     },
                     {
                       label: _sortby_option_to_label(SortBy.UpdatedAt),
-                      onClick: () => {
+                      on_click: () => {
                         if (
                           isGettingFirstBookmarks ||
                           isGettingMoreBookmarks ||
@@ -327,14 +327,14 @@ const Page: React.FC = () => {
                         setSortByQueryParam(SortBy.UpdatedAt)
                         toggleSortByDropdown()
                       },
-                      isSelected: currentSortBy == SortBy.UpdatedAt,
+                      is_selected: currentSortBy == SortBy.UpdatedAt,
                     },
                   ]}
                 />
               </OutsideClickHandler>
             ),
           }}
-          slotMonths={
+          slot_months={
             show_months ? (
               <div
                 style={{
@@ -371,7 +371,7 @@ const Page: React.FC = () => {
               <MonthsSkeleton />
             )
           }
-          slotTags={
+          slot_tags={
             <>
               {show_tags && (
                 <div
@@ -386,7 +386,7 @@ const Page: React.FC = () => {
                 >
                   {selectedTags.length > 0 && (
                     <SelectedTags
-                      selectedTags={[...selectedTags]
+                      selected_tags={[...selectedTags]
                         .filter((id) => {
                           if (!bookmarks) return false
                           return (
@@ -405,7 +405,7 @@ const Page: React.FC = () => {
                             name,
                           }
                         })}
-                      onSelectedTagClick={removeTagFromQueryParams}
+                      on_selected_tag_click={removeTagFromQueryParams}
                     />
                   )}
                   <Tags
@@ -421,7 +421,7 @@ const Page: React.FC = () => {
                           )
                         : {}
                     }
-                    onClick={addTagToQueryParams}
+                    on_click={addTagToQueryParams}
                   />
                 </div>
               )}
@@ -430,14 +430,14 @@ const Page: React.FC = () => {
           }
         />
       }
-      isGettingFirstBookmarks={isGettingFirstBookmarks}
-      isGettingMoreBookmarks={isGettingMoreBookmarks}
-      hasMoreBookmarks={hasMoreBookmarks || false}
-      noResults={!bookmarks || bookmarks.length == 0}
-      getMoreBookmarks={() => {
+      is_getting_first_bookmarks={isGettingFirstBookmarks}
+      is_getting_more_bookmarks={isGettingMoreBookmarks}
+      has_more_bookmarks={hasMoreBookmarks || false}
+      no_results={!bookmarks || bookmarks.length == 0}
+      get_more_bookmarks={() => {
         get_bookmarks({ shouldGetNextPage: true })
       }}
-      slotBookmarks={
+      slot_bookmarks={
         bookmarks && bookmarks.length
           ? bookmarks.map((bookmark, i) => (
               <Bookmark

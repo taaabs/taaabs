@@ -22,7 +22,7 @@ describe('Atoms/Button', () => {
   })
 
   it('is of type "button" when onClick is provided', () => {
-    render(<Button onClick={() => {}}>{label}</Button>)
+    render(<Button on_click={() => {}}>{label}</Button>)
     expect(screen.getByText(label).tagName.toLowerCase()).toEqual('button')
   })
 
@@ -33,7 +33,7 @@ describe('Atoms/Button', () => {
 
   it('is of type "a" when href and onClick are provided', () => {
     render(
-      <Button href="" onClick={() => {}}>
+      <Button href="" on_click={() => {}}>
         {label}
       </Button>,
     )
@@ -47,7 +47,7 @@ describe('Atoms/Button', () => {
 
   it('calls "onClick" on click without href', async () => {
     const onClickMock = jest.fn()
-    render(<Button onClick={onClickMock}>{label}</Button>)
+    render(<Button on_click={onClickMock}>{label}</Button>)
     const button = screen.getByText(label)
     await userEvent.click(button)
     expect(onClickMock).toHaveBeenCalled()
@@ -56,7 +56,7 @@ describe('Atoms/Button', () => {
   it('calls "onClick" on click with href', async () => {
     const onClickMock = jest.fn()
     render(
-      <Button onClick={onClickMock} href="/">
+      <Button on_click={onClickMock} href="/">
         {label}
       </Button>,
     )

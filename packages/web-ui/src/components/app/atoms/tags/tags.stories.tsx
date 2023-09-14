@@ -20,7 +20,7 @@ export const Primary = () => (
           bbbb: 10,
           bbbbbb: 8,
         }}
-        onClick={() => {}}
+        on_click={() => {}}
       />
       <StorybookSpacer />
       <Tags
@@ -32,7 +32,7 @@ export const Primary = () => (
           bbbb: 10,
           bbbbbb: 8,
         }}
-        onClick={() => {}}
+        on_click={() => {}}
       />
     </div>
   </StorybookMargin>

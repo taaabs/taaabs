@@ -16,12 +16,12 @@ const Page: React.FC = () => {
         }
       />
       <PricingTiers
-        leftSlot={
+        slot_left_side={
           <PricingTier
             name="Free"
             description="Organize your bookmark collection right away, no matter its size"
             price="$0"
-            priceInfo="Free forever"
+            price_info="Free forever"
             bullets={[
               'Unlimited public/private bookmarks',
               'Unlimited tags',
@@ -31,12 +31,12 @@ const Page: React.FC = () => {
             ]}
           />
         }
-        rightSlot={
+        slot_right_side={
           <PricingTier
             name="Plus"
             description="Take your bookmarking experience to the next level with our beloved, useful Plus features"
             price="Less than $1"
-            priceInfo="$11 billed annually"
+            price_info="$11 billed annually"
             bullets={[
               'Everyting in Free',
               'Tag counts',

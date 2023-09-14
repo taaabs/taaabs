@@ -15,20 +15,17 @@ export namespace UserForHeader {
   }
   export type Props = {
     user: User
-    isLoadingAvatar: boolean
+    is_loading_avatar: boolean
   }
 }
 
-export const UserForHeader: React.FC<UserForHeader.Props> = ({
-  user,
-  isLoadingAvatar,
-}) => {
-  const avatar: JSX.Element = user.avatar ? (
+export const UserForHeader: React.FC<UserForHeader.Props> = (props) => {
+  const avatar: JSX.Element = props.user.avatar ? (
     <div className={styles['avatar-and-username__avatar-image']}>
       <div className={styles['avatar-and-username__avatar-image__blurhash']}>
-        <Blurhash hash={user.avatar.blurhash} />
+        <Blurhash hash={props.user.avatar.blurhash} />
       </div>
-      <img src={user.avatar.url} />
+      <img src={props.user.avatar.url} />
     </div>
   ) : (
     <div className={styles['avatar-and-username__avatar-icon']}>
@@ -38,11 +35,11 @@ export const UserForHeader: React.FC<UserForHeader.Props> = ({
 
   return (
     <div className={styles.container}>
-      <Link className={styles['back-arrow']} href={user.backHref}>
+      <Link className={styles['back-arrow']} href={props.user.backHref}>
         <Icon variant="LESS_THAN" />
       </Link>
       <div className={styles['avatar-and-username']}>
-        {isLoadingAvatar ? (
+        {props.is_loading_avatar ? (
           <div className={styles['avatar-and-username__skeleton']}>
             <Skeleton circle={true} />
           </div>
@@ -51,7 +48,7 @@ export const UserForHeader: React.FC<UserForHeader.Props> = ({
         )}
 
         <span className={styles['avatar-and-username__username']}>
-          {user.username}
+          {props.user.username}
         </span>
       </div>
     </div>

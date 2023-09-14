@@ -10,6 +10,6 @@ export const Primary = () => (
   <StorybookMargin>
     <LogoForHeader href="" />
     <StorybookSpacer />
-    <LogoForHeader href="" isLarge={true} />
+    <LogoForHeader href="" is_large={true} />
   </StorybookMargin>
 )

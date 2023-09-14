@@ -209,7 +209,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       </div>
     )
   },
-  (o, n) => JSON.stringify(o.tags) == JSON.stringify(n.tags),
+  (o, n) => o.id == n.id && JSON.stringify(o.tags) == JSON.stringify(n.tags),
 )
 
 function _url_domain(url: string): string {
@@ -242,7 +242,8 @@ function _url_path(params: { url: string; site_path?: string }): string {
   ) {
     parsed_url = parsed_url.substring(0, parsed_url.length - 11)
   } else if (
-    parsed_url.substring(parsed_url.length - 10, parsed_url.length) == '/index.htm'
+    parsed_url.substring(parsed_url.length - 10, parsed_url.length) ==
+    '/index.htm'
   ) {
     parsed_url = parsed_url.substring(0, parsed_url.length - 10)
   } else if (

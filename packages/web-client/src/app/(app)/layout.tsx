@@ -10,9 +10,9 @@ const Layout: React.FC<{
   return (
     <PublicUserAvatarProvider>
       <App
-        slotAppHeaderDesktop={<ClientComponentAppHeaderDesktop />}
-        slotAppHeaderMobile={<ClientComponentAppHeaderMobile />}
-        slotBottomNavigationBar={<ClientComponentBottomNavigationBar />}
+        slot_AppHeaderDesktop={<ClientComponentAppHeaderDesktop />}
+        slot_AppHeaderMobile={<ClientComponentAppHeaderMobile />}
+        slot_BottomNavigationBar={<ClientComponentBottomNavigationBar />}
       >
         {children}
       </App>

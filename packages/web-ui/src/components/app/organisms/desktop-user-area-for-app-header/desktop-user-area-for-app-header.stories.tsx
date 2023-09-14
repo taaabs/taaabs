@@ -10,23 +10,19 @@ export const Primary = () => {
   return (
     <StorybookMargin>
       <DesktopUserAreaForAppHeader
-        onClickAdd={() => {}}
-        onClickSearch={() => {}}
-        onClickTheme={() => {}}
-        currentTheme="LIGHT"
-        onClickNotifications={() => {}}
+        add_on_click={() => {}}
+        search_on_click={() => {}}
+        notificatios_on_click={() => {}}
       />
       <StorybookSpacer />
       <DesktopUserAreaForAppHeader
-        onClickAdd={() => {}}
-        onClickSearch={() => {}}
-        onClickTheme={() => {}}
-        onClickNotifications={() => {}}
+        add_on_click={() => {}}
+        search_on_click={() => {}}
+        notificatios_on_click={() => {}}
         avatar={{
           url: 'https://picsum.photos/300',
           blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',
         }}
-        currentTheme="LIGHT"
       />
     </StorybookMargin>
   )

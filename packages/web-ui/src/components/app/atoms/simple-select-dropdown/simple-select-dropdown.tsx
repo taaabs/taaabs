@@ -5,14 +5,14 @@ import cn from 'classnames'
 export namespace SimpleSelectDropdown {
   type Checkbox = {
     label: string
-    onClick: () => void
-    isSelected: boolean
-    isDisabled?: boolean
+    on_click: () => void
+    is_selected: boolean
+    is_disabled?: boolean
   }
   type Item = {
     label: string
-    onClick: () => void
-    isSelected: boolean
+    on_click: () => void
+    is_selected: boolean
   }
   export type Props = {
     items: Item[]
@@ -26,11 +26,11 @@ export const SimpleSelectDropdown: React.FC<SimpleSelectDropdown.Props> = (
   return (
     <div className={styles.container}>
       {props.items.map((item, i) => (
-        <button className={styles.item} onClick={item.onClick} key={i}>
+        <button className={styles.item} onClick={item.on_click} key={i}>
           <div
             className={cn([
               styles.item__tick,
-              { [styles['item__tick--selected']]: item.isSelected },
+              { [styles['item__tick--selected']]: item.is_selected },
             ])}
           >
             <Icon variant="SELECTED" />
@@ -44,15 +44,15 @@ export const SimpleSelectDropdown: React.FC<SimpleSelectDropdown.Props> = (
             className={cn([
               styles.item,
               styles['item--with-checkbox'],
-              { [styles['item--disabled']]: checkbox.isDisabled },
+              { [styles['item--disabled']]: checkbox.is_disabled },
             ])}
-            onClick={checkbox.onClick}
+            onClick={checkbox.on_click}
             key={i}
           >
             <div
               className={cn([
                 styles.item__checkbox,
-                { [styles['item__checkbox--selected']]: checkbox.isSelected },
+                { [styles['item__checkbox--selected']]: checkbox.is_selected },
               ])}
             >
               <Icon variant="SELECTED" />

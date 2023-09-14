@@ -7,11 +7,11 @@ export namespace Button {
   export type Props = {
     href?: string
     size?: Size
-    onClick?: () => void
+    on_click?: () => void
     type?: 'submit'
     children?: React.ReactNode
-    ariaLabel?: string
-    ariaLabelledby?: string
+    aria_label?: string
+    aria_labelledby?: string
   }
 }
 
@@ -36,19 +36,19 @@ export const Button = (props: Button.Props) => {
           styles[`button--${props.size ? props.size : 'default'}`],
         )}
         href={props.href}
-        onClick={props.onClick}
+        onClick={props.on_click}
       >
         {props.children}
       </Link>
     )
-  } else if (props.onClick != undefined) {
+  } else if (props.on_click != undefined) {
     return (
       <button
         className={cn(
           styles.button,
           styles[`button--${props.size ? props.size : 'default'}`],
         )}
-        onClick={props.onClick}
+        onClick={props.on_click}
       >
         {props.children}
       </button>

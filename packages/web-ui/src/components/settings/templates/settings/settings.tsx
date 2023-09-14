@@ -3,28 +3,28 @@ import styles from './settings.module.scss'
 
 export namespace Settings {
   export type Props = {
-    headerSlot: React.ReactNode
-    mainSlot: React.ReactNode
-    desktopNavigationSlot: React.ReactNode
-    mobileNavigationSlot: React.ReactNode
+    slot_header: React.ReactNode
+    slot_main: React.ReactNode
+    slot_desktop_navigation: React.ReactNode
+    slot_mobile_navigation: React.ReactNode
   }
 }
 
 export const Settings: React.FC<Settings.Props> = (props) => {
   return (
     <>
-      <div className={styles.header}>{props.headerSlot}</div>
+      <div className={styles.header}>{props.slot_header}</div>
       <Wrapper>
         <div className={styles.content}>
           <div className={styles['content__mobile-nav']}>
-            {props.mobileNavigationSlot}
+            {props.slot_mobile_navigation}
           </div>
           <div className={styles.content__sidebar}>
             <div className={styles.content__sidebar__inner}>
-              {props.desktopNavigationSlot}
+              {props.slot_desktop_navigation}
             </div>
           </div>
-          <div className={styles.content__main}>{props.mainSlot}</div>
+          <div className={styles.content__main}>{props.slot_main}</div>
           <div className={styles.content__aside} />
         </div>
       </Wrapper>

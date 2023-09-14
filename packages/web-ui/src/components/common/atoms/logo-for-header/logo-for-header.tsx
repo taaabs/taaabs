@@ -5,7 +5,7 @@ import cn from 'classnames'
 
 export namespace LogoForHeader {
   export type Props = {
-    isLarge?: boolean
+    is_large?: boolean
     href: string
   }
 }
@@ -13,7 +13,7 @@ export namespace LogoForHeader {
 export const LogoForHeader: React.FC<LogoForHeader.Props> = (props) => {
   return (
     <Link
-      className={cn(styles.logo, { [styles['logo--large']]: props.isLarge })}
+      className={cn(styles.logo, { [styles['logo--large']]: props.is_large })}
       href={props.href}
     >
       <Icon variant="LOGO" />

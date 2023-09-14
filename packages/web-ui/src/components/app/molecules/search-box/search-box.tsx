@@ -3,14 +3,14 @@ import styles from './search-box.module.scss'
 
 export namespace SearchBox {
   export type Props = {
-    onClick: () => void
+    on_click: () => void
     placeholder: string
   }
 }
 
 export const SearchBox: React.FC<SearchBox.Props> = (props) => {
   return (
-    <button className={styles['search-box']} onClick={props.onClick}>
+    <button className={styles['search-box']} onClick={props.on_click}>
       <Icon variant="SEARCH" />
       <span>{props.placeholder}</span>
     </button>

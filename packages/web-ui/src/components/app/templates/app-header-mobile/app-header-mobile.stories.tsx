@@ -7,8 +7,8 @@ export default {
 export const Primary = () => (
   <div style={{ maxWidth: '400px', width: '100%' }}>
     <AppHeaderMobile
-      logoSlot={<div>logo</div>}
-      navigationSlot={<div>navigation</div>}
+      slot_logo={<div>logo</div>}
+      slot_navigation={<div>navigation</div>}
     />
   </div>
 )

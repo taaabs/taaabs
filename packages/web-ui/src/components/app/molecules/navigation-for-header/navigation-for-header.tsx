@@ -5,7 +5,7 @@ export namespace NavigationForHeader {
   export type NavigationItem = {
     label: string
     href: string
-    isActive: boolean
+    is_active: boolean
   }
   export type Props = {
     navigation: NavigationItem[]
@@ -22,7 +22,7 @@ export const NavigationForHeader: React.FC<NavigationForHeader.Props> = ({
           <li key={link.label}>
             <ButtonUnderlined
               href={link.href}
-              is_active={link.isActive}
+              is_active={link.is_active}
               label={link.label}
             />
           </li>

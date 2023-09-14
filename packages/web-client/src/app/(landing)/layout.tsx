@@ -6,10 +6,10 @@ import { DynamicDesktopUserForHeader } from './DynamicDesktopUserForHeader'
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
     <Landing
-      slotLogo={<LogoForHeader isLarge={true} href="/" />}
-      slotDesktopUser={<DynamicDesktopUserForHeader />}
-      slotDesktopNavigation={<DynamicDesktopNavigationForHeader />}
-      slotMobileNavigation={<div>mobile nav</div>}
+      slot_logo={<LogoForHeader is_large={true} href="/" />}
+      slot_desktop_user={<DynamicDesktopUserForHeader />}
+      slot_desktop_navigation={<DynamicDesktopNavigationForHeader />}
+      slot_mobile_navigation={<div>mobile nav</div>}
     >
       <>{children}</>
     </Landing>

@@ -13,8 +13,8 @@ export const DynamicDesktopUserForHeader: React.FC = () => {
       // buttonOnClick={() =>
       //   userData ? router.push('/inbox') : router.push('/sign-in')
       // }
-      buttonLabel="TODO"
-      buttonOnClick={() => {}}
+      button_label="TODO"
+      button_on_click={() => {}}
     />
   )
 }

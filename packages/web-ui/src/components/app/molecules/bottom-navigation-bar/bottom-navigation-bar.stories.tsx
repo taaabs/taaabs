@@ -8,11 +8,11 @@ export default {
 export const Primary = () => (
   <StorybookMargin>
     <BottomNavigationBar
-      onClickAdd={() => {}}
-      onClickMyLibrary={() => {}}
-      onClickNotifications={() => {}}
-      onClickSearch={() => {}}
-      onClickUser={() => {}}
+      add_on_click={() => {}}
+      my_library_on_click={() => {}}
+      notifications_on_click={() => {}}
+      search_on_click={() => {}}
+      user_on_click={() => {}}
     />
   </StorybookMargin>
 )

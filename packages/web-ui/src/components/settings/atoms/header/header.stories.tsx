@@ -5,5 +5,5 @@ export default {
 }
 
 export const Primary = () => {
-  return <Header title="lorem" backHref="" />
+  return <Header title="lorem" back_href="" />
 }

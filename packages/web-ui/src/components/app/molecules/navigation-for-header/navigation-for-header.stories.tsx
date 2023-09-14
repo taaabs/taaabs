@@ -6,8 +6,8 @@ export default {
 }
 
 const navigation: NavigationForHeader.Props['navigation'] = [
-  { label: 'Lorem', href: '/lorem', isActive: true },
-  { label: 'Lorem', href: '/ipsum', isActive: false },
+  { label: 'Lorem', href: '/lorem', is_active: true },
+  { label: 'Lorem', href: '/ipsum', is_active: false },
 ]
 
 export const Primary = () => {

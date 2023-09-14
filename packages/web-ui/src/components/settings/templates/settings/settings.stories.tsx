@@ -7,10 +7,10 @@ export default {
 export const Primary = () => {
   return (
     <Settings
-      headerSlot={<div>header</div>}
-      desktopNavigationSlot={<div>desktop nav</div>}
-      mobileNavigationSlot={<div>mobile nav</div>}
-      mainSlot={<div>main</div>}
+      slot_header={<div>header</div>}
+      slot_desktop_navigation={<div>desktop nav</div>}
+      slot_mobile_navigation={<div>mobile nav</div>}
+      slot_main={<div>main</div>}
     />
   )
 }

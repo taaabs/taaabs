@@ -6,50 +6,50 @@ export default {
 
 export const Primary = () => (
   <Library
-    slotSidebar={<>[SIDEBAR]</>}
-    slotAside={<>[ASIDE]</>}
-    titleBar={'Lorem ipsum'}
-    getMoreBookmarks={() => {}}
-    hasMoreBookmarks={false}
-    isGettingFirstBookmarks={false}
-    isGettingMoreBookmarks={false}
-    slotBookmarks={<>[BOOKMARKS]</>}
-    noResults={false}
-    showBookmarksSkeleton={false}
+    slot_sidebar={<>[SIDEBAR]</>}
+    slot_aside={<>[ASIDE]</>}
+    title_bar={'Lorem ipsum'}
+    get_more_bookmarks={() => {}}
+    has_more_bookmarks={false}
+    is_getting_first_bookmarks={false}
+    is_getting_more_bookmarks={false}
+    slot_bookmarks={<>[BOOKMARKS]</>}
+    no_results={false}
+    show_bookmarks_skeleton={false}
   />
 )
 
 export const Scrolling = () => (
   <Library
-    slotSidebar={<div>{lorem}</div>}
-    slotAside={<div>{lorem}</div>}
-    titleBar={'Lorem ipsum'}
-    getMoreBookmarks={() => {}}
-    hasMoreBookmarks={false}
-    isGettingFirstBookmarks={false}
-    isGettingMoreBookmarks={false}
-    slotBookmarks={
+    slot_sidebar={<div>{lorem}</div>}
+    slot_aside={<div>{lorem}</div>}
+    title_bar={'Lorem ipsum'}
+    get_more_bookmarks={() => {}}
+    has_more_bookmarks={false}
+    is_getting_first_bookmarks={false}
+    is_getting_more_bookmarks={false}
+    slot_bookmarks={
       <>
         {lorem} {lorem} {lorem} {lorem}
       </>
     }
-    noResults={false}
-    showBookmarksSkeleton={false}
+    no_results={false}
+    show_bookmarks_skeleton={false}
   />
 )
 
 export const Loading = () => (
   <Library
-    slotSidebar={<>slot sidebar</>}
-    slotAside={<>slot aside</>}
-    titleBar={'Lorem ipsum'}
-    getMoreBookmarks={() => {}}
-    hasMoreBookmarks={false}
-    isGettingFirstBookmarks={false}
-    isGettingMoreBookmarks={false}
-    slotBookmarks={<>slot bookmarks</>}
-    noResults={false}
-    showBookmarksSkeleton={true}
+    slot_sidebar={<>slot sidebar</>}
+    slot_aside={<>slot aside</>}
+    title_bar={'Lorem ipsum'}
+    get_more_bookmarks={() => {}}
+    has_more_bookmarks={false}
+    is_getting_first_bookmarks={false}
+    is_getting_more_bookmarks={false}
+    slot_bookmarks={<>slot bookmarks</>}
+    no_results={false}
+    show_bookmarks_skeleton={true}
   />
 )
 
