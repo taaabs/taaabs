@@ -35,9 +35,10 @@ export const Primary = () => (
             url: 'https://foooooooooooooooooooooooooooooooooooooooo.com/baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar',
             saves: 99,
           },
-          { url: 'https://foo.com/bar/baz', sitePath: 'bar', saves: 99 },
+          { url: 'https://foo.com/bar/baz', site_path: 'bar', saves: 99 },
           { url: 'https://bar.com/lorem/ipsum', saves: 99 },
         ]}
+        set_render_height={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -56,6 +57,7 @@ export const Primary = () => (
           { url: 'https://foo.com', saves: 99 },
           { url: 'https://bar.com/lorem/ipsum', saves: 99 },
         ]}
+        set_render_height={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -77,6 +79,7 @@ export const Primary = () => (
           { url: 'https://foo.com', saves: 99 },
           { url: 'https://bar.com/lorem/ipsum', saves: 99 },
         ]}
+        set_render_height={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -98,6 +101,7 @@ export const Primary = () => (
           { url: 'https://foo.com', saves: 99 },
           { url: 'https://bar.com/lorem/ipsum', saves: 99 },
         ]}
+        set_render_height={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -126,6 +130,7 @@ export const Primary = () => (
           { url: 'https://foo.com', saves: 99 },
           { url: 'https://bar.com/lorem/ipsum', saves: 99 },
         ]}
+        set_render_height={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -147,6 +152,7 @@ export const Primary = () => (
           { url: 'https://foo.com', saves: 99 },
           { url: 'https://bar.com/lorem/ipsum', saves: 99 },
         ]}
+        set_render_height={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -168,6 +174,7 @@ export const Primary = () => (
           { url: 'https://foo.com', saves: 99 },
           { url: 'https://bar.com/lorem/ipsum', saves: 99 },
         ]}
+        set_render_height={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -189,6 +196,7 @@ export const Primary = () => (
           { url: 'https://foo.com', saves: 99 },
           { url: 'https://bar.com/lorem/ipsum', saves: 99 },
         ]}
+        set_render_height={() => {}}
       />
       <StorybookSpacer />
     </div>

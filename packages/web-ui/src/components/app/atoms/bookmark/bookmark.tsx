@@ -2,7 +2,7 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
@@ -23,39 +23,28 @@ export namespace Bookmark {
     is_starred?: boolean
     links: { url: string; site_path?: string; saves: number }[]
     render_height?: number
+    set_render_height: (height: number) => void
   }
 }
 
 export const Bookmark: React.FC<Bookmark.Props> = memo(
   (props) => {
     const ref = useRef<HTMLDivElement>(null)
-    const [render_height, set_render_height] = useState<number | undefined>(
-      undefined,
-    )
     const is_visible = useViewportSpy(ref)
 
     useEffect(() => {
-      if (render_height) return
-
-      set_render_height(ref.current!.clientHeight)
-      sessionStorage.setItem(
-        `b_${props.id.substring(0, 8)}`,
-        ref.current!.clientHeight.toString(),
-      )
+      if (props.render_height) return
+      props.set_render_height(ref.current!.clientHeight)
     }, [])
 
     return (
       <div
         ref={ref}
         style={{
-          height: render_height
-            ? render_height
-            : props.render_height
-            ? props.render_height
-            : undefined,
+          height: props.render_height ? props.render_height : undefined,
         }}
       >
-        {is_visible == undefined || is_visible || !render_height ? (
+        {is_visible == undefined || is_visible || !props.render_height ? (
           <div
             className={styles.container}
             role="button"
@@ -209,7 +198,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       </div>
     )
   },
-  (o, n) => o.id == n.id && JSON.stringify(o.tags) == JSON.stringify(n.tags),
+  (o, n) =>
+    o.render_height == n.render_height &&
+    o.id == n.id &&
+    JSON.stringify(o.tags) == JSON.stringify(n.tags),
 )
 
 function _url_domain(url: string): string {

@@ -13,7 +13,7 @@ const Page: React.FC = () => {
           heading="Username"
           subheading="The username determines the default link of your public profile."
         />
-        <Input value="Lorem ipsum" onChange={(e) => {}} />
+        <Input value="Lorem ipsum" on_change={() => {}} />
         <Button size="default">Save</Button>
       </SettingBox>
     </>

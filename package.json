@@ -24,5 +24,10 @@
     "husky": "^8.0.3",
     "jest": "^29.4.2",
     "lint-staged": "^13.2.2"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "next@13.4.19": "patches/next@13.4.19.patch"
+    }
   }
 }

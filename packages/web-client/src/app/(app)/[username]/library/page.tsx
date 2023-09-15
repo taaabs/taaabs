@@ -5,14 +5,14 @@ import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Library } from '@web-ui/components/app/templates/library'
 import { useRouter, useParams } from 'next/navigation'
 import useToggle from 'beautiful-react-hooks/useToggle'
-import { use_library_selector } from './_hooks/store'
+import { use_library_dispatch, use_library_selector } from './_hooks/store'
 import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
 import { ButtonSelect } from '@web-ui/components/app/atoms/button-select'
 import { SimpleSelectDropdown } from '@web-ui/components/app/atoms/simple-select-dropdown'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { use_bookmarks } from './_hooks/use-bookmarks'
 import { LibraryFilter } from '@shared/types/common/library-filter'
-import { Sortby } from '@shared/types/modules/bookmarks/sort-by'
+import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
@@ -28,6 +28,7 @@ import { use_tag_view_options } from '@/hooks/library/use-tag-view-options'
 import { use_date_view_options } from '@/hooks/library/use-date-view-options'
 import { use_sortby_view_options } from '@/hooks/library/use-sortby-view-options'
 import { use_order_view_options } from '@/hooks/library/use-order-view-options'
+import { bookmarks_actions } from '@repositories/stores/user-public/library/bookmarks/bookmarks.slice'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -35,6 +36,7 @@ const Months = dynamic(() => import('./dynamic-months'), {
 })
 
 const Page: React.FC = () => {
+  const dispatch = use_library_dispatch()
   const query_params = use_shallow_search_params()
   const router = useRouter()
   const params = useParams()
@@ -88,12 +90,6 @@ const Page: React.FC = () => {
 
     return () => {
       window.history.scrollRestoration = 'auto'
-
-      for (const key in sessionStorage) {
-        if (key.substring(0, 2) == 'b_') {
-          sessionStorage.removeItem(key)
-        }
-      }
     }
   }, [])
 
@@ -440,9 +436,9 @@ const Page: React.FC = () => {
       }}
       slot_bookmarks={
         bookmarks && bookmarks.length
-          ? bookmarks.map((bookmark, i) => (
+          ? bookmarks.map((bookmark, index) => (
               <Bookmark
-                index={i}
+                index={index}
                 id={bookmark.id}
                 title={bookmark.title}
                 on_click={() => {}}
@@ -479,13 +475,15 @@ const Page: React.FC = () => {
                 key={bookmark.id}
                 on_tag_click={add_tag_to_query_params}
                 on_selected_tag_click={remove_tag_from_query_params}
-                render_height={
-                  parseInt(
-                    sessionStorage.getItem(
-                      `b_${bookmark.id.substring(0, 8)}`,
-                    ) || '0',
-                  ) || undefined
-                }
+                render_height={bookmark.render_height}
+                set_render_height={(height) => {
+                  dispatch(
+                    bookmarks_actions.set_bookmark_render_height({
+                      index,
+                      height,
+                    }),
+                  )
+                }}
               />
             ))
           : []

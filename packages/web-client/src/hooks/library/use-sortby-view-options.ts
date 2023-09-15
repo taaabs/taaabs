@@ -1,5 +1,5 @@
 import { updateSearchParam } from '@/utils/update-query-param'
-import { Sortby } from '@shared/types/modules/bookmarks/sort-by'
+import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -12,7 +12,7 @@ export const use_sortby_view_options = () => {
       parseInt(
         query_params.get('s') ||
           Object.values(Sortby)
-            .indexOf(BookmarksFetchingDefaults.Common.sortBy)
+            .indexOf(BookmarksFetchingDefaults.Common.sortby)
             .toString(),
       )
     ],
@@ -29,7 +29,7 @@ export const use_sortby_view_options = () => {
           parseInt(
             query_sortby ||
               Object.values(Sortby)
-                .indexOf(BookmarksFetchingDefaults.Common.sortBy)
+                .indexOf(BookmarksFetchingDefaults.Common.sortby)
                 .toString(),
           )
         ],
@@ -37,14 +37,14 @@ export const use_sortby_view_options = () => {
     }
   }, [query_params])
 
-  const set_sortby_query_param = (sortBy: Sortby) => {
+  const set_sortby_query_param = (sortby: Sortby) => {
     let updated_query_params: any
     updated_query_params = updateSearchParam(
       query_params,
       's',
-      sortBy == BookmarksFetchingDefaults.Common.sortBy
+      sortby == BookmarksFetchingDefaults.Common.sortby
         ? undefined
-        : Object.values(Sortby).indexOf(sortBy).toString(),
+        : Object.values(Sortby).indexOf(sortby).toString(),
     )
 
     if (query_params.get('gte')) {

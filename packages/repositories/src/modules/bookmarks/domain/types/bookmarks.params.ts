@@ -1,6 +1,6 @@
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { Sortby } from '@shared/types/modules/bookmarks/sort-by'
+import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 
 export namespace BookmarksParams {
   type Base = {

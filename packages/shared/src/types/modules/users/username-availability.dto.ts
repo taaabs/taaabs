@@ -1,4 +1,4 @@
-export namespace UsernameAvailabilityDto {
+export namespace UsernameAvailability_Dto {
   export class Body {
     public username: string
   }
