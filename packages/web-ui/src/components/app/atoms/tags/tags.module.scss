@@ -19,8 +19,9 @@
       position: relative;
       display: flex;
       justify-content: center;
-      font-size: var(--font-size-1-3rem);
-      font-weight: var(--font-weight-inter-bold);
+      font-size: var(--font-size-13px);
+      font-family: var(--font-family-plus-jakarta-sans);
+      font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
       color: var(--Tags-firstChar-foregrouond);
       text-transform: uppercase;
       width: var(--distance-22px);

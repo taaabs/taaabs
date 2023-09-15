@@ -117,6 +117,7 @@
       padding: 0 var(--distance-16px);
       > span {
         color: var(--text-color-dimmed);
+        font-size: var(--font-size-1-5rem);
       }
       &__tag {
         @include hover {
@@ -190,26 +191,30 @@
               text-underline-offset: 0.13em;
             }
             > span:first-child {
-              color: var(--text-color-normal);
-              text-decoration-color: var(--neutral500);
+              color: var(--Bookmark-link-url-foreground);
+              text-decoration-color: var(--Bookmark-link-url-foreground);
             }
             > span:last-child {
-              text-decoration-color: var(--neutral400);
+              color: var(--Bookmark-link-url-foreground);
+              text-decoration-color: var(--Bookmark-link-url-foreground);
+              font-size: var(--font-size-13px);
               word-wrap: break-word;
               display: -webkit-box;
               -webkit-line-clamp: 2;
               -webkit-box-orient: vertical;
-              color: var(--text-color-variant);
-              font-size: var(--font-size-13px);
             }
             &:visited {
               > span:first-child {
-                color: var(--text-color-dimmed);
-                text-decoration-color: var(--neutral300);
+                color: var(--Bookmark-link-url-foreground-visited);
+                text-decoration-color: var(
+                  --Bookmark-link-url-foreground-visited
+                );
               }
               > span:last-child {
-                text-decoration-color: var(--neutral300);
-                color: var(--text-color-dimmed);
+                text-decoration-color: var(
+                  --Bookmark-link-url-foreground-visited
+                );
+                color: var(--Bookmark-link-url-foreground-visited);
               }
             }
           }
