@@ -180,15 +180,14 @@
             overflow: hidden;
             @include hover {
               span {
-                text-decoration: none;
+                text-decoration: underline;
+                text-decoration-thickness: 1px;
+                text-underline-offset: 0.13em;
               }
             }
             span {
               text-overflow: ellipsis;
               overflow: hidden;
-              text-decoration: underline;
-              text-decoration-thickness: 1px;
-              text-underline-offset: 0.13em;
             }
             > span:first-child {
               color: var(--Bookmark-link-url-foreground);
