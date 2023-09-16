@@ -67,7 +67,7 @@ export const Months: React.FC<Months.Props> = memo(
       }
     }, [is_swiping])
 
-    const calculateCounts = ({
+    const calculate_counts = ({
       months,
       startIndex,
       endIndex,
@@ -196,7 +196,7 @@ export const Months: React.FC<Months.Props> = memo(
     )
 
     const calculateCountsThrottled = useThrottledCallback(
-      calculateCounts,
+      calculate_counts,
       [],
       50,
     )
@@ -223,24 +223,20 @@ export const Months: React.FC<Months.Props> = memo(
     }, [dragged_start_index, dragged_end_index])
 
     useUpdateEffect(() => {
-      calculateCounts({
+      calculate_counts({
         months: props.months,
         startIndex: start_index != null ? start_index : undefined,
         endIndex: end_index != null ? end_index : undefined,
       })
 
       if (!is_swiping) {
-        set_key(
-          `${start_index || ''}${end_index || ''}${props.selected_tags || ''}`,
-        )
+        set_key(`${start_index}${end_index}${props.selected_tags}`)
       }
     }, [start_index, end_index, props.months])
 
     useEffect(() => {
       if (!props.months || !props.current_gte || !props.current_lte) {
-        set_key(
-          `${start_index || ''}${end_index || ''}${props.selected_tags || ''}`,
-        )
+        set_key(`${start_index}${end_index}${props.selected_tags}`)
         set_start_index(null)
         set_end_index(null)
 
@@ -275,7 +271,7 @@ export const Months: React.FC<Months.Props> = memo(
       )
         return
 
-      calculateCounts({
+      calculate_counts({
         months: props.months,
         startIndex: 0,
         endIndex: props.months.length - 1,
@@ -428,7 +424,6 @@ export const Months: React.FC<Months.Props> = memo(
     )
   },
   (o, n) =>
-    o.is_getting_data == n.is_getting_data &&
     o.clear_date_range == n.clear_date_range &&
     JSON.stringify(o.months) == JSON.stringify(n.months),
 )

@@ -53,6 +53,8 @@ export const use_filter_view_options = () => {
         : Object.values(LibraryFilter).indexOf(filter).toString(),
     )
     updated_query_params = updateSearchParam(updated_query_params, 't')
+    updated_query_params = updateSearchParam(updated_query_params, 'gte')
+    updated_query_params = updateSearchParam(updated_query_params, 'lte')
 
     window.history.pushState(
       {},
