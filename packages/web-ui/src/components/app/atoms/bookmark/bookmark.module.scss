@@ -194,13 +194,17 @@
               text-decoration-color: var(--Bookmark-link-url-foreground);
             }
             > span:last-child {
+              opacity: 0.8;
               color: var(--Bookmark-link-url-foreground);
               text-decoration-color: var(--Bookmark-link-url-foreground);
               font-size: var(--font-size-13px);
-              word-wrap: break-word;
-              display: -webkit-box;
-              -webkit-line-clamp: 2;
-              -webkit-box-orient: vertical;
+              @include at1200 {
+                -webkit-line-clamp: 2;
+                word-wrap: break-word;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+              }
             }
             &:visited {
               > span:first-child {

@@ -257,5 +257,6 @@ function _url_path(params: { url: string; site_path?: string }): string {
     parsed_url = parsed_url.substring(params.site_path.length + 1)
   }
 
-  return parsed_url.length ? `/${parsed_url}` : ''
+  // return parsed_url.length ? `/${parsed_url}` : ''
+  return parsed_url.split('/').join(' › ')
 }
