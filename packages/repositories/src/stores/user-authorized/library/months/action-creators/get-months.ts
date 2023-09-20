@@ -1,10 +1,10 @@
 import { Months_Params } from '@repositories/modules/months/domain/types/months.params'
 import { LibraryDispatch, LibraryState } from '../../library.store'
-import { Months_RepositoryImpl } from '@repositories/modules/months/infrastructure/repositories/months-repository-impl'
 import { GetMonthsOnAuthorizedUser_UseCase } from '@repositories/modules/months/domain/usecases/get-months-on-authorized-user.use-case'
 import { months_actions } from '@repositories/stores/user-authorized/library/months/months.slice'
 import { bookmarksActions } from '../../bookmarks/bookmarks.slice'
 import { Months_DataSourceImpl } from '@repositories/modules/months/infrastructure/data-sources/months.data-source-impl'
+import { Months_RepositoryImpl } from '@repositories/modules/months/infrastructure/repositories/months.repository-impl'
 
 export const getMonths = (params: {
   query_params: Months_Params.Authorized

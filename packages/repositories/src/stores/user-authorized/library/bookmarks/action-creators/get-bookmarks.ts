@@ -1,19 +1,19 @@
 import { Bookmarks_Params } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { LibraryDispatch, LibraryState } from '../../library.store'
-import { BookmarksDataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks-data-source-impl'
-import { BookmarksRepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks-repository-impl'
-import { GetBookmarksOnAuthorizedUser } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-authorized-user'
 import { bookmarksActions } from '../bookmarks.slice'
 import { months_actions } from '../../months/months.slice'
+import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
+import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
+import { GetBookmarksOnAuthorizedUser_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-authorized-user.use-case'
 
 export const get_bookmarks = (params: {
   query_params: Bookmarks_Params.Authorized
   api_url: string
 }) => {
   return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
-    const data_source = new BookmarksDataSourceImpl(params.api_url)
-    const repository = new BookmarksRepositoryImpl(data_source)
-    const get_bookmarks = new GetBookmarksOnAuthorizedUser(repository)
+    const data_source = new Bookmarks_DataSourceImpl(params.api_url)
+    const repository = new Bookmarks_RepositoryImpl(data_source)
+    const get_bookmarks = new GetBookmarksOnAuthorizedUser_UseCase(repository)
 
     dispatch(bookmarksActions.setIsGettingData(true))
 
