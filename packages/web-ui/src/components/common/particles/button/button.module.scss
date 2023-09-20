@@ -15,6 +15,11 @@
   @include hover {
     background: var(--Button-background-hover);
   }
+  padding-bottom: 0.1em !important;
+  &--is-loading {
+    opacity: 0.7;
+    pointer-events: none;
+  }
   &--small {
     height: var(--button-dimension-34px);
     font-size: var(--font-size-13px);

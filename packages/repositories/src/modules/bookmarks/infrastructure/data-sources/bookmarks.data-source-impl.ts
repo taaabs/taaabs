@@ -1,14 +1,14 @@
-import { BookmarksDataSource } from './bookmarks-data-source'
-import { BookmarksDto } from '@shared/types/modules/bookmarks/bookmarks.dto'
-import { BookmarksParams } from '../../domain/types/bookmarks.params'
+import { Bookmarks_DataSource } from './bookmarks.data-source'
+import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
+import { Bookmarks_Params } from '../../domain/types/bookmarks.params'
 
-export class BookmarksDataSourceImpl implements BookmarksDataSource {
+export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(private readonly _api_url: string) {}
 
   public async get_bookmarks_on_authorized_user(
-    params: BookmarksParams.Authorized,
-  ): Promise<BookmarksDto.Response.Authorized> {
-    const queryParams: BookmarksDto.QueryParams.Authorized = {
+    params: Bookmarks_Params.Authorized,
+  ): Promise<Bookmarks_Dto.Response.Authorized> {
+    const queryParams: Bookmarks_Dto.QueryParams.Authorized = {
       tags: params.tags?.join(','),
       category_id: params.category_id,
       after: params.after,
@@ -38,9 +38,9 @@ export class BookmarksDataSourceImpl implements BookmarksDataSource {
   }
 
   public async get_bookmarks_on_public_user(
-    params: BookmarksParams.Public,
-  ): Promise<BookmarksDto.Response.Public> {
-    const queryParams: BookmarksDto.QueryParams.Public = {
+    params: Bookmarks_Params.Public,
+  ): Promise<Bookmarks_Dto.Response.Public> {
+    const queryParams: Bookmarks_Dto.QueryParams.Public = {
       tags: params.tags?.join(','),
       category_id: params.category_id,
       after: params.after,

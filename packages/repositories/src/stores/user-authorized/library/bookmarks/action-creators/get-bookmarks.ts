@@ -1,4 +1,4 @@
-import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
+import { Bookmarks_Params } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { LibraryDispatch, LibraryState } from '../../library.store'
 import { BookmarksDataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks-data-source-impl'
 import { BookmarksRepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks-repository-impl'
@@ -7,7 +7,7 @@ import { bookmarksActions } from '../bookmarks.slice'
 import { months_actions } from '../../months/months.slice'
 
 export const get_bookmarks = (params: {
-  query_params: BookmarksParams.Authorized
+  query_params: Bookmarks_Params.Authorized
   api_url: string
 }) => {
   return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {

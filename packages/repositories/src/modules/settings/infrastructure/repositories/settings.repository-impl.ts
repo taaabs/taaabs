@@ -1,18 +1,32 @@
-import { SettingsRepository } from '../../domain/repositories/settings.repository'
+import { Settings_Repository } from '../../domain/repositories/settings.repository'
+import { MyUsername } from '../../domain/types/my-username'
+import { UpdateUsername } from '../../domain/types/update-username'
 import { UsernameAvailability } from '../../domain/types/username-availability'
-import { SettingsDataSource } from '../data-sources/settings-data-source'
+import { Settings_DataSource } from '../data-sources/settings.data-source'
 
-export class SettingsRepositoryImpl implements SettingsRepository {
-  constructor(private readonly _settings_data_source: SettingsDataSource) {}
+export class Settings_RepositoryImpl implements Settings_Repository {
+  constructor(private readonly _settings_data_source: Settings_DataSource) {}
+
+  public async get_my_username(): Promise<MyUsername.Response> {
+    const { username } = await this._settings_data_source.get_my_username()
+
+    return {
+      username,
+    }
+  }
 
   public async check_username_availability(
     params: UsernameAvailability.Params,
   ): Promise<UsernameAvailability.Response> {
-    const data =
+    const { is_available } =
       await this._settings_data_source.check_username_availability(params)
 
     return {
-      is_available: data.is_available,
+      is_available,
     }
+  }
+
+  public async update_username(params: UpdateUsername.Params): Promise<void> {
+    return this._settings_data_source.update_username(params)
   }
 }

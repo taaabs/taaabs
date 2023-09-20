@@ -22,7 +22,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
       <UserForHeader
         user={{
           username: params.username as string,
-          backHref: '/',
+          back_href: '/',
           avatar: publicUserAvatar?.avatar
             ? {
                 url: publicUserAvatar.avatar.url,

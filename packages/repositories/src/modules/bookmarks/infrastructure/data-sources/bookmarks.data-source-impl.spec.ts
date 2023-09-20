@@ -1,9 +1,9 @@
-import { BookmarksDataSourceImpl } from './bookmarks-data-source-impl'
+import { Bookmarks_DataSourceImpl } from './bookmarks.data-source-impl'
 
-describe('BookmarksDataSourceImpl', () => {
+describe('Bookmarks_DataSourceImpl', () => {
   describe('get_bookmarks_on_authorized_user', () => {
     it('should call proper endpoint via a GET request', () => {
-      const sut = new BookmarksDataSourceImpl('http://example.com')
+      const sut = new Bookmarks_DataSourceImpl('http://example.com')
       sut.get_bookmarks_on_authorized_user({})
       expect(fetch).toHaveBeenCalledWith('http://example.com/v1/bookmarks?')
     })
@@ -12,7 +12,7 @@ describe('BookmarksDataSourceImpl', () => {
   describe('get_bookmarks_on_public_user', () => {
     describe('query parameters are provided', () => {
       it('should provide stringified tags', () => {
-        const sut = new BookmarksDataSourceImpl('http://example.com')
+        const sut = new Bookmarks_DataSourceImpl('http://example.com')
         const username = 'test'
         sut.get_bookmarks_on_public_user({
           username: username,

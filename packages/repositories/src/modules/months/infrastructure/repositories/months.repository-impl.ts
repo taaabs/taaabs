@@ -1,20 +1,20 @@
-import { MonthsRepository } from '../../domain/repositories/months.repository'
-import { MonthsParams } from '../../domain/types/months.params'
-import { MonthsRo } from '../../domain/types/months.ro'
-import { MonthsDataSource } from '../data-sources/months-data-source'
+import { Months_Repository } from '../../domain/repositories/months.repository'
+import { Months_Params } from '../../domain/types/months.params'
+import { Months_Ro } from '../../domain/types/months.ro'
+import { Months_DataSource } from '../data-sources/months.data-source'
 
-export class MonthsRepositoryImpl implements MonthsRepository {
-  constructor(private readonly _months_data_source: MonthsDataSource) {}
+export class Months_RepositoryImpl implements Months_Repository {
+  constructor(private readonly _months_data_source: Months_DataSource) {}
 
   public async get_months_on_authorized_user(
-    params: MonthsParams.Authorized,
-  ): Promise<MonthsRo.Authorized> {
+    params: Months_Params.Authorized,
+  ): Promise<Months_Ro.Authorized> {
     const data =
       await this._months_data_source.get_months_on_authorized_user(params)
 
     return {
       created_at: Object.entries(data.created_at).reduce<
-        MonthsRo.Authorized['updated_at']
+        Months_Ro.Authorized['updated_at']
       >(
         (acc, [k, v]) => ({
           ...acc,
@@ -29,7 +29,7 @@ export class MonthsRepositoryImpl implements MonthsRepository {
         {},
       ),
       updated_at: Object.entries(data.updated_at).reduce<
-        MonthsRo.Authorized['updated_at']
+        Months_Ro.Authorized['updated_at']
       >(
         (acc, [k, v]) => ({
           ...acc,
@@ -48,14 +48,14 @@ export class MonthsRepositoryImpl implements MonthsRepository {
   }
 
   public async get_months_on_public_user(
-    params: MonthsParams.Public,
-  ): Promise<MonthsRo.Public> {
+    params: Months_Params.Public,
+  ): Promise<Months_Ro.Public> {
     const data =
       await this._months_data_source.get_months_on_public_user(params)
 
     return {
       created_at: Object.entries(data.created_at).reduce<
-        MonthsRo.Public['created_at']
+        Months_Ro.Public['created_at']
       >(
         (acc, [k, v]) => ({
           ...acc,
@@ -69,7 +69,7 @@ export class MonthsRepositoryImpl implements MonthsRepository {
         {},
       ),
       updated_at: Object.entries(data.updated_at).reduce<
-        MonthsRo.Public['updated_at']
+        Months_Ro.Public['updated_at']
       >(
         (acc, [k, v]) => ({
           ...acc,

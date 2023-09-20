@@ -6,8 +6,8 @@ import { Provider } from 'react-redux'
 
 export const LibraryStoreProvider: React.FC<{
   children: ReactNode
-}> = ({ children }) => {
+}> = (props) => {
   const store = configure_library_store()
 
-  return <Provider store={store}>{children}</Provider>
+  return <Provider store={store}>{props.children}</Provider>
 }

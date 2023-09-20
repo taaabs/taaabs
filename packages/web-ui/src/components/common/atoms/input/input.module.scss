@@ -1,15 +1,38 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
+.contaner {
+  display: flex;
+  gap: var(--distance-8px);
+  flex-direction: column;
+}
 .input {
+  width: 100%;
   border: var(--Input-border);
   background: var(--Input-background);
   border-radius: var(--border-radius-10px);
   height: var(--input-height-46px);
   padding: 0 var(--distance-16px);
-  @include transition-100ms(border-color);
+  @include transition-100ms;
   &:focus {
     border-color: var(--Input-border-color-focus);
     outline: none;
+  }
+}
+.message {
+  margin-top: var(--distance-8px);
+  font-size: var(--font-size-13px);
+  strong {
+    font-weight: var(--font-weight-inter-medium);
+    color: var(--text-color-variant);
+  }
+  &--error {
+    color: var(--red600);
+  }
+  &--warning {
+    color: var(--yellow600);
+  }
+  &--info {
+    color: var(--text-color-dimmed);
   }
 }

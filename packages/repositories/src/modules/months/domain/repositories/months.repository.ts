@@ -1,12 +1,12 @@
-import { MonthsParams } from '../types/months.params'
-import { MonthsRo } from '../types/months.ro'
+import { Months_Params } from '../types/months.params'
+import { Months_Ro } from '../types/months.ro'
 
-export type MonthsRepository = {
+export type Months_Repository = {
   get_months_on_authorized_user(
-    params: MonthsParams.Authorized,
-  ): Promise<MonthsRo.Authorized>
+    params: Months_Params.Authorized,
+  ): Promise<Months_Ro.Authorized>
 
   get_months_on_public_user(
-    params: MonthsParams.Public,
-  ): Promise<MonthsRo.Public>
+    params: Months_Params.Public,
+  ): Promise<Months_Ro.Public>
 }

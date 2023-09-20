@@ -60,6 +60,11 @@
     }
   }
 }
+@mixin dark {
+  :where([color-scheme='dark']) & {
+    @content;
+  }
+}
 @mixin transition-100ms($transitionProperty: all) {
   transition: $transitionProperty var(--transition-duration-100ms) linear;
 }

@@ -1,23 +1,28 @@
 'use client'
 
-import { Input } from '@web-ui/components/common/atoms/input'
-import { Button } from '@web-ui/components/common/particles/button'
-import { SettingBox } from '@web-ui/components/settings/atoms/setting-box'
-import { SettingHeading } from '@web-ui/components/settings/atoms/setting-heading'
+import { useEffect } from 'react'
+import {
+  use_settings_account_dispatch,
+  use_settings_account_selector,
+} from './_hooks/store'
+import { Username } from './username'
+import { username_actions } from '@repositories/stores/user-authorized/settings-account/username/username.slice'
 
 const Page: React.FC = () => {
-  return (
-    <>
-      <SettingBox>
-        <SettingHeading
-          heading="Username"
-          subheading="The username determines the default link of your public profile."
-        />
-        <Input value="Lorem ipsum" on_change={() => {}} />
-        <Button size="default">Save</Button>
-      </SettingBox>
-    </>
+  const dispatch = use_settings_account_dispatch()
+  const { my_username } = use_settings_account_selector(
+    (state) => state.username,
   )
+
+  useEffect(() => {
+    dispatch(
+      username_actions.get_my_username({
+        api_url: process.env.NEXT_PUBLIC_API_URL,
+        user_id: 'da73e988-abe7-40a5-af67-f5b38ccbd935',
+      }),
+    )
+  }, [])
+  return <>{my_username && <Username my_username={my_username} />}</>
 }
 
 export default Page

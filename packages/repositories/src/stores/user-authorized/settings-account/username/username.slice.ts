@@ -1,40 +1,30 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import * as thunks from './action-creators'
+
 type UsernameState = {
-  isGettingCurrentUsername: boolean
-  currentUsername?: string
-  newUsername?: string
-  isCheckingUsernameAvailability: boolean
-  isNewUsernameAvailable?: boolean
+  is_getting_my_username: boolean
+  my_username?: string
 }
 
-const initialState: UsernameState = {
-  isGettingCurrentUsername: false,
-  isCheckingUsernameAvailability: false,
+const initial_state: UsernameState = {
+  is_getting_my_username: false,
 }
 
-export const usernameSlice = createSlice({
+export const username_slice = createSlice({
   name: 'username',
-  initialState,
+  initialState: initial_state,
   reducers: {
-    setIsGettingCurrentUsername(state, action: PayloadAction<boolean>) {
-      state.isGettingCurrentUsername = action.payload
+    set_is_getting_my_username(state, action: PayloadAction<boolean>) {
+      state.is_getting_my_username = action.payload
     },
-    setCurrentUsername(state, action: PayloadAction<string>) {
-      state.currentUsername = action.payload
-    },
-    setNewUsername(state, action: PayloadAction<string>) {
-      state.newUsername = action.payload
-    },
-    setIsCheckingUsernameAvailability(state, action: PayloadAction<boolean>) {
-      state.isCheckingUsernameAvailability = action.payload
-    },
-    setIsNewUsernameAvailable(state, action: PayloadAction<boolean>) {
-      state.isNewUsernameAvailable = action.payload
+    set_my_username(state, action: PayloadAction<string>) {
+      state.my_username = action.payload
     },
   },
 })
 
-export const usernameActions = {
-  ...usernameSlice.actions,
+export const username_actions = {
+  ...username_slice.actions,
+  ...thunks,
 }

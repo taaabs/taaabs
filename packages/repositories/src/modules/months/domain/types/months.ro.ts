@@ -1,15 +1,15 @@
-import { MonthEntity } from '../entities/month.entity'
+import { Month_Entity } from '../entities/month.entity'
 
-export namespace MonthsRo {
+export namespace Months_Ro {
   type Base = {
     is_months_update_scheduled: boolean
   }
   export type Authorized = Base & {
-    created_at: Record<string, MonthEntity.Authorized>
-    updated_at: Record<string, MonthEntity.Authorized>
+    created_at: Record<string, Month_Entity.Authorized>
+    updated_at: Record<string, Month_Entity.Authorized>
   }
   export type Public = Base & {
-    created_at: Record<string, MonthEntity.Public>
-    updated_at: Record<string, MonthEntity.Public>
+    created_at: Record<string, Month_Entity.Public>
+    updated_at: Record<string, Month_Entity.Public>
   }
 }

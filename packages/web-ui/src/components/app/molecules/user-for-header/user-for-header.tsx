@@ -11,7 +11,7 @@ export namespace UserForHeader {
       url: string
       blurhash: string
     }
-    backHref: string
+    back_href: string
   }
   export type Props = {
     user: User
@@ -35,7 +35,7 @@ export const UserForHeader: React.FC<UserForHeader.Props> = (props) => {
 
   return (
     <div className={styles.container}>
-      <Link className={styles['back-arrow']} href={props.user.backHref}>
+      <Link className={styles['back-arrow']} href={props.user.back_href}>
         <Icon variant="LESS_THAN" />
       </Link>
       <div className={styles['avatar-and-username']}>

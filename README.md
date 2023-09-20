@@ -42,18 +42,12 @@ Routing
 
 #### User routes:
 
-- taaabs.com/home [logged in user]
-- taaabs.com/my-library [logged in user]
+- taaabs.com/inbox
+- taaabs.com/library
 
 #### Public routes:
 
 - taaabs.com
 - taaabs.com/pricing
-- taaabs.com/@[username]
-- taaabs.com/@[username]/library?tags=a,b,c
-- taaabs.com/@[username]/about
-- [username].taaabs.com
-- [username].taaabs.com/library?tags=a,b,c
-- [username].taaabs.com/about
-
-Wildcard urls above are served from dynamic host so that these routes are SEO enabled.
+- taaabs.com/[username]
+- taaabs.com/[username]/library

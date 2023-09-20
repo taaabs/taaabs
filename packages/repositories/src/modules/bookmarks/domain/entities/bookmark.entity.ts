@@ -1,4 +1,4 @@
-export namespace BookmarkEntity {
+export namespace Bookmark_Entity {
   type Base = {
     id: string
     title: string

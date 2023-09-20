@@ -30,6 +30,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <html
       lang="en"
       className={`${inter.variable} ${interTight.variable} ${plusJakartaSans.variable}`}
+      // color-scheme="dark"
     >
       <body>
         {/* <GlobalStoreProvider> */}

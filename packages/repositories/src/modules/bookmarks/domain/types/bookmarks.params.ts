@@ -2,7 +2,7 @@ import { LibraryFilter } from '@shared/types/common/library-filter'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 
-export namespace BookmarksParams {
+export namespace Bookmarks_Params {
   type Base = {
     sort_by?: Sortby
     order?: Order

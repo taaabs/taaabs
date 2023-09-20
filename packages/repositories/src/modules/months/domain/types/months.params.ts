@@ -1,6 +1,6 @@
 import { LibraryFilter } from '@shared/types/common/library-filter'
 
-export namespace MonthsParams {
+export namespace Months_Params {
   type Base = {
     filter?: LibraryFilter
     category_id?: string

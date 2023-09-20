@@ -1,12 +1,12 @@
 import { MonthsDto } from '@shared/types/modules/months/months.dto'
-import { MonthsParams } from '../../domain/types/months.params'
-import { MonthsDataSource } from './months-data-source'
+import { Months_Params } from '../../domain/types/months.params'
+import { Months_DataSource } from './months.data-source'
 
-export class MonthsDataSourceImpl implements MonthsDataSource {
+export class Months_DataSourceImpl implements Months_DataSource {
   constructor(private readonly _apiUrl: string) {}
 
   public async get_months_on_authorized_user(
-    params: MonthsParams.Authorized,
+    params: Months_Params.Authorized,
   ): Promise<MonthsDto.Response.Authorized> {
     const queryParams: MonthsDto.QueryParams.Authorized = {
       filter: params.filter,
@@ -23,7 +23,7 @@ export class MonthsDataSourceImpl implements MonthsDataSource {
   }
 
   public async get_months_on_public_user(
-    params: MonthsParams.Public,
+    params: Months_Params.Public,
   ): Promise<MonthsDto.Response.Public> {
     const queryParams: MonthsDto.QueryParams.Public = {
       filter: params.filter,

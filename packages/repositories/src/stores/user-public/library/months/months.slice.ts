@@ -1,4 +1,4 @@
-import { MonthsRo } from '@repositories/modules/months/domain/types/months.ro'
+import { Months_Ro } from '@repositories/modules/months/domain/types/months.ro'
 import * as thunks from './action-creators'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
@@ -12,7 +12,7 @@ export type Tags = Record<string, { id: number; yields: number }>
 
 export type MonthsState = {
   is_getting_months_data: boolean
-  months_data: MonthsRo.Public | null
+  months_data: Months_Ro.Public | null
   months_of_bookmark_creation: Months | null
   months_of_url_creation: Months | null
   tags_of_bookmark_creation: Tags | null
@@ -39,7 +39,7 @@ export const months_slice = createSlice({
     set_is_getting_data(state, action: PayloadAction<boolean>) {
       state.is_getting_months_data = action.payload
     },
-    set_data(state, action: PayloadAction<MonthsRo.Public>) {
+    set_data(state, action: PayloadAction<Months_Ro.Public>) {
       state.months_data = action.payload
 
       const months_of_bookmark_creation: Months = []

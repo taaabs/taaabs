@@ -40,16 +40,16 @@ export async function generateMetadata({
 
   return {
     title: {
-      default: `${metadata.displayName} (@${metadata.username}) | Taaabs`,
-      template: `%s - ${metadata.displayName} (@${metadata.username}) | Taaabs`,
+      default: `${metadata.display_name} (@${metadata.username}) | Taaabs`,
+      template: `%s - ${metadata.display_name} (@${metadata.username}) | Taaabs`,
     },
   }
 }
 
 async function _getMetadata({ username }: { username: string }) {
-  const dataSource = new MetadataDataSourceImpl(apiUrl)
-  const repository = new MetadataRepositoryImpl(dataSource)
-  const getMetadata = new GetPublicMetadata(repository)
-  const metadata = await getMetadata.invoke({ username })
+  const data_source = new MetadataDataSourceImpl(apiUrl)
+  const repository = new MetadataRepositoryImpl(data_source)
+  const get_metadata = new GetPublicMetadata(repository)
+  const metadata = await get_metadata.invoke({ username })
   return metadata
 }

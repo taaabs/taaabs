@@ -26,6 +26,7 @@ export const DesktopUserAreaForAppHeader: React.FC<
         icon_variant="NOTIFICATIONS"
         on_click={props.notificatios_on_click}
       />
+      <ButtonOutlinedIcon icon_variant="SUN" on_click={() => {}} />
       {props.avatar ? (
         <ButtonAvatar
           url={props.avatar.url}

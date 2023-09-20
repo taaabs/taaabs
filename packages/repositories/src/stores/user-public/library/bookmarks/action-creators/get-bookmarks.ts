@@ -1,23 +1,23 @@
-import { BookmarksParams } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
-import { BookmarksDataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks-data-source-impl'
-import { BookmarksRepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks-repository-impl'
+import { Bookmarks_Params } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { bookmarks_actions } from '../bookmarks.slice'
-import { GetBookmarksOnPublicUser } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-public-user'
 import { LibraryDispatch, LibraryState } from '../../library.store'
 import { months_actions } from '../../months/months.slice'
+import { GetBookmarksOnPublicUser_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-public-user.use-case'
+import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
+import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 
 export const get_bookmarks = (params: {
-  query_params: BookmarksParams.Public
+  request_params: Bookmarks_Params.Public
   api_url: string
 }) => {
   return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
-    const data_source = new BookmarksDataSourceImpl(params.api_url)
-    const repository = new BookmarksRepositoryImpl(data_source)
-    const get_bookmarks = new GetBookmarksOnPublicUser(repository)
+    const data_source = new Bookmarks_DataSourceImpl(params.api_url)
+    const repository = new Bookmarks_RepositoryImpl(data_source)
+    const get_bookmarks = new GetBookmarksOnPublicUser_UseCase(repository)
 
     dispatch(bookmarks_actions.set_is_getting_data(true))
 
-    if (params.query_params.after) {
+    if (params.request_params.after) {
       dispatch(bookmarks_actions.set_is_getting_more_bookmarks(true))
     } else {
       dispatch(bookmarks_actions.set_is_getting_first_bookmarks(true))
@@ -25,13 +25,13 @@ export const get_bookmarks = (params: {
     }
 
     const { bookmarks, pagination } = await get_bookmarks.invoke(
-      params.query_params,
+      params.request_params,
     )
 
     dispatch(bookmarks_actions.set_is_getting_data(false))
     dispatch(bookmarks_actions.set_has_more_bookmarks(pagination.has_more))
 
-    if (params.query_params.after) {
+    if (params.request_params.after) {
       dispatch(bookmarks_actions.set_more_bookmarks(bookmarks))
       dispatch(bookmarks_actions.set_is_getting_more_bookmarks(false))
     } else {

@@ -21,5 +21,7 @@ declare const styles: {
   readonly bookmark__links__item__actions: string
   readonly bookmark__links__item__actions__open: string
   readonly bookmark__links__item__actions__bookmark: string
+  readonly 'MuiInput-root': string
+  readonly 'MuiInput-input': string
 }
 export = styles

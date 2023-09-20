@@ -143,11 +143,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                       <button
                         className={styles.bookmark__links__item__site__favicon}
                       >
-                        <img
+                        {/* LAZY LOAD because page reload requests all */}
+                        {/* <img
                           src={`https://icons.bitwarden.net/${_url_domain(
                             link.url,
                           )}/icon.png`}
-                        />
+                        /> */}
                       </button>
                       <a
                         className={styles.bookmark__links__item__site__url}

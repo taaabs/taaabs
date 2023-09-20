@@ -1,6 +1,7 @@
 import { Header } from '@web-ui/components/settings/atoms/header'
 import { Settings } from '@web-ui/components/settings/templates/settings'
 import { DynamicDesktopNavigation } from './DynamicDesktopNavigation'
+import { Metadata } from 'next'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
@@ -14,3 +15,10 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 }
 
 export default Layout
+
+export const metadata: Metadata = {
+  title: {
+    default: `Settings`,
+    template: `%s - Settings | Taaabs`,
+  },
+}

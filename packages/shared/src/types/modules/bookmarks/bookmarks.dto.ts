@@ -8,7 +8,7 @@ import { ToBoolean } from '@shared/decorators/to-boolean'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { BookmarksFetchingDefaults } from './bookmarks-fetching-defaults'
 
-export namespace BookmarksDto {
+export namespace Bookmarks_Dto {
   export namespace QueryParams {
     export class Base extends PaginationQueryParamsDto {
       @ApiProperty({

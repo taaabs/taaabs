@@ -39,62 +39,61 @@ export const use_bookmarks = () => {
   }: {
     should_get_next_page?: boolean
   }) => {
-    const get_bookmarks_params: BookmarksParams.Public = {
+    const request_params: BookmarksParams.Public = {
       username: params.username as string,
     }
 
     const query_tags = query_params.get('t')
     set_last_query_tags(query_tags)
     if (query_tags) {
-      get_bookmarks_params.tags = query_tags.split(',')
+      request_params.tags = query_tags.split(',')
     }
 
     const query_category = query_params.get('c')
     set_last_query_category(query_category)
     if (query_category) {
-      get_bookmarks_params.category_id = query_category
+      request_params.category_id = query_category
     }
 
     const query_filter = query_params.get('f')
     set_last_query_filter(query_filter)
     if (query_filter) {
-      get_bookmarks_params.filter =
+      request_params.filter =
         Object.values(LibraryFilter)[parseInt(query_filter)]
     }
 
     const query_sortby = query_params.get('s')
     set_last_query_sortby(query_sortby)
     if (query_sortby) {
-      get_bookmarks_params.sort_by =
-        Object.values(Sortby)[parseInt(query_sortby)]
+      request_params.sort_by = Object.values(Sortby)[parseInt(query_sortby)]
     }
 
     const query_order = query_params.get('o')
     set_last_query_order(query_order)
     if (query_order) {
-      get_bookmarks_params.order = Object.values(Order)[parseInt(query_order)]
+      request_params.order = Object.values(Order)[parseInt(query_order)]
     }
 
     const query_yyyymm_gte = query_params.get('gte')
     set_last_query_yyyymm_gte(query_yyyymm_gte)
     if (query_yyyymm_gte) {
-      get_bookmarks_params.yyyymm_gte = parseInt(query_yyyymm_gte)
+      request_params.yyyymm_gte = parseInt(query_yyyymm_gte)
     }
 
     const query_yyyymm_lte = query_params.get('lte')
     set_last_query_yyyymm_lte(query_yyyymm_lte)
     if (query_yyyymm_lte) {
-      get_bookmarks_params.yyyymm_lte = parseInt(query_yyyymm_lte)
+      request_params.yyyymm_lte = parseInt(query_yyyymm_lte)
     }
 
     if (should_get_next_page) {
       if (!bookmarks) throw 'Bookmarks should be there.'
-      get_bookmarks_params.after = bookmarks[bookmarks.length - 1].id
+      request_params.after = bookmarks[bookmarks.length - 1].id
     }
 
     dispatch(
       bookmarks_actions.get_bookmarks({
-        query_params: get_bookmarks_params,
+        request_params,
         api_url: process.env.NEXT_PUBLIC_API_URL,
       }),
     )

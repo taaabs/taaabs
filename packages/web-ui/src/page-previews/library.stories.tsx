@@ -108,6 +108,7 @@ const bookmark = (
       on_click={() => {}}
       on_menu_click={() => {}}
       on_selected_tag_click={() => {}}
+      set_render_height={() => {}}
     />
   </div>
 )

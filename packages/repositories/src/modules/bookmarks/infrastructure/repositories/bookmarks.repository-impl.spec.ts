@@ -1,16 +1,16 @@
-import { BookmarksDataSource } from '../data-sources/bookmarks-data-source'
-import { BookmarksRo } from '../../domain/types/bookmarks.ro'
-import { BookmarksRepositoryImpl } from './bookmarks-repository-impl'
-import { BookmarksDto } from '@shared/types/modules/bookmarks/bookmarks.dto'
+import { Bookmarks_DataSource } from '../data-sources/bookmarks.data-source'
+import { Bookmarks_Ro } from '../../domain/types/bookmarks.ro'
+import { Bookmarks_RepositoryImpl } from './bookmarks.repository-impl'
+import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { MockProxy, mock, mockReset } from 'jest-mock-extended'
 
 const now = new Date().toISOString()
 
-describe('BookmarksRepositoryImpl', () => {
-  let bookmarks_data_source_mock: MockProxy<BookmarksDataSource>
+describe('Bookmarks_RepositoryImpl', () => {
+  let bookmarks_data_source_mock: MockProxy<Bookmarks_DataSource>
 
   beforeAll(() => {
-    bookmarks_data_source_mock = mock<BookmarksDataSource>()
+    bookmarks_data_source_mock = mock<Bookmarks_DataSource>()
   })
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('BookmarksRepositoryImpl', () => {
 
   describe('get_authorized', () => {
     it('should correctly parse dto', async () => {
-      const dto: BookmarksDto.Response.Authorized = {
+      const dto: Bookmarks_Dto.Response.Authorized = {
         bookmarks: [
           {
             id: '1',
@@ -34,7 +34,7 @@ describe('BookmarksRepositoryImpl', () => {
           has_more: false,
         },
       }
-      const ro: BookmarksRo.Authorized = {
+      const ro: Bookmarks_Ro.Authorized = {
         bookmarks: [
           {
             id: '1',
@@ -56,7 +56,7 @@ describe('BookmarksRepositoryImpl', () => {
       bookmarks_data_source_mock.get_bookmarks_on_authorized_user.mockResolvedValue(
         dto,
       )
-      const sut = new BookmarksRepositoryImpl(bookmarks_data_source_mock)
+      const sut = new Bookmarks_RepositoryImpl(bookmarks_data_source_mock)
       const result = await sut.get_bookmarks_on_authorized_user({})
       expect(result).toStrictEqual(ro)
     })
@@ -64,7 +64,7 @@ describe('BookmarksRepositoryImpl', () => {
 
   describe('get_public', () => {
     it('should correclty parse dto', async () => {
-      const dto: BookmarksDto.Response.Public = {
+      const dto: Bookmarks_Dto.Response.Public = {
         bookmarks: [
           {
             id: '1',
@@ -79,7 +79,7 @@ describe('BookmarksRepositoryImpl', () => {
           has_more: false,
         },
       }
-      const ro: BookmarksRo.Public = {
+      const ro: Bookmarks_Ro.Public = {
         bookmarks: [
           {
             id: '1',
@@ -100,7 +100,7 @@ describe('BookmarksRepositoryImpl', () => {
       bookmarks_data_source_mock.get_bookmarks_on_public_user.mockResolvedValue(
         dto,
       )
-      const sut = new BookmarksRepositoryImpl(bookmarks_data_source_mock)
+      const sut = new Bookmarks_RepositoryImpl(bookmarks_data_source_mock)
       const result = await sut.get_bookmarks_on_public_user({
         username: '',
       })

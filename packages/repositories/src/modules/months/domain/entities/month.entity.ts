@@ -1,4 +1,4 @@
-export namespace MonthEntity {
+export namespace Month_Entity {
   type Base = {
     tags: Record<string, { id: number; yields: number }>
     bookmark_count: number

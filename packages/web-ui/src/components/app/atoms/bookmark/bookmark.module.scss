@@ -16,7 +16,11 @@
     @include hover {
       border-color: var(--border-color-hover);
     }
+    @include dark {
+      background: blue
+    }
   }
+  
   .bookmark {
     display: grid;
     grid-template-areas:
@@ -198,12 +202,12 @@
               color: var(--Bookmark-link-url-foreground);
               text-decoration-color: var(--Bookmark-link-url-foreground);
               font-size: var(--font-size-13px);
+              -webkit-line-clamp: 2;
+              word-wrap: break-word;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
               @include at1200 {
-                -webkit-line-clamp: 2;
-                word-wrap: break-word;
-                display: -webkit-box;
                 -webkit-line-clamp: 1;
-                -webkit-box-orient: vertical;
               }
             }
             &:visited {
@@ -277,5 +281,88 @@
         }
       }
     }
+  }
+}
+
+.MuiInput-root {
+  --TextInput-height: 64px;
+  --TextInput-paddingTop: 2rem;
+  --TextInput-labelLineHeight: 20px;
+  --TextInput-labelScale: 0.75;
+  width: 320px;
+  padding: 0px 0.75rem;
+  display: inline-flex;
+  position: relative;
+  height: var(--TextInput-height);
+  background: var(--muidocs-palette-background-paper);
+  border: 1px solid;
+  border-color: var(--muidocs-palette-grey-300);
+  border-radius: var(--muidocs-shape-borderRadius);
+  outline-color: transparent;
+  box-shadow: var(--shadow);
+
+  &:hover {
+    border-color: var(--muidocs-palette-grey-400);
+  }
+
+  &:focus-within {
+    border-color: var(--palette-primary);
+    outline: 3px solid;
+    outline-color: var(--focus-ring);
+    & label {
+      color: var(--palette-primary) !important;
+    }
+  }
+  & label {
+    line-height: var(--TextInput-labelLineHeight);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 50%;
+    left: 0.75rem;
+    overflow: hidden;
+    text-align: start;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    color: var(--muidocs-palette-grey-600);
+    white-space: nowrap;
+    pointer-events: none;
+    transform-origin: 0 0;
+    transform: translateY(-50%);
+    transition: transform 0.1s ease-out;
+  }
+
+  :where([data-mui-color-scheme='dark']) & {
+    border-color: var(--muidocs-palette-grey-800);
+    box-shadow: var(--shadow);
+
+    &:hover {
+      border-color: var(--muidocs-palette-grey-700);
+    }
+
+    &:focus-within {
+      border-color: var(--palette-primary);
+      outline-color: var(--focus-ring);
+    }
+  }
+}
+
+.MuiInput-input {
+  border: none;
+  padding: var(--TextInput-paddingTop) 0 0.75rem;
+  height: 100%;
+  font-size: 1rem;
+  background: unset;
+  flex: 1;
+  &:focus {
+    outline: none;
+  }
+  &:not(:focus)::placeholder {
+    color: transparent;
+  }
+  &:not(:placeholder-shown) ~ label,
+  &:focus ~ label {
+    transform: translateY(-100%) scale(var(--TextInput-labelScale));
+    font-weight: 600;
   }
 }

@@ -136,14 +136,14 @@ export const Months: React.FC<Months.Props> = memo(
       return start_index != -1 ? start_index : null
     }
 
-    const possibleEndIndex = ({
+    const possible_end_index = ({
       months,
       current_lte,
     }: {
       months: Months
       current_lte: number
     }): number | null => {
-      const endIndex =
+      const end_index =
         months && current_lte
           ? months.find((month) => month.yyyymm == current_lte)
             ? months.findIndex((month) => month.yyyymm == current_lte)
@@ -173,7 +173,7 @@ export const Months: React.FC<Months.Props> = memo(
               })
           : null
 
-      return endIndex != -1 ? endIndex : null
+      return end_index != -1 ? end_index : null
     }
 
     const set_start_and_end_index = ({
@@ -186,16 +186,16 @@ export const Months: React.FC<Months.Props> = memo(
       current_lte: number
     }) => {
       set_start_index(possible_start_index({ months, current_gte }))
-      set_end_index(possibleEndIndex({ months, current_lte }))
+      set_end_index(possible_end_index({ months, current_lte }))
     }
 
-    const setStartAndEndIndexThrottled = useThrottledCallback(
+    const set_start_and_index_throttled = useThrottledCallback(
       set_start_and_end_index,
       [set_start_index, set_end_index],
       50,
     )
 
-    const calculateCountsThrottled = useThrottledCallback(
+    const calculate_counts_throttled = useThrottledCallback(
       calculate_counts,
       [],
       50,
@@ -209,13 +209,13 @@ export const Months: React.FC<Months.Props> = memo(
       )
         return
 
-      setStartAndEndIndexThrottled({
+      set_start_and_index_throttled({
         months: props.months,
         current_gte: props.months[dragged_start_index].yyyymm,
         current_lte: props.months[dragged_end_index].yyyymm,
       })
 
-      calculateCountsThrottled({
+      calculate_counts_throttled({
         months: props.months,
         startIndex: dragged_start_index,
         endIndex: dragged_end_index,

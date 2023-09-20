@@ -31,26 +31,26 @@ export const use_months = () => {
   >(null)
 
   const get_months = () => {
-    const get_monthsParams: MonthsParams.Public = {
+    const request_params: MonthsParams.Public = {
       username: params.username as string,
     }
 
     const query_tags = query_params.get('t')
     set_last_query_tags(query_tags)
     if (query_tags) {
-      get_monthsParams.tags = query_tags.split(',')
+      request_params.tags = query_tags.split(',')
     }
 
     const query_filter = query_params.get('f')
     set_last_query_filter(query_filter)
     if (query_filter) {
-      get_monthsParams.filter =
+      request_params.filter =
         Object.values(LibraryFilter)[parseInt(query_filter)]
     }
 
     dispatch(
       months_actions.get_months({
-        query_params: get_monthsParams,
+        request_params,
         api_url: process.env.NEXT_PUBLIC_API_URL,
       }),
     )

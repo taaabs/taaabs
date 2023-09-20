@@ -9,6 +9,7 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
       my_library_on_click={() => {}}
       notifications_on_click={() => {}}
       search_on_click={() => {}}
+      theme_on_click={() => {}}
       user_on_click={() => {}}
     />
   )

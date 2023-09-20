@@ -1,12 +1,12 @@
 import { MonthsDto } from '@shared/types/modules/months/months.dto'
-import { MonthsParams } from '../../domain/types/months.params'
+import { Months_Params } from '../../domain/types/months.params'
 
-export type MonthsDataSource = {
+export type Months_DataSource = {
   get_months_on_authorized_user(
-    params: MonthsParams.Authorized,
+    params: Months_Params.Authorized,
   ): Promise<MonthsDto.Response.Authorized>
 
   get_months_on_public_user(
-    params: MonthsParams.Public,
+    params: Months_Params.Public,
   ): Promise<MonthsDto.Response.Public>
 }

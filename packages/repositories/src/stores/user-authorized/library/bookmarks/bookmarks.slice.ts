@@ -1,4 +1,4 @@
-import { BookmarkEntity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
+import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import * as thunks from './action-creators'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
@@ -6,8 +6,8 @@ type BookmarksState = {
   isGettingData: boolean
   is_getting_first_bookmarks: boolean
   is_getting_more_bookmarks: boolean
-  incomingBookmarks: Array<BookmarkEntity.Authorized> | null
-  bookmarks: Array<BookmarkEntity.Authorized> | null
+  incomingBookmarks: Array<Bookmark_Entity.Authorized> | null
+  bookmarks: Array<Bookmark_Entity.Authorized> | null
   has_more_bookmarks: boolean | null
 }
 
