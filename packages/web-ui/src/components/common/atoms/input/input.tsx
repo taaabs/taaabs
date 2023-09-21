@@ -20,7 +20,10 @@ export const Input: React.FC<Input.Props> = ({
   return (
     <div>
       <input
-        className={cn([styles.input])}
+        className={cn([
+          styles.input,
+          { [styles['input--error']]: message_type == 'error' },
+        ])}
         onChange={(e) => props.on_change(e.target.value)}
         value={props.value}
       />

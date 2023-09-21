@@ -9,7 +9,7 @@ export class Settings_DataSourceImpl implements Settings_DataSource {
   constructor(private readonly _api_url: string) {}
 
   public async get_my_username(): Promise<MyUsername_Dto.Response> {
-    return fetch(`${this._api_url}/v1/users/my-username`, {
+    return fetch(`${this._api_url}/v1/user/my-username`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization:
@@ -25,7 +25,7 @@ export class Settings_DataSourceImpl implements Settings_DataSource {
       username: params.username,
     }
 
-    return fetch(`${this._api_url}/v1/users/username-availability`, {
+    return fetch(`${this._api_url}/v1/user/username-availability`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export class Settings_DataSourceImpl implements Settings_DataSource {
       username: params.username,
     }
 
-    await fetch(`${this._api_url}/v1/users`, {
+    await fetch(`${this._api_url}/v1/user`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

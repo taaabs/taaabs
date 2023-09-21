@@ -22,7 +22,7 @@ const Page: React.FC = () => {
       }),
     )
   }, [])
-  return <>{my_username && <Username my_username={my_username} />}</>
+  return <>{my_username && <Username current_username={my_username} />}</>
 }
 
 export default Page

@@ -18,6 +18,13 @@
     border-color: var(--Input-border-color-focus);
     outline: none;
   }
+  &--error {
+    background: var(--red100);
+    border-color: var(--red300);
+    &:focus {
+      border-color: var(--red500);
+    }
+  }
 }
 .message {
   margin-top: var(--distance-8px);
