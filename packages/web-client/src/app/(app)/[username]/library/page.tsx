@@ -446,7 +446,8 @@ const Page: React.FC = () => {
                 date={new Date(bookmark.created_at)}
                 links={bookmark.links.map((link) => ({
                   url: link.url,
-                  saves: link.saves,
+                  saves: link.public_saves,
+                  site_path: link.site_path,
                 }))}
                 tags={
                   bookmark.tags

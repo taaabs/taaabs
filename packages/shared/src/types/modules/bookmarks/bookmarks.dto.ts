@@ -46,7 +46,8 @@ export namespace Bookmarks_Dto {
   export namespace Response {
     class Link {
       public url: string
-      public saves: number
+      public public_saves: number
+      public site_path?: string
     }
 
     class Tag {

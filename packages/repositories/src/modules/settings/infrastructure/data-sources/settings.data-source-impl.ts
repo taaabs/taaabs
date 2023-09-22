@@ -13,7 +13,7 @@ export class Settings_DataSourceImpl implements Settings_DataSource {
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYTczZTk4OC1hYmU3LTQwYTUtYWY2Ny1mNWIzOGNjYmQ5MzUiLCJpYXQiOjE2OTUwNDM2ODB9.1WC81-iygu4NrTRqV-lVCDzm--dbIDANmRAuv6DQgrs',
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
       },
     }).then((r) => r.json())
   }
@@ -30,7 +30,7 @@ export class Settings_DataSourceImpl implements Settings_DataSource {
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYTczZTk4OC1hYmU3LTQwYTUtYWY2Ny1mNWIzOGNjYmQ5MzUiLCJpYXQiOjE2OTUwNDM2ODB9.1WC81-iygu4NrTRqV-lVCDzm--dbIDANmRAuv6DQgrs',
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
       },
       body: JSON.stringify(body),
     }).then((r) => r.json())
@@ -46,7 +46,7 @@ export class Settings_DataSourceImpl implements Settings_DataSource {
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYTczZTk4OC1hYmU3LTQwYTUtYWY2Ny1mNWIzOGNjYmQ5MzUiLCJpYXQiOjE2OTUwNDM2ODB9.1WC81-iygu4NrTRqV-lVCDzm--dbIDANmRAuv6DQgrs',
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
       },
       body: JSON.stringify(body),
     })

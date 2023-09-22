@@ -25,7 +25,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           tags: bookmark.tags.map((tag) => ({ id: tag.id, name: tag.name })),
           links: bookmark.links.map((link) => ({
             url: link.url,
-            saves: link.saves,
+            public_saves: link.public_saves,
+            site_path: link.site_path,
           })),
           is_public: bookmark.is_public || false,
         }
@@ -54,7 +55,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         tags: bookmark.tags.map((tag) => ({ id: tag.id, name: tag.name })),
         links: bookmark.links.map((link) => ({
           url: link.url,
-          saves: link.saves,
+          public_saves: link.public_saves,
+          site_path: link.site_path,
         })),
       })),
       pagination: {
