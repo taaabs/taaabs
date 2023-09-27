@@ -71,7 +71,7 @@ export const Username: React.FC<Username.Props> = (props) => {
             required: true,
             minLength: 8,
             maxLength: 30,
-            pattern: /^[A-Za-z0-9\-\_]+$/,
+            pattern: /^[a-z0-9\-\_]+$/,
             validate: awesomeDebouncePromise(async (value) => {
               return await is_username_available(value)
             }, 500),
@@ -91,7 +91,7 @@ export const Username: React.FC<Username.Props> = (props) => {
               error_message = 'Maximum length of a username is 30 characters'
             } else if (errors.username?.type == 'pattern') {
               error_message =
-                'Only letters, numbers, periods, and underscores are allowed'
+                'Only lowercase letters, numbers, periods, and underscores are allowed'
             } else if (errors.username?.type == 'validate') {
               error_message = 'This username is already in use'
             }

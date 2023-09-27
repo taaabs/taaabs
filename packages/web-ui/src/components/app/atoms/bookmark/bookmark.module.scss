@@ -179,27 +179,22 @@
             }
           }
           &__url {
-            --link-color: #1a0dab;
-            --visited-link-color: #681da8;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             @include hover {
               > span {
-                text-decoration: none;
+                text-decoration: underline;
+                text-decoration-thickness: 1px;
+                text-underline-offset: 0.13em;
               }
             }
             > span {
-              color: var(--link-color);
-              text-decoration-color: var(--link-color);
+              color: var(--green700);
               text-overflow: ellipsis;
               overflow: hidden;
-              text-decoration: underline;
-              text-decoration-thickness: 1px;
-              text-underline-offset: 0.13em;
             }
             > span:last-child {
-              opacity: 0.8;
               font-size: var(--font-size-13px);
               -webkit-line-clamp: 2;
               word-wrap: break-word;
@@ -209,9 +204,8 @@
                 -webkit-line-clamp: 1;
               }
             }
-            &:visited span {
-              color: var(--visited-link-color);
-              text-decoration-color: var(--visited-link-color);
+            &:visited > span {
+              color: var(--text-color-dimmed);
             }
           }
         }
