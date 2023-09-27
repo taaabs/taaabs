@@ -131,10 +131,10 @@
         }
         &__name {
           font-size: var(--font-size-1-5rem);
-          color: var(--Bookmark-tag-foreground);
+          color: var(--green800);
           font-weight: var(--font-weight-inter-medium);
           &--selected {
-            color: var(--Bookmark-tag-selected-foreground);
+            color: var(--yellow800);
           }
         }
         &__yields {
@@ -190,7 +190,7 @@
               }
             }
             > span {
-              color: var(--green700);
+              color: var(--green900);
               text-overflow: ellipsis;
               overflow: hidden;
             }
