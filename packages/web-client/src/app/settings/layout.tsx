@@ -1,5 +1,5 @@
-import { Header } from '@web-ui/components/settings/atoms/header'
-import { Settings } from '@web-ui/components/settings/templates/settings'
+import { Header } from '@web-ui/components/app/atoms/header'
+import { Settings } from '@web-ui/components/app/templates/settings'
 import { DynamicDesktopNavigation } from './DynamicDesktopNavigation'
 import { Metadata } from 'next'
 

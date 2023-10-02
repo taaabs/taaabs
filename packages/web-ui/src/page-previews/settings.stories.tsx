@@ -1,10 +1,10 @@
 import { Input } from '@web-ui/components/common/atoms/input'
 import { Button } from '@web-ui/components/common/particles/button'
-import { DesktopMenuItem } from '@web-ui/components/settings/atoms/desktop-menu-item'
-import { Header } from '@web-ui/components/settings/atoms/header'
-import { SettingBox } from '@web-ui/components/settings/atoms/setting-box'
-import { SettingHeading } from '@web-ui/components/settings/atoms/setting-heading'
-import { Settings } from '@web-ui/components/settings/templates/settings/settings'
+import { DesktopMenuItem } from '@web-ui/components/app/atoms/desktop-menu-item'
+import { Header } from '@web-ui/components/app/atoms/header'
+import { SettingBox } from '@web-ui/components/app/atoms/setting-box'
+import { SettingHeading } from '@web-ui/components/app/atoms/setting-heading'
+import { Settings } from '@web-ui/components/app/templates/settings'
 
 export default {
   title: 'page-previews/settings',

@@ -5,5 +5,25 @@ export default {
 }
 
 export const Primary = () => {
-  return <LibraryAside />
+  return (
+    <LibraryAside
+      slot_filter={{
+        button: <>filter</>,
+        dropdown: <></>,
+        is_dropdown_visible: false,
+      }}
+      slot_months={<>months</>}
+      slot_order={{
+        button: <>filter</>,
+        dropdown: <></>,
+        is_dropdown_visible: false,
+      }}
+      slot_sortby={{
+        button: <>filter</>,
+        dropdown: <></>,
+        is_dropdown_visible: false,
+      }}
+      slot_tags={<>tags</>}
+    />
+  )
 }

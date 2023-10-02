@@ -1,6 +1,6 @@
 'use client'
 
-import { DesktopMenuItem } from '@web-ui/components/settings/atoms/desktop-menu-item'
+import { DesktopMenuItem } from '@web-ui/components/app/atoms/desktop-menu-item'
 import { usePathname } from 'next/navigation'
 
 export const DynamicDesktopNavigation: React.FC = () => {
