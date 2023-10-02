@@ -11,18 +11,8 @@ export const Primary = () => (
       <SelectedTags
         on_selected_tag_click={() => {}}
         selected_tags={[
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
-          'lorem',
-          'ipsum',
+          { id: 0, name: 'lorem' },
+          { id: 0, name: 'ipsum' },
         ]}
       />
     </div>

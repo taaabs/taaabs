@@ -1,9 +1,9 @@
 import { Input } from '@web-ui/components/common/atoms/input'
 import { Button } from '@web-ui/components/common/particles/button'
 import { DesktopMenuItem } from '@web-ui/components/app/atoms/desktop-menu-item'
-import { Header } from '@web-ui/components/app/atoms/header'
-import { SettingBox } from '@web-ui/components/app/atoms/setting-box'
-import { SettingHeading } from '@web-ui/components/app/atoms/setting-heading'
+import { SimpleBackArrowHeader } from '@web-ui/components/app/atoms/simple-back-arrow-header'
+import { Box } from '@web-ui/components/app/atoms/box'
+import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
 import { Settings } from '@web-ui/components/app/templates/settings'
 
 export default {
@@ -13,7 +13,13 @@ export default {
 export const Primary = () => {
   return (
     <Settings
-      slot_header={<Header title="Settings" back_href="" />}
+      slot_header={
+        <SimpleBackArrowHeader
+          title="Settings"
+          back_href=""
+          is_transparent_on_desktop={true}
+        />
+      }
       slot_desktop_navigation={
         <>
           <DesktopMenuItem href="" is_active={true} label="Account" />
@@ -24,31 +30,31 @@ export const Primary = () => {
       slot_mobile_navigation={'nav'}
       slot_main={
         <>
-          <SettingBox>
-            <SettingHeading heading="Lorem" subheading="Ipsum" />
+          <Box>
+            <BoxHeading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
             <Button size="default">Lorem</Button>
-          </SettingBox>
-          <SettingBox>
-            <SettingHeading heading="Lorem" subheading="Ipsum" />
+          </Box>
+          <Box>
+            <BoxHeading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
             <Button size="default">Lorem</Button>
-          </SettingBox>
-          <SettingBox>
-            <SettingHeading heading="Lorem" subheading="Ipsum" />
+          </Box>
+          <Box>
+            <BoxHeading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
             <Button size="default">Lorem</Button>
-          </SettingBox>
-          <SettingBox>
-            <SettingHeading heading="Lorem" subheading="Ipsum" />
+          </Box>
+          <Box>
+            <BoxHeading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
             <Button size="default">Lorem</Button>
-          </SettingBox>
-          <SettingBox>
-            <SettingHeading heading="Lorem" subheading="Ipsum" />
+          </Box>
+          <Box>
+            <BoxHeading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
             <Button size="default">Lorem</Button>
-          </SettingBox>
+          </Box>
         </>
       }
     />

@@ -24,7 +24,7 @@ export const Settings: React.FC<Settings.Props> = (props) => {
               {props.slot_desktop_navigation}
             </div>
           </div>
-          <div className={styles.content__main}>{props.slot_main}</div>
+          <main className={styles.content__main}>{props.slot_main}</main>
           <div className={styles.content__aside} />
         </div>
       </Wrapper>

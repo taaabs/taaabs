@@ -16,6 +16,8 @@ export const Icons = () => (
       <StorybookSpacer />
       <Icon variant={'GREATER_THAN'} />
       <StorybookSpacer />
+      <Icon variant={'HOME'} />
+      <StorybookSpacer />
       <Icon variant={'MOBILE_TITLE_BAR_MENU'} />
       <StorybookSpacer />
       <Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />

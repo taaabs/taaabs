@@ -1,7 +1,7 @@
 import { Input } from '@web-ui/components/common/atoms/input'
 import { Button } from '@web-ui/components/common/particles/button'
-import { SettingBox } from '@web-ui/components/app/atoms/setting-box'
-import { SettingHeading } from '@web-ui/components/app/atoms/setting-heading'
+import { Box } from '@web-ui/components/app/atoms/box'
+import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import awesomeDebouncePromise from 'awesome-debounce-promise'
 import { Settings_DataSourceImpl } from '@repositories/modules/settings/infrastructure/data-sources/settings.data-source-impl'
@@ -57,8 +57,8 @@ export const Username: React.FC<Username.Props> = (props) => {
 
   return (
     <form onSubmit={handleSubmit(on_submit)}>
-      <SettingBox>
-        <SettingHeading
+      <Box>
+        <BoxHeading
           heading="Username"
           subheading="The username determines the default link of your public profile."
         />
@@ -113,7 +113,7 @@ export const Username: React.FC<Username.Props> = (props) => {
         <Button size="default" type="submit" is_loading={isSubmitting}>
           Save
         </Button>
-      </SettingBox>
+      </Box>
     </form>
   )
 }

@@ -2,6 +2,7 @@ import Add from '@web-ui/assets/icons/add.svg'
 import Bookmark from '@web-ui/assets/icons/bookmark.svg'
 import Google from '@web-ui/assets/icons/google.svg'
 import GreaterThan from '@web-ui/assets/icons/greater-than.svg'
+import Home from '@web-ui/assets/icons/home.svg'
 import Info from '@web-ui/assets/icons/info.svg'
 import LessThan from '@web-ui/assets/icons/less-than.svg'
 import Search from '@web-ui/assets/icons/search.svg'
@@ -26,6 +27,7 @@ export namespace Icon {
     | 'BOOKMARK'
     | 'GOOGLE'
     | 'GREATER_THAN'
+    | 'HOME'
     | 'INFO'
     | 'LESS_THAN'
     | 'SEARCH'
@@ -64,6 +66,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'GREATER_THAN':
       icon = <GreaterThan style={{ fill: 'var(--Icon-fill)' }} />
+      break
+    case 'HOME':
+      icon = <Home style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'INFO':
       icon = <Info style={{ fill: 'var(--Icon-fill)' }} />

@@ -14,7 +14,10 @@
     align-items: center;
     justify-content: center;
     svg {
-      height: var(--icon-dimension-24px);
+      height: var(--distance-23px);
+    }
+    &:nth-child(1) svg {
+      height: var(--distance-24px);
     }
   }
 }

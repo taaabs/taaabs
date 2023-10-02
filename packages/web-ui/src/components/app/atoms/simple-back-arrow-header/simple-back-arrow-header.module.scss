@@ -3,12 +3,18 @@
 
 .container {
   height: var(--header-mobile-height);
-  @include to992 {
-    background: var(--header-background);
-    border-bottom: var(--border-primary);
-  }
+  border-bottom: var(--border-primary);
+  background: var(--header-transparent-background);
+  backdrop-filter: var(--backdrop-filter);
   @include at992 {
     height: var(--header-desktop-height);
+  }
+  &--is-transparent-on-desktop {
+    @include at992 {
+      background: none;
+      border-bottom-color: transparent;
+      backdrop-filter: none;
+    }
   }
 }
 .inner {

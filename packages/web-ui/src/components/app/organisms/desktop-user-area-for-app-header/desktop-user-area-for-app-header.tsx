@@ -1,4 +1,4 @@
-import { SearchBox } from '@web-ui/components/app/molecules/search-box'
+import { SearchBox } from '@web-ui/components/app/atoms/search-box'
 import { ButtonAvatar } from '@web-ui/components/app/atoms/button-avatar'
 import styles from './desktop-user-area-for-app-header.module.scss'
 import { ButtonOutlinedIcon } from '../../atoms/button-outlined-icon'

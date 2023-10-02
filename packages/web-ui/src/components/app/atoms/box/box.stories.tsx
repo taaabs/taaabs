@@ -1,14 +1,14 @@
 import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
-import { SettingBox } from './setting-box'
+import { Box } from './box'
 
 export default {
-  component: SettingBox,
+  component: Box,
 }
 
 export const Primary = () => {
   return (
     <StorybookMargin>
-      <SettingBox>children</SettingBox>
+      <Box>children</Box>
     </StorybookMargin>
   )
 }

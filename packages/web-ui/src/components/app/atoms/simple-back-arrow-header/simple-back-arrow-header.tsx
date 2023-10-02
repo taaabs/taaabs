@@ -1,18 +1,31 @@
 import { Icon } from '@web-ui/components/common/particles/icon'
-import styles from './header.module.scss'
+import styles from './simple-back-arrow-header.module.scss'
 import { Wrapper } from '@web-ui/components/common/particles/wrapper'
 import Link from 'next/link'
+import cn from 'classnames'
 
-export namespace Header {
+export namespace SimpleBackArrowHeader {
   export type Props = {
     title: string
     back_href: string
+    is_transparent_on_desktop?: boolean
   }
 }
 
-export const Header: React.FC<Header.Props> = (props) => {
+export const SimpleBackArrowHeader: React.FC<SimpleBackArrowHeader.Props> = ({
+  is_transparent_on_desktop = false,
+  ...props
+}) => {
   return (
-    <div className={styles.container}>
+    <div
+      className={cn([
+        styles.container,
+        {
+          [styles['container--is-transparent-on-desktop']]:
+            is_transparent_on_desktop,
+        },
+      ])}
+    >
       <Wrapper>
         <div className={styles.inner}>
           <Link className={styles['inner__back-arrow']} href={props.back_href}>

@@ -1,13 +1,13 @@
-import styles from './setting-heading.module.scss'
+import styles from './box-heading.module.scss'
 
-export namespace SettingHeading {
+export namespace BoxHeading {
   export type Props = {
     heading: string
     subheading: string
   }
 }
 
-export const SettingHeading: React.FC<SettingHeading.Props> = (props) => {
+export const BoxHeading: React.FC<BoxHeading.Props> = (props) => {
   return (
     <div className={styles.container}>
       <h2>{props.heading}</h2>

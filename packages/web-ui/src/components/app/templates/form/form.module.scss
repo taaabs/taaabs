@@ -1,0 +1,27 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.header {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  width: 100%;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 630px;
+  margin: 0 auto;
+  padding: 0 var(--distance-16px);
+  @include to992 {
+    gap: var(--distance-16px);
+    padding-top: calc(var(--header-mobile-height) + var(--distance-40px));
+    padding-bottom: var(--distance-40px);
+  }
+  @include at992 {
+    gap: var(--distance-40px);
+    padding-top: calc(var(--header-desktop-height) + var(--distance-60px));
+    padding-bottom: var(--distance-60px);
+  }
+}
