@@ -6,12 +6,12 @@ import { GetMonthsOnPublicUser_UseCase } from '@repositories/modules/months/doma
 import { Months_DataSourceImpl } from '@repositories/modules/months/infrastructure/data-sources/months.data-source-impl'
 import { Months_RepositoryImpl } from '@repositories/modules/months/infrastructure/repositories/months.repository-impl'
 
-export const get_months = (params: {
+export const get_public_months = (params: {
   request_params: Months_Params.Public
   api_url: string
 }) => {
   return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
-    const data_source = new Months_DataSourceImpl(params.api_url)
+    const data_source = new Months_DataSourceImpl(params.api_url, '')
     const repository = new Months_RepositoryImpl(data_source)
     const get_months = new GetMonthsOnPublicUser_UseCase(repository)
 

@@ -1,15 +1,19 @@
-import { useParams } from 'next/navigation'
-import { use_library_dispatch, use_library_selector } from './store'
+import { useParams, usePathname } from 'next/navigation'
+import {
+  use_library_dispatch,
+  use_library_selector,
+} from '../../stores/library'
 import { useEffect, useState } from 'react'
-import { MonthsParams } from '@repositories/modules/months/domain/types/months.params'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
-import { months_actions } from '@repositories/stores/user-public/library/months/months.slice'
+import { months_actions } from '@repositories/stores/library/months/months.slice'
+import { Months_Params } from '@repositories/modules/months/domain/types/months.params'
 
 export const use_months = () => {
   const query_params = use_shallow_search_params()
-  const params = useParams()
+  const route_params = useParams()
+  const route_pathname = usePathname()
   const dispatch = use_library_dispatch()
   const {
     months_data,
@@ -31,29 +35,55 @@ export const use_months = () => {
   >(null)
 
   const get_months = () => {
-    const request_params: MonthsParams.Public = {
-      username: params.username as string,
-    }
+    if (route_pathname == '/library') {
+      const request_params: Months_Params.Authorized = {}
 
-    const query_tags = query_params.get('t')
-    set_last_query_tags(query_tags)
-    if (query_tags) {
-      request_params.tags = query_tags.split(',')
-    }
+      const query_tags = query_params.get('t')
+      set_last_query_tags(query_tags)
+      if (query_tags) {
+        request_params.tags = query_tags.split(',')
+      }
 
-    const query_filter = query_params.get('f')
-    set_last_query_filter(query_filter)
-    if (query_filter) {
-      request_params.filter =
-        Object.values(LibraryFilter)[parseInt(query_filter)]
-    }
+      const query_filter = query_params.get('f')
+      set_last_query_filter(query_filter)
+      if (query_filter) {
+        request_params.filter =
+          Object.values(LibraryFilter)[parseInt(query_filter)]
+      }
 
-    dispatch(
-      months_actions.get_months({
-        request_params,
-        api_url: process.env.NEXT_PUBLIC_API_URL,
-      }),
-    )
+      dispatch(
+        months_actions.get_authorized_months({
+          request_params,
+          api_url: process.env.NEXT_PUBLIC_API_URL,
+          auth_token:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+        }),
+      )
+    } else {
+      const request_params: Months_Params.Public = {
+        username: route_params.username as string,
+      }
+
+      const query_tags = query_params.get('t')
+      set_last_query_tags(query_tags)
+      if (query_tags) {
+        request_params.tags = query_tags.split(',')
+      }
+
+      const query_filter = query_params.get('f')
+      set_last_query_filter(query_filter)
+      if (query_filter) {
+        request_params.filter =
+          Object.values(LibraryFilter)[parseInt(query_filter)]
+      }
+
+      dispatch(
+        months_actions.get_public_months({
+          request_params,
+          api_url: process.env.NEXT_PUBLIC_API_URL,
+        }),
+      )
+    }
   }
 
   useEffect(() => {

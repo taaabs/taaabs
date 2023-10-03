@@ -1,0 +1,46 @@
+import { Bookmarks_Params } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
+import { bookmarks_actions } from '../bookmarks.slice'
+import { LibraryDispatch, LibraryState } from '../../library.store'
+import { months_actions } from '../../months/months.slice'
+import { GetBookmarksOnPublicUser_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-public-user.use-case'
+import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
+import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
+
+export const get_public_bookmarks = (params: {
+  request_params: Bookmarks_Params.Public
+  api_url: string
+}) => {
+  return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
+    const data_source = new Bookmarks_DataSourceImpl(params.api_url, '')
+    const repository = new Bookmarks_RepositoryImpl(data_source)
+    const get_bookmarks = new GetBookmarksOnPublicUser_UseCase(repository)
+
+    dispatch(bookmarks_actions.set_is_getting_data(true))
+
+    if (params.request_params.after) {
+      dispatch(bookmarks_actions.set_is_getting_more_bookmarks(true))
+    } else {
+      dispatch(bookmarks_actions.set_is_getting_first_bookmarks(true))
+      dispatch(bookmarks_actions.set_has_more_bookmarks(null))
+    }
+
+    const { bookmarks, pagination } = await get_bookmarks.invoke(
+      params.request_params,
+    )
+
+    dispatch(bookmarks_actions.set_is_getting_data(false))
+    dispatch(bookmarks_actions.set_has_more_bookmarks(pagination.has_more))
+
+    if (params.request_params.after) {
+      dispatch(bookmarks_actions.set_more_bookmarks(bookmarks))
+      dispatch(bookmarks_actions.set_is_getting_more_bookmarks(false))
+    } else {
+      dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks))
+      if (!getState().months.is_getting_months_data) {
+        dispatch(bookmarks_actions.set_bookmarks(bookmarks))
+        dispatch(months_actions.process_tags())
+        dispatch(bookmarks_actions.set_is_getting_first_bookmarks(false))
+      }
+    }
+  }
+}

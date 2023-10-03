@@ -4,8 +4,7 @@ import { Bookmarks_Ro } from '../types/bookmarks.ro'
 import { Bookmarks_Params } from '../types/bookmarks.params'
 
 export class GetBookmarksOnAuthorizedUser_UseCase
-  implements
-    UseCase<Promise<Bookmarks_Ro.Authorized>, Bookmarks_Params.Authorized>
+  implements UseCase<Promise<Bookmarks_Ro>, Bookmarks_Params.Authorized>
 {
   constructor(private readonly _bookmarks_repository: Bookmarks_Repository) {}
 

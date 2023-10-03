@@ -8,7 +8,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
 
   public async get_bookmarks_on_authorized_user(
     params: Bookmarks_Params.Authorized,
-  ): Promise<Bookmarks_Ro.Authorized> {
+  ): Promise<Bookmarks_Ro> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.get_bookmarks_on_authorized_user(params)
 
@@ -39,7 +39,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
 
   public async get_bookmarks_on_public_user(
     params: Bookmarks_Params.Public,
-  ): Promise<Bookmarks_Ro.Public> {
+  ): Promise<Bookmarks_Ro> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.get_bookmarks_on_public_user(params)
 
@@ -52,6 +52,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         title: bookmark.title,
         is_nsfw: bookmark.is_nsfw || false,
         is_starred: bookmark.is_starred || false,
+        is_public: true,
         tags: bookmark.tags.map((tag) => ({ id: tag.id, name: tag.name })),
         links: bookmark.links.map((link) => ({
           url: link.url,

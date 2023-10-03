@@ -34,7 +34,7 @@ describe('Bookmarks_RepositoryImpl', () => {
           has_more: false,
         },
       }
-      const ro: Bookmarks_Ro.Authorized = {
+      const ro: Bookmarks_Ro = {
         bookmarks: [
           {
             id: '1',
@@ -79,7 +79,7 @@ describe('Bookmarks_RepositoryImpl', () => {
           has_more: false,
         },
       }
-      const ro: Bookmarks_Ro.Public = {
+      const ro: Bookmarks_Ro = {
         bookmarks: [
           {
             id: '1',
@@ -87,6 +87,7 @@ describe('Bookmarks_RepositoryImpl', () => {
             updated_at: now,
             is_nsfw: false,
             is_starred: false,
+            is_public: true,
             title: 'test',
             note: undefined,
             tags: [],

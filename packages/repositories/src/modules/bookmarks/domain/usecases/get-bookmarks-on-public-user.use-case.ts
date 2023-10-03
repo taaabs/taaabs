@@ -4,7 +4,7 @@ import { Bookmarks_Ro } from '../types/bookmarks.ro'
 import { Bookmarks_Params } from '../types/bookmarks.params'
 
 export class GetBookmarksOnPublicUser_UseCase
-  implements UseCase<Promise<Bookmarks_Ro.Public>, Bookmarks_Params.Public>
+  implements UseCase<Promise<Bookmarks_Ro>, Bookmarks_Params.Public>
 {
   constructor(private readonly _bookmarks_repository: Bookmarks_Repository) {}
 

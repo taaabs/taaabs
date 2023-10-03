@@ -3,7 +3,10 @@ import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { Bookmarks_Params } from '../../domain/types/bookmarks.params'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
-  constructor(private readonly _api_url: string) {}
+  constructor(
+    private readonly _api_url: string,
+    private readonly _auth_token: string,
+  ) {}
 
   public async get_bookmarks_on_authorized_user(
     params: Bookmarks_Params.Authorized,
@@ -34,6 +37,11 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       `${this._api_url}/v1/bookmarks?${new URLSearchParams(
         JSON.parse(JSON.stringify(queryParams)),
       ).toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
+        },
+      },
     ).then((r) => r.json())
   }
 

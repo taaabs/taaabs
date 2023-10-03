@@ -3,7 +3,10 @@ import { Months_Params } from '../../domain/types/months.params'
 import { Months_DataSource } from './months.data-source'
 
 export class Months_DataSourceImpl implements Months_DataSource {
-  constructor(private readonly _apiUrl: string) {}
+  constructor(
+    private readonly _api_url: string,
+    private readonly _auth_token: string,
+  ) {}
 
   public async get_months_on_authorized_user(
     params: Months_Params.Authorized,
@@ -16,9 +19,14 @@ export class Months_DataSourceImpl implements Months_DataSource {
     }
 
     return fetch(
-      `${this._apiUrl}/v1/months?${new URLSearchParams(
+      `${this._api_url}/v1/months?${new URLSearchParams(
         JSON.parse(JSON.stringify(queryParams)),
       ).toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
+        },
+      },
     ).then((r) => r.json())
   }
 
@@ -32,7 +40,7 @@ export class Months_DataSourceImpl implements Months_DataSource {
     }
 
     return fetch(
-      `${this._apiUrl}/v1/months/${params.username}?${new URLSearchParams(
+      `${this._api_url}/v1/months/${params.username}?${new URLSearchParams(
         JSON.parse(JSON.stringify(queryParams)),
       ).toString()}`,
     ).then((r) => r.json())
