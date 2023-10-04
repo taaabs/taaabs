@@ -65,33 +65,33 @@ export const Months: React.FC<Months.Props> = (props) => {
     }
   }, [is_swiping])
 
-  const calculate_counts = ({
-    months,
-    startIndex,
-    endIndex,
-  }: {
+  const calculate_counts = (params: {
     months: Months | null
-    startIndex?: number
-    endIndex?: number
+    start_index?: number
+    end_index?: number
   }) => {
-    if (!months) return
-    let monthsSliced: Months = []
-    if (startIndex != undefined && endIndex != undefined) {
-      monthsSliced = months.slice(startIndex, endIndex + 1)
+    if (!params.months) return
+
+    let months_sliced: Months = []
+    if (start_index != undefined && end_index != undefined) {
+      months_sliced = params.months.slice(start_index, end_index + 1)
     } else {
-      monthsSliced = months
+      months_sliced = params.months
     }
-    let bookmarkCount = 0
-    let starredCount = 0
-    let nsfwCount = 0
-    monthsSliced.forEach((month) => {
-      bookmarkCount += month.bookmark_count
-      starredCount += month.starred_count
-      nsfwCount += month.nsfw_count
+
+    let bookmark_count = 0
+    let starred_count = 0
+    let nsfw_count = 0
+
+    months_sliced.forEach((month) => {
+      bookmark_count += month.bookmark_count
+      starred_count += month.starred_count
+      nsfw_count += month.nsfw_count
     })
-    set_bookmark_count(bookmarkCount)
-    set_starred_count(starredCount)
-    set_nsfw_count(nsfwCount)
+
+    set_bookmark_count(bookmark_count)
+    set_starred_count(starred_count)
+    set_nsfw_count(nsfw_count)
   }
 
   const possible_start_index = ({
@@ -190,13 +190,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   const set_start_and_index_throttled = useThrottledCallback(
     set_start_and_end_index,
     [set_start_index, set_end_index],
-    50,
-  )
-
-  const calculate_counts_throttled = useThrottledCallback(
-    calculate_counts,
-    [],
-    50,
+    100,
   )
 
   useUpdateEffect(() => {
@@ -212,25 +206,19 @@ export const Months: React.FC<Months.Props> = (props) => {
       current_gte: props.months[dragged_start_index].yyyymm,
       current_lte: props.months[dragged_end_index].yyyymm,
     })
-
-    calculate_counts_throttled({
-      months: props.months,
-      startIndex: dragged_start_index,
-      endIndex: dragged_end_index,
-    })
   }, [dragged_start_index, dragged_end_index])
 
   useUpdateEffect(() => {
     calculate_counts({
       months: props.months,
-      startIndex: start_index != null ? start_index : undefined,
-      endIndex: end_index != null ? end_index : undefined,
+      start_index: start_index != null ? start_index : undefined,
+      end_index: end_index != null ? end_index : undefined,
     })
 
     if (!is_swiping) {
       set_key(`${start_index}${end_index}${props.selected_tags}`)
     }
-  }, [start_index, end_index, props.months])
+  }, [start_index, end_index])
 
   useEffect(() => {
     if (!props.months || !props.current_gte || !props.current_lte) {
@@ -248,12 +236,6 @@ export const Months: React.FC<Months.Props> = (props) => {
     })
   }, [props.current_gte, props.current_lte, props.months, props.selected_tags])
 
-  useUpdateEffect(() => {
-    if (props.has_results == undefined) {
-      set_bookmark_count(null)
-    }
-  }, [props.has_results])
-
   useEffect(() => {
     if (
       !props.months ||
@@ -266,8 +248,8 @@ export const Months: React.FC<Months.Props> = (props) => {
 
     calculate_counts({
       months: props.months,
-      startIndex: 0,
-      endIndex: props.months.length - 1,
+      start_index: 0,
+      end_index: props.months.length - 1,
     })
   }, [props.months])
 

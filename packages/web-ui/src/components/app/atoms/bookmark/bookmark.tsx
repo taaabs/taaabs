@@ -2,7 +2,7 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
-import { memo, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
@@ -27,183 +27,176 @@ export namespace Bookmark {
   }
 }
 
-export const Bookmark: React.FC<Bookmark.Props> = memo(
-  (props) => {
-    const ref = useRef<HTMLDivElement>(null)
-    const is_visible = useViewportSpy(ref)
+export const Bookmark: React.FC<Bookmark.Props> = (props) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const is_visible = useViewportSpy(ref)
 
-    useEffect(() => {
-      if (props.render_height) return
-      props.set_render_height(ref.current!.clientHeight)
-    }, [])
+  useEffect(() => {
+    if (props.render_height) return
+    props.set_render_height(ref.current!.clientHeight)
+  }, [])
 
-    return (
-      <div
-        ref={ref}
-        style={{
-          height: props.render_height ? props.render_height : undefined,
-        }}
-      >
-        {is_visible == undefined || is_visible || !props.render_height ? (
-          <div
-            className={styles.container}
-            role="button"
-            onClick={props.on_click}
-          >
-            <div className={styles.bookmark}>
-              <div className={styles.bookmark__title}>
-                <div
-                  className={cn(styles.bookmark__title__inner, {
-                    [styles['bookmark__title__inner--starred']]:
-                      props.is_starred,
-                  })}
-                >
-                  {props.is_nsfw && (
-                    <div className={styles.bookmark__title__inner__nsfw}>
-                      NSFW
-                    </div>
-                  )}
-                  <div
-                    className={styles.bookmark__title__inner__text}
-                    role="button"
-                    onClick={() => {}}
-                  >
-                    {props.title}
+  return (
+    <div
+      ref={ref}
+      style={{
+        height: props.render_height ? props.render_height : undefined,
+      }}
+    >
+      {is_visible == undefined || is_visible || !props.render_height ? (
+        <div
+          className={styles.container}
+          role="button"
+          onClick={props.on_click}
+        >
+          <div className={styles.bookmark}>
+            <div className={styles.bookmark__title}>
+              <div
+                className={cn(styles.bookmark__title__inner, {
+                  [styles['bookmark__title__inner--starred']]: props.is_starred,
+                })}
+              >
+                {props.is_nsfw && (
+                  <div className={styles.bookmark__title__inner__nsfw}>
+                    NSFW
                   </div>
+                )}
+                <div
+                  className={styles.bookmark__title__inner__text}
+                  role="button"
+                  onClick={() => {}}
+                >
+                  {props.title}
                 </div>
               </div>
-              <div className={styles.bookmark__menu}>
-                <button
-                  className={styles.bookmark__menu__button}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    props.on_menu_click()
-                  }}
-                >
-                  <Icon variant="THREE_DOTS" />
-                </button>
-              </div>
-              <div className={styles['bookmark__info']}>
-                <span>#{props.index + 1}</span>
-                <span>·</span>
-                <span>{dayjs(props.date).fromNow()}</span>
+            </div>
+            <div className={styles.bookmark__menu}>
+              <button
+                className={styles.bookmark__menu__button}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  props.on_menu_click()
+                }}
+              >
+                <Icon variant="THREE_DOTS" />
+              </button>
+            </div>
+            <div className={styles['bookmark__info']}>
+              <span>#{props.index + 1}</span>
+              <span>·</span>
+              <span>{dayjs(props.date).fromNow()}</span>
 
-                {props.tags.length > 0 && (
-                  <>
-                    <span>·</span>
-                    {props.tags.map((tag) => (
-                      <button
-                        className={styles['bookmark__info__tag']}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          if (tag.isSelected) {
-                            props.on_selected_tag_click(tag.id)
-                          } else {
-                            props.on_tag_click(tag.id)
-                          }
-                        }}
-                        key={tag.id}
-                      >
-                        <div>
+              {props.tags.length > 0 && (
+                <>
+                  <span>·</span>
+                  {props.tags.map((tag) => (
+                    <button
+                      className={styles['bookmark__info__tag']}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (tag.isSelected) {
+                          props.on_selected_tag_click(tag.id)
+                        } else {
+                          props.on_tag_click(tag.id)
+                        }
+                      }}
+                      key={tag.id}
+                    >
+                      <div>
+                        <span
+                          className={cn([
+                            styles['bookmark__info__tag__name'],
+                            {
+                              [styles['bookmark__info__tag__name--selected']]:
+                                tag.isSelected,
+                            },
+                          ])}
+                        >
+                          {tag.name.replaceAll('-', ' ')}
+                        </span>
+                        {tag.yields && (
                           <span
-                            className={cn([
-                              styles['bookmark__info__tag__name'],
-                              {
-                                [styles['bookmark__info__tag__name--selected']]:
-                                  tag.isSelected,
-                              },
-                            ])}
+                            className={styles['bookmark__info__tag__yields']}
                           >
-                            {tag.name.replaceAll('-', ' ')}
+                            {tag.yields}
                           </span>
-                          {tag.yields && (
-                            <span
-                              className={styles['bookmark__info__tag__yields']}
-                            >
-                              {tag.yields}
-                            </span>
-                          )}
-                          {tag.isSelected && (
-                            <span
-                              className={styles['bookmark__info__tag__yields']}
-                            >
-                              ×
-                            </span>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </>
-                )}
-              </div>
-              <div className={styles.bookmark__links}>
-                {props.links.map((link) => (
-                  <div className={styles.bookmark__links__item}>
-                    <div className={styles.bookmark__links__item__site}>
-                      <button
-                        className={styles.bookmark__links__item__site__favicon}
-                      >
-                        {/* LAZY LOAD because page reload requests all */}
-                        {/* <img
+                        )}
+                        {tag.isSelected && (
+                          <span
+                            className={styles['bookmark__info__tag__yields']}
+                          >
+                            ×
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </>
+              )}
+            </div>
+            <div className={styles.bookmark__links}>
+              {props.links.map((link) => (
+                <div className={styles.bookmark__links__item}>
+                  <div className={styles.bookmark__links__item__site}>
+                    <button
+                      className={styles.bookmark__links__item__site__favicon}
+                    >
+                      {/* LAZY LOAD because page reload requests all */}
+                      {/* <img
                           src={`https://icons.bitwarden.net/${_url_domain(
                             link.url,
                           )}/icon.png`}
                         /> */}
-                      </button>
-                      <a
-                        className={styles.bookmark__links__item__site__url}
-                        href={link.url}
-                      >
-                        <span>
-                          {`${_url_domain(link.url)} ${
-                            link.site_path ? `› ${link.site_path}` : ''
-                          }`}
-                        </span>
-                        <span>
-                          {_url_path({
-                            url: link.url,
-                            site_path: link.site_path,
-                          })}
-                        </span>
-                      </a>
-                    </div>
-                    <div className={styles.bookmark__links__item__actions}>
-                      <div
-                        className={styles.bookmark__links__item__actions__open}
-                      >
-                        <button
-                          onClick={() => {
-                            window.open(link.url, '_blank')
-                          }}
-                        >
-                          <Icon variant="NEW_TAB" />
-                        </button>
-                      </div>
-                      <button
-                        className={
-                          styles.bookmark__links__item__actions__bookmark
-                        }
-                      >
-                        <span>{link.saves}</span>
-                        <Icon variant="BOOKMARK" />
-                      </button>
-                    </div>
+                    </button>
+                    <a
+                      className={styles.bookmark__links__item__site__url}
+                      href={link.url}
+                    >
+                      <span>
+                        {`${_url_domain(link.url)} ${
+                          link.site_path ? `› ${link.site_path}` : ''
+                        }`}
+                      </span>
+                      <span>
+                        {_url_path({
+                          url: link.url,
+                          site_path: link.site_path,
+                        })}
+                      </span>
+                    </a>
                   </div>
-                ))}
-              </div>
+                  <div className={styles.bookmark__links__item__actions}>
+                    <div
+                      className={styles.bookmark__links__item__actions__open}
+                    >
+                      <button
+                        onClick={() => {
+                          window.open(link.url, '_blank')
+                        }}
+                      >
+                        <Icon variant="NEW_TAB" />
+                      </button>
+                    </div>
+                    <button
+                      className={
+                        styles.bookmark__links__item__actions__bookmark
+                      }
+                    >
+                      <span>{link.saves}</span>
+                      <Icon variant="BOOKMARK" />
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ) : (
-          <></>
-        )}
-      </div>
-    )
-  },
-  (o, n) =>
-    o.render_height == n.render_height &&
-    o.id == n.id &&
-    JSON.stringify(o.tags) == JSON.stringify(n.tags),
-)
+        </div>
+      ) : (
+        <></>
+      )}
+    </div>
+  )
+}
 
 function _url_domain(url: string): string {
   let parsed_url = ''
