@@ -52,8 +52,10 @@ const Page: React.FC = () => {
   const { get_bookmarks } = use_bookmarks()
   const {
     months_of_bookmark_creation,
+    months_of_bookmark_modification,
     is_getting_months_data,
     tags_of_bookmark_creation,
+    tags_of_bookmark_modification,
     selected_tags,
   } = use_months()
   const {
@@ -230,6 +232,56 @@ const Page: React.FC = () => {
             ),
             is_dropdown_visible: is_filter_dropdown_visible,
           }}
+          slot_sortby={{
+            button: (
+              <ButtonSelect
+                label="Sort by"
+                current_value={_sortby_option_to_label(current_sortby)}
+                is_active={is_sortby_dropdown_visible}
+                on_click={toggle_sortby_dropdown}
+              />
+            ),
+            is_dropdown_visible: is_sortby_dropdown_visible,
+            dropdown: (
+              <OutsideClickHandler
+                onOutsideClick={toggle_sortby_dropdown}
+                disabled={!is_sortby_dropdown_visible}
+              >
+                <SimpleSelectDropdown
+                  items={[
+                    {
+                      label: _sortby_option_to_label(Sortby.CreatedAt),
+                      on_click: () => {
+                        if (
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+                        set_sortby_query_param(Sortby.CreatedAt)
+                        toggle_sortby_dropdown()
+                      },
+                      is_selected: current_sortby == Sortby.CreatedAt,
+                    },
+                    {
+                      label: _sortby_option_to_label(Sortby.UpdatedAt),
+                      on_click: () => {
+                        if (
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+                        set_sortby_query_param(Sortby.UpdatedAt)
+                        toggle_sortby_dropdown()
+                      },
+                      is_selected: current_sortby == Sortby.UpdatedAt,
+                    },
+                  ]}
+                />
+              </OutsideClickHandler>
+            ),
+          }}
           slot_order={{
             button: (
               <ButtonSelect
@@ -281,56 +333,6 @@ const Page: React.FC = () => {
               </OutsideClickHandler>
             ),
           }}
-          slot_sortby={{
-            button: (
-              <ButtonSelect
-                label="Sort by"
-                current_value={_sortby_option_to_label(current_sortby)}
-                is_active={is_sortby_dropdown_visible}
-                on_click={toggle_sortby_dropdown}
-              />
-            ),
-            is_dropdown_visible: is_sortby_dropdown_visible,
-            dropdown: (
-              <OutsideClickHandler
-                onOutsideClick={toggle_sortby_dropdown}
-                disabled={!is_sortby_dropdown_visible}
-              >
-                <SimpleSelectDropdown
-                  items={[
-                    {
-                      label: _sortby_option_to_label(Sortby.CreatedAt),
-                      on_click: () => {
-                        if (
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-                        set_sortby_query_param(Sortby.CreatedAt)
-                        toggle_sortby_dropdown()
-                      },
-                      is_selected: current_sortby == Sortby.CreatedAt,
-                    },
-                    {
-                      label: _sortby_option_to_label(Sortby.UpdatedAt),
-                      on_click: () => {
-                        if (
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-                        set_sortby_query_param(Sortby.UpdatedAt)
-                        toggle_sortby_dropdown()
-                      },
-                      is_selected: current_sortby == Sortby.UpdatedAt,
-                    },
-                  ]}
-                />
-              </OutsideClickHandler>
-            ),
-          }}
           slot_months={
             show_months ? (
               <div
@@ -344,7 +346,11 @@ const Page: React.FC = () => {
                 }}
               >
                 <Months
-                  months={months_of_bookmark_creation}
+                  months={
+                    current_sortby == Sortby.CreatedAt
+                      ? months_of_bookmark_creation
+                      : months_of_bookmark_modification
+                  }
                   on_yyyymm_change={set_gte_lte_query_params}
                   clear_date_range={clear_gte_lte_query_params}
                   current_gte={
@@ -361,7 +367,6 @@ const Page: React.FC = () => {
                         : false
                       : undefined
                   }
-                  is_getting_data={is_getting_months_data}
                 />
               </div>
             ) : (
@@ -381,9 +386,14 @@ const Page: React.FC = () => {
                         : undefined,
                   }}
                 >
-                  {selected_tags.length > 0 && (
+                  {(is_getting_first_bookmarks
+                    ? selected_tags.length > 0
+                    : actual_selected_tags.length > 0) && (
                     <SelectedTags
-                      selected_tags={[...selected_tags]
+                      selected_tags={(is_getting_first_bookmarks
+                        ? [...selected_tags]
+                        : [...actual_selected_tags]
+                      )
                         .filter((id) => {
                           if (!bookmarks) return false
                           return (
@@ -407,13 +417,25 @@ const Page: React.FC = () => {
                   )}
                   <Tags
                     tags={
-                      tags_of_bookmark_creation
+                      current_sortby == Sortby.CreatedAt
+                        ? tags_of_bookmark_creation
+                          ? Object.fromEntries(
+                              Object.entries(tags_of_bookmark_creation).filter(
+                                (tag) =>
+                                  is_getting_first_bookmarks
+                                    ? !selected_tags.includes(tag[1].id)
+                                    : !actual_selected_tags.includes(tag[1].id),
+                              ),
+                            )
+                          : {}
+                        : tags_of_bookmark_modification
                         ? Object.fromEntries(
-                            Object.entries(tags_of_bookmark_creation).filter(
-                              (tag) =>
-                                is_getting_first_bookmarks
-                                  ? !selected_tags.includes(tag[1].id)
-                                  : !actual_selected_tags.includes(tag[1].id),
+                            Object.entries(
+                              tags_of_bookmark_modification,
+                            ).filter((tag) =>
+                              is_getting_first_bookmarks
+                                ? !selected_tags.includes(tag[1].id)
+                                : !actual_selected_tags.includes(tag[1].id),
                             ),
                           )
                         : {}

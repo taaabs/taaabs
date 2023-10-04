@@ -7,9 +7,8 @@ const Page: React.FC = () => {
       <br />
       <br />
       <br />
-      <Link href="/test_user">test_user</Link>
       <br />
-      inbox
+      UNDER CONSTRUCTION
     </div>
   )
 }

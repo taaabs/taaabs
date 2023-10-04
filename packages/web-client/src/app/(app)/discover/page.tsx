@@ -5,7 +5,8 @@ const Page: React.FC = () => {
       <br />
       <br />
       <br />
-      discover
+      <br />
+      UNDER CONSTRUCTION
     </div>
   )
 }

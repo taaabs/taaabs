@@ -18,8 +18,10 @@ export const use_months = () => {
   const {
     months_data,
     months_of_bookmark_creation,
-    is_getting_months_data,
+    months_of_bookmark_modification,
     tags_of_bookmark_creation,
+    tags_of_bookmark_modification,
+    is_getting_months_data,
   } = use_library_selector((state) => state.months)
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
   const [last_query_tags, set_last_query_tags] = useState<string | null>(null)
@@ -165,7 +167,7 @@ export const use_months = () => {
 
       if (tags_of_url_creation) {
         dispatch(
-          months_actions.set_tags_of_url_creation(
+          months_actions.set_tags_of_bookmark_modification(
             JSON.parse(tags_of_url_creation),
           ),
         )
@@ -189,8 +191,10 @@ export const use_months = () => {
 
   return {
     months_of_bookmark_creation,
+    months_of_bookmark_modification,
     is_getting_months_data,
     tags_of_bookmark_creation,
+    tags_of_bookmark_modification,
     selected_tags,
   }
 }

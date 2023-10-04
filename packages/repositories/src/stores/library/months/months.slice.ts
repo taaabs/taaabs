@@ -14,9 +14,9 @@ export type MonthsState = {
   is_getting_months_data: boolean
   months_data: Months_Ro.Public | null
   months_of_bookmark_creation: Months | null
-  months_of_url_creation: Months | null
+  months_of_bookmark_modification: Months | null
   tags_of_bookmark_creation: Tags | null
-  tags_of_url_creation: Tags | null
+  tags_of_bookmark_modification: Tags | null
   yyyymm_gte: number | null
   yyyymm_lte: number | null
 }
@@ -25,9 +25,9 @@ const initial_state: MonthsState = {
   is_getting_months_data: false,
   months_data: null,
   months_of_bookmark_creation: null,
-  months_of_url_creation: null,
+  months_of_bookmark_modification: null,
   tags_of_bookmark_creation: null,
-  tags_of_url_creation: null,
+  tags_of_bookmark_modification: null,
   yyyymm_gte: null,
   yyyymm_lte: null,
 }
@@ -43,7 +43,7 @@ export const months_slice = createSlice({
       state.months_data = action.payload
 
       const months_of_bookmark_creation: Months = []
-      const months_of_url_creation: Months = []
+      const months_of_bookmark_modification: Months = []
 
       Object.entries(action.payload.created_at).forEach(([k, v]) => {
         months_of_bookmark_creation.push({
@@ -54,7 +54,7 @@ export const months_slice = createSlice({
         })
       })
       Object.entries(action.payload.updated_at).forEach(([k, v]) => {
-        months_of_url_creation.push({
+        months_of_bookmark_modification.push({
           yyyymm: parseInt(k),
           bookmark_count: v.bookmark_count,
           starred_count: v.starred_count || 0,
@@ -63,13 +63,13 @@ export const months_slice = createSlice({
       })
 
       state.months_of_bookmark_creation = months_of_bookmark_creation
-      state.months_of_url_creation = months_of_url_creation
+      state.months_of_bookmark_modification = months_of_bookmark_modification
     },
     set_tags_of_bookmark_creation(state, action: PayloadAction<Tags>) {
       state.tags_of_bookmark_creation = action.payload
     },
-    set_tags_of_url_creation(state, action: PayloadAction<Tags>) {
-      state.tags_of_url_creation = action.payload
+    set_tags_of_bookmark_modification(state, action: PayloadAction<Tags>) {
+      state.tags_of_bookmark_modification = action.payload
     },
     set_yyyymm_gte(state, action: PayloadAction<MonthsState['yyyymm_gte']>) {
       state.yyyymm_gte = action.payload

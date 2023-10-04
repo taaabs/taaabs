@@ -66,6 +66,6 @@ export const process_tags = () => {
     dispatch(
       months_actions.set_tags_of_bookmark_creation(tags_of_bookmark_creation),
     )
-    dispatch(months_actions.set_tags_of_url_creation(tags_of_url_creation))
+    dispatch(months_actions.set_tags_of_bookmark_modification(tags_of_url_creation))
   }
 }
