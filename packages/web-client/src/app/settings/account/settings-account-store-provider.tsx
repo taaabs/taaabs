@@ -1,6 +1,6 @@
 'use client'
 
-import { configure_settings_account_store } from '@repositories/stores/user-authorized/settings-account/settings-account.store'
+import { configure_settings_account_store } from '@repositories/stores/settings-account/settings-account.store'
 import { ReactNode } from 'react'
 import { Provider } from 'react-redux'
 

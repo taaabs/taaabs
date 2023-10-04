@@ -6,7 +6,7 @@ import {
   use_settings_account_selector,
 } from './_hooks/store'
 import { Username } from './username'
-import { username_actions } from '@repositories/stores/user-authorized/settings-account/username/username.slice'
+import { username_actions } from '@repositories/stores/settings-account/username/username.slice'
 
 const Page: React.FC = () => {
   const dispatch = use_settings_account_dispatch()
