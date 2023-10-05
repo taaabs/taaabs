@@ -190,7 +190,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   const set_start_and_index_throttled = useThrottledCallback(
     set_start_and_end_index,
     [set_start_index, set_end_index],
-    100,
+    50,
   )
 
   useUpdateEffect(() => {
@@ -222,7 +222,6 @@ export const Months: React.FC<Months.Props> = (props) => {
 
   useEffect(() => {
     if (!props.months || !props.current_gte || !props.current_lte) {
-      set_key(`${start_index}${end_index}${props.selected_tags}`)
       set_start_index(null)
       set_end_index(null)
 
@@ -300,7 +299,10 @@ export const Months: React.FC<Months.Props> = (props) => {
       {props.current_gte && props.current_lte && (
         <button
           className={styles.graph__clear}
-          onClick={props.clear_date_range}
+          onClick={() => {
+            props.clear_date_range()
+            set_key(`${start_index}${end_index}${props.selected_tags}`)
+          }}
         >
           <Icon variant="ADD" />
         </button>
