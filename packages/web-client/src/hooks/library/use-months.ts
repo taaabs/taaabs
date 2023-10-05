@@ -130,14 +130,14 @@ export const use_months = () => {
   useUpdateEffect(() => {
     if (months_data) {
       sessionStorage.setItem(
-        `months_data_${query_params.toString()}`,
+        `months_data__${query_params.toString()}`,
         JSON.stringify(months_data),
       )
     }
 
     if (tags_of_bookmark_creation) {
       sessionStorage.setItem(
-        `tags_of_bookmark_creation_${query_params.toString()}`,
+        `tags_of_bookmark_creation__${query_params.toString()}`,
         JSON.stringify(tags_of_bookmark_creation),
       )
     }
@@ -145,16 +145,16 @@ export const use_months = () => {
 
   useEffect(() => {
     const months_data = sessionStorage.getItem(
-      `months_data_${query_params.toString()}`,
+      `months_data__${query_params.toString()}`,
     )
     if (months_data) {
       dispatch(months_actions.set_data(JSON.parse(months_data)))
 
       const tags_of_bookmark_creation = sessionStorage.getItem(
-        `tags_of_bookmark_creation_${query_params.toString()}`,
+        `tags_of_bookmark_creation__${query_params.toString()}`,
       )
-      const tags_of_url_creation = sessionStorage.getItem(
-        `tags_of_url_creation_${query_params.toString()}`,
+      const tags_of_bookmark_modification = sessionStorage.getItem(
+        `tags_of_boookmark_modification__${query_params.toString()}`,
       )
 
       if (tags_of_bookmark_creation) {
@@ -165,10 +165,10 @@ export const use_months = () => {
         )
       }
 
-      if (tags_of_url_creation) {
+      if (tags_of_bookmark_modification) {
         dispatch(
           months_actions.set_tags_of_bookmark_modification(
-            JSON.parse(tags_of_url_creation),
+            JSON.parse(tags_of_bookmark_modification),
           ),
         )
       }
@@ -182,7 +182,7 @@ export const use_months = () => {
           sessionStorage.removeItem(key)
         } else if (key.substring(0, 25) == 'tags_of_bookmark_creation') {
           sessionStorage.removeItem(key)
-        } else if (key.substring(0, 20) == 'tags_of_url_creation') {
+        } else if (key.substring(0, 30) == 'tags_of_boookmark_modification') {
           sessionStorage.removeItem(key)
         }
       }

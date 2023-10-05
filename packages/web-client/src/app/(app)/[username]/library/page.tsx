@@ -29,6 +29,7 @@ import { use_order_view_options } from '@/hooks/library/use-order-view-options'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { use_bookmarks } from '@/hooks/library/use-bookmarks'
 import { use_months } from '@/hooks/library/use-months'
+import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage-cleanup'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -36,6 +37,7 @@ const Months = dynamic(() => import('./dynamic-months'), {
 })
 
 const Page: React.FC = () => {
+  use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
   const query_params = use_shallow_search_params()
   const router = useRouter()

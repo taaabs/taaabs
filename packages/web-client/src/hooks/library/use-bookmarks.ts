@@ -185,24 +185,24 @@ export const use_bookmarks = () => {
 
   useUpdateEffect(() => {
     sessionStorage.setItem(
-      `bookmarks_${query_params.toString()}`,
+      `bookmarks__${query_params.toString()}`,
       JSON.stringify(bookmarks),
     )
     sessionStorage.setItem(
-      `has_more_bookmarks_${query_params.toString()}`,
+      `has_more_bookmarks__${query_params.toString()}`,
       JSON.stringify(has_more_bookmarks),
     )
   }, [bookmarks])
 
   useEffect(() => {
     const bookmarks = sessionStorage.getItem(
-      `bookmarks_${query_params.toString()}`,
+      `bookmarks__${query_params.toString()}`,
     )
 
     if (bookmarks) {
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
       const has_more_bookmarks = sessionStorage.getItem(
-        `has_more_bookmarks_${query_params.toString()}`,
+        `has_more_bookmarks__${query_params.toString()}`,
       )
       if (has_more_bookmarks) {
         dispatch(

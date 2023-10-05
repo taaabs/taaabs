@@ -14,7 +14,7 @@ export const use_scroll_restore = (
   const on_scroll_y = useDebouncedCallback(
     (scrollY: number, queryParams: URLSearchParams) => {
       sessionStorage.setItem(
-        `scroll_y_${queryParams.toString()}`,
+        `scroll_y__${queryParams.toString()}`,
         scrollY.toString(),
       )
     },
@@ -32,7 +32,7 @@ export const use_scroll_restore = (
 
   useEffect(() => {
     const scroll_y = sessionStorage.getItem(
-      `scroll_y_${query_params.toString()}`,
+      `scroll_y__${query_params.toString()}`,
     )
     if (scroll_y) {
       // Ensures triggering scroll position change in a first idle frame.

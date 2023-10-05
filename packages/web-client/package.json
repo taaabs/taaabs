@@ -7,26 +7,26 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.5",
+    "@reduxjs/toolkit": "^1.9.7",
     "@svgr/webpack": "^8.1.0",
     "@taaabs/repositories": "workspace:*",
     "@taaabs/shared": "workspace:*",
     "@taaabs/web-ui": "workspace:*",
     "awesome-debounce-promise": "^2.1.0",
     "beautiful-react-hooks": "^5.0.0",
-    "eslint": "^8.49.0",
-    "eslint-config-next": "^13.4.19",
+    "eslint": "^8.50.0",
+    "eslint-config-next": "^13.5.4",
     "next": "^13.4.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.46.1",
+    "react-hook-form": "^7.47.0",
     "react-outside-click-handler": "^1.3.0",
-    "react-redux": "^8.1.2",
+    "react-redux": "^8.1.3",
     "typescript": "^5.2.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.19",
-    "@types/node": "^20.6.1",
+    "@babel/core": "^7.23.0",
+    "@types/node": "^20.8.2",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@types/react-outside-click-handler": "^1.3.1"
