@@ -1,4 +1,4 @@
-import { updateSearchParam } from '@/utils/update-query-param'
+import { update_query_params } from '@/utils/update-query-params'
 import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
@@ -39,21 +39,16 @@ export const use_sortby_view_options = () => {
 
   const set_sortby_query_param = (sortby: Sortby) => {
     let updated_query_params: any
-    updated_query_params = updateSearchParam(
+    updated_query_params = update_query_params(
       query_params,
       's',
       sortby == BookmarksFetchingDefaults.Common.sortby
         ? undefined
         : Object.values(Sortby).indexOf(sortby).toString(),
     )
-
-    if (query_params.get('gte')) {
-      updated_query_params = updateSearchParam(updated_query_params, 'gte')
-    }
-
-    if (query_params.get('lte')) {
-      updated_query_params = updateSearchParam(updated_query_params, 'lte')
-    }
+    updated_query_params = update_query_params(updated_query_params, 't')
+    updated_query_params = update_query_params(updated_query_params, 'gte')
+    updated_query_params = update_query_params(updated_query_params, 'lte')
 
     window.history.pushState(
       {},

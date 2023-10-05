@@ -147,6 +147,8 @@ const Page: React.FC = () => {
                       label: 'All',
                       on_click: () => {
                         if (
+                          current_filter == LibraryFilter.All ||
+                          current_filter == LibraryFilter.AllNsfwExcluded ||
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
@@ -168,6 +170,9 @@ const Page: React.FC = () => {
                       label: 'Starred only',
                       on_click: () => {
                         if (
+                          current_filter == LibraryFilter.StarredOnly ||
+                          current_filter ==
+                            LibraryFilter.StarredOnlyNsfwExcluded ||
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
@@ -191,6 +196,9 @@ const Page: React.FC = () => {
                       label: 'Archived',
                       on_click: () => {
                         if (
+                          current_filter == LibraryFilter.Archived ||
+                          current_filter ==
+                            LibraryFilter.ArchivedNsfwExcluded ||
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
@@ -255,12 +263,14 @@ const Page: React.FC = () => {
                       label: _sortby_option_to_label(Sortby.CreatedAt),
                       on_click: () => {
                         if (
+                          current_sortby == Sortby.CreatedAt ||
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
                         set_sortby_query_param(Sortby.CreatedAt)
+                        set_actual_selected_tags([])
                         toggle_sortby_dropdown()
                       },
                       is_selected: current_sortby == Sortby.CreatedAt,
@@ -269,12 +279,14 @@ const Page: React.FC = () => {
                       label: _sortby_option_to_label(Sortby.UpdatedAt),
                       on_click: () => {
                         if (
+                          current_sortby == Sortby.UpdatedAt ||
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
                         set_sortby_query_param(Sortby.UpdatedAt)
+                        set_actual_selected_tags([])
                         toggle_sortby_dropdown()
                       },
                       is_selected: current_sortby == Sortby.UpdatedAt,
@@ -305,12 +317,14 @@ const Page: React.FC = () => {
                       label: _order_option_to_label(Order.Desc),
                       on_click: () => {
                         if (
+                          current_order == Order.Desc ||
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
                         set_order_query_param(Order.Desc)
+                        set_actual_selected_tags([])
                         toggle_order_dropdown()
                       },
 
@@ -320,12 +334,14 @@ const Page: React.FC = () => {
                       label: _order_option_to_label(Order.Asc),
                       on_click: () => {
                         if (
+                          current_order == Order.Asc ||
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
                         set_order_query_param(Order.Asc)
+                        set_actual_selected_tags([])
                         toggle_order_dropdown()
                       },
                       is_selected: current_order == Order.Asc,

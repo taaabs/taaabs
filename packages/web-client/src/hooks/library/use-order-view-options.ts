@@ -1,4 +1,4 @@
-import { updateSearchParam } from '@/utils/update-query-param'
+import { update_query_params } from '@/utils/update-query-params'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
@@ -35,14 +35,18 @@ export const use_order_view_options = () => {
     }
   }, [query_params])
 
-  const set_order_query_param = (orderBy: Order) => {
-    const updated_query_params = updateSearchParam(
+  const set_order_query_param = (order: Order) => {
+    let updated_query_params: any
+    updated_query_params = update_query_params(
       query_params,
       'o',
-      orderBy == BookmarksFetchingDefaults.Common.order
+      order == BookmarksFetchingDefaults.Common.order
         ? undefined
-        : Object.values(Order).indexOf(orderBy).toString(),
+        : Object.values(Order).indexOf(order).toString(),
     )
+    updated_query_params = update_query_params(updated_query_params, 't')
+    updated_query_params = update_query_params(updated_query_params, 'gte')
+    updated_query_params = update_query_params(updated_query_params, 'lte')
 
     window.history.pushState(
       {},

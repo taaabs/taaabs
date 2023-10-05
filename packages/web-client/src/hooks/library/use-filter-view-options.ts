@@ -1,5 +1,5 @@
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
-import { updateSearchParam } from '@/utils/update-query-param'
+import { update_query_params } from '@/utils/update-query-params'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -45,16 +45,16 @@ export const use_filter_view_options = () => {
 
   const set_filter_query_param = (filter: LibraryFilter) => {
     let updated_query_params: any
-    updated_query_params = updateSearchParam(
+    updated_query_params = update_query_params(
       query_params,
       'f',
       filter == BookmarksFetchingDefaults.Common.filter
         ? undefined
         : Object.values(LibraryFilter).indexOf(filter).toString(),
     )
-    updated_query_params = updateSearchParam(updated_query_params, 't')
-    updated_query_params = updateSearchParam(updated_query_params, 'gte')
-    updated_query_params = updateSearchParam(updated_query_params, 'lte')
+    updated_query_params = update_query_params(updated_query_params, 't')
+    updated_query_params = update_query_params(updated_query_params, 'gte')
+    updated_query_params = update_query_params(updated_query_params, 'lte')
 
     window.history.pushState(
       {},

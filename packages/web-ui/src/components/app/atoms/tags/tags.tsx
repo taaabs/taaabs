@@ -45,5 +45,7 @@ export const Tags: React.FC<Tags.Props> = memo(
       </div>
     )
   },
-  (o, n) => JSON.stringify(o.tags) == JSON.stringify(n.tags),
+  (o, n) =>
+    JSON.stringify(o.tags) == JSON.stringify(n.tags) &&
+    o.on_click == n.on_click,
 )

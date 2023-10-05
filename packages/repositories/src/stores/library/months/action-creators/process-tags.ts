@@ -61,11 +61,15 @@ export const process_tags = () => {
     }
 
     const tags_of_bookmark_creation = calculate_tags(months_data.created_at)
-    const tags_of_url_creation = calculate_tags(months_data.updated_at)
+    const tags_of_bookmark_modification = calculate_tags(months_data.updated_at)
 
     dispatch(
       months_actions.set_tags_of_bookmark_creation(tags_of_bookmark_creation),
     )
-    dispatch(months_actions.set_tags_of_bookmark_modification(tags_of_url_creation))
+    dispatch(
+      months_actions.set_tags_of_bookmark_modification(
+        tags_of_bookmark_modification,
+      ),
+    )
   }
 }

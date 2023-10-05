@@ -1,4 +1,4 @@
-import { updateSearchParam } from '@/utils/update-query-param'
+import { update_query_params } from '@/utils/update-query-params'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 
 export const use_date_view_options = () => {
@@ -12,8 +12,8 @@ export const use_date_view_options = () => {
     lte: number
   }) => {
     let updated_query_params: any
-    updated_query_params = updateSearchParam(query_params, 'gte', `${gte}`)
-    updated_query_params = updateSearchParam(
+    updated_query_params = update_query_params(query_params, 'gte', `${gte}`)
+    updated_query_params = update_query_params(
       updated_query_params,
       'lte',
       `${lte}`,
@@ -28,8 +28,8 @@ export const use_date_view_options = () => {
 
   const clear_gte_lte_query_params = () => {
     let updated_query_params: any
-    updated_query_params = updateSearchParam(query_params, 'gte')
-    updated_query_params = updateSearchParam(updated_query_params, 'lte')
+    updated_query_params = update_query_params(query_params, 'gte')
+    updated_query_params = update_query_params(updated_query_params, 'lte')
 
     window.history.pushState(
       {},

@@ -27,7 +27,7 @@ export const use_bookmarks = () => {
   const [last_query_filter, set_last_query_filter] = useState<string | null>(
     null,
   )
-  const [last_query_orderby, set_last_query_sortby] = useState<string | null>(
+  const [last_query_sortby, set_last_query_sortby] = useState<string | null>(
     null,
   )
   const [last_query_order, set_last_query_order] = useState<string | null>(null)
@@ -174,7 +174,7 @@ export const use_bookmarks = () => {
       query_tags != last_query_tags ||
       query_category != last_query_category ||
       query_filter != last_query_filter ||
-      query_sortby != last_query_orderby ||
+      query_sortby != last_query_sortby ||
       query_order != last_query_order ||
       query_yyyy_gte != last_query_yyyymm_gte ||
       query_yyyy_lte != last_query_yyyymm_lte
