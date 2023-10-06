@@ -28,6 +28,8 @@ export namespace Months {
 }
 
 export const Months: React.FC<Months.Props> = (props) => {
+  const [months_to_render, set_months_to_render] = useState<Months | null>(null)
+  const [date, set_date] = useState<string | null>(null)
   const graph = useRef<HTMLDivElement>(null)
   const { swiping: is_swiping } = useSwipe(undefined, {
     preventDefault: false,
@@ -93,6 +95,27 @@ export const Months: React.FC<Months.Props> = (props) => {
     set_bookmark_count(bookmark_count)
     set_starred_count(starred_count)
     set_nsfw_count(nsfw_count)
+
+    set_months_to_render(props.months)
+
+    set_date(
+      params.months.length > 0
+        ? start_index != undefined &&
+          params.months[start_index] &&
+          end_index != undefined &&
+          params.months[end_index]
+          ? yyyymm_to_display(params.months[start_index].yyyymm) +
+            (end_index != start_index
+              ? ` - ${yyyymm_to_display(params.months[end_index].yyyymm)}`
+              : '')
+          : yyyymm_to_display(params.months[0].yyyymm) +
+            (params.months.length > 1
+              ? ` - ${yyyymm_to_display(
+                  params.months[params.months.length - 1].yyyymm,
+                )}`
+              : '')
+        : '',
+    )
   }
 
   const possible_start_index = ({
@@ -259,28 +282,13 @@ export const Months: React.FC<Months.Props> = (props) => {
         <div className={styles.graph__details}>
           <div className={styles.graph__details__title}>Date range</div>
           <div className={styles['graph__details__current-range']}>
-            {(props.has_results || props.is_fetching_data) &&
-            props.months.length > 0
-              ? start_index != undefined &&
-                props.months[start_index] &&
-                end_index != undefined &&
-                props.months[end_index]
-                ? yyyymm_to_display(props.months[start_index].yyyymm) +
-                  (end_index != start_index
-                    ? ` - ${yyyymm_to_display(props.months[end_index].yyyymm)}`
-                    : '')
-                : yyyymm_to_display(props.months[0].yyyymm) +
-                  (props.months.length > 1
-                    ? ` - ${yyyymm_to_display(
-                        props.months[props.months.length - 1].yyyymm,
-                      )}`
-                    : '')
-              : props.current_gte && props.current_lte
-              ? yyyymm_to_display(props.current_gte) +
-                (props.current_gte != props.current_lte
-                  ? ` -${yyyymm_to_display(props.current_lte)}`
-                  : '')
-              : ''}
+            {date ||
+              (props.current_gte &&
+                props.current_lte &&
+                yyyymm_to_display(props.current_gte) +
+                  (props.current_gte != props.current_lte
+                    ? ` - ${yyyymm_to_display(props.current_lte)}`
+                    : ''))}
           </div>
           {(props.has_results || props.is_fetching_data) &&
           bookmark_count &&
@@ -319,11 +327,11 @@ export const Months: React.FC<Months.Props> = (props) => {
       )}
 
       {(props.has_results || props.is_fetching_data) &&
-        props.months &&
-        props.months.length >= 2 && (
+        months_to_render &&
+        months_to_render.length >= 2 && (
           <div className={styles.graph__recharts}>
             <ResponsiveContainer width={'100%'} height={135} key={key}>
-              <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
+              <AreaChart margin={{ left: 0, top: 5 }} data={months_to_render}>
                 <defs>
                   <linearGradient
                     id="bookmarkCount"
