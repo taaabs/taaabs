@@ -25,6 +25,8 @@ export namespace Library {
     has_more_bookmarks: boolean
     no_results: boolean
     get_more_bookmarks: () => void
+    clear_selected_tags?: () => void
+    clear_date_range?: () => void
     show_bookmarks_skeleton: boolean
   }
 }
@@ -282,11 +284,23 @@ export const Library: React.FC<Library.Props> = (props) => {
                 className={styles['main__inner__info']}
                 ref={end_of_bookmarks}
               >
-                {props.is_getting_first_bookmarks || props.has_more_bookmarks
-                  ? 'Loading...'
-                  : props.no_results
-                  ? 'No results'
-                  : 'End of results'}
+                <span>
+                  {props.is_getting_first_bookmarks || props.has_more_bookmarks
+                    ? 'Loading...'
+                    : props.no_results
+                    ? 'No results'
+                    : 'End of results'}
+                </span>
+                {props.clear_selected_tags && (
+                  <button onClick={props.clear_selected_tags}>
+                    Clear selected tags
+                  </button>
+                )}
+                {props.clear_date_range && (
+                  <button onClick={props.clear_date_range}>
+                    Clear date range
+                  </button>
+                )}
               </div>
             </div>
           </div>

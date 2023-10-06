@@ -22,7 +22,7 @@
     }
     @include hover {
       &::before {
-        text-decoration: underline;
+        @include text-decoration-underline;
       }
     }
     &::before {

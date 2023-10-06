@@ -42,10 +42,22 @@ export const use_tag_view_options = () => {
     )
   }
 
+  const clear_selected_tags = () => {
+    set_actual_selected_tags([])
+    const updated_query_params = update_query_params(query_params, 't')
+
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updated_query_params,
+    )
+  }
+
   return {
-    add_tag_to_query_params,
-    remove_tag_from_query_params,
     actual_selected_tags,
     set_actual_selected_tags,
+    add_tag_to_query_params,
+    remove_tag_from_query_params,
+    clear_selected_tags,
   }
 }

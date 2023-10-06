@@ -183,6 +183,8 @@
     }
     &__info {
       display: flex;
+      flex-direction: column;
+      gap: var(--distance-8px);
       justify-content: center;
       align-items: center;
       color: var(--text-color-dimmed);
@@ -193,6 +195,11 @@
       }
       @include at992 {
         height: 36vh;
+      }
+      button {
+        @include hover {
+          @include text-decoration-underline;
+        }
       }
     }
   }

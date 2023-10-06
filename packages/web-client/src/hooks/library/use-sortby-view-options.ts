@@ -38,17 +38,13 @@ export const use_sortby_view_options = () => {
   }, [query_params])
 
   const set_sortby_query_param = (sortby: Sortby) => {
-    let updated_query_params: any
-    updated_query_params = update_query_params(
+    const updated_query_params = update_query_params(
       query_params,
       's',
       sortby == BookmarksFetchingDefaults.Common.sortby
         ? undefined
         : Object.values(Sortby).indexOf(sortby).toString(),
     )
-    updated_query_params = update_query_params(updated_query_params, 't')
-    updated_query_params = update_query_params(updated_query_params, 'gte')
-    updated_query_params = update_query_params(updated_query_params, 'lte')
 
     window.history.pushState(
       {},

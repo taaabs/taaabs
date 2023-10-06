@@ -73,7 +73,7 @@ const Page: React.FC = () => {
     add_tag_to_query_params,
     remove_tag_from_query_params,
     actual_selected_tags,
-    set_actual_selected_tags,
+    clear_selected_tags,
   } = use_tag_view_options()
   const { set_gte_lte_query_params, clear_gte_lte_query_params } =
     use_date_view_options()
@@ -159,7 +159,6 @@ const Page: React.FC = () => {
                         } else {
                           set_filter_query_param(LibraryFilter.All)
                         }
-                        set_actual_selected_tags([])
                         toggle_filter_dropdown()
                       },
                       is_selected:
@@ -185,7 +184,6 @@ const Page: React.FC = () => {
                         } else {
                           set_filter_query_param(LibraryFilter.StarredOnly)
                         }
-                        set_actual_selected_tags([])
                         toggle_filter_dropdown()
                       },
                       is_selected:
@@ -211,7 +209,6 @@ const Page: React.FC = () => {
                         } else {
                           set_filter_query_param(LibraryFilter.Archived)
                         }
-                        set_actual_selected_tags([])
                         toggle_filter_dropdown()
                       },
                       is_selected:
@@ -231,7 +228,6 @@ const Page: React.FC = () => {
                           return
 
                         is_nsfw_excluded ? include_nsfw() : exclude_nsfw()
-                        set_actual_selected_tags([])
                         toggle_filter_dropdown()
                       },
                       is_selected: is_nsfw_excluded,
@@ -270,7 +266,6 @@ const Page: React.FC = () => {
                         )
                           return
                         set_sortby_query_param(Sortby.CreatedAt)
-                        set_actual_selected_tags([])
                         toggle_sortby_dropdown()
                       },
                       is_selected: current_sortby == Sortby.CreatedAt,
@@ -286,7 +281,6 @@ const Page: React.FC = () => {
                         )
                           return
                         set_sortby_query_param(Sortby.UpdatedAt)
-                        set_actual_selected_tags([])
                         toggle_sortby_dropdown()
                       },
                       is_selected: current_sortby == Sortby.UpdatedAt,
@@ -324,7 +318,6 @@ const Page: React.FC = () => {
                         )
                           return
                         set_order_query_param(Order.Desc)
-                        set_actual_selected_tags([])
                         toggle_order_dropdown()
                       },
 
@@ -341,7 +334,6 @@ const Page: React.FC = () => {
                         )
                           return
                         set_order_query_param(Order.Asc)
-                        set_actual_selected_tags([])
                         toggle_order_dropdown()
                       },
                       is_selected: current_order == Order.Asc,
@@ -385,6 +377,7 @@ const Page: React.FC = () => {
                         : false
                       : undefined
                   }
+                  is_fetching_data={is_getting_first_bookmarks}
                 />
               </div>
             ) : (
@@ -393,7 +386,7 @@ const Page: React.FC = () => {
           }
           slot_tags={
             <>
-              {show_tags && (
+              {bookmarks && bookmarks.length > 0 && show_tags && (
                 <div
                   style={{
                     pointerEvents:
@@ -413,7 +406,7 @@ const Page: React.FC = () => {
                         : [...actual_selected_tags]
                       )
                         .filter((id) => {
-                          if (!bookmarks) return false
+                          if (!bookmarks || !bookmarks[0]) return false
                           return (
                             bookmarks[0].tags?.findIndex(
                               (tag) => tag.id == id,
@@ -528,6 +521,17 @@ const Page: React.FC = () => {
               />
             ))
           : []
+      }
+      clear_selected_tags={
+        (!bookmarks || bookmarks.length == 0) && query_params.get('t')
+          ? clear_selected_tags
+          : undefined
+      }
+      clear_date_range={
+        (!bookmarks || bookmarks.length == 0) &&
+        (query_params.get('gte') || query_params.get('lte'))
+          ? clear_gte_lte_query_params
+          : undefined
       }
     />
   )

@@ -9,7 +9,6 @@ declare const styles: {
   readonly bookmark__menu: string
   readonly bookmark__menu__button: string
   readonly bookmark__info: string
-  readonly bookmark__info__tag: string
   readonly bookmark__info__tag__name: string
   readonly 'bookmark__info__tag__name--selected': string
   readonly bookmark__info__tag__yields: string

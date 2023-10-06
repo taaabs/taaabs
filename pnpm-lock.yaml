@@ -307,7 +307,7 @@ importers:
         specifier: ^13.5.4
         version: 13.5.4(eslint@8.50.0)(typescript@5.2.2)
       next:
-        specifier: ^13.4.19
+        specifier: 13.4.19
         version: 13.4.19(patch_hash=xtes2yg5ndldu3r7s5k6wbedny)(@babel/core@7.23.0)(react-dom@18.2.0)(react@18.2.0)(sass@1.68.0)
       react:
         specifier: ^18.2.0
@@ -335,7 +335,7 @@ importers:
         specifier: ^20.8.2
         version: 20.8.2
       '@types/react':
-        specifier: ^18.2.21
+        specifier: 18.2.21
         version: 18.2.21
       '@types/react-dom':
         specifier: ^18.2.10
@@ -426,8 +426,8 @@ importers:
         specifier: ^20.8.2
         version: 20.8.2
       '@types/react':
-        specifier: ^18.2.25
-        version: 18.2.25
+        specifier: 18.2.21
+        version: 18.2.21
       '@types/react-dom':
         specifier: ^18.2.10
         version: 18.2.10
@@ -4477,7 +4477,7 @@ packages:
   /@types/hoist-non-react-statics@3.3.1:
     resolution: {integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==}
     dependencies:
-      '@types/react': 18.2.25
+      '@types/react': 18.2.21
       hoist-non-react-statics: 3.3.2
     dev: false
 
@@ -4627,7 +4627,7 @@ packages:
   /@types/react-dom@18.2.10:
     resolution: {integrity: sha512-5VEC5RgXIk1HHdyN1pHlg0cOqnxHzvPGpMMyGAP5qSaDRmyZNDaQ0kkVAkK6NYlDhP6YBID3llaXlmAS/mdgCA==}
     dependencies:
-      '@types/react': 18.2.25
+      '@types/react': 18.2.21
 
   /@types/react-outside-click-handler@1.3.1:
     resolution: {integrity: sha512-0BNan5zIIDyO5k9LFSG+60ZxQ/0wf+LTF9BJx3oOUdOaJlZk6RCe52jRB75mlvLLJx2YLa61+NidOwBfptWMKw==}
@@ -4638,7 +4638,7 @@ packages:
   /@types/react-text-truncate@0.14.2:
     resolution: {integrity: sha512-lgxq31x10ecPHLF2gqp4wPf/H8ibHQP4nESil7CijqBESfNvJvjm2fp7YTw9aJWEZxNh+GLtXA9QRgjvvVyzKA==}
     dependencies:
-      '@types/react': 18.2.25
+      '@types/react': 18.2.21
     dev: true
 
   /@types/react@18.2.14:
@@ -4651,13 +4651,6 @@ packages:
 
   /@types/react@18.2.21:
     resolution: {integrity: sha512-neFKG/sBAwGxHgXiIxnbm3/AAVQ/cMRS93hvBpg8xYRbeQSPVABp9U2bRnPf0iI4+Ucdv3plSxKK+3CW2ENJxA==}
-    dependencies:
-      '@types/prop-types': 15.7.5
-      '@types/scheduler': 0.16.3
-      csstype: 3.1.2
-
-  /@types/react@18.2.25:
-    resolution: {integrity: sha512-24xqse6+VByVLIr+xWaQ9muX1B4bXJKXBbjszbld/UEDslGLY53+ZucF44HCmLbMPejTzGG9XgR+3m2/Wqu1kw==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3

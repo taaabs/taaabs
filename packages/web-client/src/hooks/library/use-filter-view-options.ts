@@ -44,17 +44,13 @@ export const use_filter_view_options = () => {
   }, [query_params])
 
   const set_filter_query_param = (filter: LibraryFilter) => {
-    let updated_query_params: any
-    updated_query_params = update_query_params(
+    const updated_query_params = update_query_params(
       query_params,
       'f',
       filter == BookmarksFetchingDefaults.Common.filter
         ? undefined
         : Object.values(LibraryFilter).indexOf(filter).toString(),
     )
-    updated_query_params = update_query_params(updated_query_params, 't')
-    updated_query_params = update_query_params(updated_query_params, 'gte')
-    updated_query_params = update_query_params(updated_query_params, 'lte')
 
     window.history.pushState(
       {},

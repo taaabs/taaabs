@@ -14,7 +14,7 @@
     text-align: left;
     @include hover {
       span:first-child {
-        text-decoration: underline;
+        @include text-decoration-underline;
       }
     }
     span:first-child {

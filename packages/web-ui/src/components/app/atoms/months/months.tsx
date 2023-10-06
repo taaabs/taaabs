@@ -23,6 +23,7 @@ export namespace Months {
     clear_date_range: () => void
     selected_tags?: string
     has_results?: boolean
+    is_fetching_data?: boolean
   }
 }
 
@@ -258,7 +259,8 @@ export const Months: React.FC<Months.Props> = (props) => {
         <div className={styles.graph__details}>
           <div className={styles.graph__details__title}>Date range</div>
           <div className={styles['graph__details__current-range']}>
-            {props.months.length > 0
+            {(props.has_results || props.is_fetching_data) &&
+            props.months.length > 0
               ? start_index != undefined &&
                 props.months[start_index] &&
                 end_index != undefined &&
@@ -267,14 +269,22 @@ export const Months: React.FC<Months.Props> = (props) => {
                   (end_index != start_index
                     ? ` - ${yyyymm_to_display(props.months[end_index].yyyymm)}`
                     : '')
-                : 'All history'
+                : yyyymm_to_display(props.months[0].yyyymm) +
+                  (props.months.length > 1
+                    ? ` - ${yyyymm_to_display(
+                        props.months[props.months.length - 1].yyyymm,
+                      )}`
+                    : '')
               : props.current_gte && props.current_lte
-              ? `${yyyymm_to_display(props.current_gte)} - ${yyyymm_to_display(
-                  props.current_lte,
-                )}`
-              : 'All history'}
+              ? yyyymm_to_display(props.current_gte) +
+                (props.current_gte != props.current_lte
+                  ? ` -${yyyymm_to_display(props.current_lte)}`
+                  : '')
+              : ''}
           </div>
-          {bookmark_count && bookmark_count > 0 ? (
+          {(props.has_results || props.is_fetching_data) &&
+          bookmark_count &&
+          bookmark_count > 0 ? (
             <div className={styles.graph__details__counts}>
               <div className={styles.graph__details__counts__total}>
                 {bookmark_count}
@@ -308,87 +318,95 @@ export const Months: React.FC<Months.Props> = (props) => {
         </button>
       )}
 
-      {props.months && props.months.length >= 2 && (
-        <div className={styles.graph__recharts}>
-          <ResponsiveContainer width={'100%'} height={135} key={key}>
-            <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
-              <defs>
-                <linearGradient id="bookmarkCount" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--Months-chart-fill)"
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--Months-chart-fill)"
-                    stopOpacity={0}
-                  />
-                </linearGradient>
-              </defs>
-              <Area
-                type="basis"
-                dataKey="bookmark_count"
-                strokeWidth={0}
-                fill="url(#bookmarkCount)"
-                isAnimationActive={false}
-              />
-              <Area
-                type="basis"
-                dataKey="starred_count"
-                strokeWidth={0}
-                fill="var(--Months-chart-starred-fill)"
-                fillOpacity={starred_count == 0 ? 0 : 1}
-                isAnimationActive={false}
-              />
-              <Area
-                type="basis"
-                dataKey="bookmark_count"
-                strokeWidth={2}
-                stroke="var(--Months-chart-stroke)"
-                isAnimationActive={false}
-                fill="transparent"
-                strokeOpacity={bookmark_count == 0 ? 0 : 1}
-              />
-              <Area
-                type="basis"
-                dataKey="nsfw_count"
-                strokeWidth={2}
-                stroke="var(--Months-chart-nsfw-stroke)"
-                fill="transparent"
-                isAnimationActive={false}
-                strokeOpacity={nsfw_count == 0 ? 0 : 1}
-              />
-              <YAxis tickCount={1} width={0} />
-              <Brush
-                startIndex={start_index != null ? start_index : undefined}
-                endIndex={end_index != null ? end_index : undefined}
-                height={40}
-                travellerWidth={24}
-                fill="transparent"
-                onChange={({ startIndex, endIndex }) => {
-                  if (
-                    startIndex == undefined ||
-                    endIndex == undefined ||
-                    !props.months
-                  )
-                    return
+      {(props.has_results || props.is_fetching_data) &&
+        props.months &&
+        props.months.length >= 2 && (
+          <div className={styles.graph__recharts}>
+            <ResponsiveContainer width={'100%'} height={135} key={key}>
+              <AreaChart margin={{ left: 0, top: 5 }} data={props.months}>
+                <defs>
+                  <linearGradient
+                    id="bookmarkCount"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop
+                      offset="5%"
+                      stopColor="var(--Months-chart-fill)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--Months-chart-fill)"
+                      stopOpacity={0}
+                    />
+                  </linearGradient>
+                </defs>
+                <Area
+                  type="basis"
+                  dataKey="bookmark_count"
+                  strokeWidth={0}
+                  fill="url(#bookmarkCount)"
+                  isAnimationActive={false}
+                />
+                <Area
+                  type="basis"
+                  dataKey="starred_count"
+                  strokeWidth={0}
+                  fill="var(--Months-chart-starred-fill)"
+                  fillOpacity={starred_count == 0 ? 0 : 1}
+                  isAnimationActive={false}
+                />
+                <Area
+                  type="basis"
+                  dataKey="bookmark_count"
+                  strokeWidth={2}
+                  stroke="var(--Months-chart-stroke)"
+                  isAnimationActive={false}
+                  fill="transparent"
+                  strokeOpacity={bookmark_count == 0 ? 0 : 1}
+                />
+                <Area
+                  type="basis"
+                  dataKey="nsfw_count"
+                  strokeWidth={2}
+                  stroke="var(--Months-chart-nsfw-stroke)"
+                  fill="transparent"
+                  isAnimationActive={false}
+                  strokeOpacity={nsfw_count == 0 ? 0 : 1}
+                />
+                <YAxis tickCount={1} width={0} />
+                <Brush
+                  startIndex={start_index != null ? start_index : undefined}
+                  endIndex={end_index != null ? end_index : undefined}
+                  height={40}
+                  travellerWidth={24}
+                  fill="transparent"
+                  onChange={({ startIndex, endIndex }) => {
+                    if (
+                      startIndex == undefined ||
+                      endIndex == undefined ||
+                      !props.months
+                    )
+                      return
 
-                  set_dragged_start_index(startIndex)
-                  set_dragged_end_index(endIndex)
-                }}
-                className={styles.graph__recharts__brush}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-      )}
+                    set_dragged_start_index(startIndex)
+                    set_dragged_end_index(endIndex)
+                  }}
+                  className={styles.graph__recharts__brush}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        )}
 
       {props.has_results && props.months && props.months.length <= 1 && (
         <div className={styles.graph__info}>All results fit in one month</div>
       )}
 
-      {props.has_results == false && (
+      {!props.has_results && !props.is_fetching_data && (
         <div className={styles.graph__info}>There is nothing to plot</div>
       )}
     </div>

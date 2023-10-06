@@ -70,7 +70,7 @@
           overflow-wrap: anywhere;
           cursor: pointer;
           @include hover {
-            @include text-decoration-thick-underline;
+            @include text-decoration-underline;
           }
         }
       }
@@ -184,7 +184,7 @@
             overflow: hidden;
             @include hover {
               > span {
-                text-decoration: underline;
+                @include text-decoration-underline;
                 text-decoration-thickness: 1px;
                 text-underline-offset: 0.13em;
               }

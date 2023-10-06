@@ -36,17 +36,13 @@ export const use_order_view_options = () => {
   }, [query_params])
 
   const set_order_query_param = (order: Order) => {
-    let updated_query_params: any
-    updated_query_params = update_query_params(
+    const updated_query_params = update_query_params(
       query_params,
       'o',
       order == BookmarksFetchingDefaults.Common.order
         ? undefined
         : Object.values(Order).indexOf(order).toString(),
     )
-    updated_query_params = update_query_params(updated_query_params, 't')
-    updated_query_params = update_query_params(updated_query_params, 'gte')
-    updated_query_params = update_query_params(updated_query_params, 'lte')
 
     window.history.pushState(
       {},
