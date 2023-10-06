@@ -184,9 +184,7 @@
             overflow: hidden;
             @include hover {
               > span {
-                @include text-decoration-underline;
-                text-decoration-thickness: 1px;
-                text-underline-offset: 0.13em;
+                @include text-decoration-underlinie-thin;
               }
             }
             > span {
