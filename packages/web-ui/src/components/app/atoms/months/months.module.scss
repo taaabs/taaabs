@@ -109,19 +109,10 @@
       :focus {
         outline: none;
       }
-      @include hover {
-        > g > rect {
-          stroke: var(--Months-chart-brush-handle-hover);
-        }
-        > g > line {
-          stroke: var(--Months-chart-brush-handle-hover);
-        }
-      }
       > rect:first-of-type {
         stroke: none;
       }
       > g > rect {
-        @include transition-100ms(stroke);
         fill: var(--Months-chart-brush-handle-fill);
         rx: var(--border-radius-8px);
         stroke: var(--Months-chart-brush-handle);

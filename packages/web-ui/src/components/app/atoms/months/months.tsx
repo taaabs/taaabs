@@ -39,6 +39,12 @@ export const Months: React.FC<Months.Props> = (props) => {
   const [key, set_key] = useState('')
   const [start_index, set_start_index] = useState<number | null>(null)
   const [end_index, set_end_index] = useState<number | null>(null)
+  const [previous_start_index, set_previous_start_index] = useState<
+    number | null
+  >(null)
+  const [previous_end_index, set_previous_end_index] = useState<number | null>(
+    null,
+  )
   const [dragged_start_index, set_dragged_start_index] = useState<
     number | null
   >(null)
@@ -211,7 +217,7 @@ export const Months: React.FC<Months.Props> = (props) => {
     set_end_index(possible_end_index({ months, current_lte }))
   }
 
-  const set_start_and_index_throttled = useThrottledCallback(
+  const set_start_and_end_index_throttled = useThrottledCallback(
     set_start_and_end_index,
     [set_start_index, set_end_index],
     50,
@@ -225,24 +231,31 @@ export const Months: React.FC<Months.Props> = (props) => {
     )
       return
 
-    set_start_and_index_throttled({
+    set_start_and_end_index_throttled({
       months: props.months,
       current_gte: props.months[dragged_start_index].yyyymm,
       current_lte: props.months[dragged_end_index].yyyymm,
     })
   }, [dragged_start_index, dragged_end_index])
 
-  useUpdateEffect(() => {
-    calculate_counts({
-      months: props.months,
-      start_index: start_index != null ? start_index : undefined,
-      end_index: end_index != null ? end_index : undefined,
-    })
-
-    if (!is_swiping) {
-      set_key(`${start_index}${end_index}${props.selected_tags}`)
+  useEffect(() => {
+    // Avoids calling calculate_counts twice
+    if (
+      start_index == null ||
+      end_index == null ||
+      start_index != previous_start_index ||
+      end_index != previous_end_index
+    ) {
+      calculate_counts({
+        months: props.months,
+        start_index: start_index != null ? start_index : undefined,
+        end_index: end_index != null ? end_index : undefined,
+      })
     }
-  }, [start_index, end_index])
+
+    set_previous_start_index(start_index)
+    set_previous_end_index(end_index)
+  }, [start_index, end_index, props.months])
 
   useEffect(() => {
     if (!props.months || !props.current_gte || !props.current_lte) {
@@ -262,6 +275,7 @@ export const Months: React.FC<Months.Props> = (props) => {
   useEffect(() => {
     if (
       !props.months ||
+      bookmark_count != null ||
       props.current_gte ||
       props.current_lte ||
       dragged_start_index != undefined ||
