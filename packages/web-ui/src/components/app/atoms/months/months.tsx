@@ -355,12 +355,12 @@ export const Months: React.FC<Months.Props> = (props) => {
                     y2="1"
                   >
                     <stop
-                      offset="5%"
+                      offset="0%"
                       stopColor="var(--Months-chart-fill)"
-                      stopOpacity={0.8}
+                      stopOpacity={1}
                     />
                     <stop
-                      offset="95%"
+                      offset="100%"
                       stopColor="var(--Months-chart-fill)"
                       stopOpacity={0}
                     />
