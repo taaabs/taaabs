@@ -1,14 +1,15 @@
+import { Month_Entity } from '@repositories/modules/months/domain/entities/month.entity'
 import { LibraryDispatch, LibraryState } from '../../library.store'
 import { Tags, months_actions } from '../months.slice'
 
 export const process_tags = () => {
   return (dispatch: LibraryDispatch, getState: () => LibraryState) => {
     const { months_data, yyyymm_gte, yyyymm_lte } = getState().months
-    if (!months_data) {
+    if (!months_data || !months_data.created_at || !months_data.updated_at) {
       throw 'Months data should be there.'
     }
 
-    const calculate_tags = (months: typeof months_data.created_at) => {
+    const calculate_tags = (months: Record<string, Month_Entity>) => {
       const monthsFiltered: typeof months_data.created_at = Object.keys(
         months,
       ).reduce((acc, val) => {
@@ -61,7 +62,7 @@ export const process_tags = () => {
     }
 
     const tags_of_bookmark_creation = calculate_tags(months_data.created_at)
-    const tags_of_bookmark_modification = calculate_tags(months_data.updated_at)
+    const tags_of_bookmark_modification = months_data.updated_at.tags
 
     dispatch(
       months_actions.set_tags_of_bookmark_creation(tags_of_bookmark_creation),

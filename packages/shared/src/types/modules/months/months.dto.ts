@@ -19,28 +19,21 @@ export namespace MonthsDto {
 
   export namespace Response {
     type TagName = string
-
     class Month {
       public tags: Record<TagName, { yields: number; id: number }>
       public bookmark_count: number
       public starred_count?: number
       public nsfw_count?: number
     }
-
-    class AuthorizedMonth extends Month {
-      public public_count?: number
-    }
-    class PublicMonth extends Month {}
-
     export class Authorized {
-      public created_at: Record<string, AuthorizedMonth>
-      public updated_at: Record<string, AuthorizedMonth>
-      public is_months_update_scheduled: boolean
+      public created_at?: Record<string, Month>
+      public updated_at?: Month
+      public is_months_update_scheduled?: boolean
     }
     export class Public {
-      public created_at: Record<string, PublicMonth>
-      public updated_at: Record<string, PublicMonth>
-      public is_months_update_scheduled: boolean
+      public created_at?: Record<string, Month>
+      public updated_at?: Month
+      public is_months_update_scheduled?: boolean
     }
   }
 }

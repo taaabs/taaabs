@@ -344,45 +344,47 @@ const Page: React.FC = () => {
             ),
           }}
           slot_months={
-            show_months ? (
-              <div
-                style={{
-                  pointerEvents:
-                    is_getting_first_bookmarks ||
-                    is_getting_more_bookmarks ||
-                    is_getting_months_data
-                      ? 'none'
-                      : 'all',
-                }}
-              >
-                <Months
-                  months={
-                    current_sortby == Sortby.CreatedAt
-                      ? months_of_bookmark_creation
-                      : months_of_bookmark_modification
-                  }
-                  on_yyyymm_change={set_gte_lte_query_params}
-                  clear_date_range={clear_gte_lte_query_params}
-                  current_gte={
-                    parseInt(query_params.get('gte') || '0') || undefined
-                  }
-                  current_lte={
-                    parseInt(query_params.get('lte') || '0') || undefined
-                  }
-                  selected_tags={query_params.get('t') || undefined}
-                  has_results={
-                    bookmarks != undefined && !is_getting_months_data
-                      ? bookmarks.length
-                        ? true
-                        : false
-                      : undefined
-                  }
-                  is_fetching_data={is_getting_first_bookmarks}
-                />
-              </div>
-            ) : (
-              <MonthsSkeleton />
-            )
+            current_sortby == Sortby.CreatedAt ? (
+              show_months ? (
+                <div
+                  style={{
+                    pointerEvents:
+                      is_getting_first_bookmarks ||
+                      is_getting_more_bookmarks ||
+                      is_getting_months_data
+                        ? 'none'
+                        : 'all',
+                  }}
+                >
+                  <Months
+                    months={
+                      current_sortby == Sortby.CreatedAt
+                        ? months_of_bookmark_creation
+                        : months_of_bookmark_modification
+                    }
+                    on_yyyymm_change={set_gte_lte_query_params}
+                    clear_date_range={clear_gte_lte_query_params}
+                    current_gte={
+                      parseInt(query_params.get('gte') || '0') || undefined
+                    }
+                    current_lte={
+                      parseInt(query_params.get('lte') || '0') || undefined
+                    }
+                    selected_tags={query_params.get('t') || undefined}
+                    has_results={
+                      bookmarks != undefined && !is_getting_months_data
+                        ? bookmarks.length
+                          ? true
+                          : false
+                        : undefined
+                    }
+                    is_fetching_data={is_getting_first_bookmarks}
+                  />
+                </div>
+              ) : (
+                <MonthsSkeleton />
+              )
+            ) : undefined
           }
           slot_tags={
             <>

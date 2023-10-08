@@ -12,9 +12,8 @@ export type Tags = Record<string, { id: number; yields: number }>
 
 export type MonthsState = {
   is_getting_months_data: boolean
-  months_data: Months_Ro.Public | null
+  months_data: Months_Ro | null
   months_of_bookmark_creation: Months | null
-  months_of_bookmark_modification: Months | null
   tags_of_bookmark_creation: Tags | null
   tags_of_bookmark_modification: Tags | null
   yyyymm_gte: number | null
@@ -25,7 +24,6 @@ const initial_state: MonthsState = {
   is_getting_months_data: false,
   months_data: null,
   months_of_bookmark_creation: null,
-  months_of_bookmark_modification: null,
   tags_of_bookmark_creation: null,
   tags_of_bookmark_modification: null,
   yyyymm_gte: null,
@@ -39,11 +37,12 @@ export const months_slice = createSlice({
     set_is_getting_data(state, action: PayloadAction<boolean>) {
       state.is_getting_months_data = action.payload
     },
-    set_data(state, action: PayloadAction<Months_Ro.Public>) {
+    set_data(state, action: PayloadAction<Months_Ro>) {
       state.months_data = action.payload
 
       const months_of_bookmark_creation: Months = []
-      const months_of_bookmark_modification: Months = []
+
+      if (!action.payload.created_at) return
 
       Object.entries(action.payload.created_at).forEach(([k, v]) => {
         months_of_bookmark_creation.push({
@@ -53,17 +52,8 @@ export const months_slice = createSlice({
           nsfw_count: v.nsfw_count || 0,
         })
       })
-      Object.entries(action.payload.updated_at).forEach(([k, v]) => {
-        months_of_bookmark_modification.push({
-          yyyymm: parseInt(k),
-          bookmark_count: v.bookmark_count,
-          starred_count: v.starred_count || 0,
-          nsfw_count: v.nsfw_count || 0,
-        })
-      })
 
       state.months_of_bookmark_creation = months_of_bookmark_creation
-      state.months_of_bookmark_modification = months_of_bookmark_modification
     },
     set_tags_of_bookmark_creation(state, action: PayloadAction<Tags>) {
       state.tags_of_bookmark_creation = action.payload

@@ -8,80 +8,66 @@ export class Months_RepositoryImpl implements Months_Repository {
 
   public async get_months_on_authorized_user(
     params: Months_Params.Authorized,
-  ): Promise<Months_Ro.Authorized> {
+  ): Promise<Months_Ro> {
     const data =
       await this._months_data_source.get_months_on_authorized_user(params)
 
     return {
-      created_at: Object.entries(data.created_at).reduce<
-        Months_Ro.Authorized['updated_at']
-      >(
-        (acc, [k, v]) => ({
-          ...acc,
-          [k]: {
-            tags: { ...v.tags },
-            bookmark_count: v.bookmark_count,
-            starred_count: v.starred_count || null,
-            nsfw_count: v.nsfw_count || null,
-            public_count: v.public_count || null,
-          },
-        }),
-        {},
-      ),
-      updated_at: Object.entries(data.updated_at).reduce<
-        Months_Ro.Authorized['updated_at']
-      >(
-        (acc, [k, v]) => ({
-          ...acc,
-          [k]: {
-            tags: { ...v.tags },
-            bookmark_count: v.bookmark_count,
-            starred_count: v.starred_count || null,
-            nsfw_count: v.nsfw_count || null,
-            public_count: v.public_count || null,
-          },
-        }),
-        {},
-      ),
+      created_at: data.created_at
+        ? Object.entries(data.created_at).reduce<Months_Ro['created_at']>(
+            (acc, [k, v]) => ({
+              ...acc,
+              [k]: {
+                tags: { ...v.tags },
+                bookmark_count: v.bookmark_count,
+                starred_count: v.starred_count,
+                nsfw_count: v.nsfw_count,
+              },
+            }),
+            {},
+          )
+        : undefined,
+      updated_at: data.updated_at
+        ? {
+            tags: { ...data.updated_at.tags },
+            bookmark_count: data.updated_at.bookmark_count,
+            starred_count: data.updated_at.starred_count,
+            nsfw_count: data.updated_at.nsfw_count,
+          }
+        : undefined,
       is_months_update_scheduled: data.is_months_update_scheduled,
     }
   }
 
   public async get_months_on_public_user(
     params: Months_Params.Public,
-  ): Promise<Months_Ro.Public> {
+  ): Promise<Months_Ro> {
     const data =
       await this._months_data_source.get_months_on_public_user(params)
 
     return {
-      created_at: Object.entries(data.created_at).reduce<
-        Months_Ro.Public['created_at']
-      >(
-        (acc, [k, v]) => ({
-          ...acc,
-          [k]: {
-            tags: { ...v.tags },
-            bookmark_count: v.bookmark_count,
-            starred_count: v.starred_count || null,
-            nsfw_count: v.nsfw_count || null,
-          },
-        }),
-        {},
-      ),
-      updated_at: Object.entries(data.updated_at).reduce<
-        Months_Ro.Public['updated_at']
-      >(
-        (acc, [k, v]) => ({
-          ...acc,
-          [k]: {
-            tags: { ...v.tags },
-            bookmark_count: v.bookmark_count,
-            starred_count: v.starred_count || null,
-            nsfw_count: v.nsfw_count || null,
-          },
-        }),
-        {},
-      ),
+      created_at: data.created_at
+        ? Object.entries(data.created_at).reduce<Months_Ro['created_at']>(
+            (acc, [k, v]) => ({
+              ...acc,
+              [k]: {
+                tags: { ...v.tags },
+                bookmark_count: v.bookmark_count,
+                starred_count: v.starred_count,
+                nsfw_count: v.nsfw_count,
+              },
+            }),
+            {},
+          )
+        : undefined,
+      updated_at: data.updated_at
+        ? {
+            tags: { ...data.updated_at.tags },
+            bookmark_count: data.updated_at.bookmark_count,
+            starred_count: data.updated_at.starred_count,
+            nsfw_count: data.updated_at.nsfw_count,
+          }
+        : undefined,
       is_months_update_scheduled: data.is_months_update_scheduled,
     }
   }

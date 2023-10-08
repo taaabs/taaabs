@@ -4,7 +4,7 @@ import { Months_Params } from '../types/months.params'
 import { Months_Repository } from '../repositories/months.repository'
 
 export class GetMonthsOnAuthorizedUser_UseCase
-  implements UseCase<Promise<Months_Ro.Authorized>, Months_Params.Authorized>
+  implements UseCase<Promise<Months_Ro>, Months_Params.Authorized>
 {
   constructor(private readonly _months_repository: Months_Repository) {}
 
