@@ -2,7 +2,7 @@ import { LibraryFilter } from '@shared/types/common/library-filter'
 import { MonthsFetchingDefaults } from './months-fetching-defaults'
 import { ToBoolean } from '@shared/decorators/to-boolean'
 
-export namespace MonthsDto {
+export namespace Months_Dto {
   export namespace QueryParams {
     class Base {
       public filter?: LibraryFilter = MonthsFetchingDefaults.Common.filter
@@ -17,23 +17,15 @@ export namespace MonthsDto {
     export class Public extends Base {}
   }
 
-  export namespace Response {
-    type TagName = string
-    class Month {
-      public tags: Record<TagName, { yields: number; id: number }>
-      public bookmark_count: number
-      public starred_count?: number
-      public nsfw_count?: number
-    }
-    export class Authorized {
-      public created_at?: Record<string, Month>
-      public updated_at?: Month
-      public is_months_update_scheduled?: boolean
-    }
-    export class Public {
-      public created_at?: Record<string, Month>
-      public updated_at?: Month
-      public is_months_update_scheduled?: boolean
-    }
+  class Month {
+    public tags: Record<string, { yields: number; id: number }>
+    public bookmark_count: number
+    public starred_count?: number
+    public nsfw_count?: number
+  }
+
+  export class Response {
+    public months?: Record<string, Month>
+    public is_months_update_scheduled?: boolean
   }
 }

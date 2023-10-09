@@ -52,14 +52,7 @@ const Page: React.FC = () => {
     has_more_bookmarks,
   } = use_library_selector((state) => state.bookmarks)
   const { get_bookmarks } = use_bookmarks()
-  const {
-    months_of_bookmark_creation,
-    months_of_bookmark_modification,
-    is_getting_months_data,
-    tags_of_bookmark_creation,
-    tags_of_bookmark_modification,
-    selected_tags,
-  } = use_months()
+  const { months, is_getting_months_data, tags, selected_tags } = use_months()
   const {
     current_filter,
     set_filter_query_param,
@@ -344,47 +337,42 @@ const Page: React.FC = () => {
             ),
           }}
           slot_months={
-            current_sortby == Sortby.CreatedAt ? (
-              show_months ? (
-                <div
-                  style={{
-                    pointerEvents:
-                      is_getting_first_bookmarks ||
-                      is_getting_more_bookmarks ||
-                      is_getting_months_data
-                        ? 'none'
-                        : 'all',
-                  }}
-                >
-                  <Months
-                    months={
-                      current_sortby == Sortby.CreatedAt
-                        ? months_of_bookmark_creation
-                        : months_of_bookmark_modification
-                    }
-                    on_yyyymm_change={set_gte_lte_query_params}
-                    clear_date_range={clear_gte_lte_query_params}
-                    current_gte={
-                      parseInt(query_params.get('gte') || '0') || undefined
-                    }
-                    current_lte={
-                      parseInt(query_params.get('lte') || '0') || undefined
-                    }
-                    selected_tags={query_params.get('t') || undefined}
-                    has_results={
-                      bookmarks != undefined && !is_getting_months_data
-                        ? bookmarks.length
-                          ? true
-                          : false
-                        : undefined
-                    }
-                    is_fetching_data={is_getting_first_bookmarks}
-                  />
-                </div>
-              ) : (
-                <MonthsSkeleton />
-              )
-            ) : undefined
+            show_months ? (
+              <div
+                style={{
+                  pointerEvents:
+                    is_getting_first_bookmarks ||
+                    is_getting_more_bookmarks ||
+                    is_getting_months_data
+                      ? 'none'
+                      : 'all',
+                }}
+              >
+                <Months
+                  months={months}
+                  on_yyyymm_change={set_gte_lte_query_params}
+                  clear_date_range={clear_gte_lte_query_params}
+                  current_gte={
+                    parseInt(query_params.get('gte') || '0') || undefined
+                  }
+                  current_lte={
+                    parseInt(query_params.get('lte') || '0') || undefined
+                  }
+                  selected_tags={query_params.get('t') || undefined}
+                  has_results={
+                    bookmarks != undefined && !is_getting_months_data
+                      ? bookmarks.length
+                        ? true
+                        : false
+                      : undefined
+                  }
+                  is_fetching_data={is_getting_first_bookmarks}
+                  sortby_updated={current_sortby == Sortby.UpdatedAt}
+                />
+              </div>
+            ) : (
+              <MonthsSkeleton />
+            )
           }
           slot_tags={
             <>
@@ -430,22 +418,9 @@ const Page: React.FC = () => {
                   )}
                   <Tags
                     tags={
-                      current_sortby == Sortby.CreatedAt
-                        ? tags_of_bookmark_creation
-                          ? Object.fromEntries(
-                              Object.entries(tags_of_bookmark_creation).filter(
-                                (tag) =>
-                                  is_getting_first_bookmarks
-                                    ? !selected_tags.includes(tag[1].id)
-                                    : !actual_selected_tags.includes(tag[1].id),
-                              ),
-                            )
-                          : {}
-                        : tags_of_bookmark_modification
+                      tags
                         ? Object.fromEntries(
-                            Object.entries(
-                              tags_of_bookmark_modification,
-                            ).filter((tag) =>
+                            Object.entries(tags).filter((tag) =>
                               is_getting_first_bookmarks
                                 ? !selected_tags.includes(tag[1].id)
                                 : !actual_selected_tags.includes(tag[1].id),
@@ -497,10 +472,8 @@ const Page: React.FC = () => {
                           isSelected,
                           id: tag.id,
                           yields:
-                            !isSelected &&
-                            tags_of_bookmark_creation &&
-                            tags_of_bookmark_creation[tag.name]
-                              ? tags_of_bookmark_creation[tag.name].yields
+                            !isSelected && tags && tags[tag.name]
+                              ? tags[tag.name].yields
                               : undefined,
                         }
                       })

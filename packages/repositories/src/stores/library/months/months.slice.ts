@@ -13,9 +13,8 @@ export type Tags = Record<string, { id: number; yields: number }>
 export type MonthsState = {
   is_getting_months_data: boolean
   months_data: Months_Ro | null
-  months_of_bookmark_creation: Months | null
-  tags_of_bookmark_creation: Tags | null
-  tags_of_bookmark_modification: Tags | null
+  months: Months | null
+  tags: Tags | null
   yyyymm_gte: number | null
   yyyymm_lte: number | null
 }
@@ -23,9 +22,8 @@ export type MonthsState = {
 const initial_state: MonthsState = {
   is_getting_months_data: false,
   months_data: null,
-  months_of_bookmark_creation: null,
-  tags_of_bookmark_creation: null,
-  tags_of_bookmark_modification: null,
+  months: null,
+  tags: null,
   yyyymm_gte: null,
   yyyymm_lte: null,
 }
@@ -40,12 +38,12 @@ export const months_slice = createSlice({
     set_data(state, action: PayloadAction<Months_Ro>) {
       state.months_data = action.payload
 
-      const months_of_bookmark_creation: Months = []
+      const months: Months = []
 
-      if (!action.payload.created_at) return
+      if (!action.payload.months) return
 
-      Object.entries(action.payload.created_at).forEach(([k, v]) => {
-        months_of_bookmark_creation.push({
+      Object.entries(action.payload.months).forEach(([k, v]) => {
+        months.push({
           yyyymm: parseInt(k),
           bookmark_count: v.bookmark_count,
           starred_count: v.starred_count || 0,
@@ -53,13 +51,10 @@ export const months_slice = createSlice({
         })
       })
 
-      state.months_of_bookmark_creation = months_of_bookmark_creation
+      state.months = months
     },
-    set_tags_of_bookmark_creation(state, action: PayloadAction<Tags>) {
-      state.tags_of_bookmark_creation = action.payload
-    },
-    set_tags_of_bookmark_modification(state, action: PayloadAction<Tags>) {
-      state.tags_of_bookmark_modification = action.payload
+    set_tags(state, action: PayloadAction<Tags>) {
+      state.tags = action.payload
     },
     set_yyyymm_gte(state, action: PayloadAction<MonthsState['yyyymm_gte']>) {
       state.yyyymm_gte = action.payload

@@ -24,6 +24,7 @@ export namespace Months {
     selected_tags?: string
     has_results?: boolean
     is_fetching_data?: boolean
+    sortby_updated?: boolean
   }
 }
 
@@ -296,13 +297,15 @@ export const Months: React.FC<Months.Props> = (props) => {
         <div className={styles.graph__details}>
           <div className={styles.graph__details__title}>Date range</div>
           <div className={styles['graph__details__current-range']}>
-            {date ||
-              (props.current_gte &&
-                props.current_lte &&
-                yyyymm_to_display(props.current_gte) +
-                  (props.current_gte != props.current_lte
-                    ? ` - ${yyyymm_to_display(props.current_lte)}`
-                    : ''))}
+            {!props.sortby_updated
+              ? date ||
+                (props.current_gte &&
+                  props.current_lte &&
+                  yyyymm_to_display(props.current_gte) +
+                    (props.current_gte != props.current_lte
+                      ? ` - ${yyyymm_to_display(props.current_lte)}`
+                      : ''))
+              : 'All history'}
           </div>
           {(props.has_results || props.is_fetching_data) &&
           bookmark_count &&
@@ -340,7 +343,8 @@ export const Months: React.FC<Months.Props> = (props) => {
         </button>
       )}
 
-      {(props.has_results || props.is_fetching_data) &&
+      {!props.sortby_updated &&
+        (props.has_results || props.is_fetching_data) &&
         months_to_render &&
         months_to_render.length >= 2 && (
           <div className={styles.graph__recharts}>
@@ -424,12 +428,21 @@ export const Months: React.FC<Months.Props> = (props) => {
           </div>
         )}
 
-      {props.has_results && props.months && props.months.length <= 1 && (
-        <div className={styles.graph__info}>All results fit in one month</div>
-      )}
+      {props.has_results &&
+        props.months &&
+        props.months.length <= 1 &&
+        !props.sortby_updated && (
+          <div className={styles.graph__info}>All results fit in one month</div>
+        )}
 
       {!props.has_results && !props.is_fetching_data && (
         <div className={styles.graph__info}>There is nothing to plot</div>
+      )}
+
+      {props.sortby_updated && (
+        <div className={styles.graph__info}>
+          Range selection is disabled for current sort option
+        </div>
       )}
     </div>
   )

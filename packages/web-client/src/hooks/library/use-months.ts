@@ -15,14 +15,8 @@ export const use_months = () => {
   const route_params = useParams()
   const route_pathname = usePathname()
   const dispatch = use_library_dispatch()
-  const {
-    months_data,
-    months_of_bookmark_creation,
-    months_of_bookmark_modification,
-    tags_of_bookmark_creation,
-    tags_of_bookmark_modification,
-    is_getting_months_data,
-  } = use_library_selector((state) => state.months)
+  const { months_data, months, tags, is_getting_months_data } =
+    use_library_selector((state) => state.months)
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
   const [last_query_tags, set_last_query_tags] = useState<string | null>(null)
   const [last_query_filter, set_last_query_filter] = useState<string | null>(
@@ -135,13 +129,13 @@ export const use_months = () => {
       )
     }
 
-    if (tags_of_bookmark_creation) {
+    if (tags) {
       sessionStorage.setItem(
-        `tags_of_bookmark_creation__${query_params.toString()}`,
-        JSON.stringify(tags_of_bookmark_creation),
+        `tags__${query_params.toString()}`,
+        JSON.stringify(tags),
       )
     }
-  }, [months_data, tags_of_bookmark_creation])
+  }, [months_data, tags])
 
   useEffect(() => {
     const months_data = sessionStorage.getItem(
@@ -150,27 +144,10 @@ export const use_months = () => {
     if (months_data) {
       dispatch(months_actions.set_data(JSON.parse(months_data)))
 
-      const tags_of_bookmark_creation = sessionStorage.getItem(
-        `tags_of_bookmark_creation__${query_params.toString()}`,
-      )
-      const tags_of_bookmark_modification = sessionStorage.getItem(
-        `tags_of_boookmark_modification__${query_params.toString()}`,
-      )
+      const tags = sessionStorage.getItem(`tags__${query_params.toString()}`)
 
-      if (tags_of_bookmark_creation) {
-        dispatch(
-          months_actions.set_tags_of_bookmark_creation(
-            JSON.parse(tags_of_bookmark_creation),
-          ),
-        )
-      }
-
-      if (tags_of_bookmark_modification) {
-        dispatch(
-          months_actions.set_tags_of_bookmark_modification(
-            JSON.parse(tags_of_bookmark_modification),
-          ),
-        )
+      if (tags) {
+        dispatch(months_actions.set_tags(JSON.parse(tags)))
       }
     } else {
       get_months()
@@ -180,9 +157,7 @@ export const use_months = () => {
       for (const key in sessionStorage) {
         if (key.substring(0, 11) == 'months_data') {
           sessionStorage.removeItem(key)
-        } else if (key.substring(0, 25) == 'tags_of_bookmark_creation') {
-          sessionStorage.removeItem(key)
-        } else if (key.substring(0, 30) == 'tags_of_boookmark_modification') {
+        } else if (key.substring(0, 4) == 'tags') {
           sessionStorage.removeItem(key)
         }
       }
@@ -190,11 +165,9 @@ export const use_months = () => {
   }, [])
 
   return {
-    months_of_bookmark_creation,
-    months_of_bookmark_modification,
+    months,
     is_getting_months_data,
-    tags_of_bookmark_creation,
-    tags_of_bookmark_modification,
+    tags,
     selected_tags,
   }
 }

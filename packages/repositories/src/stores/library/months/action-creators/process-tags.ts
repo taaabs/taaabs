@@ -5,12 +5,12 @@ import { Tags, months_actions } from '../months.slice'
 export const process_tags = () => {
   return (dispatch: LibraryDispatch, getState: () => LibraryState) => {
     const { months_data, yyyymm_gte, yyyymm_lte } = getState().months
-    if (!months_data || !months_data.created_at || !months_data.updated_at) {
+    if (!months_data || !months_data.months) {
       throw 'Months data should be there.'
     }
 
     const calculate_tags = (months: Record<string, Month_Entity>) => {
-      const monthsFiltered: typeof months_data.created_at = Object.keys(
+      const monthsFiltered: typeof months_data.months = Object.keys(
         months,
       ).reduce((acc, val) => {
         const yyyymm = parseInt(val)
@@ -61,16 +61,8 @@ export const process_tags = () => {
       return sortedTags
     }
 
-    const tags_of_bookmark_creation = calculate_tags(months_data.created_at)
-    const tags_of_bookmark_modification = months_data.updated_at.tags
+    const tags = calculate_tags(months_data.months)
 
-    dispatch(
-      months_actions.set_tags_of_bookmark_creation(tags_of_bookmark_creation),
-    )
-    dispatch(
-      months_actions.set_tags_of_bookmark_modification(
-        tags_of_bookmark_modification,
-      ),
-    )
+    dispatch(months_actions.set_tags(tags))
   }
 }
