@@ -495,6 +495,7 @@ const Page: React.FC = () => {
                     }),
                   )
                 }}
+                favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
               />
             ))
           : []

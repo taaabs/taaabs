@@ -5,6 +5,7 @@ import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import { useEffect, useRef } from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 dayjs.extend(relativeTime)
 
@@ -25,6 +26,7 @@ export namespace Bookmark {
     render_height?: number
     set_render_height: (height: number) => void
     on_link_click?: () => Promise<void>
+    favicon_host: string
   }
 }
 
@@ -148,6 +150,15 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
                             link.url,
                           )}/icon.png`}
                         /> */}
+                      <LazyLoadImage
+                        alt={'favicon'}
+                        width={16}
+                        height={16}
+                        src={`${props.favicon_host}/${_url_domain(link.url)}`}
+                        onError={() => {
+                          return 'http://192.168.0.119:4000/v1/favicons/taylor.town'
+                        }}
+                      />
                     </button>
                     <a
                       className={styles.bookmark__links__item__site__url}
