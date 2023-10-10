@@ -433,16 +433,18 @@ export const Months: React.FC<Months.Props> = (props) => {
         months_to_render &&
         months_to_render.length < 2 &&
         !props.is_range_selector_disabled && (
-          <div className={styles.graph__info}>All results fit in one month</div>
+          <div className={styles.graph__info}>
+            All results fit in one month.
+          </div>
         )}
 
       {!props.has_results && !props.is_fetching_data && (
-        <div className={styles.graph__info}>There is nothing to plot</div>
+        <div className={styles.graph__info}>There is nothing to plot.</div>
       )}
 
       {props.is_range_selector_disabled && (
         <div className={styles.graph__info}>
-          Range selection is unavailable for current sort option
+          Range selection is unavailable for current sort option.
         </div>
       )}
     </div>

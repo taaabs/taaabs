@@ -32,13 +32,14 @@ export const Primary = () => (
         on_tag_click={() => {}}
         links={[
           {
-            url: 'https://foooooooooooooooooooooooooooooooooooooooo.com/baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar',
+            url: 'https://foooooooooooooooooooooooooooooooooooooooooooooooooooo.com/baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar',
             saves: 99,
           },
-          { url: 'https://foo.com/bar/baz', site_path: 'bar', saves: 99 },
-          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com/bar/baz', site_path: 'bar', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
         ]}
         set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
       />
       <StorybookSpacer />
       <Bookmark
@@ -54,10 +55,11 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://foo.com', saves: 99 },
-          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
         ]}
         set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
       />
       <StorybookSpacer />
       <Bookmark
@@ -76,10 +78,11 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://foo.com', saves: 99 },
-          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
         ]}
         set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
       />
       <StorybookSpacer />
       <Bookmark
@@ -98,10 +101,11 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://foo.com', saves: 99 },
-          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
         ]}
         set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
       />
       <StorybookSpacer />
       <Bookmark
@@ -127,10 +131,11 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://foo.com', saves: 99 },
-          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
         ]}
         set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
       />
       <StorybookSpacer />
       <Bookmark
@@ -149,10 +154,11 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://foo.com', saves: 99 },
-          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
         ]}
         set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
       />
       <StorybookSpacer />
       <Bookmark
@@ -171,10 +177,11 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://foo.com', saves: 99 },
-          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
         ]}
         set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
       />
       <StorybookSpacer />
       <Bookmark
@@ -193,10 +200,11 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://foo.com', saves: 99 },
-          { url: 'https://bar.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
         ]}
         set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
       />
       <StorybookSpacer />
     </div>

@@ -535,6 +535,7 @@ const Page: React.FC = () => {
                 on_link_click={async () => {
                   handle_link_click({ booomark_id: bookmark.id })
                 }}
+                favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
               />
             ))
           : []
