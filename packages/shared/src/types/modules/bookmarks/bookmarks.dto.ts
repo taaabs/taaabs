@@ -12,8 +12,8 @@ export namespace Bookmarks_Dto {
   export namespace QueryParams {
     export class Base extends PaginationQueryParamsDto {
       @ApiProperty({
-        description: 'Comma separated list of tags a bookmark must include.',
-        example: 'tagA,tagB,tagC',
+        description: 'Comma separated list of tag ids a bookmark must include.',
+        example: '1,2,3',
       })
       public tags?: string
 
@@ -62,6 +62,7 @@ export namespace Bookmarks_Dto {
       public note?: string
       public created_at: string
       public updated_at: string
+      public visited_at: string
       public tags: Tag[]
       public is_starred?: boolean
       public is_nsfw?: boolean

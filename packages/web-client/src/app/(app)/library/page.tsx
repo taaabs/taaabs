@@ -30,6 +30,9 @@ import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookma
 import { use_bookmarks } from '@/hooks/library/use-bookmarks'
 import { use_months } from '@/hooks/library/use-months'
 import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage-cleanup'
+import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
+import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
+import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -73,6 +76,16 @@ const Page: React.FC = () => {
   const [is_filter_dropdown_visible, toggle_filter_dropdown] = useToggle(false)
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
+
+  const handle_link_click = async (params: { booomark_id: string }) => {
+    const data_source = new Bookmarks_DataSourceImpl(
+      process.env.NEXT_PUBLIC_API_URL,
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+    )
+    const repository = new Bookmarks_RepositoryImpl(data_source)
+    const record_visit = new RecordVisit_UseCase(repository)
+    await record_visit.invoke({ bookmark_id: params.booomark_id })
+  }
 
   useUpdateEffect(() => {
     if (!show_months) set_show_months(true)
@@ -139,6 +152,7 @@ const Page: React.FC = () => {
                     {
                       label: 'All',
                       on_click: () => {
+                        toggle_filter_dropdown()
                         if (
                           current_filter == LibraryFilter.All ||
                           current_filter == LibraryFilter.AllNsfwExcluded ||
@@ -152,7 +166,6 @@ const Page: React.FC = () => {
                         } else {
                           set_filter_query_param(LibraryFilter.All)
                         }
-                        toggle_filter_dropdown()
                       },
                       is_selected:
                         current_filter == LibraryFilter.All ||
@@ -161,6 +174,7 @@ const Page: React.FC = () => {
                     {
                       label: 'Starred only',
                       on_click: () => {
+                        toggle_filter_dropdown()
                         if (
                           current_filter == LibraryFilter.StarredOnly ||
                           current_filter ==
@@ -177,7 +191,6 @@ const Page: React.FC = () => {
                         } else {
                           set_filter_query_param(LibraryFilter.StarredOnly)
                         }
-                        toggle_filter_dropdown()
                       },
                       is_selected:
                         current_filter == LibraryFilter.StarredOnly ||
@@ -186,6 +199,7 @@ const Page: React.FC = () => {
                     {
                       label: 'Archived',
                       on_click: () => {
+                        toggle_filter_dropdown()
                         if (
                           current_filter == LibraryFilter.Archived ||
                           current_filter ==
@@ -202,7 +216,6 @@ const Page: React.FC = () => {
                         } else {
                           set_filter_query_param(LibraryFilter.Archived)
                         }
-                        toggle_filter_dropdown()
                       },
                       is_selected:
                         current_filter == LibraryFilter.Archived ||
@@ -213,6 +226,7 @@ const Page: React.FC = () => {
                     {
                       label: 'Exclude NSFW',
                       on_click: () => {
+                        toggle_filter_dropdown()
                         if (
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
@@ -221,7 +235,6 @@ const Page: React.FC = () => {
                           return
 
                         is_nsfw_excluded ? include_nsfw() : exclude_nsfw()
-                        toggle_filter_dropdown()
                       },
                       is_selected: is_nsfw_excluded,
                     },
@@ -251,6 +264,7 @@ const Page: React.FC = () => {
                     {
                       label: _sortby_option_to_label(Sortby.CreatedAt),
                       on_click: () => {
+                        toggle_sortby_dropdown()
                         if (
                           current_sortby == Sortby.CreatedAt ||
                           is_getting_first_bookmarks ||
@@ -259,13 +273,13 @@ const Page: React.FC = () => {
                         )
                           return
                         set_sortby_query_param(Sortby.CreatedAt)
-                        toggle_sortby_dropdown()
                       },
                       is_selected: current_sortby == Sortby.CreatedAt,
                     },
                     {
                       label: _sortby_option_to_label(Sortby.UpdatedAt),
                       on_click: () => {
+                        toggle_sortby_dropdown()
                         if (
                           current_sortby == Sortby.UpdatedAt ||
                           is_getting_first_bookmarks ||
@@ -274,9 +288,23 @@ const Page: React.FC = () => {
                         )
                           return
                         set_sortby_query_param(Sortby.UpdatedAt)
-                        toggle_sortby_dropdown()
                       },
                       is_selected: current_sortby == Sortby.UpdatedAt,
+                    },
+                    {
+                      label: _sortby_option_to_label(Sortby.VisitedAt),
+                      on_click: () => {
+                        toggle_sortby_dropdown()
+                        if (
+                          current_sortby == Sortby.VisitedAt ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+                        set_sortby_query_param(Sortby.VisitedAt)
+                      },
+                      is_selected: current_sortby == Sortby.VisitedAt,
                     },
                   ]}
                 />
@@ -303,6 +331,7 @@ const Page: React.FC = () => {
                     {
                       label: _order_option_to_label(Order.Desc),
                       on_click: () => {
+                        toggle_order_dropdown()
                         if (
                           current_order == Order.Desc ||
                           is_getting_first_bookmarks ||
@@ -311,8 +340,6 @@ const Page: React.FC = () => {
                         )
                           return
                         set_order_query_param(Order.Desc)
-
-                        toggle_order_dropdown()
                       },
 
                       is_selected: current_order == Order.Desc,
@@ -320,6 +347,7 @@ const Page: React.FC = () => {
                     {
                       label: _order_option_to_label(Order.Asc),
                       on_click: () => {
+                        toggle_order_dropdown()
                         if (
                           current_order == Order.Asc ||
                           is_getting_first_bookmarks ||
@@ -328,8 +356,6 @@ const Page: React.FC = () => {
                         )
                           return
                         set_order_query_param(Order.Asc)
-
-                        toggle_order_dropdown()
                       },
                       is_selected: current_order == Order.Asc,
                     },
@@ -369,7 +395,10 @@ const Page: React.FC = () => {
                       : undefined
                   }
                   is_fetching_data={is_getting_first_bookmarks}
-                  sortby_updated={current_sortby == Sortby.UpdatedAt}
+                  is_range_selector_disabled={
+                    current_sortby == Sortby.UpdatedAt ||
+                    current_sortby == Sortby.VisitedAt
+                  }
                 />
               </div>
             ) : (
@@ -455,7 +484,15 @@ const Page: React.FC = () => {
                 title={bookmark.title}
                 on_click={() => {}}
                 on_menu_click={() => {}}
-                date={new Date(bookmark.created_at)}
+                date={
+                  current_sortby == Sortby.CreatedAt
+                    ? new Date(bookmark.created_at)
+                    : current_sortby == Sortby.UpdatedAt
+                    ? new Date(bookmark.updated_at)
+                    : current_sortby == Sortby.VisitedAt
+                    ? new Date(bookmark.visited_at)
+                    : new Date()
+                }
                 links={bookmark.links.map((link) => ({
                   url: link.url,
                   saves: link.public_saves,
@@ -495,6 +532,9 @@ const Page: React.FC = () => {
                     }),
                   )
                 }}
+                on_link_click={async () => {
+                  handle_link_click({ booomark_id: bookmark.id })
+                }}
               />
             ))
           : []
@@ -525,6 +565,8 @@ function _sortby_option_to_label(sortby_option: Sortby): string {
       return 'Created at'
     case Sortby.UpdatedAt:
       return 'Updated at'
+    case Sortby.VisitedAt:
+      return 'Visited at'
   }
 }
 
@@ -542,14 +584,14 @@ function _filter_option_to_label(filter: LibraryFilter): string {
     case LibraryFilter.All:
       return 'All'
     case LibraryFilter.AllNsfwExcluded:
-      return 'All without nsfw'
+      return 'All -nsfw'
     case LibraryFilter.StarredOnly:
       return 'Starred only'
     case LibraryFilter.StarredOnlyNsfwExcluded:
-      return 'Starred only without nsfw'
+      return 'Starred only -nsfw'
     case LibraryFilter.Archived:
       return 'Archived'
     case LibraryFilter.ArchivedNsfwExcluded:
-      return 'Archived without nsfw'
+      return 'Archived -nsfw'
   }
 }

@@ -24,6 +24,7 @@ export namespace Bookmark {
     links: { url: string; site_path?: string; saves: number }[]
     render_height?: number
     set_render_height: (height: number) => void
+    on_link_click?: () => Promise<void>
   }
 }
 
@@ -151,6 +152,11 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
                     <a
                       className={styles.bookmark__links__item__site__url}
                       href={link.url}
+                      onClick={async () => {
+                        if (props.on_link_click) {
+                          await props.on_link_click()
+                        }
+                      }}
                     >
                       <span>
                         {`${_url_domain(link.url)} ${
@@ -170,7 +176,10 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
                       className={styles.bookmark__links__item__actions__open}
                     >
                       <button
-                        onClick={() => {
+                        onClick={async () => {
+                          if (props.on_link_click) {
+                            await props.on_link_click()
+                          }
                           window.open(link.url, '_blank')
                         }}
                       >

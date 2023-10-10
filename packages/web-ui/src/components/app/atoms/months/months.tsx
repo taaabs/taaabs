@@ -24,7 +24,7 @@ export namespace Months {
     selected_tags?: string
     has_results?: boolean
     is_fetching_data?: boolean
-    sortby_updated?: boolean
+    is_range_selector_disabled?: boolean
   }
 }
 
@@ -34,7 +34,6 @@ export const Months: React.FC<Months.Props> = (props) => {
   const graph = useRef<HTMLDivElement>(null)
   const { swiping: is_swiping } = useSwipe(undefined, {
     preventDefault: false,
-    passive: false,
     threshold: 0,
   })
   const [key, set_key] = useState('')
@@ -57,6 +56,8 @@ export const Months: React.FC<Months.Props> = (props) => {
   const [nsfw_count, set_nsfw_count] = useState<number | null>(null)
 
   useUpdateEffect(() => {
+    if (props.is_range_selector_disabled) return
+
     if (
       !is_swiping &&
       props.months &&
@@ -293,11 +294,11 @@ export const Months: React.FC<Months.Props> = (props) => {
 
   return (
     <div className={styles.graph} ref={graph}>
-      {props.months && (
+      {months_to_render && (
         <div className={styles.graph__details}>
           <div className={styles.graph__details__title}>Date range</div>
           <div className={styles['graph__details__current-range']}>
-            {!props.sortby_updated
+            {!props.is_range_selector_disabled
               ? date ||
                 (props.current_gte &&
                   props.current_lte &&
@@ -336,14 +337,14 @@ export const Months: React.FC<Months.Props> = (props) => {
           className={styles.graph__clear}
           onClick={() => {
             props.clear_date_range()
-            set_key(`${start_index}${end_index}${props.selected_tags}`)
+            set_key(Math.random().toString())
           }}
         >
           <Icon variant="ADD" />
         </button>
       )}
 
-      {!props.sortby_updated &&
+      {!props.is_range_selector_disabled &&
         (props.has_results || props.is_fetching_data) &&
         months_to_render &&
         months_to_render.length >= 2 && (
@@ -414,7 +415,7 @@ export const Months: React.FC<Months.Props> = (props) => {
                     if (
                       startIndex == undefined ||
                       endIndex == undefined ||
-                      !props.months
+                      !months_to_render
                     )
                       return
 
@@ -429,9 +430,9 @@ export const Months: React.FC<Months.Props> = (props) => {
         )}
 
       {props.has_results &&
-        props.months &&
-        props.months.length <= 1 &&
-        !props.sortby_updated && (
+        months_to_render &&
+        months_to_render.length < 2 &&
+        !props.is_range_selector_disabled && (
           <div className={styles.graph__info}>All results fit in one month</div>
         )}
 
@@ -439,9 +440,9 @@ export const Months: React.FC<Months.Props> = (props) => {
         <div className={styles.graph__info}>There is nothing to plot</div>
       )}
 
-      {props.sortby_updated && (
+      {props.is_range_selector_disabled && (
         <div className={styles.graph__info}>
-          Range selection is disabled for current sort option
+          Range selection is unavailable for current sort option
         </div>
       )}
     </div>

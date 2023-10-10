@@ -1,6 +1,7 @@
 import { Bookmarks_DataSource } from './bookmarks.data-source'
 import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { Bookmarks_Params } from '../../domain/types/bookmarks.params'
+import { RecordVisit_Params } from '../../domain/types/record-visit.params'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -74,5 +75,16 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         JSON.parse(JSON.stringify(queryParams)),
       ).toString()}`,
     ).then((r) => r.json())
+  }
+
+  public async record_visit(params: RecordVisit_Params): Promise<void> {
+    await fetch(
+      `${this._api_url}/v1/bookmarks/${params.bookmark_id}/record-visit`,
+      {
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
+        },
+      },
+    )
   }
 }

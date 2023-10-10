@@ -291,16 +291,18 @@ export const Library: React.FC<Library.Props> = (props) => {
                     ? 'No results'
                     : 'End of results'}
                 </span>
-                {props.clear_selected_tags && (
-                  <button onClick={props.clear_selected_tags}>
-                    Clear selected tags
-                  </button>
-                )}
-                {props.clear_date_range && (
-                  <button onClick={props.clear_date_range}>
-                    Clear date range
-                  </button>
-                )}
+                {props.clear_selected_tags &&
+                  !props.is_getting_first_bookmarks && (
+                    <button onClick={props.clear_selected_tags}>
+                      Clear selected tags
+                    </button>
+                  )}
+                {props.clear_date_range &&
+                  !props.is_getting_first_bookmarks && (
+                    <button onClick={props.clear_date_range}>
+                      Clear date range
+                    </button>
+                  )}
               </div>
             </div>
           </div>

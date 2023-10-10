@@ -1,7 +1,8 @@
-import { Bookmarks_Repository } from '@repositories/modules/bookmarks/domain/repositories/bookmarks.repository'
+import { Bookmarks_Repository } from '../../domain/repositories/bookmarks.repository'
 import { Bookmarks_DataSource } from '../data-sources/bookmarks.data-source'
-import { Bookmarks_Ro } from '@repositories/modules/bookmarks/domain/types/bookmarks.ro'
+import { Bookmarks_Ro } from '../../domain/types/bookmarks.ro'
 import { Bookmarks_Params } from '../../domain/types/bookmarks.params'
+import { RecordVisit_Params } from '../../domain/types/record-visit.params'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarksDataSource: Bookmarks_DataSource) {}
@@ -18,6 +19,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           id: bookmark.id,
           created_at: bookmark.created_at,
           updated_at: bookmark.updated_at,
+          visited_at: bookmark.visited_at,
           note: bookmark.note,
           title: bookmark.title,
           is_nsfw: bookmark.is_nsfw || false,
@@ -48,6 +50,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         id: bookmark.id,
         created_at: bookmark.created_at,
         updated_at: bookmark.updated_at,
+        visited_at: bookmark.visited_at,
         note: bookmark.note,
         title: bookmark.title,
         is_nsfw: bookmark.is_nsfw || false,
@@ -64,5 +67,9 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         has_more: pagination.has_more,
       },
     }
+  }
+
+  public async record_visit(params: RecordVisit_Params): Promise<void> {
+    await this._bookmarksDataSource.record_visit(params)
   }
 }

@@ -139,6 +139,7 @@ const Page: React.FC = () => {
                     {
                       label: 'All',
                       on_click: () => {
+                        toggle_filter_dropdown()
                         if (
                           current_filter == LibraryFilter.All ||
                           current_filter == LibraryFilter.AllNsfwExcluded ||
@@ -152,7 +153,6 @@ const Page: React.FC = () => {
                         } else {
                           set_filter_query_param(LibraryFilter.All)
                         }
-                        toggle_filter_dropdown()
                       },
                       is_selected:
                         current_filter == LibraryFilter.All ||
@@ -161,6 +161,7 @@ const Page: React.FC = () => {
                     {
                       label: 'Starred only',
                       on_click: () => {
+                        toggle_filter_dropdown()
                         if (
                           current_filter == LibraryFilter.StarredOnly ||
                           current_filter ==
@@ -177,7 +178,6 @@ const Page: React.FC = () => {
                         } else {
                           set_filter_query_param(LibraryFilter.StarredOnly)
                         }
-                        toggle_filter_dropdown()
                       },
                       is_selected:
                         current_filter == LibraryFilter.StarredOnly ||
@@ -186,6 +186,7 @@ const Page: React.FC = () => {
                     {
                       label: 'Archived',
                       on_click: () => {
+                        toggle_filter_dropdown()
                         if (
                           current_filter == LibraryFilter.Archived ||
                           current_filter ==
@@ -202,7 +203,6 @@ const Page: React.FC = () => {
                         } else {
                           set_filter_query_param(LibraryFilter.Archived)
                         }
-                        toggle_filter_dropdown()
                       },
                       is_selected:
                         current_filter == LibraryFilter.Archived ||
@@ -213,6 +213,7 @@ const Page: React.FC = () => {
                     {
                       label: 'Exclude NSFW',
                       on_click: () => {
+                        toggle_filter_dropdown()
                         if (
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
@@ -221,7 +222,6 @@ const Page: React.FC = () => {
                           return
 
                         is_nsfw_excluded ? include_nsfw() : exclude_nsfw()
-                        toggle_filter_dropdown()
                       },
                       is_selected: is_nsfw_excluded,
                     },
@@ -251,6 +251,7 @@ const Page: React.FC = () => {
                     {
                       label: _sortby_option_to_label(Sortby.CreatedAt),
                       on_click: () => {
+                        toggle_sortby_dropdown()
                         if (
                           current_sortby == Sortby.CreatedAt ||
                           is_getting_first_bookmarks ||
@@ -259,13 +260,13 @@ const Page: React.FC = () => {
                         )
                           return
                         set_sortby_query_param(Sortby.CreatedAt)
-                        toggle_sortby_dropdown()
                       },
                       is_selected: current_sortby == Sortby.CreatedAt,
                     },
                     {
                       label: _sortby_option_to_label(Sortby.UpdatedAt),
                       on_click: () => {
+                        toggle_sortby_dropdown()
                         if (
                           current_sortby == Sortby.UpdatedAt ||
                           is_getting_first_bookmarks ||
@@ -274,7 +275,6 @@ const Page: React.FC = () => {
                         )
                           return
                         set_sortby_query_param(Sortby.UpdatedAt)
-                        toggle_sortby_dropdown()
                       },
                       is_selected: current_sortby == Sortby.UpdatedAt,
                     },
@@ -303,6 +303,7 @@ const Page: React.FC = () => {
                     {
                       label: _order_option_to_label(Order.Desc),
                       on_click: () => {
+                        toggle_order_dropdown()
                         if (
                           current_order == Order.Desc ||
                           is_getting_first_bookmarks ||
@@ -311,7 +312,6 @@ const Page: React.FC = () => {
                         )
                           return
                         set_order_query_param(Order.Desc)
-                        toggle_order_dropdown()
                       },
 
                       is_selected: current_order == Order.Desc,
@@ -319,6 +319,7 @@ const Page: React.FC = () => {
                     {
                       label: _order_option_to_label(Order.Asc),
                       on_click: () => {
+                        toggle_order_dropdown()
                         if (
                           current_order == Order.Asc ||
                           is_getting_first_bookmarks ||
@@ -327,7 +328,6 @@ const Page: React.FC = () => {
                         )
                           return
                         set_order_query_param(Order.Asc)
-                        toggle_order_dropdown()
                       },
                       is_selected: current_order == Order.Asc,
                     },
@@ -367,7 +367,9 @@ const Page: React.FC = () => {
                       : undefined
                   }
                   is_fetching_data={is_getting_first_bookmarks}
-                  sortby_updated={current_sortby == Sortby.UpdatedAt}
+                  is_range_selector_disabled={
+                    current_sortby == Sortby.UpdatedAt
+                  }
                 />
               </div>
             ) : (
@@ -520,6 +522,8 @@ function _sortby_option_to_label(sortby_option: Sortby): string {
       return 'Created at'
     case Sortby.UpdatedAt:
       return 'Updated at'
+    case Sortby.VisitedAt:
+      return ''
   }
 }
 
@@ -537,14 +541,14 @@ function _filter_option_to_label(filter: LibraryFilter): string {
     case LibraryFilter.All:
       return 'All'
     case LibraryFilter.AllNsfwExcluded:
-      return 'All without nsfw'
+      return 'All -nsfw'
     case LibraryFilter.StarredOnly:
       return 'Starred only'
     case LibraryFilter.StarredOnlyNsfwExcluded:
-      return 'Starred only without nsfw'
+      return 'Starred only -nsfw'
     case LibraryFilter.Archived:
       return 'Archived'
     case LibraryFilter.ArchivedNsfwExcluded:
-      return 'Archived without nsfw'
+      return 'Archived -nsfw'
   }
 }

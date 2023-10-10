@@ -43,13 +43,11 @@
       display: inline;
       overflow-wrap: anywhere;
       text-align: left;
-      @include hover {
-        span:first-child {
-          @include text-decoration-underlinie-thin;
-        }
-      }
       span:first-child {
         color: var(--green800);
+        @include hover {
+          @include text-decoration-underlinie-thin;
+        }
       }
       span:last-child {
         color: var(--text-color-dimmed);
