@@ -241,10 +241,8 @@ export const Months: React.FC<Months.Props> = (props) => {
   }, [dragged_start_index, dragged_end_index])
 
   useEffect(() => {
-    // Avoids calling calculate_counts twice
     if (
-      start_index == null ||
-      end_index == null ||
+      JSON.stringify(props.months) != JSON.stringify(months_to_render) ||
       start_index != previous_start_index ||
       end_index != previous_end_index
     ) {
@@ -294,43 +292,63 @@ export const Months: React.FC<Months.Props> = (props) => {
 
   return (
     <div className={styles.graph} ref={graph}>
-      {months_to_render && (
-        <div className={styles.graph__details}>
-          <div className={styles.graph__details__title}>Date range</div>
-          <div className={styles['graph__details__current-range']}>
-            {!props.is_range_selector_disabled
-              ? date ||
-                (props.current_gte &&
-                  props.current_lte &&
-                  yyyymm_to_display(props.current_gte) +
-                    (props.current_gte != props.current_lte
-                      ? ` - ${yyyymm_to_display(props.current_lte)}`
-                      : ''))
-              : 'All history'}
-          </div>
-          {(props.has_results || props.is_fetching_data) &&
-          bookmark_count &&
-          bookmark_count > 0 ? (
-            <div className={styles.graph__details__counts}>
-              <div className={styles.graph__details__counts__total}>
-                {bookmark_count}
-              </div>
-              {starred_count != undefined && starred_count > 0 && (
-                <div className={styles.graph__details__counts__starred}>
-                  {starred_count}
-                </div>
-              )}
-              {nsfw_count != undefined && nsfw_count > 0 && (
-                <div className={styles.graph__details__counts__nsfw}>
-                  {nsfw_count}
-                </div>
-              )}
-            </div>
+      <div className={styles.graph__details}>
+        <div className={styles.graph__details__title}>Date range</div>
+        <div className={styles['graph__details__current-range']}>
+          {!props.has_results && !props.is_fetching_data ? (
+            props.current_gte && props.current_lte ? (
+              yyyymm_to_display(props.current_gte) +
+              (props.current_gte != props.current_lte
+                ? ` - ${yyyymm_to_display(props.current_lte)}`
+                : '')
+            ) : (
+              'All history'
+            )
           ) : (
-            ''
+            <></>
+          )}
+
+          {props.has_results || props.is_fetching_data ? (
+            !props.is_range_selector_disabled ? (
+              date ? (
+                date
+              ) : props.current_gte && props.current_lte ? (
+                yyyymm_to_display(props.current_gte) +
+                (props.current_gte != props.current_lte
+                  ? ` - ${yyyymm_to_display(props.current_lte)}`
+                  : '')
+              ) : (
+                <></>
+              )
+            ) : (
+              'All history'
+            )
+          ) : (
+            <></>
           )}
         </div>
-      )}
+        {(props.has_results || props.is_fetching_data) &&
+        bookmark_count &&
+        bookmark_count > 0 ? (
+          <div className={styles.graph__details__counts}>
+            <div className={styles.graph__details__counts__total}>
+              {bookmark_count}
+            </div>
+            {starred_count != undefined && starred_count > 0 && (
+              <div className={styles.graph__details__counts__starred}>
+                {starred_count}
+              </div>
+            )}
+            {nsfw_count != undefined && nsfw_count > 0 && (
+              <div className={styles.graph__details__counts__nsfw}>
+                {nsfw_count}
+              </div>
+            )}
+          </div>
+        ) : (
+          ''
+        )}
+      </div>
 
       {props.current_gte && props.current_lte && (
         <button
@@ -433,18 +451,16 @@ export const Months: React.FC<Months.Props> = (props) => {
         months_to_render &&
         months_to_render.length < 2 &&
         !props.is_range_selector_disabled && (
-          <div className={styles.graph__info}>
-            All results fit in one month.
-          </div>
+          <div className={styles.graph__info}>All results fit in one month</div>
         )}
 
       {!props.has_results && !props.is_fetching_data && (
-        <div className={styles.graph__info}>There is nothing to plot.</div>
+        <div className={styles.graph__info}>There is nothing to plot</div>
       )}
 
       {props.is_range_selector_disabled && (
         <div className={styles.graph__info}>
-          Range selection is unavailable for current sort option.
+          Range selection is unavailable for current sort option
         </div>
       )}
     </div>

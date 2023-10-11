@@ -389,9 +389,7 @@ const Page: React.FC = () => {
                   selected_tags={query_params.get('t') || undefined}
                   has_results={
                     bookmarks != undefined && !is_getting_months_data
-                      ? bookmarks.length
-                        ? true
-                        : false
+                      ? bookmarks.length > 0
                       : undefined
                   }
                   is_fetching_data={is_getting_first_bookmarks}

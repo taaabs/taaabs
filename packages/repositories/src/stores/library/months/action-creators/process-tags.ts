@@ -6,8 +6,8 @@ export const process_tags = () => {
   return (dispatch: LibraryDispatch, getState: () => LibraryState) => {
     const { months_data, yyyymm_gte, yyyymm_lte } = getState().months
     if (!months_data || !months_data.months) {
+      dispatch(months_actions.set_tags({}))
       return
-      throw 'Months data should be there.'
     }
 
     const calculate_tags = (months: Record<string, Month_Entity>) => {
