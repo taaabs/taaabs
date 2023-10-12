@@ -540,14 +540,14 @@ function _filter_option_to_label(filter: LibraryFilter): string {
     case LibraryFilter.All:
       return 'All'
     case LibraryFilter.AllNsfwExcluded:
-      return 'All -nsfw'
+      return 'All, NSFW excluded'
     case LibraryFilter.StarredOnly:
       return 'Starred only'
     case LibraryFilter.StarredOnlyNsfwExcluded:
-      return 'Starred only -nsfw'
+      return 'Starred only, NSFW excluded'
     case LibraryFilter.Archived:
       return 'Archived'
     case LibraryFilter.ArchivedNsfwExcluded:
-      return 'Archived -nsfw'
+      return 'Archived, NSFW excluded'
   }
 }

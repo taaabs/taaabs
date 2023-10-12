@@ -60,15 +60,15 @@ export const Months: React.FC<Months.Props> = (props) => {
 
     if (
       !is_swiping &&
-      props.months &&
+      months_to_render &&
       dragged_start_index != undefined &&
       dragged_end_index != undefined &&
-      props.months[dragged_start_index] &&
-      props.months[dragged_end_index]
+      months_to_render[dragged_start_index] &&
+      months_to_render[dragged_end_index]
     ) {
       props.on_yyyymm_change({
-        gte: props.months[dragged_start_index].yyyymm,
-        lte: props.months[dragged_end_index].yyyymm,
+        gte: months_to_render[dragged_start_index].yyyymm,
+        lte: months_to_render[dragged_end_index].yyyymm,
       })
 
       set_dragged_start_index(null)
@@ -304,27 +304,19 @@ export const Months: React.FC<Months.Props> = (props) => {
             ) : (
               'All history'
             )
-          ) : (
-            <></>
-          )}
-
-          {props.has_results || props.is_fetching_data ? (
-            !props.is_range_selector_disabled ? (
-              date ? (
-                date
-              ) : props.current_gte && props.current_lte ? (
-                yyyymm_to_display(props.current_gte) +
-                (props.current_gte != props.current_lte
-                  ? ` - ${yyyymm_to_display(props.current_lte)}`
-                  : '')
-              ) : (
-                <></>
-              )
+          ) : !props.is_range_selector_disabled ? (
+            date ? (
+              date
+            ) : props.current_gte && props.current_lte ? (
+              yyyymm_to_display(props.current_gte) +
+              (props.current_gte != props.current_lte
+                ? ` - ${yyyymm_to_display(props.current_lte)}`
+                : '')
             ) : (
-              'All history'
+              <></>
             )
           ) : (
-            <></>
+            'All history'
           )}
         </div>
         {(props.has_results || props.is_fetching_data) &&
@@ -454,9 +446,11 @@ export const Months: React.FC<Months.Props> = (props) => {
           <div className={styles.graph__info}>All results fit in one month</div>
         )}
 
-      {!props.has_results && !props.is_fetching_data && (
-        <div className={styles.graph__info}>There is nothing to plot</div>
-      )}
+      {!props.is_range_selector_disabled &&
+        !props.has_results &&
+        !props.is_fetching_data && (
+          <div className={styles.graph__info}>There is nothing to plot</div>
+        )}
 
       {props.is_range_selector_disabled && (
         <div className={styles.graph__info}>
