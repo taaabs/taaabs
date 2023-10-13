@@ -14,12 +14,12 @@
     display: inline-flex;
     gap: var(--distance-4px);
     font-family: var(--font-family-inter-tight);
-    font-size: var(--font-size-1-3rem);
+    font-size: var(--font-size-1-4rem);
     &__firstChar {
       position: relative;
       display: flex;
       justify-content: center;
-      font-size: var(--font-size-13px);
+      font-size: var(--font-size-14px);
       font-family: var(--font-family-plus-jakarta-sans);
       font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
       color: var(--Tags-firstChar-foregrouond);
@@ -30,8 +30,8 @@
         content: '';
         background: var(--Tags-firstChar-background);
         position: absolute;
-        width: var(--distance-22px);
-        height: var(--distance-22px);
+        width: var(--distance-24px);
+        height: var(--distance-24px);
         z-index: -1;
         border-radius: var(--border-radius-999px);
         top: 50%;

@@ -106,13 +106,7 @@ const Page: React.FC = () => {
   return (
     <Library
       show_bookmarks_skeleton={bookmarks == null}
-      title_bar={
-        bookmarks != null
-          ? query_params.get('c')
-            ? '[category_name]'
-            : 'All bookmarks'
-          : undefined
-      }
+      title_bar={!query_params.get('c') ? 'All bookmarks' : undefined}
       slot_sidebar={
         <NavigationForLibrarySidebar
           navigation_items={[

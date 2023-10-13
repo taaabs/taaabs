@@ -27,7 +27,9 @@ export const Tags: React.FC<Tags.Props> = (props) => {
             )}
             <div className={styles.item} key={tag}>
               {display_first_char && (
-                <div className={styles.item__firstChar}>{first_char}</div>
+                <div className={styles.item__firstChar}>
+                  <span>{first_char}</span>
+                </div>
               )}
               <button
                 className={styles.item__tag}

@@ -52,6 +52,9 @@
       top: var(--header-desktop-height);
       position: fixed;
       overflow: auto;
+      padding: var(--distance-16px) var(--distance-16px) var(--distance-16px) 0;
+    }
+    @include at1200 {
       padding: var(--distance-16px) var(--distance-32px) var(--distance-16px) 0;
     }
   }
@@ -120,13 +123,11 @@
         top: 0;
         background: var(--header-background);
         opacity: 0;
-        visibility: hidden;
         z-index: 2;
         @include transition-300ms(opacity);
       }
       &--enabled {
         opacity: 0.6;
-        visibility: visible;
       }
     }
     &__mobile-title-bar {
@@ -237,6 +238,10 @@
           top: 0 !important;
         }
         @include at992 {
+          padding: var(--distance-16px) 0 var(--distance-16px)
+            var(--distance-16px);
+        }
+        @include at1200 {
           padding: var(--distance-16px) 0 var(--distance-16px)
             var(--distance-32px);
         }
