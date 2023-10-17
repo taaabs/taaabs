@@ -16,7 +16,7 @@ export default {
 export const Primary = () => {
   return (
     <App
-      slot_AppHeaderDesktop={
+      slot_header_desktop={
         <AppHeaderDesktop
           slot_left_side_logo={<LogoForHeader href="" />}
           slot_left_side_navigation={
@@ -36,7 +36,7 @@ export const Primary = () => {
           }
         />
       }
-      slot_AppHeaderMobile={
+      slot_header_mobile={
         <AppHeaderMobile
           slot_logo={<LogoForHeader href="" />}
           slot_navigation={
@@ -49,7 +49,7 @@ export const Primary = () => {
           }
         />
       }
-      slot_BottomNavigationBar={
+      slot_bottom_navigation_bar={
         <BottomNavigationBar
           home_on_click={() => {}}
           my_library_on_click={() => {}}

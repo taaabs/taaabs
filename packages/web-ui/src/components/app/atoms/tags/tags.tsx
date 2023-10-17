@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import styles from './tags.module.scss'
 
 export namespace Tags {
@@ -7,41 +8,50 @@ export namespace Tags {
   }
 }
 
-export const Tags: React.FC<Tags.Props> = (props) => {
-  const rendered_first_chars: Set<string> = new Set([])
+/**
+ * Do not refactor memo to useState as it defers rendering
+ * to the next frame causing render jitter.
+ */
 
-  return (
-    <div className={styles.container}>
-      {Object.entries(props.tags).map(([tag, details]) => {
-        let display_first_char = false
-        const first_char = tag.substring(0, 1)
-        if (!rendered_first_chars.has(first_char)) {
-          rendered_first_chars.add(first_char)
-          display_first_char = true
-        }
+export const Tags: React.FC<Tags.Props> = memo(
+  (props) => {
+    const first_chars_processed: string[] = []
+    const new_tags_grouped: string[][] = []
+    Object.entries(props.tags).map(([tag_name]) => {
+      const current_tag_first_char = tag_name.substring(0, 1)
+      first_chars_processed.find(
+        (group) => current_tag_first_char == group[0].substring(0, 1),
+      )
+        ? new_tags_grouped[new_tags_grouped.length - 1].push(tag_name)
+        : new_tags_grouped.push([tag_name]) &&
+          first_chars_processed.push(current_tag_first_char)
+    })
 
-        return (
-          <>
-            {display_first_char && rendered_first_chars.size > 1 && (
-              <div className={styles.break} />
-            )}
-            <div className={styles.item} key={tag}>
-              {display_first_char && (
-                <div className={styles.item__firstChar}>
-                  <span>{first_char}</span>
-                </div>
-              )}
-              <button
-                className={styles.item__tag}
-                onClick={() => props.on_click(details.id)}
-              >
-                <span>{tag}</span>
-                <span>{details.yields}</span>
-              </button>
+    return (
+      <div className={styles.container}>
+        {new_tags_grouped.map((group) => (
+          <div className={styles.group} key={group[0].substring(0, 1)}>
+            <div className={styles.firstChar}>
+              <span>{group[0].substring(0, 1)}</span>
             </div>
-          </>
-        )
-      })}
-    </div>
-  )
-}
+            {group.map((tag_name) => (
+              <button
+                className={styles.tag}
+                onClick={() => props.on_click(props.tags[tag_name].id)}
+                key={tag_name}
+              >
+                <span>{tag_name}</span>
+                {props.tags[tag_name] && (
+                  <span> {props.tags[tag_name].yields}</span>
+                )}
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+    )
+  },
+  (o, n) =>
+    JSON.stringify(o.tags) == JSON.stringify(n.tags) &&
+    o.on_click == n.on_click,
+)

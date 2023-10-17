@@ -65,6 +65,8 @@ export const Library: React.FC<Library.Props> = (props) => {
     useState(false)
 
   useUpdateEffect(() => {
+    if (isSlideoutLeftDefinetelyOpened || isSlideoutRightDefinetelyOpened)
+      return
     if (swipeState.direction == 'left' || swipeState.direction == 'right') {
       main.current?.dispatchEvent(
         new CustomEvent('touchmoveSlideout', {

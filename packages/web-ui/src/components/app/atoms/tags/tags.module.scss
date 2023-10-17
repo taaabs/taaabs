@@ -3,56 +3,55 @@
 
 .container {
   display: flex;
+  flex-direction: column;
+  row-gap: var(--distance-16px);
+}
+.group {
+  display: flex;
   flex-wrap: wrap;
   column-gap: var(--distance-6px);
   row-gap: var(--distance-8px);
   align-items: center;
-  .break {
-    flex-basis: 100%;
+}
+.firstChar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  font-size: var(--font-size-14px);
+  font-family: var(--font-family-plus-jakarta-sans);
+  font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
+  color: var(--Tags-firstChar-foregrouond);
+  text-transform: uppercase;
+  width: var(--distance-22px);
+  margin-right: var(--distance-2px);
+  &::before {
+    content: '';
+    background: var(--Tags-firstChar-background);
+    position: absolute;
+    width: var(--distance-24px);
+    height: var(--distance-24px);
+    z-index: -1;
+    border-radius: var(--border-radius-999px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
-  .item {
-    display: inline-flex;
-    gap: var(--distance-4px);
-    font-family: var(--font-family-inter-tight);
-    font-size: var(--font-size-1-4rem);
-    &__firstChar {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      font-size: var(--font-size-14px);
-      font-family: var(--font-family-plus-jakarta-sans);
-      font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-      color: var(--Tags-firstChar-foregrouond);
-      text-transform: uppercase;
-      width: var(--distance-22px);
-      margin-right: var(--distance-2px);
-      &::before {
-        content: '';
-        background: var(--Tags-firstChar-background);
-        position: absolute;
-        width: var(--distance-24px);
-        height: var(--distance-24px);
-        z-index: -1;
-        border-radius: var(--border-radius-999px);
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
+}
+.tag {
+  display: inline-flex;
+  gap: var(--distance-4px);
+  font-family: var(--font-family-inter-tight);
+  font-size: var(--font-size-1-4rem);
+  display: inline;
+  overflow-wrap: anywhere;
+  text-align: left;
+  span:first-child {
+    color: var(--green800);
+    @include hover {
+      @include text-decoration-underlinie-thin;
     }
-    &__tag {
-      display: inline;
-      overflow-wrap: anywhere;
-      text-align: left;
-      span:first-child {
-        color: var(--green800);
-        @include hover {
-          @include text-decoration-underlinie-thin;
-        }
-      }
-      span:last-child {
-        color: var(--text-color-dimmed);
-        margin-left: var(--distance-2px);
-      }
-    }
+  }
+  span:last-child {
+    color: var(--text-color-dimmed);
   }
 }

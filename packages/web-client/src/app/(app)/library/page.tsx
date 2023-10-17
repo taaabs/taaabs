@@ -475,7 +475,9 @@ const Page: React.FC = () => {
                 id={bookmark.id}
                 title={bookmark.title}
                 on_click={() => {}}
-                on_menu_click={() => {}}
+                on_menu_click={() => {
+                  router.push(`/edit/${bookmark.id}` as any)
+                }}
                 date={
                   current_sortby == Sortby.CreatedAt
                     ? new Date(bookmark.created_at)

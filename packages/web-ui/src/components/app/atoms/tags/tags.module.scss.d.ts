@@ -1,8 +1,7 @@
 declare const styles: {
   readonly container: string
-  readonly break: string
-  readonly item: string
-  readonly item__firstChar: string
-  readonly item__tag: string
+  readonly group: string
+  readonly firstChar: string
+  readonly tag: string
 }
 export = styles

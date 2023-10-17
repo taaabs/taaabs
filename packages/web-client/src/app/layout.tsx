@@ -1,4 +1,4 @@
-import { GlobalStoreInitializer } from './global-store-initializer'
+// import { GlobalStoreInitializer } from './global-store-initializer'
 // import { GlobalStoreProvider } from './global-store-provider'
 import { Metadata } from 'next'
 import { Inter, Plus_Jakarta_Sans, Inter_Tight } from 'next/font/google'
@@ -34,8 +34,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     >
       <body>
         {/* <GlobalStoreProvider> */}
-        <GlobalStoreInitializer>{children}</GlobalStoreInitializer>
+        {/* <GlobalStoreInitializer></GlobalStoreInitializer> */}
         {/* </GlobalStoreProvider> */}
+        {children}
       </body>
     </html>
   )

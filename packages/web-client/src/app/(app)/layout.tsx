@@ -6,15 +6,17 @@ import { PublicUserAvatarProvider } from './public-user-avatar-provider'
 
 const Layout: React.FC<{
   children?: React.ReactNode
-}> = ({ children }) => {
+  modal?: React.ReactNode
+}> = (props) => {
   return (
     <PublicUserAvatarProvider>
       <App
-        slot_AppHeaderDesktop={<ClientComponentAppHeaderDesktop />}
-        slot_AppHeaderMobile={<ClientComponentAppHeaderMobile />}
-        slot_BottomNavigationBar={<ClientComponentBottomNavigationBar />}
+        slot_header_desktop={<ClientComponentAppHeaderDesktop />}
+        slot_header_mobile={<ClientComponentAppHeaderMobile />}
+        slot_bottom_navigation_bar={<ClientComponentBottomNavigationBar />}
+        slot_modal={props.modal}
       >
-        {children}
+        {props.children}
       </App>
     </PublicUserAvatarProvider>
   )

@@ -12,29 +12,29 @@ import { useContext, useEffect, useState } from 'react'
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const params = useParams()
   const pathname = usePathname()
-  const publicUserAvatar = useContext(PublicUserAvatarContext)
-  const [isHydrated, setIsHydrated] = useState(false)
+  const public_user_avatar = useContext(PublicUserAvatarContext)
+  const [is_hydrated, set_is_hydrated] = useState(false)
 
-  let logoSlot: JSX.Element
+  let logo_slot: JSX.Element
   // TODO: backHref should be smarter :^)
   if (params.username) {
-    logoSlot = (
+    logo_slot = (
       <UserForHeader
         user={{
           username: params.username as string,
           back_href: '/',
-          avatar: publicUserAvatar?.avatar
+          avatar: public_user_avatar?.avatar
             ? {
-                url: publicUserAvatar.avatar.url,
-                blurhash: publicUserAvatar.avatar.blurhash,
+                url: public_user_avatar.avatar.url,
+                blurhash: public_user_avatar.avatar.blurhash,
               }
             : undefined,
         }}
-        is_loading_avatar={!isHydrated}
+        is_loading_avatar={!is_hydrated}
       />
     )
   } else {
-    logoSlot = <LogoForHeader href="/" />
+    logo_slot = <LogoForHeader href="/" />
   }
 
   let navigation: NavigationForHeader.Props['navigation']
@@ -72,12 +72,12 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   }
 
   useEffect(() => {
-    setIsHydrated(true)
+    set_is_hydrated(true)
   }, [])
 
   return (
     <AppHeaderDesktop
-      slot_left_side_logo={logoSlot}
+      slot_left_side_logo={logo_slot}
       slot_left_side_navigation={
         <NavigationForHeader navigation={navigation} />
       }

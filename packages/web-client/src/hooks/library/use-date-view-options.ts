@@ -1,5 +1,6 @@
 import { update_query_params } from '@/utils/update-query-params'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
+import { useCallback } from 'react'
 
 export const use_date_view_options = () => {
   const query_params = use_shallow_search_params()
@@ -26,7 +27,7 @@ export const use_date_view_options = () => {
     )
   }
 
-  const clear_gte_lte_query_params = () => {
+  const clear_gte_lte_query_params = useCallback(() => {
     let updated_query_params: any
     updated_query_params = update_query_params(query_params, 'gte')
     updated_query_params = update_query_params(updated_query_params, 'lte')
@@ -36,7 +37,7 @@ export const use_date_view_options = () => {
       '',
       window.location.pathname + '?' + updated_query_params,
     )
-  }
+  }, [query_params])
 
   return { set_gte_lte_query_params, clear_gte_lte_query_params }
 }

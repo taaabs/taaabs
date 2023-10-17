@@ -7,9 +7,9 @@ export default {
 
 export const Primary = () => (
   <App
-    slot_AppHeaderDesktop={<>header desktop</>}
-    slot_AppHeaderMobile={<>header mobile</>}
-    slot_BottomNavigationBar={<>bottom navigation bar</>}
+    slot_header_desktop={<>header desktop</>}
+    slot_header_mobile={<>header mobile</>}
+    slot_bottom_navigation_bar={<>bottom navigation bar</>}
   >
     {loremIpsum.long}
   </App>

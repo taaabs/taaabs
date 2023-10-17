@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useState } from 'react'
+import { createContext, useState, ReactNode } from 'react'
 
 export const PublicUserAvatarContext = createContext<{
   avatar: Avatar | null
@@ -13,7 +13,7 @@ type Avatar = {
 }
 
 type Props = {
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 export const PublicUserAvatarProvider: React.FC<Props> = (props) => {
