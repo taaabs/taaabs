@@ -35,7 +35,7 @@ export const Months: React.FC<Months.Props> = memo(
     )
     const [date, set_date] = useState<string | null>(null)
     const graph = useRef<HTMLDivElement>(null)
-    const { swiping: is_swiping } = useSwipe(undefined, {
+    const { swiping: is_swiping } = useSwipe(graph, {
       preventDefault: false,
       threshold: 0,
     })

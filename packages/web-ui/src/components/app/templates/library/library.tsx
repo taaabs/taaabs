@@ -42,42 +42,90 @@ export const Library: React.FC<Library.Props> = (props) => {
   const is_hydrated = use_is_hydrated()
 
   use_scroll_restore(main_inner)
-  const isEndOfBookmarksVisible = useViewportSpy(end_of_bookmarks)
+  const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
 
-  const { onSwipeStart } = useSwipeEvents(undefined, {
+  const { onSwipeStart, onSwipeEnd } = useSwipeEvents(undefined, {
     preventDefault: false,
+    threshold: 10,
   })
   const swipeState = useSwipe(main, {
     preventDefault: false,
+    threshold: 10,
   })
 
-  const [slideoutLeft, setSlideoutLeft] = useState<Slideout>()
-  const [slideoutRight, setSlideoutRight] = useState<Slideout>()
-  const [isSlideoutLeftOpen, setIsSlideoutLeftOpen] = useState(false)
-  const [isSlideoutRightOpen, setIsSlideoutRightOpen] = useState(false)
-  const [isSlideoutLeftDefinetelyClosed, setIsSlideoutLeftDefinetelyClosed] =
-    useState(true)
-  const [isSlideoutRightDefinetelyClosed, setIsSlideoutRightDefinetelyClosed] =
-    useState(true)
-  const [isSlideoutLeftDefinetelyOpened, setIsSlideoutLeftDefinetelyOpened] =
-    useState(false)
-  const [isSlideoutRightDefinetelyOpened, setIsSlideoutRightDefinetelyOpened] =
-    useState(false)
+  const [slideout_left, set_slideout_left] = useState<Slideout>()
+  const [slideout_right, set_slideout_right] = useState<Slideout>()
+  const [is_slideout_left_open, set_is_slideout_left_open] = useState(false)
+  const [is_slideout_right_open, set_is_slideout_right_open] = useState(false)
+  const [
+    is_slideout_left_definetely_closed,
+    set_is_slideout_left_definetely_closed,
+  ] = useState(true)
+  const [
+    is_slideout_right_definetely_closed,
+    set_is_slideout_right_definetely_closed,
+  ] = useState(true)
+  const [
+    is_slideout_left_definetely_opened,
+    set_is_slideout_left_definetely_opened,
+  ] = useState(false)
+  const [
+    is_slideout_right_definetely_opened,
+    set_is_slideout_right_definetely_opened,
+  ] = useState(false)
+
+  const [initial_alpha_x, set_initial_alpha_x] = useState(0)
 
   useUpdateEffect(() => {
-    if (isSlideoutLeftDefinetelyOpened || isSlideoutRightDefinetelyOpened)
-      return
-    if (swipeState.direction == 'left' || swipeState.direction == 'right') {
-      main.current?.dispatchEvent(
-        new CustomEvent('touchmoveSlideout', {
-          detail: {
-            touches: [{ clientX: swipeState.alphaX * -1 }], // Mimics default touchmove event.
-          },
-        }),
-      )
-    }
     if (!swipeState.swiping) {
       main.current?.dispatchEvent(new Event('touchendSlideout'))
+    }
+
+    if (is_slideout_left_definetely_opened) {
+      if (swipeState.direction == 'left') toggleLeftSlideout()
+      return
+    } else if (is_slideout_right_definetely_opened) {
+      if (swipeState.direction == 'right') toggleRightSlideout()
+      return
+    }
+
+    if (swipeState.direction == 'left' || swipeState.direction == 'right') {
+      if (!is_slideout_left_open && !is_slideout_right_open) {
+        main.current?.dispatchEvent(
+          new CustomEvent('touchmoveSlideout', {
+            detail: {
+              touches: [{ clientX: swipeState.direction == 'left' ? -1 : 1 }],
+            },
+          }),
+        )
+      } else {
+        const aplha_x = swipeState.alphaX
+        // if (
+        //   (swipeState.direction == 'left' && aplha_x < previous_swipe_value) ||
+        //   (swipeState.direction == 'right' && aplha_x > previous_swipe_value)
+        // ) {
+        //   return
+        // }
+
+        if (
+          !initial_alpha_x &&
+          (is_slideout_left_open || is_slideout_right_open)
+        ) {
+          set_initial_alpha_x(aplha_x)
+          return
+        }
+
+        main.current?.dispatchEvent(
+          new CustomEvent('touchmoveSlideout', {
+            detail: {
+              touches: [{ clientX: (aplha_x - initial_alpha_x) * -1 }], // Mimics default touchmove event.
+            },
+          }),
+        )
+        // setTimeout(() => {
+        //   set_previous_swipe_value(aplha_x)
+        // }, 0)
+      }
     }
   }, [swipeState])
 
@@ -85,88 +133,92 @@ export const Library: React.FC<Library.Props> = (props) => {
     main.current?.dispatchEvent(new CustomEvent('touchstartSlideout'))
   })
 
+  onSwipeEnd(() => {})
+
   const toggleRightSlideout = () => {
-    if (!isSlideoutRightOpen) {
-      setIsSlideoutRightDefinetelyClosed(false)
+    if (!is_slideout_right_open) {
+      set_is_slideout_right_definetely_closed(false)
     } else {
-      setIsSlideoutRightDefinetelyOpened(false)
+      set_is_slideout_right_definetely_opened(false)
     }
-    slideoutRight?.toggle()
+    slideout_right?.toggle()
   }
   const toggleLeftSlideout = () => {
-    if (!isSlideoutLeftOpen) {
-      setIsSlideoutLeftDefinetelyClosed(false)
+    if (!is_slideout_left_open) {
+      set_is_slideout_left_definetely_closed(false)
     } else {
-      setIsSlideoutLeftDefinetelyOpened(false)
+      set_is_slideout_left_definetely_opened(false)
     }
-    slideoutLeft?.toggle()
+    slideout_left?.toggle()
   }
 
-  const setSlideoutInstances = async () => {
+  const set_slideout_instances = async () => {
     const Slideout = (await import('slideout')).default
 
-    const slideoutLeftInstance = new Slideout({
+    const slideout_left_instance = new Slideout({
       menu: sidebar.current!,
       panel: main.current!,
       padding: SLIDABLE_WIDTH,
       tolerance: -1,
     })
-    const slideoutRightInstance = new Slideout({
+    const slideout_right_instance = new Slideout({
       menu: aside.current!,
       panel: main.current!,
       padding: SLIDABLE_WIDTH,
       side: 'right',
       tolerance: -1,
     })
-    slideoutLeftInstance.on('beforeopen', () => {
-      setIsSlideoutLeftOpen(true)
-      setIsSlideoutLeftDefinetelyOpened(true)
+    slideout_left_instance.on('beforeopen', () => {
+      set_is_slideout_left_open(true)
+      set_is_slideout_left_definetely_opened(true)
+      set_initial_alpha_x(0)
     })
-    slideoutLeftInstance.on('beforeclose', () => {
-      setIsSlideoutLeftOpen(false)
+    slideout_left_instance.on('beforeclose', () => {
+      set_is_slideout_left_open(false)
     })
-    slideoutLeftInstance.on('close', () => {
-      setIsSlideoutLeftOpen(false)
-      setIsSlideoutLeftDefinetelyClosed(true)
-      setIsSlideoutLeftDefinetelyOpened(false)
+    slideout_left_instance.on('close', () => {
+      set_is_slideout_left_open(false)
+      set_is_slideout_left_definetely_closed(true)
+      set_is_slideout_left_definetely_opened(false)
     })
-    slideoutLeftInstance.on('translatestart', () => {
-      setIsSlideoutLeftOpen(true)
-      setIsSlideoutLeftDefinetelyClosed(false)
-      setIsSlideoutLeftDefinetelyOpened(false)
+    slideout_left_instance.on('translatestart', () => {
+      set_is_slideout_left_open(true)
+      set_is_slideout_left_definetely_closed(false)
+      set_is_slideout_left_definetely_opened(false)
     })
-    slideoutRightInstance.on('beforeopen', () => {
-      setIsSlideoutRightOpen(true)
-      setIsSlideoutRightDefinetelyOpened(true)
+    slideout_right_instance.on('beforeopen', () => {
+      set_is_slideout_right_open(true)
+      set_is_slideout_right_definetely_opened(true)
+      set_initial_alpha_x(0)
     })
-    slideoutRightInstance.on('beforeclose', () => {
-      setIsSlideoutRightOpen(false)
+    slideout_right_instance.on('beforeclose', () => {
+      set_is_slideout_right_open(false)
     })
-    slideoutRightInstance.on('close', () => {
-      setIsSlideoutRightOpen(false)
-      setIsSlideoutRightDefinetelyClosed(true)
-      setIsSlideoutRightDefinetelyOpened(false)
+    slideout_right_instance.on('close', () => {
+      set_is_slideout_right_open(false)
+      set_is_slideout_right_definetely_closed(true)
+      set_is_slideout_right_definetely_opened(false)
     })
-    slideoutRightInstance.on('translatestart', () => {
-      setIsSlideoutRightOpen(true)
-      setIsSlideoutRightDefinetelyClosed(false)
-      setIsSlideoutRightDefinetelyOpened(false)
+    slideout_right_instance.on('translatestart', () => {
+      set_is_slideout_right_open(true)
+      set_is_slideout_right_definetely_closed(false)
+      set_is_slideout_right_definetely_opened(false)
     })
 
-    setSlideoutLeft(slideoutLeftInstance)
-    setSlideoutRight(slideoutRightInstance)
+    set_slideout_left(slideout_left_instance)
+    set_slideout_right(slideout_right_instance)
   }
 
   useUpdateEffect(() => {
     if (
-      isEndOfBookmarksVisible &&
+      is_end_of_bookmarks_visible &&
       props.has_more_bookmarks &&
       !props.is_getting_more_bookmarks &&
       !props.is_getting_first_bookmarks
     ) {
       props.get_more_bookmarks()
     }
-  }, [isEndOfBookmarksVisible])
+  }, [is_end_of_bookmarks_visible])
 
   useUpdateEffect(() => {
     if (!props.is_getting_first_bookmarks) {
@@ -176,11 +228,11 @@ export const Library: React.FC<Library.Props> = (props) => {
   }, [props.is_getting_first_bookmarks])
 
   useEffect(() => {
-    setSlideoutInstances()
+    set_slideout_instances()
 
     return () => {
-      slideoutLeft?.destroy()
-      slideoutRight?.destroy()
+      slideout_left?.destroy()
+      slideout_right?.destroy()
     }
   }, [])
 
@@ -192,9 +244,11 @@ export const Library: React.FC<Library.Props> = (props) => {
           ref={sidebar}
           style={{
             width: `${SLIDABLE_WIDTH}px`,
-            zIndex: !isSlideoutRightDefinetelyClosed ? undefined : 1,
-            visibility: !isSlideoutRightDefinetelyClosed ? 'hidden' : undefined,
-            pointerEvents: !isSlideoutRightDefinetelyClosed
+            zIndex: !is_slideout_right_definetely_closed ? undefined : 1,
+            visibility: !is_slideout_right_definetely_closed
+              ? 'hidden'
+              : undefined,
+            pointerEvents: !is_slideout_right_definetely_closed
               ? 'none'
               : undefined,
           }}
@@ -212,21 +266,21 @@ export const Library: React.FC<Library.Props> = (props) => {
         <div
           className={cn(styles.main, {
             [styles['main--borders']]:
-              !isSlideoutLeftDefinetelyClosed ||
-              !isSlideoutRightDefinetelyClosed,
+              !is_slideout_left_definetely_closed ||
+              !is_slideout_right_definetely_closed,
           })}
           ref={main}
           onClick={() => {
-            isSlideoutLeftDefinetelyOpened && toggleLeftSlideout()
-            isSlideoutRightDefinetelyOpened && toggleRightSlideout()
+            is_slideout_left_definetely_opened && toggleLeftSlideout()
+            is_slideout_right_definetely_opened && toggleRightSlideout()
           }}
         >
           <div
             className={styles.main__inner}
             style={{
               pointerEvents:
-                !isSlideoutLeftDefinetelyClosed ||
-                !isSlideoutRightDefinetelyClosed
+                !is_slideout_left_definetely_closed ||
+                !is_slideout_right_definetely_closed
                   ? 'none'
                   : 'all',
             }}
@@ -235,17 +289,17 @@ export const Library: React.FC<Library.Props> = (props) => {
             <div
               className={cn(styles['main__inner__mobile-alpha-overlay'], {
                 [styles['main__inner__mobile-alpha-overlay--enabled']]:
-                  isSlideoutLeftDefinetelyOpened ||
-                  isSlideoutRightDefinetelyOpened,
+                  is_slideout_left_definetely_opened ||
+                  is_slideout_right_definetely_opened,
               })}
             />
             <div className={styles['main__inner__mobile-title-bar']}>
               <_MobileTitleBar
                 swipe_left_on_click={
-                  !isSlideoutLeftOpen ? toggleLeftSlideout : undefined
+                  !is_slideout_left_open ? toggleLeftSlideout : undefined
                 }
                 swipe_right_on_click={
-                  !isSlideoutRightOpen ? toggleRightSlideout : undefined
+                  !is_slideout_right_open ? toggleRightSlideout : undefined
                 }
                 text={props.title_bar ? props.title_bar : undefined}
               />

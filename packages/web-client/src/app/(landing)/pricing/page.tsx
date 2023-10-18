@@ -19,30 +19,28 @@ const Page: React.FC = () => {
         slot_left_side={
           <PricingTier
             name="Free"
-            description="Organize your bookmark collection right away, no matter its size"
+            description="Organize your bookmark collection right away"
             price="$0"
             price_info="Free forever"
             bullets={[
               'Unlimited public/private bookmarks',
               'Unlimited tags',
-              'All essential features',
-              'Free of third-party tracking',
-              'Free of ads',
+              'Essential features for private saves',
+              'Free of tracking and ads',
             ]}
           />
         }
         slot_right_side={
           <PricingTier
             name="Plus"
-            description="Take your bookmarking experience to the next level with our beloved, useful Plus features"
-            price="Less than $1"
-            price_info="$11 billed annually"
+            description="Take your browsing experience to the next level"
+            price="$3"
+            price_info="$30 billed annually"
             bullets={[
               'Everyting in Free',
-              'Tag counts',
-              'Extra library capabilities',
+              'Private saves gets all features',
+              'E2E encrypted bookmarks (soon)',
               'Claim shorter username',
-              "It's free if you cannot afford it",
             ]}
           />
         }
