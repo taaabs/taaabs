@@ -207,7 +207,7 @@ button {
 
 .slideout-open .slideout-menu {
   @include to992 {
-    display: block;
+    visibility: visible;
   }
 }
 

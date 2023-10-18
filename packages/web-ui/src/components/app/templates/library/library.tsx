@@ -40,17 +40,16 @@ export const Library: React.FC<Library.Props> = (props) => {
   const aside = useRef<HTMLDivElement>(null)
   const end_of_bookmarks = useRef<HTMLDivElement>(null)
   const is_hydrated = use_is_hydrated()
-
   use_scroll_restore(main_inner)
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
 
-  const { onSwipeStart, onSwipeEnd } = useSwipeEvents(undefined, {
+  const {} = useSwipeEvents(undefined, {
     preventDefault: false,
     threshold: 10,
   })
   const swipeState = useSwipe(main, {
     preventDefault: false,
-    threshold: 10,
+    threshold: 20,
   })
 
   const [slideout_left, set_slideout_left] = useState<Slideout>()
@@ -74,66 +73,29 @@ export const Library: React.FC<Library.Props> = (props) => {
     set_is_slideout_right_definetely_opened,
   ] = useState(false)
 
-  const [initial_alpha_x, set_initial_alpha_x] = useState(0)
-
   useUpdateEffect(() => {
-    if (!swipeState.swiping) {
-      main.current?.dispatchEvent(new Event('touchendSlideout'))
+    if (swipeState.direction == 'left') {
+      if (
+        is_slideout_left_definetely_closed &&
+        is_slideout_right_definetely_closed
+      ) {
+        toggleRightSlideout()
+      } else if (is_slideout_left_definetely_opened) {
+        toggleLeftSlideout()
+      }
     }
 
-    if (is_slideout_left_definetely_opened) {
-      if (swipeState.direction == 'left') toggleLeftSlideout()
-      return
-    } else if (is_slideout_right_definetely_opened) {
-      if (swipeState.direction == 'right') toggleRightSlideout()
-      return
-    }
-
-    if (swipeState.direction == 'left' || swipeState.direction == 'right') {
-      if (!is_slideout_left_open && !is_slideout_right_open) {
-        main.current?.dispatchEvent(
-          new CustomEvent('touchmoveSlideout', {
-            detail: {
-              touches: [{ clientX: swipeState.direction == 'left' ? -1 : 1 }],
-            },
-          }),
-        )
-      } else {
-        const aplha_x = swipeState.alphaX
-        // if (
-        //   (swipeState.direction == 'left' && aplha_x < previous_swipe_value) ||
-        //   (swipeState.direction == 'right' && aplha_x > previous_swipe_value)
-        // ) {
-        //   return
-        // }
-
-        if (
-          !initial_alpha_x &&
-          (is_slideout_left_open || is_slideout_right_open)
-        ) {
-          set_initial_alpha_x(aplha_x)
-          return
-        }
-
-        main.current?.dispatchEvent(
-          new CustomEvent('touchmoveSlideout', {
-            detail: {
-              touches: [{ clientX: (aplha_x - initial_alpha_x) * -1 }], // Mimics default touchmove event.
-            },
-          }),
-        )
-        // setTimeout(() => {
-        //   set_previous_swipe_value(aplha_x)
-        // }, 0)
+    if (swipeState.direction == 'right') {
+      if (
+        is_slideout_left_definetely_closed &&
+        is_slideout_right_definetely_closed
+      ) {
+        toggleLeftSlideout()
+      } else if (is_slideout_right_definetely_opened) {
+        toggleRightSlideout()
       }
     }
   }, [swipeState])
-
-  onSwipeStart(() => {
-    main.current?.dispatchEvent(new CustomEvent('touchstartSlideout'))
-  })
-
-  onSwipeEnd(() => {})
 
   const toggleRightSlideout = () => {
     if (!is_slideout_right_open) {
@@ -171,7 +133,6 @@ export const Library: React.FC<Library.Props> = (props) => {
     slideout_left_instance.on('beforeopen', () => {
       set_is_slideout_left_open(true)
       set_is_slideout_left_definetely_opened(true)
-      set_initial_alpha_x(0)
     })
     slideout_left_instance.on('beforeclose', () => {
       set_is_slideout_left_open(false)
@@ -189,7 +150,6 @@ export const Library: React.FC<Library.Props> = (props) => {
     slideout_right_instance.on('beforeopen', () => {
       set_is_slideout_right_open(true)
       set_is_slideout_right_definetely_opened(true)
-      set_initial_alpha_x(0)
     })
     slideout_right_instance.on('beforeclose', () => {
       set_is_slideout_right_open(false)

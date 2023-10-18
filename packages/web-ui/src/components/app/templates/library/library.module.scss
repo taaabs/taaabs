@@ -35,7 +35,7 @@
     top: 0;
     bottom: 0;
     z-index: 0;
-    display: none;
+    visibility: hidden;
     padding-top: var(--header-mobile-height);
     padding-bottom: var(--BottomNavigationBar-height);
   }
@@ -212,7 +212,7 @@
     bottom: 0;
     right: 0;
     height: 100svh;
-    display: none;
+    visibility: hidden;
     padding-top: var(--header-mobile-height);
     padding-bottom: var(--BottomNavigationBar-height);
   }
