@@ -7,10 +7,15 @@
 }
 .toolbar {
   height: var(--button-dimension-52px);
-  margin-bottom: var(--distance-16px);
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  @include to992 {
+    margin-bottom: var(--distance-11px);
+  }
+  @include at992 {
+    margin-bottom: var(--distance-16px);
+  }
   &__menu {
     width: var(--button-dimension-40px);
     height: var(--button-dimension-40px);
