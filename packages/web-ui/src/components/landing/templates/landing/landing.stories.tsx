@@ -11,7 +11,6 @@ export const Primary = () => {
       slot_desktop_navigation={<div>desktop navigation</div>}
       slot_desktop_user={<div>desktop user</div>}
       slot_mobile_navigation={<div>mobile navigation</div>}
-      slotFooter={<div>footer slot</div>}
     >
       <div>children</div>
     </Landing>

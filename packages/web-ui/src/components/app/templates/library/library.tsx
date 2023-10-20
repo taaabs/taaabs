@@ -54,6 +54,7 @@ export const Library: React.FC<Library.Props> = (props) => {
 
   const [slideout_left, set_slideout_left] = useState<Slideout>()
   const [slideout_right, set_slideout_right] = useState<Slideout>()
+  const [is_slideout_opening, set_is_slideout_opening] = useState(false)
   const [is_slideout_left_open, set_is_slideout_left_open] = useState(false)
   const [is_slideout_right_open, set_is_slideout_right_open] = useState(false)
   const [
@@ -79,9 +80,9 @@ export const Library: React.FC<Library.Props> = (props) => {
         is_slideout_left_definetely_closed &&
         is_slideout_right_definetely_closed
       ) {
-        toggleRightSlideout()
+        toggle_right_slideout()
       } else if (is_slideout_left_definetely_opened) {
-        toggleLeftSlideout()
+        toggle_left_slideout()
       }
     }
 
@@ -90,28 +91,42 @@ export const Library: React.FC<Library.Props> = (props) => {
         is_slideout_left_definetely_closed &&
         is_slideout_right_definetely_closed
       ) {
-        toggleLeftSlideout()
+        toggle_left_slideout()
       } else if (is_slideout_right_definetely_opened) {
-        toggleRightSlideout()
+        toggle_right_slideout()
       }
     }
   }, [swipeState])
 
-  const toggleRightSlideout = () => {
+  const toggle_right_slideout = () => {
+    if (is_slideout_opening) return
+
     if (!is_slideout_right_open) {
       set_is_slideout_right_definetely_closed(false)
     } else {
       set_is_slideout_right_definetely_opened(false)
     }
+
     slideout_right?.toggle()
+    set_is_slideout_opening(true)
+    setTimeout(() => {
+      set_is_slideout_opening(false)
+    }, 500)
   }
-  const toggleLeftSlideout = () => {
+  const toggle_left_slideout = () => {
+    if (is_slideout_opening) return
+
     if (!is_slideout_left_open) {
       set_is_slideout_left_definetely_closed(false)
     } else {
       set_is_slideout_left_definetely_opened(false)
     }
+
     slideout_left?.toggle()
+    set_is_slideout_opening(true)
+    setTimeout(() => {
+      set_is_slideout_opening(false)
+    }, 500)
   }
 
   const set_slideout_instances = async () => {
@@ -231,8 +246,8 @@ export const Library: React.FC<Library.Props> = (props) => {
           })}
           ref={main}
           onClick={() => {
-            is_slideout_left_definetely_opened && toggleLeftSlideout()
-            is_slideout_right_definetely_opened && toggleRightSlideout()
+            is_slideout_left_definetely_opened && toggle_left_slideout()
+            is_slideout_right_definetely_opened && toggle_right_slideout()
           }}
         >
           <div
@@ -246,20 +261,20 @@ export const Library: React.FC<Library.Props> = (props) => {
             }}
             ref={main_inner}
           >
-            <div
+            {/* <div
               className={cn(styles['main__inner__mobile-alpha-overlay'], {
                 [styles['main__inner__mobile-alpha-overlay--enabled']]:
                   is_slideout_left_definetely_opened ||
                   is_slideout_right_definetely_opened,
               })}
-            />
+            /> */}
             <div className={styles['main__inner__mobile-title-bar']}>
               <_MobileTitleBar
                 swipe_left_on_click={
-                  !is_slideout_left_open ? toggleLeftSlideout : undefined
+                  !is_slideout_left_open ? toggle_left_slideout : undefined
                 }
                 swipe_right_on_click={
-                  !is_slideout_right_open ? toggleRightSlideout : undefined
+                  !is_slideout_right_open ? toggle_right_slideout : undefined
                 }
                 text={props.title_bar ? props.title_bar : undefined}
               />

@@ -16,9 +16,18 @@
   > h1 {
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-    font-size: var(--font-size-80px);
     letter-spacing: var(--letter-spacing-landing-heading);
     animation: var(--animation-fade-in);
+    font-size: var(--font-size-34px);
+    @include at768 {
+      font-size: var(--font-size-64px);
+    }
+    @include at1200 {
+      font-size: var(--font-size-70px);
+    }
+    @include at1380 {
+      font-size: var(--font-size-80px);
+    }
   }
   &__subheading {
     display: flex;
@@ -27,9 +36,15 @@
     animation: var(--animation-fade-in-move-from-top-delayed);
     > p {
       margin: 0 auto;
-      font-size: var(--font-size-23px);
       white-space: pre-wrap;
       max-width: var(--distance-900px);
+      font-size: var(--font-size-18px);
+      @include at768 {
+        font-size: var(--font-size-20px);
+      }
+      @include at992 {
+        font-size: var(--font-size-23px);
+      }
       > span {
         font-style: italic;
         font-weight: var(--font-weight-inter-medium);
