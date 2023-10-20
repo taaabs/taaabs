@@ -227,6 +227,7 @@
               fill: var(--Bookmark-link-new-tab-fill) !important;
               @include transition-100ms(fill);
               width: var(--icon-dimension-12px);
+              height: var(--icon-dimension-12px);
             }
             @include hover {
               background: var(--Bookmark-link-new-tab-background-hover);
