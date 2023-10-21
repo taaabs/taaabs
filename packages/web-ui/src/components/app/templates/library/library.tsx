@@ -43,10 +43,6 @@ export const Library: React.FC<Library.Props> = (props) => {
   use_scroll_restore(main_inner)
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
 
-  const {} = useSwipeEvents(undefined, {
-    preventDefault: false,
-    threshold: 10,
-  })
   const swipeState = useSwipe(main, {
     preventDefault: false,
     threshold: 20,
@@ -111,7 +107,7 @@ export const Library: React.FC<Library.Props> = (props) => {
     set_is_slideout_opening(true)
     setTimeout(() => {
       set_is_slideout_opening(false)
-    }, 500)
+    }, 1000)
   }
   const toggle_left_slideout = () => {
     if (is_slideout_opening) return
