@@ -1,6 +1,5 @@
 import { sharedValues } from '@web-ui/constants'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
-import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import cn from 'classnames'
@@ -107,7 +106,7 @@ export const Library: React.FC<Library.Props> = (props) => {
     set_is_slideout_opening(true)
     setTimeout(() => {
       set_is_slideout_opening(false)
-    }, 1000)
+    }, 500)
   }
   const toggle_left_slideout = () => {
     if (is_slideout_opening) return
