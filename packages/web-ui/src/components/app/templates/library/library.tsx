@@ -2,6 +2,7 @@ import { sharedValues } from '@web-ui/constants'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
+import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
 import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
@@ -27,12 +28,14 @@ export namespace Library {
     clear_selected_tags?: () => void
     clear_date_range?: () => void
     show_bookmarks_skeleton: boolean
+    is_user_swiping_months: boolean
   }
 }
 
 const SLIDABLE_WIDTH = 300
 
 export const Library: React.FC<Library.Props> = (props) => {
+  const container = useRef<HTMLDivElement>(null)
   const sidebar = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLDivElement>(null)
   const main_inner = useRef<HTMLDivElement>(null)
@@ -42,7 +45,11 @@ export const Library: React.FC<Library.Props> = (props) => {
   use_scroll_restore(main_inner)
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
 
-  const swipeState = useSwipe(main, {
+  // Removing 'useSwipeEvents' breaks reload/history back. Investigate why.
+  useSwipeEvents(undefined, {
+    preventDefault: false,
+  })
+  const swipe_state = useSwipe(container, {
     preventDefault: false,
     threshold: 20,
   })
@@ -70,7 +77,9 @@ export const Library: React.FC<Library.Props> = (props) => {
   ] = useState(false)
 
   useUpdateEffect(() => {
-    if (swipeState.direction == 'left') {
+    if (props.is_user_swiping_months) return
+
+    if (swipe_state.direction == 'left') {
       if (
         is_slideout_left_definetely_closed &&
         is_slideout_right_definetely_closed
@@ -81,7 +90,7 @@ export const Library: React.FC<Library.Props> = (props) => {
       }
     }
 
-    if (swipeState.direction == 'right') {
+    if (swipe_state.direction == 'right') {
       if (
         is_slideout_left_definetely_closed &&
         is_slideout_right_definetely_closed
@@ -91,7 +100,7 @@ export const Library: React.FC<Library.Props> = (props) => {
         toggle_right_slideout()
       }
     }
-  }, [swipeState])
+  }, [swipe_state])
 
   const toggle_right_slideout = () => {
     if (is_slideout_opening) return
@@ -207,7 +216,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   }, [])
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={container}>
       <div className={styles.content}>
         <div
           className={styles.sidebar}
