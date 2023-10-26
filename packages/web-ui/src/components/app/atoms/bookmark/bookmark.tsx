@@ -5,9 +5,29 @@ import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import { memo, useEffect, useRef } from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import updateLocale from 'dayjs/plugin/updateLocale'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 dayjs.extend(relativeTime)
+dayjs.extend(updateLocale)
+
+dayjs.updateLocale('en', {
+  relativeTime: {
+    future: '%s',
+    past: '%s',
+    s: 'now',
+    m: '1m',
+    mm: '%dm',
+    h: '1h',
+    hh: '%dh',
+    d: '1d',
+    dd: '%dd',
+    M: '1m',
+    MM: '%dm',
+    y: '1y',
+    yy: '%dy',
+  },
+})
 
 export namespace Bookmark {
   export type Props = {
@@ -87,7 +107,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 </button>
               </div>
               <div className={styles['bookmark__info']}>
-                <span>#{props.index + 1}</span>
+                <span>{props.index + 1}</span>
                 <span>·</span>
                 <span>{dayjs(props.date).fromNow()}</span>
 
