@@ -67,7 +67,7 @@ export const Months: React.FC<Months.Props> = memo(
       } else {
         setTimeout(() => {
           props.set_swipe_state_handler(false)
-        }, 500)
+        }, 0)
       }
 
       if (
