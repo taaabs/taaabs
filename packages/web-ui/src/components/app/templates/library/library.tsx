@@ -49,7 +49,12 @@ export const Library: React.FC<Library.Props> = (props) => {
   useSwipeEvents(undefined, {
     preventDefault: false,
   })
-  const swipe_state = useSwipe(container, {
+  const swipe_state_container = useSwipe(container, {
+    preventDefault: false,
+    threshold: 20,
+  })
+
+  const swipe_state_main = useSwipe(main, {
     preventDefault: false,
     threshold: 20,
   })
@@ -79,7 +84,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   useUpdateEffect(() => {
     if (props.is_user_swiping_months) return
 
-    if (swipe_state.direction == 'left') {
+    if (swipe_state_container.direction == 'left') {
       if (
         is_slideout_left_definetely_closed &&
         is_slideout_right_definetely_closed
@@ -90,7 +95,7 @@ export const Library: React.FC<Library.Props> = (props) => {
       }
     }
 
-    if (swipe_state.direction == 'right') {
+    if (swipe_state_container.direction == 'right') {
       if (
         is_slideout_left_definetely_closed &&
         is_slideout_right_definetely_closed
@@ -100,7 +105,20 @@ export const Library: React.FC<Library.Props> = (props) => {
         toggle_right_slideout()
       }
     }
-  }, [swipe_state])
+  }, [swipe_state_container])
+
+  useUpdateEffect(() => {
+    if (
+      swipe_state_main.direction == 'down' ||
+      swipe_state_main.direction == 'up'
+    ) {
+      if (is_slideout_left_definetely_opened) {
+        toggle_left_slideout()
+      } else if (is_slideout_right_definetely_opened) {
+        toggle_right_slideout()
+      }
+    }
+  }, [swipe_state_main])
 
   const toggle_right_slideout = () => {
     if (is_slideout_opening) return
@@ -115,7 +133,7 @@ export const Library: React.FC<Library.Props> = (props) => {
     set_is_slideout_opening(true)
     setTimeout(() => {
       set_is_slideout_opening(false)
-    }, 500)
+    }, 300)
   }
   const toggle_left_slideout = () => {
     if (is_slideout_opening) return
@@ -130,7 +148,7 @@ export const Library: React.FC<Library.Props> = (props) => {
     set_is_slideout_opening(true)
     setTimeout(() => {
       set_is_slideout_opening(false)
-    }, 500)
+    }, 300)
   }
 
   const set_slideout_instances = async () => {

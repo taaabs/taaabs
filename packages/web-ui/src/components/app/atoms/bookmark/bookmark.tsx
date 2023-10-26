@@ -22,10 +22,6 @@ dayjs.updateLocale('en', {
     hh: '%dh',
     d: '1d',
     dd: '%dd',
-    M: '1mo',
-    MM: '%dmo',
-    y: '1y',
-    yy: '%dy',
   },
 })
 
@@ -109,7 +105,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               <div className={styles['bookmark__info']}>
                 <span>{props.index + 1}</span>
                 <span>·</span>
-                <span>{dayjs(props.date).fromNow()}</span>
+                <span>
+                  {new Date().getTime() - 30 * 24 * 60 * 60 * 1000 <
+                  props.date.getTime()
+                    ? dayjs(props.date).fromNow()
+                    : dayjs(props.date).format('MMM DD, YYYY')}
+                </span>
 
                 {props.tags.length > 0 && (
                   <>
