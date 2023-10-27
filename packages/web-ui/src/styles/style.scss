@@ -196,21 +196,6 @@ button {
   }
 }
 
-.slideout-open,
-.slideout-open body,
-.slideout-open .slideout-panel {
-  @include to992 {
-    touch-action: manipulation; // https://github.com/Mango/slideout/issues/205#issuecomment-823927561
-    overflow: hidden;
-  }
-}
-
-.slideout-open .slideout-menu {
-  @include to992 {
-    visibility: visible;
-  }
-}
-
 // react-loading-skeleton
 @keyframes react-loading-skeleton {
   100% {

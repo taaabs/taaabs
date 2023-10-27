@@ -2,7 +2,7 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  height: var(--BottomNavigationBar-height);
+  height: var(--bottom-navigation-bar-height);
   border-top: var(--border-primary);
   background: var(--BottomNavigationBar-background);
   display: flex;
