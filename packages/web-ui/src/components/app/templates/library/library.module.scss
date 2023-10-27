@@ -83,6 +83,7 @@
 }
 .main {
   @include to992 {
+    min-height: 100vh;
     position: relative;
     z-index: 1;
     padding-top: var(--header-mobile-height);

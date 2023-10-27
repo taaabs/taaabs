@@ -49,6 +49,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   })
   const swipe_state_container = useSwipe(container, {
     preventDefault: false,
+    threshold: 20,
   })
 
   const swipe_state_main = useSwipe(main, {
@@ -66,15 +67,13 @@ export const Library: React.FC<Library.Props> = (props) => {
     if (swipe_state_container.direction == 'left') {
       if (!is_side_left_open && !is_side_right_open) {
         toggle_right_side()
-      } else if (is_side_left_open && !swipe_state_container.swiping) {
+      } else if (is_side_left_open) {
         toggle_left_side()
       }
-    }
-
-    if (swipe_state_container.direction == 'right') {
+    } else if (swipe_state_container.direction == 'right') {
       if (!is_side_left_open && !is_side_right_open) {
         toggle_left_side()
-      } else if (is_side_right_open && !swipe_state_container.swiping) {
+      } else if (is_side_right_open) {
         toggle_right_side()
       }
     }
@@ -113,6 +112,7 @@ export const Library: React.FC<Library.Props> = (props) => {
       set_is_side_right_moving(false)
     }, 300)
   }
+
   const toggle_left_side = () => {
     if (is_side_left_moving || is_side_right_moving) return
     if (props.is_user_swiping_months) return
