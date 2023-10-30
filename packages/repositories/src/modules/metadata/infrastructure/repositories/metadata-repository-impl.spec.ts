@@ -17,7 +17,7 @@ describe('MetadataRepositoryImpl', () => {
     mockReset(metadata_data_source_mock)
   })
 
-  describe('get_authorized', () => {
+  describe('[get_authorized]', () => {
     it('should correctly parse dto', async () => {
       const dto: MetadataDto.Response.Authorized = {
         username: 'test',
@@ -38,7 +38,7 @@ describe('MetadataRepositoryImpl', () => {
     })
   })
 
-  describe('get_public', () => {
+  describe('[get_public]', () => {
     it('should correctly parse dto', async () => {
       const dto: MetadataDto.Response.Public = {
         username: 'test',

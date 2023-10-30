@@ -17,7 +17,7 @@ describe('Bookmarks_RepositoryImpl', () => {
     mockReset(bookmarks_data_source_mock)
   })
 
-  describe('get_authorized', () => {
+  describe('[get_authorized]', () => {
     it('should correctly parse dto', async () => {
       const dto: Bookmarks_Dto.Response.Authorized = {
         bookmarks: [
@@ -64,7 +64,7 @@ describe('Bookmarks_RepositoryImpl', () => {
     })
   })
 
-  describe('get_public', () => {
+  describe('[get_public]', () => {
     it('should correclty parse dto', async () => {
       const dto: Bookmarks_Dto.Response.Public = {
         bookmarks: [

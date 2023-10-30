@@ -11,7 +11,7 @@ describe('Bookmarks_DataSourceImpl', () => {
     })
   })
 
-  describe('get_bookmarks_on_public_user', () => {
+  describe('[get_bookmarks_on_public_user]', () => {
     describe('query parameters are provided', () => {
       it('should provide stringified tags', () => {
         const sut = new Bookmarks_DataSourceImpl('http://example.com', '')
