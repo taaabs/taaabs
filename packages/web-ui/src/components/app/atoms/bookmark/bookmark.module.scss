@@ -184,13 +184,18 @@
           overflow: hidden;
           @include hover {
             > span {
-              @include text-decoration-underlinie-thin;
+              text-decoration-color: var(--green900);
+            }
+            &:visited > span {
+              text-decoration-color: var(--text-color-dimmed);
             }
           }
           > span {
             color: var(--green900);
             text-overflow: ellipsis;
             overflow: hidden;
+            @include text-decoration-underlinie-thin;
+            text-decoration-color: rgba(24, 79, 39, 0.2);
           }
           > span:last-child {
             font-size: var(--font-size-13px);
@@ -204,6 +209,7 @@
           }
           &:visited > span {
             color: var(--text-color-dimmed);
+            text-decoration-color: rgba(115, 115, 115, 0.2);
           }
         }
       }

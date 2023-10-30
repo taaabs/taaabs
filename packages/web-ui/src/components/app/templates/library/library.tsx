@@ -62,7 +62,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   const [is_side_right_open, set_is_side_right_open] = useState(false)
 
   useUpdateEffect(() => {
-    if (props.is_user_swiping_months) return
+    if (props.is_user_swiping_months || props.is_getting_first_bookmarks) return
 
     if (swipe_state_container.direction == 'left') {
       if (!is_side_left_open && !is_side_right_open) {
@@ -80,7 +80,12 @@ export const Library: React.FC<Library.Props> = (props) => {
   }, [swipe_state_container])
 
   useUpdateEffect(() => {
-    if (is_side_left_moving || is_side_right_moving) return
+    if (
+      is_side_left_moving ||
+      is_side_right_moving ||
+      props.is_getting_first_bookmarks
+    )
+      return
 
     if (
       swipe_state_main.direction == 'down' ||
