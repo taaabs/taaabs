@@ -1,8 +1,8 @@
 declare const styles: {
-  readonly button: string
-  readonly 'button--is-loading': string
-  readonly 'button--small': string
-  readonly 'button--default': string
-  readonly 'button--large': string
+  readonly container: string
+  readonly 'container--is-loading': string
+  readonly 'container--small': string
+  readonly 'container--default': string
+  readonly 'container--large': string
 }
 export = styles

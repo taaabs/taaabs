@@ -5,21 +5,16 @@ const Page: React.FC = () => {
   return (
     <>
       <HomeHero
-        heading="Next-gen social bookmarking"
+        heading="Your personal library, organized."
         subheading={
-          <>
-            <p>
-              We build taaabs to empower everyone to <span>organize</span>,{' '}
-              <span>preserve</span> and <span>stay up to date</span> with
-              resources of the Web reliably and efficiently.
-            </p>
-
-            <p>
-              You can create a public library of your findings — let others
-              browse it and subscribe to its updates{' '}
-              <span>or keep everything completely private</span>.
-            </p>
-          </>
+          <p>
+            <strong>
+              The easiest way to save and find what matters to you.
+            </strong>
+            <br />
+            Taaabs is a privacy focused bookmark manager with nifty social
+            features.
+          </p>
         }
       />
       <div>

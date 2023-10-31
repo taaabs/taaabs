@@ -110,9 +110,11 @@ export const Username: React.FC<Username.Props> = (props) => {
             )
           }}
         />
-        <Button size="default" type="submit" is_loading={isSubmitting}>
-          Save
-        </Button>
+        <div>
+          <Button size="default" type="submit" is_loading={isSubmitting}>
+            Save
+          </Button>
+        </div>
       </Box>
     </form>
   )

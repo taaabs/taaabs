@@ -21,9 +21,9 @@ export const Button: React.FC<Button.Props> = ({
   ...props
 }) => {
   const classNames = cn([
-    styles.button,
-    styles[`button--${size}`],
-    { [styles['button--is-loading']]: props.is_loading },
+    styles.container,
+    styles[`container--${size}`],
+    { [styles['container--is-loading']]: props.is_loading },
   ])
 
   if (props.type == 'submit') {
