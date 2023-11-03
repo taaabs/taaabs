@@ -10,7 +10,7 @@ import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
-import { Bookmarks_Params } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
+import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
 
 export const use_bookmarks = () => {
   const query_params = use_shallow_search_params()
@@ -40,7 +40,7 @@ export const use_bookmarks = () => {
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
     if (route_pathname == '/library') {
-      const request_params: Bookmarks_Params.Authorized = {}
+      const request_params: GetBookmarks_Params.Authorized = {}
 
       const query_tags = query_params.get('t')
       set_last_query_tags(query_tags)
@@ -86,7 +86,7 @@ export const use_bookmarks = () => {
       }
 
       if (params.should_get_next_page) {
-        if (!bookmarks) throw 'Bookmarks should be there.'
+        if (!bookmarks) throw new Error('Bookmarks should be there.')
         request_params.after = bookmarks[bookmarks.length - 1].id
       }
 
@@ -99,7 +99,7 @@ export const use_bookmarks = () => {
         }),
       )
     } else {
-      const request_params: Bookmarks_Params.Public = {
+      const request_params: GetBookmarks_Params.Public = {
         username: route_params.username as string,
       }
 
@@ -147,7 +147,7 @@ export const use_bookmarks = () => {
       }
 
       if (params.should_get_next_page) {
-        if (!bookmarks) throw 'Bookmarks should be there.'
+        if (!bookmarks) throw new Error('Bookmarks should be there.')
         request_params.after = bookmarks[bookmarks.length - 1].id
       }
 

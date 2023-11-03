@@ -7,6 +7,8 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
+import OutsideClickHandler from 'react-outside-click-handler'
+import useToggle from 'beautiful-react-hooks/useToggle'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -35,7 +37,6 @@ export namespace Bookmark {
     on_selected_tag_click: (tagId: number) => void
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
     on_click: () => void
-    on_menu_click: () => void
     is_nsfw?: boolean
     is_starred?: boolean
     links: { url: string; site_path?: string; saves: number }[]
@@ -43,6 +44,8 @@ export namespace Bookmark {
     set_render_height: (height: number) => void
     on_link_click?: () => Promise<void>
     favicon_host: string
+    on_menu_click: () => void
+    menu_slot: React.ReactNode
   }
 }
 
@@ -50,6 +53,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
   (props) => {
     const ref = useRef<HTMLDivElement>(null)
     const is_visible = useViewportSpy(ref)
+    const [is_menu_open, toggle_is_menu_open] = useToggle(false)
 
     useEffect(() => {
       if (props.render_height) return
@@ -92,15 +96,35 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 </div>
               </div>
               <div className={styles.bookmark__menu}>
-                <button
-                  className={styles.bookmark__menu__button}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    props.on_menu_click()
+                <OutsideClickHandler
+                  disabled={!is_menu_open}
+                  onOutsideClick={() => {
+                    toggle_is_menu_open()
                   }}
                 >
-                  <Icon variant="THREE_DOTS" />
-                </button>
+                  <button
+                    className={styles.bookmark__menu__button}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      toggle_is_menu_open()
+                      if (!is_menu_open) {
+                        props.on_menu_click()
+                      }
+                    }}
+                  >
+                    <Icon variant="THREE_DOTS" />
+                  </button>
+                  <div
+                    className={cn(styles.bookmark__menu__slot, {
+                      [styles['bookmark__menu__slot--hidden']]: !is_menu_open,
+                    })}
+                    onClick={() => {
+                      toggle_is_menu_open()
+                    }}
+                  >
+                    {props.menu_slot}
+                  </div>
+                </OutsideClickHandler>
               </div>
               <div className={styles['bookmark__info']}>
                 <span>{props.index + 1}</span>
@@ -232,6 +256,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
+    o.index == n.index &&
     o.render_height == n.render_height &&
     JSON.stringify(o.tags) == JSON.stringify(n.tags),
 )

@@ -5,6 +5,7 @@ import * as thunks from './action-creators'
 
 type BookmarksState = {
   is_getting_data: boolean
+  is_updating_bookmarks: boolean
   is_getting_first_bookmarks: boolean
   is_getting_more_bookmarks: boolean
   incoming_bookmarks: Array<Bookmark_Entity> | null
@@ -14,6 +15,7 @@ type BookmarksState = {
 
 const initial_state: BookmarksState = {
   is_getting_data: false,
+  is_updating_bookmarks: false,
   is_getting_first_bookmarks: false,
   is_getting_more_bookmarks: false,
   incoming_bookmarks: null,
@@ -27,6 +29,9 @@ export const bookmarks_slice = createSlice({
   reducers: {
     set_is_getting_data(state, action: PayloadAction<boolean>) {
       state.is_getting_data = action.payload
+    },
+    set_is_updating_bookmarks(state, action: PayloadAction<boolean>) {
+      state.is_updating_bookmarks = action.payload
     },
     set_is_getting_first_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_getting_first_bookmarks = action.payload
@@ -48,7 +53,7 @@ export const bookmarks_slice = createSlice({
       action: PayloadAction<BookmarksState['bookmarks']>,
     ) {
       if (!state.bookmarks || !action.payload)
-        throw 'Some bookmarks should be there.'
+        throw new Error('Some bookmarks should be there.')
       state.bookmarks.push(...action.payload)
     },
     set_has_more_bookmarks(

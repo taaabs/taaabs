@@ -391,6 +391,9 @@ importers:
       react-loading-skeleton:
         specifier: ^3.3.1
         version: 3.3.1(react@18.2.0)
+      react-outside-click-handler:
+        specifier: ^1.3.0
+        version: 1.3.0(react-dom@18.2.0)(react@18.2.0)
       react-sortablejs:
         specifier: ^6.1.4
         version: 6.1.4(@types/sortablejs@1.15.3)(react-dom@18.2.0)(react@18.2.0)(sortablejs@1.15.0)
@@ -400,9 +403,6 @@ importers:
       recharts:
         specifier: ^2.8.0
         version: 2.8.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      slideout:
-        specifier: git+https://github.com/robertpiosi/slideout.git#0.0.11
-        version: github.com/robertpiosi/slideout/03310d084d67f59108b48695368d9de94e86896a
       sortablejs:
         specifier: ^1.15.0
         version: 1.15.0
@@ -446,6 +446,9 @@ importers:
       '@types/react-lazy-load-image-component':
         specifier: ^1.6.1
         version: 1.6.1
+      '@types/react-outside-click-handler':
+        specifier: ^1.3.1
+        version: 1.3.1
       '@types/react-text-truncate':
         specifier: ^0.14.2
         version: 0.14.2
@@ -5243,7 +5246,7 @@ packages:
       react: ^0.14 || ^15.0.0 || ^16.0.0-alpha
     dependencies:
       array.prototype.find: 2.2.1
-      function.prototype.name: 1.1.5
+      function.prototype.name: 1.1.6
       is-regex: 1.1.4
       object-is: 1.1.5
       object.assign: 4.1.4
@@ -5431,8 +5434,8 @@ packages:
     resolution: {integrity: sha512-I2ri5Z9uMpMvnsNrHre9l3PaX+z9D0/z6F7Yt2u15q7wt0I62g5kX6xUKR1SJiefgG+u2/gJUmM8B47XRvQR6w==}
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      define-properties: 1.2.1
+      es-abstract: 1.22.2
       es-shim-unscopables: 1.0.0
     dev: false
 
@@ -6700,10 +6703,6 @@ packages:
     engines: {node: '>=14.16'}
     dev: false
 
-  /decouple@0.0.2:
-    resolution: {integrity: sha512-qXqJDCIYRNAVxqPMcJ+/d7CS76P1lJzHZfYs7v+t1ecB2aEqH4fp9Owg9OITYMOPCOmA0WgH9jUNqDbZb+hLuQ==}
-    dev: false
-
   /dedent@0.7.0:
     resolution: {integrity: sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==}
     dev: true
@@ -6919,7 +6918,7 @@ packages:
   /document.contains@1.0.2:
     resolution: {integrity: sha512-YcvYFs15mX8m3AO1QNQy3BlIpSMfNRj3Ujk2BEJxsZG+HZf7/hZ6jr7mDpXrF8q+ff95Vef5yjhiZxm8CGJr6Q==}
     dependencies:
-      define-properties: 1.2.0
+      define-properties: 1.2.1
     dev: false
 
   /dom-accessibility-api@0.5.16:
@@ -10920,7 +10919,7 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.2.0
+      define-properties: 1.2.1
 
   /object-keys@1.1.1:
     resolution: {integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==}
@@ -14116,19 +14115,4 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
-    dev: false
-
-  github.com/Mango/emitter/41ab8a3956269c7ed468bde50203e15b3274152f:
-    resolution: {tarball: https://codeload.github.com/Mango/emitter/tar.gz/41ab8a3956269c7ed468bde50203e15b3274152f}
-    name: emitter
-    version: 0.0.7
-    dev: false
-
-  github.com/robertpiosi/slideout/03310d084d67f59108b48695368d9de94e86896a:
-    resolution: {tarball: https://codeload.github.com/robertpiosi/slideout/tar.gz/03310d084d67f59108b48695368d9de94e86896a}
-    name: slideout
-    version: 1.0.1
-    dependencies:
-      decouple: 0.0.2
-      emitter: github.com/Mango/emitter/41ab8a3956269c7ed468bde50203e15b3274152f
     dev: false

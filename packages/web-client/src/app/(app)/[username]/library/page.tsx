@@ -8,7 +8,7 @@ import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
 import { ButtonSelect } from '@web-ui/components/app/atoms/button-select'
-import { SimpleSelectDropdown } from '@web-ui/components/app/atoms/simple-select-dropdown'
+import { DropdownMenu } from '@web-ui/components/app/atoms/dropdown-menu'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { Sortby } from '@shared/types/modules/bookmarks/sortby'
@@ -129,7 +129,7 @@ const Page: React.FC = () => {
                 onOutsideClick={toggle_filter_dropdown}
                 disabled={!is_filter_dropdown_visible}
               >
-                <SimpleSelectDropdown
+                <DropdownMenu
                   items={[
                     {
                       label: 'All',
@@ -203,8 +203,6 @@ const Page: React.FC = () => {
                         current_filter == LibraryFilter.Archived ||
                         current_filter == LibraryFilter.ArchivedNsfwExcluded,
                     },
-                  ]}
-                  checkboxes={[
                     {
                       label: 'Exclude NSFW',
                       on_click: () => {
@@ -218,7 +216,7 @@ const Page: React.FC = () => {
 
                         is_nsfw_excluded ? include_nsfw() : exclude_nsfw()
                       },
-                      is_selected: is_nsfw_excluded,
+                      is_checked: is_nsfw_excluded,
                     },
                   ]}
                 />
@@ -241,7 +239,7 @@ const Page: React.FC = () => {
                 onOutsideClick={toggle_sortby_dropdown}
                 disabled={!is_sortby_dropdown_visible}
               >
-                <SimpleSelectDropdown
+                <DropdownMenu
                   items={[
                     {
                       label: _sortby_option_to_label(Sortby.CreatedAt),
@@ -293,7 +291,7 @@ const Page: React.FC = () => {
                 onOutsideClick={toggle_order_dropdown}
                 disabled={!is_order_dropdown_visible}
               >
-                <SimpleSelectDropdown
+                <DropdownMenu
                   items={[
                     {
                       label: _order_option_to_label(Order.Desc),
@@ -490,6 +488,7 @@ const Page: React.FC = () => {
                   )
                 }}
                 favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
+                menu_slot={<>menu</>}
               />
             ))
           : []

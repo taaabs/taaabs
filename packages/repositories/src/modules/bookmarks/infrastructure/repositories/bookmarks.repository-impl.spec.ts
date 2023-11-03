@@ -1,5 +1,5 @@
 import { Bookmarks_DataSource } from '../data-sources/bookmarks.data-source'
-import { Bookmarks_Ro } from '../../domain/types/bookmarks.ro'
+import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
 import { Bookmarks_RepositoryImpl } from './bookmarks.repository-impl'
 import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { MockProxy, mock, mockReset } from 'jest-mock-extended'
@@ -35,7 +35,7 @@ describe('Bookmarks_RepositoryImpl', () => {
           has_more: false,
         },
       }
-      const ro: Bookmarks_Ro = {
+      const ro: GetBookmarks_Ro = {
         bookmarks: [
           {
             id: '1',
@@ -82,7 +82,7 @@ describe('Bookmarks_RepositoryImpl', () => {
           has_more: false,
         },
       }
-      const ro: Bookmarks_Ro = {
+      const ro: GetBookmarks_Ro = {
         bookmarks: [
           {
             id: '1',

@@ -10,7 +10,7 @@ export const get_public_months = (params: {
   request_params: Months_Params.Public
   api_url: string
 }) => {
-  return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
+  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
     const data_source = new Months_DataSourceImpl(params.api_url, '')
     const repository = new Months_RepositoryImpl(data_source)
     const get_months = new GetMonthsOnPublicUser_UseCase(repository)
@@ -22,7 +22,7 @@ export const get_public_months = (params: {
     dispatch(months_actions.set_data(result))
     dispatch(months_actions.set_is_getting_data(false))
 
-    const state = getState()
+    const state = get_state()
     if (
       !state.bookmarks.is_getting_data &&
       state.bookmarks.is_getting_first_bookmarks

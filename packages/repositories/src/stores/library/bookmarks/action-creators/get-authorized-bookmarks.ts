@@ -1,17 +1,17 @@
-import { Bookmarks_Params } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { bookmarks_actions } from '../bookmarks.slice'
 import { LibraryDispatch, LibraryState } from '../../library.store'
 import { months_actions } from '../../months/months.slice'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { GetBookmarksOnAuthorizedUser_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-authorized-user.use-case'
+import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
 
 export const get_authorized_bookmarks = (params: {
-  request_params: Bookmarks_Params.Authorized
+  request_params: GetBookmarks_Params.Authorized
   api_url: string
   auth_token: string
 }) => {
-  return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
+  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
     const data_source = new Bookmarks_DataSourceImpl(
       params.api_url,
       params.auth_token,
@@ -40,7 +40,7 @@ export const get_authorized_bookmarks = (params: {
       dispatch(bookmarks_actions.set_is_getting_more_bookmarks(false))
     } else {
       dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks))
-      if (!getState().months.is_getting_months_data) {
+      if (!get_state().months.is_getting_months_data) {
         dispatch(bookmarks_actions.set_bookmarks(bookmarks))
         dispatch(months_actions.process_tags())
         dispatch(bookmarks_actions.set_is_getting_first_bookmarks(false))
