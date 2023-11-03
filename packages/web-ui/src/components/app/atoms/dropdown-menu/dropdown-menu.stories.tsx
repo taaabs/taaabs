@@ -1,5 +1,5 @@
 import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
-import { SimpleSelectDropdown } from './index'
+import { DropdownMenu } from './index'
 
 export default {
   component: SimpleSelectDropdown,

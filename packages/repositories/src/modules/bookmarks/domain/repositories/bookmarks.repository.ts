@@ -1,15 +1,18 @@
-import { Bookmarks_Ro } from '../types/bookmarks.ro'
-import { Bookmarks_Params } from '../types/bookmarks.params'
+import { GetBookmarks_Ro } from '../types/get-bookmarks.ro'
+import { DeleteBookmark_Params } from '../types/delete-bookmark.params'
+import { GetBookmarks_Params } from '../types/get-bookmarks.params'
 import { RecordVisit_Params } from '../types/record-visit.params'
 
 export type Bookmarks_Repository = {
   get_bookmarks_on_authorized_user(
-    params: Bookmarks_Params.Authorized,
-  ): Promise<Bookmarks_Ro>
+    params: GetBookmarks_Params.Authorized,
+  ): Promise<GetBookmarks_Ro>
 
   get_bookmarks_on_public_user(
-    params: Bookmarks_Params.Public,
-  ): Promise<Bookmarks_Ro>
+    params: GetBookmarks_Params.Public,
+  ): Promise<GetBookmarks_Ro>
 
   record_visit(params: RecordVisit_Params): Promise<void>
+
+  delete_bookmark(params: DeleteBookmark_Params): Promise<void>
 }

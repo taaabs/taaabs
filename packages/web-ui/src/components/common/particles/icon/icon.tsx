@@ -1,5 +1,6 @@
 import Add from '@web-ui/assets/icons/add.svg'
 import Bookmark from '@web-ui/assets/icons/bookmark.svg'
+import Delete from '@web-ui/assets/icons/delete.svg'
 import Google from '@web-ui/assets/icons/google.svg'
 import GreaterThan from '@web-ui/assets/icons/greater-than.svg'
 import Home from '@web-ui/assets/icons/home.svg'
@@ -25,6 +26,7 @@ export namespace Icon {
   export type Variant =
     | 'ADD'
     | 'BOOKMARK'
+    | 'DELETE'
     | 'GOOGLE'
     | 'GREATER_THAN'
     | 'HOME'
@@ -60,6 +62,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'BOOKMARK':
       icon = <Bookmark style={{ fill: 'var(--Icon-fill)' }} />
+      break
+    case 'DELETE':
+      icon = <Delete style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'GOOGLE':
       icon = <Google />

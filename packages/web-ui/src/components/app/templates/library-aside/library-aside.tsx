@@ -33,15 +33,15 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
           <Icon variant="THREE_DOTS" />
         </button>
       </div>
-      <div className={styles['sort-and-filtering']}>
+      <div className={styles['slots']}>
         {props.slot_filter && (
-          <div className={styles['sort-and-filtering__button']}>
+          <div className={styles['slots__button']}>
             {props.slot_filter.button}
             <div
               className={cn([
-                styles['sort-and-filtering__button__dropdown'],
+                styles['slots__button__dropdown'],
                 {
-                  [styles['sort-and-filtering__button__dropdown--hidden']]:
+                  [styles['slots__button__dropdown--hidden']]:
                     !props.slot_filter.is_dropdown_visible,
                 },
               ])}
@@ -51,13 +51,13 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
           </div>
         )}
         {props.slot_sortby && (
-          <div className={styles['sort-and-filtering__button']}>
+          <div className={styles['slots__button']}>
             {props.slot_sortby.button}
             <div
               className={cn([
-                styles['sort-and-filtering__button__dropdown'],
+                styles['slots__button__dropdown'],
                 {
-                  [styles['sort-and-filtering__button__dropdown--hidden']]:
+                  [styles['slots__button__dropdown--hidden']]:
                     !props.slot_sortby.is_dropdown_visible,
                 },
               ])}
@@ -67,13 +67,13 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
           </div>
         )}
         {props.slot_order && (
-          <div className={styles['sort-and-filtering__button']}>
+          <div className={styles['slots__button']}>
             {props.slot_order.button}
             <div
               className={cn([
-                styles['sort-and-filtering__button__dropdown'],
+                styles['slots__button__dropdown'],
                 {
-                  [styles['sort-and-filtering__button__dropdown--hidden']]:
+                  [styles['slots__button__dropdown--hidden']]:
                     !props.slot_order.is_dropdown_visible,
                 },
               ])}

@@ -1,7 +1,8 @@
 import { Bookmarks_DataSource } from './bookmarks.data-source'
 import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
-import { Bookmarks_Params } from '../../domain/types/bookmarks.params'
+import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { RecordVisit_Params } from '../../domain/types/record-visit.params'
+import { DeleteBookmark_Params } from '../../domain/types/delete-bookmark.params'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -10,7 +11,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   ) {}
 
   public async get_bookmarks_on_authorized_user(
-    params: Bookmarks_Params.Authorized,
+    params: GetBookmarks_Params.Authorized,
   ): Promise<Bookmarks_Dto.Response.Authorized> {
     const queryParams: Bookmarks_Dto.QueryParams.Authorized = {
       tags: params.tags?.join(','),
@@ -47,7 +48,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   }
 
   public async get_bookmarks_on_public_user(
-    params: Bookmarks_Params.Public,
+    params: GetBookmarks_Params.Public,
   ): Promise<Bookmarks_Dto.Response.Public> {
     const queryParams: Bookmarks_Dto.QueryParams.Public = {
       tags: params.tags?.join(','),
@@ -86,5 +87,14 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         },
       },
     )
+  }
+
+  public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
+    await fetch(`${this._api_url}/v1/bookmarks/${params.bookmark_id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${this._auth_token}`,
+      },
+    })
   }
 }

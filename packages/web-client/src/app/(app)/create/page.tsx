@@ -1,5 +1,3 @@
-'use client'
-
 const Page: React.FC = () => {
   return (
     <div>
@@ -8,7 +6,8 @@ const Page: React.FC = () => {
       <br />
       <br />
       <br />
-      edit
+      <br />
+      edit separate
     </div>
   )
 }

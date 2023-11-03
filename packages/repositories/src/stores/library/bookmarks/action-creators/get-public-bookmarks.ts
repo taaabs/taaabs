@@ -1,16 +1,16 @@
-import { Bookmarks_Params } from '@repositories/modules/bookmarks/domain/types/bookmarks.params'
 import { bookmarks_actions } from '../bookmarks.slice'
 import { LibraryDispatch, LibraryState } from '../../library.store'
 import { months_actions } from '../../months/months.slice'
 import { GetBookmarksOnPublicUser_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-public-user.use-case'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
+import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
 
 export const get_public_bookmarks = (params: {
-  request_params: Bookmarks_Params.Public
+  request_params: GetBookmarks_Params.Public
   api_url: string
 }) => {
-  return async (dispatch: LibraryDispatch, getState: () => LibraryState) => {
+  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
     const data_source = new Bookmarks_DataSourceImpl(params.api_url, '')
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const get_bookmarks = new GetBookmarksOnPublicUser_UseCase(repository)
@@ -36,7 +36,7 @@ export const get_public_bookmarks = (params: {
       dispatch(bookmarks_actions.set_is_getting_more_bookmarks(false))
     } else {
       dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks))
-      if (!getState().months.is_getting_months_data) {
+      if (!get_state().months.is_getting_months_data) {
         dispatch(bookmarks_actions.set_bookmarks(bookmarks))
         dispatch(months_actions.process_tags())
         dispatch(bookmarks_actions.set_is_getting_first_bookmarks(false))

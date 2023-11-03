@@ -8,6 +8,8 @@ declare const styles: {
   readonly bookmark__title__inner__text: string
   readonly bookmark__menu: string
   readonly bookmark__menu__button: string
+  readonly bookmark__menu__slot: string
+  readonly 'bookmark__menu__slot--hidden': string
   readonly bookmark__info: string
   readonly bookmark__info__tag: string
   readonly bookmark__info__tag__name: string

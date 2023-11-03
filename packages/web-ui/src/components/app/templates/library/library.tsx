@@ -3,6 +3,7 @@ import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
+import useWindowResize from 'beautiful-react-hooks/useWindowResize'
 import cn from 'classnames'
 import { useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
@@ -19,6 +20,7 @@ export namespace Library {
     slot_aside: React.ReactNode
     title_bar?: string
     slot_bookmarks: React.ReactNode
+    is_updating_bookmarks: boolean
     is_getting_first_bookmarks: boolean
     is_getting_more_bookmarks: boolean
     has_more_bookmarks: boolean
@@ -42,6 +44,16 @@ export const Library: React.FC<Library.Props> = (props) => {
   const is_hydrated = use_is_hydrated()
   use_scroll_restore()
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
+  const onWindowResize = useWindowResize()
+
+  onWindowResize(() => {
+    document.body.style.overflow = ''
+    if (is_side_left_open) {
+      toggle_left_side()
+    } else if (is_side_right_open) {
+      toggle_right_side()
+    }
+  })
 
   // Removing 'useSwipeEvents' breaks reload/history back. Investigate why.
   useSwipeEvents(undefined, {
@@ -62,7 +74,12 @@ export const Library: React.FC<Library.Props> = (props) => {
   const [is_side_right_open, set_is_side_right_open] = useState(false)
 
   useUpdateEffect(() => {
-    if (props.is_user_swiping_months || props.is_getting_first_bookmarks) return
+    if (
+      props.is_user_swiping_months ||
+      props.is_getting_first_bookmarks ||
+      window.innerWidth > sharedValues.mediaQuery992
+    )
+      return
 
     if (swipe_state_container.direction == 'left') {
       if (!is_side_left_open && !is_side_right_open) {
@@ -233,7 +250,8 @@ export const Library: React.FC<Library.Props> = (props) => {
                   styles.main__inner__bookmarks,
                   {
                     [styles['main__inner__bookmarks--loading']]:
-                      props.is_getting_first_bookmarks,
+                      props.is_getting_first_bookmarks ||
+                      props.is_updating_bookmarks,
                   },
                 ])}
                 style={{

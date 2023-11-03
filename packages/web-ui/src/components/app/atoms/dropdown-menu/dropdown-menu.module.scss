@@ -33,24 +33,19 @@
   &:first-of-type {
     border-top: none;
   }
-  &__tick {
+  &__icon {
     margin-right: var(--distance-11px);
     display: flex;
     align-items: center;
-    visibility: hidden;
+    width: var(--icon-dimension-13px);
     svg {
-      width: var(--icon-dimension-12px);
-      height: var(--icon-dimension-12px);
-    }
-    &--selected {
-      visibility: visible;
+      width: var(--icon-dimension-13px);
+      height: var(--icon-dimension-13px);
     }
   }
   &--with-checkbox {
     padding: var(--distance-8px) var(--distance-16px) var(--distance-8px)
       var(--distance-8px);
-    @include hover {
-    }
   }
   &--disabled {
     pointer-events: none;
@@ -72,7 +67,7 @@
       width: var(--icon-dimension-12px);
       height: var(--icon-dimension-12px);
     }
-    &--selected {
+    &--checked {
       svg {
         visibility: visible;
       }

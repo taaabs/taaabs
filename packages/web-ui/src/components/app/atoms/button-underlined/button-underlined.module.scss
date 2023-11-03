@@ -23,9 +23,7 @@
     transform: translateX(-50%);
   }
   @include hover {
-    &::before {
-      @include text-decoration-underline;
-    }
+    background: rgba(15, 20, 25, 0.05);
   }
   > span {
     height: 100%;

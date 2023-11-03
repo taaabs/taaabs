@@ -1,15 +1,16 @@
 import { Bookmarks_Repository } from '../../domain/repositories/bookmarks.repository'
 import { Bookmarks_DataSource } from '../data-sources/bookmarks.data-source'
-import { Bookmarks_Ro } from '../../domain/types/bookmarks.ro'
-import { Bookmarks_Params } from '../../domain/types/bookmarks.params'
+import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
+import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { RecordVisit_Params } from '../../domain/types/record-visit.params'
+import { DeleteBookmark_Params } from '../../domain/types/delete-bookmark.params'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarksDataSource: Bookmarks_DataSource) {}
 
   public async get_bookmarks_on_authorized_user(
-    params: Bookmarks_Params.Authorized,
-  ): Promise<Bookmarks_Ro> {
+    params: GetBookmarks_Params.Authorized,
+  ): Promise<GetBookmarks_Ro> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.get_bookmarks_on_authorized_user(params)
 
@@ -40,8 +41,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   }
 
   public async get_bookmarks_on_public_user(
-    params: Bookmarks_Params.Public,
-  ): Promise<Bookmarks_Ro> {
+    params: GetBookmarks_Params.Public,
+  ): Promise<GetBookmarks_Ro> {
     const { bookmarks, pagination } =
       await this._bookmarksDataSource.get_bookmarks_on_public_user(params)
 
@@ -71,5 +72,9 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
 
   public async record_visit(params: RecordVisit_Params): Promise<void> {
     await this._bookmarksDataSource.record_visit(params)
+  }
+
+  public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
+    await this._bookmarksDataSource.delete_bookmark(params)
   }
 }
