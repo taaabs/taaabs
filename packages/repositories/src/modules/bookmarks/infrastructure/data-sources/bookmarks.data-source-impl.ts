@@ -3,6 +3,8 @@ import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { RecordVisit_Params } from '../../domain/types/record-visit.params'
 import { DeleteBookmark_Params } from '../../domain/types/delete-bookmark.params'
+import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params'
+import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookmark.dto'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -96,5 +98,45 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         Authorization: `Bearer ${this._auth_token}`,
       },
     })
+  }
+
+  public async upsert_bookmark(params: UpsertBookmark_Params): Promise<void> {
+    const bookmark: CreateBookmark_Dto = {
+      created_at: params.created_at,
+      title: params.title,
+      is_public: params.is_public || undefined,
+      is_archived: params.is_archived || undefined,
+      is_starred: params.is_starred || undefined,
+      is_nsfw: params.is_nsfw || undefined,
+      tags: params.tags.map((tag) => ({
+        name: tag.name,
+        is_public: tag.is_public || undefined,
+      })),
+      links: params.links.map((link) => ({
+        url: link.url,
+        site_path: link.site_path,
+        is_public: link.is_public || undefined,
+      })),
+    }
+
+    if (params.bookmark_id) {
+      await fetch(`${this._api_url}/v1/bookmarks/${params.bookmark_id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookmark),
+      })
+    } else {
+      await fetch(`${this._api_url}/v1/bookmarks`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookmark),
+      })
+    }
   }
 }

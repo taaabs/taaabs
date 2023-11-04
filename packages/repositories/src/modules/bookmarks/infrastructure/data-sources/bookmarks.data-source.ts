@@ -2,6 +2,7 @@ import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { RecordVisit_Params } from '../../domain/types/record-visit.params'
 import { DeleteBookmark_Params } from '../../domain/types/delete-bookmark.params'
+import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params'
 
 export type Bookmarks_DataSource = {
   get_bookmarks_on_authorized_user(
@@ -15,4 +16,6 @@ export type Bookmarks_DataSource = {
   record_visit(params: RecordVisit_Params): Promise<void>
 
   delete_bookmark(params: DeleteBookmark_Params): Promise<void>
+
+  upsert_bookmark(params: UpsertBookmark_Params): Promise<void>
 }

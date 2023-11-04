@@ -34,6 +34,7 @@ import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infras
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 import { Icon } from '@web-ui/components/common/particles/icon'
+import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -536,6 +537,47 @@ const Page: React.FC = () => {
                 menu_slot={
                   <DropdownMenu
                     items={[
+                      {
+                        label: !(
+                          current_filter == LibraryFilter.Archived ||
+                          current_filter == LibraryFilter.ArchivedNsfwExcluded
+                        )
+                          ? 'Archive'
+                          : 'Restore',
+                        other_icon: <Icon variant="DELETE" />,
+                        on_click: () => {
+                          const updated_bookmark: UpsertBookmark_Params = {
+                            bookmark_id: bookmark.id,
+                            created_at: new Date(bookmark.created_at),
+                            title: bookmark.title,
+                            is_public: bookmark.is_public,
+                            is_archived: !(
+                              current_filter == LibraryFilter.Archived ||
+                              current_filter ==
+                                LibraryFilter.ArchivedNsfwExcluded
+                            ),
+                            is_nsfw: bookmark.is_nsfw,
+                            is_starred: bookmark.is_starred,
+                            links: bookmark.links.map((link) => ({
+                              url: link.url,
+                              site_path: link.site_path || '',
+                              is_public: link.is_public,
+                            })),
+                            tags: bookmark.tags.map((tag) => ({
+                              name: tag.name,
+                              is_public: tag.is_public,
+                            })),
+                          }
+                          dispatch(
+                            bookmarks_actions.upsert_bookmark({
+                              bookmark: updated_bookmark,
+                              api_url: process.env.NEXT_PUBLIC_API_URL,
+                              auth_token:
+                                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                            }),
+                          )
+                        },
+                      },
                       {
                         label: 'Delete',
                         on_click: () => {

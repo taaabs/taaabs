@@ -33,6 +33,10 @@
   &:first-of-type {
     border-top: none;
   }
+  > span {
+    white-space: nowrap;
+
+  }
   &__icon {
     margin-right: var(--distance-11px);
     display: flex;

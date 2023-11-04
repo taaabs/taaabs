@@ -1,6 +1,6 @@
 import { Settings_Repository } from '../../domain/repositories/settings.repository'
 import { MyUsername } from '../../domain/types/my-username'
-import { UpdateUsername } from '../../domain/types/update-username'
+import { UpdateUsername_Params } from '../../domain/types/update-username.params'
 import { UsernameAvailability } from '../../domain/types/username-availability'
 import { Settings_DataSource } from '../data-sources/settings.data-source'
 
@@ -26,7 +26,7 @@ export class Settings_RepositoryImpl implements Settings_Repository {
     }
   }
 
-  public async update_username(params: UpdateUsername.Params): Promise<void> {
+  public async update_username(params: UpdateUsername_Params): Promise<void> {
     return this._settings_data_source.update_username(params)
   }
 }
