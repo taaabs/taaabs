@@ -30,13 +30,13 @@ export const upsert_bookmark = (params: {
 
     if (params.bookmark.bookmark_id) {
       if (!state.bookmarks.bookmarks)
-        throw new Error('[upsert_bookmark] Bookmarks should be there')
+        throw new Error('[upsert_bookmark] Bookmarks should be there.')
       if (!params.last_authorized_months_params)
         throw new Error(
-          '[upsert_bookmark] Last authorized months params should be there',
+          '[upsert_bookmark] Last authorized months params should be there.',
         )
 
-      const is_archived_toggled =
+      const is_archived_toggled_should_remove =
         (!params.bookmark.is_archived &&
           (params.last_authorized_months_params.filter ==
             LibraryFilter.Archived ||
@@ -50,7 +50,7 @@ export const upsert_bookmark = (params: {
               LibraryFilter.ArchivedNsfwExcluded
           ))
 
-      const is_nsfw_toggled =
+      const is_nsfw_toggled_should_remove =
         params.bookmark.is_nsfw &&
         (params.last_authorized_months_params.filter ==
           LibraryFilter.AllNsfwExcluded ||
@@ -59,14 +59,18 @@ export const upsert_bookmark = (params: {
           params.last_authorized_months_params.filter ==
             LibraryFilter.StarredOnlyNsfwExcluded)
 
-      const is_starred_toggled =
+      const is_starred_toggled_should_remove =
         !params.bookmark.is_starred &&
         (params.last_authorized_months_params.filter ==
           LibraryFilter.StarredOnly ||
           params.last_authorized_months_params.filter ==
             LibraryFilter.StarredOnlyNsfwExcluded)
 
-      if (is_archived_toggled || is_nsfw_toggled || is_starred_toggled) {
+      if (
+        is_archived_toggled_should_remove ||
+        is_nsfw_toggled_should_remove ||
+        is_starred_toggled_should_remove
+      ) {
         dispatch(
           bookmarks_actions.set_incoming_bookmarks(
             state.bookmarks.bookmarks.filter(
@@ -74,14 +78,51 @@ export const upsert_bookmark = (params: {
             ),
           ),
         )
+      } else {
+        const modified_bookmark_index = state.bookmarks.bookmarks.findIndex(
+          (bookmark) => bookmark.id == params.bookmark.bookmark_id,
+        )
+
+        if (modified_bookmark_index == -1)
+          throw new Error('[upsert_bookmark] Bookmark should be there.')
+
+        let modified_bookmark =
+          state.bookmarks.bookmarks[modified_bookmark_index]
+
+        if (modified_bookmark.is_starred != params.bookmark.is_starred) {
+          modified_bookmark = {
+            ...modified_bookmark,
+            is_starred: !modified_bookmark.is_starred,
+          }
+        }
+
+        if (modified_bookmark.is_nsfw != params.bookmark.is_nsfw) {
+          modified_bookmark = {
+            ...modified_bookmark,
+            is_nsfw: !modified_bookmark.is_nsfw,
+          }
+        }
+
         dispatch(
-          months_actions.refresh_authorized_months({
-            last_authorized_months_params: params.last_authorized_months_params,
-            api_url: params.api_url,
-            auth_token: params.auth_token,
-          }),
+          bookmarks_actions.set_incoming_bookmarks(
+            state.bookmarks.bookmarks.map((bookmark) => {
+              if (bookmark.id == modified_bookmark.id) {
+                return modified_bookmark
+              } else {
+                return bookmark
+              }
+            }),
+          ),
         )
       }
+
+      dispatch(
+        months_actions.refresh_authorized_months({
+          last_authorized_months_params: params.last_authorized_months_params,
+          api_url: params.api_url,
+          auth_token: params.auth_token,
+        }),
+      )
     }
   }
 }

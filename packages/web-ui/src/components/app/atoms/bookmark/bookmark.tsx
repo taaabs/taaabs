@@ -2,7 +2,7 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
-import { memo, useEffect, useRef } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
@@ -54,17 +54,27 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const ref = useRef<HTMLDivElement>(null)
     const is_visible = useViewportSpy(ref)
     const [is_menu_open, toggle_is_menu_open] = useToggle(false)
+    const [render_height, set_render_height] = useState<number | undefined>(
+      undefined,
+    )
 
     useEffect(() => {
-      if (props.render_height) return
-      props.set_render_height(ref.current!.clientHeight)
-    }, [])
+      if (typeof render_height == 'undefined' && props.render_height) {
+        set_render_height(props.render_height)
+      } else {
+        set_render_height(0)
+        setTimeout(() => {
+          props.set_render_height(ref.current!.clientHeight)
+          set_render_height(ref.current!.clientHeight)
+        }, 0)
+      }
+    }, [props.is_nsfw])
 
     return (
       <div
         ref={ref}
         style={{
-          height: props.render_height ? props.render_height : undefined,
+          height: render_height ? render_height : undefined,
         }}
       >
         {is_visible == undefined || is_visible || !props.render_height ? (
@@ -103,7 +113,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   }}
                 >
                   <button
-                    className={styles.bookmark__menu__button}
+                    className={cn(styles.bookmark__menu__button, {
+                      [styles['bookmark__menu--toggled']]: is_menu_open,
+                    })}
                     onClick={(e) => {
                       e.stopPropagation()
                       toggle_is_menu_open()
@@ -257,6 +269,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
   },
   (o, n) =>
     o.index == n.index &&
+    o.is_starred == n.is_starred &&
+    o.is_nsfw == n.is_nsfw &&
     o.render_height == n.render_height &&
     JSON.stringify(o.tags) == JSON.stringify(n.tags),
 )

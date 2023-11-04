@@ -110,9 +110,16 @@
         }
       }
     }
+    &--toggled {
+      background: var(--Bookmark-action-background-hover);
+      svg {
+        fill: var(--Bookmark-action-fill-hover) !important;
+      }
+    }
     &__slot {
       position: absolute;
-      top: var(--button-dimension-28px);
+      z-index: 1;
+      top: calc(var(--button-dimension-28px) + var(--distance-4px));
       right: 0;
       bottom: calc(var(--distance-4px) * -1);
       opacity: 1;
