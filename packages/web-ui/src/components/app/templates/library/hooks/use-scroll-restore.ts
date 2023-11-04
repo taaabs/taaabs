@@ -33,7 +33,6 @@ export const use_scroll_restore = () => {
       `scroll_y__${query_params.toString()}`,
     )
     if (scroll_y) {
-      // Ensures triggering scroll position change in a first idle frame.
       setTimeout(() => {
         window.scrollTo(0, parseInt(scroll_y))
       }, 0)

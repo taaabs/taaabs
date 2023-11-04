@@ -1,4 +1,5 @@
 import Add from '@web-ui/assets/icons/add.svg'
+import Archive from '@web-ui/assets/icons/archive.svg'
 import Bookmark from '@web-ui/assets/icons/bookmark.svg'
 import Delete from '@web-ui/assets/icons/delete.svg'
 import Google from '@web-ui/assets/icons/google.svg'
@@ -25,6 +26,7 @@ import User from '@web-ui/assets/icons/user.svg'
 export namespace Icon {
   export type Variant =
     | 'ADD'
+    | 'ARCHIVE'
     | 'BOOKMARK'
     | 'DELETE'
     | 'GOOGLE'
@@ -59,6 +61,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
   switch (variant) {
     case 'ADD':
       icon = <Add style={{ fill: 'var(--Icon-fill)' }} />
+      break
+    case 'ARCHIVE':
+      icon = <Archive style={{ fill: 'var(--Icon-fill)' }} />
       break
     case 'BOOKMARK':
       icon = <Bookmark style={{ fill: 'var(--Icon-fill)' }} />

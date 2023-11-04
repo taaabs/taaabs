@@ -20,7 +20,7 @@ export namespace Library {
     slot_aside: React.ReactNode
     title_bar?: string
     slot_bookmarks: React.ReactNode
-    is_updating_bookmarks: boolean
+    is_updating_bookmarks?: boolean
     is_getting_first_bookmarks: boolean
     is_getting_more_bookmarks: boolean
     has_more_bookmarks: boolean
