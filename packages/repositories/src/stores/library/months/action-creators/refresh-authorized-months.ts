@@ -4,20 +4,14 @@ import { Months_RepositoryImpl } from '@repositories/modules/months/infrastructu
 import { GetMonthsOnAuthorizedUser_UseCase } from '@repositories/modules/months/domain/usecases/get-months-on-authorized-user.use-case'
 import { months_actions } from '../months.slice'
 import { bookmarks_actions } from '../../bookmarks/bookmarks.slice'
+import { Months_Params } from '@repositories/modules/months/domain/types/months.params'
 
 export const refresh_authorized_months = (params: {
+  last_authorized_months_params: Months_Params.Authorized
   api_url: string
   auth_token: string
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
-    const last_authorized_months_params =
-      get_state().months.last_authorized_months_params
-
-    if (!last_authorized_months_params)
-      throw new Error(
-        '[refresh_authorized_months] Last params should be there.',
-      )
-
     const data_source = new Months_DataSourceImpl(
       params.api_url,
       params.auth_token,
@@ -30,7 +24,7 @@ export const refresh_authorized_months = (params: {
     dispatch(months_actions.set_is_getting_data(true))
 
     const result = await get_months_use_case.invoke(
-      last_authorized_months_params,
+      params.last_authorized_months_params,
     )
 
     const state = get_state()

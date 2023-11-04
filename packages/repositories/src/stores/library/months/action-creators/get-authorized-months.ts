@@ -12,10 +12,6 @@ export const get_authorized_months = (params: {
   auth_token: string
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
-    dispatch(
-      months_actions.set_last_authorized_months_params(params.request_params),
-    )
-
     const data_source = new Months_DataSourceImpl(
       params.api_url,
       params.auth_token,

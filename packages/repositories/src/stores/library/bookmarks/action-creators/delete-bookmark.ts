@@ -4,9 +4,11 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { DeleteBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/delete-bookmark.use-case'
 import { bookmarks_actions } from '../bookmarks.slice'
 import { months_actions } from '../../months/months.slice'
+import { Months_Params } from '@repositories/modules/months/domain/types/months.params'
 
 export const delete_bookmark = (params: {
   bookmark_id: string
+  last_authorized_months_params: Months_Params.Authorized
   api_url: string
   auth_token: string
 }) => {
@@ -36,6 +38,7 @@ export const delete_bookmark = (params: {
     )
     dispatch(
       months_actions.refresh_authorized_months({
+        last_authorized_months_params: params.last_authorized_months_params,
         api_url: params.api_url,
         auth_token: params.auth_token,
       }),

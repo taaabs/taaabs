@@ -35,6 +35,7 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 import { Icon } from '@web-ui/components/common/particles/icon'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
+import { browser_storage } from '@/constants/browser-storage'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -571,6 +572,13 @@ const Page: React.FC = () => {
                           dispatch(
                             bookmarks_actions.upsert_bookmark({
                               bookmark: updated_bookmark,
+                              last_authorized_months_params:
+                                JSON.parse(
+                                  sessionStorage.getItem(
+                                    browser_storage.session_storage
+                                      .last_authorized_months_params,
+                                  ) || '',
+                                ) || undefined,
                               api_url: process.env.NEXT_PUBLIC_API_URL,
                               auth_token:
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -583,6 +591,13 @@ const Page: React.FC = () => {
                         on_click: () => {
                           dispatch(
                             bookmarks_actions.delete_bookmark({
+                              last_authorized_months_params:
+                                JSON.parse(
+                                  sessionStorage.getItem(
+                                    browser_storage.session_storage
+                                      .last_authorized_months_params,
+                                  ) || '',
+                                ) || undefined,
                               bookmark_id: bookmark.id,
                               api_url: process.env.NEXT_PUBLIC_API_URL,
                               auth_token:

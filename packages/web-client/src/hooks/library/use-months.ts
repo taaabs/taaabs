@@ -9,6 +9,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { months_actions } from '@repositories/stores/library/months/months.slice'
 import { Months_Params } from '@repositories/modules/months/domain/types/months.params'
+import { browser_storage } from '@/constants/browser-storage'
 
 export const use_months = () => {
   const query_params = use_shallow_search_params()
@@ -47,6 +48,10 @@ export const use_months = () => {
           Object.values(LibraryFilter)[parseInt(query_filter)]
       }
 
+      sessionStorage.setItem(
+        browser_storage.session_storage.last_authorized_months_params,
+        JSON.stringify(request_params),
+      )
       dispatch(
         months_actions.get_authorized_months({
           request_params,
