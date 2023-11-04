@@ -539,6 +539,94 @@ const Page: React.FC = () => {
                   <DropdownMenu
                     items={[
                       {
+                        label: bookmark.is_nsfw
+                          ? 'Unmark NSFW'
+                          : 'Mark as NSFW',
+                        is_checked: bookmark.is_nsfw,
+                        on_click: () => {
+                          const updated_bookmark: UpsertBookmark_Params = {
+                            bookmark_id: bookmark.id,
+                            created_at: new Date(bookmark.created_at),
+                            title: bookmark.title,
+                            is_public: bookmark.is_public,
+                            is_archived:
+                              current_filter == LibraryFilter.Archived ||
+                              current_filter ==
+                                LibraryFilter.ArchivedNsfwExcluded,
+                            is_nsfw: !bookmark.is_nsfw,
+                            is_starred: bookmark.is_starred,
+                            links: bookmark.links.map((link) => ({
+                              url: link.url,
+                              site_path: link.site_path || '',
+                              is_public: link.is_public,
+                            })),
+                            tags: bookmark.tags.map((tag) => ({
+                              name: tag.name,
+                              is_public: tag.is_public,
+                            })),
+                          }
+                          dispatch(
+                            bookmarks_actions.upsert_bookmark({
+                              bookmark: updated_bookmark,
+                              last_authorized_months_params:
+                                JSON.parse(
+                                  sessionStorage.getItem(
+                                    browser_storage.session_storage
+                                      .last_authorized_months_params,
+                                  ) || '',
+                                ) || undefined,
+                              api_url: process.env.NEXT_PUBLIC_API_URL,
+                              auth_token:
+                                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                            }),
+                          )
+                        },
+                      },
+                      {
+                        label: bookmark.is_starred
+                          ? 'Unmark starred'
+                          : 'Mark as starred',
+                        is_checked: bookmark.is_starred,
+                        on_click: () => {
+                          const updated_bookmark: UpsertBookmark_Params = {
+                            bookmark_id: bookmark.id,
+                            created_at: new Date(bookmark.created_at),
+                            title: bookmark.title,
+                            is_public: bookmark.is_public,
+                            is_archived:
+                              current_filter == LibraryFilter.Archived ||
+                              current_filter ==
+                                LibraryFilter.ArchivedNsfwExcluded,
+                            is_nsfw: bookmark.is_nsfw,
+                            is_starred: !bookmark.is_starred,
+                            links: bookmark.links.map((link) => ({
+                              url: link.url,
+                              site_path: link.site_path || '',
+                              is_public: link.is_public,
+                            })),
+                            tags: bookmark.tags.map((tag) => ({
+                              name: tag.name,
+                              is_public: tag.is_public,
+                            })),
+                          }
+                          dispatch(
+                            bookmarks_actions.upsert_bookmark({
+                              bookmark: updated_bookmark,
+                              last_authorized_months_params:
+                                JSON.parse(
+                                  sessionStorage.getItem(
+                                    browser_storage.session_storage
+                                      .last_authorized_months_params,
+                                  ) || '',
+                                ) || undefined,
+                              api_url: process.env.NEXT_PUBLIC_API_URL,
+                              auth_token:
+                                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                            }),
+                          )
+                        },
+                      },
+                      {
                         label: !(
                           current_filter == LibraryFilter.Archived ||
                           current_filter == LibraryFilter.ArchivedNsfwExcluded
