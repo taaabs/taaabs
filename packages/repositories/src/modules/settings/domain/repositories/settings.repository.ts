@@ -1,5 +1,5 @@
 import { MyUsername } from '../types/my-username'
-import { UpdateUsername } from '../types/update-username'
+import { UpdateUsername_Params } from '../types/update-username.params'
 import { UsernameAvailability } from '../types/username-availability'
 
 export type Settings_Repository = {
@@ -9,5 +9,5 @@ export type Settings_Repository = {
     params: UsernameAvailability.Params,
   ): Promise<UsernameAvailability.Response>
 
-  update_username(params: UpdateUsername.Params): Promise<void>
+  update_username(params: UpdateUsername_Params): Promise<void>
 }

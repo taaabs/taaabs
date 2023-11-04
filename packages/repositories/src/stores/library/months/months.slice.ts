@@ -1,7 +1,6 @@
 import { Months_Ro } from '@repositories/modules/months/domain/types/months.ro'
 import * as thunks from './action-creators'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { Months_Params } from '@repositories/modules/months/domain/types/months.params'
 
 export type Months = {
   yyyymm: number
@@ -18,7 +17,6 @@ export type MonthsState = {
   tags: Tags | null
   yyyymm_gte: number | null
   yyyymm_lte: number | null
-  last_authorized_months_params?: Months_Params.Authorized
 }
 
 const initial_state: MonthsState = {
@@ -63,12 +61,6 @@ export const months_slice = createSlice({
     },
     set_yyyymm_lte(state, action: PayloadAction<MonthsState['yyyymm_lte']>) {
       state.yyyymm_lte = action.payload
-    },
-    set_last_authorized_months_params(
-      state,
-      action: PayloadAction<MonthsState['last_authorized_months_params']>,
-    ) {
-      state.last_authorized_months_params = action.payload
     },
   },
 })

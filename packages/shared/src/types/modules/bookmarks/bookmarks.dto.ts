@@ -48,11 +48,13 @@ export namespace Bookmarks_Dto {
       public url: string
       public public_saves: number
       public site_path?: string
+      public is_public?: boolean
     }
 
     class Tag {
       public name: string
       public id: number
+      public is_public?: boolean
     }
 
     class Bookmark {
