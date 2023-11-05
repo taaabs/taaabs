@@ -102,7 +102,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
 
   public async upsert_bookmark(params: UpsertBookmark_Params): Promise<void> {
     const bookmark: CreateBookmark_Dto = {
-      created_at: params.created_at,
+      created_at: params.created_at?.toISOString(),
       title: params.title,
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,

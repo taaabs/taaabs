@@ -3,7 +3,6 @@ import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
-import useWindowResize from 'beautiful-react-hooks/useWindowResize'
 import cn from 'classnames'
 import { useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
@@ -44,24 +43,15 @@ export const Library: React.FC<Library.Props> = (props) => {
   const is_hydrated = use_is_hydrated()
   use_scroll_restore()
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
-  const onWindowResize = useWindowResize()
-
-  onWindowResize(() => {
-    document.body.style.overflow = ''
-    if (is_side_left_open) {
-      toggle_left_side()
-    } else if (is_side_right_open) {
-      toggle_right_side()
-    }
-  })
 
   // Removing 'useSwipeEvents' breaks reload/history back. Investigate why.
   useSwipeEvents(undefined, {
     preventDefault: false,
   })
+
   const swipe_state_container = useSwipe(container, {
     preventDefault: false,
-    threshold: 20,
+    threshold: 30,
   })
 
   const swipe_state_main = useSwipe(main, {
@@ -137,7 +127,6 @@ export const Library: React.FC<Library.Props> = (props) => {
 
   const toggle_left_side = () => {
     if (is_side_left_moving || is_side_right_moving) return
-    if (props.is_user_swiping_months) return
 
     if (!is_side_left_open) {
       set_is_side_left_open(true)
