@@ -127,13 +127,6 @@ export const use_months = () => {
   }, [bookmarks])
 
   useUpdateEffect(() => {
-    if (months_data) {
-      sessionStorage.setItem(
-        `months_data__${query_params.toString()}`,
-        JSON.stringify(months_data),
-      )
-    }
-
     if (tags) {
       sessionStorage.setItem(
         `tags__${query_params.toString()}`,
@@ -143,20 +136,13 @@ export const use_months = () => {
   }, [months_data, tags])
 
   useEffect(() => {
-    const months_data = sessionStorage.getItem(
-      `months_data__${query_params.toString()}`,
-    )
-    if (months_data) {
-      dispatch(months_actions.set_data(JSON.parse(months_data)))
+    const tags = sessionStorage.getItem(`tags__${query_params.toString()}`)
 
-      const tags = sessionStorage.getItem(`tags__${query_params.toString()}`)
-
-      if (tags) {
-        dispatch(months_actions.set_tags(JSON.parse(tags)))
-      }
-    } else {
-      get_months()
+    if (tags) {
+      dispatch(months_actions.set_tags(JSON.parse(tags)))
     }
+
+    get_months()
 
     return () => {
       for (const key in sessionStorage) {
