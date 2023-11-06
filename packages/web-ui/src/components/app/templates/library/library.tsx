@@ -51,7 +51,7 @@ export const Library: React.FC<Library.Props> = (props) => {
 
   const swipe_state_container = useSwipe(container, {
     preventDefault: false,
-    threshold: 30,
+    threshold: 20,
   })
 
   const swipe_state_main = useSwipe(main, {

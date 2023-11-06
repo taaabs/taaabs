@@ -24,6 +24,10 @@ dayjs.updateLocale('en', {
     hh: '%dh',
     d: '1d',
     dd: '%dd',
+    M: '',
+    MM: '',
+    y: '',
+    yy: '',
   },
 })
 
