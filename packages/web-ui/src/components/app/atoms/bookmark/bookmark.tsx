@@ -174,7 +174,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               },
                             ])}
                           >
-                            {tag.name.replaceAll('-', ' ')}
+                            {tag.name}
                           </span>
                           {tag.yields && (
                             <span
