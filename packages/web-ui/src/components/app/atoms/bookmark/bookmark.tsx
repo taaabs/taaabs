@@ -155,7 +155,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 {props.tags.length > 0 && (
                   <>
                     <span>·</span>
-                    {props.tags.map((tag) => (
+                    {props.tags.map((tag, i) => (
                       <button
                         className={styles['bookmark__info__tag']}
                         onClick={(e) => {
@@ -180,13 +180,26 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           >
                             {tag.name}
                           </span>
-                          {tag.yields && (
-                            <span
-                              className={styles['bookmark__info__tag__yields']}
-                            >
-                              {tag.yields}
-                            </span>
-                          )}
+                          {!tag.isSelected &&
+                            (tag.yields ? (
+                              <span
+                                className={
+                                  styles['bookmark__info__tag__yields']
+                                }
+                              >
+                                {tag.yields}
+                              </span>
+                            ) : (
+                              i != props.tags.length - 1 && (
+                                <span
+                                  className={
+                                    styles['bookmark__info__tag__separator']
+                                  }
+                                >
+                                  ·
+                                </span>
+                              )
+                            ))}
                           {tag.isSelected && (
                             <span
                               className={styles['bookmark__info__tag__yields']}

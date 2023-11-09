@@ -73,7 +73,6 @@ const Page: React.FC = () => {
   const [is_filter_dropdown_visible, toggle_filter_dropdown] = useToggle(false)
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
-  const [is_user_swiping_months, set_is_user_swiping_months] = useState(false)
 
   useUpdateEffect(() => {
     if (!show_months) set_show_months(true)
@@ -361,7 +360,6 @@ const Page: React.FC = () => {
                   is_range_selector_disabled={
                     current_sortby == Sortby.UpdatedAt
                   }
-                  set_swipe_state_handler={set_is_user_swiping_months}
                 />
               </div>
             ) : (
@@ -504,7 +502,6 @@ const Page: React.FC = () => {
           ? clear_gte_lte_query_params
           : undefined
       }
-      is_user_swiping_months={is_user_swiping_months}
     />
   )
 }

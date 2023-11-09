@@ -80,7 +80,6 @@ const Page: React.FC = () => {
   const [is_filter_dropdown_visible, toggle_filter_dropdown] = useToggle(false)
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
-  const [is_user_swiping_months, set_is_user_swiping_months] = useState(false)
 
   const handle_link_click = async (params: { booomark_id: string }) => {
     const data_source = new Bookmarks_DataSourceImpl(
@@ -394,7 +393,6 @@ const Page: React.FC = () => {
                     current_sortby == Sortby.UpdatedAt ||
                     current_sortby == Sortby.VisitedAt
                   }
-                  set_swipe_state_handler={set_is_user_swiping_months}
                 />
               </div>
             ) : (
@@ -712,7 +710,6 @@ const Page: React.FC = () => {
           ? clear_gte_lte_query_params
           : undefined
       }
-      is_user_swiping_months={is_user_swiping_months}
     />
   )
 }

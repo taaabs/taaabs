@@ -16,6 +16,7 @@ declare const styles: {
   readonly bookmark__info__tag__name: string
   readonly 'bookmark__info__tag__name--selected': string
   readonly bookmark__info__tag__yields: string
+  readonly bookmark__info__tag__separator: string
   readonly bookmark__links: string
   readonly bookmark__links__item: string
   readonly bookmark__links__item__site: string

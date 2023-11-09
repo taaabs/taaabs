@@ -25,7 +25,6 @@ export namespace Months {
     has_results?: boolean
     is_fetching_data?: boolean
     is_range_selector_disabled?: boolean
-    set_swipe_state_handler: (is_swiping: boolean) => void
   }
 }
 
@@ -61,14 +60,6 @@ export const Months: React.FC<Months.Props> = memo(
 
     useUpdateEffect(() => {
       if (props.is_range_selector_disabled) return
-
-      if (is_swiping) {
-        props.set_swipe_state_handler(true)
-      } else {
-        setTimeout(() => {
-          props.set_swipe_state_handler(false)
-        }, 0)
-      }
 
       if (
         !is_swiping &&

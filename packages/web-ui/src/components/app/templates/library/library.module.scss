@@ -10,18 +10,10 @@
     top: var(--header-mobile-height);
     width: 100%;
     z-index: 2;
-    transition: transform 200ms ease-out;
+    transition: transform 30ms linear;
   }
   @include at992 {
     display: none;
-  }
-  &--moved-to-left {
-    transform: translateX(-300px);
-    pointer-events: none;
-  }
-  &--moved-to-right {
-    transform: translateX(300px);
-    pointer-events: none;
   }
 }
 .content {
@@ -66,7 +58,7 @@
       height: 100%;
       overflow: auto;
       background: var(--background);
-      padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
+      padding: var(--distance-8px) var(--distance-17px) var(--distance-16px)
         var(--distance-16px);
     }
     @include at992 {
@@ -88,47 +80,34 @@
     z-index: 1;
     padding-top: var(--header-mobile-height);
     background: var(--background);
-    transition: transform 200ms ease-out;
+    transition: transform 30ms linear;
+    &::before {
+      content: '';
+      width: 1px;
+      height: 100%;
+      top: 0;
+      left: 0;
+      box-shadow: -1px 0 0 0 var(--border-color-primary);
+      position: absolute;
+    }
+    &::after {
+      content: '';
+      width: 1px;
+      height: 100%;
+      top: 0;
+      right: 0;
+      box-shadow: 1px 0 0 0 var(--border-color-primary);
+      position: absolute;
+    }
   }
   @include at992 {
     flex: 1;
     transform: translateX(0px) !important;
     margin-top: var(--header-desktop-height);
   }
-  &--moved-to-left {
-    transform: translateX(-300px);
-  }
-  &--moved-to-right {
-    transform: translateX(300px);
-  }
-  &--borders {
-    @include to992 {
-      &::before {
-        content: '';
-        width: 1px;
-        height: 100%;
-        background: var(--border-color-primary);
-        top: 0;
-        left: -1px;
-        position: absolute;
-        z-index: 3;
-      }
-      &::after {
-        content: '';
-        width: 1px;
-        height: 100%;
-        background: var(--border-color-primary);
-        top: 0;
-        right: -1px;
-        position: absolute;
-        z-index: 2;
-      }
-    }
-  }
   &__inner {
     @include to992 {
       position: relative;
-      touch-action: manipulation; // https://github.com/Mango/slideout/issues/205#issuecomment-823927561
       padding-top: var(--app-bar-height);
       padding-bottom: var(--bottom-navigation-bar-height);
       &::before {
@@ -239,8 +218,8 @@
       > div {
         @include to992 {
           padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
-            var(--distance-16px);
-          // Override inline values coming from stickybox.
+            var(--distance-17px);
+          // Overrides inline values coming from stickybox.
           position: relative !important;
           top: 0 !important;
         }
@@ -255,4 +234,8 @@
       }
     }
   }
+}
+
+.free-fall {
+  transition: transform 200ms ease-in-out;
 }

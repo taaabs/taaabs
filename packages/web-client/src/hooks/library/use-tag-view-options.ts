@@ -1,5 +1,4 @@
 import { update_query_params } from '@/utils/update-query-params'
-import { system_values } from '@shared/constants/system-values'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { useCallback, useState } from 'react'
 
@@ -17,8 +16,6 @@ export const use_tag_view_options = () => {
   // "useCallback" is required by Tags component.
   const add_tag_to_query_params = useCallback(
     (tagId: number) => {
-      if (actual_selected_tags.length == system_values.max_tags_selected) return
-
       set_actual_selected_tags([...actual_selected_tags, tagId])
 
       const updated_query_params = update_query_params(
