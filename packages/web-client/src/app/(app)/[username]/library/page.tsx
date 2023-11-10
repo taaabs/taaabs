@@ -53,13 +53,7 @@ const Page: React.FC = () => {
   } = use_library_selector((state) => state.bookmarks)
   const { get_bookmarks } = use_bookmarks()
   const { months, is_getting_months_data, tags, selected_tags } = use_months()
-  const {
-    current_filter,
-    set_filter_query_param,
-    exclude_nsfw,
-    include_nsfw,
-    is_nsfw_excluded,
-  } = use_filter_view_options()
+  const { current_filter, set_filter_query_param } = use_filter_view_options()
   const { current_sortby, set_sortby_query_param } = use_sortby_view_options()
   const { current_order, set_order_query_param } = use_order_view_options()
   const {
@@ -136,46 +130,31 @@ const Page: React.FC = () => {
                         toggle_filter_dropdown()
                         if (
                           current_filter == LibraryFilter.All ||
-                          current_filter == LibraryFilter.AllNsfwExcluded ||
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
-                        if (is_nsfw_excluded) {
-                          set_filter_query_param(LibraryFilter.AllNsfwExcluded)
-                        } else {
-                          set_filter_query_param(LibraryFilter.All)
-                        }
+
+                        set_filter_query_param(LibraryFilter.All)
                       },
-                      is_selected:
-                        current_filter == LibraryFilter.All ||
-                        current_filter == LibraryFilter.AllNsfwExcluded,
+                      is_selected: current_filter == LibraryFilter.All,
                     },
                     {
-                      label: 'Starred only',
+                      label: 'Starred',
                       on_click: () => {
                         toggle_filter_dropdown()
                         if (
-                          current_filter == LibraryFilter.StarredOnly ||
-                          current_filter ==
-                            LibraryFilter.StarredOnlyNsfwExcluded ||
+                          current_filter == LibraryFilter.Starred ||
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
-                        if (is_nsfw_excluded) {
-                          set_filter_query_param(
-                            LibraryFilter.StarredOnlyNsfwExcluded,
-                          )
-                        } else {
-                          set_filter_query_param(LibraryFilter.StarredOnly)
-                        }
+
+                        set_filter_query_param(LibraryFilter.Starred)
                       },
-                      is_selected:
-                        current_filter == LibraryFilter.StarredOnly ||
-                        current_filter == LibraryFilter.StarredOnlyNsfwExcluded,
+                      is_selected: current_filter == LibraryFilter.Starred,
                     },
                     {
                       label: 'Archived',
@@ -183,39 +162,15 @@ const Page: React.FC = () => {
                         toggle_filter_dropdown()
                         if (
                           current_filter == LibraryFilter.Archived ||
-                          current_filter ==
-                            LibraryFilter.ArchivedNsfwExcluded ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-                        if (is_nsfw_excluded) {
-                          set_filter_query_param(
-                            LibraryFilter.ArchivedNsfwExcluded,
-                          )
-                        } else {
-                          set_filter_query_param(LibraryFilter.Archived)
-                        }
-                      },
-                      is_selected:
-                        current_filter == LibraryFilter.Archived ||
-                        current_filter == LibraryFilter.ArchivedNsfwExcluded,
-                    },
-                    {
-                      label: 'Exclude NSFW',
-                      on_click: () => {
-                        toggle_filter_dropdown()
-                        if (
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
 
-                        is_nsfw_excluded ? include_nsfw() : exclude_nsfw()
+                        set_filter_query_param(LibraryFilter.Archived)
                       },
-                      is_checked: is_nsfw_excluded,
+                      is_selected: current_filter == LibraryFilter.Archived,
                     },
                   ]}
                 />
@@ -471,7 +426,7 @@ const Page: React.FC = () => {
                       })
                     : []
                 }
-                is_nsfw={bookmark.is_nsfw}
+                is_unread={bookmark.is_unread}
                 is_starred={bookmark.is_starred}
                 key={bookmark.id}
                 on_tag_click={add_tag_to_query_params}
@@ -532,15 +487,11 @@ function _filter_option_to_label(filter: LibraryFilter): string {
   switch (filter) {
     case LibraryFilter.All:
       return 'All'
-    case LibraryFilter.AllNsfwExcluded:
-      return 'All without NSFW'
-    case LibraryFilter.StarredOnly:
-      return 'Starred only'
-    case LibraryFilter.StarredOnlyNsfwExcluded:
-      return 'Starred only without NSFW'
+    case LibraryFilter.Starred:
+      return 'Starred'
     case LibraryFilter.Archived:
       return 'Archived'
-    case LibraryFilter.ArchivedNsfwExcluded:
-      return 'Archived without NSFW'
+    case LibraryFilter.Unread:
+      return ''
   }
 }

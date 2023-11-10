@@ -44,21 +44,21 @@
         box-decoration-break: clone;
         -webkit-box-decoration-break: clone;
       }
-      &__nsfw {
+      &__unread {
         display: inline-flex;
         align-items: center;
-        color: var(--Bookmark-nsfw-foreground);
-        transform: scale(0.9) translateY(-0.33rem);
+        color: var(--Bookmark-unread-foreground);
+        transform: scale(0.9) translateY(-0.27rem);
         transform-origin: left;
         position: relative;
-        font-size: var(--font-size-1-2rem);
-        margin-right: var(--distance-0-1rem);
+        margin-right: var(--distance-0-4rem);
         height: var(--distance-2-0rem);
-        background: var(--Bookmark-nsfw-background);
-        padding: 0 var(--distance-0-4rem);
-        border-radius: var(--border-radius-4px);
-        font-family: var(--font-family-plus-jakarta-sans);
-        font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
+        width: var(--distance-2-0rem);
+        background: var(--Bookmark-unread-background);
+        border-radius: var(--border-radius-999px);
+        &:after {
+          content: '⠀';
+        }
       }
       &__text {
         position: relative;

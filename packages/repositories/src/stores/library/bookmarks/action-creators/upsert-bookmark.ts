@@ -41,34 +41,34 @@ export const upsert_bookmark = (params: {
           (params.last_authorized_months_params.filter ==
             LibraryFilter.Archived ||
             params.last_authorized_months_params.filter ==
-              LibraryFilter.ArchivedNsfwExcluded)) ||
+              LibraryFilter.ArchivedUnreadExcluded)) ||
         (params.bookmark.is_archived &&
           !(
             params.last_authorized_months_params.filter ==
               LibraryFilter.Archived ||
             params.last_authorized_months_params.filter ==
-              LibraryFilter.ArchivedNsfwExcluded
+              LibraryFilter.ArchivedUnreadExcluded
           ))
 
-      const is_nsfw_toggled_should_remove =
-        params.bookmark.is_nsfw &&
+      const is_unread_toggled_should_remove =
+        params.bookmark.is_unread &&
         (params.last_authorized_months_params.filter ==
-          LibraryFilter.AllNsfwExcluded ||
+          LibraryFilter.AllUnreadExcluded ||
           params.last_authorized_months_params.filter ==
-            LibraryFilter.ArchivedNsfwExcluded ||
+            LibraryFilter.ArchivedUnreadExcluded ||
           params.last_authorized_months_params.filter ==
-            LibraryFilter.StarredOnlyNsfwExcluded)
+            LibraryFilter.StarredOnlyUnreadExcluded)
 
       const is_starred_toggled_should_remove =
         !params.bookmark.is_starred &&
         (params.last_authorized_months_params.filter ==
           LibraryFilter.StarredOnly ||
           params.last_authorized_months_params.filter ==
-            LibraryFilter.StarredOnlyNsfwExcluded)
+            LibraryFilter.StarredOnlyUnreadExcluded)
 
       if (
         is_archived_toggled_should_remove ||
-        is_nsfw_toggled_should_remove ||
+        is_unread_toggled_should_remove ||
         is_starred_toggled_should_remove
       ) {
         dispatch(
@@ -96,10 +96,10 @@ export const upsert_bookmark = (params: {
           }
         }
 
-        if (modified_bookmark.is_nsfw != params.bookmark.is_nsfw) {
+        if (modified_bookmark.is_unread != params.bookmark.is_unread) {
           modified_bookmark = {
             ...modified_bookmark,
-            is_nsfw: !modified_bookmark.is_nsfw,
+            is_unread: !modified_bookmark.is_unread,
           }
         }
 

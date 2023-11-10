@@ -67,7 +67,7 @@ export namespace Bookmarks_Dto {
       public visited_at: string
       public tags: Tag[]
       public is_starred?: boolean
-      public is_nsfw?: boolean
+      public is_unread?: boolean
     }
 
     class AuthorizedBookmark extends Bookmark {

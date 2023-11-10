@@ -13,6 +13,6 @@ export type Bookmark_Entity = {
   }[]
   is_public: boolean
   is_starred: boolean
-  is_nsfw: boolean
+  is_unread: boolean
   render_height?: number
 }

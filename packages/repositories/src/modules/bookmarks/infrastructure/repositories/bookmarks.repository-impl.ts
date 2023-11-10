@@ -23,7 +23,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           updated_at: bookmark.updated_at,
           visited_at: bookmark.visited_at,
           title: bookmark.title,
-          is_nsfw: bookmark.is_nsfw || false,
+          is_unread: bookmark.is_unread || false,
           is_starred: bookmark.is_starred || false,
           tags: bookmark.tags.map((tag) => ({
             id: tag.id,
@@ -58,7 +58,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         updated_at: bookmark.updated_at,
         visited_at: bookmark.visited_at,
         title: bookmark.title,
-        is_nsfw: bookmark.is_nsfw || false,
+        is_unread: bookmark.is_unread || false,
         is_starred: bookmark.is_starred || false,
         is_public: true,
         tags: bookmark.tags.map((tag) => ({

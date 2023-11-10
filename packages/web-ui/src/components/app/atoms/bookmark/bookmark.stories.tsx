@@ -23,7 +23,7 @@ export const Primary = () => (
         id="1"
         is_starred={false}
         title="Lorem ipsum dolor sit amet"
-        is_nsfw={false}
+        is_unread={false}
         tags={[]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
@@ -48,7 +48,7 @@ export const Primary = () => (
         id="1"
         is_starred={false}
         title="Lorem ipsum dolor sit amet"
-        is_nsfw={false}
+        is_unread={false}
         tags={[]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
@@ -69,7 +69,7 @@ export const Primary = () => (
         id="1"
         is_starred={false}
         title="Lorem ipsum dolor sit amet"
-        is_nsfw={false}
+        is_unread={false}
         tags={[
           { id: 1, name: 'lorem', yields: 8 },
           { id: 1, name: 'ipsum', isSelected: true },
@@ -93,7 +93,7 @@ export const Primary = () => (
         id="1"
         is_starred={true}
         title="Lorem ipsum dolor sit amet"
-        is_nsfw={false}
+        is_unread={false}
         tags={[
           { id: 1, name: 'lorem', yields: 8 },
           { id: 1, name: 'ipsum', yields: 2 },
@@ -117,7 +117,7 @@ export const Primary = () => (
         id="1"
         is_starred={false}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        is_nsfw={true}
+        is_unread={true}
         tags={[
           { id: 1, name: 'lorem', yields: 8 },
           { id: 1, name: 'lorem1', yields: 8 },
@@ -148,7 +148,7 @@ export const Primary = () => (
         id="1"
         is_starred={false}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        is_nsfw={false}
+        is_unread={false}
         tags={[
           { id: 1, name: 'lorem', yields: 8 },
           { id: 1, name: 'ipsum', yields: 2 },
@@ -172,7 +172,7 @@ export const Primary = () => (
         id="1"
         is_starred={true}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        is_nsfw={true}
+        is_unread={true}
         tags={[
           { id: 1, name: 'lorem', yields: 8 },
           { id: 1, name: 'ipsum', yields: 2 },
@@ -196,7 +196,7 @@ export const Primary = () => (
         id="1"
         is_starred={true}
         title="Lorem ipsum dolor sit amet"
-        is_nsfw={true}
+        is_unread={true}
         tags={[
           { id: 1, name: 'lorem', yields: 8 },
           { id: 1, name: 'ipsum', yields: 2 },

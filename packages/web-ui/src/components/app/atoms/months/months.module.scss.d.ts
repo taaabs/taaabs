@@ -6,7 +6,7 @@ declare const styles: {
   readonly graph__details__counts: string
   readonly graph__details__counts__total: string
   readonly graph__details__counts__starred: string
-  readonly graph__details__counts__nsfw: string
+  readonly graph__details__counts__unread: string
   readonly graph__info: string
   readonly graph__clear: string
   readonly graph__recharts: string

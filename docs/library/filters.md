@@ -1,10 +1,10 @@
 User can filter bookmarks with given filters:
 
 - All
-- All without nsfw
+- All without unread
 - Starred only
-- Starred only without nsfw
+- Starred only without unread
 - Archived only
-- Archived only withouot nsfw
+- Archived only withouot unread
 
 Only "All" and "Archived only" filter is available on free accounts.

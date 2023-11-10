@@ -100,7 +100,7 @@ const bookmark = (
       is_starred={false}
       links={[]}
       title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-      is_nsfw={true}
+      is_unread={true}
       tags={[
         { id: 1, name: 'foo', yields: 100 },
         { id: 2, name: 'bar', isSelected: true },
