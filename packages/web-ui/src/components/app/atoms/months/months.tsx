@@ -417,7 +417,7 @@ export const Months: React.FC<Months.Props> = memo(
                     type="basis"
                     dataKey="unread_count"
                     strokeWidth={2}
-                    stroke="var(--Months-chart-unread-stroke)"
+                    stroke="var(--red)"
                     fill="transparent"
                     isAnimationActive={false}
                     strokeOpacity={unread_count == 0 ? 0 : 1}

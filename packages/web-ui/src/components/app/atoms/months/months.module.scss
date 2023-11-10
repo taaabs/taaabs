@@ -61,7 +61,7 @@
         background: var(--Months-chart-starred-fill);
       }
       &__unread::before {
-        background: var(--Months-chart-unread-stroke);
+        background: var(--red);
       }
     }
   }

@@ -47,14 +47,13 @@
       &__unread {
         display: inline-flex;
         align-items: center;
-        color: var(--Bookmark-unread-foreground);
         transform: scale(0.9) translateY(-0.27rem);
         transform-origin: left;
         position: relative;
         margin-right: var(--distance-0-4rem);
         height: var(--distance-2-0rem);
         width: var(--distance-2-0rem);
-        background: var(--Bookmark-unread-background);
+        background: var(--red);
         border-radius: var(--border-radius-999px);
         &:after {
           content: '⠀';
