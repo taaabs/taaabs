@@ -42,19 +42,15 @@ export const Library: React.FC<Library.Props> = (props) => {
   use_scroll_restore()
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
   const [drag_distance, set_drag_distance] = useState<number>(0)
-  const [horizontal_swipe_direction, set_horizontal_swipe_direction] = useState<
-    'Left' | 'Right' | undefined
-  >(undefined)
 
   const swipe_state_main = useSwipe(main, {
     preventDefault: false,
   })
 
-  const handlers = useSwipeable({
+  const swipeable_handlers = useSwipeable({
     onSwipeStart: ({ dir }) => {
       if (dir == 'Left' || dir == 'Right') {
         document.body.style.overflow = 'hidden'
-        set_horizontal_swipe_direction(dir)
       }
       if (dir == 'Right' && is_right_side_open) {
         set_is_right_side_moving(true)
@@ -68,13 +64,11 @@ export const Library: React.FC<Library.Props> = (props) => {
     },
     onSwiping: ({ deltaX, dir }) => {
       if (
-        (horizontal_swipe_direction == 'Left' &&
-          dir == 'Left' &&
+        (dir == 'Left' &&
           deltaX < 0 &&
           deltaX >= -SLIDABLE_WIDTH &&
           !is_right_side_open) ||
-        (horizontal_swipe_direction == 'Right' &&
-          dir == 'Right' &&
+        (dir == 'Right' &&
           deltaX > 0 &&
           deltaX <= SLIDABLE_WIDTH &&
           !is_left_side_open)
@@ -84,7 +78,7 @@ export const Library: React.FC<Library.Props> = (props) => {
     },
     onSwiped: ({ dir, velocity }) => {
       if (dir == 'Left' || dir == 'Right') {
-        if (velocity > 0.1) {
+        if (velocity > 0.2) {
           if (dir == 'Right') {
             if (!is_left_side_open && !is_right_side_open) {
               toggle_left_side()
@@ -200,7 +194,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   }
 
   return (
-    <div className={styles.container} {...handlers}>
+    <div className={styles.container} {...swipeable_handlers}>
       <div
         className={cn(styles['mobile-title-bar'], {
           [styles['free-fall']]: !drag_distance,
@@ -266,12 +260,7 @@ export const Library: React.FC<Library.Props> = (props) => {
             }}
           >
             <div>
-              <div
-                className={styles['main__inner__desktop-title-bar']}
-                style={{
-                  visibility: is_hydrated ? 'visible' : 'hidden',
-                }}
-              >
+              <div className={styles['main__inner__desktop-title-bar']}>
                 <_DesktopTitleBar
                   text={props.title_bar ? props.title_bar : undefined}
                 />
@@ -293,35 +282,36 @@ export const Library: React.FC<Library.Props> = (props) => {
               </div>
               {props.show_bookmarks_skeleton && (
                 <div className={styles['main__inner__skeleton']}>
-                  {[...Array(30)].map((_, i) => (
+                  {[...Array(20)].map((_, i) => (
                     <Skeleton key={i} />
                   ))}
                 </div>
               )}
-              <div
-                className={styles['main__inner__info']}
-                ref={end_of_bookmarks}
-              >
-                <span>
-                  {props.is_getting_first_bookmarks || props.has_more_bookmarks
-                    ? 'Loading...'
-                    : props.no_results
-                    ? 'No results'
-                    : 'End of results'}
-                </span>
-                {props.clear_selected_tags &&
-                  !props.is_getting_first_bookmarks && (
+              {is_hydrated && (
+                <div
+                  className={styles['main__inner__info']}
+                  ref={end_of_bookmarks}
+                >
+                  <span>
+                    {props.is_getting_first_bookmarks ||
+                    props.has_more_bookmarks
+                      ? 'Loading...'
+                      : props.no_results
+                      ? 'No results'
+                      : 'End of results'}
+                  </span>
+                  {props.clear_selected_tags && (
                     <button onClick={props.clear_selected_tags}>
                       Clear selected tags
                     </button>
                   )}
-                {props.clear_date_range &&
-                  !props.is_getting_first_bookmarks && (
+                  {props.clear_date_range && (
                     <button onClick={props.clear_date_range}>
                       Clear date range
                     </button>
                   )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

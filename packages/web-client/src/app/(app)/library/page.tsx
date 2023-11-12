@@ -88,7 +88,7 @@ const Page: React.FC = () => {
   useUpdateEffect(() => {
     if (!show_months) set_show_months(true)
     if (!show_tags) set_show_tags(true)
-    if (show_tags_skeleton) set_show_tags_skeleton(false)
+    set_show_tags_skeleton(false)
   }, [bookmarks])
 
   useEffect(() => {
@@ -142,7 +142,7 @@ const Page: React.FC = () => {
                 <DropdownMenu
                   items={[
                     {
-                      label: 'All',
+                      label: _filter_option_to_label(LibraryFilter.All),
                       on_click: () => {
                         toggle_filter_dropdown()
                         if (
@@ -158,7 +158,7 @@ const Page: React.FC = () => {
                       is_selected: current_filter == LibraryFilter.All,
                     },
                     {
-                      label: 'Starred',
+                      label: _filter_option_to_label(LibraryFilter.Starred),
                       on_click: () => {
                         toggle_filter_dropdown()
                         if (
@@ -174,7 +174,7 @@ const Page: React.FC = () => {
                       is_selected: current_filter == LibraryFilter.Starred,
                     },
                     {
-                      label: 'Unread',
+                      label: _filter_option_to_label(LibraryFilter.Unread),
                       on_click: () => {
                         toggle_filter_dropdown()
                         if (
@@ -190,7 +190,26 @@ const Page: React.FC = () => {
                       is_selected: current_filter == LibraryFilter.Unread,
                     },
                     {
-                      label: 'Archived',
+                      label: _filter_option_to_label(
+                        LibraryFilter.StarredUnread,
+                      ),
+                      on_click: () => {
+                        toggle_filter_dropdown()
+                        if (
+                          current_filter == LibraryFilter.StarredUnread ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+
+                        set_filter_query_param(LibraryFilter.StarredUnread)
+                      },
+                      is_selected:
+                        current_filter == LibraryFilter.StarredUnread,
+                    },
+                    {
+                      label: _filter_option_to_label(LibraryFilter.Archived),
                       on_click: () => {
                         toggle_filter_dropdown()
                         if (
@@ -204,6 +223,47 @@ const Page: React.FC = () => {
                         set_filter_query_param(LibraryFilter.Archived)
                       },
                       is_selected: current_filter == LibraryFilter.Archived,
+                    },
+                    {
+                      label: _filter_option_to_label(
+                        LibraryFilter.ArchivedStarred,
+                      ),
+                      on_click: () => {
+                        toggle_filter_dropdown()
+                        if (
+                          current_filter == LibraryFilter.ArchivedStarred ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+
+                        set_filter_query_param(LibraryFilter.ArchivedStarred)
+                      },
+                      is_selected:
+                        current_filter == LibraryFilter.ArchivedStarred,
+                    },
+                    {
+                      label: _filter_option_to_label(
+                        LibraryFilter.ArchivedStarredUnread,
+                      ),
+                      on_click: () => {
+                        toggle_filter_dropdown()
+                        if (
+                          current_filter ==
+                            LibraryFilter.ArchivedStarredUnread ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+
+                        set_filter_query_param(
+                          LibraryFilter.ArchivedStarredUnread,
+                        )
+                      },
+                      is_selected:
+                        current_filter == LibraryFilter.ArchivedStarredUnread,
                     },
                   ]}
                 />
@@ -706,7 +766,15 @@ function _filter_option_to_label(filter: LibraryFilter): string {
       return 'Starred'
     case LibraryFilter.Unread:
       return 'Unread'
+    case LibraryFilter.StarredUnread:
+      return 'Starred & unread'
     case LibraryFilter.Archived:
       return 'Archived'
+    case LibraryFilter.ArchivedStarred:
+      return 'Archived starred'
+    case LibraryFilter.ArchivedUnread:
+      return 'Archived unread'
+    case LibraryFilter.ArchivedStarredUnread:
+      return 'Archived starred & unread'
   }
 }

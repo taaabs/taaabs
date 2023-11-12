@@ -125,7 +125,7 @@ const Page: React.FC = () => {
                 <DropdownMenu
                   items={[
                     {
-                      label: 'All',
+                      label: _filter_option_to_label(LibraryFilter.All),
                       on_click: () => {
                         toggle_filter_dropdown()
                         if (
@@ -141,7 +141,7 @@ const Page: React.FC = () => {
                       is_selected: current_filter == LibraryFilter.All,
                     },
                     {
-                      label: 'Starred',
+                      label: _filter_option_to_label(LibraryFilter.Starred),
                       on_click: () => {
                         toggle_filter_dropdown()
                         if (
@@ -157,7 +157,7 @@ const Page: React.FC = () => {
                       is_selected: current_filter == LibraryFilter.Starred,
                     },
                     {
-                      label: 'Archived',
+                      label: _filter_option_to_label(LibraryFilter.Archived),
                       on_click: () => {
                         toggle_filter_dropdown()
                         if (
@@ -171,6 +171,25 @@ const Page: React.FC = () => {
                         set_filter_query_param(LibraryFilter.Archived)
                       },
                       is_selected: current_filter == LibraryFilter.Archived,
+                    },
+                    {
+                      label: _filter_option_to_label(
+                        LibraryFilter.ArchivedStarred,
+                      ),
+                      on_click: () => {
+                        toggle_filter_dropdown()
+                        if (
+                          current_filter == LibraryFilter.ArchivedStarred ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+
+                        set_filter_query_param(LibraryFilter.ArchivedStarred)
+                      },
+                      is_selected:
+                        current_filter == LibraryFilter.ArchivedStarred,
                     },
                   ]}
                 />
@@ -489,9 +508,17 @@ function _filter_option_to_label(filter: LibraryFilter): string {
       return 'All'
     case LibraryFilter.Starred:
       return 'Starred'
+    case LibraryFilter.Unread:
+      return ''
+    case LibraryFilter.StarredUnread:
+      return ''
     case LibraryFilter.Archived:
       return 'Archived'
-    case LibraryFilter.Unread:
+    case LibraryFilter.ArchivedStarred:
+      return 'Archived starred'
+    case LibraryFilter.ArchivedUnread:
+      return ''
+    case LibraryFilter.ArchivedStarredUnread:
       return ''
   }
 }

@@ -74,6 +74,13 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       }
     }, [props.is_unread])
 
+    const relative_time = dayjs(props.date).fromNow()
+
+    const bookmark_date =
+      relative_time != ''
+        ? relative_time
+        : dayjs(props.date).format('MMM DD, YYYY')
+
     return (
       <div
         ref={ref}
@@ -143,13 +150,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               <div className={styles['bookmark__info']}>
                 <span>{props.index + 1}</span>
                 <span>·</span>
-                <span>
-                  {new Date().getTime() - 30 * 24 * 60 * 60 * 1000 <
-                  props.date.getTime()
-                    ? dayjs(props.date).fromNow()
-                    : dayjs(props.date).format('MMM DD, YYYY')}
-                </span>
-
+                <span>{bookmark_date}</span>
                 {props.tags.length > 0 && (
                   <>
                     <span>·</span>

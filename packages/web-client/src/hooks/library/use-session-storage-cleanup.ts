@@ -4,7 +4,7 @@ import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-para
 
 const HISTORY_LIMIT = 5
 
-// Purpose of this hook is avoiding hitting storage limits.
+// Purpose of this hook is to avoid hitting storage limits.
 export const use_session_storage_cleanup = () => {
   const query_params = use_shallow_search_params()
 
