@@ -245,6 +245,25 @@ const Page: React.FC = () => {
                     },
                     {
                       label: _filter_option_to_label(
+                        LibraryFilter.ArchivedUnread,
+                      ),
+                      on_click: () => {
+                        toggle_filter_dropdown()
+                        if (
+                          current_filter == LibraryFilter.ArchivedUnread ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+
+                        set_filter_query_param(LibraryFilter.ArchivedUnread)
+                      },
+                      is_selected:
+                        current_filter == LibraryFilter.ArchivedUnread,
+                    },
+                    {
+                      label: _filter_option_to_label(
                         LibraryFilter.ArchivedStarredUnread,
                       ),
                       on_click: () => {

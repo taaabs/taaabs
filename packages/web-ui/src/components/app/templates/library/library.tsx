@@ -287,31 +287,31 @@ export const Library: React.FC<Library.Props> = (props) => {
                   ))}
                 </div>
               )}
-              {is_hydrated && (
-                <div
-                  className={styles['main__inner__info']}
-                  ref={end_of_bookmarks}
-                >
-                  <span>
-                    {props.is_getting_first_bookmarks ||
-                    props.has_more_bookmarks
-                      ? 'Loading...'
-                      : props.no_results
-                      ? 'No results'
-                      : 'End of results'}
-                  </span>
-                  {props.clear_selected_tags && (
-                    <button onClick={props.clear_selected_tags}>
-                      Clear selected tags
-                    </button>
-                  )}
-                  {props.clear_date_range && (
-                    <button onClick={props.clear_date_range}>
-                      Clear date range
-                    </button>
-                  )}
-                </div>
-              )}
+              <div
+                className={styles['main__inner__info']}
+                ref={end_of_bookmarks}
+              >
+                <span>
+                  {props.is_getting_first_bookmarks || props.has_more_bookmarks
+                    ? 'Loading...'
+                    : props.no_results
+                    ? 'No results'
+                    : 'End of results'}
+                </span>
+                {
+                  // INVESTIGATE: Without "is_hydrated" gives errors after page refresh, why?
+                }
+                {is_hydrated && props.clear_selected_tags && (
+                  <button onClick={props.clear_selected_tags}>
+                    Clear selected tags
+                  </button>
+                )}
+                {props.clear_date_range && (
+                  <button onClick={props.clear_date_range}>
+                    Clear date range
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
