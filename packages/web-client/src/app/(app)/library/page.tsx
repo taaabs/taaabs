@@ -587,7 +587,7 @@ const Page: React.FC = () => {
                   <DropdownMenu
                     items={[
                       {
-                        label: 'unread badge',
+                        label: 'Unread',
                         is_checked: bookmark.is_unread,
                         on_click: () => {
                           const updated_bookmark: UpsertBookmark_Params = {
@@ -636,7 +636,11 @@ const Page: React.FC = () => {
                             title: bookmark.title,
                             is_public: bookmark.is_public,
                             is_archived:
-                              current_filter == LibraryFilter.Archived,
+                              current_filter == LibraryFilter.Archived ||
+                              current_filter == LibraryFilter.ArchivedStarred ||
+                              current_filter == LibraryFilter.ArchivedUnread ||
+                              current_filter ==
+                                LibraryFilter.ArchivedStarredUnread,
                             is_unread: bookmark.is_unread,
                             is_starred: !bookmark.is_starred,
                             links: bookmark.links.map((link) => ({
@@ -667,7 +671,12 @@ const Page: React.FC = () => {
                         },
                       },
                       {
-                        label: !(current_filter == LibraryFilter.Archived)
+                        label: !(
+                          current_filter == LibraryFilter.Archived ||
+                          current_filter == LibraryFilter.ArchivedStarred ||
+                          current_filter == LibraryFilter.ArchivedUnread ||
+                          current_filter == LibraryFilter.ArchivedStarredUnread
+                        )
                           ? 'Archive'
                           : 'Restore',
                         other_icon: <Icon variant="ARCHIVE" />,
@@ -678,7 +687,11 @@ const Page: React.FC = () => {
                             title: bookmark.title,
                             is_public: bookmark.is_public,
                             is_archived: !(
-                              current_filter == LibraryFilter.Archived
+                              current_filter == LibraryFilter.Archived ||
+                              current_filter == LibraryFilter.ArchivedStarred ||
+                              current_filter == LibraryFilter.ArchivedUnread ||
+                              current_filter ==
+                                LibraryFilter.ArchivedStarredUnread
                             ),
                             is_unread: bookmark.is_unread,
                             is_starred: bookmark.is_starred,

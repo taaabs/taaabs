@@ -41,30 +41,42 @@ export const upsert_bookmark = (params: {
           (params.last_authorized_months_params.filter ==
             LibraryFilter.Archived ||
             params.last_authorized_months_params.filter ==
-              LibraryFilter.ArchivedUnreadExcluded)) ||
+              LibraryFilter.ArchivedStarred ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.ArchivedUnread ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.ArchivedStarredUnread)) ||
         (params.bookmark.is_archived &&
           !(
             params.last_authorized_months_params.filter ==
               LibraryFilter.Archived ||
             params.last_authorized_months_params.filter ==
-              LibraryFilter.ArchivedUnreadExcluded
+              LibraryFilter.ArchivedStarred ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.ArchivedUnread ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.ArchivedStarredUnread
           ))
-
-      const is_unread_toggled_should_remove =
-        params.bookmark.is_unread &&
-        (params.last_authorized_months_params.filter ==
-          LibraryFilter.AllUnreadExcluded ||
-          params.last_authorized_months_params.filter ==
-            LibraryFilter.ArchivedUnreadExcluded ||
-          params.last_authorized_months_params.filter ==
-            LibraryFilter.StarredOnlyUnreadExcluded)
 
       const is_starred_toggled_should_remove =
         !params.bookmark.is_starred &&
-        (params.last_authorized_months_params.filter ==
-          LibraryFilter.StarredOnly ||
+        (params.last_authorized_months_params.filter == LibraryFilter.Starred ||
           params.last_authorized_months_params.filter ==
-            LibraryFilter.StarredOnlyUnreadExcluded)
+            LibraryFilter.StarredUnread ||
+          params.last_authorized_months_params.filter ==
+            LibraryFilter.ArchivedStarred ||
+          params.last_authorized_months_params.filter ==
+            LibraryFilter.ArchivedStarredUnread)
+
+      const is_unread_toggled_should_remove =
+        !params.bookmark.is_unread &&
+        (params.last_authorized_months_params.filter == LibraryFilter.Unread ||
+          params.last_authorized_months_params.filter ==
+            LibraryFilter.StarredUnread ||
+          params.last_authorized_months_params.filter ==
+            LibraryFilter.ArchivedUnread ||
+          params.last_authorized_months_params.filter ==
+            LibraryFilter.ArchivedStarredUnread)
 
       if (
         is_archived_toggled_should_remove ||
