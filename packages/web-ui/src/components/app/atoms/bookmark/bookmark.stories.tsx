@@ -23,6 +23,7 @@ export const Primary = () => (
         id="1"
         is_starred={false}
         title="Lorem ipsum dolor sit amet"
+        description="Lorem ipsum dolor sit amet"
         is_unread={false}
         tags={[]}
         date={new Date('2022-02-20')}
@@ -69,6 +70,7 @@ export const Primary = () => (
         id="1"
         is_starred={false}
         title="Lorem ipsum dolor sit amet"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies sapien nulla, at facilisis risus dictum sed."
         is_unread={false}
         tags={[
           { id: 1, name: 'lorem', yields: 8 },

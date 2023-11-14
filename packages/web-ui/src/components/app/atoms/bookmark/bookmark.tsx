@@ -36,6 +36,7 @@ export namespace Bookmark {
     index: number
     id: string
     title: string
+    description?: string
     date: Date
     on_tag_click: (tagId: number) => void
     on_selected_tag_click: (tagId: number) => void
@@ -151,6 +152,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 <span>{props.index + 1}</span>
                 <span>·</span>
                 <span>{bookmark_date}</span>
+                {props.description && (
+                  <>
+                    <span>·</span>
+                    <span>{props.description}</span>
+                  </>
+                )}
                 {props.tags.length > 0 && (
                   <>
                     <span>·</span>

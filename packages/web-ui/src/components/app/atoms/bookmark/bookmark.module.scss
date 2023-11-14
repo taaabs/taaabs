@@ -134,15 +134,17 @@
   }
   &__info {
     grid-area: info;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--distance-0-6rem) var(--distance-0-6rem);
+    display: inline;
     font-family: var(--font-family-inter-tight);
-    margin: var(--distance-8px) 0 var(--distance-12px) 0;
+    margin: var(--distance-8px) 0 var(--distance-6px) 0;
     padding: 0 var(--distance-16px);
+    font-size: var(--font-size-1-5rem);
+    > * {
+      padding-right: var(--distance-0-6rem);
+      padding-bottom: var(--distance-0-6rem);
+    }
     > span {
       color: var(--text-color-dimmed);
-      font-size: var(--font-size-1-5rem);
     }
     &__tag {
       @include hover {
