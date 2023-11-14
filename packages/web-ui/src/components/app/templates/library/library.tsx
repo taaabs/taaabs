@@ -299,14 +299,14 @@ export const Library: React.FC<Library.Props> = (props) => {
                     : 'End of results'}
                 </span>
                 {
-                  // INVESTIGATE: Without "is_hydrated" gives errors after page refresh, why?
+                  // TODO: INVESTIGATE: Without "is_hydrated" gives errors after page refresh, why?
                 }
                 {is_hydrated && props.clear_selected_tags && (
                   <button onClick={props.clear_selected_tags}>
                     Clear selected tags
                   </button>
                 )}
-                {props.clear_date_range && (
+                {is_hydrated && props.clear_date_range && (
                   <button onClick={props.clear_date_range}>
                     Clear date range
                   </button>
