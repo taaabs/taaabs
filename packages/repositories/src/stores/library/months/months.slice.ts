@@ -6,7 +6,7 @@ export type Months = {
   yyyymm: number
   bookmark_count: number
   starred_count: number
-  nsfw_count: number
+  unread_count: number
 }[]
 export type Tags = Record<string, { id: number; yields: number }>
 
@@ -47,7 +47,7 @@ export const months_slice = createSlice({
           yyyymm: parseInt(k),
           bookmark_count: v.bookmark_count,
           starred_count: v.starred_count || 0,
-          nsfw_count: v.nsfw_count || 0,
+          unread_count: v.unread_count || 0,
         })
       })
 

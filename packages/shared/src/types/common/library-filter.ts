@@ -1,8 +1,10 @@
 export enum LibraryFilter {
   All = 'all',
-  AllNsfwExcluded = 'all_nsfw_excluded',
-  StarredOnly = 'starred_only',
-  StarredOnlyNsfwExcluded = 'starred_ony_nsfw_excluded',
+  Starred = 'starred',
+  Unread = 'unread',
+  StarredUnread = 'starred_unread',
   Archived = 'archived',
-  ArchivedNsfwExcluded = 'archived_nsfw_excluded',
+  ArchivedStarred = 'archived_starred',
+  ArchivedUnread = 'archived_unread',
+  ArchivedStarredUnread = 'archived_starred_unread',
 }

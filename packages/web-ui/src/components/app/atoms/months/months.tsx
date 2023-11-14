@@ -11,7 +11,7 @@ type Months = {
   yyyymm: number
   bookmark_count: number
   starred_count: number
-  nsfw_count: number
+  unread_count: number
 }[]
 
 export namespace Months {
@@ -25,7 +25,6 @@ export namespace Months {
     has_results?: boolean
     is_fetching_data?: boolean
     is_range_selector_disabled?: boolean
-    set_swipe_state_handler: (is_swiping: boolean) => void
   }
 }
 
@@ -57,18 +56,10 @@ export const Months: React.FC<Months.Props> = memo(
     )
     const [bookmark_count, set_bookmark_count] = useState<number | null>(null)
     const [starred_count, set_starred_count] = useState<number | null>(null)
-    const [nsfw_count, set_nsfw_count] = useState<number | null>(null)
+    const [unread_count, set_unread_count] = useState<number | null>(null)
 
     useUpdateEffect(() => {
       if (props.is_range_selector_disabled) return
-
-      if (is_swiping) {
-        props.set_swipe_state_handler(true)
-      } else {
-        setTimeout(() => {
-          props.set_swipe_state_handler(false)
-        }, 0)
-      }
 
       if (
         !is_swiping &&
@@ -104,17 +95,17 @@ export const Months: React.FC<Months.Props> = memo(
 
       let bookmark_count = 0
       let starred_count = 0
-      let nsfw_count = 0
+      let unread_count = 0
 
       months_sliced.forEach((month) => {
         bookmark_count += month.bookmark_count
         starred_count += month.starred_count
-        nsfw_count += month.nsfw_count
+        unread_count += month.unread_count
       })
 
       set_bookmark_count(bookmark_count)
       set_starred_count(starred_count)
-      set_nsfw_count(nsfw_count)
+      set_unread_count(unread_count)
 
       set_months_to_render(props.months)
 
@@ -348,9 +339,9 @@ export const Months: React.FC<Months.Props> = memo(
                   {starred_count}
                 </div>
               )}
-              {nsfw_count != undefined && nsfw_count > 0 && (
-                <div className={styles.graph__details__counts__nsfw}>
-                  {nsfw_count}
+              {unread_count != undefined && unread_count > 0 && (
+                <div className={styles.graph__details__counts__unread}>
+                  {unread_count}
                 </div>
               )}
             </div>
@@ -424,12 +415,12 @@ export const Months: React.FC<Months.Props> = memo(
                   />
                   <Area
                     type="basis"
-                    dataKey="nsfw_count"
+                    dataKey="unread_count"
                     strokeWidth={2}
-                    stroke="var(--Months-chart-nsfw-stroke)"
+                    stroke="var(--red)"
                     fill="transparent"
                     isAnimationActive={false}
-                    strokeOpacity={nsfw_count == 0 ? 0 : 1}
+                    strokeOpacity={unread_count == 0 ? 0 : 1}
                   />
                   <YAxis tickCount={1} width={0} />
                   <Brush

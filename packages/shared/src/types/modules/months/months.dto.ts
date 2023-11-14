@@ -21,7 +21,7 @@ export namespace Months_Dto {
     public tags: Record<string, { yields: number; id: number }>
     public bookmark_count: number
     public starred_count?: number
-    public nsfw_count?: number
+    public unread_count?: number
   }
 
   export class Response {

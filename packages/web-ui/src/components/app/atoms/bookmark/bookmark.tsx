@@ -41,7 +41,7 @@ export namespace Bookmark {
     on_selected_tag_click: (tagId: number) => void
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
     on_click: () => void
-    is_nsfw?: boolean
+    is_unread?: boolean
     is_starred?: boolean
     links: { url: string; site_path?: string; saves: number }[]
     render_height?: number
@@ -72,7 +72,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           set_render_height(ref.current!.clientHeight)
         }, 0)
       }
-    }, [props.is_nsfw])
+    }, [props.is_unread])
+
+    const relative_time = dayjs(props.date).fromNow()
+
+    const bookmark_date =
+      relative_time != ''
+        ? relative_time
+        : dayjs(props.date).format('MMM DD, YYYY')
 
     return (
       <div
@@ -95,10 +102,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                       props.is_starred,
                   })}
                 >
-                  {props.is_nsfw && (
-                    <div className={styles.bookmark__title__inner__nsfw}>
-                      NSFW
-                    </div>
+                  {props.is_unread && (
+                    <div className={styles.bookmark__title__inner__unread} />
                   )}
                   <div
                     className={styles.bookmark__title__inner__text}
@@ -145,17 +150,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               <div className={styles['bookmark__info']}>
                 <span>{props.index + 1}</span>
                 <span>·</span>
-                <span>
-                  {new Date().getTime() - 30 * 24 * 60 * 60 * 1000 <
-                  props.date.getTime()
-                    ? dayjs(props.date).fromNow()
-                    : dayjs(props.date).format('MMM DD, YYYY')}
-                </span>
-
+                <span>{bookmark_date}</span>
                 {props.tags.length > 0 && (
                   <>
                     <span>·</span>
-                    {props.tags.map((tag) => (
+                    {props.tags.map((tag, i) => (
                       <button
                         className={styles['bookmark__info__tag']}
                         onClick={(e) => {
@@ -180,13 +179,26 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           >
                             {tag.name}
                           </span>
-                          {tag.yields && (
-                            <span
-                              className={styles['bookmark__info__tag__yields']}
-                            >
-                              {tag.yields}
-                            </span>
-                          )}
+                          {!tag.isSelected &&
+                            (tag.yields ? (
+                              <span
+                                className={
+                                  styles['bookmark__info__tag__yields']
+                                }
+                              >
+                                {tag.yields}
+                              </span>
+                            ) : (
+                              i != props.tags.length - 1 && (
+                                <span
+                                  className={
+                                    styles['bookmark__info__tag__separator']
+                                  }
+                                >
+                                  ·
+                                </span>
+                              )
+                            ))}
                           {tag.isSelected && (
                             <span
                               className={styles['bookmark__info__tag__yields']}
@@ -274,7 +286,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
   (o, n) =>
     o.index == n.index &&
     o.is_starred == n.is_starred &&
-    o.is_nsfw == n.is_nsfw &&
+    o.is_unread == n.is_unread &&
     o.render_height == n.render_height &&
     JSON.stringify(o.tags) == JSON.stringify(n.tags),
 )

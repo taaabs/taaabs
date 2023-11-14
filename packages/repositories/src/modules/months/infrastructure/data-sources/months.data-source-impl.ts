@@ -19,7 +19,7 @@ export class Months_DataSourceImpl implements Months_DataSource {
     }
 
     return fetch(
-      `${this._api_url}/v1/months?${new URLSearchParams(
+      `${this._api_url}/v1/counts?${new URLSearchParams(
         JSON.parse(JSON.stringify(queryParams)),
       ).toString()}`,
       {
@@ -40,7 +40,7 @@ export class Months_DataSourceImpl implements Months_DataSource {
     }
 
     return fetch(
-      `${this._api_url}/v1/months/${params.username}?${new URLSearchParams(
+      `${this._api_url}/v1/counts/${params.username}?${new URLSearchParams(
         JSON.parse(JSON.stringify(queryParams)),
       ).toString()}`,
     ).then((r) => r.json())

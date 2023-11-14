@@ -17,11 +17,6 @@ export const use_filter_view_options = () => {
       )
     ],
   )
-  const [is_nsfw_excluded, set_is_nsfw_excluded] = useState<boolean>(
-    current_filter == LibraryFilter.AllNsfwExcluded ||
-      current_filter == LibraryFilter.ArchivedNsfwExcluded ||
-      current_filter == LibraryFilter.StarredOnlyNsfwExcluded,
-  )
 
   useUpdateEffect(() => {
     const query_filter = query_params.get('f')
@@ -59,51 +54,8 @@ export const use_filter_view_options = () => {
     )
   }
 
-  useUpdateEffect(() => {
-    if (
-      current_filter == LibraryFilter.AllNsfwExcluded ||
-      current_filter == LibraryFilter.ArchivedNsfwExcluded ||
-      current_filter == LibraryFilter.StarredOnlyNsfwExcluded
-    ) {
-      set_is_nsfw_excluded(true)
-    } else {
-      set_is_nsfw_excluded(false)
-    }
-  }, [current_filter])
-
-  const exclude_nsfw = () => {
-    switch (current_filter) {
-      case LibraryFilter.All:
-        set_filter_query_param(LibraryFilter.AllNsfwExcluded)
-        break
-      case LibraryFilter.StarredOnly:
-        set_filter_query_param(LibraryFilter.StarredOnlyNsfwExcluded)
-        break
-      case LibraryFilter.Archived:
-        set_filter_query_param(LibraryFilter.ArchivedNsfwExcluded)
-        break
-    }
-  }
-
-  const include_nsfw = () => {
-    switch (current_filter) {
-      case LibraryFilter.AllNsfwExcluded:
-        set_filter_query_param(LibraryFilter.All)
-        break
-      case LibraryFilter.StarredOnlyNsfwExcluded:
-        set_filter_query_param(LibraryFilter.StarredOnly)
-        break
-      case LibraryFilter.ArchivedNsfwExcluded:
-        set_filter_query_param(LibraryFilter.Archived)
-        break
-    }
-  }
-
   return {
     current_filter,
     set_filter_query_param,
-    exclude_nsfw,
-    include_nsfw,
-    is_nsfw_excluded,
   }
 }

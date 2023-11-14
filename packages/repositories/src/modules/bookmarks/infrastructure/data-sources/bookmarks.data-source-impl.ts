@@ -107,7 +107,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,
       is_starred: params.is_starred || undefined,
-      is_nsfw: params.is_nsfw || undefined,
+      is_unread: params.is_unread || undefined,
       tags: params.tags.map((tag) => ({
         name: tag.name,
         is_public: tag.is_public || undefined,

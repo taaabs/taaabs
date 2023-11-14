@@ -4,7 +4,7 @@ declare const styles: {
   readonly bookmark__title: string
   readonly bookmark__title__inner: string
   readonly 'bookmark__title__inner--starred': string
-  readonly bookmark__title__inner__nsfw: string
+  readonly bookmark__title__inner__unread: string
   readonly bookmark__title__inner__text: string
   readonly bookmark__menu: string
   readonly bookmark__menu__button: string
@@ -16,6 +16,7 @@ declare const styles: {
   readonly bookmark__info__tag__name: string
   readonly 'bookmark__info__tag__name--selected': string
   readonly bookmark__info__tag__yields: string
+  readonly bookmark__info__tag__separator: string
   readonly bookmark__links: string
   readonly bookmark__links__item: string
   readonly bookmark__links__item__site: string

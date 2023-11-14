@@ -53,13 +53,7 @@ const Page: React.FC = () => {
   } = use_library_selector((state) => state.bookmarks)
   const { get_bookmarks } = use_bookmarks()
   const { months, is_getting_months_data, tags, selected_tags } = use_months()
-  const {
-    current_filter,
-    set_filter_query_param,
-    exclude_nsfw,
-    include_nsfw,
-    is_nsfw_excluded,
-  } = use_filter_view_options()
+  const { current_filter, set_filter_query_param } = use_filter_view_options()
   const { current_sortby, set_sortby_query_param } = use_sortby_view_options()
   const { current_order, set_order_query_param } = use_order_view_options()
   const {
@@ -73,7 +67,6 @@ const Page: React.FC = () => {
   const [is_filter_dropdown_visible, toggle_filter_dropdown] = useToggle(false)
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
-  const [is_user_swiping_months, set_is_user_swiping_months] = useState(false)
 
   useUpdateEffect(() => {
     if (!show_months) set_show_months(true)
@@ -132,91 +125,71 @@ const Page: React.FC = () => {
                 <DropdownMenu
                   items={[
                     {
-                      label: 'All',
+                      label: _filter_option_to_label(LibraryFilter.All),
                       on_click: () => {
                         toggle_filter_dropdown()
                         if (
                           current_filter == LibraryFilter.All ||
-                          current_filter == LibraryFilter.AllNsfwExcluded ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-                        if (is_nsfw_excluded) {
-                          set_filter_query_param(LibraryFilter.AllNsfwExcluded)
-                        } else {
-                          set_filter_query_param(LibraryFilter.All)
-                        }
-                      },
-                      is_selected:
-                        current_filter == LibraryFilter.All ||
-                        current_filter == LibraryFilter.AllNsfwExcluded,
-                    },
-                    {
-                      label: 'Starred only',
-                      on_click: () => {
-                        toggle_filter_dropdown()
-                        if (
-                          current_filter == LibraryFilter.StarredOnly ||
-                          current_filter ==
-                            LibraryFilter.StarredOnlyNsfwExcluded ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-                        if (is_nsfw_excluded) {
-                          set_filter_query_param(
-                            LibraryFilter.StarredOnlyNsfwExcluded,
-                          )
-                        } else {
-                          set_filter_query_param(LibraryFilter.StarredOnly)
-                        }
-                      },
-                      is_selected:
-                        current_filter == LibraryFilter.StarredOnly ||
-                        current_filter == LibraryFilter.StarredOnlyNsfwExcluded,
-                    },
-                    {
-                      label: 'Archived',
-                      on_click: () => {
-                        toggle_filter_dropdown()
-                        if (
-                          current_filter == LibraryFilter.Archived ||
-                          current_filter ==
-                            LibraryFilter.ArchivedNsfwExcluded ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-                        if (is_nsfw_excluded) {
-                          set_filter_query_param(
-                            LibraryFilter.ArchivedNsfwExcluded,
-                          )
-                        } else {
-                          set_filter_query_param(LibraryFilter.Archived)
-                        }
-                      },
-                      is_selected:
-                        current_filter == LibraryFilter.Archived ||
-                        current_filter == LibraryFilter.ArchivedNsfwExcluded,
-                    },
-                    {
-                      label: 'Exclude NSFW',
-                      on_click: () => {
-                        toggle_filter_dropdown()
-                        if (
                           is_getting_first_bookmarks ||
                           is_getting_more_bookmarks ||
                           is_getting_months_data
                         )
                           return
 
-                        is_nsfw_excluded ? include_nsfw() : exclude_nsfw()
+                        set_filter_query_param(LibraryFilter.All)
                       },
-                      is_checked: is_nsfw_excluded,
+                      is_selected: current_filter == LibraryFilter.All,
+                    },
+                    {
+                      label: _filter_option_to_label(LibraryFilter.Starred),
+                      on_click: () => {
+                        toggle_filter_dropdown()
+                        if (
+                          current_filter == LibraryFilter.Starred ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+
+                        set_filter_query_param(LibraryFilter.Starred)
+                      },
+                      is_selected: current_filter == LibraryFilter.Starred,
+                    },
+                    {
+                      label: _filter_option_to_label(LibraryFilter.Archived),
+                      on_click: () => {
+                        toggle_filter_dropdown()
+                        if (
+                          current_filter == LibraryFilter.Archived ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+
+                        set_filter_query_param(LibraryFilter.Archived)
+                      },
+                      is_selected: current_filter == LibraryFilter.Archived,
+                    },
+                    {
+                      label: _filter_option_to_label(
+                        LibraryFilter.ArchivedStarred,
+                      ),
+                      on_click: () => {
+                        toggle_filter_dropdown()
+                        if (
+                          current_filter == LibraryFilter.ArchivedStarred ||
+                          is_getting_first_bookmarks ||
+                          is_getting_more_bookmarks ||
+                          is_getting_months_data
+                        )
+                          return
+
+                        set_filter_query_param(LibraryFilter.ArchivedStarred)
+                      },
+                      is_selected:
+                        current_filter == LibraryFilter.ArchivedStarred,
                     },
                   ]}
                 />
@@ -361,7 +334,6 @@ const Page: React.FC = () => {
                   is_range_selector_disabled={
                     current_sortby == Sortby.UpdatedAt
                   }
-                  set_swipe_state_handler={set_is_user_swiping_months}
                 />
               </div>
             ) : (
@@ -473,7 +445,7 @@ const Page: React.FC = () => {
                       })
                     : []
                 }
-                is_nsfw={bookmark.is_nsfw}
+                is_unread={bookmark.is_unread}
                 is_starred={bookmark.is_starred}
                 key={bookmark.id}
                 on_tag_click={add_tag_to_query_params}
@@ -504,7 +476,6 @@ const Page: React.FC = () => {
           ? clear_gte_lte_query_params
           : undefined
       }
-      is_user_swiping_months={is_user_swiping_months}
     />
   )
 }
@@ -535,15 +506,19 @@ function _filter_option_to_label(filter: LibraryFilter): string {
   switch (filter) {
     case LibraryFilter.All:
       return 'All'
-    case LibraryFilter.AllNsfwExcluded:
-      return 'All without NSFW'
-    case LibraryFilter.StarredOnly:
-      return 'Starred only'
-    case LibraryFilter.StarredOnlyNsfwExcluded:
-      return 'Starred only without NSFW'
+    case LibraryFilter.Starred:
+      return 'Starred'
+    case LibraryFilter.Unread:
+      return ''
+    case LibraryFilter.StarredUnread:
+      return ''
     case LibraryFilter.Archived:
       return 'Archived'
-    case LibraryFilter.ArchivedNsfwExcluded:
-      return 'Archived without NSFW'
+    case LibraryFilter.ArchivedStarred:
+      return 'Archived starred'
+    case LibraryFilter.ArchivedUnread:
+      return ''
+    case LibraryFilter.ArchivedStarredUnread:
+      return ''
   }
 }

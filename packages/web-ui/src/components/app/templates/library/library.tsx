@@ -2,7 +2,6 @@ import { sharedValues } from '@web-ui/constants'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
-import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
 import cn from 'classnames'
 import { useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
@@ -12,6 +11,7 @@ import { _MobileTitleBar } from './components/_mobile-title-bar'
 import { use_scroll_restore } from './hooks/use-scroll-restore'
 import styles from './library.module.scss'
 import { use_is_hydrated } from '@shared/hooks'
+import { useSwipeable } from 'react-swipeable'
 
 export namespace Library {
   export type Props = {
@@ -28,14 +28,12 @@ export namespace Library {
     clear_selected_tags?: () => void
     clear_date_range?: () => void
     show_bookmarks_skeleton: boolean
-    is_user_swiping_months: boolean
   }
 }
 
 const SLIDABLE_WIDTH = 300
 
 export const Library: React.FC<Library.Props> = (props) => {
-  const container = useRef<HTMLDivElement>(null)
   const sidebar = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLDivElement>(null)
@@ -43,104 +41,124 @@ export const Library: React.FC<Library.Props> = (props) => {
   const is_hydrated = use_is_hydrated()
   use_scroll_restore()
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
-
-  // Removing 'useSwipeEvents' breaks reload/history back. Investigate why.
-  useSwipeEvents(undefined, {
-    preventDefault: false,
-  })
-
-  const swipe_state_container = useSwipe(container, {
-    preventDefault: false,
-    threshold: 20,
-  })
+  const [drag_distance, set_drag_distance] = useState<number>(0)
 
   const swipe_state_main = useSwipe(main, {
     preventDefault: false,
   })
 
-  const [is_side_left_moving, set_is_side_left_moving] = useState(false)
-  const [is_side_right_moving, set_is_side_right_moving] = useState(false)
-  const [is_side_left_open, set_is_side_left_open] = useState(false)
-  const [is_side_right_open, set_is_side_right_open] = useState(false)
+  const swipeable_handlers = useSwipeable({
+    onSwipeStart: ({ dir }) => {
+      if (dir == 'Left' || dir == 'Right') {
+        document.body.style.overflow = 'hidden'
+      }
+      if (dir == 'Right' && is_right_side_open) {
+        set_is_right_side_moving(true)
+      } else if (dir == 'Right' && !is_left_side_open) {
+        set_is_left_side_moving(true)
+      } else if (dir == 'Left' && is_left_side_open) {
+        set_is_left_side_moving(true)
+      } else if (dir == 'Left' && !is_right_side_open) {
+        set_is_right_side_moving(true)
+      }
+    },
+    onSwiping: ({ deltaX, dir }) => {
+      if (
+        (dir == 'Left' &&
+          deltaX < 0 &&
+          deltaX >= -SLIDABLE_WIDTH &&
+          !is_right_side_open) ||
+        (dir == 'Right' &&
+          deltaX > 0 &&
+          deltaX <= SLIDABLE_WIDTH &&
+          !is_left_side_open)
+      ) {
+        set_drag_distance(deltaX)
+      }
+    },
+    onSwiped: ({ dir, velocity }) => {
+      if (dir == 'Left' || dir == 'Right') {
+        if (velocity > 0.2) {
+          if (dir == 'Right') {
+            if (!is_left_side_open && !is_right_side_open) {
+              toggle_left_side()
+            } else if (is_right_side_open) {
+              toggle_right_side()
+            }
+          }
+          if (dir == 'Left') {
+            if (!is_right_side_open && !is_left_side_open) {
+              toggle_right_side()
+            } else if (is_left_side_open) {
+              toggle_left_side()
+            }
+          }
+        } else if (!is_left_side_open && !is_right_side_open) {
+          document.body.style.overflow = ''
+        }
+
+        set_drag_distance(0)
+        setTimeout(() => {
+          set_is_right_side_moving(false)
+          set_is_left_side_moving(false)
+        }, 300)
+      }
+    },
+  })
+
+  const [is_left_side_moving, set_is_left_side_moving] = useState(false)
+  const [is_right_side_moving, set_is_right_side_moving] = useState(false)
+  const [is_left_side_open, set_is_left_side_open] = useState(false)
+  const [is_right_side_open, set_is_right_side_open] = useState(false)
 
   useUpdateEffect(() => {
-    if (
-      props.is_user_swiping_months ||
-      props.is_getting_first_bookmarks ||
-      window.innerWidth > sharedValues.mediaQuery992
-    )
-      return
-
-    if (swipe_state_container.direction == 'left') {
-      if (!is_side_left_open && !is_side_right_open) {
-        toggle_right_side()
-      } else if (is_side_left_open) {
-        toggle_left_side()
-      }
-    } else if (swipe_state_container.direction == 'right') {
-      if (!is_side_left_open && !is_side_right_open) {
-        toggle_left_side()
-      } else if (is_side_right_open) {
-        toggle_right_side()
-      }
-    }
-  }, [swipe_state_container])
-
-  useUpdateEffect(() => {
-    if (
-      is_side_left_moving ||
-      is_side_right_moving ||
-      props.is_getting_first_bookmarks
-    )
-      return
+    if (is_left_side_moving || is_right_side_moving) return
 
     if (
       swipe_state_main.direction == 'down' ||
       swipe_state_main.direction == 'up'
     ) {
-      if (is_side_left_open) {
+      if (is_left_side_open) {
         toggle_left_side()
-      } else if (is_side_right_open) {
+      } else if (is_right_side_open) {
         toggle_right_side()
       }
     }
   }, [swipe_state_main])
 
   const toggle_right_side = () => {
-    if (is_side_left_moving || is_side_right_moving) return
+    document.body.style.overflow = 'hidden'
+    set_is_right_side_moving(true)
 
-    if (!is_side_right_open) {
-      set_is_side_right_open(true)
-      document.body.style.overflow = 'hidden'
+    if (!is_right_side_open) {
+      set_is_right_side_open(true)
     } else {
-      set_is_side_right_open(false)
+      set_is_right_side_open(false)
       setTimeout(() => {
         document.body.style.overflow = ''
       }, 300)
     }
 
-    set_is_side_right_moving(true)
     setTimeout(() => {
-      set_is_side_right_moving(false)
+      set_is_right_side_moving(false)
     }, 300)
   }
 
   const toggle_left_side = () => {
-    if (is_side_left_moving || is_side_right_moving) return
+    document.body.style.overflow = 'hidden'
+    set_is_left_side_moving(true)
 
-    if (!is_side_left_open) {
-      set_is_side_left_open(true)
-      document.body.style.overflow = 'hidden'
+    if (!is_left_side_open) {
+      set_is_left_side_open(true)
     } else {
-      set_is_side_left_open(false)
+      set_is_left_side_open(false)
       setTimeout(() => {
         document.body.style.overflow = ''
       }, 300)
     }
 
-    set_is_side_left_moving(true)
     setTimeout(() => {
-      set_is_side_left_moving(false)
+      set_is_left_side_moving(false)
     }, 300)
   }
 
@@ -161,20 +179,38 @@ export const Library: React.FC<Library.Props> = (props) => {
     }
   }, [props.is_getting_first_bookmarks])
 
+  let translate_x = 0
+
+  if (is_left_side_open && !drag_distance) {
+    translate_x = SLIDABLE_WIDTH
+  } else if (is_right_side_open && !drag_distance) {
+    translate_x = -SLIDABLE_WIDTH
+  } else if (!is_left_side_open && !is_right_side_open && drag_distance) {
+    translate_x = drag_distance
+  } else if (is_left_side_open && drag_distance) {
+    translate_x = SLIDABLE_WIDTH + drag_distance
+  } else if (is_right_side_open && drag_distance) {
+    translate_x = -SLIDABLE_WIDTH + drag_distance
+  }
+
   return (
-    <div className={styles.container} ref={container}>
+    <div className={styles.container} {...swipeable_handlers}>
       <div
         className={cn(styles['mobile-title-bar'], {
-          [styles['mobile-title-bar--moved-to-left']]: is_side_right_open,
-          [styles['mobile-title-bar--moved-to-right']]: is_side_left_open,
+          [styles['free-fall']]: !drag_distance,
         })}
+        style={{
+          pointerEvents:
+            is_right_side_open || is_left_side_open ? 'none' : undefined,
+          transform: `translateX(${translate_x}px)`,
+        }}
       >
         <_MobileTitleBar
           swipe_left_on_click={
-            !is_side_left_open ? toggle_left_side : undefined
+            !is_left_side_open ? toggle_left_side : undefined
           }
           swipe_right_on_click={
-            !is_side_right_open ? toggle_right_side : undefined
+            !is_right_side_open ? toggle_right_side : undefined
           }
           text={props.title_bar ? props.title_bar : undefined}
         />
@@ -182,16 +218,15 @@ export const Library: React.FC<Library.Props> = (props) => {
       <div className={styles.content}>
         <div
           className={cn(styles.sidebar, {
-            [styles['aside--hidden']]: !(
-              (is_side_left_open || is_side_left_moving) &&
-              !is_side_right_open
-            ),
+            [styles['aside--hidden']]:
+              (is_right_side_open || is_right_side_moving) &&
+              !is_left_side_moving,
           })}
           ref={sidebar}
           style={{
             width: `${SLIDABLE_WIDTH}px`,
-            zIndex: !is_side_right_open ? undefined : 1,
-            pointerEvents: is_side_right_open ? 'none' : undefined,
+            zIndex: !is_right_side_open ? undefined : 1,
+            pointerEvents: is_right_side_open ? 'none' : undefined,
           }}
         >
           <div
@@ -206,30 +241,26 @@ export const Library: React.FC<Library.Props> = (props) => {
 
         <div
           className={cn(styles.main, {
-            [styles['main--moved-to-left']]: is_side_right_open,
-            [styles['main--moved-to-right']]: is_side_left_open,
-            [styles['main--borders']]: is_side_left_open || is_side_right_open,
+            [styles['free-fall']]: !drag_distance,
           })}
           ref={main}
           onClick={() => {
-            is_side_left_open && toggle_left_side()
-            is_side_right_open && toggle_right_side()
+            is_left_side_open && toggle_left_side()
+            is_right_side_open && toggle_right_side()
+          }}
+          style={{
+            transform: `translateX(${translate_x}px)`,
           }}
         >
           <div
             className={styles.main__inner}
             style={{
               pointerEvents:
-                is_side_left_open || is_side_right_open ? 'none' : 'all',
+                is_left_side_open || is_right_side_open ? 'none' : 'all',
             }}
           >
             <div>
-              <div
-                className={styles['main__inner__desktop-title-bar']}
-                style={{
-                  visibility: is_hydrated ? 'visible' : 'hidden',
-                }}
-              >
+              <div className={styles['main__inner__desktop-title-bar']}>
                 <_DesktopTitleBar
                   text={props.title_bar ? props.title_bar : undefined}
                 />
@@ -251,7 +282,7 @@ export const Library: React.FC<Library.Props> = (props) => {
               </div>
               {props.show_bookmarks_skeleton && (
                 <div className={styles['main__inner__skeleton']}>
-                  {[...Array(30)].map((_, i) => (
+                  {[...Array(20)].map((_, i) => (
                     <Skeleton key={i} />
                   ))}
                 </div>
@@ -267,30 +298,26 @@ export const Library: React.FC<Library.Props> = (props) => {
                     ? 'No results'
                     : 'End of results'}
                 </span>
-                {props.clear_selected_tags &&
-                  !props.is_getting_first_bookmarks && (
-                    <button onClick={props.clear_selected_tags}>
-                      Clear selected tags
-                    </button>
-                  )}
-                {props.clear_date_range &&
-                  !props.is_getting_first_bookmarks && (
-                    <button onClick={props.clear_date_range}>
-                      Clear date range
-                    </button>
-                  )}
+                {
+                  // INVESTIGATE: Without "is_hydrated" gives errors after page refresh, why?
+                }
+                {is_hydrated && props.clear_selected_tags && (
+                  <button onClick={props.clear_selected_tags}>
+                    Clear selected tags
+                  </button>
+                )}
+                {props.clear_date_range && (
+                  <button onClick={props.clear_date_range}>
+                    Clear date range
+                  </button>
+                )}
               </div>
             </div>
           </div>
         </div>
 
         <div
-          className={cn(styles.aside, {
-            [styles['aside--hidden']]: !(
-              (is_side_right_open || is_side_right_moving) &&
-              !is_side_left_open
-            ),
-          })}
+          className={styles.aside}
           ref={aside}
           style={{
             width: `${SLIDABLE_WIDTH}px`,
