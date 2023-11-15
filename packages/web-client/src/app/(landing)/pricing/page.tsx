@@ -34,8 +34,8 @@ const Page: React.FC = () => {
           <PricingTier
             name="Plus"
             description="Take your browsing experience to the next level"
-            price="Only $3"
-            price_info="$30 billed annually"
+            price="$4"
+            price_info="$40 billed annually"
             bullets={[
               'Everyting in Free',
               'Personal library gets all features',
