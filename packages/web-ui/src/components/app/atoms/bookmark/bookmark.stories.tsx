@@ -21,7 +21,7 @@ export const Primary = () => (
       <Bookmark
         index={22}
         id="1"
-        is_starred={false}
+        stars={0}
         title="Lorem ipsum dolor sit amet"
         description="Lorem ipsum dolor sit amet"
         is_unread={false}
@@ -47,7 +47,7 @@ export const Primary = () => (
       <Bookmark
         index={22}
         id="1"
-        is_starred={false}
+        stars={0}
         title="Lorem ipsum dolor sit amet"
         is_unread={false}
         tags={[]}
@@ -68,7 +68,7 @@ export const Primary = () => (
       <Bookmark
         index={22}
         id="1"
-        is_starred={false}
+        stars={0}
         title="Lorem ipsum dolor sit amet"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies sapien nulla, at facilisis risus dictum sed."
         is_unread={false}
@@ -93,7 +93,7 @@ export const Primary = () => (
       <Bookmark
         index={22}
         id="1"
-        is_starred={true}
+        stars={2}
         title="Lorem ipsum dolor sit amet"
         is_unread={false}
         tags={[
@@ -117,7 +117,7 @@ export const Primary = () => (
       <Bookmark
         index={22}
         id="1"
-        is_starred={false}
+        stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={true}
         tags={[
@@ -148,7 +148,7 @@ export const Primary = () => (
       <Bookmark
         index={22}
         id="1"
-        is_starred={false}
+        stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={false}
         tags={[
@@ -172,7 +172,7 @@ export const Primary = () => (
       <Bookmark
         index={22}
         id="1"
-        is_starred={true}
+        stars={2}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={true}
         tags={[
@@ -196,7 +196,7 @@ export const Primary = () => (
       <Bookmark
         index={22}
         id="1"
-        is_starred={true}
+        stars={2}
         title="Lorem ipsum dolor sit amet"
         is_unread={true}
         tags={[

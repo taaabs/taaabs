@@ -23,8 +23,9 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           updated_at: bookmark.updated_at,
           visited_at: bookmark.visited_at,
           title: bookmark.title,
+          is_public: bookmark.is_public || false,
           is_unread: bookmark.is_unread || false,
-          is_starred: bookmark.is_starred || false,
+          stars: bookmark.stars || 0,
           tags: bookmark.tags.map((tag) => ({
             id: tag.id,
             name: tag.name,
@@ -36,7 +37,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             site_path: link.site_path,
             is_public: link.is_public || false,
           })),
-          is_public: bookmark.is_public || false,
         }
       }),
       pagination: {
@@ -58,9 +58,9 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         updated_at: bookmark.updated_at,
         visited_at: bookmark.visited_at,
         title: bookmark.title,
-        is_unread: bookmark.is_unread || false,
-        is_starred: bookmark.is_starred || false,
         is_public: true,
+        is_unread: bookmark.is_unread || false,
+        stars: bookmark.stars || 0,
         tags: bookmark.tags.map((tag) => ({
           id: tag.id,
           name: tag.name,

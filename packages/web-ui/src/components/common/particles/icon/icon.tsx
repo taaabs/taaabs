@@ -60,76 +60,76 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
 
   switch (variant) {
     case 'ADD':
-      icon = <Add style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Add />
       break
     case 'ARCHIVE':
-      icon = <Archive style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Archive />
       break
     case 'BOOKMARK':
-      icon = <Bookmark style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Bookmark />
       break
     case 'DELETE':
-      icon = <Delete style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Delete />
       break
     case 'GOOGLE':
       icon = <Google />
       break
     case 'GREATER_THAN':
-      icon = <GreaterThan style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <GreaterThan />
       break
     case 'HOME':
-      icon = <Home style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Home />
       break
     case 'INFO':
-      icon = <Info style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Info />
       break
     case 'LESS_THAN':
-      icon = <LessThan style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <LessThan />
       break
     case 'LOGO':
-      icon = <Logo style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Logo />
       break
     case 'MOBILE_TITLE_BAR_MENU':
-      icon = <MobileTitleBarMenu style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <MobileTitleBarMenu />
       break
     case 'MOBILE_TITLE_BAR_VIEW_OPTIONS':
-      icon = <MobileTitleBarViewOptions style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <MobileTitleBarViewOptions />
       break
     case 'NEW_TAB':
-      icon = <NewTab style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <NewTab />
       break
     case 'NOTIFICATIONS':
-      icon = <Notifications style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Notifications />
       break
     case 'SEARCH':
-      icon = <Search style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Search />
       break
     case 'SELECTED':
-      icon = <Selected style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Selected />
       break
     case 'SELECTED_BOLD':
-      icon = <SelectedBold style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <SelectedBold />
       break
     case 'STAR':
-      icon = <Star style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Star />
       break
     case 'SUN':
-      icon = <Sun style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <Sun />
       break
     case 'THREE_DOTS':
-      icon = <ThreeDots style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <ThreeDots />
       break
     case 'STAR_FILLED':
-      icon = <StarFilled style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <StarFilled />
       break
     case 'USER_ADD':
-      icon = <UserAdd style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <UserAdd />
       break
     case 'USER_REMOVE':
-      icon = <UserRemove style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <UserRemove />
       break
     case 'USER':
-      icon = <User style={{ fill: 'var(--Icon-fill)' }} />
+      icon = <User />
       break
   }
 

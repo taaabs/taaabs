@@ -1,10 +1,11 @@
 export enum LibraryFilter {
   All = 'all',
-  Starred = 'starred',
+  OneStar = 'one_star',
+  TwoStars = 'two_stars',
+  ThreeStars = 'three_stars',
   Unread = 'unread',
-  StarredUnread = 'starred_unread',
+  OneStarUnread = 'one_star_unread',
+  TwoStarsUnread = 'two_stars_unread',
+  ThreeStarsUnread = 'three_stars_unread',
   Archived = 'archived',
-  ArchivedStarred = 'archived_starred',
-  ArchivedUnread = 'archived_unread',
-  ArchivedStarredUnread = 'archived_starred_unread',
 }

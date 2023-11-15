@@ -38,45 +38,52 @@ export const upsert_bookmark = (params: {
 
       const is_archived_toggled_should_remove =
         (!params.bookmark.is_archived &&
-          (params.last_authorized_months_params.filter ==
-            LibraryFilter.Archived ||
-            params.last_authorized_months_params.filter ==
-              LibraryFilter.ArchivedStarred ||
-            params.last_authorized_months_params.filter ==
-              LibraryFilter.ArchivedUnread ||
-            params.last_authorized_months_params.filter ==
-              LibraryFilter.ArchivedStarredUnread)) ||
+          params.last_authorized_months_params.filter ==
+            LibraryFilter.Archived) ||
         (params.bookmark.is_archived &&
           !(
             params.last_authorized_months_params.filter ==
-              LibraryFilter.Archived ||
-            params.last_authorized_months_params.filter ==
-              LibraryFilter.ArchivedStarred ||
-            params.last_authorized_months_params.filter ==
-              LibraryFilter.ArchivedUnread ||
-            params.last_authorized_months_params.filter ==
-              LibraryFilter.ArchivedStarredUnread
+            LibraryFilter.Archived
           ))
 
       const is_starred_toggled_should_remove =
-        !params.bookmark.is_starred &&
-        (params.last_authorized_months_params.filter == LibraryFilter.Starred ||
-          params.last_authorized_months_params.filter ==
-            LibraryFilter.StarredUnread ||
-          params.last_authorized_months_params.filter ==
-            LibraryFilter.ArchivedStarred ||
-          params.last_authorized_months_params.filter ==
-            LibraryFilter.ArchivedStarredUnread)
+        (params.bookmark.stars == 0 &&
+          (params.last_authorized_months_params.filter ==
+            LibraryFilter.OneStar ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.TwoStars ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.ThreeStars ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.OneStarUnread ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.TwoStarsUnread ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.ThreeStarsUnread)) ||
+        (params.bookmark.stars == 1 &&
+          (params.last_authorized_months_params.filter ==
+            LibraryFilter.TwoStars ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.ThreeStars ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.TwoStarsUnread ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.ThreeStarsUnread)) ||
+        (params.bookmark.stars == 2 &&
+          (params.last_authorized_months_params.filter ==
+            LibraryFilter.ThreeStars ||
+            params.last_authorized_months_params.filter ==
+              LibraryFilter.ThreeStarsUnread))
 
       const is_unread_toggled_should_remove =
         !params.bookmark.is_unread &&
         (params.last_authorized_months_params.filter == LibraryFilter.Unread ||
           params.last_authorized_months_params.filter ==
-            LibraryFilter.StarredUnread ||
+            LibraryFilter.OneStarUnread ||
           params.last_authorized_months_params.filter ==
-            LibraryFilter.ArchivedUnread ||
+            LibraryFilter.TwoStarsUnread ||
           params.last_authorized_months_params.filter ==
-            LibraryFilter.ArchivedStarredUnread)
+            LibraryFilter.ThreeStarsUnread)
 
       if (
         is_archived_toggled_should_remove ||
@@ -101,17 +108,17 @@ export const upsert_bookmark = (params: {
         let modified_bookmark =
           state.bookmarks.bookmarks[modified_bookmark_index]
 
-        if (modified_bookmark.is_starred != params.bookmark.is_starred) {
+        if (modified_bookmark.stars != params.bookmark.stars) {
           modified_bookmark = {
             ...modified_bookmark,
-            is_starred: !modified_bookmark.is_starred,
+            stars: params.bookmark.stars || 0,
           }
         }
 
         if (modified_bookmark.is_unread != params.bookmark.is_unread) {
           modified_bookmark = {
             ...modified_bookmark,
-            is_unread: !modified_bookmark.is_unread,
+            is_unread: params.bookmark.is_unread,
           }
         }
 
