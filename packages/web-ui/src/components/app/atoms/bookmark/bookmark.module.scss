@@ -35,15 +35,6 @@
       display: inline;
       color: var(--text-color-normal);
       margin-right: var(--distance-0-6rem);
-      &--starred {
-        padding: var(--distance-0-7rem) var(--distance-0-5rem) 0.28rem
-          var(--distance-0-5rem);
-        margin-left: calc(var(--distance-0-5rem) * -1);
-        margin-right: calc(var(--distance-0-6rem) - var(--distance-0-4rem));
-        background: var(--Bookmark-starred-title-background);
-        box-decoration-break: clone;
-        -webkit-box-decoration-break: clone;
-      }
       &__unread {
         display: inline-flex;
         align-items: center;
@@ -57,6 +48,16 @@
         border-radius: var(--border-radius-999px);
         &:after {
           content: '⠀';
+        }
+      }
+      &__stars {
+        display: inline-flex;
+        gap: var(--distance-0-4rem);
+        transform: translateY(0.12rem);
+        margin-right: var(--distance-0-6rem);
+        > svg {
+          width: var(--distance-2-0rem);
+          fill: var(--yellow);
         }
       }
       &__text {
@@ -97,7 +98,7 @@
       width: var(--button-dimension-28px);
       height: var(--button-dimension-28px);
       svg {
-        fill: var(--Bookmark-action-fill) !important;
+        fill: var(--Bookmark-action-fill);
         @include transition-100ms(fill);
         width: var(--icon-dimension-16px);
         height: var(--icon-dimension-16px);
@@ -105,14 +106,14 @@
       @include hover {
         background: var(--Bookmark-action-background-hover);
         svg {
-          fill: var(--Bookmark-action-fill-hover) !important;
+          fill: var(--Bookmark-action-fill-hover);
         }
       }
     }
     &--toggled {
       background: var(--Bookmark-action-background-hover);
       svg {
-        fill: var(--Bookmark-action-fill-hover) !important;
+        fill: var(--Bookmark-action-fill-hover);
       }
     }
     &__slot {
@@ -260,7 +261,7 @@
             width: var(--button-dimension-28px);
             height: var(--button-dimension-28px);
             svg {
-              fill: var(--Bookmark-link-new-tab-fill) !important;
+              fill: var(--Bookmark-link-new-tab-fill);
               @include transition-100ms(fill);
               width: var(--icon-dimension-12px);
               height: var(--icon-dimension-12px);
@@ -268,7 +269,7 @@
             @include hover {
               background: var(--Bookmark-link-new-tab-background-hover);
               svg {
-                fill: var(--Bookmark-link-new-tab-fill-hover) !important;
+                fill: var(--Bookmark-link-new-tab-fill-hover);
               }
             }
           }
@@ -293,7 +294,7 @@
           }
           svg {
             height: var(--icon-dimension-16px);
-            fill: var(--Bookmark-saves-foreground) !important;
+            fill: var(--Bookmark-saves-foreground);
           }
         }
       }

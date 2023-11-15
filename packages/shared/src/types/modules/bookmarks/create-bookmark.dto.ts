@@ -14,7 +14,7 @@ export class CreateBookmark_Dto {
   public created_at?: string
   public is_public?: boolean
   public is_archived?: boolean
-  public is_starred?: boolean
+  public stars?: number
   public is_unread?: boolean
   public tags: Tag[]
   public links: Link[]

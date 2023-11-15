@@ -43,7 +43,7 @@ export namespace Bookmark {
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
     on_click: () => void
     is_unread?: boolean
-    is_starred?: boolean
+    stars: number
     links: { url: string; site_path?: string; saves: number }[]
     render_height?: number
     set_render_height: (height: number) => void
@@ -73,7 +73,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           set_render_height(ref.current!.clientHeight)
         }, 0)
       }
-    }, [props.is_unread])
+    }, [props.is_unread, props.stars])
 
     const relative_time = dayjs(props.date).fromNow()
 
@@ -97,14 +97,16 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           >
             <div className={styles.bookmark}>
               <div className={styles.bookmark__title}>
-                <div
-                  className={cn(styles.bookmark__title__inner, {
-                    [styles['bookmark__title__inner--starred']]:
-                      props.is_starred,
-                  })}
-                >
+                <div className={styles.bookmark__title__inner}>
                   {props.is_unread && (
                     <div className={styles.bookmark__title__inner__unread} />
+                  )}
+                  {props.stars >= 1 && (
+                    <div className={styles.bookmark__title__inner__stars}>
+                      {[...new Array(props.stars)].map(() => (
+                        <Icon variant="STAR_FILLED" />
+                      ))}
+                    </div>
                   )}
                   <div
                     className={styles.bookmark__title__inner__text}
@@ -292,7 +294,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
   },
   (o, n) =>
     o.index == n.index &&
-    o.is_starred == n.is_starred &&
+    o.stars == n.stars &&
     o.is_unread == n.is_unread &&
     o.render_height == n.render_height &&
     JSON.stringify(o.tags) == JSON.stringify(n.tags),

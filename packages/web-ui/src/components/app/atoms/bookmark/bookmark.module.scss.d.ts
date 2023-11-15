@@ -3,8 +3,8 @@ declare const styles: {
   readonly bookmark: string
   readonly bookmark__title: string
   readonly bookmark__title__inner: string
-  readonly 'bookmark__title__inner--starred': string
   readonly bookmark__title__inner__unread: string
+  readonly bookmark__title__inner__stars: string
   readonly bookmark__title__inner__text: string
   readonly bookmark__menu: string
   readonly bookmark__menu__button: string

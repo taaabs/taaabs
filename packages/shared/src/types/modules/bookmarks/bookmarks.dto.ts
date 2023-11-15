@@ -66,7 +66,7 @@ export namespace Bookmarks_Dto {
       public updated_at: string
       public visited_at: string
       public tags: Tag[]
-      public is_starred?: boolean
+      public stars?: number
       public is_unread?: boolean
     }
 
