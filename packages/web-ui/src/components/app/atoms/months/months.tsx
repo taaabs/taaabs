@@ -473,8 +473,7 @@ export const Months: React.FC<Months.Props> = memo(
   (o, n) =>
     o.has_results == n.has_results &&
     o.clear_date_range == n.clear_date_range &&
-    o.is_range_selector_disabled == n.is_range_selector_disabled &&
-    JSON.stringify(o.months) == JSON.stringify(n.months),
+    o.is_range_selector_disabled == n.is_range_selector_disabled,
 )
 
 function yyyymm_to_display(yyyymm: number) {

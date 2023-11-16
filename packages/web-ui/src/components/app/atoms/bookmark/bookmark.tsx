@@ -41,6 +41,7 @@ export namespace Bookmark {
     on_tag_click: (tagId: number) => void
     on_selected_tag_click: (tagId: number) => void
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
+    number_of_selected_tags: number
     on_click: () => void
     is_unread?: boolean
     stars: number
@@ -103,13 +104,16 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   )}
                   {props.stars >= 1 && (
                     <div className={styles.bookmark__title__inner__stars}>
-                      {[...new Array(props.stars)].map(() => (
-                        <Icon variant="STAR_FILLED" />
+                      {[...new Array(props.stars)].map((_, i) => (
+                        <Icon variant="STAR_FILLED" key={i} />
                       ))}
                     </div>
                   )}
                   <div
-                    className={styles.bookmark__title__inner__text}
+                    className={cn(styles.bookmark__title__inner__text, {
+                      [styles['bookmark__title__inner__text--unread']]:
+                        props.is_unread,
+                    })}
                     role="button"
                     onClick={() => {}}
                   >
@@ -297,7 +301,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.stars == n.stars &&
     o.is_unread == n.is_unread &&
     o.render_height == n.render_height &&
-    JSON.stringify(o.tags) == JSON.stringify(n.tags),
+    o.number_of_selected_tags == n.number_of_selected_tags,
 )
 
 function _url_domain(url: string): string {

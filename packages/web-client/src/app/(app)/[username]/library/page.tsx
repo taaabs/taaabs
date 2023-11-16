@@ -432,6 +432,7 @@ const Page: React.FC = () => {
                 title={bookmark.title}
                 on_click={() => {}}
                 on_menu_click={() => {}}
+                number_of_selected_tags={selected_tags.length}
                 date={new Date(bookmark.created_at)}
                 links={bookmark.links.map((link) => ({
                   url: link.url,

@@ -42,6 +42,7 @@ export const Primary = () => (
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
+        number_of_selected_tags={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -63,6 +64,7 @@ export const Primary = () => (
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
+        number_of_selected_tags={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -88,6 +90,7 @@ export const Primary = () => (
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
+        number_of_selected_tags={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -112,6 +115,7 @@ export const Primary = () => (
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
+        number_of_selected_tags={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -143,6 +147,7 @@ export const Primary = () => (
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
+        number_of_selected_tags={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -167,6 +172,7 @@ export const Primary = () => (
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
+        number_of_selected_tags={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -191,6 +197,7 @@ export const Primary = () => (
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
+        number_of_selected_tags={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -215,6 +222,7 @@ export const Primary = () => (
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
+        number_of_selected_tags={0}
       />
       <StorybookSpacer />
     </div>

@@ -154,9 +154,6 @@ importers:
       '@types/jsonwebtoken':
         specifier: ^9.0.3
         version: 9.0.3
-      '@types/lodash':
-        specifier: ^4.14.199
-        version: 4.14.199
       '@types/node':
         specifier: ^20.8.2
         version: 20.8.2
@@ -4564,10 +4561,6 @@ packages:
     resolution: {integrity: sha512-b0jGiOgHtZ2jqdPgPnP6WLCXZk1T8p06A/vPGzUvxpFGgKMbjXJDjC5m52ErqBnIuWZFgGoIJyRdeG5AyreJjA==}
     dependencies:
       '@types/node': 20.8.2
-    dev: true
-
-  /@types/lodash@4.14.199:
-    resolution: {integrity: sha512-Vrjz5N5Ia4SEzWWgIVwnHNEnb1UE1XMkvY5DGXrAeOGE9imk0hgTHh5GyDjLDJi9OTCn9oo9dXH1uToK1VRfrg==}
     dev: true
 
   /@types/mime-types@2.1.1:

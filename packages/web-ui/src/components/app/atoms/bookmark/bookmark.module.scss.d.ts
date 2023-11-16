@@ -6,6 +6,7 @@ declare const styles: {
   readonly bookmark__title__inner__unread: string
   readonly bookmark__title__inner__stars: string
   readonly bookmark__title__inner__text: string
+  readonly 'bookmark__title__inner__text--unread': string
   readonly bookmark__menu: string
   readonly bookmark__menu__button: string
   readonly 'bookmark__menu--toggled': string
