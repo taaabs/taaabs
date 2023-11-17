@@ -42,6 +42,9 @@ export const Library: React.FC<Library.Props> = (props) => {
   use_scroll_restore()
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
   const [drag_distance, set_drag_distance] = useState<number>(0)
+  const [initial_swipe_direction, set_initial_swipe_direction] = useState<
+    'Left' | 'Right' | undefined
+  >(undefined)
 
   const swipe_state_main = useSwipe(main, {
     preventDefault: false,
@@ -51,6 +54,7 @@ export const Library: React.FC<Library.Props> = (props) => {
     onSwipeStart: ({ dir }) => {
       if (dir == 'Left' || dir == 'Right') {
         document.body.style.overflow = 'hidden'
+        set_initial_swipe_direction(dir)
       }
       if (dir == 'Right' && is_right_side_open) {
         set_is_right_side_moving(true)
@@ -64,11 +68,13 @@ export const Library: React.FC<Library.Props> = (props) => {
     },
     onSwiping: ({ deltaX, dir }) => {
       if (
-        (dir == 'Left' &&
+        (initial_swipe_direction == 'Left' &&
+          dir == 'Left' &&
           deltaX < 0 &&
           deltaX >= -SLIDABLE_WIDTH &&
           !is_right_side_open) ||
-        (dir == 'Right' &&
+        (initial_swipe_direction == 'Right' &&
+          dir == 'Right' &&
           deltaX > 0 &&
           deltaX <= SLIDABLE_WIDTH &&
           !is_left_side_open)
@@ -97,12 +103,12 @@ export const Library: React.FC<Library.Props> = (props) => {
           document.body.style.overflow = ''
         }
 
-        set_drag_distance(0)
         setTimeout(() => {
           set_is_right_side_moving(false)
           set_is_left_side_moving(false)
         }, 300)
       }
+      set_drag_distance(0)
     },
   })
 
