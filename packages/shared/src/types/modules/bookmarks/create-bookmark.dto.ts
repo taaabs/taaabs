@@ -5,7 +5,7 @@ class Tag {
 
 class Link {
   public url: string
-  public site_path: string
+  public site_path?: string
   public is_public?: boolean
 }
 
