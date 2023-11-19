@@ -36,6 +36,8 @@ import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usec
 import { Icon } from '@web-ui/components/common/particles/icon'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { browser_storage } from '@/constants/browser-storage'
+import { use_is_hydrated } from '@shared/hooks'
+import { ButtonSelectSkeleton } from '@web-ui/components/app/atoms/button-select-skeleton'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -43,6 +45,7 @@ const Months = dynamic(() => import('./dynamic-months'), {
 })
 
 const Page: React.FC = () => {
+  const is_hydrated = use_is_hydrated()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
   const query_params = use_shallow_search_params()
@@ -126,15 +129,17 @@ const Page: React.FC = () => {
       slot_aside={
         <LibraryAside
           slot_filter={{
-            button: (
+            button: is_hydrated ? (
               <ButtonSelect
                 label="Filter"
                 current_value={_filter_option_to_label(current_filter)}
                 is_active={is_filter_dropdown_visible}
                 on_click={toggle_filter_dropdown}
               />
+            ) : (
+              <ButtonSelectSkeleton />
             ),
-            dropdown: (
+            dropdown: is_hydrated && (
               <OutsideClickHandler
                 onOutsideClick={toggle_filter_dropdown}
                 disabled={!is_filter_dropdown_visible}
@@ -301,16 +306,18 @@ const Page: React.FC = () => {
             is_dropdown_visible: is_filter_dropdown_visible,
           }}
           slot_sortby={{
-            button: (
+            button: is_hydrated ? (
               <ButtonSelect
                 label="Sort by"
                 current_value={_sortby_option_to_label(current_sortby)}
                 is_active={is_sortby_dropdown_visible}
                 on_click={toggle_sortby_dropdown}
               />
+            ) : (
+              <ButtonSelectSkeleton />
             ),
             is_dropdown_visible: is_sortby_dropdown_visible,
-            dropdown: (
+            dropdown: is_hydrated && (
               <OutsideClickHandler
                 onOutsideClick={toggle_sortby_dropdown}
                 disabled={!is_sortby_dropdown_visible}
@@ -368,16 +375,18 @@ const Page: React.FC = () => {
             ),
           }}
           slot_order={{
-            button: (
+            button: is_hydrated ? (
               <ButtonSelect
                 label="Order"
                 current_value={_order_option_to_label(current_order)}
                 is_active={is_order_dropdown_visible}
                 on_click={toggle_order_dropdown}
               />
+            ) : (
+              <ButtonSelectSkeleton />
             ),
             is_dropdown_visible: is_order_dropdown_visible,
-            dropdown: (
+            dropdown: is_hydrated && (
               <OutsideClickHandler
                 onOutsideClick={toggle_order_dropdown}
                 disabled={!is_order_dropdown_visible}
@@ -539,6 +548,7 @@ const Page: React.FC = () => {
                 title={bookmark.title}
                 on_click={() => {}}
                 on_menu_click={() => {}}
+                number_of_selected_tags={selected_tags.length}
                 date={
                   current_sortby == Sortby.CreatedAt
                     ? new Date(bookmark.created_at)
@@ -609,7 +619,7 @@ const Page: React.FC = () => {
                             stars: bookmark.stars,
                             links: bookmark.links.map((link) => ({
                               url: link.url,
-                              site_path: link.site_path || '',
+                              site_path: link.site_path,
                               is_public: link.is_public,
                             })),
                             tags: bookmark.tags.map((tag) => ({
@@ -649,7 +659,7 @@ const Page: React.FC = () => {
                             stars: bookmark.stars == 1 ? 0 : 1,
                             links: bookmark.links.map((link) => ({
                               url: link.url,
-                              site_path: link.site_path || '',
+                              site_path: link.site_path,
                               is_public: link.is_public,
                             })),
                             tags: bookmark.tags.map((tag) => ({
@@ -689,7 +699,7 @@ const Page: React.FC = () => {
                             stars: bookmark.stars == 2 ? 0 : 2,
                             links: bookmark.links.map((link) => ({
                               url: link.url,
-                              site_path: link.site_path || '',
+                              site_path: link.site_path,
                               is_public: link.is_public,
                             })),
                             tags: bookmark.tags.map((tag) => ({
@@ -729,7 +739,7 @@ const Page: React.FC = () => {
                             stars: bookmark.stars == 3 ? 0 : 3,
                             links: bookmark.links.map((link) => ({
                               url: link.url,
-                              site_path: link.site_path || '',
+                              site_path: link.site_path,
                               is_public: link.is_public,
                             })),
                             tags: bookmark.tags.map((tag) => ({
@@ -772,7 +782,7 @@ const Page: React.FC = () => {
                             stars: bookmark.stars,
                             links: bookmark.links.map((link) => ({
                               url: link.url,
-                              site_path: link.site_path || '',
+                              site_path: link.site_path,
                               is_public: link.is_public,
                             })),
                             tags: bookmark.tags.map((tag) => ({
