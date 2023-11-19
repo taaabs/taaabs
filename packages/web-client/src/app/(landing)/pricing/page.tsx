@@ -32,7 +32,7 @@ const Page: React.FC = () => {
         }
         slot_right_side={
           <PricingTier
-            name="Plus"
+            name="Pro"
             description="Take your browsing experience to the next level"
             price="$4"
             price_info="$40 billed annually"

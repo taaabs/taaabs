@@ -1,4 +1,4 @@
-# Taaabs - next-gen social bookmarking
+# Taaabs - a secure and free bookmark manager for all of your devices.
 
 This document contains qucik start, configuration and technical details on working with Taaabs codebase. For business details, decision log, functional and non-functional requirements visit the project's wiki.
 
