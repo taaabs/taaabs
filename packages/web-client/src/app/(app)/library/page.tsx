@@ -139,7 +139,7 @@ const Page: React.FC = () => {
                   current_filter == LibraryFilter.ThreeStarsUnread
                 }
                 unread_click_handler={() => {
-                  if (is_getting_first_bookmarks) return
+                  if (is_getting_first_bookmarks || is_updating_bookmarks) return
 
                   if (current_filter == LibraryFilter.Unread) {
                     set_filter_query_param(LibraryFilter.All)
@@ -172,7 +172,7 @@ const Page: React.FC = () => {
                     : 0
                 }
                 stars_click_handler={(selected_stars) => {
-                  if (is_getting_first_bookmarks) return
+                  if (is_getting_first_bookmarks || is_updating_bookmarks) return
 
                   if (selected_stars == 1) {
                     if (
