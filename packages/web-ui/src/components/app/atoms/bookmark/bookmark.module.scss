@@ -144,7 +144,7 @@
     padding: 0 var(--distance-16px);
     font-size: var(--font-size-1-5rem);
     > * {
-      padding-right: var(--distance-0-6rem);
+      padding-right: var(--distance-0-8rem);
       padding-bottom: var(--distance-0-6rem);
     }
     > span {
@@ -166,10 +166,6 @@
       &__yields {
         color: var(--text-color-dimmed);
         margin-left: var(--distance-0-4rem);
-      }
-      &__separator {
-        color: var(--text-color-dimmed);
-        margin-left: var(--distance-0-6rem);
       }
     }
   }

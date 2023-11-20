@@ -3,7 +3,7 @@
 
 .container {
   display: flex;
-  gap: var(--distance-23px);
+  gap: var(--distance-20px);
 }
 .unread {
   width: var(--distance-32px);
@@ -13,7 +13,7 @@
   @include hover {
     background-color: var(--red);
     &:not(&.unread--selected) {
-      opacity: 0.5;
+      background-color: var(--neutral300);
     }
   }
   &--selected {
@@ -22,19 +22,18 @@
 }
 .stars {
   display: flex;
-  gap: var(--distance-10px);
   transform: translateY(calc(var(--distance-1px) * -1));
   &__star {
     display: flex;
+    padding: 0 var(--distance-5px);
     > svg {
       height: var(--distance-32px);
       width: var(--distance-32px);
       fill: var(--neutral200);
     }
     &--hover {
-      opacity: 0.5;
       > svg {
-        fill: var(--yellow);
+        fill: var(--neutral300);
       }
     }
     &--selected {

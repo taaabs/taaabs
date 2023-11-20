@@ -194,26 +194,13 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           >
                             {tag.name}
                           </span>
-                          {!tag.isSelected &&
-                            (tag.yields ? (
-                              <span
-                                className={
-                                  styles['bookmark__info__tag__yields']
-                                }
-                              >
-                                {tag.yields}
-                              </span>
-                            ) : (
-                              i != props.tags.length - 1 && (
-                                <span
-                                  className={
-                                    styles['bookmark__info__tag__separator']
-                                  }
-                                >
-                                  ·
-                                </span>
-                              )
-                            ))}
+                          {!tag.isSelected && tag.yields && (
+                            <span
+                              className={styles['bookmark__info__tag__yields']}
+                            >
+                              {tag.yields}
+                            </span>
+                          )}
                           {tag.isSelected && (
                             <span
                               className={styles['bookmark__info__tag__yields']}
