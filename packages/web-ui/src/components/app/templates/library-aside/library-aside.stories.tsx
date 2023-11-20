@@ -7,11 +7,7 @@ export default {
 export const Primary = () => {
   return (
     <LibraryAside
-      slot_filter={{
-        button: <>filter</>,
-        dropdown: <></>,
-        is_dropdown_visible: false,
-      }}
+      slot_filter={<>filter</>}
       slot_months={<>months</>}
       slot_order={{
         button: <>filter</>,

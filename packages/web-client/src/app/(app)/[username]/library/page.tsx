@@ -32,6 +32,7 @@ import { use_months } from '@/hooks/library/use-months'
 import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage-cleanup'
 import { use_is_hydrated } from '@shared/hooks'
 import { ButtonSelectSkeleton } from '@web-ui/components/app/atoms/button-select-skeleton'
+import { UnreadStarsFilter } from '@web-ui/components/app/atoms/unread-stars-filter'
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
@@ -111,110 +112,55 @@ const Page: React.FC = () => {
       }
       slot_aside={
         <LibraryAside
-          slot_filter={{
-            button: is_hydrated ? (
-              <ButtonSelect
-                label="Filter"
-                current_value={_filter_option_to_label(current_filter)}
-                is_active={is_filter_dropdown_visible}
-                on_click={toggle_filter_dropdown}
+          slot_filter={
+            is_hydrated &&
+            current_filter != LibraryFilter.Archived && (
+              <UnreadStarsFilter
+                selected_stars={
+                  current_filter == LibraryFilter.OneStar
+                    ? 1
+                    : current_filter == LibraryFilter.TwoStars
+                    ? 2
+                    : current_filter == LibraryFilter.ThreeStars
+                    ? 3
+                    : 0
+                }
+                stars_click_handler={(selected_stars) => {
+                  if (selected_stars == 1) {
+                    if (current_filter == LibraryFilter.OneStar) {
+                      set_filter_query_param(LibraryFilter.All)
+                    } else if (
+                      current_filter == LibraryFilter.All ||
+                      current_filter == LibraryFilter.TwoStars ||
+                      current_filter == LibraryFilter.ThreeStars
+                    ) {
+                      set_filter_query_param(LibraryFilter.OneStar)
+                    }
+                  } else if (selected_stars == 2) {
+                    if (current_filter == LibraryFilter.TwoStars) {
+                      set_filter_query_param(LibraryFilter.All)
+                    } else if (
+                      current_filter == LibraryFilter.All ||
+                      current_filter == LibraryFilter.OneStar ||
+                      current_filter == LibraryFilter.ThreeStars
+                    ) {
+                      set_filter_query_param(LibraryFilter.TwoStars)
+                    }
+                  } else if (selected_stars == 3) {
+                    if (current_filter == LibraryFilter.ThreeStars) {
+                      set_filter_query_param(LibraryFilter.All)
+                    } else if (
+                      current_filter == LibraryFilter.All ||
+                      current_filter == LibraryFilter.OneStar ||
+                      current_filter == LibraryFilter.TwoStars
+                    ) {
+                      set_filter_query_param(LibraryFilter.ThreeStars)
+                    }
+                  }
+                }}
               />
-            ) : (
-              <ButtonSelectSkeleton />
-            ),
-            dropdown: is_hydrated && (
-              <OutsideClickHandler
-                onOutsideClick={toggle_filter_dropdown}
-                disabled={!is_filter_dropdown_visible}
-              >
-                <DropdownMenu
-                  items={[
-                    {
-                      label: _filter_option_to_label(LibraryFilter.All),
-                      on_click: () => {
-                        toggle_filter_dropdown()
-                        if (
-                          current_filter == LibraryFilter.All ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-
-                        set_filter_query_param(LibraryFilter.All)
-                      },
-                      is_selected: current_filter == LibraryFilter.All,
-                    },
-                    {
-                      label: _filter_option_to_label(LibraryFilter.OneStar),
-                      on_click: () => {
-                        toggle_filter_dropdown()
-                        if (
-                          current_filter == LibraryFilter.OneStar ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-
-                        set_filter_query_param(LibraryFilter.OneStar)
-                      },
-                      is_selected: current_filter == LibraryFilter.OneStar,
-                    },
-                    {
-                      label: _filter_option_to_label(LibraryFilter.TwoStars),
-                      on_click: () => {
-                        toggle_filter_dropdown()
-                        if (
-                          current_filter == LibraryFilter.TwoStars ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-
-                        set_filter_query_param(LibraryFilter.TwoStars)
-                      },
-                      is_selected: current_filter == LibraryFilter.TwoStars,
-                    },
-                    {
-                      label: _filter_option_to_label(LibraryFilter.ThreeStars),
-                      on_click: () => {
-                        toggle_filter_dropdown()
-                        if (
-                          current_filter == LibraryFilter.ThreeStars ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-
-                        set_filter_query_param(LibraryFilter.ThreeStars)
-                      },
-                      is_selected: current_filter == LibraryFilter.ThreeStars,
-                    },
-                    {
-                      label: _filter_option_to_label(LibraryFilter.Archived),
-                      on_click: () => {
-                        toggle_filter_dropdown()
-                        if (
-                          current_filter == LibraryFilter.Archived ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
-                        )
-                          return
-
-                        set_filter_query_param(LibraryFilter.Archived)
-                      },
-                      is_selected: current_filter == LibraryFilter.Archived,
-                    },
-                  ]}
-                />
-              </OutsideClickHandler>
-            ),
-            is_dropdown_visible: is_filter_dropdown_visible,
-          }}
+            )
+          }
           slot_sortby={{
             button: is_hydrated ? (
               <ButtonSelect

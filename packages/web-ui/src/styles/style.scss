@@ -164,6 +164,10 @@ button {
   color: var(--selection-foreground);
 }
 
+svg {
+  fill: var(--plain-black);
+}
+
 @keyframes fade-in {
   0% {
     opacity: 0;
