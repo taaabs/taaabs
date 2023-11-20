@@ -31,8 +31,8 @@ export const UnreadStarsFilter: React.FC<UnreadStarsFilter.Props> = (props) => {
       <div className={styles.stars}>
         <button
           className={cn(styles.stars__star, {
-            [styles['stars__star--selected']]:
-              props.selected_stars >= 1 || (hovered_star && hovered_star >= 1),
+            [styles['stars__star--hover']]: hovered_star && hovered_star >= 1,
+            [styles['stars__star--selected']]: props.selected_stars >= 1,
           })}
           onClick={() => {
             props.stars_click_handler(1)
@@ -48,8 +48,8 @@ export const UnreadStarsFilter: React.FC<UnreadStarsFilter.Props> = (props) => {
         </button>
         <button
           className={cn(styles.stars__star, {
-            [styles['stars__star--selected']]:
-              props.selected_stars >= 2 || (hovered_star && hovered_star >= 2),
+            [styles['stars__star--hover']]: hovered_star && hovered_star >= 2,
+            [styles['stars__star--selected']]: props.selected_stars >= 2,
           })}
           onClick={() => {
             props.stars_click_handler(2)
@@ -65,8 +65,8 @@ export const UnreadStarsFilter: React.FC<UnreadStarsFilter.Props> = (props) => {
         </button>
         <button
           className={cn(styles.stars__star, {
-            [styles['stars__star--selected']]:
-              props.selected_stars == 3 || (hovered_star && hovered_star == 3),
+            [styles['stars__star--hover']]: hovered_star && hovered_star == 3,
+            [styles['stars__star--selected']]: props.selected_stars == 3,
           })}
           onClick={() => {
             props.stars_click_handler(3)

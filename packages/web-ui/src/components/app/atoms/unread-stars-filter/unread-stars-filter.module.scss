@@ -12,6 +12,9 @@
   background-color: var(--neutral200);
   @include hover {
     background-color: var(--red);
+    &:not(&.unread--selected) {
+      opacity: 0.5;
+    }
   }
   &--selected {
     background-color: var(--red);
@@ -28,7 +31,14 @@
       width: var(--distance-32px);
       fill: var(--neutral200);
     }
+    &--hover {
+      opacity: 0.5;
+      > svg {
+        fill: var(--yellow);
+      }
+    }
     &--selected {
+      opacity: 1;
       > svg {
         fill: var(--yellow);
       }

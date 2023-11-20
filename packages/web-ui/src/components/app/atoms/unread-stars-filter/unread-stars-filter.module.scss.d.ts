@@ -4,6 +4,7 @@ declare const styles: {
   readonly 'unread--selected': string
   readonly stars: string
   readonly stars__star: string
+  readonly 'stars__star--hover': string
   readonly 'stars__star--selected': string
 }
 export = styles

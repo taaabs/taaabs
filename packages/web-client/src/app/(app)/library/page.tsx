@@ -474,7 +474,6 @@ const Page: React.FC = () => {
                 title={bookmark.title}
                 on_click={() => {}}
                 on_menu_click={() => {}}
-                number_of_selected_tags={selected_tags.length}
                 date={
                   current_sortby == Sortby.CreatedAt
                     ? new Date(bookmark.created_at)
@@ -489,6 +488,12 @@ const Page: React.FC = () => {
                   saves: link.public_saves,
                   site_path: link.site_path,
                 }))}
+                number_of_selected_tags={
+                  is_getting_first_bookmarks
+                    ? selected_tags.length
+                    : actual_selected_tags.length
+                }
+                current_filter={current_filter}
                 tags={
                   bookmark.tags
                     ? bookmark.tags.map((tag) => {

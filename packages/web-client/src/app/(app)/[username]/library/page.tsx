@@ -68,7 +68,6 @@ const Page: React.FC = () => {
   } = use_tag_view_options()
   const { set_gte_lte_query_params, clear_gte_lte_query_params } =
     use_date_view_options()
-  const [is_filter_dropdown_visible, toggle_filter_dropdown] = useToggle(false)
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
 
@@ -387,13 +386,24 @@ const Page: React.FC = () => {
                 title={bookmark.title}
                 on_click={() => {}}
                 on_menu_click={() => {}}
-                number_of_selected_tags={selected_tags.length}
-                date={new Date(bookmark.created_at)}
+                date={
+                  current_sortby == Sortby.CreatedAt
+                    ? new Date(bookmark.created_at)
+                    : current_sortby == Sortby.UpdatedAt
+                    ? new Date(bookmark.updated_at)
+                    : new Date()
+                }
                 links={bookmark.links.map((link) => ({
                   url: link.url,
                   saves: link.public_saves,
                   site_path: link.site_path,
                 }))}
+                current_filter={current_filter}
+                number_of_selected_tags={
+                  is_getting_first_bookmarks
+                    ? selected_tags.length
+                    : actual_selected_tags.length
+                }
                 tags={
                   bookmark.tags
                     ? bookmark.tags.map((tag) => {
@@ -414,7 +424,6 @@ const Page: React.FC = () => {
                       })
                     : []
                 }
-                is_unread={bookmark.is_unread}
                 stars={bookmark.stars}
                 key={bookmark.id}
                 on_tag_click={add_tag_to_query_params}
