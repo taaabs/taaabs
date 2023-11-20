@@ -1,0 +1,37 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  gap: var(--distance-23px);
+}
+.unread {
+  width: var(--distance-32px);
+  height: var(--distance-32px);
+  border-radius: var(--border-radius-999px);
+  background-color: var(--neutral200);
+  @include hover {
+    background-color: var(--red);
+  }
+  &--selected {
+    background-color: var(--red);
+  }
+}
+.stars {
+  display: flex;
+  gap: var(--distance-10px);
+  transform: translateY(calc(var(--distance-1px) * -1));
+  &__star {
+    display: flex;
+    > svg {
+      height: var(--distance-32px);
+      width: var(--distance-32px);
+      fill: var(--neutral200);
+    }
+    &--selected {
+      > svg {
+        fill: var(--yellow);
+      }
+    }
+  }
+}
