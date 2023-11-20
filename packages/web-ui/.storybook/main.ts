@@ -38,7 +38,7 @@ const config: StorybookConfig = {
       },
       css: {
         modules: {
-          generateScopedName: '[name]---[local]---[hash:base64:5]',
+          generateScopedName: '[name]_[local]___[hash:base64:5]',
         },
       },
     }

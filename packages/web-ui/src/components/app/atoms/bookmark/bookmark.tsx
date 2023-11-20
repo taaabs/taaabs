@@ -56,7 +56,7 @@ export namespace Bookmark {
 }
 
 export const Bookmark: React.FC<Bookmark.Props> = memo(
-  (props) => {
+  function Bookmark(props) {
     const ref = useRef<HTMLDivElement>(null)
     const is_visible = useViewportSpy(ref)
     const [is_menu_open, toggle_is_menu_open] = useToggle(false)
@@ -65,7 +65,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
 
     useEffect(() => {
-      if (typeof render_height == 'undefined' && props.render_height) {
+      if (render_height === undefined && props.render_height) {
         set_render_height(props.render_height)
       } else {
         set_render_height(0)
@@ -357,6 +357,5 @@ function _url_path(params: { url: string; site_path?: string }): string {
     parsed_url = parsed_url.substring(params.site_path.length + 1)
   }
 
-  // return parsed_url.length ? `/${parsed_url}` : ''
   return parsed_url.split('/').join(' › ')
 }

@@ -29,7 +29,7 @@ export namespace Months {
 }
 
 export const Months: React.FC<Months.Props> = memo(
-  (props) => {
+  function Months(props) {
     const [months_to_render, set_months_to_render] = useState<Months | null>(
       null,
     )

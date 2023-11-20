@@ -14,7 +14,7 @@ export namespace Tags {
  */
 
 export const Tags: React.FC<Tags.Props> = memo(
-  (props) => {
+  function Tags(props) {
     const first_chars_processed: string[] = []
     const new_tags_grouped: string[][] = []
     Object.entries(props.tags).map(([tag_name]) => {

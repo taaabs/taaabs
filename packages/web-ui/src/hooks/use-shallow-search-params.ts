@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 export const use_shallow_search_params = () => {
   const [search_params, set_search_params] = useState(
     new URLSearchParams(
-      typeof window != 'undefined'
+      window !== undefined
         ? new URLSearchParams(window.location.search)
         : undefined,
     ),

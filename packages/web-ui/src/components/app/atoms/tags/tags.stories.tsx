@@ -11,26 +11,68 @@ export const Primary = () => (
     <div style={{ width: 260 }}>
       <Tags
         tags={{
-          aa: 10,
-          aaaa: 8,
-          aaaaaa: 52,
-          aaaaaaa: 1,
-          aaaaaaaa:2,
-          bb: 3,
-          bbbb: 10,
-          bbbbbb: 8,
+          aa: {
+            id: 1,
+            yields: 1,
+          },
+          aaaa: {
+            id: 1,
+            yields: 1,
+          },
+          aaaaaa: {
+            id: 1,
+            yields: 1,
+          },
+          aaaaaaa: {
+            id: 1,
+            yields: 1,
+          },
+          aaaaaaaa: {
+            id: 1,
+            yields: 1,
+          },
+          bb: {
+            id: 1,
+            yields: 1,
+          },
+          bbbb: {
+            id: 1,
+            yields: 1,
+          },
+          bbbbbb: {
+            id: 1,
+            yields: 1,
+          },
         }}
         on_click={() => {}}
       />
       <StorybookSpacer />
       <Tags
         tags={{
-          aa: 10,
-          aaaa: 8,
-          aaaaaa: 52,
-          bb: 3,
-          bbbb: 10,
-          bbbbbb: 8,
+          aa: {
+            id: 1,
+            yields: 1,
+          },
+          aaaa: {
+            id: 1,
+            yields: 1,
+          },
+          aaaaaa: {
+            id: 1,
+            yields: 1,
+          },
+          bb: {
+            id: 1,
+            yields: 1,
+          },
+          bbbb: {
+            id: 1,
+            yields: 1,
+          },
+          bbbbbb: {
+            id: 1,
+            yields: 1,
+          },
         }}
         on_click={() => {}}
       />

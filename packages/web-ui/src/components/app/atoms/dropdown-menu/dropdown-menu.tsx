@@ -20,14 +20,14 @@ export const DropdownMenu: React.FC<DropdownMenu.Props> = (props) => {
   return (
     <div className={styles.container}>
       {props.items.map((item, i) =>
-        typeof item.is_selected != 'undefined' || item.other_icon ? (
+        item.is_selected !== undefined || item.other_icon ? (
           <button className={styles.item} onClick={item.on_click} key={i}>
             <div className={styles.item__icon}>
               {item.is_selected ? <Icon variant="SELECTED" /> : item.other_icon}
             </div>
             <span>{item.label}</span>
           </button>
-        ) : typeof item.is_checked != 'undefined' ? (
+        ) : item.is_checked !== undefined ? (
           <button
             className={cn([
               styles.item,
