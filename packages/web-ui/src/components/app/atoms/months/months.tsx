@@ -400,7 +400,7 @@ export const Months: React.FC<Months.Props> = memo(
                     type="basis"
                     dataKey="starred_count"
                     strokeWidth={0}
-                    fill="var(--Months-chart-starred-fill)"
+                    fill="var(--yellow)"
                     fillOpacity={starred_count == 0 ? 0 : 1}
                     isAnimationActive={false}
                   />

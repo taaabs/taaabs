@@ -58,7 +58,7 @@
       }
 
       &__starred::before {
-        background: var(--Months-chart-starred-fill);
+        background: var(--yellow);
       }
       &__unread::before {
         background: var(--red);
