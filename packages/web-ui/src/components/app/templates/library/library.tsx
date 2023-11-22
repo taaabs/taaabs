@@ -27,6 +27,8 @@ export namespace Library {
     get_more_bookmarks: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
+    clear_unread?: () => void
+    clear_selected_stars?: () => void
     show_bookmarks_skeleton: boolean
   }
 }
@@ -305,6 +307,14 @@ export const Library: React.FC<Library.Props> = (props) => {
                 {
                   // TODO: INVESTIGATE: Without "is_hydrated" gives errors after page refresh, why?
                 }
+                {is_hydrated && props.clear_unread && (
+                  <button onClick={props.clear_unread}>Clear unread</button>
+                )}
+                {is_hydrated && props.clear_selected_stars && (
+                  <button onClick={props.clear_selected_stars}>
+                    Clear selected stars
+                  </button>
+                )}
                 {is_hydrated && props.clear_selected_tags && (
                   <button onClick={props.clear_selected_tags}>
                     Clear selected tags

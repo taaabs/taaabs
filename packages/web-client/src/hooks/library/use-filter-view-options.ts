@@ -74,9 +74,19 @@ export const use_filter_view_options = () => {
     )
   }
 
+  const clear_selected_stars = (filter: LibraryFilter) => {
+    alert('TODO')
+  }
+
+  const clear_unread = (filter: LibraryFilter) => {
+    alert('TODO')
+  }
+
   return {
     current_filter,
     set_filter_query_param,
     set_filter_query_param_reset_others,
+    clear_selected_stars,
+    clear_unread,
   }
 }

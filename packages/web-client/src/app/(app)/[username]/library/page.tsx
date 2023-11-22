@@ -59,6 +59,7 @@ const Page: React.FC = () => {
     current_filter,
     set_filter_query_param,
     set_filter_query_param_reset_others,
+    clear_selected_stars,
   } = use_filter_view_options()
   const { current_sortby, set_sortby_query_param } = use_sortby_view_options()
   const { current_order, set_order_query_param } = use_order_view_options()
@@ -468,6 +469,17 @@ const Page: React.FC = () => {
               />
             ))
           : []
+      }
+      clear_selected_stars={
+        !is_getting_first_bookmarks &&
+        (!bookmarks || bookmarks.length == 0) &&
+        (current_filter == LibraryFilter.OneStar ||
+          current_filter == LibraryFilter.TwoStars ||
+          current_filter == LibraryFilter.ThreeStars)
+          ? () => {
+              clear_selected_stars(current_filter)
+            }
+          : undefined
       }
       clear_selected_tags={
         (!bookmarks || bookmarks.length == 0) && query_params.get('t')
