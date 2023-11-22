@@ -15,12 +15,12 @@ export const get_public_bookmarks = (params: {
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const get_bookmarks = new GetBookmarksOnPublicUser_UseCase(repository)
 
-    dispatch(bookmarks_actions.set_is_getting_data(true))
+    dispatch(bookmarks_actions.set_is_fetching_data(true))
 
     if (params.request_params.after) {
-      dispatch(bookmarks_actions.set_is_getting_more_bookmarks(true))
+      dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(true))
     } else {
-      dispatch(bookmarks_actions.set_is_getting_first_bookmarks(true))
+      dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(true))
       dispatch(bookmarks_actions.set_has_more_bookmarks(null))
     }
 
@@ -28,18 +28,18 @@ export const get_public_bookmarks = (params: {
       params.request_params,
     )
 
-    dispatch(bookmarks_actions.set_is_getting_data(false))
+    dispatch(bookmarks_actions.set_is_fetching_data(false))
     dispatch(bookmarks_actions.set_has_more_bookmarks(pagination.has_more))
 
     if (params.request_params.after) {
       dispatch(bookmarks_actions.set_more_bookmarks(bookmarks))
-      dispatch(bookmarks_actions.set_is_getting_more_bookmarks(false))
+      dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(false))
     } else {
       dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks))
-      if (!get_state().months.is_getting_months_data) {
+      if (!get_state().months.is_fetching_months_data) {
         dispatch(bookmarks_actions.set_bookmarks(bookmarks))
         dispatch(months_actions.process_tags())
-        dispatch(bookmarks_actions.set_is_getting_first_bookmarks(false))
+        dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
       }
     }
   }

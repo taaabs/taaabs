@@ -34,7 +34,7 @@ dayjs.updateLocale('en', {
 
 export namespace Bookmark {
   export type Props = {
-    index: number
+    fetch_timestamp?: number // Forces rerender for bookmark height adjustment (upon unread/stars change).
     title: string
     note?: string
     date: Date
@@ -158,7 +158,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 </OutsideClickHandler>
               </div>
               <div className={styles['bookmark__info']}>
-                <span>{props.index + 1}</span>
                 <span>·</span>
                 <span>{bookmark_date}</span>
                 {props.note && (
@@ -170,7 +169,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 {props.tags.length > 0 && (
                   <>
                     <span>·</span>
-                    {props.tags.map((tag, i) => (
+                    {props.tags.map((tag) => (
                       <button
                         className={styles['bookmark__info__tag']}
                         onClick={(e) => {
@@ -287,7 +286,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
-    o.index == n.index &&
+    o.fetch_timestamp == n.fetch_timestamp &&
     o.stars == n.stars &&
     o.is_unread == n.is_unread &&
     o.render_height == n.render_height &&

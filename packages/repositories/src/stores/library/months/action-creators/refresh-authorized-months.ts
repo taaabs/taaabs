@@ -21,7 +21,7 @@ export const refresh_authorized_months = (params: {
       repository,
     )
 
-    dispatch(months_actions.set_is_getting_data(true))
+    dispatch(months_actions.set_is_fetching_data(true))
 
     const result = await get_months_use_case.invoke(
       params.last_authorized_months_params,
@@ -29,7 +29,7 @@ export const refresh_authorized_months = (params: {
 
     const state = get_state()
     dispatch(months_actions.set_data(result))
-    dispatch(months_actions.set_is_getting_data(false))
+    dispatch(months_actions.set_is_fetching_data(false))
     dispatch(months_actions.process_tags())
     dispatch(
       bookmarks_actions.set_bookmarks(state.bookmarks.incoming_bookmarks),

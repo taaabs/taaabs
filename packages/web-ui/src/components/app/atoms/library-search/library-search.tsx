@@ -2,6 +2,8 @@ import Skeleton from 'react-loading-skeleton'
 import styles from './library-search.module.scss'
 import { use_is_hydrated } from '@shared/hooks'
 import { Icon } from '@web-ui/components/common/particles/icon'
+import { useState } from 'react'
+import cn from 'classnames'
 
 export namespace LibrarySearch {
   type Hint = {
@@ -11,6 +13,9 @@ export namespace LibrarySearch {
   export type Props = {
     placeholder: string
     search_string: string
+    on_change: (value: string) => void
+    on_submit: () => void
+    on_click_clear_search_string: () => void
     on_click_hint: (hint: string) => void
     on_click_recent_hint_remove: (hint: string) => void
     hints: Hint[]
@@ -19,12 +24,30 @@ export namespace LibrarySearch {
 
 export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
   const is_hydrated = use_is_hydrated()
+  const [is_focused, set_is_focused] = useState(false)
 
   return is_hydrated ? (
     <div className={styles.container}>
-      <div className={styles.input}>
+      <div
+        className={cn(styles.input, { [styles['input--focus']]: is_focused })}
+      >
         <Icon variant="SEARCH" />
-        <input value={props.search_string} placeholder={props.placeholder} />
+        <input
+          value={props.search_string}
+          placeholder={props.placeholder}
+          onFocus={() => {
+            set_is_focused(true)
+          }}
+          onBlur={() => {
+            set_is_focused(false)
+          }}
+          onChange={(e) => {
+            props.on_change(e.target.value)
+          }}
+          onSubmit={() => {
+            props.on_submit()
+          }}
+        />
       </div>
       {props.hints.length > 0 && (
         <div className={styles.hints}>

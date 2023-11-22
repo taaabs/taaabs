@@ -20,8 +20,8 @@ export namespace Library {
     slot_search: React.ReactNode
     slot_bookmarks: React.ReactNode
     is_updating_bookmarks?: boolean
-    is_getting_first_bookmarks: boolean
-    is_getting_more_bookmarks: boolean
+    is_fetching_first_bookmarks: boolean
+    is_fetching_more_bookmarks: boolean
     has_more_bookmarks: boolean
     no_results: boolean
     get_more_bookmarks: () => void
@@ -174,18 +174,18 @@ export const Library: React.FC<Library.Props> = (props) => {
     if (
       is_end_of_bookmarks_visible &&
       props.has_more_bookmarks &&
-      !props.is_getting_more_bookmarks &&
-      !props.is_getting_first_bookmarks
+      !props.is_fetching_more_bookmarks &&
+      !props.is_fetching_first_bookmarks
     ) {
       props.get_more_bookmarks()
     }
   }, [is_end_of_bookmarks_visible])
 
   useUpdateEffect(() => {
-    if (!props.is_getting_first_bookmarks) {
+    if (!props.is_fetching_first_bookmarks) {
       window.scrollTo(0, 0)
     }
-  }, [props.is_getting_first_bookmarks])
+  }, [props.is_fetching_first_bookmarks])
 
   let translate_x = 0
 
@@ -276,7 +276,7 @@ export const Library: React.FC<Library.Props> = (props) => {
                   styles.main__inner__bookmarks,
                   {
                     [styles['main__inner__bookmarks--loading']]:
-                      props.is_getting_first_bookmarks ||
+                      props.is_fetching_first_bookmarks ||
                       props.is_updating_bookmarks,
                   },
                 ])}
@@ -298,7 +298,7 @@ export const Library: React.FC<Library.Props> = (props) => {
                 ref={end_of_bookmarks}
               >
                 <span>
-                  {props.is_getting_first_bookmarks || props.has_more_bookmarks
+                  {props.is_fetching_first_bookmarks || props.has_more_bookmarks
                     ? 'Loading...'
                     : props.no_results
                     ? 'No results'
@@ -308,7 +308,9 @@ export const Library: React.FC<Library.Props> = (props) => {
                   // TODO: INVESTIGATE: Without "is_hydrated" gives errors after page refresh, why?
                 }
                 {is_hydrated && props.clear_unread && (
-                  <button onClick={props.clear_unread}>Clear unread</button>
+                  <button onClick={props.clear_unread}>
+                    Clear Unread only
+                  </button>
                 )}
                 {is_hydrated && props.clear_selected_stars && (
                   <button onClick={props.clear_selected_stars}>

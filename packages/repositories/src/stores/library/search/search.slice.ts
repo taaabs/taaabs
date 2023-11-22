@@ -1,58 +1,48 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as thunks from './action-creators'
-import { LibraryFilter } from '@shared/types/common/library-filter'
-import { Sortby } from '@shared/types/modules/bookmarks/sortby'
-import { Order } from '@shared/types/modules/bookmarks/order'
+import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
+import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 
 type SearchState = {
-  is_getting_search_data: boolean
-  filter?: LibraryFilter
-  tags?: number[]
-  sortby?: Sortby
-  order?: Order
-  yyyymm_gte?: number
-  yyyymm_lte?: number
-  search_string?: string
+  is_fetching_searchable_bookmarks: boolean
+  searchable_bookmarks?: SearchableBookmark_Entity[]
+  searchable_bookmarks_filtered?: SearchableBookmark_Entity[]
+  bookmark_ids_inc?: number[]
+  bookmarks_of_search?: Bookmark_Entity[]
 }
 
 const initial_state: SearchState = {
-  is_getting_search_data: false,
+  is_fetching_searchable_bookmarks: false,
 }
 
 export const search_slice = createSlice({
   name: 'search',
   initialState: initial_state,
   reducers: {
-    set_is_getting_search_data(
+    set_is_getting_searchable_bookmarks(
       state,
-      action: PayloadAction<SearchState['is_getting_search_data']>,
+      action: PayloadAction<SearchState['is_fetching_searchable_bookmarks']>,
     ) {
-      state.is_getting_search_data = action.payload
+      state.is_fetching_searchable_bookmarks = action.payload
     },
-    set_filter(state, action: PayloadAction<SearchState['filter']>) {
-      state.filter = action.payload
-    },
-    set_tags(state, action: PayloadAction<SearchState['tags']>) {
-      state.tags = action.payload
-    },
-    set_sortby(state, action: PayloadAction<SearchState['sortby']>) {
-      state.sortby = action.payload
-    },
-    set_order(state, action: PayloadAction<SearchState['order']>) {
-      state.order = action.payload
-    },
-    set_yyyymm_gte(state, action: PayloadAction<SearchState['yyyymm_gte']>) {
-      state.yyyymm_gte = action.payload
-    },
-    set_yyyymm_lte(state, action: PayloadAction<SearchState['yyyymm_lte']>) {
-      state.yyyymm_lte = action.payload
-    },
-    set_search_string(
+    set_searchable_bookmarks(
       state,
-      action: PayloadAction<SearchState['search_string']>,
+      action: PayloadAction<SearchState['searchable_bookmarks']>,
     ) {
-      state.search_string = action.payload
+      state.searchable_bookmarks = action.payload
+    },
+    set_bookmark_ids_inc(
+      state,
+      action: PayloadAction<SearchState['bookmark_ids_inc']>,
+    ) {
+      state.bookmark_ids_inc = action.payload
+    },
+    set_bookmarks_of_search(
+      state,
+      action: PayloadAction<SearchState['bookmarks_of_search']>,
+    ) {
+      state.bookmarks_of_search = action.payload
     },
   },
 })

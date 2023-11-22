@@ -225,7 +225,7 @@ export const Months: React.FC<Months.Props> = memo(
     const set_start_and_end_index_throttled = useThrottledCallback(
       set_start_and_end_index,
       [set_start_index, set_end_index],
-      100,
+      80,
     )
 
     useUpdateEffect(() => {

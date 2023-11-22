@@ -48,13 +48,12 @@ const Page: React.FC = () => {
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
   const {
     bookmarks,
-    is_getting_first_bookmarks,
-    is_getting_more_bookmarks,
+    is_fetching_first_bookmarks,
+    is_fetching_more_bookmarks,
     has_more_bookmarks,
-    bookmarks_fetch_timestamp,
   } = use_library_selector((state) => state.bookmarks)
   const { get_bookmarks } = use_bookmarks()
-  const { months, is_getting_months_data, tags, selected_tags } = use_months()
+  const { months, is_fetching_months_data, tags, selected_tags } = use_months()
   const {
     current_filter,
     set_filter_query_param,
@@ -109,7 +108,7 @@ const Page: React.FC = () => {
             {
               label: 'All bookmarks',
               on_click: () => {
-                if (is_getting_first_bookmarks) return
+                if (is_fetching_first_bookmarks) return
                 dispatch(bookmarks_actions.set_bookmarks(null))
                 set_show_months(false)
                 set_show_tags(false)
@@ -122,7 +121,7 @@ const Page: React.FC = () => {
             {
               label: 'Archived',
               on_click: () => {
-                if (is_getting_first_bookmarks) return
+                if (is_fetching_first_bookmarks) return
                 dispatch(bookmarks_actions.set_bookmarks(null))
                 set_show_months(false)
                 set_show_tags(false)
@@ -151,7 +150,7 @@ const Page: React.FC = () => {
                     : 0
                 }
                 stars_click_handler={(selected_stars) => {
-                  if (is_getting_first_bookmarks) return
+                  if (is_fetching_first_bookmarks) return
 
                   if (selected_stars == 1) {
                     if (current_filter == LibraryFilter.OneStar) {
@@ -213,9 +212,9 @@ const Page: React.FC = () => {
                         toggle_sortby_dropdown()
                         if (
                           current_sortby == Sortby.CreatedAt ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
+                          is_fetching_first_bookmarks ||
+                          is_fetching_more_bookmarks ||
+                          is_fetching_months_data
                         )
                           return
                         set_sortby_query_param(Sortby.CreatedAt)
@@ -228,9 +227,9 @@ const Page: React.FC = () => {
                         toggle_sortby_dropdown()
                         if (
                           current_sortby == Sortby.UpdatedAt ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
+                          is_fetching_first_bookmarks ||
+                          is_fetching_more_bookmarks ||
+                          is_fetching_months_data
                         )
                           return
                         set_sortby_query_param(Sortby.UpdatedAt)
@@ -267,9 +266,9 @@ const Page: React.FC = () => {
                         toggle_order_dropdown()
                         if (
                           current_order == Order.Desc ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
+                          is_fetching_first_bookmarks ||
+                          is_fetching_more_bookmarks ||
+                          is_fetching_months_data
                         )
                           return
                         set_order_query_param(Order.Desc)
@@ -283,9 +282,9 @@ const Page: React.FC = () => {
                         toggle_order_dropdown()
                         if (
                           current_order == Order.Asc ||
-                          is_getting_first_bookmarks ||
-                          is_getting_more_bookmarks ||
-                          is_getting_months_data
+                          is_fetching_first_bookmarks ||
+                          is_fetching_more_bookmarks ||
+                          is_fetching_months_data
                         )
                           return
                         set_order_query_param(Order.Asc)
@@ -302,9 +301,9 @@ const Page: React.FC = () => {
               <div
                 style={{
                   pointerEvents:
-                    is_getting_first_bookmarks ||
-                    is_getting_more_bookmarks ||
-                    is_getting_months_data
+                    is_fetching_first_bookmarks ||
+                    is_fetching_more_bookmarks ||
+                    is_fetching_months_data
                       ? 'none'
                       : 'all',
                 }}
@@ -321,11 +320,11 @@ const Page: React.FC = () => {
                   }
                   selected_tags={query_params.get('t') || undefined}
                   has_results={
-                    bookmarks != undefined && !is_getting_months_data
+                    bookmarks != undefined && !is_fetching_months_data
                       ? bookmarks.length > 0
                       : undefined
                   }
-                  is_fetching_data={is_getting_first_bookmarks}
+                  is_fetching_data={is_fetching_first_bookmarks}
                   is_range_selector_disabled={
                     current_sortby == Sortby.UpdatedAt
                   }
@@ -341,18 +340,18 @@ const Page: React.FC = () => {
                 <div
                   style={{
                     pointerEvents:
-                      is_getting_first_bookmarks ||
-                      is_getting_more_bookmarks ||
-                      is_getting_months_data
+                      is_fetching_first_bookmarks ||
+                      is_fetching_more_bookmarks ||
+                      is_fetching_months_data
                         ? 'none'
                         : undefined,
                   }}
                 >
-                  {(is_getting_first_bookmarks
+                  {(is_fetching_first_bookmarks
                     ? selected_tags.length > 0
                     : actual_selected_tags.length > 0) && (
                     <SelectedTags
-                      selected_tags={(is_getting_first_bookmarks
+                      selected_tags={(is_fetching_first_bookmarks
                         ? [...selected_tags]
                         : [...actual_selected_tags]
                       )
@@ -382,7 +381,7 @@ const Page: React.FC = () => {
                       tags
                         ? Object.fromEntries(
                             Object.entries(tags).filter((tag) =>
-                              is_getting_first_bookmarks
+                              is_fetching_first_bookmarks
                                 ? !selected_tags.includes(tag[1].id)
                                 : !actual_selected_tags.includes(tag[1].id),
                             ),
@@ -398,8 +397,8 @@ const Page: React.FC = () => {
           }
         />
       }
-      is_getting_first_bookmarks={is_getting_first_bookmarks}
-      is_getting_more_bookmarks={is_getting_more_bookmarks}
+      is_fetching_first_bookmarks={is_fetching_first_bookmarks}
+      is_fetching_more_bookmarks={is_fetching_more_bookmarks}
       has_more_bookmarks={has_more_bookmarks || false}
       no_results={!bookmarks || bookmarks.length == 0}
       get_more_bookmarks={() => {
@@ -409,8 +408,7 @@ const Page: React.FC = () => {
         bookmarks && bookmarks.length
           ? bookmarks.map((bookmark, index) => (
               <Bookmark
-                key={bookmark.id + bookmarks_fetch_timestamp}
-                index={index}
+                key={bookmark.id}
                 title={bookmark.title}
                 on_click={() => {}}
                 on_menu_click={() => {}}
@@ -428,14 +426,14 @@ const Page: React.FC = () => {
                 }))}
                 current_filter={current_filter}
                 number_of_selected_tags={
-                  is_getting_first_bookmarks
+                  is_fetching_first_bookmarks
                     ? selected_tags.length
                     : actual_selected_tags.length
                 }
                 tags={
                   bookmark.tags
                     ? bookmark.tags.map((tag) => {
-                        const isSelected = is_getting_first_bookmarks
+                        const isSelected = is_fetching_first_bookmarks
                           ? selected_tags.find((t) => t == tag.id) != undefined
                           : actual_selected_tags.find((t) => t == tag.id) !=
                             undefined
@@ -471,7 +469,7 @@ const Page: React.FC = () => {
           : []
       }
       clear_selected_stars={
-        !is_getting_first_bookmarks &&
+        !is_fetching_first_bookmarks &&
         (!bookmarks || bookmarks.length == 0) &&
         (current_filter == LibraryFilter.OneStar ||
           current_filter == LibraryFilter.TwoStars ||
@@ -482,11 +480,14 @@ const Page: React.FC = () => {
           : undefined
       }
       clear_selected_tags={
-        (!bookmarks || bookmarks.length == 0) && query_params.get('t')
+        !is_fetching_first_bookmarks &&
+        (!bookmarks || bookmarks.length == 0) &&
+        query_params.get('t')
           ? clear_selected_tags
           : undefined
       }
       clear_date_range={
+        !is_fetching_first_bookmarks &&
         (!bookmarks || bookmarks.length == 0) &&
         (query_params.get('gte') || query_params.get('lte'))
           ? clear_gte_lte_query_params

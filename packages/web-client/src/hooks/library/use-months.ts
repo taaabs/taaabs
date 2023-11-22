@@ -16,7 +16,7 @@ export const use_months = () => {
   const route_params = useParams()
   const route_pathname = usePathname()
   const dispatch = use_library_dispatch()
-  const { months_data, months, tags, is_getting_months_data } =
+  const { months_data, months, tags, is_fetching_months_data } =
     use_library_selector((state) => state.months)
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
   const [last_query_tags, set_last_query_tags] = useState<string | null>(null)
@@ -157,7 +157,7 @@ export const use_months = () => {
 
   return {
     months,
-    is_getting_months_data,
+    is_fetching_months_data,
     tags,
     selected_tags,
   }

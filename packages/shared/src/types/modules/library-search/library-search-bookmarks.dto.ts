@@ -1,4 +1,4 @@
-export namespace SearchBookmarks_Dto {
+export namespace LibrarySearchBookmarks_Dto {
   export namespace Response {
     class Bookmark {
       public id: number
@@ -7,6 +7,7 @@ export namespace SearchBookmarks_Dto {
       public created_at: number
       public tags?: string[]
       public stars?: number
+      public is_archived?: boolean
     }
 
     class AuthorizedBookmark extends Bookmark {

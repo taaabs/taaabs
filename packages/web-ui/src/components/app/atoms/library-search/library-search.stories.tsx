@@ -15,6 +15,7 @@ export const Primary = () => (
         hints={[]}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
+        on_click_clear_search_string={() => {}}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -27,6 +28,7 @@ export const Primary = () => (
         ]}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
+        on_click_clear_search_string={() => {}}
       />
     </div>
   </div>

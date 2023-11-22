@@ -1,6 +1,7 @@
 declare const styles: {
   readonly container: string
   readonly input: string
+  readonly 'input--focus': string
   readonly hints: string
   readonly hints__item: string
   readonly hints__item__icon: string
