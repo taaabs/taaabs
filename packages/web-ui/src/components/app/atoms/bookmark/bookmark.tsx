@@ -71,7 +71,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       } else {
         set_render_height(0)
         setTimeout(() => {
-          const height = ref.current!.getBoundingClientRect().height
+          if (!ref.current) return
+          const height = ref.current.getBoundingClientRect().height
           props.set_render_height(height)
           set_render_height(height)
         }, 0)

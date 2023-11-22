@@ -75,6 +75,7 @@ const Page: React.FC = () => {
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
 
   useUpdateEffect(() => {
+    if (bookmarks == null) return
     if (!show_months) set_show_months(true)
     if (!show_tags) set_show_tags(true)
     if (show_tags_skeleton) set_show_tags_skeleton(false)
@@ -98,7 +99,7 @@ const Page: React.FC = () => {
           ? 'All bookmarks'
           : current_filter == LibraryFilter.Archived
           ? 'Archived'
-          : 'TODO'
+          : 'All bookmarks'
       }
       slot_search={<>search</>}
       slot_sidebar={
@@ -107,6 +108,11 @@ const Page: React.FC = () => {
             {
               label: 'All bookmarks',
               on_click: () => {
+                if (is_getting_first_bookmarks) return
+                dispatch(bookmarks_actions.set_bookmarks(null))
+                set_show_months(false)
+                set_show_tags(false)
+                set_show_tags_skeleton(true)
                 set_filter_query_param_reset_others(LibraryFilter.All)
                 set_actual_selected_tags([])
               },
@@ -115,6 +121,11 @@ const Page: React.FC = () => {
             {
               label: 'Archived',
               on_click: () => {
+                if (is_getting_first_bookmarks) return
+                dispatch(bookmarks_actions.set_bookmarks(null))
+                set_show_months(false)
+                set_show_tags(false)
+                set_show_tags_skeleton(true)
                 set_filter_query_param_reset_others(LibraryFilter.Archived)
                 set_actual_selected_tags([])
               },

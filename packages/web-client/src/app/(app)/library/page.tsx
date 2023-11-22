@@ -93,6 +93,7 @@ const Page: React.FC = () => {
   }
 
   useUpdateEffect(() => {
+    if (bookmarks == null) return
     if (!show_months) set_show_months(true)
     if (!show_tags) set_show_tags(true)
     set_show_tags_skeleton(false)
@@ -116,12 +117,18 @@ const Page: React.FC = () => {
           ? 'All bookmarks'
           : current_filter == LibraryFilter.Archived
           ? 'Archived'
-          : 'TODO'
+          : 'All bookmarks'
       }
       slot_search={
         <LibrarySearch
           search_string=""
-          placeholder="x"
+          placeholder={
+            current_filter == LibraryFilter.All
+              ? 'Search in all bookmarks'
+              : current_filter == LibraryFilter.Archived
+              ? 'Search in archived bookmarks'
+              : 'Search in all bookmarks'
+          }
           hints={[]}
           on_click_hint={() => {}}
           on_click_recent_hint_remove={() => {}}
@@ -133,6 +140,11 @@ const Page: React.FC = () => {
             {
               label: 'All bookmarks',
               on_click: () => {
+                if (is_getting_first_bookmarks || is_updating_bookmarks) return
+                dispatch(bookmarks_actions.set_bookmarks(null))
+                set_show_months(false)
+                set_show_tags(false)
+                set_show_tags_skeleton(true)
                 set_filter_query_param_reset_others(LibraryFilter.All)
                 set_actual_selected_tags([])
               },
@@ -141,6 +153,11 @@ const Page: React.FC = () => {
             {
               label: 'Archived',
               on_click: () => {
+                if (is_getting_first_bookmarks || is_updating_bookmarks) return
+                dispatch(bookmarks_actions.set_bookmarks(null))
+                set_show_months(false)
+                set_show_tags(false)
+                set_show_tags_skeleton(true)
                 set_filter_query_param_reset_others(LibraryFilter.Archived)
                 set_actual_selected_tags([])
               },

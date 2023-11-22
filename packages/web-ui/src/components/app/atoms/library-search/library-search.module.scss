@@ -87,6 +87,7 @@
   color: var(--TitleBar-primary-foreground);
 }
 .skeleton {
+  width: 100%;
   margin: var(--distance-16px) 0;
   transform: translateX(calc(var(--distance-16px) * -1));
   > span > span {
