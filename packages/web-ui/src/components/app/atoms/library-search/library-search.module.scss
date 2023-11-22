@@ -1,0 +1,96 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--distance-4px);
+  margin: var(--distance-16px) 0;
+  width: 100%;
+}
+.input {
+  display: flex;
+  align-items: center;
+  gap: var(--distance-16px);
+  padding: 0 var(--distance-16px);
+  height: var(--button-dimension-52px);
+  background-color: var(--blue50);
+  border: 1px solid var(--blue100);
+  border-radius: var(--border-radius-999px);
+  width: calc(100% + (var(--distance-16px) * 2));
+  transform: translateX(calc(var(--distance-16px) * -1));
+  > svg {
+    width: var(--distance-20px);
+    fill: var(--brand-color);
+  }
+  > input {
+    border: none;
+    background: none;
+    font-size: var(--font-size-18px);
+    font-weight: var(--font-weight-inter-medium);
+    color: var(--brand-color);
+    &:focus {
+      outline: none;
+    }
+    &::placeholder {
+      color: var(--brand-color);
+      opacity: 0.8;
+    }
+  }
+}
+.hints {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius-12px);
+  background-color: var(--neutral100);
+  padding: var(--distance-12px) 0;
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: var(--distance-10px);
+    height: var(--distance-32px);
+    padding: 0 var(--distance-16px) 0 var(--distance-14px);
+    @include hover {
+      background-color: var(--neutral200);
+    }
+    &__icon {
+      display: flex;
+      > svg {
+        width: var(--distance-15px);
+        fill: var(--neutral700);
+      }
+    }
+    &__text {
+      display: flex;
+      flex-grow: 1;
+      > span {
+        white-space: pre-wrap;
+      }
+      > span:last-child {
+        font-weight: var(--font-weight-inter-medium);
+      }
+    }
+    &__remove {
+      display: flex;
+      font-size: var(--font-size-13px);
+      color: var(--text-color-dimmed);
+      @include hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+.text {
+  font-family: var(--font-family-plus-jakarta-sans);
+  font-weight: var(--font-weight-plus-jakarta-sans-bold);
+  font-size: var(--font-size-22px);
+  color: var(--TitleBar-primary-foreground);
+}
+.skeleton {
+  margin: var(--distance-16px) 0;
+  transform: translateX(calc(var(--distance-16px) * -1));
+  > span > span {
+    width: calc(100% + (var(--distance-16px) * 2));
+    height: var(--button-dimension-52px);
+  }
+}

@@ -122,10 +122,8 @@
         background: var(--header-background);
       }
     }
-    &__desktop-title-bar {
-      @include to992 {
-        display: none;
-      }
+    &__search {
+      display: flex;
     }
     &__skeleton {
       display: flex;

@@ -3,7 +3,6 @@
 import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
 import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Library } from '@web-ui/components/app/templates/library'
-import { useRouter, useParams } from 'next/navigation'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
@@ -44,8 +43,6 @@ const Page: React.FC = () => {
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
   const query_params = use_shallow_search_params()
-  const router = useRouter()
-  const params = useParams()
   const [show_months, set_show_months] = useState(false)
   const [show_tags, set_show_tags] = useState(false)
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
@@ -54,10 +51,15 @@ const Page: React.FC = () => {
     is_getting_first_bookmarks,
     is_getting_more_bookmarks,
     has_more_bookmarks,
+    bookmarks_fetch_timestamp,
   } = use_library_selector((state) => state.bookmarks)
   const { get_bookmarks } = use_bookmarks()
   const { months, is_getting_months_data, tags, selected_tags } = use_months()
-  const { current_filter, set_filter_query_param } = use_filter_view_options()
+  const {
+    current_filter,
+    set_filter_query_param,
+    set_filter_query_param_reset_others,
+  } = use_filter_view_options()
   const { current_sortby, set_sortby_query_param } = use_sortby_view_options()
   const { current_order, set_order_query_param } = use_order_view_options()
   const {
@@ -65,6 +67,7 @@ const Page: React.FC = () => {
     remove_tag_from_query_params,
     actual_selected_tags,
     clear_selected_tags,
+    set_actual_selected_tags,
   } = use_tag_view_options()
   const { set_gte_lte_query_params, clear_gte_lte_query_params } =
     use_date_view_options()
@@ -90,22 +93,33 @@ const Page: React.FC = () => {
   return (
     <Library
       show_bookmarks_skeleton={bookmarks == null}
-      title_bar={!query_params.get('c') ? 'All bookmarks' : undefined}
+      mobile_title_bar={
+        current_filter == LibraryFilter.All
+          ? 'All bookmarks'
+          : current_filter == LibraryFilter.Archived
+          ? 'Archived'
+          : 'TODO'
+      }
+      slot_search={<>search</>}
       slot_sidebar={
         <NavigationForLibrarySidebar
           navigation_items={[
             {
               label: 'All bookmarks',
               on_click: () => {
-                router.push(`/${params.username}/library`)
+                set_filter_query_param_reset_others(LibraryFilter.All)
+                set_actual_selected_tags([])
               },
-              is_active: query_params.get('c') ? false : true,
+              is_active: current_filter != LibraryFilter.Archived,
             },
-            // {
-            //   label: 'Categories',
-            //   onClick: () => {},
-            //   isActive: queryParams.get('categoryId') ? true : false,
-            // },
+            {
+              label: 'Archived',
+              on_click: () => {
+                set_filter_query_param_reset_others(LibraryFilter.Archived)
+                set_actual_selected_tags([])
+              },
+              is_active: current_filter == LibraryFilter.Archived,
+            },
           ]}
         />
       }
@@ -383,8 +397,8 @@ const Page: React.FC = () => {
         bookmarks && bookmarks.length
           ? bookmarks.map((bookmark, index) => (
               <Bookmark
+                key={bookmark.id + bookmarks_fetch_timestamp}
                 index={index}
-                id={bookmark.id}
                 title={bookmark.title}
                 on_click={() => {}}
                 on_menu_click={() => {}}
@@ -427,7 +441,6 @@ const Page: React.FC = () => {
                     : []
                 }
                 stars={bookmark.stars}
-                key={bookmark.id}
                 on_tag_click={add_tag_to_query_params}
                 on_selected_tag_click={remove_tag_from_query_params}
                 render_height={bookmark.render_height}
@@ -465,9 +478,9 @@ export default Page
 function _sortby_option_to_label(sortby_option: Sortby): string {
   switch (sortby_option) {
     case Sortby.CreatedAt:
-      return 'Created at'
+      return 'Date created'
     case Sortby.UpdatedAt:
-      return 'Updated at'
+      return 'Date updated'
     case Sortby.VisitedAt:
       return ''
   }
@@ -476,31 +489,8 @@ function _sortby_option_to_label(sortby_option: Sortby): string {
 function _order_option_to_label(order_option: Order): string {
   switch (order_option) {
     case Order.Desc:
-      return 'Newest to Oldest'
+      return 'Newest first'
     case Order.Asc:
-      return 'Oldest to Newest'
-  }
-}
-
-function _filter_option_to_label(filter: LibraryFilter): string {
-  switch (filter) {
-    case LibraryFilter.All:
-      return 'All'
-    case LibraryFilter.OneStar:
-      return 'At least one star'
-    case LibraryFilter.TwoStars:
-      return 'At least two stars'
-    case LibraryFilter.ThreeStars:
-      return 'Three stars'
-    case LibraryFilter.Unread:
-      return ''
-    case LibraryFilter.OneStarUnread:
-      return ''
-    case LibraryFilter.TwoStarsUnread:
-      return ''
-    case LibraryFilter.ThreeStarsUnread:
-      return ''
-    case LibraryFilter.Archived:
-      return 'Archived'
+      return 'Oldest first'
   }
 }

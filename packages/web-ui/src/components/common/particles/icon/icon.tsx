@@ -7,6 +7,7 @@ import GreaterThan from '@web-ui/assets/icons/greater-than.svg'
 import Home from '@web-ui/assets/icons/home.svg'
 import Info from '@web-ui/assets/icons/info.svg'
 import LessThan from '@web-ui/assets/icons/less-than.svg'
+import Recent from '@web-ui/assets/icons/recent.svg'
 import Search from '@web-ui/assets/icons/search.svg'
 import Selected from '@web-ui/assets/icons/selected.svg'
 import SelectedBold from '@web-ui/assets/icons/selected-bold.svg'
@@ -34,6 +35,7 @@ export namespace Icon {
     | 'HOME'
     | 'INFO'
     | 'LESS_THAN'
+    | 'RECENT'
     | 'SEARCH'
     | 'SELECTED'
     | 'SELECTED_BOLD'
@@ -100,6 +102,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'NOTIFICATIONS':
       icon = <Notifications />
+      break
+    case 'RECENT':
+      icon = <Recent />
       break
     case 'SEARCH':
       icon = <Search />

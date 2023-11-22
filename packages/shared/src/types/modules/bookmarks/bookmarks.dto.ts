@@ -61,7 +61,7 @@ export namespace Bookmarks_Dto {
       public id: string
       public title: string
       public links: Link[]
-      public description?: string
+      public note?: string
       public created_at: string
       public updated_at: string
       public visited_at: string

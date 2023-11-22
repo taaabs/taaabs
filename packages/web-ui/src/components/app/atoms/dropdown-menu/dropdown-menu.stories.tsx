@@ -2,31 +2,18 @@ import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
 import { DropdownMenu } from './index'
 
 export default {
-  component: SimpleSelectDropdown,
+  component: DropdownMenu,
 }
 
 export const Primary = () => {
   return (
     <StorybookMargin>
       <div style={{ width: 300 }}>
-        <SimpleSelectDropdown
+        <DropdownMenu
           items={[
             { label: 'Lorem', on_click: () => {}, is_selected: false },
             { label: 'Lorem', on_click: () => {}, is_selected: true },
             { label: 'Lorem', on_click: () => {}, is_selected: false },
-          ]}
-          checkboxes={[
-            {
-              label: 'Lorem',
-              on_click: () => {},
-              is_selected: true,
-            },
-            {
-              label: 'Lorem',
-              on_click: () => {},
-              is_selected: false,
-              is_disabled: true,
-            },
           ]}
         />
       </div>

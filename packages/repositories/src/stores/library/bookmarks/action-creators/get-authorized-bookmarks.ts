@@ -41,8 +41,8 @@ export const get_authorized_bookmarks = (params: {
     } else {
       dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks))
       if (!get_state().months.is_getting_months_data) {
-        dispatch(bookmarks_actions.set_bookmarks(bookmarks))
         dispatch(months_actions.process_tags())
+        dispatch(bookmarks_actions.set_bookmarks(bookmarks))
         dispatch(bookmarks_actions.set_is_getting_first_bookmarks(false))
       }
     }

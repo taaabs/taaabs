@@ -6,7 +6,6 @@ import cn from 'classnames'
 import { useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import StickyBox from 'react-sticky-box'
-import { _DesktopTitleBar } from './components/_desktop-title-bar'
 import { _MobileTitleBar } from './components/_mobile-title-bar'
 import { use_scroll_restore } from './hooks/use-scroll-restore'
 import styles from './library.module.scss'
@@ -17,7 +16,8 @@ export namespace Library {
   export type Props = {
     slot_sidebar: React.ReactNode
     slot_aside: React.ReactNode
-    title_bar?: string
+    mobile_title_bar?: string
+    slot_search: React.ReactNode
     slot_bookmarks: React.ReactNode
     is_updating_bookmarks?: boolean
     is_getting_first_bookmarks: boolean
@@ -218,7 +218,7 @@ export const Library: React.FC<Library.Props> = (props) => {
           swipe_right_on_click={
             !is_right_side_open ? toggle_right_side : undefined
           }
-          text={props.title_bar ? props.title_bar : undefined}
+          text={props.mobile_title_bar ? props.mobile_title_bar : undefined}
         />
       </div>
       <div className={styles.content}>
@@ -266,10 +266,8 @@ export const Library: React.FC<Library.Props> = (props) => {
             }}
           >
             <div>
-              <div className={styles['main__inner__desktop-title-bar']}>
-                <_DesktopTitleBar
-                  text={props.title_bar ? props.title_bar : undefined}
-                />
+              <div className={styles['main__inner__search']}>
+                {props.slot_search}
               </div>
               <div
                 className={cn([

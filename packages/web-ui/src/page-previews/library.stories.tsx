@@ -70,7 +70,7 @@ export const Primary = () => {
             ]}
           />
         }
-        title_bar="All bookmarks"
+        mobile_title_bar="All bookmarks"
         get_more_bookmarks={() => {}}
         has_more_bookmarks={false}
         is_getting_first_bookmarks={false}
