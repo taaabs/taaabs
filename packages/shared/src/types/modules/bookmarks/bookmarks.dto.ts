@@ -70,10 +70,10 @@ export namespace Bookmarks_Dto {
       public is_unread?: boolean
     }
 
-    class AuthorizedBookmark extends Bookmark {
+    export class AuthorizedBookmark extends Bookmark {
       public is_public?: boolean
     }
-    class PublicBookmark extends Bookmark {}
+    export class PublicBookmark extends Bookmark {}
 
     export class Authorized extends PaginatedResponseDto {
       public bookmarks: AuthorizedBookmark[]
