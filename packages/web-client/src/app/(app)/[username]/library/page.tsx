@@ -352,8 +352,8 @@ const Page: React.FC = () => {
                     : actual_selected_tags.length > 0) && (
                     <SelectedTags
                       selected_tags={(is_fetching_first_bookmarks
-                        ? [...selected_tags]
-                        : [...actual_selected_tags]
+                        ? selected_tags
+                        : actual_selected_tags
                       )
                         .filter((id) => {
                           if (!bookmarks || !bookmarks[0]) return false

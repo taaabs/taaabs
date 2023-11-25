@@ -3,7 +3,7 @@ export namespace LibrarySearchBookmarks_Dto {
     class Bookmark {
       public id: number
       public title: string
-      public sites: string
+      public sites: string[]
       public created_at: number
       public tags?: string[]
       public stars?: number

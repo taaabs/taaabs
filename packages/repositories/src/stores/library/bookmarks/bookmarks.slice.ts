@@ -8,8 +8,9 @@ type BookmarksState = {
   is_updating_bookmarks: boolean
   is_fetching_first_bookmarks: boolean
   is_fetching_more_bookmarks: boolean
-  incoming_bookmarks: Array<Bookmark_Entity> | null
-  bookmarks: Array<Bookmark_Entity> | null
+  is_in_search_mode?: boolean
+  incoming_bookmarks: Bookmark_Entity[] | null
+  bookmarks: Bookmark_Entity[] | null
   has_more_bookmarks: boolean | null
   bookmarks_fetch_timestamp: number | null
 }
@@ -40,6 +41,9 @@ export const bookmarks_slice = createSlice({
     },
     set_is_fetching_more_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_fetching_more_bookmarks = action.payload
+    },
+    set_is_in_search_mode(state, action: PayloadAction<boolean>) {
+      state.is_in_search_mode = action.payload
     },
     set_incoming_bookmarks(
       state,

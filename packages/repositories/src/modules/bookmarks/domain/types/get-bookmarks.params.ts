@@ -8,7 +8,7 @@ export namespace GetBookmarks_Params {
     order?: Order
     tags?: string[]
     category_id?: string
-    after?: string
+    after?: number
     filter?: LibraryFilter
     yyyymm_gte?: number
     yyyymm_lte?: number

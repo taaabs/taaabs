@@ -58,7 +58,7 @@ export namespace Bookmarks_Dto {
     }
 
     class Bookmark {
-      public id: string
+      public id: number
       public title: string
       public links: Link[]
       public note?: string

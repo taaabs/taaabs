@@ -8,6 +8,7 @@
   margin: var(--distance-16px) 0;
   width: 100%;
 }
+
 .input {
   display: flex;
   align-items: center;
@@ -21,20 +22,52 @@
   transform: translateX(calc(var(--distance-16px) * -1));
   box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.4);
   @include transition-100ms;
+  &--yields-no-results {
+    border-color: var(--red200) !important;
+    background-color: var(--red50);
+    box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.4);
+    > form > input {
+      color: var(--red600) !important;
+    }
+    > svg {
+      fill: var(--red600) !important;
+    }
+  }
   &--focus {
     border: 1px solid var(--blue300);
     box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.7);
   }
+  &--focus-yields-no-results {
+    border-color: var(--red300) !important;
+    box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.7);
+  }
   > svg {
+    @include transition-100ms(fill);
     width: var(--icon-dimension-22px);
     fill: var(--brand-color);
   }
-  > input {
+  &__loader {
+    width: var(--icon-dimension-22px);
+    height: var(--icon-dimension-22px);
+    border: 2.5px solid var(--brand-color);
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+  }
+  > form {
+    flex-grow: 1;
+  }
+  > form > input {
+    width: 100%;
+    height: var(--button-dimension-52px);
     border: none;
     background: none;
     font-size: var(--font-size-18px);
     font-weight: var(--font-weight-inter-medium);
     color: var(--brand-color);
+    @include transition-100ms(color);
     &:focus {
       outline: none;
     }
@@ -44,6 +77,7 @@
     }
   }
 }
+
 .hints {
   display: flex;
   flex-direction: column;
@@ -69,10 +103,12 @@
       display: flex;
       flex-grow: 1;
       > span {
+        color: var(--text-color-variant);
         white-space: pre-wrap;
       }
       > span:last-child {
-        font-weight: var(--font-weight-inter-medium);
+        color: var(--text-color-normal);
+        font-weight: var(--font-weight-inter-semi-bold);
       }
     }
     &__remove {
@@ -85,12 +121,14 @@
     }
   }
 }
+
 .text {
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   font-size: var(--font-size-22px);
   color: var(--TitleBar-primary-foreground);
 }
+
 .skeleton {
   width: 100%;
   margin: var(--distance-16px) 0;
@@ -98,5 +136,14 @@
   > span > span {
     width: calc(100% + (var(--distance-16px) * 2));
     height: var(--button-dimension-52px);
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

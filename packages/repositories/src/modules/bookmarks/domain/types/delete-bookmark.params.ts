@@ -1,3 +1,3 @@
 export type DeleteBookmark_Params = {
-  bookmark_id: string
+  bookmark_id: number
 }

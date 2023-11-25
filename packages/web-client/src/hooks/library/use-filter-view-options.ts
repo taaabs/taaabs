@@ -58,7 +58,9 @@ export const use_filter_view_options = () => {
     let updated_query_params = update_query_params(
       query_params,
       'f',
-      Object.values(LibraryFilter).indexOf(filter).toString(),
+      filter == BookmarksFetchingDefaults.Common.filter
+        ? undefined
+        : Object.values(LibraryFilter).indexOf(filter).toString(),
     )
 
     updated_query_params = update_query_params(updated_query_params, 'lte')

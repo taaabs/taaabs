@@ -23,13 +23,13 @@ export namespace Library {
     is_fetching_first_bookmarks: boolean
     is_fetching_more_bookmarks: boolean
     has_more_bookmarks: boolean
-    no_results: boolean
     get_more_bookmarks: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
     clear_unread?: () => void
     clear_selected_stars?: () => void
     show_bookmarks_skeleton: boolean
+    info_text?: string
   }
 }
 
@@ -297,13 +297,7 @@ export const Library: React.FC<Library.Props> = (props) => {
                 className={styles['main__inner__info']}
                 ref={end_of_bookmarks}
               >
-                <span>
-                  {props.is_fetching_first_bookmarks || props.has_more_bookmarks
-                    ? 'Loading...'
-                    : props.no_results
-                    ? 'No results'
-                    : 'End of results'}
-                </span>
+                {props.info_text && <span>{props.info_text}</span>}
                 {
                   // TODO: INVESTIGATE: Without "is_hydrated" gives errors after page refresh, why?
                 }

@@ -1,6 +1,6 @@
 import { Bookmarks_Dto } from './bookmarks.dto'
 
-export namespace GetManyByIds_Dto {
+export namespace BookmarksByIds_Dto {
   export class Body {
     public ids: number[]
   }
