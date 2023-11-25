@@ -454,7 +454,9 @@ const Page: React.FC = () => {
             button: is_hydrated ? (
               <ButtonSelect
                 label="Sort by"
-                current_value={_sortby_option_to_label(sortby_view_options.current_sortby)}
+                current_value={_sortby_option_to_label(
+                  sortby_view_options.current_sortby,
+                )}
                 is_active={is_sortby_dropdown_visible}
                 on_click={toggle_sortby_dropdown}
               />
@@ -474,45 +476,57 @@ const Page: React.FC = () => {
                       on_click: () => {
                         toggle_sortby_dropdown()
                         if (
-                          sortby_view_options.current_sortby == Sortby.CreatedAt ||
+                          sortby_view_options.current_sortby ==
+                            Sortby.CreatedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
                           is_fetching_months_data
                         )
                           return
-                        sortby_view_options.set_sortby_query_param(Sortby.CreatedAt)
+                        sortby_view_options.set_sortby_query_param(
+                          Sortby.CreatedAt,
+                        )
                       },
-                      is_selected: sortby_view_options.current_sortby == Sortby.CreatedAt,
+                      is_selected:
+                        sortby_view_options.current_sortby == Sortby.CreatedAt,
                     },
                     {
                       label: _sortby_option_to_label(Sortby.UpdatedAt),
                       on_click: () => {
                         toggle_sortby_dropdown()
                         if (
-                          sortby_view_options.current_sortby == Sortby.UpdatedAt ||
+                          sortby_view_options.current_sortby ==
+                            Sortby.UpdatedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
                           is_fetching_months_data
                         )
                           return
-                        sortby_view_options.set_sortby_query_param(Sortby.UpdatedAt)
+                        sortby_view_options.set_sortby_query_param(
+                          Sortby.UpdatedAt,
+                        )
                       },
-                      is_selected: sortby_view_options.current_sortby == Sortby.UpdatedAt,
+                      is_selected:
+                        sortby_view_options.current_sortby == Sortby.UpdatedAt,
                     },
                     {
                       label: _sortby_option_to_label(Sortby.VisitedAt),
                       on_click: () => {
                         toggle_sortby_dropdown()
                         if (
-                          sortby_view_options.current_sortby == Sortby.VisitedAt ||
+                          sortby_view_options.current_sortby ==
+                            Sortby.VisitedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
                           is_fetching_months_data
                         )
                           return
-                        sortby_view_options.set_sortby_query_param(Sortby.VisitedAt)
+                        sortby_view_options.set_sortby_query_param(
+                          Sortby.VisitedAt,
+                        )
                       },
-                      is_selected: sortby_view_options.current_sortby == Sortby.VisitedAt,
+                      is_selected:
+                        sortby_view_options.current_sortby == Sortby.VisitedAt,
                     },
                   ]}
                 />
@@ -523,7 +537,9 @@ const Page: React.FC = () => {
             button: is_hydrated ? (
               <ButtonSelect
                 label="Order"
-                current_value={_order_option_to_label(order_view_options.current_order)}
+                current_value={_order_option_to_label(
+                  order_view_options.current_order,
+                )}
                 is_active={is_order_dropdown_visible}
                 on_click={toggle_order_dropdown}
               />
@@ -552,7 +568,8 @@ const Page: React.FC = () => {
                         order_view_options.set_order_query_param(Order.Desc)
                       },
 
-                      is_selected: order_view_options.current_order == Order.Desc,
+                      is_selected:
+                        order_view_options.current_order == Order.Desc,
                     },
                     {
                       label: _order_option_to_label(Order.Asc),
@@ -567,7 +584,8 @@ const Page: React.FC = () => {
                           return
                         order_view_options.set_order_query_param(Order.Asc)
                       },
-                      is_selected: order_view_options.current_order == Order.Asc,
+                      is_selected:
+                        order_view_options.current_order == Order.Asc,
                     },
                   ]}
                 />
