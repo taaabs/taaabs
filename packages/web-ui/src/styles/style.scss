@@ -167,6 +167,10 @@ svg {
   fill: var(--plain-black);
 }
 
+strong {
+  font-weight: var(--font-weight-inter-semi-bold);
+}
+
 @keyframes fade-in {
   0% {
     opacity: 0;

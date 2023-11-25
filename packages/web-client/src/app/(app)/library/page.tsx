@@ -61,6 +61,7 @@ const Page: React.FC = () => {
     is_fetching_more_bookmarks,
     has_more_bookmarks,
     bookmarks_fetch_timestamp,
+    is_in_search_mode,
   } = use_library_selector((state) => state.bookmarks)
   const { get_bookmarks } = use_bookmarks()
   const { months, is_fetching_months_data, tags, selected_tags } = use_months()
@@ -601,6 +602,7 @@ const Page: React.FC = () => {
         bookmarks &&
         bookmarks.length &&
         !hints.length &&
+        !(is_in_search_mode && is_fetching_first_bookmarks) &&
         !(
           search_string.length > 0 &&
           found_ids !== undefined &&
@@ -992,18 +994,23 @@ const Page: React.FC = () => {
           : undefined
       }
       info_text={
-        is_fetching_first_bookmarks || is_fetching_more_bookmarks
-          ? 'Loading...'
-          : !search_string.length &&
-            !is_fetching_first_bookmarks &&
-            (!bookmarks || bookmarks.length == 0)
-          ? 'No results'
-          : !is_initializing_orama &&
-            search_string.length > 0 &&
-            found_ids !== undefined &&
-            found_ids.length == 0
-          ? `Your search - ${search_string} - did not match any bookmarks.`
-          : ''
+        is_fetching_first_bookmarks || is_fetching_more_bookmarks ? (
+          'Loading...'
+        ) : !search_string.length &&
+          !is_fetching_first_bookmarks &&
+          (!bookmarks || bookmarks.length == 0) ? (
+          'No results'
+        ) : !is_initializing_orama &&
+          search_string.length > 0 &&
+          found_ids !== undefined &&
+          found_ids.length == 0 ? (
+          <>
+            Your search - <strong>{search_string}</strong> - did not match any
+            bookmarks
+          </>
+        ) : (
+          ''
+        )
       }
     />
   )

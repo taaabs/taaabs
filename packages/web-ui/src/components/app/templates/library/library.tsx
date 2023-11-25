@@ -29,7 +29,7 @@ export namespace Library {
     clear_unread?: () => void
     clear_selected_stars?: () => void
     show_bookmarks_skeleton: boolean
-    info_text?: string
+    info_text?: React.ReactNode
   }
 }
 
