@@ -6,7 +6,6 @@ import {
   insertMultiple,
   search,
   remove,
-  insert,
 } from '@orama/orama'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -49,7 +48,7 @@ export const use_search = () => {
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
   const [is_initializing_orama, set_is_initializing_orama] = useState(false)
   const [search_string, set_search_string] = useState('')
-  const [hints, set_hints] = useState<Hint[]>([])
+  const [hints, set_hints] = useState<Hint[] | undefined>()
 
   const [orama, set_orama] = useState<Orama<typeof schema> | undefined>()
   const [orama_results, set_orama_results] = useState<Results<Result>>()
@@ -187,28 +186,30 @@ export const use_search = () => {
     const found_ids = results.hits.map((result) => parseInt(result.id))
     set_found_ids(found_ids)
     if (!found_ids.length) {
-      set_hints([])
+      clear_hints()
     } else {
-      // TODO: generate hints
-      set_hints([{ type: 'new', text: 'todo' }])
+      get_hints()
     }
   }
 
+  const get_hints = () => {
+    set_hints([{ type: 'new', text: 'todo' }])
+  }
+
+  const clear_hints = () => {
+    set_hints(undefined)
+  }
+
   useUpdateEffect(() => {
-    if (orama !== undefined) {
-      if (search_string.length) {
-        query_orama()
-      } else {
-        set_hints([])
-        set_orama_results(undefined)
-      }
+    if (orama !== undefined && search_string.length) {
+      query_orama()
     }
-  }, [search_string, orama])
+  }, [search_string, current_filter, selected_tags])
 
   const get_bookmarks_of_search = (params: {
     should_get_next_page?: boolean
   }) => {
-    set_hints([])
+    clear_hints()
     if (found_ids) {
       if (!params.should_get_next_page) {
         dispatch(
@@ -290,6 +291,9 @@ export const use_search = () => {
     search_string,
     set_search_string,
     hints,
+    get_hints,
+    set_hints,
+    clear_hints,
     init_orama,
     is_initializing_orama,
     orama,

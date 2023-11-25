@@ -16,12 +16,13 @@ export namespace LibrarySearch {
     search_string: string
     is_loading: boolean
     on_focus: () => void
+    on_blur: () => void
     on_change: (value: string) => void
     on_submit: () => void
     on_click_clear_search_string: () => void
     on_click_hint: (hint: string) => void
     on_click_recent_hint_remove: (hint: string) => void
-    hints: Hint[]
+    hints?: Hint[]
     yields_no_results: boolean
   }
 }
@@ -32,10 +33,10 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
   const input = useRef<HTMLInputElement>(null)
 
   useUpdateEffect(() => {
-    if (props.is_loading) {
-      input.current?.blur()
+    if (!props.is_loading) {
+      props.on_focus()
     }
-  }, [is_focused])
+  }, [props.is_loading])
 
   return is_hydrated ? (
     <div className={styles.container}>
@@ -66,13 +67,14 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
             ref={input}
             value={props.search_string}
             placeholder={
-              props.is_loading ? 'Building fast index...' : props.placeholder
+              props.is_loading ? 'Initializing...' : props.placeholder
             }
             onFocus={() => {
               props.on_focus()
               set_is_focused(true)
             }}
             onBlur={() => {
+              props.on_blur()
               set_is_focused(false)
             }}
             onChange={(e) => {
@@ -81,7 +83,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
           />
         </form>
       </div>
-      {props.hints.length > 0 && (
+      {props.hints && (
         <div className={styles.hints}>
           {props.hints.map((hint) => (
             <button

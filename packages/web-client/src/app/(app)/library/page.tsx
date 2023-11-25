@@ -81,22 +81,13 @@ const Page: React.FC = () => {
     clear_selected_tags,
     set_actual_selected_tags,
   } = use_tag_view_options()
-  const { set_gte_lte_query_params, clear_gte_lte_query_params } =
-    use_date_view_options()
   const {
-    search_string,
-    hints,
-    set_search_string,
-    init_orama,
-    is_initializing_orama,
-    orama,
-    found_ids,
-    get_bookmarks_of_search,
-    delete_searchable_bookmark,
-    update_searchable_bookmarks,
-    set_current_filter,
-    set_selected_tags,
-  } = use_search()
+    set_gte_lte_query_params,
+    clear_gte_lte_query_params,
+    current_gte,
+    current_lte,
+  } = use_date_view_options()
+  const search = use_search()
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
 
@@ -118,15 +109,15 @@ const Page: React.FC = () => {
   }, [bookmarks])
 
   useUpdateEffect(() => {
-    set_search_string('')
-  }, [query_params])
+    if (search.search_string) {
+      if (search.hints) {
+        dispatch(bookmarks_actions.set_bookmarks([]))
+        search.clear_hints()
+      }
+      search.set_search_string('')
 
-  useUpdateEffect(() => {
-    if (!search_string) {
-      dispatch(bookmarks_actions.set_bookmarks([]))
-      get_bookmarks({})
     }
-  }, [search_string])
+  }, [current_filter, selected_tags, current_gte, current_lte])
 
   useEffect(() => {
     // Automatic scroll restoration works great when
@@ -150,8 +141,8 @@ const Page: React.FC = () => {
       }
       slot_search={
         <LibrarySearch
-          search_string={search_string}
-          is_loading={is_initializing_orama}
+          search_string={search.search_string}
+          is_loading={search.is_initializing_orama}
           placeholder={
             current_filter == LibraryFilter.All &&
             !actual_selected_tags.length &&
@@ -165,46 +156,53 @@ const Page: React.FC = () => {
               ? 'Search in archived bookmarks'
               : 'Search here...'
           }
-          hints={hints}
+          hints={search.hints}
           yields_no_results={
-            !is_initializing_orama &&
-            search_string.length > 0 &&
-            found_ids !== undefined &&
-            found_ids.length == 0
+            !search.is_initializing_orama &&
+            search.search_string.length > 0 &&
+            search.found_ids !== undefined &&
+            search.found_ids.length == 0
           }
           on_click_hint={() => {}}
           on_click_recent_hint_remove={() => {}}
           on_click_clear_search_string={() => {}}
           on_focus={async () => {
-            if (!is_initializing_orama && orama === undefined) {
-              await init_orama()
-            }
-            set_current_filter(current_filter)
-            set_selected_tags(
-              selected_tags
-                .filter((id) => {
-                  if (!bookmarks || !bookmarks[0]) return false
-                  return (
-                    bookmarks[0].tags?.findIndex((tag) => tag.id == id) != -1
-                  )
-                })
-                .map((id) => {
-                  const name = bookmarks![0].tags!.find(
-                    (tag) => tag.id == id,
-                  )!.name
+            if (!search.is_initializing_orama) {
+              if (search.orama === undefined) {
+                await search.init_orama()
+              }
+              search.set_current_filter(current_filter)
+              search.set_selected_tags(
+                selected_tags
+                  .filter((id) => {
+                    if (!bookmarks || !bookmarks[0]) return false
+                    return (
+                      bookmarks[0].tags?.findIndex((tag) => tag.id == id) != -1
+                    )
+                  })
+                  .map((id) => {
+                    const name = bookmarks![0].tags!.find(
+                      (tag) => tag.id == id,
+                    )!.name
 
-                  return name
-                }),
-            )
-          }}
-          on_change={(value) => {
-            if (!is_initializing_orama) {
-              set_search_string(value)
+                    return name
+                  }),
+              )
+              search.get_hints()
             }
           }}
+          on_change={search.set_search_string}
           on_submit={() => {
-            if (found_ids === undefined || found_ids.length == 0) return
-            get_bookmarks_of_search({})
+            if (search.found_ids === undefined || search.found_ids.length == 0)
+              return
+            search.get_bookmarks_of_search({})
+          }}
+          on_blur={() => {
+            if (!search.search_string && !search.is_initializing_orama) {
+              dispatch(bookmarks_actions.set_bookmarks([]))
+              get_bookmarks({})
+              search.clear_hints()
+            }
           }}
         />
       }
@@ -583,17 +581,17 @@ const Page: React.FC = () => {
       is_fetching_first_bookmarks={is_fetching_first_bookmarks}
       is_fetching_more_bookmarks={is_fetching_more_bookmarks}
       has_more_bookmarks={
-        (!search_string && has_more_bookmarks) ||
-        (search_string &&
-          found_ids &&
+        (!search.search_string && has_more_bookmarks) ||
+        (search.search_string &&
+          search.found_ids &&
           bookmarks &&
-          found_ids.length > bookmarks.length) ||
+          search.found_ids.length > bookmarks.length) ||
         false
       }
       get_more_bookmarks={() => {
-        if (hints.length) return
-        if (search_string) {
-          get_bookmarks_of_search({ should_get_next_page: true })
+        if (search.hints) return
+        if (search.search_string) {
+          search.get_bookmarks_of_search({ should_get_next_page: true })
         } else {
           get_bookmarks({ should_get_next_page: true })
         }
@@ -601,12 +599,12 @@ const Page: React.FC = () => {
       slot_bookmarks={
         bookmarks &&
         bookmarks.length &&
-        !hints.length &&
+        !search.hints &&
         !(is_in_search_mode && is_fetching_first_bookmarks) &&
         !(
-          search_string.length > 0 &&
-          found_ids !== undefined &&
-          found_ids.length == 0
+          search.search_string.length > 0 &&
+          search.found_ids !== undefined &&
+          search.found_ids.length == 0
         )
           ? bookmarks.map((bookmark, index) => (
               <Bookmark
@@ -714,10 +712,13 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          update_searchable_bookmarks({
+                          search.update_searchable_bookmarks({
                             bookmark: updated_bookmark,
                           })
-                          if (bookmarks.length == 1 && search_string.length) {
+                          if (
+                            bookmarks.length == 1 &&
+                            search.search_string.length
+                          ) {
                             if (
                               !is_unread &&
                               (current_filter == LibraryFilter.Unread ||
@@ -727,7 +728,7 @@ const Page: React.FC = () => {
                                 current_filter ==
                                   LibraryFilter.ThreeStarsUnread)
                             ) {
-                              set_search_string('')
+                              search.set_search_string('')
                             }
                           }
                         },
@@ -770,11 +771,14 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          update_searchable_bookmarks({
+                          search.update_searchable_bookmarks({
                             bookmark: updated_bookmark,
                           })
-                          if (bookmarks.length == 1 && search_string.length) {
-                            set_search_string('')
+                          if (
+                            bookmarks.length == 1 &&
+                            search.search_string.length
+                          ) {
+                            search.set_search_string('')
                           }
                         },
                       },
@@ -816,11 +820,14 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          update_searchable_bookmarks({
+                          search.update_searchable_bookmarks({
                             bookmark: updated_bookmark,
                           })
-                          if (bookmarks.length == 1 && search_string.length) {
-                            set_search_string('')
+                          if (
+                            bookmarks.length == 1 &&
+                            search.search_string.length
+                          ) {
+                            search.set_search_string('')
                           }
                         },
                       },
@@ -862,11 +869,14 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          update_searchable_bookmarks({
+                          search.update_searchable_bookmarks({
                             bookmark: updated_bookmark,
                           })
-                          if (bookmarks.length == 1 && search_string.length) {
-                            set_search_string('')
+                          if (
+                            bookmarks.length == 1 &&
+                            search.search_string.length
+                          ) {
+                            search.set_search_string('')
                           }
                         },
                       },
@@ -911,11 +921,14 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          update_searchable_bookmarks({
+                          search.update_searchable_bookmarks({
                             bookmark: updated_bookmark,
                           })
-                          if (bookmarks.length == 1 && search_string.length) {
-                            set_search_string('')
+                          if (
+                            bookmarks.length == 1 &&
+                            search.search_string.length
+                          ) {
+                            search.set_search_string('')
                           }
                         },
                       },
@@ -937,11 +950,14 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          delete_searchable_bookmark({
+                          search.delete_searchable_bookmark({
                             bookmark_id: bookmark.id,
                           })
-                          if (bookmarks.length == 1 && search_string.length) {
-                            set_search_string('')
+                          if (
+                            bookmarks.length == 1 &&
+                            search.search_string.length
+                          ) {
+                            search.set_search_string('')
                           }
                         },
                         other_icon: <Icon variant="DELETE" />,
@@ -996,17 +1012,17 @@ const Page: React.FC = () => {
       info_text={
         is_fetching_first_bookmarks || is_fetching_more_bookmarks ? (
           'Loading...'
-        ) : !search_string.length &&
+        ) : !search.search_string.length &&
           !is_fetching_first_bookmarks &&
           (!bookmarks || bookmarks.length == 0) ? (
           'No results'
-        ) : !is_initializing_orama &&
-          search_string.length > 0 &&
-          found_ids !== undefined &&
-          found_ids.length == 0 ? (
+        ) : !search.is_initializing_orama &&
+          search.search_string.length > 0 &&
+          search.found_ids !== undefined &&
+          search.found_ids.length == 0 ? (
           <>
-            Your search - <strong>{search_string}</strong> - did not match any
-            bookmarks
+            Your search - <strong>{search.search_string}</strong> - did not
+            match any bookmarks
           </>
         ) : (
           ''
