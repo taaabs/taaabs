@@ -19,7 +19,6 @@ export const get_authorized_bookmarks = (params: {
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const get_bookmarks = new GetBookmarksOnAuthorizedUser_UseCase(repository)
 
-    
     dispatch(bookmarks_actions.set_is_fetching_data(true))
 
     if (params.request_params.after) {
