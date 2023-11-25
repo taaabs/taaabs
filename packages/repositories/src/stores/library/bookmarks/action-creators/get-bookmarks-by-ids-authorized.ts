@@ -20,7 +20,7 @@ export const get_bookmarks_by_ids_authorized = (params: {
     const get_bookomarks_by_ids = new GetBookmarksByIdsAuthorized_UseCase(
       repository,
     )
-    dispatch(bookmarks_actions.set_is_in_search_mode(true))
+
     dispatch(bookmarks_actions.set_is_fetching_data(true))
     if (params.is_next_page) {
       dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(true))

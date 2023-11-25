@@ -1,6 +1,6 @@
 import { bookmarks_actions } from '../bookmarks.slice'
 import { LibraryDispatch, LibraryState } from '../../library.store'
-import { months_actions } from '../../months/months.slice'
+import { counts_actions } from '../../counts/counts.slice'
 import { GetBookmarksOnPublicUser_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-public-user.use-case'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
@@ -37,9 +37,9 @@ export const get_public_bookmarks = (params: {
       dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(false))
     } else {
       dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks))
-      if (!get_state().months.is_fetching_months_data) {
+      if (!get_state().counts.is_fetching_counts_data) {
         dispatch(bookmarks_actions.set_bookmarks(bookmarks))
-        dispatch(months_actions.process_tags())
+        dispatch(counts_actions.process_tags())
         dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
       }
     }

@@ -124,6 +124,7 @@ export const use_search = () => {
   }
 
   const init_orama = async () => {
+    dispatch(bookmarks_actions.set_is_in_search_mode(true))
     set_is_initializing_orama(true)
     const data_source = new LibrarySearch_DataSourceImpl(
       process.env.NEXT_PUBLIC_API_URL,

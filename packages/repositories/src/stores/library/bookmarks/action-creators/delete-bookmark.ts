@@ -3,12 +3,12 @@ import { LibraryDispatch, LibraryState } from '../../library.store'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { DeleteBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/delete-bookmark.use-case'
 import { bookmarks_actions } from '../bookmarks.slice'
-import { months_actions } from '../../months/months.slice'
-import { Months_Params } from '@repositories/modules/months/domain/types/months.params'
+import { counts_actions } from '../../counts/counts.slice'
+import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 
 export const delete_bookmark = (params: {
   bookmark_id: number
-  last_authorized_months_params: Months_Params.Authorized
+  last_authorized_counts_params: Counts_Params.Authorized
   api_url: string
   auth_token: string
 }) => {
@@ -37,8 +37,8 @@ export const delete_bookmark = (params: {
       ),
     )
     dispatch(
-      months_actions.refresh_authorized_months({
-        last_authorized_months_params: params.last_authorized_months_params,
+      counts_actions.refresh_authorized_counts({
+        last_authorized_counts_params: params.last_authorized_counts_params,
         api_url: params.api_url,
         auth_token: params.auth_token,
       }),

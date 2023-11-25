@@ -17,7 +17,7 @@ import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
+import { CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
 import { use_filter_view_options } from '@/hooks/library/use-filter-view-options'
@@ -27,7 +27,7 @@ import { use_sortby_view_options } from '@/hooks/library/use-sortby-view-options
 import { use_order_view_options } from '@/hooks/library/use-order-view-options'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { use_bookmarks } from '@/hooks/library/use-bookmarks'
-import { use_months } from '@/hooks/library/use-months'
+import { use_counts } from '@/hooks/library/use-counts'
 import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage-cleanup'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
@@ -41,9 +41,9 @@ import { UnreadStarsFilter } from '@web-ui/components/app/atoms/unread-stars-fil
 import { LibrarySearch } from '@web-ui/components/app/atoms/library-search'
 import { use_search } from '@/hooks/library/use-search'
 
-const Months = dynamic(() => import('./dynamic-months'), {
+const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
-  loading: () => <MonthsSkeleton />,
+  loading: () => <CustomRangeSkeleton />,
 })
 
 const Page: React.FC = () => {
@@ -52,11 +52,11 @@ const Page: React.FC = () => {
   const dispatch = use_library_dispatch()
   const query_params = use_shallow_search_params()
   const [show_months, set_show_months] = useState(false)
-  const [show_tags, set_show_tags] = useState(false)
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
+  const [show_bookmarks_skeleton, set_show_bookmarks_skeleton] = useState(true)
   const bookmarks_slice_state = use_library_selector((state) => state.bookmarks)
   const { get_bookmarks } = use_bookmarks()
-  const { months, is_fetching_months_data, tags, selected_tags } = use_months()
+  const { months, is_fetching_counts_data, tags, selected_tags } = use_counts()
   const filter_view_options = use_filter_view_options()
   const sortby_view_options = use_sortby_view_options()
   const order_view_options = use_order_view_options()
@@ -78,9 +78,9 @@ const Page: React.FC = () => {
 
   useUpdateEffect(() => {
     if (bookmarks_slice_state.bookmarks == null) return
-    if (!show_months) set_show_months(true)
-    if (!show_tags) set_show_tags(true)
+    set_show_months(true)
     set_show_tags_skeleton(false)
+    set_show_bookmarks_skeleton(false)
   }, [bookmarks_slice_state.bookmarks])
 
   useUpdateEffect(() => {
@@ -110,7 +110,7 @@ const Page: React.FC = () => {
 
   return (
     <Library
-      show_bookmarks_skeleton={bookmarks_slice_state.bookmarks == null}
+      show_bookmarks_skeleton={show_bookmarks_skeleton}
       mobile_title_bar={
         filter_view_options.current_filter == LibraryFilter.All
           ? 'All bookmarks'
@@ -202,14 +202,15 @@ const Page: React.FC = () => {
               on_click: () => {
                 if (
                   bookmarks_slice_state.is_fetching_first_bookmarks ||
-                  bookmarks_slice_state.is_updating_bookmarks ||
-                  filter_view_options.current_filter != LibraryFilter.Archived
+                  bookmarks_slice_state.is_updating_bookmarks
                 )
                   return
                 filter_view_options.set_filter_query_param_reset_others(
                   LibraryFilter.All,
                 )
-                tag_view_options.set_actual_selected_tags([])
+                set_show_bookmarks_skeleton(true)
+                set_show_tags_skeleton(true)
+                set_show_months(false)
               },
               is_active:
                 filter_view_options.current_filter != LibraryFilter.Archived,
@@ -219,14 +220,15 @@ const Page: React.FC = () => {
               on_click: () => {
                 if (
                   bookmarks_slice_state.is_fetching_first_bookmarks ||
-                  bookmarks_slice_state.is_updating_bookmarks ||
-                  filter_view_options.current_filter == LibraryFilter.Archived
+                  bookmarks_slice_state.is_updating_bookmarks
                 )
                   return
                 filter_view_options.set_filter_query_param_reset_others(
                   LibraryFilter.Archived,
                 )
-                tag_view_options.set_actual_selected_tags([])
+                set_show_bookmarks_skeleton(true)
+                set_show_tags_skeleton(true)
+                set_show_months(false)
               },
               is_active:
                 filter_view_options.current_filter == LibraryFilter.Archived,
@@ -480,7 +482,7 @@ const Page: React.FC = () => {
                             Sortby.CreatedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          is_fetching_months_data
+                          is_fetching_counts_data
                         )
                           return
                         sortby_view_options.set_sortby_query_param(
@@ -499,7 +501,7 @@ const Page: React.FC = () => {
                             Sortby.UpdatedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          is_fetching_months_data
+                          is_fetching_counts_data
                         )
                           return
                         sortby_view_options.set_sortby_query_param(
@@ -518,7 +520,7 @@ const Page: React.FC = () => {
                             Sortby.VisitedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          is_fetching_months_data
+                          is_fetching_counts_data
                         )
                           return
                         sortby_view_options.set_sortby_query_param(
@@ -562,7 +564,7 @@ const Page: React.FC = () => {
                           order_view_options.current_order == Order.Desc ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          is_fetching_months_data
+                          is_fetching_counts_data
                         )
                           return
                         order_view_options.set_order_query_param(Order.Desc)
@@ -579,7 +581,7 @@ const Page: React.FC = () => {
                           order_view_options.current_order == Order.Asc ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          is_fetching_months_data
+                          is_fetching_counts_data
                         )
                           return
                         order_view_options.set_order_query_param(Order.Asc)
@@ -599,13 +601,13 @@ const Page: React.FC = () => {
                   pointerEvents:
                     bookmarks_slice_state.is_fetching_first_bookmarks ||
                     bookmarks_slice_state.is_fetching_more_bookmarks ||
-                    is_fetching_months_data
+                    is_fetching_counts_data
                       ? 'none'
                       : 'all',
                 }}
               >
-                <Months
-                  months={months}
+                <CustomRange
+                  counts={months}
                   on_yyyymm_change={date_view_options.set_gte_lte_query_params}
                   clear_date_range={
                     date_view_options.clear_gte_lte_query_params
@@ -619,7 +621,7 @@ const Page: React.FC = () => {
                   selected_tags={query_params.get('t') || undefined}
                   has_results={
                     bookmarks_slice_state.bookmarks != undefined &&
-                    !is_fetching_months_data
+                    !is_fetching_counts_data
                       ? bookmarks_slice_state.bookmarks.length > 0
                       : undefined
                   }
@@ -633,18 +635,18 @@ const Page: React.FC = () => {
                 />
               </div>
             ) : (
-              <MonthsSkeleton />
+              <CustomRangeSkeleton />
             )
           }
           slot_tags={
             <>
-              {show_tags && (
+              {!show_tags_skeleton ? (
                 <div
                   style={{
                     pointerEvents:
                       bookmarks_slice_state.is_fetching_first_bookmarks ||
                       bookmarks_slice_state.is_fetching_more_bookmarks ||
-                      is_fetching_months_data
+                      is_fetching_counts_data
                         ? 'none'
                         : undefined,
                   }}
@@ -702,8 +704,9 @@ const Page: React.FC = () => {
                     on_click={tag_view_options.add_tag_to_query_params}
                   />
                 </div>
+              ) : (
+                <TagsSkeleton />
               )}
-              {show_tags_skeleton && <TagsSkeleton />}
             </>
           }
         />
@@ -733,12 +736,13 @@ const Page: React.FC = () => {
       }}
       slot_bookmarks={
         bookmarks_slice_state.bookmarks &&
-        bookmarks_slice_state.bookmarks.length &&
+        !show_bookmarks_skeleton &&
         !search.hints &&
         !(
           bookmarks_slice_state.is_in_search_mode &&
           bookmarks_slice_state.is_fetching_first_bookmarks
         ) &&
+        !search.is_initializing_orama &&
         !(
           search.search_string.length > 0 &&
           search.found_ids !== undefined &&
@@ -846,11 +850,11 @@ const Page: React.FC = () => {
                           dispatch(
                             bookmarks_actions.upsert_bookmark({
                               bookmark: updated_bookmark,
-                              last_authorized_months_params:
+                              last_authorized_counts_params:
                                 JSON.parse(
                                   sessionStorage.getItem(
                                     browser_storage.session_storage
-                                      .last_authorized_months_params,
+                                      .last_authorized_counts_params,
                                   ) || '',
                                 ) || undefined,
                               api_url: process.env.NEXT_PUBLIC_API_URL,
@@ -909,11 +913,11 @@ const Page: React.FC = () => {
                           dispatch(
                             bookmarks_actions.upsert_bookmark({
                               bookmark: updated_bookmark,
-                              last_authorized_months_params:
+                              last_authorized_counts_params:
                                 JSON.parse(
                                   sessionStorage.getItem(
                                     browser_storage.session_storage
-                                      .last_authorized_months_params,
+                                      .last_authorized_counts_params,
                                   ) || '',
                                 ) || undefined,
                               api_url: process.env.NEXT_PUBLIC_API_URL,
@@ -960,11 +964,11 @@ const Page: React.FC = () => {
                           dispatch(
                             bookmarks_actions.upsert_bookmark({
                               bookmark: updated_bookmark,
-                              last_authorized_months_params:
+                              last_authorized_counts_params:
                                 JSON.parse(
                                   sessionStorage.getItem(
                                     browser_storage.session_storage
-                                      .last_authorized_months_params,
+                                      .last_authorized_counts_params,
                                   ) || '',
                                 ) || undefined,
                               api_url: process.env.NEXT_PUBLIC_API_URL,
@@ -1011,11 +1015,11 @@ const Page: React.FC = () => {
                           dispatch(
                             bookmarks_actions.upsert_bookmark({
                               bookmark: updated_bookmark,
-                              last_authorized_months_params:
+                              last_authorized_counts_params:
                                 JSON.parse(
                                   sessionStorage.getItem(
                                     browser_storage.session_storage
-                                      .last_authorized_months_params,
+                                      .last_authorized_counts_params,
                                   ) || '',
                                 ) || undefined,
                               api_url: process.env.NEXT_PUBLIC_API_URL,
@@ -1068,11 +1072,11 @@ const Page: React.FC = () => {
                           dispatch(
                             bookmarks_actions.upsert_bookmark({
                               bookmark: updated_bookmark,
-                              last_authorized_months_params:
+                              last_authorized_counts_params:
                                 JSON.parse(
                                   sessionStorage.getItem(
                                     browser_storage.session_storage
-                                      .last_authorized_months_params,
+                                      .last_authorized_counts_params,
                                   ) || '',
                                 ) || undefined,
                               api_url: process.env.NEXT_PUBLIC_API_URL,
@@ -1097,11 +1101,11 @@ const Page: React.FC = () => {
                         on_click: () => {
                           dispatch(
                             bookmarks_actions.delete_bookmark({
-                              last_authorized_months_params:
+                              last_authorized_counts_params:
                                 JSON.parse(
                                   sessionStorage.getItem(
                                     browser_storage.session_storage
-                                      .last_authorized_months_params,
+                                      .last_authorized_counts_params,
                                   ) || '',
                                 ) || undefined,
                               bookmark_id: bookmark.id,

@@ -1,0 +1,132 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.custom-range {
+  position: relative;
+  border-radius: var(--border-radius-12px);
+  border-bottom-left-radius: 13px;
+  border-bottom-right-radius: 13px;
+  border: var(--border-secondary);
+  overflow: hidden;
+  height: var(--custom-range-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--Months-background);
+  @include transition-100ms(box-shadow);
+  &__details {
+    position: absolute;
+    z-index: 1;
+    top: var(--distance-5px);
+    left: var(--distance-13px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    &__title {
+      font-size: var(--font-size-13px);
+      color: var(--text-color-dimmed);
+    }
+    &__current-range {
+      font-weight: var(--font-weight-inter-medium);
+    }
+    &__counts {
+      display: flex;
+      gap: var(--distance-6px);
+      margin-top: var(--distance-4px);
+      padding: var(--distance-1px) var(--distance-6px) var(--distance-1px)
+        var(--distance-6px);
+      border-radius: var(--border-radius-4px);
+      font-size: var(--font-size-14px);
+      transform: translateX(calc(var(--distance-5px) * -1));
+      font-weight: var(--font-weight-inter-medium);
+      > div {
+        position: relative;
+        padding-left: var(--distance-12px);
+      }
+      > div::before {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 6px;
+      }
+      &__total::before {
+        background: var(--Months-chart-stroke);
+      }
+
+      &__starred::before {
+        background: var(--yellow);
+      }
+      &__unread::before {
+        background: var(--red);
+      }
+    }
+  }
+  &__info {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: var(--text-color-dimmed);
+    text-align: center;
+    font-size: var(--font-size-13px);
+    padding: 0 var(--distance-16px);
+    align-items: flex-end;
+    padding-bottom: var(--distance-24px);
+  }
+  &__clear {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: var(--distance-10px);
+    right: var(--distance-6px);
+    height: var(--button-dimension-28px);
+    width: var(--button-dimension-28px);
+    @include transition-100ms(background-color);
+    border-radius: var(--border-radius-999px);
+    @include hover {
+      background: var(--Months-clear-background-hover);
+    }
+    svg {
+      width: var(--icon-dimension-16px);
+      height: var(--icon-dimension-16px);
+      transform: rotate(45deg);
+      @include transition-100ms(fill);
+    }
+  }
+  &__recharts {
+    width: 100%;
+    svg {
+      transform: translateY(54px);
+    }
+    &__brush {
+      transform: translateY(-47px) scale(0.9);
+      transform-origin: center;
+      :focus {
+        outline: none;
+      }
+      > rect:first-of-type {
+        stroke: none;
+      }
+      > g > rect {
+        fill: var(--Months-chart-brush-handle-fill);
+        rx: var(--border-radius-8px);
+        stroke: var(--Months-chart-brush-handle);
+      }
+      > g > line {
+        @include transition-100ms(stroke);
+        stroke: var(--Months-chart-brush-handle);
+        &:first-of-type {
+          transform: translateY(-0.6px);
+        }
+        &:last-of-type {
+          transform: translateY(0.6px);
+        }
+      }
+    }
+  }
+}

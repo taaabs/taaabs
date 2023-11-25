@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { bookmarks_slice } from './bookmarks/bookmarks.slice'
-import { months_slice } from './months/months.slice'
+import { counts_slice } from './counts/counts.slice'
 
 const reducer = {
   bookmarks: bookmarks_slice.reducer,
-  months: months_slice.reducer,
+  counts: counts_slice.reducer,
 }
 
 export const configure_library_store = () => {

@@ -4,13 +4,13 @@ import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infras
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/upsert-bookmark.use-case'
 import { bookmarks_actions } from '../bookmarks.slice'
-import { months_actions } from '../../months/months.slice'
-import { Months_Params } from '@repositories/modules/months/domain/types/months.params'
+import { counts_actions } from '../../counts/counts.slice'
 import { LibraryFilter } from '@shared/types/common/library-filter'
+import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 
 export const upsert_bookmark = (params: {
   bookmark: UpsertBookmark_Params
-  last_authorized_months_params?: Months_Params.Authorized
+  last_authorized_counts_params?: Counts_Params.Authorized
   api_url: string
   auth_token: string
 }) => {
@@ -31,58 +31,58 @@ export const upsert_bookmark = (params: {
     if (params.bookmark.bookmark_id) {
       if (!state.bookmarks.bookmarks)
         throw new Error('[upsert_bookmark] Bookmarks should be there.')
-      if (!params.last_authorized_months_params)
+      if (!params.last_authorized_counts_params)
         throw new Error(
           '[upsert_bookmark] Last authorized months params should be there.',
         )
 
       const is_archived_toggled_should_remove =
         (!params.bookmark.is_archived &&
-          params.last_authorized_months_params.filter ==
+          params.last_authorized_counts_params.filter ==
             LibraryFilter.Archived) ||
         (params.bookmark.is_archived &&
           !(
-            params.last_authorized_months_params.filter ==
+            params.last_authorized_counts_params.filter ==
             LibraryFilter.Archived
           ))
 
       const is_starred_toggled_should_remove =
         (params.bookmark.stars == 0 &&
-          (params.last_authorized_months_params.filter ==
+          (params.last_authorized_counts_params.filter ==
             LibraryFilter.OneStar ||
-            params.last_authorized_months_params.filter ==
+            params.last_authorized_counts_params.filter ==
               LibraryFilter.TwoStars ||
-            params.last_authorized_months_params.filter ==
+            params.last_authorized_counts_params.filter ==
               LibraryFilter.ThreeStars ||
-            params.last_authorized_months_params.filter ==
+            params.last_authorized_counts_params.filter ==
               LibraryFilter.OneStarUnread ||
-            params.last_authorized_months_params.filter ==
+            params.last_authorized_counts_params.filter ==
               LibraryFilter.TwoStarsUnread ||
-            params.last_authorized_months_params.filter ==
+            params.last_authorized_counts_params.filter ==
               LibraryFilter.ThreeStarsUnread)) ||
         (params.bookmark.stars == 1 &&
-          (params.last_authorized_months_params.filter ==
+          (params.last_authorized_counts_params.filter ==
             LibraryFilter.TwoStars ||
-            params.last_authorized_months_params.filter ==
+            params.last_authorized_counts_params.filter ==
               LibraryFilter.ThreeStars ||
-            params.last_authorized_months_params.filter ==
+            params.last_authorized_counts_params.filter ==
               LibraryFilter.TwoStarsUnread ||
-            params.last_authorized_months_params.filter ==
+            params.last_authorized_counts_params.filter ==
               LibraryFilter.ThreeStarsUnread)) ||
         (params.bookmark.stars == 2 &&
-          (params.last_authorized_months_params.filter ==
+          (params.last_authorized_counts_params.filter ==
             LibraryFilter.ThreeStars ||
-            params.last_authorized_months_params.filter ==
+            params.last_authorized_counts_params.filter ==
               LibraryFilter.ThreeStarsUnread))
 
       const is_unread_toggled_should_remove =
         !params.bookmark.is_unread &&
-        (params.last_authorized_months_params.filter == LibraryFilter.Unread ||
-          params.last_authorized_months_params.filter ==
+        (params.last_authorized_counts_params.filter == LibraryFilter.Unread ||
+          params.last_authorized_counts_params.filter ==
             LibraryFilter.OneStarUnread ||
-          params.last_authorized_months_params.filter ==
+          params.last_authorized_counts_params.filter ==
             LibraryFilter.TwoStarsUnread ||
-          params.last_authorized_months_params.filter ==
+          params.last_authorized_counts_params.filter ==
             LibraryFilter.ThreeStarsUnread)
 
       if (
@@ -136,8 +136,8 @@ export const upsert_bookmark = (params: {
       }
 
       dispatch(
-        months_actions.refresh_authorized_months({
-          last_authorized_months_params: params.last_authorized_months_params,
+        counts_actions.refresh_authorized_counts({
+          last_authorized_counts_params: params.last_authorized_counts_params,
           api_url: params.api_url,
           auth_token: params.auth_token,
         }),

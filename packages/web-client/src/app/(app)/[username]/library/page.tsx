@@ -17,7 +17,7 @@ import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { MonthsSkeleton } from '@web-ui/components/app/atoms/months-skeleton'
+import { CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
 import { use_filter_view_options } from '@/hooks/library/use-filter-view-options'
@@ -35,7 +35,7 @@ import { UnreadStarsFilter } from '@web-ui/components/app/atoms/unread-stars-fil
 
 const Months = dynamic(() => import('./dynamic-months'), {
   ssr: false,
-  loading: () => <MonthsSkeleton />,
+  loading: () => <CustomRangeSkeleton />,
 })
 
 const Page: React.FC = () => {
@@ -331,7 +331,7 @@ const Page: React.FC = () => {
                 />
               </div>
             ) : (
-              <MonthsSkeleton />
+              <CustomRangeSkeleton />
             )
           }
           slot_tags={

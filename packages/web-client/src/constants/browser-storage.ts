@@ -1,5 +1,5 @@
 export const browser_storage = {
   session_storage: {
-    last_authorized_months_params: 'last-authorized-months-params',
+    last_authorized_counts_params: 'last-authorized-counts-params',
   },
 }

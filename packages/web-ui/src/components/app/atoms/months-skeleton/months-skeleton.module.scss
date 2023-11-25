@@ -1,9 +1,0 @@
-// @type
-@use '../../../../styles/foundation' as *;
-
-.container {
-  > span > span {
-    height: var(--months-height);
-    border-radius: var(--border-radius-12px);
-  }
-}
