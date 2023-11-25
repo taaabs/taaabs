@@ -54,39 +54,14 @@ const Page: React.FC = () => {
   const [show_months, set_show_months] = useState(false)
   const [show_tags, set_show_tags] = useState(false)
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
-  const {
-    bookmarks,
-    is_updating_bookmarks,
-    is_fetching_first_bookmarks,
-    is_fetching_more_bookmarks,
-    has_more_bookmarks,
-    bookmarks_fetch_timestamp,
-    is_in_search_mode,
-  } = use_library_selector((state) => state.bookmarks)
+  const bookmarks_slice_state = use_library_selector((state) => state.bookmarks)
   const { get_bookmarks } = use_bookmarks()
   const { months, is_fetching_months_data, tags, selected_tags } = use_months()
-  const {
-    current_filter,
-    set_filter_query_param,
-    set_filter_query_param_reset_others,
-    clear_selected_stars,
-    clear_unread,
-  } = use_filter_view_options()
-  const { current_sortby, set_sortby_query_param } = use_sortby_view_options()
-  const { current_order, set_order_query_param } = use_order_view_options()
-  const {
-    add_tag_to_query_params,
-    remove_tag_from_query_params,
-    actual_selected_tags,
-    clear_selected_tags,
-    set_actual_selected_tags,
-  } = use_tag_view_options()
-  const {
-    set_gte_lte_query_params,
-    clear_gte_lte_query_params,
-    current_gte,
-    current_lte,
-  } = use_date_view_options()
+  const filter_view_options = use_filter_view_options()
+  const sortby_view_options = use_sortby_view_options()
+  const order_view_options = use_order_view_options()
+  const tag_view_options = use_tag_view_options()
+  const date_view_options = use_date_view_options()
   const search = use_search()
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
@@ -102,11 +77,11 @@ const Page: React.FC = () => {
   }
 
   useUpdateEffect(() => {
-    if (bookmarks == null) return
+    if (bookmarks_slice_state.bookmarks == null) return
     if (!show_months) set_show_months(true)
     if (!show_tags) set_show_tags(true)
     set_show_tags_skeleton(false)
-  }, [bookmarks])
+  }, [bookmarks_slice_state.bookmarks])
 
   useUpdateEffect(() => {
     if (search.search_string) {
@@ -115,9 +90,13 @@ const Page: React.FC = () => {
         search.clear_hints()
       }
       search.set_search_string('')
-
     }
-  }, [current_filter, selected_tags, current_gte, current_lte])
+  }, [
+    filter_view_options.current_filter,
+    selected_tags,
+    date_view_options.current_gte,
+    date_view_options.current_lte,
+  ])
 
   useEffect(() => {
     // Automatic scroll restoration works great when
@@ -131,11 +110,11 @@ const Page: React.FC = () => {
 
   return (
     <Library
-      show_bookmarks_skeleton={bookmarks == null}
+      show_bookmarks_skeleton={bookmarks_slice_state.bookmarks == null}
       mobile_title_bar={
-        current_filter == LibraryFilter.All
+        filter_view_options.current_filter == LibraryFilter.All
           ? 'All bookmarks'
-          : current_filter == LibraryFilter.Archived
+          : filter_view_options.current_filter == LibraryFilter.Archived
           ? 'Archived'
           : 'All bookmarks'
       }
@@ -144,13 +123,13 @@ const Page: React.FC = () => {
           search_string={search.search_string}
           is_loading={search.is_initializing_orama}
           placeholder={
-            current_filter == LibraryFilter.All &&
-            !actual_selected_tags.length &&
+            filter_view_options.current_filter == LibraryFilter.All &&
+            !tag_view_options.actual_selected_tags.length &&
             !query_params.get('gte') &&
             !query_params.get('lte')
               ? 'Search in all bookmarks'
-              : current_filter == LibraryFilter.Archived &&
-                !actual_selected_tags.length &&
+              : filter_view_options.current_filter == LibraryFilter.Archived &&
+                !tag_view_options.actual_selected_tags.length &&
                 !query_params.get('gte') &&
                 !query_params.get('lte')
               ? 'Search in archived bookmarks'
@@ -171,17 +150,23 @@ const Page: React.FC = () => {
               if (search.orama === undefined) {
                 await search.init_orama()
               }
-              search.set_current_filter(current_filter)
+              search.set_current_filter(filter_view_options.current_filter)
               search.set_selected_tags(
                 selected_tags
                   .filter((id) => {
-                    if (!bookmarks || !bookmarks[0]) return false
+                    if (
+                      !bookmarks_slice_state.bookmarks ||
+                      !bookmarks_slice_state.bookmarks[0]
+                    )
+                      return false
                     return (
-                      bookmarks[0].tags?.findIndex((tag) => tag.id == id) != -1
+                      bookmarks_slice_state.bookmarks[0].tags?.findIndex(
+                        (tag) => tag.id == id,
+                      ) != -1
                     )
                   })
                   .map((id) => {
-                    const name = bookmarks![0].tags!.find(
+                    const name = bookmarks_slice_state.bookmarks![0].tags!.find(
                       (tag) => tag.id == id,
                     )!.name
 
@@ -193,13 +178,16 @@ const Page: React.FC = () => {
           }}
           on_change={search.set_search_string}
           on_submit={() => {
-            if (search.found_ids === undefined || search.found_ids.length == 0)
+            if (
+              search.found_ids === undefined ||
+              search.found_ids.length == 0 ||
+              !search.search_string
+            )
               return
             search.get_bookmarks_of_search({})
           }}
           on_blur={() => {
             if (!search.search_string && !search.is_initializing_orama) {
-              dispatch(bookmarks_actions.set_bookmarks([]))
               get_bookmarks({})
               search.clear_hints()
             }
@@ -213,29 +201,35 @@ const Page: React.FC = () => {
               label: 'All bookmarks',
               on_click: () => {
                 if (
-                  is_fetching_first_bookmarks ||
-                  is_updating_bookmarks ||
-                  current_filter != LibraryFilter.Archived
+                  bookmarks_slice_state.is_fetching_first_bookmarks ||
+                  bookmarks_slice_state.is_updating_bookmarks ||
+                  filter_view_options.current_filter != LibraryFilter.Archived
                 )
                   return
-                set_filter_query_param_reset_others(LibraryFilter.All)
-                set_actual_selected_tags([])
+                filter_view_options.set_filter_query_param_reset_others(
+                  LibraryFilter.All,
+                )
+                tag_view_options.set_actual_selected_tags([])
               },
-              is_active: current_filter != LibraryFilter.Archived,
+              is_active:
+                filter_view_options.current_filter != LibraryFilter.Archived,
             },
             {
               label: 'Archived',
               on_click: () => {
                 if (
-                  is_fetching_first_bookmarks ||
-                  is_updating_bookmarks ||
-                  current_filter == LibraryFilter.Archived
+                  bookmarks_slice_state.is_fetching_first_bookmarks ||
+                  bookmarks_slice_state.is_updating_bookmarks ||
+                  filter_view_options.current_filter == LibraryFilter.Archived
                 )
                   return
-                set_filter_query_param_reset_others(LibraryFilter.Archived)
-                set_actual_selected_tags([])
+                filter_view_options.set_filter_query_param_reset_others(
+                  LibraryFilter.Archived,
+                )
+                tag_view_options.set_actual_selected_tags([])
               },
-              is_active: current_filter == LibraryFilter.Archived,
+              is_active:
+                filter_view_options.current_filter == LibraryFilter.Archived,
             },
           ]}
         />
@@ -244,107 +238,212 @@ const Page: React.FC = () => {
         <LibraryAside
           slot_filter={
             is_hydrated &&
-            current_filter != LibraryFilter.Archived && (
+            filter_view_options.current_filter != LibraryFilter.Archived && (
               <UnreadStarsFilter
                 is_unread_selected={
-                  current_filter == LibraryFilter.Unread ||
-                  current_filter == LibraryFilter.OneStarUnread ||
-                  current_filter == LibraryFilter.TwoStarsUnread ||
-                  current_filter == LibraryFilter.ThreeStarsUnread
+                  filter_view_options.current_filter == LibraryFilter.Unread ||
+                  filter_view_options.current_filter ==
+                    LibraryFilter.OneStarUnread ||
+                  filter_view_options.current_filter ==
+                    LibraryFilter.TwoStarsUnread ||
+                  filter_view_options.current_filter ==
+                    LibraryFilter.ThreeStarsUnread
                 }
                 unread_click_handler={() => {
-                  if (is_fetching_first_bookmarks || is_updating_bookmarks)
+                  if (
+                    bookmarks_slice_state.is_fetching_first_bookmarks ||
+                    bookmarks_slice_state.is_updating_bookmarks
+                  )
                     return
 
-                  if (current_filter == LibraryFilter.Unread) {
-                    set_filter_query_param(LibraryFilter.All)
-                  } else if (current_filter == LibraryFilter.All) {
-                    set_filter_query_param(LibraryFilter.Unread)
-                  } else if (current_filter == LibraryFilter.OneStarUnread) {
-                    set_filter_query_param(LibraryFilter.OneStar)
-                  } else if (current_filter == LibraryFilter.TwoStarsUnread) {
-                    set_filter_query_param(LibraryFilter.TwoStars)
-                  } else if (current_filter == LibraryFilter.ThreeStarsUnread) {
-                    set_filter_query_param(LibraryFilter.ThreeStars)
-                  } else if (current_filter == LibraryFilter.OneStar) {
-                    set_filter_query_param(LibraryFilter.OneStarUnread)
-                  } else if (current_filter == LibraryFilter.TwoStars) {
-                    set_filter_query_param(LibraryFilter.TwoStarsUnread)
-                  } else if (current_filter == LibraryFilter.ThreeStars) {
-                    set_filter_query_param(LibraryFilter.ThreeStarsUnread)
+                  if (
+                    filter_view_options.current_filter == LibraryFilter.Unread
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      LibraryFilter.All,
+                    )
+                  } else if (
+                    filter_view_options.current_filter == LibraryFilter.All
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      LibraryFilter.Unread,
+                    )
+                  } else if (
+                    filter_view_options.current_filter ==
+                    LibraryFilter.OneStarUnread
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      LibraryFilter.OneStar,
+                    )
+                  } else if (
+                    filter_view_options.current_filter ==
+                    LibraryFilter.TwoStarsUnread
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      LibraryFilter.TwoStars,
+                    )
+                  } else if (
+                    filter_view_options.current_filter ==
+                    LibraryFilter.ThreeStarsUnread
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      LibraryFilter.ThreeStars,
+                    )
+                  } else if (
+                    filter_view_options.current_filter == LibraryFilter.OneStar
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      LibraryFilter.OneStarUnread,
+                    )
+                  } else if (
+                    filter_view_options.current_filter == LibraryFilter.TwoStars
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      LibraryFilter.TwoStarsUnread,
+                    )
+                  } else if (
+                    filter_view_options.current_filter ==
+                    LibraryFilter.ThreeStars
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      LibraryFilter.ThreeStarsUnread,
+                    )
                   }
                 }}
                 selected_stars={
-                  current_filter == LibraryFilter.OneStar ||
-                  current_filter == LibraryFilter.OneStarUnread
+                  filter_view_options.current_filter == LibraryFilter.OneStar ||
+                  filter_view_options.current_filter ==
+                    LibraryFilter.OneStarUnread
                     ? 1
-                    : current_filter == LibraryFilter.TwoStars ||
-                      current_filter == LibraryFilter.TwoStarsUnread
+                    : filter_view_options.current_filter ==
+                        LibraryFilter.TwoStars ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.TwoStarsUnread
                     ? 2
-                    : current_filter == LibraryFilter.ThreeStars ||
-                      current_filter == LibraryFilter.ThreeStarsUnread
+                    : filter_view_options.current_filter ==
+                        LibraryFilter.ThreeStars ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.ThreeStarsUnread
                     ? 3
                     : 0
                 }
                 stars_click_handler={(selected_stars) => {
-                  if (is_fetching_first_bookmarks || is_updating_bookmarks)
+                  if (
+                    bookmarks_slice_state.is_fetching_first_bookmarks ||
+                    bookmarks_slice_state.is_updating_bookmarks
+                  )
                     return
 
                   if (selected_stars == 1) {
                     if (
-                      current_filter == LibraryFilter.Unread ||
-                      current_filter == LibraryFilter.TwoStarsUnread ||
-                      current_filter == LibraryFilter.ThreeStarsUnread
+                      filter_view_options.current_filter ==
+                        LibraryFilter.Unread ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.TwoStarsUnread ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.ThreeStarsUnread
                     ) {
-                      set_filter_query_param(LibraryFilter.OneStarUnread)
-                    } else if (current_filter == LibraryFilter.OneStar) {
-                      set_filter_query_param(LibraryFilter.All)
-                    } else if (current_filter == LibraryFilter.OneStarUnread) {
-                      set_filter_query_param(LibraryFilter.Unread)
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.OneStarUnread,
+                      )
                     } else if (
-                      current_filter == LibraryFilter.All ||
-                      current_filter == LibraryFilter.TwoStars ||
-                      current_filter == LibraryFilter.ThreeStars
+                      filter_view_options.current_filter ==
+                      LibraryFilter.OneStar
                     ) {
-                      set_filter_query_param(LibraryFilter.OneStar)
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.All,
+                      )
+                    } else if (
+                      filter_view_options.current_filter ==
+                      LibraryFilter.OneStarUnread
+                    ) {
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.Unread,
+                      )
+                    } else if (
+                      filter_view_options.current_filter == LibraryFilter.All ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.TwoStars ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.ThreeStars
+                    ) {
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.OneStar,
+                      )
                     }
                   } else if (selected_stars == 2) {
                     if (
-                      current_filter == LibraryFilter.Unread ||
-                      current_filter == LibraryFilter.OneStarUnread ||
-                      current_filter == LibraryFilter.ThreeStarsUnread
+                      filter_view_options.current_filter ==
+                        LibraryFilter.Unread ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.OneStarUnread ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.ThreeStarsUnread
                     ) {
-                      set_filter_query_param(LibraryFilter.TwoStarsUnread)
-                    } else if (current_filter == LibraryFilter.TwoStars) {
-                      set_filter_query_param(LibraryFilter.All)
-                    } else if (current_filter == LibraryFilter.TwoStarsUnread) {
-                      set_filter_query_param(LibraryFilter.Unread)
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.TwoStarsUnread,
+                      )
                     } else if (
-                      current_filter == LibraryFilter.All ||
-                      current_filter == LibraryFilter.OneStar ||
-                      current_filter == LibraryFilter.ThreeStars
+                      filter_view_options.current_filter ==
+                      LibraryFilter.TwoStars
                     ) {
-                      set_filter_query_param(LibraryFilter.TwoStars)
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.All,
+                      )
+                    } else if (
+                      filter_view_options.current_filter ==
+                      LibraryFilter.TwoStarsUnread
+                    ) {
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.Unread,
+                      )
+                    } else if (
+                      filter_view_options.current_filter == LibraryFilter.All ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.OneStar ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.ThreeStars
+                    ) {
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.TwoStars,
+                      )
                     }
                   } else if (selected_stars == 3) {
                     if (
-                      current_filter == LibraryFilter.Unread ||
-                      current_filter == LibraryFilter.OneStarUnread ||
-                      current_filter == LibraryFilter.TwoStarsUnread
+                      filter_view_options.current_filter ==
+                        LibraryFilter.Unread ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.OneStarUnread ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.TwoStarsUnread
                     ) {
-                      set_filter_query_param(LibraryFilter.ThreeStarsUnread)
-                    } else if (current_filter == LibraryFilter.ThreeStars) {
-                      set_filter_query_param(LibraryFilter.All)
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.ThreeStarsUnread,
+                      )
                     } else if (
-                      current_filter == LibraryFilter.ThreeStarsUnread
+                      filter_view_options.current_filter ==
+                      LibraryFilter.ThreeStars
                     ) {
-                      set_filter_query_param(LibraryFilter.Unread)
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.All,
+                      )
                     } else if (
-                      current_filter == LibraryFilter.All ||
-                      current_filter == LibraryFilter.OneStar ||
-                      current_filter == LibraryFilter.TwoStars
+                      filter_view_options.current_filter ==
+                      LibraryFilter.ThreeStarsUnread
                     ) {
-                      set_filter_query_param(LibraryFilter.ThreeStars)
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.Unread,
+                      )
+                    } else if (
+                      filter_view_options.current_filter == LibraryFilter.All ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.OneStar ||
+                      filter_view_options.current_filter ==
+                        LibraryFilter.TwoStars
+                    ) {
+                      filter_view_options.set_filter_query_param(
+                        LibraryFilter.ThreeStars,
+                      )
                     }
                   }
                 }}
@@ -355,7 +454,7 @@ const Page: React.FC = () => {
             button: is_hydrated ? (
               <ButtonSelect
                 label="Sort by"
-                current_value={_sortby_option_to_label(current_sortby)}
+                current_value={_sortby_option_to_label(sortby_view_options.current_sortby)}
                 is_active={is_sortby_dropdown_visible}
                 on_click={toggle_sortby_dropdown}
               />
@@ -375,45 +474,45 @@ const Page: React.FC = () => {
                       on_click: () => {
                         toggle_sortby_dropdown()
                         if (
-                          current_sortby == Sortby.CreatedAt ||
-                          is_fetching_first_bookmarks ||
-                          is_fetching_more_bookmarks ||
+                          sortby_view_options.current_sortby == Sortby.CreatedAt ||
+                          bookmarks_slice_state.is_fetching_first_bookmarks ||
+                          bookmarks_slice_state.is_fetching_more_bookmarks ||
                           is_fetching_months_data
                         )
                           return
-                        set_sortby_query_param(Sortby.CreatedAt)
+                        sortby_view_options.set_sortby_query_param(Sortby.CreatedAt)
                       },
-                      is_selected: current_sortby == Sortby.CreatedAt,
+                      is_selected: sortby_view_options.current_sortby == Sortby.CreatedAt,
                     },
                     {
                       label: _sortby_option_to_label(Sortby.UpdatedAt),
                       on_click: () => {
                         toggle_sortby_dropdown()
                         if (
-                          current_sortby == Sortby.UpdatedAt ||
-                          is_fetching_first_bookmarks ||
-                          is_fetching_more_bookmarks ||
+                          sortby_view_options.current_sortby == Sortby.UpdatedAt ||
+                          bookmarks_slice_state.is_fetching_first_bookmarks ||
+                          bookmarks_slice_state.is_fetching_more_bookmarks ||
                           is_fetching_months_data
                         )
                           return
-                        set_sortby_query_param(Sortby.UpdatedAt)
+                        sortby_view_options.set_sortby_query_param(Sortby.UpdatedAt)
                       },
-                      is_selected: current_sortby == Sortby.UpdatedAt,
+                      is_selected: sortby_view_options.current_sortby == Sortby.UpdatedAt,
                     },
                     {
                       label: _sortby_option_to_label(Sortby.VisitedAt),
                       on_click: () => {
                         toggle_sortby_dropdown()
                         if (
-                          current_sortby == Sortby.VisitedAt ||
-                          is_fetching_first_bookmarks ||
-                          is_fetching_more_bookmarks ||
+                          sortby_view_options.current_sortby == Sortby.VisitedAt ||
+                          bookmarks_slice_state.is_fetching_first_bookmarks ||
+                          bookmarks_slice_state.is_fetching_more_bookmarks ||
                           is_fetching_months_data
                         )
                           return
-                        set_sortby_query_param(Sortby.VisitedAt)
+                        sortby_view_options.set_sortby_query_param(Sortby.VisitedAt)
                       },
-                      is_selected: current_sortby == Sortby.VisitedAt,
+                      is_selected: sortby_view_options.current_sortby == Sortby.VisitedAt,
                     },
                   ]}
                 />
@@ -424,7 +523,7 @@ const Page: React.FC = () => {
             button: is_hydrated ? (
               <ButtonSelect
                 label="Order"
-                current_value={_order_option_to_label(current_order)}
+                current_value={_order_option_to_label(order_view_options.current_order)}
                 is_active={is_order_dropdown_visible}
                 on_click={toggle_order_dropdown}
               />
@@ -444,31 +543,31 @@ const Page: React.FC = () => {
                       on_click: () => {
                         toggle_order_dropdown()
                         if (
-                          current_order == Order.Desc ||
-                          is_fetching_first_bookmarks ||
-                          is_fetching_more_bookmarks ||
+                          order_view_options.current_order == Order.Desc ||
+                          bookmarks_slice_state.is_fetching_first_bookmarks ||
+                          bookmarks_slice_state.is_fetching_more_bookmarks ||
                           is_fetching_months_data
                         )
                           return
-                        set_order_query_param(Order.Desc)
+                        order_view_options.set_order_query_param(Order.Desc)
                       },
 
-                      is_selected: current_order == Order.Desc,
+                      is_selected: order_view_options.current_order == Order.Desc,
                     },
                     {
                       label: _order_option_to_label(Order.Asc),
                       on_click: () => {
                         toggle_order_dropdown()
                         if (
-                          current_order == Order.Asc ||
-                          is_fetching_first_bookmarks ||
-                          is_fetching_more_bookmarks ||
+                          order_view_options.current_order == Order.Asc ||
+                          bookmarks_slice_state.is_fetching_first_bookmarks ||
+                          bookmarks_slice_state.is_fetching_more_bookmarks ||
                           is_fetching_months_data
                         )
                           return
-                        set_order_query_param(Order.Asc)
+                        order_view_options.set_order_query_param(Order.Asc)
                       },
-                      is_selected: current_order == Order.Asc,
+                      is_selected: order_view_options.current_order == Order.Asc,
                     },
                   ]}
                 />
@@ -480,8 +579,8 @@ const Page: React.FC = () => {
               <div
                 style={{
                   pointerEvents:
-                    is_fetching_first_bookmarks ||
-                    is_fetching_more_bookmarks ||
+                    bookmarks_slice_state.is_fetching_first_bookmarks ||
+                    bookmarks_slice_state.is_fetching_more_bookmarks ||
                     is_fetching_months_data
                       ? 'none'
                       : 'all',
@@ -489,8 +588,10 @@ const Page: React.FC = () => {
               >
                 <Months
                   months={months}
-                  on_yyyymm_change={set_gte_lte_query_params}
-                  clear_date_range={clear_gte_lte_query_params}
+                  on_yyyymm_change={date_view_options.set_gte_lte_query_params}
+                  clear_date_range={
+                    date_view_options.clear_gte_lte_query_params
+                  }
                   current_gte={
                     parseInt(query_params.get('gte') || '0') || undefined
                   }
@@ -499,14 +600,17 @@ const Page: React.FC = () => {
                   }
                   selected_tags={query_params.get('t') || undefined}
                   has_results={
-                    bookmarks != undefined && !is_fetching_months_data
-                      ? bookmarks.length > 0
+                    bookmarks_slice_state.bookmarks != undefined &&
+                    !is_fetching_months_data
+                      ? bookmarks_slice_state.bookmarks.length > 0
                       : undefined
                   }
-                  is_fetching_data={is_fetching_first_bookmarks}
+                  is_fetching_data={
+                    bookmarks_slice_state.is_fetching_first_bookmarks
+                  }
                   is_range_selector_disabled={
-                    current_sortby == Sortby.UpdatedAt ||
-                    current_sortby == Sortby.VisitedAt
+                    sortby_view_options.current_sortby == Sortby.UpdatedAt ||
+                    sortby_view_options.current_sortby == Sortby.VisitedAt
                   }
                 />
               </div>
@@ -520,40 +624,47 @@ const Page: React.FC = () => {
                 <div
                   style={{
                     pointerEvents:
-                      is_fetching_first_bookmarks ||
-                      is_fetching_more_bookmarks ||
+                      bookmarks_slice_state.is_fetching_first_bookmarks ||
+                      bookmarks_slice_state.is_fetching_more_bookmarks ||
                       is_fetching_months_data
                         ? 'none'
                         : undefined,
                   }}
                 >
-                  {(is_fetching_first_bookmarks
+                  {(bookmarks_slice_state.is_fetching_first_bookmarks
                     ? selected_tags.length > 0
-                    : actual_selected_tags.length > 0) && (
+                    : tag_view_options.actual_selected_tags.length > 0) && (
                     <SelectedTags
-                      selected_tags={(is_fetching_first_bookmarks
+                      selected_tags={(bookmarks_slice_state.is_fetching_first_bookmarks
                         ? selected_tags
-                        : actual_selected_tags
+                        : tag_view_options.actual_selected_tags
                       )
                         .filter((id) => {
-                          if (!bookmarks || !bookmarks[0]) return false
+                          if (
+                            !bookmarks_slice_state.bookmarks ||
+                            !bookmarks_slice_state.bookmarks[0]
+                          )
+                            return false
                           return (
-                            bookmarks[0].tags?.findIndex(
+                            bookmarks_slice_state.bookmarks[0].tags?.findIndex(
                               (tag) => tag.id == id,
                             ) != -1
                           )
                         })
                         .map((id) => {
-                          const name = bookmarks![0].tags!.find(
-                            (tag) => tag.id == id,
-                          )!.name
+                          const name =
+                            bookmarks_slice_state.bookmarks![0].tags!.find(
+                              (tag) => tag.id == id,
+                            )!.name
 
                           return {
                             id,
                             name,
                           }
                         })}
-                      on_selected_tag_click={remove_tag_from_query_params}
+                      on_selected_tag_click={
+                        tag_view_options.remove_tag_from_query_params
+                      }
                     />
                   )}
                   <Tags
@@ -561,14 +672,16 @@ const Page: React.FC = () => {
                       tags
                         ? Object.fromEntries(
                             Object.entries(tags).filter((tag) =>
-                              is_fetching_first_bookmarks
+                              bookmarks_slice_state.is_fetching_first_bookmarks
                                 ? !selected_tags.includes(tag[1].id)
-                                : !actual_selected_tags.includes(tag[1].id),
+                                : !tag_view_options.actual_selected_tags.includes(
+                                    tag[1].id,
+                                  ),
                             ),
                           )
                         : {}
                     }
-                    on_click={add_tag_to_query_params}
+                    on_click={tag_view_options.add_tag_to_query_params}
                   />
                 </div>
               )}
@@ -577,15 +690,19 @@ const Page: React.FC = () => {
           }
         />
       }
-      is_updating_bookmarks={is_updating_bookmarks}
-      is_fetching_first_bookmarks={is_fetching_first_bookmarks}
-      is_fetching_more_bookmarks={is_fetching_more_bookmarks}
+      is_updating_bookmarks={bookmarks_slice_state.is_updating_bookmarks}
+      is_fetching_first_bookmarks={
+        bookmarks_slice_state.is_fetching_first_bookmarks
+      }
+      is_fetching_more_bookmarks={
+        bookmarks_slice_state.is_fetching_more_bookmarks
+      }
       has_more_bookmarks={
-        (!search.search_string && has_more_bookmarks) ||
+        (!search.search_string && bookmarks_slice_state.has_more_bookmarks) ||
         (search.search_string &&
           search.found_ids &&
-          bookmarks &&
-          search.found_ids.length > bookmarks.length) ||
+          bookmarks_slice_state.bookmarks &&
+          search.found_ids.length > bookmarks_slice_state.bookmarks.length) ||
         false
       }
       get_more_bookmarks={() => {
@@ -597,28 +714,33 @@ const Page: React.FC = () => {
         }
       }}
       slot_bookmarks={
-        bookmarks &&
-        bookmarks.length &&
+        bookmarks_slice_state.bookmarks &&
+        bookmarks_slice_state.bookmarks.length &&
         !search.hints &&
-        !(is_in_search_mode && is_fetching_first_bookmarks) &&
+        !(
+          bookmarks_slice_state.is_in_search_mode &&
+          bookmarks_slice_state.is_fetching_first_bookmarks
+        ) &&
         !(
           search.search_string.length > 0 &&
           search.found_ids !== undefined &&
           search.found_ids.length == 0
         )
-          ? bookmarks.map((bookmark, index) => (
+          ? bookmarks_slice_state.bookmarks.map((bookmark, index) => (
               <Bookmark
                 key={bookmark.id}
-                fetch_timestamp={bookmarks_fetch_timestamp || 0}
+                fetch_timestamp={
+                  bookmarks_slice_state.bookmarks_fetch_timestamp || 0
+                }
                 title={bookmark.title}
                 on_click={() => {}}
                 on_menu_click={() => {}}
                 date={
-                  current_sortby == Sortby.CreatedAt
+                  sortby_view_options.current_sortby == Sortby.CreatedAt
                     ? new Date(bookmark.created_at)
-                    : current_sortby == Sortby.UpdatedAt
+                    : sortby_view_options.current_sortby == Sortby.UpdatedAt
                     ? new Date(bookmark.updated_at)
-                    : current_sortby == Sortby.VisitedAt
+                    : sortby_view_options.current_sortby == Sortby.VisitedAt
                     ? new Date(bookmark.visited_at)
                     : new Date()
                 }
@@ -628,18 +750,21 @@ const Page: React.FC = () => {
                   site_path: link.site_path,
                 }))}
                 number_of_selected_tags={
-                  is_fetching_first_bookmarks
+                  bookmarks_slice_state.is_fetching_first_bookmarks
                     ? selected_tags.length
-                    : actual_selected_tags.length
+                    : tag_view_options.actual_selected_tags.length
                 }
-                current_filter={current_filter}
+                current_filter={filter_view_options.current_filter}
                 tags={
                   bookmark.tags
                     ? bookmark.tags.map((tag) => {
-                        const isSelected = is_fetching_first_bookmarks
-                          ? selected_tags.find((t) => t == tag.id) != undefined
-                          : actual_selected_tags.find((t) => t == tag.id) !=
-                            undefined
+                        const isSelected =
+                          bookmarks_slice_state.is_fetching_first_bookmarks
+                            ? selected_tags.find((t) => t == tag.id) !=
+                              undefined
+                            : tag_view_options.actual_selected_tags.find(
+                                (t) => t == tag.id,
+                              ) != undefined
 
                         return {
                           name: tag.name,
@@ -655,8 +780,10 @@ const Page: React.FC = () => {
                 }
                 is_unread={bookmark.is_unread}
                 stars={bookmark.stars}
-                on_tag_click={add_tag_to_query_params}
-                on_selected_tag_click={remove_tag_from_query_params}
+                on_tag_click={tag_view_options.add_tag_to_query_params}
+                on_selected_tag_click={
+                  tag_view_options.remove_tag_from_query_params
+                }
                 render_height={bookmark.render_height}
                 set_render_height={(height) => {
                   dispatch(
@@ -684,7 +811,8 @@ const Page: React.FC = () => {
                             title: bookmark.title,
                             is_public: bookmark.is_public,
                             is_archived:
-                              current_filter == LibraryFilter.Archived,
+                              filter_view_options.current_filter ==
+                              LibraryFilter.Archived,
                             is_unread,
                             stars: bookmark.stars,
                             links: bookmark.links.map((link) => ({
@@ -716,16 +844,19 @@ const Page: React.FC = () => {
                             bookmark: updated_bookmark,
                           })
                           if (
-                            bookmarks.length == 1 &&
+                            bookmarks_slice_state.bookmarks &&
+                            bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
                             if (
                               !is_unread &&
-                              (current_filter == LibraryFilter.Unread ||
-                                current_filter == LibraryFilter.OneStarUnread ||
-                                current_filter ==
+                              (filter_view_options.current_filter ==
+                                LibraryFilter.Unread ||
+                                filter_view_options.current_filter ==
+                                  LibraryFilter.OneStarUnread ||
+                                filter_view_options.current_filter ==
                                   LibraryFilter.TwoStarsUnread ||
-                                current_filter ==
+                                filter_view_options.current_filter ==
                                   LibraryFilter.ThreeStarsUnread)
                             ) {
                               search.set_search_string('')
@@ -743,7 +874,8 @@ const Page: React.FC = () => {
                             title: bookmark.title,
                             is_public: bookmark.is_public,
                             is_archived:
-                              current_filter == LibraryFilter.Archived,
+                              filter_view_options.current_filter ==
+                              LibraryFilter.Archived,
                             is_unread: bookmark.is_unread,
                             stars: bookmark.stars == 1 ? 0 : 1,
                             links: bookmark.links.map((link) => ({
@@ -775,7 +907,8 @@ const Page: React.FC = () => {
                             bookmark: updated_bookmark,
                           })
                           if (
-                            bookmarks.length == 1 &&
+                            bookmarks_slice_state.bookmarks &&
+                            bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
                             search.set_search_string('')
@@ -792,7 +925,8 @@ const Page: React.FC = () => {
                             title: bookmark.title,
                             is_public: bookmark.is_public,
                             is_archived:
-                              current_filter == LibraryFilter.Archived,
+                              filter_view_options.current_filter ==
+                              LibraryFilter.Archived,
                             is_unread: bookmark.is_unread,
                             stars: bookmark.stars == 2 ? 0 : 2,
                             links: bookmark.links.map((link) => ({
@@ -824,7 +958,8 @@ const Page: React.FC = () => {
                             bookmark: updated_bookmark,
                           })
                           if (
-                            bookmarks.length == 1 &&
+                            bookmarks_slice_state.bookmarks &&
+                            bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
                             search.set_search_string('')
@@ -841,7 +976,8 @@ const Page: React.FC = () => {
                             title: bookmark.title,
                             is_public: bookmark.is_public,
                             is_archived:
-                              current_filter == LibraryFilter.Archived,
+                              filter_view_options.current_filter ==
+                              LibraryFilter.Archived,
                             is_unread: bookmark.is_unread,
                             stars: bookmark.stars == 3 ? 0 : 3,
                             links: bookmark.links.map((link) => ({
@@ -873,7 +1009,8 @@ const Page: React.FC = () => {
                             bookmark: updated_bookmark,
                           })
                           if (
-                            bookmarks.length == 1 &&
+                            bookmarks_slice_state.bookmarks &&
+                            bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
                             search.set_search_string('')
@@ -881,7 +1018,10 @@ const Page: React.FC = () => {
                         },
                       },
                       {
-                        label: !(current_filter == LibraryFilter.Archived)
+                        label: !(
+                          filter_view_options.current_filter ==
+                          LibraryFilter.Archived
+                        )
                           ? 'Archive'
                           : 'Restore',
                         other_icon: <Icon variant="ARCHIVE" />,
@@ -892,7 +1032,8 @@ const Page: React.FC = () => {
                             title: bookmark.title,
                             is_public: bookmark.is_public,
                             is_archived: !(
-                              current_filter == LibraryFilter.Archived
+                              filter_view_options.current_filter ==
+                              LibraryFilter.Archived
                             ),
                             is_unread: bookmark.is_unread,
                             stars: bookmark.stars,
@@ -925,7 +1066,8 @@ const Page: React.FC = () => {
                             bookmark: updated_bookmark,
                           })
                           if (
-                            bookmarks.length == 1 &&
+                            bookmarks_slice_state.bookmarks &&
+                            bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
                             search.set_search_string('')
@@ -954,7 +1096,8 @@ const Page: React.FC = () => {
                             bookmark_id: bookmark.id,
                           })
                           if (
-                            bookmarks.length == 1 &&
+                            bookmarks_slice_state.bookmarks &&
+                            bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
                             search.set_search_string('')
@@ -970,51 +1113,61 @@ const Page: React.FC = () => {
           : []
       }
       clear_unread={
-        !is_fetching_first_bookmarks &&
-        (!bookmarks || bookmarks.length == 0) &&
-        (current_filter == LibraryFilter.Unread ||
-          current_filter == LibraryFilter.OneStarUnread ||
-          current_filter == LibraryFilter.TwoStarsUnread ||
-          current_filter == LibraryFilter.ThreeStarsUnread)
+        !bookmarks_slice_state.is_fetching_first_bookmarks &&
+        (!bookmarks_slice_state.bookmarks ||
+          bookmarks_slice_state.bookmarks.length == 0) &&
+        (filter_view_options.current_filter == LibraryFilter.Unread ||
+          filter_view_options.current_filter == LibraryFilter.OneStarUnread ||
+          filter_view_options.current_filter == LibraryFilter.TwoStarsUnread ||
+          filter_view_options.current_filter == LibraryFilter.ThreeStarsUnread)
           ? () => {
-              clear_unread(current_filter)
+              filter_view_options.clear_unread(
+                filter_view_options.current_filter,
+              )
             }
           : undefined
       }
       clear_selected_stars={
-        !is_fetching_first_bookmarks &&
-        (!bookmarks || bookmarks.length == 0) &&
-        (current_filter == LibraryFilter.OneStar ||
-          current_filter == LibraryFilter.OneStarUnread ||
-          current_filter == LibraryFilter.TwoStars ||
-          current_filter == LibraryFilter.TwoStarsUnread ||
-          current_filter == LibraryFilter.ThreeStars ||
-          current_filter == LibraryFilter.ThreeStarsUnread)
+        !bookmarks_slice_state.is_fetching_first_bookmarks &&
+        (!bookmarks_slice_state.bookmarks ||
+          bookmarks_slice_state.bookmarks.length == 0) &&
+        (filter_view_options.current_filter == LibraryFilter.OneStar ||
+          filter_view_options.current_filter == LibraryFilter.OneStarUnread ||
+          filter_view_options.current_filter == LibraryFilter.TwoStars ||
+          filter_view_options.current_filter == LibraryFilter.TwoStarsUnread ||
+          filter_view_options.current_filter == LibraryFilter.ThreeStars ||
+          filter_view_options.current_filter == LibraryFilter.ThreeStarsUnread)
           ? () => {
-              clear_selected_stars(current_filter)
+              filter_view_options.clear_selected_stars(
+                filter_view_options.current_filter,
+              )
             }
           : undefined
       }
       clear_selected_tags={
-        !is_fetching_first_bookmarks &&
-        (!bookmarks || bookmarks.length == 0) &&
+        !bookmarks_slice_state.is_fetching_first_bookmarks &&
+        (!bookmarks_slice_state.bookmarks ||
+          bookmarks_slice_state.bookmarks.length == 0) &&
         query_params.get('t')
-          ? clear_selected_tags
+          ? tag_view_options.clear_selected_tags
           : undefined
       }
       clear_date_range={
-        !is_fetching_first_bookmarks &&
-        (!bookmarks || bookmarks.length == 0) &&
+        !bookmarks_slice_state.is_fetching_first_bookmarks &&
+        (!bookmarks_slice_state.bookmarks ||
+          bookmarks_slice_state.bookmarks.length == 0) &&
         (query_params.get('gte') || query_params.get('lte'))
-          ? clear_gte_lte_query_params
+          ? date_view_options.clear_gte_lte_query_params
           : undefined
       }
       info_text={
-        is_fetching_first_bookmarks || is_fetching_more_bookmarks ? (
+        bookmarks_slice_state.is_fetching_first_bookmarks ||
+        bookmarks_slice_state.is_fetching_more_bookmarks ? (
           'Loading...'
         ) : !search.search_string.length &&
-          !is_fetching_first_bookmarks &&
-          (!bookmarks || bookmarks.length == 0) ? (
+          !bookmarks_slice_state.is_fetching_first_bookmarks &&
+          (!bookmarks_slice_state.bookmarks ||
+            bookmarks_slice_state.bookmarks.length == 0) ? (
           'No results'
         ) : !search.is_initializing_orama &&
           search.search_string.length > 0 &&

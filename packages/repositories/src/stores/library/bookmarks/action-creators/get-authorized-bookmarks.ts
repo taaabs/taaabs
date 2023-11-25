@@ -19,7 +19,7 @@ export const get_authorized_bookmarks = (params: {
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const get_bookmarks = new GetBookmarksOnAuthorizedUser_UseCase(repository)
 
-    dispatch(bookmarks_actions.set_is_in_search_mode(false))
+    
     dispatch(bookmarks_actions.set_is_fetching_data(true))
 
     if (params.request_params.after) {
@@ -35,6 +35,7 @@ export const get_authorized_bookmarks = (params: {
 
     dispatch(bookmarks_actions.set_is_fetching_data(false))
     dispatch(bookmarks_actions.set_has_more_bookmarks(pagination.has_more))
+    dispatch(bookmarks_actions.set_is_in_search_mode(false))
 
     if (params.request_params.after) {
       dispatch(bookmarks_actions.set_more_bookmarks(bookmarks))
