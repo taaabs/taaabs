@@ -6,7 +6,6 @@ import cn from 'classnames'
 import { useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import StickyBox from 'react-sticky-box'
-import { _DesktopTitleBar } from './components/_desktop-title-bar'
 import { _MobileTitleBar } from './components/_mobile-title-bar'
 import { use_scroll_restore } from './hooks/use-scroll-restore'
 import styles from './library.module.scss'
@@ -17,17 +16,20 @@ export namespace Library {
   export type Props = {
     slot_sidebar: React.ReactNode
     slot_aside: React.ReactNode
-    title_bar?: string
+    mobile_title_bar?: string
+    slot_search: React.ReactNode
     slot_bookmarks: React.ReactNode
     is_updating_bookmarks?: boolean
-    is_getting_first_bookmarks: boolean
-    is_getting_more_bookmarks: boolean
+    is_fetching_first_bookmarks: boolean
+    is_fetching_more_bookmarks: boolean
     has_more_bookmarks: boolean
-    no_results: boolean
     get_more_bookmarks: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
+    clear_unread?: () => void
+    clear_selected_stars?: () => void
     show_bookmarks_skeleton: boolean
+    info_text?: React.ReactNode
   }
 }
 
@@ -172,18 +174,18 @@ export const Library: React.FC<Library.Props> = (props) => {
     if (
       is_end_of_bookmarks_visible &&
       props.has_more_bookmarks &&
-      !props.is_getting_more_bookmarks &&
-      !props.is_getting_first_bookmarks
+      !props.is_fetching_more_bookmarks &&
+      !props.is_fetching_first_bookmarks
     ) {
       props.get_more_bookmarks()
     }
   }, [is_end_of_bookmarks_visible])
 
   useUpdateEffect(() => {
-    if (!props.is_getting_first_bookmarks) {
+    if (!props.is_fetching_first_bookmarks) {
       window.scrollTo(0, 0)
     }
-  }, [props.is_getting_first_bookmarks])
+  }, [props.is_fetching_first_bookmarks])
 
   let translate_x = 0
 
@@ -218,7 +220,7 @@ export const Library: React.FC<Library.Props> = (props) => {
           swipe_right_on_click={
             !is_right_side_open ? toggle_right_side : undefined
           }
-          text={props.title_bar ? props.title_bar : undefined}
+          text={props.mobile_title_bar ? props.mobile_title_bar : undefined}
         />
       </div>
       <div className={styles.content}>
@@ -266,17 +268,15 @@ export const Library: React.FC<Library.Props> = (props) => {
             }}
           >
             <div>
-              <div className={styles['main__inner__desktop-title-bar']}>
-                <_DesktopTitleBar
-                  text={props.title_bar ? props.title_bar : undefined}
-                />
+              <div className={styles['main__inner__search']}>
+                {props.slot_search}
               </div>
               <div
                 className={cn([
                   styles.main__inner__bookmarks,
                   {
                     [styles['main__inner__bookmarks--loading']]:
-                      props.is_getting_first_bookmarks ||
+                      props.is_fetching_first_bookmarks ||
                       props.is_updating_bookmarks,
                   },
                 ])}
@@ -297,16 +297,20 @@ export const Library: React.FC<Library.Props> = (props) => {
                 className={styles['main__inner__info']}
                 ref={end_of_bookmarks}
               >
-                <span>
-                  {props.is_getting_first_bookmarks || props.has_more_bookmarks
-                    ? 'Loading...'
-                    : props.no_results
-                    ? 'No results'
-                    : 'End of results'}
-                </span>
+                {props.info_text && <span>{props.info_text}</span>}
                 {
                   // TODO: INVESTIGATE: Without "is_hydrated" gives errors after page refresh, why?
                 }
+                {is_hydrated && props.clear_unread && (
+                  <button onClick={props.clear_unread}>
+                    Clear Unread only
+                  </button>
+                )}
+                {is_hydrated && props.clear_selected_stars && (
+                  <button onClick={props.clear_selected_stars}>
+                    Clear selected stars
+                  </button>
+                )}
                 {is_hydrated && props.clear_selected_tags && (
                   <button onClick={props.clear_selected_tags}>
                     Clear selected tags

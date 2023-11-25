@@ -122,10 +122,8 @@
         background: var(--header-background);
       }
     }
-    &__desktop-title-bar {
-      @include to992 {
-        display: none;
-      }
+    &__search {
+      display: flex;
     }
     &__skeleton {
       display: flex;
@@ -139,9 +137,8 @@
         gap: var(--distance-16px);
       }
       > span > span {
-        height: 158px;
+        height: 160px;
         @include at992 {
-          height: 136px;
           border-radius: var(--border-radius-12px);
         }
       }
@@ -169,14 +166,16 @@
       gap: var(--distance-8px);
       justify-content: center;
       align-items: center;
+      text-align: center;
       color: var(--text-color-dimmed);
       width: 100%;
       font-size: var(--font-size-13px);
+      padding: 0 var(--distance-16px);
       @include to992 {
         height: 20vh;
       }
       @include at992 {
-        height: 36vh;
+        height: 45vh;
       }
       button {
         @include hover {

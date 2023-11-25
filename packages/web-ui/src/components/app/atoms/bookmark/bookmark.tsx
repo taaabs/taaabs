@@ -34,10 +34,9 @@ dayjs.updateLocale('en', {
 
 export namespace Bookmark {
   export type Props = {
-    index: number
-    id: string
+    fetch_timestamp?: number // Forces rerender for bookmark height adjustment (upon unread/stars change).
     title: string
-    description?: string
+    note?: string
     date: Date
     on_tag_click: (tagId: number) => void
     on_selected_tag_click: (tagId: number) => void
@@ -72,8 +71,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       } else {
         set_render_height(0)
         setTimeout(() => {
-          props.set_render_height(ref.current!.clientHeight)
-          set_render_height(ref.current!.clientHeight)
+          if (!ref.current) return
+          const height = ref.current.getBoundingClientRect().height
+          props.set_render_height(height)
+          set_render_height(height)
         }, 0)
       }
     }, [props.is_unread, props.stars])
@@ -157,19 +158,18 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 </OutsideClickHandler>
               </div>
               <div className={styles['bookmark__info']}>
-                <span>{props.index + 1}</span>
                 <span>·</span>
                 <span>{bookmark_date}</span>
-                {props.description && (
+                {props.note && (
                   <>
                     <span>·</span>
-                    <span>{props.description}</span>
+                    <span>{props.note}</span>
                   </>
                 )}
                 {props.tags.length > 0 && (
                   <>
                     <span>·</span>
-                    {props.tags.map((tag, i) => (
+                    {props.tags.map((tag) => (
                       <button
                         className={styles['bookmark__info__tag']}
                         onClick={(e) => {
@@ -286,7 +286,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
-    o.index == n.index &&
+    o.fetch_timestamp == n.fetch_timestamp &&
     o.stars == n.stars &&
     o.is_unread == n.is_unread &&
     o.render_height == n.render_height &&

@@ -17,9 +17,8 @@ export const use_bookmarks = () => {
   const route_params = useParams()
   const route_pathname = usePathname()
   const dispatch = use_library_dispatch()
-  const { bookmarks, has_more_bookmarks } = use_library_selector(
-    (state) => state.bookmarks,
-  )
+  const { bookmarks, has_more_bookmarks, is_in_search_mode } =
+    use_library_selector((state) => state.bookmarks)
   const [last_query_tags, set_last_query_tags] = useState<string | null>(null)
   const [last_query_category, set_last_query_category] = useState<
     string | null
@@ -184,6 +183,7 @@ export const use_bookmarks = () => {
   }, [query_params])
 
   useUpdateEffect(() => {
+    if (is_in_search_mode) return
     sessionStorage.setItem(
       `bookmarks__${query_params.toString()}`,
       JSON.stringify(bookmarks),

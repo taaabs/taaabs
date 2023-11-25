@@ -1,5 +1,5 @@
 export type Bookmark_Entity = {
-  id: string
+  id: number
   title: string
   created_at: string
   updated_at: string

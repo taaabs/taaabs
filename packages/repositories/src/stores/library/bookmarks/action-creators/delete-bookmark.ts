@@ -7,7 +7,7 @@ import { months_actions } from '../../months/months.slice'
 import { Months_Params } from '@repositories/modules/months/domain/types/months.params'
 
 export const delete_bookmark = (params: {
-  bookmark_id: string
+  bookmark_id: number
   last_authorized_months_params: Months_Params.Authorized
   api_url: string
   auth_token: string

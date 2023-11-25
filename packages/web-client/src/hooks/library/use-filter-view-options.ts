@@ -54,8 +54,41 @@ export const use_filter_view_options = () => {
     )
   }
 
+  const set_filter_query_param_reset_others = (filter: LibraryFilter) => {
+    let updated_query_params = update_query_params(
+      query_params,
+      'f',
+      filter == BookmarksFetchingDefaults.Common.filter
+        ? undefined
+        : Object.values(LibraryFilter).indexOf(filter).toString(),
+    )
+
+    updated_query_params = update_query_params(updated_query_params, 'lte')
+    updated_query_params = update_query_params(updated_query_params, 'gte')
+    updated_query_params = update_query_params(updated_query_params, 't')
+    updated_query_params = update_query_params(updated_query_params, 's')
+    updated_query_params = update_query_params(updated_query_params, 'o')
+
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updated_query_params,
+    )
+  }
+
+  const clear_selected_stars = (filter: LibraryFilter) => {
+    alert('TODO')
+  }
+
+  const clear_unread = (filter: LibraryFilter) => {
+    alert('TODO')
+  }
+
   return {
     current_filter,
     set_filter_query_param,
+    set_filter_query_param_reset_others,
+    clear_selected_stars,
+    clear_unread,
   }
 }

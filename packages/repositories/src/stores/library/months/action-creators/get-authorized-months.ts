@@ -21,23 +21,23 @@ export const get_authorized_months = (params: {
       repository,
     )
 
-    dispatch(months_actions.set_is_getting_data(true))
+    dispatch(months_actions.set_is_fetching_data(true))
 
     const result = await get_months_use_case.invoke(params.request_params)
 
     dispatch(months_actions.set_data(result))
-    dispatch(months_actions.set_is_getting_data(false))
+    dispatch(months_actions.set_is_fetching_data(false))
 
     const state = get_state()
     if (
-      !state.bookmarks.is_getting_data &&
-      state.bookmarks.is_getting_first_bookmarks
+      !state.bookmarks.is_fetching_data &&
+      state.bookmarks.is_fetching_first_bookmarks
     ) {
       dispatch(months_actions.process_tags())
       dispatch(
         bookmarks_actions.set_bookmarks(state.bookmarks.incoming_bookmarks),
       )
-      dispatch(bookmarks_actions.set_is_getting_first_bookmarks(false))
+      dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
     }
   }
 }

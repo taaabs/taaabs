@@ -58,10 +58,10 @@ export namespace Bookmarks_Dto {
     }
 
     class Bookmark {
-      public id: string
+      public id: number
       public title: string
       public links: Link[]
-      public description?: string
+      public note?: string
       public created_at: string
       public updated_at: string
       public visited_at: string
@@ -70,10 +70,10 @@ export namespace Bookmarks_Dto {
       public is_unread?: boolean
     }
 
-    class AuthorizedBookmark extends Bookmark {
+    export class AuthorizedBookmark extends Bookmark {
       public is_public?: boolean
     }
-    class PublicBookmark extends Bookmark {}
+    export class PublicBookmark extends Bookmark {}
 
     export class Authorized extends PaginatedResponseDto {
       public bookmarks: AuthorizedBookmark[]

@@ -4,40 +4,46 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import * as thunks from './action-creators'
 
 type BookmarksState = {
-  is_getting_data: boolean
+  is_fetching_data: boolean
   is_updating_bookmarks: boolean
-  is_getting_first_bookmarks: boolean
-  is_getting_more_bookmarks: boolean
-  incoming_bookmarks: Array<Bookmark_Entity> | null
-  bookmarks: Array<Bookmark_Entity> | null
+  is_fetching_first_bookmarks: boolean
+  is_fetching_more_bookmarks: boolean
+  is_in_search_mode?: boolean
+  incoming_bookmarks: Bookmark_Entity[] | null
+  bookmarks: Bookmark_Entity[] | null
   has_more_bookmarks: boolean | null
+  bookmarks_fetch_timestamp: number | null
 }
 
 const initial_state: BookmarksState = {
-  is_getting_data: false,
+  is_fetching_data: false,
   is_updating_bookmarks: false,
-  is_getting_first_bookmarks: false,
-  is_getting_more_bookmarks: false,
+  is_fetching_first_bookmarks: false,
+  is_fetching_more_bookmarks: false,
   incoming_bookmarks: null,
   bookmarks: null,
   has_more_bookmarks: null,
+  bookmarks_fetch_timestamp: null,
 }
 
 export const bookmarks_slice = createSlice({
   name: 'bookmarks',
   initialState: initial_state,
   reducers: {
-    set_is_getting_data(state, action: PayloadAction<boolean>) {
-      state.is_getting_data = action.payload
+    set_is_fetching_data(state, action: PayloadAction<boolean>) {
+      state.is_fetching_data = action.payload
     },
     set_is_updating_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_updating_bookmarks = action.payload
     },
-    set_is_getting_first_bookmarks(state, action: PayloadAction<boolean>) {
-      state.is_getting_first_bookmarks = action.payload
+    set_is_fetching_first_bookmarks(state, action: PayloadAction<boolean>) {
+      state.is_fetching_first_bookmarks = action.payload
     },
-    set_is_getting_more_bookmarks(state, action: PayloadAction<boolean>) {
-      state.is_getting_more_bookmarks = action.payload
+    set_is_fetching_more_bookmarks(state, action: PayloadAction<boolean>) {
+      state.is_fetching_more_bookmarks = action.payload
+    },
+    set_is_in_search_mode(state, action: PayloadAction<boolean>) {
+      state.is_in_search_mode = action.payload
     },
     set_incoming_bookmarks(
       state,
@@ -46,6 +52,7 @@ export const bookmarks_slice = createSlice({
       state.incoming_bookmarks = action.payload
     },
     set_bookmarks(state, action: PayloadAction<BookmarksState['bookmarks']>) {
+      state.bookmarks_fetch_timestamp = Date.now()
       state.bookmarks = action.payload
     },
     set_more_bookmarks(

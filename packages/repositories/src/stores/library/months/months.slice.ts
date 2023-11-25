@@ -11,7 +11,7 @@ export type Months = {
 export type Tags = Record<string, { id: number; yields: number }>
 
 export type MonthsState = {
-  is_getting_months_data: boolean
+  is_fetching_months_data: boolean
   months_data: Months_Ro | null
   months: Months | null
   tags: Tags | null
@@ -20,7 +20,7 @@ export type MonthsState = {
 }
 
 const initial_state: MonthsState = {
-  is_getting_months_data: false,
+  is_fetching_months_data: false,
   months_data: null,
   months: null,
   tags: null,
@@ -32,8 +32,8 @@ export const months_slice = createSlice({
   name: 'months',
   initialState: initial_state,
   reducers: {
-    set_is_getting_data(state, action: PayloadAction<boolean>) {
-      state.is_getting_months_data = action.payload
+    set_is_fetching_data(state, action: PayloadAction<boolean>) {
+      state.is_fetching_months_data = action.payload
     },
     set_data(state, action: PayloadAction<Months_Ro>) {
       state.months_data = action.payload

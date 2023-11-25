@@ -5,6 +5,8 @@ import { RecordVisit_Params } from '../../domain/types/record-visit.params'
 import { DeleteBookmark_Params } from '../../domain/types/delete-bookmark.params'
 import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params'
 import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookmark.dto'
+import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by-ids.dto'
+import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -77,6 +79,41 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       `${this._api_url}/v1/bookmarks/${params.username}?${new URLSearchParams(
         JSON.parse(JSON.stringify(queryParams)),
       ).toString()}`,
+    ).then((r) => r.json())
+  }
+
+  public async get_bookmarks_by_ids_authorized(
+    params: GetBookmarksByIds_Params.Authorized,
+  ): Promise<BookmarksByIds_Dto.Response.Authorized> {
+    const body: BookmarksByIds_Dto.Body = {
+      ids: params.ids,
+    }
+    return await fetch(`${this._api_url}/v1/bookmarks/by-ids`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this._auth_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    }).then((r) => r.json())
+  }
+
+  public async get_bookmarks_by_ids_public(
+    params: GetBookmarksByIds_Params.Public,
+  ): Promise<BookmarksByIds_Dto.Response.Authorized> {
+    const body: BookmarksByIds_Dto.Body = {
+      ids: params.ids,
+    }
+    return await fetch(
+      `${this._api_url}/v1/bookmarks/by-ids/${params.username}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      },
     ).then((r) => r.json())
   }
 
