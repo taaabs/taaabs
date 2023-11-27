@@ -29,7 +29,6 @@ const schema = {
   id: 'string',
   title: 'string',
   sites: 'string[]',
-  tags: 'string[]',
   created_at: 'number',
 } as const
 
@@ -47,10 +46,13 @@ export const use_search = () => {
   >()
   const dispatch = use_library_dispatch()
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
-  const [is_initializing_orama, set_is_initializing_orama] = useState(false)
+  const [is_initializing, set_is_initializing] = useState(false)
   const [search_string, set_search_string] = useState('')
   const [hints, set_hints] = useState<Hint[] | undefined>()
-  const [orama, set_orama] = useState<Orama<typeof schema> | undefined>()
+  const [db, set_db] = useState<Orama<typeof schema> | undefined>()
+  const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =
+    useState<number | undefined>()
+  const [db_results, set_db_results] = useState<Results<Result>>()
   const [found_ids, set_found_ids] = useState<number[] | undefined>()
 
   useUpdateEffect(() => {
@@ -121,8 +123,8 @@ export const use_search = () => {
     )
   }
 
-  const init_orama = async () => {
-    set_is_initializing_orama(true)
+  const init = async () => {
+    set_is_initializing(true)
     const data_source = new LibrarySearch_DataSourceImpl(
       process.env.NEXT_PUBLIC_API_URL,
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -133,32 +135,49 @@ export const use_search = () => {
     const { bookmarks } = await get_searchable_bookmarks.invoke({})
 
     set_searchable_bookmarks(bookmarks)
-    const orama_db = await create({
+    const db = await create({
       schema,
     })
-    await insertMultiple(
-      orama_db,
-      bookmarks.map((bookmark) => ({
-        id: bookmark.id.toString(),
-        title: bookmark.title,
-        sites: bookmark.sites,
-        tags: bookmark.tags,
-        created_at: bookmark.created_at,
-      })),
-      500,
-    )
-    set_orama(orama_db)
-    set_is_initializing_orama(false)
+
+    const chunkSize = 500
+    let indexed_count = 0
+    for (let i = 0; i < bookmarks.length; i += chunkSize) {
+      const chunk = bookmarks.slice(i, i + chunkSize)
+      await insertMultiple(
+        db,
+        chunk.map((bookmark) => {
+          return {
+            id: bookmark.id.toString(),
+            title:
+              bookmark.title +
+              ' ' +
+              bookmark.tags.join(' ') +
+              ' ' +
+              bookmark.sites.join(' '),
+            sites: bookmark.sites,
+            created_at: bookmark.created_at,
+          }
+        }),
+      )
+      indexed_count += chunk.length
+      set_indexed_bookmarks_percentage(
+        Math.floor((indexed_count / bookmarks.length) * 100),
+      )
+    }
+
+    set_db(db)
+    set_is_initializing(false)
   }
 
-  const query_orama = async () => {
-    if (!orama) return
+  const query_db = async () => {
+    if (!db) return
     const gte = query_params.get('gte')
     const lte = query_params.get('lte')
 
-    const results: Results<Result> = await search(orama, {
+    const results: Results<Result> = await search(db, {
       term: search_string,
       limit: 200,
+      properties: ['title'],
       where: {
         ...((query_params.get('t') || query_params.get('f')) &&
         ids_to_search_amongst
@@ -181,19 +200,22 @@ export const use_search = () => {
             }
           : {}),
       },
+      threshold: 0,
     })
-    const found_ids = results.hits.map((result) => parseInt(result.id))
-    set_found_ids(found_ids)
-    if (!found_ids.length) {
+    set_db_results(results)
+    if (results.count == 0) {
       clear_hints()
+      set_found_ids(undefined)
     } else {
+      const found_ids = results.hits.map((result) => parseInt(result.id))
+      set_found_ids(found_ids)
       get_hints()
     }
   }
 
   useUpdateEffect(() => {
-    if (orama !== undefined && search_string.length) {
-      query_orama()
+    if (db !== undefined && search_string.length) {
+      query_db()
     }
   }, [search_string])
 
@@ -203,6 +225,15 @@ export const use_search = () => {
 
   const clear_hints = () => {
     set_hints(undefined)
+  }
+
+  const clear_search_string = () => {
+    set_search_string('')
+  }
+
+  const reset_field = () => {
+    clear_search_string()
+    set_db_results(undefined)
   }
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
@@ -239,8 +270,8 @@ export const use_search = () => {
   const delete_searchable_bookmark = async (params: {
     bookmark_id: number
   }) => {
-    if (!orama || !searchable_bookmarks) return
-    await remove(orama, params.bookmark_id.toString())
+    if (!db || !searchable_bookmarks) return
+    await remove(db, params.bookmark_id.toString())
 
     set_searchable_bookmarks(
       searchable_bookmarks.filter(
@@ -253,7 +284,7 @@ export const use_search = () => {
     bookmark: UpsertBookmark_Params
   }) => {
     if (
-      !orama ||
+      !db ||
       !searchable_bookmarks ||
       !params.bookmark.bookmark_id ||
       !params.bookmark.created_at
@@ -292,14 +323,18 @@ export const use_search = () => {
     hints,
     clear_hints,
     get_hints,
-    init_orama,
-    is_initializing_orama,
-    orama,
+    init,
+    db_results,
+    is_initializing,
+    db,
     found_ids,
     get_bookmarks,
     delete_searchable_bookmark,
     update_searchable_bookmark,
     set_current_filter,
     set_selected_tags,
+    indexed_bookmarks_percentage,
+    clear_search_string,
+    reset_field,
   }
 }
