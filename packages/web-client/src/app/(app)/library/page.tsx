@@ -88,7 +88,7 @@ const Page: React.FC = () => {
 
   useUpdateEffect(() => {
     if (search.search_string) {
-      search.set_search_string('')
+      search.clear_search_string()
     }
     if (search.hints) {
       search.clear_hints()
@@ -103,7 +103,7 @@ const Page: React.FC = () => {
   ])
 
   useUpdateEffect(() => {
-    if (search.orama && search.is_search_focused) {
+    if (search.db && search.is_search_focused) {
       search.set_current_filter(filter_view_options.current_filter)
       search.set_selected_tags(
         selected_tags
@@ -129,7 +129,7 @@ const Page: React.FC = () => {
       )
       search.get_hints()
     }
-  }, [search.orama])
+  }, [search.db])
 
   useEffect(() => {
     // Automatic scroll restoration works great when
@@ -154,7 +154,8 @@ const Page: React.FC = () => {
       slot_search={
         <LibrarySearch
           search_string={search.search_string}
-          is_loading={search.is_initializing_orama}
+          is_loading={search.is_initializing}
+          loading_progress_percentage={search.indexed_bookmarks_percentage}
           placeholder={
             filter_view_options.current_filter == LibraryFilter.All &&
             !tag_view_options.actual_selected_tags.length &&
@@ -169,20 +170,14 @@ const Page: React.FC = () => {
               : 'Search here...'
           }
           hints={search.hints}
-          yields_no_results={
-            !search.is_initializing_orama &&
-            search.search_string.length > 0 &&
-            search.found_ids !== undefined &&
-            !search.found_ids.length
-          }
           on_click_hint={() => {}}
           on_click_recent_hint_remove={() => {}}
           on_click_clear_search_string={() => {}}
           on_focus={async () => {
             search.set_is_search_focused(true)
-            if (!search.is_initializing_orama) {
-              if (search.orama === undefined) {
-                await search.init_orama()
+            if (!search.is_initializing) {
+              if (search.db === undefined) {
+                await search.init()
               } else {
                 search.set_current_filter(filter_view_options.current_filter)
                 search.set_selected_tags(
@@ -213,7 +208,7 @@ const Page: React.FC = () => {
             }
           }}
           on_change={(value) => {
-            if (search.is_initializing_orama) return
+            if (search.is_initializing) return
             search.set_search_string(value)
             if (!value) {
               get_bookmarks({})
@@ -223,13 +218,20 @@ const Page: React.FC = () => {
             if (search.found_ids?.length) {
               search.get_bookmarks({})
             } else if (search.search_string) {
+              search.reset_field()
               get_bookmarks({})
-              search.set_search_string('')
             }
           }}
           on_blur={() => {
             search.set_is_search_focused(false)
             search.clear_hints()
+          }}
+          results_count={
+            search.search_string ? search.db_results?.count : undefined
+          }
+          on_clear_click={() => {
+            search.reset_field()
+            get_bookmarks({})
           }}
         />
       }
@@ -900,7 +902,7 @@ const Page: React.FC = () => {
                                 filter_view_options.current_filter ==
                                   LibraryFilter.ThreeStarsUnread)
                             ) {
-                              search.set_search_string('')
+                              search.clear_search_string()
                             }
                           }
                         },
@@ -952,7 +954,7 @@ const Page: React.FC = () => {
                             bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
-                            search.set_search_string('')
+                            search.clear_search_string()
                           }
                         },
                       },
@@ -1003,7 +1005,7 @@ const Page: React.FC = () => {
                             bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
-                            search.set_search_string('')
+                            search.clear_search_string()
                           }
                         },
                       },
@@ -1054,7 +1056,7 @@ const Page: React.FC = () => {
                             bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
-                            search.set_search_string('')
+                            search.clear_search_string()
                           }
                         },
                       },
@@ -1111,7 +1113,7 @@ const Page: React.FC = () => {
                             bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
-                            search.set_search_string('')
+                            search.clear_search_string()
                           }
                         },
                       },
@@ -1141,7 +1143,7 @@ const Page: React.FC = () => {
                             bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
-                            search.set_search_string('')
+                            search.clear_search_string()
                           }
                         },
                         other_icon: <Icon variant="DELETE" />,
@@ -1210,7 +1212,7 @@ const Page: React.FC = () => {
           (!bookmarks_slice_state.bookmarks ||
             bookmarks_slice_state.bookmarks.length == 0) ? (
           'No results'
-        ) : !search.is_initializing_orama &&
+        ) : !search.is_initializing &&
           search.search_string.length > 0 &&
           search.found_ids !== undefined &&
           !search.found_ids.length ? (

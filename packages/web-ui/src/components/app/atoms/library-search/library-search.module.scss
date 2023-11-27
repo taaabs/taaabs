@@ -29,6 +29,9 @@
     box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.4);
     > form > input {
       color: var(--red600) !important;
+      &::placeholder {
+        color: var(--red600) !important;
+      }
     }
     > svg {
       fill: var(--red600) !important;
@@ -45,7 +48,7 @@
   > svg {
     width: var(--icon-dimension-22px);
     fill: var(--brand-color);
-    @include transition-100ms;
+    @include transition-100ms(fill);
   }
   &__loader {
     width: var(--icon-dimension-22px);
@@ -68,12 +71,52 @@
     font-size: var(--font-size-18px);
     font-weight: var(--font-weight-inter-medium);
     color: var(--brand-color);
+    @include transition-100ms(color);
     &:focus {
       outline: none;
     }
     &::placeholder {
       color: var(--brand-color);
       opacity: 0.8;
+      @include transition-100ms(color);
+    }
+  }
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--distance-8px);
+    &__results-count {
+      color: var(--blue500);
+      @include transition-100ms(color);
+      &--yields-no-results {
+        color: var(--red500);
+      }
+    }
+    &__clear {
+      transform: rotate(45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--button-dimension-28px);
+      height: var(--button-dimension-28px);
+      border-radius: var(--border-radius-999px);
+      @include transition-100ms(background-color);
+      @include hover {
+        background-color: var(--blue200);
+      }
+      &--yields-no-results {
+        @include hover {
+          background-color: var(--red100);
+        }
+        > svg {
+          fill: var(--red600) !important;
+        }
+      }
+      > svg {
+        width: var(--icon-dimension-16px);
+        fill: var(--brand-color);
+        @include transition-100ms(fill);
+      }
     }
   }
 }

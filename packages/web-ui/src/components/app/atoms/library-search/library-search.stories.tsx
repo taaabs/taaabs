@@ -12,7 +12,7 @@ export const Primary = () => (
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={''}
-        hints={[]}
+        hints={undefined}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
         on_click_clear_search_string={() => {}}
@@ -20,12 +20,45 @@ export const Primary = () => (
         on_change={() => {}}
         on_focus={() => {}}
         on_submit={() => {}}
-        yields_no_results={false}
+        on_blur={() => {}}
+        on_clear_click={() => {}}
       />
+      <StorybookSpacer />
+      <LibrarySearch
+        placeholder={'Search in all bookmarks'}
+        search_string={'lorem ipsum'}
+        hints={undefined}
+        on_click_hint={() => {}}
+        on_click_recent_hint_remove={() => {}}
+        on_click_clear_search_string={() => {}}
+        is_loading={false}
+        on_change={() => {}}
+        on_focus={() => {}}
+        on_submit={() => {}}
+        on_blur={() => {}}
+        on_clear_click={() => {}}
+        results_count={2137}
+      />
+      <LibrarySearch
+        placeholder={'Search in all bookmarks'}
+        search_string={'lorem ipsum'}
+        hints={undefined}
+        on_click_hint={() => {}}
+        on_click_recent_hint_remove={() => {}}
+        on_click_clear_search_string={() => {}}
+        is_loading={false}
+        on_change={() => {}}
+        on_focus={() => {}}
+        on_submit={() => {}}
+        on_blur={() => {}}
+        on_clear_click={() => {}}
+        results_count={0}
+      />
+      <StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={'xyz'}
-        hints={[]}
+        hints={undefined}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
         on_click_clear_search_string={() => {}}
@@ -33,12 +66,14 @@ export const Primary = () => (
         on_change={() => {}}
         on_focus={() => {}}
         on_submit={() => {}}
-        yields_no_results={true}
+        on_blur={() => {}}
+        on_clear_click={() => {}}
       />
+      <StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={''}
-        hints={[]}
+        hints={undefined}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
         on_click_clear_search_string={() => {}}
@@ -46,7 +81,8 @@ export const Primary = () => (
         on_change={() => {}}
         on_focus={() => {}}
         on_submit={() => {}}
-        yields_no_results={false}
+        on_blur={() => {}}
+        on_clear_click={() => {}}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -64,7 +100,8 @@ export const Primary = () => (
         on_change={() => {}}
         on_focus={() => {}}
         on_submit={() => {}}
-        yields_no_results={false}
+        on_blur={() => {}}
+        on_clear_click={() => {}}
       />
     </div>
   </div>
