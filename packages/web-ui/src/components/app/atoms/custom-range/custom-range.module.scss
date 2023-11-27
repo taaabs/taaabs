@@ -12,8 +12,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--Months-background);
-  @include transition-100ms(box-shadow);
   &__details {
     position: absolute;
     z-index: 1;
@@ -106,6 +104,15 @@
     &__brush {
       transform: translateY(-47px) scale(0.9);
       transform-origin: center;
+      @include hover {
+        > g > rect {
+          stroke: var(--neutral400);
+        }
+        > g > line {
+          @include transition-100ms(stroke);
+          stroke: var(--neutral400);
+        }
+      }
       :focus {
         outline: none;
       }
@@ -113,9 +120,10 @@
         stroke: none;
       }
       > g > rect {
+        @include transition-100ms(stroke);
         fill: var(--Months-chart-brush-handle-fill);
         rx: var(--border-radius-8px);
-        stroke: var(--Months-chart-brush-handle);
+        stroke: var(--neutral350);
       }
       > g > line {
         @include transition-100ms(stroke);
