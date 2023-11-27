@@ -8,7 +8,7 @@ export const Primary = () => {
   return (
     <LibraryAside
       slot_filter={<>filter</>}
-      slot_months={<>months</>}
+      slot_custom_range={<>months</>}
       slot_order={{
         button: <>filter</>,
         dropdown: <></>,

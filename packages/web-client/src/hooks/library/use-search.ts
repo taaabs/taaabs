@@ -37,11 +37,12 @@ type Result = TypedDocument<Orama<typeof schema>>
 
 export const use_search = () => {
   const query_params = use_shallow_search_params()
+  const [is_search_focused, set_is_search_focused] = useState(false)
   const [searchable_bookmarks, set_searchable_bookmarks] =
     useState<SearchableBookmark_Entity[]>()
   const [current_filter, set_current_filter] = useState<LibraryFilter>()
   const [selected_tags, set_selected_tags] = useState<string[]>([])
-  const [ids_to_search_in, set_ids_to_search_in] = useState<
+  const [ids_to_search_amongst, set_ids_to_search_amongst] = useState<
     string[] | undefined
   >()
   const dispatch = use_library_dispatch()
@@ -49,19 +50,16 @@ export const use_search = () => {
   const [is_initializing_orama, set_is_initializing_orama] = useState(false)
   const [search_string, set_search_string] = useState('')
   const [hints, set_hints] = useState<Hint[] | undefined>()
-
   const [orama, set_orama] = useState<Orama<typeof schema> | undefined>()
-  const [orama_results, set_orama_results] = useState<Results<Result>>()
   const [found_ids, set_found_ids] = useState<number[] | undefined>()
 
   useUpdateEffect(() => {
-    find_ids_to_search_in()
+    find_bookmarks_ids_within_current_view_options()
   }, [current_filter, selected_tags, searchable_bookmarks])
 
-  // detect change to selected tags, filter
-  const find_ids_to_search_in = () => {
+  const find_bookmarks_ids_within_current_view_options = () => {
     if (!searchable_bookmarks) return
-    set_ids_to_search_in(
+    set_ids_to_search_amongst(
       searchable_bookmarks
         .filter((bookmark) => {
           let should_keep = false
@@ -124,7 +122,6 @@ export const use_search = () => {
   }
 
   const init_orama = async () => {
-    dispatch(bookmarks_actions.set_is_in_search_mode(true))
     set_is_initializing_orama(true)
     const data_source = new LibrarySearch_DataSourceImpl(
       process.env.NEXT_PUBLIC_API_URL,
@@ -155,15 +152,17 @@ export const use_search = () => {
   }
 
   const query_orama = async () => {
+    if (!orama) return
     const gte = query_params.get('gte')
     const lte = query_params.get('lte')
 
-    const results: Results<Result> = await search(orama!, {
+    const results: Results<Result> = await search(orama, {
       term: search_string,
       limit: 200,
       where: {
-        ...((query_params.get('t') || query_params.get('f')) && ids_to_search_in
-          ? { id: ids_to_search_in }
+        ...((query_params.get('t') || query_params.get('f')) &&
+        ids_to_search_amongst
+          ? { id: ids_to_search_amongst }
           : {}),
         ...(gte && lte
           ? {
@@ -183,7 +182,6 @@ export const use_search = () => {
           : {}),
       },
     })
-    set_orama_results(results)
     const found_ids = results.hits.map((result) => parseInt(result.id))
     set_found_ids(found_ids)
     if (!found_ids.length) {
@@ -193,6 +191,12 @@ export const use_search = () => {
     }
   }
 
+  useUpdateEffect(() => {
+    if (orama !== undefined && search_string.length) {
+      query_orama()
+    }
+  }, [search_string])
+
   const get_hints = () => {
     set_hints([{ type: 'new', text: 'todo' }])
   }
@@ -201,15 +205,7 @@ export const use_search = () => {
     set_hints(undefined)
   }
 
-  useUpdateEffect(() => {
-    if (orama !== undefined && search_string.length) {
-      query_orama()
-    }
-  }, [search_string, current_filter, selected_tags])
-
-  const get_bookmarks_of_search = (params: {
-    should_get_next_page?: boolean
-  }) => {
+  const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
     clear_hints()
     if (found_ids) {
       if (!params.should_get_next_page) {
@@ -253,7 +249,7 @@ export const use_search = () => {
     )
   }
 
-  const update_searchable_bookmarks = async (params: {
+  const update_searchable_bookmark = async (params: {
     bookmark: UpsertBookmark_Params
   }) => {
     if (
@@ -289,19 +285,20 @@ export const use_search = () => {
   }
 
   return {
+    is_search_focused,
+    set_is_search_focused,
     search_string,
     set_search_string,
     hints,
-    get_hints,
-    set_hints,
     clear_hints,
+    get_hints,
     init_orama,
     is_initializing_orama,
     orama,
     found_ids,
-    get_bookmarks_of_search,
+    get_bookmarks,
     delete_searchable_bookmark,
-    update_searchable_bookmarks,
+    update_searchable_bookmark,
     set_current_filter,
     set_selected_tags,
   }

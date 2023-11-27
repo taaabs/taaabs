@@ -32,12 +32,6 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
   const [is_focused, set_is_focused] = useState(false)
   const input = useRef<HTMLInputElement>(null)
 
-  useUpdateEffect(() => {
-    if (!props.is_loading) {
-      props.on_focus()
-    }
-  }, [props.is_loading])
-
   return is_hydrated ? (
     <div className={styles.container}>
       <div

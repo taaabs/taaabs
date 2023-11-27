@@ -296,7 +296,7 @@ const Page: React.FC = () => {
               </OutsideClickHandler>
             ),
           }}
-          slot_months={
+          slot_custom_range={
             show_months ? (
               <div
                 style={{

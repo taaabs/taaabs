@@ -51,18 +51,21 @@ const Page: React.FC = () => {
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
   const query_params = use_shallow_search_params()
-  const [show_months, set_show_months] = useState(false)
+  const [show_custom_range, set_show_custom_range] = useState(false)
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
   const [show_bookmarks_skeleton, set_show_bookmarks_skeleton] = useState(true)
   const bookmarks_slice_state = use_library_selector((state) => state.bookmarks)
-  const { get_bookmarks } = use_bookmarks()
+  const search = use_search()
+  const { get_bookmarks } = use_bookmarks({
+    is_in_search_mode: !!search.search_string,
+  })
   const { months, is_fetching_counts_data, tags, selected_tags } = use_counts()
   const filter_view_options = use_filter_view_options()
   const sortby_view_options = use_sortby_view_options()
   const order_view_options = use_order_view_options()
   const tag_view_options = use_tag_view_options()
   const date_view_options = use_date_view_options()
-  const search = use_search()
+
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
 
@@ -78,25 +81,55 @@ const Page: React.FC = () => {
 
   useUpdateEffect(() => {
     if (bookmarks_slice_state.bookmarks == null) return
-    set_show_months(true)
+    set_show_custom_range(true)
     set_show_tags_skeleton(false)
     set_show_bookmarks_skeleton(false)
   }, [bookmarks_slice_state.bookmarks])
 
   useUpdateEffect(() => {
     if (search.search_string) {
-      if (search.hints) {
-        dispatch(bookmarks_actions.set_bookmarks([]))
-        search.clear_hints()
-      }
       search.set_search_string('')
+    }
+    if (search.hints) {
+      search.clear_hints()
     }
   }, [
     filter_view_options.current_filter,
-    selected_tags,
+    order_view_options.current_order,
+    sortby_view_options.current_sortby,
+    tag_view_options.actual_selected_tags,
     date_view_options.current_gte,
     date_view_options.current_lte,
   ])
+
+  useUpdateEffect(() => {
+    if (search.orama && search.is_search_focused) {
+      search.set_current_filter(filter_view_options.current_filter)
+      search.set_selected_tags(
+        selected_tags
+          .filter((id) => {
+            if (
+              !bookmarks_slice_state.bookmarks ||
+              !bookmarks_slice_state.bookmarks[0]
+            )
+              return false
+            return (
+              bookmarks_slice_state.bookmarks[0].tags?.findIndex(
+                (tag) => tag.id == id,
+              ) != -1
+            )
+          })
+          .map((id) => {
+            const name = bookmarks_slice_state.bookmarks![0].tags!.find(
+              (tag) => tag.id == id,
+            )!.name
+
+            return name
+          }),
+      )
+      search.get_hints()
+    }
+  }, [search.orama])
 
   useEffect(() => {
     // Automatic scroll restoration works great when
@@ -140,57 +173,63 @@ const Page: React.FC = () => {
             !search.is_initializing_orama &&
             search.search_string.length > 0 &&
             search.found_ids !== undefined &&
-            search.found_ids.length == 0
+            !search.found_ids.length
           }
           on_click_hint={() => {}}
           on_click_recent_hint_remove={() => {}}
           on_click_clear_search_string={() => {}}
           on_focus={async () => {
+            search.set_is_search_focused(true)
             if (!search.is_initializing_orama) {
               if (search.orama === undefined) {
                 await search.init_orama()
-              }
-              search.set_current_filter(filter_view_options.current_filter)
-              search.set_selected_tags(
-                selected_tags
-                  .filter((id) => {
-                    if (
-                      !bookmarks_slice_state.bookmarks ||
-                      !bookmarks_slice_state.bookmarks[0]
-                    )
-                      return false
-                    return (
-                      bookmarks_slice_state.bookmarks[0].tags?.findIndex(
-                        (tag) => tag.id == id,
-                      ) != -1
-                    )
-                  })
-                  .map((id) => {
-                    const name = bookmarks_slice_state.bookmarks![0].tags!.find(
-                      (tag) => tag.id == id,
-                    )!.name
+              } else {
+                search.set_current_filter(filter_view_options.current_filter)
+                search.set_selected_tags(
+                  selected_tags
+                    .filter((id) => {
+                      if (
+                        !bookmarks_slice_state.bookmarks ||
+                        !bookmarks_slice_state.bookmarks[0]
+                      )
+                        return false
+                      return (
+                        bookmarks_slice_state.bookmarks[0].tags?.findIndex(
+                          (tag) => tag.id == id,
+                        ) != -1
+                      )
+                    })
+                    .map((id) => {
+                      const name =
+                        bookmarks_slice_state.bookmarks![0].tags!.find(
+                          (tag) => tag.id == id,
+                        )!.name
 
-                    return name
-                  }),
-              )
-              search.get_hints()
+                      return name
+                    }),
+                )
+                search.get_hints()
+              }
             }
           }}
-          on_change={search.set_search_string}
+          on_change={(value) => {
+            if (search.is_initializing_orama) return
+            search.set_search_string(value)
+            if (!value) {
+              get_bookmarks({})
+            }
+          }}
           on_submit={() => {
-            if (
-              search.found_ids === undefined ||
-              search.found_ids.length == 0 ||
-              !search.search_string
-            )
-              return
-            search.get_bookmarks_of_search({})
+            if (search.found_ids?.length) {
+              search.get_bookmarks({})
+            } else if (search.search_string) {
+              get_bookmarks({})
+              search.set_search_string('')
+            }
           }}
           on_blur={() => {
-            if (!search.search_string && !search.is_initializing_orama) {
-              get_bookmarks({})
-              search.clear_hints()
-            }
+            search.set_is_search_focused(false)
+            search.clear_hints()
           }}
         />
       }
@@ -205,12 +244,7 @@ const Page: React.FC = () => {
                   bookmarks_slice_state.is_updating_bookmarks
                 )
                   return
-                filter_view_options.set_filter_query_param_reset_others(
-                  LibraryFilter.All,
-                )
-                set_show_bookmarks_skeleton(true)
-                set_show_tags_skeleton(true)
-                set_show_months(false)
+                filter_view_options.set_filter_query_param(LibraryFilter.All)
               },
               is_active:
                 filter_view_options.current_filter != LibraryFilter.Archived,
@@ -223,12 +257,9 @@ const Page: React.FC = () => {
                   bookmarks_slice_state.is_updating_bookmarks
                 )
                   return
-                filter_view_options.set_filter_query_param_reset_others(
+                filter_view_options.set_filter_query_param(
                   LibraryFilter.Archived,
                 )
-                set_show_bookmarks_skeleton(true)
-                set_show_tags_skeleton(true)
-                set_show_months(false)
               },
               is_active:
                 filter_view_options.current_filter == LibraryFilter.Archived,
@@ -594,8 +625,8 @@ const Page: React.FC = () => {
               </OutsideClickHandler>
             ),
           }}
-          slot_months={
-            show_months ? (
+          slot_custom_range={
+            show_custom_range ? (
               <div
                 style={{
                   pointerEvents:
@@ -721,33 +752,21 @@ const Page: React.FC = () => {
       has_more_bookmarks={
         (!search.search_string && bookmarks_slice_state.has_more_bookmarks) ||
         (search.search_string &&
-          search.found_ids &&
           bookmarks_slice_state.bookmarks &&
+          search.found_ids !== undefined &&
           search.found_ids.length > bookmarks_slice_state.bookmarks.length) ||
         false
       }
       get_more_bookmarks={() => {
         if (search.hints) return
         if (search.search_string) {
-          search.get_bookmarks_of_search({ should_get_next_page: true })
+          search.get_bookmarks({ should_get_next_page: true })
         } else {
           get_bookmarks({ should_get_next_page: true })
         }
       }}
       slot_bookmarks={
-        bookmarks_slice_state.bookmarks &&
-        !show_bookmarks_skeleton &&
-        !search.hints &&
-        !(
-          bookmarks_slice_state.is_in_search_mode &&
-          bookmarks_slice_state.is_fetching_first_bookmarks
-        ) &&
-        !search.is_initializing_orama &&
-        !(
-          search.search_string.length > 0 &&
-          search.found_ids !== undefined &&
-          search.found_ids.length == 0
-        )
+        bookmarks_slice_state.bookmarks && !show_bookmarks_skeleton
           ? bookmarks_slice_state.bookmarks.map((bookmark, index) => (
               <Bookmark
                 key={bookmark.id}
@@ -862,7 +881,7 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          search.update_searchable_bookmarks({
+                          search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
                           })
                           if (
@@ -925,7 +944,7 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          search.update_searchable_bookmarks({
+                          search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
                           })
                           if (
@@ -976,7 +995,7 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          search.update_searchable_bookmarks({
+                          search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
                           })
                           if (
@@ -1027,7 +1046,7 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          search.update_searchable_bookmarks({
+                          search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
                           })
                           if (
@@ -1084,7 +1103,7 @@ const Page: React.FC = () => {
                                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                             }),
                           )
-                          search.update_searchable_bookmarks({
+                          search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
                           })
                           if (
@@ -1194,11 +1213,15 @@ const Page: React.FC = () => {
         ) : !search.is_initializing_orama &&
           search.search_string.length > 0 &&
           search.found_ids !== undefined &&
-          search.found_ids.length == 0 ? (
+          !search.found_ids.length ? (
           <>
             Your search - <strong>{search.search_string}</strong> - did not
             match any bookmarks
           </>
+        ) : !bookmarks_slice_state.has_more_bookmarks ||
+          bookmarks_slice_state.bookmarks?.length ==
+            search.found_ids?.length ? (
+          'End of results'
         ) : (
           ''
         )

@@ -15,7 +15,7 @@ export namespace LibraryAside {
       dropdown: React.ReactNode
       is_dropdown_visible: boolean
     }
-    slot_months?: React.ReactNode
+    slot_custom_range?: React.ReactNode
     slot_tags?: React.ReactNode
   }
 }
@@ -64,7 +64,7 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
             </div>
           </div>
         )}
-        {props.slot_months}
+        {props.slot_custom_range}
         <div className={styles.tags}>{props.slot_tags}</div>
       </div>
     </div>

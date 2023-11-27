@@ -12,13 +12,14 @@ import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-para
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
 
-export const use_bookmarks = () => {
+export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   const query_params = use_shallow_search_params()
   const route_params = useParams()
   const route_pathname = usePathname()
   const dispatch = use_library_dispatch()
-  const { bookmarks, has_more_bookmarks, is_in_search_mode } =
-    use_library_selector((state) => state.bookmarks)
+  const { bookmarks, has_more_bookmarks } = use_library_selector(
+    (state) => state.bookmarks,
+  )
   const [last_query_tags, set_last_query_tags] = useState<string | null>(null)
   const [last_query_category, set_last_query_category] = useState<
     string | null
@@ -183,7 +184,8 @@ export const use_bookmarks = () => {
   }, [query_params])
 
   useUpdateEffect(() => {
-    if (is_in_search_mode) return
+    if (params.is_in_search_mode) return
+    // TODO: Runs 21 times!
     sessionStorage.setItem(
       `bookmarks__${query_params.toString()}`,
       JSON.stringify(bookmarks),

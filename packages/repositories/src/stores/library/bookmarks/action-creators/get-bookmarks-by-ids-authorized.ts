@@ -1,5 +1,5 @@
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
-import { LibraryDispatch, LibraryState } from '../../library.store'
+import { LibraryDispatch } from '../../library.store'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { bookmarks_actions } from '../bookmarks.slice'
 import { GetBookmarksByIds_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks-by-ids.params'
