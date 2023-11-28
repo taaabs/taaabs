@@ -30,6 +30,8 @@ const schema = {
   title: 'string',
   sites: 'string[]',
   created_at: 'number',
+  updated_at: 'number',
+  visited_at: 'number',
 } as const
 
 type Result = TypedDocument<Orama<typeof schema>>
@@ -52,15 +54,11 @@ export const use_search = () => {
   const [db, set_db] = useState<Orama<typeof schema> | undefined>()
   const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =
     useState<number | undefined>()
-  const [db_results, set_db_results] = useState<Results<Result>>()
-  const [found_ids, set_found_ids] = useState<number[] | undefined>()
+  const [result, set_result] = useState<Results<Result>>()
 
   useUpdateEffect(() => {
-    find_bookmarks_ids_within_current_view_options()
-  }, [current_filter, selected_tags, searchable_bookmarks])
-
-  const find_bookmarks_ids_within_current_view_options = () => {
     if (!searchable_bookmarks) return
+
     set_ids_to_search_amongst(
       searchable_bookmarks
         .filter((bookmark) => {
@@ -121,7 +119,7 @@ export const use_search = () => {
         })
         .map((bookmark) => bookmark.id.toString()),
     )
-  }
+  }, [current_filter, selected_tags, searchable_bookmarks])
 
   const init = async () => {
     set_is_initializing(true)
@@ -135,11 +133,15 @@ export const use_search = () => {
     const { bookmarks } = await get_searchable_bookmarks.invoke({})
 
     set_searchable_bookmarks(bookmarks)
+
     const db = await create({
       schema,
+      sort: {
+        unsortableProperties: ['title', 'id'],
+      },
     })
 
-    const chunkSize = 500
+    const chunkSize = 1000
     let indexed_count = 0
     for (let i = 0; i < bookmarks.length; i += chunkSize) {
       const chunk = bookmarks.slice(i, i + chunkSize)
@@ -154,10 +156,12 @@ export const use_search = () => {
               bookmark.tags.join(' ') +
               ' ' +
               bookmark.sites.join(' '),
-            sites: bookmark.sites,
             created_at: bookmark.created_at,
+            updated_at: bookmark.updated_at,
+            visited_at: bookmark.visited_at,
           }
         }),
+        chunkSize,
       )
       indexed_count += chunk.length
       set_indexed_bookmarks_percentage(
@@ -171,16 +175,19 @@ export const use_search = () => {
 
   const query_db = async () => {
     if (!db) return
+    const tags = query_params.get('t')
+    const filter = query_params.get('f')
     const gte = query_params.get('gte')
     const lte = query_params.get('lte')
+    const order = query_params.get('o')
+    const sortby = query_params.get('s')
 
     const results: Results<Result> = await search(db, {
       term: search_string,
-      limit: 200,
+      limit: 1000,
       properties: ['title'],
       where: {
-        ...((query_params.get('t') || query_params.get('f')) &&
-        ids_to_search_amongst
+        ...((tags || filter) && ids_to_search_amongst
           ? { id: ids_to_search_amongst }
           : {}),
         ...(gte && lte
@@ -200,15 +207,22 @@ export const use_search = () => {
             }
           : {}),
       },
+      sortBy: {
+        property:
+          sortby == '1'
+            ? 'updated_at'
+            : sortby == '2'
+            ? 'visited_at'
+            : 'created_at',
+        order: order == '1' ? 'ASC' : 'DESC',
+      },
       threshold: 0,
     })
-    set_db_results(results)
+
+    set_result(results)
     if (results.count == 0) {
       clear_hints()
-      set_found_ids(undefined)
     } else {
-      const found_ids = results.hits.map((result) => parseInt(result.id))
-      set_found_ids(found_ids)
       get_hints()
     }
   }
@@ -220,7 +234,8 @@ export const use_search = () => {
   }, [search_string])
 
   const get_hints = () => {
-    set_hints([{ type: 'new', text: 'todo' }])
+    // TODO
+    // set_hints([{ type: 'new', text: 'todo' }])
   }
 
   const clear_hints = () => {
@@ -233,12 +248,12 @@ export const use_search = () => {
 
   const reset_field = () => {
     clear_search_string()
-    set_db_results(undefined)
+    set_result(undefined)
   }
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
     clear_hints()
-    if (found_ids) {
+    if (result?.count) {
       if (!params.should_get_next_page) {
         dispatch(
           bookmarks_actions.get_bookmarks_by_ids_authorized({
@@ -247,11 +262,11 @@ export const use_search = () => {
               'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
             is_next_page: false,
             request_params: {
-              ids: found_ids.slice(0, 20),
+              ids: result.hits.slice(0, 20).map((hit) => parseInt(hit.id)),
             },
           }),
         )
-      } else if (bookmarks) {
+      } else if (bookmarks && bookmarks.length < result.hits.length) {
         dispatch(
           bookmarks_actions.get_bookmarks_by_ids_authorized({
             api_url: process.env.NEXT_PUBLIC_API_URL,
@@ -259,7 +274,9 @@ export const use_search = () => {
               'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
             is_next_page: true,
             request_params: {
-              ids: found_ids.slice(bookmarks.length, bookmarks.length + 20),
+              ids: result.hits
+                .slice(bookmarks.length, bookmarks.length + 20)
+                .map((hit) => parseInt(hit.id)),
             },
           }),
         )
@@ -282,6 +299,7 @@ export const use_search = () => {
 
   const update_searchable_bookmark = async (params: {
     bookmark: UpsertBookmark_Params
+    visited_at?: Date
   }) => {
     if (
       !db ||
@@ -298,9 +316,11 @@ export const use_search = () => {
       {
         id: params.bookmark.bookmark_id,
         title: params.bookmark.title,
-        created_at: Math.round(
-          new Date(params.bookmark.created_at).getTime() / 1000,
-        ),
+        created_at: Math.round(params.bookmark.created_at.getTime() / 1000),
+        updated_at: Math.round(new Date().getTime() / 1000),
+        visited_at: params.visited_at
+          ? Math.round(params.visited_at.getTime() / 1000)
+          : 0,
         is_archived: params.bookmark.is_archived,
         is_unread: params.bookmark.is_unread,
         sites: params.bookmark.links.map(
@@ -324,10 +344,9 @@ export const use_search = () => {
     clear_hints,
     get_hints,
     init,
-    db_results,
+    result,
     is_initializing,
     db,
-    found_ids,
     get_bookmarks,
     delete_searchable_bookmark,
     update_searchable_bookmark,

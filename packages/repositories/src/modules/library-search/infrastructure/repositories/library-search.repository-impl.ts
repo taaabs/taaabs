@@ -21,6 +21,8 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
         return {
           id: bookmark.id,
           created_at: bookmark.created_at,
+          updated_at: bookmark.updated_at,
+          visited_at: bookmark.visited_at,
           title: bookmark.title,
           is_unread: bookmark.is_unread || false,
           is_archived: bookmark.is_archived || false,
@@ -45,6 +47,8 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
         return {
           id: bookmark.id,
           created_at: bookmark.created_at,
+          updated_at: bookmark.updated_at,
+          visited_at: 0,
           title: bookmark.title,
           is_unread: false,
           is_archived: bookmark.is_archived || false,

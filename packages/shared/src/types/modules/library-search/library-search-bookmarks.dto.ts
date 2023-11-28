@@ -5,12 +5,14 @@ export namespace LibrarySearchBookmarks_Dto {
       public title: string
       public sites: string[]
       public created_at: number
+      public updated_at: number
       public tags?: string[]
       public stars?: number
       public is_archived?: boolean
     }
 
     class AuthorizedBookmark extends Bookmark {
+      public visited_at: number
       public is_unread?: boolean
     }
 

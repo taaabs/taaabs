@@ -215,11 +215,10 @@ const Page: React.FC = () => {
             }
           }}
           on_submit={() => {
-            if (search.found_ids?.length) {
+            if (!search.result?.count) return
+
+            if (search.result?.count) {
               search.get_bookmarks({})
-            } else if (search.search_string) {
-              search.reset_field()
-              get_bookmarks({})
             }
           }}
           on_blur={() => {
@@ -227,7 +226,7 @@ const Page: React.FC = () => {
             search.clear_hints()
           }}
           results_count={
-            search.search_string ? search.db_results?.count : undefined
+            search.search_string ? search.result?.count : undefined
           }
           on_clear_click={() => {
             search.reset_field()
@@ -755,8 +754,8 @@ const Page: React.FC = () => {
         (!search.search_string && bookmarks_slice_state.has_more_bookmarks) ||
         (search.search_string &&
           bookmarks_slice_state.bookmarks &&
-          search.found_ids !== undefined &&
-          search.found_ids.length > bookmarks_slice_state.bookmarks.length) ||
+          search.result !== undefined &&
+          search.result.count > bookmarks_slice_state.bookmarks.length) ||
         false
       }
       get_more_bookmarks={() => {
@@ -885,6 +884,7 @@ const Page: React.FC = () => {
                           )
                           search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
+                            visited_at: new Date(bookmark.visited_at),
                           })
                           if (
                             bookmarks_slice_state.bookmarks &&
@@ -948,6 +948,7 @@ const Page: React.FC = () => {
                           )
                           search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
+                            visited_at: new Date(bookmark.visited_at),
                           })
                           if (
                             bookmarks_slice_state.bookmarks &&
@@ -999,6 +1000,7 @@ const Page: React.FC = () => {
                           )
                           search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
+                            visited_at: new Date(bookmark.visited_at),
                           })
                           if (
                             bookmarks_slice_state.bookmarks &&
@@ -1050,6 +1052,7 @@ const Page: React.FC = () => {
                           )
                           search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
+                            visited_at: new Date(bookmark.visited_at),
                           })
                           if (
                             bookmarks_slice_state.bookmarks &&
@@ -1107,6 +1110,7 @@ const Page: React.FC = () => {
                           )
                           search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
+                            visited_at: new Date(bookmark.visited_at),
                           })
                           if (
                             bookmarks_slice_state.bookmarks &&
@@ -1205,28 +1209,18 @@ const Page: React.FC = () => {
       }
       info_text={
         bookmarks_slice_state.is_fetching_first_bookmarks ||
-        bookmarks_slice_state.is_fetching_more_bookmarks ? (
-          'Loading...'
-        ) : !search.search_string.length &&
-          !bookmarks_slice_state.is_fetching_first_bookmarks &&
-          (!bookmarks_slice_state.bookmarks ||
-            bookmarks_slice_state.bookmarks.length == 0) ? (
-          'No results'
-        ) : !search.is_initializing &&
-          search.search_string.length > 0 &&
-          search.found_ids !== undefined &&
-          !search.found_ids.length ? (
-          <>
-            Your search - <strong>{search.search_string}</strong> - did not
-            match any bookmarks
-          </>
-        ) : !bookmarks_slice_state.has_more_bookmarks ||
-          bookmarks_slice_state.bookmarks?.length ==
-            search.found_ids?.length ? (
-          'End of results'
-        ) : (
-          ''
-        )
+        bookmarks_slice_state.is_fetching_more_bookmarks
+          ? 'Loading...'
+          : !search.search_string.length &&
+            !bookmarks_slice_state.is_fetching_first_bookmarks &&
+            (!bookmarks_slice_state.bookmarks ||
+              bookmarks_slice_state.bookmarks.length == 0)
+          ? 'No results'
+          : !bookmarks_slice_state.has_more_bookmarks ||
+            bookmarks_slice_state.bookmarks?.length ==
+              search.result?.hits.length
+          ? 'End of results'
+          : ''
       }
     />
   )

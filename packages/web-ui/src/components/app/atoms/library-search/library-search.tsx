@@ -92,7 +92,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                     props.results_count == 0,
                 })}
               >
-                {props.results_count} results
+                {props.results_count == 0 ? 'no' : props.results_count}{' '}
+                {props.results_count == 1 ? 'result' : 'results'}
               </div>
             )}
             <button
