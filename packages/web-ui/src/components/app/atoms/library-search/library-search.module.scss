@@ -12,10 +12,10 @@
 .input {
   display: flex;
   align-items: center;
-  gap: var(--distance-14px);
-  padding: 0 var(--distance-16px);
+  gap: var(--distance-13px);
   height: var(--button-dimension-52px);
-  background-color: var(--blue50);
+  background-color: var(--blue50-transparent);
+  backdrop-filter: var(--backdrop-filter);
   border: 1px solid var(--blue100);
   border-radius: var(--border-radius-999px);
   width: calc(100% + (var(--distance-16px) * 2));
@@ -27,13 +27,7 @@
     border-color: var(--red100) !important;
     background-color: var(--red50);
     box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.4);
-    > form > input {
-      color: var(--red600) !important;
-      &::placeholder {
-        color: var(--red600) !important;
-      }
-    }
-    > svg {
+    svg {
       fill: var(--red600) !important;
     }
   }
@@ -45,10 +39,23 @@
     border-color: var(--red300) !important;
     box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.7);
   }
-  > svg {
-    width: var(--icon-dimension-22px);
-    fill: var(--brand-color);
-    @include transition-100ms(fill);
+  &__left-side {
+    margin-left: var(--distance-8px);
+    width: var(--button-dimension-34px);
+    height: var(--button-dimension-34px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include transition-100ms(background);
+    border-radius: var(--border-radius-999px);
+    @include hover {
+      background: var(--blue200);
+    }
+    > svg {
+      width: var(--icon-dimension-20px);
+      fill: var(--brand-color);
+      @include transition-100ms(fill);
+    }
   }
   &__loader {
     width: var(--icon-dimension-22px);
@@ -60,31 +67,69 @@
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
   }
-  > form {
+  .form {
     flex-grow: 1;
-  }
-  > form > input {
-    width: 100%;
-    height: var(--button-dimension-52px);
-    border: none;
-    background: none;
-    font-size: var(--font-size-18px);
-    font-weight: var(--font-weight-inter-medium);
-    color: var(--brand-color);
-    @include transition-100ms(color);
-    &:focus {
-      outline: none;
-    }
-    &::placeholder {
+    position: relative;
+    &__styled-value {
+      position: absolute;
       color: var(--brand-color);
-      opacity: 0.8;
+      font-size: var(--font-size-17px);
+      font-weight: var(--font-weight-inter-medium);
       @include transition-100ms(color);
+      display: flex;
+      align-items: center;
+      height: var(--button-dimension-52px);
+      width: 100%;
+      pointer-events: none;
+      user-select: none;
+      word-break: break-word;
+      white-space: pre;
+      -webkit-user-select: none;
+      user-select: none;
+      &--yields-no-results {
+        color: var(--red600) !important;
+        &::placeholder {
+          color: var(--red600) !important;
+        }
+      }
+      &__pre-highlight {
+        opacity: 0.7;
+      }
+      &__highlight {
+        background-color: var(--blue200);
+        border-radius: var(--border-radius-3px);
+        @include transition-100ms(background-color);
+        &--no-results {
+          background-color: var(--red200);
+        }
+      }
+    }
+    > input {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      font-size: var(--font-size-17px);
+      font-weight: var(--font-weight-inter-medium);
+      color: transparent;
+      user-select: none;
+      height: var(--button-dimension-52px);
+      display: flex;
+      align-items: center;
+      &:focus {
+        outline: none;
+      }
+      &::placeholder {
+        color: var(--brand-color);
+        opacity: 0.8;
+        @include transition-100ms(color);
+      }
     }
   }
-  &__actions {
+  &__right-side {
     display: flex;
     align-items: center;
     gap: var(--distance-8px);
+    margin-right: var(--distance-11px);
     &__results-count {
       color: var(--blue500);
       @include transition-100ms(color);
@@ -125,46 +170,55 @@
   z-index: 1;
   width: 100%;
   top: calc(var(--button-dimension-52px) + var(--distance-4px));
-  display: flex;
-  flex-direction: column;
-  border-radius: var(--border-radius-12px);
-  background-color: var(--plain-white);
-  padding: var(--distance-12px) 0;
-  box-shadow: var(--box-shadow);
-  border: var(--border-primary);
-  &__item {
+  &__inner {
     display: flex;
-    align-items: center;
-    gap: var(--distance-10px);
-    height: var(--distance-32px);
-    padding: 0 var(--distance-16px) 0 var(--distance-14px);
-    @include hover {
-      background-color: var(--neutral50);
-    }
-    &__icon {
+    flex-direction: column;
+    border-radius: var(--border-radius-12px);
+    background-color: var(--plain-white);
+    padding: var(--distance-12px) 0;
+    box-shadow: var(--box-shadow);
+    border: var(--border-primary);
+    width: 100%;
+    &__item {
       display: flex;
-      > svg {
-        width: var(--distance-15px);
-      }
-    }
-    &__text {
-      display: flex;
-      flex-grow: 1;
-      > span {
-        color: var(--text-color-variant);
-        white-space: pre-wrap;
-      }
-      > span:last-child {
-        color: var(--text-color-normal);
-        font-weight: var(--font-weight-inter-semi-bold);
-      }
-    }
-    &__remove {
-      display: flex;
-      font-size: var(--font-size-13px);
-      color: var(--text-color-dimmed);
+      align-items: center;
+      gap: var(--distance-10px);
+      height: var(--distance-32px);
+      padding: 0 var(--distance-16px) 0 var(--distance-14px);
       @include hover {
-        text-decoration: underline;
+        background-color: var(--neutral50);
+      }
+      &__icon {
+        display: flex;
+        > svg {
+          width: var(--distance-15px);
+        }
+      }
+      &__text {
+        display: flex;
+        flex-grow: 1;
+        > span {
+          color: var(--text-color-variant);
+          white-space: pre-wrap;
+        }
+        > span:nth-child(2) {
+          color: var(--text-color-normal);
+          font-weight: var(--font-weight-inter-semi-bold);
+        }
+        > span:nth-child(3) {
+          color: var(--text-color-dimmed);
+          &::before {
+            content: ' ';
+          }
+        }
+      }
+      &__remove {
+        display: flex;
+        font-size: var(--font-size-13px);
+        color: var(--text-color-dimmed);
+        @include hover {
+          text-decoration: underline;
+        }
       }
     }
   }

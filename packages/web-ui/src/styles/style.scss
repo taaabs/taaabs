@@ -72,8 +72,8 @@
   --Months-chart-brush-handle-fill: #fff;
   --Months-chart-brush-handle: var(--neutral350);
   --Tags-selected-foreground: var(--yellow800);
-  --Tags-firstChar-foregrouond: var(--brand-color);
-  --Tags-firstChar-background: var(--blue50);
+  --Tags-first-char-foregrouond: var(--brand-color);
+  --Tags-first-char-background: var(--blue50);
   --Input-background: var(--blue100);
   --Input-border: 1px solid var(--blue200);
   --Input-border-color-focus: var(--blue400);
@@ -155,6 +155,12 @@ button {
   border: none;
   padding: 0;
   cursor: pointer;
+}
+
+input {
+  padding: 0;
+  border: none;
+  background: none;
 }
 
 ::selection {

@@ -4,18 +4,26 @@ declare const styles: {
   readonly 'input--yields-no-results': string
   readonly 'input--focus': string
   readonly 'input--focus-yields-no-results': string
+  readonly 'input__left-side': string
   readonly input__loader: string
   readonly rotation: string
-  readonly input__actions: string
-  readonly 'input__actions__results-count': string
-  readonly 'input__actions__results-count--yields-no-results': string
-  readonly input__actions__clear: string
-  readonly 'input__actions__clear--yields-no-results': string
+  readonly form: string
+  readonly 'form__styled-value': string
+  readonly 'form__styled-value--yields-no-results': string
+  readonly 'form__styled-value__pre-highlight': string
+  readonly 'form__styled-value__highlight': string
+  readonly 'form__styled-value__highlight--no-results': string
+  readonly 'input__right-side': string
+  readonly 'input__right-side__results-count': string
+  readonly 'input__right-side__results-count--yields-no-results': string
+  readonly 'input__right-side__clear': string
+  readonly 'input__right-side__clear--yields-no-results': string
   readonly hints: string
-  readonly hints__item: string
-  readonly hints__item__icon: string
-  readonly hints__item__text: string
-  readonly hints__item__remove: string
+  readonly hints__inner: string
+  readonly hints__inner__item: string
+  readonly hints__inner__item__icon: string
+  readonly hints__inner__item__text: string
+  readonly hints__inner__item__remove: string
   readonly text: string
   readonly skeleton: string
 }

@@ -31,7 +31,7 @@ export const Tags: React.FC<Tags.Props> = memo(
       <div className={styles.container}>
         {new_tags_grouped.map((group) => (
           <div className={styles.group} key={group[0].substring(0, 1)}>
-            <div className={styles.firstChar}>
+            <div className={styles['first-char']}>
               <span>{group[0].substring(0, 1)}</span>
             </div>
             {group.map((tag_name) => (

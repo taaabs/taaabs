@@ -1,4 +1,5 @@
 import { useParams, usePathname } from 'next/navigation'
+import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import {
   use_library_dispatch,
   use_library_selector,
@@ -11,6 +12,7 @@ import { Order } from '@shared/types/modules/bookmarks/order'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
+import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 
 export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   const query_params = use_shallow_search_params()
@@ -183,17 +185,32 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
     }
   }, [query_params])
 
+  const set_bookomarks_to_session_storage = useDebouncedCallback(
+    (params: {
+      bookmarks: Bookmark_Entity[]
+      query_params: string
+      has_more_bookmarks: boolean
+    }) => {
+      sessionStorage.setItem(
+        `bookmarks__${params.query_params}`,
+        JSON.stringify(params.bookmarks),
+      )
+      sessionStorage.setItem(
+        `has_more_bookmarks__${params.query_params}`,
+        `${params.has_more_bookmarks}`,
+      )
+    },
+    [],
+    0,
+  )
+
   useUpdateEffect(() => {
     if (params.is_in_search_mode) return
-    // TODO: Runs 21 times!
-    sessionStorage.setItem(
-      `bookmarks__${query_params.toString()}`,
-      JSON.stringify(bookmarks),
-    )
-    sessionStorage.setItem(
-      `has_more_bookmarks__${query_params.toString()}`,
-      JSON.stringify(has_more_bookmarks),
-    )
+    set_bookomarks_to_session_storage({
+      bookmarks: bookmarks,
+      query_params: query_params.toString(),
+      has_more_bookmarks,
+    })
   }, [bookmarks])
 
   useEffect(() => {

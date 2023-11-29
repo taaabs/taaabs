@@ -4,8 +4,8 @@ import {
   TypedDocument,
   create,
   insertMultiple,
-  search,
   remove,
+  search,
 } from '@orama/orama'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -19,16 +19,25 @@ import { LibrarySearch_RepositoryImpl } from '@repositories/modules/library-sear
 import { GetSearchableBookmarksOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-searchable-bookmarks-on-authorized-user.user-case'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
+import { get_site_variants_for_search } from '@/utils/get-site-variants-for-search'
+import {
+  afterInsert as highlightAfterInsert,
+  searchWithHighlight,
+} from '@orama/plugin-match-highlight'
+import { system_values } from '@shared/constants/system-values'
 
 type Hint = {
   type: 'new' | 'recent'
-  text: string
+  term: string
+  completion: string
+  yields?: number
 }
 
 const schema = {
   id: 'string',
   title: 'string',
   sites: 'string[]',
+  sites_variants: 'string[]',
   created_at: 'number',
   updated_at: 'number',
   visited_at: 'number',
@@ -54,7 +63,7 @@ export const use_search = () => {
   const [db, set_db] = useState<Orama<typeof schema> | undefined>()
   const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =
     useState<number | undefined>()
-  const [result, set_result] = useState<Results<Result>>()
+  const [result, set_result] = useState<Results<Result> | undefined>()
 
   useUpdateEffect(() => {
     if (!searchable_bookmarks) return
@@ -137,8 +146,14 @@ export const use_search = () => {
     const db = await create({
       schema,
       sort: {
-        unsortableProperties: ['title', 'id'],
+        unsortableProperties: ['id', 'title', 'sites', 'sites_variants'],
       },
+      plugins: [
+        {
+          name: 'highlight',
+          afterInsert: highlightAfterInsert,
+        },
+      ],
     })
 
     const chunkSize = 1000
@@ -150,12 +165,14 @@ export const use_search = () => {
         chunk.map((bookmark) => {
           return {
             id: bookmark.id.toString(),
-            title:
-              bookmark.title +
-              ' ' +
-              bookmark.tags.join(' ') +
-              ' ' +
-              bookmark.sites.join(' '),
+            title: `${bookmark.title} (${bookmark.tags.join(
+              ' ',
+            )}) (${bookmark.sites.join(' ')})`,
+
+            sites: bookmark.sites,
+            sites_variants: bookmark.sites
+              .map((site) => get_site_variants_for_search(site))
+              .flat(),
             created_at: bookmark.created_at,
             updated_at: bookmark.updated_at,
             visited_at: bookmark.visited_at,
@@ -173,8 +190,9 @@ export const use_search = () => {
     set_is_initializing(false)
   }
 
-  const query_db = async () => {
-    if (!db) return
+  const query_db = async (params: { search_string: string }) => {
+    if (!db) throw new Error('[query_db] Db should be there.')
+
     const tags = query_params.get('t')
     const filter = query_params.get('f')
     const gte = query_params.get('gte')
@@ -182,9 +200,19 @@ export const use_search = () => {
     const order = query_params.get('o')
     const sortby = query_params.get('s')
 
-    const results: Results<Result> = await search(db, {
-      term: search_string,
+    // 'lorem site:abc.com site:abc.com ipsum site:abc.com'
+    // ["abc.com", "abc.com", "abc.com"]
+    const sites_variants = params.search_string
+      .match(/(?<=site:)(.*?)($|\s)/g)
+      ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
+
+    const term = params.search_string
+      .replace(/(?=site:)(.*?)($|\s)/g, '')
+      .trim()
+
+    const result: Results<Result> = await searchWithHighlight(db, {
       limit: 1000,
+      term,
       properties: ['title'],
       where: {
         ...((tags || filter) && ids_to_search_amongst
@@ -206,6 +234,7 @@ export const use_search = () => {
               },
             }
           : {}),
+        ...(sites_variants?.length ? { sites_variants } : {}),
       },
       sortBy: {
         property:
@@ -216,26 +245,205 @@ export const use_search = () => {
             : 'created_at',
         order: order == '1' ? 'ASC' : 'DESC',
       },
-      threshold: 0,
+      threshold: term ? 0 : undefined,
+      tolerance: term ? 1 : undefined,
     })
 
-    set_result(results)
-    if (results.count == 0) {
-      clear_hints()
-    } else {
-      get_hints()
-    }
+    set_result(result)
   }
 
   useUpdateEffect(() => {
     if (db !== undefined && search_string.length) {
-      query_db()
+      get_hints()
     }
   }, [search_string])
 
-  const get_hints = () => {
-    // TODO
-    // set_hints([{ type: 'new', text: 'todo' }])
+  const get_hints = async () => {
+    if (!db) throw new Error('[get_hints] Db should be there.')
+
+    const tags = query_params.get('t')
+    const filter = query_params.get('f')
+    const gte = query_params.get('gte')
+    const lte = query_params.get('lte')
+    const order = query_params.get('o')
+    const sortby = query_params.get('s')
+
+    const words = search_string.split(' ')
+    const last_word = words[words.length - 1]
+
+    if (last_word.substring(0, 5) == 'site:') {
+      const term = last_word.substring(5)
+      const result: Results<Result> = await search(db, {
+        limit: 100000,
+        term,
+        properties: ['sites'],
+        where: {
+          ...((tags || filter) && ids_to_search_amongst
+            ? { id: ids_to_search_amongst }
+            : {}),
+          ...(gte && lte
+            ? {
+                created_at: {
+                  between: [
+                    new Date(
+                      parseInt(gte.toString().substring(0, 4)),
+                      parseInt(gte.toString().substring(4, 6)) - 1,
+                    ).getTime() / 1000,
+                    new Date(
+                      parseInt(lte.toString().substring(0, 4)),
+                      parseInt(lte.toString().substring(4, 6)),
+                    ).getTime() / 1000,
+                  ],
+                },
+              }
+            : {}),
+        },
+        sortBy: {
+          property:
+            sortby == '1'
+              ? 'updated_at'
+              : sortby == '2'
+              ? 'visited_at'
+              : 'created_at',
+          order: order == '1' ? 'ASC' : 'DESC',
+        },
+        threshold: 0,
+      })
+
+      const sites: { site: string; occurences: number }[] = []
+
+      result.hits.forEach(({ document }) => {
+        document.sites.forEach((site) => {
+          if (site.includes(term)) {
+            const index = sites.findIndex((s) => s.site == site)
+            if (index == -1) {
+              sites.push({ site, occurences: 1 })
+            } else {
+              sites[index] = {
+                ...sites[index],
+                occurences: sites[index].occurences + 1,
+              }
+            }
+          }
+        })
+      })
+
+      sites.sort((a, b) => b.occurences - a.occurences)
+
+      const hints: Hint[] = sites.map((site) => ({
+        term,
+        completion: site.site.split(term)[1],
+        type: 'new',
+        yields: site.occurences,
+      }))
+
+      const hints_no_dupes: Hint[] = []
+
+      hints.forEach((hint) => {
+        const hint_index = hints_no_dupes.findIndex(
+          (h) => h.completion == hint.completion,
+        )
+
+        if (hint_index == -1) {
+          hints_no_dupes.push(hint)
+        } else {
+          hints_no_dupes[hint_index] = {
+            ...hints_no_dupes[hint_index],
+            yields: hints_no_dupes[hint_index].yields! + hint.yields!,
+          }
+        }
+      })
+
+      const hints_no_empty_completion = hints_no_dupes.filter(
+        (hint) => hint.completion,
+      )
+
+      set_hints(
+        hints_no_empty_completion.length
+          ? hints_no_empty_completion
+          : undefined,
+      )
+    } else if (last_word.length) {
+      const sites_variants = search_string
+        .match(/(?<=site:)(.*?)($|\s)/g)
+        ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
+
+      const term = search_string.replace(/(?=site:)(.*?)($|\s)/g, '').trim()
+
+      const result: Results<Result> = await search(db, {
+        limit: 1000,
+        term,
+        properties: ['title'],
+        where: {
+          ...((tags || filter) && ids_to_search_amongst
+            ? { id: ids_to_search_amongst }
+            : {}),
+          ...(gte && lte
+            ? {
+                created_at: {
+                  between: [
+                    new Date(
+                      parseInt(gte.toString().substring(0, 4)),
+                      parseInt(gte.toString().substring(4, 6)) - 1,
+                    ).getTime() / 1000,
+                    new Date(
+                      parseInt(lte.toString().substring(0, 4)),
+                      parseInt(lte.toString().substring(4, 6)),
+                    ).getTime() / 1000,
+                  ],
+                },
+              }
+            : {}),
+          ...(sites_variants?.length ? { sites_variants } : {}),
+        },
+        sortBy: {
+          property:
+            sortby == '1'
+              ? 'updated_at'
+              : sortby == '2'
+              ? 'visited_at'
+              : 'created_at',
+          order: order == '1' ? 'ASC' : 'DESC',
+        },
+        threshold: 0,
+      })
+
+      let words_hashmap: { [word: string]: number } = {}
+
+      result.hits.forEach(({ document }) => {
+        const word = document.title
+          .toLowerCase()
+          .split(last_word)[1]
+          ?.replace(/[^a-zA-Z ]/g, ' ')
+          .split(' ')[0]
+
+        if (word) {
+          if (words_hashmap[word]) {
+            words_hashmap[word] = words_hashmap[word] + 1
+          } else {
+            words_hashmap = { ...words_hashmap, [word]: 1 }
+          }
+        }
+      })
+
+      const hints: Hint[] = []
+
+      Object.entries(words_hashmap).map(([k, v]) => {
+        if (!words.includes(last_word + k)) {
+          hints.push({ completion: k, term: last_word, type: 'new', yields: v })
+        }
+      })
+
+      hints.sort((a, b) => b.yields! - a.yields!)
+
+      const hints_with_no_yields: Hint[] = hints.map((hint) => ({
+        completion: hint.completion,
+        term: hint.term,
+        type: hint.type,
+      }))
+
+      set_hints(hints.length ? hints_with_no_yields.slice(0, 10) : undefined)
+    }
   }
 
   const clear_hints = () => {
@@ -246,8 +454,7 @@ export const use_search = () => {
     set_search_string('')
   }
 
-  const reset_field = () => {
-    clear_search_string()
+  const clear_result = () => {
     set_result(undefined)
   }
 
@@ -283,6 +490,12 @@ export const use_search = () => {
       }
     }
   }
+
+  useUpdateEffect(() => {
+    if (result) {
+      get_bookmarks({})
+    }
+  }, [result])
 
   const delete_searchable_bookmark = async (params: {
     bookmark_id: number
@@ -344,6 +557,7 @@ export const use_search = () => {
     clear_hints,
     get_hints,
     init,
+    query_db,
     result,
     is_initializing,
     db,
@@ -354,6 +568,6 @@ export const use_search = () => {
     set_selected_tags,
     indexed_bookmarks_percentage,
     clear_search_string,
-    reset_field,
+    clear_result,
   }
 }

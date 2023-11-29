@@ -15,7 +15,6 @@ export const Primary = () => (
         hints={undefined}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
-        on_click_clear_search_string={() => {}}
         is_loading={false}
         on_change={() => {}}
         on_focus={() => {}}
@@ -30,7 +29,6 @@ export const Primary = () => (
         hints={undefined}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
-        on_click_clear_search_string={() => {}}
         is_loading={false}
         on_change={() => {}}
         on_focus={() => {}}
@@ -39,13 +37,43 @@ export const Primary = () => (
         on_clear_click={() => {}}
         results_count={2137}
       />
+      <StorybookSpacer />
+      <LibrarySearch
+        placeholder={'Search in all bookmarks'}
+        search_string={'lorem site:lorem.com ipsum site:ipsum.com'}
+        hints={undefined}
+        on_click_hint={() => {}}
+        on_click_recent_hint_remove={() => {}}
+        is_loading={false}
+        on_change={() => {}}
+        on_focus={() => {}}
+        on_submit={() => {}}
+        on_blur={() => {}}
+        on_clear_click={() => {}}
+        results_count={2137}
+      />
+      <StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={'lorem ipsum'}
         hints={undefined}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
-        on_click_clear_search_string={() => {}}
+        is_loading={false}
+        on_change={() => {}}
+        on_focus={() => {}}
+        on_submit={() => {}}
+        on_blur={() => {}}
+        on_clear_click={() => {}}
+        results_count={0}
+      />
+      <StorybookSpacer />
+      <LibrarySearch
+        placeholder={'Search in all bookmarks'}
+        search_string={'lorem site:lorem.com ipsum site:ipsum.com'}
+        hints={undefined}
+        on_click_hint={() => {}}
+        on_click_recent_hint_remove={() => {}}
         is_loading={false}
         on_change={() => {}}
         on_focus={() => {}}
@@ -61,7 +89,6 @@ export const Primary = () => (
         hints={undefined}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
-        on_click_clear_search_string={() => {}}
         is_loading={false}
         on_change={() => {}}
         on_focus={() => {}}
@@ -76,7 +103,6 @@ export const Primary = () => (
         hints={undefined}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
-        on_click_clear_search_string={() => {}}
         is_loading={true}
         on_change={() => {}}
         on_focus={() => {}}
@@ -87,15 +113,23 @@ export const Primary = () => (
       <StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
-        search_string={'hania'}
+        search_string={'mid'}
         hints={[
-          { text: 'hania rani', type: 'recent' },
-          { text: 'hania rani live', type: 'new' },
-          { text: 'hania rani leaving', type: 'new' },
+          {
+            term: 'mid',
+            completion: 'dle',
+            type: 'recent',
+            yields: 100,
+          },
+          {
+            term: 'mid',
+            completion: 'point',
+            type: 'new',
+            yields: 51,
+          },
         ]}
         on_click_hint={() => {}}
         on_click_recent_hint_remove={() => {}}
-        on_click_clear_search_string={() => {}}
         is_loading={false}
         on_change={() => {}}
         on_focus={() => {}}

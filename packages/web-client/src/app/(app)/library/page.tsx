@@ -56,10 +56,10 @@ const Page: React.FC = () => {
   const [show_bookmarks_skeleton, set_show_bookmarks_skeleton] = useState(true)
   const bookmarks_slice_state = use_library_selector((state) => state.bookmarks)
   const search = use_search()
-  const { get_bookmarks } = use_bookmarks({
+  const bookmarks = use_bookmarks({
     is_in_search_mode: !!search.search_string,
   })
-  const { months, is_fetching_counts_data, tags, selected_tags } = use_counts()
+  const counts = use_counts()
   const filter_view_options = use_filter_view_options()
   const sortby_view_options = use_sortby_view_options()
   const order_view_options = use_order_view_options()
@@ -106,7 +106,7 @@ const Page: React.FC = () => {
     if (search.db && search.is_search_focused) {
       search.set_current_filter(filter_view_options.current_filter)
       search.set_selected_tags(
-        selected_tags
+        counts.selected_tags
           .filter((id) => {
             if (
               !bookmarks_slice_state.bookmarks ||
@@ -132,8 +132,6 @@ const Page: React.FC = () => {
   }, [search.db])
 
   useEffect(() => {
-    // Automatic scroll restoration works great when
-    // reloading, but not at all when navigating back/forward.
     window.history.scrollRestoration = 'manual'
 
     return () => {
@@ -151,7 +149,7 @@ const Page: React.FC = () => {
           ? 'Archived'
           : 'All bookmarks'
       }
-      slot_search={
+      slot_desktop_search={
         <LibrarySearch
           search_string={search.search_string}
           is_loading={search.is_initializing}
@@ -170,9 +168,15 @@ const Page: React.FC = () => {
               : 'Search here...'
           }
           hints={search.hints}
-          on_click_hint={() => {}}
+          on_click_hint={(i) => {
+            if (search.hints) {
+              const search_string =
+                search.search_string + search.hints[i].completion
+              search.set_search_string(search_string)
+              search.query_db({ search_string })
+            }
+          }}
           on_click_recent_hint_remove={() => {}}
-          on_click_clear_search_string={() => {}}
           on_focus={async () => {
             search.set_is_search_focused(true)
             if (!search.is_initializing) {
@@ -181,7 +185,7 @@ const Page: React.FC = () => {
               } else {
                 search.set_current_filter(filter_view_options.current_filter)
                 search.set_selected_tags(
-                  selected_tags
+                  counts.selected_tags
                     .filter((id) => {
                       if (
                         !bookmarks_slice_state.bookmarks ||
@@ -210,16 +214,17 @@ const Page: React.FC = () => {
           on_change={(value) => {
             if (search.is_initializing) return
             search.set_search_string(value)
+            if (value.endsWith(' ')) {
+              search.clear_hints()
+            }
+            search.clear_result()
             if (!value) {
-              get_bookmarks({})
+              search.clear_hints()
+              bookmarks.get_bookmarks({})
             }
           }}
           on_submit={() => {
-            if (!search.result?.count) return
-
-            if (search.result?.count) {
-              search.get_bookmarks({})
-            }
+            search.query_db({ search_string: search.search_string })
           }}
           on_blur={() => {
             search.set_is_search_focused(false)
@@ -229,8 +234,9 @@ const Page: React.FC = () => {
             search.search_string ? search.result?.count : undefined
           }
           on_clear_click={() => {
-            search.reset_field()
-            get_bookmarks({})
+            search.clear_result()
+            search.clear_search_string()
+            bookmarks.get_bookmarks({})
           }}
         />
       }
@@ -514,7 +520,7 @@ const Page: React.FC = () => {
                             Sortby.CreatedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          is_fetching_counts_data
+                          counts.is_fetching_counts_data
                         )
                           return
                         sortby_view_options.set_sortby_query_param(
@@ -533,7 +539,7 @@ const Page: React.FC = () => {
                             Sortby.UpdatedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          is_fetching_counts_data
+                          counts.is_fetching_counts_data
                         )
                           return
                         sortby_view_options.set_sortby_query_param(
@@ -552,7 +558,7 @@ const Page: React.FC = () => {
                             Sortby.VisitedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          is_fetching_counts_data
+                          counts.is_fetching_counts_data
                         )
                           return
                         sortby_view_options.set_sortby_query_param(
@@ -596,7 +602,7 @@ const Page: React.FC = () => {
                           order_view_options.current_order == Order.Desc ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          is_fetching_counts_data
+                          counts.is_fetching_counts_data
                         )
                           return
                         order_view_options.set_order_query_param(Order.Desc)
@@ -613,7 +619,7 @@ const Page: React.FC = () => {
                           order_view_options.current_order == Order.Asc ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          is_fetching_counts_data
+                          counts.is_fetching_counts_data
                         )
                           return
                         order_view_options.set_order_query_param(Order.Asc)
@@ -633,13 +639,13 @@ const Page: React.FC = () => {
                   pointerEvents:
                     bookmarks_slice_state.is_fetching_first_bookmarks ||
                     bookmarks_slice_state.is_fetching_more_bookmarks ||
-                    is_fetching_counts_data
+                    counts.is_fetching_counts_data
                       ? 'none'
                       : 'all',
                 }}
               >
                 <CustomRange
-                  counts={months}
+                  counts={counts.months}
                   on_yyyymm_change={date_view_options.set_gte_lte_query_params}
                   clear_date_range={
                     date_view_options.clear_gte_lte_query_params
@@ -653,7 +659,7 @@ const Page: React.FC = () => {
                   selected_tags={query_params.get('t') || undefined}
                   has_results={
                     bookmarks_slice_state.bookmarks != undefined &&
-                    !is_fetching_counts_data
+                    !counts.is_fetching_counts_data
                       ? bookmarks_slice_state.bookmarks.length > 0
                       : undefined
                   }
@@ -678,17 +684,17 @@ const Page: React.FC = () => {
                     pointerEvents:
                       bookmarks_slice_state.is_fetching_first_bookmarks ||
                       bookmarks_slice_state.is_fetching_more_bookmarks ||
-                      is_fetching_counts_data
+                      counts.is_fetching_counts_data
                         ? 'none'
                         : undefined,
                   }}
                 >
                   {(bookmarks_slice_state.is_fetching_first_bookmarks
-                    ? selected_tags.length > 0
+                    ? counts.selected_tags.length > 0
                     : tag_view_options.actual_selected_tags.length > 0) && (
                     <SelectedTags
                       selected_tags={(bookmarks_slice_state.is_fetching_first_bookmarks
-                        ? selected_tags
+                        ? counts.selected_tags
                         : tag_view_options.actual_selected_tags
                       )
                         .filter((id) => {
@@ -721,11 +727,11 @@ const Page: React.FC = () => {
                   )}
                   <Tags
                     tags={
-                      tags
+                      counts.tags
                         ? Object.fromEntries(
-                            Object.entries(tags).filter((tag) =>
+                            Object.entries(counts.tags).filter((tag) =>
                               bookmarks_slice_state.is_fetching_first_bookmarks
-                                ? !selected_tags.includes(tag[1].id)
+                                ? !counts.selected_tags.includes(tag[1].id)
                                 : !tag_view_options.actual_selected_tags.includes(
                                     tag[1].id,
                                   ),
@@ -763,11 +769,11 @@ const Page: React.FC = () => {
         if (search.search_string) {
           search.get_bookmarks({ should_get_next_page: true })
         } else {
-          get_bookmarks({ should_get_next_page: true })
+          bookmarks.get_bookmarks({ should_get_next_page: true })
         }
       }}
       slot_bookmarks={
-        bookmarks_slice_state.bookmarks && !show_bookmarks_skeleton
+        bookmarks_slice_state.bookmarks
           ? bookmarks_slice_state.bookmarks.map((bookmark, index) => (
               <Bookmark
                 key={bookmark.id}
@@ -793,7 +799,7 @@ const Page: React.FC = () => {
                 }))}
                 number_of_selected_tags={
                   bookmarks_slice_state.is_fetching_first_bookmarks
-                    ? selected_tags.length
+                    ? counts.selected_tags.length
                     : tag_view_options.actual_selected_tags.length
                 }
                 current_filter={filter_view_options.current_filter}
@@ -802,7 +808,7 @@ const Page: React.FC = () => {
                     ? bookmark.tags.map((tag) => {
                         const isSelected =
                           bookmarks_slice_state.is_fetching_first_bookmarks
-                            ? selected_tags.find((t) => t == tag.id) !=
+                            ? counts.selected_tags.find((t) => t == tag.id) !=
                               undefined
                             : tag_view_options.actual_selected_tags.find(
                                 (t) => t == tag.id,
@@ -813,8 +819,8 @@ const Page: React.FC = () => {
                           isSelected,
                           id: tag.id,
                           yields:
-                            !isSelected && tags && tags[tag.name]
-                              ? tags[tag.name].yields
+                            !isSelected && counts.tags && counts.tags[tag.name]
+                              ? counts.tags[tag.name].yields
                               : undefined,
                         }
                       })

@@ -117,8 +117,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                       [styles['bookmark__title__inner__text--unread']]:
                         props.is_unread,
                     })}
-                    role="button"
-                    onClick={() => {}}
                   >
                     {props.title}
                   </div>

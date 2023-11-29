@@ -13,20 +13,20 @@
   row-gap: var(--distance-8px);
   align-items: center;
 }
-.firstChar {
+.first-char {
   position: relative;
   display: flex;
   justify-content: center;
   font-size: var(--font-size-14px);
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-  color: var(--Tags-firstChar-foregrouond);
+  color: var(--Tags-first-char-foregrouond);
   text-transform: uppercase;
   width: var(--distance-22px);
   margin-right: var(--distance-2px);
   &::before {
     content: '';
-    background: var(--Tags-firstChar-background);
+    background: var(--Tags-first-char-background);
     position: absolute;
     width: var(--distance-24px);
     height: var(--distance-24px);
