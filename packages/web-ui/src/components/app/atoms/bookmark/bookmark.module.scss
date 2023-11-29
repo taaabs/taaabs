@@ -67,10 +67,6 @@
         font-size: var(--font-size-1-9rem);
         margin-bottom: var(--distance-0-8rem);
         overflow-wrap: anywhere;
-        cursor: pointer;
-        @include hover {
-          @include text-decoration-underline;
-        }
         &--unread {
           font-weight: var(--font-weight-inter-semi-bold);
         }

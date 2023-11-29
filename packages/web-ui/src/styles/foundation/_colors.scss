@@ -1,7 +1,7 @@
 @mixin colors {
   --white: #fff;
   --red: red;
-  --yellow: #FFE500;
+  --yellow: #ffe500;
 
   --neutral25: #fbfbfb;
   --neutral50: #f9f9f9;
@@ -43,6 +43,7 @@
   --red950: #450a0a;
 
   --blue50: #eff6ff;
+  --blue50-transparent: rgba(239, 246, 255, 0.8);
   --blue100: #dbeafe;
   --blue200: #bfdbfe;
   --blue300: #93c5fd;

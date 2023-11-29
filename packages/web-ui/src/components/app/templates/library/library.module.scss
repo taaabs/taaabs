@@ -122,8 +122,14 @@
         background: var(--header-background);
       }
     }
-    &__search {
+    &__desktop-search {
+      position: sticky;
+      top: var(--header-desktop-height);
+      z-index: 2;
       display: flex;
+      @include to992 {
+        display: none;
+      }
     }
     &__skeleton {
       display: flex;

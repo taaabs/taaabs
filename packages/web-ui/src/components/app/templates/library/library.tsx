@@ -17,7 +17,7 @@ export namespace Library {
     slot_sidebar: React.ReactNode
     slot_aside: React.ReactNode
     mobile_title_bar?: string
-    slot_search: React.ReactNode
+    slot_desktop_search: React.ReactNode
     slot_bookmarks: React.ReactNode
     is_updating_bookmarks?: boolean
     is_fetching_first_bookmarks: boolean
@@ -268,8 +268,8 @@ export const Library: React.FC<Library.Props> = (props) => {
             }}
           >
             <div>
-              <div className={styles['main__inner__search']}>
-                {props.slot_search}
+              <div className={styles['main__inner__desktop-search']}>
+                {props.slot_desktop_search}
               </div>
               <div
                 className={cn([
