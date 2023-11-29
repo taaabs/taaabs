@@ -24,12 +24,11 @@ import {
   afterInsert as highlightAfterInsert,
   searchWithHighlight,
 } from '@orama/plugin-match-highlight'
-import { system_values } from '@shared/constants/system-values'
 
 type Hint = {
   type: 'new' | 'recent'
   term: string
-  completion: string
+  completion?: string
   yields?: number
 }
 
@@ -41,6 +40,9 @@ const schema = {
   created_at: 'number',
   updated_at: 'number',
   visited_at: 'number',
+  is_archived: 'boolean',
+  is_unread: 'boolean',
+  stars: 'number',
 } as const
 
 type Result = TypedDocument<Orama<typeof schema>>
@@ -70,62 +72,9 @@ export const use_search = () => {
 
     set_ids_to_search_amongst(
       searchable_bookmarks
-        .filter((bookmark) => {
-          let should_keep = false
-          if (selected_tags.every((tag) => bookmark.tags.includes(tag))) {
-            if (current_filter == LibraryFilter.All) {
-              if (!bookmark.is_archived) {
-                should_keep = true
-              }
-            } else if (current_filter == LibraryFilter.Archived) {
-              if (bookmark.is_archived) {
-                should_keep = true
-              }
-            } else if (current_filter == LibraryFilter.Unread) {
-              if (bookmark.is_unread && !bookmark.is_archived) {
-                should_keep = true
-              }
-            } else if (current_filter == LibraryFilter.OneStar) {
-              if (bookmark.stars >= 1 && !bookmark.is_archived) {
-                should_keep = true
-              }
-            } else if (current_filter == LibraryFilter.TwoStars) {
-              if (bookmark.stars >= 2 && !bookmark.is_archived) {
-                should_keep = true
-              }
-            } else if (current_filter == LibraryFilter.ThreeStars) {
-              should_keep = true
-              if (bookmark.stars == 3 && !bookmark.is_archived) {
-                should_keep = true
-              }
-            } else if (current_filter == LibraryFilter.OneStarUnread) {
-              if (
-                bookmark.stars >= 1 &&
-                bookmark.is_unread &&
-                !bookmark.is_archived
-              ) {
-                should_keep = true
-              }
-            } else if (current_filter == LibraryFilter.TwoStarsUnread) {
-              if (
-                bookmark.stars >= 2 &&
-                bookmark.is_unread &&
-                !bookmark.is_archived
-              ) {
-                should_keep = true
-              }
-            } else if (current_filter == LibraryFilter.ThreeStarsUnread) {
-              if (
-                bookmark.stars == 3 &&
-                bookmark.is_unread &&
-                !bookmark.is_archived
-              ) {
-                should_keep = true
-              }
-            }
-          }
-          return should_keep
-        })
+        .filter((bookmark) =>
+          selected_tags.every((tag) => bookmark.tags.includes(tag)),
+        )
         .map((bookmark) => bookmark.id.toString()),
     )
   }, [current_filter, selected_tags, searchable_bookmarks])
@@ -142,6 +91,8 @@ export const use_search = () => {
     const { bookmarks } = await get_searchable_bookmarks.invoke({})
 
     set_searchable_bookmarks(bookmarks)
+
+    const before = Date.now()
 
     const db = await create({
       schema,
@@ -176,6 +127,9 @@ export const use_search = () => {
             created_at: bookmark.created_at,
             updated_at: bookmark.updated_at,
             visited_at: bookmark.visited_at,
+            is_archived: bookmark.is_archived,
+            is_unread: bookmark.is_unread,
+            stars: bookmark.stars,
           }
         }),
         chunkSize,
@@ -186,6 +140,8 @@ export const use_search = () => {
       )
     }
 
+    alert(Date.now() - before)
+
     set_db(db)
     set_is_initializing(false)
   }
@@ -194,7 +150,6 @@ export const use_search = () => {
     if (!db) throw new Error('[query_db] Db should be there.')
 
     const tags = query_params.get('t')
-    const filter = query_params.get('f')
     const gte = query_params.get('gte')
     const lte = query_params.get('lte')
     const order = query_params.get('o')
@@ -215,9 +170,29 @@ export const use_search = () => {
       term,
       properties: ['title'],
       where: {
-        ...((tags || filter) && ids_to_search_amongst
-          ? { id: ids_to_search_amongst }
+        ...(tags && ids_to_search_amongst ? { id: ids_to_search_amongst } : {}),
+        is_archived: current_filter != LibraryFilter.Archived ? false : true,
+        ...(current_filter == LibraryFilter.Unread ||
+        current_filter == LibraryFilter.OneStarUnread ||
+        current_filter == LibraryFilter.TwoStarsUnread ||
+        current_filter == LibraryFilter.ThreeStarsUnread
+          ? {
+              is_unread: true,
+            }
           : {}),
+        stars: {
+          gte:
+            current_filter == LibraryFilter.OneStar ||
+            current_filter == LibraryFilter.OneStarUnread
+              ? 1
+              : current_filter == LibraryFilter.TwoStars ||
+                current_filter == LibraryFilter.TwoStarsUnread
+              ? 2
+              : current_filter == LibraryFilter.ThreeStars ||
+                current_filter == LibraryFilter.ThreeStarsUnread
+              ? 3
+              : 0,
+        },
         ...(gte && lte
           ? {
               created_at: {
@@ -262,7 +237,6 @@ export const use_search = () => {
     if (!db) throw new Error('[get_hints] Db should be there.')
 
     const tags = query_params.get('t')
-    const filter = query_params.get('f')
     const gte = query_params.get('gte')
     const lte = query_params.get('lte')
     const order = query_params.get('o')
@@ -278,9 +252,31 @@ export const use_search = () => {
         term,
         properties: ['sites'],
         where: {
-          ...((tags || filter) && ids_to_search_amongst
+          ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
             : {}),
+          is_archived: current_filter != LibraryFilter.Archived ? false : true,
+          ...(current_filter == LibraryFilter.Unread ||
+          current_filter == LibraryFilter.OneStarUnread ||
+          current_filter == LibraryFilter.TwoStarsUnread ||
+          current_filter == LibraryFilter.ThreeStarsUnread
+            ? {
+                is_unread: true,
+              }
+            : {}),
+          stars: {
+            gte:
+              current_filter == LibraryFilter.OneStar ||
+              current_filter == LibraryFilter.OneStarUnread
+                ? 1
+                : current_filter == LibraryFilter.TwoStars ||
+                  current_filter == LibraryFilter.TwoStarsUnread
+                ? 2
+                : current_filter == LibraryFilter.ThreeStars ||
+                  current_filter == LibraryFilter.ThreeStarsUnread
+                ? 3
+                : 0,
+          },
           ...(gte && lte
             ? {
                 created_at: {
@@ -375,9 +371,28 @@ export const use_search = () => {
         term,
         properties: ['title'],
         where: {
-          ...((tags || filter) && ids_to_search_amongst
+          ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
             : {}),
+          is_archived: current_filter != LibraryFilter.Archived ? false : true,
+          is_unread:
+            current_filter == LibraryFilter.Unread ||
+            current_filter == LibraryFilter.OneStarUnread ||
+            current_filter == LibraryFilter.TwoStarsUnread ||
+            current_filter == LibraryFilter.ThreeStarsUnread,
+          stars: {
+            gte:
+              current_filter == LibraryFilter.OneStar ||
+              current_filter == LibraryFilter.OneStarUnread
+                ? 1
+                : current_filter == LibraryFilter.TwoStars ||
+                  current_filter == LibraryFilter.TwoStarsUnread
+                ? 2
+                : current_filter == LibraryFilter.ThreeStars ||
+                  current_filter == LibraryFilter.ThreeStarsUnread
+                ? 3
+                : 0,
+          },
           ...(gte && lte
             ? {
                 created_at: {
@@ -443,6 +458,12 @@ export const use_search = () => {
       }))
 
       set_hints(hints.length ? hints_with_no_yields.slice(0, 10) : undefined)
+    } else {
+      set_hints([
+        { term: 'recent entry 1', type: 'recent' },
+        { term: 'recent entry 2', type: 'recent' },
+        { term: 'recent entry 3', type: 'recent' },
+      ])
     }
   }
 

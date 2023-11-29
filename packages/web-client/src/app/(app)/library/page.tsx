@@ -174,6 +174,7 @@ const Page: React.FC = () => {
                 search.search_string + search.hints[i].completion
               search.set_search_string(search_string)
               search.query_db({ search_string })
+              search.clear_hints()
             }
           }}
           on_click_recent_hint_remove={() => {}}

@@ -10,7 +10,7 @@ export namespace LibrarySearch {
   type Hint = {
     type: 'new' | 'recent'
     term: string
-    completion: string
+    completion?: string
     yields?: number
   }
   export type Props = {
@@ -198,7 +198,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                   </div>
                   <div className={styles.hints__inner__item__text}>
                     <span>{hint.term}</span>
-                    <span>{hint.completion}</span>
+                    {hint.completion && <span>{hint.completion}</span>}
                     {hint.yields && <span>{hint.yields}</span>}
                   </div>
                   {hint.type == 'recent' && (
