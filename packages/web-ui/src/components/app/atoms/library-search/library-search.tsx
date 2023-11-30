@@ -5,6 +5,7 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import { useRef, useState } from 'react'
 import cn from 'classnames'
 import OutsideClickHandler from 'react-outside-click-handler'
+import { system_values } from '@shared/constants/system-values'
 
 export namespace LibrarySearch {
   type Hint = {
@@ -152,7 +153,12 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                     ]]: props.results_count == 0,
                   })}
                 >
-                  {props.results_count == 0 ? 'no' : props.results_count}{' '}
+                  {props.results_count == 0
+                    ? 'no'
+                    : props.results_count ==
+                      system_values.max_library_search_results
+                    ? `${system_values.max_library_search_results}+`
+                    : props.results_count}{' '}
                   {props.results_count == 1 ? 'result' : 'results'}
                 </div>
               )}

@@ -1,5 +1,6 @@
 declare const styles: {
   readonly container: string
+  readonly 'container--search-style': string
   readonly bookmark: string
   readonly bookmark__title: string
   readonly bookmark__title__inner: string
