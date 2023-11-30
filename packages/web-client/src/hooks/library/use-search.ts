@@ -5,11 +5,11 @@ import {
   create,
   insertMultiple,
   remove,
+  insert,
   search,
 } from '@orama/orama'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
@@ -24,6 +24,7 @@ import {
   afterInsert as highlightAfterInsert,
   searchWithHighlight,
 } from '@orama/plugin-match-highlight'
+import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -35,6 +36,7 @@ type Hint = {
 const schema = {
   id: 'string',
   title: 'string',
+  tag_ids: 'string[]',
   sites: 'string[]',
   sites_variants: 'string[]',
   created_at: 'number',
@@ -66,6 +68,7 @@ export const use_search = () => {
   const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =
     useState<number | undefined>()
   const [result, set_result] = useState<Results<Result> | undefined>()
+  const [count, set_count] = useState<number | undefined>()
 
   useUpdateEffect(() => {
     if (!searchable_bookmarks) return
@@ -92,12 +95,18 @@ export const use_search = () => {
 
     set_searchable_bookmarks(bookmarks)
 
-    const before = Date.now()
-
     const db = await create({
       schema,
       sort: {
-        unsortableProperties: ['id', 'title', 'sites', 'sites_variants'],
+        unsortableProperties: [
+          'id',
+          'title',
+          'sites',
+          'sites_variants',
+          'is_archived',
+          'is_unread',
+          'stars',
+        ],
       },
       plugins: [
         {
@@ -116,10 +125,9 @@ export const use_search = () => {
         chunk.map((bookmark) => {
           return {
             id: bookmark.id.toString(),
-            title: `${bookmark.title} (${bookmark.tags.join(
+            title: `${bookmark.title} ${bookmark.tags.join(
               ' ',
-            )}) (${bookmark.sites.join(' ')})`,
-
+            )} ${bookmark.sites.join(' ')}`,
             sites: bookmark.sites,
             sites_variants: bookmark.sites
               .map((site) => get_site_variants_for_search(site))
@@ -139,8 +147,6 @@ export const use_search = () => {
         Math.floor((indexed_count / bookmarks.length) * 100),
       )
     }
-
-    alert(Date.now() - before)
 
     set_db(db)
     set_is_initializing(false)
@@ -165,66 +171,179 @@ export const use_search = () => {
       .replace(/(?=site:)(.*?)($|\s)/g, '')
       .trim()
 
-    const result: Results<Result> = await searchWithHighlight(db, {
-      limit: 1000,
-      term,
-      properties: ['title'],
-      where: {
-        ...(tags && ids_to_search_amongst ? { id: ids_to_search_amongst } : {}),
-        is_archived: current_filter != LibraryFilter.Archived ? false : true,
-        ...(current_filter == LibraryFilter.Unread ||
-        current_filter == LibraryFilter.OneStarUnread ||
-        current_filter == LibraryFilter.TwoStarsUnread ||
-        current_filter == LibraryFilter.ThreeStarsUnread
-          ? {
-              is_unread: true,
-            }
-          : {}),
-        stars: {
-          gte:
-            current_filter == LibraryFilter.OneStar ||
-            current_filter == LibraryFilter.OneStarUnread
-              ? 1
-              : current_filter == LibraryFilter.TwoStars ||
-                current_filter == LibraryFilter.TwoStarsUnread
-              ? 2
-              : current_filter == LibraryFilter.ThreeStars ||
-                current_filter == LibraryFilter.ThreeStarsUnread
-              ? 3
-              : 0,
+    const result_without_tolerance: Results<Result> = await searchWithHighlight(
+      db,
+      {
+        limit: 1000000,
+        term,
+        properties: ['title'],
+        where: {
+          ...(tags && ids_to_search_amongst
+            ? { id: ids_to_search_amongst }
+            : {}),
+          is_archived: current_filter != LibraryFilter.Archived ? false : true,
+          ...(current_filter == LibraryFilter.Unread ||
+          current_filter == LibraryFilter.OneStarUnread ||
+          current_filter == LibraryFilter.TwoStarsUnread ||
+          current_filter == LibraryFilter.ThreeStarsUnread
+            ? {
+                is_unread: true,
+              }
+            : {}),
+          stars: {
+            gte:
+              current_filter == LibraryFilter.OneStar ||
+              current_filter == LibraryFilter.OneStarUnread
+                ? 1
+                : current_filter == LibraryFilter.TwoStars ||
+                  current_filter == LibraryFilter.TwoStarsUnread
+                ? 2
+                : current_filter == LibraryFilter.ThreeStars ||
+                  current_filter == LibraryFilter.ThreeStarsUnread
+                ? 3
+                : 0,
+          },
+          ...(gte && lte
+            ? {
+                created_at: {
+                  between: [
+                    new Date(
+                      parseInt(gte.toString().substring(0, 4)),
+                      parseInt(gte.toString().substring(4, 6)) - 1,
+                    ).getTime() / 1000,
+                    new Date(
+                      parseInt(lte.toString().substring(0, 4)),
+                      parseInt(lte.toString().substring(4, 6)),
+                    ).getTime() /
+                      1000 -
+                      1,
+                  ],
+                },
+              }
+            : {}),
+          ...(sites_variants?.length ? { sites_variants } : {}),
         },
-        ...(gte && lte
-          ? {
-              created_at: {
-                between: [
-                  new Date(
-                    parseInt(gte.toString().substring(0, 4)),
-                    parseInt(gte.toString().substring(4, 6)) - 1,
-                  ).getTime() / 1000,
-                  new Date(
-                    parseInt(lte.toString().substring(0, 4)),
-                    parseInt(lte.toString().substring(4, 6)),
-                  ).getTime() / 1000,
-                ],
-              },
-            }
-          : {}),
-        ...(sites_variants?.length ? { sites_variants } : {}),
+        sortBy: {
+          property:
+            sortby == '1'
+              ? 'updated_at'
+              : sortby == '2'
+              ? 'visited_at'
+              : 'created_at',
+          order: order == '1' ? 'ASC' : 'DESC',
+        },
+        threshold: term ? 0 : undefined,
       },
-      sortBy: {
-        property:
-          sortby == '1'
-            ? 'updated_at'
-            : sortby == '2'
-            ? 'visited_at'
-            : 'created_at',
-        order: order == '1' ? 'ASC' : 'DESC',
+    )
+
+    const result_with_tolerance: Results<Result> = await searchWithHighlight(
+      db,
+      {
+        limit: 1000000,
+        term,
+        properties: ['title'],
+        where: {
+          ...(tags && ids_to_search_amongst
+            ? { id: ids_to_search_amongst }
+            : {}),
+          is_archived: current_filter != LibraryFilter.Archived ? false : true,
+          ...(current_filter == LibraryFilter.Unread ||
+          current_filter == LibraryFilter.OneStarUnread ||
+          current_filter == LibraryFilter.TwoStarsUnread ||
+          current_filter == LibraryFilter.ThreeStarsUnread
+            ? {
+                is_unread: true,
+              }
+            : {}),
+          stars: {
+            gte:
+              current_filter == LibraryFilter.OneStar ||
+              current_filter == LibraryFilter.OneStarUnread
+                ? 1
+                : current_filter == LibraryFilter.TwoStars ||
+                  current_filter == LibraryFilter.TwoStarsUnread
+                ? 2
+                : current_filter == LibraryFilter.ThreeStars ||
+                  current_filter == LibraryFilter.ThreeStarsUnread
+                ? 3
+                : 0,
+          },
+          ...(gte && lte
+            ? {
+                created_at: {
+                  between: [
+                    new Date(
+                      parseInt(gte.toString().substring(0, 4)),
+                      parseInt(gte.toString().substring(4, 6)) - 1,
+                    ).getTime() / 1000,
+                    new Date(
+                      parseInt(lte.toString().substring(0, 4)),
+                      parseInt(lte.toString().substring(4, 6)),
+                    ).getTime() /
+                      1000 -
+                      1,
+                  ],
+                },
+              }
+            : {}),
+          ...(sites_variants?.length ? { sites_variants } : {}),
+        },
+        sortBy: {
+          property:
+            sortby == '1'
+              ? 'updated_at'
+              : sortby == '2'
+              ? 'visited_at'
+              : 'created_at',
+          order: order == '1' ? 'ASC' : 'DESC',
+        },
+        threshold: term ? 0 : undefined,
+        tolerance: term ? 1 : undefined,
       },
-      threshold: term ? 0 : undefined,
-      tolerance: term ? 1 : undefined,
+    )
+
+    const merged_hits = [
+      ...result_without_tolerance.hits,
+      ...result_with_tolerance.hits,
+    ]
+    const merged_hits_no_dupes: any[] = []
+    merged_hits.forEach((hit) => {
+      if (
+        merged_hits_no_dupes.findIndex(
+          (merged_hit) => merged_hit.id == hit.id,
+        ) == -1
+      ) {
+        merged_hits_no_dupes.push(hit)
+      }
     })
 
-    set_result(result)
+    merged_hits_no_dupes.sort((a: any, b: any) => {
+      if (sortby == '1') {
+        if (order == '1') {
+          return a.document.updated_at - b.document.updated_at
+        } else {
+          return b.document.updated_at - a.document.updated_at
+        }
+      } else if (sortby == '2') {
+        if (order == '1') {
+          return a.document.visited_at - b.document.visited_at
+        } else {
+          return b.document.visited_at - a.document.visited_at
+        }
+      } else {
+        if (order == '1') {
+          return a.document.created_at - b.document.created_at
+        } else {
+          return b.document.created_at - a.document.created_at
+        }
+      }
+    })
+
+    set_result({
+      count: merged_hits_no_dupes.length,
+      elapsed: { formatted: '', raw: 0 },
+      hits: merged_hits_no_dupes,
+    })
   }
 
   useUpdateEffect(() => {
@@ -288,7 +407,9 @@ export const use_search = () => {
                     new Date(
                       parseInt(lte.toString().substring(0, 4)),
                       parseInt(lte.toString().substring(4, 6)),
-                    ).getTime() / 1000,
+                    ).getTime() /
+                      1000 -
+                      1,
                   ],
                 },
               }
@@ -404,7 +525,9 @@ export const use_search = () => {
                     new Date(
                       parseInt(lte.toString().substring(0, 4)),
                       parseInt(lte.toString().substring(4, 6)),
-                    ).getTime() / 1000,
+                    ).getTime() /
+                      1000 -
+                      1,
                   ],
                 },
               }
@@ -515,58 +638,53 @@ export const use_search = () => {
   useUpdateEffect(() => {
     if (result) {
       get_bookmarks({})
+      set_count(result.count)
+    } else {
+      set_count(undefined)
     }
   }, [result])
 
   const delete_searchable_bookmark = async (params: {
     bookmark_id: number
   }) => {
-    if (!db || !searchable_bookmarks) return
+    if (!db) return
     await remove(db, params.bookmark_id.toString())
-
-    set_searchable_bookmarks(
-      searchable_bookmarks.filter(
-        (bookmark) => bookmark.id != params.bookmark_id,
-      ),
-    )
   }
 
   const update_searchable_bookmark = async (params: {
     bookmark: UpsertBookmark_Params
-    visited_at?: Date
+    visited_at: Date
+    tag_ids: number[]
   }) => {
-    if (
-      !db ||
-      !searchable_bookmarks ||
-      !params.bookmark.bookmark_id ||
-      !params.bookmark.created_at
-    )
+    if (!db || !params.bookmark.bookmark_id || !params.bookmark.created_at)
       return
 
-    set_searchable_bookmarks([
-      ...searchable_bookmarks.filter(
-        (bookmark) => bookmark.id != params.bookmark.bookmark_id,
-      ),
-      {
-        id: params.bookmark.bookmark_id,
-        title: params.bookmark.title,
-        created_at: Math.round(params.bookmark.created_at.getTime() / 1000),
-        updated_at: Math.round(new Date().getTime() / 1000),
-        visited_at: params.visited_at
-          ? Math.round(params.visited_at.getTime() / 1000)
-          : 0,
-        is_archived: params.bookmark.is_archived,
-        is_unread: params.bookmark.is_unread,
-        sites: params.bookmark.links.map(
-          (link) =>
-            `${get_domain_from_url(link.url)}${
-              link.site_path ? `/${link.site_path}` : ''
-            }`,
-        ),
-        stars: params.bookmark.stars || 0,
-        tags: params.bookmark.tags.map((tag) => tag.name),
-      },
-    ])
+    await remove(db, params.bookmark.bookmark_id.toString())
+
+    const sites = params.bookmark.links.map(
+      (link) =>
+        `${get_domain_from_url(link.url)}${
+          link.site_path ? `/${link.site_path}` : ''
+        }`,
+    )
+
+    await insert(db, {
+      id: params.bookmark.bookmark_id.toString(),
+      created_at: params.bookmark.created_at.getTime() / 1000,
+      updated_at: new Date().getTime() / 1000,
+      is_archived: params.bookmark.is_archived,
+      is_unread: params.bookmark.is_unread,
+      sites,
+      sites_variants: sites
+        .map((site) => get_site_variants_for_search(site))
+        .flat(),
+      stars: params.bookmark.stars || 0,
+      tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
+      title: `${params.bookmark.title} ${params.bookmark.tags
+        .map((tag) => tag.name)
+        .join(' ')} ${sites.join(' ')}`,
+      visited_at: params.visited_at.getTime() / 1000,
+    })
   }
 
   return {
@@ -590,5 +708,7 @@ export const use_search = () => {
     indexed_bookmarks_percentage,
     clear_search_string,
     clear_result,
+    count,
+    set_count,
   }
 }

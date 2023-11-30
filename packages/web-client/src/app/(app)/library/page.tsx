@@ -231,9 +231,7 @@ const Page: React.FC = () => {
             search.set_is_search_focused(false)
             search.clear_hints()
           }}
-          results_count={
-            search.search_string ? search.result?.count : undefined
-          }
+          results_count={search.search_string ? search?.count : undefined}
           on_clear_click={() => {
             search.clear_result()
             search.clear_search_string()
@@ -766,7 +764,7 @@ const Page: React.FC = () => {
         false
       }
       get_more_bookmarks={() => {
-        if (search.hints) return
+        if (search.hints || !bookmarks_slice_state.bookmarks?.length) return
         if (search.search_string) {
           search.get_bookmarks({ should_get_next_page: true })
         } else {
@@ -892,6 +890,7 @@ const Page: React.FC = () => {
                           search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
                             visited_at: new Date(bookmark.visited_at),
+                            tag_ids: bookmark.tags.map((tag) => tag.id),
                           })
                           if (
                             bookmarks_slice_state.bookmarks &&
@@ -956,6 +955,7 @@ const Page: React.FC = () => {
                           search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
                             visited_at: new Date(bookmark.visited_at),
+                            tag_ids: bookmark.tags.map((tag) => tag.id),
                           })
                           if (
                             bookmarks_slice_state.bookmarks &&
@@ -1008,6 +1008,7 @@ const Page: React.FC = () => {
                           search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
                             visited_at: new Date(bookmark.visited_at),
+                            tag_ids: bookmark.tags.map((tag) => tag.id),
                           })
                           if (
                             bookmarks_slice_state.bookmarks &&
@@ -1060,6 +1061,7 @@ const Page: React.FC = () => {
                           search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
                             visited_at: new Date(bookmark.visited_at),
+                            tag_ids: bookmark.tags.map((tag) => tag.id),
                           })
                           if (
                             bookmarks_slice_state.bookmarks &&
@@ -1118,7 +1120,9 @@ const Page: React.FC = () => {
                           search.update_searchable_bookmark({
                             bookmark: updated_bookmark,
                             visited_at: new Date(bookmark.visited_at),
+                            tag_ids: bookmark.tags.map((tag) => tag.id),
                           })
+                          if (search.count) search.set_count(search.count - 1)
                           if (
                             bookmarks_slice_state.bookmarks &&
                             bookmarks_slice_state.bookmarks.length == 1 &&
@@ -1149,6 +1153,7 @@ const Page: React.FC = () => {
                           search.delete_searchable_bookmark({
                             bookmark_id: bookmark.id,
                           })
+                          if (search.count) search.set_count(search.count - 1)
                           if (
                             bookmarks_slice_state.bookmarks &&
                             bookmarks_slice_state.bookmarks.length == 1 &&
@@ -1165,6 +1170,16 @@ const Page: React.FC = () => {
               />
             ))
           : []
+      }
+      refresh_results={
+        !search.search_string.length &&
+        !bookmarks_slice_state.is_fetching_first_bookmarks &&
+        (!bookmarks_slice_state.bookmarks ||
+          bookmarks_slice_state.bookmarks.length == 0)
+          ? () => {
+              bookmarks.get_bookmarks({})
+            }
+          : undefined
       }
       clear_unread={
         !bookmarks_slice_state.is_fetching_first_bookmarks &&

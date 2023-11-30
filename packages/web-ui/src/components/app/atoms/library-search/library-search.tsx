@@ -126,7 +126,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
               value={props.search_string}
               placeholder={
                 props.is_loading
-                  ? `Initializing... ${
+                  ? `One moment please... ${
                       props.loading_progress_percentage
                         ? props.loading_progress_percentage + '%'
                         : ''

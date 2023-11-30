@@ -25,7 +25,7 @@
   @include transition-100ms;
   &--yields-no-results {
     border-color: var(--red100) !important;
-    background-color: var(--red50);
+    background-color: var(--red50-transparent);
     box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.4);
     svg {
       fill: var(--red600) !important;
