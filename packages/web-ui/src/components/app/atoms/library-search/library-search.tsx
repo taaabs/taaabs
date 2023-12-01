@@ -183,7 +183,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                     {
                       props.hints[
                         selected_hint_index == -1 ? 0 : selected_hint_index
-                      ].completion
+                      ]?.completion
                     }
                   </span>
                   <span className={styles['form__styled-value__tab']}>tab</span>

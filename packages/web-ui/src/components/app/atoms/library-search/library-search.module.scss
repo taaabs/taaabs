@@ -70,11 +70,13 @@
   .form {
     flex-grow: 1;
     position: relative;
+
     &__styled-value {
       position: absolute;
       color: var(--brand-color);
       font-size: var(--font-size-17px);
-      font-weight: var(--font-weight-inter-medium);
+      font-weight: var(--font-weight-inter-tight-medium);
+      font-family: var(--font-family-inter-tight);
       @include transition-100ms(color);
       display: flex;
       align-items: center;
@@ -123,7 +125,8 @@
       z-index: 1;
       width: 100%;
       font-size: var(--font-size-17px);
-      font-weight: var(--font-weight-inter-medium);
+      font-weight: var(--font-weight-inter-tight-medium);
+      font-family: var(--font-family-inter-tight);
       color: transparent;
       user-select: none;
       height: var(--button-dimension-52px);
@@ -133,6 +136,8 @@
         outline: none;
       }
       &::placeholder {
+        font-weight: var(--font-weight-inter-medium);
+        font-family: var(--font-family-inter);
         color: var(--brand-color);
         opacity: 0.8;
         @include transition-100ms(color);
