@@ -25,6 +25,7 @@ import {
   searchWithHighlight,
 } from '@orama/plugin-match-highlight'
 import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
+import { system_values } from '@shared/constants/system-values'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -122,24 +123,22 @@ export const use_search = () => {
       const chunk = bookmarks.slice(i, i + chunkSize)
       await insertMultiple(
         db,
-        chunk.map((bookmark) => {
-          return {
-            id: bookmark.id.toString(),
-            title: `${bookmark.title} ${bookmark.tags.join(
-              ' ',
-            )} ${bookmark.sites.join(' ')}`,
-            sites: bookmark.sites,
-            sites_variants: bookmark.sites
-              .map((site) => get_site_variants_for_search(site))
-              .flat(),
-            created_at: bookmark.created_at,
-            updated_at: bookmark.updated_at,
-            visited_at: bookmark.visited_at,
-            is_archived: bookmark.is_archived,
-            is_unread: bookmark.is_unread,
-            stars: bookmark.stars,
-          }
-        }),
+        chunk.map((bookmark) => ({
+          id: bookmark.id.toString(),
+          title: `${bookmark.title} ${bookmark.tags.join(
+            ' ',
+          )} ${bookmark.sites.join(' ')}`,
+          sites: bookmark.sites,
+          sites_variants: bookmark.sites
+            .map((site) => get_site_variants_for_search(site))
+            .flat(),
+          created_at: bookmark.created_at,
+          updated_at: bookmark.updated_at,
+          visited_at: bookmark.visited_at,
+          is_archived: bookmark.is_archived,
+          is_unread: bookmark.is_unread,
+          stars: bookmark.stars,
+        })),
         chunkSize,
       )
       indexed_count += chunk.length
@@ -174,7 +173,7 @@ export const use_search = () => {
     const result_without_tolerance: Results<Result> = await searchWithHighlight(
       db,
       {
-        limit: 1000000,
+        limit: system_values.max_library_search_results,
         term,
         properties: ['title'],
         where: {
@@ -239,7 +238,7 @@ export const use_search = () => {
     const result_with_tolerance: Results<Result> = await searchWithHighlight(
       db,
       {
-        limit: 1000000,
+        limit: system_values.max_library_search_results,
         term,
         properties: ['title'],
         where: {
@@ -340,9 +339,15 @@ export const use_search = () => {
     })
 
     set_result({
-      count: merged_hits_no_dupes.length,
+      count:
+        merged_hits_no_dupes.length > system_values.max_library_search_results
+          ? system_values.max_library_search_results
+          : merged_hits_no_dupes.length,
       elapsed: { formatted: '', raw: 0 },
-      hits: merged_hits_no_dupes,
+      hits: merged_hits_no_dupes.splice(
+        0,
+        system_values.max_library_search_results,
+      ),
     })
   }
 
@@ -354,6 +359,7 @@ export const use_search = () => {
 
   const get_hints = async () => {
     if (!db) throw new Error('[get_hints] Db should be there.')
+    if (search_string.endsWith(' ')) return
 
     const tags = query_params.get('t')
     const gte = query_params.get('gte')
@@ -366,8 +372,9 @@ export const use_search = () => {
 
     if (last_word.substring(0, 5) == 'site:') {
       const term = last_word.substring(5)
+
       const result: Results<Result> = await search(db, {
-        limit: 100000,
+        limit: 1000000,
         term,
         properties: ['sites'],
         where: {
@@ -414,15 +421,6 @@ export const use_search = () => {
                 },
               }
             : {}),
-        },
-        sortBy: {
-          property:
-            sortby == '1'
-              ? 'updated_at'
-              : sortby == '2'
-              ? 'visited_at'
-              : 'created_at',
-          order: order == '1' ? 'ASC' : 'DESC',
         },
         threshold: 0,
       })

@@ -103,6 +103,20 @@
           background-color: var(--red200);
         }
       }
+      &__completion {
+        opacity: 0.5;
+        font-weight: var(--font-weight-inter-regular);
+      }
+      &__tab {
+        border: 1px solid var(--blue200);
+        background: var(--blue100);
+        border-radius: var(--border-radius-4px);
+        color: var(--blue500);
+        font-size: var(--font-size-13px);
+        padding: var(--distance-1px) var(--distance-4px);
+        margin-left: var(--distance-6px);
+        box-shadow: var(--box-shadow-blue);
+      }
     }
     > input {
       position: relative;
@@ -186,6 +200,9 @@
       height: var(--distance-32px);
       padding: 0 var(--distance-16px) 0 var(--distance-14px);
       @include hover {
+        background-color: var(--neutral100);
+      }
+      &--selected {
         background-color: var(--neutral50);
       }
       &__icon {

@@ -19,6 +19,10 @@
       background: blue;
     }
   }
+  &--search-style {
+    background: var(--blue700);
+    border: none;
+  }
 }
 .bookmark {
   display: grid;
