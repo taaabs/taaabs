@@ -359,6 +359,7 @@ export const use_search = () => {
 
   const get_hints = async () => {
     if (!db) throw new Error('[get_hints] Db should be there.')
+    if (search_string.endsWith(' ')) return
 
     const tags = query_params.get('t')
     const gte = query_params.get('gte')

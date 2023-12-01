@@ -2,10 +2,11 @@ import Skeleton from 'react-loading-skeleton'
 import styles from './library-search.module.scss'
 import { use_is_hydrated } from '@shared/hooks'
 import { Icon } from '@web-ui/components/common/particles/icon'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { system_values } from '@shared/constants/system-values'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace LibrarySearch {
   type Hint = {
@@ -35,6 +36,60 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
   const is_hydrated = use_is_hydrated()
   const [is_focused, set_is_focused] = useState(false)
   const input = useRef<HTMLInputElement>(null)
+  const [selected_hint_index, set_selected_hint_index] = useState<number>(-1)
+
+  const handle_keyboard = (event: any) => {
+    if (event.key == 'Tab') {
+      if (props.hints) {
+        event.preventDefault()
+        props.on_change(
+          props.search_string +
+            props.hints[selected_hint_index == -1 ? 0 : selected_hint_index]
+              .completion +
+            ' ',
+        )
+      }
+    }
+    if (event.key == 'ArrowDown') {
+      if (props.hints) {
+        event.preventDefault()
+        set_selected_hint_index(
+          props.hints.length == selected_hint_index + 1
+            ? 0
+            : selected_hint_index + 1,
+        )
+      }
+    }
+    if (event.key == 'ArrowUp') {
+      if (props.hints) {
+        event.preventDefault()
+        set_selected_hint_index(
+          selected_hint_index == 0 || selected_hint_index == -1
+            ? props.hints.length - 1
+            : selected_hint_index - 1,
+        )
+      }
+    }
+    if (event.key == 'Enter') {
+      if (props.hints && selected_hint_index != -1) {
+        props.on_change(
+          props.search_string + props.hints[selected_hint_index].completion,
+        )
+      }
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handle_keyboard)
+
+    return () => {
+      window.removeEventListener('keydown', handle_keyboard)
+    }
+  }, [props.hints, selected_hint_index])
+
+  useUpdateEffect(() => {
+    set_selected_hint_index(-1)
+  }, [props.hints])
 
   return is_hydrated ? (
     <div className={styles.container}>
@@ -73,6 +128,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
             onSubmit={(e) => {
               e.preventDefault()
               props.on_submit()
+              input.current?.blur()
+              set_is_focused(false)
             }}
           >
             <div
@@ -112,15 +169,26 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                           >
                             {str}
                           </span>
-                          <span> </span>
                         </>
                       )}
                     </>
                   ))
                 } else {
-                  return str
+                  return <span>{str}</span>
                 }
               })}
+              {props.search_string && props.hints && (
+                <>
+                  <span className={styles['form__styled-value__completion']}>
+                    {
+                      props.hints[
+                        selected_hint_index == -1 ? 0 : selected_hint_index
+                      ].completion
+                    }
+                  </span>
+                  <span className={styles['form__styled-value__tab']}>tab</span>
+                </>
+              )}
             </div>
             <input
               ref={input}
@@ -140,6 +208,10 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
               }}
               onChange={(e) => {
                 props.on_change(e.target.value)
+              }}
+              onBlur={() => {
+                props.on_blur()
+                set_is_focused(false)
               }}
             />
           </form>
@@ -191,7 +263,10 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
               {props.hints.map((hint, i) => (
                 <button
                   key={hint.term + hint.completion + hint.type}
-                  className={styles.hints__inner__item}
+                  className={cn(styles.hints__inner__item, {
+                    [styles['hints__inner__item--selected']]:
+                      selected_hint_index == i,
+                  })}
                   onClick={() => {
                     props.on_click_hint(i)
                     props.on_blur()

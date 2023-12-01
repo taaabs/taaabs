@@ -13,6 +13,8 @@ declare const styles: {
   readonly 'form__styled-value__pre-highlight': string
   readonly 'form__styled-value__highlight': string
   readonly 'form__styled-value__highlight--no-results': string
+  readonly 'form__styled-value__completion': string
+  readonly 'form__styled-value__tab': string
   readonly 'input__right-side': string
   readonly 'input__right-side__results-count': string
   readonly 'input__right-side__results-count--yields-no-results': string
@@ -21,6 +23,7 @@ declare const styles: {
   readonly hints: string
   readonly hints__inner: string
   readonly hints__inner__item: string
+  readonly 'hints__inner__item--selected': string
   readonly hints__inner__item__icon: string
   readonly hints__inner__item__text: string
   readonly hints__inner__item__remove: string
