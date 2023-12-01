@@ -70,7 +70,15 @@
   .form {
     flex-grow: 1;
     position: relative;
-
+    &__keycap {
+      border: 1px solid var(--blue200);
+      background: var(--blue100);
+      border-radius: var(--border-radius-4px);
+      color: var(--blue500);
+      font-size: var(--font-size-13px);
+      padding: var(--distance-1px) var(--distance-5px);
+      box-shadow: var(--box-shadow-blue);
+    }
     &__styled-value {
       position: absolute;
       color: var(--brand-color);
@@ -80,7 +88,6 @@
       @include transition-100ms(color);
       display: flex;
       align-items: center;
-      height: var(--button-dimension-52px);
       width: 100%;
       pointer-events: none;
       user-select: none;
@@ -108,16 +115,7 @@
       &__completion {
         opacity: 0.5;
         font-weight: var(--font-weight-inter-regular);
-      }
-      &__tab {
-        border: 1px solid var(--blue200);
-        background: var(--blue100);
-        border-radius: var(--border-radius-4px);
-        color: var(--blue500);
-        font-size: var(--font-size-13px);
-        padding: var(--distance-1px) var(--distance-4px);
-        margin-left: var(--distance-6px);
-        box-shadow: var(--box-shadow-blue);
+        margin-right: var(--distance-6px);
       }
     }
     > input {
@@ -129,7 +127,6 @@
       font-family: var(--font-family-inter-tight);
       color: transparent;
       user-select: none;
-      height: var(--button-dimension-52px);
       display: flex;
       align-items: center;
       &:focus {
@@ -149,6 +146,12 @@
     align-items: center;
     gap: var(--distance-8px);
     margin-right: var(--distance-11px);
+    &__press_key {
+      color: var(--blue500);
+      display: flex;
+      white-space: pre-wrap;
+      margin-right: var(--distance-11px);
+    }
     &__results-count {
       color: var(--blue500);
       @include transition-100ms(color);
