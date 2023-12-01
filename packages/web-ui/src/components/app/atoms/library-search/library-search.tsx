@@ -19,6 +19,7 @@ export namespace LibrarySearch {
     placeholder: string
     search_string: string
     is_loading: boolean
+    is_focused: boolean
     loading_progress_percentage?: number
     on_focus: () => void
     on_blur: () => void
@@ -34,12 +35,14 @@ export namespace LibrarySearch {
 
 export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
   const is_hydrated = use_is_hydrated()
-  const [is_focused, set_is_focused] = useState(false)
   const input = useRef<HTMLInputElement>(null)
   const [selected_hint_index, set_selected_hint_index] = useState<number>(-1)
 
   const handle_keyboard = (event: any) => {
-    if (event.key == 'Tab') {
+    if (event.code == 'Slash' && !props.is_focused) {
+      event.preventDefault()
+      input.current?.focus()
+    } else if (event.code == 'Tab') {
       if (props.hints) {
         event.preventDefault()
         props.on_change(
@@ -49,8 +52,11 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
             ' ',
         )
       }
-    }
-    if (event.key == 'ArrowDown') {
+    } else if (event.code == 'Escape' && props.is_focused) {
+      event.preventDefault()
+      input.current?.blur()
+      props.on_blur()
+    } else if (event.code == 'ArrowDown') {
       if (props.hints) {
         event.preventDefault()
         set_selected_hint_index(
@@ -59,8 +65,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
             : selected_hint_index + 1,
         )
       }
-    }
-    if (event.key == 'ArrowUp') {
+    } else if (event.code == 'ArrowUp') {
       if (props.hints) {
         event.preventDefault()
         set_selected_hint_index(
@@ -69,8 +74,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
             : selected_hint_index - 1,
         )
       }
-    }
-    if (event.key == 'Enter') {
+    } else if (event.code == 'Enter') {
       if (props.hints && selected_hint_index != -1) {
         props.on_change(
           props.search_string + props.hints[selected_hint_index].completion,
@@ -85,7 +89,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
     return () => {
       window.removeEventListener('keydown', handle_keyboard)
     }
-  }, [props.hints, selected_hint_index])
+  }, [props.hints, selected_hint_index, props.is_focused])
 
   useUpdateEffect(() => {
     set_selected_hint_index(-1)
@@ -96,7 +100,6 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
       <OutsideClickHandler
         onOutsideClick={() => {
           props.on_blur()
-          set_is_focused(false)
         }}
         disabled={props.hints && props.hints.length > 0}
       >
@@ -104,17 +107,17 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
           className={cn(
             styles.input,
             { [styles['input--yields-no-results']]: props.results_count == 0 },
-            { [styles['input--focus']]: is_focused },
+            { [styles['input--focus']]: props.is_focused },
             {
               [styles['input--focus-yields-no-results']]:
-                is_focused && props.results_count == 0,
+                props.is_focused && props.results_count == 0,
             },
           )}
         >
           <button
             className={styles['input__left-side']}
             style={{
-              pointerEvents: !is_focused ? 'none' : undefined,
+              pointerEvents: !props.is_focused ? 'none' : undefined,
             }}
           >
             {props.is_loading ? (
@@ -129,7 +132,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
               e.preventDefault()
               props.on_submit()
               input.current?.blur()
-              set_is_focused(false)
+              props.on_blur()
             }}
           >
             <div
@@ -186,7 +189,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                       ]?.completion
                     }
                   </span>
-                  <span className={styles['form__styled-value__tab']}>tab</span>
+                  <span className={styles['form__keycap']}>tab</span>
                 </>
               )}
             </div>
@@ -202,52 +205,52 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                     }`
                   : props.placeholder
               }
-              onFocus={() => {
-                props.on_focus()
-                set_is_focused(true)
-              }}
+              onFocus={props.on_focus}
               onChange={(e) => {
                 props.on_change(e.target.value)
               }}
-              onBlur={() => {
-                props.on_blur()
-                set_is_focused(false)
-              }}
             />
           </form>
-          {props.search_string && (
-            <div className={styles['input__right-side']}>
-              {props.results_count !== undefined && (
-                <div
-                  className={cn(styles['input__right-side__results-count'], {
-                    [styles[
-                      'input__right-side__results-count--yields-no-results'
-                    ]]: props.results_count == 0,
+
+          <div className={styles['input__right-side']}>
+            {props.search_string ? (
+              <>
+                {props.results_count !== undefined && (
+                  <div
+                    className={cn(styles['input__right-side__results-count'], {
+                      [styles[
+                        'input__right-side__results-count--yields-no-results'
+                      ]]: props.results_count == 0,
+                    })}
+                  >
+                    {props.results_count == 0
+                      ? 'no'
+                      : props.results_count ==
+                        system_values.max_library_search_results
+                      ? `${system_values.max_library_search_results}+`
+                      : props.results_count}{' '}
+                    {props.results_count == 1 ? 'result' : 'results'}
+                  </div>
+                )}
+                <button
+                  className={cn(styles['input__right-side__clear'], {
+                    [styles['input__right-side__clear--yields-no-results']]:
+                      props.results_count == 0,
                   })}
+                  onClick={() => {
+                    props.on_clear_click()
+                    input.current?.focus()
+                  }}
                 >
-                  {props.results_count == 0
-                    ? 'no'
-                    : props.results_count ==
-                      system_values.max_library_search_results
-                    ? `${system_values.max_library_search_results}+`
-                    : props.results_count}{' '}
-                  {props.results_count == 1 ? 'result' : 'results'}
-                </div>
-              )}
-              <button
-                className={cn(styles['input__right-side__clear'], {
-                  [styles['input__right-side__clear--yields-no-results']]:
-                    props.results_count == 0,
-                })}
-                onClick={() => {
-                  props.on_clear_click()
-                  input.current?.focus()
-                }}
-              >
-                <Icon variant="ADD" />
-              </button>
-            </div>
-          )}
+                  <Icon variant="ADD" />
+                </button>
+              </>
+            ) : (
+              <div className={styles['input__right-side__press_key']}>
+                Type <div className={styles.form__keycap}>/</div> to search
+              </div>
+            )}
+          </div>
         </div>
       </OutsideClickHandler>
       {props.hints && (
@@ -255,7 +258,6 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
           <OutsideClickHandler
             onOutsideClick={() => {
               props.on_blur()
-              set_is_focused(false)
             }}
             disabled={!props.hints}
           >
@@ -270,7 +272,6 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                   onClick={() => {
                     props.on_click_hint(i)
                     props.on_blur()
-                    set_is_focused(false)
                   }}
                 >
                   <div className={styles.hints__inner__item__icon}>

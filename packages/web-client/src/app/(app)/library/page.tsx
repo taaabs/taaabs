@@ -173,16 +173,17 @@ const Page: React.FC = () => {
               const search_string =
                 search.search_string + search.hints[i].completion
               search.set_search_string(search_string)
-              search.query_db({ search_string })
               search.clear_hints()
+              search.query_db({ search_string })
             }
           }}
           on_click_recent_hint_remove={() => {}}
-          on_focus={async () => {
+          is_focused={search.is_search_focused}
+          on_focus={() => {
             search.set_is_search_focused(true)
             if (!search.is_initializing) {
               if (search.db === undefined) {
-                await search.init()
+                search.init()
               } else {
                 search.set_current_filter(filter_view_options.current_filter)
                 search.set_selected_tags(

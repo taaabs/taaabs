@@ -8,14 +8,15 @@ declare const styles: {
   readonly input__loader: string
   readonly rotation: string
   readonly form: string
+  readonly form__keycap: string
   readonly 'form__styled-value': string
   readonly 'form__styled-value--yields-no-results': string
   readonly 'form__styled-value__pre-highlight': string
   readonly 'form__styled-value__highlight': string
   readonly 'form__styled-value__highlight--no-results': string
   readonly 'form__styled-value__completion': string
-  readonly 'form__styled-value__tab': string
   readonly 'input__right-side': string
+  readonly 'input__right-side__press_key': string
   readonly 'input__right-side__results-count': string
   readonly 'input__right-side__results-count--yields-no-results': string
   readonly 'input__right-side__clear': string
