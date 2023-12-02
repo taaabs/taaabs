@@ -289,7 +289,12 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                   <div className={styles.hints__inner__item__text}>
                     <span>{hint.term}</span>
                     <span>{hint.completion}</span>
-                    <span>{hint.yields}</span>
+                    {hint.yields && <span>{hint.yields}</span>}
+                    {selected_hint_index == i && (
+                      <div className={styles['hints__inner__item__keycap']}>
+                        enter
+                      </div>
+                    )}
                   </div>
                   {hint.type == 'recent' && (
                     <button
