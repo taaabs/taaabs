@@ -180,8 +180,8 @@ const Page: React.FC = () => {
           on_click_recent_hint_remove={() => {}}
           is_focused={search.is_search_focused}
           on_focus={() => {
-            search.set_is_search_focused(true)
             if (!search.is_initializing) {
+              search.set_is_search_focused(true)
               if (search.db === undefined) {
                 search.init()
               } else {
@@ -209,7 +209,6 @@ const Page: React.FC = () => {
                       return name
                     }),
                 )
-                search.get_hints()
               }
             }
           }}
@@ -221,7 +220,6 @@ const Page: React.FC = () => {
             }
             search.clear_result()
             if (!value) {
-              search.clear_hints()
               bookmarks.get_bookmarks({})
             }
           }}
@@ -792,6 +790,7 @@ const Page: React.FC = () => {
                     ? new Date(bookmark.visited_at)
                     : new Date()
                 }
+                should_display_only_month={search.result !== undefined}
                 links={bookmark.links.map((link) => ({
                   url: link.url,
                   saves: link.public_saves,

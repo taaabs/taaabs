@@ -29,7 +29,7 @@ import { system_values } from '@shared/constants/system-values'
 
 type Hint = {
   type: 'new' | 'recent'
-  term: string
+  term?: string
   completion?: string
   yields?: number
 }
@@ -40,6 +40,7 @@ const schema = {
   tag_ids: 'string[]',
   sites: 'string[]',
   sites_variants: 'string[]',
+  tags: 'string[]',
   created_at: 'number',
   updated_at: 'number',
   visited_at: 'number',
@@ -74,14 +75,22 @@ export const use_search = () => {
   useUpdateEffect(() => {
     if (!searchable_bookmarks) return
 
-    set_ids_to_search_amongst(
-      searchable_bookmarks
-        .filter((bookmark) =>
-          selected_tags.every((tag) => bookmark.tags.includes(tag)),
-        )
-        .map((bookmark) => bookmark.id.toString()),
-    )
-  }, [current_filter, selected_tags, searchable_bookmarks])
+    if (selected_tags.length) {
+      set_ids_to_search_amongst(
+        searchable_bookmarks
+          .filter((bookmark) =>
+            selected_tags.every((tag) => bookmark.tags.includes(tag)),
+          )
+          .map((bookmark) => bookmark.id.toString()),
+      )
+    } else {
+      get_hints()
+    }
+  }, [selected_tags, searchable_bookmarks])
+
+  useUpdateEffect(() => {
+    get_hints()
+  }, [ids_to_search_amongst])
 
   const init = async () => {
     set_is_initializing(true)
@@ -93,8 +102,9 @@ export const use_search = () => {
     const get_searchable_bookmarks =
       new GetSearchableBookmarksOnAuthorizedUser_UseCase(repository)
     const { bookmarks } = await get_searchable_bookmarks.invoke({})
-
     set_searchable_bookmarks(bookmarks)
+
+    // const before = Date.now()
 
     const db = await create({
       schema,
@@ -132,6 +142,7 @@ export const use_search = () => {
           sites_variants: bookmark.sites
             .map((site) => get_site_variants_for_search(site))
             .flat(),
+          tags: bookmark.tags,
           created_at: bookmark.created_at,
           updated_at: bookmark.updated_at,
           visited_at: bookmark.visited_at,
@@ -146,6 +157,8 @@ export const use_search = () => {
         Math.floor((indexed_count / bookmarks.length) * 100),
       )
     }
+
+    // alert(Date.now() - before)
 
     set_db(db)
     set_is_initializing(false)
@@ -352,14 +365,13 @@ export const use_search = () => {
   }
 
   useUpdateEffect(() => {
-    if (db !== undefined && search_string.length) {
+    if (db !== undefined) {
       get_hints()
     }
   }, [search_string])
 
   const get_hints = async () => {
-    if (!db) throw new Error('[get_hints] Db should be there.')
-    if (search_string.endsWith(' ')) return
+    if (!db) return
 
     const tags = query_params.get('t')
     const gte = query_params.get('gte')
@@ -369,6 +381,10 @@ export const use_search = () => {
 
     const words = search_string.split(' ')
     const last_word = words[words.length - 1]
+    const sites_variants = search_string
+      .match(/(?<=site:)(.*?)($|\s)/g)
+      ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
+    const term = search_string.replace(/(?=site:)(.*?)($|\s)/g, '').trim()
 
     if (last_word.substring(0, 5) == 'site:') {
       const term = last_word.substring(5)
@@ -479,12 +495,6 @@ export const use_search = () => {
           : undefined,
       )
     } else if (last_word.length) {
-      const sites_variants = search_string
-        .match(/(?<=site:)(.*?)($|\s)/g)
-        ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
-
-      const term = search_string.replace(/(?=site:)(.*?)($|\s)/g, '').trim()
-
       const result: Results<Result> = await search(db, {
         limit: 1000,
         term,
@@ -580,11 +590,91 @@ export const use_search = () => {
 
       set_hints(hints.length ? hints_with_no_yields.slice(0, 10) : undefined)
     } else {
-      set_hints([
-        { term: 'recent entry 1', type: 'recent' },
-        { term: 'recent entry 2', type: 'recent' },
-        { term: 'recent entry 3', type: 'recent' },
-      ])
+      const result: Results<Result> = await search(db, {
+        limit: 1000,
+        term: term ? term : undefined,
+        properties: ['title'],
+        where: {
+          ...(tags && ids_to_search_amongst
+            ? { id: ids_to_search_amongst }
+            : {}),
+          is_archived: current_filter != LibraryFilter.Archived ? false : true,
+          is_unread:
+            current_filter == LibraryFilter.Unread ||
+            current_filter == LibraryFilter.OneStarUnread ||
+            current_filter == LibraryFilter.TwoStarsUnread ||
+            current_filter == LibraryFilter.ThreeStarsUnread,
+          stars: {
+            gte:
+              current_filter == LibraryFilter.OneStar ||
+              current_filter == LibraryFilter.OneStarUnread
+                ? 1
+                : current_filter == LibraryFilter.TwoStars ||
+                  current_filter == LibraryFilter.TwoStarsUnread
+                ? 2
+                : current_filter == LibraryFilter.ThreeStars ||
+                  current_filter == LibraryFilter.ThreeStarsUnread
+                ? 3
+                : 0,
+          },
+          ...(gte && lte
+            ? {
+                created_at: {
+                  between: [
+                    new Date(
+                      parseInt(gte.toString().substring(0, 4)),
+                      parseInt(gte.toString().substring(4, 6)) - 1,
+                    ).getTime() / 1000,
+                    new Date(
+                      parseInt(lte.toString().substring(0, 4)),
+                      parseInt(lte.toString().substring(4, 6)),
+                    ).getTime() /
+                      1000 -
+                      1,
+                  ],
+                },
+              }
+            : {}),
+          ...(sites_variants?.length ? { sites_variants } : {}),
+        },
+        sortBy: {
+          property:
+            sortby == '1'
+              ? 'updated_at'
+              : sortby == '2'
+              ? 'visited_at'
+              : 'created_at',
+          order: order == '1' ? 'ASC' : 'DESC',
+        },
+        threshold: term ? 0 : undefined,
+      })
+
+      let tags_hashmap: { [tag: string]: number } = {}
+
+      result.hits.forEach(({ document }) => {
+        document.tags.forEach((tag) => {
+          if (term.split(' ').includes(tag) || selected_tags.includes(tag))
+            return
+          if (tags_hashmap[tag]) {
+            tags_hashmap[tag] = tags_hashmap[tag] + 1
+          } else {
+            tags_hashmap = { ...tags_hashmap, [tag]: 1 }
+          }
+        })
+      })
+
+      const hints: Hint[] = []
+
+      Object.keys(tags_hashmap).map((k) => {
+        hints.push({
+          completion: k,
+          type: 'new',
+        })
+      })
+
+      hints.sort((a, b) => b.yields! - a.yields!)
+
+      if (hints.length >= 2) set_hints(hints)
     }
   }
 

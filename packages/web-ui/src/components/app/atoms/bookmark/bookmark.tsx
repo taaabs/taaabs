@@ -38,6 +38,7 @@ export namespace Bookmark {
     title: string
     note?: string
     date: Date
+    should_display_only_month: boolean
     on_tag_click: (tagId: number) => void
     on_selected_tag_click: (tagId: number) => void
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
@@ -81,10 +82,13 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
     const relative_time = dayjs(props.date).fromNow()
 
-    const bookmark_date =
-      relative_time != ''
-        ? relative_time
-        : dayjs(props.date).format('MMM DD, YYYY')
+    const bookmark_date = props.should_display_only_month
+      ? relative_time != ''
+        ? 'This month'
+        : dayjs(props.date).format('MMM YYYY')
+      : relative_time != ''
+      ? relative_time
+      : dayjs(props.date).format('MMM DD, YYYY')
 
     return (
       <div
