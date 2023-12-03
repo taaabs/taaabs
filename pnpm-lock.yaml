@@ -288,6 +288,9 @@ importers:
       '@orama/orama':
         specifier: 2.0.0-beta.7
         version: 2.0.0-beta.7
+      '@orama/plugin-data-persistence':
+        specifier: 2.0.0-beta.7
+        version: 2.0.0-beta.7
       '@orama/plugin-match-highlight':
         specifier: 2.0.0-beta.7
         version: 2.0.0-beta.7
@@ -2763,6 +2766,11 @@ packages:
       - supports-color
     dev: false
 
+  /@msgpack/msgpack@2.8.0:
+    resolution: {integrity: sha512-h9u4u/jiIRKbq25PM+zymTyW6bhTzELvOoUd+AvYriWOAKpLGnIamaET3pnHYoI5iYphAHBI4ayx0MehR+VVPQ==}
+    engines: {node: '>= 10'}
+    dev: false
+
   /@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.2:
     resolution: {integrity: sha512-9bfjwDxIDWmmOKusUcqdS4Rw+SETlp9Dy39Xui9BEGEk19dDwH0jhipwFzEff/pFg95NKymc6TOTbRKcWeRqyQ==}
     cpu: [arm64]
@@ -3341,6 +3349,14 @@ packages:
   /@orama/orama@2.0.0-beta.7:
     resolution: {integrity: sha512-7JlCMVoqJ2QBZtJ7H1shYbiVnaJJf5M/LI/H+b/YUyop0wnYTNfi6bRHuGhEMqh8ACXkHPNs0IHkyCKz+mFIXg==}
     engines: {node: '>= 16.0.0'}
+    dev: false
+
+  /@orama/plugin-data-persistence@2.0.0-beta.7:
+    resolution: {integrity: sha512-3Mv5CtaM0g6+KNEQc0hVhLwXwYKUfxpTAeA/k/Y4UBk2ug1ajgTj1fhAObspOzy5jMdBMUmQL3tujv9clYfjvQ==}
+    dependencies:
+      '@msgpack/msgpack': 2.8.0
+      '@orama/orama': 2.0.0-beta.7
+      dpack: 0.6.22
     dev: false
 
   /@orama/plugin-match-highlight@2.0.0-beta.7:
@@ -6991,6 +7007,10 @@ packages:
   /dotenv@16.3.1:
     resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
     engines: {node: '>=12'}
+
+  /dpack@0.6.22:
+    resolution: {integrity: sha512-WGPNlW2OAE7Bj0eODMpAHUcEqxrlg01e9OFZDxQodminIgC194/cRHT7K04Z1j7AUEWTeeplYGrIv/xRdwU9Hg==}
+    dev: false
 
   /duplexify@3.7.1:
     resolution: {integrity: sha512-07z8uv2wMyS51kKhD1KsdXJg5WQ6t93RneqRxUHnskXVtlYYkLqM0gqStQZ3pj073g687jPCHrqNfCzawLYh5g==}

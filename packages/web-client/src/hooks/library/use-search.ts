@@ -8,6 +8,7 @@ import {
   insert,
   search,
 } from '@orama/orama'
+import { persist, restore } from '@orama/plugin-data-persistence'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { LibraryFilter } from '@shared/types/common/library-filter'
@@ -109,8 +110,6 @@ export const use_search = () => {
     const { bookmarks } = await get_searchable_bookmarks.invoke({})
     set_searchable_bookmarks(bookmarks)
 
-    // const before = Date.now()
-
     const db = await create({
       schema,
       sort: {
@@ -141,7 +140,7 @@ export const use_search = () => {
         chunk.map((bookmark) => ({
           id: bookmark.id.toString(),
           title: `${bookmark.title} ${bookmark.tags.join(' ')} ${bookmark.sites
-            .map((site) => site.replace('/', '› '))
+            .map((site) => site.replace('/', ' › '))
             .join(' ')}`,
           sites: bookmark.sites,
           sites_variants: bookmark.sites
@@ -162,8 +161,6 @@ export const use_search = () => {
         Math.floor((indexed_count / bookmarks.length) * 100),
       )
     }
-
-    // alert(Date.now() - before)
 
     set_db(db)
     set_is_initializing(false)
@@ -370,31 +367,31 @@ export const use_search = () => {
       hits,
     })
 
-    set_highlights(
-      hits.reduce((a, v) => {
-        const positions = Object.values((v as any).positions.title)
-          .flat()
-          .map((highlight: any) => [highlight.start, highlight.length])
+    const highlights = hits.reduce((a, v) => {
+      const positions = Object.values((v as any).positions.title)
+        .flat()
+        .map((highlight: any) => [highlight.start, highlight.length])
 
-        const new_positions: any = []
+      const new_positions: any = []
 
-        for (let i = 0; i < positions.length; i++) {
-          if (
-            positions[i + 1] &&
-            positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
-          ) {
-            new_positions.push([positions[i][0], positions[i][1] + 1])
-          } else {
-            new_positions.push([positions[i][0], positions[i][1]])
-          }
+      for (let i = 0; i < positions.length; i++) {
+        if (
+          positions[i + 1] &&
+          positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
+        ) {
+          new_positions.push([positions[i][0], positions[i][1] + 1])
+        } else {
+          new_positions.push([positions[i][0], positions[i][1]])
         }
+      }
 
-        return {
-          ...a,
-          [v.id]: new_positions,
-        }
-      }, {}),
-    )
+      return {
+        ...a,
+        [v.id]: new_positions,
+      }
+    }, {})
+
+    set_highlights(highlights)
   }
 
   const get_hints = async () => {
@@ -721,16 +718,11 @@ export const use_search = () => {
     set_hints(undefined)
   }
 
-  const clear_highlights = () => {
-    set_highlights(undefined)
-  }
-
-  const clear_search_string = () => {
-    set_search_string('')
-  }
-
-  const clear_result = () => {
+  const reset = () => {
     set_result(undefined)
+    set_hints(undefined)
+    set_highlights(undefined)
+    set_search_string('')
   }
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
@@ -825,7 +817,6 @@ export const use_search = () => {
     set_search_string,
     hints,
     clear_hints,
-    clear_highlights,
     get_hints,
     init,
     query_db,
@@ -838,8 +829,7 @@ export const use_search = () => {
     set_current_filter,
     set_selected_tags,
     indexed_bookmarks_percentage,
-    clear_search_string,
-    clear_result,
+    reset,
     count,
     set_count,
     highlights,

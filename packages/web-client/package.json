@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@orama/orama": "2.0.0-beta.7",
+    "@orama/plugin-data-persistence": "2.0.0-beta.7",
     "@orama/plugin-match-highlight": "2.0.0-beta.7",
     "@reduxjs/toolkit": "^1.9.7",
     "@svgr/webpack": "^8.1.0",

@@ -193,10 +193,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         props.title +
                         ' ' +
                         props.tags
-                          .map((tag) => `${tag.name} `)
+                          .map((tag) => ` ${tag.name}`)
                           .slice(0, i)
-                          .join(' ')
+                          .join('')
                       ).length
+
                       return (
                         <button
                           className={styles['bookmark__info__tag']}
@@ -271,12 +272,13 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   const link_first_char_index_in_search_title = (
                     props.title +
                     ' ' +
-                    props.tags.map((tag) => `${tag.name} `).join(' ') +
+                    props.tags.map((tag) => tag.name).join(' ') +
+                    ' ' +
                     props.links
                       .map(
                         (link) =>
-                          `${_url_domain(link.url)} ${
-                            link.site_path ? `› ${link.site_path} ` : ''
+                          `${_url_domain(link.url)}${
+                            link.site_path ? ` › ${link.site_path}` : ''
                           }`,
                       )
                       .slice(0, i)
@@ -396,11 +398,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
 function _url_domain(url: string): string {
   let parsed_url = ''
-  if (url.substring(0, 12) == 'https://www.') {
-    parsed_url = url.substring(12)
-  } else if (url.substring(0, 11) == 'http://www.') {
-    parsed_url = url.substring(11)
-  } else if (url.substring(0, 8) == 'https://') {
+  if (url.substring(0, 8) == 'https://') {
     parsed_url = url.substring(8)
   } else if (url.substring(0, 7) == 'http://') {
     parsed_url = url.substring(7)

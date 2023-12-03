@@ -87,15 +87,7 @@ const Page: React.FC = () => {
   }, [bookmarks_slice_state.bookmarks])
 
   useUpdateEffect(() => {
-    if (search.search_string) {
-      search.clear_search_string()
-    }
-    if (search.hints) {
-      search.clear_hints()
-    }
-    if (search.highlights) {
-      search.clear_highlights()
-    }
+    search.reset()
   }, [
     filter_view_options.current_filter,
     order_view_options.current_order,
@@ -220,7 +212,6 @@ const Page: React.FC = () => {
             if (value.endsWith(' ')) {
               search.clear_hints()
             }
-            search.clear_result()
             if (!value) {
               bookmarks.get_bookmarks({})
             }
@@ -234,8 +225,7 @@ const Page: React.FC = () => {
           }}
           results_count={search.search_string ? search?.count : undefined}
           on_clear_click={() => {
-            search.clear_result()
-            search.clear_search_string()
+            search.reset()
             bookmarks.get_bookmarks({})
           }}
         />
@@ -911,7 +901,7 @@ const Page: React.FC = () => {
                                 filter_view_options.current_filter ==
                                   LibraryFilter.ThreeStarsUnread)
                             ) {
-                              search.clear_search_string()
+                              search.reset()
                             }
                           }
                         },
@@ -965,7 +955,7 @@ const Page: React.FC = () => {
                             bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
-                            search.clear_search_string()
+                            search.reset()
                           }
                         },
                       },
@@ -1018,7 +1008,7 @@ const Page: React.FC = () => {
                             bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
-                            search.clear_search_string()
+                            search.reset()
                           }
                         },
                       },
@@ -1071,7 +1061,7 @@ const Page: React.FC = () => {
                             bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
-                            search.clear_search_string()
+                            search.reset()
                           }
                         },
                       },
@@ -1131,7 +1121,7 @@ const Page: React.FC = () => {
                             bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
-                            search.clear_search_string()
+                            search.reset()
                           }
                         },
                       },
@@ -1162,7 +1152,7 @@ const Page: React.FC = () => {
                             bookmarks_slice_state.bookmarks.length == 1 &&
                             search.search_string.length
                           ) {
-                            search.clear_search_string()
+                            search.reset()
                           }
                         },
                         other_icon: <Icon variant="DELETE" />,
