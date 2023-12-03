@@ -242,7 +242,6 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                   })}
                   onClick={() => {
                     props.on_clear_click()
-                    input.current?.focus()
                   }}
                 >
                   <Icon variant="ADD" />

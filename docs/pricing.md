@@ -3,14 +3,16 @@
 - Unlimited public/private bookmarks
 - Unlimited tags
 
-### Plus
+### Pro
 
 - Multi-link bookmarks
-- Sort by saves count
-- Starred only filter
-- Exclude unread filter
+- Filters (unread, starred)
 - Categories
 - Tag counts
-- Short username (<8 characters)
+- Sort by updated date
+- Sort by last visited
+- Adjust custom range
+- Short username (<6 characters)
+- Add highlights to saved links
 
-Cost: $11 yearly
+Cost: $40 yearly
