@@ -855,8 +855,12 @@ export const use_search = () => {
 
     await insert(db, {
       id: params.bookmark.bookmark_id.toString(),
+      title: `${params.bookmark.title} ${params.bookmark.tags
+        .map((tag) => tag.name)
+        .join(' ')} ${sites.join(' ')}`,
       created_at: params.bookmark.created_at.getTime() / 1000,
       updated_at: new Date().getTime() / 1000,
+      visited_at: params.visited_at.getTime() / 1000,
       is_archived: params.bookmark.is_archived,
       is_unread: params.bookmark.is_unread,
       sites,
@@ -864,11 +868,8 @@ export const use_search = () => {
         .map((site) => get_site_variants_for_search(site))
         .flat(),
       stars: params.bookmark.stars || 0,
+      tags: params.bookmark.tags.map((tag) => tag.name),
       tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
-      title: `${params.bookmark.title} ${params.bookmark.tags
-        .map((tag) => tag.name)
-        .join(' ')} ${sites.join(' ')}`,
-      visited_at: params.visited_at.getTime() / 1000,
     })
 
     await cache_data({ db, searchable_bookmarks: searchable_bookmarks! })
