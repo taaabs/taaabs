@@ -93,6 +93,9 @@ const Page: React.FC = () => {
     if (search.hints) {
       search.clear_hints()
     }
+    if (search.highlights) {
+      search.clear_highlights()
+    }
   }, [
     filter_view_options.current_filter,
     order_view_options.current_order,
@@ -173,7 +176,6 @@ const Page: React.FC = () => {
               const search_string =
                 search.search_string + search.hints[i].completion
               search.set_search_string(search_string)
-              search.clear_hints()
               search.query_db({ search_string })
             }
           }}
@@ -772,8 +774,9 @@ const Page: React.FC = () => {
       }}
       slot_bookmarks={
         bookmarks_slice_state.bookmarks
-          ? bookmarks_slice_state.bookmarks.map((bookmark, index) => (
+          ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
               <Bookmark
+                index={i}
                 key={bookmark.id}
                 fetch_timestamp={
                   bookmarks_slice_state.bookmarks_fetch_timestamp || 0
@@ -835,7 +838,7 @@ const Page: React.FC = () => {
                 set_render_height={(height) => {
                   dispatch(
                     bookmarks_actions.set_bookmark_render_height({
-                      index,
+                      index: i,
                       height,
                     }),
                   )
@@ -1167,6 +1170,7 @@ const Page: React.FC = () => {
                     ]}
                   />
                 }
+                highlights={search.highlights?.[bookmark.id.toString()]}
               />
             ))
           : []

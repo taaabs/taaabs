@@ -33,17 +33,20 @@ dayjs.updateLocale('en', {
 })
 
 export namespace Bookmark {
+  export type Highlights = [number, number][]
+
   export type Props = {
+    index: number
     fetch_timestamp?: number // Forces rerender for bookmark height adjustment (upon unread/stars change).
     title: string
     note?: string
     date: Date
-    should_display_only_month: boolean
+    should_display_only_month?: boolean
     on_tag_click: (tagId: number) => void
     on_selected_tag_click: (tagId: number) => void
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
     number_of_selected_tags: number
-    current_filter: LibraryFilter
+    current_filter?: LibraryFilter
     on_click: () => void
     is_unread?: boolean
     stars: number
@@ -54,6 +57,7 @@ export namespace Bookmark {
     favicon_host: string
     on_menu_click: () => void
     menu_slot: React.ReactNode
+    highlights?: Highlights
   }
 }
 
@@ -122,7 +126,20 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         props.is_unread,
                     })}
                   >
-                    {props.title}
+                    {props.highlights
+                      ? props.title.split('').map((char, i) => {
+                          const is_highlighted = props.highlights!.find(
+                            ([index, length]) =>
+                              i >= index && i < index + length,
+                          )
+
+                          return is_highlighted ? (
+                            <span className={styles.highlight}>{char}</span>
+                          ) : (
+                            char
+                          )
+                        })
+                      : props.title}
                   </div>
                 </div>
               </div>
@@ -171,113 +188,194 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 {props.tags.length > 0 && (
                   <>
                     <span>·</span>
-                    {props.tags.map((tag) => (
-                      <button
-                        className={styles['bookmark__info__tag']}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          if (tag.isSelected) {
-                            props.on_selected_tag_click(tag.id)
-                          } else {
-                            props.on_tag_click(tag.id)
-                          }
-                        }}
-                        key={tag.id}
-                      >
-                        <div>
-                          <span
-                            className={cn([
-                              styles['bookmark__info__tag__name'],
-                              {
-                                [styles['bookmark__info__tag__name--selected']]:
-                                  tag.isSelected,
-                              },
-                            ])}
-                          >
-                            {tag.name}
-                          </span>
-                          {!tag.isSelected && tag.yields && (
+                    {props.tags.map((tag, i) => {
+                      const tag_first_char_index_in_search_title = (
+                        props.title +
+                        ' ' +
+                        props.tags
+                          .map((tag) => `${tag.name} `)
+                          .slice(0, i)
+                          .join(' ')
+                      ).length
+                      return (
+                        <button
+                          className={styles['bookmark__info__tag']}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            if (tag.isSelected) {
+                              props.on_selected_tag_click(tag.id)
+                            } else {
+                              props.on_tag_click(tag.id)
+                            }
+                          }}
+                          key={tag.id}
+                        >
+                          <div>
                             <span
-                              className={styles['bookmark__info__tag__yields']}
+                              className={cn([
+                                styles['bookmark__info__tag__name'],
+                                {
+                                  [styles[
+                                    'bookmark__info__tag__name--selected'
+                                  ]]: tag.isSelected,
+                                },
+                              ])}
                             >
-                              {tag.yields}
+                              {props.highlights
+                                ? tag.name.split('').map((char, i) => {
+                                    const real_i =
+                                      tag_first_char_index_in_search_title + i
+                                    const is_highlighted =
+                                      props.highlights!.find(
+                                        ([index, length]) =>
+                                          real_i >= index &&
+                                          real_i < index + length,
+                                      )
+                                    return is_highlighted ? (
+                                      <span className={styles.highlight}>
+                                        {char}
+                                      </span>
+                                    ) : (
+                                      char
+                                    )
+                                  })
+                                : tag.name}
                             </span>
-                          )}
-                          {tag.isSelected && (
-                            <span
-                              className={styles['bookmark__info__tag__yields']}
-                            >
-                              ×
-                            </span>
-                          )}
-                        </div>
-                      </button>
-                    ))}
+                            {!tag.isSelected && tag.yields && (
+                              <span
+                                className={
+                                  styles['bookmark__info__tag__yields']
+                                }
+                              >
+                                {tag.yields}
+                              </span>
+                            )}
+                            {tag.isSelected && (
+                              <span
+                                className={
+                                  styles['bookmark__info__tag__yields']
+                                }
+                              >
+                                ×
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      )
+                    })}
                   </>
                 )}
               </div>
               <div className={styles.bookmark__links}>
-                {props.links.map((link) => (
-                  <div className={styles.bookmark__links__item} key={link.url}>
-                    <div className={styles.bookmark__links__item__site}>
-                      <button
-                        className={styles.bookmark__links__item__site__favicon}
-                      >
-                        <LazyLoadImage
-                          alt={'Favicon'}
-                          width={16}
-                          height={16}
-                          src={`${props.favicon_host}/${_url_domain(link.url)}`}
-                        />
-                      </button>
-                      <a
-                        className={styles.bookmark__links__item__site__url}
-                        href={link.url}
-                        onClick={async () => {
-                          if (props.on_link_click) {
-                            await props.on_link_click()
-                          }
-                        }}
-                      >
-                        <span>
-                          {`${_url_domain(link.url)} ${
-                            link.site_path ? `› ${link.site_path}` : ''
-                          }`}
-                        </span>
-                        <span>
-                          {_url_path({
-                            url: link.url,
-                            site_path: link.site_path,
-                          })}
-                        </span>
-                      </a>
-                    </div>
-                    <div className={styles.bookmark__links__item__actions}>
-                      <div
-                        className={styles.bookmark__links__item__actions__open}
-                      >
+                {props.links.map((link, i) => {
+                  const link_first_char_index_in_search_title = (
+                    props.title +
+                    ' ' +
+                    props.tags.map((tag) => `${tag.name} `).join(' ') +
+                    props.links
+                      .map(
+                        (link) =>
+                          `${_url_domain(link.url)} ${
+                            link.site_path ? `› ${link.site_path} ` : ''
+                          }`,
+                      )
+                      .slice(0, i)
+                      .join(' ')
+                  ).length
+
+                  return (
+                    <div
+                      className={styles.bookmark__links__item}
+                      key={link.url}
+                    >
+                      <div className={styles.bookmark__links__item__site}>
                         <button
+                          className={
+                            styles.bookmark__links__item__site__favicon
+                          }
+                        >
+                          <LazyLoadImage
+                            alt={'Favicon'}
+                            width={16}
+                            height={16}
+                            src={`${props.favicon_host}/${_url_domain(
+                              link.url,
+                            )}`}
+                          />
+                        </button>
+                        <a
+                          className={styles.bookmark__links__item__site__url}
+                          href={link.url}
                           onClick={async () => {
                             if (props.on_link_click) {
                               await props.on_link_click()
                             }
-                            window.open(link.url, '_blank')
                           }}
                         >
-                          <Icon variant="NEW_TAB" />
+                          <span>
+                            {props.highlights
+                              ? `${_url_domain(link.url)} ${
+                                  link.site_path ? `› ${link.site_path} ` : ''
+                                }`
+                                  .split('')
+                                  .map((char, i) => {
+                                    const real_i =
+                                      link_first_char_index_in_search_title + i
+                                    const is_highlighted =
+                                      props.highlights!.find(
+                                        ([index, length]) =>
+                                          real_i >= index &&
+                                          real_i < index + length,
+                                      )
+                                    return is_highlighted ? (
+                                      <span className={styles.highlight}>
+                                        {char}
+                                      </span>
+                                    ) : (
+                                      char
+                                    )
+                                  })
+                              : `${_url_domain(link.url)} ${
+                                  link.site_path ? `› ${link.site_path}` : ''
+                                }`}
+                          </span>
+                          <span>
+                            {_url_path({
+                              url: link.url,
+                              site_path: link.site_path,
+                            })}
+                          </span>
+                        </a>
+                      </div>
+                      <div className={styles.bookmark__links__item__actions}>
+                        <div
+                          className={
+                            styles.bookmark__links__item__actions__open
+                          }
+                        >
+                          <button
+                            onClick={async () => {
+                              if (props.on_link_click) {
+                                await props.on_link_click()
+                              }
+                              window.open(link.url, '_blank')
+                            }}
+                          >
+                            <Icon variant="NEW_TAB" />
+                          </button>
+                        </div>
+                        <button
+                          className={
+                            styles.bookmark__links__item__actions__bookmark
+                          }
+                        >
+                          <span>{link.saves}</span>
+                          <Icon variant="BOOKMARK" />
                         </button>
                       </div>
-                      <button
-                        className={
-                          styles.bookmark__links__item__actions__bookmark
-                        }
-                      >
-                        <span>{link.saves}</span>
-                        <Icon variant="BOOKMARK" />
-                      </button>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </div>

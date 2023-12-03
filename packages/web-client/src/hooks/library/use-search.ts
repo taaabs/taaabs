@@ -34,6 +34,10 @@ type Hint = {
   yields?: number
 }
 
+type Highlights = {
+  [id: string]: [number, number][]
+}
+
 const schema = {
   id: 'string',
   title: 'string',
@@ -70,6 +74,7 @@ export const use_search = () => {
   const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =
     useState<number | undefined>()
   const [result, set_result] = useState<Results<Result> | undefined>()
+  const [highlights, set_highlights] = useState<Highlights>()
   const [count, set_count] = useState<number | undefined>()
 
   useUpdateEffect(() => {
@@ -135,9 +140,9 @@ export const use_search = () => {
         db,
         chunk.map((bookmark) => ({
           id: bookmark.id.toString(),
-          title: `${bookmark.title} ${bookmark.tags.join(
-            ' ',
-          )} ${bookmark.sites.join(' ')}`,
+          title: `${bookmark.title} ${bookmark.tags.join(' ')} ${bookmark.sites
+            .map((site) => site.replace('/', '› '))
+            .join(' ')}`,
           sites: bookmark.sites,
           sites_variants: bookmark.sites
             .map((site) => get_site_variants_for_search(site))
@@ -251,7 +256,7 @@ export const use_search = () => {
     const result_with_tolerance: Results<Result> = await searchWithHighlight(
       db,
       {
-        limit: system_values.max_library_search_results,
+        limit: term.length >= 5 ? system_values.max_library_search_results : 0,
         term,
         properties: ['title'],
         where: {
@@ -318,7 +323,7 @@ export const use_search = () => {
       ...result_without_tolerance.hits,
       ...result_with_tolerance.hits,
     ]
-    const merged_hits_no_dupes: any[] = []
+    const merged_hits_no_dupes: Results<Result>['hits'] = []
     merged_hits.forEach((hit) => {
       if (
         merged_hits_no_dupes.findIndex(
@@ -351,24 +356,46 @@ export const use_search = () => {
       }
     })
 
+    const hits = merged_hits_no_dupes.splice(
+      0,
+      system_values.max_library_search_results,
+    )
+
     set_result({
       count:
-        merged_hits_no_dupes.length > system_values.max_library_search_results
+        hits.length > system_values.max_library_search_results
           ? system_values.max_library_search_results
-          : merged_hits_no_dupes.length,
+          : hits.length,
       elapsed: { formatted: '', raw: 0 },
-      hits: merged_hits_no_dupes.splice(
-        0,
-        system_values.max_library_search_results,
-      ),
+      hits,
     })
-  }
 
-  useUpdateEffect(() => {
-    if (db !== undefined) {
-      get_hints()
-    }
-  }, [search_string])
+    set_highlights(
+      hits.reduce((a, v) => {
+        const positions = Object.values((v as any).positions.title)
+          .flat()
+          .map((highlight: any) => [highlight.start, highlight.length])
+
+        const new_positions: any = []
+
+        for (let i = 0; i < positions.length; i++) {
+          if (
+            positions[i + 1] &&
+            positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
+          ) {
+            new_positions.push([positions[i][0], positions[i][1] + 1])
+          } else {
+            new_positions.push([positions[i][0], positions[i][1]])
+          }
+        }
+
+        return {
+          ...a,
+          [v.id]: new_positions,
+        }
+      }, {}),
+    )
+  }
 
   const get_hints = async () => {
     if (!db) return
@@ -504,11 +531,14 @@ export const use_search = () => {
             ? { id: ids_to_search_amongst }
             : {}),
           is_archived: current_filter != LibraryFilter.Archived ? false : true,
-          is_unread:
-            current_filter == LibraryFilter.Unread ||
-            current_filter == LibraryFilter.OneStarUnread ||
-            current_filter == LibraryFilter.TwoStarsUnread ||
-            current_filter == LibraryFilter.ThreeStarsUnread,
+          ...(current_filter == LibraryFilter.Unread ||
+          current_filter == LibraryFilter.OneStarUnread ||
+          current_filter == LibraryFilter.TwoStarsUnread ||
+          current_filter == LibraryFilter.ThreeStarsUnread
+            ? {
+                is_unread: true,
+              }
+            : {}),
           stars: {
             gte:
               current_filter == LibraryFilter.OneStar ||
@@ -599,11 +629,14 @@ export const use_search = () => {
             ? { id: ids_to_search_amongst }
             : {}),
           is_archived: current_filter != LibraryFilter.Archived ? false : true,
-          is_unread:
-            current_filter == LibraryFilter.Unread ||
-            current_filter == LibraryFilter.OneStarUnread ||
-            current_filter == LibraryFilter.TwoStarsUnread ||
-            current_filter == LibraryFilter.ThreeStarsUnread,
+          ...(current_filter == LibraryFilter.Unread ||
+          current_filter == LibraryFilter.OneStarUnread ||
+          current_filter == LibraryFilter.TwoStarsUnread ||
+          current_filter == LibraryFilter.ThreeStarsUnread
+            ? {
+                is_unread: true,
+              }
+            : {}),
           stars: {
             gte:
               current_filter == LibraryFilter.OneStar ||
@@ -678,8 +711,18 @@ export const use_search = () => {
     }
   }
 
+  useUpdateEffect(() => {
+    if (db !== undefined && is_search_focused) {
+      get_hints()
+    }
+  }, [search_string])
+
   const clear_hints = () => {
     set_hints(undefined)
+  }
+
+  const clear_highlights = () => {
+    set_highlights(undefined)
   }
 
   const clear_search_string = () => {
@@ -782,6 +825,7 @@ export const use_search = () => {
     set_search_string,
     hints,
     clear_hints,
+    clear_highlights,
     get_hints,
     init,
     query_db,
@@ -798,5 +842,7 @@ export const use_search = () => {
     clear_result,
     count,
     set_count,
+    highlights,
+    set_highlights,
   }
 }

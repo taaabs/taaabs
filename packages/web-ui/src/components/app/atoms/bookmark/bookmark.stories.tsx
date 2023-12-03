@@ -1,5 +1,6 @@
 import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
 import { Bookmark } from './bookmark'
+import { LibraryFilter } from '@shared/types/common/library-filter'
 
 export default {
   component: Bookmark,
@@ -20,7 +21,6 @@ export const Primary = () => (
     >
       <Bookmark
         index={22}
-        id="1"
         stars={0}
         title="Lorem ipsum dolor sit amet"
         note="Lorem ipsum dolor sit amet"
@@ -47,7 +47,37 @@ export const Primary = () => (
       <StorybookSpacer />
       <Bookmark
         index={22}
-        id="1"
+        stars={0}
+        title="Lorem ipsum"
+        is_unread={false}
+        tags={[
+          { id: 1, name: 'lorem', yields: 8 },
+          { id: 1, name: 'ipsum', yields: 2 },
+          { id: 1, name: 'ipsum', yields: 2 },
+        ]}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={() => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          { url: 'https://google.com', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+        ]}
+        set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
+        menu_slot={<>menu</>}
+        number_of_selected_tags={0}
+        highlights={[
+          [1, 2],
+          [12, 2],
+          [18, 2],
+          [32, 2],
+        ]}
+      />
+      <StorybookSpacer />
+      <Bookmark
+        index={22}
         stars={0}
         title="Lorem ipsum dolor sit amet"
         is_unread={false}
@@ -69,7 +99,6 @@ export const Primary = () => (
       <StorybookSpacer />
       <Bookmark
         index={22}
-        id="1"
         stars={0}
         title="Lorem ipsum dolor sit amet"
         note="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies sapien nulla, at facilisis risus dictum sed."
@@ -95,7 +124,6 @@ export const Primary = () => (
       <StorybookSpacer />
       <Bookmark
         index={22}
-        id="1"
         stars={2}
         title="Lorem ipsum dolor sit amet"
         is_unread={false}
@@ -120,7 +148,6 @@ export const Primary = () => (
       <StorybookSpacer />
       <Bookmark
         index={22}
-        id="1"
         stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={true}
@@ -152,7 +179,6 @@ export const Primary = () => (
       <StorybookSpacer />
       <Bookmark
         index={22}
-        id="1"
         stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={false}
@@ -177,7 +203,6 @@ export const Primary = () => (
       <StorybookSpacer />
       <Bookmark
         index={22}
-        id="1"
         stars={2}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={true}
@@ -202,7 +227,6 @@ export const Primary = () => (
       <StorybookSpacer />
       <Bookmark
         index={22}
-        id="1"
         stars={2}
         title="Lorem ipsum dolor sit amet"
         is_unread={true}
