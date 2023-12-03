@@ -8,7 +8,6 @@ import {
   insert,
   search,
 } from '@orama/orama'
-import { persist, restore } from '@orama/plugin-data-persistence'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { LibraryFilter } from '@shared/types/common/library-filter'
@@ -24,9 +23,15 @@ import { get_site_variants_for_search } from '@/utils/get-site-variants-for-sear
 import {
   afterInsert as highlightAfterInsert,
   searchWithHighlight,
+  saveWithHighlight,
+  loadWithHighlight,
+  RawDataWithPositions,
 } from '@orama/plugin-match-highlight'
 import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
 import { system_values } from '@shared/constants/system-values'
+import localforage from 'localforage'
+import { browser_storage } from '@/constants/browser-storage'
+import { persist, restore } from '@orama/plugin-data-persistence'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -100,70 +105,121 @@ export const use_search = () => {
 
   const init = async () => {
     set_is_initializing(true)
-    const data_source = new LibrarySearch_DataSourceImpl(
-      process.env.NEXT_PUBLIC_API_URL,
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+
+    let bookmarks = await localforage.getItem<SearchableBookmark_Entity[]>(
+      browser_storage.local_forage.authorized_library_search
+        .searchable_bookmarks,
     )
-    const repository = new LibrarySearch_RepositoryImpl(data_source)
-    const get_searchable_bookmarks =
-      new GetSearchableBookmarksOnAuthorizedUser_UseCase(repository)
-    const { bookmarks } = await get_searchable_bookmarks.invoke({})
-    set_searchable_bookmarks(bookmarks)
 
-    const db = await create({
-      schema,
-      sort: {
-        unsortableProperties: [
-          'id',
-          'title',
-          'sites',
-          'sites_variants',
-          'is_archived',
-          'is_unread',
-          'stars',
-        ],
-      },
-      plugins: [
-        {
-          name: 'highlight',
-          afterInsert: highlightAfterInsert,
+    if (bookmarks) {
+      set_searchable_bookmarks(bookmarks)
+    } else {
+      const data_source = new LibrarySearch_DataSourceImpl(
+        process.env.NEXT_PUBLIC_API_URL,
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+      )
+      const repository = new LibrarySearch_RepositoryImpl(data_source)
+      const get_searchable_bookmarks =
+        new GetSearchableBookmarksOnAuthorizedUser_UseCase(repository)
+      const result = await get_searchable_bookmarks.invoke({})
+      set_searchable_bookmarks(result.bookmarks)
+      bookmarks = result.bookmarks
+    }
+
+    const cached_db = await localforage.getItem<string>(
+      browser_storage.local_forage.authorized_library_search.db,
+    )
+    const cached_highlights = await localforage.getItem<RawDataWithPositions>(
+      browser_storage.local_forage.authorized_library_search.db_highlights,
+    )
+
+    let db: Orama<typeof schema>
+
+    if (cached_db && cached_highlights) {
+      db = await restore('json', cached_db)
+      await loadWithHighlight(db, cached_highlights)
+    } else {
+      db = await create({
+        schema,
+        sort: {
+          unsortableProperties: [
+            'id',
+            'title',
+            'sites',
+            'sites_variants',
+            'is_archived',
+            'is_unread',
+            'stars',
+          ],
         },
-      ],
-    })
+        plugins: [
+          {
+            name: 'highlight',
+            afterInsert: highlightAfterInsert,
+          },
+        ],
+      })
 
-    const chunkSize = 1000
-    let indexed_count = 0
-    for (let i = 0; i < bookmarks.length; i += chunkSize) {
-      const chunk = bookmarks.slice(i, i + chunkSize)
-      await insertMultiple(
-        db,
-        chunk.map((bookmark) => ({
-          id: bookmark.id.toString(),
-          title: `${bookmark.title} ${bookmark.tags.join(' ')} ${bookmark.sites
-            .map((site) => site.replace('/', ' › '))
-            .join(' ')}`,
-          sites: bookmark.sites,
-          sites_variants: bookmark.sites
-            .map((site) => get_site_variants_for_search(site))
-            .flat(),
-          tags: bookmark.tags,
-          created_at: bookmark.created_at,
-          updated_at: bookmark.updated_at,
-          visited_at: bookmark.visited_at,
-          is_archived: bookmark.is_archived,
-          is_unread: bookmark.is_unread,
-          stars: bookmark.stars,
-        })),
-        chunkSize,
-      )
-      indexed_count += chunk.length
-      set_indexed_bookmarks_percentage(
-        Math.floor((indexed_count / bookmarks.length) * 100),
-      )
+      const chunkSize = 1000
+      let indexed_count = 0
+      for (let i = 0; i < bookmarks.length; i += chunkSize) {
+        const chunk = bookmarks.slice(i, i + chunkSize)
+        await insertMultiple(
+          db,
+          chunk.map((bookmark) => ({
+            id: bookmark.id.toString(),
+            title: `${bookmark.title} ${bookmark.tags.join(
+              ' ',
+            )} ${bookmark.sites
+              .map((site) => site.replace('/', ' › '))
+              .join(' ')}`,
+            sites: bookmark.sites,
+            sites_variants: bookmark.sites
+              .map((site) => get_site_variants_for_search(site))
+              .flat(),
+            tags: bookmark.tags,
+            created_at: bookmark.created_at,
+            updated_at: bookmark.updated_at,
+            visited_at: bookmark.visited_at,
+            is_archived: bookmark.is_archived,
+            is_unread: bookmark.is_unread,
+            stars: bookmark.stars,
+          })),
+          chunkSize,
+        )
+        indexed_count += chunk.length
+        set_indexed_bookmarks_percentage(
+          Math.floor((indexed_count / bookmarks.length) * 100),
+        )
+      }
+
+      cache_data({ db, searchable_bookmarks: bookmarks })
     }
 
     set_db(db)
     set_is_initializing(false)
+  }
+
+  const cache_data = async (params: {
+    db: Orama<typeof schema>
+    searchable_bookmarks: SearchableBookmark_Entity[]
+  }) => {
+    const db_stringified = await persist(params.db, 'json')
+    const highlights = await saveWithHighlight(params.db)
+
+    await localforage.setItem(
+      browser_storage.local_forage.authorized_library_search.db,
+      db_stringified,
+    )
+    await localforage.setItem(
+      browser_storage.local_forage.authorized_library_search.db_highlights,
+      highlights,
+    )
+    await localforage.setItem(
+      browser_storage.local_forage.authorized_library_search
+        .searchable_bookmarks,
+      params.searchable_bookmarks,
+    )
   }
 
   const query_db = async (params: { search_string: string }) => {
@@ -710,6 +766,7 @@ export const use_search = () => {
 
   useUpdateEffect(() => {
     if (db !== undefined && is_search_focused) {
+      set_result(undefined)
       get_hints()
     }
   }, [search_string])
@@ -772,6 +829,11 @@ export const use_search = () => {
   }) => {
     if (!db) return
     await remove(db, params.bookmark_id.toString())
+    const new_searchable_bookmarks = searchable_bookmarks!.filter(
+      (bookmark) => bookmark.id != params.bookmark_id,
+    )
+    set_searchable_bookmarks(new_searchable_bookmarks)
+    await cache_data({ db, searchable_bookmarks: new_searchable_bookmarks })
   }
 
   const update_searchable_bookmark = async (params: {
@@ -808,6 +870,8 @@ export const use_search = () => {
         .join(' ')} ${sites.join(' ')}`,
       visited_at: params.visited_at.getTime() / 1000,
     })
+
+    await cache_data({ db, searchable_bookmarks: searchable_bookmarks! })
   }
 
   return {
