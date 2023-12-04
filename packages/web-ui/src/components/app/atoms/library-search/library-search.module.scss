@@ -46,10 +46,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    @include transition-100ms(background);
+    @include transition-100ms(background-color);
     border-radius: var(--border-radius-999px);
     @include hover {
-      background: var(--blue200);
+      background: var(--blue100);
     }
     > svg {
       width: var(--icon-dimension-20px);
@@ -70,6 +70,10 @@
   .form {
     flex-grow: 1;
     position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    cursor: text;
     &__keycap {
       border: 1px solid var(--blue200);
       background: var(--blue100);
@@ -235,12 +239,6 @@
         > span:nth-child(2) {
           color: var(--text-color-normal);
           font-weight: var(--font-weight-inter-semi-bold);
-        }
-        > span:nth-child(3) {
-          color: var(--text-color-dimmed);
-          &::before {
-            content: ' ';
-          }
         }
         &__keycap {
           border: 1px solid var(--neutral300);

@@ -220,8 +220,8 @@ const Page: React.FC = () => {
             search.query_db({ search_string: search.search_string })
           }}
           on_blur={() => {
-            search.set_is_search_focused(false)
             search.clear_hints()
+            search.set_is_search_focused(false)
           }}
           results_count={search.search_string ? search?.count : undefined}
           on_clear_click={() => {

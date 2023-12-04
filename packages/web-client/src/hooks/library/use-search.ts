@@ -25,9 +25,7 @@ import {
   searchWithHighlight,
   saveWithHighlight,
   loadWithHighlight,
-  RawDataWithPositions,
 } from '@orama/plugin-match-highlight'
-import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
 import { system_values } from '@shared/constants/system-values'
 import localforage from 'localforage'
 import { browser_storage } from '@/constants/browser-storage'
@@ -61,11 +59,12 @@ const schema = {
 
 type Result = TypedDocument<Orama<typeof schema>>
 
+type BookmarkTags = { id: number; tags: string[] }
+
 export const use_search = () => {
   const query_params = use_shallow_search_params()
   const [is_search_focused, set_is_search_focused] = useState(false)
-  const [searchable_bookmarks, set_searchable_bookmarks] =
-    useState<SearchableBookmark_Entity[]>()
+  const [all_bookmarks, set_all_bookmarks] = useState<BookmarkTags[]>()
   const [current_filter, set_current_filter] = useState<LibraryFilter>()
   const [selected_tags, set_selected_tags] = useState<string[]>([])
   const [ids_to_search_amongst, set_ids_to_search_amongst] = useState<
@@ -84,20 +83,20 @@ export const use_search = () => {
   const [count, set_count] = useState<number | undefined>()
 
   useUpdateEffect(() => {
-    if (!searchable_bookmarks) return
+    if (!all_bookmarks) return
 
     if (selected_tags.length) {
       set_ids_to_search_amongst(
-        searchable_bookmarks
+        all_bookmarks
           .filter((bookmark) =>
             selected_tags.every((tag) => bookmark.tags.includes(tag)),
           )
           .map((bookmark) => bookmark.id.toString()),
       )
-    } else {
+    } else if (is_search_focused) {
       get_hints()
     }
-  }, [selected_tags, searchable_bookmarks])
+  }, [selected_tags, all_bookmarks])
 
   useUpdateEffect(() => {
     get_hints()
@@ -106,13 +105,22 @@ export const use_search = () => {
   const init = async () => {
     set_is_initializing(true)
 
-    let bookmarks = await localforage.getItem<SearchableBookmark_Entity[]>(
-      browser_storage.local_forage.authorized_library_search
-        .searchable_bookmarks,
+    let db: Orama<typeof schema>
+
+    const cached_all_bookmarks = await localforage.getItem<string>(
+      browser_storage.local_forage.authorized_library.all_bookmarks,
+    )
+    const cached_db = await localforage.getItem<string>(
+      browser_storage.local_forage.authorized_library.db,
+    )
+    const cached_highlights = await localforage.getItem<string>(
+      browser_storage.local_forage.authorized_library.db_highlights,
     )
 
-    if (bookmarks) {
-      set_searchable_bookmarks(bookmarks)
+    if (cached_all_bookmarks && cached_db && cached_highlights) {
+      set_all_bookmarks(JSON.parse(cached_all_bookmarks))
+      db = await restore('json', cached_db)
+      await loadWithHighlight(db, JSON.parse(cached_highlights as any))
     } else {
       const data_source = new LibrarySearch_DataSourceImpl(
         process.env.NEXT_PUBLIC_API_URL,
@@ -121,24 +129,8 @@ export const use_search = () => {
       const repository = new LibrarySearch_RepositoryImpl(data_source)
       const get_searchable_bookmarks =
         new GetSearchableBookmarksOnAuthorizedUser_UseCase(repository)
-      const result = await get_searchable_bookmarks.invoke({})
-      set_searchable_bookmarks(result.bookmarks)
-      bookmarks = result.bookmarks
-    }
+      const { bookmarks } = await get_searchable_bookmarks.invoke({})
 
-    const cached_db = await localforage.getItem<string>(
-      browser_storage.local_forage.authorized_library_search.db,
-    )
-    const cached_highlights = await localforage.getItem<RawDataWithPositions>(
-      browser_storage.local_forage.authorized_library_search.db_highlights,
-    )
-
-    let db: Orama<typeof schema>
-
-    if (cached_db && cached_highlights) {
-      db = await restore('json', cached_db)
-      await loadWithHighlight(db, cached_highlights)
-    } else {
       db = await create({
         schema,
         sort: {
@@ -193,7 +185,13 @@ export const use_search = () => {
         )
       }
 
-      cache_data({ db, searchable_bookmarks: bookmarks })
+      const bookmarks_tags: BookmarkTags[] = bookmarks.map((bookmark) => ({
+        id: bookmark.id,
+        tags: bookmark.tags,
+      }))
+      set_all_bookmarks(bookmarks_tags)
+
+      cache_data({ db, all_bookmarks: bookmarks_tags })
     }
 
     set_db(db)
@@ -202,27 +200,28 @@ export const use_search = () => {
 
   const cache_data = async (params: {
     db: Orama<typeof schema>
-    searchable_bookmarks: SearchableBookmark_Entity[]
+    all_bookmarks: BookmarkTags[]
   }) => {
     const db_stringified = await persist(params.db, 'json')
     const highlights = await saveWithHighlight(params.db)
 
     await localforage.setItem(
-      browser_storage.local_forage.authorized_library_search.db,
+      browser_storage.local_forage.authorized_library.db,
       db_stringified,
     )
     await localforage.setItem(
-      browser_storage.local_forage.authorized_library_search.db_highlights,
-      highlights,
+      browser_storage.local_forage.authorized_library.db_highlights,
+      JSON.stringify(highlights),
     )
     await localforage.setItem(
-      browser_storage.local_forage.authorized_library_search
-        .searchable_bookmarks,
-      params.searchable_bookmarks,
+      browser_storage.local_forage.authorized_library.all_bookmarks,
+      JSON.stringify(params.all_bookmarks),
     )
   }
 
-  const query_db = async (params: { search_string: string }) => {
+  const get_hits = async (params: {
+    search_string: string
+  }): Promise<Results<Result>['hits']> => {
     if (!db) throw new Error('[query_db] Db should be there.')
 
     const tags = query_params.get('t')
@@ -236,6 +235,7 @@ export const use_search = () => {
     const sites_variants = params.search_string
       .match(/(?<=site:)(.*?)($|\s)/g)
       ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
+      .filter((variant) => variant != '')
 
     const term = params.search_string
       .replace(/(?=site:)(.*?)($|\s)/g, '')
@@ -376,7 +376,9 @@ export const use_search = () => {
       ...result_without_tolerance.hits,
       ...result_with_tolerance.hits,
     ]
+
     const merged_hits_no_dupes: Results<Result>['hits'] = []
+
     merged_hits.forEach((hit) => {
       if (
         merged_hits_no_dupes.findIndex(
@@ -409,45 +411,66 @@ export const use_search = () => {
       }
     })
 
-    const hits = merged_hits_no_dupes.splice(
+    return merged_hits_no_dupes.slice(
       0,
       system_values.max_library_search_results,
     )
+  }
+
+  const query_db = async (params: { search_string: string }) => {
+    const hits = await get_hits({ search_string: params.search_string })
 
     set_result({
       count:
-        hits.length > system_values.max_library_search_results
+        hits.length == system_values.max_library_search_results
           ? system_values.max_library_search_results
           : hits.length,
       elapsed: { formatted: '', raw: 0 },
       hits,
     })
 
-    const highlights = hits.reduce((a, v) => {
-      const positions = Object.values((v as any).positions.title)
-        .flat()
-        .map((highlight: any) => [highlight.start, highlight.length])
+    set_highlights(
+      hits.reduce((a, v) => {
+        const positions = Object.values((v as any).positions.title)
+          .flat()
+          .map((highlight: any) => [highlight.start, highlight.length])
 
-      const new_positions: any = []
+        const new_positions: any = []
 
-      for (let i = 0; i < positions.length; i++) {
-        if (
-          positions[i + 1] &&
-          positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
-        ) {
-          new_positions.push([positions[i][0], positions[i][1] + 1])
-        } else {
-          new_positions.push([positions[i][0], positions[i][1]])
+        for (let i = 0; i < positions.length; i++) {
+          if (
+            positions[i + 1] &&
+            positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
+          ) {
+            new_positions.push([positions[i][0], positions[i][1] + 1])
+          } else {
+            new_positions.push([positions[i][0], positions[i][1]])
+          }
         }
-      }
 
-      return {
-        ...a,
-        [v.id]: new_positions,
-      }
-    }, {})
+        return {
+          ...a,
+          [v.id]: new_positions,
+        }
+      }, {}),
+    )
 
-    set_highlights(highlights)
+    if (hits.length) {
+      let recent_searches: string[] = []
+
+      recent_searches = JSON.parse(
+        localStorage.getItem(
+          browser_storage.local_storage.authorized_library.recent_searches,
+        ) || '[]',
+      )
+
+      localStorage.setItem(
+        browser_storage.local_storage.authorized_library.recent_searches,
+        JSON.stringify([
+          ...new Set([params.search_string, ...recent_searches].slice(0, 1000)),
+        ]),
+      )
+    }
   }
 
   const get_hints = async () => {
@@ -466,301 +489,383 @@ export const use_search = () => {
       ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
     const term = search_string.replace(/(?=site:)(.*?)($|\s)/g, '').trim()
 
-    if (last_word.substring(0, 5) == 'site:') {
-      const term = last_word.substring(5)
+    if (!search_string) {
+      set_hints(
+        (
+          JSON.parse(
+            localStorage.getItem(
+              browser_storage.local_storage.authorized_library.recent_searches,
+            ) || '[]',
+          ) as string[]
+        )
+          .filter(
+            (recent_search_string) =>
+              recent_search_string != search_string &&
+              recent_search_string.startsWith(search_string),
+          )
+          .slice(0, 30)
+          .map((recent_search_string) => ({
+            type: 'recent',
+            completion: recent_search_string.slice(search_string.length),
+            term: recent_search_string.slice(0, search_string.length),
+          })),
+      )
+    } else {
+      const recent_hints: Hint[] = (
+        JSON.parse(
+          localStorage.getItem(
+            browser_storage.local_storage.authorized_library.recent_searches,
+          ) || '[]',
+        ) as string[]
+      )
+        .filter(
+          (recent_search_string) =>
+            recent_search_string != search_string &&
+            recent_search_string.startsWith(search_string),
+        )
+        .slice(0, 3)
+        .map((recent_search_string) => ({
+          type: 'recent',
+          completion: recent_search_string.slice(search_string.length),
+          term: recent_search_string.slice(0, search_string.length),
+        }))
 
-      const result: Results<Result> = await search(db, {
-        limit: 1000000,
-        term,
-        properties: ['sites'],
-        where: {
-          ...(tags && ids_to_search_amongst
-            ? { id: ids_to_search_amongst }
-            : {}),
-          is_archived: current_filter != LibraryFilter.Archived ? false : true,
-          ...(current_filter == LibraryFilter.Unread ||
-          current_filter == LibraryFilter.OneStarUnread ||
-          current_filter == LibraryFilter.TwoStarsUnread ||
-          current_filter == LibraryFilter.ThreeStarsUnread
-            ? {
-                is_unread: true,
-              }
-            : {}),
-          stars: {
-            gte:
-              current_filter == LibraryFilter.OneStar ||
-              current_filter == LibraryFilter.OneStarUnread
-                ? 1
-                : current_filter == LibraryFilter.TwoStars ||
-                  current_filter == LibraryFilter.TwoStarsUnread
-                ? 2
-                : current_filter == LibraryFilter.ThreeStars ||
-                  current_filter == LibraryFilter.ThreeStarsUnread
-                ? 3
-                : 0,
+      if (last_word.substring(0, 5) == 'site:') {
+        const term = last_word.substring(5)
+
+        const result: Results<Result> = await search(db, {
+          limit: 1000,
+          term: term ? term : undefined,
+          properties: ['sites'],
+          where: {
+            ...(tags && ids_to_search_amongst
+              ? { id: ids_to_search_amongst }
+              : {}),
+            is_archived:
+              current_filter != LibraryFilter.Archived ? false : true,
+            ...(current_filter == LibraryFilter.Unread ||
+            current_filter == LibraryFilter.OneStarUnread ||
+            current_filter == LibraryFilter.TwoStarsUnread ||
+            current_filter == LibraryFilter.ThreeStarsUnread
+              ? {
+                  is_unread: true,
+                }
+              : {}),
+            stars: {
+              gte:
+                current_filter == LibraryFilter.OneStar ||
+                current_filter == LibraryFilter.OneStarUnread
+                  ? 1
+                  : current_filter == LibraryFilter.TwoStars ||
+                    current_filter == LibraryFilter.TwoStarsUnread
+                  ? 2
+                  : current_filter == LibraryFilter.ThreeStars ||
+                    current_filter == LibraryFilter.ThreeStarsUnread
+                  ? 3
+                  : 0,
+            },
+            ...(gte && lte
+              ? {
+                  created_at: {
+                    between: [
+                      new Date(
+                        parseInt(gte.toString().substring(0, 4)),
+                        parseInt(gte.toString().substring(4, 6)) - 1,
+                      ).getTime() / 1000,
+                      new Date(
+                        parseInt(lte.toString().substring(0, 4)),
+                        parseInt(lte.toString().substring(4, 6)),
+                      ).getTime() /
+                        1000 -
+                        1,
+                    ],
+                  },
+                }
+              : {}),
           },
-          ...(gte && lte
-            ? {
-                created_at: {
-                  between: [
-                    new Date(
-                      parseInt(gte.toString().substring(0, 4)),
-                      parseInt(gte.toString().substring(4, 6)) - 1,
-                    ).getTime() / 1000,
-                    new Date(
-                      parseInt(lte.toString().substring(0, 4)),
-                      parseInt(lte.toString().substring(4, 6)),
-                    ).getTime() /
-                      1000 -
-                      1,
-                  ],
-                },
-              }
-            : {}),
-        },
-        threshold: 0,
-      })
+          threshold: term ? 0 : undefined,
+        })
 
-      const sites: { site: string; occurences: number }[] = []
+        const sites: { site: string; occurences: number }[] = []
 
-      result.hits.forEach(({ document }) => {
-        document.sites.forEach((site) => {
-          if (site.includes(term)) {
-            const index = sites.findIndex((s) => s.site == site)
-            if (index == -1) {
-              sites.push({ site, occurences: 1 })
-            } else {
-              sites[index] = {
-                ...sites[index],
-                occurences: sites[index].occurences + 1,
+        result.hits.forEach(({ document }) => {
+          document.sites.forEach((site) => {
+            if (site.includes(term)) {
+              const index = sites.findIndex((s) => s.site == site)
+              if (index == -1) {
+                sites.push({ site, occurences: 1 })
+              } else {
+                sites[index] = {
+                  ...sites[index],
+                  occurences: sites[index].occurences + 1,
+                }
               }
+            }
+          })
+        })
+
+        sites.sort((a, b) => b.occurences - a.occurences)
+
+        const hints: Hint[] = sites.map((site) => ({
+          term,
+          completion: term ? site.site.split(term)[1] : site.site,
+          type: 'new',
+          yields: site.occurences,
+        }))
+
+        const hints_no_dupes: Hint[] = []
+
+        hints.forEach((hint) => {
+          const hint_index = hints_no_dupes.findIndex(
+            (h) => h.completion == hint.completion,
+          )
+
+          if (hint_index == -1) {
+            hints_no_dupes.push(hint)
+          } else {
+            hints_no_dupes[hint_index] = {
+              ...hints_no_dupes[hint_index],
+              yields: hints_no_dupes[hint_index].yields! + hint.yields!,
             }
           }
         })
-      })
 
-      sites.sort((a, b) => b.occurences - a.occurences)
-
-      const hints: Hint[] = sites.map((site) => ({
-        term,
-        completion: site.site.split(term)[1],
-        type: 'new',
-        yields: site.occurences,
-      }))
-
-      const hints_no_dupes: Hint[] = []
-
-      hints.forEach((hint) => {
-        const hint_index = hints_no_dupes.findIndex(
-          (h) => h.completion == hint.completion,
+        const hints_no_empty_completion = hints_no_dupes.filter(
+          (hint) => hint.completion,
         )
 
-        if (hint_index == -1) {
-          hints_no_dupes.push(hint)
+        set_hints(
+          hints_no_empty_completion.length
+            ? [
+                ...recent_hints.map((recent_hint) => {
+                  const hint = hints_no_empty_completion.find(
+                    (hint) => recent_hint.completion == hint.completion,
+                  )
+
+                  if (hint) {
+                    return {
+                      ...recent_hint,
+                      yields: hint.yields,
+                    }
+                  } else {
+                    return recent_hint
+                  }
+                }),
+                ...hints_no_empty_completion.filter(
+                  (hint) =>
+                    !recent_hints.find(
+                      (recent_hint) =>
+                        recent_hint.completion == hint.completion,
+                    ),
+                ),
+              ]
+            : undefined,
+        )
+      } else {
+        const ids_of_hits = (await get_hits({ search_string })).map(
+          (hit) => hit.id,
+        )
+
+        if (last_word.length) {
+          const result: Results<Result> = await search(db, {
+            limit: 1000,
+            term,
+            properties: ['title'],
+            where: {
+              ...(ids_of_hits.length ? { id: ids_of_hits } : {}),
+              is_archived:
+                current_filter != LibraryFilter.Archived ? false : true,
+              ...(current_filter == LibraryFilter.Unread ||
+              current_filter == LibraryFilter.OneStarUnread ||
+              current_filter == LibraryFilter.TwoStarsUnread ||
+              current_filter == LibraryFilter.ThreeStarsUnread
+                ? {
+                    is_unread: true,
+                  }
+                : {}),
+              stars: {
+                gte:
+                  current_filter == LibraryFilter.OneStar ||
+                  current_filter == LibraryFilter.OneStarUnread
+                    ? 1
+                    : current_filter == LibraryFilter.TwoStars ||
+                      current_filter == LibraryFilter.TwoStarsUnread
+                    ? 2
+                    : current_filter == LibraryFilter.ThreeStars ||
+                      current_filter == LibraryFilter.ThreeStarsUnread
+                    ? 3
+                    : 0,
+              },
+              ...(gte && lte
+                ? {
+                    created_at: {
+                      between: [
+                        new Date(
+                          parseInt(gte.toString().substring(0, 4)),
+                          parseInt(gte.toString().substring(4, 6)) - 1,
+                        ).getTime() / 1000,
+                        new Date(
+                          parseInt(lte.toString().substring(0, 4)),
+                          parseInt(lte.toString().substring(4, 6)),
+                        ).getTime() /
+                          1000 -
+                          1,
+                      ],
+                    },
+                  }
+                : {}),
+              ...(sites_variants?.length ? { sites_variants } : {}),
+            },
+            sortBy: {
+              property:
+                sortby == '1'
+                  ? 'updated_at'
+                  : sortby == '2'
+                  ? 'visited_at'
+                  : 'created_at',
+              order: order == '1' ? 'ASC' : 'DESC',
+            },
+            threshold: 0,
+          })
+
+          let words_hashmap: { [word: string]: number } = {}
+
+          result.hits.forEach(({ document }) => {
+            const word = document.title
+              .toLowerCase()
+              .split(last_word)[1]
+              ?.replace(/[^a-zA-Z ]/g, ' ')
+              .split(' ')[0]
+
+            if (word) {
+              if (words_hashmap[word]) {
+                words_hashmap[word] = words_hashmap[word] + 1
+              } else {
+                words_hashmap = { ...words_hashmap, [word]: 1 }
+              }
+            }
+          })
+
+          const new_hints: Hint[] = []
+
+          Object.entries(words_hashmap).map(([k, v]) => {
+            if (!words.includes(last_word + k)) {
+              new_hints.push({
+                completion: k,
+                term: last_word,
+                type: 'new',
+                yields: v,
+              })
+            }
+          })
+
+          new_hints.sort((a, b) => b.yields! - a.yields!)
+
+          const hints_with_no_yields: Hint[] = new_hints.map((hint) => ({
+            completion: hint.completion,
+            term: hint.term,
+            type: hint.type,
+          }))
+
+          set_hints(
+            new_hints.length
+              ? [...recent_hints, ...hints_with_no_yields.slice(0, 10)]
+              : undefined,
+          )
         } else {
-          hints_no_dupes[hint_index] = {
-            ...hints_no_dupes[hint_index],
-            yields: hints_no_dupes[hint_index].yields! + hint.yields!,
-          }
-        }
-      })
+          const result: Results<Result> = await search(db, {
+            limit: 1000,
+            term: term ? term : undefined,
+            properties: ['title'],
+            where: {
+              ...(tags && ids_of_hits ? { id: ids_of_hits } : {}),
+              is_archived:
+                current_filter != LibraryFilter.Archived ? false : true,
+              ...(current_filter == LibraryFilter.Unread ||
+              current_filter == LibraryFilter.OneStarUnread ||
+              current_filter == LibraryFilter.TwoStarsUnread ||
+              current_filter == LibraryFilter.ThreeStarsUnread
+                ? {
+                    is_unread: true,
+                  }
+                : {}),
+              stars: {
+                gte:
+                  current_filter == LibraryFilter.OneStar ||
+                  current_filter == LibraryFilter.OneStarUnread
+                    ? 1
+                    : current_filter == LibraryFilter.TwoStars ||
+                      current_filter == LibraryFilter.TwoStarsUnread
+                    ? 2
+                    : current_filter == LibraryFilter.ThreeStars ||
+                      current_filter == LibraryFilter.ThreeStarsUnread
+                    ? 3
+                    : 0,
+              },
+              ...(gte && lte
+                ? {
+                    created_at: {
+                      between: [
+                        new Date(
+                          parseInt(gte.toString().substring(0, 4)),
+                          parseInt(gte.toString().substring(4, 6)) - 1,
+                        ).getTime() / 1000,
+                        new Date(
+                          parseInt(lte.toString().substring(0, 4)),
+                          parseInt(lte.toString().substring(4, 6)),
+                        ).getTime() /
+                          1000 -
+                          1,
+                      ],
+                    },
+                  }
+                : {}),
+              ...(sites_variants?.length ? { sites_variants } : {}),
+            },
+            sortBy: {
+              property:
+                sortby == '1'
+                  ? 'updated_at'
+                  : sortby == '2'
+                  ? 'visited_at'
+                  : 'created_at',
+              order: order == '1' ? 'ASC' : 'DESC',
+            },
+            threshold: term ? 0 : undefined,
+          })
 
-      const hints_no_empty_completion = hints_no_dupes.filter(
-        (hint) => hint.completion,
-      )
+          let tags_hashmap: { [tag: string]: number } = {}
 
-      set_hints(
-        hints_no_empty_completion.length
-          ? hints_no_empty_completion
-          : undefined,
-      )
-    } else if (last_word.length) {
-      const result: Results<Result> = await search(db, {
-        limit: 1000,
-        term,
-        properties: ['title'],
-        where: {
-          ...(tags && ids_to_search_amongst
-            ? { id: ids_to_search_amongst }
-            : {}),
-          is_archived: current_filter != LibraryFilter.Archived ? false : true,
-          ...(current_filter == LibraryFilter.Unread ||
-          current_filter == LibraryFilter.OneStarUnread ||
-          current_filter == LibraryFilter.TwoStarsUnread ||
-          current_filter == LibraryFilter.ThreeStarsUnread
-            ? {
-                is_unread: true,
+          result.hits.forEach(({ document }) => {
+            document.tags.forEach((tag) => {
+              if (term.split(' ').includes(tag) || selected_tags.includes(tag))
+                return
+              if (tags_hashmap[tag]) {
+                tags_hashmap[tag] = tags_hashmap[tag] + 1
+              } else {
+                tags_hashmap = { ...tags_hashmap, [tag]: 1 }
               }
-            : {}),
-          stars: {
-            gte:
-              current_filter == LibraryFilter.OneStar ||
-              current_filter == LibraryFilter.OneStarUnread
-                ? 1
-                : current_filter == LibraryFilter.TwoStars ||
-                  current_filter == LibraryFilter.TwoStarsUnread
-                ? 2
-                : current_filter == LibraryFilter.ThreeStars ||
-                  current_filter == LibraryFilter.ThreeStarsUnread
-                ? 3
-                : 0,
-          },
-          ...(gte && lte
-            ? {
-                created_at: {
-                  between: [
-                    new Date(
-                      parseInt(gte.toString().substring(0, 4)),
-                      parseInt(gte.toString().substring(4, 6)) - 1,
-                    ).getTime() / 1000,
-                    new Date(
-                      parseInt(lte.toString().substring(0, 4)),
-                      parseInt(lte.toString().substring(4, 6)),
-                    ).getTime() /
-                      1000 -
-                      1,
-                  ],
-                },
-              }
-            : {}),
-          ...(sites_variants?.length ? { sites_variants } : {}),
-        },
-        sortBy: {
-          property:
-            sortby == '1'
-              ? 'updated_at'
-              : sortby == '2'
-              ? 'visited_at'
-              : 'created_at',
-          order: order == '1' ? 'ASC' : 'DESC',
-        },
-        threshold: 0,
-      })
+            })
+          })
 
-      let words_hashmap: { [word: string]: number } = {}
+          const new_hints: Hint[] = []
 
-      result.hits.forEach(({ document }) => {
-        const word = document.title
-          .toLowerCase()
-          .split(last_word)[1]
-          ?.replace(/[^a-zA-Z ]/g, ' ')
-          .split(' ')[0]
+          Object.keys(tags_hashmap).map((k) => {
+            new_hints.push({
+              completion: k,
+              type: 'new',
+            })
+          })
 
-        if (word) {
-          if (words_hashmap[word]) {
-            words_hashmap[word] = words_hashmap[word] + 1
+          new_hints.sort((a, b) => b.yields! - a.yields!)
+
+          if (new_hints.length >= 2) {
+            set_hints([...recent_hints, ...new_hints])
           } else {
-            words_hashmap = { ...words_hashmap, [word]: 1 }
+            set_hints(undefined)
           }
         }
-      })
-
-      const hints: Hint[] = []
-
-      Object.entries(words_hashmap).map(([k, v]) => {
-        if (!words.includes(last_word + k)) {
-          hints.push({ completion: k, term: last_word, type: 'new', yields: v })
-        }
-      })
-
-      hints.sort((a, b) => b.yields! - a.yields!)
-
-      const hints_with_no_yields: Hint[] = hints.map((hint) => ({
-        completion: hint.completion,
-        term: hint.term,
-        type: hint.type,
-      }))
-
-      set_hints(hints.length ? hints_with_no_yields.slice(0, 10) : undefined)
-    } else {
-      const result: Results<Result> = await search(db, {
-        limit: 1000,
-        term: term ? term : undefined,
-        properties: ['title'],
-        where: {
-          ...(tags && ids_to_search_amongst
-            ? { id: ids_to_search_amongst }
-            : {}),
-          is_archived: current_filter != LibraryFilter.Archived ? false : true,
-          ...(current_filter == LibraryFilter.Unread ||
-          current_filter == LibraryFilter.OneStarUnread ||
-          current_filter == LibraryFilter.TwoStarsUnread ||
-          current_filter == LibraryFilter.ThreeStarsUnread
-            ? {
-                is_unread: true,
-              }
-            : {}),
-          stars: {
-            gte:
-              current_filter == LibraryFilter.OneStar ||
-              current_filter == LibraryFilter.OneStarUnread
-                ? 1
-                : current_filter == LibraryFilter.TwoStars ||
-                  current_filter == LibraryFilter.TwoStarsUnread
-                ? 2
-                : current_filter == LibraryFilter.ThreeStars ||
-                  current_filter == LibraryFilter.ThreeStarsUnread
-                ? 3
-                : 0,
-          },
-          ...(gte && lte
-            ? {
-                created_at: {
-                  between: [
-                    new Date(
-                      parseInt(gte.toString().substring(0, 4)),
-                      parseInt(gte.toString().substring(4, 6)) - 1,
-                    ).getTime() / 1000,
-                    new Date(
-                      parseInt(lte.toString().substring(0, 4)),
-                      parseInt(lte.toString().substring(4, 6)),
-                    ).getTime() /
-                      1000 -
-                      1,
-                  ],
-                },
-              }
-            : {}),
-          ...(sites_variants?.length ? { sites_variants } : {}),
-        },
-        sortBy: {
-          property:
-            sortby == '1'
-              ? 'updated_at'
-              : sortby == '2'
-              ? 'visited_at'
-              : 'created_at',
-          order: order == '1' ? 'ASC' : 'DESC',
-        },
-        threshold: term ? 0 : undefined,
-      })
-
-      let tags_hashmap: { [tag: string]: number } = {}
-
-      result.hits.forEach(({ document }) => {
-        document.tags.forEach((tag) => {
-          if (term.split(' ').includes(tag) || selected_tags.includes(tag))
-            return
-          if (tags_hashmap[tag]) {
-            tags_hashmap[tag] = tags_hashmap[tag] + 1
-          } else {
-            tags_hashmap = { ...tags_hashmap, [tag]: 1 }
-          }
-        })
-      })
-
-      const hints: Hint[] = []
-
-      Object.keys(tags_hashmap).map((k) => {
-        hints.push({
-          completion: k,
-          type: 'new',
-        })
-      })
-
-      hints.sort((a, b) => b.yields! - a.yields!)
-
-      if (hints.length >= 2) set_hints(hints)
+      }
     }
   }
 
@@ -829,11 +934,11 @@ export const use_search = () => {
   }) => {
     if (!db) return
     await remove(db, params.bookmark_id.toString())
-    const new_searchable_bookmarks = searchable_bookmarks!.filter(
+    const new_all_bookmarks = all_bookmarks!.filter(
       (bookmark) => bookmark.id != params.bookmark_id,
     )
-    set_searchable_bookmarks(new_searchable_bookmarks)
-    await cache_data({ db, searchable_bookmarks: new_searchable_bookmarks })
+    set_all_bookmarks(new_all_bookmarks)
+    await cache_data({ db, all_bookmarks: new_all_bookmarks })
   }
 
   const update_searchable_bookmark = async (params: {
@@ -872,7 +977,16 @@ export const use_search = () => {
       tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
     })
 
-    await cache_data({ db, searchable_bookmarks: searchable_bookmarks! })
+    const new_all_bookmarks = all_bookmarks!.filter(
+      (bookmark) => bookmark.id != params.bookmark.bookmark_id,
+    )
+
+    new_all_bookmarks.push({
+      id: params.bookmark.bookmark_id,
+      tags: params.bookmark.tags.map((tag) => tag.name),
+    })
+
+    await cache_data({ db, all_bookmarks: new_all_bookmarks })
   }
 
   return {
