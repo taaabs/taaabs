@@ -102,7 +102,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       >
         {is_visible == undefined || is_visible || !props.render_height ? (
           <div
-            className={styles.container}
+            className={cn(styles.container, {
+              [styles['container--has-highlights']]: props.highlights,
+            })}
             role="button"
             onClick={props.on_click}
           >
@@ -279,7 +281,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
                   return (
                     <div
-                      className={styles.bookmark__links__item}
+                      className={cn(styles.bookmark__links__item, {
+                        [styles['bookmark__links__item--has-highlights']]:
+                          props.highlights,
+                      })}
                       key={link.url}
                     >
                       <div className={styles.bookmark__links__item__site}>

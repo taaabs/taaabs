@@ -19,9 +19,16 @@
       background: blue;
     }
   }
-  &--search-style {
-    background: var(--blue700);
-    border: none;
+  &--has-highlights {
+    border-color: var(--blue100);
+    @include to992 {
+      border-top-color: var(--blue200);
+    }
+    @include at992 {
+      @include hover {
+        border-color: var(--blue200);
+      }
+    }
   }
 }
 .bookmark {
@@ -180,6 +187,10 @@
       padding: var(--distance-10px) var(--distance-12px);
       background-color: var(--Bookmark-link-background);
       border-top: var(--border-secondary);
+      &--has-highlights {
+        background-color: var(--blue25);
+        border-top-color: var(--blue100);
+      }
       &:last-of-type {
         border-bottom-left-radius: var(--border-radius-12px);
         border-bottom-right-radius: var(--border-radius-12px);

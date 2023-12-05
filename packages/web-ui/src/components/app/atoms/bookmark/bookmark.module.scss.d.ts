@@ -1,6 +1,6 @@
 declare const styles: {
   readonly container: string
-  readonly 'container--search-style': string
+  readonly 'container--has-highlights': string
   readonly bookmark: string
   readonly bookmark__meta: string
   readonly bookmark__meta__date: string
@@ -22,6 +22,7 @@ declare const styles: {
   readonly bookmark__tags__tag__yields: string
   readonly bookmark__links: string
   readonly bookmark__links__item: string
+  readonly 'bookmark__links__item--has-highlights': string
   readonly bookmark__links__item__site: string
   readonly bookmark__links__item__site__favicon: string
   readonly bookmark__links__item__site__url: string
