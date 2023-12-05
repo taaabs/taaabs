@@ -229,16 +229,14 @@ export const use_search = () => {
     const order = query_params.get('o')
     const sortby = query_params.get('s')
 
-    // 'lorem site:abc.com site:abc.com ipsum site:abc.com'
+    // 'lorem @abc.com @abc.com ipsum @abc.com'
     // ["abc.com", "abc.com", "abc.com"]
     const sites_variants = params.search_string
-      .match(/(?<=site:)(.*?)($|\s)/g)
+      .match(/(?<=@)(.*?)($|\s)/g)
       ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
       .filter((variant) => variant != '')
 
-    const term = params.search_string
-      .replace(/(?=site:)(.*?)($|\s)/g, '')
-      .trim()
+    const term = params.search_string.replace(/(?=@)(.*?)($|\s)/g, '').trim()
 
     const result_without_tolerance: Results<Result> = await searchWithHighlight(
       db,
@@ -484,9 +482,9 @@ export const use_search = () => {
     const words = search_string.split(' ')
     const last_word = words[words.length - 1]
     const sites_variants = search_string
-      .match(/(?<=site:)(.*?)($|\s)/g)
+      .match(/(?<=@)(.*?)($|\s)/g)
       ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
-    const term = search_string.replace(/(?=site:)(.*?)($|\s)/g, '').trim()
+    const term = search_string.replace(/(?=@)(.*?)($|\s)/g, '').trim()
 
     if (!search_string) {
       set_hints(
@@ -529,8 +527,8 @@ export const use_search = () => {
           term: recent_search_string.slice(0, search_string.length),
         }))
 
-      if (last_word.substring(0, 5) == 'site:') {
-        const site_term = last_word.substring(5)
+      if (last_word.substring(0, 1) == '@') {
+        const site_term = last_word.substring(1)
 
         const result: Results<Result> = await search(db, {
           limit: 1000,
@@ -638,7 +636,7 @@ export const use_search = () => {
                         recent_hint.completion == hint.completion,
                     ),
                 ),
-              ]
+              ].slice(0, system_values.max_library_search_hints)
             : undefined,
         )
       } else {

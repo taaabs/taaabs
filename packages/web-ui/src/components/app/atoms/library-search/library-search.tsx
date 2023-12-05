@@ -140,47 +140,34 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                 props.results_count == 0,
             })}
           >
-            {/* /($|\s)(?=site:)(.*?)($|\s)/ */}
-            {/* 'lorem site:abc.com site:abc.com ipsum' */}
-            {/* ["lorem ", "site:abc.com", " ", "site:abc.com", " ipsum"] */}
-            {props.search_string
-              .split(/($|\s)(?=site:)(.*?)($|\s)/)
-              .map((str) => {
-                if (str.substring(0, 5) == 'site:') {
-                  return str.split(':').map((str, i) => (
+            {/* /(?=@)(.*?)($|\s)/ */}
+            {/* 'lorem @abc.com @abc.com ipsum' */}
+            {/* ["lorem ", "@abc.com", " ", "@abc.com", " ipsum"] */}
+            {props.search_string.split(/(?=@)(.*?)($|\s)/).map((str) => {
+              if (str.substring(0, 1) == '@') {
+                return (
+                  <>
+                    <span
+                      className={styles['form__styled-value__pre-highlight']}
+                    >
+                      @
+                    </span>
                     <>
-                      {i == 0 && (
-                        <span
-                          className={
-                            styles['form__styled-value__pre-highlight']
-                          }
-                        >
-                          {str}
-                          {i == 0 && <>{':'}</>}
-                        </span>
-                      )}
-                      {i == 1 && (
-                        <>
-                          <span
-                            className={cn(
-                              styles['form__styled-value__highlight'],
-                              {
-                                [styles[
-                                  'form__styled-value__highlight--no-results'
-                                ]]: props.results_count == 0,
-                              },
-                            )}
-                          >
-                            {str}
-                          </span>
-                        </>
-                      )}
+                      <span
+                        className={cn(styles['form__styled-value__highlight'], {
+                          [styles['form__styled-value__highlight--no-results']]:
+                            props.results_count == 0,
+                        })}
+                      >
+                        {str.substring(1)}
+                      </span>
                     </>
-                  ))
-                } else {
-                  return <span>{str}</span>
-                }
-              })}
+                  </>
+                )
+              } else {
+                return <span>{str}</span>
+              }
+            })}
             {(props.search_string || selected_hint_index != -1) &&
               props.hints && (
                 <>
