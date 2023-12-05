@@ -209,12 +209,6 @@ const Page: React.FC = () => {
           on_change={(value) => {
             if (search.is_initializing) return
             search.set_search_string(value)
-            if (value.endsWith(' ')) {
-              search.clear_hints()
-            }
-            if (!value) {
-              bookmarks.get_bookmarks({})
-            }
           }}
           on_submit={() => {
             search.query_db({ search_string: search.search_string })
@@ -222,6 +216,9 @@ const Page: React.FC = () => {
           on_blur={() => {
             search.clear_hints()
             search.set_is_search_focused(false)
+            if (!search.search_string) {
+              bookmarks.get_bookmarks({})
+            }
           }}
           results_count={search.search_string ? search?.count : undefined}
           on_clear_click={() => {

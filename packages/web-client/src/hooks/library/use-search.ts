@@ -740,10 +740,16 @@ export const use_search = () => {
 
           set_hints(
             new_hints.length
-              ? [...recent_hints, ...new_hints].slice(
-                  0,
-                  system_values.max_library_search_hints,
-                )
+              ? [
+                  ...recent_hints,
+                  ...new_hints.filter(
+                    (hint) =>
+                      !recent_hints.find(
+                        (recent_hint) =>
+                          recent_hint.completion == hint.completion,
+                      ),
+                  ),
+                ].slice(0, system_values.max_library_search_hints)
               : undefined,
           )
         } else {
