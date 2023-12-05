@@ -22,6 +22,7 @@ declare const styles: {
   readonly 'input__right-side__clear': string
   readonly 'input__right-side__clear--yields-no-results': string
   readonly hints: string
+  readonly 'hints--hidden': string
   readonly hints__inner: string
   readonly hints__inner__item: string
   readonly 'hints__inner__item--selected': string

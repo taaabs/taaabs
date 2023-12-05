@@ -201,6 +201,15 @@
   border-radius: var(--border-radius-12px);
   border: var(--border-primary);
   box-shadow: var(--box-shadow);
+  opacity: 1;
+  @include transition-100ms;
+  transform: translateY(0);
+  &--hidden {
+    opacity: 0;
+    transform: translateY(calc(var(--distance-4px) * -1));
+    pointer-events: none;
+    transition: none;
+  }
   &__inner {
     background-color: var(--plain-white);
     padding: var(--distance-8px) 0;

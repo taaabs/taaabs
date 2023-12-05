@@ -247,6 +247,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                     props.results_count == 0,
                 })}
                 onClick={() => {
+                  set_is_focused_fix(false)
                   props.on_clear_click()
                 }}
               >
@@ -262,8 +263,12 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
           )}
         </div>
       </div>
-      {props.hints && is_focused_fix && (
-        <div className={styles.hints}>
+      <div
+        className={cn(styles.hints, {
+          [styles['hints--hidden']]: !(props.hints && is_focused_fix),
+        })}
+      >
+        {props.hints && is_focused_fix && (
           <div className={styles.hints__inner}>
             {props.hints.map((hint, i) => (
               <button
@@ -315,8 +320,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
               </button>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   ) : (
     <div className={styles.skeleton}>
