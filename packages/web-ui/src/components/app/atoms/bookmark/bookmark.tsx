@@ -108,6 +108,46 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             onClick={props.on_click}
           >
             <div className={styles.bookmark}>
+              <div className={styles.bookmark__meta}>
+                <div className={styles.bookmark__meta__date}>
+                  <span>{props.index + 1}.  </span>
+                  <span>{bookmark_date}</span>
+                </div>
+                <div className={styles.bookmark__meta__menu}>
+                  <OutsideClickHandler
+                    disabled={!is_menu_open}
+                    onOutsideClick={() => {
+                      toggle_is_menu_open()
+                    }}
+                  >
+                    <button
+                      className={cn(styles.bookmark__meta__menu__button, {
+                        [styles['bookmark__meta__menu--toggled']]: is_menu_open,
+                      })}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggle_is_menu_open()
+                        if (!is_menu_open) {
+                          props.on_menu_click()
+                        }
+                      }}
+                    >
+                      <Icon variant="THREE_DOTS" />
+                    </button>
+                    <div
+                      className={cn(styles.bookmark__meta__menu__slot, {
+                        [styles['bookmark__meta__menu__slot--hidden']]:
+                          !is_menu_open,
+                      })}
+                      onClick={() => {
+                        toggle_is_menu_open()
+                      }}
+                    >
+                      {props.menu_slot}
+                    </div>
+                  </OutsideClickHandler>
+                </div>
+              </div>
               <div className={styles.bookmark__title}>
                 <div className={styles.bookmark__title__inner}>
                   {props.is_unread && (
@@ -143,51 +183,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   </div>
                 </div>
               </div>
-              <div className={styles.bookmark__menu}>
-                <OutsideClickHandler
-                  disabled={!is_menu_open}
-                  onOutsideClick={() => {
-                    toggle_is_menu_open()
-                  }}
-                >
-                  <button
-                    className={cn(styles.bookmark__menu__button, {
-                      [styles['bookmark__menu--toggled']]: is_menu_open,
-                    })}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggle_is_menu_open()
-                      if (!is_menu_open) {
-                        props.on_menu_click()
-                      }
-                    }}
-                  >
-                    <Icon variant="THREE_DOTS" />
-                  </button>
-                  <div
-                    className={cn(styles.bookmark__menu__slot, {
-                      [styles['bookmark__menu__slot--hidden']]: !is_menu_open,
-                    })}
-                    onClick={() => {
-                      toggle_is_menu_open()
-                    }}
-                  >
-                    {props.menu_slot}
-                  </div>
-                </OutsideClickHandler>
-              </div>
-              <div className={styles['bookmark__info']}>
-                <span>·</span>
-                <span>{bookmark_date}</span>
-                {props.note && (
-                  <>
-                    <span>·</span>
-                    <span>{props.note}</span>
-                  </>
-                )}
+              <div className={styles.bookmark__tags}>
                 {props.tags.length > 0 && (
                   <>
-                    <span>·</span>
                     {props.tags.map((tag, i) => {
                       const tag_first_char_index_in_search_title = (
                         props.title +
@@ -200,7 +198,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
                       return (
                         <button
-                          className={styles['bookmark__info__tag']}
+                          className={styles.bookmark__tags__tag}
                           onClick={(e) => {
                             e.stopPropagation()
                             if (tag.isSelected) {
@@ -214,10 +212,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           <div>
                             <span
                               className={cn([
-                                styles['bookmark__info__tag__name'],
+                                styles.bookmark__tags__tag__name,
                                 {
                                   [styles[
-                                    'bookmark__info__tag__name--selected'
+                                    'bookmark__tags__tag__name--selected'
                                   ]]: tag.isSelected,
                                 },
                               ])}
@@ -244,18 +242,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             </span>
                             {!tag.isSelected && tag.yields && (
                               <span
-                                className={
-                                  styles['bookmark__info__tag__yields']
-                                }
+                                className={styles.bookmark__tags__tag__yields}
                               >
                                 {tag.yields}
                               </span>
                             )}
                             {tag.isSelected && (
                               <span
-                                className={
-                                  styles['bookmark__info__tag__yields']
-                                }
+                                className={styles.bookmark__tags__tag__yields}
                               >
                                 ×
                               </span>

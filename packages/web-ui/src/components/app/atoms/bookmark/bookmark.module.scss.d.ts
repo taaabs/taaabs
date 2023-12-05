@@ -2,22 +2,24 @@ declare const styles: {
   readonly container: string
   readonly 'container--search-style': string
   readonly bookmark: string
+  readonly bookmark__meta: string
+  readonly bookmark__meta__date: string
+  readonly bookmark__meta__menu: string
+  readonly bookmark__meta__menu__button: string
+  readonly 'bookmark__meta__menu--toggled': string
+  readonly bookmark__meta__menu__slot: string
+  readonly 'bookmark__meta__menu__slot--hidden': string
   readonly bookmark__title: string
   readonly bookmark__title__inner: string
   readonly bookmark__title__inner__unread: string
   readonly bookmark__title__inner__stars: string
   readonly bookmark__title__inner__text: string
   readonly 'bookmark__title__inner__text--unread': string
-  readonly bookmark__menu: string
-  readonly bookmark__menu__button: string
-  readonly 'bookmark__menu--toggled': string
-  readonly bookmark__menu__slot: string
-  readonly 'bookmark__menu__slot--hidden': string
-  readonly bookmark__info: string
-  readonly bookmark__info__tag: string
-  readonly bookmark__info__tag__name: string
-  readonly 'bookmark__info__tag__name--selected': string
-  readonly bookmark__info__tag__yields: string
+  readonly bookmark__tags: string
+  readonly bookmark__tags__tag: string
+  readonly bookmark__tags__tag__name: string
+  readonly 'bookmark__tags__tag__name--selected': string
+  readonly bookmark__tags__tag__yields: string
   readonly bookmark__links: string
   readonly bookmark__links__item: string
   readonly bookmark__links__item__site: string

@@ -25,16 +25,80 @@
   }
 }
 .bookmark {
-  display: grid;
-  grid-template-areas:
-    'title menu'
-    'info info'
-    'links links';
-  grid-template-columns: 1fr auto;
+  display: flex;
+  flex-direction: column;
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    &__date {
+      color: var(--text-color-dimmed);
+      display: flex;
+      padding-left: var(--distance-16px);
+      padding-bottom: var(--distance-6px);
+      white-space: pre-wrap;
+    }
+    &__menu {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      margin-left: var(--distance-8px);
+      margin-top: var(--distance-11px);
+      @include to992 {
+        margin-right: var(--distance-16px);
+        margin-left: var(--distance-16px);
+      }
+      @include at992 {
+        margin-right: var(--distance-8px);
+        margin-left: var(--distance-8px);
+      }
+      &__button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--border-radius-999px);
+        @include transition-100ms(background-color);
+        width: var(--button-dimension-28px);
+        height: var(--button-dimension-28px);
+        svg {
+          fill: var(--Bookmark-action-fill);
+          @include transition-100ms(fill);
+          width: var(--icon-dimension-16px);
+          height: var(--icon-dimension-16px);
+        }
+        @include hover {
+          background: var(--Bookmark-action-background-hover);
+          svg {
+            fill: var(--Bookmark-action-fill-hover);
+          }
+        }
+      }
+      &--toggled {
+        background: var(--Bookmark-action-background-hover);
+        svg {
+          fill: var(--Bookmark-action-fill-hover);
+        }
+      }
+      &__slot {
+        position: absolute;
+        z-index: 1;
+        top: calc(var(--button-dimension-28px) + var(--distance-4px));
+        right: 0;
+        bottom: calc(var(--distance-4px) * -1);
+        opacity: 1;
+        @include transition-100ms;
+        transform: translateY(0);
+        &--hidden {
+          opacity: 0;
+          transform: translateY(calc(var(--distance-4px) * -1));
+          pointer-events: none;
+          transition: none;
+        }
+      }
+    }
+  }
   &__title {
-    grid-area: title;
-    padding-top: var(--distance-12px);
-    padding-left: var(--distance-16px);
+    padding: 0 var(--distance-16px);
     &__inner {
       display: inline;
       color: var(--text-color-normal);
@@ -77,68 +141,7 @@
       }
     }
   }
-  &__menu {
-    grid-area: menu;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    margin-left: var(--distance-8px);
-    margin-top: var(--distance-11px);
-    @include to992 {
-      margin-right: var(--distance-16px);
-      margin-left: var(--distance-16px);
-    }
-    @include at992 {
-      margin-right: var(--distance-8px);
-      margin-left: var(--distance-8px);
-    }
-    &__button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--border-radius-999px);
-      @include transition-100ms(background-color);
-      width: var(--button-dimension-28px);
-      height: var(--button-dimension-28px);
-      svg {
-        fill: var(--Bookmark-action-fill);
-        @include transition-100ms(fill);
-        width: var(--icon-dimension-16px);
-        height: var(--icon-dimension-16px);
-      }
-      @include hover {
-        background: var(--Bookmark-action-background-hover);
-        svg {
-          fill: var(--Bookmark-action-fill-hover);
-        }
-      }
-    }
-    &--toggled {
-      background: var(--Bookmark-action-background-hover);
-      svg {
-        fill: var(--Bookmark-action-fill-hover);
-      }
-    }
-    &__slot {
-      position: absolute;
-      z-index: 1;
-      top: calc(var(--button-dimension-28px) + var(--distance-4px));
-      right: 0;
-      bottom: calc(var(--distance-4px) * -1);
-      opacity: 1;
-      @include transition-100ms;
-      transform: translateY(0);
-      &--hidden {
-        opacity: 0;
-        transform: translateY(calc(var(--distance-4px) * -1));
-        pointer-events: none;
-        transition: none;
-      }
-    }
-  }
-  &__info {
-    grid-area: info;
-    display: inline;
+  &__tags {
     font-family: var(--font-family-inter-tight);
     margin: var(--distance-8px) 0 var(--distance-6px) 0;
     padding: 0 var(--distance-16px);
@@ -170,7 +173,7 @@
     }
   }
   &__links {
-    grid-area: links;
+    display: block;
     &__item {
       display: flex;
       gap: var(--distance-8px);
@@ -301,6 +304,5 @@
   }
 }
 .highlight {
-  // color: var(--text-color-normal);
   background-color: var(--highlight);
 }
