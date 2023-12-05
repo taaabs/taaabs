@@ -197,7 +197,6 @@
   z-index: 1;
   width: 100%;
   top: calc(var(--button-dimension-52px) + var(--distance-4px));
-  max-height: 280px;
   overflow: hidden;
   border-radius: var(--border-radius-12px);
   border: var(--border-primary);
@@ -206,8 +205,6 @@
     background-color: var(--plain-white);
     padding: var(--distance-8px) 0;
     box-shadow: var(--box-shadow);
-    max-height: 280px;
-    overflow-y: auto;
     &__item {
       display: flex;
       align-items: center;
@@ -232,6 +229,14 @@
         align-items: center;
         flex-grow: 1;
         height: 100%;
+        &--recent {
+          > span {
+            color: var(--text-color-dimmed) !important;
+          }
+          > span:nth-child(2) {
+            color: var(--text-color-variant) !important;
+          }
+        }
         > span {
           color: var(--text-color-variant);
           white-space: pre-wrap;

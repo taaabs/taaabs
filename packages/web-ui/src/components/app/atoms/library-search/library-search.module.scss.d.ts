@@ -27,6 +27,7 @@ declare const styles: {
   readonly 'hints__inner__item--selected': string
   readonly hints__inner__item__icon: string
   readonly hints__inner__item__content: string
+  readonly 'hints__inner__item__content--recent': string
   readonly hints__inner__item__content__keycap: string
   readonly hints__inner__item__remove: string
   readonly text: string

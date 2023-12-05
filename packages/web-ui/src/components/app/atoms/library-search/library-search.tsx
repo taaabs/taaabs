@@ -140,43 +140,47 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                 props.results_count == 0,
             })}
           >
-            {/* /(?=site:)(.*?)($|\s)/ */}
+            {/* /($|\s)(?=site:)(.*?)($|\s)/ */}
             {/* 'lorem site:abc.com site:abc.com ipsum' */}
             {/* ["lorem ", "site:abc.com", " ", "site:abc.com", " ipsum"] */}
-            {props.search_string.split(/(?=site:)(.*?)($|\s)/).map((str) => {
-              if (str.substring(0, 5) == 'site:') {
-                return str.split(':').map((str, i) => (
-                  <>
-                    {i == 0 && (
-                      <span
-                        className={styles['form__styled-value__pre-highlight']}
-                      >
-                        {str}
-                        {i == 0 && <>{':'}</>}
-                      </span>
-                    )}
-                    {i == 1 && (
-                      <>
+            {props.search_string
+              .split(/($|\s)(?=site:)(.*?)($|\s)/)
+              .map((str) => {
+                if (str.substring(0, 5) == 'site:') {
+                  return str.split(':').map((str, i) => (
+                    <>
+                      {i == 0 && (
                         <span
-                          className={cn(
-                            styles['form__styled-value__highlight'],
-                            {
-                              [styles[
-                                'form__styled-value__highlight--no-results'
-                              ]]: props.results_count == 0,
-                            },
-                          )}
+                          className={
+                            styles['form__styled-value__pre-highlight']
+                          }
                         >
                           {str}
+                          {i == 0 && <>{':'}</>}
                         </span>
-                      </>
-                    )}
-                  </>
-                ))
-              } else {
-                return <span>{str}</span>
-              }
-            })}
+                      )}
+                      {i == 1 && (
+                        <>
+                          <span
+                            className={cn(
+                              styles['form__styled-value__highlight'],
+                              {
+                                [styles[
+                                  'form__styled-value__highlight--no-results'
+                                ]]: props.results_count == 0,
+                              },
+                            )}
+                          >
+                            {str}
+                          </span>
+                        </>
+                      )}
+                    </>
+                  ))
+                } else {
+                  return <span>{str}</span>
+                }
+              })}
             {(props.search_string || selected_hint_index != -1) &&
               props.hints && (
                 <>
@@ -223,7 +227,6 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
             }}
           />
         </form>
-
         <div className={styles['input__right-side']}>
           {props.search_string ? (
             <>
@@ -287,7 +290,12 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                   {hint.type == 'new' && <Icon variant="SEARCH" />}
                   {hint.type == 'recent' && <Icon variant="RECENT" />}
                 </div>
-                <div className={styles.hints__inner__item__content}>
+                <div
+                  className={cn(styles.hints__inner__item__content, {
+                    [styles['hints__inner__item__content--recent']]:
+                      hint.type == 'recent',
+                  })}
+                >
                   <span>{props.search_string}</span>
                   <span>{hint.completion}</span>
                   {selected_hint_index == i && (
