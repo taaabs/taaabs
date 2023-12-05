@@ -33,8 +33,7 @@ import { persist, restore } from '@orama/plugin-data-persistence'
 
 type Hint = {
   type: 'new' | 'recent'
-  term?: string
-  completion?: string
+  completion: string
   yields?: number
 }
 
@@ -531,11 +530,11 @@ export const use_search = () => {
         }))
 
       if (last_word.substring(0, 5) == 'site:') {
-        const term = last_word.substring(5)
+        const site_term = last_word.substring(5)
 
         const result: Results<Result> = await search(db, {
           limit: 1000,
-          term: term ? term : undefined,
+          term: site_term ? site_term : undefined,
           properties: ['sites'],
           where: {
             ...(tags && ids_to_search_amongst
@@ -583,14 +582,14 @@ export const use_search = () => {
                 }
               : {}),
           },
-          threshold: term ? 0 : undefined,
+          threshold: site_term ? 0 : undefined,
         })
 
         const sites: { site: string; occurences: number }[] = []
 
         result.hits.forEach(({ document }) => {
           document.sites.forEach((site) => {
-            if (site.includes(term)) {
+            if (site.includes(site_term)) {
               const index = sites.findIndex((s) => s.site == site)
               if (index == -1) {
                 sites.push({ site, occurences: 1 })
@@ -607,10 +606,9 @@ export const use_search = () => {
         sites.sort((a, b) => b.occurences - a.occurences)
 
         const hints: Hint[] = sites.map((site) => ({
-          term,
-          completion: term ? site.site.split(term)[1] : site.site,
+          term: search_string,
+          completion: site_term ? site.site.split(site_term)[1] : site.site,
           type: 'new',
-          yields: site.occurences,
         }))
 
         const hints_no_dupes: Hint[] = []
@@ -622,36 +620,18 @@ export const use_search = () => {
 
           if (hint_index == -1) {
             hints_no_dupes.push(hint)
-          } else {
-            hints_no_dupes[hint_index] = {
-              ...hints_no_dupes[hint_index],
-              yields: hints_no_dupes[hint_index].yields! + hint.yields!,
-            }
           }
         })
 
-        const hints_no_empty_completion = hints_no_dupes.filter(
+        const hints_no_empty_completions = hints_no_dupes.filter(
           (hint) => hint.completion,
         )
 
         set_hints(
-          hints_no_empty_completion.length
+          hints_no_empty_completions.length
             ? [
-                ...recent_hints.map((recent_hint) => {
-                  const hint = hints_no_empty_completion.find(
-                    (hint) => recent_hint.completion == hint.completion,
-                  )
-
-                  if (hint) {
-                    return {
-                      ...recent_hint,
-                      yields: hint.yields,
-                    }
-                  } else {
-                    return recent_hint
-                  }
-                }),
-                ...hints_no_empty_completion.filter(
+                ...recent_hints,
+                ...hints_no_empty_completions.filter(
                   (hint) =>
                     !recent_hints.find(
                       (recent_hint) =>
@@ -752,7 +732,6 @@ export const use_search = () => {
             if (!words.includes(last_word + k)) {
               new_hints.push({
                 completion: k,
-                term: last_word,
                 type: 'new',
                 yields: v,
               })
@@ -763,7 +742,6 @@ export const use_search = () => {
 
           const hints_with_no_yields: Hint[] = new_hints.map((hint) => ({
             completion: hint.completion,
-            term: hint.term,
             type: hint.type,
           }))
 

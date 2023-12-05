@@ -10,8 +10,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 export namespace LibrarySearch {
   type Hint = {
     type: 'new' | 'recent'
-    term?: string
-    completion?: string
+    completion: string
   }
   export type Props = {
     placeholder: string
@@ -105,7 +104,11 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
         <button
           className={styles['input__left-side']}
           onClick={() => {
-            !props.is_focused && input.current?.focus()
+            if (!props.is_focused) {
+              input.current?.focus()
+              input.current!.value = ''
+              input.current!.value = props.search_string
+            }
           }}
         >
           {props.is_loading ? (
@@ -125,6 +128,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
           onClick={() => {
             if (!props.is_focused) {
               input.current?.focus()
+              input.current?.focus()
+              input.current!.value = ''
+              input.current!.value = props.search_string
             }
           }}
         >
@@ -265,8 +271,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
             {props.hints.map((hint, i) => (
               <button
                 key={
-                  (hint.term ? hint.term : '') +
-                  (hint.completion ? hint.completion : '')
+                  props.search_string +
+                  (hint.completion ? hint.completion : '') +
+                  hint.type
                 }
                 className={cn(styles.hints__inner__item, {
                   [styles['hints__inner__item--selected']]:
@@ -281,7 +288,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                   {hint.type == 'recent' && <Icon variant="RECENT" />}
                 </div>
                 <div className={styles.hints__inner__item__content}>
-                  <span>{hint.term}</span>
+                  <span>{props.search_string}</span>
                   <span>{hint.completion}</span>
                   {selected_hint_index == i && (
                     <div
