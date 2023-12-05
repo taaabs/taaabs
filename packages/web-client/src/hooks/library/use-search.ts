@@ -502,7 +502,7 @@ export const use_search = () => {
               recent_search_string != search_string &&
               recent_search_string.startsWith(search_string),
           )
-          .slice(0, 30)
+          .slice(0, system_values.max_library_search_hints)
           .map((recent_search_string) => ({
             type: 'recent',
             completion: recent_search_string.slice(search_string.length),
@@ -740,14 +740,12 @@ export const use_search = () => {
 
           new_hints.sort((a, b) => b.yields! - a.yields!)
 
-          const hints_with_no_yields: Hint[] = new_hints.map((hint) => ({
-            completion: hint.completion,
-            type: hint.type,
-          }))
-
           set_hints(
             new_hints.length
-              ? [...recent_hints, ...hints_with_no_yields.slice(0, 10)]
+              ? [...recent_hints, ...new_hints].slice(
+                  0,
+                  system_values.max_library_search_hints,
+                )
               : undefined,
           )
         } else {
@@ -838,7 +836,12 @@ export const use_search = () => {
           new_hints.sort((a, b) => b.yields! - a.yields!)
 
           if (new_hints.length >= 2) {
-            set_hints([...recent_hints, ...new_hints])
+            set_hints(
+              [...recent_hints, ...new_hints].slice(
+                0,
+                system_values.max_library_search_hints,
+              ),
+            )
           } else {
             set_hints(undefined)
           }
