@@ -14,8 +14,8 @@ export const AppHeaderDesktop = (props: AppHeaderDesktop.Props) => {
     <div className={styles.container}>
       <Wrapper>
         <div className={styles.inner}>
-          <div className={styles.inner__left}>
-            {props.slot_left_side_logo}
+          {props.slot_left_side_logo}
+          <div className={styles.inner__navigation}>
             {props.slot_left_side_navigation}
           </div>
           {props.slot_right_side}
