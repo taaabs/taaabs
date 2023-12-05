@@ -8,5 +8,5 @@ const Layout: React.FC<{ children: React.ReactNode }> = async (props) => {
 export default Layout
 
 export const metadata: Metadata = {
-  title: 'Library',
+  title: 'Bookmarks',
 }

@@ -10,5 +10,5 @@ const Layout: React.FC<{
 export default Layout
 
 export const metadata: Metadata = {
-  title: 'Library',
+  title: 'Bookmarks',
 }

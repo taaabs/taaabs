@@ -32,7 +32,7 @@ export const use_counts = () => {
   >(null)
 
   const get_counts = () => {
-    if (route_pathname == '/library') {
+    if (route_pathname == '/bookmarks') {
       const request_params: Counts_Params.Authorized = {}
 
       const query_tags = query_params.get('t')

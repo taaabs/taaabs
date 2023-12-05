@@ -46,27 +46,27 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         is_active: pathname == `/${params.username}`,
       },
       {
-        label: 'Library',
-        href: `/${params.username}/library`,
-        is_active: pathname == `/${params.username}/library`,
+        label: 'Bookmarks',
+        href: `/${params.username}/bookmarks`,
+        is_active: pathname == `/${params.username}/bookmarks`,
       },
     ]
   } else {
     navigation = [
       {
-        label: 'Inbox',
-        href: '/inbox',
-        is_active: pathname == '/inbox',
+        label: 'Home',
+        href: '/home',
+        is_active: pathname == '/home',
       },
       {
-        label: 'Library',
-        href: '/library',
-        is_active: pathname == '/library',
+        label: 'Bookmarks',
+        href: '/bookmarks',
+        is_active: pathname == '/bookmarks',
       },
       {
-        label: 'Discover',
-        href: '/discover',
-        is_active: pathname == '/discover',
+        label: 'Notifications',
+        href: '/notifications',
+        is_active: pathname == '/notifications',
       },
     ]
   }
@@ -85,7 +85,6 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         <DesktopUserAreaForAppHeader
           add_on_click={() => {}}
           search_on_click={() => {}}
-          notificatios_on_click={() => {}}
         />
       }
     />

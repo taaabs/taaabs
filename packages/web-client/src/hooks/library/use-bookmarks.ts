@@ -41,7 +41,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   >(null)
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
-    if (route_pathname == '/library') {
+    if (route_pathname == '/bookmarks') {
       const request_params: GetBookmarks_Params.Authorized = {}
 
       const query_tags = query_params.get('t')

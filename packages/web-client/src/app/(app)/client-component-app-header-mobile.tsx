@@ -45,9 +45,9 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
         is_active: pathname == `/${params.username}`,
       },
       {
-        label: 'Library',
-        href: `/${params.username}/library`,
-        is_active: pathname == `/${params.username}/library`,
+        label: 'Bookmarks',
+        href: `/${params.username}/bookmarks`,
+        is_active: pathname == `/${params.username}/bookmarks`,
       },
     ]
   } else {
@@ -58,9 +58,9 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
         is_active: pathname == '/inbox',
       },
       {
-        label: 'Library',
-        href: '/library',
-        is_active: pathname == '/library',
+        label: 'Bookmarks',
+        href: '/bookmarks',
+        is_active: pathname == '/bookmarks',
       },
     ]
   }
