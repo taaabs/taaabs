@@ -763,7 +763,6 @@ const Page: React.FC = () => {
         bookmarks_slice_state.bookmarks
           ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
               <Bookmark
-                index={i}
                 key={bookmark.id}
                 fetch_timestamp={
                   bookmarks_slice_state.bookmarks_fetch_timestamp || 0

@@ -36,7 +36,6 @@ export namespace Bookmark {
   export type Highlights = [number, number][]
 
   export type Props = {
-    index: number
     fetch_timestamp?: number // Forces rerender for bookmark height adjustment (upon unread/stars change).
     title: string
     note?: string
@@ -110,8 +109,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             <div className={styles.bookmark}>
               <div className={styles.bookmark__meta}>
                 <div className={styles.bookmark__meta__date}>
-                  <span>{props.index + 1}.  </span>
-                  <span>{bookmark_date}</span>
+                  {bookmark_date}
                 </div>
                 <div className={styles.bookmark__meta__menu}>
                   <OutsideClickHandler
