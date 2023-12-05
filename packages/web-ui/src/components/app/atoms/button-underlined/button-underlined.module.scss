@@ -21,6 +21,7 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    
   }
   @include hover {
     background: rgba(15, 20, 25, 0.05);
@@ -35,7 +36,7 @@
     &::after {
       position: absolute;
       content: '';
-      width: 100%;
+      width: 70%;
       bottom: 0;
       left: 0;
       margin-left: 50%;
