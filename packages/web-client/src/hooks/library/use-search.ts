@@ -33,6 +33,7 @@ import { persist, restore } from '@orama/plugin-data-persistence'
 
 type Hint = {
   type: 'new' | 'recent'
+  search_string: string
   completion: string
   yields?: number
 }
@@ -504,7 +505,7 @@ export const use_search = () => {
           .map((recent_search_string) => ({
             type: 'recent',
             completion: recent_search_string.slice(search_string.length),
-            term: recent_search_string.slice(0, search_string.length),
+            search_string: '',
           })),
       )
     } else {
@@ -524,7 +525,7 @@ export const use_search = () => {
         .map((recent_search_string) => ({
           type: 'recent',
           completion: recent_search_string.slice(search_string.length),
-          term: recent_search_string.slice(0, search_string.length),
+          search_string: recent_search_string.slice(0, search_string.length),
         }))
 
       if (last_word.substring(0, 1) == '@') {
@@ -604,7 +605,7 @@ export const use_search = () => {
         sites.sort((a, b) => b.occurences - a.occurences)
 
         const hints: Hint[] = sites.map((site) => ({
-          term: search_string,
+          search_string,
           completion: site_term ? site.site.split(site_term)[1] : site.site,
           type: 'new',
         }))
@@ -729,6 +730,7 @@ export const use_search = () => {
           Object.entries(words_hashmap).map(([k, v]) => {
             if (!words.includes(last_word + k)) {
               new_hints.push({
+                search_string,
                 completion: k,
                 type: 'new',
                 yields: v,
@@ -832,6 +834,7 @@ export const use_search = () => {
 
           Object.keys(tags_hashmap).map((k) => {
             new_hints.push({
+              search_string,
               completion: k,
               type: 'new',
             })

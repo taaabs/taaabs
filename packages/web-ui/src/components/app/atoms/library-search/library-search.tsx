@@ -11,6 +11,7 @@ export namespace LibrarySearch {
   type Hint = {
     type: 'new' | 'recent'
     completion: string
+    search_string: string
   }
   export type Props = {
     placeholder: string
@@ -34,6 +35,11 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
   const is_hydrated = use_is_hydrated()
   const input = useRef<HTMLInputElement>(null)
   const [selected_hint_index, set_selected_hint_index] = useState<number>(-1)
+  const [is_focused_fix, set_is_focused_fix] = useState(false)
+
+  useUpdateEffect(() => {
+    set_is_focused_fix(props.is_focused)
+  }, [props.is_focused])
 
   const handle_keyboard = (event: any) => {
     if (event.code == 'Slash' && !props.is_focused) {
@@ -169,7 +175,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
               }
             })}
             {(props.search_string || selected_hint_index != -1) &&
-              props.hints && (
+              props.hints &&
+              is_focused_fix && (
                 <>
                   <span className={styles['form__styled-value__completion']}>
                     {
@@ -255,7 +262,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
           )}
         </div>
       </div>
-      {props.hints && (
+      {props.hints && is_focused_fix && (
         <div className={styles.hints}>
           <div className={styles.hints__inner}>
             {props.hints.map((hint, i) => (
@@ -271,6 +278,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                 })}
                 onClick={() => {
                   props.on_click_hint(i)
+                  set_is_focused_fix(false)
                 }}
               >
                 <div className={styles.hints__inner__item__icon}>
@@ -283,7 +291,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                       hint.type == 'recent',
                   })}
                 >
-                  <span>{props.search_string}</span>
+                  <span>{hint.search_string}</span>
                   <span>{hint.completion}</span>
                   {selected_hint_index == i && (
                     <div
