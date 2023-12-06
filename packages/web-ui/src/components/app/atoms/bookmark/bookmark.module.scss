@@ -71,14 +71,14 @@
           height: var(--icon-dimension-16px);
         }
         @include hover {
-          background: var(--Bookmark-action-background-hover);
+          background-color: var(--neutral100);
           svg {
             fill: var(--neutral600);
           }
         }
       }
       &--toggled {
-        background: var(--Bookmark-action-background-hover);
+        background-color: var(--neutral100);
         svg {
           fill: var(--neutral600);
         }
