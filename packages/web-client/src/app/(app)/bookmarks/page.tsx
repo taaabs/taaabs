@@ -173,10 +173,15 @@ const Page: React.FC = () => {
           }}
           on_click_recent_hint_remove={() => {}}
           is_focused={search.is_search_focused}
-          on_focus={() => {
+          on_focus={async () => {
+            search.set_is_search_focused(true)
             if (!search.is_initializing) {
-              search.set_is_search_focused(true)
-              if (search.db === undefined) {
+              const is_cache_stale = await search.check_is_cache_stale({
+                api_url: process.env.NEXT_PUBLIC_API_URL,
+                auth_token:
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+              })
+              if (search.db === undefined || is_cache_stale) {
                 search.init()
               } else {
                 search.set_current_filter(filter_view_options.current_filter)

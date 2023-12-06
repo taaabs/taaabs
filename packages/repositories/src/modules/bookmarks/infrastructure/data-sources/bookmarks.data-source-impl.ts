@@ -54,7 +54,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async get_bookmarks_on_public_user(
     params: GetBookmarks_Params.Public,
   ): Promise<Bookmarks_Dto.Response.Public> {
-    const queryParams: Bookmarks_Dto.QueryParams.Public = {
+    const query_params: Bookmarks_Dto.QueryParams.Public = {
       tags: params.tags?.join(','),
       category_id: params.category_id,
       after: params.after,
@@ -77,7 +77,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
 
     return fetch(
       `${this._api_url}/v1/bookmarks/${params.username}?${new URLSearchParams(
-        JSON.parse(JSON.stringify(queryParams)),
+        JSON.parse(JSON.stringify(query_params)),
       ).toString()}`,
     ).then((r) => r.json())
   }

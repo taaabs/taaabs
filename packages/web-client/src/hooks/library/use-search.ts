@@ -30,6 +30,8 @@ import { system_values } from '@shared/constants/system-values'
 import localforage from 'localforage'
 import { browser_storage } from '@/constants/browser-storage'
 import { persist, restore } from '@orama/plugin-data-persistence'
+import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-authorized-user.use-case'
+import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-public-user.use-case'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -102,24 +104,90 @@ export const use_search = () => {
     get_hints()
   }, [ids_to_search_amongst])
 
+  const check_is_cache_stale = async (params: {
+    api_url: string
+    auth_token?: string
+    username?: string
+  }): Promise<boolean> => {
+    if (!params.auth_token && !params.username)
+      throw new Error(
+        '[check_staleness] Auth token OR username should be there.',
+      )
+
+    const cache_updated_at = await localforage.getItem<Date>(
+      browser_storage.local_forage.authorized_library.search.cached_at,
+    )
+
+    if (cache_updated_at) {
+      let updated_at: Date | undefined
+
+      if (params.auth_token) {
+        const data_source = new LibrarySearch_DataSourceImpl(
+          params.api_url,
+          params.auth_token,
+        )
+        const repository = new LibrarySearch_RepositoryImpl(data_source)
+        const get_last_updated_at_on_authorized_user_use_case =
+          new GetLastUpdatedAtOnAuthorizedUser_UseCase(repository)
+        const result =
+          await get_last_updated_at_on_authorized_user_use_case.invoke({
+            is_archived: current_filter == LibraryFilter.Archived,
+            public_only: false, // TODO
+          })
+
+        updated_at = result.updated_at
+      } else {
+        const data_source = new LibrarySearch_DataSourceImpl(params.api_url)
+        const repository = new LibrarySearch_RepositoryImpl(data_source)
+        const get_last_updated_at_on_public_user_use_case =
+          new GetLastUpdatedAtOnPublicUser_UseCase(repository)
+        const result = await get_last_updated_at_on_public_user_use_case.invoke(
+          {
+            username: params.username!,
+            is_archived: current_filter == LibraryFilter.Archived,
+          },
+        )
+
+        updated_at = result.updated_at
+      }
+
+      if (updated_at && updated_at > cache_updated_at) {
+        await localforage.removeItem(
+          browser_storage.local_forage.authorized_library.search.cached_at,
+        )
+        await localforage.removeItem(
+          browser_storage.local_forage.authorized_library.search.bookmarks,
+        )
+        await localforage.removeItem(
+          browser_storage.local_forage.authorized_library.search.index,
+        )
+        await localforage.removeItem(
+          browser_storage.local_forage.authorized_library.search.highlights,
+        )
+        return true
+      }
+    }
+    return false
+  }
+
   const init = async () => {
     set_is_initializing(true)
 
     let db: Orama<typeof schema>
 
-    const cached_all_bookmarks = await localforage.getItem<string>(
-      browser_storage.local_forage.authorized_library.all_bookmarks,
+    const cached_bookmarks = await localforage.getItem<string>(
+      browser_storage.local_forage.authorized_library.search.bookmarks,
     )
-    const cached_db = await localforage.getItem<string>(
-      browser_storage.local_forage.authorized_library.db,
+    const cached_index = await localforage.getItem<string>(
+      browser_storage.local_forage.authorized_library.search.index,
     )
     const cached_highlights = await localforage.getItem<string>(
-      browser_storage.local_forage.authorized_library.db_highlights,
+      browser_storage.local_forage.authorized_library.search.highlights,
     )
 
-    if (cached_all_bookmarks && cached_db && cached_highlights) {
-      set_all_bookmarks(JSON.parse(cached_all_bookmarks))
-      db = await restore('json', cached_db)
+    if (cached_bookmarks && cached_index && cached_highlights) {
+      set_all_bookmarks(JSON.parse(cached_bookmarks))
+      db = await restore('json', cached_index)
       await loadWithHighlight(db, JSON.parse(cached_highlights as any))
     } else {
       const data_source = new LibrarySearch_DataSourceImpl(
@@ -180,8 +248,11 @@ export const use_search = () => {
           chunkSize,
         )
         indexed_count += chunk.length
+        const progress_percentage = Math.floor(
+          (indexed_count / bookmarks.length) * 100,
+        )
         set_indexed_bookmarks_percentage(
-          Math.floor((indexed_count / bookmarks.length) * 100),
+          progress_percentage < 100 ? progress_percentage : undefined,
         )
       }
 
@@ -191,7 +262,7 @@ export const use_search = () => {
       }))
       set_all_bookmarks(bookmarks_tags)
 
-      cache_data({ db, all_bookmarks: bookmarks_tags })
+      cache_data({ db, bookmarks: bookmarks_tags })
     }
 
     set_db(db)
@@ -200,22 +271,26 @@ export const use_search = () => {
 
   const cache_data = async (params: {
     db: Orama<typeof schema>
-    all_bookmarks: BookmarkTags[]
+    bookmarks: BookmarkTags[]
   }) => {
     const db_stringified = await persist(params.db, 'json')
     const highlights = await saveWithHighlight(params.db)
 
     await localforage.setItem(
-      browser_storage.local_forage.authorized_library.db,
+      browser_storage.local_forage.authorized_library.search.index,
       db_stringified,
     )
     await localforage.setItem(
-      browser_storage.local_forage.authorized_library.db_highlights,
+      browser_storage.local_forage.authorized_library.search.highlights,
       JSON.stringify(highlights),
     )
     await localforage.setItem(
-      browser_storage.local_forage.authorized_library.all_bookmarks,
-      JSON.stringify(params.all_bookmarks),
+      browser_storage.local_forage.authorized_library.search.bookmarks,
+      JSON.stringify(params.bookmarks),
+    )
+    await localforage.setItem(
+      browser_storage.local_forage.authorized_library.search.cached_at,
+      new Date(),
     )
   }
 
@@ -925,7 +1000,7 @@ export const use_search = () => {
       (bookmark) => bookmark.id != params.bookmark_id,
     )
     set_all_bookmarks(new_all_bookmarks)
-    await cache_data({ db, all_bookmarks: new_all_bookmarks })
+    await cache_data({ db, bookmarks: new_all_bookmarks })
   }
 
   const update_searchable_bookmark = async (params: {
@@ -973,7 +1048,7 @@ export const use_search = () => {
       tags: params.bookmark.tags.map((tag) => tag.name),
     })
 
-    await cache_data({ db, all_bookmarks: new_all_bookmarks })
+    await cache_data({ db, bookmarks: new_all_bookmarks })
   }
 
   return {
@@ -1000,5 +1075,6 @@ export const use_search = () => {
     set_count,
     highlights,
     set_highlights,
+    check_is_cache_stale,
   }
 }

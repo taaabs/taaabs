@@ -1,12 +1,40 @@
 import { LibrarySearch_Repository } from '../../domain/repositories/library-search.repository'
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
+import { GetLastUpdated_Params } from '../../domain/types/get-last-updated.params'
+import { GetLastUpdated_Ro } from '../../domain/types/get-last-updated.ro'
 import { LibrarySearch_DataSource } from '../data-sources/library-search.data-source'
 
 export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
   constructor(
     private readonly _library_search_data_source: LibrarySearch_DataSource,
   ) {}
+
+  public async get_last_updated_at_on_authorized_user(
+    params: GetLastUpdated_Params.Authorized,
+  ): Promise<GetLastUpdated_Ro> {
+    const result =
+      await this._library_search_data_source.get_last_updated_on_authorized_user(
+        params,
+      )
+
+    return {
+      updated_at: result.updated_at ? new Date(result.updated_at) : undefined,
+    }
+  }
+
+  public async get_last_updated_at_on_public_user(
+    params: GetLastUpdated_Params.Public,
+  ): Promise<GetLastUpdated_Ro> {
+    const result =
+      await this._library_search_data_source.get_last_updated_on_public_user(
+        params,
+      )
+
+    return {
+      updated_at: result.updated_at ? new Date(result.updated_at) : undefined,
+    }
+  }
 
   public async get_bookmarks_on_authorized_user(
     params: GetBookmarks_Params.Authorized,

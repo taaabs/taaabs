@@ -1,7 +1,17 @@
 import { LibrarySearchBookmarks_Dto } from '@shared/types/modules/library-search/library-search-bookmarks.dto'
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
+import { LastUpdated_Dto } from '@shared/types/modules/library-search/last-updated.dto'
+import { GetLastUpdated_Params } from '../../domain/types/get-last-updated.params'
 
 export type LibrarySearch_DataSource = {
+  get_last_updated_on_authorized_user(
+    params: GetLastUpdated_Params.Authorized,
+  ): Promise<LastUpdated_Dto.Response>
+
+  get_last_updated_on_public_user(
+    params: GetLastUpdated_Params.Public,
+  ): Promise<LastUpdated_Dto.Response>
+
   get_bookmarks_on_authorized_user(
     params: GetBookmarks_Params.Authorized,
   ): Promise<LibrarySearchBookmarks_Dto.Response.Authorized>

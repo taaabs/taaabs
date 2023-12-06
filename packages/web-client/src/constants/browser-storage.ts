@@ -1,10 +1,12 @@
 export const browser_storage = {
   local_forage: {
     authorized_library: {
-      all_bookmarks: 'authorized-library-search.all-bookmarks',
-      db: 'authorized-library-search.db',
-      db_highlights: 'authorized-library-search.db-highlights',
-      db_cached_at: 'authorized-library-search.cached-at',
+      search: {
+        bookmarks: 'authorized-library.search.bookmarks',
+        index: 'authorized-library-search.search.index',
+        highlights: 'authorized-library-search.search.highlights',
+        cached_at: 'authorized-library-search.search.cached-at',
+      },
     },
   },
   session_storage: {

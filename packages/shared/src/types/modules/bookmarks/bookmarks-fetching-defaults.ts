@@ -10,6 +10,6 @@ export namespace BookmarksFetchingDefaults {
   }
 
   export namespace Authorized {
-    export const publicOnly = false
+    export const public_only = false
   }
 }
