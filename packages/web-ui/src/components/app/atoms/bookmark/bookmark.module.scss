@@ -26,7 +26,7 @@
     }
     @include at992 {
       @include hover {
-        border-color: var(--blue200);
+        border-color: var(--blue300);
       }
     }
   }
@@ -34,15 +34,17 @@
 .bookmark {
   display: flex;
   flex-direction: column;
-  &__meta {
+  &__top {
     display: flex;
     justify-content: space-between;
     align-items: end;
-    &__date {
+    position: relative;
+    &__info {
       color: var(--text-color-dimmed);
       display: flex;
       padding-left: var(--distance-16px);
       padding-bottom: var(--distance-6px);
+      white-space: pre-wrap;
     }
     &__menu {
       position: relative;
@@ -214,6 +216,12 @@
           @include transition-100ms(border-color);
           @include hover {
             border-color: var(--border-color-hover);
+          }
+          &--has-highlights {
+            border-color: var(--blue100);
+            @include hover {
+              border-color: var(--blue300);
+            }
           }
           > img {
             width: var(--distance-16px);

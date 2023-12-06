@@ -2,13 +2,13 @@ declare const styles: {
   readonly container: string
   readonly 'container--has-highlights': string
   readonly bookmark: string
-  readonly bookmark__meta: string
-  readonly bookmark__meta__date: string
-  readonly bookmark__meta__menu: string
-  readonly bookmark__meta__menu__button: string
-  readonly 'bookmark__meta__menu--toggled': string
-  readonly bookmark__meta__menu__slot: string
-  readonly 'bookmark__meta__menu__slot--hidden': string
+  readonly bookmark__top: string
+  readonly bookmark__top__info: string
+  readonly bookmark__top__menu: string
+  readonly bookmark__top__menu__button: string
+  readonly 'bookmark__top__menu--toggled': string
+  readonly bookmark__top__menu__slot: string
+  readonly 'bookmark__top__menu__slot--hidden': string
   readonly bookmark__title: string
   readonly bookmark__title__inner: string
   readonly bookmark__title__inner__unread: string
@@ -25,6 +25,7 @@ declare const styles: {
   readonly 'bookmark__links__item--has-highlights': string
   readonly bookmark__links__item__site: string
   readonly bookmark__links__item__site__favicon: string
+  readonly 'bookmark__links__item__site__favicon--has-highlights': string
   readonly bookmark__links__item__site__url: string
   readonly bookmark__links__item__actions: string
   readonly bookmark__links__item__actions__open: string

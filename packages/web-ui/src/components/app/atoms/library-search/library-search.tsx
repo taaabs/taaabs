@@ -130,6 +130,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
             props.on_submit()
             input.current?.blur()
             props.on_blur()
+            set_is_focused_fix(false)
           }}
           onClick={() => {
             if (!props.is_focused) {

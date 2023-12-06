@@ -525,7 +525,7 @@ export const use_search = () => {
         .map((recent_search_string) => ({
           type: 'recent',
           completion: recent_search_string.slice(search_string.length),
-          search_string: recent_search_string.slice(0, search_string.length),
+          search_string,
         }))
 
       if (last_word.substring(0, 1) == '@') {

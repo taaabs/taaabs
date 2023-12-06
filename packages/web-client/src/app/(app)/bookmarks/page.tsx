@@ -214,7 +214,9 @@ const Page: React.FC = () => {
             }
           }}
           on_submit={() => {
-            search.query_db({ search_string: search.search_string })
+            if (search.search_string) {
+              search.query_db({ search_string: search.search_string })
+            }
           }}
           on_blur={() => {
             search.clear_hints()
@@ -764,6 +766,7 @@ const Page: React.FC = () => {
           ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
               <Bookmark
                 key={bookmark.id}
+                index={i}
                 fetch_timestamp={
                   bookmarks_slice_state.bookmarks_fetch_timestamp || 0
                 }

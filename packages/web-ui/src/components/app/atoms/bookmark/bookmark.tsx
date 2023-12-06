@@ -36,6 +36,7 @@ export namespace Bookmark {
   export type Highlights = [number, number][]
 
   export type Props = {
+    index: number
     fetch_timestamp?: number // Forces rerender for bookmark height adjustment (upon unread/stars change).
     title: string
     note?: string
@@ -109,11 +110,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             onClick={props.on_click}
           >
             <div className={styles.bookmark}>
-              <div className={styles.bookmark__meta}>
-                <div className={styles.bookmark__meta__date}>
+              <div className={styles.bookmark__top}>
+                <div className={styles.bookmark__top__info}>
                   {bookmark_date}
                 </div>
-                <div className={styles.bookmark__meta__menu}>
+                <div className={styles.bookmark__top__menu}>
                   <OutsideClickHandler
                     disabled={!is_menu_open}
                     onOutsideClick={() => {
@@ -121,8 +122,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     }}
                   >
                     <button
-                      className={cn(styles.bookmark__meta__menu__button, {
-                        [styles['bookmark__meta__menu--toggled']]: is_menu_open,
+                      className={cn(styles.bookmark__top__menu__button, {
+                        [styles['bookmark__top__menu--toggled']]: is_menu_open,
                       })}
                       onClick={(e) => {
                         e.stopPropagation()
@@ -135,8 +136,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                       <Icon variant="THREE_DOTS" />
                     </button>
                     <div
-                      className={cn(styles.bookmark__meta__menu__slot, {
-                        [styles['bookmark__meta__menu__slot--hidden']]:
+                      className={cn(styles.bookmark__top__menu__slot, {
+                        [styles['bookmark__top__menu__slot--hidden']]:
                           !is_menu_open,
                       })}
                       onClick={() => {
@@ -289,9 +290,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     >
                       <div className={styles.bookmark__links__item__site}>
                         <button
-                          className={
-                            styles.bookmark__links__item__site__favicon
-                          }
+                          className={cn(
+                            styles.bookmark__links__item__site__favicon,
+                            {
+                              [styles[
+                                'bookmark__links__item__site__favicon--has-highlights'
+                              ]]: props.highlights,
+                            },
+                          )}
                         >
                           <LazyLoadImage
                             alt={'Favicon'}

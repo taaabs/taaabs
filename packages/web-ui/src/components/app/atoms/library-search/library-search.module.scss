@@ -23,6 +23,9 @@
   box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.4);
   z-index: 2;
   @include transition-100ms;
+  @include hover {
+    border-color: var(--blue300);
+  }
   &--yields-no-results {
     border-color: var(--red100) !important;
     background-color: var(--red50-transparent);
@@ -32,7 +35,7 @@
     }
   }
   &--focus {
-    border: 1px solid var(--blue300);
+    border: 1px solid var(--blue400) !important;
     box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.7);
   }
   &--focus-yields-no-results {
@@ -174,7 +177,7 @@
       border-radius: var(--border-radius-999px);
       @include transition-100ms(background-color);
       @include hover {
-        background-color: var(--blue200);
+        background-color: var(--blue100);
       }
       &--yields-no-results {
         @include hover {
