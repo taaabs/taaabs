@@ -77,6 +77,7 @@
     align-items: center;
     height: 100%;
     cursor: text;
+    overflow: hidden;
     &__keycap {
       border: 1px solid var(--blue200);
       background: var(--blue100);
@@ -157,11 +158,12 @@
     &__press_key {
       color: var(--blue500);
       display: flex;
-      white-space: pre-wrap;
+      white-space: pre;
       margin-right: var(--distance-11px);
     }
     &__results-count {
       color: var(--blue500);
+      white-space: pre;
       @include transition-100ms(color);
       &--yields-no-results {
         color: var(--red500);

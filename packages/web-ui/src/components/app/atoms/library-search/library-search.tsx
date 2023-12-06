@@ -218,7 +218,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
               }
             }}
             onChange={(e) => {
-              props.on_change(e.target.value)
+              if (!e.target.value.endsWith('  ')) {
+                props.on_change(e.target.value)
+              }
             }}
           />
         </form>
