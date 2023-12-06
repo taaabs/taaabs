@@ -465,7 +465,9 @@ export const use_search = () => {
       localStorage.setItem(
         browser_storage.local_storage.authorized_library.recent_searches,
         JSON.stringify([
-          ...new Set([params.search_string, ...recent_searches].slice(0, 1000)),
+          ...new Set(
+            [params.search_string.trim(), ...recent_searches].slice(0, 1000),
+          ),
         ]),
       )
     }
@@ -488,25 +490,22 @@ export const use_search = () => {
     const term = search_string.replace(/(?=@)(.*?)($|\s)/g, '').trim()
 
     if (!search_string) {
+      const recent_searches = JSON.parse(
+        localStorage.getItem(
+          browser_storage.local_storage.authorized_library.recent_searches,
+        ) || '[]',
+      ) as string[]
+
       set_hints(
-        (
-          JSON.parse(
-            localStorage.getItem(
-              browser_storage.local_storage.authorized_library.recent_searches,
-            ) || '[]',
-          ) as string[]
-        )
-          .filter(
-            (recent_search_string) =>
-              recent_search_string != search_string &&
-              recent_search_string.startsWith(search_string),
-          )
-          .slice(0, system_values.max_library_search_hints)
-          .map((recent_search_string) => ({
-            type: 'recent',
-            completion: recent_search_string.slice(search_string.length),
-            search_string: '',
-          })),
+        recent_searches.length
+          ? recent_searches
+              .slice(0, system_values.max_library_search_hints)
+              .map((recent_search_string) => ({
+                type: 'recent',
+                completion: recent_search_string.slice(search_string.length),
+                search_string: '',
+              }))
+          : undefined,
       )
     } else {
       const recent_hints: Hint[] = (

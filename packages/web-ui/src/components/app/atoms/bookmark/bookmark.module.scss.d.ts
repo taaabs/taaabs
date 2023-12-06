@@ -29,7 +29,8 @@ declare const styles: {
   readonly bookmark__links__item__site__url: string
   readonly bookmark__links__item__actions: string
   readonly bookmark__links__item__actions__open: string
-  readonly bookmark__links__item__actions__bookmark: string
+  readonly bookmark__links__item__actions__menu: string
+  readonly 'bookmark__links__item__actions__public-saves': string
   readonly highlight: string
 }
 export = styles

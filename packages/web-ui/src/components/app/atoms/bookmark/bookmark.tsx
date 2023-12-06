@@ -50,7 +50,7 @@ export namespace Bookmark {
     on_click: () => void
     is_unread?: boolean
     stars: number
-    links: { url: string; site_path?: string; saves: number }[]
+    links: { url: string; site_path?: string; saves?: number }[]
     render_height?: number
     set_render_height: (height: number) => void
     on_link_click?: () => Promise<void>
@@ -353,29 +353,37 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         </a>
                       </div>
                       <div className={styles.bookmark__links__item__actions}>
-                        <div
+                        {link.saves !== undefined && link.saves > 0 && (
+                          <button
+                            className={
+                              styles[
+                                'bookmark__links__item__actions__public-saves'
+                              ]
+                            }
+                          >
+                            {link.saves}
+                          </button>
+                        )}
+                        <button
                           className={
                             styles.bookmark__links__item__actions__open
                           }
+                          onClick={async () => {
+                            if (props.on_link_click) {
+                              await props.on_link_click()
+                            }
+                            window.open(link.url, '_blank')
+                          }}
                         >
-                          <button
-                            onClick={async () => {
-                              if (props.on_link_click) {
-                                await props.on_link_click()
-                              }
-                              window.open(link.url, '_blank')
-                            }}
-                          >
-                            <Icon variant="NEW_TAB" />
-                          </button>
-                        </div>
+                          <Icon variant="NEW_TAB" />
+                        </button>
                         <button
                           className={
-                            styles.bookmark__links__item__actions__bookmark
+                            styles.bookmark__links__item__actions__menu
                           }
+                          onClick={async () => {}}
                         >
-                          <span>{link.saves}</span>
-                          <Icon variant="BOOKMARK" />
+                          <Icon variant="THREE_DOTS" />
                         </button>
                       </div>
                     </div>

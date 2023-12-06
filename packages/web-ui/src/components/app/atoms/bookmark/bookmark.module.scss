@@ -2,7 +2,7 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  background: var(--Bookmark-background);
+  background: var(--plain-white);
   border: var(--border-secondary);
   @include transition-100ms(border-color);
   @include to992 {
@@ -50,15 +50,12 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      margin-left: var(--distance-8px);
       margin-top: var(--distance-11px);
       @include to992 {
         margin-right: var(--distance-16px);
-        margin-left: var(--distance-16px);
       }
       @include at992 {
-        margin-right: var(--distance-8px);
-        margin-left: var(--distance-8px);
+        margin-right: var(--distance-10px);
       }
       &__button {
         display: flex;
@@ -69,22 +66,21 @@
         width: var(--button-dimension-28px);
         height: var(--button-dimension-28px);
         svg {
-          fill: var(--Bookmark-action-fill);
+          fill: var(--neutral350);
           @include transition-100ms(fill);
-          width: var(--icon-dimension-16px);
           height: var(--icon-dimension-16px);
         }
         @include hover {
           background: var(--Bookmark-action-background-hover);
           svg {
-            fill: var(--Bookmark-action-fill-hover);
+            fill: var(--neutral600);
           }
         }
       }
       &--toggled {
         background: var(--Bookmark-action-background-hover);
         svg {
-          fill: var(--Bookmark-action-fill-hover);
+          fill: var(--neutral600);
         }
       }
       &__slot {
@@ -184,10 +180,11 @@
     display: block;
     &__item {
       display: flex;
-      gap: var(--distance-8px);
+      gap: var(--distance-12px);
       justify-content: space-between;
-      padding: var(--distance-10px) var(--distance-12px);
-      background-color: var(--Bookmark-link-background);
+      padding: var(--distance-10px) var(--distance-10px) var(--distance-10px)
+        var(--distance-12px);
+      background-color: var(--neutral25);
       border-top: var(--border-secondary);
       &--has-highlights {
         background-color: var(--blue25);
@@ -234,7 +231,6 @@
           overflow: hidden;
           @include hover {
             > span {
-              color: var(--text-color-normal) !important;
               @include text-decoration-underlinie-thin;
               text-decoration-color: var(--text-color-variant);
             }
@@ -267,54 +263,54 @@
       &__actions {
         display: flex;
         align-items: center;
-        gap: var(--distance-8px);
+        gap: var(--distance-4px);
         &__open {
           display: flex;
           align-items: center;
-          gap: var(--distance-4px);
-          > button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--border-radius-999px);
-            @include transition-100ms(background-color);
-            width: var(--button-dimension-28px);
-            height: var(--button-dimension-28px);
+          justify-content: center;
+          border-radius: var(--border-radius-999px);
+          @include transition-100ms(background-color);
+          width: var(--button-dimension-28px);
+          height: var(--button-dimension-28px);
+          svg {
+            fill: var(--neutral500);
+            @include transition-100ms(fill);
+            width: var(--icon-dimension-12px);
+            height: var(--icon-dimension-12px);
+          }
+          @include hover {
+            background: var(--neutral200);
             svg {
-              fill: var(--Bookmark-link-new-tab-fill);
-              @include transition-100ms(fill);
-              width: var(--icon-dimension-12px);
-              height: var(--icon-dimension-12px);
-            }
-            @include hover {
-              background: var(--Bookmark-link-new-tab-background-hover);
-              svg {
-                fill: var(--Bookmark-link-new-tab-fill-hover);
-              }
+              fill: var(--neutral600);
             }
           }
         }
-        &__bookmark {
+        &__menu {
           display: flex;
-          gap: var(--distance-6px);
           align-items: center;
-          height: var(--button-dimension-34px);
-          padding: 0 var(--distance-12px) 0 var(--distance-11px);
-          background-color: var(--Bookmark-saves-background);
+          justify-content: center;
           border-radius: var(--border-radius-999px);
           @include transition-100ms(background-color);
-          @include hover {
-            background-color: var(--Bookmark-saves-background-hover);
-          }
-          span {
-            color: var(--Bookmark-saves-foreground);
-            font-family: var(--font-family-plus-jakarta-sans);
-            font-weight: var(--font-weight-plus-jakarta-sans-bold);
-            font-size: var(--font-size-14px);
-          }
+          width: var(--button-dimension-28px);
+          height: var(--button-dimension-28px);
           svg {
+            fill: var(--neutral400);
+            @include transition-100ms(fill);
             height: var(--icon-dimension-16px);
-            fill: var(--Bookmark-saves-foreground);
+          }
+          @include hover {
+            background: var(--neutral200);
+            svg {
+              fill: var(--neutral600);
+            }
+          }
+        }
+        &__public-saves {
+          margin-right: 8px;
+          color: var(--text-color-dimmed);
+          font-size: var(--font-size-13px);
+          @include hover {
+            text-decoration: underline;
           }
         }
       }
