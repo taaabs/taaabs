@@ -9,7 +9,7 @@
   width: 100%;
   position: relative;
 }
-.input {
+.search {
   display: flex;
   align-items: center;
   gap: var(--distance-13px);
@@ -70,14 +70,14 @@
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
   }
-  .form {
+  &__form {
     flex-grow: 1;
     position: relative;
     display: flex;
     align-items: center;
     height: 100%;
     cursor: text;
-    overflow: hidden;
+    overflow: auto;
     &__keycap {
       border: 1px solid var(--blue200);
       background: var(--blue100);
@@ -88,65 +88,72 @@
       padding: var(--distance-1px) var(--distance-5px);
       box-shadow: var(--box-shadow-blue);
     }
-    &__styled-value {
+    &__content {
       position: absolute;
-      color: var(--brand-color);
-      font-size: var(--font-size-17px);
-      font-weight: var(--font-weight-inter-tight-medium);
-      font-family: var(--font-family-inter-tight);
-      @include transition-100ms(color);
-      display: flex;
-      align-items: center;
-      width: 100%;
-      pointer-events: none;
-      user-select: none;
-      word-break: break-word;
       white-space: pre;
       -webkit-user-select: none;
       user-select: none;
-      &--yields-no-results {
-        color: var(--red600) !important;
-        &::placeholder {
-          color: var(--red600) !important;
-        }
-      }
-      &__pre-highlight {
-        opacity: 0.7;
-      }
-      &__highlight {
-        background-color: var(--blue200);
-        border-radius: var(--border-radius-3px);
-        @include transition-100ms(background-color);
-        &--no-results {
-          background-color: var(--red200);
-        }
-      }
-      &__completion {
-        opacity: 0.5;
-        font-weight: var(--font-weight-inter-regular);
-        margin-right: var(--distance-6px);
-      }
-    }
-    > input {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      font-size: var(--font-size-17px);
-      font-weight: var(--font-weight-inter-tight-medium);
-      font-family: var(--font-family-inter-tight);
-      color: transparent;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      &:focus {
-        outline: none;
-      }
-      &::placeholder {
-        font-weight: var(--font-weight-inter-medium);
-        font-family: var(--font-family-inter);
+      &__styled-value {
+        z-index: -1;
+        position: absolute;
         color: var(--brand-color);
-        opacity: 0.8;
+        font-size: var(--font-size-17px);
+        font-weight: var(--font-weight-inter-tight-medium);
+        font-family: var(--font-family-inter-tight);
         @include transition-100ms(color);
+        display: flex;
+        align-items: center;
+        pointer-events: none;
+        &--yields-no-results {
+          color: var(--red600) !important;
+          &::placeholder {
+            color: var(--red600) !important;
+          }
+        }
+        &__pre-highlight {
+          opacity: 0.7;
+        }
+        &__highlight {
+          background-color: var(--blue200);
+          border-radius: var(--border-radius-3px);
+          @include transition-100ms(background-color);
+          &--no-results {
+            background-color: var(--red200);
+          }
+        }
+        &__completion {
+          opacity: 0.5;
+          font-weight: var(--font-weight-inter-regular);
+          margin-right: var(--distance-6px);
+        }
+      }
+      &__sizer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 0;
+        white-space: pre;
+        visibility: hidden;
+        font-size: var(--font-size-17px);
+        font-weight: var(--font-weight-inter-tight-medium);
+        font-family: var(--font-family-inter-tight);
+      }
+      input {
+        color: transparent;
+        z-index: 1;
+        font-size: var(--font-size-17px);
+        font-weight: var(--font-weight-inter-tight-medium);
+        font-family: var(--font-family-inter-tight);
+        &:focus {
+          outline: none;
+        }
+        &::placeholder {
+          font-weight: var(--font-weight-inter-medium);
+          font-family: var(--font-family-inter);
+          color: var(--brand-color);
+          opacity: 0.8;
+          @include transition-100ms(color);
+        }
       }
     }
   }

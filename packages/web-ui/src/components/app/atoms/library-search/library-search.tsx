@@ -37,6 +37,13 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
   const [selected_hint_index, set_selected_hint_index] = useState<number>(-1)
   const [is_focused_fix, set_is_focused_fix] = useState(false)
 
+  const [sizer_width, set_sizer_width] = useState(0)
+  const sizer = useRef<HTMLDivElement>(null)
+
+  useUpdateEffect(() => {
+    set_sizer_width(sizer.current?.getBoundingClientRect().width || 0)
+  }, [props.search_string])
+
   useUpdateEffect(() => {
     set_is_focused_fix(props.is_focused)
   }, [props.is_focused])
@@ -98,17 +105,17 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
     <div className={styles.container}>
       <div
         className={cn(
-          styles.input,
-          { [styles['input--yields-no-results']]: props.results_count == 0 },
-          { [styles['input--focus']]: props.is_focused },
+          styles.search,
+          { [styles['search--yields-no-results']]: props.results_count == 0 },
+          { [styles['search--focus']]: props.is_focused },
           {
-            [styles['input--focus-yields-no-results']]:
+            [styles['search--focus-yields-no-results']]:
               props.is_focused && props.results_count == 0,
           },
         )}
       >
         <button
-          className={styles['input__left-side']}
+          className={styles['search__left-side']}
           onClick={() => {
             if (!props.is_focused) {
               input.current?.focus()
@@ -118,13 +125,13 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
           }}
         >
           {props.is_loading ? (
-            <div className={styles.input__loader} />
+            <div className={styles.search__loader} />
           ) : (
             <Icon variant="SEARCH" />
           )}
         </button>
         <form
-          className={styles.form}
+          className={styles.search__form}
           onSubmit={(e) => {
             e.preventDefault()
             props.on_submit()
@@ -141,97 +148,122 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
             }
           }}
         >
-          <div
-            className={cn(styles['form__styled-value'], {
-              [styles['form__styled-value--yields-no-results']]:
-                props.results_count == 0,
-            })}
-          >
-            {/* /(?=@)(.*?)($|\s)/ */}
-            {/* 'lorem @abc.com @abc.com ipsum' */}
-            {/* ["lorem ", "@abc.com", " ", "@abc.com", " ipsum"] */}
-            {props.search_string.split(/(?=@)(.*?)($|\s)/).map((str) => {
-              if (str.substring(0, 1) == '@') {
-                return (
-                  <>
-                    <span
-                      className={styles['form__styled-value__pre-highlight']}
-                    >
-                      @
-                    </span>
+          <div className={styles.search__form__content}>
+            <div
+              className={cn(styles['search__form__content__styled-value'], {
+                [styles[
+                  'search__form__content__styled-value--yields-no-results'
+                ]]: props.results_count == 0,
+              })}
+            >
+              {/* /(?=@)(.*?)($|\s)/ */}
+              {/* 'lorem @abc.com @abc.com ipsum' */}
+              {/* ["lorem ", "@abc.com", " ", "@abc.com", " ipsum"] */}
+              {props.search_string.split(/(?=@)(.*?)($|\s)/).map((str) => {
+                if (str.substring(0, 1) == '@') {
+                  return (
                     <>
                       <span
-                        className={cn(styles['form__styled-value__highlight'], {
-                          [styles['form__styled-value__highlight--no-results']]:
-                            props.results_count == 0,
-                        })}
+                        className={
+                          styles[
+                            'search__form__content__styled-value__pre-highlight'
+                          ]
+                        }
                       >
-                        {str.substring(1)}
+                        @
                       </span>
+                      <>
+                        <span
+                          className={cn(
+                            styles[
+                              'search__form__content__styled-value__highlight'
+                            ],
+                            {
+                              [styles[
+                                'search__form__content__styled-value__highlight--no-results'
+                              ]]: props.results_count == 0,
+                            },
+                          )}
+                        >
+                          {str.substring(1)}
+                        </span>
+                      </>
                     </>
+                  )
+                } else {
+                  return <span>{str}</span>
+                }
+              })}
+              {(props.search_string || selected_hint_index != -1) &&
+                props.hints &&
+                is_focused_fix && (
+                  <>
+                    <span
+                      className={
+                        styles[
+                          'search__form__content__styled-value__completion'
+                        ]
+                      }
+                    >
+                      {
+                        props.hints[
+                          selected_hint_index == -1 ? 0 : selected_hint_index
+                        ]?.completion
+                      }
+                    </span>
+                    <span className={styles['search__form__keycap']}>tab</span>
                   </>
-                )
-              } else {
-                return <span>{str}</span>
-              }
-            })}
-            {(props.search_string || selected_hint_index != -1) &&
-              props.hints &&
-              is_focused_fix && (
-                <>
-                  <span className={styles['form__styled-value__completion']}>
-                    {
-                      props.hints[
-                        selected_hint_index == -1 ? 0 : selected_hint_index
-                      ]?.completion
-                    }
-                  </span>
-                  <span className={styles['form__keycap']}>tab</span>
-                </>
-              )}
+                )}
+            </div>
+            <div>
+              <div className={styles.search__form__content__sizer} ref={sizer}>
+                {props.search_string}
+              </div>
+              <input
+                ref={input}
+                value={props.search_string}
+                style={{
+                  pointerEvents: !props.is_focused ? 'none' : undefined,
+                  width: sizer_width > 300 ? `${sizer_width}px` : undefined,
+                }}
+                placeholder={
+                  props.is_loading
+                    ? `One moment please... ${
+                        props.loading_progress_percentage
+                          ? props.loading_progress_percentage + '%'
+                          : ''
+                      }`
+                    : selected_hint_index != -1
+                    ? undefined
+                    : props.placeholder
+                }
+                onBlur={() => {
+                  setTimeout(() => {
+                    props.on_blur()
+                  }, 100)
+                }}
+                onFocus={() => {
+                  if (!props.is_focused) {
+                    props.on_focus()
+                  }
+                }}
+                onChange={(e) => {
+                  if (!e.target.value.endsWith('  ')) {
+                    props.on_change(e.target.value)
+                  }
+                }}
+              />
+            </div>
           </div>
-          <input
-            ref={input}
-            value={props.search_string}
-            style={{
-              pointerEvents: !props.is_focused ? 'none' : undefined,
-            }}
-            placeholder={
-              props.is_loading
-                ? `One moment please... ${
-                    props.loading_progress_percentage
-                      ? props.loading_progress_percentage + '%'
-                      : ''
-                  }`
-                : selected_hint_index != -1
-                ? undefined
-                : props.placeholder
-            }
-            onBlur={() => {
-              setTimeout(() => {
-                props.on_blur()
-              }, 100)
-            }}
-            onFocus={() => {
-              if (!props.is_focused) {
-                props.on_focus()
-              }
-            }}
-            onChange={(e) => {
-              if (!e.target.value.endsWith('  ')) {
-                props.on_change(e.target.value)
-              }
-            }}
-          />
         </form>
-        <div className={styles['input__right-side']}>
+        <div className={styles['search__right-side']}>
           {props.search_string ? (
             <>
               {props.results_count !== undefined && (
                 <div
-                  className={cn(styles['input__right-side__results-count'], {
+                  className={cn(styles['search__right-side__results-count'], {
                     [styles[
-                      'input__right-side__results-count--yields-no-results'
+                      'search__right-side__results-count--yields-no-results'
                     ]]: props.results_count == 0,
                   })}
                 >
@@ -245,8 +277,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                 </div>
               )}
               <button
-                className={cn(styles['input__right-side__clear'], {
-                  [styles['input__right-side__clear--yields-no-results']]:
+                className={cn(styles['search__right-side__clear'], {
+                  [styles['search__right-side__clear--yields-no-results']]:
                     props.results_count == 0,
                 })}
                 onClick={() => {
@@ -259,8 +291,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
             </>
           ) : (
             !props.is_focused && (
-              <div className={styles['input__right-side__press_key']}>
-                Type <div className={styles.form__keycap}>/</div> to search
+              <div className={styles['search__right-side__press_key']}>
+                Type <div className={styles.search__form__keycap}>/</div> to
+                search
               </div>
             )
           )}

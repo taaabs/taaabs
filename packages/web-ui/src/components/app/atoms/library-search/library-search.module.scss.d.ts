@@ -1,26 +1,28 @@
 declare const styles: {
   readonly container: string
-  readonly input: string
-  readonly 'input--yields-no-results': string
-  readonly 'input--focus': string
-  readonly 'input--focus-yields-no-results': string
-  readonly 'input__left-side': string
-  readonly input__loader: string
+  readonly search: string
+  readonly 'search--yields-no-results': string
+  readonly 'search--focus': string
+  readonly 'search--focus-yields-no-results': string
+  readonly 'search__left-side': string
+  readonly search__loader: string
   readonly rotation: string
-  readonly form: string
-  readonly form__keycap: string
-  readonly 'form__styled-value': string
-  readonly 'form__styled-value--yields-no-results': string
-  readonly 'form__styled-value__pre-highlight': string
-  readonly 'form__styled-value__highlight': string
-  readonly 'form__styled-value__highlight--no-results': string
-  readonly 'form__styled-value__completion': string
-  readonly 'input__right-side': string
-  readonly 'input__right-side__press_key': string
-  readonly 'input__right-side__results-count': string
-  readonly 'input__right-side__results-count--yields-no-results': string
-  readonly 'input__right-side__clear': string
-  readonly 'input__right-side__clear--yields-no-results': string
+  readonly search__form: string
+  readonly search__form__keycap: string
+  readonly search__form__content: string
+  readonly 'search__form__content__styled-value': string
+  readonly 'search__form__content__styled-value--yields-no-results': string
+  readonly 'search__form__content__styled-value__pre-highlight': string
+  readonly 'search__form__content__styled-value__highlight': string
+  readonly 'search__form__content__styled-value__highlight--no-results': string
+  readonly 'search__form__content__styled-value__completion': string
+  readonly search__form__content__sizer: string
+  readonly 'search__right-side': string
+  readonly 'search__right-side__press_key': string
+  readonly 'search__right-side__results-count': string
+  readonly 'search__right-side__results-count--yields-no-results': string
+  readonly 'search__right-side__clear': string
+  readonly 'search__right-side__clear--yields-no-results': string
   readonly hints: string
   readonly 'hints--hidden': string
   readonly hints__inner: string
