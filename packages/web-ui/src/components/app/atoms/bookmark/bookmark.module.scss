@@ -20,15 +20,7 @@
     }
   }
   &--has-highlights {
-    border-color: var(--blue100);
-    @include to992 {
-      border-top-color: var(--blue200);
-    }
-    @include at992 {
-      @include hover {
-        border-color: var(--blue300);
-      }
-    }
+    background: linear-gradient(15deg, rgba(239,246,255,1) 0%, rgba(255,255,255,1) 55%);
   }
 }
 .bookmark {
@@ -186,10 +178,6 @@
         var(--distance-12px);
       background-color: var(--neutral25);
       border-top: var(--border-secondary);
-      &--has-highlights {
-        background-color: var(--blue25);
-        border-top-color: var(--blue100);
-      }
       &:last-of-type {
         border-bottom-left-radius: var(--border-radius-12px);
         border-bottom-right-radius: var(--border-radius-12px);
@@ -213,12 +201,6 @@
           @include transition-100ms(border-color);
           @include hover {
             border-color: var(--border-color-hover);
-          }
-          &--has-highlights {
-            border-color: var(--blue100);
-            @include hover {
-              border-color: var(--blue300);
-            }
           }
           > img {
             width: var(--distance-16px);

@@ -284,22 +284,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
                   return (
                     <div
-                      className={cn(styles.bookmark__links__item, {
-                        [styles['bookmark__links__item--has-highlights']]:
-                          props.highlights,
-                      })}
+                      className={styles.bookmark__links__item}
                       key={link.url}
                     >
                       <div className={styles.bookmark__links__item__site}>
                         <button
-                          className={cn(
-                            styles.bookmark__links__item__site__favicon,
-                            {
-                              [styles[
-                                'bookmark__links__item__site__favicon--has-highlights'
-                              ]]: props.highlights,
-                            },
-                          )}
+                          className={
+                            styles.bookmark__links__item__site__favicon
+                          }
                         >
                           <LazyLoadImage
                             alt={'Favicon'}

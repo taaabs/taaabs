@@ -22,10 +22,8 @@ declare const styles: {
   readonly bookmark__tags__tag__yields: string
   readonly bookmark__links: string
   readonly bookmark__links__item: string
-  readonly 'bookmark__links__item--has-highlights': string
   readonly bookmark__links__item__site: string
   readonly bookmark__links__item__site__favicon: string
-  readonly 'bookmark__links__item__site__favicon--has-highlights': string
   readonly bookmark__links__item__site__url: string
   readonly bookmark__links__item__actions: string
   readonly bookmark__links__item__actions__open: string
