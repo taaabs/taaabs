@@ -112,6 +112,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             <div className={styles.bookmark}>
               <div className={styles.bookmark__top}>
                 <div className={styles.bookmark__top__info}>
+                  {props.index}
+                  {' · '}
                   {bookmark_date}
                 </div>
                 <div className={styles.bookmark__top__menu}>
