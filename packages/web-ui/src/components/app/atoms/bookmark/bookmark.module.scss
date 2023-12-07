@@ -52,7 +52,7 @@
       flex-direction: column;
       margin-top: var(--distance-11px);
       @include to992 {
-        margin-right: var(--distance-16px);
+        margin-right: var(--distance-8px);
       }
       @include at992 {
         margin-right: var(--distance-10px);
