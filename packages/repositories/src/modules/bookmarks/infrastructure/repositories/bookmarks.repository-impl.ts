@@ -7,6 +7,7 @@ import { DeleteBookmark_Params } from '../../domain/types/delete-bookmark.params
 import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params'
 import { GetBookmarksByIds_Ro } from '../../domain/types/get-bookmarks-by-ids.ro'
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
+import { RecordVisit_Ro } from '../../domain/types/record-visit.ro'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -141,8 +142,13 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     }
   }
 
-  public record_visit(params: RecordVisit_Params): Promise<void> {
-    return this._bookmarks_data_source.record_visit(params)
+  public async record_visit(
+    params: RecordVisit_Params,
+  ): Promise<RecordVisit_Ro> {
+    const { visited_at } =
+      await this._bookmarks_data_source.record_visit(params)
+
+    return { visited_at: new Date(visited_at) }
   }
 
   public delete_bookmark(params: DeleteBookmark_Params): Promise<void> {

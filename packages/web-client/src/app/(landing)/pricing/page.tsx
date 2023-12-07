@@ -23,24 +23,24 @@ const Page: React.FC = () => {
             price="Literally $0"
             price_info="Free forever"
             bullets={[
-              'Unlimited public/private bookmarks',
-              'Unlimited tags',
-              'Essential personal library features',
-              'Personal library free of tracking and ads',
+              'Unlimited encrypted bookmarks',
+              'Unlimited tags and folders',
+              'Essential view options',
+              'Personal library free of ads',
             ]}
           />
         }
         slot_right_side={
           <PricingTier
-            name="Pro"
+            name="Premium"
             description="Take your browsing experience to the next level"
-            price="$4"
-            price_info="$40 billed annually"
+            price="$3.99"
+            price_info="$39.99 billed annually"
             bullets={[
-              'Everyting in Free',
-              'Personal library gets all features',
-              'E2E encrypted bookmarks (soon)',
-              'Claim shorter username',
+              'All view options',
+              'Unlimited categories',
+              'Full-text search',
+              'Notes, highlights and reminders',
             ]}
           />
         }

@@ -69,14 +69,19 @@ const Page: React.FC = () => {
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
 
-  const handle_link_click = async (params: { booomark_id: number }) => {
+  const handle_link_click = async (params: {
+    booomark_id: number
+  }): Promise<Date> => {
     const data_source = new Bookmarks_DataSourceImpl(
       process.env.NEXT_PUBLIC_API_URL,
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
     )
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const record_visit = new RecordVisit_UseCase(repository)
-    await record_visit.invoke({ bookmark_id: params.booomark_id })
+    const { visited_at } = await record_visit.invoke({
+      bookmark_id: params.booomark_id,
+    })
+    return visited_at
   }
 
   useUpdateEffect(() => {
@@ -176,11 +181,15 @@ const Page: React.FC = () => {
           on_focus={async () => {
             search.set_is_search_focused(true)
             if (!search.is_initializing) {
-              const is_cache_stale = await search.check_is_cache_stale({
-                api_url: process.env.NEXT_PUBLIC_API_URL,
-                auth_token:
-                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-              })
+              let is_cache_stale: boolean | undefined
+              if (!search.is_caching_data) {
+                is_cache_stale = await search.check_is_cache_stale({
+                  api_url: process.env.NEXT_PUBLIC_API_URL,
+                  auth_token:
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                })
+              }
+
               if (search.db === undefined || is_cache_stale) {
                 search.init()
               } else {
@@ -784,7 +793,7 @@ const Page: React.FC = () => {
                     ? new Date(bookmark.updated_at)
                     : sortby_view_options.current_sortby == Sortby.VisitedAt
                     ? new Date(bookmark.visited_at)
-                    : new Date()
+                    : new Date(bookmark.created_at)
                 }
                 should_display_only_month={search.result !== undefined}
                 links={bookmark.links.map((link) => ({
@@ -837,7 +846,34 @@ const Page: React.FC = () => {
                   )
                 }}
                 on_link_click={async () => {
-                  handle_link_click({ booomark_id: bookmark.id })
+                  const visited_at = await handle_link_click({
+                    booomark_id: bookmark.id,
+                  })
+                  const updated_bookmark: UpsertBookmark_Params = {
+                    bookmark_id: bookmark.id,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    is_public: bookmark.is_public,
+                    is_archived:
+                      filter_view_options.current_filter ==
+                      LibraryFilter.Archived,
+                    is_unread: bookmark.is_unread,
+                    stars: bookmark.stars,
+                    links: bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                      is_public: link.is_public,
+                    })),
+                    tags: bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      is_public: tag.is_public,
+                    })),
+                  }
+                  search.update_searchable_bookmark({
+                    bookmark: updated_bookmark,
+                    visited_at,
+                    tag_ids: bookmark.tags.map((tag) => tag.id),
+                  })
                 }}
                 favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
                 menu_slot={
@@ -1164,6 +1200,7 @@ const Page: React.FC = () => {
                   />
                 }
                 highlights={search.highlights?.[bookmark.id.toString()]}
+                orama_db_id={search.db?.id}
               />
             ))
           : []

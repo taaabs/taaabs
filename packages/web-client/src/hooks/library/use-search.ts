@@ -8,7 +8,7 @@ import {
   insert,
   search,
 } from '@orama/orama'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
@@ -85,16 +85,17 @@ export const use_search = () => {
   const [result, set_result] = useState<Results<Result> | undefined>()
   const [highlights, set_highlights] = useState<Highlights>()
   const [count, set_count] = useState<number | undefined>()
+  const [is_caching_data, set_is_caching_data] = useState(false)
 
   const on_idle = () => {
     if (!db || !bookmarks_just_tags) return
     cache_data({ db, bookmarks_just_tags })
   }
 
-  const idle_timer_for_data_caching = useIdleTimer({
+  const idle_timer = useIdleTimer({
     onIdle: on_idle,
-    stopOnIdle: true,
     startManually: true,
+    stopOnIdle: true,
     timeout: 1000,
   })
 
@@ -127,9 +128,6 @@ export const use_search = () => {
       throw new Error(
         '[check_staleness] Auth token OR username should be there.',
       )
-
-    // Skip check if waiting for idle (something was updated just now)
-    if (idle_timer_for_data_caching.getRemainingTime() != 0) return false
 
     const cache_updated_at = await localforage.getItem<Date>(
       browser_storage.local_forage.authorized_library.search.cached_at,
@@ -309,6 +307,7 @@ export const use_search = () => {
       browser_storage.local_forage.authorized_library.search.cached_at,
       new Date(),
     )
+    set_is_caching_data(false)
   }
 
   const get_hits = async (params: {
@@ -1005,7 +1004,7 @@ export const use_search = () => {
       (bookmark) => bookmark.id != params.bookmark_id,
     )
     set_bookmarks_just_tags(new_all_bookmarks)
-    idle_timer_for_data_caching.start()
+    set_is_caching_data(true)
   }
 
   const update_searchable_bookmark = async (params: {
@@ -1049,7 +1048,8 @@ export const use_search = () => {
       tags: params.bookmark.tags.map((tag) => tag.name),
     })
     set_bookmarks_just_tags(new_all_bookmarks)
-    idle_timer_for_data_caching.start()
+    set_is_caching_data(true)
+    idle_timer.start()
   }
 
   return {
@@ -1077,5 +1077,6 @@ export const use_search = () => {
     highlights,
     set_highlights,
     check_is_cache_stale,
+    is_caching_data,
   }
 }

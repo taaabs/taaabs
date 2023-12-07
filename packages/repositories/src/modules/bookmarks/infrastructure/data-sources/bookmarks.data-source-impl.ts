@@ -7,6 +7,7 @@ import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params
 import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookmark.dto'
 import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by-ids.dto'
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
+import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -117,15 +118,17 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     ).then((r) => r.json())
   }
 
-  public async record_visit(params: RecordVisit_Params): Promise<void> {
-    await fetch(
+  public async record_visit(
+    params: RecordVisit_Params,
+  ): Promise<RecordVisit_Dto.Response> {
+    return await fetch(
       `${this._api_url}/v1/bookmarks/${params.bookmark_id}/record-visit`,
       {
         headers: {
           Authorization: `Bearer ${this._auth_token}`,
         },
       },
-    )
+    ).then((r) => r.json())
   }
 
   public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {

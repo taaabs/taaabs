@@ -1,6 +1,6 @@
 import { ToBoolean } from '@shared/decorators/to-boolean'
 
-export namespace LastUpdated_Dto {
+export namespace LibrarySearchLastUpdated_Dto {
   export namespace QueryParams {
     class Base {
       @ToBoolean()
@@ -12,6 +12,7 @@ export namespace LastUpdated_Dto {
     }
     export class Public extends Base {}
   }
+
   export class Response {
     public updated_at?: string
   }

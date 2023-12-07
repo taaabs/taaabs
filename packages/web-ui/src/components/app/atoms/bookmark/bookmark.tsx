@@ -57,6 +57,7 @@ export namespace Bookmark {
     on_menu_click: () => void
     menu_slot: React.ReactNode
     highlights?: Highlights
+    orama_db_id?: string
   }
 }
 
@@ -416,7 +417,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.is_unread == n.is_unread &&
     o.render_height == n.render_height &&
     o.current_filter == n.current_filter &&
-    o.number_of_selected_tags == n.number_of_selected_tags,
+    o.number_of_selected_tags == n.number_of_selected_tags &&
+    o.orama_db_id == n.orama_db_id,
 )
 
 function get_url_domain(url: string): string {

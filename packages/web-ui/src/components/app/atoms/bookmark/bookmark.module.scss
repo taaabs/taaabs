@@ -26,11 +26,7 @@
   &__main {
     display: block;
     &--has-highlights {
-      background: linear-gradient(
-        15deg,
-        var(--blue50) 0%,
-        transparent 55%
-      );
+      background: linear-gradient(15deg, var(--blue50) 0%, transparent 55%);
       @include at992 {
         border-top-left-radius: var(--border-radius-12px);
       }
@@ -111,14 +107,14 @@
         &__unread {
           display: inline-flex;
           align-items: center;
-          transform: scale(0.9) translateY(-0.27rem);
-          transform-origin: left;
+          transform: translateY(-0.25rem);
           position: relative;
-          margin-right: var(--distance-0-4rem);
+          margin-right: var(--distance-0-7rem);
           height: var(--distance-2-0rem);
           width: var(--distance-2-0rem);
           background: var(--red);
           border-radius: var(--border-radius-999px);
+          filter: drop-shadow(2px 2px 2px rgba(255, 0, 0, 0.07));
           &:after {
             content: '⠀';
           }
@@ -126,11 +122,12 @@
         &__stars {
           display: inline-flex;
           gap: var(--distance-0-4rem);
-          transform: translateY(0.12rem);
-          margin-right: var(--distance-0-6rem);
+          transform: translateY(0.22rem);
+          margin-right: var(--distance-0-7rem);
           > svg {
-            width: var(--distance-2-0rem);
+            height: var(--distance-2-0rem);
             fill: var(--yellow);
+            filter: drop-shadow(2px 2px 2px rgba(242, 218, 0, 0.2));
           }
         }
         &__text {

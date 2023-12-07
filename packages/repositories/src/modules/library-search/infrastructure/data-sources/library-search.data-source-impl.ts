@@ -1,7 +1,7 @@
 import { LibrarySearchBookmarks_Dto } from '@shared/types/modules/library-search/library-search-bookmarks.dto'
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { LibrarySearch_DataSource } from './library-search.data-source'
-import { LastUpdated_Dto } from '@shared/types/modules/library-search/last-updated.dto'
+import { LibrarySearchLastUpdated_Dto } from '@shared/types/modules/library-search/library-search-last-updated.dto'
 import { GetLastUpdated_Params } from '../../domain/types/get-last-updated.params'
 
 export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
@@ -12,13 +12,13 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
 
   public get_last_updated_on_authorized_user(
     params: GetLastUpdated_Params.Authorized,
-  ): Promise<LastUpdated_Dto.Response> {
+  ): Promise<LibrarySearchLastUpdated_Dto.Response> {
     if (!this._auth_token)
       throw new Error(
         '[get_last_updated_on_authorized_user] Missing auth token.',
       )
 
-    const query_params: LastUpdated_Dto.QueryParams.Authorized = {
+    const query_params: LibrarySearchLastUpdated_Dto.QueryParams.Authorized = {
       is_archived: params.is_archived ? params.is_archived : undefined,
       public_only: params.public_only ? params.public_only : undefined,
     }
@@ -36,8 +36,8 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
 
   public get_last_updated_on_public_user(
     params: GetLastUpdated_Params.Public,
-  ): Promise<LastUpdated_Dto.Response> {
-    const query_params: LastUpdated_Dto.QueryParams.Public = {
+  ): Promise<LibrarySearchLastUpdated_Dto.Response> {
+    const query_params: LibrarySearchLastUpdated_Dto.QueryParams.Public = {
       is_archived: params.is_archived ? params.is_archived : undefined,
     }
     return fetch(
