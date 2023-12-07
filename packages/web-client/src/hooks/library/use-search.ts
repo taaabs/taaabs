@@ -128,6 +128,9 @@ export const use_search = () => {
         '[check_staleness] Auth token OR username should be there.',
       )
 
+    // Skip check if waiting for idle (something was updated just now)
+    if (idle_timer_for_data_caching.getRemainingTime() != 0) return false
+
     const cache_updated_at = await localforage.getItem<Date>(
       browser_storage.local_forage.authorized_library.search.cached_at,
     )
