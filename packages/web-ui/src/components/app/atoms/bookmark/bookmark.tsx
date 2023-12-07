@@ -36,7 +36,6 @@ export namespace Bookmark {
   export type Highlights = [number, number][]
 
   export type Props = {
-    index: number
     fetch_timestamp?: number // Forces rerender for bookmark height adjustment (upon unread/stars change).
     title: string
     note?: string
@@ -103,166 +102,180 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       >
         {is_visible == undefined || is_visible || !props.render_height ? (
           <div
-            className={cn(styles.container, {
-              [styles['container--has-highlights']]: props.highlights,
-            })}
+            className={styles.container}
             role="button"
             onClick={props.on_click}
           >
             <div className={styles.bookmark}>
-              <div className={styles.bookmark__top}>
-                <div className={styles.bookmark__top__info}>
-                  {props.index + 1}
-                  {' · '}
-                  {bookmark_date}
-                </div>
-                <div className={styles.bookmark__top__menu}>
-                  <OutsideClickHandler
-                    disabled={!is_menu_open}
-                    onOutsideClick={() => {
-                      toggle_is_menu_open()
-                    }}
-                  >
-                    <button
-                      className={cn(styles.bookmark__top__menu__button, {
-                        [styles['bookmark__top__menu--toggled']]: is_menu_open,
-                      })}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        toggle_is_menu_open()
-                        if (!is_menu_open) {
-                          props.on_menu_click()
-                        }
-                      }}
-                    >
-                      <Icon variant="THREE_DOTS" />
-                    </button>
-                    <div
-                      className={cn(styles.bookmark__top__menu__slot, {
-                        [styles['bookmark__top__menu__slot--hidden']]:
-                          !is_menu_open,
-                      })}
-                      onClick={() => {
+              <div
+                className={cn(styles.bookmark__main, {
+                  [styles['bookmark__main--has-highlights']]: props.highlights,
+                })}
+              >
+                <div className={styles.bookmark__main__top}>
+                  <div className={styles.bookmark__main__top__info}>
+                    {bookmark_date}
+                  </div>
+                  <div className={styles.bookmark__main__top__menu}>
+                    <OutsideClickHandler
+                      disabled={!is_menu_open}
+                      onOutsideClick={() => {
                         toggle_is_menu_open()
                       }}
                     >
-                      {props.menu_slot}
-                    </div>
-                  </OutsideClickHandler>
-                </div>
-              </div>
-              <div className={styles.bookmark__title}>
-                <div className={styles.bookmark__title__inner}>
-                  {props.is_unread && (
-                    <div className={styles.bookmark__title__inner__unread} />
-                  )}
-                  {props.stars >= 1 && (
-                    <div className={styles.bookmark__title__inner__stars}>
-                      {[...new Array(props.stars)].map((_, i) => (
-                        <Icon variant="STAR_FILLED" key={i} />
-                      ))}
-                    </div>
-                  )}
-                  <div
-                    className={cn(styles.bookmark__title__inner__text, {
-                      [styles['bookmark__title__inner__text--unread']]:
-                        props.is_unread,
-                    })}
-                  >
-                    {props.highlights
-                      ? props.title.split('').map((char, i) => {
-                          const is_highlighted = props.highlights!.find(
-                            ([index, length]) =>
-                              i >= index && i < index + length,
-                          )
-
-                          return is_highlighted ? (
-                            <span className={styles.highlight}>{char}</span>
-                          ) : (
-                            char
-                          )
-                        })
-                      : props.title}
+                      <button
+                        className={cn(
+                          styles.bookmark__main__top__menu__button,
+                          {
+                            [styles['bookmark__main__top__menu--toggled']]:
+                              is_menu_open,
+                          },
+                        )}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggle_is_menu_open()
+                          if (!is_menu_open) {
+                            props.on_menu_click()
+                          }
+                        }}
+                      >
+                        <Icon variant="THREE_DOTS" />
+                      </button>
+                      <div
+                        className={cn(styles.bookmark__main__top__menu__slot, {
+                          [styles['bookmark__main__top__menu__slot--hidden']]:
+                            !is_menu_open,
+                        })}
+                        onClick={() => {
+                          toggle_is_menu_open()
+                        }}
+                      >
+                        {props.menu_slot}
+                      </div>
+                    </OutsideClickHandler>
                   </div>
                 </div>
-              </div>
-              <div className={styles.bookmark__tags}>
-                {props.tags.length > 0 && (
-                  <>
-                    {props.tags.map((tag, i) => {
-                      const tag_first_char_index_in_search_title = (
-                        props.title +
-                        ' ' +
-                        props.tags
-                          .map((tag) => ` ${tag.name}`)
-                          .slice(0, i)
-                          .join('')
-                      ).length
+                <div className={styles.bookmark__main__title}>
+                  <div className={styles.bookmark__main__title__inner}>
+                    {props.is_unread && (
+                      <div
+                        className={styles.bookmark__main__title__inner__unread}
+                      />
+                    )}
+                    {props.stars >= 1 && (
+                      <div
+                        className={styles.bookmark__main__title__inner__stars}
+                      >
+                        {[...new Array(props.stars)].map((_, i) => (
+                          <Icon variant="STAR_FILLED" key={i} />
+                        ))}
+                      </div>
+                    )}
+                    <div
+                      className={cn(styles.bookmark__main__title__inner__text, {
+                        [styles['bookmark__main__title__inner__text--unread']]:
+                          props.is_unread,
+                      })}
+                    >
+                      {props.highlights
+                        ? props.title.split('').map((char, i) => {
+                            const is_highlighted = props.highlights!.find(
+                              ([index, length]) =>
+                                i >= index && i < index + length,
+                            )
 
-                      return (
-                        <button
-                          className={styles.bookmark__tags__tag}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            if (tag.isSelected) {
-                              props.on_selected_tag_click(tag.id)
-                            } else {
-                              props.on_tag_click(tag.id)
-                            }
-                          }}
-                          key={tag.id}
-                        >
-                          <div>
-                            <span
-                              className={cn([
-                                styles.bookmark__tags__tag__name,
-                                {
-                                  [styles[
-                                    'bookmark__tags__tag__name--selected'
-                                  ]]: tag.isSelected,
-                                },
-                              ])}
-                            >
-                              {props.highlights
-                                ? tag.name.split('').map((char, i) => {
-                                    const real_i =
-                                      tag_first_char_index_in_search_title + i
-                                    const is_highlighted =
-                                      props.highlights!.find(
-                                        ([index, length]) =>
-                                          real_i >= index &&
-                                          real_i < index + length,
+                            return is_highlighted ? (
+                              <span className={styles.highlight}>{char}</span>
+                            ) : (
+                              char
+                            )
+                          })
+                        : props.title}
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.bookmark__main__tags}>
+                  {props.tags.length > 0 && (
+                    <>
+                      {props.tags.map((tag, i) => {
+                        const tag_first_char_index_in_search_title = (
+                          props.title +
+                          ' ' +
+                          props.tags
+                            .map((tag) => ` ${tag.name}`)
+                            .slice(0, i)
+                            .join('')
+                        ).length
+
+                        return (
+                          <button
+                            className={styles.bookmark__main__tags__tag}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (tag.isSelected) {
+                                props.on_selected_tag_click(tag.id)
+                              } else {
+                                props.on_tag_click(tag.id)
+                              }
+                            }}
+                            key={tag.id}
+                          >
+                            <div>
+                              <span
+                                className={cn([
+                                  styles.bookmark__main__tags__tag__name,
+                                  {
+                                    [styles[
+                                      'bookmark__main__tags__tag__name--selected'
+                                    ]]: tag.isSelected,
+                                  },
+                                ])}
+                              >
+                                {props.highlights
+                                  ? tag.name.split('').map((char, i) => {
+                                      const real_i =
+                                        tag_first_char_index_in_search_title + i
+                                      const is_highlighted =
+                                        props.highlights!.find(
+                                          ([index, length]) =>
+                                            real_i >= index &&
+                                            real_i < index + length,
+                                        )
+                                      return is_highlighted ? (
+                                        <span className={styles.highlight}>
+                                          {char}
+                                        </span>
+                                      ) : (
+                                        char
                                       )
-                                    return is_highlighted ? (
-                                      <span className={styles.highlight}>
-                                        {char}
-                                      </span>
-                                    ) : (
-                                      char
-                                    )
-                                  })
-                                : tag.name}
-                            </span>
-                            {!tag.isSelected && tag.yields && (
-                              <span
-                                className={styles.bookmark__tags__tag__yields}
-                              >
-                                {tag.yields}
+                                    })
+                                  : tag.name}
                               </span>
-                            )}
-                            {tag.isSelected && (
-                              <span
-                                className={styles.bookmark__tags__tag__yields}
-                              >
-                                ×
-                              </span>
-                            )}
-                          </div>
-                        </button>
-                      )
-                    })}
-                  </>
-                )}
+                              {!tag.isSelected && tag.yields && (
+                                <span
+                                  className={
+                                    styles.bookmark__main__tags__tag__yields
+                                  }
+                                >
+                                  {tag.yields}
+                                </span>
+                              )}
+                              {tag.isSelected && (
+                                <span
+                                  className={
+                                    styles.bookmark__main__tags__tag__yields
+                                  }
+                                >
+                                  ×
+                                </span>
+                              )}
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </>
+                  )}
+                </div>
               </div>
               <div className={styles.bookmark__links}>
                 {props.links.map((link, i) => {

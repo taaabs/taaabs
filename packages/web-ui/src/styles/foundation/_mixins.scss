@@ -65,6 +65,11 @@
     @content;
   }
 }
+@mixin touch-screen {
+  @media (pointer: coarse) {
+    @content;
+  }
+}
 @mixin transition-100ms($transitionProperty: all) {
   transition: $transitionProperty var(--transition-duration-100ms) linear;
 }

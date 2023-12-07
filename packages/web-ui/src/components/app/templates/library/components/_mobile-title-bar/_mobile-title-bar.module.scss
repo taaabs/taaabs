@@ -9,7 +9,6 @@
   border-bottom: var(--border-primary);
   background: var(--header-transparent-background);
   backdrop-filter: var(--backdrop-filter);
-  box-sizing: content-box;
 }
 .icon {
   display: flex;
@@ -45,7 +44,6 @@
     font-size: var(--font-size-22px);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
   }
-  
 }
 .skeleton {
   > span > span {

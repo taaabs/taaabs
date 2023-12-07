@@ -144,7 +144,7 @@ const Page: React.FC = () => {
           ? 'Archived'
           : 'All bookmarks'
       }
-      slot_desktop_search={
+      slot_search={
         <LibrarySearch
           search_string={search.search_string}
           is_loading={search.is_initializing}
@@ -771,7 +771,6 @@ const Page: React.FC = () => {
           ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
               <Bookmark
                 key={bookmark.id}
-                index={i}
                 fetch_timestamp={
                   bookmarks_slice_state.bookmarks_fetch_timestamp || 0
                 }

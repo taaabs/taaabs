@@ -122,13 +122,12 @@
         background: var(--header-background);
       }
     }
-    &__desktop-search {
-      position: sticky;
-      top: var(--header-desktop-height);
-      z-index: 2;
-      display: flex;
-      @include to992 {
-        display: none;
+    &__search {
+      @include at992 {
+        display: flex;
+        z-index: 2;
+        top: var(--header-desktop-height);
+        position: sticky;
       }
     }
     &__skeleton {
@@ -150,9 +149,6 @@
       }
     }
     &__bookmarks {
-      @include to992 {
-        margin-top: var(--distance-8px);
-      }
       > div {
         @include to992 {
           margin-bottom: var(--distance-8px);

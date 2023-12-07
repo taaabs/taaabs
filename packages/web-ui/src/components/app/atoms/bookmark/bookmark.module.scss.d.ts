@@ -1,25 +1,26 @@
 declare const styles: {
   readonly container: string
-  readonly 'container--has-highlights': string
   readonly bookmark: string
-  readonly bookmark__top: string
-  readonly bookmark__top__info: string
-  readonly bookmark__top__menu: string
-  readonly bookmark__top__menu__button: string
-  readonly 'bookmark__top__menu--toggled': string
-  readonly bookmark__top__menu__slot: string
-  readonly 'bookmark__top__menu__slot--hidden': string
-  readonly bookmark__title: string
-  readonly bookmark__title__inner: string
-  readonly bookmark__title__inner__unread: string
-  readonly bookmark__title__inner__stars: string
-  readonly bookmark__title__inner__text: string
-  readonly 'bookmark__title__inner__text--unread': string
-  readonly bookmark__tags: string
-  readonly bookmark__tags__tag: string
-  readonly bookmark__tags__tag__name: string
-  readonly 'bookmark__tags__tag__name--selected': string
-  readonly bookmark__tags__tag__yields: string
+  readonly bookmark__main: string
+  readonly 'bookmark__main--has-highlights': string
+  readonly bookmark__main__top: string
+  readonly bookmark__main__top__info: string
+  readonly bookmark__main__top__menu: string
+  readonly bookmark__main__top__menu__button: string
+  readonly 'bookmark__main__top__menu--toggled': string
+  readonly bookmark__main__top__menu__slot: string
+  readonly 'bookmark__main__top__menu__slot--hidden': string
+  readonly bookmark__main__title: string
+  readonly bookmark__main__title__inner: string
+  readonly bookmark__main__title__inner__unread: string
+  readonly bookmark__main__title__inner__stars: string
+  readonly bookmark__main__title__inner__text: string
+  readonly 'bookmark__main__title__inner__text--unread': string
+  readonly bookmark__main__tags: string
+  readonly bookmark__main__tags__tag: string
+  readonly bookmark__main__tags__tag__name: string
+  readonly 'bookmark__main__tags__tag__name--selected': string
+  readonly bookmark__main__tags__tag__yields: string
   readonly bookmark__links: string
   readonly bookmark__links__item: string
   readonly bookmark__links__item__site: string

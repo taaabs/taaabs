@@ -21,6 +21,7 @@ export const Primary = () => (
         on_submit={() => {}}
         on_blur={() => {}}
         on_clear_click={() => {}}
+        is_focused={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -36,6 +37,7 @@ export const Primary = () => (
         on_blur={() => {}}
         on_clear_click={() => {}}
         results_count={2137}
+        is_focused={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -51,6 +53,7 @@ export const Primary = () => (
         on_blur={() => {}}
         on_clear_click={() => {}}
         results_count={2137}
+        is_focused={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -66,6 +69,7 @@ export const Primary = () => (
         on_blur={() => {}}
         on_clear_click={() => {}}
         results_count={0}
+        is_focused={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -81,6 +85,7 @@ export const Primary = () => (
         on_blur={() => {}}
         on_clear_click={() => {}}
         results_count={0}
+        is_focused={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -95,6 +100,7 @@ export const Primary = () => (
         on_submit={() => {}}
         on_blur={() => {}}
         on_clear_click={() => {}}
+        is_focused={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -109,6 +115,7 @@ export const Primary = () => (
         on_submit={() => {}}
         on_blur={() => {}}
         on_clear_click={() => {}}
+        is_focused={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -116,16 +123,14 @@ export const Primary = () => (
         search_string={'mid'}
         hints={[
           {
-            term: 'mid',
+            search_string: 'mid',
             completion: 'dle',
             type: 'recent',
-            yields: 100,
           },
           {
-            term: 'mid',
+            search_string: 'mid',
             completion: 'point',
             type: 'new',
-            yields: 51,
           },
         ]}
         on_click_hint={() => {}}
@@ -136,6 +141,7 @@ export const Primary = () => (
         on_submit={() => {}}
         on_blur={() => {}}
         on_clear_click={() => {}}
+        is_focused={true}
       />
     </div>
   </div>

@@ -5,9 +5,14 @@
   display: flex;
   flex-direction: column;
   gap: var(--distance-4px);
-  margin: var(--distance-16px) 0;
   width: 100%;
   position: relative;
+  @include to992 {
+    margin: var(--distance-12px) 0;
+  }
+  @include at992 {
+    margin: var(--distance-16px) 0;
+  }
 }
 .search {
   display: flex;
@@ -18,11 +23,20 @@
   backdrop-filter: var(--backdrop-filter);
   border: 1px solid var(--blue100);
   border-radius: var(--border-radius-999px);
-  width: calc(100% + (var(--distance-16px) * 2));
-  transform: translateX(calc(var(--distance-16px) * -1));
   box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.4);
   z-index: 2;
   @include transition-100ms;
+  @include to992 {
+    margin: 0 var(--distance-8px);
+  }
+  @include at992 {
+    transform: translateX(calc(var(--distance-8px) * -1));
+    width: calc(100% + (var(--distance-8px) * 2));
+  }
+  @include at1200 {
+    transform: translateX(calc(var(--distance-16px) * -1));
+    width: calc(100% + (var(--distance-16px) * 2));
+  }
   @include hover {
     border-color: var(--blue300);
   }
@@ -87,6 +101,9 @@
       font-family: var(--font-family-inter);
       padding: var(--distance-1px) var(--distance-5px);
       box-shadow: var(--box-shadow-blue);
+      @include touch-screen {
+        display: none;
+      }
     }
     &__content {
       position: absolute;
@@ -125,6 +142,9 @@
           opacity: 0.5;
           font-weight: var(--font-weight-inter-regular);
           margin-right: var(--distance-6px);
+          @include touch-screen {
+            display: none;
+          }
         }
       }
       &__sizer {
@@ -167,6 +187,9 @@
       display: flex;
       white-space: pre;
       margin-right: var(--distance-11px);
+      @include touch-screen {
+        display: none;
+      }
     }
     &__results-count {
       color: var(--blue500);
@@ -216,11 +239,21 @@
   opacity: 1;
   @include transition-100ms;
   transform: translateY(0);
+  @include to992 {
+    width: calc(100% - (var(--distance-16px)));
+    margin-left: 50%;
+    transform: translateY(0) translateX(-50%);
+  }
   &--hidden {
     opacity: 0;
-    transform: translateY(calc(var(--distance-4px) * -1));
     pointer-events: none;
     transition: none;
+    @include to992 {
+      transform: translateY(calc(var(--distance-4px) * -1)) translateX(-50%);
+    }
+    @include at992 {
+      transform: translateY(calc(var(--distance-4px) * -1));
+    }
   }
   &__inner {
     background-color: var(--plain-white);
@@ -276,6 +309,9 @@
           padding: var(--distance-1px) var(--distance-5px);
           box-shadow: var(--box-shadow);
           margin-left: var(--distance-6px);
+          @include touch-screen {
+            display: none;
+          }
         }
       }
       &__remove {

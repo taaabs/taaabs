@@ -586,15 +586,13 @@ export const use_search = () => {
       ) as string[]
 
       set_hints(
-        recent_searches.length
-          ? recent_searches
-              .slice(0, system_values.max_library_search_hints)
-              .map((recent_search_string) => ({
-                type: 'recent',
-                completion: recent_search_string.slice(search_string.length),
-                search_string: '',
-              }))
-          : undefined,
+        recent_searches
+          .slice(0, system_values.max_library_search_hints)
+          .map((recent_search_string) => ({
+            type: 'recent',
+            completion: recent_search_string.slice(search_string.length),
+            search_string: '',
+          })),
       )
     } else {
       const recent_hints: Hint[] = (
@@ -715,18 +713,15 @@ export const use_search = () => {
         )
 
         set_hints(
-          hints_no_empty_completions.length
-            ? [
-                ...recent_hints,
-                ...hints_no_empty_completions.filter(
-                  (hint) =>
-                    !recent_hints.find(
-                      (recent_hint) =>
-                        recent_hint.completion == hint.completion,
-                    ),
+          [
+            ...recent_hints,
+            ...hints_no_empty_completions.filter(
+              (hint) =>
+                !recent_hints.find(
+                  (recent_hint) => recent_hint.completion == hint.completion,
                 ),
-              ].slice(0, system_values.max_library_search_hints)
-            : undefined,
+            ),
+          ].slice(0, system_values.max_library_search_hints),
         )
       } else {
         const ids_of_hits = (await get_hits({ search_string })).map(
@@ -829,18 +824,15 @@ export const use_search = () => {
           new_hints.sort((a, b) => b.yields! - a.yields!)
 
           set_hints(
-            new_hints.length
-              ? [
-                  ...recent_hints,
-                  ...new_hints.filter(
-                    (hint) =>
-                      !recent_hints.find(
-                        (recent_hint) =>
-                          recent_hint.completion == hint.completion,
-                      ),
+            [
+              ...recent_hints,
+              ...new_hints.filter(
+                (hint) =>
+                  !recent_hints.find(
+                    (recent_hint) => recent_hint.completion == hint.completion,
                   ),
-                ].slice(0, system_values.max_library_search_hints)
-              : undefined,
+              ),
+            ].slice(0, system_values.max_library_search_hints),
           )
         } else {
           const result: Results<Result> = await search(db, {
@@ -930,16 +922,12 @@ export const use_search = () => {
 
           new_hints.sort((a, b) => b.yields! - a.yields!)
 
-          if (new_hints.length >= 2) {
-            set_hints(
-              [...recent_hints, ...new_hints].slice(
-                0,
-                system_values.max_library_search_hints,
-              ),
-            )
-          } else {
-            set_hints(undefined)
-          }
+          set_hints(
+            [...recent_hints, ...new_hints].slice(
+              0,
+              system_values.max_library_search_hints,
+            ),
+          )
         }
       }
     }

@@ -36,7 +36,6 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
   const input = useRef<HTMLInputElement>(null)
   const [selected_hint_index, set_selected_hint_index] = useState<number>(-1)
   const [is_focused_fix, set_is_focused_fix] = useState(false)
-
   const [sizer_width, set_sizer_width] = useState(0)
   const sizer = useRef<HTMLDivElement>(null)
 
@@ -44,7 +43,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
     set_sizer_width(sizer.current?.getBoundingClientRect().width || 0)
   }, [props.search_string])
 
-  useUpdateEffect(() => {
+  useEffect(() => {
     set_is_focused_fix(props.is_focused)
   }, [props.is_focused])
 
@@ -224,7 +223,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                 value={props.search_string}
                 style={{
                   pointerEvents: !props.is_focused ? 'none' : undefined,
-                  width: sizer_width > 300 ? `${sizer_width}px` : undefined,
+                  width: sizer_width > 250 ? `${sizer_width}px` : undefined,
                 }}
                 placeholder={
                   props.is_loading

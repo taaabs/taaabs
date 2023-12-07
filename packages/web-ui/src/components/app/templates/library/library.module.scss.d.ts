@@ -7,7 +7,7 @@ declare const styles: {
   readonly sidebar__inner: string
   readonly main: string
   readonly main__inner: string
-  readonly 'main__inner__desktop-search': string
+  readonly main__inner__search: string
   readonly main__inner__skeleton: string
   readonly main__inner__bookmarks: string
   readonly 'main__inner__bookmarks--loading': string

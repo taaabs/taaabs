@@ -101,7 +101,7 @@ const Page: React.FC = () => {
           ? 'Archived'
           : 'All bookmarks'
       }
-      slot_desktop_search={<>search</>}
+      slot_search={<>search</>}
       slot_sidebar={
         <NavigationForLibrarySidebar
           navigation_items={[
