@@ -243,6 +243,11 @@
             text-overflow: ellipsis;
             overflow: hidden;
           }
+          > span:first-child {
+            -webkit-line-clamp: 1;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+          }
           > span:last-child {
             color: var(--text-color-variant);
             font-size: var(--font-size-13px);

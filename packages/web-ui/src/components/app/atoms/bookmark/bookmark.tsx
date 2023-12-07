@@ -272,7 +272,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     props.links
                       .map(
                         (link) =>
-                          `${_url_domain(link.url)}${
+                          `${get_url_domain(link.url)}${
                             link.site_path ? ` › ${link.site_path}` : ''
                           }`,
                       )
@@ -303,7 +303,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             alt={'Favicon'}
                             width={16}
                             height={16}
-                            src={`${props.favicon_host}/${_url_domain(
+                            src={`${props.favicon_host}/${get_url_domain(
                               link.url,
                             )}`}
                           />
@@ -319,7 +319,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         >
                           <span>
                             {props.highlights
-                              ? `${_url_domain(link.url)} ${
+                              ? `${get_url_domain(link.url)} ${
                                   link.site_path ? `› ${link.site_path} ` : ''
                                 }`
                                   .split('')
@@ -340,12 +340,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                       char
                                     )
                                   })
-                              : `${_url_domain(link.url)} ${
+                              : `${get_url_domain(link.url)} ${
                                   link.site_path ? `› ${link.site_path}` : ''
                                 }`}
                           </span>
                           <span>
-                            {_url_path({
+                            {get_url_path({
                               url: link.url,
                               site_path: link.site_path,
                             })}
@@ -407,7 +407,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.number_of_selected_tags == n.number_of_selected_tags,
 )
 
-function _url_domain(url: string): string {
+function get_url_domain(url: string): string {
   let parsed_url = ''
   if (url.substring(0, 8) == 'https://') {
     parsed_url = url.substring(8)
@@ -417,10 +417,14 @@ function _url_domain(url: string): string {
     parsed_url = url
   }
 
-  return parsed_url.split('/')[0]
+  return parsed_url
+    .split('/')[0]
+    .split('.')
+    .map((segment) => segment.replace(/(.{5})/g, '$1​'))
+    .join('.')
 }
 
-function _url_path(params: { url: string; site_path?: string }): string {
+function get_url_path(params: { url: string; site_path?: string }): string {
   let parsed_url = params.url.replace('://', '').split('?')[0]
 
   if (parsed_url.substring(parsed_url.length - 1, parsed_url.length) == '/') {
@@ -456,5 +460,8 @@ function _url_path(params: { url: string; site_path?: string }): string {
     parsed_url = parsed_url.substring(params.site_path.length + 1)
   }
 
-  return parsed_url.split('/').join(' › ')
+  return parsed_url
+    .split('/')
+    .map((segment) => segment.replace(/(.{5})/g, '$1​'))
+    .join(' › ')
 }
