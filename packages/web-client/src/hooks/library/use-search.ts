@@ -32,6 +32,7 @@ import { browser_storage } from '@/constants/browser-storage'
 import { persist, restore } from '@orama/plugin-data-persistence'
 import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-authorized-user.use-case'
 import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-public-user.use-case'
+import { useIdleTimer } from 'react-idle-timer'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -66,7 +67,8 @@ type BookmarkTags = { id: number; tags: string[] }
 export const use_search = () => {
   const query_params = use_shallow_search_params()
   const [is_search_focused, set_is_search_focused] = useState(false)
-  const [all_bookmarks, set_all_bookmarks] = useState<BookmarkTags[]>()
+  const [bookmarks_just_tags, set_bookmarks_just_tags] =
+    useState<BookmarkTags[]>()
   const [current_filter, set_current_filter] = useState<LibraryFilter>()
   const [selected_tags, set_selected_tags] = useState<string[]>([])
   const [ids_to_search_amongst, set_ids_to_search_amongst] = useState<
@@ -84,12 +86,24 @@ export const use_search = () => {
   const [highlights, set_highlights] = useState<Highlights>()
   const [count, set_count] = useState<number | undefined>()
 
+  const on_idle = () => {
+    if (!db || !bookmarks_just_tags) return
+    cache_data({ db, bookmarks_just_tags })
+  }
+
+  const idle_timer_for_data_caching = useIdleTimer({
+    onIdle: on_idle,
+    stopOnIdle: true,
+    startManually: true,
+    timeout: 1000,
+  })
+
   useUpdateEffect(() => {
-    if (!all_bookmarks) return
+    if (!bookmarks_just_tags) return
 
     if (selected_tags.length) {
       set_ids_to_search_amongst(
-        all_bookmarks
+        bookmarks_just_tags
           .filter((bookmark) =>
             selected_tags.every((tag) => bookmark.tags.includes(tag)),
           )
@@ -98,7 +112,7 @@ export const use_search = () => {
     } else if (is_search_focused) {
       get_hints()
     }
-  }, [selected_tags, all_bookmarks])
+  }, [selected_tags, bookmarks_just_tags])
 
   useUpdateEffect(() => {
     get_hints()
@@ -186,7 +200,7 @@ export const use_search = () => {
     )
 
     if (cached_bookmarks && cached_index && cached_highlights) {
-      set_all_bookmarks(JSON.parse(cached_bookmarks))
+      set_bookmarks_just_tags(JSON.parse(cached_bookmarks))
       db = await restore('json', cached_index)
       await loadWithHighlight(db, JSON.parse(cached_highlights as any))
     } else {
@@ -260,9 +274,9 @@ export const use_search = () => {
         id: bookmark.id,
         tags: bookmark.tags,
       }))
-      set_all_bookmarks(bookmarks_tags)
+      set_bookmarks_just_tags(bookmarks_tags)
 
-      cache_data({ db, bookmarks: bookmarks_tags })
+      cache_data({ db, bookmarks_just_tags: bookmarks_tags })
     }
 
     set_db(db)
@@ -271,7 +285,7 @@ export const use_search = () => {
 
   const cache_data = async (params: {
     db: Orama<typeof schema>
-    bookmarks: BookmarkTags[]
+    bookmarks_just_tags: BookmarkTags[]
   }) => {
     const db_stringified = await persist(params.db, 'json')
     const highlights = await saveWithHighlight(params.db)
@@ -286,7 +300,7 @@ export const use_search = () => {
     )
     await localforage.setItem(
       browser_storage.local_forage.authorized_library.search.bookmarks,
-      JSON.stringify(params.bookmarks),
+      JSON.stringify(params.bookmarks_just_tags),
     )
     await localforage.setItem(
       browser_storage.local_forage.authorized_library.search.cached_at,
@@ -996,11 +1010,11 @@ export const use_search = () => {
   }) => {
     if (!db) return
     await remove(db, params.bookmark_id.toString())
-    const new_all_bookmarks = all_bookmarks!.filter(
+    const new_all_bookmarks = bookmarks_just_tags!.filter(
       (bookmark) => bookmark.id != params.bookmark_id,
     )
-    set_all_bookmarks(new_all_bookmarks)
-    await cache_data({ db, bookmarks: new_all_bookmarks })
+    set_bookmarks_just_tags(new_all_bookmarks)
+    idle_timer_for_data_caching.start()
   }
 
   const update_searchable_bookmark = async (params: {
@@ -1012,14 +1026,12 @@ export const use_search = () => {
       return
 
     await remove(db, params.bookmark.bookmark_id.toString())
-
     const sites = params.bookmark.links.map(
       (link) =>
         `${get_domain_from_url(link.url)}${
           link.site_path ? `/${link.site_path}` : ''
         }`,
     )
-
     await insert(db, {
       id: params.bookmark.bookmark_id.toString(),
       title: `${params.bookmark.title} ${params.bookmark.tags
@@ -1038,17 +1050,15 @@ export const use_search = () => {
       tags: params.bookmark.tags.map((tag) => tag.name),
       tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
     })
-
-    const new_all_bookmarks = all_bookmarks!.filter(
+    const new_all_bookmarks = bookmarks_just_tags!.filter(
       (bookmark) => bookmark.id != params.bookmark.bookmark_id,
     )
-
     new_all_bookmarks.push({
       id: params.bookmark.bookmark_id,
       tags: params.bookmark.tags.map((tag) => tag.name),
     })
-
-    await cache_data({ db, bookmarks: new_all_bookmarks })
+    set_bookmarks_just_tags(new_all_bookmarks)
+    idle_timer_for_data_caching.start()
   }
 
   return {
