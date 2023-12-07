@@ -334,12 +334,17 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                       char
                                     )
                                   })
-                              : `${get_url_domain(link.url)} ${
+                              : `${get_url_domain(link.url)
+                                  .split('.')
+                                  .map((segment) =>
+                                    segment.replace(/(.{5})/g, '$1​'),
+                                  )
+                                  .join('.')} ${
                                   link.site_path ? `› ${link.site_path}` : ''
                                 }`}
                           </span>
                           <span>
-                            {get_url_path({
+                            {url_path_for_display({
                               url: link.url,
                               site_path: link.site_path,
                             })}
@@ -411,14 +416,13 @@ function get_url_domain(url: string): string {
     parsed_url = url
   }
 
-  return parsed_url
-    .split('/')[0]
-    .split('.')
-    .map((segment) => segment.replace(/(.{5})/g, '$1​'))
-    .join('.')
+  return parsed_url.split('/')[0]
 }
 
-function get_url_path(params: { url: string; site_path?: string }): string {
+function url_path_for_display(params: {
+  url: string
+  site_path?: string
+}): string {
   let parsed_url = params.url.replace('://', '').split('?')[0]
 
   if (parsed_url.substring(parsed_url.length - 1, parsed_url.length) == '/') {
