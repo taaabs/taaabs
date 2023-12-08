@@ -557,7 +557,10 @@ export const use_search = () => {
         browser_storage.local_storage.authorized_library.recent_searches,
         JSON.stringify([
           ...new Set(
-            [params.search_string.trim(), ...recent_searches].slice(0, 1000),
+            [
+              params.search_string.toLowerCase().trim(),
+              ...recent_searches,
+            ].slice(0, 1000),
           ),
         ]),
       )
@@ -573,12 +576,14 @@ export const use_search = () => {
     const order = query_params.get('o')
     const sortby = query_params.get('s')
 
-    const words = search_string.split(' ')
+    const search_string_lower = search_string.toLowerCase()
+
+    const words = search_string_lower.split(' ')
     const last_word = words[words.length - 1]
-    const sites_variants = search_string
+    const sites_variants = search_string_lower
       .match(/(?<=@)(.*?)($|\s)/g)
       ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
-    const term = search_string.replace(/(?=@)(.*?)($|\s)/g, '').trim()
+    const term = search_string_lower.replace(/(?=@)(.*?)($|\s)/g, '').trim()
 
     if (!search_string) {
       const recent_searches = JSON.parse(
@@ -606,14 +611,14 @@ export const use_search = () => {
       )
         .filter(
           (recent_search_string) =>
-            recent_search_string != search_string &&
+            recent_search_string != search_string_lower &&
             recent_search_string.startsWith(search_string),
         )
         .slice(0, 3)
         .map((recent_search_string) => ({
           type: 'recent',
           completion: recent_search_string.slice(search_string.length),
-          search_string,
+          search_string: search_string_lower,
         }))
 
       if (last_word.substring(0, 1) == '@') {
@@ -693,7 +698,7 @@ export const use_search = () => {
         sites.sort((a, b) => b.occurences - a.occurences)
 
         const hints: Hint[] = sites.map((site) => ({
-          search_string,
+          search_string: search_string_lower,
           completion: site_term ? site.site.split(site_term)[1] : site.site,
           type: 'new',
         }))
@@ -726,9 +731,9 @@ export const use_search = () => {
           ].slice(0, system_values.max_library_search_hints),
         )
       } else {
-        const ids_of_hits = (await get_hits({ search_string })).map(
-          (hit) => hit.id,
-        )
+        const ids_of_hits = (
+          await get_hits({ search_string: search_string_lower })
+        ).map((hit) => hit.id)
 
         if (last_word.length) {
           const result: Results<Result> = await search(db, {
@@ -815,7 +820,7 @@ export const use_search = () => {
           Object.entries(words_hashmap).map(([k, v]) => {
             if (!words.includes(last_word + k)) {
               new_hints.push({
-                search_string,
+                search_string: search_string_lower,
                 completion: k,
                 type: 'new',
                 yields: v,
@@ -916,7 +921,7 @@ export const use_search = () => {
 
           Object.keys(tags_hashmap).map((k) => {
             new_hints.push({
-              search_string,
+              search_string: search_string_lower,
               completion: k,
               type: 'new',
             })
