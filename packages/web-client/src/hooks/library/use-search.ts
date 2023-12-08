@@ -8,7 +8,7 @@ import {
   insert,
   search,
 } from '@orama/orama'
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
