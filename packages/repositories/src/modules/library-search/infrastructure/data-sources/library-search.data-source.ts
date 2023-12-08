@@ -4,9 +4,7 @@ import { LibrarySearchLastUpdated_Dto } from '@shared/types/modules/library-sear
 import { GetLastUpdated_Params } from '../../domain/types/get-last-updated.params'
 
 export type LibrarySearch_DataSource = {
-  get_last_updated_on_authorized_user(
-    params: GetLastUpdated_Params.Authorized,
-  ): Promise<LibrarySearchLastUpdated_Dto.Response>
+  get_last_updated_on_authorized_user(): Promise<LibrarySearchLastUpdated_Dto.Response>
 
   get_last_updated_on_public_user(
     params: GetLastUpdated_Params.Public,

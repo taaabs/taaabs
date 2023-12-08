@@ -10,46 +10,28 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
     private readonly _auth_token?: string,
   ) {}
 
-  public get_last_updated_on_authorized_user(
-    params: GetLastUpdated_Params.Authorized,
-  ): Promise<LibrarySearchLastUpdated_Dto.Response> {
+  public async get_last_updated_on_authorized_user(): Promise<LibrarySearchLastUpdated_Dto.Response> {
     if (!this._auth_token)
       throw new Error(
         '[get_last_updated_on_authorized_user] Missing auth token.',
       )
 
-    const query_params: LibrarySearchLastUpdated_Dto.QueryParams.Authorized = {
-      is_archived: params.is_archived ? params.is_archived : undefined,
-      public_only: params.public_only ? params.public_only : undefined,
-    }
-    return fetch(
-      `${this._api_url}/v1/library-search/last-updated-at?${new URLSearchParams(
-        JSON.parse(JSON.stringify(query_params)),
-      ).toString()}`,
-      {
-        headers: {
-          Authorization: `Bearer ${this._auth_token}`,
-        },
+    return fetch(`${this._api_url}/v1/library-search/last-updated-at`, {
+      headers: {
+        Authorization: `Bearer ${this._auth_token}`,
       },
-    ).then((r) => r.json())
+    }).then((r) => r.json())
   }
 
-  public get_last_updated_on_public_user(
+  public async get_last_updated_on_public_user(
     params: GetLastUpdated_Params.Public,
   ): Promise<LibrarySearchLastUpdated_Dto.Response> {
-    const query_params: LibrarySearchLastUpdated_Dto.QueryParams.Public = {
-      is_archived: params.is_archived ? params.is_archived : undefined,
-    }
     return fetch(
-      `${this._api_url}/v1/library-search/last-updated-at/${
-        params.username
-      }?${new URLSearchParams(
-        JSON.parse(JSON.stringify(query_params)),
-      ).toString()}`,
+      `${this._api_url}/v1/library-search/last-updated-at/${params.username}`,
     ).then((r) => r.json())
   }
 
-  public get_bookmarks_on_authorized_user(): Promise<LibrarySearchBookmarks_Dto.Response.Authorized> {
+  public async get_bookmarks_on_authorized_user(): Promise<LibrarySearchBookmarks_Dto.Response.Authorized> {
     if (!this._auth_token)
       throw new Error(
         '[get_last_updated_on_authorized_user] Missing auth token.',
@@ -62,7 +44,7 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
     }).then((r) => r.json())
   }
 
-  public get_bookmarks_on_public_user(
+  public async get_bookmarks_on_public_user(
     params: GetBookmarks_Params.Public,
   ): Promise<LibrarySearchBookmarks_Dto.Response.Public> {
     return fetch(

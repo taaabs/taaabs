@@ -57,6 +57,7 @@ const schema = {
   visited_at: 'number',
   is_archived: 'boolean',
   is_unread: 'boolean',
+  is_public: 'boolean',
   stars: 'number',
 } as const
 
@@ -145,10 +146,7 @@ export const use_search = () => {
         const get_last_updated_at_on_authorized_user_use_case =
           new GetLastUpdatedAtOnAuthorizedUser_UseCase(repository)
         const result =
-          await get_last_updated_at_on_authorized_user_use_case.invoke({
-            is_archived: current_filter == LibraryFilter.Archived,
-            public_only: false, // TODO
-          })
+          await get_last_updated_at_on_authorized_user_use_case.invoke()
 
         updated_at = result.updated_at
       } else {
@@ -159,7 +157,6 @@ export const use_search = () => {
         const result = await get_last_updated_at_on_public_user_use_case.invoke(
           {
             username: params.username!,
-            is_archived: current_filter == LibraryFilter.Archived,
           },
         )
 
@@ -224,6 +221,7 @@ export const use_search = () => {
             'sites_variants',
             'is_archived',
             'is_unread',
+            'is_public',
             'stars',
           ],
         },
@@ -258,6 +256,7 @@ export const use_search = () => {
             visited_at: bookmark.visited_at,
             is_archived: bookmark.is_archived,
             is_unread: bookmark.is_unread,
+            is_public: bookmark.is_public,
             stars: bookmark.stars,
           })),
           chunkSize,

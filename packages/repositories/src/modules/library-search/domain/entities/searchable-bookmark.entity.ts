@@ -8,5 +8,6 @@ export type SearchableBookmark_Entity = {
   visited_at: number
   is_unread: boolean
   is_archived: boolean
+  is_public: boolean
   stars: number
 }

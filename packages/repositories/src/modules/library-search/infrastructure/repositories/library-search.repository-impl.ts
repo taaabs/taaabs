@@ -10,13 +10,9 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
     private readonly _library_search_data_source: LibrarySearch_DataSource,
   ) {}
 
-  public async get_last_updated_at_on_authorized_user(
-    params: GetLastUpdated_Params.Authorized,
-  ): Promise<GetLastUpdated_Ro> {
+  public async get_last_updated_at_on_authorized_user(): Promise<GetLastUpdated_Ro> {
     const result =
-      await this._library_search_data_source.get_last_updated_on_authorized_user(
-        params,
-      )
+      await this._library_search_data_source.get_last_updated_on_authorized_user()
 
     return {
       updated_at: result.updated_at ? new Date(result.updated_at) : undefined,
@@ -54,6 +50,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           title: bookmark.title,
           is_unread: bookmark.is_unread || false,
           is_archived: bookmark.is_archived || false,
+          is_public: bookmark.is_public || false,
           sites: bookmark.sites,
           tags: bookmark.tags || [],
           stars: bookmark.stars || 0,
@@ -80,6 +77,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           title: bookmark.title,
           is_unread: false,
           is_archived: bookmark.is_archived || false,
+          is_public: false,
           sites: bookmark.sites,
           tags: bookmark.tags || [],
           stars: bookmark.stars || 0,
