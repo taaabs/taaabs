@@ -2,7 +2,7 @@
 
 import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
 import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
-import { Library } from '@web-ui/components/app/templates/library'
+import { Bookmarks } from '@web-ui/components/app/templates/library'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
@@ -92,7 +92,7 @@ const Page: React.FC = () => {
   }, [])
 
   return (
-    <Library
+    <Bookmarks
       show_bookmarks_skeleton={bookmarks == null}
       mobile_title_bar={
         current_filter == LibraryFilter.All

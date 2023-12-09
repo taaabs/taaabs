@@ -222,8 +222,12 @@
               @include text-decoration-underlinie-thin;
               text-decoration-color: var(--text-color-variant);
             }
-            &:visited > span {
-              text-decoration-color: var(--text-color-dimmed);
+          }
+          &--dim-visited {
+            @include hover {
+              &:visited > span {
+                text-decoration-color: var(--text-color-dimmed);
+              }
             }
           }
           > span {
@@ -247,7 +251,7 @@
               -webkit-line-clamp: 1;
             }
           }
-          &:visited > span {
+          &--dim-visited:visited > span {
             color: var(--text-color-dimmed);
             text-decoration-color: rgba(115, 115, 115, 0.3);
           }

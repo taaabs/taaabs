@@ -26,6 +26,7 @@ declare const styles: {
   readonly bookmark__links__item__site: string
   readonly bookmark__links__item__site__favicon: string
   readonly bookmark__links__item__site__url: string
+  readonly 'bookmark__links__item__site__url--dim-visited': string
   readonly bookmark__links__item__actions: string
   readonly bookmark__links__item__actions__open: string
   readonly bookmark__links__item__actions__menu: string

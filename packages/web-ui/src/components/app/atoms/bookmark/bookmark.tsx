@@ -59,6 +59,7 @@ export namespace Bookmark {
     highlights?: Highlights
     orama_db_id?: string
     is_serach_result: boolean
+    should_dim_visited_links: boolean
   }
 }
 
@@ -319,7 +320,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           />
                         </button>
                         <a
-                          className={styles.bookmark__links__item__site__url}
+                          className={cn(
+                            styles.bookmark__links__item__site__url,
+                            {
+                              [styles[
+                                'bookmark__links__item__site__url--dim-visited'
+                              ]]: props.should_dim_visited_links,
+                            },
+                          )}
                           href={link.url}
                           onClick={async () => {
                             if (props.on_link_click) {
