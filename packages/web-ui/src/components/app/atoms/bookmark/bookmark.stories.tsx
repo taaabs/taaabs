@@ -20,7 +20,6 @@ export const Primary = () => (
       }}
     >
       <Bookmark
-        index={22}
         stars={0}
         title="Lorem ipsum dolor sit amet"
         note="Lorem ipsum dolor sit amet"
@@ -33,7 +32,7 @@ export const Primary = () => (
         on_tag_click={() => {}}
         links={[
           {
-            url: 'https://foooooooooooooooooooooooooooooooooooooooooooooooooooo.com/baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar',
+            url: 'https://foooooooooooooooooooooooooooooooooooooooooooooooooooo.com/baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar',
             saves: 99,
           },
           { url: 'https://google.com/bar/baz', site_path: 'bar', saves: 99 },
@@ -43,10 +42,10 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
+        is_serach_result={false}
       />
       <StorybookSpacer />
       <Bookmark
-        index={22}
         stars={0}
         title="Lorem ipsum"
         is_unread={false}
@@ -74,10 +73,10 @@ export const Primary = () => (
           [18, 2],
           [32, 2],
         ]}
+        is_serach_result={true}
       />
       <StorybookSpacer />
       <Bookmark
-        index={22}
         stars={0}
         title="Lorem ipsum dolor sit amet"
         is_unread={false}
@@ -95,10 +94,10 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
+        is_serach_result={false}
       />
       <StorybookSpacer />
       <Bookmark
-        index={22}
         stars={0}
         title="Lorem ipsum dolor sit amet"
         note="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies sapien nulla, at facilisis risus dictum sed."
@@ -120,10 +119,10 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
+        is_serach_result={false}
       />
       <StorybookSpacer />
       <Bookmark
-        index={22}
         stars={2}
         title="Lorem ipsum dolor sit amet"
         is_unread={false}
@@ -144,10 +143,10 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
+        is_serach_result={false}
       />
       <StorybookSpacer />
       <Bookmark
-        index={22}
         stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={true}
@@ -175,10 +174,10 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
+        is_serach_result={false}
       />
       <StorybookSpacer />
       <Bookmark
-        index={22}
         stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={false}
@@ -199,10 +198,10 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
+        is_serach_result={false}
       />
       <StorybookSpacer />
       <Bookmark
-        index={22}
         stars={2}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={true}
@@ -223,10 +222,10 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
+        is_serach_result={false}
       />
       <StorybookSpacer />
       <Bookmark
-        index={22}
         stars={2}
         title="Lorem ipsum dolor sit amet"
         is_unread={true}
@@ -247,6 +246,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
+        is_serach_result={false}
       />
       <StorybookSpacer />
     </div>

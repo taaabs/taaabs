@@ -58,6 +58,7 @@ export namespace Bookmark {
     menu_slot: React.ReactNode
     highlights?: Highlights
     orama_db_id?: string
+    is_serach_result: boolean
   }
 }
 
@@ -110,7 +111,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             <div className={styles.bookmark}>
               <div
                 className={cn(styles.bookmark__main, {
-                  [styles['bookmark__main--has-highlights']]: props.highlights,
+                  [styles['bookmark__main--search-result']]:
+                    props.is_serach_result,
                 })}
               >
                 <div className={styles.bookmark__main__top}>

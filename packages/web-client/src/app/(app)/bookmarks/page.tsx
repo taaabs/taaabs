@@ -1201,6 +1201,7 @@ const Page: React.FC = () => {
                 }
                 highlights={search.highlights?.[bookmark.id.toString()]}
                 orama_db_id={search.db?.id}
+                is_serach_result={search.result !== undefined}
               />
             ))
           : []
