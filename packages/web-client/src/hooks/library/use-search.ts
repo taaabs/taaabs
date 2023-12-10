@@ -831,7 +831,16 @@ export const use_search = () => {
 
           set_hints(
             [
-              ...recent_hints,
+              ...(new_hints.length > 0
+                ? new_hints.length > system_values.max_library_search_hints
+                  ? recent_hints
+                  : recent_hints.filter((hint) =>
+                      recent_hints.find(
+                        (recent_hint) =>
+                          recent_hint.completion == hint.completion,
+                      ),
+                    )
+                : []),
               ...new_hints.filter(
                 (hint) =>
                   !recent_hints.find(
