@@ -54,12 +54,16 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
     } else if (event.code == 'Tab') {
       if (props.hints) {
         event.preventDefault()
-        props.on_change(
-          props.search_string +
-            props.hints[selected_hint_index == -1 ? 0 : selected_hint_index]
-              .completion +
-            ' ',
-        )
+        if (props.hints[selected_hint_index == -1 ? 0 : selected_hint_index]) {
+          props.on_change(
+            props.search_string +
+              props.hints[selected_hint_index == -1 ? 0 : selected_hint_index]
+                .completion +
+              ' ',
+          )
+        } else {
+          props.on_change(props.search_string + ' ')
+        }
       }
     } else if (event.code == 'ArrowDown') {
       if (props.hints) {
@@ -210,7 +214,11 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                         ]?.completion
                       }
                     </span>
-                    <span className={styles['search__form__keycap']}>tab</span>
+                    {props.hints.length > 0 && (
+                      <span className={styles['search__form__keycap']}>
+                        tab
+                      </span>
+                    )}
                   </>
                 )}
             </div>
