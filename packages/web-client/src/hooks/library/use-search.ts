@@ -740,7 +740,7 @@ export const use_search = () => {
             term,
             properties: ['title'],
             where: {
-              ...(ids_of_hits.length ? { id: ids_of_hits } : {}),
+              id: ids_of_hits,
               is_archived:
                 current_filter != LibraryFilter.Archived ? false : true,
               ...(current_filter == LibraryFilter.Unread ||
@@ -846,7 +846,7 @@ export const use_search = () => {
             term: term ? term : undefined,
             properties: ['title'],
             where: {
-              ...(tags && ids_of_hits ? { id: ids_of_hits } : {}),
+              id: ids_of_hits,
               is_archived:
                 current_filter != LibraryFilter.Archived ? false : true,
               ...(current_filter == LibraryFilter.Unread ||

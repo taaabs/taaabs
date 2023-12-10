@@ -27,7 +27,7 @@
   z-index: 2;
   @include transition-100ms;
   @include to992 {
-    margin: 0 var(--distance-8px);
+    margin: 0 var(--distance-10px);
   }
   @include at992 {
     transform: translateX(calc(var(--distance-8px) * -1));
@@ -240,7 +240,7 @@
   @include transition-100ms;
   transform: translateY(0);
   @include to992 {
-    width: calc(100% - (var(--distance-16px)));
+    width: calc(100% - (var(--distance-20px)));
     margin-left: 50%;
     transform: translateY(0) translateX(-50%);
   }

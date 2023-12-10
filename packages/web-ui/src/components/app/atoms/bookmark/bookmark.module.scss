@@ -106,7 +106,8 @@
         &__unread {
           display: inline-flex;
           align-items: center;
-          transform: translateY(-0.25rem);
+          transform: scale(0.95) translateY(-0.3rem);
+          transform-origin: left;
           position: relative;
           margin-right: var(--distance-0-7rem);
           height: var(--distance-2-0rem);
@@ -120,7 +121,7 @@
         }
         &__stars {
           display: inline-flex;
-          gap: var(--distance-0-4rem);
+          gap: var(--distance-0-6rem);
           transform: translateY(0.22rem);
           margin-right: var(--distance-0-7rem);
           > svg {

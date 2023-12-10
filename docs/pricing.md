@@ -1,18 +1,13 @@
-### Free
+Premium features
 
-- Unlimited public/private bookmarks
-- Unlimited tags
-
-### Pro
-
-- Multi-link bookmarks
-- Filters (unread, starred)
-- Categories
-- Tag counts
-- Sort by updated date
-- Sort by last visited
-- Adjust custom range
-- Short username (<6 characters)
-- Add highlights to saved links
-
-Cost: $40 yearly
+- multi-link bookmarks
+- tag counts
+- unread/stars
+- custom range
+- shorter username (below 6 characters)
+- reminders
+- notes
+- highlights
+- categories
+- sort option: updated_at
+- sort option: last_visited
