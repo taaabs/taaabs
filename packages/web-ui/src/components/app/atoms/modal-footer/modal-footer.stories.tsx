@@ -9,7 +9,11 @@ export const Primary = () => {
   return (
     <div>
       <StorybookSpacer />
-      <ModalFooter slot_right_side={<div>slot</div>} />
+      <ModalFooter
+        button_label="Lorem"
+        on_click_cancel={() => {}}
+        is_disabled={false}
+      />
     </div>
   )
 }

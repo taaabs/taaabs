@@ -5,6 +5,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  gap: var(--distance-24px);
   border-top: var(--border-primary);
   background: var(--plain-white);
   box-shadow: var(--box-shadow-up);
@@ -13,5 +14,17 @@
   }
   @include at992 {
     padding: var(--distance-16px) var(--distance-40px) var(--distance-16px) 0;
+  }
+  &__right-side {
+    display: flex;
+    align-items: center;
+    gap: var(--distance-24px);
+    &__cancel {
+      color: var(--text-color-dimmed);
+      @include hover {
+        color: var(--text-color-normal);
+        @include text-decoration-underlinie-thin;
+      }
+    }
   }
 }

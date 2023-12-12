@@ -9,7 +9,6 @@ import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
 import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
 import { Form } from '@web-ui/components/app/templates/form'
 import { Input } from '@web-ui/components/common/atoms/input'
-import { Button } from '@web-ui/components/common/particles/button'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
@@ -24,11 +23,12 @@ export const UpsertBookmarkForm: React.FC<{
   is_archived?: boolean
   on_submit: (bookmark: Bookmark_Entity) => void
   on_close: () => void
+  auth_token: string
 }> = (props) => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitted },
   } = useForm<FormValues>({ mode: 'all' })
   const [links, set_links] = useState<{ url: string; is_public: boolean }[]>(
     props.bookmark?.links.map((link) => ({
@@ -46,7 +46,7 @@ export const UpsertBookmarkForm: React.FC<{
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     const data_source = new Bookmarks_DataSourceImpl(
       process.env.NEXT_PUBLIC_API_URL,
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+      props.auth_token,
     )
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
@@ -75,20 +75,13 @@ export const UpsertBookmarkForm: React.FC<{
     <form onSubmit={handleSubmit(on_submit)}>
       <Form
         slot_header={
-          <ModalHeader
-            title="Edit bookmark"
-            on_click_close={() => {
-              props.on_close()
-            }}
-          />
+          <ModalHeader title="Edit bookmark" on_click_close={props.on_close} />
         }
         slot_footer={
           <ModalFooter
-            slot_right_side={
-              <Button size="medium" type="submit" is_loading={isSubmitting}>
-                Save
-              </Button>
-            }
+            on_click_cancel={props.on_close}
+            button_label="Save"
+            is_disabled={isSubmitting || isSubmitted}
           />
         }
       >

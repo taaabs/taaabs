@@ -225,7 +225,7 @@ export const Library: React.FC<Library.Props> = (props) => {
         />
       </div>
       <div className={styles.content}>
-        <div
+        <aside
           className={cn(styles.sidebar, {
             [styles['aside--hidden']]:
               (is_right_side_open || is_right_side_moving) &&
@@ -246,9 +246,9 @@ export const Library: React.FC<Library.Props> = (props) => {
           >
             {props.slot_sidebar}
           </div>
-        </div>
+        </aside>
 
-        <div
+        <main
           className={cn(styles.main, {
             [styles['free-fall']]: !drag_distance,
           })}
@@ -330,9 +330,9 @@ export const Library: React.FC<Library.Props> = (props) => {
               </div>
             </div>
           </div>
-        </div>
+        </main>
 
-        <div
+        <aside
           className={styles.aside}
           ref={aside}
           style={{
@@ -346,7 +346,7 @@ export const Library: React.FC<Library.Props> = (props) => {
               </StickyBox>
             </div>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   )

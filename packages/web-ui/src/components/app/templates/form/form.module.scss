@@ -38,11 +38,16 @@
       display: flex;
       flex-direction: column;
       gap: var(--distance-16px);
-      padding: var(--distance-16px);
       width: 100%;
+      @include to768 {
+        padding: var(--distance-16px) 0;
+      }
+      @include at768 {
+        padding: var(--distance-16px);
+      }
       @include at992 {
-        gap: var(--distance-40px);
-        padding: var(--distance-40px) 0;
+        gap: var(--distance-24px);
+        padding: var(--distance-24px) 0;
         width: 630px;
       }
     }

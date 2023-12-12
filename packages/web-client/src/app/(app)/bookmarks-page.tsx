@@ -92,6 +92,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
     set_show_custom_range(true)
     set_show_tags_skeleton(false)
     set_show_bookmarks_skeleton(false)
+    modal_context?.set_modal()
   }, [bookmarks_slice_state.bookmarks])
 
   useUpdateEffect(() => {
@@ -1181,6 +1182,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                     is_archived:
                                       filter_view_options.current_filter ==
                                       LibraryFilter.Archived,
+                                    auth_token:
+                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   })
                                 dispatch(
                                   bookmarks_actions.replace_bookmark({
@@ -1197,6 +1200,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
+
                                 search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,

@@ -28,9 +28,12 @@
   &__inner {
     background-color: white;
     overflow: hidden;
-    transform: translateY(var(--distance-8px));
+    @include to768 {
+      transform: translateY(var(--distance-8px));
+    }
     @include at768 {
       border-radius: var(--border-radius-14px);
+      transform: scale(0.98);
     }
     @include to992 {
       border-bottom-left-radius: 0;
@@ -40,8 +43,13 @@
       border-radius: var(--border-radius-20px);
     }
     &--visible {
-      transform: translateY(0);
       @include transition-100ms(transform);
+      @include to768 {
+        transform: translateY(0);
+      }
+      @include at768 {
+        transform: scale(1);
+      }
     }
   }
 }
