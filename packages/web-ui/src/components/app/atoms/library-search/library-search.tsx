@@ -28,6 +28,7 @@ export namespace LibrarySearch {
     on_clear_click: () => void
     hints?: Hint[]
     results_count?: number
+    is_slash_shortcut_disabled: boolean
   }
 }
 
@@ -48,7 +49,11 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
   }, [props.is_focused])
 
   const handle_keyboard = (event: any) => {
-    if (event.code == 'Slash' && !props.is_focused) {
+    if (
+      event.code == 'Slash' &&
+      !props.is_focused &&
+      !props.is_slash_shortcut_disabled
+    ) {
       event.preventDefault()
       input.current?.focus()
     } else if (event.code == 'Tab') {
@@ -98,7 +103,12 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
     return () => {
       window.removeEventListener('keydown', handle_keyboard)
     }
-  }, [props.hints, selected_hint_index, props.is_focused])
+  }, [
+    props.hints,
+    selected_hint_index,
+    props.is_focused,
+    props.is_slash_shortcut_disabled,
+  ])
 
   useUpdateEffect(() => {
     set_selected_hint_index(-1)

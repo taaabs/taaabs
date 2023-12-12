@@ -245,6 +245,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
             search.reset()
             bookmarks.get_bookmarks({})
           }}
+          is_slash_shortcut_disabled={modal_context?.modal !== undefined}
         />
       }
       slot_sidebar={
