@@ -40,6 +40,7 @@
       > svg {
         height: var(--icon-dimension-20px);
         fill: var(--brand-color);
+        @include transition-100ms(fill);
       }
       &:nth-child(2) {
         > svg {
