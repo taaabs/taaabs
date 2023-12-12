@@ -22,6 +22,7 @@ export const Primary = () => (
         on_blur={() => {}}
         on_clear_click={() => {}}
         is_focused={false}
+        is_slash_shortcut_disabled={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -38,6 +39,7 @@ export const Primary = () => (
         on_clear_click={() => {}}
         results_count={2137}
         is_focused={false}
+        is_slash_shortcut_disabled={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -54,6 +56,7 @@ export const Primary = () => (
         on_clear_click={() => {}}
         results_count={2137}
         is_focused={false}
+        is_slash_shortcut_disabled={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -70,6 +73,7 @@ export const Primary = () => (
         on_clear_click={() => {}}
         results_count={0}
         is_focused={false}
+        is_slash_shortcut_disabled={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -86,6 +90,7 @@ export const Primary = () => (
         on_clear_click={() => {}}
         results_count={0}
         is_focused={false}
+        is_slash_shortcut_disabled={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -101,6 +106,7 @@ export const Primary = () => (
         on_blur={() => {}}
         on_clear_click={() => {}}
         is_focused={false}
+        is_slash_shortcut_disabled={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -116,6 +122,7 @@ export const Primary = () => (
         on_blur={() => {}}
         on_clear_click={() => {}}
         is_focused={false}
+        is_slash_shortcut_disabled={false}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -142,6 +149,7 @@ export const Primary = () => (
         on_blur={() => {}}
         on_clear_click={() => {}}
         is_focused={true}
+        is_slash_shortcut_disabled={false}
       />
     </div>
   </div>

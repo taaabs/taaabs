@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--distance-16px);
+  margin-bottom: var(--distance-16px);
 }
 .item {
   display: flex;
@@ -54,12 +55,10 @@
   }
 }
 .new {
-  margin-top: var(--distance-16px);
   margin-left: 25.5px;
   margin-right: 84px;
   cursor: text;
   input {
-    opacity: 0.5;
     pointer-events: none;
   }
 }

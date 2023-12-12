@@ -10,6 +10,7 @@ export namespace Input {
     message_type?: MessageType
     message?: React.ReactNode
     is_disabled?: boolean
+    autofocus?: boolean
   }
 }
 
@@ -26,6 +27,7 @@ export const Input: React.FC<Input.Props> = ({
         ])}
         onChange={(e) => props.on_change(e.target.value)}
         value={props.value}
+        autoFocus={props.autofocus}
       />
       {props.message && (
         <div
