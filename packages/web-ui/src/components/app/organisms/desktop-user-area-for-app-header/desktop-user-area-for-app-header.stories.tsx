@@ -10,14 +10,14 @@ export const Primary = () => {
   return (
     <StorybookMargin>
       <DesktopUserAreaForAppHeader
-        add_on_click={() => {}}
-        search_on_click={() => {}}
+        on_click_add={() => {}}
+        on_click_search={() => {}}
         notificatios_on_click={() => {}}
       />
       <StorybookSpacer />
       <DesktopUserAreaForAppHeader
-        add_on_click={() => {}}
-        search_on_click={() => {}}
+        on_click_add={() => {}}
+        on_click_search={() => {}}
         notificatios_on_click={() => {}}
         avatar={{
           url: 'https://picsum.photos/300',

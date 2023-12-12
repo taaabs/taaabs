@@ -1,0 +1,57 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: var(--border-primary);
+  background: var(--header-transparent-background);
+  backdrop-filter: var(--backdrop-filter);
+  @include to992 {
+    height: var(--header-mobile-height);
+    padding: 0 var(--distance-16px) 0 var(--distance-32px);
+  }
+  @include at992 {
+    height: var(--distance-54px);
+    padding: 0 var(--distance-40px);
+  }
+}
+.title {
+  color: var(--color-text--normal);
+  font-family: var(--font-family-plus-jakarta-sans);
+  font-weight: var(--font-weight-plus-jakarta-sans-bold);
+  letter-spacing: var(--letter-spacing-logo);
+  font-size: var(--font-size-22px);
+  @include at992 {
+    font-size: var(--font-size-24px);
+  }
+}
+.close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-999px);
+  @include transition-100ms(background-color);
+  @include hover {
+    background-color: var(--neutral100);
+  }
+  @include to992 {
+    width: var(--button-dimension-28px);
+    height: var(--button-dimension-28px);
+  }
+  @include at992 {
+    width: var(--button-dimension-34px);
+    height: var(--button-dimension-34px);
+  }
+  svg {
+    fill: var(--plain-black);
+    transform: rotate(45deg);
+    @include to992 {
+      height: var(--icon-dimension-18px);
+    }
+    @include at992 {
+      height: var(--icon-dimension-20px);
+    }
+  }
+}

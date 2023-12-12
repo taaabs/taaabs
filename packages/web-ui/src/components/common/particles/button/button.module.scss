@@ -29,6 +29,16 @@
     font-size: var(--font-size-15px);
     padding: 0 var(--distance-16px);
   }
+  &--medium {
+    height: var(--button-dimension-42px);
+    font-size: var(--font-size-17px);
+    padding: 0 var(--distance-18px);
+    @include at1200 {
+      height: var(--button-dimension-44px);
+      font-size: var(--font-size-18px);
+      padding: 0 var(--distance-20px);
+    }
+  }
   &--large {
     height: var(--button-dimension-48px);
     font-size: var(--font-size-20px);

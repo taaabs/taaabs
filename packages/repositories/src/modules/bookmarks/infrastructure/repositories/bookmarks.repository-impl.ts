@@ -8,6 +8,7 @@ import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params
 import { GetBookmarksByIds_Ro } from '../../domain/types/get-bookmarks-by-ids.ro'
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { RecordVisit_Ro } from '../../domain/types/record-visit.ro'
+import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -155,7 +156,31 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     return this._bookmarks_data_source.delete_bookmark(params)
   }
 
-  public upsert_bookmark(params: UpsertBookmark_Params): Promise<void> {
-    return this._bookmarks_data_source.upsert_bookmark(params)
+  public async upsert_bookmark(
+    params: UpsertBookmark_Params,
+  ): Promise<Bookmark_Entity> {
+    const bookmark = await this._bookmarks_data_source.upsert_bookmark(params)
+
+    return {
+      id: bookmark.id,
+      created_at: bookmark.created_at,
+      updated_at: bookmark.updated_at,
+      visited_at: bookmark.visited_at,
+      title: bookmark.title,
+      is_public: bookmark.is_public || false,
+      is_unread: bookmark.is_unread || false,
+      stars: bookmark.stars || 0,
+      tags: bookmark.tags.map((tag) => ({
+        id: tag.id,
+        name: tag.name,
+        is_public: tag.is_public || false,
+      })),
+      links: bookmark.links.map((link) => ({
+        url: link.url,
+        public_saves: link.public_saves,
+        site_path: link.site_path,
+        is_public: link.is_public || false,
+      })),
+    }
   }
 }

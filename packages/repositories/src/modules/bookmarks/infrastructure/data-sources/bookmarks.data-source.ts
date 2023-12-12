@@ -28,5 +28,7 @@ export type Bookmarks_DataSource = {
 
   delete_bookmark(params: DeleteBookmark_Params): Promise<void>
 
-  upsert_bookmark(params: UpsertBookmark_Params): Promise<void>
+  upsert_bookmark(
+    params: UpsertBookmark_Params,
+  ): Promise<Bookmarks_Dto.Response.AuthorizedBookmark>
 }

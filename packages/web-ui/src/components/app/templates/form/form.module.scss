@@ -1,27 +1,54 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
-.header {
-  position: fixed;
-  z-index: 2;
-  top: 0;
-  width: 100%;
-}
-.main {
+.container {
+  position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 630px;
-  margin: 0 auto;
-  padding: 0 var(--distance-16px);
-  @include to992 {
-    gap: var(--distance-16px);
-    padding-top: calc(var(--header-mobile-height) + var(--distance-40px));
-    padding-bottom: var(--distance-40px);
+  max-height: calc(100vh - var(--distance-80px));
+  width: 100vw;
+  @include at768 {
+    width: 768px;
   }
   @include at992 {
-    gap: var(--distance-40px);
-    padding-top: calc(var(--header-desktop-height) + var(--distance-60px));
-    padding-bottom: var(--distance-60px);
+    width: 900px;
+  }
+  &__header {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  &__content {
+    overflow: auto;
+    position: relative;
+    scrollbar-width: none;
+    @include to992 {
+      padding-top: var(--header-mobile-height);
+    }
+    @include at992 {
+      padding-top: var(--distance-54px);
+      margin: 0 auto;
+    }
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    &__inner {
+      display: flex;
+      flex-direction: column;
+      gap: var(--distance-16px);
+      padding: var(--distance-16px);
+      width: 100%;
+      @include at992 {
+        gap: var(--distance-40px);
+        padding: var(--distance-40px) 0;
+        width: 630px;
+      }
+    }
+  }
+  &__footer {
+    z-index: 1;
+    width: 100%;
   }
 }

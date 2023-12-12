@@ -1,0 +1,64 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.sortable {
+  display: flex;
+  flex-direction: column;
+  gap: var(--distance-16px);
+}
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__handle {
+    padding: 0 var(--distance-8px);
+    transform: translateX(calc(var(--distance-8px) * -1));
+    cursor: grab;
+    > svg {
+      fill: var(--brand-color);
+      height: var(--icon-dimension-16px);
+    }
+  }
+  &__input {
+    flex: 1;
+  }
+  &__actions {
+    display: flex;
+    gap: var(--distance-8px);
+    margin-left: var(--distance-16px);
+    &__button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      width: var(--button-dimension-34px);
+      height: var(--button-dimension-34px);
+      @include transition-100ms(background-color);
+      @include hover {
+        background-color: var(--blue100);
+      }
+      > svg {
+        height: var(--icon-dimension-20px);
+        fill: var(--brand-color);
+      }
+      &:nth-child(2) {
+        > svg {
+          transform: rotate(45deg);
+        }
+      }
+      &--disabled > svg {
+        fill: var(--blue300);
+      }
+    }
+  }
+}
+.new {
+  margin-top: var(--distance-16px);
+  margin-left: 25.5px;
+  margin-right: 92px;
+  cursor: text;
+  input {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}

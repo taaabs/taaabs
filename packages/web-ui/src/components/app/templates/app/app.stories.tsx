@@ -1,4 +1,4 @@
-import { loremIpsum } from '@web-ui/helpers/storybook/lorem-ipsum'
+import { lorem_ipsum } from '@web-ui/helpers/storybook/lorem-ipsum'
 import { App } from './app'
 
 export default {
@@ -11,6 +11,6 @@ export const Primary = () => (
     slot_header_mobile={<>header mobile</>}
     slot_bottom_navigation_bar={<>bottom navigation bar</>}
   >
-    {loremIpsum.long}
+    {lorem_ipsum.long}
   </App>
 )

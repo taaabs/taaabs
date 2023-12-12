@@ -4,4 +4,5 @@ export const system_values = {
   password_length: 64,
   max_library_search_results: 1000,
   max_library_search_hints: 10,
+  sortablejs_animation_duration: 150,
 }

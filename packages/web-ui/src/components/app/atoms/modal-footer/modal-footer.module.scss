@@ -1,0 +1,17 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-top: var(--border-primary);
+  background: var(--plain-white);
+  box-shadow: var(--box-shadow-up);
+  @include to992 {
+    padding: var(--distance-16px);
+  }
+  @include at992 {
+    padding: var(--distance-16px) var(--distance-40px) var(--distance-16px) 0;
+  }
+}

@@ -17,7 +17,6 @@ import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-para
 import { LibrarySearch_DataSourceImpl } from '@repositories/modules/library-search/infrastructure/data-sources/library-search.data-source-impl'
 import { LibrarySearch_RepositoryImpl } from '@repositories/modules/library-search/infrastructure/repositories/library-search.repository-impl'
 import { GetSearchableBookmarksOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-searchable-bookmarks-on-authorized-user.user-case'
-import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { get_site_variants_for_search } from '@/utils/get-site-variants-for-search'
 import {
@@ -1021,14 +1020,24 @@ export const use_search = () => {
   }
 
   const update_searchable_bookmark = async (params: {
-    bookmark: UpsertBookmark_Params
-    visited_at: Date
+    bookmark: {
+      id: number
+      created_at: Date
+      visited_at: Date
+      updated_at: Date
+      title: string
+      is_public: boolean
+      is_archived: boolean
+      is_unread: boolean
+      stars?: number
+      tags: string[]
+      links: { url: string; site_path?: string }[]
+    }
     tag_ids: number[]
   }) => {
-    if (!db || !params.bookmark.bookmark_id || !params.bookmark.created_at)
-      return
+    if (!db) return
 
-    await remove(db, params.bookmark.bookmark_id.toString())
+    await remove(db, params.bookmark.id.toString())
     const sites = params.bookmark.links.map(
       (link) =>
         `${get_domain_from_url(link.url)}${
@@ -1036,13 +1045,13 @@ export const use_search = () => {
         }`,
     )
     await insert(db, {
-      id: params.bookmark.bookmark_id.toString(),
-      title: `${params.bookmark.title} ${params.bookmark.tags
-        .map((tag) => tag.name)
-        .join(' ')} ${sites.join(' ')}`,
+      id: params.bookmark.id.toString(),
+      title: `${params.bookmark.title} ${params.bookmark.tags.join(
+        ' ',
+      )} ${sites.join(' ')}`,
       created_at: params.bookmark.created_at.getTime() / 1000,
-      updated_at: new Date().getTime() / 1000,
-      visited_at: params.visited_at.getTime() / 1000,
+      updated_at: params.bookmark.updated_at.getTime() / 1000,
+      visited_at: params.bookmark.visited_at.getTime() / 1000,
       is_archived: params.bookmark.is_archived,
       is_unread: params.bookmark.is_unread,
       sites,
@@ -1050,15 +1059,15 @@ export const use_search = () => {
         .map((site) => get_site_variants_for_search(site))
         .flat(),
       stars: params.bookmark.stars || 0,
-      tags: params.bookmark.tags.map((tag) => tag.name),
+      tags: params.bookmark.tags,
       tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
     })
     const new_all_bookmarks = bookmarks_just_tags!.filter(
-      (bookmark) => bookmark.id != params.bookmark.bookmark_id,
+      (bookmark) => bookmark.id != params.bookmark.id,
     )
     new_all_bookmarks.push({
-      id: params.bookmark.bookmark_id,
-      tags: params.bookmark.tags.map((tag) => tag.name),
+      id: params.bookmark.id,
+      tags: params.bookmark.tags,
     })
     set_bookmarks_just_tags(new_all_bookmarks)
     set_is_caching_data(true)

@@ -8,14 +8,17 @@
 }
 .input {
   width: 100%;
-  border: var(--Input-border);
-  background: var(--Input-background);
+  border: 1px solid var(--blue200);
+  background: var(--blue100);
   border-radius: var(--border-radius-10px);
   height: var(--input-height-46px);
-  padding: 0 var(--distance-16px);
+  padding: 0 var(--distance-12px);
   @include transition-100ms;
+  @include hover {
+    border-color: var(--blue300);
+  }
   &:focus {
-    border-color: var(--Input-border-color-focus);
+    border-color: var(--blue400);
     outline: none;
   }
   &--error {

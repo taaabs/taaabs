@@ -23,10 +23,10 @@ const Page: React.FC = () => {
             price="Literally $0"
             price_info="Free forever"
             bullets={[
-              'Unlimited encrypted bookmarks',
-              'Unlimited tags and folders',
+              'Unlimited bookmarks',
+              'Unlimited tags',
               'Essential view options',
-              'Personal library free of ads',
+              'No ads. No trackers. No kidding.',
             ]}
           />
         }
@@ -37,10 +37,10 @@ const Page: React.FC = () => {
             price="$3.99"
             price_info="$39.99 billed annually"
             bullets={[
-              'All view options',
-              'Unlimited categories',
-              'Full-text search',
+              'Power-user view options',
+              'Categories and folders',
               'Notes, highlights and reminders',
+              'Multi-link bookmarks',
             ]}
           />
         }

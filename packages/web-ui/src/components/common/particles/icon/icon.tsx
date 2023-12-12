@@ -2,12 +2,16 @@ import Add from '@web-ui/assets/icons/add.svg'
 import Archive from '@web-ui/assets/icons/archive.svg'
 import Bookmark from '@web-ui/assets/icons/bookmark.svg'
 import Delete from '@web-ui/assets/icons/delete.svg'
+import Edit from '@web-ui/assets/icons/edit.svg'
+import Globe from '@web-ui/assets/icons/globe.svg'
 import Google from '@web-ui/assets/icons/google.svg'
 import GreaterThan from '@web-ui/assets/icons/greater-than.svg'
+import Handle from '@web-ui/assets/icons/handle.svg'
 import Home from '@web-ui/assets/icons/home.svg'
 import Info from '@web-ui/assets/icons/info.svg'
 import LessThan from '@web-ui/assets/icons/less-than.svg'
 import Recent from '@web-ui/assets/icons/recent.svg'
+import Remove from '@web-ui/assets/icons/remove.svg'
 import Search from '@web-ui/assets/icons/search.svg'
 import Selected from '@web-ui/assets/icons/selected.svg'
 import SelectedBold from '@web-ui/assets/icons/selected-bold.svg'
@@ -30,12 +34,16 @@ export namespace Icon {
     | 'ARCHIVE'
     | 'BOOKMARK'
     | 'DELETE'
+    | 'EDIT'
+    | 'GLOBE'
     | 'GOOGLE'
     | 'GREATER_THAN'
+    | 'HANDLE'
     | 'HOME'
     | 'INFO'
     | 'LESS_THAN'
     | 'RECENT'
+    | 'REMOVE'
     | 'SEARCH'
     | 'SELECTED'
     | 'SELECTED_BOLD'
@@ -73,11 +81,20 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'DELETE':
       icon = <Delete />
       break
+    case 'EDIT':
+      icon = <Edit />
+      break
+    case 'GLOBE':
+      icon = <Globe />
+      break
     case 'GOOGLE':
       icon = <Google />
       break
     case 'GREATER_THAN':
       icon = <GreaterThan />
+      break
+    case 'HANDLE':
+      icon = <Handle />
       break
     case 'HOME':
       icon = <Home />
@@ -105,6 +122,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'RECENT':
       icon = <Recent />
+      break
+    case 'REMOVE':
+      icon = <Remove />
       break
     case 'SEARCH':
       icon = <Search />

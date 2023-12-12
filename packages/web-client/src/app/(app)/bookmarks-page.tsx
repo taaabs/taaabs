@@ -15,7 +15,7 @@ import { Order } from '@shared/types/modules/bookmarks/order'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -40,6 +40,8 @@ import { ButtonSelectSkeleton } from '@web-ui/components/app/atoms/button-select
 import { UnreadStarsFilter } from '@web-ui/components/app/atoms/unread-stars-filter'
 import { LibrarySearch } from '@web-ui/components/app/atoms/library-search'
 import { use_search } from '@/hooks/library/use-search'
+import { ModalContext } from './modal-provider'
+import { upsert_bookmark_modal } from '@/modals'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -51,6 +53,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
   const query_params = use_shallow_search_params()
+  const modal_context = useContext(ModalContext)
   const [show_custom_range, set_show_custom_range] = useState(false)
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
   const [show_bookmarks_skeleton, set_show_bookmarks_skeleton] = useState(true)
@@ -780,9 +783,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
               <Bookmark
                 key={bookmark.id}
-                fetch_timestamp={
-                  bookmarks_slice_state.bookmarks_fetch_timestamp || 0
-                }
+                updated_at={bookmark.updated_at}
                 title={bookmark.title}
                 on_click={() => {}}
                 on_menu_click={() => {}}
@@ -849,29 +850,26 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   const visited_at = await handle_link_click({
                     booomark_id: bookmark.id,
                   })
-                  const updated_bookmark: UpsertBookmark_Params = {
-                    bookmark_id: bookmark.id,
-                    created_at: new Date(bookmark.created_at),
-                    title: bookmark.title,
-                    is_public: bookmark.is_public,
-                    is_archived:
-                      filter_view_options.current_filter ==
-                      LibraryFilter.Archived,
-                    is_unread: bookmark.is_unread,
-                    stars: bookmark.stars,
-                    links: bookmark.links.map((link) => ({
-                      url: link.url,
-                      site_path: link.site_path,
-                      is_public: link.is_public,
-                    })),
-                    tags: bookmark.tags.map((tag) => ({
-                      name: tag.name,
-                      is_public: tag.is_public,
-                    })),
-                  }
                   search.update_searchable_bookmark({
-                    bookmark: updated_bookmark,
-                    visited_at,
+                    bookmark: {
+                      id: bookmark.id,
+                      created_at: new Date(bookmark.created_at),
+                      visited_at,
+                      updated_at: new Date(),
+                      title: bookmark.title,
+                      is_public: bookmark.is_public,
+                      is_archived:
+                        filter_view_options.current_filter ==
+                        LibraryFilter.Archived,
+                      is_unread: bookmark.is_unread,
+                      stars: bookmark.stars,
+                      links: bookmark.links.map((link) => ({
+                        url: link.url,
+                        site_path: link.site_path,
+                        is_public: link.is_public,
+                      })),
+                      tags: bookmark.tags.map((tag) => tag.name),
+                    },
                     tag_ids: bookmark.tags.map((tag) => tag.id),
                   })
                 }}
@@ -920,8 +918,25 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             }),
                           )
                           search.update_searchable_bookmark({
-                            bookmark: updated_bookmark,
-                            visited_at: new Date(bookmark.visited_at),
+                            bookmark: {
+                              id: bookmark.id,
+                              created_at: new Date(bookmark.created_at),
+                              visited_at: new Date(bookmark.visited_at),
+                              updated_at: new Date(),
+                              title: bookmark.title,
+                              is_public: bookmark.is_public,
+                              is_archived:
+                                filter_view_options.current_filter ==
+                                LibraryFilter.Archived,
+                              is_unread,
+                              stars: bookmark.stars,
+                              links: bookmark.links.map((link) => ({
+                                url: link.url,
+                                site_path: link.site_path,
+                                is_public: link.is_public,
+                              })),
+                              tags: bookmark.tags.map((tag) => tag.name),
+                            },
                             tag_ids: bookmark.tags.map((tag) => tag.id),
                           })
                           if (
@@ -985,8 +1000,25 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             }),
                           )
                           search.update_searchable_bookmark({
-                            bookmark: updated_bookmark,
-                            visited_at: new Date(bookmark.visited_at),
+                            bookmark: {
+                              id: bookmark.id,
+                              created_at: new Date(bookmark.created_at),
+                              visited_at: new Date(bookmark.visited_at),
+                              updated_at: new Date(),
+                              title: bookmark.title,
+                              is_public: bookmark.is_public,
+                              is_archived:
+                                filter_view_options.current_filter ==
+                                LibraryFilter.Archived,
+                              is_unread: bookmark.is_unread,
+                              stars: bookmark.stars == 1 ? 0 : 1,
+                              links: bookmark.links.map((link) => ({
+                                url: link.url,
+                                site_path: link.site_path,
+                                is_public: link.is_public,
+                              })),
+                              tags: bookmark.tags.map((tag) => tag.name),
+                            },
                             tag_ids: bookmark.tags.map((tag) => tag.id),
                           })
                           if (
@@ -1038,8 +1070,24 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             }),
                           )
                           search.update_searchable_bookmark({
-                            bookmark: updated_bookmark,
-                            visited_at: new Date(bookmark.visited_at),
+                            bookmark: {
+                              id: bookmark.id,
+                              created_at: new Date(bookmark.created_at),
+                              visited_at: new Date(bookmark.visited_at),
+                              updated_at: new Date(),
+                              title: bookmark.title,
+                              is_public: bookmark.is_public,
+                              is_archived:
+                                filter_view_options.current_filter ==
+                                LibraryFilter.Archived,
+                              is_unread: bookmark.is_unread,
+                              stars: bookmark.stars == 2 ? 0 : 2,
+                              links: bookmark.links.map((link) => ({
+                                url: link.url,
+                                site_path: link.site_path,
+                              })),
+                              tags: bookmark.tags.map((tag) => tag.name),
+                            },
                             tag_ids: bookmark.tags.map((tag) => tag.id),
                           })
                           if (
@@ -1091,8 +1139,25 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             }),
                           )
                           search.update_searchable_bookmark({
-                            bookmark: updated_bookmark,
-                            visited_at: new Date(bookmark.visited_at),
+                            bookmark: {
+                              id: bookmark.id,
+                              created_at: new Date(bookmark.created_at),
+                              visited_at: new Date(bookmark.visited_at),
+                              updated_at: new Date(),
+                              title: bookmark.title,
+                              is_public: bookmark.is_public,
+                              is_archived:
+                                filter_view_options.current_filter ==
+                                LibraryFilter.Archived,
+                              is_unread: bookmark.is_unread,
+                              stars: bookmark.stars == 3 ? 0 : 3,
+                              links: bookmark.links.map((link) => ({
+                                url: link.url,
+                                site_path: link.site_path,
+                              })),
+                              tags: bookmark.tags.map((tag) => tag.name),
+                            },
+
                             tag_ids: bookmark.tags.map((tag) => tag.id),
                           })
                           if (
@@ -1104,6 +1169,69 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                           }
                         },
                       },
+                      ...(props.user == 'authorized'
+                        ? [
+                            {
+                              label: 'Edit',
+                              on_click: async () => {
+                                const updated_bookmark =
+                                  await upsert_bookmark_modal({
+                                    modal_context,
+                                    bookmark,
+                                    is_archived:
+                                      filter_view_options.current_filter ==
+                                      LibraryFilter.Archived,
+                                  })
+                                dispatch(
+                                  bookmarks_actions.replace_bookmark({
+                                    bookmark: updated_bookmark,
+                                    last_authorized_counts_params:
+                                      JSON.parse(
+                                        sessionStorage.getItem(
+                                          browser_storage.session_storage
+                                            .last_authorized_counts_params,
+                                        ) || '',
+                                      ) || undefined,
+                                    api_url: process.env.NEXT_PUBLIC_API_URL,
+                                    auth_token:
+                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                  }),
+                                )
+                                search.update_searchable_bookmark({
+                                  bookmark: {
+                                    id: bookmark.id,
+                                    is_archived:
+                                      filter_view_options.current_filter ==
+                                      LibraryFilter.Archived,
+                                    is_public: updated_bookmark.is_public,
+                                    is_unread: updated_bookmark.is_unread,
+                                    title: updated_bookmark.title,
+                                    tags: updated_bookmark.tags.map(
+                                      (tag) => tag.name,
+                                    ),
+                                    links: updated_bookmark.links.map(
+                                      (link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                      }),
+                                    ),
+                                    created_at: new Date(
+                                      updated_bookmark.created_at,
+                                    ),
+                                    visited_at: new Date(bookmark.visited_at),
+                                    updated_at: new Date(bookmark.updated_at),
+
+                                    stars: updated_bookmark.stars,
+                                  },
+                                  tag_ids: updated_bookmark.tags.map(
+                                    (tag) => tag.id,
+                                  ),
+                                })
+                              },
+                              other_icon: <Icon variant="EDIT" />,
+                            },
+                          ]
+                        : []),
                       {
                         label: !(
                           filter_view_options.current_filter ==
@@ -1150,8 +1278,26 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             }),
                           )
                           search.update_searchable_bookmark({
-                            bookmark: updated_bookmark,
-                            visited_at: new Date(bookmark.visited_at),
+                            bookmark: {
+                              id: bookmark.id,
+                              created_at: new Date(bookmark.created_at),
+                              visited_at: new Date(bookmark.visited_at),
+                              updated_at: new Date(),
+                              title: bookmark.title,
+                              is_public: bookmark.is_public,
+                              is_archived: !(
+                                filter_view_options.current_filter ==
+                                LibraryFilter.Archived
+                              ),
+                              is_unread: bookmark.is_unread,
+                              stars: bookmark.stars,
+                              links: bookmark.links.map((link) => ({
+                                url: link.url,
+                                site_path: link.site_path,
+                                is_public: link.is_public,
+                              })),
+                              tags: bookmark.tags.map((tag) => tag.name),
+                            },
                             tag_ids: bookmark.tags.map((tag) => tag.id),
                           })
                           if (search.count) search.set_count(search.count - 1)

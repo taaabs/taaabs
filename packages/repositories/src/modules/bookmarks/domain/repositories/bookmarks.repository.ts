@@ -6,6 +6,7 @@ import { UpsertBookmark_Params } from '../types/upsert-bookmark.params'
 import { GetBookmarksByIds_Params } from '../types/get-bookmarks-by-ids.params'
 import { GetBookmarksByIds_Ro } from '../types/get-bookmarks-by-ids.ro'
 import { RecordVisit_Ro } from '../types/record-visit.ro'
+import { Bookmark_Entity } from '../entities/bookmark.entity'
 
 export type Bookmarks_Repository = {
   get_bookmarks_on_authorized_user(
@@ -28,5 +29,5 @@ export type Bookmarks_Repository = {
 
   delete_bookmark(params: DeleteBookmark_Params): Promise<void>
 
-  upsert_bookmark(params: UpsertBookmark_Params): Promise<void>
+  upsert_bookmark(params: UpsertBookmark_Params): Promise<Bookmark_Entity>
 }

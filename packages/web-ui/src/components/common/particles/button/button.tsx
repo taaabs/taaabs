@@ -3,7 +3,7 @@ import styles from './button.module.scss'
 import cn from 'classnames'
 
 export namespace Button {
-  export type Size = 'small' | 'default' | 'large'
+  export type Size = 'small' | 'default' | 'medium' | 'large'
   export type Props = {
     href?: string
     size?: Size

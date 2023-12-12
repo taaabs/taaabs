@@ -8,8 +8,8 @@ export namespace DesktopUserAreaForAppHeader {
       url: string
       blurhash: string
     }
-    search_on_click: () => void
-    add_on_click: () => void
+    on_click_search: () => void
+    on_click_add: () => void
   }
 }
 
@@ -20,9 +20,9 @@ export const DesktopUserAreaForAppHeader: React.FC<
     <div className={styles.container}>
       <ButtonOutlinedIcon
         icon_variant="SEARCH"
-        on_click={props.search_on_click}
+        on_click={props.on_click_search}
       />
-      <ButtonOutlinedIcon icon_variant="ADD" on_click={props.add_on_click} />
+      <ButtonOutlinedIcon icon_variant="ADD" on_click={props.on_click_add} />
       {props.avatar ? (
         <ButtonAvatar
           url={props.avatar.url}

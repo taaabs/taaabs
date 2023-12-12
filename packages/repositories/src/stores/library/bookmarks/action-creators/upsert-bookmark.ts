@@ -24,7 +24,7 @@ export const upsert_bookmark = (params: {
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
 
-    await upsert_bookmark_use_case.invoke(params.bookmark)
+    const result = await upsert_bookmark_use_case.invoke(params.bookmark)
 
     const state = get_state()
 
@@ -98,35 +98,11 @@ export const upsert_bookmark = (params: {
           ),
         )
       } else {
-        const modified_bookmark_index = state.bookmarks.bookmarks.findIndex(
-          (bookmark) => bookmark.id == params.bookmark.bookmark_id,
-        )
-
-        if (modified_bookmark_index == -1)
-          throw new Error('[upsert_bookmark] Bookmark should be there.')
-
-        let modified_bookmark =
-          state.bookmarks.bookmarks[modified_bookmark_index]
-
-        if (modified_bookmark.stars != params.bookmark.stars) {
-          modified_bookmark = {
-            ...modified_bookmark,
-            stars: params.bookmark.stars || 0,
-          }
-        }
-
-        if (modified_bookmark.is_unread != params.bookmark.is_unread) {
-          modified_bookmark = {
-            ...modified_bookmark,
-            is_unread: params.bookmark.is_unread,
-          }
-        }
-
         dispatch(
           bookmarks_actions.set_incoming_bookmarks(
             state.bookmarks.bookmarks.map((bookmark) => {
-              if (bookmark.id == modified_bookmark.id) {
-                return modified_bookmark
+              if (bookmark.id == result.id) {
+                return result
               } else {
                 return bookmark
               }

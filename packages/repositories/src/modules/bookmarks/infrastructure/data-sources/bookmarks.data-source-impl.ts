@@ -8,6 +8,7 @@ import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookm
 import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by-ids.dto'
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
+import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -140,7 +141,9 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     })
   }
 
-  public async upsert_bookmark(params: UpsertBookmark_Params): Promise<void> {
+  public async upsert_bookmark(
+    params: UpsertBookmark_Params,
+  ): Promise<Bookmarks_Dto.Response.AuthorizedBookmark> {
     const bookmark: CreateBookmark_Dto = {
       created_at: params.created_at?.toISOString(),
       title: params.title,
@@ -160,23 +163,26 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     }
 
     if (params.bookmark_id) {
-      await fetch(`${this._api_url}/v1/bookmarks/${params.bookmark_id}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${this._auth_token}`,
-          'Content-Type': 'application/json',
+      return await fetch(
+        `${this._api_url}/v1/bookmarks/${params.bookmark_id}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${this._auth_token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bookmark),
         },
-        body: JSON.stringify(bookmark),
-      })
+      ).then((r) => r.json())
     } else {
-      await fetch(`${this._api_url}/v1/bookmarks`, {
+      return await fetch(`${this._api_url}/v1/bookmarks`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${this._auth_token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(bookmark),
-      })
+      }).then((r) => r.json())
     }
   }
 }

@@ -11,7 +11,6 @@ type BookmarksState = {
   incoming_bookmarks: Bookmark_Entity[] | null
   bookmarks: Bookmark_Entity[] | null
   has_more_bookmarks: boolean | null
-  bookmarks_fetch_timestamp: number | null
 }
 
 const initial_state: BookmarksState = {
@@ -22,7 +21,6 @@ const initial_state: BookmarksState = {
   incoming_bookmarks: null,
   bookmarks: null,
   has_more_bookmarks: null,
-  bookmarks_fetch_timestamp: null,
 }
 
 export const bookmarks_slice = createSlice({
@@ -48,7 +46,6 @@ export const bookmarks_slice = createSlice({
       state.incoming_bookmarks = action.payload
     },
     set_bookmarks(state, action: PayloadAction<BookmarksState['bookmarks']>) {
-      state.bookmarks_fetch_timestamp = Date.now()
       state.bookmarks = action.payload
     },
     set_more_bookmarks(

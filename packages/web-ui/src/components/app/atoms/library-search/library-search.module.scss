@@ -183,6 +183,7 @@
     gap: var(--distance-8px);
     margin-right: var(--distance-11px);
     &__press_key {
+      pointer-events: none;
       color: var(--blue500);
       display: flex;
       white-space: pre;

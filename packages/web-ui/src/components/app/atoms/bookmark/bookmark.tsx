@@ -36,7 +36,7 @@ export namespace Bookmark {
   export type Highlights = [number, number][]
 
   export type Props = {
-    fetch_timestamp?: number // Forces rerender for bookmark height adjustment (upon unread/stars change).
+    updated_at: string
     title: string
     note?: string
     date: Date
@@ -84,7 +84,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           set_render_height(height)
         }, 0)
       }
-    }, [props.is_unread, props.stars])
+    }, [props.updated_at])
 
     const relative_time = dayjs(props.date).fromNow()
 
@@ -422,7 +422,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
-    o.fetch_timestamp == n.fetch_timestamp &&
+    o.updated_at == n.updated_at &&
     o.stars == n.stars &&
     o.is_unread == n.is_unread &&
     o.render_height == n.render_height &&

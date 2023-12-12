@@ -29,9 +29,8 @@ export const Primary = () => {
           }
           slot_right_side={
             <DesktopUserAreaForAppHeader
-              add_on_click={() => {}}
-              search_on_click={() => {}}
-              notificatios_on_click={() => {}}
+              on_click_add={() => {}}
+              on_click_search={() => {}}
             />
           }
         />
@@ -84,9 +83,9 @@ export const Primary = () => {
             {bookmark}
           </>
         }
-        no_results={false}
         show_bookmarks_skeleton={false}
-      ></Library>
+        slot_search={<>search</>}
+      />
     </App>
   )
 }
@@ -94,10 +93,7 @@ export const Primary = () => {
 const bookmark = (
   <div style={{ marginBottom: 'var(--distance-8px)' }}>
     <Bookmark
-      id="1"
-      index={1}
       date={new Date()}
-      is_starred={false}
       links={[]}
       title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
       is_unread={true}
@@ -110,6 +106,12 @@ const bookmark = (
       on_menu_click={() => {}}
       on_selected_tag_click={() => {}}
       set_render_height={() => {}}
+      favicon_host=""
+      is_serach_result={false}
+      menu_slot={<></>}
+      number_of_selected_tags={0}
+      should_dim_visited_links={false}
+      stars={0}
     />
   </div>
 )
