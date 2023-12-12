@@ -5,7 +5,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - var(--distance-80px));
+  max-height: calc(100svh - var(--distance-80px));
   width: 100vw;
   @include at768 {
     width: 768px;
