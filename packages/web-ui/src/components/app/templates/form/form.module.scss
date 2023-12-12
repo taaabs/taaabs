@@ -5,10 +5,11 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  max-height: calc(100svh - var(--distance-80px));
+  max-height: calc(80svh);
   width: 100vw;
   @include at768 {
     width: calc(100vw - var(--distance-80px));
+    max-height: calc(100svh - var(--distance-80px));
   }
   @include at992 {
     width: 900px;
@@ -25,9 +26,7 @@
     overflow: auto;
     position: relative;
     scrollbar-width: none;
-    @include to992 {
-      padding-top: var(--header-mobile-height);
-    }
+    padding-top: var(--header-mobile-height);
     @include at992 {
       padding-top: var(--distance-52px);
     }
@@ -42,9 +41,7 @@
       left: 0;
       right: 0;
       background: var(--header-background);
-      @include to992 {
-        height: var(--header-mobile-height);
-      }
+      height: var(--header-mobile-height);
       @include at992 {
         height: var(--distance-52px);
       }
@@ -52,16 +49,13 @@
     &__inner {
       display: flex;
       flex-direction: column;
-      margin: 0 auto;
-      @include to768 {
-        gap: var(--distance-8px);
-        padding: var(--distance-8px) 0;
-      }
+      gap: var(--distance-16px);
+      padding: var(--distance-16px) 0;
       @include at768 {
-        gap: var(--distance-16px);
         padding: var(--distance-16px);
       }
       @include at992 {
+        margin: 0 auto;
         gap: var(--distance-24px);
         padding: var(--distance-24px) 0;
         width: 630px;

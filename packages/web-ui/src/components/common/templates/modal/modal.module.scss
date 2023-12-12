@@ -12,7 +12,7 @@
   height: 100%;
   pointer-events: none;
   backdrop-filter: var(--backdrop-filter);
-  background-color: rgba(17, 17, 17, 0.4);
+  background-color: rgba(0, 0, 0, 0.2);
   opacity: 0;
   &--visible {
     pointer-events: all;

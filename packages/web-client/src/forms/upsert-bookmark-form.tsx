@@ -105,6 +105,7 @@ export const UpsertBookmarkForm: React.FC<{
                 })),
               )
             }}
+            button_text="Add link"
           />
         </Box>
         <Box>
@@ -152,6 +153,7 @@ export const UpsertBookmarkForm: React.FC<{
                 })),
               )
             }}
+            button_text="Add tag"
           />
         </Box>
       </Form>

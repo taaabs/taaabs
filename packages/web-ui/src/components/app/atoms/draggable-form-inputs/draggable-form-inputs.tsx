@@ -16,6 +16,7 @@ namespace DraggableFormInputs {
   export type Props = {
     items: Item[]
     on_change: (items: Item[]) => void
+    button_text: string
   }
 }
 
@@ -115,7 +116,7 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
           ])
         }}
       >
-        Add
+        {props.button_text}
       </Button>
     </div>
   )

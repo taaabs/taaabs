@@ -610,7 +610,7 @@ export const use_search = () => {
         .filter(
           (recent_search_string) =>
             recent_search_string != search_string_lower &&
-            recent_search_string.startsWith(search_string),
+            recent_search_string.startsWith(search_string_lower),
         )
         .slice(0, 3)
         .map((recent_search_string) => ({

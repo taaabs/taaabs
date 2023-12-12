@@ -18,7 +18,10 @@
   &__right-side {
     display: flex;
     align-items: center;
-    gap: var(--distance-24px);
+    gap: var(--distance-16px);
+    @include at992 {
+      gap: var(--distance-24px);
+    }
     &__cancel {
       color: var(--text-color-dimmed);
       @include hover {
