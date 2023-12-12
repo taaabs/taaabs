@@ -25,7 +25,7 @@
   &__actions {
     display: flex;
     gap: var(--distance-8px);
-    margin-left: var(--distance-16px);
+    margin-left: var(--distance-8px);
     &__button {
       display: flex;
       align-items: center;
@@ -56,7 +56,7 @@
 .new {
   margin-top: var(--distance-16px);
   margin-left: 25.5px;
-  margin-right: 92px;
+  margin-right: 84px;
   cursor: text;
   input {
     opacity: 0.5;

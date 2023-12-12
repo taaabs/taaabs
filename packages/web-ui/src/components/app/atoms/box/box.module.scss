@@ -6,9 +6,12 @@
   flex-direction: column;
   gap: var(--distance-24px);
   background: var(--blue-box-background);
-  border-radius: var(--border-radius-20px);
   padding: var(--distance-16px);
+  @include to992 {
+    border-radius: var(--border-radius-14px);
+  }
   @include at992 {
     padding: var(--distance-40px);
+    border-radius: var(--border-radius-20px);
   }
 }

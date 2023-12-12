@@ -29,13 +29,15 @@
     background-color: white;
     overflow: hidden;
     transform: translateY(var(--distance-8px));
+    @include at768 {
+      border-radius: var(--border-radius-14px);
+    }
     @include to992 {
-      border-radius: var(--border-radius-20px);
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
     }
     @include at992 {
-      border-radius: var(--border-radius-30px);
+      border-radius: var(--border-radius-20px);
     }
     &--visible {
       transform: translateY(0);
