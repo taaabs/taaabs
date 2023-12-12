@@ -9,7 +9,8 @@
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     color: var(--brand-color);
-    @include to992 {
+    font-size: var(--font-size-20px);
+    @include at768 {
       font-size: var(--font-size-22px);
     }
     @include at992 {

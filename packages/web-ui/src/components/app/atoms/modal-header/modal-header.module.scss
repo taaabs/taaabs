@@ -3,16 +3,14 @@
 
 .container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   border-bottom: var(--border-primary);
   background: var(--header-transparent-background);
   backdrop-filter: var(--backdrop-filter);
   height: var(--header-mobile-height);
-  padding: 0 var(--distance-12px) 0 var(--distance-16px);
   @include at992 {
     height: var(--distance-52px);
-    padding: 0 var(--distance-20px) 0 var(--distance-40px);
   }
 }
 .title {

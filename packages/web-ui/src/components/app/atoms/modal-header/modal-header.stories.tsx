@@ -5,5 +5,5 @@ export default {
 }
 
 export const Primary = () => {
-  return <ModalHeader title="Lorem ipsum" on_click_close={() => {}} />
+  return <ModalHeader title="Lorem ipsum" />
 }

@@ -8,7 +8,7 @@
   max-height: calc(80svh);
   width: 100vw;
   @include at768 {
-    width: calc(100vw - var(--distance-80px));
+    width: calc(70vw);
     max-height: calc(100svh - var(--distance-80px));
   }
   @include at992 {
