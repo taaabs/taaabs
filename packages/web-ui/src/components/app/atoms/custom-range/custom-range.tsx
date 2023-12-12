@@ -64,8 +64,8 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       if (
         !is_swiping &&
         counts_to_render &&
-        dragged_start_index != undefined &&
-        dragged_end_index != undefined &&
+        dragged_start_index !== undefined &&
+        dragged_end_index !== undefined &&
         counts_to_render[dragged_start_index] &&
         counts_to_render[dragged_end_index]
       ) {
@@ -87,7 +87,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       if (!params.counts) return
 
       let counts_sliced: Counts = []
-      if (start_index != undefined && end_index != undefined) {
+      if (start_index !== undefined && end_index !== undefined) {
         counts_sliced = params.counts.slice(start_index, end_index + 1)
       } else {
         counts_sliced = params.counts
@@ -111,9 +111,9 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
 
       set_date(
         params.counts.length > 0
-          ? start_index != undefined &&
+          ? start_index !== undefined &&
             params.counts[start_index] &&
-            end_index != undefined &&
+            end_index !== undefined &&
             params.counts[end_index]
             ? yyyymm_to_display(params.counts[start_index].yyyymm) +
               (end_index != start_index
@@ -286,8 +286,8 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
         bookmark_count != null ||
         props.current_gte ||
         props.current_lte ||
-        dragged_start_index != undefined ||
-        dragged_end_index != undefined
+        dragged_start_index !== undefined ||
+        dragged_end_index !== undefined
       )
         return
 
@@ -336,14 +336,14 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
               <div className={styles['custom-range__details__counts__total']}>
                 {bookmark_count}
               </div>
-              {starred_count != undefined && starred_count > 0 && (
+              {starred_count !== undefined && starred_count > 0 && (
                 <div
                   className={styles['custom-range__details__counts__starred']}
                 >
                   {starred_count}
                 </div>
               )}
-              {unread_count != undefined && unread_count > 0 && (
+              {unread_count !== undefined && unread_count > 0 && (
                 <div
                   className={styles['custom-range__details__counts__unread']}
                 >

@@ -320,7 +320,7 @@ const Page: React.FC = () => {
                   }
                   selected_tags={query_params.get('t') || undefined}
                   has_results={
-                    bookmarks != undefined && !is_fetching_months_data
+                    bookmarks !== undefined && !is_fetching_months_data
                       ? bookmarks.length > 0
                       : undefined
                   }
@@ -434,7 +434,7 @@ const Page: React.FC = () => {
                   bookmark.tags
                     ? bookmark.tags.map((tag) => {
                         const isSelected = is_fetching_first_bookmarks
-                          ? selected_tags.find((t) => t == tag.id) != undefined
+                          ? selected_tags.find((t) => t == tag.id) !== undefined
                           : actual_selected_tags.find((t) => t == tag.id) !=
                             undefined
 

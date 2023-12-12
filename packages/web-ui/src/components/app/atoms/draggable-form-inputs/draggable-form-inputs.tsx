@@ -6,6 +6,7 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import cn from 'classnames'
 import { system_values } from '@shared/constants/system-values'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { Button } from '@web-ui/components/common/particles/button'
 
 namespace DraggableFormInputs {
   type Item = {
@@ -87,6 +88,7 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
                       }),
                     )
                   }}
+                  type="button"
                 >
                   <Icon variant="GLOBE" />
                 </button>
@@ -95,6 +97,7 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
                   onClick={() => {
                     set_items(items.filter((el) => el.id != item.id))
                   }}
+                  type="button"
                 >
                   <Icon variant="ADD" />
                 </button>
@@ -103,19 +106,17 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
           ))}
         </ReactSortable>
       )}
-      <div
-        className={styles.new}
-        role="button"
-        onClick={() => {
-          set_is_autofocus_enabled(true)
+      <Button
+        on_click={() => {
+          if (!is_autofocus_enabled) set_is_autofocus_enabled(true)
           set_items([
             ...items,
             { id: last_id + 1, is_public: false, value: '' },
           ])
         }}
       >
-        <Input on_change={() => {}} value={''} />
-      </div>
+        Add
+      </Button>
     </div>
   )
 }

@@ -16,37 +16,34 @@ export namespace Button {
   }
 }
 
-export const Button: React.FC<Button.Props> = ({
-  size = 'default',
-  ...props
-}) => {
-  const classNames = cn([
+export const Button: React.FC<Button.Props> = (props) => {
+  const class_names = cn([
     styles.container,
-    styles[`container--${size}`],
+    styles[`container--${props.size ? props.size : 'default'}`],
     { [styles['container--is-loading']]: props.is_loading },
   ])
 
   if (props.type == 'submit') {
     return (
-      <button className={classNames} type="submit">
+      <button className={class_names} type="submit">
         {props.children}
       </button>
     )
-  } else if (props.href != undefined) {
+  } else if (props.href !== undefined) {
     return (
-      <Link className={classNames} href={props.href} onClick={props.on_click}>
+      <Link className={class_names} href={props.href} onClick={props.on_click}>
         {props.children}
       </Link>
     )
-  } else if (props.on_click != undefined) {
+  } else if (props.on_click !== undefined) {
     return (
-      <button className={classNames} onClick={props.on_click}>
+      <button className={class_names} onClick={props.on_click} type="button">
         {props.children}
       </button>
     )
   } else {
     return (
-      <button className={classNames} disabled>
+      <button className={class_names} disabled>
         {props.children}
       </button>
     )

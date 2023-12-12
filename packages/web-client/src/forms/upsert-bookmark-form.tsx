@@ -93,10 +93,7 @@ export const UpsertBookmarkForm: React.FC<{
         }
       >
         <Box>
-          <BoxHeading
-            heading="Links"
-            subheading="Add one or more urls directly related to the bookmarked resource like an article and a discussion thread it was mentioned on."
-          />
+          <BoxHeading heading="Links" />
           <DraggableFormInputs
             items={links.map((el) => ({
               value: el.url,
@@ -113,10 +110,7 @@ export const UpsertBookmarkForm: React.FC<{
           />
         </Box>
         <Box>
-          <BoxHeading
-            heading="Title"
-            subheading="Briefly describe your bookmark."
-          />
+          <BoxHeading heading="Title" />
           <Controller
             name="title"
             control={control}
@@ -146,10 +140,7 @@ export const UpsertBookmarkForm: React.FC<{
           />
         </Box>
         <Box>
-          <BoxHeading
-            heading="Tags"
-            subheading="Accurate keywords help keeping your library organized."
-          />
+          <BoxHeading heading="Tags" />
           <DraggableFormInputs
             items={tags.map((tag) => ({
               value: tag.name,

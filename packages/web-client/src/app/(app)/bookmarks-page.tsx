@@ -666,7 +666,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   }
                   selected_tags={query_params.get('t') || undefined}
                   has_results={
-                    bookmarks_slice_state.bookmarks != undefined &&
+                    bookmarks_slice_state.bookmarks &&
                     !counts.is_fetching_counts_data
                       ? bookmarks_slice_state.bookmarks.length > 0
                       : undefined
@@ -819,7 +819,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               undefined
                             : tag_view_options.actual_selected_tags.find(
                                 (t) => t == tag.id,
-                              ) != undefined
+                              ) !== undefined
 
                         return {
                           name: tag.name,

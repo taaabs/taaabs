@@ -12,7 +12,7 @@ export namespace ButtonUnderlined {
 }
 
 export const ButtonUnderlined: React.FC<ButtonUnderlined.Props> = (props) => {
-  if (props.href != undefined) {
+  if (props.href !== undefined) {
     return (
       <Link
         className={cn(styles.button, {
