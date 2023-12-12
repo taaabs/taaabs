@@ -26,13 +26,28 @@
     position: relative;
     scrollbar-width: none;
     @include to992 {
-      margin-top: var(--header-mobile-height);
+      padding-top: var(--header-mobile-height);
     }
     @include at992 {
-      margin-top: var(--distance-52px);
+      padding-top: var(--distance-52px);
     }
     &::-webkit-scrollbar {
       display: none;
+    }
+    &::before {
+      position: absolute;
+      content: '';
+      height: var(--distance-52px);
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--header-background);
+      @include to992 {
+        height: var(--header-mobile-height);
+      }
+      @include at992 {
+        height: var(--distance-52px);
+      }
     }
     &__inner {
       display: flex;

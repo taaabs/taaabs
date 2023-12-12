@@ -33,27 +33,37 @@ export const Primary = () => {
           <Box>
             <BoxHeading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
-            <Button size="default">Lorem</Button>
+            <div>
+              <Button size="default">Lorem</Button>
+            </div>
           </Box>
           <Box>
             <BoxHeading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
-            <Button size="default">Lorem</Button>
+            <div>
+              <Button size="default">Lorem</Button>
+            </div>
           </Box>
           <Box>
             <BoxHeading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
-            <Button size="default">Lorem</Button>
+            <div>
+              <Button size="default">Lorem</Button>
+            </div>
           </Box>
           <Box>
             <BoxHeading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
-            <Button size="default">Lorem</Button>
+            <div>
+              <Button size="default">Lorem</Button>
+            </div>
           </Box>
           <Box>
             <BoxHeading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
-            <Button size="default">Lorem</Button>
+            <div>
+              <Button size="default">Lorem</Button>
+            </div>
           </Box>
         </>
       }

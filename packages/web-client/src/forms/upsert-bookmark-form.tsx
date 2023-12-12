@@ -81,9 +81,7 @@ export const UpsertBookmarkForm: React.FC<{
       }}
     >
       <Form
-        slot_header={
-          <ModalHeader title="Edit bookmark" on_click_close={props.on_close} />
-        }
+        slot_header={<ModalHeader title="Edit bookmark" />}
         slot_footer={
           <ModalFooter
             on_click_cancel={props.on_close}

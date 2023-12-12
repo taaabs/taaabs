@@ -25,31 +25,3 @@
     font-size: var(--font-size-24px);
   }
 }
-.close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--border-radius-999px);
-  @include transition-100ms(background-color);
-  @include hover {
-    background-color: var(--neutral100);
-  }
-  @include to992 {
-    width: var(--button-dimension-28px);
-    height: var(--button-dimension-28px);
-  }
-  @include at992 {
-    width: var(--button-dimension-34px);
-    height: var(--button-dimension-34px);
-  }
-  svg {
-    fill: var(--plain-black);
-    transform: rotate(45deg);
-    @include to992 {
-      height: var(--icon-dimension-18px);
-    }
-    @include at992 {
-      height: var(--icon-dimension-20px);
-    }
-  }
-}

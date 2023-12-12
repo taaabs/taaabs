@@ -3,7 +3,6 @@ import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
 import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
 import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
 import { Form } from '@web-ui/components/app/templates/form/form'
-import { Button } from '@web-ui/components/common/particles/button'
 import { Modal } from '@web-ui/components/common/templates/modal'
 import { lorem_ipsum } from '@web-ui/helpers/storybook/lorem-ipsum'
 
@@ -22,27 +21,20 @@ export const Primary = () => {
           }
           slot_footer={
             <ModalFooter
-              slot_right_side={<Button size="medium">Create</Button>}
+              button_label="Create"
+              is_disabled={false}
+              on_click_cancel={() => {}}
             />
           }
         >
           <Box>
-            <BoxHeading
-              heading="Links"
-              subheading="Add one or more urls directly related to the bookmarked resource like an article and a place it was shared from."
-            />
+            <BoxHeading heading="Links" />
           </Box>
           <Box>
-            <BoxHeading
-              heading="Title"
-              subheading="Briefly describe your bookmark."
-            />
+            <BoxHeading heading="Title" />
           </Box>
           <Box>
-            <BoxHeading
-              heading="Tags"
-              subheading="Accurate keywords help keeping your library organized."
-            />
+            <BoxHeading heading="Tags" />
           </Box>
         </Form>
       }

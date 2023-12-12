@@ -112,6 +112,7 @@ const bookmark = (
       number_of_selected_tags={0}
       should_dim_visited_links={false}
       stars={0}
+      updated_at=""
     />
   </div>
 )

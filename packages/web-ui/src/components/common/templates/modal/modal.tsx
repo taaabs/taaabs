@@ -17,13 +17,13 @@ export const Modal: React.FC<Modal.Props> = (props) => {
       const scrollbar_width = window.innerWidth - document.body.clientWidth
 
       document.body.style.overflow = 'hidden'
-      header!.style.paddingRight = `${scrollbar_width}px`
+      if (header) header.style.paddingRight = `${scrollbar_width}px`
       top_divs.forEach(
         (el: any) => (el.style.paddingRight = `${scrollbar_width}px`),
       )
     } else {
       document.body.style.overflow = ''
-      header!.style.paddingRight = ''
+      if (header) header.style.paddingRight = ''
       top_divs.forEach((el: any) => (el.style.paddingRight = ''))
     }
   }, [props.slot_modal])
