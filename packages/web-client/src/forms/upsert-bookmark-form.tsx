@@ -72,7 +72,14 @@ export const UpsertBookmarkForm: React.FC<{
   }
 
   return (
-    <form onSubmit={handleSubmit(on_submit)}>
+    <form
+      onSubmit={handleSubmit(on_submit)}
+      onKeyDown={(e) => {
+        if (e.code == 'Enter') {
+          e.preventDefault()
+        }
+      }}
+    >
       <Form
         slot_header={
           <ModalHeader title="Edit bookmark" on_click_close={props.on_close} />

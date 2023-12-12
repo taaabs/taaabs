@@ -8,7 +8,7 @@
   max-height: calc(100svh - var(--distance-80px));
   width: 100vw;
   @include at768 {
-    width: 768px;
+    width: calc(100vw - var(--distance-80px));
   }
   @include at992 {
     width: 900px;
@@ -21,15 +21,15 @@
     width: 100%;
   }
   &__content {
+    width: 100%;
     overflow: auto;
     position: relative;
     scrollbar-width: none;
     @include to992 {
-      padding-top: var(--header-mobile-height);
+      margin-top: var(--header-mobile-height);
     }
     @include at992 {
-      padding-top: var(--distance-52px);
-      margin: 0 auto;
+      margin-top: var(--distance-52px);
     }
     &::-webkit-scrollbar {
       display: none;
@@ -37,12 +37,13 @@
     &__inner {
       display: flex;
       flex-direction: column;
-      gap: var(--distance-16px);
-      width: 100%;
+      margin: 0 auto;
       @include to768 {
-        padding: var(--distance-16px) 0;
+        gap: var(--distance-8px);
+        padding: var(--distance-8px) 0;
       }
       @include at768 {
+        gap: var(--distance-16px);
         padding: var(--distance-16px);
       }
       @include at992 {

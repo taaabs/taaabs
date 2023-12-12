@@ -422,9 +422,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
+    o.is_serach_result == n.is_serach_result &&
     o.updated_at == n.updated_at &&
-    o.stars == n.stars &&
-    o.is_unread == n.is_unread &&
     o.render_height == n.render_height &&
     o.current_filter == n.current_filter &&
     o.number_of_selected_tags == n.number_of_selected_tags &&

@@ -29,7 +29,7 @@
     background-color: white;
     overflow: hidden;
     @include to768 {
-      transform: translateY(var(--distance-8px));
+      transform: translateY(var(--distance-20px));
     }
     @include at768 {
       border-radius: var(--border-radius-14px);

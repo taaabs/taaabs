@@ -11,11 +11,8 @@
   height: var(--header-mobile-height);
   padding: 0 var(--distance-12px) 0 var(--distance-16px);
   @include at992 {
-    padding: 0 var(--distance-14px) 0 var(--distance-16px);
-  }
-  @include at992 {
     height: var(--distance-52px);
-    padding: 0 var(--distance-16px) 0 var(--distance-40px);
+    padding: 0 var(--distance-20px) 0 var(--distance-40px);
   }
 }
 .title {
