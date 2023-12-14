@@ -35,11 +35,7 @@ const Page: React.FC = () => {
             description="Get the most out of Taaabs"
             price="$4.99"
             price_info="$49.99 billed annually"
-            bullets={[
-              'All personal library add-ons',
-              'Dark mode',
-              'Claim shorter username',
-            ]}
+            bullets={['All add-ons', 'Dark mode', 'Claim shorter username']}
           />
         }
       />

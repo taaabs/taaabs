@@ -65,6 +65,7 @@ export namespace Bookmarks_Dto {
 
     class AuthorizedTag extends Tag {
       public is_public?: boolean
+      public name?: string
       public name_aes?: string
     }
     class PublicTag extends Tag {
@@ -83,7 +84,6 @@ export namespace Bookmarks_Dto {
     export class AuthorizedBookmark extends Bookmark {
       public title?: string
       public title_aes?: string
-      public is_public?: boolean
       public links: AuthorizedLink[]
       public tags: AuthorizedTag[]
     }

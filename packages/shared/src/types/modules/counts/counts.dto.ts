@@ -17,15 +17,36 @@ export namespace Counts_Dto {
     export class Public extends Base {}
   }
 
-  class Month {
-    public tags: Record<string, { yields: number; id: number }>
-    public bookmark_count: number
-    public starred_count?: number
-    public unread_count?: number
-  }
+  export namespace Response {
+    class AuthorizedMonth {
+      public tags: {
+        name?: string
+        name_aes?: string
+        yields: number
+        id: number
+      }[]
+      public bookmark_count: number
+      public starred_count?: number
+      public unread_count?: number
+    }
 
-  export class Response {
-    public months?: Record<string, Month>
-    public is_counts_update_scheduled?: boolean
+    class PublicMonth {
+      public tags: {
+        name: string
+        yields: number
+        id: number
+      }[]
+      public bookmark_count: number
+      public starred_count?: number
+    }
+
+    export class Authorized {
+      public months?: Record<string, AuthorizedMonth>
+      public is_counts_update_scheduled?: boolean
+    }
+    export class Public {
+      public months?: Record<string, PublicMonth>
+      public is_counts_update_scheduled?: boolean
+    }
   }
 }
