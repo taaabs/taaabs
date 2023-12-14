@@ -9,6 +9,7 @@ import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookm
 import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by-ids.dto'
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
+import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -173,7 +174,14 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           url_aes: !link.is_public
             ? CryptoJS.AES.encrypt(link.url, 'my_secret_key').toString()
             : undefined,
-          // site: link.site_path,
+          site_aes: !link.is_public
+            ? CryptoJS.AES.encrypt(
+                get_domain_from_url(link.url),
+                'my_secret_key',
+              ).toString()
+            : undefined,
+          hash: CryptoJS.SHA256(link.url + 'my_secret_key').toString(),
+          site: link.site_path,
           is_public: link.is_public,
         }
       }),

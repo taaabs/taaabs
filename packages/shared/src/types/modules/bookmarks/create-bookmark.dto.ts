@@ -7,8 +7,10 @@ class Tag {
 
 class Link {
   public url?: string
-  public url_aes?: string
   public site?: string
+  public url_aes?: string
+  public site_aes?: string
+  public hash: string
   public is_public: boolean
 }
 
