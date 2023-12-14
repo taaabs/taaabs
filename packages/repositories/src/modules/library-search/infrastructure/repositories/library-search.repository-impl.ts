@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js'
 import { LibrarySearch_Repository } from '../../domain/repositories/library-search.repository'
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
@@ -47,12 +48,35 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           created_at: bookmark.created_at,
           updated_at: bookmark.updated_at,
           visited_at: bookmark.visited_at,
-          title: bookmark.title,
+          title: bookmark.title
+            ? bookmark.title
+            : CryptoJS.AES.decrypt(
+                bookmark.title_aes!,
+                'my_secret_key',
+              ).toString(CryptoJS.enc.Utf8),
           is_unread: bookmark.is_unread || false,
           is_archived: bookmark.is_archived || false,
           is_public: bookmark.is_public || false,
-          sites: bookmark.sites,
-          tags: bookmark.tags || [],
+          sites: bookmark.sites.map((site) => {
+            if (site.site) {
+              return site.site
+            } else {
+              return CryptoJS.AES.decrypt(
+                site.site_aes!,
+                'my_secret_key',
+              ).toString(CryptoJS.enc.Utf8)
+            }
+          }),
+          tags: bookmark.tags.map((tag) => {
+            if (tag.tag) {
+              return tag.tag
+            } else {
+              return CryptoJS.AES.decrypt(
+                tag.tag_aes!,
+                'my_secret_key',
+              ).toString(CryptoJS.enc.Utf8)
+            }
+          }),
           stars: bookmark.stars || 0,
         }
       }),
@@ -79,7 +103,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           is_archived: bookmark.is_archived || false,
           is_public: false,
           sites: bookmark.sites,
-          tags: bookmark.tags || [],
+          tags: bookmark.tags,
           stars: bookmark.stars || 0,
         }
       }),

@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js'
 import { Bookmarks_Repository } from '../../domain/repositories/bookmarks.repository'
 import { Bookmarks_DataSource } from '../data-sources/bookmarks.data-source'
 import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
@@ -9,7 +10,6 @@ import { GetBookmarksByIds_Ro } from '../../domain/types/get-bookmarks-by-ids.ro
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { RecordVisit_Ro } from '../../domain/types/record-visit.ro'
 import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
-import CryptoJS from 'crypto-js'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
