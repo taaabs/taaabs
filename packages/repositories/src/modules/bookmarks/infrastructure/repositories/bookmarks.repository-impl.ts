@@ -36,11 +36,9 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         stars: bookmark.stars || 0,
         tags: bookmark.tags.map((tag) => ({
           id: tag.id,
-          name: tag.name
-            ? tag.name
-            : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
-                CryptoJS.enc.Utf8,
-              ),
+          name: CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
+            CryptoJS.enc.Utf8,
+          ),
           is_public: tag.is_public || false,
         })),
         links: bookmark.links.map((link) => ({
@@ -116,11 +114,9 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         stars: bookmark.stars || 0,
         tags: bookmark.tags.map((tag) => ({
           id: tag.id,
-          name: tag.name
-            ? tag.name
-            : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
-                CryptoJS.enc.Utf8,
-              ),
+          name: CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
+            CryptoJS.enc.Utf8,
+          ),
           is_public: tag.is_public || false,
         })),
         links: bookmark.links.map((link) => ({
@@ -201,11 +197,9 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       stars: bookmark.stars || 0,
       tags: bookmark.tags.map((tag) => ({
         id: tag.id,
-        name: tag.name
-          ? tag.name
-          : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
-              CryptoJS.enc.Utf8,
-            ),
+        name: CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
+          CryptoJS.enc.Utf8,
+        ),
         is_public: tag.is_public || false,
       })),
       links: bookmark.links.map((link) => ({

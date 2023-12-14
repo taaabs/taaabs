@@ -106,7 +106,7 @@
         &__unread {
           display: inline-flex;
           align-items: center;
-          transform: scale(0.95) translateY(-0.22rem);
+          transform: translateY(-0.22rem);
           transform-origin: left;
           position: relative;
           margin-right: var(--distance-0-7rem);
