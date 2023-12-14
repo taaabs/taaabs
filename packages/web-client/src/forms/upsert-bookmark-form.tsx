@@ -58,7 +58,6 @@ export const UpsertBookmarkForm: React.FC<{
         : undefined,
       stars: props.bookmark?.stars,
       is_archived: props.is_archived || false,
-      is_public: props.bookmark?.is_public || false,
       is_unread: props.bookmark?.is_unread || false,
       links: links.map((link) => ({
         url: link.url,

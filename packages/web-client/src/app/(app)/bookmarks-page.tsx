@@ -653,7 +653,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 }}
               >
                 <CustomRange
-                  counts={counts.months}
+                  counts={counts.months || undefined}
                   on_yyyymm_change={date_view_options.set_gte_lte_query_params}
                   clear_date_range={
                     date_view_options.clear_gte_lte_query_params
@@ -801,7 +801,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 should_display_only_month={search.result !== undefined}
                 links={bookmark.links.map((link) => ({
                   url: link.url,
-                  saves: link.public_saves,
+                  saves: link.saves,
                   site_path: link.site_path,
                 }))}
                 number_of_selected_tags={
@@ -888,7 +888,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             bookmark_id: bookmark.id,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
-                            is_public: bookmark.is_public,
                             is_archived:
                               filter_view_options.current_filter ==
                               LibraryFilter.Archived,
@@ -970,7 +969,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             bookmark_id: bookmark.id,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
-                            is_public: bookmark.is_public,
                             is_archived:
                               filter_view_options.current_filter ==
                               LibraryFilter.Archived,
@@ -1040,7 +1038,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             bookmark_id: bookmark.id,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
-                            is_public: bookmark.is_public,
                             is_archived:
                               filter_view_options.current_filter ==
                               LibraryFilter.Archived,
@@ -1109,7 +1106,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             bookmark_id: bookmark.id,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
-                            is_public: bookmark.is_public,
                             is_archived:
                               filter_view_options.current_filter ==
                               LibraryFilter.Archived,
@@ -1250,7 +1246,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             bookmark_id: bookmark.id,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
-                            is_public: bookmark.is_public,
                             is_archived: !(
                               filter_view_options.current_filter ==
                               LibraryFilter.Archived

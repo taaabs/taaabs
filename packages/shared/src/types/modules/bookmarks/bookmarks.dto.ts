@@ -45,35 +45,53 @@ export namespace Bookmarks_Dto {
 
   export namespace Response {
     class Link {
-      public url: string
-      public public_saves: number
-      public site_path?: string
+      public site?: string
+      public saves?: number
+    }
+
+    class AuthorizedLink extends Link {
+      public url?: string
+      public url_aes?: string
+      public site_aes?: string
       public is_public?: boolean
+    }
+    class PublicLink extends Link {
+      public url: string
     }
 
     class Tag {
-      public name: string
       public id: number
+    }
+
+    class AuthorizedTag extends Tag {
       public is_public?: boolean
+      public name_aes?: string
+    }
+    class PublicTag extends Tag {
+      public name: string
     }
 
     class Bookmark {
       public id: number
-      public title: string
-      public links: Link[]
-      public note?: string
       public created_at: string
       public updated_at: string
       public visited_at: string
-      public tags: Tag[]
       public stars?: number
       public is_unread?: boolean
     }
 
     export class AuthorizedBookmark extends Bookmark {
+      public title?: string
+      public title_aes?: string
       public is_public?: boolean
+      public links: AuthorizedLink[]
+      public tags: AuthorizedTag[]
     }
-    export class PublicBookmark extends Bookmark {}
+    export class PublicBookmark extends Bookmark {
+      public title: string
+      public links: PublicLink[]
+      public tags: PublicTag[]
+    }
 
     export class Authorized extends PaginatedResponseDto {
       public bookmarks: AuthorizedBookmark[]

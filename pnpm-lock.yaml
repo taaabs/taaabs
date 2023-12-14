@@ -229,6 +229,9 @@ importers:
       '@taaabs/shared':
         specifier: workspace:*
         version: link:../shared
+      crypto-js:
+        specifier: ^4.1.1
+        version: 4.1.1
       query-string:
         specifier: ^8.1.0
         version: 8.1.0
@@ -236,6 +239,9 @@ importers:
         specifier: ^8.0.7
         version: 8.0.7(@reduxjs/toolkit@1.9.5)(react@18.2.0)(redux@4.2.1)
     devDependencies:
+      '@types/crypto-js':
+        specifier: ^4.1.2
+        version: 4.1.2
       '@types/jest':
         specifier: ^29.4.0
         version: 29.5.1

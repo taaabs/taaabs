@@ -28,11 +28,9 @@
   &__inner {
     background-color: var(--background);
     overflow: hidden;
-    @include to768 {
-      transform: translateY(var(--distance-20px));
-    }
+    border-radius: var(--border-radius-14px);
+    transform: translateY(var(--distance-20px));
     @include at768 {
-      border-radius: var(--border-radius-14px);
       transform: scale(0.98);
     }
     @include to992 {

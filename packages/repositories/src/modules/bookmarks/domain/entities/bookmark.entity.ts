@@ -7,7 +7,7 @@ export type Bookmark_Entity = {
   tags: { name: string; id: number; is_public: boolean }[]
   links: {
     url: string
-    public_saves: number
+    saves?: number
     site_path?: string
     is_public: boolean
   }[]

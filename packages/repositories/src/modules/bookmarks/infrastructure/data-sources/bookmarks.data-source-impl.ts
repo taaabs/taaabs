@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js'
 import { Bookmarks_DataSource } from './bookmarks.data-source'
 import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
@@ -8,7 +9,6 @@ import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookm
 import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by-ids.dto'
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
-import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -102,7 +102,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
 
   public async get_bookmarks_by_ids_public(
     params: GetBookmarksByIds_Params.Public,
-  ): Promise<BookmarksByIds_Dto.Response.Authorized> {
+  ): Promise<BookmarksByIds_Dto.Response.Public> {
     const body: BookmarksByIds_Dto.Body = {
       ids: params.ids,
     }
@@ -144,22 +144,38 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async upsert_bookmark(
     params: UpsertBookmark_Params,
   ): Promise<Bookmarks_Dto.Response.AuthorizedBookmark> {
+    let is_bookmark_public = false
+    for (let i = 0; i < params.links.length; i++) {
+      if (params.links[i].is_public) {
+        is_bookmark_public = true
+        break
+      }
+    }
     const bookmark: CreateBookmark_Dto = {
       created_at: params.created_at?.toISOString(),
-      title: params.title,
-      is_public: params.is_public || undefined,
+      title: is_bookmark_public ? params.title : undefined,
+      title_aes: !is_bookmark_public
+        ? CryptoJS.AES.encrypt(params.title, 'my_secret_key').toString()
+        : undefined,
+      is_public: is_bookmark_public,
       is_archived: params.is_archived || undefined,
       stars: params.stars || undefined,
       is_unread: params.is_unread || undefined,
       tags: params.tags.map((tag) => ({
-        name: tag.name,
+        name: tag.is_public ? tag.name : undefined,
+        name_aes: CryptoJS.AES.encrypt(tag.name, 'my_secret_key').toString(),
         is_public: tag.is_public || undefined,
       })),
-      links: params.links.map((link) => ({
-        url: link.url,
-        site_path: link.site_path,
-        is_public: link.is_public || undefined,
-      })),
+      links: params.links.map((link) => {
+        return {
+          url: link.is_public ? link.url : undefined,
+          url_aes: !link.is_public
+            ? CryptoJS.AES.encrypt(link.url, 'my_secret_key').toString()
+            : undefined,
+          // site: link.site_path,
+          is_public: link.is_public,
+        }
+      }),
     }
 
     if (params.bookmark_id) {

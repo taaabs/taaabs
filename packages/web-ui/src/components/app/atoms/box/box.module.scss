@@ -8,9 +8,9 @@
   gap: var(--distance-14px);
   padding: var(--distance-14px) var(--distance-16px) var(--distance-16px)
     var(--distance-16px);
+  border-radius: var(--border-radius-20px);
   @include at768 {
     gap: var(--distance-18px);
-    border-radius: var(--border-radius-20px);
   }
   @include at992 {
     padding: var(--distance-35px) var(--distance-40px) var(--distance-40px)

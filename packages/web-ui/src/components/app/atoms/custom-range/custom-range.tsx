@@ -16,7 +16,7 @@ type Counts = {
 
 export namespace CustomRange {
   export type Props = {
-    counts: Counts | null
+    counts?: Counts
     current_gte?: number
     current_lte?: number
     on_yyyymm_change: ({ gte, lte }: { gte: number; lte: number }) => void
@@ -30,9 +30,7 @@ export namespace CustomRange {
 
 export const CustomRange: React.FC<CustomRange.Props> = memo(
   function CustomRange(props) {
-    const [counts_to_render, set_counts_to_render] = useState<Counts | null>(
-      null,
-    )
+    const [counts_to_render, set_counts_to_render] = useState<Counts>()
     const [date, set_date] = useState<string | null>(null)
     const custom_range = useRef<HTMLDivElement>(null)
     const { swiping: is_swiping } = useSwipe(custom_range, {
@@ -40,23 +38,15 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       threshold: 0,
     })
     const [key, set_key] = useState('')
-    const [start_index, set_start_index] = useState<number | null>(null)
-    const [end_index, set_end_index] = useState<number | null>(null)
-    const [previous_start_index, set_previous_start_index] = useState<
-      number | null
-    >(null)
-    const [previous_end_index, set_previous_end_index] = useState<
-      number | null
-    >(null)
-    const [dragged_start_index, set_dragged_start_index] = useState<
-      number | null
-    >(null)
-    const [dragged_end_index, set_dragged_end_index] = useState<number | null>(
-      null,
-    )
-    const [bookmark_count, set_bookmark_count] = useState<number | null>(null)
-    const [starred_count, set_starred_count] = useState<number | null>(null)
-    const [unread_count, set_unread_count] = useState<number | null>(null)
+    const [start_index, set_start_index] = useState<number>()
+    const [end_index, set_end_index] = useState<number>()
+    const [previous_start_index, set_previous_start_index] = useState<number>()
+    const [previous_end_index, set_previous_end_index] = useState<number>()
+    const [dragged_start_index, set_dragged_start_index] = useState<number>()
+    const [dragged_end_index, set_dragged_end_index] = useState<number>()
+    const [bookmark_count, set_bookmark_count] = useState<number>()
+    const [starred_count, set_starred_count] = useState<number>()
+    const [unread_count, set_unread_count] = useState<number>()
 
     useUpdateEffect(() => {
       if (props.is_range_selector_disabled) return
@@ -74,13 +64,13 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
           lte: counts_to_render[dragged_end_index].yyyymm,
         })
 
-        set_dragged_start_index(null)
-        set_dragged_end_index(null)
+        set_dragged_start_index(undefined)
+        set_dragged_end_index(undefined)
       }
     }, [is_swiping])
 
     const calculate_counts = (params: {
-      counts: Counts | null
+      counts?: Counts
       start_index?: number
       end_index?: number
     }) => {
@@ -135,7 +125,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     }: {
       counts: Counts
       current_gte: number
-    }): number | null => {
+    }): number | undefined => {
       const start_index =
         counts && current_gte
           ? counts.find((el) => el.yyyymm == current_gte)
@@ -164,9 +154,9 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                             : prev,
                         )
               })
-          : null
+          : undefined
 
-      return start_index != -1 ? start_index : null
+      return start_index != -1 ? start_index : undefined
     }
 
     const possible_end_index = ({
@@ -175,7 +165,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     }: {
       counts: Counts
       current_lte: number
-    }): number | null => {
+    }): number | undefined => {
       const end_index =
         counts && current_lte
           ? counts.find((el) => el.yyyymm == current_lte)
@@ -204,9 +194,9 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                             : prev,
                         )
               })
-          : null
+          : undefined
 
-      return end_index != -1 ? end_index : null
+      return end_index != -1 ? end_index : undefined
     }
 
     const set_start_and_end_index = ({
@@ -262,8 +252,8 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
 
     useEffect(() => {
       if (!props.counts || !props.current_gte || !props.current_lte) {
-        set_start_index(null)
-        set_end_index(null)
+        set_start_index(undefined)
+        set_end_index(undefined)
 
         return
       }

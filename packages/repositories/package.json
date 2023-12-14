@@ -11,10 +11,12 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "@taaabs/shared": "workspace:*",
+    "crypto-js": "^4.1.1",
     "query-string": "^8.1.0",
     "react-redux": "^8.0.7"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.1.2",
     "@types/jest": "^29.4.0",
     "jest": "^29.4.2",
     "jest-fetch-mock": "^3.0.3",

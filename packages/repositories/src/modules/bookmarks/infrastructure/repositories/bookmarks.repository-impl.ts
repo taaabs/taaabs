@@ -9,6 +9,7 @@ import { GetBookmarksByIds_Ro } from '../../domain/types/get-bookmarks-by-ids.ro
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { RecordVisit_Ro } from '../../domain/types/record-visit.ro'
 import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
+import CryptoJS from 'crypto-js'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -25,19 +26,31 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         created_at: bookmark.created_at,
         updated_at: bookmark.updated_at,
         visited_at: bookmark.visited_at,
-        title: bookmark.title,
+        title: bookmark.is_public
+          ? bookmark.title!
+          : CryptoJS.AES.decrypt(bookmark.title_aes!, 'my_secret_key').toString(
+              CryptoJS.enc.Utf8,
+            ),
         is_public: bookmark.is_public || false,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
         tags: bookmark.tags.map((tag) => ({
           id: tag.id,
-          name: tag.name,
+          name: tag.name
+            ? tag.name
+            : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
+                CryptoJS.enc.Utf8,
+              ),
           is_public: tag.is_public || false,
         })),
         links: bookmark.links.map((link) => ({
-          url: link.url,
-          public_saves: link.public_saves,
-          site_path: link.site_path,
+          url: link.is_public
+            ? link.url!
+            : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
+                CryptoJS.enc.Utf8,
+              ),
+          saves: link.saves,
+          // site_path: link.site_path,
           is_public: link.is_public || false,
         })),
       })),
@@ -70,8 +83,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         })),
         links: bookmark.links.map((link) => ({
           url: link.url,
-          public_saves: link.public_saves,
-          site_path: link.site_path,
+          saves: link.saves,
+          // site_path: link.site,
           is_public: true,
         })),
       })),
@@ -93,19 +106,31 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         created_at: bookmark.created_at,
         updated_at: bookmark.updated_at,
         visited_at: bookmark.visited_at,
-        title: bookmark.title,
+        title: bookmark.is_public
+          ? bookmark.title!
+          : CryptoJS.AES.decrypt(bookmark.title_aes!, 'my_secret_key').toString(
+              CryptoJS.enc.Utf8,
+            ),
         is_public: bookmark.is_public || false,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
         tags: bookmark.tags.map((tag) => ({
           id: tag.id,
-          name: tag.name,
+          name: tag.name
+            ? tag.name
+            : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
+                CryptoJS.enc.Utf8,
+              ),
           is_public: tag.is_public || false,
         })),
         links: bookmark.links.map((link) => ({
-          url: link.url,
-          public_saves: link.public_saves,
-          site_path: link.site_path,
+          url: link.is_public
+            ? link.url!
+            : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
+                CryptoJS.enc.Utf8,
+              ),
+          saves: link.saves,
+          // site_path: link.site_path,
           is_public: link.is_public || false,
         })),
       })),
@@ -135,8 +160,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         })),
         links: bookmark.links.map((link) => ({
           url: link.url,
-          public_saves: link.public_saves,
-          site_path: link.site_path,
+          saves: link.saves,
+          // site_path: link.site_path,
           is_public: true,
         })),
       })),
@@ -166,19 +191,31 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       created_at: bookmark.created_at,
       updated_at: bookmark.updated_at,
       visited_at: bookmark.visited_at,
-      title: bookmark.title,
+      title: bookmark.is_public
+        ? bookmark.title!
+        : CryptoJS.AES.decrypt(bookmark.title_aes!, 'my_secret_key').toString(
+            CryptoJS.enc.Utf8,
+          ),
       is_public: bookmark.is_public || false,
       is_unread: bookmark.is_unread || false,
       stars: bookmark.stars || 0,
       tags: bookmark.tags.map((tag) => ({
         id: tag.id,
-        name: tag.name,
+        name: tag.name
+          ? tag.name
+          : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
+              CryptoJS.enc.Utf8,
+            ),
         is_public: tag.is_public || false,
       })),
       links: bookmark.links.map((link) => ({
-        url: link.url,
-        public_saves: link.public_saves,
-        site_path: link.site_path,
+        url: link.is_public
+          ? link.url!
+          : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
+              CryptoJS.enc.Utf8,
+            ),
+        saves: link.saves,
+        // site_path: link.site_path,
         is_public: link.is_public || false,
       })),
     }
