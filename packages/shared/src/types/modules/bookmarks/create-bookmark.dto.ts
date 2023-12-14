@@ -1,6 +1,7 @@
 class Tag {
   public name?: string
   public name_aes: string
+  public hash: string
   public is_public?: boolean
 }
 

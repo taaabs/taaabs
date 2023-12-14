@@ -164,6 +164,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       tags: params.tags.map((tag) => ({
         name: tag.is_public ? tag.name : undefined,
         name_aes: CryptoJS.AES.encrypt(tag.name, 'my_secret_key').toString(),
+        hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
         is_public: tag.is_public || undefined,
       })),
       links: params.links.map((link) => {
