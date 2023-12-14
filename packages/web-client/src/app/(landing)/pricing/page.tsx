@@ -23,9 +23,8 @@ const Page: React.FC = () => {
             price="Literally $0"
             price_info="Free forever"
             bullets={[
-              'Unlimited bookmarks',
-              'Unlimited tags',
-              'Essential view options',
+              'Unlimited bookmarks and tags',
+              'End-to-end encryption',
               'No ads. No trackers. No kidding.',
             ]}
           />
@@ -33,14 +32,13 @@ const Page: React.FC = () => {
         slot_right_side={
           <PricingTier
             name="Premium"
-            description="Take your browsing experience to the next level"
-            price="$3.99"
-            price_info="$39.99 billed annually"
+            description="Get the most out of Taaabs"
+            price="$4.99"
+            price_info="$49.99 billed annually"
             bullets={[
-              'Power-user view options',
-              'Categories and folders',
-              'Notes, highlights and reminders',
-              'Multi-link bookmarks',
+              'All personal library add-ons',
+              'Dark mode',
+              'Claim shorter username',
             ]}
           />
         }
