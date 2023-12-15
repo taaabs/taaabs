@@ -180,7 +180,13 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
               search.query_db({ search_string })
             }
           }}
-          on_click_recent_hint_remove={() => {}}
+          on_click_recent_hint_remove={(i) => {
+            const search_string =
+              search.hints![i].search_string + search.hints![i].completion
+            search.remove_recent_hint({ search_string })
+            search.clear_hints()
+            search.set_is_search_focused(false)
+          }}
           is_focused={search.is_search_focused}
           on_focus={async () => {
             search.set_is_search_focused(true)

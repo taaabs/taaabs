@@ -46,6 +46,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
 
   useEffect(() => {
     set_is_focused_fix(props.is_focused)
+    if (props.is_focused) {
+      input.current?.focus()
+    }
   }, [props.is_focused])
 
   const handle_keyboard = (event: any) => {

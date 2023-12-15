@@ -958,6 +958,26 @@ export const use_search = () => {
     set_hints(undefined)
   }
 
+  const remove_recent_hint = (params: { search_string: string }) => {
+    localStorage.setItem(
+      browser_storage.local_storage.authorized_library.recent_searches,
+      JSON.stringify(
+        JSON.parse(
+          localStorage.getItem(
+            browser_storage.local_storage.authorized_library.recent_searches,
+          ) || '[]',
+        ).filter(
+          (recent_serach_string: string) =>
+            recent_serach_string != params.search_string,
+        ),
+      ),
+    )
+    setTimeout(() => {
+      get_hints()
+      set_is_search_focused(true)
+    }, 100)
+  }
+
   const reset = () => {
     set_result(undefined)
     set_hints(undefined)
@@ -1100,5 +1120,6 @@ export const use_search = () => {
     set_highlights,
     check_is_cache_stale,
     is_caching_data,
+    remove_recent_hint,
   }
 }
