@@ -23,6 +23,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     return {
       bookmarks: bookmarks.map((bookmark) => ({
         id: bookmark.id,
+        is_public: bookmark.title !== undefined,
         created_at: bookmark.created_at,
         updated_at: bookmark.updated_at,
         visited_at: bookmark.visited_at,
@@ -68,11 +69,11 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     return {
       bookmarks: bookmarks.map((bookmark) => ({
         id: bookmark.id,
+        is_public: true,
         created_at: bookmark.created_at,
         updated_at: bookmark.updated_at,
         visited_at: bookmark.visited_at,
         title: bookmark.title,
-        is_public: true,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
         tags: bookmark.tags.map((tag) => ({
@@ -102,6 +103,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     return {
       bookmarks: bookmarks.map((bookmark) => ({
         id: bookmark.id,
+        is_public: bookmark.title !== undefined,
         created_at: bookmark.created_at,
         updated_at: bookmark.updated_at,
         visited_at: bookmark.visited_at,
@@ -186,6 +188,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
 
     return {
       id: bookmark.id,
+      is_public: bookmark.title !== undefined,
       created_at: bookmark.created_at,
       updated_at: bookmark.updated_at,
       visited_at: bookmark.visited_at,

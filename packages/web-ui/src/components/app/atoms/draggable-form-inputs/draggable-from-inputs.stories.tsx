@@ -11,5 +11,6 @@ export const Primary = () => (
       { value: 'ipsum', is_public: false },
     ]}
     on_change={() => {}}
+    button_text="Lorem"
   />
 )

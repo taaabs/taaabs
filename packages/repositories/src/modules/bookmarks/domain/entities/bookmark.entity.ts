@@ -1,5 +1,6 @@
 export type Bookmark_Entity = {
   id: number
+  is_public: boolean
   title: string
   created_at: string
   updated_at: string

@@ -11,17 +11,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  &__handle {
-    padding: 0 var(--distance-8px);
-    transform: translateX(calc(var(--distance-8px) * -1));
-    cursor: grab;
-    > svg {
-      fill: var(--brand-color);
-      height: var(--icon-dimension-16px);
-    }
-  }
   &__input {
     flex: 1;
+    display: flex;
+    &__handle {
+      display: flex;
+      align-items: center;
+      width: var(--distance-24px);
+      cursor: grab;
+      > svg {
+        fill: var(--brand-color);
+        height: var(--icon-dimension-16px);
+      }
+    }
+    &__field {
+      flex: 1;
+    }
   }
   &__actions {
     display: flex;

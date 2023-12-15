@@ -49,28 +49,31 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
           className={styles.sortable}
           animation={system_values.sortablejs_animation_duration}
           handle=".handle"
+          forceFallback={true}
         >
           {items.map((item) => (
             <div key={item.id} className={styles.item}>
-              <div className={cn(styles.item__handle, 'handle')}>
-                <Icon variant="HANDLE" />
-              </div>
               <div className={styles.item__input}>
-                <Input
-                  autofocus={is_autofocus_enabled}
-                  value={item.value}
-                  on_change={(value) => {
-                    set_items(
-                      items.map((el) => {
-                        if (el.id == item.id) {
-                          return { ...el, value: value }
-                        } else {
-                          return el
-                        }
-                      }),
-                    )
-                  }}
-                />
+                <div className={cn(styles.item__input__handle, 'handle')}>
+                  <Icon variant="HANDLE" />
+                </div>
+                <div className={styles.item__input__field}>
+                  <Input
+                    autofocus={is_autofocus_enabled}
+                    value={item.value}
+                    on_change={(value) => {
+                      set_items(
+                        items.map((el) => {
+                          if (el.id == item.id) {
+                            return { ...el, value: value }
+                          } else {
+                            return el
+                          }
+                        }),
+                      )
+                    }}
+                  />
+                </div>
               </div>
               <div className={styles.item__actions}>
                 <button

@@ -19,7 +19,7 @@ const Page: React.FC = () => {
         slot_left_side={
           <PricingTier
             name="Free"
-            description="Organize your bookmark collection right away"
+            description="Organize your bookmarks right away"
             price="Literally $0"
             price_info="Free forever"
             bullets={[
@@ -34,8 +34,12 @@ const Page: React.FC = () => {
             name="Premium"
             description="Get the most out of Taaabs"
             price="$4.99"
-            price_info="$49.99 billed annually"
-            bullets={['All add-ons', 'Dark mode', 'Claim shorter username']}
+            price_info="$44.99 billed annually"
+            bullets={[
+              'All library add-ons',
+              'Claim shorter username',
+              'Official stickers',
+            ]}
           />
         }
       />
