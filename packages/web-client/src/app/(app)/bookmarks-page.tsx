@@ -815,7 +815,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                     ? counts.selected_tags.length
                     : tag_view_options.actual_selected_tags.length
                 }
-                current_filter={filter_view_options.current_filter}
+                query_params={query_params.toString()}
                 tags={
                   bookmark.tags
                     ? bookmark.tags.map((tag) => {

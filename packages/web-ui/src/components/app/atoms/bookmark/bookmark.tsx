@@ -9,7 +9,6 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useToggle from 'beautiful-react-hooks/useToggle'
-import { LibraryFilter } from '@shared/types/common/library-filter'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -45,7 +44,7 @@ export namespace Bookmark {
     on_selected_tag_click: (tagId: number) => void
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
     number_of_selected_tags: number
-    current_filter?: LibraryFilter
+    query_params?: string
     on_click: () => void
     is_unread?: boolean
     stars: number
@@ -425,7 +424,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.is_serach_result == n.is_serach_result &&
     o.updated_at == n.updated_at &&
     o.render_height == n.render_height &&
-    o.current_filter == n.current_filter &&
+    o.query_params == n.query_params &&
     o.number_of_selected_tags == n.number_of_selected_tags &&
     o.orama_db_id == n.orama_db_id,
 )
