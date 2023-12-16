@@ -1,6 +1,5 @@
 import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
 import { Bookmark } from './bookmark'
-import { LibraryFilter } from '@shared/types/common/library-filter'
 
 export default {
   component: Bookmark,
@@ -43,11 +42,14 @@ export const Primary = () => (
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
         is_serach_result={false}
+        should_dim_visited_links={false}
+        updated_at=""
       />
       <StorybookSpacer />
       <Bookmark
         stars={0}
         title="Lorem ipsum"
+        note="Lorem ipsum dolor sit amet"
         is_unread={false}
         tags={[
           { id: 1, name: 'lorem', yields: 8 },
@@ -74,6 +76,8 @@ export const Primary = () => (
           [32, 2],
         ]}
         is_serach_result={true}
+        should_dim_visited_links={false}
+        updated_at=""
       />
       <StorybookSpacer />
       <Bookmark
@@ -95,6 +99,8 @@ export const Primary = () => (
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
         is_serach_result={false}
+        should_dim_visited_links={false}
+        updated_at=""
       />
       <StorybookSpacer />
       <Bookmark
@@ -120,6 +126,8 @@ export const Primary = () => (
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
         is_serach_result={false}
+        should_dim_visited_links={false}
+        updated_at=""
       />
       <StorybookSpacer />
       <Bookmark
@@ -144,6 +152,8 @@ export const Primary = () => (
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
         is_serach_result={false}
+        should_dim_visited_links={false}
+        updated_at=""
       />
       <StorybookSpacer />
       <Bookmark
@@ -175,6 +185,8 @@ export const Primary = () => (
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
         is_serach_result={false}
+        should_dim_visited_links={false}
+        updated_at=""
       />
       <StorybookSpacer />
       <Bookmark
@@ -199,6 +211,8 @@ export const Primary = () => (
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
         is_serach_result={false}
+        should_dim_visited_links={false}
+        updated_at=""
       />
       <StorybookSpacer />
       <Bookmark
@@ -223,6 +237,8 @@ export const Primary = () => (
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
         is_serach_result={false}
+        should_dim_visited_links={false}
+        updated_at=""
       />
       <StorybookSpacer />
       <Bookmark
@@ -247,6 +263,8 @@ export const Primary = () => (
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
         is_serach_result={false}
+        should_dim_visited_links={false}
+        updated_at=""
       />
       <StorybookSpacer />
     </div>

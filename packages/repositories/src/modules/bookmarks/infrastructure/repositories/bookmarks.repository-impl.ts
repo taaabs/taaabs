@@ -32,6 +32,13 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           : CryptoJS.AES.decrypt(bookmark.title_aes!, 'my_secret_key').toString(
               CryptoJS.enc.Utf8,
             ),
+        note: bookmark.note
+          ? bookmark.note
+          : bookmark.note_aes
+          ? CryptoJS.AES.decrypt(bookmark.note_aes, 'my_secret_key').toString(
+              CryptoJS.enc.Utf8,
+            )
+          : undefined,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
         tags: bookmark.tags.map((tag) => ({
@@ -74,6 +81,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         updated_at: bookmark.updated_at,
         visited_at: bookmark.visited_at,
         title: bookmark.title,
+        note: bookmark.note,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
         tags: bookmark.tags.map((tag) => ({
@@ -112,6 +120,13 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           : CryptoJS.AES.decrypt(bookmark.title_aes!, 'my_secret_key').toString(
               CryptoJS.enc.Utf8,
             ),
+        note: bookmark.note
+          ? bookmark.note
+          : bookmark.note_aes
+          ? CryptoJS.AES.decrypt(bookmark.note_aes, 'my_secret_key').toString(
+              CryptoJS.enc.Utf8,
+            )
+          : undefined,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
         tags: bookmark.tags.map((tag) => ({
@@ -150,6 +165,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         updated_at: bookmark.updated_at,
         visited_at: bookmark.visited_at,
         title: bookmark.title,
+        note: bookmark.note,
         is_public: true,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
@@ -197,6 +213,13 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         : CryptoJS.AES.decrypt(bookmark.title_aes!, 'my_secret_key').toString(
             CryptoJS.enc.Utf8,
           ),
+      note: bookmark.note
+        ? bookmark.note
+        : bookmark.note_aes
+        ? CryptoJS.AES.decrypt(bookmark.note_aes, 'my_secret_key').toString(
+            CryptoJS.enc.Utf8,
+          )
+        : undefined,
       is_unread: bookmark.is_unread || false,
       stars: bookmark.stars || 0,
       tags: bookmark.tags.map((tag) => ({

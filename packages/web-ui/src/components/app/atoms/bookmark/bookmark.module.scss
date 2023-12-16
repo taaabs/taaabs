@@ -98,9 +98,12 @@
         }
       }
     }
-    &__title {
+    &__content {
       padding: 0 var(--distance-16px);
-      &__inner {
+      display: flex;
+      flex-direction: column;
+      gap: var(--distance-2px);
+      &__title {
         display: inline;
         color: var(--text-color-normal);
         &__unread {
@@ -141,6 +144,10 @@
             font-weight: var(--font-weight-inter-semi-bold);
           }
         }
+      }
+      &__note {
+        color: var(--text-color-variant);
+        font-size: var(--font-size-1-4rem);
       }
     }
     &__tags {

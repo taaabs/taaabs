@@ -54,9 +54,15 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
                 bookmark.title_aes!,
                 'my_secret_key',
               ).toString(CryptoJS.enc.Utf8),
+          note: bookmark.note
+            ? bookmark.note
+            : bookmark.note_aes
+            ? CryptoJS.AES.decrypt(bookmark.note_aes, 'my_secret_key').toString(
+                CryptoJS.enc.Utf8,
+              )
+            : undefined,
           is_unread: bookmark.is_unread || false,
           is_archived: bookmark.is_archived || false,
-          is_public: bookmark.is_public || false,
           sites: bookmark.sites.map((site) => {
             if (site.site) {
               return site.site
@@ -99,6 +105,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           updated_at: bookmark.updated_at,
           visited_at: 0,
           title: bookmark.title,
+          note: bookmark.note,
           is_unread: false,
           is_archived: bookmark.is_archived || false,
           is_public: false,

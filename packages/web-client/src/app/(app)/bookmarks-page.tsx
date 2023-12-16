@@ -793,6 +793,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 key={bookmark.id}
                 updated_at={bookmark.updated_at}
                 title={bookmark.title}
+                note={bookmark.note}
                 on_click={() => {}}
                 on_menu_click={() => {}}
                 date={
@@ -865,7 +866,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                       visited_at,
                       updated_at: new Date(),
                       title: bookmark.title,
-                      is_public: bookmark.is_public,
+                      note: bookmark.note,
                       is_archived:
                         filter_view_options.current_filter ==
                         LibraryFilter.Archived,
@@ -931,7 +932,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               visited_at: new Date(bookmark.visited_at),
                               updated_at: new Date(),
                               title: bookmark.title,
-                              is_public: bookmark.is_public,
+                              note: bookmark.note,
                               is_archived:
                                 filter_view_options.current_filter ==
                                 LibraryFilter.Archived,
@@ -1012,7 +1013,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               visited_at: new Date(bookmark.visited_at),
                               updated_at: new Date(),
                               title: bookmark.title,
-                              is_public: bookmark.is_public,
+                              note: bookmark.note,
                               is_archived:
                                 filter_view_options.current_filter ==
                                 LibraryFilter.Archived,
@@ -1081,7 +1082,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               visited_at: new Date(bookmark.visited_at),
                               updated_at: new Date(),
                               title: bookmark.title,
-                              is_public: bookmark.is_public,
+                              note: bookmark.note,
                               is_archived:
                                 filter_view_options.current_filter ==
                                 LibraryFilter.Archived,
@@ -1149,7 +1150,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               visited_at: new Date(bookmark.visited_at),
                               updated_at: new Date(),
                               title: bookmark.title,
-                              is_public: bookmark.is_public,
+                              note: bookmark.note,
                               is_archived:
                                 filter_view_options.current_filter ==
                                 LibraryFilter.Archived,
@@ -1210,9 +1211,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                     is_archived:
                                       filter_view_options.current_filter ==
                                       LibraryFilter.Archived,
-                                    is_public: updated_bookmark.is_public,
                                     is_unread: updated_bookmark.is_unread,
                                     title: updated_bookmark.title,
+                                    note: updated_bookmark.note,
                                     tags: updated_bookmark.tags.map(
                                       (tag) => tag.name,
                                     ),
@@ -1290,7 +1291,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               visited_at: new Date(bookmark.visited_at),
                               updated_at: new Date(),
                               title: bookmark.title,
-                              is_public: bookmark.is_public,
+                              note: bookmark.note,
                               is_archived: !(
                                 filter_view_options.current_filter ==
                                 LibraryFilter.Archived
@@ -1352,6 +1353,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   />
                 }
                 highlights={search.highlights?.[bookmark.id.toString()]}
+                highlights_note={
+                  search.highlights_note?.[bookmark.id.toString()]
+                }
                 orama_db_id={search.db?.id}
                 is_serach_result={search.result !== undefined}
                 should_dim_visited_links={props.user == 'public'}

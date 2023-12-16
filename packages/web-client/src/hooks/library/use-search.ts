@@ -47,6 +47,7 @@ type Highlights = {
 const schema = {
   id: 'string',
   title: 'string',
+  note: 'string',
   tag_ids: 'string[]',
   sites: 'string[]',
   sites_variants: 'string[]',
@@ -56,7 +57,6 @@ const schema = {
   visited_at: 'number',
   is_archived: 'boolean',
   is_unread: 'boolean',
-  is_public: 'boolean',
   stars: 'number',
 } as const
 
@@ -84,6 +84,7 @@ export const use_search = () => {
     useState<number | undefined>()
   const [result, set_result] = useState<Results<Result> | undefined>()
   const [highlights, set_highlights] = useState<Highlights>()
+  const [highlights_note, set_highlights_note] = useState<Highlights>()
   const [count, set_count] = useState<number | undefined>()
   const [is_caching_data, set_is_caching_data] = useState(false)
 
@@ -216,11 +217,11 @@ export const use_search = () => {
           unsortableProperties: [
             'id',
             'title',
+            'note',
             'sites',
             'sites_variants',
             'is_archived',
             'is_unread',
-            'is_public',
             'stars',
           ],
         },
@@ -240,11 +241,12 @@ export const use_search = () => {
           db,
           chunk.map((bookmark) => ({
             id: bookmark.id.toString(),
-            title: `${bookmark.title} ${bookmark.tags.join(
-              ' ',
-            )} ${bookmark.sites
-              .map((site) => site.replace('/', ' › '))
-              .join(' ')}`,
+            title:
+              (bookmark.title ? `${bookmark.title} ` : '') +
+              bookmark.tags.join(' ') +
+              (bookmark.tags.length ? ' ' : '') +
+              bookmark.sites.map((site) => site.replace('/', ' › ')).join(' '),
+            note: bookmark.note || '',
             sites: bookmark.sites,
             sites_variants: bookmark.sites
               .map((site) => get_site_variants_for_search(site))
@@ -255,7 +257,6 @@ export const use_search = () => {
             visited_at: bookmark.visited_at,
             is_archived: bookmark.is_archived,
             is_unread: bookmark.is_unread,
-            is_public: bookmark.is_public,
             stars: bookmark.stars,
           })),
           chunkSize,
@@ -311,7 +312,7 @@ export const use_search = () => {
   const get_hits = async (params: {
     search_string: string
   }): Promise<Results<Result>['hits']> => {
-    if (!db) throw new Error('[query_db] Db should be there.')
+    if (!db) throw new Error('[get_hits] DB should be there.')
 
     const tags = query_params.get('t')
     const gte = query_params.get('gte')
@@ -333,7 +334,7 @@ export const use_search = () => {
       {
         limit: system_values.max_library_search_results,
         term,
-        properties: ['title'],
+        properties: ['title', 'note'],
         where: {
           ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
@@ -398,7 +399,7 @@ export const use_search = () => {
       {
         limit: term.length >= 5 ? system_values.max_library_search_results : 0,
         term,
-        properties: ['title'],
+        properties: ['title', 'note'],
         where: {
           ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
@@ -519,6 +520,32 @@ export const use_search = () => {
     set_highlights(
       hits.reduce((a, v) => {
         const positions = Object.values((v as any).positions.title)
+          .flat()
+          .map((highlight: any) => [highlight.start, highlight.length])
+
+        const new_positions: any = []
+
+        for (let i = 0; i < positions.length; i++) {
+          if (
+            positions[i + 1] &&
+            positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
+          ) {
+            new_positions.push([positions[i][0], positions[i][1] + 1])
+          } else {
+            new_positions.push([positions[i][0], positions[i][1]])
+          }
+        }
+
+        return {
+          ...a,
+          [v.id]: new_positions,
+        }
+      }, {}),
+    )
+
+    set_highlights_note(
+      hits.reduce((a, v) => {
+        const positions = Object.values((v as any).positions.note)
           .flat()
           .map((highlight: any) => [highlight.start, highlight.length])
 
@@ -737,7 +764,7 @@ export const use_search = () => {
           const result: Results<Result> = await search(db, {
             limit: 1000,
             term,
-            properties: ['title'],
+            properties: ['title', 'note'],
             where: {
               id: ids_of_hits,
               is_archived:
@@ -809,6 +836,19 @@ export const use_search = () => {
                 words_hashmap[word] = words_hashmap[word] + 1
               } else {
                 words_hashmap = { ...words_hashmap, [word]: 1 }
+              }
+            } else {
+              const word = document.note
+                .toLowerCase()
+                .split(last_word)[1]
+                ?.replace(/[^a-zA-Z ]/g, ' ')
+                .split(' ')[0]
+              if (word) {
+                if (words_hashmap[word]) {
+                  words_hashmap[word] = words_hashmap[word] + 1
+                } else {
+                  words_hashmap = { ...words_hashmap, [word]: 1 }
+                }
               }
             }
           })
@@ -982,6 +1022,7 @@ export const use_search = () => {
     set_result(undefined)
     set_hints(undefined)
     set_highlights(undefined)
+    set_highlights_note(undefined)
     set_search_string('')
   }
 
@@ -1045,8 +1086,8 @@ export const use_search = () => {
       created_at: Date
       visited_at: Date
       updated_at: Date
-      title: string
-      is_public: boolean
+      title?: string
+      note?: string
       is_archived: boolean
       is_unread: boolean
       stars?: number
@@ -1066,9 +1107,13 @@ export const use_search = () => {
     )
     await insert(db, {
       id: params.bookmark.id.toString(),
-      title: `${params.bookmark.title} ${params.bookmark.tags.join(
-        ' ',
-      )} ${sites.join(' ')}`,
+      title:
+        (params.bookmark.title ? `${params.bookmark.title} ` : '') +
+        (params.bookmark.note ? `${params.bookmark.note} ` : '') +
+        params.bookmark.tags.join(' ') +
+        (sites.length ? ' ' : '') +
+        sites.join(' '),
+      note: params.bookmark.note || '',
       created_at: params.bookmark.created_at.getTime() / 1000,
       updated_at: params.bookmark.updated_at.getTime() / 1000,
       visited_at: params.bookmark.visited_at.getTime() / 1000,
@@ -1117,7 +1162,7 @@ export const use_search = () => {
     count,
     set_count,
     highlights,
-    set_highlights,
+    highlights_note,
     check_is_cache_stale,
     is_caching_data,
     remove_recent_hint,

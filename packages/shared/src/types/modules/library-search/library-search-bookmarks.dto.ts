@@ -10,7 +10,7 @@ export namespace LibrarySearchBookmarks_Dto {
     }
     class Bookmark {
       public id: number
-
+      public note?: string
       public created_at: number
       public updated_at: number
       public stars?: number
@@ -20,9 +20,9 @@ export namespace LibrarySearchBookmarks_Dto {
     class AuthorizedBookmark extends Bookmark {
       public title?: string
       public title_aes?: string
+      public note_aes?: string
       public visited_at: number
       public is_unread?: boolean
-      public is_public?: boolean
       public sites: AuthorizedSite[]
       public tags: AuthorizedTag[]
     }

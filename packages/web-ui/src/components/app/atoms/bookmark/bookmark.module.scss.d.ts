@@ -10,12 +10,13 @@ declare const styles: {
   readonly 'bookmark__main__top__menu--toggled': string
   readonly bookmark__main__top__menu__slot: string
   readonly 'bookmark__main__top__menu__slot--hidden': string
-  readonly bookmark__main__title: string
-  readonly bookmark__main__title__inner: string
-  readonly bookmark__main__title__inner__unread: string
-  readonly bookmark__main__title__inner__stars: string
-  readonly bookmark__main__title__inner__text: string
-  readonly 'bookmark__main__title__inner__text--unread': string
+  readonly bookmark__main__content: string
+  readonly bookmark__main__content__title: string
+  readonly bookmark__main__content__title__unread: string
+  readonly bookmark__main__content__title__stars: string
+  readonly bookmark__main__content__title__text: string
+  readonly 'bookmark__main__content__title__text--unread': string
+  readonly bookmark__main__content__note: string
   readonly bookmark__main__tags: string
   readonly bookmark__main__tags__tag: string
   readonly bookmark__main__tags__tag__name: string

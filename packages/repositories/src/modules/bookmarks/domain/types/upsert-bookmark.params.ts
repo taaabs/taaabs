@@ -2,6 +2,7 @@ export type UpsertBookmark_Params = {
   bookmark_id?: number
   created_at?: Date
   title: string
+  note?: string
   is_archived: boolean
   is_unread: boolean
   stars?: number

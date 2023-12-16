@@ -24,4 +24,6 @@ export class CreateBookmark_Dto {
   public is_unread?: boolean
   public tags: Tag[]
   public links: Link[]
+  public note?: string
+  public note_aes?: string
 }

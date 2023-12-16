@@ -158,6 +158,11 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       title_aes: !is_bookmark_public
         ? CryptoJS.AES.encrypt(params.title, 'my_secret_key').toString()
         : undefined,
+      note: is_bookmark_public ? params.note : undefined,
+      note_aes:
+        !is_bookmark_public && params.note
+          ? CryptoJS.AES.encrypt(params.note, 'my_secret_key').toString()
+          : undefined,
       is_public: is_bookmark_public,
       is_archived: params.is_archived || undefined,
       stars: params.stars || undefined,

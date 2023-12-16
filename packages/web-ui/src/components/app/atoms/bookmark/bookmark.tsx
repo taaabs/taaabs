@@ -36,7 +36,7 @@ export namespace Bookmark {
 
   export type Props = {
     updated_at: string
-    title: string
+    title?: string
     note?: string
     date: Date
     should_display_only_month?: boolean
@@ -56,6 +56,7 @@ export namespace Bookmark {
     on_menu_click: () => void
     menu_slot: React.ReactNode
     highlights?: Highlights
+    highlights_note?: Highlights
     orama_db_id?: string
     is_serach_result: boolean
     should_dim_visited_links: boolean
@@ -158,52 +159,76 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     </OutsideClickHandler>
                   </div>
                 </div>
-                <div className={styles.bookmark__main__title}>
-                  <div className={styles.bookmark__main__title__inner}>
+                <div className={styles.bookmark__main__content}>
+                  <div className={styles.bookmark__main__content__title}>
                     {props.is_unread && (
                       <div
-                        className={styles.bookmark__main__title__inner__unread}
+                        className={
+                          styles.bookmark__main__content__title__unread
+                        }
                       />
                     )}
                     {props.stars >= 1 && (
                       <div
-                        className={styles.bookmark__main__title__inner__stars}
+                        className={styles.bookmark__main__content__title__stars}
                       >
                         {[...new Array(props.stars)].map((_, i) => (
                           <Icon variant="STAR_FILLED" key={i} />
                         ))}
                       </div>
                     )}
-                    <div
-                      className={cn(styles.bookmark__main__title__inner__text, {
-                        [styles['bookmark__main__title__inner__text--unread']]:
-                          props.is_unread,
-                      })}
-                    >
-                      {props.highlights
-                        ? props.title.split('').map((char, i) => {
-                            const is_highlighted = props.highlights!.find(
+                    {props.title && (
+                      <div
+                        className={cn(
+                          styles.bookmark__main__content__title__text,
+                          {
+                            [styles[
+                              'bookmark__main__content__title__text--unread'
+                            ]]: props.is_unread,
+                          },
+                        )}
+                      >
+                        {props.highlights
+                          ? props.title.split('').map((char, i) => {
+                              const is_highlighted = props.highlights!.find(
+                                ([index, length]) =>
+                                  i >= index && i < index + length,
+                              )
+
+                              return is_highlighted ? (
+                                <span className={styles.highlight}>{char}</span>
+                              ) : (
+                                char
+                              )
+                            })
+                          : props.title}
+                      </div>
+                    )}
+                  </div>
+                  {props.note && (
+                    <div className={styles.bookmark__main__content__note}>
+                      {props.highlights_note
+                        ? props.note.split('').map((char, i) => {
+                            const is_highlighted = props.highlights_note!.find(
                               ([index, length]) =>
                                 i >= index && i < index + length,
                             )
-
                             return is_highlighted ? (
                               <span className={styles.highlight}>{char}</span>
                             ) : (
                               char
                             )
                           })
-                        : props.title}
+                        : props.note}
                     </div>
-                  </div>
+                  )}
                 </div>
                 <div className={styles.bookmark__main__tags}>
                   {props.tags.length > 0 && (
                     <>
                       {props.tags.map((tag, i) => {
                         const tag_first_char_index_in_search_title = (
-                          props.title +
-                          ' ' +
+                          (props.title ? `${props.title} ` : '') +
                           props.tags
                             .map((tag) => ` ${tag.name}`)
                             .slice(0, i)
@@ -283,10 +308,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               <div className={styles.bookmark__links}>
                 {props.links.map((link, i) => {
                   const link_first_char_index_in_search_title = (
-                    props.title +
-                    ' ' +
+                    (props.title ? `${props.title} ` : '') +
                     props.tags.map((tag) => tag.name).join(' ') +
-                    ' ' +
+                    (props.tags.length ? ' ' : '') +
                     props.links
                       .map(
                         (link) =>

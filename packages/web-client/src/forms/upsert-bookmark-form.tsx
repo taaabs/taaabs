@@ -16,6 +16,7 @@ type FormValues = {
   title: string
   links: string[]
   tags: string[]
+  note: string
 }
 
 export const UpsertBookmarkForm: React.FC<{
@@ -50,9 +51,11 @@ export const UpsertBookmarkForm: React.FC<{
     )
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
+
     const bookmark = await upsert_bookmark_use_case.invoke({
       bookmark_id: props.bookmark?.id,
       title: form_data.title,
+      note: form_data.note || undefined,
       created_at: props.bookmark?.created_at
         ? new Date(props.bookmark.created_at)
         : undefined,
@@ -153,6 +156,26 @@ export const UpsertBookmarkForm: React.FC<{
               )
             }}
             button_text="Add tag"
+          />
+        </Box>
+        <Box>
+          <BoxHeading heading="Note" />
+          <Controller
+            name="note"
+            control={control}
+            defaultValue={props.bookmark?.note}
+            render={({ field }) => {
+              return (
+                <Input
+                  value={field.value}
+                  on_change={(value) => {
+                    if (!isSubmitting) {
+                      field.onChange(value)
+                    }
+                  }}
+                />
+              )
+            }}
           />
         </Box>
       </Form>
