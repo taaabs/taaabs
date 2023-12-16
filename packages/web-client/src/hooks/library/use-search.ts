@@ -246,7 +246,12 @@ export const use_search = () => {
               bookmark.tags.join(' ') +
               (bookmark.tags.length ? ' ' : '') +
               bookmark.sites.map((site) => site.replace('/', ' › ')).join(' '),
-            note: bookmark.note || '',
+            note: bookmark.note
+              ? `${bookmark.note} ` +
+                bookmark.tags.join(' ') +
+                (bookmark.tags.length ? ' ' : '') +
+                bookmark.sites.map((site) => site.replace('/', ' › ')).join(' ')
+              : '',
             sites: bookmark.sites,
             sites_variants: bookmark.sites
               .map((site) => get_site_variants_for_search(site))
@@ -892,7 +897,7 @@ export const use_search = () => {
           const result: Results<Result> = await search(db, {
             limit: 1000,
             term: term ? term : undefined,
-            properties: ['title'],
+            properties: ['title', 'note'],
             where: {
               id: ids_of_hits,
               is_archived:
@@ -1113,7 +1118,12 @@ export const use_search = () => {
         params.bookmark.tags.join(' ') +
         (sites.length ? ' ' : '') +
         sites.join(' '),
-      note: params.bookmark.note || '',
+      note: params.bookmark.note
+        ? `${params.bookmark.note} ` +
+          params.bookmark.tags.join(' ') +
+          (sites.length ? ' ' : '') +
+          sites.join(' ')
+        : '',
       created_at: params.bookmark.created_at.getTime() / 1000,
       updated_at: params.bookmark.updated_at.getTime() / 1000,
       visited_at: params.bookmark.visited_at.getTime() / 1000,

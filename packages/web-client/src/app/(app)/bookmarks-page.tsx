@@ -895,6 +895,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             bookmark_id: bookmark.id,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
+                            note: bookmark.note,
                             is_archived:
                               filter_view_options.current_filter ==
                               LibraryFilter.Archived,
@@ -976,6 +977,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             bookmark_id: bookmark.id,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
+                            note: bookmark.note,
                             is_archived:
                               filter_view_options.current_filter ==
                               LibraryFilter.Archived,
@@ -1045,6 +1047,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             bookmark_id: bookmark.id,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
+                            note: bookmark.note,
                             is_archived:
                               filter_view_options.current_filter ==
                               LibraryFilter.Archived,
@@ -1113,6 +1116,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             bookmark_id: bookmark.id,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
+                            note: bookmark.note,
                             is_archived:
                               filter_view_options.current_filter ==
                               LibraryFilter.Archived,
@@ -1357,7 +1361,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   search.highlights_note?.[bookmark.id.toString()]
                 }
                 orama_db_id={search.db?.id}
-                is_serach_result={search.result !== undefined}
+                is_serach_result={
+                  search.result !== undefined && search.result.count > 0
+                }
                 should_dim_visited_links={props.user == 'public'}
               />
             ))
