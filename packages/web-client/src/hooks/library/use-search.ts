@@ -173,9 +173,6 @@ export const use_search = () => {
         await localforage.removeItem(
           browser_storage.local_forage.authorized_library.search.index,
         )
-        await localforage.removeItem(
-          browser_storage.local_forage.authorized_library.search.highlights,
-        )
         return true
       }
     }
@@ -193,14 +190,31 @@ export const use_search = () => {
     const cached_index = await localforage.getItem<string>(
       browser_storage.local_forage.authorized_library.search.index,
     )
-    const cached_highlights = await localforage.getItem<string>(
-      browser_storage.local_forage.authorized_library.search.highlights,
-    )
 
-    if (cached_bookmarks && cached_index && cached_highlights) {
+    if (cached_bookmarks && cached_index) {
+      db = await create({
+        schema,
+        sort: {
+          unsortableProperties: [
+            'id',
+            'title',
+            'note',
+            'sites',
+            'sites_variants',
+            'is_archived',
+            'is_unread',
+            'stars',
+          ],
+        },
+        plugins: [
+          {
+            name: 'highlight',
+            afterInsert: highlightAfterInsert,
+          },
+        ],
+      })
       set_bookmarks_just_tags(JSON.parse(cached_bookmarks))
-      db = await restore('json', cached_index)
-      await loadWithHighlight(db, JSON.parse(cached_highlights as any))
+      await loadWithHighlight(db, JSON.parse(cached_index as any))
     } else {
       const data_source = new LibrarySearch_DataSourceImpl(
         process.env.NEXT_PUBLIC_API_URL,
@@ -292,16 +306,11 @@ export const use_search = () => {
     db: Orama<typeof schema>
     bookmarks_just_tags: BookmarkTags[]
   }) => {
-    const db_stringified = await persist(params.db, 'json')
-    const highlights = await saveWithHighlight(params.db)
+    const index = await saveWithHighlight(params.db)
 
     await localforage.setItem(
       browser_storage.local_forage.authorized_library.search.index,
-      db_stringified,
-    )
-    await localforage.setItem(
-      browser_storage.local_forage.authorized_library.search.highlights,
-      JSON.stringify(highlights),
+      JSON.stringify(index),
     )
     await localforage.setItem(
       browser_storage.local_forage.authorized_library.search.bookmarks,
@@ -510,17 +519,22 @@ export const use_search = () => {
     )
   }
 
-  const query_db = async (params: { search_string: string }) => {
+  const query_db = async (params: {
+    search_string: string
+    set_highlights_only?: boolean
+  }) => {
     const hits = await get_hits({ search_string: params.search_string })
 
-    set_result({
-      count:
-        hits.length == system_values.max_library_search_results
-          ? system_values.max_library_search_results
-          : hits.length,
-      elapsed: { formatted: '', raw: 0 },
-      hits,
-    })
+    if (!params.set_highlights_only) {
+      set_result({
+        count:
+          hits.length == system_values.max_library_search_results
+            ? system_values.max_library_search_results
+            : hits.length,
+        elapsed: { formatted: '', raw: 0 },
+        hits,
+      })
+    }
 
     set_highlights(
       hits.reduce((a, v) => {
@@ -1114,7 +1128,6 @@ export const use_search = () => {
       id: params.bookmark.id.toString(),
       title:
         (params.bookmark.title ? `${params.bookmark.title} ` : '') +
-        (params.bookmark.note ? `${params.bookmark.note} ` : '') +
         params.bookmark.tags.join(' ') +
         (sites.length ? ' ' : '') +
         sites.join(' '),
@@ -1147,6 +1160,8 @@ export const use_search = () => {
     set_bookmarks_just_tags(new_all_bookmarks)
     set_is_caching_data(true)
     idle_timer.start()
+    if (result && result.count > 0)
+      query_db({ search_string, set_highlights_only: true })
   }
 
   return {

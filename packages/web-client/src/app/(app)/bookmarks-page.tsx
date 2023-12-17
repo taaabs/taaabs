@@ -1209,7 +1209,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                   }),
                                 )
 
-                                search.update_searchable_bookmark({
+                                await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
                                     is_archived:
@@ -1232,7 +1232,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                     ),
                                     visited_at: new Date(bookmark.visited_at),
                                     updated_at: new Date(bookmark.updated_at),
-
                                     stars: updated_bookmark.stars,
                                   },
                                   tag_ids: updated_bookmark.tags.map(

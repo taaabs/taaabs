@@ -24,7 +24,7 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
   props,
 ) => {
   const [is_autofocus_enabled, set_is_autofocus_enabled] = useState(false)
-  const [last_id, set_last_id] = useState(0)
+  const [count, set_count] = useState(props.items.length)
   const [items, set_items] = useState<
     { id: number; value: string; is_public: boolean }[]
   >(
@@ -36,7 +36,6 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
   )
 
   useUpdateEffect(() => {
-    set_last_id(items.length > 0 ? items[items.length - 1].id : 0)
     props.on_change(items)
   }, [items])
 
@@ -113,10 +112,8 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
       <Button
         on_click={() => {
           if (!is_autofocus_enabled) set_is_autofocus_enabled(true)
-          set_items([
-            ...items,
-            { id: last_id + 1, is_public: false, value: '' },
-          ])
+          set_items([...items, { id: count + 1, is_public: false, value: '' }])
+          set_count(items.length + 1)
         }}
       >
         {props.button_text}
