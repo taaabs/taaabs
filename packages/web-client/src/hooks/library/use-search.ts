@@ -28,7 +28,6 @@ import {
 import { system_values } from '@shared/constants/system-values'
 import localforage from 'localforage'
 import { browser_storage } from '@/constants/browser-storage'
-import { persist, restore } from '@orama/plugin-data-persistence'
 import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-authorized-user.use-case'
 import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-public-user.use-case'
 import { useIdleTimer } from 'react-idle-timer'
@@ -182,7 +181,27 @@ export const use_search = () => {
   const init = async () => {
     set_is_initializing(true)
 
-    let db: Orama<typeof schema>
+    const db = await create({
+      schema,
+      sort: {
+        unsortableProperties: [
+          'id',
+          'title',
+          'note',
+          'sites',
+          'sites_variants',
+          'is_archived',
+          'is_unread',
+          'stars',
+        ],
+      },
+      plugins: [
+        {
+          name: 'highlight',
+          afterInsert: highlightAfterInsert,
+        },
+      ],
+    })
 
     const cached_bookmarks = await localforage.getItem<string>(
       browser_storage.local_forage.authorized_library.search.bookmarks,
@@ -192,27 +211,6 @@ export const use_search = () => {
     )
 
     if (cached_bookmarks && cached_index) {
-      db = await create({
-        schema,
-        sort: {
-          unsortableProperties: [
-            'id',
-            'title',
-            'note',
-            'sites',
-            'sites_variants',
-            'is_archived',
-            'is_unread',
-            'stars',
-          ],
-        },
-        plugins: [
-          {
-            name: 'highlight',
-            afterInsert: highlightAfterInsert,
-          },
-        ],
-      })
       set_bookmarks_just_tags(JSON.parse(cached_bookmarks))
       await loadWithHighlight(db, JSON.parse(cached_index as any))
     } else {
@@ -224,28 +222,6 @@ export const use_search = () => {
       const get_searchable_bookmarks =
         new GetSearchableBookmarksOnAuthorizedUser_UseCase(repository)
       const { bookmarks } = await get_searchable_bookmarks.invoke({})
-
-      db = await create({
-        schema,
-        sort: {
-          unsortableProperties: [
-            'id',
-            'title',
-            'note',
-            'sites',
-            'sites_variants',
-            'is_archived',
-            'is_unread',
-            'stars',
-          ],
-        },
-        plugins: [
-          {
-            name: 'highlight',
-            afterInsert: highlightAfterInsert,
-          },
-        ],
-      })
 
       const chunkSize = 1000
       let indexed_count = 0

@@ -10,7 +10,7 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
 
   public async get_counts_on_authorized_user(
     params: Counts_Params.Authorized,
-  ): Promise<Counts_Dto.Response> {
+  ): Promise<Counts_Dto.Response.Authorized> {
     const queryParams: Counts_Dto.QueryParams.Authorized = {
       filter: params.filter,
       category_id: params.category_id,
@@ -32,7 +32,7 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
 
   public async get_counts_on_public_user(
     params: Counts_Params.Public,
-  ): Promise<Counts_Dto.Response> {
+  ): Promise<Counts_Dto.Response.Public> {
     const queryParams: Counts_Dto.QueryParams.Public = {
       filter: params.filter,
       category_id: params.category_id,
