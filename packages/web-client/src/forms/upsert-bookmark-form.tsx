@@ -17,6 +17,7 @@ type FormValues = {
   links: string[]
   tags: string[]
   note: string
+  is_public?: boolean
 }
 
 export const UpsertBookmarkForm: React.FC<{
@@ -54,6 +55,10 @@ export const UpsertBookmarkForm: React.FC<{
 
     const bookmark = await upsert_bookmark_use_case.invoke({
       bookmark_id: props.bookmark?.id,
+      is_public:
+        (form_data.is_public === undefined && props.bookmark?.is_public) ||
+        form_data.is_public ||
+        false,
       title: form_data.title,
       note: form_data.note || undefined,
       created_at: props.bookmark?.created_at
@@ -64,9 +69,12 @@ export const UpsertBookmarkForm: React.FC<{
       is_unread: props.bookmark?.is_unread || false,
       links: links.map((link) => ({
         url: link.url,
-        is_public: link.is_public,
+        is_public: form_data.is_public ? link.is_public : false,
       })),
-      tags: tags.map((tag) => ({ name: tag.name, is_public: tag.is_public })),
+      tags: tags.map((tag) => ({
+        name: tag.name,
+        is_public: form_data.is_public ? tag.is_public : false,
+      })),
     })
     if (props.bookmark) {
       props.on_submit(bookmark)
@@ -93,21 +101,57 @@ export const UpsertBookmarkForm: React.FC<{
         }
       >
         <Box>
-          <BoxHeading heading="Links" />
-          <DraggableFormInputs
-            items={links.map((el) => ({
-              value: el.url,
-              is_public: el.is_public,
-            }))}
-            on_change={(links) => {
-              set_links(
-                links.map((el) => ({
-                  url: el.value,
-                  is_public: el.is_public,
-                })),
+          <BoxHeading heading="Visibility" />
+          <Controller
+            name="is_public"
+            control={control}
+            defaultValue={props.bookmark?.is_public}
+            render={({ field }) => {
+              return (
+                <input
+                  type="checkbox"
+                  checked={field.value}
+                  onChange={(is_checked) => {
+                    field.onChange(is_checked)
+                  }}
+                />
               )
             }}
-            button_text="Add link"
+          />
+        </Box>
+        <Box>
+          <BoxHeading heading="Links" />
+          <Controller
+            name="is_public"
+            control={control}
+            defaultValue={props.bookmark?.is_public}
+            render={({ field }) => {
+              return (
+                <DraggableFormInputs
+                  items={links.map((link) => ({
+                    value: link.url,
+                    is_public:
+                      props.bookmark?.is_public == false
+                        ? true
+                        : link.is_public,
+                  }))}
+                  on_change={(links) => {
+                    set_links(
+                      links.map((el) => ({
+                        url: el.value,
+                        is_public: el.is_public,
+                      })),
+                    )
+                  }}
+                  button_text="Add link"
+                  show_visibility_toggler={
+                    (field.value === undefined && props.bookmark?.is_public) ||
+                    field.value ||
+                    false
+                  }
+                />
+              )
+            }}
           />
         </Box>
         <Box>
@@ -142,20 +186,35 @@ export const UpsertBookmarkForm: React.FC<{
         </Box>
         <Box>
           <BoxHeading heading="Tags" />
-          <DraggableFormInputs
-            items={tags.map((tag) => ({
-              value: tag.name,
-              is_public: tag.is_public,
-            }))}
-            on_change={(tags) => {
-              set_tags(
-                tags.map((el) => ({
-                  name: el.value,
-                  is_public: el.is_public,
-                })),
+          <Controller
+            name="is_public"
+            control={control}
+            defaultValue={props.bookmark?.is_public}
+            render={({ field }) => {
+              return (
+                <DraggableFormInputs
+                  items={tags.map((tag) => ({
+                    value: tag.name,
+                    is_public:
+                      props.bookmark?.is_public == false ? true : tag.is_public,
+                  }))}
+                  on_change={(tags) => {
+                    set_tags(
+                      tags.map((el) => ({
+                        name: el.value,
+                        is_public: el.is_public,
+                      })),
+                    )
+                  }}
+                  button_text="Add tag"
+                  show_visibility_toggler={
+                    (field.value === undefined && props.bookmark?.is_public) ||
+                    field.value ||
+                    false
+                  }
+                />
               )
             }}
-            button_text="Add tag"
           />
         </Box>
         <Box>

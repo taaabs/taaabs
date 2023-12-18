@@ -23,9 +23,9 @@ const Page: React.FC = () => {
             price="Literally $0"
             price_info="Free forever"
             bullets={[
-              'Unlimited bookmarks and tags',
+              'Unlimited bookmarks',
+              'Unlimited tags',
               'End-to-end encryption',
-              'Zero ads',
             ]}
           />
         }

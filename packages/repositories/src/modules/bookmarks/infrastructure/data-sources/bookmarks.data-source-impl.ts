@@ -145,33 +145,29 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async upsert_bookmark(
     params: UpsertBookmark_Params,
   ): Promise<Bookmarks_Dto.Response.AuthorizedBookmark> {
-    let is_bookmark_public = false
-    for (let i = 0; i < params.links.length; i++) {
-      if (params.links[i].is_public) {
-        is_bookmark_public = true
-        break
-      }
-    }
     const bookmark: CreateBookmark_Dto = {
       created_at: params.created_at?.toISOString(),
-      title: is_bookmark_public ? params.title : undefined,
-      title_aes: !is_bookmark_public
-        ? CryptoJS.AES.encrypt(params.title, 'my_secret_key').toString()
-        : undefined,
-      note: is_bookmark_public ? params.note : undefined,
+      title: params.is_public ? params.title : undefined,
+      title_aes:
+        !params.is_public && params.title
+          ? CryptoJS.AES.encrypt(params.title, 'my_secret_key').toString()
+          : undefined,
+      note: params.is_public ? params.note : undefined,
       note_aes:
-        !is_bookmark_public && params.note
+        !params.is_public && params.note
           ? CryptoJS.AES.encrypt(params.note, 'my_secret_key').toString()
           : undefined,
-      is_public: is_bookmark_public,
+      is_public: params.is_public,
       is_archived: params.is_archived || undefined,
       stars: params.stars || undefined,
       is_unread: params.is_unread || undefined,
       tags: params.tags.map((tag) => ({
         name: tag.is_public ? tag.name : undefined,
-        name_aes: CryptoJS.AES.encrypt(tag.name, 'my_secret_key').toString(),
+        name_aes: !tag.is_public
+          ? CryptoJS.AES.encrypt(tag.name, 'my_secret_key').toString()
+          : undefined,
         hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
-        is_public: tag.is_public || undefined,
+        is_public: tag.is_public,
       })),
       links: params.links.map((link) => {
         return {

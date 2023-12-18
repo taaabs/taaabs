@@ -17,6 +17,7 @@ namespace DraggableFormInputs {
     items: Item[]
     on_change: (items: Item[]) => void
     button_text: string
+    show_visibility_toggler: boolean
   }
 }
 
@@ -75,28 +76,33 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
                 </div>
               </div>
               <div className={styles.item__actions}>
+                {props.show_visibility_toggler && (
+                  <button
+                    className={cn(styles.item__actions__button, {
+                      [styles['item__actions__button--disabled']]:
+                        !item.is_public,
+                    })}
+                    onClick={() => {
+                      set_items(
+                        items.map((el) => {
+                          if (el.id == item.id) {
+                            return { ...el, is_public: !el.is_public }
+                          } else {
+                            return el
+                          }
+                        }),
+                      )
+                    }}
+                    type="button"
+                  >
+                    <Icon variant="GLOBE" />
+                  </button>
+                )}
                 <button
-                  className={cn(styles.item__actions__button, {
-                    [styles['item__actions__button--disabled']]:
-                      !item.is_public,
-                  })}
-                  onClick={() => {
-                    set_items(
-                      items.map((el) => {
-                        if (el.id == item.id) {
-                          return { ...el, is_public: !el.is_public }
-                        } else {
-                          return el
-                        }
-                      }),
-                    )
-                  }}
-                  type="button"
-                >
-                  <Icon variant="GLOBE" />
-                </button>
-                <button
-                  className={styles.item__actions__button}
+                  className={cn(
+                    styles.item__actions__button,
+                    styles['item__actions__button--remove'],
+                  )}
                   onClick={() => {
                     set_items(items.filter((el) => el.id != item.id))
                   }}
@@ -112,7 +118,7 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
       <Button
         on_click={() => {
           if (!is_autofocus_enabled) set_is_autofocus_enabled(true)
-          set_items([...items, { id: count + 1, is_public: false, value: '' }])
+          set_items([...items, { id: count + 1, is_public: true, value: '' }])
           set_count(items.length + 1)
         }}
       >

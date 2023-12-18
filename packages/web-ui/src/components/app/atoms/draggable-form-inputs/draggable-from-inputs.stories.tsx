@@ -12,5 +12,6 @@ export const Primary = () => (
     ]}
     on_change={() => {}}
     button_text="Lorem"
+    show_visibility_toggler={true}
   />
 )

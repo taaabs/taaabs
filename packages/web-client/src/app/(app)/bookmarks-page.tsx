@@ -893,6 +893,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                           const is_unread = !bookmark.is_unread
                           const updated_bookmark: UpsertBookmark_Params = {
                             bookmark_id: bookmark.id,
+                            is_public: bookmark.is_public,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
                             note: bookmark.note,
@@ -975,6 +976,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                         on_click: () => {
                           const updated_bookmark: UpsertBookmark_Params = {
                             bookmark_id: bookmark.id,
+                            is_public: bookmark.is_public,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
                             note: bookmark.note,
@@ -1045,6 +1047,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                         on_click: () => {
                           const updated_bookmark: UpsertBookmark_Params = {
                             bookmark_id: bookmark.id,
+                            is_public: bookmark.is_public,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
                             note: bookmark.note,
@@ -1114,6 +1117,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                         on_click: () => {
                           const updated_bookmark: UpsertBookmark_Params = {
                             bookmark_id: bookmark.id,
+                            is_public: bookmark.is_public,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
                             note: bookmark.note,
@@ -1254,6 +1258,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                         on_click: () => {
                           const updated_bookmark: UpsertBookmark_Params = {
                             bookmark_id: bookmark.id,
+                            is_public: bookmark.is_public,
                             created_at: new Date(bookmark.created_at),
                             title: bookmark.title,
                             is_archived: !(

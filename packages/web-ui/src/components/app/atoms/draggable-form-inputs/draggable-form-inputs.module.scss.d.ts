@@ -6,6 +6,7 @@ declare const styles: {
   readonly item__input__field: string
   readonly item__actions: string
   readonly item__actions__button: string
+  readonly 'item__actions__button--remove': string
   readonly 'item__actions__button--disabled': string
 }
 export = styles

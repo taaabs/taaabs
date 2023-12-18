@@ -1,7 +1,8 @@
 export type UpsertBookmark_Params = {
   bookmark_id?: number
+  is_public: boolean
   created_at?: Date
-  title: string
+  title?: string
   note?: string
   is_archived: boolean
   is_unread: boolean

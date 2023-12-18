@@ -48,10 +48,8 @@
         fill: var(--brand-color);
         @include transition-100ms(fill);
       }
-      &:nth-child(2) {
-        > svg {
-          transform: rotate(45deg);
-        }
+      &--remove > svg {
+        transform: rotate(45deg);
       }
       &--disabled > svg {
         fill: var(--blue300);
