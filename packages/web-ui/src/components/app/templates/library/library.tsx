@@ -1,4 +1,5 @@
 import { sharedValues } from '@web-ui/constants'
+import useWindowResize from 'beautiful-react-hooks/useWindowResize'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
@@ -36,7 +37,17 @@ export namespace Library {
 
 const SLIDABLE_WIDTH = 300
 
+const get_slidable_width = () => {
+  if (window.innerWidth < 370) {
+    return window.innerWidth * 0.82
+  } else {
+    return SLIDABLE_WIDTH
+  }
+}
+
 export const Library: React.FC<Library.Props> = (props) => {
+  const [slidable_width, set_slidable_width] = useState(get_slidable_width())
+  const on_window_resize = useWindowResize()
   const sidebar = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLDivElement>(null)
@@ -48,6 +59,10 @@ export const Library: React.FC<Library.Props> = (props) => {
   const [initial_swipe_direction, set_initial_swipe_direction] = useState<
     'Left' | 'Right' | undefined
   >(undefined)
+
+  on_window_resize(() => {
+    set_slidable_width(get_slidable_width())
+  })
 
   const swipe_state_main = useSwipe(main, {
     preventDefault: false,
@@ -74,12 +89,12 @@ export const Library: React.FC<Library.Props> = (props) => {
         (initial_swipe_direction == 'Left' &&
           dir == 'Left' &&
           deltaX < 0 &&
-          deltaX >= -SLIDABLE_WIDTH &&
+          deltaX >= -slidable_width &&
           !is_right_side_open) ||
         (initial_swipe_direction == 'Right' &&
           dir == 'Right' &&
           deltaX > 0 &&
-          deltaX <= SLIDABLE_WIDTH &&
+          deltaX <= slidable_width &&
           !is_left_side_open)
       ) {
         set_drag_distance(deltaX)
@@ -191,15 +206,15 @@ export const Library: React.FC<Library.Props> = (props) => {
   let translate_x = 0
 
   if (is_left_side_open && !drag_distance) {
-    translate_x = SLIDABLE_WIDTH
+    translate_x = slidable_width
   } else if (is_right_side_open && !drag_distance) {
-    translate_x = -SLIDABLE_WIDTH
+    translate_x = -slidable_width
   } else if (!is_left_side_open && !is_right_side_open && drag_distance) {
     translate_x = drag_distance
   } else if (is_left_side_open && drag_distance) {
-    translate_x = SLIDABLE_WIDTH + drag_distance
+    translate_x = slidable_width + drag_distance
   } else if (is_right_side_open && drag_distance) {
-    translate_x = -SLIDABLE_WIDTH + drag_distance
+    translate_x = -slidable_width + drag_distance
   }
 
   return (
@@ -233,7 +248,7 @@ export const Library: React.FC<Library.Props> = (props) => {
           })}
           ref={sidebar}
           style={{
-            width: `${SLIDABLE_WIDTH}px`,
+            width: `${slidable_width}px`,
             zIndex: !is_right_side_open ? undefined : 1,
             pointerEvents: is_right_side_open ? 'none' : undefined,
           }}
@@ -241,7 +256,7 @@ export const Library: React.FC<Library.Props> = (props) => {
           <div
             className={styles.sidebar__inner}
             style={{
-              width: `${SLIDABLE_WIDTH}px`,
+              width: `${slidable_width}px`,
             }}
           >
             {props.slot_sidebar}
@@ -336,7 +351,7 @@ export const Library: React.FC<Library.Props> = (props) => {
           className={styles.aside}
           ref={aside}
           style={{
-            width: `${SLIDABLE_WIDTH}px`,
+            width: `${slidable_width}px`,
           }}
         >
           <div className={styles.aside__inner}>
