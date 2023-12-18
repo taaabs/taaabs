@@ -161,31 +161,35 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       is_archived: params.is_archived || undefined,
       stars: params.stars || undefined,
       is_unread: params.is_unread || undefined,
-      tags: params.tags.map((tag) => ({
-        name: tag.is_public ? tag.name : undefined,
-        name_aes: !tag.is_public
-          ? CryptoJS.AES.encrypt(tag.name, 'my_secret_key').toString()
-          : undefined,
-        hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
-        is_public: tag.is_public,
-      })),
-      links: params.links.map((link) => {
-        return {
-          url: link.is_public ? link.url : undefined,
-          url_aes: !link.is_public
-            ? CryptoJS.AES.encrypt(link.url, 'my_secret_key').toString()
+      tags: params.tags
+        .filter((tag) => tag.name != '')
+        .map((tag) => ({
+          name: tag.is_public ? tag.name : undefined,
+          name_aes: !tag.is_public
+            ? CryptoJS.AES.encrypt(tag.name, 'my_secret_key').toString()
             : undefined,
-          site_aes: !link.is_public
-            ? CryptoJS.AES.encrypt(
-                get_domain_from_url(link.url),
-                'my_secret_key',
-              ).toString()
-            : undefined,
-          hash: CryptoJS.SHA256(link.url + 'my_secret_key').toString(),
-          site: link.site_path,
-          is_public: link.is_public,
-        }
-      }),
+          hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
+          is_public: tag.is_public,
+        })),
+      links: params.links
+        .filter((link) => link.url != '')
+        .map((link) => {
+          return {
+            url: link.is_public ? link.url : undefined,
+            url_aes: !link.is_public
+              ? CryptoJS.AES.encrypt(link.url, 'my_secret_key').toString()
+              : undefined,
+            site_aes: !link.is_public
+              ? CryptoJS.AES.encrypt(
+                  get_domain_from_url(link.url),
+                  'my_secret_key',
+                ).toString()
+              : undefined,
+            hash: CryptoJS.SHA256(link.url + 'my_secret_key').toString(),
+            site: link.site_path,
+            is_public: link.is_public,
+          }
+        }),
     }
 
     if (params.bookmark_id) {

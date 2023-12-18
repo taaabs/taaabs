@@ -30,7 +30,7 @@ export const UpsertBookmarkForm: React.FC<{
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitted },
+    formState: { errors, isSubmitting },
   } = useForm<FormValues>({ mode: 'all' })
   const [links, set_links] = useState<{ url: string; is_public: boolean }[]>(
     props.bookmark?.links.map((link) => ({
@@ -53,32 +53,34 @@ export const UpsertBookmarkForm: React.FC<{
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
 
-    const bookmark = await upsert_bookmark_use_case.invoke({
-      bookmark_id: props.bookmark?.id,
-      is_public:
-        (form_data.is_public === undefined && props.bookmark?.is_public) ||
-        form_data.is_public ||
-        false,
-      title: form_data.title,
-      note: form_data.note || undefined,
-      created_at: props.bookmark?.created_at
-        ? new Date(props.bookmark.created_at)
-        : undefined,
-      stars: props.bookmark?.stars,
-      is_archived: props.is_archived || false,
-      is_unread: props.bookmark?.is_unread || false,
-      links: links.map((link) => ({
-        url: link.url,
-        is_public: form_data.is_public ? link.is_public : false,
-      })),
-      tags: tags.map((tag) => ({
-        name: tag.name,
-        is_public: form_data.is_public ? tag.is_public : false,
-      })),
-    })
-    if (props.bookmark) {
-      props.on_submit(bookmark)
-    }
+    try {
+      const bookmark = await upsert_bookmark_use_case.invoke({
+        bookmark_id: props.bookmark?.id,
+        is_public:
+          (form_data.is_public === undefined && props.bookmark?.is_public) ||
+          form_data.is_public ||
+          false,
+        title: form_data.title,
+        note: form_data.note || undefined,
+        created_at: props.bookmark?.created_at
+          ? new Date(props.bookmark.created_at)
+          : undefined,
+        stars: props.bookmark?.stars,
+        is_archived: props.is_archived || false,
+        is_unread: props.bookmark?.is_unread || false,
+        links: links.map((link) => ({
+          url: link.url,
+          is_public: form_data.is_public ? link.is_public : false,
+        })),
+        tags: tags.map((tag) => ({
+          name: tag.name,
+          is_public: form_data.is_public ? tag.is_public : false,
+        })),
+      })
+      if (props.bookmark) {
+        props.on_submit(bookmark)
+      }
+    } catch {}
   }
 
   return (
@@ -96,7 +98,7 @@ export const UpsertBookmarkForm: React.FC<{
           <ModalFooter
             on_click_cancel={props.on_close}
             button_label="Save"
-            is_disabled={isSubmitting || isSubmitted}
+            is_disabled={isSubmitting}
           />
         }
       >
