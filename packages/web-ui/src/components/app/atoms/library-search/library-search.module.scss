@@ -92,6 +92,10 @@
     height: 100%;
     cursor: text;
     overflow: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     &__keycap {
       border: 1px solid var(--blue200);
       background: var(--blue100);
