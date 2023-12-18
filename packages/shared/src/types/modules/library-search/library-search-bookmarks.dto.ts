@@ -5,8 +5,8 @@ export namespace LibrarySearchBookmarks_Dto {
       public site_aes?: string
     }
     class AuthorizedTag {
-      public tag?: string
-      public tag_aes?: string
+      public name?: string
+      public name_aes?: string
     }
     class Bookmark {
       public id: number

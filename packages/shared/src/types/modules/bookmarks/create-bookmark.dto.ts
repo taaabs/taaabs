@@ -1,6 +1,6 @@
 class Tag {
   public name?: string
-  public name_aes: string
+  public name_aes?: string
   public hash: string
   public is_public?: boolean
 }
@@ -11,7 +11,7 @@ class Link {
   public url_aes?: string
   public site_aes?: string
   public hash: string
-  public is_public: boolean
+  public is_public?: boolean
 }
 
 export class CreateBookmark_Dto {

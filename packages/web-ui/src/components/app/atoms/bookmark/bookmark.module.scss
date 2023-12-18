@@ -255,6 +255,9 @@
             word-wrap: break-word;
             display: -webkit-box;
             -webkit-box-orient: vertical;
+            @include to768 {
+              font-family: var(--font-family-inter-tight);
+            }
             @include at1200 {
               -webkit-line-clamp: 1;
             }

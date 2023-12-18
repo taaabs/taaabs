@@ -74,11 +74,11 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
             }
           }),
           tags: bookmark.tags.map((tag) => {
-            if (tag.tag) {
-              return tag.tag
+            if (tag.name) {
+              return tag.name
             } else {
               return CryptoJS.AES.decrypt(
-                tag.tag_aes!,
+                tag.name_aes!,
                 'my_secret_key',
               ).toString(CryptoJS.enc.Utf8)
             }

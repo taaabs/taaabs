@@ -25,7 +25,7 @@ const Page: React.FC = () => {
             bullets={[
               'Unlimited bookmarks and tags',
               'End-to-end encryption',
-              'No ads. No trackers. No kidding.',
+              'Zero ads',
             ]}
           />
         }
@@ -38,7 +38,7 @@ const Page: React.FC = () => {
             bullets={[
               'All library add-ons',
               'Claim shorter username',
-              'Official stickers',
+              '"Supporter" badge on your profile',
             ]}
           />
         }
