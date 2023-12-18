@@ -30,7 +30,7 @@
     overflow: hidden;
     border-radius: var(--border-radius-14px);
     transform: translateY(var(--distance-20px));
-    box-shadow: var(--box-shadow);
+    box-shadow: var(--box-shadow-long);
     @include at768 {
       transform: scale(0.98);
     }
