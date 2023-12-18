@@ -32,9 +32,9 @@ describe('Bookmarks_DataSourceImpl', () => {
   describe('[record_visit]', () => {
     it('calls fetch correctly', () => {
       const sut = new Bookmarks_DataSourceImpl('http://example.com', 'token')
-      sut.record_visit({ bookmark_id: 'test' })
+      sut.record_visit({ bookmark_id: 1 })
       expect(fetch).toHaveBeenCalledWith(
-        `http://example.com/v1/bookmarks/test/record-visit`,
+        `http://example.com/v1/bookmarks/1/record-visit`,
         {
           headers: { Authorization: 'Bearer token' },
         },
@@ -45,14 +45,11 @@ describe('Bookmarks_DataSourceImpl', () => {
   describe('[delete_bookmark]', () => {
     it('calls fetch correctly', () => {
       const sut = new Bookmarks_DataSourceImpl('http://example.com', 'token')
-      sut.delete_bookmark({ bookmark_id: 'test' })
-      expect(fetch).toHaveBeenCalledWith(
-        `http://example.com/v1/bookmarks/test`,
-        {
-          method: 'DELETE',
-          headers: { Authorization: 'Bearer token' },
-        },
-      )
+      sut.delete_bookmark({ bookmark_id: 1 })
+      expect(fetch).toHaveBeenCalledWith(`http://example.com/v1/bookmarks/1`, {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer token' },
+      })
     })
   })
 })
