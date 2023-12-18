@@ -271,7 +271,8 @@ export const use_search = () => {
       }))
       set_bookmarks_just_tags(bookmarks_tags)
 
-      cache_data({ db, bookmarks_just_tags: bookmarks_tags })
+      set_is_caching_data(true)
+      idle_timer.start()
     }
 
     set_db(db)
