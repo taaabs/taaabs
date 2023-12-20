@@ -6,6 +6,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
 import { Icon } from '@web-ui/components/common/particles/icon'
+import { use_popstate } from './hooks/use-popstate'
 
 type Counts = {
   yyyymm: number
@@ -30,6 +31,7 @@ export namespace CustomRange {
 
 export const CustomRange: React.FC<CustomRange.Props> = memo(
   function CustomRange(props) {
+    const { pop_count } = use_popstate()
     const [counts_to_render, set_counts_to_render] = useState<Counts>()
     const [date, set_date] = useState<string | null>(null)
     const custom_range = useRef<HTMLDivElement>(null)
@@ -37,7 +39,6 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       preventDefault: false,
       threshold: 0,
     })
-    const [key, set_key] = useState('')
     const [start_index, set_start_index] = useState<number>()
     const [end_index, set_end_index] = useState<number>()
     const [previous_start_index, set_previous_start_index] = useState<number>()
@@ -351,7 +352,6 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
             className={styles['custom-range__clear']}
             onClick={() => {
               props.clear_date_range()
-              set_key(Math.random().toString())
             }}
           >
             <Icon variant="ADD" />
@@ -363,7 +363,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
           counts_to_render &&
           counts_to_render.length >= 2 && (
             <div className={styles['custom-range__recharts']}>
-              <ResponsiveContainer width={'100%'} height={135} key={key}>
+              <ResponsiveContainer width={'100%'} height={135} key={pop_count}>
                 <AreaChart margin={{ left: 0, top: 5 }} data={counts_to_render}>
                   <defs>
                     <linearGradient

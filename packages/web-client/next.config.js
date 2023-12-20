@@ -10,6 +10,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   poweredByHeader: false,
+  reactStrictMode: false,
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
@@ -20,6 +21,7 @@ const nextConfig = {
   },
   experimental: {
     typedRoutes: true,
+    windowHistorySupport: true,
   },
 }
 

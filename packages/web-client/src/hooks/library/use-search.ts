@@ -13,7 +13,6 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
-import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { LibrarySearch_DataSourceImpl } from '@repositories/modules/library-search/infrastructure/data-sources/library-search.data-source-impl'
 import { LibrarySearch_RepositoryImpl } from '@repositories/modules/library-search/infrastructure/repositories/library-search.repository-impl'
 import { GetSearchableBookmarksOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-searchable-bookmarks-on-authorized-user.user-case'
@@ -31,6 +30,7 @@ import { browser_storage } from '@/constants/browser-storage'
 import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-authorized-user.use-case'
 import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-public-user.use-case'
 import { useIdleTimer } from 'react-idle-timer'
+import { useSearchParams } from 'next/navigation'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -64,7 +64,7 @@ type Result = TypedDocument<Orama<typeof schema>>
 type BookmarkTags = { id: number; tags: string[] }
 
 export const use_search = () => {
-  const query_params = use_shallow_search_params()
+  const query_params = useSearchParams()
   const [is_search_focused, set_is_search_focused] = useState(false)
   const [bookmarks_just_tags, set_bookmarks_just_tags] =
     useState<BookmarkTags[]>()
@@ -388,7 +388,7 @@ export const use_search = () => {
     const result_with_tolerance: Results<Result> = await searchWithHighlight(
       db,
       {
-        limit: term.length >= 5 ? system_values.max_library_search_results : 0,
+        limit: system_values.max_library_search_results,
         term,
         properties: ['title', 'note'],
         where: {

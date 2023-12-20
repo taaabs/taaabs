@@ -3,10 +3,10 @@ import { Order } from '@shared/types/modules/bookmarks/order'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
+import { useSearchParams } from 'next/navigation'
 
 export const use_order_view_options = () => {
-  const query_params = use_shallow_search_params()
+  const query_params = useSearchParams()
   const [current_order, set_current_order] = useState<Order>(
     Object.values(Order)[
       parseInt(

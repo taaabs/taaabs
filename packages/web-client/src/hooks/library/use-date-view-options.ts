@@ -1,9 +1,9 @@
 import { update_query_params } from '@/utils/update-query-params'
-import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
+import { useSearchParams } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
 export const use_date_view_options = () => {
-  const query_params = use_shallow_search_params()
+  const query_params = useSearchParams()
   const [current_gte, set_current_gte] = useState<number | undefined>(
     parseInt(query_params.get('gte') || '0') || undefined,
   )

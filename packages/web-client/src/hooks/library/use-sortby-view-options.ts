@@ -3,10 +3,10 @@ import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
+import { useSearchParams } from 'next/navigation'
 
 export const use_sortby_view_options = () => {
-  const query_params = use_shallow_search_params()
+  const query_params = useSearchParams()
   const [current_sortby, set_current_sortby] = useState<Sortby>(
     Object.values(Sortby)[
       parseInt(

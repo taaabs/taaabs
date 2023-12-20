@@ -3,9 +3,10 @@ import { LibraryFilter } from '@shared/types/common/library-filter'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 export const use_filter_view_options = () => {
-  const query_params = use_shallow_search_params()
+  const query_params = useSearchParams()
   const [current_filter, set_current_filter] = useState<LibraryFilter>(
     Object.values(LibraryFilter)[
       parseInt(
