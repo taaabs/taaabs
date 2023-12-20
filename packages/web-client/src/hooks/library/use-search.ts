@@ -646,7 +646,10 @@ export const use_search = () => {
         const site_term = last_word.substring(1)
 
         const result: Results<Result> = await search(db, {
-          limit: 1000,
+          limit:
+            site_term.length <= 2
+              ? 100
+              : system_values.max_library_search_results,
           term: site_term ? site_term : undefined,
           properties: ['sites'],
           where: {
@@ -758,7 +761,8 @@ export const use_search = () => {
 
         if (last_word.length) {
           const result: Results<Result> = await search(db, {
-            limit: 1000,
+            limit:
+              term.length <= 2 ? 100 : system_values.max_library_search_results,
             term,
             properties: ['title', 'note'],
             where: {
@@ -886,7 +890,8 @@ export const use_search = () => {
           )
         } else {
           const result: Results<Result> = await search(db, {
-            limit: 1000,
+            limit:
+              term.length <= 2 ? 100 : system_values.max_library_search_results,
             term: term ? term : undefined,
             properties: ['title', 'note'],
             where: {

@@ -40,13 +40,15 @@ export namespace Counts_Dto {
       public starred_count?: number
     }
 
-    export class Authorized {
-      public months?: Record<string, AuthorizedMonth>
-      public is_counts_update_scheduled?: boolean
+    class Counts {
+      public is_stale?: boolean
     }
-    export class Public {
+
+    export class Authorized extends Counts {
+      public months?: Record<string, AuthorizedMonth>
+    }
+    export class Public extends Counts {
       public months?: Record<string, PublicMonth>
-      public is_counts_update_scheduled?: boolean
     }
   }
 }
