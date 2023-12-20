@@ -1,9 +1,10 @@
 import { update_query_params } from '@/utils/update-query-params'
-import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { useSearchParams } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
 export const use_tag_view_options = () => {
-  const query_params = use_shallow_search_params()
+  const query_params = useSearchParams()
   const [actual_selected_tags, set_actual_selected_tags] = useState<number[]>(
     query_params.get('t')
       ? query_params
@@ -13,16 +14,33 @@ export const use_tag_view_options = () => {
       : [],
   )
 
+  useUpdateEffect(() => {
+    set_actual_selected_tags(
+      query_params.get('t')
+        ? query_params
+            .get('t')!
+            .split(',')
+            .map((t) => parseInt(t))
+        : [],
+    )
+  }, [query_params])
+
   // "useCallback" is required by Tags component.
   const add_tag_to_query_params = useCallback(
-    (tagId: number) => {
-      set_actual_selected_tags([...actual_selected_tags, tagId])
+    (tag_id: number) => {
+      const selected_tags = query_params.get('t')
+        ? query_params
+            .get('t')!
+            .split(',')
+            .map((t) => parseInt(t))
+        : []
 
       const updated_query_params = update_query_params(
         query_params,
         't',
-        [...actual_selected_tags, tagId].join(','),
+        [...selected_tags, tag_id].join(','),
       )
+
       window.history.pushState(
         {},
         '',
@@ -32,12 +50,18 @@ export const use_tag_view_options = () => {
     [query_params],
   )
 
-  const remove_tag_from_query_params = (tagId: number) => {
-    set_actual_selected_tags(actual_selected_tags.filter((t) => t != tagId))
+  const remove_tag_from_query_params = (tag_id: number) => {
+    const selected_tags = query_params.get('t')
+      ? query_params
+          .get('t')!
+          .split(',')
+          .map((t) => parseInt(t))
+      : []
+
     const updated_query_params = update_query_params(
       query_params,
       't',
-      actual_selected_tags.filter((t) => t != tagId).join(','),
+      selected_tags.filter((t) => t != tag_id).join(','),
     )
     window.history.pushState(
       {},
@@ -47,7 +71,6 @@ export const use_tag_view_options = () => {
   }
 
   const clear_selected_tags = () => {
-    set_actual_selected_tags([])
     const updated_query_params = update_query_params(query_params, 't')
 
     window.history.pushState(

@@ -1,4 +1,4 @@
-import { useParams, usePathname } from 'next/navigation'
+import { useParams, usePathname, useSearchParams } from 'next/navigation'
 import {
   use_library_dispatch,
   use_library_selector,
@@ -6,13 +6,12 @@ import {
 import { useEffect, useState } from 'react'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 import { browser_storage } from '@/constants/browser-storage'
 
 export const use_counts = () => {
-  const query_params = use_shallow_search_params()
+  const query_params = useSearchParams()
   const route_params = useParams()
   const route_pathname = usePathname()
   const dispatch = use_library_dispatch()
@@ -88,6 +87,12 @@ export const use_counts = () => {
   }
 
   useEffect(() => {
+    const tags = sessionStorage.getItem(`tags__${query_params.toString()}`)
+
+    if (tags) {
+      dispatch(counts_actions.set_tags(JSON.parse(tags)))
+    }
+
     const query_tags = query_params.get('t')
     const query_filter = query_params.get('f')
     if (query_tags != last_query_tags || query_filter != last_query_filter) {
@@ -146,9 +151,7 @@ export const use_counts = () => {
 
     return () => {
       for (const key in sessionStorage) {
-        if (key.substring(0, 11) == 'months_data') {
-          sessionStorage.removeItem(key)
-        } else if (key.substring(0, 4) == 'tags') {
+        if (key.substring(0, 4) == 'tags') {
           sessionStorage.removeItem(key)
         }
       }

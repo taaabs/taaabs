@@ -1,4 +1,4 @@
-import { useParams, usePathname } from 'next/navigation'
+import { useParams, usePathname, useSearchParams } from 'next/navigation'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import {
   use_library_dispatch,
@@ -9,13 +9,12 @@ import { useEffect, useState } from 'react'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 
 export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
-  const query_params = use_shallow_search_params()
+  const query_params = useSearchParams()
   const route_params = useParams()
   const route_pathname = usePathname()
   const dispatch = use_library_dispatch()
@@ -41,6 +40,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   >(null)
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
+    if (route_pathname == '/edit') return
     if (route_pathname == '/bookmarks') {
       const request_params: GetBookmarks_Params.Authorized = {}
 
@@ -163,25 +163,43 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   }
 
   useUpdateEffect(() => {
-    const query_tags = query_params.get('t')
-    const query_category = query_params.get('c')
-    const query_filter = query_params.get('f')
-    const query_sortby = query_params.get('s')
-    const query_order = query_params.get('o')
-    const query_yyyy_gte = query_params.get('gte')
-    const query_yyyy_lte = query_params.get('lte')
+    const bookmarks = sessionStorage.getItem(
+      `bookmarks__${query_params.toString()}`,
+    )
 
-    if (
-      query_params.size == 0 ||
-      query_tags != last_query_tags ||
-      query_category != last_query_category ||
-      query_filter != last_query_filter ||
-      query_sortby != last_query_sortby ||
-      query_order != last_query_order ||
-      query_yyyy_gte != last_query_yyyymm_gte ||
-      query_yyyy_lte != last_query_yyyymm_lte
-    ) {
-      get_bookmarks({})
+    if (bookmarks) {
+      dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
+      const has_more_bookmarks = sessionStorage.getItem(
+        `has_more_bookmarks__${query_params.toString()}`,
+      )
+      if (has_more_bookmarks) {
+        dispatch(
+          bookmarks_actions.set_has_more_bookmarks(
+            has_more_bookmarks == 'true',
+          ),
+        )
+      }
+    } else {
+      const query_tags = query_params.get('t')
+      const query_category = query_params.get('c')
+      const query_filter = query_params.get('f')
+      const query_sortby = query_params.get('s')
+      const query_order = query_params.get('o')
+      const query_yyyy_gte = query_params.get('gte')
+      const query_yyyy_lte = query_params.get('lte')
+
+      if (
+        query_params.size == 0 ||
+        query_tags != last_query_tags ||
+        query_category != last_query_category ||
+        query_filter != last_query_filter ||
+        query_sortby != last_query_sortby ||
+        query_order != last_query_order ||
+        query_yyyy_gte != last_query_yyyymm_gte ||
+        query_yyyy_lte != last_query_yyyymm_lte
+      ) {
+        get_bookmarks({})
+      }
     }
   }, [query_params])
 
