@@ -1,4 +1,4 @@
-import { Months_Ro } from '@repositories/modules/months/domain/types/months.ro'
+import { Counts_Ro } from '@repositories/modules/counts/domain/types/counts.ro'
 import * as thunks from './action-creators'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
@@ -12,7 +12,7 @@ export type Tags = Record<string, { id: number; yields: number }>
 
 export type CountsState = {
   is_fetching_counts_data: boolean
-  counts_data: Months_Ro | null
+  counts_data: Counts_Ro | null
   months: Months | null
   tags: Tags | null
   yyyymm_gte: number | null
@@ -35,7 +35,7 @@ export const counts_slice = createSlice({
     set_is_fetching_data(state, action: PayloadAction<boolean>) {
       state.is_fetching_counts_data = action.payload
     },
-    set_data(state, action: PayloadAction<Months_Ro>) {
+    set_data(state, action: PayloadAction<Counts_Ro>) {
       state.counts_data = action.payload
 
       const months: Months = []

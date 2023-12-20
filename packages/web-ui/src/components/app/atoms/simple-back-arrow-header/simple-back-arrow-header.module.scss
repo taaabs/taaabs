@@ -2,7 +2,6 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  box-sizing: content-box;
   height: var(--header-mobile-height);
   border-bottom: var(--border-primary);
   background: var(--header-transparent-background);

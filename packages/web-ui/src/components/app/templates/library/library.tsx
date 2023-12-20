@@ -53,7 +53,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   const aside = useRef<HTMLDivElement>(null)
   const end_of_bookmarks = useRef<HTMLDivElement>(null)
   const is_hydrated = use_is_hydrated()
-  use_scroll_restore()
+  // use_scroll_restore()
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
   const [drag_distance, set_drag_distance] = useState<number>(0)
   const [initial_swipe_direction, set_initial_swipe_direction] = useState<

@@ -1,6 +1,6 @@
-import styles from './form.module.scss'
+import styles from './form-modal.module.scss'
 
-export namespace Form {
+export namespace FormModal {
   export type Props = {
     slot_header: React.ReactNode
     children?: React.ReactNode
@@ -8,7 +8,7 @@ export namespace Form {
   }
 }
 
-export const Form: React.FC<Form.Props> = (props) => {
+export const FormModal: React.FC<FormModal.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.container__header}>{props.slot_header}</div>

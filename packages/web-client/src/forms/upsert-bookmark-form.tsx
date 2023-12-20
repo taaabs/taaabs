@@ -7,7 +7,7 @@ import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
 import { DraggableFormInputs } from '@web-ui/components/app/atoms/draggable-form-inputs'
 import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
 import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
-import { Form } from '@web-ui/components/app/templates/form'
+import { FormModal } from '@web-ui/components/app/templates/form-modal'
 import { Input } from '@web-ui/components/common/atoms/input'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -92,7 +92,7 @@ export const UpsertBookmarkForm: React.FC<{
         }
       }}
     >
-      <Form
+      <FormModal
         slot_header={<ModalHeader title="Edit bookmark" />}
         slot_footer={
           <ModalFooter
@@ -239,7 +239,7 @@ export const UpsertBookmarkForm: React.FC<{
             }}
           />
         </Box>
-      </Form>
+      </FormModal>
     </form>
   )
 }

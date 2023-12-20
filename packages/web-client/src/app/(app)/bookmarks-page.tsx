@@ -14,8 +14,7 @@ import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
-import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -41,6 +40,7 @@ import { UnreadStarsFilter } from '@web-ui/components/app/atoms/unread-stars-fil
 import { LibrarySearch } from '@web-ui/components/app/atoms/library-search'
 import { use_search } from '@/hooks/library/use-search'
 import { ModalContext } from './modal-provider'
+import { useSearchParams } from 'next/navigation'
 import { upsert_bookmark_modal } from '@/modals'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
@@ -52,7 +52,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   const is_hydrated = use_is_hydrated()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
-  const query_params = use_shallow_search_params()
+  const query_params = useSearchParams()
   const modal_context = useContext(ModalContext)
   const [show_custom_range, set_show_custom_range] = useState(false)
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
@@ -134,14 +134,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
       search.get_hints()
     }
   }, [search.db])
-
-  useEffect(() => {
-    window.history.scrollRestoration = 'manual'
-
-    return () => {
-      window.history.scrollRestoration = 'auto'
-    }
-  }, [])
 
   return (
     <Library

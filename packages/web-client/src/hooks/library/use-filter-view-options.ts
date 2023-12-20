@@ -1,4 +1,3 @@
-import { use_shallow_search_params } from '@web-ui/hooks/use-shallow-search-params'
 import { update_query_params } from '@/utils/update-query-params'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'

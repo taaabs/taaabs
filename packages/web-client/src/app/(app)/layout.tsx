@@ -4,9 +4,10 @@ import { ClientComponentAppHeaderMobile } from './client-component-app-header-mo
 import { ClientComponentBottomNavigationBar } from './client-component-bottom-navigation-bar'
 import { PublicUserAvatarProvider } from './public-user-avatar-provider'
 import { ModalProvider } from './modal-provider'
+import { ReactNode } from 'react'
 
 const Layout: React.FC<{
-  children?: React.ReactNode
+  children?: ReactNode
 }> = (props) => {
   return (
     <PublicUserAvatarProvider>

@@ -10,12 +10,11 @@ import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { useContext } from 'react'
 import { ModalContext } from './modal-provider'
 import { use_is_hydrated } from '@shared/hooks'
-import { Form } from '@web-ui/components/app/templates/form'
+import { FormModal } from '@web-ui/components/app/templates/form-modal'
 import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
 import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
 import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
 import { Box } from '@web-ui/components/app/atoms/box'
-import { Button } from '@web-ui/components/common/particles/button'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const params = useParams()
@@ -81,12 +80,14 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   }
 
   const create_bookmark_modal = (
-    <Form
-      slot_header={
-        <ModalHeader title="New bookmark" on_click_close={() => {}} />
-      }
+    <FormModal
+      slot_header={<ModalHeader title="New bookmark" />}
       slot_footer={
-        <ModalFooter slot_right_side={<Button size="medium">Create</Button>} />
+        <ModalFooter
+          button_label="Save"
+          is_disabled={false}
+          on_click_cancel={() => {}}
+        />
       }
     >
       <Box>
@@ -104,7 +105,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
       <Box>
         <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
       </Box>
-    </Form>
+    </FormModal>
   )
 
   return (
