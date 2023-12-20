@@ -1,6 +1,6 @@
 // import { GlobalStoreInitializer } from './global-store-initializer'
 // import { GlobalStoreProvider } from './global-store-provider'
-import { Metadata } from 'next'
+import { Metadata, Viewport } from 'next'
 import { Inter, Plus_Jakarta_Sans, Inter_Tight } from 'next/font/google'
 
 import '@web-ui/styles/style.scss'
@@ -47,6 +47,8 @@ export default Layout
 export const metadata: Metadata = {
   title: 'TODO',
   description: 'TODO',
-  viewport:
-    'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+}
+
+export const viewport: Viewport = {
+  userScalable: false, // Required by slidable
 }

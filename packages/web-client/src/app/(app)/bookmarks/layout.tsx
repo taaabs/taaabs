@@ -8,7 +8,7 @@ const Layout: React.FC<{
   return (
     <LibraryStoreProvider>
       <div>{props.children}</div>
-      <div>{props.modal}</div>
+      {/* <div>{props.modal}</div> */}
     </LibraryStoreProvider>
   )
 }
