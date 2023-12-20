@@ -1,7 +1,7 @@
 import { update_query_params } from '@/utils/update-query-params'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useSearchParams } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
 export const use_tag_view_options = () => {
   const query_params = useSearchParams()
@@ -25,30 +25,32 @@ export const use_tag_view_options = () => {
     )
   }, [query_params])
 
-  // "useCallback" is required by Tags component.
-  const add_tag_to_query_params = useCallback(
-    (tag_id: number) => {
-      const selected_tags = query_params.get('t')
-        ? query_params
-            .get('t')!
-            .split(',')
-            .map((t) => parseInt(t))
-        : []
+  const add_tag_to_query_params = (tag_id: number) => {
+    const selected_tags = query_params.get('t')
+      ? query_params
+          .get('t')!
+          .split(',')
+          .map((t) => parseInt(t))
+      : []
 
-      const updated_query_params = update_query_params(
-        query_params,
-        't',
-        [...selected_tags, tag_id].join(','),
-      )
+    const updated_query_params = update_query_params(
+      query_params,
+      't',
+      [...selected_tags, tag_id].join(','),
+    )
 
-      window.history.pushState(
-        {},
-        '',
-        window.location.pathname + '?' + updated_query_params,
-      )
-    },
-    [query_params],
-  )
+    for (const key in sessionStorage) {
+      if (key.endsWith(`__${updated_query_params}`)) {
+        sessionStorage.removeItem(key)
+      }
+    }
+
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updated_query_params,
+    )
+  }
 
   const remove_tag_from_query_params = (tag_id: number) => {
     const selected_tags = query_params.get('t')
@@ -63,6 +65,13 @@ export const use_tag_view_options = () => {
       't',
       selected_tags.filter((t) => t != tag_id).join(','),
     )
+
+    for (const key in sessionStorage) {
+      if (key.endsWith(`__${updated_query_params}`)) {
+        sessionStorage.removeItem(key)
+      }
+    }
+
     window.history.pushState(
       {},
       '',

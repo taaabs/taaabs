@@ -363,7 +363,17 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
           counts_to_render &&
           counts_to_render.length >= 2 && (
             <div className={styles['custom-range__recharts']}>
-              <ResponsiveContainer width={'100%'} height={135} key={pop_count}>
+              <ResponsiveContainer
+                width={'100%'}
+                height={135}
+                key={
+                  pop_count +
+                  (props.current_gte === undefined &&
+                  props.current_lte === undefined
+                    ? 1
+                    : 0)
+                }
+              >
                 <AreaChart margin={{ left: 0, top: 5 }} data={counts_to_render}>
                   <defs>
                     <linearGradient

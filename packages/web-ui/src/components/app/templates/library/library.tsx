@@ -8,7 +8,6 @@ import { useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import StickyBox from 'react-sticky-box'
 import { _MobileTitleBar } from './components/_mobile-title-bar'
-import { use_scroll_restore } from './hooks/use-scroll-restore'
 import styles from './library.module.scss'
 import { use_is_hydrated } from '@shared/hooks'
 import { useSwipeable } from 'react-swipeable'
@@ -53,7 +52,6 @@ export const Library: React.FC<Library.Props> = (props) => {
   const aside = useRef<HTMLDivElement>(null)
   const end_of_bookmarks = useRef<HTMLDivElement>(null)
   const is_hydrated = use_is_hydrated()
-  // use_scroll_restore()
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
   const [drag_distance, set_drag_distance] = useState<number>(0)
   const [initial_swipe_direction, set_initial_swipe_direction] = useState<
