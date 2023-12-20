@@ -218,7 +218,7 @@
       }
       > div {
         @include to992 {
-          padding: var(--distance-8px) var(--distance-16px) var(--distance-16px)
+          padding: 0 var(--distance-16px) var(--distance-16px)
             var(--distance-17px);
           // Overrides inline values coming from stickybox.
           position: relative !important;

@@ -6,16 +6,14 @@
   flex-direction: column;
 }
 .toolbar {
-  height: var(--button-dimension-52px);
+  height: var(--app-bar-height);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   margin-left: var(--distance-8px);
-  @include to992 {
-    margin-bottom: var(--distance-11px);
-  }
   @include at992 {
     margin-bottom: var(--distance-16px);
+    height: var(--button-dimension-52px);
   }
   &__filters {
     width: 100%;
@@ -35,7 +33,10 @@
       background-color: var(--neutral200);
     }
     svg {
-      height: var(--icon-dimension-20px);
+      height: var(--icon-dimension-19px);
+      @include at992 {
+        height: var(--icon-dimension-20px);
+      }
     }
   }
 }
