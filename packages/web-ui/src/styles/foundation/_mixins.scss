@@ -1,3 +1,5 @@
+@use 'sass:meta';
+
 @mixin at576 {
   @media (min-width: 576px) {
     @content;

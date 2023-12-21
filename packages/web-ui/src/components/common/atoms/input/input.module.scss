@@ -6,14 +6,13 @@
   gap: var(--distance-8px);
   flex-direction: column;
 }
-.input {
+.field {
   width: 100%;
   border: 1px solid var(--blue200);
-  background: var(--blue100);
+  background-color: var(--blue100);
   border-radius: var(--border-radius-10px);
-  height: var(--input-height-46px);
-  padding: 0 var(--distance-12px);
-  @include transition-100ms;
+  transition: background-color var(--transition-duration-100ms) linear,
+    border-color var(--transition-duration-100ms) linear;
   @include hover {
     border-color: var(--blue300);
   }
@@ -28,6 +27,15 @@
       border-color: var(--red500);
     }
   }
+}
+.input {
+  height: var(--input-height-46px);
+  padding: 0 var(--distance-12px);
+}
+.textarea {
+  position: relative;
+  padding: var(--distance-12px);
+  resize: none;
 }
 .message {
   margin-top: var(--distance-8px);

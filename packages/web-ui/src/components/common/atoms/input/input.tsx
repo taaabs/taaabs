@@ -11,6 +11,7 @@ export namespace Input {
     message?: React.ReactNode
     is_disabled?: boolean
     autofocus?: boolean
+    lines?: number
   }
 }
 
@@ -20,15 +21,30 @@ export const Input: React.FC<Input.Props> = ({
 }) => {
   return (
     <div>
-      <input
-        className={cn([
-          styles.input,
-          { [styles['input--error']]: message_type == 'error' },
-        ])}
-        onChange={(e) => props.on_change(e.target.value)}
-        value={props.value}
-        autoFocus={props.autofocus}
-      />
+      {props.lines && props.lines > 1 ? (
+        <textarea
+          className={cn([
+            styles.field,
+            styles.textarea,
+            { [styles['field--error']]: message_type == 'error' },
+          ])}
+          onChange={(e) => props.on_change(e.target.value)}
+          value={props.value}
+          autoFocus={props.autofocus}
+          rows={props.lines}
+        />
+      ) : (
+        <input
+          className={cn([
+            styles.field,
+            styles.input,
+            { [styles['field--error']]: message_type == 'error' },
+          ])}
+          onChange={(e) => props.on_change(e.target.value)}
+          value={props.value}
+          autoFocus={props.autofocus}
+        />
+      )}
       {props.message && (
         <div
           className={cn([

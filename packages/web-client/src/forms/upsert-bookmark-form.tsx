@@ -148,6 +148,7 @@ export const UpsertBookmarkForm: React.FC<{
                   }}
                   message_type={error_message ? 'error' : undefined}
                   message={error_message}
+                  lines={2}
                 />
               )
             }}
@@ -247,6 +248,7 @@ export const UpsertBookmarkForm: React.FC<{
                   }}
                   message_type={error_message ? 'error' : undefined}
                   message={error_message}
+                  lines={5}
                 />
               )
             }}
