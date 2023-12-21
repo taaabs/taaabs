@@ -16,6 +16,7 @@ declare const styles: {
   readonly bookmark__main__content__title__stars: string
   readonly bookmark__main__content__title__text: string
   readonly 'bookmark__main__content__title__text--unread': string
+  readonly 'bookmark__main__content__title__text--untitled': string
   readonly bookmark__main__content__note: string
   readonly bookmark__main__tags: string
   readonly bookmark__main__tags__tag: string

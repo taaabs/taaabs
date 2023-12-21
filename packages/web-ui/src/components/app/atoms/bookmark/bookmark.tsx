@@ -177,7 +177,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         ))}
                       </div>
                     )}
-                    {props.title && (
+                    {props.title ? (
                       <div
                         className={cn(
                           styles.bookmark__main__content__title__text,
@@ -202,6 +202,17 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               )
                             })
                           : props.title}
+                      </div>
+                    ) : (
+                      <div
+                        className={cn(
+                          styles.bookmark__main__content__title__text,
+                          styles[
+                            'bookmark__main__content__title__text--untitled'
+                          ],
+                        )}
+                      >
+                        (Untitled)
                       </div>
                     )}
                   </div>
