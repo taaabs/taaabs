@@ -193,7 +193,7 @@
     top: 0;
     bottom: 0;
     right: 0;
-    height: 100svh;
+    height: 100lvh;
     padding-top: var(--header-mobile-height);
     padding-bottom: var(--bottom-navigation-bar-height);
   }
@@ -211,6 +211,7 @@
     @include to992 {
       overflow: auto;
       background: var(--Library-background);
+      padding-bottom: calc(100lvh - 100svh);
     }
     &__stickybox {
       @include at992 {

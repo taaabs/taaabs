@@ -32,6 +32,8 @@ export const get_bookmarks_by_ids_authorized = (params: {
       params.request_params,
     )
 
+    dispatch(bookmarks_actions.set_are_bookmarks_of_search(true))
+
     if (params.is_next_page) {
       dispatch(bookmarks_actions.set_more_bookmarks(bookmarks))
       dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(false))

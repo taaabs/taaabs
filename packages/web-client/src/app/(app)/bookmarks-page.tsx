@@ -1355,7 +1355,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 }
                 orama_db_id={search.db?.id}
                 is_serach_result={
-                  search.result !== undefined && search.result.count > 0
+                  bookmarks_slice_state.are_bookmarks_of_search || false
                 }
                 should_dim_visited_links={props.user == 'public'}
               />

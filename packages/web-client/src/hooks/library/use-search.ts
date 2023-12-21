@@ -495,57 +495,60 @@ export const use_search = () => {
       })
     }
 
-    set_highlights(
-      hits.reduce((a, v) => {
-        const positions = Object.values((v as any).positions.title)
-          .flat()
-          .map((highlight: any) => [highlight.start, highlight.length])
+    // Defer setting highlights to the next frame, just after bookmark fetching has begun.
+    setTimeout(() => {
+      set_highlights(
+        hits.reduce((a, v) => {
+          const positions = Object.values((v as any).positions.title)
+            .flat()
+            .map((highlight: any) => [highlight.start, highlight.length])
 
-        const new_positions: any = []
+          const new_positions: any = []
 
-        for (let i = 0; i < positions.length; i++) {
-          if (
-            positions[i + 1] &&
-            positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
-          ) {
-            new_positions.push([positions[i][0], positions[i][1] + 1])
-          } else {
-            new_positions.push([positions[i][0], positions[i][1]])
+          for (let i = 0; i < positions.length; i++) {
+            if (
+              positions[i + 1] &&
+              positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
+            ) {
+              new_positions.push([positions[i][0], positions[i][1] + 1])
+            } else {
+              new_positions.push([positions[i][0], positions[i][1]])
+            }
           }
-        }
 
-        return {
-          ...a,
-          [v.id]: new_positions,
-        }
-      }, {}),
-    )
-
-    set_highlights_note(
-      hits.reduce((a, v) => {
-        const positions = Object.values((v as any).positions.note)
-          .flat()
-          .map((highlight: any) => [highlight.start, highlight.length])
-
-        const new_positions: any = []
-
-        for (let i = 0; i < positions.length; i++) {
-          if (
-            positions[i + 1] &&
-            positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
-          ) {
-            new_positions.push([positions[i][0], positions[i][1] + 1])
-          } else {
-            new_positions.push([positions[i][0], positions[i][1]])
+          return {
+            ...a,
+            [v.id]: new_positions,
           }
-        }
+        }, {}),
+      )
 
-        return {
-          ...a,
-          [v.id]: new_positions,
-        }
-      }, {}),
-    )
+      set_highlights_note(
+        hits.reduce((a, v) => {
+          const positions = Object.values((v as any).positions.note)
+            .flat()
+            .map((highlight: any) => [highlight.start, highlight.length])
+
+          const new_positions: any = []
+
+          for (let i = 0; i < positions.length; i++) {
+            if (
+              positions[i + 1] &&
+              positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
+            ) {
+              new_positions.push([positions[i][0], positions[i][1] + 1])
+            } else {
+              new_positions.push([positions[i][0], positions[i][1]])
+            }
+          }
+
+          return {
+            ...a,
+            [v.id]: new_positions,
+          }
+        }, {}),
+      )
+    }, 0)
 
     if (hits.length) {
       let recent_searches: string[] = []
