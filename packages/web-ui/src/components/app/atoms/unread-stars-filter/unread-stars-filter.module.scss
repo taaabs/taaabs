@@ -3,11 +3,15 @@
 
 .container {
   display: flex;
+  gap: var(--distance-16px);
+  @include at992 {
   gap: var(--distance-20px);
+    
+  }
 }
 .unread {
-  width: var(--icon-dimension-30px);
-  height: var(--icon-dimension-30px);
+  width: var(--icon-dimension-28px);
+  height: var(--icon-dimension-28px);
   border-radius: var(--border-radius-999px);
   background-color: var(--neutral200);
   @include at992 {
@@ -32,8 +36,8 @@
     display: flex;
     padding: 0 var(--distance-5px);
     > svg {
-      height: var(--icon-dimension-30px);
-      width: var(--icon-dimension-30px);
+      height: var(--icon-dimension-28px);
+      width: var(--icon-dimension-28px);
       fill: var(--neutral200);
       @include at992 {
         height: var(--icon-dimension-32px);

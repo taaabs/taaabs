@@ -50,10 +50,12 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           visited_at: bookmark.visited_at,
           title: bookmark.title
             ? bookmark.title
-            : CryptoJS.AES.decrypt(
-                bookmark.title_aes!,
+            : bookmark.title_aes
+            ? CryptoJS.AES.decrypt(
+                bookmark.title_aes,
                 'my_secret_key',
-              ).toString(CryptoJS.enc.Utf8),
+              ).toString(CryptoJS.enc.Utf8)
+            : undefined,
           note: bookmark.note
             ? bookmark.note
             : bookmark.note_aes

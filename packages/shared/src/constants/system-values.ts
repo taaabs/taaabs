@@ -5,4 +5,12 @@ export const system_values = {
   max_library_search_results: 1000,
   max_library_search_hints: 10,
   sortablejs_animation_duration: 150,
+  bookmark: {
+    title: {
+      max_length: 160,
+    },
+    note: {
+      max_length: 1000,
+    },
+  },
 }

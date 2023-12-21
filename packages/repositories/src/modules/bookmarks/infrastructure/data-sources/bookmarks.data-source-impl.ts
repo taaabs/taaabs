@@ -162,7 +162,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       stars: params.stars || undefined,
       is_unread: params.is_unread || undefined,
       tags: params.tags
-        .filter((tag) => tag.name != '')
+        .filter((tag) => tag.name.length > 0)
         .map((tag) => ({
           name: tag.is_public ? tag.name : undefined,
           name_aes: !tag.is_public
@@ -172,7 +172,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           is_public: tag.is_public,
         })),
       links: params.links
-        .filter((link) => link.url != '')
+        .filter((link) => link.url.length > 0)
         .map((link) => {
           return {
             url: link.is_public ? link.url : undefined,

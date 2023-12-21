@@ -40,7 +40,8 @@ import { UnreadStarsFilter } from '@web-ui/components/app/atoms/unread-stars-fil
 import { LibrarySearch } from '@web-ui/components/app/atoms/library-search'
 import { use_search } from '@/hooks/library/use-search'
 import { ModalContext } from './modal-provider'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { upsert_bookmark_modal } from '@/modals'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -48,7 +49,6 @@ const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
 })
 
 const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
-  const router = useRouter()
   const is_hydrated = use_is_hydrated()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
@@ -183,14 +183,11 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           on_focus={async () => {
             search.set_is_search_focused(true)
             if (!search.is_initializing) {
-              let is_cache_stale: boolean | undefined
-              if (!search.is_caching_data) {
-                is_cache_stale = await search.check_is_cache_stale({
-                  api_url: process.env.NEXT_PUBLIC_API_URL,
-                  auth_token:
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                })
-              }
+              const is_cache_stale = await search.check_is_cache_stale({
+                api_url: process.env.NEXT_PUBLIC_API_URL,
+                auth_token:
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+              })
 
               if (search.db === undefined || is_cache_stale) {
                 search.init()
@@ -1179,62 +1176,61 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Edit',
                               on_click: async () => {
-                                router.push(`/edit`)
-                                // const updated_bookmark =
-                                //   await upsert_bookmark_modal({
-                                //     modal_context,
-                                //     bookmark,
-                                //     is_archived:
-                                //       filter_view_options.current_filter ==
-                                //       LibraryFilter.Archived,
-                                //     auth_token:
-                                //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                //   })
-                                // dispatch(
-                                //   bookmarks_actions.replace_bookmark({
-                                //     bookmark: updated_bookmark,
-                                //     last_authorized_counts_params:
-                                //       JSON.parse(
-                                //         sessionStorage.getItem(
-                                //           browser_storage.session_storage
-                                //             .last_authorized_counts_params,
-                                //         ) || '',
-                                //       ) || undefined,
-                                //     api_url: process.env.NEXT_PUBLIC_API_URL,
-                                //     auth_token:
-                                //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                //   }),
-                                // )
+                                const updated_bookmark =
+                                  await upsert_bookmark_modal({
+                                    modal_context,
+                                    bookmark,
+                                    is_archived:
+                                      filter_view_options.current_filter ==
+                                      LibraryFilter.Archived,
+                                    auth_token:
+                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                  })
+                                dispatch(
+                                  bookmarks_actions.replace_bookmark({
+                                    bookmark: updated_bookmark,
+                                    last_authorized_counts_params:
+                                      JSON.parse(
+                                        sessionStorage.getItem(
+                                          browser_storage.session_storage
+                                            .last_authorized_counts_params,
+                                        ) || '',
+                                      ) || undefined,
+                                    api_url: process.env.NEXT_PUBLIC_API_URL,
+                                    auth_token:
+                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                  }),
+                                )
 
-                                // await search.update_searchable_bookmark({
-                                //   bookmark: {
-                                //     id: bookmark.id,
-                                //     is_archived:
-                                //       filter_view_options.current_filter ==
-                                //       LibraryFilter.Archived,
-                                //     is_unread: updated_bookmark.is_unread,
-                                //     title: updated_bookmark.title,
-                                //     note: updated_bookmark.note,
-                                //     tags: updated_bookmark.tags.map(
-                                //       (tag) => tag.name,
-                                //     ),
-                                //     links: updated_bookmark.links.map(
-                                //       (link) => ({
-                                //         url: link.url,
-                                //         site_path: link.site_path,
-                                //       }),
-                                //     ),
-                                //     created_at: new Date(
-                                //       updated_bookmark.created_at,
-                                //     ),
-                                //     visited_at: new Date(bookmark.visited_at),
-                                //     updated_at: new Date(bookmark.updated_at),
-                                //     stars: updated_bookmark.stars,
-                                //   },
-                                //   tag_ids: updated_bookmark.tags.map(
-                                //     (tag) => tag.id,
-                                //   ),
-                                // })
+                                await search.update_searchable_bookmark({
+                                  bookmark: {
+                                    id: bookmark.id,
+                                    is_archived:
+                                      filter_view_options.current_filter ==
+                                      LibraryFilter.Archived,
+                                    is_unread: updated_bookmark.is_unread,
+                                    title: updated_bookmark.title,
+                                    note: updated_bookmark.note,
+                                    tags: updated_bookmark.tags.map(
+                                      (tag) => tag.name,
+                                    ),
+                                    links: updated_bookmark.links.map(
+                                      (link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                      }),
+                                    ),
+                                    created_at: new Date(
+                                      updated_bookmark.created_at,
+                                    ),
+                                    visited_at: new Date(bookmark.visited_at),
+                                    updated_at: new Date(bookmark.updated_at),
+                                    stars: updated_bookmark.stars,
+                                  },
+                                  tag_ids: updated_bookmark.tags.map(
+                                    (tag) => tag.id,
+                                  ),
+                                })
                               },
                               other_icon: <Icon variant="EDIT" />,
                             },

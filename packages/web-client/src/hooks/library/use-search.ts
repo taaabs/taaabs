@@ -29,7 +29,6 @@ import localforage from 'localforage'
 import { browser_storage } from '@/constants/browser-storage'
 import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-authorized-user.use-case'
 import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-public-user.use-case'
-import { useIdleTimer } from 'react-idle-timer'
 import { useSearchParams } from 'next/navigation'
 
 type Hint = {
@@ -85,19 +84,6 @@ export const use_search = () => {
   const [highlights, set_highlights] = useState<Highlights>()
   const [highlights_note, set_highlights_note] = useState<Highlights>()
   const [count, set_count] = useState<number | undefined>()
-  const [is_caching_data, set_is_caching_data] = useState(false)
-
-  const on_idle = () => {
-    if (!db || !bookmarks_just_tags) return
-    cache_data({ db, bookmarks_just_tags })
-  }
-
-  const idle_timer = useIdleTimer({
-    onIdle: on_idle,
-    startManually: true,
-    stopOnIdle: true,
-    timeout: 1000,
-  })
 
   useUpdateEffect(() => {
     if (!bookmarks_just_tags) return
@@ -264,15 +250,12 @@ export const use_search = () => {
           progress_percentage < 100 ? progress_percentage : undefined,
         )
       }
-
-      const bookmarks_tags: BookmarkTags[] = bookmarks.map((bookmark) => ({
+      const bookmarks_just_tags: BookmarkTags[] = bookmarks.map((bookmark) => ({
         id: bookmark.id,
         tags: bookmark.tags,
       }))
-      set_bookmarks_just_tags(bookmarks_tags)
-
-      set_is_caching_data(true)
-      idle_timer.start()
+      set_bookmarks_just_tags(bookmarks_just_tags)
+      cache_data({ db, bookmarks_just_tags })
     }
 
     set_db(db)
@@ -297,7 +280,6 @@ export const use_search = () => {
       browser_storage.local_forage.authorized_library.search.cached_at,
       new Date(),
     )
-    set_is_caching_data(false)
   }
 
   const get_hits = async (params: {
@@ -1078,7 +1060,6 @@ export const use_search = () => {
       (bookmark) => bookmark.id != params.bookmark_id,
     )
     set_bookmarks_just_tags(new_all_bookmarks)
-    set_is_caching_data(true)
   }
 
   const update_searchable_bookmark = async (params: {
@@ -1140,8 +1121,9 @@ export const use_search = () => {
       tags: params.bookmark.tags,
     })
     set_bookmarks_just_tags(new_all_bookmarks)
-    set_is_caching_data(true)
-    idle_timer.start()
+    setTimeout(() => {
+      cache_data({ db, bookmarks_just_tags: new_all_bookmarks })
+    }, 0)
     if (result && result.count > 0)
       query_db({ search_string, set_highlights_only: true })
   }
@@ -1171,7 +1153,6 @@ export const use_search = () => {
     highlights,
     highlights_note,
     check_is_cache_stale,
-    is_caching_data,
     remove_recent_hint,
   }
 }

@@ -2,6 +2,7 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/upsert-bookmark.use-case'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
+import { system_values } from '@shared/constants/system-values'
 import { Box } from '@web-ui/components/app/atoms/box'
 import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
 import { DraggableFormInputs } from '@web-ui/components/app/atoms/draggable-form-inputs'
@@ -30,7 +31,7 @@ export const UpsertBookmarkForm: React.FC<{
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'all' })
   const [links, set_links] = useState<{ url: string; is_public: boolean }[]>(
     props.bookmark?.links.map((link) => ({
@@ -98,7 +99,7 @@ export const UpsertBookmarkForm: React.FC<{
           <ModalFooter
             on_click_cancel={props.on_close}
             button_label="Save"
-            is_disabled={isSubmitting}
+            is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
           />
         }
       >
@@ -116,6 +117,37 @@ export const UpsertBookmarkForm: React.FC<{
                   onChange={(is_checked) => {
                     field.onChange(is_checked)
                   }}
+                />
+              )
+            }}
+          />
+        </Box>
+        <Box>
+          <BoxHeading heading="Title" />
+          <Controller
+            name="title"
+            control={control}
+            defaultValue={props.bookmark?.title}
+            rules={{
+              maxLength: system_values.bookmark.title.max_length,
+            }}
+            render={({ field }) => {
+              let error_message: string | undefined
+
+              if (errors.title?.type == 'maxLength') {
+                error_message = `Title should be no longer than ${system_values.bookmark.title.max_length} characters.`
+              }
+
+              return (
+                <Input
+                  value={field.value}
+                  on_change={(value) => {
+                    if (!isSubmitting) {
+                      field.onChange(value)
+                    }
+                  }}
+                  message_type={error_message ? 'error' : undefined}
+                  message={error_message}
                 />
               )
             }}
@@ -151,36 +183,6 @@ export const UpsertBookmarkForm: React.FC<{
                     field.value ||
                     false
                   }
-                />
-              )
-            }}
-          />
-        </Box>
-        <Box>
-          <BoxHeading heading="Title" />
-          <Controller
-            name="title"
-            control={control}
-            defaultValue={props.bookmark?.title}
-            rules={{
-              required: true,
-            }}
-            render={({ field }) => {
-              let error_message: string | undefined
-
-              if (errors.title?.type == 'required') {
-                error_message = 'Bookmark title must be set'
-              }
-
-              return (
-                <Input
-                  value={field.value}
-                  on_change={(value) => {
-                    if (!isSubmitting) {
-                      field.onChange(value)
-                    }
-                  }}
-                  message_type={error_message ? 'error' : undefined}
                 />
               )
             }}
@@ -225,7 +227,16 @@ export const UpsertBookmarkForm: React.FC<{
             name="note"
             control={control}
             defaultValue={props.bookmark?.note}
+            rules={{
+              maxLength: system_values.bookmark.note.max_length,
+            }}
             render={({ field }) => {
+              let error_message: string | undefined
+
+              if (errors.note?.type == 'maxLength') {
+                error_message = `Note should be no longer than ${system_values.bookmark.note.max_length} characters.`
+              }
+
               return (
                 <Input
                   value={field.value}
@@ -234,6 +245,8 @@ export const UpsertBookmarkForm: React.FC<{
                       field.onChange(value)
                     }
                   }}
+                  message_type={error_message ? 'error' : undefined}
+                  message={error_message}
                 />
               )
             }}
