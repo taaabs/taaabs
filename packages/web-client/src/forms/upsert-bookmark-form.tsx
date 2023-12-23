@@ -217,6 +217,7 @@ export const UpsertBookmarkForm: React.FC<{
                     field.value ||
                     false
                   }
+                  max_items={system_values.bookmark.tags.limit}
                 />
               )
             }}

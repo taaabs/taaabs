@@ -15,7 +15,11 @@
     background: var(--Button-background-hover);
   }
   padding-bottom: 0.1em !important;
-  &--is-loading {
+  &--loading {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  &--disabled {
     opacity: 0.7;
     pointer-events: none;
   }

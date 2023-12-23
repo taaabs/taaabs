@@ -13,6 +13,7 @@ export namespace Button {
     aria_label?: string
     aria_labelledby?: string
     is_loading?: boolean
+    is_disabled?: boolean
   }
 }
 
@@ -20,7 +21,8 @@ export const Button: React.FC<Button.Props> = (props) => {
   const class_names = cn([
     styles.container,
     styles[`container--${props.size ? props.size : 'default'}`],
-    { [styles['container--is-loading']]: props.is_loading },
+    { [styles['container--loading']]: props.is_loading },
+    { [styles['container--disabled']]: props.is_disabled },
   ])
 
   if (props.type == 'submit') {

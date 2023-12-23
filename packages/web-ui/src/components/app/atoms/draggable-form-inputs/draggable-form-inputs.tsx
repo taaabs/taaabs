@@ -18,6 +18,7 @@ namespace DraggableFormInputs {
     on_change: (items: Item[]) => void
     button_text: string
     show_visibility_toggler: boolean
+    max_items?: number
   }
 }
 
@@ -121,6 +122,9 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
           set_items([...items, { id: count + 1, is_public: true, value: '' }])
           set_count(items.length + 1)
         }}
+        is_disabled={
+          props.max_items ? items.length == props.max_items : undefined
+        }
       >
         {props.button_text}
       </Button>

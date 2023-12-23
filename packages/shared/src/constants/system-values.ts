@@ -12,5 +12,8 @@ export const system_values = {
     note: {
       max_length: 1000,
     },
+    tags: {
+      limit: 6,
+    },
   },
 }
