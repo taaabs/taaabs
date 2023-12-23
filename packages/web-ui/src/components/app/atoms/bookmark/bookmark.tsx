@@ -9,6 +9,7 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useToggle from 'beautiful-react-hooks/useToggle'
+import { LibraryFilter } from '@shared/types/common/library-filter'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -60,6 +61,7 @@ export namespace Bookmark {
     orama_db_id?: string
     is_serach_result: boolean
     should_dim_visited_links: boolean
+    current_filter?: LibraryFilter // Needs by [update_searchable_bookmarks]
   }
 }
 
@@ -461,7 +463,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.render_height == n.render_height &&
     o.query_params == n.query_params &&
     o.number_of_selected_tags == n.number_of_selected_tags &&
-    o.orama_db_id == n.orama_db_id,
+    o.orama_db_id == n.orama_db_id &&
+    o.current_filter == n.current_filter,
 )
 
 function get_url_domain(url: string): string {

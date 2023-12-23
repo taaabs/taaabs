@@ -1238,5 +1238,6 @@ export const use_search = () => {
     highlights_note,
     check_is_cache_stale,
     remove_recent_hint,
+    current_filter,
   }
 }

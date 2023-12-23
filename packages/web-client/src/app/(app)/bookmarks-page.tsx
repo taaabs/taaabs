@@ -1375,6 +1375,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   bookmarks_slice_state.are_bookmarks_of_search || false
                 }
                 should_dim_visited_links={props.user == 'public'}
+                // It's important to wait until filter is set to search hook's state
+                current_filter={search.current_filter}
               />
             ))
           : []
