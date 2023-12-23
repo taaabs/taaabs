@@ -280,7 +280,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   bookmarks_slice_state.is_updating_bookmarks
                 )
                   return
-                filter_view_options.set_filter_query_param(LibraryFilter.All)
+                filter_view_options.set_filter_query_param_and_clear_others(
+                  LibraryFilter.All,
+                )
               },
               is_active:
                 filter_view_options.current_filter != LibraryFilter.Archived,
@@ -293,7 +295,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   bookmarks_slice_state.is_updating_bookmarks
                 )
                   return
-                filter_view_options.set_filter_query_param(
+                filter_view_options.set_filter_query_param_and_clear_others(
                   LibraryFilter.Archived,
                 )
               },
