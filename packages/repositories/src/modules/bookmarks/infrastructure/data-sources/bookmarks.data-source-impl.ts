@@ -20,7 +20,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async get_bookmarks_on_authorized_user(
     params: GetBookmarks_Params.Authorized,
   ): Promise<Bookmarks_Dto.Response.Authorized> {
-    const queryParams: Bookmarks_Dto.QueryParams.Authorized = {
+    const query_params: Bookmarks_Dto.QueryParams.Authorized = {
       tags: params.tags?.join(','),
       category_id: params.category_id,
       after: params.after,
@@ -44,7 +44,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
 
     return fetch(
       `${this._api_url}/v1/bookmarks?${new URLSearchParams(
-        JSON.parse(JSON.stringify(queryParams)),
+        JSON.parse(JSON.stringify(query_params)),
       ).toString()}`,
       {
         headers: {

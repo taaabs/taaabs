@@ -2,7 +2,6 @@ import CryptoJS from 'crypto-js'
 import { LibrarySearch_Repository } from '../../domain/repositories/library-search.repository'
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
-import { GetLastUpdated_Params } from '../../domain/types/get-last-updated.params'
 import { GetLastUpdated_Ro } from '../../domain/types/get-last-updated.ro'
 import { LibrarySearch_DataSource } from '../data-sources/library-search.data-source'
 
@@ -17,24 +16,14 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
 
     return {
       updated_at: result.updated_at ? new Date(result.updated_at) : undefined,
-    }
-  }
-
-  public async get_last_updated_at_on_public_user(
-    params: GetLastUpdated_Params.Public,
-  ): Promise<GetLastUpdated_Ro> {
-    const result =
-      await this._library_search_data_source.get_last_updated_on_public_user(
-        params,
-      )
-
-    return {
-      updated_at: result.updated_at ? new Date(result.updated_at) : undefined,
+      archived_updated_at: result.archived_updated_at
+        ? new Date(result.archived_updated_at)
+        : undefined,
     }
   }
 
   public async get_bookmarks_on_authorized_user(
-    params: GetBookmarks_Params.Authorized,
+    params: GetBookmarks_Params,
   ): Promise<GetBookmarks_Ro> {
     const { bookmarks } =
       await this._library_search_data_source.get_bookmarks_on_authorized_user(
@@ -64,7 +53,6 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
               )
             : undefined,
           is_unread: bookmark.is_unread || false,
-          is_archived: bookmark.is_archived || false,
           sites: bookmark.sites.map((site) => {
             if (site.site) {
               return site.site
@@ -85,34 +73,6 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
               ).toString(CryptoJS.enc.Utf8)
             }
           }),
-          stars: bookmark.stars || 0,
-        }
-      }),
-    }
-  }
-
-  public async get_bookmarks_on_public_user(
-    params: GetBookmarks_Params.Public,
-  ): Promise<GetBookmarks_Ro> {
-    const { bookmarks } =
-      await this._library_search_data_source.get_bookmarks_on_public_user(
-        params,
-      )
-
-    return {
-      bookmarks: bookmarks.map((bookmark) => {
-        return {
-          id: bookmark.id,
-          created_at: bookmark.created_at,
-          updated_at: bookmark.updated_at,
-          visited_at: 0,
-          title: bookmark.title,
-          note: bookmark.note,
-          is_unread: false,
-          is_archived: bookmark.is_archived || false,
-          is_public: false,
-          sites: bookmark.sites,
-          tags: bookmark.tags,
           stars: bookmark.stars || 0,
         }
       }),

@@ -107,7 +107,11 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   ])
 
   useUpdateEffect(() => {
-    if (search.db && search.is_search_focused) {
+    search.set_current_filter(filter_view_options.current_filter)
+  }, [filter_view_options.current_filter])
+
+  useUpdateEffect(() => {
+    if (search.db || search.archived_db) {
       search.set_current_filter(filter_view_options.current_filter)
       search.set_selected_tags(
         counts.selected_tags
@@ -131,9 +135,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
             return name
           }),
       )
-      search.get_hints()
     }
-  }, [search.db])
+  }, [search.db, search.archived_db])
 
   return (
     <Library
@@ -182,17 +185,28 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           is_focused={search.is_search_focused}
           on_focus={async () => {
             search.set_is_search_focused(true)
+
             if (!search.is_initializing) {
               const is_cache_stale = await search.check_is_cache_stale({
                 api_url: process.env.NEXT_PUBLIC_API_URL,
                 auth_token:
                   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                is_archived:
+                  filter_view_options.current_filter == LibraryFilter.Archived,
               })
 
-              if (search.db === undefined || is_cache_stale) {
-                search.init()
+              if (
+                (filter_view_options.current_filter != LibraryFilter.Archived
+                  ? search.db === undefined
+                  : search.archived_db === undefined) ||
+                is_cache_stale
+              ) {
+                search.init({
+                  is_archived:
+                    filter_view_options.current_filter ==
+                    LibraryFilter.Archived,
+                })
               } else {
-                search.set_current_filter(filter_view_options.current_filter)
                 search.set_selected_tags(
                   counts.selected_tags
                     .filter((id) => {
@@ -1353,7 +1367,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 highlights_note={
                   search.highlights_note?.[bookmark.id.toString()]
                 }
-                orama_db_id={search.db?.id}
+                orama_db_id={
+                  (search.db?.id || '') + (search.archived_db?.id || '')
+                }
                 is_serach_result={
                   bookmarks_slice_state.are_bookmarks_of_search || false
                 }

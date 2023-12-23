@@ -48,13 +48,13 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
           setList={set_items}
           className={styles.sortable}
           animation={system_values.sortablejs_animation_duration}
-          delayOnTouchOnly={true}
           forceFallback={true}
+          handle={'.handle'}
         >
           {items.map((item) => (
             <div key={item.id} className={styles.item}>
               <div className={styles.item__input}>
-                <div className={styles.item__input__handle}>
+                <div className={cn(styles.item__input__handle, 'handle')}>
                   <Icon variant="HANDLE" />
                 </div>
                 <div className={styles.item__input__field}>

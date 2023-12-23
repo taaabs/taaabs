@@ -4,15 +4,13 @@ import { GetBookmarks_Params } from '../types/get-bookmarks.params'
 import { LibrarySearch_Repository } from '../repositories/library-search.repository'
 
 export class GetSearchableBookmarksOnAuthorizedUser_UseCase
-  implements UseCase<Promise<GetBookmarks_Ro>, GetBookmarks_Params.Authorized>
+  implements UseCase<Promise<GetBookmarks_Ro>, GetBookmarks_Params>
 {
   constructor(
     private readonly _library_search_repository: LibrarySearch_Repository,
   ) {}
 
-  public invoke(
-    params: GetBookmarks_Params.Authorized,
-  ): Promise<GetBookmarks_Ro> {
+  public invoke(params: GetBookmarks_Params): Promise<GetBookmarks_Ro> {
     return this._library_search_repository.get_bookmarks_on_authorized_user(
       params,
     )

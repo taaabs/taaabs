@@ -28,7 +28,6 @@ import { system_values } from '@shared/constants/system-values'
 import localforage from 'localforage'
 import { browser_storage } from '@/constants/browser-storage'
 import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-authorized-user.use-case'
-import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-public-user.use-case'
 import { useSearchParams } from 'next/navigation'
 
 type Hint = {
@@ -53,7 +52,6 @@ const schema = {
   created_at: 'number',
   updated_at: 'number',
   visited_at: 'number',
-  is_archived: 'boolean',
   is_unread: 'boolean',
   stars: 'number',
 } as const
@@ -67,6 +65,8 @@ export const use_search = () => {
   const [is_search_focused, set_is_search_focused] = useState(false)
   const [bookmarks_just_tags, set_bookmarks_just_tags] =
     useState<BookmarkTags[]>()
+  const [archived_bookmarks_just_tags, set_archived_bookmarks_just_tags] =
+    useState<BookmarkTags[]>()
   const [current_filter, set_current_filter] = useState<LibraryFilter>()
   const [selected_tags, set_selected_tags] = useState<string[]>([])
   const [ids_to_search_amongst, set_ids_to_search_amongst] = useState<
@@ -76,21 +76,30 @@ export const use_search = () => {
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
   const [is_initializing, set_is_initializing] = useState(false)
   const [search_string, set_search_string] = useState('')
-  const [hints, set_hints] = useState<Hint[] | undefined>()
-  const [db, set_db] = useState<Orama<typeof schema> | undefined>()
+  const [hints, set_hints] = useState<Hint[]>()
+  const [db, set_db] = useState<Orama<typeof schema>>()
+  const [archived_db, set_archived_db] = useState<Orama<typeof schema>>()
   const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =
     useState<number | undefined>()
-  const [result, set_result] = useState<Results<Result> | undefined>()
+  const [result, set_result] = useState<Results<Result>>()
   const [highlights, set_highlights] = useState<Highlights>()
   const [highlights_note, set_highlights_note] = useState<Highlights>()
-  const [count, set_count] = useState<number | undefined>()
+  const [count, set_count] = useState<number>()
 
   useUpdateEffect(() => {
-    if (!bookmarks_just_tags) return
+    if (
+      (current_filter != LibraryFilter.Archived && !bookmarks_just_tags) ||
+      (current_filter == LibraryFilter.Archived &&
+        !archived_bookmarks_just_tags)
+    )
+      return
 
     if (selected_tags.length) {
       set_ids_to_search_amongst(
-        bookmarks_just_tags
+        (current_filter != LibraryFilter.Archived
+          ? bookmarks_just_tags!
+          : archived_bookmarks_just_tags!
+        )
           .filter((bookmark) =>
             selected_tags.every((tag) => bookmark.tags.includes(tag)),
           )
@@ -99,7 +108,7 @@ export const use_search = () => {
     } else if (is_search_focused) {
       get_hints()
     }
-  }, [selected_tags, bookmarks_just_tags])
+  }, [selected_tags, bookmarks_just_tags, archived_bookmarks_just_tags])
 
   useUpdateEffect(() => {
     get_hints()
@@ -107,56 +116,51 @@ export const use_search = () => {
 
   const check_is_cache_stale = async (params: {
     api_url: string
-    auth_token?: string
-    username?: string
+    auth_token: string
+    is_archived: boolean
   }): Promise<boolean> => {
-    if (!params.auth_token && !params.username)
-      throw new Error(
-        '[check_staleness] Auth token OR username should be there.',
-      )
-
     const cache_updated_at = await localforage.getItem<Date>(
-      browser_storage.local_forage.authorized_library.search.cached_at,
+      !params.is_archived
+        ? browser_storage.local_forage.authorized_library.search.cached_at
+        : browser_storage.local_forage.authorized_library.search
+            .archived_cached_at,
     )
 
     if (cache_updated_at) {
       let updated_at: Date | undefined
 
-      if (params.auth_token) {
-        const data_source = new LibrarySearch_DataSourceImpl(
-          params.api_url,
-          params.auth_token,
-        )
-        const repository = new LibrarySearch_RepositoryImpl(data_source)
-        const get_last_updated_at_on_authorized_user_use_case =
-          new GetLastUpdatedAtOnAuthorizedUser_UseCase(repository)
-        const result =
-          await get_last_updated_at_on_authorized_user_use_case.invoke()
+      const data_source = new LibrarySearch_DataSourceImpl(
+        params.api_url,
+        params.auth_token,
+      )
+      const repository = new LibrarySearch_RepositoryImpl(data_source)
+      const get_last_updated_at_on_authorized_user_use_case =
+        new GetLastUpdatedAtOnAuthorizedUser_UseCase(repository)
+      const result =
+        await get_last_updated_at_on_authorized_user_use_case.invoke()
 
-        updated_at = result.updated_at
-      } else {
-        const data_source = new LibrarySearch_DataSourceImpl(params.api_url)
-        const repository = new LibrarySearch_RepositoryImpl(data_source)
-        const get_last_updated_at_on_public_user_use_case =
-          new GetLastUpdatedAtOnPublicUser_UseCase(repository)
-        const result = await get_last_updated_at_on_public_user_use_case.invoke(
-          {
-            username: params.username!,
-          },
-        )
+      !params.is_archived
+        ? (updated_at = result.updated_at)
+        : (updated_at = result.archived_updated_at)
 
-        updated_at = result.updated_at
-      }
-
-      if (updated_at && updated_at > cache_updated_at) {
+      if (updated_at && updated_at.getTime() > cache_updated_at.getTime()) {
         await localforage.removeItem(
-          browser_storage.local_forage.authorized_library.search.cached_at,
+          !params.is_archived
+            ? browser_storage.local_forage.authorized_library.search.cached_at
+            : browser_storage.local_forage.authorized_library.search
+                .archived_cached_at,
         )
         await localforage.removeItem(
-          browser_storage.local_forage.authorized_library.search.bookmarks,
+          !params.is_archived
+            ? browser_storage.local_forage.authorized_library.search.bookmarks
+            : browser_storage.local_forage.authorized_library.search
+                .archived_bookmarks,
         )
         await localforage.removeItem(
-          browser_storage.local_forage.authorized_library.search.index,
+          !params.is_archived
+            ? browser_storage.local_forage.authorized_library.search.index
+            : browser_storage.local_forage.authorized_library.search
+                .archived_index,
         )
         return true
       }
@@ -164,7 +168,7 @@ export const use_search = () => {
     return false
   }
 
-  const init = async () => {
+  const init = async (params: { is_archived: boolean }) => {
     set_is_initializing(true)
 
     const db = await create({
@@ -176,7 +180,6 @@ export const use_search = () => {
           'note',
           'sites',
           'sites_variants',
-          'is_archived',
           'is_unread',
           'stars',
         ],
@@ -190,14 +193,21 @@ export const use_search = () => {
     })
 
     const cached_bookmarks = await localforage.getItem<string>(
-      browser_storage.local_forage.authorized_library.search.bookmarks,
+      !params.is_archived
+        ? browser_storage.local_forage.authorized_library.search.bookmarks
+        : browser_storage.local_forage.authorized_library.search
+            .archived_bookmarks,
     )
     const cached_index = await localforage.getItem<string>(
-      browser_storage.local_forage.authorized_library.search.index,
+      !params.is_archived
+        ? browser_storage.local_forage.authorized_library.search.index
+        : browser_storage.local_forage.authorized_library.search.archived_index,
     )
 
     if (cached_bookmarks && cached_index) {
-      set_bookmarks_just_tags(JSON.parse(cached_bookmarks))
+      !params.is_archived
+        ? set_bookmarks_just_tags(JSON.parse(cached_bookmarks))
+        : set_archived_bookmarks_just_tags(JSON.parse(cached_bookmarks))
       await loadWithHighlight(db, JSON.parse(cached_index as any))
     } else {
       const data_source = new LibrarySearch_DataSourceImpl(
@@ -207,7 +217,10 @@ export const use_search = () => {
       const repository = new LibrarySearch_RepositoryImpl(data_source)
       const get_searchable_bookmarks =
         new GetSearchableBookmarksOnAuthorizedUser_UseCase(repository)
-      const { bookmarks } = await get_searchable_bookmarks.invoke({})
+      const { bookmarks } = await get_searchable_bookmarks.invoke({
+        is_archived: params.is_archived,
+        public_only: false,
+      })
 
       const chunkSize = 1000
       let indexed_count = 0
@@ -236,7 +249,6 @@ export const use_search = () => {
             created_at: bookmark.created_at,
             updated_at: bookmark.updated_at,
             visited_at: bookmark.visited_at,
-            is_archived: bookmark.is_archived,
             is_unread: bookmark.is_unread,
             stars: bookmark.stars,
           })),
@@ -254,38 +266,54 @@ export const use_search = () => {
         id: bookmark.id,
         tags: bookmark.tags,
       }))
-      set_bookmarks_just_tags(bookmarks_just_tags)
-      cache_data({ db, bookmarks_just_tags })
+      !params.is_archived
+        ? set_bookmarks_just_tags(bookmarks_just_tags)
+        : set_archived_bookmarks_just_tags(bookmarks_just_tags)
+      cache_data({ db, bookmarks_just_tags, is_archived: params.is_archived })
     }
 
-    set_db(db)
+    !params.is_archived ? set_db(db) : set_archived_db(db)
     set_is_initializing(false)
   }
 
   const cache_data = async (params: {
     db: Orama<typeof schema>
     bookmarks_just_tags: BookmarkTags[]
+    is_archived: boolean
   }) => {
-    const index = await saveWithHighlight(params.db)
-
     await localforage.setItem(
-      browser_storage.local_forage.authorized_library.search.index,
+      !params.is_archived
+        ? browser_storage.local_forage.authorized_library.search.cached_at
+        : browser_storage.local_forage.authorized_library.search
+            .archived_cached_at,
+      // We cache without waiting for the server to update a bookmark,
+      // so we need to account for some latency.
+      new Date(Date.now() + 5000),
+    )
+    const index = await saveWithHighlight(params.db)
+    await localforage.setItem(
+      !params.is_archived
+        ? browser_storage.local_forage.authorized_library.search.index
+        : browser_storage.local_forage.authorized_library.search.archived_index,
       JSON.stringify(index),
     )
     await localforage.setItem(
-      browser_storage.local_forage.authorized_library.search.bookmarks,
+      !params.is_archived
+        ? browser_storage.local_forage.authorized_library.search.bookmarks
+        : browser_storage.local_forage.authorized_library.search
+            .archived_bookmarks,
       JSON.stringify(params.bookmarks_just_tags),
-    )
-    await localforage.setItem(
-      browser_storage.local_forage.authorized_library.search.cached_at,
-      new Date(),
     )
   }
 
   const get_hits = async (params: {
     search_string: string
   }): Promise<Results<Result>['hits']> => {
-    if (!db) throw new Error('[get_hits] DB should be there.')
+    if (
+      (current_filter != LibraryFilter.Archived && !db) ||
+      (current_filter == LibraryFilter.Archived && !archived_db)
+    )
+      throw new Error('DB should be there.')
 
     const tags = query_params.get('t')
     const gte = query_params.get('gte')
@@ -303,7 +331,7 @@ export const use_search = () => {
     const term = params.search_string.replace(/(?=@)(.*?)($|\s)/g, '').trim()
 
     const result_without_tolerance: Results<Result> = await searchWithHighlight(
-      db,
+      current_filter != LibraryFilter.Archived ? db! : archived_db!,
       {
         limit: system_values.max_library_search_results,
         term,
@@ -312,7 +340,6 @@ export const use_search = () => {
           ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
             : {}),
-          is_archived: current_filter != LibraryFilter.Archived ? false : true,
           ...(current_filter == LibraryFilter.Unread ||
           current_filter == LibraryFilter.OneStarUnread ||
           current_filter == LibraryFilter.TwoStarsUnread ||
@@ -368,7 +395,7 @@ export const use_search = () => {
     )
 
     const result_with_tolerance: Results<Result> = await searchWithHighlight(
-      db,
+      current_filter != LibraryFilter.Archived ? db! : archived_db!,
       {
         limit: system_values.max_library_search_results,
         term,
@@ -377,7 +404,6 @@ export const use_search = () => {
           ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
             : {}),
-          is_archived: current_filter != LibraryFilter.Archived ? false : true,
           ...(current_filter == LibraryFilter.Unread ||
           current_filter == LibraryFilter.OneStarUnread ||
           current_filter == LibraryFilter.TwoStarsUnread ||
@@ -574,7 +600,11 @@ export const use_search = () => {
   }
 
   const get_hints = async () => {
-    if (!db) return
+    if (
+      (current_filter != LibraryFilter.Archived && !db) ||
+      (current_filter == LibraryFilter.Archived && !archived_db)
+    )
+      throw new Error('DB should be there.')
 
     const tags = query_params.get('t')
     const gte = query_params.get('gte')
@@ -630,61 +660,62 @@ export const use_search = () => {
       if (last_word.substring(0, 1) == '@') {
         const site_term = last_word.substring(1)
 
-        const result: Results<Result> = await search(db, {
-          limit:
-            site_term.length <= 2
-              ? 100
-              : system_values.max_library_search_results,
-          term: site_term ? site_term : undefined,
-          properties: ['sites'],
-          where: {
-            ...(tags && ids_to_search_amongst
-              ? { id: ids_to_search_amongst }
-              : {}),
-            is_archived:
-              current_filter != LibraryFilter.Archived ? false : true,
-            ...(current_filter == LibraryFilter.Unread ||
-            current_filter == LibraryFilter.OneStarUnread ||
-            current_filter == LibraryFilter.TwoStarsUnread ||
-            current_filter == LibraryFilter.ThreeStarsUnread
-              ? {
-                  is_unread: true,
-                }
-              : {}),
-            stars: {
-              gte:
-                current_filter == LibraryFilter.OneStar ||
-                current_filter == LibraryFilter.OneStarUnread
-                  ? 1
-                  : current_filter == LibraryFilter.TwoStars ||
-                    current_filter == LibraryFilter.TwoStarsUnread
-                  ? 2
-                  : current_filter == LibraryFilter.ThreeStars ||
-                    current_filter == LibraryFilter.ThreeStarsUnread
-                  ? 3
-                  : 0,
+        const result: Results<Result> = await search(
+          current_filter != LibraryFilter.Archived ? db! : archived_db!,
+          {
+            limit:
+              site_term.length <= 2
+                ? 100
+                : system_values.max_library_search_results,
+            term: site_term ? site_term : undefined,
+            properties: ['sites'],
+            where: {
+              ...(tags && ids_to_search_amongst
+                ? { id: ids_to_search_amongst }
+                : {}),
+              ...(current_filter == LibraryFilter.Unread ||
+              current_filter == LibraryFilter.OneStarUnread ||
+              current_filter == LibraryFilter.TwoStarsUnread ||
+              current_filter == LibraryFilter.ThreeStarsUnread
+                ? {
+                    is_unread: true,
+                  }
+                : {}),
+              stars: {
+                gte:
+                  current_filter == LibraryFilter.OneStar ||
+                  current_filter == LibraryFilter.OneStarUnread
+                    ? 1
+                    : current_filter == LibraryFilter.TwoStars ||
+                      current_filter == LibraryFilter.TwoStarsUnread
+                    ? 2
+                    : current_filter == LibraryFilter.ThreeStars ||
+                      current_filter == LibraryFilter.ThreeStarsUnread
+                    ? 3
+                    : 0,
+              },
+              ...(gte && lte
+                ? {
+                    created_at: {
+                      between: [
+                        new Date(
+                          parseInt(gte.toString().substring(0, 4)),
+                          parseInt(gte.toString().substring(4, 6)) - 1,
+                        ).getTime() / 1000,
+                        new Date(
+                          parseInt(lte.toString().substring(0, 4)),
+                          parseInt(lte.toString().substring(4, 6)),
+                        ).getTime() /
+                          1000 -
+                          1,
+                      ],
+                    },
+                  }
+                : {}),
             },
-            ...(gte && lte
-              ? {
-                  created_at: {
-                    between: [
-                      new Date(
-                        parseInt(gte.toString().substring(0, 4)),
-                        parseInt(gte.toString().substring(4, 6)) - 1,
-                      ).getTime() / 1000,
-                      new Date(
-                        parseInt(lte.toString().substring(0, 4)),
-                        parseInt(lte.toString().substring(4, 6)),
-                      ).getTime() /
-                        1000 -
-                        1,
-                    ],
-                  },
-                }
-              : {}),
+            threshold: site_term ? 0 : undefined,
           },
-          threshold: site_term ? 0 : undefined,
-        })
+        )
 
         const sites: { site: string; occurences: number }[] = []
 
@@ -745,67 +776,70 @@ export const use_search = () => {
         ).map((hit) => hit.id)
 
         if (last_word.length) {
-          const result: Results<Result> = await search(db, {
-            limit:
-              term.length <= 2 ? 100 : system_values.max_library_search_results,
-            term,
-            properties: ['title', 'note'],
-            where: {
-              id: ids_of_hits,
-              is_archived:
-                current_filter != LibraryFilter.Archived ? false : true,
-              ...(current_filter == LibraryFilter.Unread ||
-              current_filter == LibraryFilter.OneStarUnread ||
-              current_filter == LibraryFilter.TwoStarsUnread ||
-              current_filter == LibraryFilter.ThreeStarsUnread
-                ? {
-                    is_unread: true,
-                  }
-                : {}),
-              stars: {
-                gte:
-                  current_filter == LibraryFilter.OneStar ||
-                  current_filter == LibraryFilter.OneStarUnread
-                    ? 1
-                    : current_filter == LibraryFilter.TwoStars ||
-                      current_filter == LibraryFilter.TwoStarsUnread
-                    ? 2
-                    : current_filter == LibraryFilter.ThreeStars ||
-                      current_filter == LibraryFilter.ThreeStarsUnread
-                    ? 3
-                    : 0,
+          const result: Results<Result> = await search(
+            current_filter != LibraryFilter.Archived ? db! : archived_db!,
+            {
+              limit:
+                term.length <= 2
+                  ? 100
+                  : system_values.max_library_search_results,
+              term,
+              properties: ['title', 'note'],
+              where: {
+                id: ids_of_hits,
+                ...(current_filter == LibraryFilter.Unread ||
+                current_filter == LibraryFilter.OneStarUnread ||
+                current_filter == LibraryFilter.TwoStarsUnread ||
+                current_filter == LibraryFilter.ThreeStarsUnread
+                  ? {
+                      is_unread: true,
+                    }
+                  : {}),
+                stars: {
+                  gte:
+                    current_filter == LibraryFilter.OneStar ||
+                    current_filter == LibraryFilter.OneStarUnread
+                      ? 1
+                      : current_filter == LibraryFilter.TwoStars ||
+                        current_filter == LibraryFilter.TwoStarsUnread
+                      ? 2
+                      : current_filter == LibraryFilter.ThreeStars ||
+                        current_filter == LibraryFilter.ThreeStarsUnread
+                      ? 3
+                      : 0,
+                },
+                ...(gte && lte
+                  ? {
+                      created_at: {
+                        between: [
+                          new Date(
+                            parseInt(gte.toString().substring(0, 4)),
+                            parseInt(gte.toString().substring(4, 6)) - 1,
+                          ).getTime() / 1000,
+                          new Date(
+                            parseInt(lte.toString().substring(0, 4)),
+                            parseInt(lte.toString().substring(4, 6)),
+                          ).getTime() /
+                            1000 -
+                            1,
+                        ],
+                      },
+                    }
+                  : {}),
+                ...(sites_variants?.length ? { sites_variants } : {}),
               },
-              ...(gte && lte
-                ? {
-                    created_at: {
-                      between: [
-                        new Date(
-                          parseInt(gte.toString().substring(0, 4)),
-                          parseInt(gte.toString().substring(4, 6)) - 1,
-                        ).getTime() / 1000,
-                        new Date(
-                          parseInt(lte.toString().substring(0, 4)),
-                          parseInt(lte.toString().substring(4, 6)),
-                        ).getTime() /
-                          1000 -
-                          1,
-                      ],
-                    },
-                  }
-                : {}),
-              ...(sites_variants?.length ? { sites_variants } : {}),
+              sortBy: {
+                property:
+                  sortby == '1'
+                    ? 'updated_at'
+                    : sortby == '2'
+                    ? 'visited_at'
+                    : 'created_at',
+                order: order == '1' ? 'ASC' : 'DESC',
+              },
+              threshold: 0,
             },
-            sortBy: {
-              property:
-                sortby == '1'
-                  ? 'updated_at'
-                  : sortby == '2'
-                  ? 'visited_at'
-                  : 'created_at',
-              order: order == '1' ? 'ASC' : 'DESC',
-            },
-            threshold: 0,
-          })
+          )
 
           let words_hashmap: { [word: string]: number } = {}
 
@@ -874,67 +908,70 @@ export const use_search = () => {
             ].slice(0, system_values.max_library_search_hints),
           )
         } else {
-          const result: Results<Result> = await search(db, {
-            limit:
-              term.length <= 2 ? 100 : system_values.max_library_search_results,
-            term: term ? term : undefined,
-            properties: ['title', 'note'],
-            where: {
-              id: ids_of_hits,
-              is_archived:
-                current_filter != LibraryFilter.Archived ? false : true,
-              ...(current_filter == LibraryFilter.Unread ||
-              current_filter == LibraryFilter.OneStarUnread ||
-              current_filter == LibraryFilter.TwoStarsUnread ||
-              current_filter == LibraryFilter.ThreeStarsUnread
-                ? {
-                    is_unread: true,
-                  }
-                : {}),
-              stars: {
-                gte:
-                  current_filter == LibraryFilter.OneStar ||
-                  current_filter == LibraryFilter.OneStarUnread
-                    ? 1
-                    : current_filter == LibraryFilter.TwoStars ||
-                      current_filter == LibraryFilter.TwoStarsUnread
-                    ? 2
-                    : current_filter == LibraryFilter.ThreeStars ||
-                      current_filter == LibraryFilter.ThreeStarsUnread
-                    ? 3
-                    : 0,
+          const result: Results<Result> = await search(
+            current_filter != LibraryFilter.Archived ? db! : archived_db!,
+            {
+              limit:
+                term.length <= 2
+                  ? 100
+                  : system_values.max_library_search_results,
+              term: term ? term : undefined,
+              properties: ['title', 'note'],
+              where: {
+                id: ids_of_hits,
+                ...(current_filter == LibraryFilter.Unread ||
+                current_filter == LibraryFilter.OneStarUnread ||
+                current_filter == LibraryFilter.TwoStarsUnread ||
+                current_filter == LibraryFilter.ThreeStarsUnread
+                  ? {
+                      is_unread: true,
+                    }
+                  : {}),
+                stars: {
+                  gte:
+                    current_filter == LibraryFilter.OneStar ||
+                    current_filter == LibraryFilter.OneStarUnread
+                      ? 1
+                      : current_filter == LibraryFilter.TwoStars ||
+                        current_filter == LibraryFilter.TwoStarsUnread
+                      ? 2
+                      : current_filter == LibraryFilter.ThreeStars ||
+                        current_filter == LibraryFilter.ThreeStarsUnread
+                      ? 3
+                      : 0,
+                },
+                ...(gte && lte
+                  ? {
+                      created_at: {
+                        between: [
+                          new Date(
+                            parseInt(gte.toString().substring(0, 4)),
+                            parseInt(gte.toString().substring(4, 6)) - 1,
+                          ).getTime() / 1000,
+                          new Date(
+                            parseInt(lte.toString().substring(0, 4)),
+                            parseInt(lte.toString().substring(4, 6)),
+                          ).getTime() /
+                            1000 -
+                            1,
+                        ],
+                      },
+                    }
+                  : {}),
+                ...(sites_variants?.length ? { sites_variants } : {}),
               },
-              ...(gte && lte
-                ? {
-                    created_at: {
-                      between: [
-                        new Date(
-                          parseInt(gte.toString().substring(0, 4)),
-                          parseInt(gte.toString().substring(4, 6)) - 1,
-                        ).getTime() / 1000,
-                        new Date(
-                          parseInt(lte.toString().substring(0, 4)),
-                          parseInt(lte.toString().substring(4, 6)),
-                        ).getTime() /
-                          1000 -
-                          1,
-                      ],
-                    },
-                  }
-                : {}),
-              ...(sites_variants?.length ? { sites_variants } : {}),
+              sortBy: {
+                property:
+                  sortby == '1'
+                    ? 'updated_at'
+                    : sortby == '2'
+                    ? 'visited_at'
+                    : 'created_at',
+                order: order == '1' ? 'ASC' : 'DESC',
+              },
+              threshold: term ? 0 : undefined,
             },
-            sortBy: {
-              property:
-                sortby == '1'
-                  ? 'updated_at'
-                  : sortby == '2'
-                  ? 'visited_at'
-                  : 'created_at',
-              order: order == '1' ? 'ASC' : 'DESC',
-            },
-            threshold: term ? 0 : undefined,
-          })
+          )
 
           let tags_hashmap: { [tag: string]: number } = {}
 
@@ -974,7 +1011,7 @@ export const use_search = () => {
   }
 
   useUpdateEffect(() => {
-    if (db !== undefined && is_search_focused) {
+    if (is_search_focused) {
       set_result(undefined)
       get_hints()
     }
@@ -1057,12 +1094,21 @@ export const use_search = () => {
   const delete_searchable_bookmark = async (params: {
     bookmark_id: number
   }) => {
-    if (!db) return
-    await remove(db, params.bookmark_id.toString())
-    const new_all_bookmarks = bookmarks_just_tags!.filter(
-      (bookmark) => bookmark.id != params.bookmark_id,
-    )
-    set_bookmarks_just_tags(new_all_bookmarks)
+    if (current_filter != LibraryFilter.Archived) {
+      if (!db) return
+      await remove(db, params.bookmark_id.toString())
+      const new_all_bookmarks = bookmarks_just_tags!.filter(
+        (bookmark) => bookmark.id != params.bookmark_id,
+      )
+      set_bookmarks_just_tags(new_all_bookmarks)
+    } else {
+      if (!archived_db) return
+      await remove(archived_db, params.bookmark_id.toString())
+      const new_all_bookmarks = archived_bookmarks_just_tags!.filter(
+        (bookmark) => bookmark.id != params.bookmark_id,
+      )
+      set_archived_bookmarks_just_tags(new_all_bookmarks)
+    }
   }
 
   const update_searchable_bookmark = async (params: {
@@ -1081,52 +1127,86 @@ export const use_search = () => {
     }
     tag_ids: number[]
   }) => {
-    if (!db) return
+    if (
+      (current_filter != LibraryFilter.Archived && !db) ||
+      (current_filter == LibraryFilter.Archived && !archived_db)
+    )
+      return
 
-    await remove(db, params.bookmark.id.toString())
+    await remove(
+      current_filter != LibraryFilter.Archived ? db! : archived_db!,
+      params.bookmark.id.toString(),
+    )
     const sites = params.bookmark.links.map(
       (link) =>
         `${get_domain_from_url(link.url)}${
           link.site_path ? `/${link.site_path}` : ''
         }`,
     )
-    await insert(db, {
-      id: params.bookmark.id.toString(),
-      title:
-        (params.bookmark.title ? `${params.bookmark.title} ` : '') +
-        params.bookmark.tags.join(' ') +
-        (sites.length ? ' ' : '') +
-        sites.join(' '),
-      note: params.bookmark.note
-        ? `${params.bookmark.note} ` +
+
+    await insert(
+      current_filter != LibraryFilter.Archived ? db! : archived_db!,
+      {
+        id: params.bookmark.id.toString(),
+        title:
+          (params.bookmark.title ? `${params.bookmark.title} ` : '') +
           params.bookmark.tags.join(' ') +
           (sites.length ? ' ' : '') +
-          sites.join(' ')
-        : '',
-      created_at: params.bookmark.created_at.getTime() / 1000,
-      updated_at: params.bookmark.updated_at.getTime() / 1000,
-      visited_at: params.bookmark.visited_at.getTime() / 1000,
-      is_archived: params.bookmark.is_archived,
-      is_unread: params.bookmark.is_unread,
-      sites,
-      sites_variants: sites
-        .map((site) => get_site_variants_for_search(site))
-        .flat(),
-      stars: params.bookmark.stars || 0,
-      tags: params.bookmark.tags,
-      tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
-    })
-    const new_all_bookmarks = bookmarks_just_tags!.filter(
-      (bookmark) => bookmark.id != params.bookmark.id,
+          sites.join(' '),
+        note: params.bookmark.note
+          ? `${params.bookmark.note} ` +
+            params.bookmark.tags.join(' ') +
+            (sites.length ? ' ' : '') +
+            sites.join(' ')
+          : '',
+        created_at: params.bookmark.created_at.getTime() / 1000,
+        updated_at: params.bookmark.updated_at.getTime() / 1000,
+        visited_at: params.bookmark.visited_at.getTime() / 1000,
+        is_unread: params.bookmark.is_unread,
+        sites,
+        sites_variants: sites
+          .map((site) => get_site_variants_for_search(site))
+          .flat(),
+        stars: params.bookmark.stars || 0,
+        tags: params.bookmark.tags,
+        tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
+      },
     )
-    new_all_bookmarks.push({
-      id: params.bookmark.id,
-      tags: params.bookmark.tags,
-    })
-    set_bookmarks_just_tags(new_all_bookmarks)
-    setTimeout(() => {
-      cache_data({ db, bookmarks_just_tags: new_all_bookmarks })
-    }, 0)
+
+    if (current_filter != LibraryFilter.Archived) {
+      const new_bookmarks_just_tags = bookmarks_just_tags!.filter(
+        (bookmark) => bookmark.id != params.bookmark.id,
+      )
+      new_bookmarks_just_tags.push({
+        id: params.bookmark.id,
+        tags: params.bookmark.tags,
+      })
+      set_bookmarks_just_tags(new_bookmarks_just_tags)
+      setTimeout(() => {
+        cache_data({
+          db: db!,
+          bookmarks_just_tags: new_bookmarks_just_tags,
+          is_archived: false,
+        })
+      }, 0)
+    } else {
+      const new_archived_bookmarks_just_tags =
+        archived_bookmarks_just_tags!.filter(
+          (bookmark) => bookmark.id != params.bookmark.id,
+        )
+      new_archived_bookmarks_just_tags.push({
+        id: params.bookmark.id,
+        tags: params.bookmark.tags,
+      })
+      set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
+      setTimeout(() => {
+        cache_data({
+          db: archived_db!,
+          bookmarks_just_tags: new_archived_bookmarks_just_tags,
+          is_archived: true,
+        })
+      }, 0)
+    }
     if (result && result.count > 0)
       query_db({ search_string, set_highlights_only: true })
   }
@@ -1144,6 +1224,7 @@ export const use_search = () => {
     result,
     is_initializing,
     db,
+    archived_db,
     get_bookmarks,
     delete_searchable_bookmark,
     update_searchable_bookmark,
