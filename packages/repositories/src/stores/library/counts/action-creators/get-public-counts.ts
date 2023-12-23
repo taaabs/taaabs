@@ -32,6 +32,7 @@ export const get_public_counts = (params: {
         bookmarks_actions.set_bookmarks(state.bookmarks.incoming_bookmarks),
       )
       dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
+      dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
     }
   }
 }

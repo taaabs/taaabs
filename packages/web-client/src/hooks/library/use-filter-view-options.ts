@@ -47,6 +47,12 @@ export const use_filter_view_options = () => {
         : Object.values(LibraryFilter).indexOf(filter).toString(),
     )
 
+    for (const key in sessionStorage) {
+      if (key.endsWith(`__${updated_query_params}`)) {
+        sessionStorage.removeItem(key)
+      }
+    }
+
     window.history.pushState(
       {},
       '',

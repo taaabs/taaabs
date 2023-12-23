@@ -63,6 +63,7 @@ type BookmarkTags = { id: number; tags: string[] }
 export const use_search = () => {
   const query_params = useSearchParams()
   const [is_search_focused, set_is_search_focused] = useState(false)
+  const [is_caching_bookmarks, set_is_caching_bookmarks] = useState(false)
   const [bookmarks_just_tags, set_bookmarks_just_tags] =
     useState<BookmarkTags[]>()
   const [archived_bookmarks_just_tags, set_archived_bookmarks_just_tags] =
@@ -281,15 +282,7 @@ export const use_search = () => {
     bookmarks_just_tags: BookmarkTags[]
     is_archived: boolean
   }) => {
-    await localforage.setItem(
-      !params.is_archived
-        ? browser_storage.local_forage.authorized_library.search.cached_at
-        : browser_storage.local_forage.authorized_library.search
-            .archived_cached_at,
-      // We cache without waiting for the server to update a bookmark,
-      // so we need to account for some latency.
-      new Date(Date.now() + 5000),
-    )
+    set_is_caching_bookmarks(true)
     const index = await saveWithHighlight(params.db)
     await localforage.setItem(
       !params.is_archived
@@ -304,6 +297,16 @@ export const use_search = () => {
             .archived_bookmarks,
       JSON.stringify(params.bookmarks_just_tags),
     )
+    await localforage.setItem(
+      !params.is_archived
+        ? browser_storage.local_forage.authorized_library.search.cached_at
+        : browser_storage.local_forage.authorized_library.search
+            .archived_cached_at,
+      // We cache without waiting for the server to update a bookmark,
+      // so we need to account for some latency.
+      new Date(Date.now() + 5000),
+    )
+    set_is_caching_bookmarks(false)
   }
 
   const get_hits = async (params: {
@@ -1042,12 +1045,11 @@ export const use_search = () => {
   }
 
   const reset = () => {
+    set_search_string('')
     set_result(undefined)
     set_hints(undefined)
     set_highlights(undefined)
     set_highlights_note(undefined)
-    set_search_string('')
-    // dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
   }
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
@@ -1247,6 +1249,7 @@ export const use_search = () => {
     get_hints,
     init,
     query_db,
+    is_caching_bookmarks,
     result,
     is_initializing,
     db,

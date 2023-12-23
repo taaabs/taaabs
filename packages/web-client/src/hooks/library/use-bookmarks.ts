@@ -23,7 +23,6 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   )
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
-    if (route_pathname == '/edit') return
     if (route_pathname == '/bookmarks') {
       const request_params: GetBookmarks_Params.Authorized = {}
 

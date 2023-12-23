@@ -44,6 +44,7 @@ export const get_authorized_bookmarks = (params: {
         dispatch(counts_actions.process_tags())
         dispatch(bookmarks_actions.set_bookmarks(bookmarks))
         dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
+        dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
       }
     }
   }

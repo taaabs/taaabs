@@ -14,7 +14,7 @@ import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { Tags } from '@web-ui/components/app/atoms/tags'
 import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -101,7 +101,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
     filter_view_options.current_filter,
     order_view_options.current_order,
     sortby_view_options.current_sortby,
-    tag_view_options.actual_selected_tags,
+    tag_view_options.selected_tags,
     date_view_options.current_gte,
     date_view_options.current_lte,
   ])
@@ -138,6 +138,16 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
     }
   }, [search.db, search.archived_db])
 
+  // We don't refetch bookmarks on back/forward navigation, therefore we need
+  // to clear "searching" state this way.
+  useEffect(() => {
+    const handleEvent = () => {
+      dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
+    }
+    window.addEventListener('popstate', handleEvent)
+    return () => window.removeEventListener('popstate', handleEvent)
+  }, [])
+
   return (
     <Library
       show_bookmarks_skeleton={show_bookmarks_skeleton}
@@ -155,12 +165,12 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           loading_progress_percentage={search.indexed_bookmarks_percentage}
           placeholder={
             filter_view_options.current_filter == LibraryFilter.All &&
-            !tag_view_options.actual_selected_tags.length &&
+            !tag_view_options.selected_tags.length &&
             !query_params.get('gte') &&
             !query_params.get('lte')
               ? 'Search in all bookmarks'
               : filter_view_options.current_filter == LibraryFilter.Archived &&
-                !tag_view_options.actual_selected_tags.length &&
+                !tag_view_options.selected_tags.length &&
                 !query_params.get('gte') &&
                 !query_params.get('lte')
               ? 'Search in archived bookmarks'
@@ -184,6 +194,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           }}
           is_focused={search.is_search_focused}
           on_focus={async () => {
+            if (search.is_caching_bookmarks) return
+
             search.set_is_search_focused(true)
 
             if (!search.is_initializing) {
@@ -708,11 +720,11 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 >
                   {(bookmarks_slice_state.is_fetching_first_bookmarks
                     ? counts.selected_tags.length > 0
-                    : tag_view_options.actual_selected_tags.length > 0) && (
+                    : tag_view_options.selected_tags.length > 0) && (
                     <SelectedTags
                       selected_tags={(bookmarks_slice_state.is_fetching_first_bookmarks
                         ? counts.selected_tags
-                        : tag_view_options.actual_selected_tags
+                        : tag_view_options.selected_tags
                       )
                         .filter((id) => {
                           if (
@@ -749,7 +761,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             Object.entries(counts.tags).filter((tag) =>
                               bookmarks_slice_state.is_fetching_first_bookmarks
                                 ? !counts.selected_tags.includes(tag[1].id)
-                                : !tag_view_options.actual_selected_tags.includes(
+                                : !tag_view_options.selected_tags.includes(
                                     tag[1].id,
                                   ),
                             ),
@@ -808,7 +820,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                     ? new Date(bookmark.visited_at)
                     : new Date(bookmark.created_at)
                 }
-                should_display_only_month={search.result !== undefined}
+                should_display_only_month={
+                  bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+                }
                 links={bookmark.links.map((link) => ({
                   url: link.url,
                   saves: link.saves,
@@ -817,7 +831,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 number_of_selected_tags={
                   bookmarks_slice_state.is_fetching_first_bookmarks
                     ? counts.selected_tags.length
-                    : tag_view_options.actual_selected_tags.length
+                    : tag_view_options.selected_tags.length
                 }
                 query_params={query_params.toString()}
                 tags={
@@ -827,7 +841,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                           bookmarks_slice_state.is_fetching_first_bookmarks
                             ? counts.selected_tags.find((t) => t == tag.id) !=
                               undefined
-                            : tag_view_options.actual_selected_tags.find(
+                            : tag_view_options.selected_tags.find(
                                 (t) => t == tag.id,
                               ) !== undefined
 
@@ -1371,7 +1385,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   (search.db?.id || '') + (search.archived_db?.id || '')
                 }
                 is_serach_result={
-                  bookmarks_slice_state.showing_bookmarks_fetched_by_ids || false
+                  bookmarks_slice_state.showing_bookmarks_fetched_by_ids ||
+                  false
                 }
                 should_dim_visited_links={props.user == 'public'}
                 // It's important to wait until filter is set to search hook's state

@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 export const use_tag_view_options = () => {
   const query_params = useSearchParams()
-  const [actual_selected_tags, set_actual_selected_tags] = useState<number[]>(
+  const [selected_tags, set_selected_tags] = useState<number[]>(
     query_params.get('t')
       ? query_params
           .get('t')!
@@ -15,7 +15,7 @@ export const use_tag_view_options = () => {
   )
 
   useUpdateEffect(() => {
-    set_actual_selected_tags(
+    set_selected_tags(
       query_params.get('t')
         ? query_params
             .get('t')!
@@ -90,8 +90,8 @@ export const use_tag_view_options = () => {
   }
 
   return {
-    actual_selected_tags,
-    set_actual_selected_tags,
+    selected_tags,
+    set_selected_tags,
     add_tag_to_query_params,
     remove_tag_from_query_params,
     clear_selected_tags,

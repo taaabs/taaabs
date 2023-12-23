@@ -65,9 +65,9 @@ const Page: React.FC = () => {
   const {
     add_tag_to_query_params,
     remove_tag_from_query_params,
-    actual_selected_tags,
+    selected_tags,
     clear_selected_tags,
-    set_actual_selected_tags,
+    set_selected_tags,
   } = use_tag_view_options()
   const { set_gte_lte_query_params, clear_gte_lte_query_params } =
     use_date_view_options()
@@ -114,7 +114,7 @@ const Page: React.FC = () => {
                 set_show_tags(false)
                 set_show_tags_skeleton(true)
                 set_filter_query_param_reset_others(LibraryFilter.All)
-                set_actual_selected_tags([])
+                set_selected_tags([])
               },
               is_active: current_filter != LibraryFilter.Archived,
             },
@@ -127,7 +127,7 @@ const Page: React.FC = () => {
                 set_show_tags(false)
                 set_show_tags_skeleton(true)
                 set_filter_query_param_reset_others(LibraryFilter.Archived)
-                set_actual_selected_tags([])
+                set_selected_tags([])
               },
               is_active: current_filter == LibraryFilter.Archived,
             },
@@ -349,11 +349,11 @@ const Page: React.FC = () => {
                 >
                   {(is_fetching_first_bookmarks
                     ? selected_tags.length > 0
-                    : actual_selected_tags.length > 0) && (
+                    : selected_tags.length > 0) && (
                     <SelectedTags
                       selected_tags={(is_fetching_first_bookmarks
                         ? selected_tags
-                        : actual_selected_tags
+                        : selected_tags
                       )
                         .filter((id) => {
                           if (!bookmarks || !bookmarks[0]) return false
@@ -383,7 +383,7 @@ const Page: React.FC = () => {
                             Object.entries(tags).filter((tag) =>
                               is_fetching_first_bookmarks
                                 ? !selected_tags.includes(tag[1].id)
-                                : !actual_selected_tags.includes(tag[1].id),
+                                : !selected_tags.includes(tag[1].id),
                             ),
                           )
                         : {}
@@ -428,14 +428,14 @@ const Page: React.FC = () => {
                 number_of_selected_tags={
                   is_fetching_first_bookmarks
                     ? selected_tags.length
-                    : actual_selected_tags.length
+                    : selected_tags.length
                 }
                 tags={
                   bookmark.tags
                     ? bookmark.tags.map((tag) => {
                         const isSelected = is_fetching_first_bookmarks
                           ? selected_tags.find((t) => t == tag.id) !== undefined
-                          : actual_selected_tags.find((t) => t == tag.id) !=
+                          : selected_tags.find((t) => t == tag.id) !=
                             undefined
 
                         return {
