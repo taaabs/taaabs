@@ -1371,7 +1371,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   (search.db?.id || '') + (search.archived_db?.id || '')
                 }
                 is_serach_result={
-                  bookmarks_slice_state.are_bookmarks_of_search || false
+                  bookmarks_slice_state.showing_bookmarks_fetched_by_ids || false
                 }
                 should_dim_visited_links={props.user == 'public'}
                 // It's important to wait until filter is set to search hook's state

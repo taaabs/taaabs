@@ -1047,7 +1047,7 @@ export const use_search = () => {
     set_highlights(undefined)
     set_highlights_note(undefined)
     set_search_string('')
-    dispatch(bookmarks_actions.set_are_bookmarks_of_search(false))
+    // dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
   }
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {

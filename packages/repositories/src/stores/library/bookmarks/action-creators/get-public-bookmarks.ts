@@ -30,7 +30,7 @@ export const get_public_bookmarks = (params: {
 
     dispatch(bookmarks_actions.set_is_fetching_data(false))
     dispatch(bookmarks_actions.set_has_more_bookmarks(pagination.has_more))
-    dispatch(bookmarks_actions.set_are_bookmarks_of_search(false))
+    dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
 
     if (params.request_params.after) {
       dispatch(bookmarks_actions.set_more_bookmarks(bookmarks))
