@@ -42,7 +42,7 @@
       border-radius: var(--border-radius-999px);
       width: 7px;
       height: 7px;
-      @include transition-100ms;
+      @include transition-150ms;
     }
     > span {
       font-weight: var(--font-weight-inter-medium);

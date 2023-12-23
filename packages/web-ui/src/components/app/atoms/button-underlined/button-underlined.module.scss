@@ -41,7 +41,7 @@
       left: 0;
       margin-left: 50%;
       transform: translateX(-50%) translateY(100%);
-      @include transition-100ms;
+      @include transition-150ms;
       @include to992 {
         $underline-height: 2.7px;
         height: $underline-height;

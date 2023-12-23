@@ -1047,6 +1047,7 @@ export const use_search = () => {
     set_highlights(undefined)
     set_highlights_note(undefined)
     set_search_string('')
+    dispatch(bookmarks_actions.set_are_bookmarks_of_search(false))
   }
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
@@ -1101,13 +1102,28 @@ export const use_search = () => {
         (bookmark) => bookmark.id != params.bookmark_id,
       )
       set_bookmarks_just_tags(new_all_bookmarks)
+      setTimeout(() => {
+        cache_data({
+          db: db!,
+          bookmarks_just_tags: new_all_bookmarks,
+          is_archived: false,
+        })
+      }, 0)
     } else {
       if (!archived_db) return
       await remove(archived_db, params.bookmark_id.toString())
-      const new_all_bookmarks = archived_bookmarks_just_tags!.filter(
-        (bookmark) => bookmark.id != params.bookmark_id,
-      )
-      set_archived_bookmarks_just_tags(new_all_bookmarks)
+      const new_archived_bookmarks_just_tags =
+        archived_bookmarks_just_tags!.filter(
+          (bookmark) => bookmark.id != params.bookmark_id,
+        )
+      set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
+      setTimeout(() => {
+        cache_data({
+          db: archived_db!,
+          bookmarks_just_tags: new_archived_bookmarks_just_tags,
+          is_archived: true,
+        })
+      }, 0)
     }
   }
 
@@ -1144,43 +1160,51 @@ export const use_search = () => {
         }`,
     )
 
-    await insert(
-      current_filter != LibraryFilter.Archived ? db! : archived_db!,
-      {
-        id: params.bookmark.id.toString(),
-        title:
-          (params.bookmark.title ? `${params.bookmark.title} ` : '') +
-          params.bookmark.tags.join(' ') +
-          (sites.length ? ' ' : '') +
-          sites.join(' '),
-        note: params.bookmark.note
-          ? `${params.bookmark.note} ` +
+    if (
+      (current_filter == LibraryFilter.Archived &&
+        params.bookmark.is_archived) ||
+      (current_filter != LibraryFilter.Archived && !params.bookmark.is_archived)
+    ) {
+      await insert(
+        current_filter != LibraryFilter.Archived ? db! : archived_db!,
+        {
+          id: params.bookmark.id.toString(),
+          title:
+            (params.bookmark.title ? `${params.bookmark.title} ` : '') +
             params.bookmark.tags.join(' ') +
             (sites.length ? ' ' : '') +
-            sites.join(' ')
-          : '',
-        created_at: params.bookmark.created_at.getTime() / 1000,
-        updated_at: params.bookmark.updated_at.getTime() / 1000,
-        visited_at: params.bookmark.visited_at.getTime() / 1000,
-        is_unread: params.bookmark.is_unread,
-        sites,
-        sites_variants: sites
-          .map((site) => get_site_variants_for_search(site))
-          .flat(),
-        stars: params.bookmark.stars || 0,
-        tags: params.bookmark.tags,
-        tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
-      },
-    )
+            sites.join(' '),
+          note: params.bookmark.note
+            ? `${params.bookmark.note} ` +
+              params.bookmark.tags.join(' ') +
+              (sites.length ? ' ' : '') +
+              sites.join(' ')
+            : '',
+          created_at: params.bookmark.created_at.getTime() / 1000,
+          updated_at: params.bookmark.updated_at.getTime() / 1000,
+          visited_at: params.bookmark.visited_at.getTime() / 1000,
+          is_unread: params.bookmark.is_unread,
+          sites,
+          sites_variants: sites
+            .map((site) => get_site_variants_for_search(site))
+            .flat(),
+          stars: params.bookmark.stars || 0,
+          tags: params.bookmark.tags,
+          tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
+        },
+      )
+    }
 
     if (current_filter != LibraryFilter.Archived) {
       const new_bookmarks_just_tags = bookmarks_just_tags!.filter(
         (bookmark) => bookmark.id != params.bookmark.id,
       )
-      new_bookmarks_just_tags.push({
-        id: params.bookmark.id,
-        tags: params.bookmark.tags,
-      })
+      if (!params.bookmark.is_archived) {
+        new_bookmarks_just_tags.push({
+          id: params.bookmark.id,
+          tags: params.bookmark.tags,
+        })
+      }
       set_bookmarks_just_tags(new_bookmarks_just_tags)
       setTimeout(() => {
         cache_data({
@@ -1194,10 +1218,12 @@ export const use_search = () => {
         archived_bookmarks_just_tags!.filter(
           (bookmark) => bookmark.id != params.bookmark.id,
         )
-      new_archived_bookmarks_just_tags.push({
-        id: params.bookmark.id,
-        tags: params.bookmark.tags,
-      })
+      if (params.bookmark.is_archived) {
+        new_archived_bookmarks_just_tags.push({
+          id: params.bookmark.id,
+          tags: params.bookmark.tags,
+        })
+      }
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
       setTimeout(() => {
         cache_data({

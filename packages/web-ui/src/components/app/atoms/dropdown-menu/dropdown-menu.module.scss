@@ -22,7 +22,7 @@
   border-width: 1px;
   display: flex;
   align-items: center;
-  @include transition-100ms;
+  @include transition-150ms;
   @include hover {
     background-color: var(--SimpleSelectDropdown-background-hover);
     border-top: var(--border-primary);

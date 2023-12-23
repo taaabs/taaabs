@@ -25,7 +25,7 @@
   border-radius: var(--border-radius-999px);
   box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.4);
   z-index: 2;
-  @include transition-100ms;
+  @include transition-150ms;
   @include to992 {
     margin: 0 var(--distance-10px);
   }
@@ -63,7 +63,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    @include transition-100ms(background-color);
+    @include transition-150ms(background-color);
     border-radius: var(--border-radius-999px);
     @include hover {
       background: var(--blue100);
@@ -71,7 +71,7 @@
     > svg {
       width: var(--icon-dimension-20px);
       fill: var(--brand-color);
-      @include transition-100ms(fill);
+      @include transition-150ms(fill);
     }
   }
   &__loader {
@@ -121,7 +121,7 @@
         font-size: var(--font-size-17px);
         font-weight: var(--font-weight-inter-tight-medium);
         font-family: var(--font-family-inter-tight);
-        @include transition-100ms(color);
+        @include transition-150ms(color);
         display: flex;
         align-items: center;
         pointer-events: none;
@@ -137,7 +137,7 @@
         &__highlight {
           background-color: var(--blue200);
           border-radius: var(--border-radius-3px);
-          @include transition-100ms(background-color);
+          @include transition-150ms(background-color);
           &--no-results {
             background-color: var(--red200);
           }
@@ -176,7 +176,7 @@
           font-family: var(--font-family-inter);
           color: var(--brand-color);
           opacity: 0.8;
-          @include transition-100ms(color);
+          @include transition-150ms(color);
         }
       }
     }
@@ -199,7 +199,7 @@
     &__results-count {
       color: var(--blue500);
       white-space: pre;
-      @include transition-100ms(color);
+      @include transition-150ms(color);
       &--yields-no-results {
         color: var(--red500);
       }
@@ -212,7 +212,7 @@
       width: var(--button-dimension-28px);
       height: var(--button-dimension-28px);
       border-radius: var(--border-radius-999px);
-      @include transition-100ms(background-color);
+      @include transition-150ms(background-color);
       @include hover {
         background-color: var(--blue100);
       }
@@ -227,7 +227,7 @@
       > svg {
         width: var(--icon-dimension-16px);
         fill: var(--brand-color);
-        @include transition-100ms(fill);
+        @include transition-150ms(fill);
       }
     }
   }
@@ -242,7 +242,7 @@
   border: var(--border-primary);
   box-shadow: var(--box-shadow);
   opacity: 1;
-  @include transition-100ms;
+  @include transition-150ms;
   transform: translateY(0);
   @include to992 {
     width: calc(100% - (var(--distance-20px)));

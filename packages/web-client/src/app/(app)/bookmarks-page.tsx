@@ -97,7 +97,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
 
   useUpdateEffect(() => {
     search.reset()
-    dispatch(bookmarks_actions.set_are_bookmarks_of_search(false))
   }, [
     filter_view_options.current_filter,
     order_view_options.current_order,

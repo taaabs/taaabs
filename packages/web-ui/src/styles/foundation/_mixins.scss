@@ -72,11 +72,11 @@
     @content;
   }
 }
-@mixin transition-100ms($transitionProperty: all) {
-  transition: $transitionProperty var(--transition-duration-100ms) linear;
+@mixin transition-150ms($transitionProperty: all) {
+  transition: $transitionProperty var(--transition-duration-150ms) var(--transition-timing-function);
 }
 @mixin transition-300ms($transitionProperty: all) {
-  transition: $transitionProperty var(--transition-duration-300ms) linear;
+  transition: $transitionProperty var(--transition-duration-300ms) var(--transition-timing-function);
 }
 @mixin text-decoration-underline {
   text-decoration: underline;

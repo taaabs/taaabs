@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     height: var(--button-dimension-48px);
-    @include transition-100ms(color);
+    @include transition-150ms(color);
     color: var(--text-color-dimmed);
     font-size: var(--font-size-20px);
     @include at992 {

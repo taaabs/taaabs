@@ -11,8 +11,8 @@
   border: 1px solid var(--blue200);
   background-color: var(--blue100);
   border-radius: var(--border-radius-10px);
-  transition: background-color var(--transition-duration-100ms) linear,
-    border-color var(--transition-duration-100ms) linear;
+  transition: background-color var(--transition-duration-150ms) linear,
+    border-color var(--transition-duration-150ms) linear;
   @include hover {
     border-color: var(--blue300);
   }

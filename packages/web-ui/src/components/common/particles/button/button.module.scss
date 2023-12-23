@@ -9,7 +9,7 @@
   background: var(--Button-background);
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
-  @include transition-100ms(background-color);
+  @include transition-150ms(background-color);
   border-radius: var(--border-radius-999px);
   @include hover {
     background: var(--Button-background-hover);

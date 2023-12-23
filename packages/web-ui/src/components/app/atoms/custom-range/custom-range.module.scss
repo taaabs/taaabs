@@ -84,7 +84,7 @@
     right: var(--distance-6px);
     height: var(--button-dimension-28px);
     width: var(--button-dimension-28px);
-    @include transition-100ms(background-color);
+    @include transition-150ms(background-color);
     border-radius: var(--border-radius-999px);
     @include hover {
       background: var(--Months-clear-background-hover);
@@ -93,7 +93,7 @@
       width: var(--icon-dimension-16px);
       height: var(--icon-dimension-16px);
       transform: rotate(45deg);
-      @include transition-100ms(fill);
+      @include transition-150ms(fill);
     }
   }
   &__recharts {
@@ -109,7 +109,7 @@
           stroke: var(--neutral400);
         }
         > g > line {
-          @include transition-100ms(stroke);
+          @include transition-150ms(stroke);
           stroke: var(--neutral400);
         }
       }
@@ -120,13 +120,13 @@
         stroke: none;
       }
       > g > rect {
-        @include transition-100ms(stroke);
+        @include transition-150ms(stroke);
         fill: var(--Months-chart-brush-handle-fill);
         rx: var(--border-radius-8px);
         stroke: var(--neutral350);
       }
       > g > line {
-        @include transition-100ms(stroke);
+        @include transition-150ms(stroke);
         stroke: var(--Months-chart-brush-handle);
         &:first-of-type {
           transform: translateY(-0.6px);

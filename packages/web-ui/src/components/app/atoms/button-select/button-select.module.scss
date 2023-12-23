@@ -11,7 +11,7 @@
   border: var(--border-secondary);
   padding: 0 var(--distance-13px) 0 var(--distance-12px);
   background-color: var(--outlined-button-background);
-  @include transition-100ms(border-color);
+  @include transition-150ms(border-color);
   @include hover {
     border-color: var(--border-color-hover);
   }
@@ -35,7 +35,7 @@
 .arrow {
   svg {
     transform: rotate(-90deg);
-    @include transition-100ms(transform);
+    @include transition-150ms(transform);
     width: var(--icon-dimension-12px);
     height: var(--icon-dimension-12px);
   }

@@ -11,13 +11,16 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  backdrop-filter: var(--backdrop-filter);
+  backdrop-filter: blur(0);
   background-color: rgba(0, 0, 0, 0.2);
   opacity: 0;
   &--visible {
     pointer-events: all;
     opacity: 1;
-    @include transition-100ms(opacity);
+    backdrop-filter: var(--backdrop-filter);
+    transition-property: opacity, backdrop-filter;
+    transition-timing-function: var(--transition-timing-function);
+    transition-duration: var(--transition-duration-150ms);
   }
   @include to992 {
     align-items: flex-end;
@@ -42,7 +45,7 @@
       border-radius: var(--border-radius-20px);
     }
     &--visible {
-      @include transition-100ms(transform);
+      @include transition-150ms(transform);
       @include to768 {
         transform: translateY(0);
       }

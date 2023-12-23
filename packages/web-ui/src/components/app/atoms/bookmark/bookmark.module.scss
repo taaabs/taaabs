@@ -4,7 +4,7 @@
 .container {
   background: var(--plain-white);
   border: var(--border-secondary);
-  @include transition-100ms(border-color);
+  @include transition-150ms(border-color);
   @include to992 {
     border-top: var(--border-primary);
     border-left: 0;
@@ -59,12 +59,12 @@
           align-items: center;
           justify-content: center;
           border-radius: var(--border-radius-999px);
-          @include transition-100ms(background-color);
+          @include transition-150ms(background-color);
           width: var(--button-dimension-28px);
           height: var(--button-dimension-28px);
           svg {
             fill: var(--neutral350);
-            @include transition-100ms(fill);
+            @include transition-150ms(fill);
             height: var(--icon-dimension-16px);
           }
           @include hover {
@@ -87,7 +87,7 @@
           right: 0;
           bottom: calc(var(--distance-4px) * -1);
           opacity: 1;
-          @include transition-100ms;
+          @include transition-150ms;
           transform: translateY(0);
           &--hidden {
             opacity: 0;
@@ -216,7 +216,7 @@
           background-color: var(--outlined-button-background);
           border-radius: var(--border-radius-999px);
           border: var(--border-secondary);
-          @include transition-100ms(border-color);
+          @include transition-150ms(border-color);
           @include hover {
             border-color: var(--border-color-hover);
           }
@@ -281,12 +281,12 @@
           align-items: center;
           justify-content: center;
           border-radius: var(--border-radius-999px);
-          @include transition-100ms(background-color);
+          @include transition-150ms(background-color);
           width: var(--button-dimension-28px);
           height: var(--button-dimension-28px);
           svg {
             fill: var(--neutral500);
-            @include transition-100ms(fill);
+            @include transition-150ms(fill);
             width: var(--icon-dimension-12px);
             height: var(--icon-dimension-12px);
           }
@@ -302,12 +302,12 @@
           align-items: center;
           justify-content: center;
           border-radius: var(--border-radius-999px);
-          @include transition-100ms(background-color);
+          @include transition-150ms(background-color);
           width: var(--button-dimension-28px);
           height: var(--button-dimension-28px);
           svg {
             fill: var(--neutral400);
-            @include transition-100ms(fill);
+            @include transition-150ms(fill);
             height: var(--icon-dimension-16px);
           }
           @include hover {

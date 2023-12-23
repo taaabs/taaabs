@@ -23,7 +23,7 @@
   }
   svg {
     fill: var(--brand-color);
-    @include transition-100ms(transform);
+    @include transition-150ms(transform);
     height: 18px;
     width: 10px;
     @include at992 {

@@ -39,14 +39,14 @@
       border-radius: 999px;
       width: var(--button-dimension-34px);
       height: var(--button-dimension-34px);
-      @include transition-100ms(background-color);
+      @include transition-150ms(background-color);
       @include hover {
         background-color: var(--blue100);
       }
       > svg {
         height: var(--icon-dimension-20px);
         fill: var(--brand-color);
-        @include transition-100ms(fill);
+        @include transition-150ms(fill);
       }
       &--remove > svg {
         transform: rotate(45deg);

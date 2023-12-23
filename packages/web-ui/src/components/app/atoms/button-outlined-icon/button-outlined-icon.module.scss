@@ -10,7 +10,7 @@
   border: var(--border-secondary);
   overflow: hidden;
   position: relative;
-  @include transition-100ms(border-color);
+  @include transition-150ms(border-color);
   width: var(--button-dimension-40px);
   height: var(--button-dimension-40px);
   background: var(--ButtonOutlined-icon-background);

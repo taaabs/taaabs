@@ -141,7 +141,7 @@
   --icon-dimension-30px: 30px;
   --icon-dimension-32px: 32px;
 
-  --backdrop-filter: saturate(180%) blur(5px);
+  --backdrop-filter: blur(4px);
 
   --box-shadow: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.06);
   --box-shadow-long: 0px 6px 20px 2px rgba(0, 0, 0, 0.12);
@@ -151,8 +151,10 @@
   --letter-spacing-logo: -0.04em;
   --letter-spacing-landing-heading: 1.5px;
 
-  --transition-duration-100ms: 0.1s;
-  --transition-duration-300ms: 0.3s;
+  --transition-duration-150ms: 150ms;
+  --transition-duration-300ms: 300ms;
+
+  --transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
   --animation-fade-in: fade-in 1s ease 0s 1 normal backwards running;
   --animation-fade-in-move-from-top-delayed: fade-in-move-from-top 1.2s ease

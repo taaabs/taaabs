@@ -28,7 +28,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    @include transition-100ms(background-color);
+    @include transition-150ms(background-color);
     @include hover {
       background-color: var(--neutral200);
     }
@@ -53,7 +53,7 @@
       width: 100%;
       z-index: 2;
       opacity: 1;
-      @include transition-100ms;
+      @include transition-150ms;
       transform: translateY(0);
       &--hidden {
         opacity: 0;

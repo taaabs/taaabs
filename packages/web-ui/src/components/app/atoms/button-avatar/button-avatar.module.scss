@@ -14,7 +14,7 @@
   img {
     width: 100%;
     height: 100%;
-    @include transition-100ms(filter);
+    @include transition-150ms(filter);
     z-index: 0;
     @include hover {
       filter: brightness(90%);

@@ -22,7 +22,7 @@
     }
     &__cancel {
       color: var(--text-color-dimmed);
-      @include transition-100ms(color);
+      @include transition-150ms(color);
       @include hover {
         color: var(--text-color-normal);
       }
