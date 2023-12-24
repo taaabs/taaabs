@@ -440,10 +440,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             styles.bookmark__links__item__actions__open
                           }
                           onClick={async () => {
+                            window.open(link.url, '_blank')
                             if (props.on_link_click) {
                               await props.on_link_click()
                             }
-                            window.open(link.url, '_blank')
                           }}
                         >
                           <Icon variant="NEW_TAB" />

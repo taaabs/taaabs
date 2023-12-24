@@ -223,10 +223,10 @@ export const use_search = () => {
         public_only: false,
       })
 
-      const chunkSize = 1000
+      const chunk_size = 1000
       let indexed_count = 0
-      for (let i = 0; i < bookmarks.length; i += chunkSize) {
-        const chunk = bookmarks.slice(i, i + chunkSize)
+      for (let i = 0; i < bookmarks.length; i += chunk_size) {
+        const chunk = bookmarks.slice(i, i + chunk_size)
         await insertMultiple(
           db,
           chunk.map((bookmark) => ({
@@ -253,7 +253,7 @@ export const use_search = () => {
             is_unread: bookmark.is_unread,
             stars: bookmark.stars,
           })),
-          chunkSize,
+          chunk_size,
         )
         indexed_count += chunk.length
         const progress_percentage = Math.floor(
