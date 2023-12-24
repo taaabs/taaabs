@@ -11,6 +11,7 @@ export const Primary = () => {
           name="Lorem"
           description="Lorem ipsum"
           price="$0"
+          price_duration="Month"
           price_info="Lorem ipsum"
           bullets={[
             'Lorem ipsum',

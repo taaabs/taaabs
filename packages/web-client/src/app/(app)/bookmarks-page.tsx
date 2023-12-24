@@ -93,6 +93,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
     set_show_tags_skeleton(false)
     set_show_bookmarks_skeleton(false)
     modal_context?.set_modal()
+    sortby_view_options.set_commited_sortby(sortby_view_options.current_sortby)
   }, [bookmarks_slice_state.bookmarks])
 
   useUpdateEffect(() => {
@@ -833,11 +834,19 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   bookmarks_slice_state.is_fetching_first_bookmarks
                 }
                 date={
-                  sortby_view_options.current_sortby == Sortby.CreatedAt
+                  !bookmarks_slice_state.is_fetching_first_bookmarks
+                    ? sortby_view_options.current_sortby == Sortby.CreatedAt
+                      ? new Date(bookmark.created_at)
+                      : sortby_view_options.current_sortby == Sortby.UpdatedAt
+                      ? new Date(bookmark.updated_at)
+                      : sortby_view_options.current_sortby == Sortby.VisitedAt
+                      ? new Date(bookmark.visited_at)
+                      : new Date(bookmark.created_at)
+                    : sortby_view_options.commited_sortby == Sortby.CreatedAt
                     ? new Date(bookmark.created_at)
-                    : sortby_view_options.current_sortby == Sortby.UpdatedAt
+                    : sortby_view_options.commited_sortby == Sortby.UpdatedAt
                     ? new Date(bookmark.updated_at)
-                    : sortby_view_options.current_sortby == Sortby.VisitedAt
+                    : sortby_view_options.commited_sortby == Sortby.VisitedAt
                     ? new Date(bookmark.visited_at)
                     : new Date(bookmark.created_at)
                 }

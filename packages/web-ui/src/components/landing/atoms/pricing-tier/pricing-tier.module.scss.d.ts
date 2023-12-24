@@ -4,7 +4,7 @@ declare const styles: {
   readonly top__name: string
   readonly top__description: string
   readonly price: string
-  readonly price__costPerMonth: string
+  readonly price__cost: string
   readonly price__info: string
   readonly bullets: string
   readonly bullets__item: string

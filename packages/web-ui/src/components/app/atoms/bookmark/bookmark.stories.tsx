@@ -44,6 +44,7 @@ export const Primary = () => (
         is_serach_result={false}
         should_dim_visited_links={false}
         updated_at=""
+        is_fetching_bookmarks={false}
       />
       <StorybookSpacer />
       <Bookmark
@@ -78,6 +79,7 @@ export const Primary = () => (
         is_serach_result={true}
         should_dim_visited_links={false}
         updated_at=""
+        is_fetching_bookmarks={false}
       />
       <StorybookSpacer />
       <Bookmark
@@ -101,6 +103,7 @@ export const Primary = () => (
         is_serach_result={false}
         should_dim_visited_links={false}
         updated_at=""
+        is_fetching_bookmarks={false}
       />
       <StorybookSpacer />
       <Bookmark
@@ -128,6 +131,7 @@ export const Primary = () => (
         is_serach_result={false}
         should_dim_visited_links={false}
         updated_at=""
+        is_fetching_bookmarks={false}
       />
       <StorybookSpacer />
       <Bookmark
@@ -154,6 +158,7 @@ export const Primary = () => (
         is_serach_result={false}
         should_dim_visited_links={false}
         updated_at=""
+        is_fetching_bookmarks={false}
       />
       <StorybookSpacer />
       <Bookmark
@@ -187,6 +192,7 @@ export const Primary = () => (
         is_serach_result={false}
         should_dim_visited_links={false}
         updated_at=""
+        is_fetching_bookmarks={false}
       />
       <StorybookSpacer />
       <Bookmark
@@ -213,6 +219,7 @@ export const Primary = () => (
         is_serach_result={false}
         should_dim_visited_links={false}
         updated_at=""
+        is_fetching_bookmarks={false}
       />
       <StorybookSpacer />
       <Bookmark
@@ -239,6 +246,7 @@ export const Primary = () => (
         is_serach_result={false}
         should_dim_visited_links={false}
         updated_at=""
+        is_fetching_bookmarks={false}
       />
       <StorybookSpacer />
       <Bookmark
@@ -265,6 +273,7 @@ export const Primary = () => (
         is_serach_result={false}
         should_dim_visited_links={false}
         updated_at=""
+        is_fetching_bookmarks={false}
       />
       <StorybookSpacer />
       <Bookmark
@@ -290,6 +299,7 @@ export const Primary = () => (
         is_serach_result={false}
         should_dim_visited_links={false}
         updated_at=""
+        is_fetching_bookmarks={false}
       />
       <StorybookSpacer />
     </div>

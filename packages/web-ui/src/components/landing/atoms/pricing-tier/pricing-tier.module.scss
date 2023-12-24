@@ -27,7 +27,7 @@
 .price {
   display: flex;
   flex-direction: column;
-  &__costPerMonth {
+  &__cost {
     display: flex;
     align-items: center;
     gap: var(--distance-6px);

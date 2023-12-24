@@ -33,8 +33,9 @@ const Page: React.FC = () => {
           <PricingTier
             name="Premium"
             description="Get the most out of Taaabs"
-            price="$4.99"
-            price_info="$44.99 billed annually"
+            price="$29.99"
+            price_duration="Year"
+            price_info="12 months at $2.49/mo. Save 50%"
             bullets={[
               'All library add-ons',
               'Claim shorter username',

@@ -61,8 +61,8 @@ export namespace Bookmark {
     orama_db_id?: string
     is_serach_result: boolean
     should_dim_visited_links: boolean
-    current_filter?: LibraryFilter // Needs by [update_searchable_bookmarks]
-    is_fetching_bookmarks?: boolean
+    current_filter?: LibraryFilter // Needs by [use_search/update_searchable_bookmarks]
+    is_fetching_bookmarks: boolean
   }
 }
 
@@ -469,7 +469,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
-    (o.date == n.date || n.is_fetching_bookmarks || false) && // Fixes flashing date on sort change
+    o.date == n.date &&
     o.is_serach_result == n.is_serach_result &&
     o.updated_at == n.updated_at &&
     o.render_height == n.render_height &&

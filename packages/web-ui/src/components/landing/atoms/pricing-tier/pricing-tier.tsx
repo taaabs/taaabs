@@ -6,6 +6,7 @@ export namespace PricingTier {
     name: string
     description: string
     price: string
+    price_duration?: string
     price_info: string
     bullets: string[]
   }
@@ -19,9 +20,13 @@ export const PricingTier: React.FC<PricingTier.Props> = (props) => {
         <div className={styles.top__description}>{props.description}</div>
       </div>
       <div className={styles.price}>
-        <div className={styles.price__costPerMonth}>
+        <div className={styles.price__cost}>
           <div>{props.price}</div>
-          <div>/ month</div>
+          {props.price_duration ? (
+            <div>/ {props.price_duration}</div>
+          ) : (
+            <div></div>
+          )}
         </div>
         <div className={styles.price__info}>{props.price_info}</div>
       </div>
