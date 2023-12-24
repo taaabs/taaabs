@@ -58,6 +58,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
   const [show_bookmarks_skeleton, set_show_bookmarks_skeleton] = useState(true)
   const bookmarks_slice_state = use_library_selector((state) => state.bookmarks)
+  const counts_slice_state = use_library_selector((state) => state.counts)
   const search = use_search()
   const bookmarks = use_bookmarks({
     is_in_search_mode: !!search.search_string,
@@ -852,6 +853,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 }
                 should_display_only_month={
                   bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+                }
+                counts_fetched_at_timestamp={
+                  counts_slice_state.fetched_at_timestamp
                 }
                 links={bookmark.links.map((link) => ({
                   url: link.url,
