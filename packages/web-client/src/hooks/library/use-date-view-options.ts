@@ -29,6 +29,12 @@ export const use_date_view_options = () => {
       `${lte}`,
     )
 
+    for (const key in sessionStorage) {
+      if (key.endsWith(`__${updated_query_params}`)) {
+        sessionStorage.removeItem(key)
+      }
+    }
+
     window.history.pushState(
       {},
       '',
@@ -43,6 +49,12 @@ export const use_date_view_options = () => {
     let updated_query_params: any
     updated_query_params = update_query_params(query_params, 'gte')
     updated_query_params = update_query_params(updated_query_params, 'lte')
+
+    for (const key in sessionStorage) {
+      if (key.endsWith(`__${updated_query_params}`)) {
+        sessionStorage.removeItem(key)
+      }
+    }
 
     window.history.pushState(
       {},

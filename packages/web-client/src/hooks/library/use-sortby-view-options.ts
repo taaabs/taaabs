@@ -50,6 +50,12 @@ export const use_sortby_view_options = () => {
     updated_query_params = update_query_params(updated_query_params, 'lte')
     updated_query_params = update_query_params(updated_query_params, 'gte')
 
+    for (const key in sessionStorage) {
+      if (key.endsWith(`__${updated_query_params}`)) {
+        sessionStorage.removeItem(key)
+      }
+    }
+
     window.history.pushState(
       {},
       '',

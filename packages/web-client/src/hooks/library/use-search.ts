@@ -336,7 +336,8 @@ export const use_search = () => {
     const result_without_tolerance: Results<Result> = await searchWithHighlight(
       current_filter != LibraryFilter.Archived ? db! : archived_db!,
       {
-        limit: system_values.max_library_search_results,
+        limit:
+          term.length <= 2 ? 100 : system_values.max_library_search_results,
         term,
         properties: ['title', 'note'],
         where: {
@@ -400,7 +401,8 @@ export const use_search = () => {
     const result_with_tolerance: Results<Result> = await searchWithHighlight(
       current_filter != LibraryFilter.Archived ? db! : archived_db!,
       {
-        limit: system_values.max_library_search_results,
+        limit:
+          term.length <= 2 ? 100 : system_values.max_library_search_results,
         term,
         properties: ['title', 'note'],
         where: {

@@ -163,6 +163,17 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       is_unread: params.is_unread || undefined,
       tags: params.tags
         .filter((tag) => tag.name.length > 0)
+        .reduce(
+          (acc, tag) => {
+            const is_duplicate = acc.findIndex((t) => t.name == tag.name) != -1
+            if (is_duplicate) {
+              return acc
+            } else {
+              return [...acc, tag]
+            }
+          },
+          [] as UpsertBookmark_Params['tags'],
+        )
         .map((tag) => ({
           name: tag.is_public ? tag.name : undefined,
           name_aes: !tag.is_public
@@ -173,6 +184,17 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         })),
       links: params.links
         .filter((link) => link.url.length > 0)
+        .reduce(
+          (acc, link) => {
+            const is_duplicate = acc.findIndex((l) => l.url == link.url) != -1
+            if (is_duplicate) {
+              return acc
+            } else {
+              return [...acc, link]
+            }
+          },
+          [] as UpsertBookmark_Params['links'],
+        )
         .map((link) => {
           return {
             url: link.is_public ? link.url : undefined,

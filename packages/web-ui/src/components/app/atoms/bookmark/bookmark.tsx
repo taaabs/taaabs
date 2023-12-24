@@ -62,6 +62,7 @@ export namespace Bookmark {
     is_serach_result: boolean
     should_dim_visited_links: boolean
     current_filter?: LibraryFilter // Needs by [update_searchable_bookmarks]
+    is_fetching_bookmarks?: boolean
   }
 }
 
@@ -198,9 +199,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               )
 
                               return is_highlighted ? (
-                                <span className={styles.highlight}>{char}</span>
+                                <span className={styles.highlight} key={i}>
+                                  {char}
+                                </span>
                               ) : (
-                                char
+                                <span key={i}>{char}</span>
                               )
                             })
                           : props.title}
@@ -227,9 +230,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                 i >= index && i < index + length,
                             )
                             return is_highlighted ? (
-                              <span className={styles.highlight}>{char}</span>
+                              <span className={styles.highlight} key={i}>
+                                {char}
+                              </span>
                             ) : (
-                              char
+                              <span key={i}>{char}</span>
                             )
                           })
                         : props.note}
@@ -283,11 +288,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                             real_i < index + length,
                                         )
                                       return is_highlighted ? (
-                                        <span className={styles.highlight}>
+                                        <span
+                                          className={styles.highlight}
+                                          key={i}
+                                        >
                                           {char}
                                         </span>
                                       ) : (
-                                        char
+                                        <span key={i}>{char}</span>
                                       )
                                     })
                                   : tag.name}
@@ -387,11 +395,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                           real_i < index + length,
                                       )
                                     return is_highlighted ? (
-                                      <span className={styles.highlight}>
+                                      <span
+                                        className={styles.highlight}
+                                        key={i}
+                                      >
                                         {char}
                                       </span>
                                     ) : (
-                                      char
+                                      <span key={i}>{char}</span>
                                     )
                                   })
                               : `${get_url_domain(link.url)
@@ -458,6 +469,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
+    (o.date == n.date || n.is_fetching_bookmarks || false) && // Fixes flashing date on sort change
     o.is_serach_result == n.is_serach_result &&
     o.updated_at == n.updated_at &&
     o.render_height == n.render_height &&

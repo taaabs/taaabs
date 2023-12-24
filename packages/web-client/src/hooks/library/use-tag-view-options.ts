@@ -82,6 +82,12 @@ export const use_tag_view_options = () => {
   const clear_selected_tags = () => {
     const updated_query_params = update_query_params(query_params, 't')
 
+    for (const key in sessionStorage) {
+      if (key.endsWith(`__${updated_query_params}`)) {
+        sessionStorage.removeItem(key)
+      }
+    }
+
     window.history.pushState(
       {},
       '',

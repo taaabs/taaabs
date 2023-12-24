@@ -175,10 +175,10 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
               {/* /(?=@)(.*?)($|\s)/ */}
               {/* 'lorem @abc.com @abc.com ipsum' */}
               {/* ["lorem ", "@abc.com", " ", "@abc.com", " ipsum"] */}
-              {props.search_string.split(/(?=@)(.*?)($|\s)/).map((str) => {
+              {props.search_string.split(/(?=@)(.*?)($|\s)/).map((str, i) => {
                 if (str.substring(0, 1) == '@') {
                   return (
-                    <>
+                    <span key={i}>
                       <span
                         className={
                           styles[
@@ -188,26 +188,24 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                       >
                         @
                       </span>
-                      <>
-                        <span
-                          className={cn(
-                            styles[
-                              'search__form__content__styled-value__highlight'
-                            ],
-                            {
-                              [styles[
-                                'search__form__content__styled-value__highlight--no-results'
-                              ]]: props.results_count == 0,
-                            },
-                          )}
-                        >
-                          {str.substring(1)}
-                        </span>
-                      </>
-                    </>
+                      <span
+                        className={cn(
+                          styles[
+                            'search__form__content__styled-value__highlight'
+                          ],
+                          {
+                            [styles[
+                              'search__form__content__styled-value__highlight--no-results'
+                            ]]: props.results_count == 0,
+                          },
+                        )}
+                      >
+                        {str.substring(1)}
+                      </span>
+                    </span>
                   )
                 } else {
-                  return <span>{str}</span>
+                  return <span key={i}>{str}</span>
                 }
               })}
               {(props.search_string || selected_hint_index != -1) &&
@@ -363,15 +361,16 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = (props) => {
                   )}
                 </div>
                 {hint.type == 'recent' && (
-                  <button
+                  <div
                     className={styles.hints__inner__item__remove}
                     onClick={(e) => {
                       e.stopPropagation()
                       props.on_click_recent_hint_remove(i)
                     }}
+                    role="button"
                   >
                     remove
-                  </button>
+                  </div>
                 )}
               </button>
             ))}

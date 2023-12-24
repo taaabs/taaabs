@@ -283,6 +283,14 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 filter_view_options.set_filter_query_param_and_clear_others(
                   LibraryFilter.All,
                 )
+                if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
+                  search.reset()
+                  if (
+                    filter_view_options.current_filter != LibraryFilter.Archived
+                  ) {
+                    bookmarks.get_bookmarks({})
+                  }
+                }
               },
               is_active:
                 filter_view_options.current_filter != LibraryFilter.Archived,
@@ -298,6 +306,14 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 filter_view_options.set_filter_query_param_and_clear_others(
                   LibraryFilter.Archived,
                 )
+                if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
+                  search.reset()
+                  if (
+                    filter_view_options.current_filter == LibraryFilter.Archived
+                  ) {
+                    bookmarks.get_bookmarks({})
+                  }
+                }
               },
               is_active:
                 filter_view_options.current_filter == LibraryFilter.Archived,
@@ -813,6 +829,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 note={bookmark.note}
                 on_click={() => {}}
                 on_menu_click={() => {}}
+                is_fetching_bookmarks={
+                  bookmarks_slice_state.is_fetching_first_bookmarks
+                }
                 date={
                   sortby_view_options.current_sortby == Sortby.CreatedAt
                     ? new Date(bookmark.created_at)

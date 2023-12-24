@@ -44,6 +44,12 @@ export const use_order_view_options = () => {
         : Object.values(Order).indexOf(order).toString(),
     )
 
+    for (const key in sessionStorage) {
+      if (key.endsWith(`__${updated_query_params}`)) {
+        sessionStorage.removeItem(key)
+      }
+    }
+
     window.history.pushState(
       {},
       '',
