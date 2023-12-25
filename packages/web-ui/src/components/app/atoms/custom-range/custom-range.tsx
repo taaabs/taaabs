@@ -222,7 +222,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     const set_start_and_end_index_throttled = useThrottledCallback(
       set_start_and_end_index,
       [set_start_index, set_end_index, set_random_number],
-      70,
+      50,
     )
 
     useUpdateEffect(() => {

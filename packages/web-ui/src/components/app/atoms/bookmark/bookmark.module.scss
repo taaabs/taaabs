@@ -200,13 +200,13 @@
         border-bottom-left-radius: var(--border-radius-12px);
         border-bottom-right-radius: var(--border-radius-12px);
       }
-      &__site {
+      &__link {
         flex: 1;
         display: flex;
         align-items: center;
         gap: var(--distance-8px);
         overflow: hidden;
-        &__favicon {
+        &__site {
           display: flex;
           flex-shrink: 0;
           align-items: center;
@@ -223,6 +223,9 @@
           > img {
             width: var(--distance-16px);
             height: var(--distance-16px);
+          }
+          &--highlighted {
+            background-color: var(--highlight);
           }
         }
         &__url {

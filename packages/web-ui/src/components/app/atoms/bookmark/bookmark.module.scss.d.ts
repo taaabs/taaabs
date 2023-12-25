@@ -25,10 +25,11 @@ declare const styles: {
   readonly bookmark__main__tags__tag__yields: string
   readonly bookmark__links: string
   readonly bookmark__links__item: string
-  readonly bookmark__links__item__site: string
-  readonly bookmark__links__item__site__favicon: string
-  readonly bookmark__links__item__site__url: string
-  readonly 'bookmark__links__item__site__url--dim-visited': string
+  readonly bookmark__links__item__link: string
+  readonly bookmark__links__item__link__site: string
+  readonly 'bookmark__links__item__link__site--highlighted': string
+  readonly bookmark__links__item__link__url: string
+  readonly 'bookmark__links__item__link__url--dim-visited': string
   readonly bookmark__links__item__actions: string
   readonly bookmark__links__item__actions__open: string
   readonly bookmark__links__item__actions__menu: string

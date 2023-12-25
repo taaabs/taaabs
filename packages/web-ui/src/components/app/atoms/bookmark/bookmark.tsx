@@ -10,6 +10,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { LibraryFilter } from '@shared/types/common/library-filter'
+import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search/get-site-variants-for-search'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -58,6 +59,7 @@ export namespace Bookmark {
     menu_slot: React.ReactNode
     highlights?: Highlights
     highlights_note?: Highlights
+    highlights_site_variants?: string[]
     orama_db_id?: string
     is_serach_result: boolean
     should_dim_visited_links: boolean
@@ -75,7 +77,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const [render_height, set_render_height] = useState<number | undefined>(
       undefined,
     )
-
+    console.log('x')
     useEffect(() => {
       if (render_height === undefined && props.render_height) {
         set_render_height(props.render_height)
@@ -329,16 +331,35 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               </div>
               <div className={styles.bookmark__links}>
                 {props.links.map((link, i) => {
+                  let is_site_highlighted = false
+                  if (
+                    props.highlights_site_variants !== undefined &&
+                    props.highlights_site_variants.length
+                  ) {
+                    const site =
+                      get_url_domain(link.url) +
+                      (link.site_path ? `/${link.site_path}` : '')
+                    const link_site_variants =
+                      get_site_variants_for_search(site)
+                    if (
+                      link_site_variants.some((site_variant) =>
+                        props.highlights_site_variants!.includes(site_variant),
+                      )
+                    ) {
+                      is_site_highlighted = true
+                    }
+                  }
+
                   const link_first_char_index_in_search_title = (
                     (props.title ? `${props.title} ` : '') +
                     props.tags.map((tag) => tag.name).join(' ') +
                     (props.tags.length ? ' ' : '') +
                     props.links
                       .map(
-                        (link) =>
+                        (link, i) =>
                           `${get_url_domain(link.url)}${
                             link.site_path ? ` › ${link.site_path}` : ''
-                          }`,
+                          }${i > 0 ? ' ' : ''}`,
                       )
                       .slice(0, i)
                       .join(' ')
@@ -349,11 +370,16 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                       className={styles.bookmark__links__item}
                       key={link.url}
                     >
-                      <div className={styles.bookmark__links__item__site}>
+                      <div className={styles.bookmark__links__item__link}>
                         <button
-                          className={
-                            styles.bookmark__links__item__site__favicon
-                          }
+                          className={cn(
+                            styles.bookmark__links__item__link__site,
+                            {
+                              [styles[
+                                'bookmark__links__item__link__site--highlighted'
+                              ]]: is_site_highlighted,
+                            },
+                          )}
                         >
                           <LazyLoadImage
                             alt={'Favicon'}
@@ -366,10 +392,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         </button>
                         <a
                           className={cn(
-                            styles.bookmark__links__item__site__url,
+                            styles.bookmark__links__item__link__url,
                             {
                               [styles[
-                                'bookmark__links__item__site__url--dim-visited'
+                                'bookmark__links__item__link__url--dim-visited'
                               ]]: props.should_dim_visited_links,
                             },
                           )}
@@ -470,7 +496,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
-    o.date == n.date &&
+    o.is_fetching_bookmarks == n.is_fetching_bookmarks &&
     o.is_serach_result == n.is_serach_result &&
     o.updated_at == n.updated_at &&
     o.render_height == n.render_height &&
