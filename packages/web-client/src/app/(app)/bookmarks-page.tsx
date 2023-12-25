@@ -708,6 +708,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   selected_tags={query_params.get('t') || undefined}
                   has_results={
                     bookmarks_slice_state.bookmarks &&
+                    !bookmarks_slice_state.is_fetching_first_bookmarks &&
                     !counts.is_fetching_counts_data
                       ? bookmarks_slice_state.bookmarks.length > 0
                       : undefined
@@ -771,6 +772,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                         })}
                       on_selected_tag_click={
                         tag_view_options.remove_tag_from_query_params
+                      }
+                      is_fetching_bookmarks={
+                        bookmarks_slice_state.is_fetching_first_bookmarks
                       }
                     />
                   )}

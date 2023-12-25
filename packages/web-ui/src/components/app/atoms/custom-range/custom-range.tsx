@@ -39,10 +39,9 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       preventDefault: false,
       threshold: 0,
     })
+    const [random_number, set_random_number] = useState(0)
     const [start_index, set_start_index] = useState<number>()
     const [end_index, set_end_index] = useState<number>()
-    const [previous_start_index, set_previous_start_index] = useState<number>()
-    const [previous_end_index, set_previous_end_index] = useState<number>()
     const [dragged_start_index, set_dragged_start_index] = useState<number>()
     const [dragged_end_index, set_dragged_end_index] = useState<number>()
     const [bookmark_count, set_bookmark_count] = useState<number>()
@@ -76,6 +75,9 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       end_index?: number
     }) => {
       if (!params.counts) return
+
+      console.log(start_index)
+      console.log(end_index)
 
       let counts_sliced: Counts = []
       if (start_index !== undefined && end_index !== undefined) {
@@ -200,23 +202,30 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       return end_index != -1 ? end_index : undefined
     }
 
-    const set_start_and_end_index = ({
-      counts,
-      current_gte,
-      current_lte,
-    }: {
+    const set_start_and_end_index = (params: {
       counts: Counts
       current_gte: number
       current_lte: number
     }) => {
-      set_start_index(possible_start_index({ counts, current_gte }))
-      set_end_index(possible_end_index({ counts, current_lte }))
+      set_start_index(
+        possible_start_index({
+          counts: params.counts,
+          current_gte: params.current_gte,
+        }),
+      )
+      set_end_index(
+        possible_end_index({
+          counts: params.counts,
+          current_lte: params.current_lte,
+        }),
+      )
+      set_random_number(Math.random())
     }
 
     const set_start_and_end_index_throttled = useThrottledCallback(
       set_start_and_end_index,
-      [set_start_index, set_end_index],
-      60,
+      [set_start_index, set_end_index, set_random_number],
+      50,
     )
 
     useUpdateEffect(() => {
@@ -235,26 +244,18 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     }, [dragged_start_index, dragged_end_index])
 
     useEffect(() => {
-      if (
-        JSON.stringify(props.counts) != JSON.stringify(counts_to_render) ||
-        start_index != previous_start_index ||
-        end_index != previous_end_index
-      ) {
-        calculate_counts({
-          counts: props.counts,
-          start_index: start_index != null ? start_index : undefined,
-          end_index: end_index != null ? end_index : undefined,
-        })
-      }
-
-      set_previous_start_index(start_index)
-      set_previous_end_index(end_index)
-    }, [start_index, end_index, props.counts])
+      calculate_counts({
+        counts: props.counts,
+        start_index: start_index != null ? start_index : undefined,
+        end_index: end_index != null ? end_index : undefined,
+      })
+    }, [random_number])
 
     useEffect(() => {
       if (!props.counts || !props.current_gte || !props.current_lte) {
         set_start_index(undefined)
         set_end_index(undefined)
+        set_random_number(Math.random())
 
         return
       }
