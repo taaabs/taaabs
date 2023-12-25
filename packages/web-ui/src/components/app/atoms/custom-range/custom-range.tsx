@@ -76,9 +76,6 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     }) => {
       if (!params.counts) return
 
-      console.log(start_index)
-      console.log(end_index)
-
       let counts_sliced: Counts = []
       if (start_index !== undefined && end_index !== undefined) {
         counts_sliced = params.counts.slice(start_index, end_index + 1)
@@ -225,7 +222,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     const set_start_and_end_index_throttled = useThrottledCallback(
       set_start_and_end_index,
       [set_start_index, set_end_index, set_random_number],
-      50,
+      70,
     )
 
     useUpdateEffect(() => {
