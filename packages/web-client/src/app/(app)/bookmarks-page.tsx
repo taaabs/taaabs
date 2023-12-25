@@ -1419,6 +1419,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 highlights_note={
                   search.highlights_note?.[bookmark.id.toString()]
                 }
+                highlights_site_variants={search.highlights_sites_variants}
                 orama_db_id={
                   (search.db?.id || '') + (search.archived_db?.id || '')
                 }

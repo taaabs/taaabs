@@ -17,7 +17,6 @@ import { LibrarySearch_DataSourceImpl } from '@repositories/modules/library-sear
 import { LibrarySearch_RepositoryImpl } from '@repositories/modules/library-search/infrastructure/repositories/library-search.repository-impl'
 import { GetSearchableBookmarksOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-searchable-bookmarks-on-authorized-user.user-case'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
-import { get_site_variants_for_search } from '@/utils/get-site-variants-for-search'
 import {
   afterInsert as highlightAfterInsert,
   searchWithHighlight,
@@ -29,6 +28,7 @@ import localforage from 'localforage'
 import { browser_storage } from '@/constants/browser-storage'
 import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-authorized-user.use-case'
 import { useSearchParams } from 'next/navigation'
+import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -85,6 +85,8 @@ export const use_search = () => {
   const [result, set_result] = useState<Results<Result>>()
   const [highlights, set_highlights] = useState<Highlights>()
   const [highlights_note, set_highlights_note] = useState<Highlights>()
+  const [highlights_sites_variants, set_highlights_sites_variants] =
+    useState<string[]>()
   const [count, set_count] = useState<number>()
 
   useUpdateEffect(() => {
@@ -325,11 +327,10 @@ export const use_search = () => {
     const sortby = query_params.get('s')
 
     // 'lorem @abc.com @abc.com ipsum @abc.com'
-    // ["abc.com", "abc.com", "abc.com"]
-    const sites_variants = params.search_string
-      .match(/(?<=@)(.*?)($|\s)/g)
-      ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
-      .filter((variant) => variant != '')
+    // ["abccom", "abccom", "abccom"]
+    const sites_variants = get_sites_variants_from_search_string(
+      params.search_string,
+    )
 
     const term = params.search_string.replace(/(?=@)(.*?)($|\s)/g, '').trim()
 
@@ -578,6 +579,10 @@ export const use_search = () => {
             [v.id]: new_positions,
           }
         }, {}),
+      )
+
+      set_highlights_sites_variants(
+        get_sites_variants_from_search_string(params.search_string),
       )
     }, 0)
 
@@ -1052,6 +1057,7 @@ export const use_search = () => {
     set_hints(undefined)
     set_highlights(undefined)
     set_highlights_note(undefined)
+    set_highlights_sites_variants(undefined)
   }
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
@@ -1270,5 +1276,13 @@ export const use_search = () => {
     check_is_cache_stale,
     remove_recent_hint,
     current_filter,
+    highlights_sites_variants,
   }
+}
+
+const get_sites_variants_from_search_string = (search_string: string) => {
+  return search_string
+    .match(/(?<=@)(.*?)($|\s)/g)
+    ?.map((site) => site.replaceAll('.', '').replaceAll('/', '').trim())
+    .filter((variant) => variant != '')
 }
