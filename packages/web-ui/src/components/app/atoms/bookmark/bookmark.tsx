@@ -65,7 +65,7 @@ export namespace Bookmark {
     should_dim_visited_links: boolean
     current_filter?: LibraryFilter // Needs by [use_search/update_searchable_bookmarks]
     is_fetching_bookmarks: boolean
-    counts_fetched_at_timestamp?: number // When updating other bookmark, we refetch counts and this is needed to trigger a rerender of all bookmarks
+    counts_refreshed_at_timestamp?: number // When updating other bookmark, we refetch counts and this is needed to trigger a rerender of all bookmarks
   }
 }
 
@@ -77,7 +77,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const [render_height, set_render_height] = useState<number | undefined>(
       undefined,
     )
-    console.log('x')
+
     useEffect(() => {
       if (render_height === undefined && props.render_height) {
         set_render_height(props.render_height)
@@ -504,7 +504,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.number_of_selected_tags == n.number_of_selected_tags &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&
-    o.counts_fetched_at_timestamp == n.counts_fetched_at_timestamp,
+    o.counts_refreshed_at_timestamp == n.counts_refreshed_at_timestamp,
 )
 
 function get_url_domain(url: string): string {

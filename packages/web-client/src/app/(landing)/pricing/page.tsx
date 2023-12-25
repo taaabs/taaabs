@@ -9,7 +9,7 @@ const Page: React.FC = () => {
         heading="Pricing"
         subheading={
           <>
-            Embrace the Web without breaking your bank.
+            Supercharge your personal library with Premium Features.
             <br />
             Start free, upgrade anytime. No credit card required.
           </>
@@ -37,7 +37,7 @@ const Page: React.FC = () => {
             price_duration="Year"
             price_info="12 months at $2.49/mo. Save 50%"
             bullets={[
-              'All personal library features',
+              'Personal Library Premium™',
               'Dark mode',
               'Claim shorter username',
             ]}

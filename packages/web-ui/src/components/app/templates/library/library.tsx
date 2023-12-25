@@ -37,7 +37,7 @@ export namespace Library {
 const SLIDABLE_WIDTH = 300
 
 const get_slidable_width = () => {
-  if (window.innerWidth < 370) {
+  if (window !== undefined && window.innerWidth < 370) {
     return window.innerWidth * 0.82
   } else {
     return SLIDABLE_WIDTH

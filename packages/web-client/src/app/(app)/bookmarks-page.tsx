@@ -858,8 +858,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 should_display_only_month={
                   bookmarks_slice_state.showing_bookmarks_fetched_by_ids
                 }
-                counts_fetched_at_timestamp={
-                  counts_slice_state.fetched_at_timestamp
+                counts_refreshed_at_timestamp={
+                  counts_slice_state.refreshed_at_timestamp
                 }
                 links={bookmark.links.map((link) => ({
                   url: link.url,
