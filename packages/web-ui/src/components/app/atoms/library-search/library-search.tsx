@@ -400,5 +400,11 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
     o.loading_progress_percentage == n.loading_progress_percentage &&
     o.placeholder == n.placeholder &&
     o.results_count == n.results_count &&
+    o.on_focus == n.on_focus &&
+    o.on_blur == n.on_blur &&
+    o.on_change == n.on_change &&
+    o.on_clear_click == n.on_clear_click &&
+    o.on_click_hint == n.on_click_hint &&
+    o.on_click_recent_hint_remove == n.on_click_recent_hint_remove &&
     JSON.stringify(o.hints) == JSON.stringify(n.hints),
 )
