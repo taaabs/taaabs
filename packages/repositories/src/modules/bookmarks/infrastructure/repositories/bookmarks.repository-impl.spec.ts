@@ -22,7 +22,8 @@ describe('Bookmarks_RepositoryImpl', () => {
       const dto: Bookmarks_Dto.Response.Authorized = {
         bookmarks: [
           {
-            id: '1',
+            id: 1,
+            is_public: true,
             created_at: now,
             updated_at: now,
             visited_at: now,
@@ -38,12 +39,13 @@ describe('Bookmarks_RepositoryImpl', () => {
       const ro: GetBookmarks_Ro = {
         bookmarks: [
           {
-            id: '1',
+            id: 1,
             created_at: now,
             updated_at: now,
             visited_at: now,
             is_unread: false,
-            is_public: false,
+            is_public: true,
+            note: undefined,
             stars: 0,
             title: 'test',
             tags: [],
@@ -68,7 +70,7 @@ describe('Bookmarks_RepositoryImpl', () => {
       const dto: Bookmarks_Dto.Response.Public = {
         bookmarks: [
           {
-            id: '1',
+            id: 1,
             created_at: now,
             updated_at: now,
             visited_at: now,
@@ -84,7 +86,7 @@ describe('Bookmarks_RepositoryImpl', () => {
       const ro: GetBookmarks_Ro = {
         bookmarks: [
           {
-            id: '1',
+            id: 1,
             created_at: now,
             updated_at: now,
             visited_at: now,
@@ -92,6 +94,7 @@ describe('Bookmarks_RepositoryImpl', () => {
             stars: 0,
             is_public: true,
             title: 'test',
+            note: undefined,
             tags: [],
             links: [],
           },

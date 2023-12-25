@@ -83,6 +83,7 @@ export namespace Bookmarks_Dto {
     }
 
     export class AuthorizedBookmark extends Bookmark {
+      public is_public?: boolean
       public title?: string
       public title_aes?: string
       public links: AuthorizedLink[]

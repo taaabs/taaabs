@@ -1,7 +1,7 @@
-const apiConfig = require('./packages/api/jest.config')
-const webUiConfig = require('./packages/web-ui/jest.config')
-const webClientConfig = require('./packages/web-client/jest.config')
-const repositoriesConfig = require('./packages/repositories/jest.config')
+const api_config = require('./packages/api/jest.config')
+const web_ui_config = require('./packages/web-ui/jest.config')
+const web_client_config = require('./packages/web-client/jest.config')
+const repositories_config = require('./packages/repositories/jest.config')
 
 module.exports = {
   verbose: true,
@@ -10,24 +10,30 @@ module.exports = {
       displayName: 'api',
       rootDir: '<rootDir>/packages/api',
       preset: 'ts-jest',
-      ...apiConfig,
+      ...api_config,
     },
     {
       displayName: 'repositories',
       rootDir: '<rootDir>/packages/repositories',
       preset: 'ts-jest',
       testEnvironment: 'node',
-      ...repositoriesConfig,
+      ...repositories_config,
+    },
+    {
+      displayName: 'shared',
+      rootDir: '<rootDir>/packages/shared',
+      preset: 'ts-jest',
+      testEnvironment: 'node',
     },
     {
       displayName: 'web-client',
       rootDir: '<rootDir>/packages/web-client',
-      ...webClientConfig,
+      ...web_client_config,
     },
     {
       displayName: 'web-ui',
       rootDir: '<rootDir>/packages/web-ui',
-      ...webUiConfig,
+      ...web_ui_config,
     },
   ],
 }
