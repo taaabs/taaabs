@@ -40,7 +40,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
     const [is_focused_fix, set_is_focused_fix] = useState(false)
     const [sizer_width, set_sizer_width] = useState(0)
     const sizer = useRef<HTMLDivElement>(null)
-    console.log('x')
+
     useUpdateEffect(() => {
       set_sizer_width(sizer.current?.getBoundingClientRect().width || 0)
     }, [props.search_string])
