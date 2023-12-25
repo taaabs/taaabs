@@ -1,5 +1,5 @@
 export const get_site_variants_for_search = (site: string): string[] => {
-  const variants = []
+  const variants: string[] = []
   let segments = site.split('.')
   const path = segments[segments.length - 1].split('/')[1] || undefined
   if (path)
