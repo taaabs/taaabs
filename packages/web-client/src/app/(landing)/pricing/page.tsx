@@ -37,9 +37,9 @@ const Page: React.FC = () => {
             price_duration="Year"
             price_info="12 months at $2.49/mo. Save 50%"
             bullets={[
-              'All library add-ons',
+              'All personal library features',
+              'Dark mode',
               'Claim shorter username',
-              '"Supporter" badge on your profile',
             ]}
           />
         }
