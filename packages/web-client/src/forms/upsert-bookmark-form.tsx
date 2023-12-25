@@ -10,7 +10,7 @@ import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
 import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
 import { FormModal } from '@web-ui/components/app/templates/form-modal'
 import { Input } from '@web-ui/components/common/atoms/input'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 type FormValues = {
@@ -83,6 +83,20 @@ export const UpsertBookmarkForm: React.FC<{
       }
     } catch {}
   }
+
+  const handle_keyboard = (event: any) => {
+    if (event.code == 'Escape') {
+      props.on_close()
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handle_keyboard)
+
+    return () => {
+      window.removeEventListener('keydown', handle_keyboard)
+    }
+  }, [])
 
   return (
     <form
