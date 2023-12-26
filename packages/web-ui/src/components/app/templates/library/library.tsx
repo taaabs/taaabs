@@ -312,32 +312,27 @@ export const Library: React.FC<Library.Props> = (props) => {
                 ref={end_of_bookmarks}
               >
                 {props.info_text && <span>{props.info_text}</span>}
-                {
-                  // TODO: INVESTIGATE: Without "is_hydrated" gives errors after page refresh, why?
-                }
-                {is_hydrated && props.refresh_results && (
+                {props.refresh_results && (
                   <button onClick={props.refresh_results}>
                     Refresh results
                   </button>
                 )}
-                {is_hydrated && props.clear_unread && (
-                  <button onClick={props.clear_unread}>
-                    Clear Unread only
-                  </button>
+                {props.clear_unread && (
+                  <button onClick={props.clear_unread}>Clear unread</button>
                 )}
-                {is_hydrated && props.clear_selected_stars && (
+                {props.clear_selected_stars && (
                   <button onClick={props.clear_selected_stars}>
-                    Clear selected stars
+                    Clear stars
                   </button>
                 )}
-                {is_hydrated && props.clear_selected_tags && (
-                  <button onClick={props.clear_selected_tags}>
-                    Clear selected tags
-                  </button>
-                )}
-                {is_hydrated && props.clear_date_range && (
+                {props.clear_date_range && (
                   <button onClick={props.clear_date_range}>
-                    Clear date range
+                    Clear custom range
+                  </button>
+                )}
+                {props.clear_selected_tags && (
+                  <button onClick={props.clear_selected_tags}>
+                    Clear tags
                   </button>
                 )}
               </div>
