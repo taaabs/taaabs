@@ -167,8 +167,8 @@
         color: var(--text-color-dimmed);
       }
       &__tag {
-        @include hover {
-          > div > span:first-child {
+        > div > span:first-child {
+          @include hover {
             @include text-decoration-underline;
           }
         }
