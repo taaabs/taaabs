@@ -82,12 +82,72 @@ export const use_filter_view_options = () => {
     )
   }
 
-  const clear_selected_stars = (filter: LibraryFilter) => {
-    alert('TODO')
+  const clear_selected_stars = () => {
+    let updated_query_params: URLSearchParams
+    if (
+      current_filter == LibraryFilter.OneStarUnread ||
+      current_filter == LibraryFilter.TwoStarsUnread ||
+      current_filter == LibraryFilter.ThreeStarsUnread
+    ) {
+      updated_query_params = update_query_params(
+        query_params,
+        'f',
+        Object.values(LibraryFilter).indexOf(LibraryFilter.Unread).toString(),
+      )
+    } else {
+      updated_query_params = update_query_params(query_params, 'f')
+    }
+
+    for (const key in sessionStorage) {
+      if (key.endsWith(`__${updated_query_params}`)) {
+        sessionStorage.removeItem(key)
+      }
+    }
+
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updated_query_params,
+    )
   }
 
-  const clear_unread = (filter: LibraryFilter) => {
-    alert('TODO')
+  const clear_unread = () => {
+    let updated_query_params: URLSearchParams
+    if (current_filter == LibraryFilter.OneStarUnread) {
+      updated_query_params = update_query_params(
+        query_params,
+        'f',
+        Object.values(LibraryFilter).indexOf(LibraryFilter.OneStar).toString(),
+      )
+    } else if (current_filter == LibraryFilter.TwoStarsUnread) {
+      updated_query_params = update_query_params(
+        query_params,
+        'f',
+        Object.values(LibraryFilter).indexOf(LibraryFilter.TwoStars).toString(),
+      )
+    } else if (current_filter == LibraryFilter.ThreeStarsUnread) {
+      updated_query_params = update_query_params(
+        query_params,
+        'f',
+        Object.values(LibraryFilter)
+          .indexOf(LibraryFilter.ThreeStars)
+          .toString(),
+      )
+    } else {
+      updated_query_params = update_query_params(query_params, 'f')
+    }
+
+    for (const key in sessionStorage) {
+      if (key.endsWith(`__${updated_query_params}`)) {
+        sessionStorage.removeItem(key)
+      }
+    }
+
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updated_query_params,
+    )
   }
 
   return {
