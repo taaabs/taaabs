@@ -33,7 +33,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
   function CustomRange(props) {
     const { pop_count } = use_popstate()
     const [counts_to_render, set_counts_to_render] = useState<Counts>()
-    const [date, set_date] = useState<string | null>(null)
+    const [date, set_date] = useState<string>()
     const custom_range = useRef<HTMLDivElement>(null)
     const { swiping: is_swiping } = useSwipe(custom_range, {
       preventDefault: false,
@@ -74,7 +74,10 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       start_index?: number
       end_index?: number
     }) => {
-      if (!params.counts) return
+      if (!params.counts || props.has_results === false) {
+        set_bookmark_count(undefined)
+        return
+      }
 
       let counts_sliced: Counts = []
       if (start_index !== undefined && end_index !== undefined) {
@@ -359,7 +362,9 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
         {!props.is_range_selector_disabled &&
           (props.has_results || props.is_fetching_data) &&
           counts_to_render &&
-          counts_to_render.length >= 2 && (
+          counts_to_render.length >= 2 &&
+          bookmark_count &&
+          bookmark_count > 0 && (
             <div className={styles['custom-range__recharts']}>
               <ResponsiveContainer
                 width={'100%'}

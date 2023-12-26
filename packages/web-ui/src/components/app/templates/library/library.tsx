@@ -36,16 +36,14 @@ export namespace Library {
 
 const SLIDABLE_WIDTH = 300
 
-const get_slidable_width = () => {
-  if (typeof window != 'undefined' && window.innerWidth < 370) {
-    return window.innerWidth * 0.82
-  } else {
-    return SLIDABLE_WIDTH
-  }
-}
-
 export const Library: React.FC<Library.Props> = (props) => {
-  const [slidable_width, set_slidable_width] = useState(get_slidable_width())
+  const [slidable_width, set_slidable_width] = useState(
+    window.innerWidth < 370
+      ? window.innerWidth * 0.82
+      : window.innerWidth >= 992 && window.innerWidth < 1100
+      ? window.innerWidth * 0.27
+      : SLIDABLE_WIDTH,
+  )
   const on_window_resize = useWindowResize()
   const sidebar = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLDivElement>(null)
@@ -59,7 +57,14 @@ export const Library: React.FC<Library.Props> = (props) => {
   >(undefined)
 
   on_window_resize(() => {
-    set_slidable_width(get_slidable_width())
+    if (window === undefined) return
+    set_slidable_width(
+      window.innerWidth < 370
+        ? window.innerWidth * 0.82
+        : window.innerWidth >= 992 && window.innerWidth < 1100
+        ? window.innerWidth * 0.27
+        : SLIDABLE_WIDTH,
+    )
   })
 
   const swipe_state_main = useSwipe(main, {
