@@ -8,7 +8,9 @@ import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
 import { DraggableFormInputs } from '@web-ui/components/app/atoms/draggable-form-inputs'
 import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
 import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
+import { RadioSetting } from '@web-ui/components/app/atoms/radio-setting'
 import { FormModal } from '@web-ui/components/app/templates/form-modal'
+import { FormRadio } from '@web-ui/components/app/templates/form-radio'
 import { Input } from '@web-ui/components/common/atoms/input'
 import { useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -125,13 +127,31 @@ export const UpsertBookmarkForm: React.FC<{
             defaultValue={props.bookmark?.is_public}
             render={({ field }) => {
               return (
-                <input
-                  type="checkbox"
-                  checked={field.value}
-                  onChange={(is_checked) => {
-                    field.onChange(is_checked)
-                  }}
-                />
+                <FormRadio>
+                  <RadioSetting
+                    top_line="Private"
+                    bottom_line="All data is encrypted end-to-end"
+                    on_click={() => {
+                      field.onChange(false)
+                    }}
+                    is_checked={!field.value}
+                  />
+                  <RadioSetting
+                    top_line="Public"
+                    bottom_line="Selected links and tags can remain private"
+                    on_click={() => {
+                      field.onChange(true)
+                    }}
+                    is_checked={field.value}
+                  />
+                </FormRadio>
+                // <input
+                //   type="checkbox"
+                //   checked={field.value}
+                //   onChange={(is_checked) => {
+                //     field.onChange(is_checked)
+                //   }}
+                // />
               )
             }}
           />

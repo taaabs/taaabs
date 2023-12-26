@@ -12,13 +12,11 @@ export const Primary = () => {
       <DesktopUserAreaForAppHeader
         on_click_add={() => {}}
         on_click_search={() => {}}
-        notificatios_on_click={() => {}}
       />
       <StorybookSpacer />
       <DesktopUserAreaForAppHeader
         on_click_add={() => {}}
         on_click_search={() => {}}
-        notificatios_on_click={() => {}}
         avatar={{
           url: 'https://picsum.photos/300',
           blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',

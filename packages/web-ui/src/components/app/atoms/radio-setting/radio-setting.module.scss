@@ -1,0 +1,44 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--distance-12px);
+  cursor: pointer;
+}
+.radio {
+  border: 1px solid var(--blue200);
+  background: var(--blue100);
+  width: var(--distance-20px);
+  height: var(--distance-20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-999px);
+  @include hover {
+    border-color: var(--blue300);
+  }
+  @include transition-150ms(border-color);
+  &--checked {
+    border-color: var(--blue300);
+  }
+  &__check {
+    background-color: var(--brand-color);
+    border-radius: var(--border-radius-999px);
+    width: var(--distance-11px);
+    height: var(--distance-11px);
+  }
+}
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--distance-2px);
+  &__top-line {
+    font-weight: var(--font-weight-inter-medium);
+    font-size: var(--font-size-16px);
+  }
+  &__bottom-line {
+    color: var(--text-color-variant);
+  }
+}

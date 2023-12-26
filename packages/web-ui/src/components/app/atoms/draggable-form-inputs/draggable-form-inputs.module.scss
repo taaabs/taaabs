@@ -31,7 +31,7 @@
   }
   &__actions {
     display: flex;
-    gap: var(--distance-8px);
+    gap: var(--distance-4px);
     margin-left: var(--distance-8px);
     &__button {
       display: flex;
@@ -49,8 +49,11 @@
         fill: var(--brand-color);
         @include transition-150ms(fill);
       }
-      &--remove > svg {
-        transform: rotate(45deg);
+      &--remove {
+        margin-right: calc(var(--distance-2px) * -1);
+        > svg {
+          transform: rotate(45deg);
+        }
       }
       &--disabled > svg {
         fill: var(--blue300);
