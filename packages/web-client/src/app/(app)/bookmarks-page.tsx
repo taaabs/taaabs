@@ -136,7 +136,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
     } else if (
       bookmarks_slice_state.toast_message == 'filter-no-longer-satisfied'
     ) {
-      toast.success('This bookmark no longer matches the current filter')
+      toast.success('Updated bookmark no longer matches the current filter')
     }
     dispatch(bookmarks_actions.set_toast_message())
   }, [bookmarks_slice_state.toast_message])
