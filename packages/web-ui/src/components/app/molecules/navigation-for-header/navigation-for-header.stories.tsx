@@ -1,4 +1,4 @@
-import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
+import { Helpers } from '@web-ui'
 import { NavigationForHeader } from './navigation-for-header'
 
 export default {
@@ -12,10 +12,10 @@ const navigation: NavigationForHeader.Props['navigation'] = [
 
 export const Primary = () => {
   return (
-    <StorybookMargin>
+    <Helpers.Storybook.StorybookMargin>
       <div style={{ height: '60px' }}>
         <NavigationForHeader navigation={navigation} />
       </div>
-    </StorybookMargin>
+    </Helpers.Storybook.StorybookMargin>
   )
 }

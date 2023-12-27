@@ -1,7 +1,4 @@
-import { Input } from '@web-ui/components/common/atoms/input'
-import { Button } from '@web-ui/components/common/particles/button'
-import { Box } from '@web-ui/components/app/atoms/box'
-import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
+import { Ui } from '@web-ui'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import awesomeDebouncePromise from 'awesome-debounce-promise'
 import { Settings_DataSourceImpl } from '@repositories/modules/settings/infrastructure/data-sources/settings.data-source-impl'
@@ -57,8 +54,8 @@ export const Username: React.FC<Username.Props> = (props) => {
 
   return (
     <form onSubmit={handleSubmit(on_submit)}>
-      <Box>
-        <BoxHeading
+      <Ui.App.Atoms.Box>
+        <Ui.App.Atoms.BoxHeading
           heading="Username"
           subheading="The username determines the default link of your public profile."
         />
@@ -97,7 +94,7 @@ export const Username: React.FC<Username.Props> = (props) => {
             }
 
             return (
-              <Input
+              <Ui.Common.Atoms.Input
                 value={field.value}
                 on_change={(value) => {
                   if (isSubmitting) return
@@ -111,11 +108,15 @@ export const Username: React.FC<Username.Props> = (props) => {
           }}
         />
         <div>
-          <Button size="default" type="submit" is_loading={isSubmitting}>
+          <Ui.Common.Particles.Button
+            size="default"
+            type="submit"
+            is_loading={isSubmitting}
+          >
             Save
-          </Button>
+          </Ui.Common.Particles.Button>
         </div>
-      </Box>
+      </Ui.App.Atoms.Box>
     </form>
   )
 }

@@ -1,5 +1,4 @@
-import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
-import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
+import { Helpers, Ui } from '@web-ui'
 import { Icon } from './icon'
 import styles from './icon-stories.module.scss'
 
@@ -8,34 +7,34 @@ export default {
 }
 
 export const Icons = () => (
-  <StorybookMargin>
+  <Helpers.Storybook.StorybookMargin>
     <div className={styles.container}>
-      <Icon variant={'ADD'} />
-      <StorybookSpacer />
-      <Icon variant={'BOOKMARK'} />
-      <StorybookSpacer />
-      <Icon variant={'GREATER_THAN'} />
-      <StorybookSpacer />
-      <Icon variant={'HOME'} />
-      <StorybookSpacer />
-      <Icon variant={'MOBILE_TITLE_BAR_MENU'} />
-      <StorybookSpacer />
-      <Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
-      <StorybookSpacer />
-      <Icon variant={'SEARCH'} />
-      <StorybookSpacer />
-      <Icon variant={'STAR_FILLED'} />
-      <StorybookSpacer />
-      <Icon variant={'STAR'} />
-      <StorybookSpacer />
-      <Icon variant={'SUN'} />
-      <StorybookSpacer />
-      <Icon variant={'USER_ADD'} />
-      <StorybookSpacer />
-      <Icon variant={'USER_REMOVE'} />
-      <StorybookSpacer />
-      <Icon variant={'USER'} />
-      <StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'ADD'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'BOOKMARK'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'GREATER_THAN'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'HOME'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'MOBILE_TITLE_BAR_MENU'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'SEARCH'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'STAR_FILLED'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'STAR'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'SUN'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'USER_ADD'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'USER_REMOVE'} />
+      <Helpers.Storybook.StorybookSpacer />
+      <Ui.Common.Particles.Icon variant={'USER'} />
+      <Helpers.Storybook.StorybookSpacer />
     </div>
-  </StorybookMargin>
+  </Helpers.Storybook.StorybookMargin>
 )

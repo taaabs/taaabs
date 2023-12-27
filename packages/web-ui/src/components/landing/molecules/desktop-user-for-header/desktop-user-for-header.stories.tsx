@@ -1,6 +1,5 @@
-import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
+import { Helpers } from '@web-ui'
 import { DesktopUserForHeader } from './desktop-user-for-header'
-import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
 
 export default {
   component: DesktopUserForHeader,
@@ -8,10 +7,10 @@ export default {
 
 export const Primary = () => {
   return (
-    <StorybookMargin>
+    <Helpers.Storybook.StorybookMargin>
       <DesktopUserForHeader button_label="Lorem" button_on_click={() => {}} />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <DesktopUserForHeader button_label="Lorem" button_on_click={() => {}} />
-    </StorybookMargin>
+    </Helpers.Storybook.StorybookMargin>
   )
 }

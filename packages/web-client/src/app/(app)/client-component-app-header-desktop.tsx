@@ -1,20 +1,11 @@
 'use client'
 
-import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
-import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
-import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
-import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { Ui } from '@web-ui'
 import { useParams, usePathname } from 'next/navigation'
 import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { useContext } from 'react'
 import { ModalContext } from './modal-provider'
 import { use_is_hydrated } from '@shared/hooks'
-import { FormModal } from '@web-ui/components/app/templates/form-modal'
-import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
-import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
-import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
-import { Box } from '@web-ui/components/app/atoms/box'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const params = useParams()
@@ -27,7 +18,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   // TODO: backHref should be smarter :^)
   if (params.username) {
     logo_slot = (
-      <UserForHeader
+      <Ui.App.Molecules.UserForHeader
         user={{
           username: params.username as string,
           back_href: '/',
@@ -42,10 +33,10 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
       />
     )
   } else {
-    logo_slot = <LogoForHeader href="/" />
+    logo_slot = <Ui.Common.Atoms.LogoForHeader href="/" />
   }
 
-  let navigation: NavigationForHeader.Props['navigation']
+  let navigation: Ui.App.Molecules.NavigationForHeader.Props['navigation']
   if (params.username) {
     navigation = [
       {
@@ -80,42 +71,57 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   }
 
   const create_bookmark_modal = (
-    <FormModal
-      slot_header={<ModalHeader title="New bookmark" />}
+    <Ui.App.Templates.FormModal
+      slot_header={<Ui.App.Atoms.ModalHeader title="New bookmark" />}
       slot_footer={
-        <ModalFooter
+        <Ui.App.Atoms.ModalFooter
           button_label="Save"
           is_disabled={false}
           on_click_cancel={() => {}}
         />
       }
     >
-      <Box>
-        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
-      </Box>
-      <Box>
-        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
-      </Box>
-      <Box>
-        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
-      </Box>
-      <Box>
-        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
-      </Box>
-      <Box>
-        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
-      </Box>
-    </FormModal>
+      <Ui.App.Atoms.Box>
+        <Ui.App.Atoms.BoxHeading
+          heading="Lorem ipsum"
+          subheading="Lorem ipsum"
+        />
+      </Ui.App.Atoms.Box>
+      <Ui.App.Atoms.Box>
+        <Ui.App.Atoms.BoxHeading
+          heading="Lorem ipsum"
+          subheading="Lorem ipsum"
+        />
+      </Ui.App.Atoms.Box>
+      <Ui.App.Atoms.Box>
+        <Ui.App.Atoms.BoxHeading
+          heading="Lorem ipsum"
+          subheading="Lorem ipsum"
+        />
+      </Ui.App.Atoms.Box>
+      <Ui.App.Atoms.Box>
+        <Ui.App.Atoms.BoxHeading
+          heading="Lorem ipsum"
+          subheading="Lorem ipsum"
+        />
+      </Ui.App.Atoms.Box>
+      <Ui.App.Atoms.Box>
+        <Ui.App.Atoms.BoxHeading
+          heading="Lorem ipsum"
+          subheading="Lorem ipsum"
+        />
+      </Ui.App.Atoms.Box>
+    </Ui.App.Templates.FormModal>
   )
 
   return (
-    <AppHeaderDesktop
+    <Ui.App.Templates.AppHeaderDesktop
       slot_left_side_logo={logo_slot}
       slot_left_side_navigation={
-        <NavigationForHeader navigation={navigation} />
+        <Ui.App.Molecules.NavigationForHeader navigation={navigation} />
       }
       slot_right_side={
-        <DesktopUserAreaForAppHeader
+        <Ui.App.Organisms.DesktopUserAreaForAppHeader
           on_click_add={() => {
             modal?.set_modal(create_bookmark_modal)
           }}

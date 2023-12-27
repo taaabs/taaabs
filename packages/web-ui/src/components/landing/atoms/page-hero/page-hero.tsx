@@ -1,4 +1,4 @@
-import { Wrapper } from '@web-ui/components/common/particles/wrapper'
+import { Ui } from '@web-ui'
 import styles from './page-hero.module.scss'
 
 export namespace PageHero {
@@ -11,12 +11,12 @@ export namespace PageHero {
 export const PageHero: React.FC<PageHero.Props> = (props) => {
   return (
     <div className={styles.container}>
-      <Wrapper>
+      <Ui.Common.Templates.Wrapper>
         <div className={styles.inner}>
           <h1>{props.heading}</h1>
           <p>{props.subheading}</p>
         </div>
-      </Wrapper>
+      </Ui.Common.Templates.Wrapper>
     </div>
   )
 }

@@ -1,12 +1,10 @@
 import { ReactSortable } from 'react-sortablejs'
 import styles from './draggable-form-inputs.module.scss'
 import { useState } from 'react'
-import { Input } from '@web-ui/components/common/atoms/input'
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Ui } from '@web-ui'
 import cn from 'classnames'
 import { system_values } from '@shared/constants/system-values'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { Button } from '@web-ui/components/common/particles/button'
 
 namespace DraggableFormInputs {
   type Item = {
@@ -56,10 +54,10 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
             <div key={item.id} className={styles.item}>
               <div className={styles.item__input}>
                 <div className={cn(styles.item__input__handle, 'handle')}>
-                  <Icon variant="HANDLE" />
+                  <Ui.Common.Particles.Icon variant="HANDLE" />
                 </div>
                 <div className={styles.item__input__field}>
-                  <Input
+                  <Ui.Common.Atoms.Input
                     autofocus={is_autofocus_enabled}
                     value={item.value}
                     on_change={(value) => {
@@ -96,7 +94,7 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
                     }}
                     type="button"
                   >
-                    <Icon variant="GLOBE" />
+                    <Ui.Common.Particles.Icon variant="GLOBE" />
                   </button>
                 )}
                 <button
@@ -109,14 +107,14 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
                   }}
                   type="button"
                 >
-                  <Icon variant="ADD" />
+                  <Ui.Common.Particles.Icon variant="ADD" />
                 </button>
               </div>
             </div>
           ))}
         </ReactSortable>
       )}
-      <Button
+      <Ui.Common.Particles.Button
         on_click={() => {
           if (!is_autofocus_enabled) set_is_autofocus_enabled(true)
           set_items([...items, { id: count + 1, is_public: true, value: '' }])
@@ -127,7 +125,7 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
         }
       >
         {props.button_text}
-      </Button>
+      </Ui.Common.Particles.Button>
     </div>
   )
 }

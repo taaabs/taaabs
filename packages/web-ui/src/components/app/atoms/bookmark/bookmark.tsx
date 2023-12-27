@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Ui } from '@web-ui'
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
@@ -149,7 +149,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           }
                         }}
                       >
-                        <Icon variant="THREE_DOTS" />
+                        <Ui.Common.Particles.Icon variant="THREE_DOTS" />
                       </button>
                       <div
                         className={cn(styles.bookmark__main__top__menu__slot, {
@@ -179,7 +179,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         className={styles.bookmark__main__content__title__stars}
                       >
                         {[...new Array(props.stars)].map((_, i) => (
-                          <Icon variant="STAR_FILLED" key={i} />
+                          <Ui.Common.Particles.Icon
+                            variant="STAR_FILLED"
+                            key={i}
+                          />
                         ))}
                       </div>
                     )}
@@ -472,7 +475,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             }
                           }}
                         >
-                          <Icon variant="NEW_TAB" />
+                          <Ui.Common.Particles.Icon variant="NEW_TAB" />
                         </button>
                         <button
                           className={
@@ -480,7 +483,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           }
                           onClick={async () => {}}
                         >
-                          <Icon variant="THREE_DOTS" />
+                          <Ui.Common.Particles.Icon variant="THREE_DOTS" />
                         </button>
                       </div>
                     </div>

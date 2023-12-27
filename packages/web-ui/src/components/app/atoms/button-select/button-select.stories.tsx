@@ -1,6 +1,5 @@
-import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
+import { Helpers } from '@web-ui'
 import { ButtonSelect } from './button-select'
-import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
 
 export default {
   component: ButtonSelect,
@@ -8,14 +7,14 @@ export default {
 
 export const Primary = () => {
   return (
-    <StorybookMargin>
+    <Helpers.Storybook.StorybookMargin>
       <div style={{ width: '300px' }}>
         <ButtonSelect
           label="Lorem ipsum"
           current_value="Lorem ipsum"
           on_click={() => {}}
         />
-        <StorybookSpacer />
+        <Helpers.Storybook.StorybookSpacer />
         <ButtonSelect
           label="Lorem ipsum"
           current_value="Lorem ipsum"
@@ -23,6 +22,6 @@ export const Primary = () => {
           on_click={() => {}}
         />
       </div>
-    </StorybookMargin>
+    </Helpers.Storybook.StorybookMargin>
   )
 }

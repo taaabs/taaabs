@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Ui } from '@web-ui'
 import styles from './logo-for-header.module.scss'
 import cn from 'classnames'
 
@@ -16,7 +16,7 @@ export const LogoForHeader: React.FC<LogoForHeader.Props> = (props) => {
       className={cn(styles.logo, { [styles['logo--large']]: props.is_large })}
       href={props.href}
     >
-      <Icon variant="LOGO" />
+      <Ui.Common.Particles.Icon variant="LOGO" />
       <span>taaabs</span>
     </Link>
   )

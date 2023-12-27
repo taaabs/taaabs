@@ -1,4 +1,4 @@
-import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
+import { Helpers } from '@web-ui'
 import { BoxHeading } from './box-heading'
 
 export default {
@@ -7,8 +7,8 @@ export default {
 
 export const Primary = () => {
   return (
-    <StorybookMargin>
+    <Helpers.Storybook.StorybookMargin>
       <BoxHeading heading="Lorem" subheading="Ipsum" />
-    </StorybookMargin>
+    </Helpers.Storybook.StorybookMargin>
   )
 }

@@ -1,13 +1,4 @@
-import { App } from '@web-ui/components/app/templates/app'
-import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
-import { BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
-import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
-import { Library } from '@web-ui/components/app/templates/library'
-import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
-import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
-import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
-import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
+import { Ui } from '@web-ui'
 
 export default {
   title: 'page-previews/library',
@@ -15,12 +6,12 @@ export default {
 
 export const Primary = () => {
   return (
-    <App
+    <Ui.App.Templates.App
       slot_header_desktop={
-        <AppHeaderDesktop
-          slot_left_side_logo={<LogoForHeader href="" />}
+        <Ui.App.Templates.AppHeaderDesktop
+          slot_left_side_logo={<Ui.Common.Atoms.LogoForHeader href="" />}
           slot_left_side_navigation={
-            <NavigationForHeader
+            <Ui.App.Molecules.NavigationForHeader
               navigation={[
                 { label: 'Lorem', href: '/lorem', is_active: false },
                 { label: 'Ipsum', href: '/ipsum', is_active: true },
@@ -28,7 +19,7 @@ export const Primary = () => {
             />
           }
           slot_right_side={
-            <DesktopUserAreaForAppHeader
+            <Ui.App.Organisms.DesktopUserAreaForAppHeader
               on_click_add={() => {}}
               on_click_search={() => {}}
             />
@@ -36,10 +27,10 @@ export const Primary = () => {
         />
       }
       slot_header_mobile={
-        <AppHeaderMobile
-          slot_logo={<LogoForHeader href="" />}
+        <Ui.App.Templates.AppHeaderMobile
+          slot_logo={<Ui.Common.Atoms.LogoForHeader href="" />}
           slot_navigation={
-            <NavigationForHeader
+            <Ui.App.Molecules.NavigationForHeader
               navigation={[
                 { label: 'Lorem', href: '/lorem', is_active: false },
                 { label: 'Ipsum', href: '/ipsum', is_active: true },
@@ -49,7 +40,7 @@ export const Primary = () => {
         />
       }
       slot_bottom_navigation_bar={
-        <BottomNavigationBar
+        <Ui.App.Molecules.BottomNavigationBar
           home_on_click={() => {}}
           my_library_on_click={() => {}}
           add_on_click={() => {}}
@@ -59,10 +50,10 @@ export const Primary = () => {
         />
       }
     >
-      <Library
+      <Ui.App.Templates.Library
         slot_aside={<>aside</>}
         slot_sidebar={
-          <NavigationForLibrarySidebar
+          <Ui.App.Atoms.NavigationForLibrarySidebar
             navigation_items={[
               { label: 'All bookmarks', is_active: true, on_click: () => {} },
               { label: 'Categories', is_active: false, on_click: () => {} },
@@ -86,13 +77,13 @@ export const Primary = () => {
         show_bookmarks_skeleton={false}
         slot_search={<>search</>}
       />
-    </App>
+    </Ui.App.Templates.App>
   )
 }
 
 const bookmark = (
   <div style={{ marginBottom: 'var(--distance-8px)' }}>
-    <Bookmark
+    <Ui.App.Atoms.Bookmark
       date={new Date()}
       links={[]}
       title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
@@ -113,6 +104,7 @@ const bookmark = (
       should_dim_visited_links={false}
       stars={0}
       updated_at=""
+      is_fetching_bookmarks={false}
     />
   </div>
 )

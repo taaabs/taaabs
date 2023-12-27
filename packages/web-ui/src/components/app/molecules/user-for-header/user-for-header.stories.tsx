@@ -1,18 +1,17 @@
-import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
+import { Helpers } from '@web-ui'
 import { UserForHeader } from '.'
-import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
 
 export default {
   component: UserForHeader,
 }
 
 export const Primary = () => (
-  <StorybookMargin>
+  <Helpers.Storybook.StorybookMargin>
     <UserForHeader
       user={{ username: 'lorem', back_href: '/lorem' }}
       is_loading_avatar={false}
     />
-    <StorybookSpacer />
+    <Helpers.Storybook.StorybookSpacer />
     <UserForHeader
       user={{
         username: 'lorem',
@@ -24,5 +23,5 @@ export const Primary = () => (
       }}
       is_loading_avatar={false}
     />
-  </StorybookMargin>
+  </Helpers.Storybook.StorybookMargin>
 )

@@ -1,4 +1,4 @@
-import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
+import { Helpers } from '@web-ui'
 import { ModalFooter } from './modal-footer'
 
 export default {
@@ -8,7 +8,7 @@ export default {
 export const Primary = () => {
   return (
     <div>
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <ModalFooter
         button_label="Lorem"
         on_click_cancel={() => {}}

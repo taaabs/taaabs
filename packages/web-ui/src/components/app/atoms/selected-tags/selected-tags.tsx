@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import styles from './selected-tags.module.scss'
 
-export namespace Tags {
+export namespace SelectedTags {
   export type Props = {
     selected_tags: { name: string; id: number }[]
     on_selected_tag_click: (tagId: number) => void
@@ -9,7 +9,7 @@ export namespace Tags {
   }
 }
 
-export const SelectedTags: React.FC<Tags.Props> = memo(
+export const SelectedTags: React.FC<SelectedTags.Props> = memo(
   function SelectedTags(props) {
     return props.selected_tags.length ? (
       <div className={styles.container}>

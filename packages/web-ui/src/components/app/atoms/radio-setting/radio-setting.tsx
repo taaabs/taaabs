@@ -1,7 +1,7 @@
 import styles from './radio-setting.module.scss'
 import cn from 'classnames'
 
-export namespace ButtonSelect {
+export namespace RadioSetting {
   export type Props = {
     top_line: string
     bottom_line?: string
@@ -10,7 +10,7 @@ export namespace ButtonSelect {
   }
 }
 
-export const RadioSetting: React.FC<ButtonSelect.Props> = (props) => {
+export const RadioSetting: React.FC<RadioSetting.Props> = (props) => {
   return (
     <div className={styles.container} onClick={props.on_click} role="button">
       <div

@@ -1,10 +1,4 @@
-import { Input } from '@web-ui/components/common/atoms/input'
-import { Button } from '@web-ui/components/common/particles/button'
-import { DesktopMenuItem } from '@web-ui/components/app/atoms/desktop-menu-item'
-import { SimpleBackArrowHeader } from '@web-ui/components/app/atoms/simple-back-arrow-header'
-import { Box } from '@web-ui/components/app/atoms/box'
-import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
-import { Settings } from '@web-ui/components/app/templates/settings'
+import { Ui } from '@web-ui'
 
 export default {
   title: 'page-previews/settings',
@@ -12,9 +6,9 @@ export default {
 
 export const Primary = () => {
   return (
-    <Settings
+    <Ui.App.Templates.Settings
       slot_header={
-        <SimpleBackArrowHeader
+        <Ui.App.Atoms.SimpleBackArrowHeader
           title="Settings"
           back_href=""
           is_transparent_on_desktop={true}
@@ -22,49 +16,71 @@ export const Primary = () => {
       }
       slot_desktop_navigation={
         <>
-          <DesktopMenuItem href="" is_active={true} label="Account" />
-          <DesktopMenuItem href="" is_active={false} label="Billing & plans" />
-          <DesktopMenuItem href="" is_active={false} label="Import bookmarks" />
+          <Ui.App.Atoms.DesktopMenuItem
+            href=""
+            is_active={true}
+            label="Account"
+          />
+          <Ui.App.Atoms.DesktopMenuItem
+            href=""
+            is_active={false}
+            label="Billing & plans"
+          />
+          <Ui.App.Atoms.DesktopMenuItem
+            href=""
+            is_active={false}
+            label="Import bookmarks"
+          />
         </>
       }
       slot_mobile_navigation={'nav'}
       slot_main={
         <>
-          <Box>
-            <BoxHeading heading="Lorem" subheading="Ipsum" />
-            <Input value="Lorem ipsum" on_change={() => {}} />
+          <Ui.App.Atoms.Box>
+            <Ui.App.Atoms.BoxHeading heading="Lorem" subheading="Ipsum" />
+            <Ui.Common.Atoms.Input value="Lorem ipsum" on_change={() => {}} />
             <div>
-              <Button size="default">Lorem</Button>
+              <Ui.Common.Particles.Button size="default">
+                Lorem
+              </Ui.Common.Particles.Button>
             </div>
-          </Box>
-          <Box>
-            <BoxHeading heading="Lorem" subheading="Ipsum" />
-            <Input value="Lorem ipsum" on_change={() => {}} />
+          </Ui.App.Atoms.Box>
+          <Ui.App.Atoms.Box>
+            <Ui.App.Atoms.BoxHeading heading="Lorem" subheading="Ipsum" />
+            <Ui.Common.Atoms.Input value="Lorem ipsum" on_change={() => {}} />
             <div>
-              <Button size="default">Lorem</Button>
+              <Ui.Common.Particles.Button size="default">
+                Lorem
+              </Ui.Common.Particles.Button>
             </div>
-          </Box>
-          <Box>
-            <BoxHeading heading="Lorem" subheading="Ipsum" />
-            <Input value="Lorem ipsum" on_change={() => {}} />
+          </Ui.App.Atoms.Box>
+          <Ui.App.Atoms.Box>
+            <Ui.App.Atoms.BoxHeading heading="Lorem" subheading="Ipsum" />
+            <Ui.Common.Atoms.Input value="Lorem ipsum" on_change={() => {}} />
             <div>
-              <Button size="default">Lorem</Button>
+              <Ui.Common.Particles.Button size="default">
+                Lorem
+              </Ui.Common.Particles.Button>
             </div>
-          </Box>
-          <Box>
-            <BoxHeading heading="Lorem" subheading="Ipsum" />
-            <Input value="Lorem ipsum" on_change={() => {}} />
+          </Ui.App.Atoms.Box>
+          <Ui.App.Atoms.Box>
+            <Ui.App.Atoms.BoxHeading heading="Lorem" subheading="Ipsum" />
+            <Ui.Common.Atoms.Input value="Lorem ipsum" on_change={() => {}} />
             <div>
-              <Button size="default">Lorem</Button>
+              <Ui.Common.Particles.Button size="default">
+                Lorem
+              </Ui.Common.Particles.Button>
             </div>
-          </Box>
-          <Box>
-            <BoxHeading heading="Lorem" subheading="Ipsum" />
-            <Input value="Lorem ipsum" on_change={() => {}} />
+          </Ui.App.Atoms.Box>
+          <Ui.App.Atoms.Box>
+            <Ui.App.Atoms.BoxHeading heading="Lorem" subheading="Ipsum" />
+            <Ui.Common.Atoms.Input value="Lorem ipsum" on_change={() => {}} />
             <div>
-              <Button size="default">Lorem</Button>
+              <Ui.Common.Particles.Button size="default">
+                Lorem
+              </Ui.Common.Particles.Button>
             </div>
-          </Box>
+          </Ui.App.Atoms.Box>
         </>
       }
     />

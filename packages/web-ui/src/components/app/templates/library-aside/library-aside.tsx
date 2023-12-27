@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Ui } from '@web-ui'
 import styles from './library-aside.module.scss'
 import cn from 'classnames'
 
@@ -28,7 +28,7 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
           {props.slot_filter && <>{props.slot_filter}</>}
         </div>
         <button className={styles.toolbar__menu}>
-          <Icon variant="THREE_DOTS" />
+          <Ui.Common.Particles.Icon variant="THREE_DOTS" />
         </button>
       </div>
       <div className={styles['slots']}>

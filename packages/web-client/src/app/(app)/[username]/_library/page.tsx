@@ -189,14 +189,14 @@ const Page: React.FC = () => {
           }
           slot_sortby={{
             button: is_hydrated ? (
-              <ButtonSelect
+              <Ui.Common.Particles.ButtonSelect
                 label="Sort by"
                 current_value={_sortby_option_to_label(current_sortby)}
                 is_active={is_sortby_dropdown_visible}
                 on_click={toggle_sortby_dropdown}
               />
             ) : (
-              <ButtonSelectSkeleton />
+              <Ui.Common.Particles.ButtonSelectSkeleton />
             ),
             is_dropdown_visible: is_sortby_dropdown_visible,
             dropdown: is_hydrated && (
@@ -243,14 +243,14 @@ const Page: React.FC = () => {
           }}
           slot_order={{
             button: is_hydrated ? (
-              <ButtonSelect
+              <Ui.Common.Particles.ButtonSelect
                 label="Order"
                 current_value={_order_option_to_label(current_order)}
                 is_active={is_order_dropdown_visible}
                 on_click={toggle_order_dropdown}
               />
             ) : (
-              <ButtonSelectSkeleton />
+              <Ui.Common.Particles.ButtonSelectSkeleton />
             ),
             is_dropdown_visible: is_order_dropdown_visible,
             dropdown: is_hydrated && (

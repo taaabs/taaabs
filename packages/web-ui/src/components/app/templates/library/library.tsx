@@ -1,4 +1,4 @@
-import { sharedValues } from '@web-ui/constants'
+import { sharedValues } from '@web-ui'
 import useWindowResize from 'beautiful-react-hooks/useWindowResize'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'

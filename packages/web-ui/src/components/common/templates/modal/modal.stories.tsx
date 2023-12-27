@@ -1,4 +1,4 @@
-import { lorem_ipsum } from '@web-ui/helpers/storybook/lorem-ipsum'
+import { Helpers } from '@web-ui'
 import { Modal } from './modal'
 
 export default {
@@ -7,7 +7,7 @@ export default {
 
 export const Primary = () => (
   <Modal
-    children={<>{lorem_ipsum.long}</>}
-    slot_modal={<div>{lorem_ipsum.long}</div>}
+    children={<>{Helpers.lorem_ipsum.long}</>}
+    slot_modal={<div>{Helpers.lorem_ipsum.long}</div>}
   />
 )

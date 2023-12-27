@@ -1,4 +1,6 @@
-import { App } from '@web-ui/components/app/templates/app'
+'use client'
+
+import { Ui } from '@web-ui'
 import { ClientComponentAppHeaderDesktop } from './client-component-app-header-desktop'
 import { ClientComponentAppHeaderMobile } from './client-component-app-header-mobile'
 import { ClientComponentBottomNavigationBar } from './client-component-bottom-navigation-bar'
@@ -12,13 +14,13 @@ const Layout: React.FC<{
   return (
     <PublicUserAvatarProvider>
       <ModalProvider>
-        <App
+        <Ui.App.Templates.App
           slot_header_desktop={<ClientComponentAppHeaderDesktop />}
           slot_header_mobile={<ClientComponentAppHeaderMobile />}
           slot_bottom_navigation_bar={<ClientComponentBottomNavigationBar />}
         >
           {props.children}
-        </App>
+        </Ui.App.Templates.App>
       </ModalProvider>
     </PublicUserAvatarProvider>
   )

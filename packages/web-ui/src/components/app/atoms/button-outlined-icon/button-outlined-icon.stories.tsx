@@ -1,12 +1,12 @@
 import { ButtonOutlinedIcon } from './button-outlined-icon'
-import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
+import { Helpers } from '@web-ui'
 
 export default {
   component: ButtonOutlinedIcon,
 }
 
 export const Primary = () => (
-  <StorybookMargin>
+  <Helpers.Storybook.StorybookMargin>
     <ButtonOutlinedIcon icon_variant="ADD" on_click={() => {}} />
-  </StorybookMargin>
+  </Helpers.Storybook.StorybookMargin>
 )

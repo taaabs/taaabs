@@ -1,4 +1,4 @@
-import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
+import { Helpers } from '@web-ui'
 import { SelectedTags } from '.'
 
 export default {
@@ -6,7 +6,7 @@ export default {
 }
 
 export const Primary = () => (
-  <StorybookMargin>
+  <Helpers.Storybook.StorybookMargin>
     <div style={{ width: 260 }}>
       <SelectedTags
         on_selected_tag_click={() => {}}
@@ -16,5 +16,5 @@ export const Primary = () => (
         ]}
       />
     </div>
-  </StorybookMargin>
+  </Helpers.Storybook.StorybookMargin>
 )

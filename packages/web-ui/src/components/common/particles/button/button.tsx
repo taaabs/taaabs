@@ -17,7 +17,7 @@ export namespace Button {
   }
 }
 
-export const Button: React.FC<Button.Props> = (props) => {
+export const Button: React.FC<Ui.Common.Particles.Button.Props> = (props) => {
   const class_names = cn([
     styles.container,
     styles[`container--${props.size ? props.size : 'default'}`],

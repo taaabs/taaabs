@@ -1,4 +1,4 @@
-import { Button } from '@web-ui/components/common/particles/button'
+import { Ui } from '@web-ui'
 import styles from './modal-footer.module.scss'
 
 export namespace ModalFooter {
@@ -21,9 +21,13 @@ export const ModalFooter: React.FC<ModalFooter.Props> = (props) => {
         >
           Cancel
         </button>
-        <Button size="medium" type="submit" is_loading={props.is_disabled}>
+        <Ui.Common.Particles.Button
+          size="medium"
+          type="submit"
+          is_loading={props.is_disabled}
+        >
           {props.button_label}
-        </Button>
+        </Ui.Common.Particles.Button>
       </div>
     </div>
   )

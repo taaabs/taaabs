@@ -1,5 +1,4 @@
-import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
-import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
+import { Helpers } from '@web-ui'
 import { AppHeaderDesktop } from './app-header-desktop'
 
 export default {
@@ -7,12 +6,12 @@ export default {
 }
 
 export const Primary = () => (
-  <StorybookMargin>
+  <Helpers.Storybook.StorybookMargin>
     <AppHeaderDesktop
       slot_left_side_logo={<div>logo</div>}
       slot_left_side_navigation={<div>navigation</div>}
       slot_right_side={<div>right side</div>}
     />
-    <StorybookSpacer />
-  </StorybookMargin>
+    <Helpers.Storybook.StorybookSpacer />
+  </Helpers.Storybook.StorybookMargin>
 )

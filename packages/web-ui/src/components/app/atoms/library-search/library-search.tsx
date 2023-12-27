@@ -1,7 +1,7 @@
 import Skeleton from 'react-loading-skeleton'
 import styles from './library-search.module.scss'
 import { use_is_hydrated } from '@shared/hooks'
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Ui } from '@web-ui'
 import { memo, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { system_values } from '@shared/constants/system-values'
@@ -146,7 +146,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
             {props.is_loading ? (
               <div className={styles.search__loader} />
             ) : (
-              <Icon variant="SEARCH" />
+              <Ui.Common.Particles.Icon variant="SEARCH" />
             )}
           </button>
           <form
@@ -310,7 +310,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                     props.on_clear_click()
                   }}
                 >
-                  <Icon variant="ADD" />
+                  <Ui.Common.Particles.Icon variant="ADD" />
                 </button>
               </>
             ) : (
@@ -347,8 +347,12 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                   }}
                 >
                   <div className={styles.hints__inner__item__icon}>
-                    {hint.type == 'new' && <Icon variant="SEARCH" />}
-                    {hint.type == 'recent' && <Icon variant="RECENT" />}
+                    {hint.type == 'new' && (
+                      <Ui.Common.Particles.Icon variant="SEARCH" />
+                    )}
+                    {hint.type == 'recent' && (
+                      <Ui.Common.Particles.Icon variant="RECENT" />
+                    )}
                   </div>
                   <div
                     className={cn(styles.hints__inner__item__content, {

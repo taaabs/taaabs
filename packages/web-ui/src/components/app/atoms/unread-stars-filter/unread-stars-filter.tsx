@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Ui } from '@web-ui'
 import styles from './unread-stars-filter.module.scss'
 import cn from 'classnames'
 import { useState } from 'react'
@@ -44,7 +44,7 @@ export const UnreadStarsFilter: React.FC<UnreadStarsFilter.Props> = (props) => {
             set_hovered_star(undefined)
           }}
         >
-          <Icon variant="STAR_FILLED" />
+          <Ui.Common.Particles.Icon variant="STAR_FILLED" />
         </button>
         <button
           className={cn(styles.stars__star, {
@@ -61,7 +61,7 @@ export const UnreadStarsFilter: React.FC<UnreadStarsFilter.Props> = (props) => {
             set_hovered_star(undefined)
           }}
         >
-          <Icon variant="STAR_FILLED" />
+          <Ui.Common.Particles.Icon variant="STAR_FILLED" />
         </button>
         <button
           className={cn(styles.stars__star, {
@@ -78,7 +78,7 @@ export const UnreadStarsFilter: React.FC<UnreadStarsFilter.Props> = (props) => {
             set_hovered_star(undefined)
           }}
         >
-          <Icon variant="STAR_FILLED" />
+          <Ui.Common.Particles.Icon variant="STAR_FILLED" />
         </button>
       </div>
     </div>

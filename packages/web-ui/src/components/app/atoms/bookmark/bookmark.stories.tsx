@@ -1,4 +1,4 @@
-import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
+import { Helpers } from '@web-ui'
 import { Bookmark } from './bookmark'
 
 export default {
@@ -46,7 +46,7 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <Bookmark
         stars={0}
         title="Lorem ipsum"
@@ -81,7 +81,7 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <Bookmark
         stars={0}
         title="Lorem ipsum dolor sit amet"
@@ -105,7 +105,7 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <Bookmark
         stars={0}
         title="Lorem ipsum dolor sit amet"
@@ -133,7 +133,7 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <Bookmark
         stars={2}
         title="Lorem ipsum dolor sit amet"
@@ -160,7 +160,7 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <Bookmark
         stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
@@ -194,7 +194,7 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <Bookmark
         stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
@@ -221,7 +221,7 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <Bookmark
         stars={2}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
@@ -248,7 +248,7 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <Bookmark
         stars={2}
         title="Lorem ipsum dolor sit amet"
@@ -275,7 +275,7 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <Bookmark
         stars={2}
         is_unread={true}
@@ -301,7 +301,7 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
     </div>
   </div>
 )

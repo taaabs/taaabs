@@ -6,7 +6,7 @@ export default {
 
 export const Primary = () => {
   return (
-    <NewBookmark slot_header={<>header</>}>
+    <NewBookmark slot_header={<>header</>} slot_footer={<>footer</>}>
       <div>content</div>
       <div>content</div>
     </NewBookmark>

@@ -1,6 +1,5 @@
-import { StorybookMargin } from '@web-ui/helpers/storybook/storybook-margin'
+import { Helpers } from '@web-ui'
 import { DesktopUserAreaForAppHeader } from './desktop-user-area-for-app-header'
-import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
 
 export default {
   component: DesktopUserAreaForAppHeader,
@@ -8,12 +7,12 @@ export default {
 
 export const Primary = () => {
   return (
-    <StorybookMargin>
+    <Helpers.Storybook.StorybookMargin>
       <DesktopUserAreaForAppHeader
         on_click_add={() => {}}
         on_click_search={() => {}}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <DesktopUserAreaForAppHeader
         on_click_add={() => {}}
         on_click_search={() => {}}
@@ -22,6 +21,6 @@ export const Primary = () => {
           blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',
         }}
       />
-    </StorybookMargin>
+    </Helpers.Storybook.StorybookMargin>
   )
 }

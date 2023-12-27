@@ -1,24 +1,15 @@
 'use client'
 
-import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
-import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
-import { Library } from '@web-ui/components/app/templates/library'
+import { Ui } from '@web-ui'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
-import { LibraryAside } from '@web-ui/components/app/templates/library-aside'
-import { ButtonSelect } from '@web-ui/components/app/atoms/button-select'
-import { DropdownMenu } from '@web-ui/components/app/atoms/dropdown-menu'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { Tags } from '@web-ui/components/app/atoms/tags'
-import { SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { useContext, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
 import { use_filter_view_options } from '@/hooks/library/use-filter-view-options'
 import { use_tag_view_options } from '@/hooks/library/use-tag-view-options'
 import { use_date_view_options } from '@/hooks/library/use-date-view-options'
@@ -31,13 +22,9 @@ import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
-import { Icon } from '@web-ui/components/common/particles/icon'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { browser_storage } from '@/constants/browser-storage'
 import { use_is_hydrated } from '@shared/hooks'
-import { ButtonSelectSkeleton } from '@web-ui/components/app/atoms/button-select-skeleton'
-import { UnreadStarsFilter } from '@web-ui/components/app/atoms/unread-stars-filter'
-import { LibrarySearch } from '@web-ui/components/app/atoms/library-search'
 import { use_search } from '@/hooks/library/use-search'
 import { ModalContext } from './modal-provider'
 import { useSearchParams } from 'next/navigation'
@@ -45,7 +32,7 @@ import { upsert_bookmark_modal } from '@/modals'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
-  loading: () => <CustomRangeSkeleton />,
+  loading: () => <Ui.App.Atoms.CustomRangeSkeleton />,
 })
 
 const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
@@ -151,7 +138,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   }, [])
 
   return (
-    <Library
+    <Ui.App.Templates.Library
       show_bookmarks_skeleton={show_bookmarks_skeleton}
       mobile_title_bar={
         filter_view_options.current_filter == LibraryFilter.All
@@ -161,7 +148,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           : 'All bookmarks'
       }
       slot_search={
-        <LibrarySearch
+        <Ui.App.Atoms.LibrarySearch
           search_string={search.search_string}
           is_loading={search.is_initializing}
           loading_progress_percentage={search.indexed_bookmarks_percentage}
@@ -272,7 +259,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
         />
       }
       slot_sidebar={
-        <NavigationForLibrarySidebar
+        <Ui.App.Atoms.NavigationForLibrarySidebar
           navigation_items={[
             {
               label: 'All bookmarks',
@@ -324,11 +311,11 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
         />
       }
       slot_aside={
-        <LibraryAside
+        <Ui.App.Templates.LibraryAside
           slot_filter={
             is_hydrated &&
             filter_view_options.current_filter != LibraryFilter.Archived && (
-              <UnreadStarsFilter
+              <Ui.App.Atoms.UnreadStarsFilter
                 is_unread_selected={
                   filter_view_options.current_filter == LibraryFilter.Unread ||
                   filter_view_options.current_filter ==
@@ -541,7 +528,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           }
           slot_sortby={{
             button: is_hydrated ? (
-              <ButtonSelect
+              <Ui.App.Atoms.ButtonSelect
                 label="Sort by"
                 current_value={_sortby_option_to_label(
                   sortby_view_options.current_sortby,
@@ -550,7 +537,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 on_click={toggle_sortby_dropdown}
               />
             ) : (
-              <ButtonSelectSkeleton />
+              <Ui.App.Atoms.ButtonSelectSkeleton />
             ),
             is_dropdown_visible: is_sortby_dropdown_visible,
             dropdown: is_hydrated && (
@@ -558,7 +545,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 onOutsideClick={toggle_sortby_dropdown}
                 disabled={!is_sortby_dropdown_visible}
               >
-                <DropdownMenu
+                <Ui.App.Atoms.DropdownMenu
                   items={[
                     {
                       label: _sortby_option_to_label(Sortby.CreatedAt),
@@ -624,7 +611,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           }}
           slot_order={{
             button: is_hydrated ? (
-              <ButtonSelect
+              <Ui.App.Atoms.ButtonSelect
                 label="Order"
                 current_value={_order_option_to_label(
                   order_view_options.current_order,
@@ -633,7 +620,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 on_click={toggle_order_dropdown}
               />
             ) : (
-              <ButtonSelectSkeleton />
+              <Ui.App.Atoms.ButtonSelectSkeleton />
             ),
             is_dropdown_visible: is_order_dropdown_visible,
             dropdown: is_hydrated && (
@@ -641,7 +628,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 onOutsideClick={toggle_order_dropdown}
                 disabled={!is_order_dropdown_visible}
               >
-                <DropdownMenu
+                <Ui.App.Atoms.DropdownMenu
                   items={[
                     {
                       label: _order_option_to_label(Order.Desc),
@@ -723,7 +710,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 />
               </div>
             ) : (
-              <CustomRangeSkeleton />
+              <Ui.App.Atoms.CustomRangeSkeleton />
             )
           }
           slot_tags={
@@ -742,7 +729,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   {(bookmarks_slice_state.is_fetching_first_bookmarks
                     ? counts.selected_tags.length > 0
                     : tag_view_options.selected_tags.length > 0) && (
-                    <SelectedTags
+                    <Ui.App.Atoms.SelectedTags
                       selected_tags={(bookmarks_slice_state.is_fetching_first_bookmarks
                         ? counts.selected_tags
                         : tag_view_options.selected_tags
@@ -778,7 +765,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                       }
                     />
                   )}
-                  <Tags
+                  <Ui.App.Atoms.Tags
                     tags={
                       counts.tags
                         ? Object.fromEntries(
@@ -796,7 +783,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   />
                 </div>
               ) : (
-                <TagsSkeleton />
+                <Ui.App.Atoms.TagsSkeleton />
               )}
             </>
           }
@@ -828,7 +815,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
       slot_bookmarks={
         bookmarks_slice_state.bookmarks
           ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
-              <Bookmark
+              <Ui.App.Atoms.Bookmark
                 key={bookmark.id}
                 updated_at={bookmark.updated_at}
                 title={bookmark.title}
@@ -939,7 +926,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 }}
                 favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
                 menu_slot={
-                  <DropdownMenu
+                  <Ui.App.Atoms.DropdownMenu
                     items={[
                       {
                         label: 'Mark as Unread',
@@ -1298,7 +1285,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                   ),
                                 })
                               },
-                              other_icon: <Icon variant="EDIT" />,
+                              other_icon: (
+                                <Ui.Common.Particles.Icon variant="EDIT" />
+                              ),
                             },
                           ]
                         : []),
@@ -1309,7 +1298,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                         )
                           ? 'Archive'
                           : 'Restore',
-                        other_icon: <Icon variant="ARCHIVE" />,
+                        other_icon: (
+                          <Ui.Common.Particles.Icon variant="ARCHIVE" />
+                        ),
                         on_click: () => {
                           const updated_bookmark: UpsertBookmark_Params = {
                             bookmark_id: bookmark.id,
@@ -1410,7 +1401,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             search.reset()
                           }
                         },
-                        other_icon: <Icon variant="DELETE" />,
+                        other_icon: (
+                          <Ui.Common.Particles.Icon variant="DELETE" />
+                        ),
                       },
                     ]}
                   />
@@ -1453,9 +1446,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           filter_view_options.current_filter == LibraryFilter.TwoStarsUnread ||
           filter_view_options.current_filter == LibraryFilter.ThreeStarsUnread)
           ? () => {
-              filter_view_options.clear_unread(
-                filter_view_options.current_filter,
-              )
+              filter_view_options.clear_unread()
             }
           : undefined
       }
@@ -1470,9 +1461,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           filter_view_options.current_filter == LibraryFilter.ThreeStars ||
           filter_view_options.current_filter == LibraryFilter.ThreeStarsUnread)
           ? () => {
-              filter_view_options.clear_selected_stars(
-                filter_view_options.current_filter,
-              )
+              filter_view_options.clear_selected_stars()
             }
           : undefined
       }

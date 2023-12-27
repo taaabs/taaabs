@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/react'
 import { LibrarySearch } from './library-search'
-import { StorybookSpacer } from '@web-ui/helpers/storybook/storybook-spacer'
+import { Helpers } from '@web-ui'
 
 export default {
   component: LibrarySearch,
@@ -24,7 +24,7 @@ export const Primary = () => (
         is_focused={false}
         is_slash_shortcut_disabled={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={'lorem ipsum'}
@@ -41,7 +41,7 @@ export const Primary = () => (
         is_focused={false}
         is_slash_shortcut_disabled={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={'lorem site:lorem.com ipsum site:ipsum.com'}
@@ -58,7 +58,7 @@ export const Primary = () => (
         is_focused={false}
         is_slash_shortcut_disabled={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={'lorem ipsum'}
@@ -75,7 +75,7 @@ export const Primary = () => (
         is_focused={false}
         is_slash_shortcut_disabled={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={'lorem site:lorem.com ipsum site:ipsum.com'}
@@ -92,7 +92,7 @@ export const Primary = () => (
         is_focused={false}
         is_slash_shortcut_disabled={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={'xyz'}
@@ -108,7 +108,7 @@ export const Primary = () => (
         is_focused={false}
         is_slash_shortcut_disabled={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={''}
@@ -124,7 +124,7 @@ export const Primary = () => (
         is_focused={false}
         is_slash_shortcut_disabled={false}
       />
-      <StorybookSpacer />
+      <Helpers.Storybook.StorybookSpacer />
       <LibrarySearch
         placeholder={'Search in all bookmarks'}
         search_string={'mid'}
