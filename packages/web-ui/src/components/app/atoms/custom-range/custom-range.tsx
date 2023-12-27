@@ -324,37 +324,80 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
           {(props.has_results || props.is_fetching_data) &&
           bookmark_count &&
           bookmark_count > 0 ? (
-            <div className={styles['custom-range__details__counts']}>
-              <div className={styles['custom-range__details__counts__total']}>
-                {bookmark_count != starred_count &&
-                  bookmark_count != unread_count && (
-                    <span>{bookmark_count}</span>
-                  )}
-              </div>
-              {bookmark_count == unread_count && (
-                <div
-                  className={styles['custom-range__details__counts__unread']}
-                >
-                  {unread_count != starred_count && <span>{unread_count}</span>}
+            bookmark_count != unread_count &&
+            bookmark_count != starred_count ? (
+              <div className={styles['custom-range__details__counts']}>
+                <div className={styles['custom-range__details__counts__total']}>
+                  <span>{bookmark_count}</span>
                 </div>
-              )}
-              {starred_count !== undefined && starred_count > 0 && (
-                <div
-                  className={styles['custom-range__details__counts__starred']}
-                >
-                  <span>{starred_count}</span>
-                </div>
-              )}
-              {unread_count !== undefined &&
-                unread_count > 0 &&
-                unread_count != bookmark_count && (
+                {unread_count !== undefined && unread_count > 0 && (
                   <div
                     className={styles['custom-range__details__counts__unread']}
                   >
                     <span>{unread_count}</span>
                   </div>
                 )}
-            </div>
+                {starred_count !== undefined && starred_count > 0 && (
+                  <div
+                    className={styles['custom-range__details__counts__starred']}
+                  >
+                    <span>{starred_count}</span>
+                  </div>
+                )}
+              </div>
+            ) : bookmark_count == unread_count &&
+              bookmark_count != starred_count ? (
+              <div className={styles['custom-range__details__counts']}>
+                <div
+                  className={styles['custom-range__details__counts__total']}
+                ></div>
+                <div
+                  className={styles['custom-range__details__counts__unread']}
+                >
+                  <span>{unread_count}</span>
+                </div>
+                {starred_count !== undefined && starred_count > 0 && (
+                  <div
+                    className={styles['custom-range__details__counts__starred']}
+                  >
+                    <span>{starred_count}</span>
+                  </div>
+                )}
+              </div>
+            ) : bookmark_count == starred_count &&
+              bookmark_count != unread_count ? (
+              <div className={styles['custom-range__details__counts']}>
+                <div
+                  className={styles['custom-range__details__counts__total']}
+                ></div>
+                <div
+                  className={styles['custom-range__details__counts__starred']}
+                >
+                  <span>{starred_count}</span>
+                </div>
+                {unread_count !== undefined && unread_count > 0 && (
+                  <div
+                    className={styles['custom-range__details__counts__unread']}
+                  >
+                    <span>{unread_count}</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className={styles['custom-range__details__counts']}>
+                <div
+                  className={styles['custom-range__details__counts__total']}
+                ></div>
+                <div
+                  className={styles['custom-range__details__counts__unread']}
+                ></div>
+                <div
+                  className={styles['custom-range__details__counts__starred']}
+                >
+                  <span>{bookmark_count}</span>
+                </div>
+              </div>
+            )
           ) : (
             ''
           )}
