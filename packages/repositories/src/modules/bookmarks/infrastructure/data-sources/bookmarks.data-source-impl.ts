@@ -225,7 +225,13 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           },
           body: JSON.stringify(bookmark),
         },
-      ).then((r) => r.json())
+      ).then(async (r) => {
+        if (r.ok) {
+          return r.json()
+        } else {
+          throw new Error()
+        }
+      })
     } else {
       return await fetch(`${this._api_url}/v1/bookmarks`, {
         method: 'POST',
@@ -234,7 +240,13 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(bookmark),
-      }).then((r) => r.json())
+      }).then(async (r) => {
+        if (r.ok) {
+          return r.json()
+        } else {
+          throw new Error()
+        }
+      })
     }
   }
 }

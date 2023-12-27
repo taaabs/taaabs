@@ -3,7 +3,9 @@
 import { Metadata, Viewport } from 'next'
 import { Inter, Plus_Jakarta_Sans, Inter_Tight } from 'next/font/google'
 
+import 'react-toastify/dist/ReactToastify.css'
 import '@web-ui/styles/style.scss'
+import { ToastContainer } from 'react-toastify'
 
 export const revalidate = 0
 
@@ -36,6 +38,20 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {/* <GlobalStoreProvider> */}
         {/* <GlobalStoreInitializer></GlobalStoreInitializer> */}
         {/* </GlobalStoreProvider> */}
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          closeButton={false}
+          icon={false}
+        />
         {children}
       </body>
     </html>

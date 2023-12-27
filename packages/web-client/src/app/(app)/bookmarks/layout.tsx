@@ -8,13 +8,12 @@ const Layout: React.FC<{
   return (
     <LibraryStoreProvider>
       <div>{props.children}</div>
-      {/* <div>{props.modal}</div> */}
     </LibraryStoreProvider>
   )
 }
 
 export default Layout
 
-// export const metadata: Metadata = {
-//   title: 'Bookmarks',
-// }
+export const metadata: Metadata = {
+  title: 'Bookmarks',
+}

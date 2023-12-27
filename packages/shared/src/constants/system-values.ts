@@ -14,6 +14,7 @@ export const system_values = {
     },
     tags: {
       limit: 6,
+      max_length: 15,
     },
   },
 }

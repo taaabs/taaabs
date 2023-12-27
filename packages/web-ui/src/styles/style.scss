@@ -60,6 +60,11 @@
   --Tags-selected-foreground: var(--yellow800);
   --Tags-first-char-foregrouond: var(--brand-color);
   --Tags-first-char-background: var(--blue50);
+
+  // Toast overrides
+  --toastify-color-success: var(--brand-color);
+  --toastify-color-error: var(--red);
+  --toastify-text-color-light: var(--text-color-normal);
 }
 
 *,
@@ -254,4 +259,24 @@ strong {
 
 .sortable-ghost {
   opacity: 0;
+}
+
+.Toastify__progress-bar {
+  height: var(--distance-4px);
+}
+.Toastify__toast-container {
+  top: 0;
+  padding: 0;
+}
+.Toastify__toast {
+  border-radius: var(--border-radius-12px);
+  box-shadow: var(--box-shadow);
+  margin: var(--distance-4px) var(--distance-10px) var(--distance-8px)
+    var(--distance-10px);
+  @include at992 {
+    margin-top: var(--distance-18px);
+  }
+}
+.Toastify__toast-body {
+  text-align: center;
 }

@@ -6,6 +6,7 @@ import { system_values } from '@shared/constants/system-values'
 import { Ui } from '@web-ui'
 import { useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 type FormValues = {
   title: string
@@ -48,34 +49,32 @@ export const UpsertBookmarkForm: React.FC<{
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
 
-    try {
-      const bookmark = await upsert_bookmark_use_case.invoke({
-        bookmark_id: props.bookmark?.id,
-        is_public:
-          (form_data.is_public === undefined && props.bookmark?.is_public) ||
-          form_data.is_public ||
-          false,
-        title: form_data.title,
-        note: form_data.note || undefined,
-        created_at: props.bookmark?.created_at
-          ? new Date(props.bookmark.created_at)
-          : undefined,
-        stars: props.bookmark?.stars,
-        is_archived: props.is_archived || false,
-        is_unread: props.bookmark?.is_unread || false,
-        links: links.map((link) => ({
-          url: link.url,
-          is_public: form_data.is_public ? link.is_public : false,
-        })),
-        tags: tags.map((tag) => ({
-          name: tag.name,
-          is_public: form_data.is_public ? tag.is_public : false,
-        })),
-      })
-      if (props.bookmark) {
-        props.on_submit(bookmark)
-      }
-    } catch {}
+    const bookmark = await upsert_bookmark_use_case.invoke({
+      bookmark_id: props.bookmark?.id,
+      is_public:
+        (form_data.is_public === undefined && props.bookmark?.is_public) ||
+        form_data.is_public ||
+        false,
+      title: form_data.title,
+      note: form_data.note || undefined,
+      created_at: props.bookmark?.created_at
+        ? new Date(props.bookmark.created_at)
+        : undefined,
+      stars: props.bookmark?.stars,
+      is_archived: props.is_archived || false,
+      is_unread: props.bookmark?.is_unread || false,
+      links: links.map((link) => ({
+        url: link.url,
+        is_public: form_data.is_public ? link.is_public : false,
+      })),
+      tags: tags.map((tag) => ({
+        name: tag.name,
+        is_public: form_data.is_public ? tag.is_public : false,
+      })),
+    })
+    if (props.bookmark) {
+      props.on_submit(bookmark)
+    }
   }
 
   const handle_keyboard = (event: any) => {
@@ -94,7 +93,28 @@ export const UpsertBookmarkForm: React.FC<{
 
   return (
     <form
-      onSubmit={handleSubmit(on_submit)}
+      onSubmit={(e) => {
+        e.preventDefault()
+        toast.promise(handleSubmit(on_submit), {
+          pending: {
+            render() {
+              return 'Updading...'
+            },
+            icon: false,
+          },
+          success: {
+            render() {
+              return 'Bookmark has been updated'
+            },
+          },
+          error: {
+            render() {
+              props.on_close()
+              return 'Something went wrong... Try again later.'
+            },
+          },
+        })
+      }}
       onKeyDown={(e) => {
         if (e.code == 'Enter') {
           e.preventDefault()
@@ -137,13 +157,6 @@ export const UpsertBookmarkForm: React.FC<{
                     is_checked={field.value}
                   />
                 </Ui.App.Templates.FormRadio>
-                // <input
-                //   type="checkbox"
-                //   checked={field.value}
-                //   onChange={(is_checked) => {
-                //     field.onChange(is_checked)
-                //   }}
-                // />
               )
             }}
           />
