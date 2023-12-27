@@ -1,4 +1,4 @@
-import { Ui } from '@web-ui'
+import { ButtonUnderlined } from '../../atoms/button-underlined'
 import styles from './navigation-for-header.module.scss'
 
 export namespace NavigationForHeader {
@@ -20,7 +20,7 @@ export const NavigationForHeader: React.FC<NavigationForHeader.Props> = ({
       <ul>
         {navigation.map((link) => (
           <li key={link.label}>
-            <Ui.App.Atoms.ButtonUnderlined
+            <ButtonUnderlined
               href={link.href}
               is_active={link.is_active}
               label={link.label}

@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin } from '@web-ui/helpers/storybook'
 import { ButtonAvatar } from './button-avatar'
 
 export default {
@@ -6,12 +6,12 @@ export default {
 }
 
 export const Primary = () => (
-  <Helpers.Storybook.StorybookMargin>
+  <StorybookMargin>
     <ButtonAvatar
       url="https://picsum.photos/300"
       blurhash="KGF5?xYk^6@-5c,1@[or[Q"
       alt="XYZ"
       on_click={() => {}}
     />
-  </Helpers.Storybook.StorybookMargin>
+  </StorybookMargin>
 )

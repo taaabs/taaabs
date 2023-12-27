@@ -1,6 +1,6 @@
 'use client'
 
-import { Ui } from '@web-ui'
+import { Modal } from '@web-ui/components/common/templates/modal'
 import { createContext, ReactNode, useState } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
 
@@ -14,7 +14,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
 
   return (
     <ModalContext.Provider value={{ set_modal, modal }}>
-      <Ui.Common.Templates.Modal
+      <Modal
         slot_modal={
           modal && (
             <OutsideClickHandler
@@ -28,7 +28,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
         }
       >
         {props.children}
-      </Ui.Common.Templates.Modal>
+      </Modal>
     </ModalContext.Provider>
   )
 }

@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 import { LogoForHeader } from '.'
 
 export default {
@@ -6,9 +6,9 @@ export default {
 }
 
 export const Primary = () => (
-  <Helpers.Storybook.StorybookMargin>
+  <StorybookMargin>
     <LogoForHeader href="" />
-    <Helpers.Storybook.StorybookSpacer />
+    <StorybookSpacer />
     <LogoForHeader href="" is_large={true} />
-  </Helpers.Storybook.StorybookMargin>
+  </StorybookMargin>
 )

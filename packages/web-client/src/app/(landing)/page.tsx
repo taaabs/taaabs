@@ -1,10 +1,10 @@
-import { Ui } from '@web-ui'
+import { HomeHero } from '@web-ui/components/landing/atoms/home-hero'
 import Link from 'next/link'
 
 const Page: React.FC = () => {
   return (
     <>
-      <Ui.Landing.Atoms.HomeHero
+      <HomeHero
         heading="Your personal library, organized."
         subheading={
           <p>
@@ -18,7 +18,7 @@ const Page: React.FC = () => {
         }
       />
       <div>
-        <Link href="/test_user">test_user</Link>
+        <Link href="/">test_user</Link>
       </div>
     </>
   )

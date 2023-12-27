@@ -1,5 +1,6 @@
-import { Helpers,Ui } from '@web-ui'
 import { DesktopMenuItem } from './desktop-menu-item'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
+import { Wrapper } from '@web-ui/components/common/templates/wrapper'
 
 export default {
   component: DesktopMenuItem,
@@ -7,12 +8,12 @@ export default {
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
-      <Ui.Common.Templates.Wrapper>
+    <StorybookMargin>
+      <Wrapper>
         <DesktopMenuItem is_active={true} href="" label="Lorem ipsum" />
-        <Helpers.Storybook.StorybookSpacer />
+        <StorybookSpacer />
         <DesktopMenuItem is_active={false} href="" label="Lorem ipsum" />
-      </Ui.Common.Templates.Wrapper>
-    </Helpers.Storybook.StorybookMargin>
+      </Wrapper>
+    </StorybookMargin>
   )
 }

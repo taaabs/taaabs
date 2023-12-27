@@ -1,4 +1,4 @@
-import { Ui } from '@web-ui'
+import { Wrapper } from '@web-ui/components/common/templates/wrapper'
 import styles from './new-bookmark.module.scss'
 
 export namespace NewBookmark {
@@ -16,9 +16,9 @@ export const NewBookmark: React.FC<NewBookmark.Props> = (props) => {
         <div className={styles.header}>{props.slot_header}</div>
         <main className={styles.main}>{props.children}</main>
         <div className={styles.footer}>
-          <Ui.Common.Templates.Wrapper>
+          <Wrapper>
             <div className={styles.footer__inner}>{props.slot_footer}</div>
-          </Ui.Common.Templates.Wrapper>
+          </Wrapper>
         </div>
       </div>
     </>

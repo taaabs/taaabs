@@ -1,4 +1,4 @@
-import { Ui } from '@web-ui'
+import { Icon } from '@web-ui/components/common/particles/icon'
 import styles from './button-select.module.scss'
 import cn from 'classnames'
 
@@ -30,7 +30,7 @@ export const ButtonSelect: React.FC<ButtonSelect.Props> = (props) => {
           { [styles['arrow--toggled']]: props.is_active },
         ])}
       >
-        <Ui.Common.Particles.Icon variant="LESS_THAN" />
+        <Icon variant="LESS_THAN" />
       </div>
     </button>
   )

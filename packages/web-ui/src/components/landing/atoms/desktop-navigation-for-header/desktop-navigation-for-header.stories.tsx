@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin } from '@web-ui/helpers/storybook'
 import { DesktopNavigationForHeader } from './desktop-navigation-for-header'
 
 export default {
@@ -7,7 +7,7 @@ export default {
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
+    <StorybookMargin>
       <DesktopNavigationForHeader
         navigation_items={[
           { label: 'Pricing', href: '/', is_active: false },
@@ -15,6 +15,6 @@ export const Primary = () => {
           { label: 'Forum', href: '/', is_active: false },
         ]}
       />
-    </Helpers.Storybook.StorybookMargin>
+    </StorybookMargin>
   )
 }

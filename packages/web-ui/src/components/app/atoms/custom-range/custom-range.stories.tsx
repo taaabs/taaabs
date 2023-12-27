@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 import { CustomRange } from './custom-range'
 
 export default {
@@ -6,7 +6,7 @@ export default {
 }
 
 export const Primary = () => (
-  <Helpers.Storybook.StorybookMargin>
+  <StorybookMargin>
     <div style={{ width: 260 }}>
       <CustomRange
         counts={[
@@ -69,7 +69,7 @@ export const Primary = () => (
         clear_date_range={() => {}}
         has_results={true}
       />
-      <Helpers.Storybook.StorybookSpacer />
+      <StorybookSpacer />
       <CustomRange
         counts={[
           {
@@ -133,7 +133,7 @@ export const Primary = () => (
         current_lte={202305}
         has_results={true}
       />
-      <Helpers.Storybook.StorybookSpacer />
+      <StorybookSpacer />
       <CustomRange
         counts={[
           {
@@ -198,5 +198,5 @@ export const Primary = () => (
         has_results={true}
       />
     </div>
-  </Helpers.Storybook.StorybookMargin>
+  </StorybookMargin>
 )

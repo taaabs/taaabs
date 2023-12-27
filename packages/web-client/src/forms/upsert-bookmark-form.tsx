@@ -3,10 +3,18 @@ import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/u
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { system_values } from '@shared/constants/system-values'
-import { Ui } from '@web-ui'
 import { useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import { FormModal } from '../../../web-ui/src/components/app/templates/form-modal'
+import { ModalHeader } from '../../../web-ui/src/components/app/atoms/modal-header'
+import { ModalFooter } from '../../../web-ui/src/components/app/atoms/modal-footer'
+import { BoxHeading } from '../../../web-ui/src/components/app/atoms/box-heading'
+import { FormRadio } from '../../../web-ui/src/components/app/templates/form-radio'
+import { RadioSetting } from '../../../web-ui/src/components/app/atoms/radio-setting'
+import { Box } from '../../../web-ui/src/components/app/atoms/box'
+import { Input } from '../../../web-ui/src/components/common/atoms/input'
+import { DraggableFormInputs } from '../../../web-ui/src/components/app/atoms/draggable-form-inputs'
 
 type FormValues = {
   title: string
@@ -121,26 +129,26 @@ export const UpsertBookmarkForm: React.FC<{
         }
       }}
     >
-      <Ui.App.Templates.FormModal
-        slot_header={<Ui.App.Atoms.ModalHeader title="Edit bookmark" />}
+      <FormModal
+        slot_header={<ModalHeader title="Edit bookmark" />}
         slot_footer={
-          <Ui.App.Atoms.ModalFooter
+          <ModalFooter
             on_click_cancel={props.on_close}
             button_label="Save"
             is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
           />
         }
       >
-        <Ui.App.Atoms.Box>
-          <Ui.App.Atoms.BoxHeading heading="Visibility" />
+        <Box>
+          <BoxHeading heading="Visibility" />
           <Controller
             name="is_public"
             control={control}
             defaultValue={props.bookmark?.is_public}
             render={({ field }) => {
               return (
-                <Ui.App.Templates.FormRadio>
-                  <Ui.App.Atoms.RadioSetting
+                <FormRadio>
+                  <RadioSetting
                     top_line="Private"
                     bottom_line="All data is encrypted end-to-end"
                     on_click={() => {
@@ -148,7 +156,7 @@ export const UpsertBookmarkForm: React.FC<{
                     }}
                     is_checked={!field.value}
                   />
-                  <Ui.App.Atoms.RadioSetting
+                  <RadioSetting
                     top_line="Public"
                     bottom_line="Selected links and tags can remain private"
                     on_click={() => {
@@ -156,13 +164,13 @@ export const UpsertBookmarkForm: React.FC<{
                     }}
                     is_checked={field.value}
                   />
-                </Ui.App.Templates.FormRadio>
+                </FormRadio>
               )
             }}
           />
-        </Ui.App.Atoms.Box>
-        <Ui.App.Atoms.Box>
-          <Ui.App.Atoms.BoxHeading heading="Title" />
+        </Box>
+        <Box>
+          <BoxHeading heading="Title" />
           <Controller
             name="title"
             control={control}
@@ -178,7 +186,7 @@ export const UpsertBookmarkForm: React.FC<{
               }
 
               return (
-                <Ui.Common.Atoms.Input
+                <Input
                   value={field.value}
                   on_change={(value) => {
                     if (!isSubmitting) {
@@ -192,16 +200,16 @@ export const UpsertBookmarkForm: React.FC<{
               )
             }}
           />
-        </Ui.App.Atoms.Box>
-        <Ui.App.Atoms.Box>
-          <Ui.App.Atoms.BoxHeading heading="Links" />
+        </Box>
+        <Box>
+          <BoxHeading heading="Links" />
           <Controller
             name="is_public"
             control={control}
             defaultValue={props.bookmark?.is_public}
             render={({ field }) => {
               return (
-                <Ui.App.Atoms.DraggableFormInputs
+                <DraggableFormInputs
                   items={links.map((link) => ({
                     value: link.url,
                     is_public:
@@ -227,16 +235,16 @@ export const UpsertBookmarkForm: React.FC<{
               )
             }}
           />
-        </Ui.App.Atoms.Box>
-        <Ui.App.Atoms.Box>
-          <Ui.App.Atoms.BoxHeading heading="Tags" />
+        </Box>
+        <Box>
+          <BoxHeading heading="Tags" />
           <Controller
             name="is_public"
             control={control}
             defaultValue={props.bookmark?.is_public}
             render={({ field }) => {
               return (
-                <Ui.App.Atoms.DraggableFormInputs
+                <DraggableFormInputs
                   items={tags.map((tag) => ({
                     value: tag.name,
                     is_public:
@@ -261,9 +269,9 @@ export const UpsertBookmarkForm: React.FC<{
               )
             }}
           />
-        </Ui.App.Atoms.Box>
-        <Ui.App.Atoms.Box>
-          <Ui.App.Atoms.BoxHeading heading="Note" />
+        </Box>
+        <Box>
+          <BoxHeading heading="Note" />
           <Controller
             name="note"
             control={control}
@@ -279,7 +287,7 @@ export const UpsertBookmarkForm: React.FC<{
               }
 
               return (
-                <Ui.Common.Atoms.Input
+                <Input
                   value={field.value}
                   on_change={(value) => {
                     if (!isSubmitting) {
@@ -293,8 +301,8 @@ export const UpsertBookmarkForm: React.FC<{
               )
             }}
           />
-        </Ui.App.Atoms.Box>
-      </Ui.App.Templates.FormModal>
+        </Box>
+      </FormModal>
     </form>
   )
 }

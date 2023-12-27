@@ -3,14 +3,13 @@ import { AvatarContextSetter } from './avatar-context-setter'
 import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
 import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
 import { GetPublicMetadata } from '@repositories/modules/metadata/domain/usecases/get-public-metadata'
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL
+import { LibraryStoreProvider } from '@/providers/library-store-provider'
 
 const Layout: React.FC<{
   children: React.ReactNode
   params: { username: string }
-}> = async ({ children, params }) => {
-  const metadata = await _getMetadata({ username: params.username })
+}> = async (props) => {
+  const metadata = await _getMetadata({ username: props.params.username })
 
   return (
     <>
@@ -24,7 +23,7 @@ const Layout: React.FC<{
             : undefined
         }
       />
-      {children}
+      <LibraryStoreProvider>{props.children}</LibraryStoreProvider>
     </>
   )
 }
@@ -47,7 +46,9 @@ export async function generateMetadata({
 }
 
 async function _getMetadata({ username }: { username: string }) {
-  const data_source = new MetadataDataSourceImpl(apiUrl)
+  const data_source = new MetadataDataSourceImpl(
+    process.env.NEXT_PUBLIC_API_URL,
+  )
   const repository = new MetadataRepositoryImpl(data_source)
   const get_metadata = new GetPublicMetadata(repository)
   const metadata = await get_metadata.invoke({ username })

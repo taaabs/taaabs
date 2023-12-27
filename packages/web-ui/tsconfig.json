@@ -21,8 +21,8 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "paths": {
-      "@web-ui": [
-        "src/index"
+      "@web-ui/*": [
+        "src/*"
       ],
       "@shared/*": [
         "../shared/src/*"

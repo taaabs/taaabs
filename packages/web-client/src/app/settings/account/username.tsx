@@ -1,10 +1,13 @@
-import { Ui } from '@web-ui'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import awesomeDebouncePromise from 'awesome-debounce-promise'
 import { Settings_DataSourceImpl } from '@repositories/modules/settings/infrastructure/data-sources/settings.data-source-impl'
 import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastructure/repositories/settings.repository-impl'
 import { CheckUsernameAvailability_UseCase } from '@repositories/modules/settings/domain/use-cases/check-username-availability.use-case'
 import { UpdateUsername_UseCase } from '@repositories/modules/settings/domain/use-cases/update-username.use-case'
+import { Box } from '@web-ui/components/app/atoms/box'
+import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
+import { Input } from '@web-ui/components/common/atoms/input'
+import { Button } from '@web-ui/components/common/particles/button'
 
 type FormValues = {
   username: string
@@ -54,8 +57,8 @@ export const Username: React.FC<Username.Props> = (props) => {
 
   return (
     <form onSubmit={handleSubmit(on_submit)}>
-      <Ui.App.Atoms.Box>
-        <Ui.App.Atoms.BoxHeading
+      <Box>
+        <BoxHeading
           heading="Username"
           subheading="The username determines the default link of your public profile."
         />
@@ -94,7 +97,7 @@ export const Username: React.FC<Username.Props> = (props) => {
             }
 
             return (
-              <Ui.Common.Atoms.Input
+              <Input
                 value={field.value}
                 on_change={(value) => {
                   if (isSubmitting) return
@@ -108,15 +111,11 @@ export const Username: React.FC<Username.Props> = (props) => {
           }}
         />
         <div>
-          <Ui.Common.Particles.Button
-            size="default"
-            type="submit"
-            is_loading={isSubmitting}
-          >
+          <Button size="default" type="submit" is_loading={isSubmitting}>
             Save
-          </Ui.Common.Particles.Button>
+          </Button>
         </div>
-      </Ui.App.Atoms.Box>
+      </Box>
     </form>
   )
 }

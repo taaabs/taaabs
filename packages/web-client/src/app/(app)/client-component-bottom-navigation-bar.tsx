@@ -1,10 +1,10 @@
 'use client'
 
-import { Ui } from '@web-ui'
+import { BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
 
 export const ClientComponentBottomNavigationBar: React.FC = () => {
   return (
-    <Ui.App.Molecules.BottomNavigationBar
+    <BottomNavigationBar
       add_on_click={() => {}}
       my_library_on_click={() => {}}
       notifications_on_click={() => {}}

@@ -1,4 +1,3 @@
-import { Ui } from '@web-ui'
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
@@ -11,6 +10,7 @@ import OutsideClickHandler from 'react-outside-click-handler'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { LibraryFilter } from '@shared/types/common/library-filter'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search/get-site-variants-for-search'
+import { Icon } from '@web-ui/components/common/particles/icon'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -149,7 +149,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           }
                         }}
                       >
-                        <Ui.Common.Particles.Icon variant="THREE_DOTS" />
+                        <Icon variant="THREE_DOTS" />
                       </button>
                       <div
                         className={cn(styles.bookmark__main__top__menu__slot, {
@@ -179,10 +179,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         className={styles.bookmark__main__content__title__stars}
                       >
                         {[...new Array(props.stars)].map((_, i) => (
-                          <Ui.Common.Particles.Icon
-                            variant="STAR_FILLED"
-                            key={i}
-                          />
+                          <Icon variant="STAR_FILLED" key={i} />
                         ))}
                       </div>
                     )}
@@ -475,7 +472,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             }
                           }}
                         >
-                          <Ui.Common.Particles.Icon variant="NEW_TAB" />
+                          <Icon variant="NEW_TAB" />
                         </button>
                         <button
                           className={
@@ -483,7 +480,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           }
                           onClick={async () => {}}
                         >
-                          <Ui.Common.Particles.Icon variant="THREE_DOTS" />
+                          <Icon variant="THREE_DOTS" />
                         </button>
                       </div>
                     </div>

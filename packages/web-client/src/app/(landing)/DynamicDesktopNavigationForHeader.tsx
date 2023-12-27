@@ -1,13 +1,13 @@
 'use client'
 
-import { Ui } from '@web-ui'
+import { DesktopNavigationForHeader } from '@web-ui/components/landing/atoms/desktop-navigation-for-header'
 import { usePathname } from 'next/navigation'
 
 export const DynamicDesktopNavigationForHeader: React.FC = () => {
   const pathname = usePathname()
 
   return (
-    <Ui.Landing.Atoms.DesktopNavigationForHeader
+    <DesktopNavigationForHeader
       navigation_items={[
         { label: 'Home', href: '/', is_active: pathname == '/' },
         {

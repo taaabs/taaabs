@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin } from '@web-ui/helpers/storybook'
 import { Box } from './box'
 
 export default {
@@ -7,8 +7,8 @@ export default {
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
+    <StorybookMargin>
       <Box>children</Box>
-    </Helpers.Storybook.StorybookMargin>
+    </StorybookMargin>
   )
 }

@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 import { ButtonUnderlined } from './button-underlined'
 
 export default {
@@ -6,15 +6,15 @@ export default {
 }
 
 export const Primary = () => (
-  <Helpers.Storybook.StorybookMargin>
+  <StorybookMargin>
     <Wrapper>
       <ButtonUnderlined is_active={true} href="/" label="Lorem ispum" />
     </Wrapper>
-    <Helpers.Storybook.StorybookSpacer />
+    <StorybookSpacer />
     <Wrapper>
       <ButtonUnderlined is_active={false} href="/" label="Lorem ispum" />
     </Wrapper>
-    <Helpers.Storybook.StorybookSpacer />
+    <StorybookSpacer />
     <Wrapper>
       <ButtonUnderlined
         is_active={true}
@@ -22,11 +22,11 @@ export const Primary = () => (
         label="Lorem ispum"
       />
     </Wrapper>
-    <Helpers.Storybook.StorybookSpacer />
+    <StorybookSpacer />
     <Wrapper>
       <ButtonUnderlined is_active={false} label="Lorem ispum" />
     </Wrapper>
-  </Helpers.Storybook.StorybookMargin>
+  </StorybookMargin>
 )
 
 const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {

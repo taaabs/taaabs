@@ -1,7 +1,7 @@
-import { Ui } from '@web-ui'
+import { CustomRange } from '@web-ui/components/app/atoms/custom-range'
 
-const DynamicCustomRange = (props: Ui.App.Atoms.CustomRange.Props) => (
-  <Ui.App.Atoms.CustomRange {...props} />
+const DynamicCustomRange = (props: CustomRange.Props) => (
+  <CustomRange {...props} />
 )
 
 export default DynamicCustomRange

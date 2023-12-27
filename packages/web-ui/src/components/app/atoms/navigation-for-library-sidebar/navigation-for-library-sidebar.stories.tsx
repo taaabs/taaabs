@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin } from '@web-ui/helpers/storybook'
 import { NavigationForLibrarySidebar } from './navigation-for-library-sidebar'
 
 export default {
@@ -7,13 +7,13 @@ export default {
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
+    <StorybookMargin>
       <NavigationForLibrarySidebar
         navigation_items={[
           { label: 'All bookmarks', on_click: () => {}, is_active: true },
           { label: 'Categories', on_click: () => {}, is_active: false },
         ]}
       />
-    </Helpers.Storybook.StorybookMargin>
+    </StorybookMargin>
   )
 }

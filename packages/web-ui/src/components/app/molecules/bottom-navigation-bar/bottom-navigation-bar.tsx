@@ -1,4 +1,4 @@
-import { Ui } from '@web-ui'
+import { Icon } from '@web-ui/components/common/particles/icon'
 import styles from './bottom-navigation-bar.module.scss'
 
 export namespace BottomNavigationBar {
@@ -18,23 +18,23 @@ export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
   return (
     <div className={styles.container}>
       <button onClick={props.home_on_click}>
-        <Ui.Common.Particles.Icon variant="HOME" />
+        <Icon variant="HOME" />
       </button>
 
       <button onClick={props.notifications_on_click}>
-        <Ui.Common.Particles.Icon variant="SEARCH" />
+        <Icon variant="SEARCH" />
       </button>
 
       <button onClick={props.add_on_click}>
-        <Ui.Common.Particles.Icon variant="ADD" />
+        <Icon variant="ADD" />
       </button>
 
       <button onClick={props.notifications_on_click}>
-        <Ui.Common.Particles.Icon variant="NOTIFICATIONS" />
+        <Icon variant="NOTIFICATIONS" />
       </button>
 
       <button onClick={props.user_on_click}>
-        <Ui.Common.Particles.Icon variant="USER" />
+        <Icon variant="USER" />
       </button>
     </div>
   )

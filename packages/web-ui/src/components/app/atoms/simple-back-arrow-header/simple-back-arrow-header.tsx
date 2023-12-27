@@ -1,7 +1,8 @@
-import { Ui } from '@web-ui'
 import styles from './simple-back-arrow-header.module.scss'
 import Link from 'next/link'
 import cn from 'classnames'
+import { Wrapper } from '@web-ui/components/common/templates/wrapper'
+import { Icon } from '@web-ui/components/common/particles/icon'
 
 export namespace SimpleBackArrowHeader {
   export type Props = {
@@ -25,14 +26,14 @@ export const SimpleBackArrowHeader: React.FC<SimpleBackArrowHeader.Props> = ({
         },
       ])}
     >
-      <Ui.Common.Templates.Wrapper>
+      <Wrapper>
         <div className={styles.inner}>
           <Link className={styles['inner__back-arrow']} href={props.back_href}>
-            <Ui.Common.Particles.Icon variant="LESS_THAN" />
+            <Icon variant="LESS_THAN" />
           </Link>
           <span className={styles.inner__title}>{props.title}</span>
         </div>
-      </Ui.Common.Templates.Wrapper>
+      </Wrapper>
     </div>
   )
 }

@@ -1,4 +1,5 @@
-import { Ui } from '@web-ui'
+import { ButtonAvatar } from '../../atoms/button-avatar'
+import { ButtonOutlinedIcon } from '../../atoms/button-outlined-icon'
 import styles from './desktop-user-area-for-app-header.module.scss'
 
 export namespace DesktopUserAreaForAppHeader {
@@ -17,26 +18,20 @@ export const DesktopUserAreaForAppHeader: React.FC<
 > = (props) => {
   return (
     <div className={styles.container}>
-      <Ui.App.Atoms.ButtonOutlinedIcon
+      <ButtonOutlinedIcon
         icon_variant="SEARCH"
         on_click={props.on_click_search}
       />
-      <Ui.App.Atoms.ButtonOutlinedIcon
-        icon_variant="ADD"
-        on_click={props.on_click_add}
-      />
+      <ButtonOutlinedIcon icon_variant="ADD" on_click={props.on_click_add} />
       {props.avatar ? (
-        <Ui.App.Atoms.ButtonAvatar
+        <ButtonAvatar
           url={props.avatar.url}
           blurhash={props.avatar.blurhash}
           on_click={() => {}}
           alt="XYZ"
         />
       ) : (
-        <Ui.App.Atoms.ButtonOutlinedIcon
-          icon_variant="USER"
-          on_click={() => {}}
-        />
+        <ButtonOutlinedIcon icon_variant="USER" on_click={() => {}} />
       )}
     </div>
   )

@@ -1,7 +1,6 @@
-import { SimpleBackArrowHeader } from '@web-ui/components/app/atoms/simple-back-arrow-header'
 import { Settings } from '@web-ui/components/app/templates/settings'
 import { DynamicDesktopNavigation } from './DynamicDesktopNavigation'
-import { Metadata } from 'next'
+import { SimpleBackArrowHeader } from '@web-ui/components/app/atoms/simple-back-arrow-header'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
@@ -21,10 +20,3 @@ const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 }
 
 export default Layout
-
-export const metadata: Metadata = {
-  title: {
-    default: `Settings`,
-    template: `%s - Settings | Taaabs`,
-  },
-}

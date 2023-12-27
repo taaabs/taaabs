@@ -1,6 +1,6 @@
-import { Ui } from '@web-ui'
 import styles from './_mobile-title-bar.module.scss'
 import cn from 'classnames'
+import { Icon } from '@web-ui/components/common/particles/icon'
 
 export namespace _MobileTitleBar {
   export type Props = {
@@ -17,7 +17,7 @@ export const _MobileTitleBar: React.FC<_MobileTitleBar.Props> = (props) => {
         className={cn(styles.icon, styles['icon--left'])}
         onClick={props.swipe_left_on_click}
       >
-        <Ui.Common.Particles.Icon variant={'MOBILE_TITLE_BAR_MENU'} />
+        <Icon variant={'MOBILE_TITLE_BAR_MENU'} />
       </button>
 
       {props.text && (
@@ -30,7 +30,7 @@ export const _MobileTitleBar: React.FC<_MobileTitleBar.Props> = (props) => {
         className={cn(styles.icon, styles['icon--right'])}
         onClick={props.swipe_right_on_click}
       >
-        <Ui.Common.Particles.Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
+        <Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
       </button>
     </div>
   )

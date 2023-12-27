@@ -1,12 +1,12 @@
-import { Helpers } from '@web-ui'
 import { BottomNavigationBar } from './bottom-navigation-bar'
+import { StorybookMargin } from '@web-ui/helpers/storybook'
 
 export default {
   component: BottomNavigationBar,
 }
 
 export const Primary = () => (
-  <Helpers.Storybook.StorybookMargin>
+  <StorybookMargin>
     <BottomNavigationBar
       add_on_click={() => {}}
       my_library_on_click={() => {}}
@@ -15,5 +15,5 @@ export const Primary = () => (
       user_on_click={() => {}}
       home_on_click={() => {}}
     />
-  </Helpers.Storybook.StorybookMargin>
+  </StorybookMargin>
 )

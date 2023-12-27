@@ -1,11 +1,11 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin } from '@web-ui/helpers/storybook'
 import { PricingTier } from './pricing-tier'
 
 export default { component: PricingTier }
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
+    <StorybookMargin>
       <div style={{ width: 520 }}>
         <PricingTier
           name="Lorem"
@@ -22,6 +22,6 @@ export const Primary = () => {
           ]}
         />
       </div>
-    </Helpers.Storybook.StorybookMargin>
+    </StorybookMargin>
   )
 }

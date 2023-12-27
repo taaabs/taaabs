@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { Ui } from '@web-ui'
 import styles from './user-for-header.module.scss'
 import { Blurhash } from 'react-blurhash'
 import Skeleton from 'react-loading-skeleton'
+import { Icon } from '@web-ui/components/common/particles/icon'
 
 export namespace UserForHeader {
   export type User = {
@@ -29,14 +29,14 @@ export const UserForHeader: React.FC<UserForHeader.Props> = (props) => {
     </div>
   ) : (
     <div className={styles['avatar-and-username__avatar-icon']}>
-      <Ui.Common.Particles.Icon variant="USER" />
+      <Icon variant="USER" />
     </div>
   )
 
   return (
     <div className={styles.container}>
       <Link className={styles['back-arrow']} href={props.user.back_href}>
-        <Ui.Common.Particles.Icon variant="LESS_THAN" />
+        <Icon variant="LESS_THAN" />
       </Link>
       <div className={styles['avatar-and-username']}>
         {props.is_loading_avatar ? (

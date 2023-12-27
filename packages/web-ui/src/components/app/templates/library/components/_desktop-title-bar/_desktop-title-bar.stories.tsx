@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin } from '@web-ui/helpers/storybook'
 import { _DesktopTitleBar } from './_desktop-title-bar'
 
 export default {
@@ -6,7 +6,7 @@ export default {
 }
 
 export const Primary = () => (
-  <Helpers.Storybook.StorybookMargin>
+  <StorybookMargin>
     <_DesktopTitleBar text="Lorem ipsum" />
-  </Helpers.Storybook.StorybookMargin>
+  </StorybookMargin>
 )

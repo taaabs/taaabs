@@ -1,5 +1,5 @@
-import { Ui } from '@web-ui'
 import styles from './pricing-tiers.module.scss'
+import { Wrapper } from '@web-ui/components/common/templates/wrapper'
 
 export namespace PricingTiers {
   export type Props = {
@@ -11,12 +11,12 @@ export namespace PricingTiers {
 export const PricingTiers: React.FC<PricingTiers.Props> = (props) => {
   return (
     <section className={styles.container}>
-      <Ui.Common.Templates.Wrapper>
+      <Wrapper>
         <div className={styles.inner}>
           {props.slot_left_side}
           {props.slot_right_side}
         </div>
-      </Ui.Common.Templates.Wrapper>
+      </Wrapper>
     </section>
   )
 }

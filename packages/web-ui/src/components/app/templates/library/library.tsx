@@ -1,4 +1,3 @@
-import { sharedValues } from '@web-ui'
 import useWindowResize from 'beautiful-react-hooks/useWindowResize'
 import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -11,6 +10,7 @@ import { _MobileTitleBar } from './components/_mobile-title-bar'
 import styles from './library.module.scss'
 import { use_is_hydrated } from '@shared/hooks'
 import { useSwipeable } from 'react-swipeable'
+import { shared_values } from '@web-ui/constants'
 
 export namespace Library {
   export type Props = {
@@ -354,7 +354,7 @@ export const Library: React.FC<Library.Props> = (props) => {
         >
           <div className={styles.aside__inner}>
             <div className={styles.aside__inner__stickybox}>
-              <StickyBox offsetTop={sharedValues.appHeaderDesktop}>
+              <StickyBox offsetTop={shared_values.appHeaderDesktop}>
                 {props.slot_aside}
               </StickyBox>
             </div>

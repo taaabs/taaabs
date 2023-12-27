@@ -1,12 +1,12 @@
-import { Helpers } from '@web-ui'
 import { Tags } from '.'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 
 export default {
   component: Tags,
 }
 
 export const Primary = () => (
-  <Helpers.Storybook.StorybookMargin>
+  <StorybookMargin>
     <div style={{ width: 260 }}>
       <Tags
         tags={{
@@ -45,7 +45,7 @@ export const Primary = () => (
         }}
         on_click={() => {}}
       />
-      <Helpers.Storybook.StorybookSpacer />
+      <StorybookSpacer />
       <Tags
         tags={{
           aa: {
@@ -76,5 +76,5 @@ export const Primary = () => (
         on_click={() => {}}
       />
     </div>
-  </Helpers.Storybook.StorybookMargin>
+  </StorybookMargin>
 )

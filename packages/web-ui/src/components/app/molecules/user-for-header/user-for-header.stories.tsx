@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 import { UserForHeader } from '.'
 
 export default {
@@ -6,12 +6,12 @@ export default {
 }
 
 export const Primary = () => (
-  <Helpers.Storybook.StorybookMargin>
+  <StorybookMargin>
     <UserForHeader
       user={{ username: 'lorem', back_href: '/lorem' }}
       is_loading_avatar={false}
     />
-    <Helpers.Storybook.StorybookSpacer />
+    <StorybookSpacer />
     <UserForHeader
       user={{
         username: 'lorem',
@@ -23,5 +23,5 @@ export const Primary = () => (
       }}
       is_loading_avatar={false}
     />
-  </Helpers.Storybook.StorybookMargin>
+  </StorybookMargin>
 )

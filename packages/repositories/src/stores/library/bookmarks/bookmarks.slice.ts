@@ -3,7 +3,11 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as thunks from './action-creators'
 
-type ToastMessage = 'restored' | 'archived' | 'filter-no-longer-satisfied'
+type ToastMessage =
+  | 'restored'
+  | 'archived'
+  | 'filter-no-longer-satisfied'
+  | 'deleted'
 
 type BookmarksState = {
   is_fetching_data: boolean

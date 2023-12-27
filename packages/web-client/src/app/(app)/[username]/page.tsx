@@ -1,16 +1,5 @@
-const Page: React.FC = () => {
-  return (
-    <>
-      <div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        PROFILE
-      </div>
-    </>
-  )
-}
+import BookmarksPage from '../bookmarks-page'
+
+const Page: React.FC = () => <BookmarksPage user="public" />
 
 export default Page

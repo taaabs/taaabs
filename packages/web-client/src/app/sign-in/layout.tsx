@@ -1,5 +1,5 @@
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <>{children}</>
+const Layout: React.FC<{ children: React.ReactNode }> = (props) => {
+  return <>{props.children}</>
 }
 
 export default Layout

@@ -27,7 +27,7 @@ export const replace_bookmark = (params: {
     if (modified_bookmark_index == -1)
       throw new Error('[upsert_prefetched_bookmark] Bookmark should be there.')
 
-    // see if bookmark is missing one of selected tags, if so, remove
+    // TODO see if bookmark is missing one of selected tags, if so, remove
 
     dispatch(
       bookmarks_actions.set_incoming_bookmarks(

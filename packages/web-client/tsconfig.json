@@ -23,11 +23,8 @@
       "@/*": [
         "src/*"
       ],
-      "@web-ui": [
-        "../web-ui/src/index"
-      ],
-      "@web-ui/styles/style.scss": [
-        "../web-ui/src/styles/style.scss"
+      "@web-ui/*": [
+        "../web-ui/src/*"
       ],
       "@repositories/*": [
         "../repositories/src/*"

@@ -1,9 +1,11 @@
-import { Ui } from '@web-ui'
+import { PageHero } from '@web-ui/components/landing/atoms/page-hero'
+import { PricingTier } from '@web-ui/components/landing/atoms/pricing-tier'
+import { PricingTiers } from '@web-ui/components/landing/templates/pricing-tiers'
 
 const Page: React.FC = () => {
   return (
     <>
-      <Ui.Landing.Atoms.PageHero
+      <PageHero
         heading="Pricing"
         subheading={
           <>
@@ -13,9 +15,9 @@ const Page: React.FC = () => {
           </>
         }
       />
-      <Ui.Landing.Templates.PricingTiers
+      <PricingTiers
         slot_left_side={
-          <Ui.Landing.Atoms.PricingTier
+          <PricingTier
             name="Free"
             description="Organize your bookmarks right away"
             price="Literally $0"
@@ -28,7 +30,7 @@ const Page: React.FC = () => {
           />
         }
         slot_right_side={
-          <Ui.Landing.Atoms.PricingTier
+          <PricingTier
             name="Premium"
             description="Get the most out of Taaabs"
             price="$29.99"

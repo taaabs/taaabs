@@ -1,4 +1,4 @@
-import { Ui } from '@web-ui'
+import { Icon } from '@web-ui/components/common/particles/icon'
 import styles from './dropdown-menu.module.scss'
 import cn from 'classnames'
 
@@ -23,11 +23,7 @@ export const DropdownMenu: React.FC<DropdownMenu.Props> = (props) => {
         item.is_selected !== undefined || item.other_icon ? (
           <button className={styles.item} onClick={item.on_click} key={i}>
             <div className={styles.item__icon}>
-              {item.is_selected ? (
-                <Ui.Common.Particles.Icon variant="SELECTED" />
-              ) : (
-                item.other_icon
-              )}
+              {item.is_selected ? <Icon variant="SELECTED" /> : item.other_icon}
             </div>
             <span>{item.label}</span>
           </button>
@@ -49,7 +45,7 @@ export const DropdownMenu: React.FC<DropdownMenu.Props> = (props) => {
                 },
               ])}
             >
-              <Ui.Common.Particles.Icon variant="SELECTED" />
+              <Icon variant="SELECTED" />
             </div>
             <span>{item.label}</span>
           </button>

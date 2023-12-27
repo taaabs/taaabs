@@ -1,29 +1,25 @@
-import { Helpers, Ui } from '@web-ui'
 import { Button } from './button'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 
 export default {
   component: Button,
 }
 
 export const Primary = () => (
-  <Helpers.Storybook.StorybookMargin>
+  <StorybookMargin>
     Small:
     <br />
     <br />
-    <Ui.Common.Particles.Button size="small">
-      Click me!
-    </Ui.Common.Particles.Button>
-    <Helpers.Storybook.StorybookSpacer />
+    <Button size="small">Click me!</Button>
+    <StorybookSpacer />
     Default:
     <br />
     <br />
-    <Ui.Common.Particles.Button>Click me!</Ui.Common.Particles.Button>
-    <Helpers.Storybook.StorybookSpacer />
+    <Button>Click me!</Button>
+    <StorybookSpacer />
     Large:
     <br />
     <br />
-    <Ui.Common.Particles.Button size="large">
-      Click me!
-    </Ui.Common.Particles.Button>
-  </Helpers.Storybook.StorybookMargin>
+    <Button size="large">Click me!</Button>
+  </StorybookMargin>
 )

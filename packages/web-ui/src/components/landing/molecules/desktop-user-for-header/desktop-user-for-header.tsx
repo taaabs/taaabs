@@ -1,4 +1,4 @@
-import { Ui } from '@web-ui'
+import { Button } from '@web-ui/components/common/particles/button'
 
 export namespace DesktopUserForHeader {
   export type Props = {
@@ -11,8 +11,8 @@ export const DesktopUserForHeader: React.FC<DesktopUserForHeader.Props> = (
   props,
 ) => {
   return (
-    <Ui.Common.Particles.Button size="large" on_click={props.button_on_click}>
+    <Button size="large" on_click={props.button_on_click}>
       {props.button_label}
-    </Ui.Common.Particles.Button>
+    </Button>
   )
 }

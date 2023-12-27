@@ -1,4 +1,4 @@
-import { Ui } from '@web-ui'
+import { Wrapper } from '@web-ui/components/common/templates/wrapper'
 import styles from './app-header-desktop.module.scss'
 
 export namespace AppHeaderDesktop {
@@ -12,7 +12,7 @@ export namespace AppHeaderDesktop {
 export const AppHeaderDesktop = (props: AppHeaderDesktop.Props) => {
   return (
     <div className={styles.container}>
-      <Ui.Common.Templates.Wrapper>
+      <Wrapper>
         <div className={styles.inner}>
           {props.slot_left_side_logo}
           <div className={styles.inner__navigation}>
@@ -20,7 +20,7 @@ export const AppHeaderDesktop = (props: AppHeaderDesktop.Props) => {
           </div>
           {props.slot_right_side}
         </div>
-      </Ui.Common.Templates.Wrapper>
+      </Wrapper>
     </div>
   )
 }

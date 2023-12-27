@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 import { DesktopUserForHeader } from './desktop-user-for-header'
 
 export default {
@@ -7,10 +7,10 @@ export default {
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
+    <StorybookMargin>
       <DesktopUserForHeader button_label="Lorem" button_on_click={() => {}} />
-      <Helpers.Storybook.StorybookSpacer />
+      <StorybookSpacer />
       <DesktopUserForHeader button_label="Lorem" button_on_click={() => {}} />
-    </Helpers.Storybook.StorybookMargin>
+    </StorybookMargin>
   )
 }

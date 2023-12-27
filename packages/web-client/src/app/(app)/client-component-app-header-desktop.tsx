@@ -1,11 +1,20 @@
 'use client'
 
-import { Ui } from '@web-ui'
 import { useParams, usePathname } from 'next/navigation'
 import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { useContext } from 'react'
 import { ModalContext } from './modal-provider'
 import { use_is_hydrated } from '@shared/hooks'
+import { UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
+import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
+import { FormModal } from '@web-ui/components/app/templates/form-modal'
+import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
+import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
+import { Box } from '@web-ui/components/app/atoms/box'
+import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
+import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
+import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const params = useParams()
@@ -18,7 +27,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   // TODO: backHref should be smarter :^)
   if (params.username) {
     logo_slot = (
-      <Ui.App.Molecules.UserForHeader
+      <UserForHeader
         user={{
           username: params.username as string,
           back_href: '/',
@@ -33,21 +42,21 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
       />
     )
   } else {
-    logo_slot = <Ui.Common.Atoms.LogoForHeader href="/" />
+    logo_slot = <LogoForHeader href="/" />
   }
 
-  let navigation: Ui.App.Molecules.NavigationForHeader.Props['navigation']
+  let navigation: NavigationForHeader.Props['navigation']
   if (params.username) {
     navigation = [
       {
-        label: 'Profile',
+        label: 'Bookmarks',
         href: `/${params.username}`,
         is_active: pathname == `/${params.username}`,
       },
       {
-        label: 'Bookmarks',
-        href: `/${params.username}/bookmarks`,
-        is_active: pathname == `/${params.username}/bookmarks`,
+        label: 'About',
+        href: `/${params.username}/about`,
+        is_active: pathname == `/${params.username}/about`,
       },
     ]
   } else {
@@ -71,57 +80,42 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   }
 
   const create_bookmark_modal = (
-    <Ui.App.Templates.FormModal
-      slot_header={<Ui.App.Atoms.ModalHeader title="New bookmark" />}
+    <FormModal
+      slot_header={<ModalHeader title="New bookmark" />}
       slot_footer={
-        <Ui.App.Atoms.ModalFooter
+        <ModalFooter
           button_label="Save"
           is_disabled={false}
           on_click_cancel={() => {}}
         />
       }
     >
-      <Ui.App.Atoms.Box>
-        <Ui.App.Atoms.BoxHeading
-          heading="Lorem ipsum"
-          subheading="Lorem ipsum"
-        />
-      </Ui.App.Atoms.Box>
-      <Ui.App.Atoms.Box>
-        <Ui.App.Atoms.BoxHeading
-          heading="Lorem ipsum"
-          subheading="Lorem ipsum"
-        />
-      </Ui.App.Atoms.Box>
-      <Ui.App.Atoms.Box>
-        <Ui.App.Atoms.BoxHeading
-          heading="Lorem ipsum"
-          subheading="Lorem ipsum"
-        />
-      </Ui.App.Atoms.Box>
-      <Ui.App.Atoms.Box>
-        <Ui.App.Atoms.BoxHeading
-          heading="Lorem ipsum"
-          subheading="Lorem ipsum"
-        />
-      </Ui.App.Atoms.Box>
-      <Ui.App.Atoms.Box>
-        <Ui.App.Atoms.BoxHeading
-          heading="Lorem ipsum"
-          subheading="Lorem ipsum"
-        />
-      </Ui.App.Atoms.Box>
-    </Ui.App.Templates.FormModal>
+      <Box>
+        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
+      </Box>
+      <Box>
+        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
+      </Box>
+      <Box>
+        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
+      </Box>
+      <Box>
+        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
+      </Box>
+      <Box>
+        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
+      </Box>
+    </FormModal>
   )
 
   return (
-    <Ui.App.Templates.AppHeaderDesktop
+    <AppHeaderDesktop
       slot_left_side_logo={logo_slot}
       slot_left_side_navigation={
-        <Ui.App.Molecules.NavigationForHeader navigation={navigation} />
+        <NavigationForHeader navigation={navigation} />
       }
       slot_right_side={
-        <Ui.App.Organisms.DesktopUserAreaForAppHeader
+        <DesktopUserAreaForAppHeader
           on_click_add={() => {
             modal?.set_modal(create_bookmark_modal)
           }}

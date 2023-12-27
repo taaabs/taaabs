@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 import { DesktopUserAreaForAppHeader } from './desktop-user-area-for-app-header'
 
 export default {
@@ -7,12 +7,12 @@ export default {
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
+    <StorybookMargin>
       <DesktopUserAreaForAppHeader
         on_click_add={() => {}}
         on_click_search={() => {}}
       />
-      <Helpers.Storybook.StorybookSpacer />
+      <StorybookSpacer />
       <DesktopUserAreaForAppHeader
         on_click_add={() => {}}
         on_click_search={() => {}}
@@ -21,6 +21,6 @@ export const Primary = () => {
           blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',
         }}
       />
-    </Helpers.Storybook.StorybookMargin>
+    </StorybookMargin>
   )
 }

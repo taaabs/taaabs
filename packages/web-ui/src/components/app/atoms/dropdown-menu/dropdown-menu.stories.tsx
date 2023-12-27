@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin } from '@web-ui/helpers/storybook'
 import { DropdownMenu } from './index'
 
 export default {
@@ -7,7 +7,7 @@ export default {
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
+    <StorybookMargin>
       <div style={{ width: 300 }}>
         <DropdownMenu
           items={[
@@ -17,6 +17,6 @@ export const Primary = () => {
           ]}
         />
       </div>
-    </Helpers.Storybook.StorybookMargin>
+    </StorybookMargin>
   )
 }

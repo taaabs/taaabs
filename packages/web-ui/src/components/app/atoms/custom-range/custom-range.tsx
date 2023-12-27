@@ -5,8 +5,8 @@ import useSwipe from 'beautiful-react-hooks/useSwipe'
 import { memo, useEffect, useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
-import { Ui } from '@web-ui'
 import { use_popstate } from './hooks/use-popstate'
+import { Icon } from '@web-ui/components/common/particles/icon'
 
 type Counts = {
   yyyymm: number
@@ -410,7 +410,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
               props.clear_date_range()
             }}
           >
-            <Ui.Common.Particles.Icon variant="ADD" />
+            <Icon variant="ADD" />
           </button>
         )}
 

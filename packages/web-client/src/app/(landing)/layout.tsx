@@ -1,17 +1,18 @@
-import { Ui } from '@web-ui'
+import { Landing } from '@web-ui/components/landing/templates/landing'
 import { DynamicDesktopNavigationForHeader } from './DynamicDesktopNavigationForHeader'
 import { DynamicDesktopUserForHeader } from './DynamicDesktopUserForHeader'
+import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
-    <Ui.Landing.Templates.Landing
-      slot_logo={<Ui.Common.Atoms.LogoForHeader is_large={true} href="/" />}
+    <Landing
+      slot_logo={<LogoForHeader is_large={true} href="/" />}
       slot_desktop_user={<DynamicDesktopUserForHeader />}
       slot_desktop_navigation={<DynamicDesktopNavigationForHeader />}
       slot_mobile_navigation={<div>mobile nav</div>}
     >
       <>{children}</>
-    </Ui.Landing.Templates.Landing>
+    </Landing>
   )
 }
 

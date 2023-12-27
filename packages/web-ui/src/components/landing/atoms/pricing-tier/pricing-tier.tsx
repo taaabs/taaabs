@@ -1,5 +1,5 @@
-import { Ui } from '@web-ui'
 import styles from './pricing-tier.module.scss'
+import { Icon } from '@web-ui/components/common/particles/icon'
 
 export namespace PricingTier {
   export type Props = {
@@ -34,7 +34,7 @@ export const PricingTier: React.FC<PricingTier.Props> = (props) => {
         {props.bullets.map((bullet) => (
           <div className={styles.bullets__item}>
             <div className={styles.bullets__item__check}>
-              <Ui.Common.Particles.Icon variant="SELECTED_BOLD" />
+              <Icon variant="SELECTED_BOLD" />
             </div>
             <span>{bullet}</span>
           </div>

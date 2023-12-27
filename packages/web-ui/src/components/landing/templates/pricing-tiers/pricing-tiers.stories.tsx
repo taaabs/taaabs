@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin } from '@web-ui/helpers/storybook'
 import { PricingTiers } from './pricing-tiers'
 
 export default {
@@ -7,8 +7,11 @@ export default {
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
-      <PricingTiers slot_left_side={<div>left</div>} slot_right_side={<div>right</div>} />
-    </Helpers.Storybook.StorybookMargin>
+    <StorybookMargin>
+      <PricingTiers
+        slot_left_side={<div>left</div>}
+        slot_right_side={<div>right</div>}
+      />
+    </StorybookMargin>
   )
 }

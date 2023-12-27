@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 import { Input } from './input'
 
 export default {
@@ -7,10 +7,10 @@ export default {
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
+    <StorybookMargin>
       <Input on_change={() => {}} value="Lorem" />
-      <Helpers.Storybook.StorybookSpacer />
+      <StorybookSpacer />
       <Input on_change={() => {}} value="Lorem" lines={2} />
-    </Helpers.Storybook.StorybookMargin>
+    </StorybookMargin>
   )
 }

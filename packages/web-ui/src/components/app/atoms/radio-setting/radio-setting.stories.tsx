@@ -1,4 +1,4 @@
-import { Helpers } from '@web-ui'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 import { RadioSetting } from './radio-setting'
 
 export default {
@@ -7,7 +7,7 @@ export default {
 
 export const Primary = () => {
   return (
-    <Helpers.Storybook.StorybookMargin>
+    <StorybookMargin>
       <div
         style={{
           display: 'flex',
@@ -20,9 +20,9 @@ export const Primary = () => {
           bottom_line="ipsum"
           on_click={() => {}}
         />
-        <Helpers.Storybook.StorybookSpacer />
+        <StorybookSpacer />
         <RadioSetting top_line="Lorem" on_click={() => {}} />
-        <Helpers.Storybook.StorybookSpacer />
+        <StorybookSpacer />
         <RadioSetting
           top_line="Lorem"
           bottom_line="ipsum"
@@ -30,6 +30,6 @@ export const Primary = () => {
           is_checked={true}
         />
       </div>
-    </Helpers.Storybook.StorybookMargin>
+    </StorybookMargin>
   )
 }
