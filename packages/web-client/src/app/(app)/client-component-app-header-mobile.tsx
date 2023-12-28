@@ -3,10 +3,10 @@
 import { useParams, usePathname } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { PublicUserAvatarContext } from './public-user-avatar-provider'
-import { UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
-import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
-import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
+import { UserForHeader as UiAppMolecule_UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
+import { LogoForHeader as UiCommonAtoms_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
+import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
 
 export const ClientComponentAppHeaderMobile: React.FC = () => {
   const pathname = usePathname()
@@ -18,7 +18,7 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
   // TODO: backHref should be smarter :^)
   if (params.username) {
     logo_slot = (
-      <UserForHeader
+      <UiAppMolecule_UserForHeader
         user={{
           username: params.username as string,
           back_href: '/',
@@ -33,10 +33,10 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
       />
     )
   } else {
-    logo_slot = <LogoForHeader href="/" />
+    logo_slot = <UiCommonAtoms_LogoForHeader href="/" />
   }
 
-  let navigation: NavigationForHeader.Props['navigation']
+  let navigation: UiAppMolecule_NavigationForHeader.Props['navigation']
   if (params.username) {
     navigation = [
       {
@@ -70,9 +70,11 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
   }, [])
 
   return (
-    <AppHeaderMobile
+    <UiAppTemplate_AppHeaderMobile
       slot_logo={logo_slot}
-      slot_navigation={<NavigationForHeader navigation={navigation} />}
+      slot_navigation={
+        <UiAppMolecule_NavigationForHeader navigation={navigation} />
+      }
     />
   )
 }

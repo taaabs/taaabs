@@ -4,7 +4,7 @@ import { ClientComponentBottomNavigationBar } from './client-component-bottom-na
 import { PublicUserAvatarProvider } from './public-user-avatar-provider'
 import { ModalProvider } from './modal-provider'
 import { ReactNode } from 'react'
-import { App } from '@web-ui/components/app/templates/app'
+import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
 
 const Layout: React.FC<{
   children?: ReactNode
@@ -12,13 +12,13 @@ const Layout: React.FC<{
   return (
     <PublicUserAvatarProvider>
       <ModalProvider>
-        <App
+        <UiAppTemplate_App
           slot_header_desktop={<ClientComponentAppHeaderDesktop />}
           slot_header_mobile={<ClientComponentAppHeaderMobile />}
           slot_bottom_navigation_bar={<ClientComponentBottomNavigationBar />}
         >
           {props.children}
-        </App>
+        </UiAppTemplate_App>
       </ModalProvider>
     </PublicUserAvatarProvider>
   )

@@ -1,6 +1,6 @@
 'use client'
 // import { useGlobalSelector } from '@repositories/hooks/store'
-import { DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
+import { DesktopUserForHeader as UiLandingMolecule_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
 // import { useRouter } from 'next/navigation'
 
 export const DynamicDesktopUserForHeader: React.FC = () => {
@@ -8,7 +8,7 @@ export const DynamicDesktopUserForHeader: React.FC = () => {
   // const { userData } = useRootSelector((state) => state.userData)
 
   return (
-    <DesktopUserForHeader
+    <UiLandingMolecule_DesktopUserForHeader
       // buttonLabel={userData ? 'Open inbox' : 'Sign in'}
       // buttonOnClick={() =>
       //   userData ? router.push('/inbox') : router.push('/sign-in')

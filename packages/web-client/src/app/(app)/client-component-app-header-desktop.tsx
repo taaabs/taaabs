@@ -5,16 +5,16 @@ import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { useContext } from 'react'
 import { ModalContext } from './modal-provider'
 import { use_is_hydrated } from '@shared/hooks'
-import { UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
-import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
-import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { FormModal } from '@web-ui/components/app/templates/form-modal'
-import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
-import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
-import { Box } from '@web-ui/components/app/atoms/box'
-import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
-import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
-import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
+import { UserForHeader as UiAppMolecule_UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
+import { LogoForHeader as UiCommonAtoms_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
+import { FormModal as UiAppTemplate_FormModal } from '@web-ui/components/app/templates/form-modal'
+import { ModalHeader as UiAppAtom_ModalHeader } from '@web-ui/components/app/atoms/modal-header'
+import { ModalFooter as UiAppAtom_ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
+import { Box as UiAppAtom_Box } from '@web-ui/components/app/atoms/box'
+import { BoxHeading as UiAppAtom_BoxHeading } from '@web-ui/components/app/atoms/box-heading'
+import { AppHeaderDesktop as UiAppTemplate_AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
+import { DesktopUserAreaForAppHeader as UiAppOrganism_DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const params = useParams()
@@ -27,7 +27,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   // TODO: backHref should be smarter :^)
   if (params.username) {
     logo_slot = (
-      <UserForHeader
+      <UiAppMolecule_UserForHeader
         user={{
           username: params.username as string,
           back_href: '/',
@@ -42,10 +42,10 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
       />
     )
   } else {
-    logo_slot = <LogoForHeader href="/" />
+    logo_slot = <UiCommonAtoms_LogoForHeader href="/" />
   }
 
-  let navigation: NavigationForHeader.Props['navigation']
+  let navigation: UiAppMolecule_NavigationForHeader.Props['navigation']
   if (params.username) {
     navigation = [
       {
@@ -80,42 +80,42 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   }
 
   const create_bookmark_modal = (
-    <FormModal
-      slot_header={<ModalHeader title="New bookmark" />}
+    <UiAppTemplate_FormModal
+      slot_header={<UiAppAtom_ModalHeader title="New bookmark" />}
       slot_footer={
-        <ModalFooter
+        <UiAppAtom_ModalFooter
           button_label="Save"
           is_disabled={false}
           on_click_cancel={() => {}}
         />
       }
     >
-      <Box>
-        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
-      </Box>
-      <Box>
-        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
-      </Box>
-      <Box>
-        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
-      </Box>
-      <Box>
-        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
-      </Box>
-      <Box>
-        <BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
-      </Box>
-    </FormModal>
+      <UiAppAtom_Box>
+        <UiAppAtom_BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
+      </UiAppAtom_Box>
+      <UiAppAtom_Box>
+        <UiAppAtom_BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
+      </UiAppAtom_Box>
+      <UiAppAtom_Box>
+        <UiAppAtom_BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
+      </UiAppAtom_Box>
+      <UiAppAtom_Box>
+        <UiAppAtom_BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
+      </UiAppAtom_Box>
+      <UiAppAtom_Box>
+        <UiAppAtom_BoxHeading heading="Lorem ipsum" subheading="Lorem ipsum" />
+      </UiAppAtom_Box>
+    </UiAppTemplate_FormModal>
   )
 
   return (
-    <AppHeaderDesktop
+    <UiAppTemplate_AppHeaderDesktop
       slot_left_side_logo={logo_slot}
       slot_left_side_navigation={
-        <NavigationForHeader navigation={navigation} />
+        <UiAppMolecule_NavigationForHeader navigation={navigation} />
       }
       slot_right_side={
-        <DesktopUserAreaForAppHeader
+        <UiAppOrganism_DesktopUserAreaForAppHeader
           on_click_add={() => {
             modal?.set_modal(create_bookmark_modal)
           }}

@@ -4,10 +4,10 @@ import { Settings_DataSourceImpl } from '@repositories/modules/settings/infrastr
 import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastructure/repositories/settings.repository-impl'
 import { CheckUsernameAvailability_UseCase } from '@repositories/modules/settings/domain/use-cases/check-username-availability.use-case'
 import { UpdateUsername_UseCase } from '@repositories/modules/settings/domain/use-cases/update-username.use-case'
-import { Box } from '@web-ui/components/app/atoms/box'
-import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
-import { Input } from '@web-ui/components/common/atoms/input'
-import { Button } from '@web-ui/components/common/particles/button'
+import { Box as UiAppAtom_Box } from '@web-ui/components/app/atoms/box'
+import { BoxHeading as UiAppAtom_BoxHeading } from '@web-ui/components/app/atoms/box-heading'
+import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
+import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
 
 type FormValues = {
   username: string
@@ -57,8 +57,8 @@ export const Username: React.FC<Username.Props> = (props) => {
 
   return (
     <form onSubmit={handleSubmit(on_submit)}>
-      <Box>
-        <BoxHeading
+      <UiAppAtom_Box>
+        <UiAppAtom_BoxHeading
           heading="Username"
           subheading="The username determines the default link of your public profile."
         />
@@ -97,7 +97,7 @@ export const Username: React.FC<Username.Props> = (props) => {
             }
 
             return (
-              <Input
+              <UiCommonAtom_Input
                 value={field.value}
                 on_change={(value) => {
                   if (isSubmitting) return
@@ -111,11 +111,15 @@ export const Username: React.FC<Username.Props> = (props) => {
           }}
         />
         <div>
-          <Button size="default" type="submit" is_loading={isSubmitting}>
+          <UiCommonParticle_Button
+            size="default"
+            type="submit"
+            is_loading={isSubmitting}
+          >
             Save
-          </Button>
+          </UiCommonParticle_Button>
         </div>
-      </Box>
+      </UiAppAtom_Box>
     </form>
   )
 }
