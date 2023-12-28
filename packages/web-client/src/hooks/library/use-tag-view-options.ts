@@ -52,7 +52,7 @@ export const use_tag_view_options = () => {
     )
   }
 
-  const remove_tag_from_query_params = (tag_id: number) => {
+  const remove_tags_from_query_params = (tag_ids: number[]) => {
     const selected_tags = query_params.get('t')
       ? query_params
           .get('t')!
@@ -63,7 +63,7 @@ export const use_tag_view_options = () => {
     const updated_query_params = update_query_params(
       query_params,
       't',
-      selected_tags.filter((t) => t != tag_id).join(','),
+      selected_tags.filter((t) => tag_ids.every((tag) => tag != t)).join(','),
     )
 
     for (const key in sessionStorage) {
@@ -99,7 +99,7 @@ export const use_tag_view_options = () => {
     selected_tags,
     set_selected_tags,
     add_tag_to_query_params,
-    remove_tag_from_query_params,
+    remove_tags_from_query_params,
     clear_selected_tags,
   }
 }

@@ -789,8 +789,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             name,
                           }
                         })}
-                      on_selected_tag_click={
-                        tag_view_options.remove_tag_from_query_params
+                      on_selected_tag_click={(tag_id) =>
+                        tag_view_options.remove_tags_from_query_params([tag_id])
                       }
                       is_fetching_bookmarks={
                         bookmarks_slice_state.is_fetching_first_bookmarks
@@ -917,8 +917,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 is_unread={bookmark.is_unread}
                 stars={bookmark.stars}
                 on_tag_click={tag_view_options.add_tag_to_query_params}
-                on_selected_tag_click={
-                  tag_view_options.remove_tag_from_query_params
+                on_selected_tag_click={(tag_id) =>
+                  tag_view_options.remove_tags_from_query_params([tag_id])
                 }
                 render_height={bookmark.render_height}
                 set_render_height={(height) => {
@@ -1299,7 +1299,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
-
                                 await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
@@ -1329,6 +1328,20 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                     (tag) => tag.id,
                                   ),
                                 })
+                                // Unselect removed tags when there is no more bookmarks with them.
+                                const updated_tag_ids =
+                                  updated_bookmark.tags.map((t) => t.id)
+                                tag_view_options.remove_tags_from_query_params(
+                                  tag_view_options.selected_tags.filter((t) => {
+                                    const yields = Object.values(
+                                      counts_slice_state.tags!,
+                                    ).find((tag) => tag.id == t)!.yields
+                                    return (
+                                      !updated_tag_ids.includes(t) &&
+                                      yields == 1
+                                    )
+                                  }),
+                                )
                               },
                               other_icon: <Icon variant="EDIT" />,
                             },
