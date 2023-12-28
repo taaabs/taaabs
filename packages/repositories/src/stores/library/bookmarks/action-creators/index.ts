@@ -1,4 +1,5 @@
 export * from './delete-bookmark'
+export * from './filter-out-bookmark'
 export * from './get-authorized-bookmarks'
 export * from './get-public-bookmarks'
 export * from './upsert-bookmark'
