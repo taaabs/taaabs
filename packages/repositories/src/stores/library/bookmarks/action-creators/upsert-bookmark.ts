@@ -5,7 +5,7 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/upsert-bookmark.use-case'
 import { bookmarks_actions } from '../bookmarks.slice'
 import { counts_actions } from '../../counts/counts.slice'
-import { LibraryFilter } from '@shared/types/common/library-filter'
+import { Filter } from '@shared/types/common/filter'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 
 export const upsert_bookmark = (params: {
@@ -38,50 +38,21 @@ export const upsert_bookmark = (params: {
 
       const is_archived_toggled_should_remove =
         params.bookmark.is_archived &&
-        !(params.last_authorized_counts_params.filter == LibraryFilter.Archived)
+        !(params.last_authorized_counts_params.filter == Filter.Archived)
 
       const is_restored_toggled_should_remove =
         !params.bookmark.is_archived &&
-        params.last_authorized_counts_params.filter == LibraryFilter.Archived
+        params.last_authorized_counts_params.filter == Filter.Archived
 
       const is_starred_toggled_should_remove =
-        (params.bookmark.stars == 0 &&
-          (params.last_authorized_counts_params.filter ==
-            LibraryFilter.OneStar ||
-            params.last_authorized_counts_params.filter ==
-              LibraryFilter.TwoStars ||
-            params.last_authorized_counts_params.filter ==
-              LibraryFilter.ThreeStars ||
-            params.last_authorized_counts_params.filter ==
-              LibraryFilter.OneStarUnread ||
-            params.last_authorized_counts_params.filter ==
-              LibraryFilter.TwoStarsUnread ||
-            params.last_authorized_counts_params.filter ==
-              LibraryFilter.ThreeStarsUnread)) ||
-        (params.bookmark.stars == 1 &&
-          (params.last_authorized_counts_params.filter ==
-            LibraryFilter.TwoStars ||
-            params.last_authorized_counts_params.filter ==
-              LibraryFilter.ThreeStars ||
-            params.last_authorized_counts_params.filter ==
-              LibraryFilter.TwoStarsUnread ||
-            params.last_authorized_counts_params.filter ==
-              LibraryFilter.ThreeStarsUnread)) ||
-        (params.bookmark.stars == 2 &&
-          (params.last_authorized_counts_params.filter ==
-            LibraryFilter.ThreeStars ||
-            params.last_authorized_counts_params.filter ==
-              LibraryFilter.ThreeStarsUnread))
+        params.bookmark.stars == 0 &&
+        (params.last_authorized_counts_params.filter == Filter.Starred ||
+          params.last_authorized_counts_params.filter == Filter.StarredUnread)
 
       const is_unread_toggled_should_remove =
         !params.bookmark.is_unread &&
-        (params.last_authorized_counts_params.filter == LibraryFilter.Unread ||
-          params.last_authorized_counts_params.filter ==
-            LibraryFilter.OneStarUnread ||
-          params.last_authorized_counts_params.filter ==
-            LibraryFilter.TwoStarsUnread ||
-          params.last_authorized_counts_params.filter ==
-            LibraryFilter.ThreeStarsUnread)
+        (params.last_authorized_counts_params.filter == Filter.Unread ||
+          params.last_authorized_counts_params.filter == Filter.StarredUnread)
 
       if (
         is_archived_toggled_should_remove ||

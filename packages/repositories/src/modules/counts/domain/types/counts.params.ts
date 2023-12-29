@@ -1,8 +1,8 @@
-import { LibraryFilter } from '@shared/types/common/library-filter'
+import { Filter } from '@shared/types/common/filter'
 
 export namespace Counts_Params {
   type Base = {
-    filter?: LibraryFilter
+    filter?: Filter
     category_id?: string
     tags?: string[]
   }

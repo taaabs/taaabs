@@ -6,7 +6,7 @@ import {
 } from '../../stores/library'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect } from 'react'
-import { LibraryFilter } from '@shared/types/common/library-filter'
+import { Filter } from '@shared/types/common/filter'
 import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
@@ -39,7 +39,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       const query_filter = query_params.get('f')
       if (query_filter) {
         request_params.filter =
-          Object.values(LibraryFilter)[parseInt(query_filter)]
+          Object.values(Filter)[parseInt(query_filter)]
       }
 
       const query_sortby = query_params.get('s')
@@ -93,7 +93,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       const query_filter = query_params.get('f')
       if (query_filter) {
         request_params.filter =
-          Object.values(LibraryFilter)[parseInt(query_filter)]
+          Object.values(Filter)[parseInt(query_filter)]
       }
 
       const query_sortby = query_params.get('s')

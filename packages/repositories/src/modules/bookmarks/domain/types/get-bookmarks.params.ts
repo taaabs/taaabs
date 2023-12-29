@@ -1,4 +1,4 @@
-import { LibraryFilter } from '@shared/types/common/library-filter'
+import { Filter } from '@shared/types/common/filter'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 
@@ -9,7 +9,7 @@ export namespace GetBookmarks_Params {
     tags?: string[]
     category_id?: string
     after?: number
-    filter?: LibraryFilter
+    filter?: Filter
     yyyymm_gte?: number
     yyyymm_lte?: number
   }

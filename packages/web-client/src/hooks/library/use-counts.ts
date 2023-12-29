@@ -4,7 +4,7 @@ import {
   use_library_selector,
 } from '../../stores/library'
 import { useEffect, useState } from 'react'
-import { LibraryFilter } from '@shared/types/common/library-filter'
+import { Filter } from '@shared/types/common/filter'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
@@ -43,7 +43,7 @@ export const use_counts = () => {
       set_last_query_filter(query_filter || undefined)
       if (query_filter) {
         request_params.filter =
-          Object.values(LibraryFilter)[parseInt(query_filter)]
+          Object.values(Filter)[parseInt(query_filter)]
       }
 
       sessionStorage.setItem(
@@ -73,7 +73,7 @@ export const use_counts = () => {
       set_last_query_filter(query_filter || undefined)
       if (query_filter) {
         request_params.filter =
-          Object.values(LibraryFilter)[parseInt(query_filter)]
+          Object.values(Filter)[parseInt(query_filter)]
       }
 
       dispatch(

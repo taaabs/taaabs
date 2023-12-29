@@ -4,7 +4,12 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 
 export namespace LibraryAside {
   export type Props = {
-    slot_filter?: React.ReactNode
+    slot_presets?: React.ReactNode
+    slot_filter?: {
+      button: React.ReactNode
+      dropdown: React.ReactNode
+      is_dropdown_visible: boolean
+    }
     slot_sortby?: {
       button: React.ReactNode
       dropdown: React.ReactNode
@@ -24,14 +29,30 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.toolbar}>
-        <div className={styles.toolbar__filters}>
-          {props.slot_filter && <>{props.slot_filter}</>}
+        <div className={styles.toolbar__presets}>
+          {props.slot_presets && <>{props.slot_presets}</>}
         </div>
         <button className={styles.toolbar__menu}>
           <Icon variant="THREE_DOTS" />
         </button>
       </div>
       <div className={styles['slots']}>
+        {props.slot_filter && (
+          <div className={styles['slots__button']}>
+            {props.slot_filter.button}
+            <div
+              className={cn([
+                styles['slots__button__dropdown'],
+                {
+                  [styles['slots__button__dropdown--hidden']]:
+                    !props.slot_filter.is_dropdown_visible,
+                },
+              ])}
+            >
+              {props.slot_filter.dropdown}
+            </div>
+          </div>
+        )}
         {props.slot_sortby && (
           <div className={styles['slots__button']}>
             {props.slot_sortby.button}

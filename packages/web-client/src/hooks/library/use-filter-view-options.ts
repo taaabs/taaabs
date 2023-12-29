@@ -1,5 +1,5 @@
 import { update_query_params } from '@/utils/update-query-params'
-import { LibraryFilter } from '@shared/types/common/library-filter'
+import { Filter } from '@shared/types/common/filter'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useState } from 'react'
@@ -7,11 +7,11 @@ import { useSearchParams } from 'next/navigation'
 
 export const use_filter_view_options = () => {
   const query_params = useSearchParams()
-  const [current_filter, set_current_filter] = useState<LibraryFilter>(
-    Object.values(LibraryFilter)[
+  const [current_filter, set_current_filter] = useState<Filter>(
+    Object.values(Filter)[
       parseInt(
         query_params.get('f') ||
-          Object.values(LibraryFilter)
+          Object.values(Filter)
             .indexOf(BookmarksFetchingDefaults.Common.filter)
             .toString(),
       )
@@ -22,14 +22,13 @@ export const use_filter_view_options = () => {
     const query_filter = query_params.get('f')
 
     if (
-      query_filter !=
-      Object.values(LibraryFilter).indexOf(current_filter).toString()
+      query_filter != Object.values(Filter).indexOf(current_filter).toString()
     ) {
       set_current_filter(
-        Object.values(LibraryFilter)[
+        Object.values(Filter)[
           parseInt(
             query_filter ||
-              Object.values(LibraryFilter)
+              Object.values(Filter)
                 .indexOf(BookmarksFetchingDefaults.Common.filter)
                 .toString(),
           )
@@ -38,13 +37,13 @@ export const use_filter_view_options = () => {
     }
   }, [query_params])
 
-  const set_filter_query_param = (filter: LibraryFilter) => {
+  const set_filter_query_param = (filter: Filter) => {
     const updated_query_params = update_query_params(
       query_params,
       'f',
       filter == BookmarksFetchingDefaults.Common.filter
         ? undefined
-        : Object.values(LibraryFilter).indexOf(filter).toString(),
+        : Object.values(Filter).indexOf(filter).toString(),
     )
 
     for (const key in sessionStorage) {
@@ -60,13 +59,13 @@ export const use_filter_view_options = () => {
     )
   }
 
-  const set_filter_query_param_and_clear_others = (filter: LibraryFilter) => {
+  const set_filter_query_param_and_clear_others = (filter: Filter) => {
     const updated_query_params = update_query_params(
       new URLSearchParams(),
       'f',
       filter == BookmarksFetchingDefaults.Common.filter
         ? undefined
-        : Object.values(LibraryFilter).indexOf(filter).toString(),
+        : Object.values(Filter).indexOf(filter).toString(),
     )
 
     for (const key in sessionStorage) {
@@ -84,15 +83,11 @@ export const use_filter_view_options = () => {
 
   const clear_selected_stars = () => {
     let updated_query_params: URLSearchParams
-    if (
-      current_filter == LibraryFilter.OneStarUnread ||
-      current_filter == LibraryFilter.TwoStarsUnread ||
-      current_filter == LibraryFilter.ThreeStarsUnread
-    ) {
+    if (current_filter == Filter.StarredUnread) {
       updated_query_params = update_query_params(
         query_params,
         'f',
-        Object.values(LibraryFilter).indexOf(LibraryFilter.Unread).toString(),
+        Object.values(Filter).indexOf(Filter.Unread).toString(),
       )
     } else {
       updated_query_params = update_query_params(query_params, 'f')
@@ -113,25 +108,11 @@ export const use_filter_view_options = () => {
 
   const clear_unread = () => {
     let updated_query_params: URLSearchParams
-    if (current_filter == LibraryFilter.OneStarUnread) {
+    if (current_filter == Filter.StarredUnread) {
       updated_query_params = update_query_params(
         query_params,
         'f',
-        Object.values(LibraryFilter).indexOf(LibraryFilter.OneStar).toString(),
-      )
-    } else if (current_filter == LibraryFilter.TwoStarsUnread) {
-      updated_query_params = update_query_params(
-        query_params,
-        'f',
-        Object.values(LibraryFilter).indexOf(LibraryFilter.TwoStars).toString(),
-      )
-    } else if (current_filter == LibraryFilter.ThreeStarsUnread) {
-      updated_query_params = update_query_params(
-        query_params,
-        'f',
-        Object.values(LibraryFilter)
-          .indexOf(LibraryFilter.ThreeStars)
-          .toString(),
+        Object.values(Filter).indexOf(Filter.Starred).toString(),
       )
     } else {
       updated_query_params = update_query_params(query_params, 'f')

@@ -16,5 +16,8 @@ export const system_values = {
       limit: 6,
       max_length: 15,
     },
+    stars: {
+      limit: 5,
+    },
   },
 }

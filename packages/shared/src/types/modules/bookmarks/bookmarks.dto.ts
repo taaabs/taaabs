@@ -5,7 +5,7 @@ import { Order } from '@shared/types/modules/bookmarks/order'
 import { PaginationQueryParamsDto } from '@shared/types/common/pagination-options.dto'
 import { Type } from 'class-transformer'
 import { ToBoolean } from '@shared/decorators/to-boolean'
-import { LibraryFilter } from '@shared/types/common/library-filter'
+import { Filter } from '@shared/types/common/filter'
 import { BookmarksFetchingDefaults } from './bookmarks-fetching-defaults'
 
 export namespace Bookmarks_Dto {
@@ -31,7 +31,7 @@ export namespace Bookmarks_Dto {
 
       public order?: Order = BookmarksFetchingDefaults.Common.order
 
-      public filter?: LibraryFilter = BookmarksFetchingDefaults.Common.filter
+      public filter?: Filter = BookmarksFetchingDefaults.Common.filter
     }
 
     export class Authorized extends Base {

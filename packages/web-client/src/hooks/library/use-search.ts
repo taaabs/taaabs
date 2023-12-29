@@ -10,7 +10,7 @@ import {
 } from '@orama/orama'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { LibraryFilter } from '@shared/types/common/library-filter'
+import { Filter } from '@shared/types/common/filter'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { LibrarySearch_DataSourceImpl } from '@repositories/modules/library-search/infrastructure/data-sources/library-search.data-source-impl'
@@ -68,7 +68,7 @@ export const use_search = () => {
     useState<BookmarkTags[]>()
   const [archived_bookmarks_just_tags, set_archived_bookmarks_just_tags] =
     useState<BookmarkTags[]>()
-  const [current_filter, set_current_filter] = useState<LibraryFilter>()
+  const [current_filter, set_current_filter] = useState<Filter>()
   const [selected_tags, set_selected_tags] = useState<string[]>([])
   const [ids_to_search_amongst, set_ids_to_search_amongst] = useState<
     string[] | undefined
@@ -91,15 +91,14 @@ export const use_search = () => {
 
   useUpdateEffect(() => {
     if (
-      (current_filter != LibraryFilter.Archived && !bookmarks_just_tags) ||
-      (current_filter == LibraryFilter.Archived &&
-        !archived_bookmarks_just_tags)
+      (current_filter != Filter.Archived && !bookmarks_just_tags) ||
+      (current_filter == Filter.Archived && !archived_bookmarks_just_tags)
     )
       return
 
     if (selected_tags.length) {
       set_ids_to_search_amongst(
-        (current_filter != LibraryFilter.Archived
+        (current_filter != Filter.Archived
           ? bookmarks_just_tags!
           : archived_bookmarks_just_tags!
         )
@@ -315,8 +314,8 @@ export const use_search = () => {
     search_string: string
   }): Promise<Results<Result>['hits']> => {
     if (
-      (current_filter != LibraryFilter.Archived && !db) ||
-      (current_filter == LibraryFilter.Archived && !archived_db)
+      (current_filter != Filter.Archived && !db) ||
+      (current_filter == Filter.Archived && !archived_db)
     )
       throw new Error('DB should be there.')
 
@@ -335,7 +334,7 @@ export const use_search = () => {
     const term = params.search_string.replace(/(?=@)(.*?)($|\s)/g, '').trim()
 
     const result_without_tolerance: Results<Result> = await searchWithHighlight(
-      current_filter != LibraryFilter.Archived ? db! : archived_db!,
+      current_filter != Filter.Archived ? db! : archived_db!,
       {
         limit:
           term.length <= 2 ? 100 : system_values.max_library_search_results,
@@ -345,25 +344,16 @@ export const use_search = () => {
           ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
             : {}),
-          ...(current_filter == LibraryFilter.Unread ||
-          current_filter == LibraryFilter.OneStarUnread ||
-          current_filter == LibraryFilter.TwoStarsUnread ||
-          current_filter == LibraryFilter.ThreeStarsUnread
+          ...(current_filter == Filter.Unread
             ? {
                 is_unread: true,
               }
             : {}),
           stars: {
             gte:
-              current_filter == LibraryFilter.OneStar ||
-              current_filter == LibraryFilter.OneStarUnread
+              current_filter == Filter.Starred ||
+              current_filter == Filter.StarredUnread
                 ? 1
-                : current_filter == LibraryFilter.TwoStars ||
-                  current_filter == LibraryFilter.TwoStarsUnread
-                ? 2
-                : current_filter == LibraryFilter.ThreeStars ||
-                  current_filter == LibraryFilter.ThreeStarsUnread
-                ? 3
                 : 0,
           },
           ...(gte && lte
@@ -400,7 +390,7 @@ export const use_search = () => {
     )
 
     const result_with_tolerance: Results<Result> = await searchWithHighlight(
-      current_filter != LibraryFilter.Archived ? db! : archived_db!,
+      current_filter != Filter.Archived ? db! : archived_db!,
       {
         limit:
           term.length <= 2 ? 100 : system_values.max_library_search_results,
@@ -410,25 +400,17 @@ export const use_search = () => {
           ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
             : {}),
-          ...(current_filter == LibraryFilter.Unread ||
-          current_filter == LibraryFilter.OneStarUnread ||
-          current_filter == LibraryFilter.TwoStarsUnread ||
-          current_filter == LibraryFilter.ThreeStarsUnread
+          ...(current_filter == Filter.Unread ||
+          current_filter == Filter.StarredUnread
             ? {
                 is_unread: true,
               }
             : {}),
           stars: {
             gte:
-              current_filter == LibraryFilter.OneStar ||
-              current_filter == LibraryFilter.OneStarUnread
+              current_filter == Filter.Starred ||
+              current_filter == Filter.StarredUnread
                 ? 1
-                : current_filter == LibraryFilter.TwoStars ||
-                  current_filter == LibraryFilter.TwoStarsUnread
-                ? 2
-                : current_filter == LibraryFilter.ThreeStars ||
-                  current_filter == LibraryFilter.ThreeStarsUnread
-                ? 3
                 : 0,
           },
           ...(gte && lte
@@ -611,8 +593,8 @@ export const use_search = () => {
 
   const get_hints = async () => {
     if (
-      (current_filter != LibraryFilter.Archived && !db) ||
-      (current_filter == LibraryFilter.Archived && !archived_db)
+      (current_filter != Filter.Archived && !db) ||
+      (current_filter == Filter.Archived && !archived_db)
     )
       throw new Error('DB should be there.')
 
@@ -671,7 +653,7 @@ export const use_search = () => {
         const site_term = last_word.substring(1)
 
         const result: Results<Result> = await search(
-          current_filter != LibraryFilter.Archived ? db! : archived_db!,
+          current_filter != Filter.Archived ? db! : archived_db!,
           {
             limit:
               site_term.length <= 2
@@ -683,25 +665,17 @@ export const use_search = () => {
               ...(tags && ids_to_search_amongst
                 ? { id: ids_to_search_amongst }
                 : {}),
-              ...(current_filter == LibraryFilter.Unread ||
-              current_filter == LibraryFilter.OneStarUnread ||
-              current_filter == LibraryFilter.TwoStarsUnread ||
-              current_filter == LibraryFilter.ThreeStarsUnread
+              ...(current_filter == Filter.Unread ||
+              current_filter == Filter.StarredUnread
                 ? {
                     is_unread: true,
                   }
                 : {}),
               stars: {
                 gte:
-                  current_filter == LibraryFilter.OneStar ||
-                  current_filter == LibraryFilter.OneStarUnread
+                  current_filter == Filter.Starred ||
+                  current_filter == Filter.StarredUnread
                     ? 1
-                    : current_filter == LibraryFilter.TwoStars ||
-                      current_filter == LibraryFilter.TwoStarsUnread
-                    ? 2
-                    : current_filter == LibraryFilter.ThreeStars ||
-                      current_filter == LibraryFilter.ThreeStarsUnread
-                    ? 3
                     : 0,
               },
               ...(gte && lte
@@ -787,7 +761,7 @@ export const use_search = () => {
 
         if (last_word.length) {
           const result: Results<Result> = await search(
-            current_filter != LibraryFilter.Archived ? db! : archived_db!,
+            current_filter != Filter.Archived ? db! : archived_db!,
             {
               limit:
                 term.length <= 2
@@ -797,25 +771,17 @@ export const use_search = () => {
               properties: ['title', 'note'],
               where: {
                 id: ids_of_hits,
-                ...(current_filter == LibraryFilter.Unread ||
-                current_filter == LibraryFilter.OneStarUnread ||
-                current_filter == LibraryFilter.TwoStarsUnread ||
-                current_filter == LibraryFilter.ThreeStarsUnread
+                ...(current_filter == Filter.Unread ||
+                current_filter == Filter.StarredUnread
                   ? {
                       is_unread: true,
                     }
                   : {}),
                 stars: {
                   gte:
-                    current_filter == LibraryFilter.OneStar ||
-                    current_filter == LibraryFilter.OneStarUnread
+                    current_filter == Filter.Starred ||
+                    current_filter == Filter.StarredUnread
                       ? 1
-                      : current_filter == LibraryFilter.TwoStars ||
-                        current_filter == LibraryFilter.TwoStarsUnread
-                      ? 2
-                      : current_filter == LibraryFilter.ThreeStars ||
-                        current_filter == LibraryFilter.ThreeStarsUnread
-                      ? 3
                       : 0,
                 },
                 ...(gte && lte
@@ -919,7 +885,7 @@ export const use_search = () => {
           )
         } else {
           const result: Results<Result> = await search(
-            current_filter != LibraryFilter.Archived ? db! : archived_db!,
+            current_filter != Filter.Archived ? db! : archived_db!,
             {
               limit:
                 term.length <= 2
@@ -929,25 +895,17 @@ export const use_search = () => {
               properties: ['title', 'note'],
               where: {
                 id: ids_of_hits,
-                ...(current_filter == LibraryFilter.Unread ||
-                current_filter == LibraryFilter.OneStarUnread ||
-                current_filter == LibraryFilter.TwoStarsUnread ||
-                current_filter == LibraryFilter.ThreeStarsUnread
+                ...(current_filter == Filter.Unread ||
+                current_filter == Filter.StarredUnread
                   ? {
                       is_unread: true,
                     }
                   : {}),
                 stars: {
                   gte:
-                    current_filter == LibraryFilter.OneStar ||
-                    current_filter == LibraryFilter.OneStarUnread
+                    current_filter == Filter.Starred ||
+                    current_filter == Filter.StarredUnread
                       ? 1
-                      : current_filter == LibraryFilter.TwoStars ||
-                        current_filter == LibraryFilter.TwoStarsUnread
-                      ? 2
-                      : current_filter == LibraryFilter.ThreeStars ||
-                        current_filter == LibraryFilter.ThreeStarsUnread
-                      ? 3
                       : 0,
                 },
                 ...(gte && lte
@@ -1105,7 +1063,7 @@ export const use_search = () => {
   const delete_searchable_bookmark = async (params: {
     bookmark_id: number
   }) => {
-    if (current_filter != LibraryFilter.Archived) {
+    if (current_filter != Filter.Archived) {
       if (!db) return
       await remove(db, params.bookmark_id.toString())
       const new_all_bookmarks = bookmarks_just_tags!.filter(
@@ -1154,13 +1112,13 @@ export const use_search = () => {
     tag_ids: number[]
   }) => {
     if (
-      (current_filter != LibraryFilter.Archived && !db) ||
-      (current_filter == LibraryFilter.Archived && !archived_db)
+      (current_filter != Filter.Archived && !db) ||
+      (current_filter == Filter.Archived && !archived_db)
     )
       return
 
     await remove(
-      current_filter != LibraryFilter.Archived ? db! : archived_db!,
+      current_filter != Filter.Archived ? db! : archived_db!,
       params.bookmark.id.toString(),
     )
     const sites = params.bookmark.links.map(
@@ -1171,41 +1129,37 @@ export const use_search = () => {
     )
 
     if (
-      (current_filter == LibraryFilter.Archived &&
-        params.bookmark.is_archived) ||
-      (current_filter != LibraryFilter.Archived && !params.bookmark.is_archived)
+      (current_filter == Filter.Archived && params.bookmark.is_archived) ||
+      (current_filter != Filter.Archived && !params.bookmark.is_archived)
     ) {
-      await insert(
-        current_filter != LibraryFilter.Archived ? db! : archived_db!,
-        {
-          id: params.bookmark.id.toString(),
-          title:
-            (params.bookmark.title ? `${params.bookmark.title} ` : '') +
+      await insert(current_filter != Filter.Archived ? db! : archived_db!, {
+        id: params.bookmark.id.toString(),
+        title:
+          (params.bookmark.title ? `${params.bookmark.title} ` : '') +
+          params.bookmark.tags.join(' ') +
+          (sites.length ? ' ' : '') +
+          sites.join(' '),
+        note: params.bookmark.note
+          ? `${params.bookmark.note} ` +
             params.bookmark.tags.join(' ') +
             (sites.length ? ' ' : '') +
-            sites.join(' '),
-          note: params.bookmark.note
-            ? `${params.bookmark.note} ` +
-              params.bookmark.tags.join(' ') +
-              (sites.length ? ' ' : '') +
-              sites.join(' ')
-            : '',
-          created_at: params.bookmark.created_at.getTime() / 1000,
-          updated_at: params.bookmark.updated_at.getTime() / 1000,
-          visited_at: params.bookmark.visited_at.getTime() / 1000,
-          is_unread: params.bookmark.is_unread,
-          sites,
-          sites_variants: sites
-            .map((site) => get_site_variants_for_search(site))
-            .flat(),
-          stars: params.bookmark.stars || 0,
-          tags: params.bookmark.tags,
-          tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
-        },
-      )
+            sites.join(' ')
+          : '',
+        created_at: params.bookmark.created_at.getTime() / 1000,
+        updated_at: params.bookmark.updated_at.getTime() / 1000,
+        visited_at: params.bookmark.visited_at.getTime() / 1000,
+        is_unread: params.bookmark.is_unread,
+        sites,
+        sites_variants: sites
+          .map((site) => get_site_variants_for_search(site))
+          .flat(),
+        stars: params.bookmark.stars || 0,
+        tags: params.bookmark.tags,
+        tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
+      })
     }
 
-    if (current_filter != LibraryFilter.Archived) {
+    if (current_filter != Filter.Archived) {
       const new_bookmarks_just_tags = bookmarks_just_tags!.filter(
         (bookmark) => bookmark.id != params.bookmark.id,
       )

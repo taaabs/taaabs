@@ -1,10 +1,10 @@
 import { Sortby } from './sortby'
 import { Order } from './order'
-import { LibraryFilter } from '@shared/types/common/library-filter'
+import { Filter } from '@shared/types/common/filter'
 
 export namespace BookmarksFetchingDefaults {
   export namespace Common {
-    export const filter = LibraryFilter.All
+    export const filter = Filter.All
     export const order = Order.Desc
     export const sortby = Sortby.CreatedAt
   }
