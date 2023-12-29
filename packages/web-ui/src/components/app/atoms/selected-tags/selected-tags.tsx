@@ -5,7 +5,6 @@ export namespace SelectedTags {
   export type Props = {
     selected_tags: { name: string; id: number }[]
     on_selected_tag_click: (tagId: number) => void
-    is_fetching_bookmarks?: boolean
   }
 }
 
@@ -28,5 +27,4 @@ export const SelectedTags: React.FC<SelectedTags.Props> = memo(
       <></>
     )
   },
-  (o, n) => o.is_fetching_bookmarks == n.is_fetching_bookmarks,
 )

@@ -1,5 +1,5 @@
 const Page: React.FC = () => {
-  return <div>About</div>
+  return <div>Activity</div>
 }
 
 export default Page

@@ -34,10 +34,9 @@
 .text {
   display: flex;
   flex-direction: column;
-  gap: var(--distance-2px);
   &__top-line {
     font-weight: var(--font-weight-inter-medium);
-    font-size: var(--font-size-16px);
+    font-size: var(--font-size-17px);
   }
   &__bottom-line {
     color: var(--text-color-variant);

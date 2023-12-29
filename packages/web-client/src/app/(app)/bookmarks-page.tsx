@@ -43,6 +43,7 @@ import { Tags as UiAppAtom_Tags } from '@web-ui/components/app/atoms/tags'
 import { TagsSkeleton as UiAppAtom_TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
 import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/particles/icon'
+import { use_popstate } from '@web-ui/components/app/atoms/custom-range/hooks/use-popstate'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -70,6 +71,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   const order_view_options = use_order_view_options()
   const tag_view_options = use_tag_view_options()
   const date_view_options = use_date_view_options()
+  const { pop_count } = use_popstate()
 
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
@@ -146,10 +148,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
       toast.success('Bookmark has been archived')
     } else if (bookmarks_slice_state.toast_message == 'restored') {
       toast.success('Bookmark has been restored')
-    } else if (
-      bookmarks_slice_state.toast_message == 'filter-no-longer-satisfied'
-    ) {
-      toast.success('Updated bookmark no longer matched the current filter')
     } else if (bookmarks_slice_state.toast_message == 'deleted') {
       toast.success('Bookmark has been deleted')
     }
@@ -762,6 +760,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                     ? counts.selected_tags.length > 0
                     : tag_view_options.selected_tags.length > 0) && (
                     <UiAppAtom_SelectedTags
+                      key={`${pop_count}${bookmarks_slice_state.is_fetching_first_bookmarks}`}
                       selected_tags={(bookmarks_slice_state.is_fetching_first_bookmarks
                         ? counts.selected_tags
                         : tag_view_options.selected_tags
@@ -791,9 +790,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                         })}
                       on_selected_tag_click={(tag_id) =>
                         tag_view_options.remove_tags_from_query_params([tag_id])
-                      }
-                      is_fetching_bookmarks={
-                        bookmarks_slice_state.is_fetching_first_bookmarks
                       }
                     />
                   )}

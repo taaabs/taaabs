@@ -1,0 +1,10 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  > div {
+    display: flex;
+    width: 100%;
+  }
+}

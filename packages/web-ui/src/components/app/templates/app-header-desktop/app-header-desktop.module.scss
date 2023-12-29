@@ -10,13 +10,12 @@
 .inner {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  justify-content: center;
   height: 100%;
   gap: var(--distance-40px);
   position: relative;
   &__navigation {
     position: absolute;
-    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;

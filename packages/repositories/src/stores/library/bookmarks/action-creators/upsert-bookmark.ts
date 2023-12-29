@@ -122,13 +122,6 @@ export const upsert_bookmark = (params: {
         dispatch(bookmarks_actions.set_toast_message('archived'))
       } else if (is_restored_toggled_should_remove) {
         dispatch(bookmarks_actions.set_toast_message('restored'))
-      } else if (
-        is_unread_toggled_should_remove ||
-        is_starred_toggled_should_remove
-      ) {
-        dispatch(
-          bookmarks_actions.set_toast_message('filter-no-longer-satisfied'),
-        )
       }
     }
   }

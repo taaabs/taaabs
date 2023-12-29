@@ -18,30 +18,29 @@ export const use_counts = () => {
   const { counts_data, months, tags, is_fetching_counts_data } =
     use_library_selector((state) => state.counts)
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
-  const [last_query_tags, set_last_query_tags] = useState<string | null>(null)
-  const [last_query_filter, set_last_query_filter] = useState<string | null>(
-    null,
-  )
+  const [last_query_tags, set_last_query_tags] = useState<string>()
+  const [last_query_filter, set_last_query_filter] = useState<string>()
+  const [last_query_refresh_trigger, set_last_query_refresh_trigger] =
+    useState<string>()
   const [selected_tags, set_selected_tags] = useState<number[]>([])
-  const [last_query_yyyymm_gte, set_last_query_yyyymm_gte] = useState<
-    string | null
-  >(null)
-  const [last_query_yyyymm_lte, set_last_query_yyyymm_lte] = useState<
-    string | null
-  >(null)
+  const [last_query_yyyymm_gte, set_last_query_yyyymm_gte] = useState<string>()
+  const [last_query_yyyymm_lte, set_last_query_yyyymm_lte] = useState<string>()
 
   const get_counts = () => {
     if (route_pathname == '/bookmarks') {
       const request_params: Counts_Params.Authorized = {}
 
+      const query_refresh_trigger = query_params.get('r')
+      set_last_query_refresh_trigger(query_refresh_trigger || undefined)
+
       const query_tags = query_params.get('t')
-      set_last_query_tags(query_tags)
+      set_last_query_tags(query_tags || undefined)
       if (query_tags) {
         request_params.tags = query_tags.split(',')
       }
 
       const query_filter = query_params.get('f')
-      set_last_query_filter(query_filter)
+      set_last_query_filter(query_filter || undefined)
       if (query_filter) {
         request_params.filter =
           Object.values(LibraryFilter)[parseInt(query_filter)]
@@ -65,13 +64,13 @@ export const use_counts = () => {
       }
 
       const query_tags = query_params.get('t')
-      set_last_query_tags(query_tags)
+      set_last_query_tags(query_tags || undefined)
       if (query_tags) {
         request_params.tags = query_tags.split(',')
       }
 
       const query_filter = query_params.get('f')
-      set_last_query_filter(query_filter)
+      set_last_query_filter(query_filter || undefined)
       if (query_filter) {
         request_params.filter =
           Object.values(LibraryFilter)[parseInt(query_filter)]
@@ -95,7 +94,12 @@ export const use_counts = () => {
 
     const query_tags = query_params.get('t')
     const query_filter = query_params.get('f')
-    if (query_tags != last_query_tags || query_filter != last_query_filter) {
+    const query_refresh_trigger = query_params.get('r') // Set after bookmark creation.
+    if (
+      query_tags != last_query_tags ||
+      query_filter != last_query_filter ||
+      query_refresh_trigger != last_query_refresh_trigger
+    ) {
       get_counts()
     }
 
@@ -106,8 +110,8 @@ export const use_counts = () => {
       query_yyyymm_gte != last_query_yyyymm_gte ||
       query_yyyymm_lte != last_query_yyyymm_lte
     ) {
-      set_last_query_yyyymm_gte(query_yyyymm_gte)
-      set_last_query_yyyymm_lte(query_yyyymm_lte)
+      set_last_query_yyyymm_gte(query_yyyymm_gte || undefined)
+      set_last_query_yyyymm_lte(query_yyyymm_lte || undefined)
       dispatch(
         counts_actions.set_yyyymm_gte(
           parseInt(query_yyyymm_gte || '0') || null,

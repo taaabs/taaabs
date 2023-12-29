@@ -377,7 +377,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                       }}
                       role="button"
                     >
-                      remove
+                      Remove
                     </div>
                   )}
                 </button>

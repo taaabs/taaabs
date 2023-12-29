@@ -208,7 +208,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
 
     return {
       id: bookmark.id,
-      is_public: bookmark.title !== undefined,
+      is_public: bookmark.is_public || false,
       created_at: bookmark.created_at,
       updated_at: bookmark.updated_at,
       visited_at: bookmark.visited_at,

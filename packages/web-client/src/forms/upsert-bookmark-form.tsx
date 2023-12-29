@@ -15,6 +15,7 @@ import { RadioSetting } from '../../../web-ui/src/components/app/atoms/radio-set
 import { Box } from '../../../web-ui/src/components/app/atoms/box'
 import { Input } from '../../../web-ui/src/components/common/atoms/input'
 import { DraggableFormInputs } from '../../../web-ui/src/components/app/atoms/draggable-form-inputs'
+import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
 
 type FormValues = {
   title: string
@@ -30,6 +31,7 @@ export const UpsertBookmarkForm: React.FC<{
   on_submit: (bookmark: Bookmark_Entity) => void
   on_close: () => void
   auth_token: string
+  action: 'create' | 'update'
 }> = (props) => {
   const {
     control,
@@ -80,9 +82,7 @@ export const UpsertBookmarkForm: React.FC<{
         is_public: form_data.is_public ? tag.is_public : false,
       })),
     })
-    if (props.bookmark) {
-      props.on_submit(bookmark)
-    }
+    props.on_submit(bookmark)
   }
 
   const handle_keyboard = (event: any) => {
@@ -112,7 +112,9 @@ export const UpsertBookmarkForm: React.FC<{
           },
           success: {
             render() {
-              return 'Bookmark has been updated'
+              return `Bookmark has been ${
+                props.bookmark ? 'updated' : 'created'
+              }`
             },
           },
           error: {
@@ -130,11 +132,17 @@ export const UpsertBookmarkForm: React.FC<{
       }}
     >
       <FormModal
-        slot_header={<ModalHeader title="Edit bookmark" />}
+        slot_header={
+          <ModalHeader
+            title={
+              props.action == 'update' ? 'Edit bookmark' : 'Create bookmark'
+            }
+          />
+        }
         slot_footer={
           <ModalFooter
             on_click_cancel={props.on_close}
-            button_label="Save"
+            button_label={props.action == 'update' ? 'Save' : 'Submit'}
             is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
           />
         }
@@ -171,35 +179,37 @@ export const UpsertBookmarkForm: React.FC<{
         </Box>
         <Box>
           <BoxHeading heading="Title" />
-          <Controller
-            name="title"
-            control={control}
-            defaultValue={props.bookmark?.title}
-            rules={{
-              maxLength: system_values.bookmark.title.max_length,
-            }}
-            render={({ field }) => {
-              let error_message: string | undefined
+          <UiCommonTemplate_FormControllerFix>
+            <Controller
+              name="title"
+              control={control}
+              defaultValue={props.bookmark?.title}
+              rules={{
+                maxLength: system_values.bookmark.title.max_length,
+              }}
+              render={({ field }) => {
+                let error_message: string | undefined
 
-              if (errors.title?.type == 'maxLength') {
-                error_message = `Title should be no longer than ${system_values.bookmark.title.max_length} characters.`
-              }
+                if (errors.title?.type == 'maxLength') {
+                  error_message = `Title should be no longer than ${system_values.bookmark.title.max_length} characters.`
+                }
 
-              return (
-                <Input
-                  value={field.value}
-                  on_change={(value) => {
-                    if (!isSubmitting) {
-                      field.onChange(value)
-                    }
-                  }}
-                  message_type={error_message ? 'error' : undefined}
-                  message={error_message}
-                  lines={2}
-                />
-              )
-            }}
-          />
+                return (
+                  <Input
+                    value={field.value}
+                    on_change={(value) => {
+                      if (!isSubmitting) {
+                        field.onChange(value)
+                      }
+                    }}
+                    message_type={error_message ? 'error' : undefined}
+                    message={error_message}
+                    lines={2}
+                  />
+                )
+              }}
+            />
+          </UiCommonTemplate_FormControllerFix>
         </Box>
         <Box>
           <BoxHeading heading="Links" />
@@ -272,35 +282,37 @@ export const UpsertBookmarkForm: React.FC<{
         </Box>
         <Box>
           <BoxHeading heading="Note" />
-          <Controller
-            name="note"
-            control={control}
-            defaultValue={props.bookmark?.note}
-            rules={{
-              maxLength: system_values.bookmark.note.max_length,
-            }}
-            render={({ field }) => {
-              let error_message: string | undefined
+          <UiCommonTemplate_FormControllerFix>
+            <Controller
+              name="note"
+              control={control}
+              defaultValue={props.bookmark?.note}
+              rules={{
+                maxLength: system_values.bookmark.note.max_length,
+              }}
+              render={({ field }) => {
+                let error_message: string | undefined
 
-              if (errors.note?.type == 'maxLength') {
-                error_message = `Note should be no longer than ${system_values.bookmark.note.max_length} characters.`
-              }
+                if (errors.note?.type == 'maxLength') {
+                  error_message = `Note should be no longer than ${system_values.bookmark.note.max_length} characters.`
+                }
 
-              return (
-                <Input
-                  value={field.value}
-                  on_change={(value) => {
-                    if (!isSubmitting) {
-                      field.onChange(value)
-                    }
-                  }}
-                  message_type={error_message ? 'error' : undefined}
-                  message={error_message}
-                  lines={5}
-                />
-              )
-            }}
-          />
+                return (
+                  <Input
+                    value={field.value}
+                    on_change={(value) => {
+                      if (!isSubmitting) {
+                        field.onChange(value)
+                      }
+                    }}
+                    message_type={error_message ? 'error' : undefined}
+                    message={error_message}
+                    lines={5}
+                  />
+                )
+              }}
+            />
+          </UiCommonTemplate_FormControllerFix>
         </Box>
       </FormModal>
     </form>
