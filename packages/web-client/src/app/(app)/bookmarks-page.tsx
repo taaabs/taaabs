@@ -175,7 +175,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           is_loading={search.is_initializing}
           loading_progress_percentage={search.indexed_bookmarks_percentage}
           placeholder={
-            filter_view_options.current_filter == Filter.All &&
+            filter_view_options.current_filter == Filter.None &&
             !tag_view_options.selected_tags.length &&
             !query_params.get('gte') &&
             !query_params.get('lte')
@@ -291,11 +291,11 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 )
                   return
                 filter_view_options.set_filter_query_param_and_clear_others(
-                  Filter.All,
+                  Filter.None,
                 )
                 if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
                   search.reset()
-                  if (filter_view_options.current_filter == Filter.All) {
+                  if (filter_view_options.current_filter == Filter.None) {
                     bookmarks.get_bookmarks({})
                   }
                 }
@@ -330,20 +330,20 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 <UiAppAtom_DropdownMenu
                   items={[
                     {
-                      label: _filter_option_to_label(Filter.All),
+                      label: _filter_option_to_label(Filter.None),
                       on_click: () => {
                         toggle_filter_dropdown()
                         if (
-                          filter_view_options.current_filter == Filter.All ||
+                          filter_view_options.current_filter == Filter.None ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
                           counts.is_fetching_counts_data
                         )
                           return
-                        filter_view_options.set_filter_query_param(Filter.All)
+                        filter_view_options.set_filter_query_param(Filter.None)
                       },
                       is_selected:
-                        filter_view_options.current_filter == Filter.All,
+                        filter_view_options.current_filter == Filter.None,
                     },
                     ...(props.user == 'authorized'
                       ? [
@@ -1598,8 +1598,8 @@ export default BookmarksPage
 
 function _filter_option_to_label(filter_option: Filter): string {
   switch (filter_option) {
-    case Filter.All:
-      return 'All'
+    case Filter.None:
+      return 'None'
     case Filter.Starred:
       return 'Starred'
     case Filter.Unread:

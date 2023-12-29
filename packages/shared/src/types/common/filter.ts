@@ -1,5 +1,5 @@
 export enum Filter {
-  All = 'all',
+  None = 'none',
   Starred = 'starred',
   Unread = 'unread',
   StarredUnread = 'starred_unread',

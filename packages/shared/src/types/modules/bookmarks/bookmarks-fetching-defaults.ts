@@ -4,7 +4,7 @@ import { Filter } from '@shared/types/common/filter'
 
 export namespace BookmarksFetchingDefaults {
   export namespace Common {
-    export const filter = Filter.All
+    export const filter = Filter.None
     export const order = Order.Desc
     export const sortby = Sortby.CreatedAt
   }
