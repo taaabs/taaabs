@@ -165,9 +165,11 @@ export const use_search = () => {
                 .archived_index,
         )
         return true
+      } else {
+        return false
       }
     }
-    return false
+    return true
   }
 
   const init = async (params: { is_archived: boolean }) => {
