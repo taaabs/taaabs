@@ -25,6 +25,7 @@ export namespace CustomRange {
     selected_tags?: string
     has_results?: boolean
     is_fetching_data?: boolean
+    is_fetching_counts_data?: boolean
     is_range_selector_disabled?: boolean
   }
 }
@@ -304,7 +305,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                   ? ` - ${yyyymm_to_display(props.current_lte)}`
                   : '')
               ) : (
-                'All history'
+                ''
               )
             ) : !props.is_range_selector_disabled ? (
               date ? (
@@ -513,10 +514,18 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
 
         {!props.is_range_selector_disabled &&
           !props.has_results &&
-          !props.is_fetching_data && (
+          !props.is_fetching_data &&
+          !props.is_fetching_counts_data && (
             <div className={styles['custom-range__info']}>
               There is nothing to plot
             </div>
+          )}
+
+        {!props.has_results &&
+          !props.is_fetching_data &&
+          props.is_fetching_counts_data &&
+          !props.is_range_selector_disabled && (
+            <div className={styles['custom-range__info']}>Loading...</div>
           )}
 
         {props.is_range_selector_disabled && (
@@ -528,6 +537,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     )
   },
   (o, n) =>
+    o.is_fetching_counts_data == n.is_fetching_counts_data &&
     o.has_results == n.has_results &&
     o.clear_date_range == n.clear_date_range &&
     o.is_range_selector_disabled == n.is_range_selector_disabled,

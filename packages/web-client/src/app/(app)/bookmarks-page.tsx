@@ -34,7 +34,6 @@ import { Library as UiAppTemplate_Library } from '@web-ui/components/app/templat
 import { LibrarySearch as UiAppAtom_LibrarySearch } from '@web-ui/components/app/atoms/library-search'
 import { NavigationForLibrarySidebar as UiAppAtom_NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
 import { LibraryAside as UiAppTemplate_LibraryAside } from '@web-ui/components/app/templates/library-aside'
-import { UnreadStarsFilter as UiAppAtom_UnreadStarsFilter } from '@web-ui/components/app/atoms/unread-stars-filter'
 import { ButtonSelect as UiAppAtom_ButtonSelect } from '@web-ui/components/app/atoms/button-select'
 import { ButtonSelectSkeleton as UiAppAtom_ButtonSelectSkeleton } from '@web-ui/components/app/atoms/button-select-skeleton'
 import { DropdownMenu as UiAppAtom_DropdownMenu } from '@web-ui/components/app/atoms/dropdown-menu'
@@ -614,6 +613,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   }
                   is_fetching_data={
                     bookmarks_slice_state.is_fetching_first_bookmarks
+                  }
+                  is_fetching_counts_data={
+                    counts_slice_state.is_fetching_counts_data
                   }
                   is_range_selector_disabled={
                     sortby_view_options.current_sortby == Sortby.UpdatedAt ||
