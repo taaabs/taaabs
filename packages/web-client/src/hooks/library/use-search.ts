@@ -305,9 +305,7 @@ export const use_search = () => {
         ? browser_storage.local_forage.authorized_library.search.cached_at
         : browser_storage.local_forage.authorized_library.search
             .archived_cached_at,
-      // We cache without waiting for the server to update a bookmark,
-      // so we need to account for some latency.
-      new Date(Date.now() + 5000),
+      new Date(),
     )
     set_is_caching_bookmarks(false)
   }

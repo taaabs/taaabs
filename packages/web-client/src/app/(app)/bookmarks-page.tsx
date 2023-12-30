@@ -855,9 +855,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Mark as Unread',
                               is_checked: bookmark.is_unread,
-                              on_click: () => {
+                              on_click: async () => {
                                 const is_unread = !bookmark.is_unread
-                                const updated_bookmark: UpsertBookmark_Params =
+                                const modified_bookmark: UpsertBookmark_Params =
                                   {
                                     bookmark_id: bookmark.id,
                                     is_public: bookmark.is_public,
@@ -879,9 +879,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       is_public: tag.is_public,
                                     })),
                                   }
-                                dispatch(
+                                const updated_bookmark = await dispatch(
                                   bookmarks_actions.upsert_bookmark({
-                                    bookmark: updated_bookmark,
+                                    bookmark: modified_bookmark,
                                     last_authorized_counts_params:
                                       JSON.parse(
                                         sessionStorage.getItem(
@@ -894,12 +894,14 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
-                                search.update_searchable_bookmark({
+                                await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
                                     created_at: new Date(bookmark.created_at),
                                     visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(),
+                                    updated_at: new Date(
+                                      updated_bookmark.updated_at,
+                                    ),
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -936,8 +938,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'One star',
                               is_checked: bookmark.stars == 1,
-                              on_click: () => {
-                                const updated_bookmark: UpsertBookmark_Params =
+                              on_click: async () => {
+                                const modified_bookmark: UpsertBookmark_Params =
                                   {
                                     bookmark_id: bookmark.id,
                                     is_public: bookmark.is_public,
@@ -959,9 +961,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       is_public: tag.is_public,
                                     })),
                                   }
-                                dispatch(
+                                const updated_bookmark = await dispatch(
                                   bookmarks_actions.upsert_bookmark({
-                                    bookmark: updated_bookmark,
+                                    bookmark: modified_bookmark,
                                     last_authorized_counts_params:
                                       JSON.parse(
                                         sessionStorage.getItem(
@@ -974,12 +976,14 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
-                                search.update_searchable_bookmark({
+                                await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
                                     created_at: new Date(bookmark.created_at),
                                     visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(),
+                                    updated_at: new Date(
+                                      updated_bookmark.updated_at,
+                                    ),
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1008,8 +1012,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Two stars',
                               is_checked: bookmark.stars == 2,
-                              on_click: () => {
-                                const updated_bookmark: UpsertBookmark_Params =
+                              on_click: async () => {
+                                const modified_bookmark: UpsertBookmark_Params =
                                   {
                                     bookmark_id: bookmark.id,
                                     is_public: bookmark.is_public,
@@ -1031,9 +1035,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       is_public: tag.is_public,
                                     })),
                                   }
-                                dispatch(
+                                const updated_bookmark = await dispatch(
                                   bookmarks_actions.upsert_bookmark({
-                                    bookmark: updated_bookmark,
+                                    bookmark: modified_bookmark,
                                     last_authorized_counts_params:
                                       JSON.parse(
                                         sessionStorage.getItem(
@@ -1051,7 +1055,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                     id: bookmark.id,
                                     created_at: new Date(bookmark.created_at),
                                     visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(),
+                                    updated_at: new Date(
+                                      updated_bookmark.updated_at,
+                                    ),
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1079,8 +1085,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Three stars',
                               is_checked: bookmark.stars == 3,
-                              on_click: () => {
-                                const updated_bookmark: UpsertBookmark_Params =
+                              on_click: async () => {
+                                const modified_bookmark: UpsertBookmark_Params =
                                   {
                                     bookmark_id: bookmark.id,
                                     is_public: bookmark.is_public,
@@ -1102,9 +1108,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       is_public: tag.is_public,
                                     })),
                                   }
-                                dispatch(
+                                const updated_bookmark = await dispatch(
                                   bookmarks_actions.upsert_bookmark({
-                                    bookmark: updated_bookmark,
+                                    bookmark: modified_bookmark,
                                     last_authorized_counts_params:
                                       JSON.parse(
                                         sessionStorage.getItem(
@@ -1122,7 +1128,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                     id: bookmark.id,
                                     created_at: new Date(bookmark.created_at),
                                     visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(),
+                                    updated_at: new Date(
+                                      updated_bookmark.updated_at,
+                                    ),
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1150,8 +1158,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Four stars',
                               is_checked: bookmark.stars == 4,
-                              on_click: () => {
-                                const updated_bookmark: UpsertBookmark_Params =
+                              on_click: async () => {
+                                const modified_bookmark: UpsertBookmark_Params =
                                   {
                                     bookmark_id: bookmark.id,
                                     is_public: bookmark.is_public,
@@ -1173,9 +1181,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       is_public: tag.is_public,
                                     })),
                                   }
-                                dispatch(
+                                const updated_bookmark = await dispatch(
                                   bookmarks_actions.upsert_bookmark({
-                                    bookmark: updated_bookmark,
+                                    bookmark: modified_bookmark,
                                     last_authorized_counts_params:
                                       JSON.parse(
                                         sessionStorage.getItem(
@@ -1193,7 +1201,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                     id: bookmark.id,
                                     created_at: new Date(bookmark.created_at),
                                     visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(),
+                                    updated_at: new Date(
+                                      updated_bookmark.updated_at,
+                                    ),
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1221,8 +1231,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Five stars',
                               is_checked: bookmark.stars == 5,
-                              on_click: () => {
-                                const updated_bookmark: UpsertBookmark_Params =
+                              on_click: async () => {
+                                const modified_bookmark: UpsertBookmark_Params =
                                   {
                                     bookmark_id: bookmark.id,
                                     is_public: bookmark.is_public,
@@ -1244,9 +1254,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       is_public: tag.is_public,
                                     })),
                                   }
-                                dispatch(
+                                const updated_bookmark = await dispatch(
                                   bookmarks_actions.upsert_bookmark({
-                                    bookmark: updated_bookmark,
+                                    bookmark: modified_bookmark,
                                     last_authorized_counts_params:
                                       JSON.parse(
                                         sessionStorage.getItem(
@@ -1264,7 +1274,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                     id: bookmark.id,
                                     created_at: new Date(bookmark.created_at),
                                     visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(),
+                                    updated_at: new Date(
+                                      updated_bookmark.updated_at,
+                                    ),
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1364,7 +1376,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       updated_bookmark.created_at,
                                     ),
                                     visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(bookmark.updated_at),
+                                    updated_at: new Date(
+                                      updated_bookmark.updated_at,
+                                    ),
                                     stars: updated_bookmark.stars,
                                   },
                                   tag_ids: updated_bookmark.tags.map(
@@ -1399,7 +1413,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                 <UiCommonParticles_Icon variant="ARCHIVE" />
                               ),
                               on_click: () => {
-                                const updated_bookmark: UpsertBookmark_Params =
+                                const modified_bookmark: UpsertBookmark_Params =
                                   {
                                     bookmark_id: bookmark.id,
                                     is_public: bookmark.is_public,
@@ -1423,7 +1437,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                   }
                                 dispatch(
                                   bookmarks_actions.upsert_bookmark({
-                                    bookmark: updated_bookmark,
+                                    bookmark: modified_bookmark,
                                     last_authorized_counts_params:
                                       JSON.parse(
                                         sessionStorage.getItem(

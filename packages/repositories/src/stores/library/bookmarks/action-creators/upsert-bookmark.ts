@@ -7,6 +7,7 @@ import { bookmarks_actions } from '../bookmarks.slice'
 import { counts_actions } from '../../counts/counts.slice'
 import { Filter } from '@shared/types/common/filter'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
+import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 
 export const upsert_bookmark = (params: {
   bookmark: UpsertBookmark_Params
@@ -14,86 +15,89 @@ export const upsert_bookmark = (params: {
   api_url: string
   auth_token: string
 }) => {
-  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
-    dispatch(bookmarks_actions.set_is_updating_bookmarks(true))
+  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
+    new Promise<Bookmark_Entity>(async (resolve) => {
+      dispatch(bookmarks_actions.set_is_updating_bookmarks(true))
 
-    const data_source = new Bookmarks_DataSourceImpl(
-      params.api_url,
-      params.auth_token,
-    )
-    const repository = new Bookmarks_RepositoryImpl(data_source)
-    const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
-
-    const result = await upsert_bookmark_use_case.invoke(params.bookmark)
-
-    const state = get_state()
-
-    if (params.bookmark.bookmark_id) {
-      if (!state.bookmarks.bookmarks)
-        throw new Error('[upsert_bookmark] Bookmarks should be there.')
-      if (!params.last_authorized_counts_params)
-        throw new Error(
-          '[upsert_bookmark] Last authorized months params should be there.',
-        )
-
-      const is_archived_toggled_should_remove =
-        params.bookmark.is_archived &&
-        !(params.last_authorized_counts_params.filter == Filter.Archived)
-
-      const is_restored_toggled_should_remove =
-        !params.bookmark.is_archived &&
-        params.last_authorized_counts_params.filter == Filter.Archived
-
-      const is_starred_toggled_should_remove =
-        params.bookmark.stars == 0 &&
-        (params.last_authorized_counts_params.filter == Filter.Starred ||
-          params.last_authorized_counts_params.filter == Filter.StarredUnread)
-
-      const is_unread_toggled_should_remove =
-        !params.bookmark.is_unread &&
-        (params.last_authorized_counts_params.filter == Filter.Unread ||
-          params.last_authorized_counts_params.filter == Filter.StarredUnread)
-
-      if (
-        is_archived_toggled_should_remove ||
-        is_restored_toggled_should_remove ||
-        is_unread_toggled_should_remove ||
-        is_starred_toggled_should_remove
-      ) {
-        dispatch(
-          bookmarks_actions.set_incoming_bookmarks(
-            state.bookmarks.bookmarks.filter(
-              (bookmark) => bookmark.id != params.bookmark.bookmark_id,
-            ),
-          ),
-        )
-      } else {
-        dispatch(
-          bookmarks_actions.set_incoming_bookmarks(
-            state.bookmarks.bookmarks.map((bookmark) => {
-              if (bookmark.id == result.id) {
-                return result
-              } else {
-                return bookmark
-              }
-            }),
-          ),
-        )
-      }
-
-      dispatch(
-        counts_actions.refresh_authorized_counts({
-          last_authorized_counts_params: params.last_authorized_counts_params,
-          api_url: params.api_url,
-          auth_token: params.auth_token,
-        }),
+      const data_source = new Bookmarks_DataSourceImpl(
+        params.api_url,
+        params.auth_token,
       )
+      const repository = new Bookmarks_RepositoryImpl(data_source)
+      const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
 
-      if (is_archived_toggled_should_remove) {
-        dispatch(bookmarks_actions.set_toast_message('archived'))
-      } else if (is_restored_toggled_should_remove) {
-        dispatch(bookmarks_actions.set_toast_message('restored'))
+      const result = await upsert_bookmark_use_case.invoke(params.bookmark)
+
+      const state = get_state()
+
+      if (params.bookmark.bookmark_id) {
+        if (!state.bookmarks.bookmarks)
+          throw new Error('[upsert_bookmark] Bookmarks should be there.')
+        if (!params.last_authorized_counts_params)
+          throw new Error(
+            '[upsert_bookmark] Last authorized months params should be there.',
+          )
+
+        const is_archived_toggled_should_remove =
+          params.bookmark.is_archived &&
+          !(params.last_authorized_counts_params.filter == Filter.Archived)
+
+        const is_restored_toggled_should_remove =
+          !params.bookmark.is_archived &&
+          params.last_authorized_counts_params.filter == Filter.Archived
+
+        const is_starred_toggled_should_remove =
+          params.bookmark.stars == 0 &&
+          (params.last_authorized_counts_params.filter == Filter.Starred ||
+            params.last_authorized_counts_params.filter == Filter.StarredUnread)
+
+        const is_unread_toggled_should_remove =
+          !params.bookmark.is_unread &&
+          (params.last_authorized_counts_params.filter == Filter.Unread ||
+            params.last_authorized_counts_params.filter == Filter.StarredUnread)
+
+        if (
+          is_archived_toggled_should_remove ||
+          is_restored_toggled_should_remove ||
+          is_unread_toggled_should_remove ||
+          is_starred_toggled_should_remove
+        ) {
+          dispatch(
+            bookmarks_actions.set_incoming_bookmarks(
+              state.bookmarks.bookmarks.filter(
+                (bookmark) => bookmark.id != params.bookmark.bookmark_id,
+              ),
+            ),
+          )
+        } else {
+          dispatch(
+            bookmarks_actions.set_incoming_bookmarks(
+              state.bookmarks.bookmarks.map((bookmark) => {
+                if (bookmark.id == result.id) {
+                  return result
+                } else {
+                  return bookmark
+                }
+              }),
+            ),
+          )
+        }
+
+        dispatch(
+          counts_actions.refresh_authorized_counts({
+            last_authorized_counts_params: params.last_authorized_counts_params,
+            api_url: params.api_url,
+            auth_token: params.auth_token,
+          }),
+        )
+
+        if (is_archived_toggled_should_remove) {
+          dispatch(bookmarks_actions.set_toast_message('archived'))
+        } else if (is_restored_toggled_should_remove) {
+          dispatch(bookmarks_actions.set_toast_message('restored'))
+        }
       }
-    }
-  }
+
+      resolve(result)
+    })
 }
