@@ -505,7 +505,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
 
         {props.has_results &&
           counts_to_render &&
-          counts_to_render.length < 2 &&
+          counts_to_render.length <= 1 &&
           !props.is_range_selector_disabled && (
             <div className={styles['custom-range__info']}>
               All results fit in one month

@@ -162,7 +162,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       stars: params.stars || undefined,
       is_unread: params.is_unread || undefined,
       tags: params.tags
-        .filter((tag) => tag.name.length > 0)
+        .filter((tag) => tag.name.trim().length > 0)
         .reduce(
           (acc, tag) => {
             const is_duplicate = acc.findIndex((t) => t.name == tag.name) != -1
@@ -175,9 +175,9 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           [] as UpsertBookmark_Params['tags'],
         )
         .map((tag) => ({
-          name: tag.is_public ? tag.name : undefined,
+          name: tag.is_public ? tag.name.trim() : undefined,
           name_aes: !tag.is_public
-            ? CryptoJS.AES.encrypt(tag.name, 'my_secret_key').toString()
+            ? CryptoJS.AES.encrypt(tag.name.trim(), 'my_secret_key').toString()
             : undefined,
           hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
           is_public: tag.is_public,
