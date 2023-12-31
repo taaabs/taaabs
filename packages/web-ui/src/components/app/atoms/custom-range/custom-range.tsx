@@ -50,6 +50,12 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     const [unread_count, set_unread_count] = useState<number>()
 
     useUpdateEffect(() => {
+      set_bookmark_count(undefined)
+      set_starred_count(undefined)
+      set_unread_count(undefined)
+    }, [pop_count])
+
+    useUpdateEffect(() => {
       if (props.is_range_selector_disabled) return
 
       if (
@@ -298,7 +304,9 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
             Custom range
           </div>
           <div className={styles['custom-range__details__current-range']}>
-            {!props.has_results && !props.is_fetching_data ? (
+            {!props.has_results &&
+            !props.is_fetching_data &&
+            !props.is_fetching_counts_data ? (
               props.current_gte && props.current_lte ? (
                 yyyymm_to_display(props.current_gte) +
                 (props.current_gte != props.current_lte
@@ -506,7 +514,8 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
         {props.has_results &&
           counts_to_render &&
           counts_to_render.length <= 1 &&
-          !props.is_range_selector_disabled && (
+          !props.is_range_selector_disabled &&
+          !props.is_fetching_counts_data && (
             <div className={styles['custom-range__info']}>
               All results fit in one month
             </div>
@@ -519,13 +528,6 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
             <div className={styles['custom-range__info']}>
               There is nothing to plot
             </div>
-          )}
-
-        {!props.has_results &&
-          !props.is_fetching_data &&
-          props.is_fetching_counts_data &&
-          !props.is_range_selector_disabled && (
-            <div className={styles['custom-range__info']}>Loading...</div>
           )}
 
         {props.is_range_selector_disabled && (

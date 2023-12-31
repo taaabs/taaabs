@@ -344,6 +344,25 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                       is_selected:
                         filter_view_options.current_filter == Filter.None,
                     },
+                    {
+                      label: _filter_option_to_label(Filter.Starred),
+                      on_click: () => {
+                        toggle_filter_dropdown()
+                        if (
+                          filter_view_options.current_filter ==
+                            Filter.Starred ||
+                          bookmarks_slice_state.is_fetching_first_bookmarks ||
+                          bookmarks_slice_state.is_fetching_more_bookmarks ||
+                          counts.is_fetching_counts_data
+                        )
+                          return
+                        filter_view_options.set_filter_query_param(
+                          Filter.Starred,
+                        )
+                      },
+                      is_selected:
+                        filter_view_options.current_filter == Filter.Starred,
+                    },
                     ...(props.user == 'authorized'
                       ? [
                           {
@@ -368,25 +387,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                           },
                         ]
                       : []),
-                    {
-                      label: _filter_option_to_label(Filter.Starred),
-                      on_click: () => {
-                        toggle_filter_dropdown()
-                        if (
-                          filter_view_options.current_filter ==
-                            Filter.Starred ||
-                          bookmarks_slice_state.is_fetching_first_bookmarks ||
-                          bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          counts.is_fetching_counts_data
-                        )
-                          return
-                        filter_view_options.set_filter_query_param(
-                          Filter.Starred,
-                        )
-                      },
-                      is_selected:
-                        filter_view_options.current_filter == Filter.Starred,
-                    },
                     ...(props.user == 'authorized'
                       ? [
                           {
