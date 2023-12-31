@@ -6,15 +6,15 @@ import { system_values } from '@shared/constants/system-values'
 import { useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { FormModal } from '../../../web-ui/src/components/app/templates/form-modal'
-import { ModalHeader } from '../../../web-ui/src/components/app/atoms/modal-header'
-import { ModalFooter } from '../../../web-ui/src/components/app/atoms/modal-footer'
-import { BoxHeading } from '../../../web-ui/src/components/app/atoms/box-heading'
-import { FormRadio } from '../../../web-ui/src/components/app/templates/form-radio'
-import { RadioSetting } from '../../../web-ui/src/components/app/atoms/radio-setting'
-import { Box } from '../../../web-ui/src/components/app/atoms/box'
-import { Input } from '../../../web-ui/src/components/common/atoms/input'
-import { DraggableFormInputs } from '../../../web-ui/src/components/app/atoms/draggable-form-inputs'
+import { FormModal as UiAppTemplate_FormModal } from '../../../web-ui/src/components/app/templates/form-modal'
+import { ModalHeader as UiAppAtom_ModalHeader } from '../../../web-ui/src/components/app/atoms/modal-header'
+import { ModalFooter as UiAppAtom_ModalFooter } from '../../../web-ui/src/components/app/atoms/modal-footer'
+import { BoxHeading as UiAppAtom_BoxHeading } from '../../../web-ui/src/components/app/atoms/box-heading'
+import { FormRadio as UiAppTemplate_FormRadio } from '../../../web-ui/src/components/app/templates/form-radio'
+import { RadioSetting as UiAppAtom_RadioSetting } from '../../../web-ui/src/components/app/atoms/radio-setting'
+import { Box as UiAppAtom_Box } from '../../../web-ui/src/components/app/atoms/box'
+import { Input as UiCommonAtom_Input } from '../../../web-ui/src/components/common/atoms/input'
+import { DraggableFormInputs as UiAppAtom_DraggableFormInputs } from '../../../web-ui/src/components/app/atoms/draggable-form-inputs'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
 
 type FormValues = {
@@ -25,7 +25,7 @@ type FormValues = {
   is_public?: boolean
 }
 
-export const UpsertBookmarkForm: React.FC<{
+export const UpsertBookmark: React.FC<{
   bookmark?: Bookmark_Entity
   is_archived?: boolean
   on_submit: (bookmark: Bookmark_Entity) => void
@@ -131,32 +131,32 @@ export const UpsertBookmarkForm: React.FC<{
         }
       }}
     >
-      <FormModal
+      <UiAppTemplate_FormModal
         slot_header={
-          <ModalHeader
+          <UiAppAtom_ModalHeader
             title={
               props.action == 'update' ? 'Edit bookmark' : 'Create bookmark'
             }
           />
         }
         slot_footer={
-          <ModalFooter
+          <UiAppAtom_ModalFooter
             on_click_cancel={props.on_close}
             button_label={props.action == 'update' ? 'Save' : 'Submit'}
             is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
           />
         }
       >
-        <Box>
-          <BoxHeading heading="Visibility" />
+        <UiAppAtom_Box>
+          <UiAppAtom_BoxHeading heading="Visibility" />
           <Controller
             name="is_public"
             control={control}
             defaultValue={props.bookmark?.is_public}
             render={({ field }) => {
               return (
-                <FormRadio>
-                  <RadioSetting
+                <UiAppTemplate_FormRadio>
+                  <UiAppAtom_RadioSetting
                     top_line="Private"
                     bottom_line="All data is encrypted end-to-end"
                     on_click={() => {
@@ -164,7 +164,7 @@ export const UpsertBookmarkForm: React.FC<{
                     }}
                     is_checked={!field.value}
                   />
-                  <RadioSetting
+                  <UiAppAtom_RadioSetting
                     top_line="Public"
                     bottom_line="Selected links and tags can remain private"
                     on_click={() => {
@@ -172,13 +172,13 @@ export const UpsertBookmarkForm: React.FC<{
                     }}
                     is_checked={field.value}
                   />
-                </FormRadio>
+                </UiAppTemplate_FormRadio>
               )
             }}
           />
-        </Box>
-        <Box>
-          <BoxHeading heading="Title" />
+        </UiAppAtom_Box>
+        <UiAppAtom_Box>
+          <UiAppAtom_BoxHeading heading="Title" />
           <UiCommonTemplate_FormControllerFix>
             <Controller
               name="title"
@@ -195,7 +195,7 @@ export const UpsertBookmarkForm: React.FC<{
                 }
 
                 return (
-                  <Input
+                  <UiCommonAtom_Input
                     value={field.value}
                     on_change={(value) => {
                       if (!isSubmitting) {
@@ -210,16 +210,16 @@ export const UpsertBookmarkForm: React.FC<{
               }}
             />
           </UiCommonTemplate_FormControllerFix>
-        </Box>
-        <Box>
-          <BoxHeading heading="Links" />
+        </UiAppAtom_Box>
+        <UiAppAtom_Box>
+          <UiAppAtom_BoxHeading heading="Links" />
           <Controller
             name="is_public"
             control={control}
             defaultValue={props.bookmark?.is_public}
             render={({ field }) => {
               return (
-                <DraggableFormInputs
+                <UiAppAtom_DraggableFormInputs
                   items={links.map((link) => ({
                     value: link.url,
                     is_public:
@@ -245,16 +245,16 @@ export const UpsertBookmarkForm: React.FC<{
               )
             }}
           />
-        </Box>
-        <Box>
-          <BoxHeading heading="Tags" />
+        </UiAppAtom_Box>
+        <UiAppAtom_Box>
+          <UiAppAtom_BoxHeading heading="Tags" />
           <Controller
             name="is_public"
             control={control}
             defaultValue={props.bookmark?.is_public}
             render={({ field }) => {
               return (
-                <DraggableFormInputs
+                <UiAppAtom_DraggableFormInputs
                   items={tags.map((tag) => ({
                     value: tag.name,
                     is_public:
@@ -279,9 +279,9 @@ export const UpsertBookmarkForm: React.FC<{
               )
             }}
           />
-        </Box>
-        <Box>
-          <BoxHeading heading="Note" />
+        </UiAppAtom_Box>
+        <UiAppAtom_Box>
+          <UiAppAtom_BoxHeading heading="Note" />
           <UiCommonTemplate_FormControllerFix>
             <Controller
               name="note"
@@ -298,7 +298,7 @@ export const UpsertBookmarkForm: React.FC<{
                 }
 
                 return (
-                  <Input
+                  <UiCommonAtom_Input
                     value={field.value}
                     on_change={(value) => {
                       if (!isSubmitting) {
@@ -313,8 +313,8 @@ export const UpsertBookmarkForm: React.FC<{
               }}
             />
           </UiCommonTemplate_FormControllerFix>
-        </Box>
-      </FormModal>
+        </UiAppAtom_Box>
+      </UiAppTemplate_FormModal>
     </form>
   )
 }

@@ -1,4 +1,4 @@
-import { UpsertBookmarkForm } from '@/forms'
+import { UpsertBookmark as Form_UpsertBookmark } from '@/forms/upsert-bookmark'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 
 export const upsert_bookmark_modal = (params: {
@@ -11,7 +11,7 @@ export const upsert_bookmark_modal = (params: {
     const on_submit_handler = (bookmark: Bookmark_Entity) => resolve(bookmark)
     const on_close_handler = () => params.modal_context.set_modal()
     params.modal_context.set_modal(
-      <UpsertBookmarkForm
+      <Form_UpsertBookmark
         action="update"
         bookmark={params.bookmark}
         is_archived={params.is_archived}
