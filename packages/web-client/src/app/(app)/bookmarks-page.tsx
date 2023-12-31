@@ -606,8 +606,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   selected_tags={query_params.get('t') || undefined}
                   has_results={
                     bookmarks_slice_state.bookmarks &&
-                    !bookmarks_slice_state.is_fetching_first_bookmarks &&
-                    !counts.is_fetching_counts_data
+                    !bookmarks_slice_state.is_fetching_first_bookmarks
                       ? bookmarks_slice_state.bookmarks.length > 0
                       : undefined
                   }
