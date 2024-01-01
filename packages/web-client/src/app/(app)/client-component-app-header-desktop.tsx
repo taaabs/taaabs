@@ -1,6 +1,11 @@
 'use client'
 
-import { useParams, usePathname, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { useContext } from 'react'
 import { ModalContext } from './modal-provider'
@@ -12,9 +17,12 @@ import { AppHeaderDesktop as UiAppTemplate_AppHeaderDesktop } from '@web-ui/comp
 import { DesktopUserAreaForAppHeader as UiAppOrganism_DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
 import { UpsertBookmark as Form_UpsertBookmarkForm } from '@/forms/upsert-bookmark'
 import { update_query_params } from '@/utils/update-query-params'
+import { BookmarkHash } from '@/utils/bookmark-hash'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const query_params = useSearchParams()
+  const router = useRouter()
   const params = useParams()
   const pathname = usePathname()
   const public_user_avatar = useContext(PublicUserAvatarContext)
@@ -77,6 +85,51 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
     ]
   }
 
+  const open_new_bookmark_modal = (params: { with_autofill?: boolean }) => {
+    const bookmark = BookmarkHash.from({ hash: window.location.hash.slice(1) })
+
+    modal?.set_modal(
+      <Form_UpsertBookmarkForm
+        action="create"
+        bookmark_autofill={
+          params.with_autofill
+            ? {
+                title: bookmark.title,
+                links: bookmark.links,
+                tags: bookmark.tags,
+                note: bookmark.note,
+              }
+            : undefined
+        }
+        auth_token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg"
+        on_close={modal?.set_modal}
+        on_submit={(bookmark) => {
+          modal?.set_modal()
+          if (pathname == '/bookmarks') {
+            const updated_query_params = update_query_params(
+              query_params,
+              'r', // Bookmarks (r)efetch trigger.
+              bookmark.id.toString(),
+            )
+            window.history.pushState(
+              {},
+              '',
+              window.location.pathname + '?' + updated_query_params,
+            )
+          } else {
+            router.push(`/bookmarks`)
+          }
+        }}
+      />,
+    )
+  }
+
+  useUpdateEffect(() => {
+    if (window.location.hash.slice(1).length) {
+      open_new_bookmark_modal({ with_autofill: true })
+    }
+  }, [is_hydrated])
+
   return (
     <UiAppTemplate_AppHeaderDesktop
       slot_left_side_logo={logo}
@@ -86,29 +139,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
       slot_right_side={
         <UiAppOrganism_DesktopUserAreaForAppHeader
           on_click_add={() => {
-            modal?.set_modal(
-              <Form_UpsertBookmarkForm
-                action="create"
-                bookmark={undefined}
-                auth_token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg"
-                on_close={modal?.set_modal}
-                on_submit={(bookmark) => {
-                  modal?.set_modal()
-                  if (pathname == '/bookmarks') {
-                    const updated_query_params = update_query_params(
-                      query_params,
-                      'r', // Bookmarks (r)efetch trigger.
-                      bookmark.id.toString(),
-                    )
-                    window.history.pushState(
-                      {},
-                      '',
-                      window.location.pathname + '?' + updated_query_params,
-                    )
-                  }
-                }}
-              />,
-            )
+            open_new_bookmark_modal({})
           }}
           on_click_search={() => {}}
         />

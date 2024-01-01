@@ -19,36 +19,64 @@ import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui
 
 type FormValues = {
   title: string
-  links: string[]
-  tags: string[]
   note: string
   is_public?: boolean
 }
 
-export const UpsertBookmark: React.FC<{
-  bookmark?: Bookmark_Entity
-  is_archived?: boolean
-  on_submit: (bookmark: Bookmark_Entity) => void
-  on_close: () => void
-  auth_token: string
-  action: 'create' | 'update'
-}> = (props) => {
+type BookmarkAutofill = {
+  title?: string
+  note?: string
+  links?: {
+    url: string
+    site_path?: string
+  }[]
+  tags?: string[]
+}
+
+export namespace UpsertBookmark {
+  export type Props = {
+    bookmark?: Bookmark_Entity
+    bookmark_autofill?: BookmarkAutofill
+    is_archived?: boolean
+    on_submit: (bookmark: Bookmark_Entity) => void
+    on_close: () => void
+    auth_token: string
+    action: 'create' | 'update'
+  }
+}
+
+export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'all' })
+
   const [links, set_links] = useState<{ url: string; is_public: boolean }[]>(
-    props.bookmark?.links.map((link) => ({
-      url: link.url,
-      is_public: link.is_public,
-    })) || [],
+    props.bookmark
+      ? props.bookmark?.links.map((link) => ({
+          url: link.url,
+          is_public: link.is_public,
+        }))
+      : props.bookmark_autofill && props.bookmark_autofill.links
+      ? props.bookmark_autofill.links.map(({ url }) => ({
+          url,
+          is_public: true,
+        }))
+      : [],
   )
   const [tags, set_tags] = useState<{ name: string; is_public: boolean }[]>(
-    props.bookmark?.tags.map((tag) => ({
-      name: tag.name,
-      is_public: tag.is_public,
-    })) || [],
+    props.bookmark
+      ? props.bookmark?.tags.map((tag) => ({
+          name: tag.name,
+          is_public: tag.is_public,
+        }))
+      : props.bookmark_autofill && props.bookmark_autofill.tags
+      ? props.bookmark_autofill.tags.map((name) => ({
+          name,
+          is_public: true,
+        }))
+      : [],
   )
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
@@ -58,7 +86,6 @@ export const UpsertBookmark: React.FC<{
     )
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
-
     const bookmark = await upsert_bookmark_use_case.invoke({
       bookmark_id: props.bookmark?.id,
       is_public:
@@ -183,7 +210,13 @@ export const UpsertBookmark: React.FC<{
             <Controller
               name="title"
               control={control}
-              defaultValue={props.bookmark?.title}
+              defaultValue={
+                props.bookmark
+                  ? props.bookmark.title
+                  : props.bookmark_autofill
+                  ? props.bookmark_autofill.title
+                  : undefined
+              }
               rules={{
                 maxLength: system_values.bookmark.title.max_length,
               }}
@@ -286,7 +319,13 @@ export const UpsertBookmark: React.FC<{
             <Controller
               name="note"
               control={control}
-              defaultValue={props.bookmark?.note}
+              defaultValue={
+                props.bookmark
+                  ? props.bookmark?.note
+                  : props.bookmark_autofill
+                  ? props.bookmark_autofill.note
+                  : undefined
+              }
               rules={{
                 maxLength: system_values.bookmark.note.max_length,
               }}

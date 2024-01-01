@@ -183,10 +183,11 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           is_public: tag.is_public,
         })),
       links: params.links
-        .filter((link) => link.url.length > 0)
+        .filter((link) => link.url.trim().length > 0)
         .reduce(
           (acc, link) => {
-            const is_duplicate = acc.findIndex((l) => l.url == link.url) != -1
+            const is_duplicate =
+              acc.findIndex((l) => l.url == link.url.trim()) != -1
             if (is_duplicate) {
               return acc
             } else {
@@ -197,9 +198,12 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         )
         .map((link) => {
           return {
-            url: link.is_public ? link.url : undefined,
+            url: link.is_public ? link.url.trim() : undefined,
             url_aes: !link.is_public
-              ? CryptoJS.AES.encrypt(link.url, 'my_secret_key').toString()
+              ? CryptoJS.AES.encrypt(
+                  link.url.trim(),
+                  'my_secret_key',
+                ).toString()
               : undefined,
             site_aes: !link.is_public
               ? CryptoJS.AES.encrypt(
@@ -207,7 +211,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                   'my_secret_key',
                 ).toString()
               : undefined,
-            hash: CryptoJS.SHA256(link.url + 'my_secret_key').toString(),
+            hash: CryptoJS.SHA256(link.url.trim() + 'my_secret_key').toString(),
             site: link.site_path,
             is_public: link.is_public,
           }
