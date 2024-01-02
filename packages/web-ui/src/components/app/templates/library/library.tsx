@@ -3,7 +3,7 @@ import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import cn from 'classnames'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import StickyBox from 'react-sticky-box'
 import { _MobileTitleBar } from './components/_mobile-title-bar'
@@ -38,11 +38,12 @@ const SLIDABLE_WIDTH = 300
 
 export const Library: React.FC<Library.Props> = (props) => {
   const [slidable_width, set_slidable_width] = useState(
-    window.innerWidth < 370
-      ? window.innerWidth * 0.82
-      : window.innerWidth >= 992 && window.innerWidth < 1100
-      ? window.innerWidth * 0.27
-      : SLIDABLE_WIDTH,
+    // window.innerWidth < 370
+    //   ? window.innerWidth * 0.82
+    //   : window.innerWidth >= 992 && window.innerWidth < 1100
+    //   ? window.innerWidth * 0.27
+    //   : SLIDABLE_WIDTH,
+    SLIDABLE_WIDTH,
   )
   const on_window_resize = useWindowResize()
   const sidebar = useRef<HTMLDivElement>(null)
@@ -56,16 +57,21 @@ export const Library: React.FC<Library.Props> = (props) => {
     'Left' | 'Right' | undefined
   >(undefined)
 
+  const get_slidable_width = () => {
+    return window.innerWidth < 370
+      ? window.innerWidth * 0.82
+      : window.innerWidth >= 992 && window.innerWidth < 1100
+      ? window.innerWidth * 0.27
+      : SLIDABLE_WIDTH
+  }
+
   on_window_resize(() => {
-    if (window === undefined) return
-    set_slidable_width(
-      window.innerWidth < 370
-        ? window.innerWidth * 0.82
-        : window.innerWidth >= 992 && window.innerWidth < 1100
-        ? window.innerWidth * 0.27
-        : SLIDABLE_WIDTH,
-    )
+    set_slidable_width(get_slidable_width())
   })
+
+  useEffect(() => {
+    set_slidable_width(get_slidable_width())
+  }, [])
 
   const swipe_state_main = useSwipe(main, {
     preventDefault: false,
