@@ -399,10 +399,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               ]]: props.should_dim_visited_links,
                             },
                           )}
-                          href={link.url}
                           onClick={async () => {
                             if (props.on_link_click) {
                               await props.on_link_click()
+                              location.href = link.url
                             }
                           }}
                         >
