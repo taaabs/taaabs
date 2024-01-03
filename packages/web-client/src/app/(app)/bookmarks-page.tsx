@@ -381,6 +381,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                 Filter.Unread,
                               )
                             },
+                            is_disabled: true,
                             is_selected:
                               filter_view_options.current_filter ==
                               Filter.Unread,
@@ -432,6 +433,28 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                       is_selected:
                         filter_view_options.current_filter == Filter.Archived,
                     },
+                    ...(props.user == 'authorized'
+                      ? [
+                          {
+                            label: 'Public only',
+                            on_click: () => {
+                              // toggle_filter_dropdown()
+                              // if (
+                              //   filter_view_options.current_filter ==
+                              //     Filter.StarredUnread ||
+                              //   bookmarks_slice_state.is_fetching_first_bookmarks ||
+                              //   bookmarks_slice_state.is_fetching_more_bookmarks ||
+                              //   counts.is_fetching_counts_data
+                              // )
+                              //   return
+                              // filter_view_options.set_filter_query_param(
+                              //   Filter.StarredUnread,
+                              // )
+                            },
+                            is_checked: false,
+                          },
+                        ]
+                      : []),
                   ]}
                 />
               </OutsideClickHandler>
@@ -812,7 +835,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   const visited_at = await handle_link_click({
                     booomark_id: bookmark.id,
                   })
-                  search.update_searchable_bookmark({
+                  await search.update_searchable_bookmark({
                     bookmark: {
                       id: bookmark.id,
                       created_at: new Date(bookmark.created_at),
