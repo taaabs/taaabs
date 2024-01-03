@@ -37,14 +37,7 @@ export namespace Library {
 const SLIDABLE_WIDTH = 300
 
 export const Library: React.FC<Library.Props> = (props) => {
-  const [slidable_width, set_slidable_width] = useState(
-    // window.innerWidth < 370
-    //   ? window.innerWidth * 0.82
-    //   : window.innerWidth >= 992 && window.innerWidth < 1100
-    //   ? window.innerWidth * 0.27
-    //   : SLIDABLE_WIDTH,
-    SLIDABLE_WIDTH,
-  )
+  const [slidable_width, set_slidable_width] = useState(SLIDABLE_WIDTH)
   const on_window_resize = useWindowResize()
   const sidebar = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLDivElement>(null)
@@ -61,7 +54,7 @@ export const Library: React.FC<Library.Props> = (props) => {
     return window.innerWidth < 370
       ? window.innerWidth * 0.82
       : window.innerWidth >= 992 && window.innerWidth < 1100
-      ? window.innerWidth * 0.27
+      ? window.innerWidth * 0.26
       : SLIDABLE_WIDTH
   }
 
