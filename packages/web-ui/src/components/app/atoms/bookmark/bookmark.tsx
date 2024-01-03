@@ -400,12 +400,16 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             },
                           )}
                           href={link.url}
-                          // onClick={async () => {
-                          //   if (props.on_link_click) {
-                          //     await props.on_link_click()
-                          //     location.href = link.url
-                          //   }
-                          // }}
+                          onClick={async (e) => {
+                            e.preventDefault()
+                            if (props.on_link_click) {
+                              await props.on_link_click()
+                            }
+                            // Fix for #198
+                            setTimeout(() => {
+                              location.href = link.url
+                            }, 0)
+                          }}
                         >
                           <span>
                             {props.highlights
