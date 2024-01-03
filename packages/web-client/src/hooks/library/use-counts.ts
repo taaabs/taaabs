@@ -42,8 +42,7 @@ export const use_counts = () => {
       const query_filter = query_params.get('f')
       set_last_query_filter(query_filter || undefined)
       if (query_filter) {
-        request_params.filter =
-          Object.values(Filter)[parseInt(query_filter)]
+        request_params.filter = Object.values(Filter)[parseInt(query_filter)]
       }
 
       sessionStorage.setItem(
@@ -72,8 +71,7 @@ export const use_counts = () => {
       const query_filter = query_params.get('f')
       set_last_query_filter(query_filter || undefined)
       if (query_filter) {
-        request_params.filter =
-          Object.values(Filter)[parseInt(query_filter)]
+        request_params.filter = Object.values(Filter)[parseInt(query_filter)]
       }
 
       dispatch(

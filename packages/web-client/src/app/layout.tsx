@@ -2,11 +2,11 @@
 // import { GlobalStoreProvider } from './global-store-provider'
 import { Metadata, Viewport } from 'next'
 import { Inter, Plus_Jakarta_Sans, Inter_Tight } from 'next/font/google'
+import { ToastContainer } from 'react-toastify'
 
+import '@web-ui/styles/style.scss'
 import 'react-loading-skeleton/dist/skeleton.css'
 import 'react-toastify/dist/ReactToastify.css'
-import '@web-ui/styles/style.scss'
-import { ToastContainer } from 'react-toastify'
 
 export const revalidate = 0
 

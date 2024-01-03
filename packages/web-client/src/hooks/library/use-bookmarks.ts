@@ -38,8 +38,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
 
       const query_filter = query_params.get('f')
       if (query_filter) {
-        request_params.filter =
-          Object.values(Filter)[parseInt(query_filter)]
+        request_params.filter = Object.values(Filter)[parseInt(query_filter)]
       }
 
       const query_sortby = query_params.get('s')
@@ -92,8 +91,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
 
       const query_filter = query_params.get('f')
       if (query_filter) {
-        request_params.filter =
-          Object.values(Filter)[parseInt(query_filter)]
+        request_params.filter = Object.values(Filter)[parseInt(query_filter)]
       }
 
       const query_sortby = query_params.get('s')
