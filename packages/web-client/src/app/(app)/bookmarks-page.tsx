@@ -1336,46 +1336,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                     auth_token:
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   })
-                                const updated_tag_ids =
-                                  updated_bookmark.tags.map((t) => t.id)
-                                if (
-                                  tag_view_options.selected_tags.every((t) =>
-                                    updated_tag_ids.includes(t),
-                                  )
-                                ) {
-                                  dispatch(
-                                    bookmarks_actions.replace_bookmark({
-                                      bookmark: updated_bookmark,
-                                      last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                    }),
-                                  )
-                                } else {
-                                  // We filter out bookmark when there are other bookmarks still matching with selected tags.
-                                  dispatch(
-                                    bookmarks_actions.filter_out_bookmark({
-                                      bookmark_id: updated_bookmark.id,
-                                      last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                    }),
-                                  )
-                                }
                                 await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
@@ -1407,18 +1367,65 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                     (tag) => tag.id,
                                   ),
                                 })
-                                // Unselect removed tags when there is no more bookmarks with them.
-                                tag_view_options.remove_tags_from_query_params(
-                                  tag_view_options.selected_tags.filter((t) => {
-                                    const yields = Object.values(
-                                      counts_slice_state.tags!,
-                                    ).find((tag) => tag.id == t)!.yields
-                                    return (
-                                      !updated_tag_ids.includes(t) &&
-                                      yields == 1
+                                setTimeout(() => {
+                                  const updated_tag_ids =
+                                    updated_bookmark.tags.map((t) => t.id)
+                                  if (
+                                    tag_view_options.selected_tags.every((t) =>
+                                      updated_tag_ids.includes(t),
                                     )
-                                  }),
-                                )
+                                  ) {
+                                    dispatch(
+                                      bookmarks_actions.replace_bookmark({
+                                        bookmark: updated_bookmark,
+                                        last_authorized_counts_params:
+                                          JSON.parse(
+                                            sessionStorage.getItem(
+                                              browser_storage.session_storage
+                                                .last_authorized_counts_params,
+                                            ) || '',
+                                          ) || undefined,
+                                        api_url:
+                                          process.env.NEXT_PUBLIC_API_URL,
+                                        auth_token:
+                                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                      }),
+                                    )
+                                  } else {
+                                    // We filter out bookmark when there are other bookmarks still matching with selected tags.
+                                    dispatch(
+                                      bookmarks_actions.filter_out_bookmark({
+                                        bookmark_id: updated_bookmark.id,
+                                        last_authorized_counts_params:
+                                          JSON.parse(
+                                            sessionStorage.getItem(
+                                              browser_storage.session_storage
+                                                .last_authorized_counts_params,
+                                            ) || '',
+                                          ) || undefined,
+                                        api_url:
+                                          process.env.NEXT_PUBLIC_API_URL,
+                                        auth_token:
+                                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                      }),
+                                    )
+                                  }
+
+                                  // Unselect removed tags when there is no more bookmarks with them.
+                                  tag_view_options.remove_tags_from_query_params(
+                                    tag_view_options.selected_tags.filter(
+                                      (t) => {
+                                        const yields = Object.values(
+                                          counts_slice_state.tags!,
+                                        ).find((tag) => tag.id == t)!.yields
+                                        return (
+                                          !updated_tag_ids.includes(t) &&
+                                          yields == 1
+                                        )
+                                      },
+                                    ),
+                                  )
+                                }, 0)
                               },
                               other_icon: (
                                 <UiCommonParticles_Icon variant="EDIT" />

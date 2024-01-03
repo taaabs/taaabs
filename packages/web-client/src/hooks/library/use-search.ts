@@ -1171,6 +1171,7 @@ export const use_search = () => {
       }
       set_bookmarks_just_tags(new_bookmarks_just_tags)
       setTimeout(() => {
+        // Caching takes time, we want to do it in the next frame so, form edit popup can hide.
         cache_data({
           db: db!,
           bookmarks_just_tags: new_bookmarks_just_tags,
@@ -1190,6 +1191,7 @@ export const use_search = () => {
       }
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
       setTimeout(() => {
+        // Caching takes time, we want to do it in the next frame so, form edit popup can hide.
         cache_data({
           db: archived_db!,
           bookmarks_just_tags: new_archived_bookmarks_just_tags,
