@@ -29,6 +29,7 @@ import { browser_storage } from '@/constants/browser-storage'
 import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-authorized-user.use-case'
 import { useSearchParams } from 'next/navigation'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search'
+import { use_has_focus } from '@shared/hooks/use-has-focus'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -88,6 +89,35 @@ export const use_search = () => {
   const [highlights_sites_variants, set_highlights_sites_variants] =
     useState<string[]>()
   const [count, set_count] = useState<number>()
+
+  /** Deferred db caching - START */
+  const has_focus = use_has_focus()
+  const [scheduled_db_to_cache, set_sheduled_db_to_cache] = useState<
+    'all' | 'archived'
+  >()
+
+  useUpdateEffect(() => {
+    if (has_focus && scheduled_db_to_cache) {
+      set_sheduled_db_to_cache(undefined)
+
+      if (scheduled_db_to_cache == 'all') {
+        if (!db || !bookmarks_just_tags) return
+        setTimeout(() => {
+          cache_data({ db, bookmarks_just_tags, is_archived: false })
+        }, 0)
+      } else {
+        if (!archived_db || !archived_bookmarks_just_tags) return
+        setTimeout(() => {
+          cache_data({
+            db: archived_db,
+            bookmarks_just_tags: archived_bookmarks_just_tags,
+            is_archived: true,
+          })
+        }, 0)
+      }
+    }
+  }, [has_focus])
+  /** Deferred db caching - END */
 
   useUpdateEffect(() => {
     if (
@@ -1170,14 +1200,7 @@ export const use_search = () => {
         })
       }
       set_bookmarks_just_tags(new_bookmarks_just_tags)
-      setTimeout(() => {
-        // Caching takes time, we want to do it in the next frame so, form edit popup can hide.
-        cache_data({
-          db: db!,
-          bookmarks_just_tags: new_bookmarks_just_tags,
-          is_archived: false,
-        })
-      }, 0)
+      set_sheduled_db_to_cache('all')
     } else {
       const new_archived_bookmarks_just_tags =
         archived_bookmarks_just_tags!.filter(
@@ -1190,14 +1213,7 @@ export const use_search = () => {
         })
       }
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      setTimeout(() => {
-        // Caching takes time, we want to do it in the next frame so, form edit popup can hide.
-        cache_data({
-          db: archived_db!,
-          bookmarks_just_tags: new_archived_bookmarks_just_tags,
-          is_archived: true,
-        })
-      }, 0)
+      set_sheduled_db_to_cache('archived')
     }
     if (result && result.count > 0)
       query_db({ search_string, set_highlights_only: true })

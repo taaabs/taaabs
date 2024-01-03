@@ -406,9 +406,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               await props.on_link_click()
                             }
                             // Fix for #198
-                            // Search is cached in next frame after update
-                            // so the bookmark updating modal can hide and we
-                            // need to wait for another frame before going out.
+                            // For whatever reason we need to change location
+                            // in the next frame, otherwise back navigation
+                            // reloads page when user is in search mode.
                             setTimeout(() => {
                               location.href = link.url
                             }, 0)
