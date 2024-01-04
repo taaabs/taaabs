@@ -88,8 +88,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
         ) || 'null',
       )
     if (recent_visit) {
-      dispatch(bookmarks_actions.set_is_updating_bookmarks(true))
       if (has_focus) {
+        // Timeout prevents white screen when navigating back.
         setTimeout(() => {
           localStorage.removeItem(
             browser_storage.local_storage.authorized_library.recent_visit,
@@ -100,20 +100,16 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
           const record_visit = new RecordVisit_UseCase(repository)
-          Promise.all([
-            record_visit.invoke({
-              bookmark_id: recent_visit.bookmark.id,
-              visited_at: new Date(recent_visit.visited_at),
-            }),
+          record_visit.invoke({
+            bookmark_id: recent_visit.bookmark.id,
+            visited_at: new Date(recent_visit.visited_at),
+          }),
             search.update_searchable_bookmark({
               bookmark: {
                 ...recent_visit.bookmark,
                 visited_at: recent_visit.visited_at,
               },
-            }),
-          ]).then(() => {
-            dispatch(bookmarks_actions.set_is_updating_bookmarks(false))
-          })
+            })
         }, 0)
       }
     }

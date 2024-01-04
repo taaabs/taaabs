@@ -1172,13 +1172,11 @@ export const use_search = () => {
         })
       }
       set_bookmarks_just_tags(new_bookmarks_just_tags)
-      setTimeout(() => {
-        cache_data({
-          db: db!,
-          bookmarks_just_tags: new_bookmarks_just_tags,
-          is_archived: false,
-        })
-      }, 0)
+      await cache_data({
+        db: db!,
+        bookmarks_just_tags: new_bookmarks_just_tags,
+        is_archived: false,
+      })
     } else {
       const new_archived_bookmarks_just_tags =
         archived_bookmarks_just_tags!.filter(
@@ -1191,16 +1189,14 @@ export const use_search = () => {
         })
       }
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      setTimeout(() => {
-        cache_data({
-          db: archived_db!,
-          bookmarks_just_tags: new_archived_bookmarks_just_tags,
-          is_archived: true,
-        })
-      }, 0)
+      await cache_data({
+        db: archived_db!,
+        bookmarks_just_tags: new_archived_bookmarks_just_tags,
+        is_archived: true,
+      })
     }
     if (result && result.count > 0)
-      query_db({ search_string, set_highlights_only: true })
+      await query_db({ search_string, set_highlights_only: true })
   }
 
   return {
