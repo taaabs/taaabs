@@ -100,15 +100,18 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
           const record_visit = new RecordVisit_UseCase(repository)
-          record_visit.invoke({
-            bookmark_id: recent_visit.bookmark.id,
-            visited_at: new Date(recent_visit.visited_at),
-          }),
-            search.update_searchable_bookmark({
+          search
+            .update_searchable_bookmark({
               bookmark: {
                 ...recent_visit.bookmark,
                 visited_at: recent_visit.visited_at,
               },
+            })
+            .then(() => {
+              record_visit.invoke({
+                bookmark_id: recent_visit.bookmark.id,
+                visited_at: new Date(recent_visit.visited_at),
+              })
             })
         }, 0)
       }
