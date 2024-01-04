@@ -81,36 +81,40 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   const has_focus = use_has_focus()
 
   useUpdateEffect(() => {
-    if (has_focus) {
-      const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit | null =
-        JSON.parse(
-          localStorage.getItem(
-            browser_storage.local_storage.authorized_library.recent_visit,
-          ) || 'null',
-        )
-
-      if (recent_visit) {
-        localStorage.removeItem(
+    const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit | null =
+      JSON.parse(
+        localStorage.getItem(
           browser_storage.local_storage.authorized_library.recent_visit,
-        )
-        const data_source = new Bookmarks_DataSourceImpl(
-          process.env.NEXT_PUBLIC_API_URL,
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-        )
-        const repository = new Bookmarks_RepositoryImpl(data_source)
-        const record_visit = new RecordVisit_UseCase(repository)
-        Promise.all([
-          record_visit.invoke({
-            bookmark_id: recent_visit.bookmark.id,
-            visited_at: new Date(recent_visit.visited_at),
-          }),
-          search.update_searchable_bookmark({
-            bookmark: {
-              ...recent_visit.bookmark,
-              visited_at: recent_visit.visited_at,
-            },
-          }),
-        ])
+        ) || 'null',
+      )
+    if (recent_visit) {
+      dispatch(bookmarks_actions.set_is_updating_bookmarks(true))
+      if (has_focus) {
+        setTimeout(() => {
+          localStorage.removeItem(
+            browser_storage.local_storage.authorized_library.recent_visit,
+          )
+          const data_source = new Bookmarks_DataSourceImpl(
+            process.env.NEXT_PUBLIC_API_URL,
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+          )
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          const record_visit = new RecordVisit_UseCase(repository)
+          Promise.all([
+            record_visit.invoke({
+              bookmark_id: recent_visit.bookmark.id,
+              visited_at: new Date(recent_visit.visited_at),
+            }),
+            search.update_searchable_bookmark({
+              bookmark: {
+                ...recent_visit.bookmark,
+                visited_at: recent_visit.visited_at,
+              },
+            }),
+          ]).then(() => {
+            dispatch(bookmarks_actions.set_is_updating_bookmarks(false))
+          })
+        }, 0)
       }
     }
   }, [has_focus])
