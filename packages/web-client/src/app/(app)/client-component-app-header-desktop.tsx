@@ -116,8 +116,6 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
               '',
               window.location.pathname + '?' + updated_query_params,
             )
-          } else {
-            router.push(`/bookmarks`)
           }
         }}
       />,

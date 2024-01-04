@@ -8,7 +8,7 @@ import {
   insert,
   search,
 } from '@orama/orama'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { Filter } from '@shared/types/common/filter'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
@@ -1172,11 +1172,13 @@ export const use_search = () => {
         })
       }
       set_bookmarks_just_tags(new_bookmarks_just_tags)
-      await cache_data({
-        db: db!,
-        bookmarks_just_tags: new_bookmarks_just_tags,
-        is_archived: false,
-      })
+      setTimeout(() => {
+        cache_data({
+          db: db!,
+          bookmarks_just_tags: new_bookmarks_just_tags,
+          is_archived: false,
+        })
+      }, 0)
     } else {
       const new_archived_bookmarks_just_tags =
         archived_bookmarks_just_tags!.filter(
@@ -1189,11 +1191,13 @@ export const use_search = () => {
         })
       }
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      await cache_data({
-        db: archived_db!,
-        bookmarks_just_tags: new_archived_bookmarks_just_tags,
-        is_archived: true,
-      })
+      setTimeout(() => {
+        cache_data({
+          db: archived_db!,
+          bookmarks_just_tags: new_archived_bookmarks_just_tags,
+          is_archived: true,
+        })
+      }, 0)
     }
     if (result && result.count > 0)
       await query_db({ search_string, set_highlights_only: true })

@@ -52,6 +52,7 @@ export namespace Bookmarks_Dto {
       public url_aes?: string
       public site_aes?: string
       public is_public?: boolean
+      public saves?: number
     }
     class PublicLink extends Link {
       public url: string

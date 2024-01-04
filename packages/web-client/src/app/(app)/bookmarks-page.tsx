@@ -100,19 +100,10 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
           const record_visit = new RecordVisit_UseCase(repository)
-          search
-            .update_searchable_bookmark({
-              bookmark: {
-                ...recent_visit.bookmark,
-                visited_at: recent_visit.visited_at,
-              },
-            })
-            .then(() => {
-              record_visit.invoke({
-                bookmark_id: recent_visit.bookmark.id,
-                visited_at: new Date(recent_visit.visited_at),
-              })
-            })
+          record_visit.invoke({
+            bookmark_id: recent_visit.bookmark.id,
+            visited_at: new Date(recent_visit.visited_at),
+          })
         }, 0)
       }
     }
@@ -191,6 +182,32 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
     window.addEventListener('popstate', handleEvent)
     return () => window.removeEventListener('popstate', handleEvent)
   }, [])
+
+  // Whenever a user updates a bookmark, we need to initialize cached search
+  // to update its state.
+  const initialize_cached_search = async () => {
+    if (
+      filter_view_options.current_filter != Filter.Archived
+        ? search.db === undefined
+        : search.archived_db === undefined
+    ) {
+      const is_cache_stale = await search.check_is_cache_stale({
+        api_url: process.env.NEXT_PUBLIC_API_URL,
+        auth_token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+        is_archived: filter_view_options.current_filter == Filter.Archived,
+      })
+      if (!is_cache_stale) {
+        await search.init({
+          is_archived: filter_view_options.current_filter == Filter.Archived,
+        })
+      }
+    }
+  }
+
+  useEffect(() => {
+    initialize_cached_search()
+  }, [filter_view_options.current_filter])
 
   return (
     <UiAppTemplate_Library
@@ -787,6 +804,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 is_fetching_bookmarks={
                   bookmarks_slice_state.is_fetching_first_bookmarks
                 }
+                is_not_interactive={search.is_initializing}
                 date={
                   !bookmarks_slice_state.is_fetching_first_bookmarks
                     ? sortby_view_options.current_sortby == Sortby.CreatedAt

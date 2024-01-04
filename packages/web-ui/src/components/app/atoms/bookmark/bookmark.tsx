@@ -66,6 +66,7 @@ export namespace Bookmark {
     current_filter?: Filter // Needs by [use_search/update_searchable_bookmarks]
     is_fetching_bookmarks: boolean
     counts_refreshed_at_timestamp?: number // When updating other bookmark, we refetch counts and this is needed to trigger a rerender of all bookmarks
+    is_not_interactive?: boolean
   }
 }
 
@@ -107,6 +108,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         ref={ref}
         style={{
           height: render_height ? render_height : undefined,
+          pointerEvents: props.is_not_interactive ? 'none' : undefined,
         }}
       >
         {is_visible == undefined || is_visible || !props.render_height ? (
@@ -498,6 +500,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
+    o.is_not_interactive == n.is_not_interactive &&
     o.is_fetching_bookmarks == n.is_fetching_bookmarks &&
     o.is_serach_result == n.is_serach_result &&
     o.updated_at == n.updated_at &&

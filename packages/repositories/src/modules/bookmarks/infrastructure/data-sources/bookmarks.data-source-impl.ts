@@ -209,29 +209,28 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
               : undefined,
             site_aes: !link.is_public
               ? CryptoJS.AES.encrypt(
-                  get_domain_from_url(link.url),
+                  get_domain_from_url(link.url) + link.site_path
+                    ? `/${link.site_path}`
+                    : '',
                   'my_secret_key',
                 ).toString()
               : undefined,
             hash: CryptoJS.SHA256(link.url.trim() + 'my_secret_key').toString(),
-            site: link.site_path,
+            site: link.is_public ? link.site_path : undefined,
             is_public: link.is_public,
           }
         }),
     }
 
     if (params.bookmark_id) {
-      return await fetch(
-        `${this._api_url}/v1/bookmarks/${params.bookmark_id}`,
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${this._auth_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(bookmark),
+      return fetch(`${this._api_url}/v1/bookmarks/${params.bookmark_id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
+          'Content-Type': 'application/json',
         },
-      ).then(async (r) => {
+        body: JSON.stringify(bookmark),
+      }).then((r) => {
         if (r.ok) {
           return r.json()
         } else {
@@ -239,14 +238,14 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         }
       })
     } else {
-      return await fetch(`${this._api_url}/v1/bookmarks`, {
+      return fetch(`${this._api_url}/v1/bookmarks`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${this._auth_token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(bookmark),
-      }).then(async (r) => {
+      }).then((r) => {
         if (r.ok) {
           return r.json()
         } else {

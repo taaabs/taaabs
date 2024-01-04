@@ -5,7 +5,6 @@ import { DeleteBookmark_Params } from '../../domain/types/delete-bookmark.params
 import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params'
 import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by-ids.dto'
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
-import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 
 export type Bookmarks_DataSource = {
   get_bookmarks_on_authorized_user(
@@ -24,7 +23,7 @@ export type Bookmarks_DataSource = {
     params: GetBookmarksByIds_Params.Public,
   ): Promise<BookmarksByIds_Dto.Response.Public>
 
-  record_visit(params: RecordVisit_Params): Promise<RecordVisit_Dto.Response>
+  record_visit(params: RecordVisit_Params): Promise<void>
 
   delete_bookmark(params: DeleteBookmark_Params): Promise<void>
 

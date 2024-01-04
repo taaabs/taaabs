@@ -59,6 +59,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               ),
           // site_path: link.site_path,
           is_public: link.is_public || false,
+          saves: link.saves,
         })),
       })),
       pagination: {
@@ -148,6 +149,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               ),
           // site_path: link.site_path,
           is_public: link.is_public || false,
+          saves: link.saves,
         })),
       })),
     }
@@ -185,12 +187,12 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     }
   }
 
-  public record_visit(params: RecordVisit_Params): Promise<void> {
-    return this._bookmarks_data_source.record_visit(params)
+  public async record_visit(params: RecordVisit_Params): Promise<void> {
+    await this._bookmarks_data_source.record_visit(params)
   }
 
-  public delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
-    return this._bookmarks_data_source.delete_bookmark(params)
+  public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
+    await this._bookmarks_data_source.delete_bookmark(params)
   }
 
   public async upsert_bookmark(

@@ -44,7 +44,7 @@ export class Counts_RepositoryImpl implements Counts_Repository {
             {},
           )
         : {},
-      is_stale: data.is_counts_update_scheduled,
+      is_stale: data.is_stale,
     }
   }
 
@@ -74,7 +74,7 @@ export class Counts_RepositoryImpl implements Counts_Repository {
             {},
           )
         : {},
-      is_stale: data.is_counts_update_scheduled,
+      is_stale: data.is_stale,
     }
   }
 }
