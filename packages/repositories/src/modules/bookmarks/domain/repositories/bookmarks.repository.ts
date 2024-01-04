@@ -5,7 +5,6 @@ import { RecordVisit_Params } from '../types/record-visit.params'
 import { UpsertBookmark_Params } from '../types/upsert-bookmark.params'
 import { GetBookmarksByIds_Params } from '../types/get-bookmarks-by-ids.params'
 import { GetBookmarksByIds_Ro } from '../types/get-bookmarks-by-ids.ro'
-import { RecordVisit_Ro } from '../types/record-visit.ro'
 import { Bookmark_Entity } from '../entities/bookmark.entity'
 
 export type Bookmarks_Repository = {
@@ -25,7 +24,7 @@ export type Bookmarks_Repository = {
     params: GetBookmarksByIds_Params.Public,
   ): Promise<GetBookmarksByIds_Ro>
 
-  record_visit(params: RecordVisit_Params): Promise<RecordVisit_Ro>
+  record_visit(params: RecordVisit_Params): Promise<void>
 
   delete_bookmark(params: DeleteBookmark_Params): Promise<void>
 

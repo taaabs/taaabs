@@ -30,6 +30,21 @@ import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/
 import { useSearchParams } from 'next/navigation'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search'
 
+export type BookmarkOfSearch = {
+  id: number
+  created_at: string
+  visited_at: string
+  updated_at: string
+  title?: string
+  note?: string
+  is_archived: boolean
+  is_unread: boolean
+  stars?: number
+  tags: string[]
+  links: { url: string; site_path?: string }[]
+  tag_ids: number[]
+}
+
 type Hint = {
   type: 'new' | 'recent'
   search_string: string
@@ -1096,20 +1111,7 @@ export const use_search = () => {
   }
 
   const update_searchable_bookmark = async (params: {
-    bookmark: {
-      id: number
-      created_at: Date
-      visited_at: Date
-      updated_at: Date
-      title?: string
-      note?: string
-      is_archived: boolean
-      is_unread: boolean
-      stars?: number
-      tags: string[]
-      links: { url: string; site_path?: string }[]
-    }
-    tag_ids: number[]
+    bookmark: BookmarkOfSearch
   }) => {
     if (
       (current_filter != Filter.Archived && !db) ||
@@ -1145,9 +1147,9 @@ export const use_search = () => {
             (sites.length ? ' ' : '') +
             sites.join(' ')
           : '',
-        created_at: params.bookmark.created_at.getTime() / 1000,
-        updated_at: params.bookmark.updated_at.getTime() / 1000,
-        visited_at: params.bookmark.visited_at.getTime() / 1000,
+        created_at: new Date(params.bookmark.created_at).getTime() / 1000,
+        updated_at: new Date(params.bookmark.updated_at).getTime() / 1000,
+        visited_at: new Date(params.bookmark.visited_at).getTime() / 1000,
         is_unread: params.bookmark.is_unread,
         sites,
         sites_variants: sites
@@ -1155,7 +1157,7 @@ export const use_search = () => {
           .flat(),
         stars: params.bookmark.stars || 0,
         tags: params.bookmark.tags,
-        tag_ids: params.tag_ids.map((tag_id) => tag_id.toString()),
+        tag_ids: params.bookmark.tag_ids.map((tag_id) => tag_id.toString()),
       })
     }
 

@@ -53,7 +53,7 @@ export namespace Bookmark {
     links: { url: string; site_path?: string; saves?: number }[]
     render_height?: number
     set_render_height: (height: number) => void
-    on_link_click?: () => Promise<void>
+    on_link_click?: () => void
     favicon_host: string
     on_menu_click: () => void
     menu_slot: React.ReactNode
@@ -403,15 +403,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           onClick={async (e) => {
                             e.preventDefault()
                             if (props.on_link_click) {
-                              await props.on_link_click()
+                              props.on_link_click()
                             }
-                            // Fix for #198
-                            // For whatever reason we need to change location
-                            // in the next frame, otherwise back navigation
-                            // reloads page when user is in search mode.
-                            setTimeout(() => {
-                              location.href = link.url
-                            }, 0)
+                            location.href = link.url
                           }}
                         >
                           <span>
@@ -476,7 +470,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           onClick={async () => {
                             window.open(link.url, '_blank')
                             if (props.on_link_click) {
-                              await props.on_link_click()
+                              props.on_link_click()
                             }
                           }}
                         >

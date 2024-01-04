@@ -8,7 +8,6 @@ import { DeleteBookmark_Params } from '../../domain/types/delete-bookmark.params
 import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params'
 import { GetBookmarksByIds_Ro } from '../../domain/types/get-bookmarks-by-ids.ro'
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
-import { RecordVisit_Ro } from '../../domain/types/record-visit.ro'
 import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
@@ -58,7 +57,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
                 CryptoJS.enc.Utf8,
               ),
-          saves: link.saves,
           // site_path: link.site_path,
           is_public: link.is_public || false,
         })),
@@ -148,7 +146,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
                 CryptoJS.enc.Utf8,
               ),
-          saves: link.saves,
           // site_path: link.site_path,
           is_public: link.is_public || false,
         })),
@@ -188,13 +185,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     }
   }
 
-  public async record_visit(
-    params: RecordVisit_Params,
-  ): Promise<RecordVisit_Ro> {
-    const { visited_at } =
-      await this._bookmarks_data_source.record_visit(params)
-
-    return { visited_at: new Date(visited_at) }
+  public record_visit(params: RecordVisit_Params): Promise<void> {
+    return this._bookmarks_data_source.record_visit(params)
   }
 
   public delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
@@ -243,7 +235,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
               CryptoJS.enc.Utf8,
             ),
-        saves: link.saves,
         // site_path: link.site_path,
         is_public: link.is_public || false,
       })),

@@ -45,10 +45,8 @@ export namespace Bookmarks_Dto {
 
   export namespace Response {
     class Link {
-      public site?: string
-      public saves?: number
+      public site_path?: string
     }
-
     class AuthorizedLink extends Link {
       public url?: string
       public url_aes?: string
@@ -57,6 +55,7 @@ export namespace Bookmarks_Dto {
     }
     class PublicLink extends Link {
       public url: string
+      public saves: number
     }
 
     class Tag {

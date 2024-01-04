@@ -22,7 +22,7 @@ import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infras
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
-import { browser_storage } from '@/constants/browser-storage'
+import { BrowserStorage, browser_storage } from '@/constants/browser-storage'
 import { use_is_hydrated } from '@shared/hooks'
 import { use_search } from '@/hooks/library/use-search'
 import { ModalContext } from './modal-provider'
@@ -43,6 +43,7 @@ import { TagsSkeleton as UiAppAtom_TagsSkeleton } from '@web-ui/components/app/a
 import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/particles/icon'
 import { use_popstate } from '@web-ui/components/app/atoms/custom-range/hooks/use-popstate'
+import { use_has_focus } from '@/hooks/misc/use-has-focus'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -76,20 +77,44 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
 
-  const handle_link_click = async (params: {
-    booomark_id: number
-  }): Promise<Date> => {
-    const data_source = new Bookmarks_DataSourceImpl(
-      process.env.NEXT_PUBLIC_API_URL,
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-    )
-    const repository = new Bookmarks_RepositoryImpl(data_source)
-    const record_visit = new RecordVisit_UseCase(repository)
-    const { visited_at } = await record_visit.invoke({
-      bookmark_id: params.booomark_id,
-    })
-    return visited_at
-  }
+  /** Upload deferred recent visit - START */
+  const has_focus = use_has_focus()
+
+  useUpdateEffect(() => {
+    if (has_focus) {
+      const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit | null =
+        JSON.parse(
+          localStorage.getItem(
+            browser_storage.local_storage.authorized_library.recent_visit,
+          ) || 'null',
+        )
+
+      if (recent_visit) {
+        localStorage.removeItem(
+          browser_storage.local_storage.authorized_library.recent_visit,
+        )
+        const data_source = new Bookmarks_DataSourceImpl(
+          process.env.NEXT_PUBLIC_API_URL,
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+        )
+        const repository = new Bookmarks_RepositoryImpl(data_source)
+        const record_visit = new RecordVisit_UseCase(repository)
+        Promise.all([
+          record_visit.invoke({
+            bookmark_id: recent_visit.bookmark.id,
+            visited_at: new Date(recent_visit.visited_at),
+          }),
+          search.update_searchable_bookmark({
+            bookmark: {
+              ...recent_visit.bookmark,
+              visited_at: recent_visit.visited_at,
+            },
+          }),
+        ])
+      }
+    }
+  }, [has_focus])
+  /** Upload deferred recent visit - END */
 
   useUpdateEffect(() => {
     if (bookmarks_slice_state.bookmarks == null) return
@@ -831,31 +856,35 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                     }),
                   )
                 }}
-                on_link_click={async () => {
-                  const visited_at = await handle_link_click({
-                    booomark_id: bookmark.id,
-                  })
-                  await search.update_searchable_bookmark({
-                    bookmark: {
-                      id: bookmark.id,
-                      created_at: new Date(bookmark.created_at),
-                      visited_at,
-                      updated_at: new Date(),
-                      title: bookmark.title,
-                      note: bookmark.note,
-                      is_archived:
-                        filter_view_options.current_filter == Filter.Archived,
-                      is_unread: bookmark.is_unread,
-                      stars: bookmark.stars,
-                      links: bookmark.links.map((link) => ({
-                        url: link.url,
-                        site_path: link.site_path,
-                        is_public: link.is_public,
-                      })),
-                      tags: bookmark.tags.map((tag) => tag.name),
-                    },
-                    tag_ids: bookmark.tags.map((tag) => tag.id),
-                  })
+                on_link_click={() => {
+                  const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit =
+                    {
+                      bookmark: {
+                        id: bookmark.id,
+                        created_at: bookmark.created_at,
+                        visited_at: bookmark.visited_at,
+                        updated_at: bookmark.updated_at,
+                        title: bookmark.title,
+                        note: bookmark.note,
+                        is_archived:
+                          filter_view_options.current_filter == Filter.Archived,
+                        is_unread: bookmark.is_unread,
+                        stars: bookmark.stars,
+                        links: bookmark.links.map((link) => ({
+                          url: link.url,
+                          site_path: link.site_path,
+                          is_public: link.is_public,
+                        })),
+                        tags: bookmark.tags.map((tag) => tag.name),
+                        tag_ids: bookmark.tags.map((tag) => tag.id),
+                      },
+                      visited_at: new Date().toISOString(),
+                    }
+                  localStorage.setItem(
+                    browser_storage.local_storage.authorized_library
+                      .recent_visit,
+                    JSON.stringify(recent_visit),
+                  )
                 }}
                 favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
                 menu_slot={
@@ -919,11 +948,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                 await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
-                                    created_at: new Date(bookmark.created_at),
-                                    visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(
-                                      updated_bookmark.updated_at,
-                                    ),
+                                    created_at: bookmark.created_at,
+                                    visited_at: bookmark.visited_at,
+                                    updated_at: updated_bookmark.updated_at,
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -937,8 +964,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       is_public: link.is_public,
                                     })),
                                     tags: bookmark.tags.map((tag) => tag.name),
+                                    tag_ids: bookmark.tags.map((tag) => tag.id),
                                   },
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
                                 })
                                 if (
                                   bookmarks_slice_state.bookmarks &&
@@ -1001,11 +1028,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                 await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
-                                    created_at: new Date(bookmark.created_at),
-                                    visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(
-                                      updated_bookmark.updated_at,
-                                    ),
+                                    created_at: bookmark.created_at,
+                                    visited_at: bookmark.visited_at,
+                                    updated_at: updated_bookmark.updated_at,
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1019,8 +1044,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       is_public: link.is_public,
                                     })),
                                     tags: bookmark.tags.map((tag) => tag.name),
+                                    tag_ids: bookmark.tags.map((tag) => tag.id),
                                   },
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
                                 })
                                 if (
                                   bookmarks_slice_state.bookmarks &&
@@ -1075,11 +1100,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                 search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
-                                    created_at: new Date(bookmark.created_at),
-                                    visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(
-                                      updated_bookmark.updated_at,
-                                    ),
+                                    created_at: bookmark.created_at,
+                                    visited_at: bookmark.visited_at,
+                                    updated_at: updated_bookmark.updated_at,
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1092,8 +1115,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       site_path: link.site_path,
                                     })),
                                     tags: bookmark.tags.map((tag) => tag.name),
+                                    tag_ids: bookmark.tags.map((tag) => tag.id),
                                   },
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
                                 })
                                 if (
                                   bookmarks_slice_state.bookmarks &&
@@ -1148,11 +1171,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                 search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
-                                    created_at: new Date(bookmark.created_at),
-                                    visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(
-                                      updated_bookmark.updated_at,
-                                    ),
+                                    created_at: bookmark.created_at,
+                                    visited_at: bookmark.visited_at,
+                                    updated_at: updated_bookmark.updated_at,
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1165,8 +1186,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       site_path: link.site_path,
                                     })),
                                     tags: bookmark.tags.map((tag) => tag.name),
+                                    tag_ids: bookmark.tags.map((tag) => tag.id),
                                   },
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
                                 })
                                 if (
                                   bookmarks_slice_state.bookmarks &&
@@ -1221,11 +1242,10 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                 search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
-                                    created_at: new Date(bookmark.created_at),
-                                    visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(
-                                      updated_bookmark.updated_at,
-                                    ),
+                                    created_at: bookmark.created_at,
+                                    visited_at: bookmark.visited_at,
+                                    updated_at: updated_bookmark.updated_at,
+
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1238,8 +1258,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       site_path: link.site_path,
                                     })),
                                     tags: bookmark.tags.map((tag) => tag.name),
+                                    tag_ids: bookmark.tags.map((tag) => tag.id),
                                   },
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
                                 })
                                 if (
                                   bookmarks_slice_state.bookmarks &&
@@ -1294,11 +1314,10 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                 search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
-                                    created_at: new Date(bookmark.created_at),
-                                    visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(
-                                      updated_bookmark.updated_at,
-                                    ),
+                                    created_at: bookmark.created_at,
+                                    visited_at: bookmark.visited_at,
+                                    updated_at: updated_bookmark.updated_at,
+
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1311,8 +1330,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       site_path: link.site_path,
                                     })),
                                     tags: bookmark.tags.map((tag) => tag.name),
+                                    tag_ids: bookmark.tags.map((tag) => tag.id),
                                   },
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
                                 })
                                 if (
                                   bookmarks_slice_state.bookmarks &&
@@ -1354,18 +1373,15 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                         site_path: link.site_path,
                                       }),
                                     ),
-                                    created_at: new Date(
-                                      updated_bookmark.created_at,
-                                    ),
-                                    visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(
-                                      updated_bookmark.updated_at,
-                                    ),
+                                    created_at: updated_bookmark.created_at,
+                                    visited_at: bookmark.visited_at,
+                                    updated_at: updated_bookmark.updated_at,
+
                                     stars: updated_bookmark.stars,
+                                    tag_ids: updated_bookmark.tags.map(
+                                      (tag) => tag.id,
+                                    ),
                                   },
-                                  tag_ids: updated_bookmark.tags.map(
-                                    (tag) => tag.id,
-                                  ),
                                 })
                                 setTimeout(() => {
                                   const updated_tag_ids =
@@ -1482,9 +1498,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                 search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
-                                    created_at: new Date(bookmark.created_at),
-                                    visited_at: new Date(bookmark.visited_at),
-                                    updated_at: new Date(),
+                                    created_at: bookmark.created_at,
+                                    visited_at: bookmark.visited_at,
+                                    updated_at: new Date().toISOString(),
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived: !(
@@ -1499,8 +1515,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       is_public: link.is_public,
                                     })),
                                     tags: bookmark.tags.map((tag) => tag.name),
+                                    tag_ids: bookmark.tags.map((tag) => tag.id),
                                   },
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
                                 })
                                 if (search.count)
                                   search.set_count(search.count - 1)

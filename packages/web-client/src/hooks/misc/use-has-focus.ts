@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 export const use_has_focus = () => {
-  const [has_focus, set_has_focus] = useState(document.hasFocus())
+  const [has_focus, set_has_focus] = useState(true)
 
   useEffect(() => {
     const on_focus = () => set_has_focus(true)

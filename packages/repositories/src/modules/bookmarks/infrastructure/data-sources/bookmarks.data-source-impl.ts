@@ -120,17 +120,19 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     ).then((r) => r.json())
   }
 
-  public async record_visit(
-    params: RecordVisit_Params,
-  ): Promise<RecordVisit_Dto.Response> {
-    return await fetch(
-      `${this._api_url}/v1/bookmarks/${params.bookmark_id}/record-visit`,
-      {
-        headers: {
-          Authorization: `Bearer ${this._auth_token}`,
-        },
+  public async record_visit(params: RecordVisit_Params): Promise<void> {
+    const body: RecordVisit_Dto.Body = {
+      bookmark_id: params.bookmark_id,
+      visited_at: params.visited_at.toISOString(),
+    }
+    await fetch(`${this._api_url}/v1/bookmarks/record-visit`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this._auth_token}`,
+        'Content-Type': 'application/json',
       },
-    ).then((r) => r.json())
+      body: JSON.stringify(body),
+    })
   }
 
   public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
