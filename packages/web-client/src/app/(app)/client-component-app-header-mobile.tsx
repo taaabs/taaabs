@@ -1,6 +1,9 @@
 'use client'
 
-import { useParams, usePathname } from 'next/navigation'
+import {
+  useParams,
+  // usePathname
+} from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { UserForHeader as UiAppMolecule_UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
@@ -9,7 +12,7 @@ import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-u
 import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
 
 export const ClientComponentAppHeaderMobile: React.FC = () => {
-  const pathname = usePathname()
+  // const pathname = usePathname()
   const params = useParams()
   const public_user_avatar = useContext(PublicUserAvatarContext)
   const [is_hydrated, set_is_hydrated] = useState(false)
@@ -36,35 +39,6 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
     logo_slot = <UiCommonAtom_LogoForHeader href="/" />
   }
 
-  let navigation: UiAppMolecule_NavigationForHeader.Props['navigation']
-  if (params.username) {
-    navigation = [
-      {
-        label: 'Profile',
-        href: `/${params.username}`,
-        is_active: pathname == `/${params.username}`,
-      },
-      {
-        label: 'Bookmarks',
-        href: `/${params.username}/bookmarks`,
-        is_active: pathname == `/${params.username}/bookmarks`,
-      },
-    ]
-  } else {
-    navigation = [
-      {
-        label: 'Inbox',
-        href: '/inbox',
-        is_active: pathname == '/inbox',
-      },
-      {
-        label: 'Bookmarks',
-        href: '/bookmarks',
-        is_active: pathname == '/bookmarks',
-      },
-    ]
-  }
-
   useEffect(() => {
     set_is_hydrated(true)
   }, [])
@@ -72,9 +46,7 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
   return (
     <UiAppTemplate_AppHeaderMobile
       slot_logo={logo_slot}
-      slot_navigation={
-        <UiAppMolecule_NavigationForHeader navigation={navigation} />
-      }
+      slot_navigation={<UiAppMolecule_NavigationForHeader navigation={[]} />}
     />
   )
 }

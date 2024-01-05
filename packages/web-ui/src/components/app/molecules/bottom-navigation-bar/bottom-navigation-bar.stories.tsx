@@ -1,5 +1,5 @@
 import { BottomNavigationBar } from './bottom-navigation-bar'
-import { StorybookMargin } from '@web-ui/helpers/storybook'
+import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 
 export default {
   component: BottomNavigationBar,
@@ -8,12 +8,48 @@ export default {
 export const Primary = () => (
   <StorybookMargin>
     <BottomNavigationBar
-      add_on_click={() => {}}
-      my_library_on_click={() => {}}
-      notifications_on_click={() => {}}
-      search_on_click={() => {}}
-      user_on_click={() => {}}
-      home_on_click={() => {}}
+      items={[
+        {
+          icon_variant: 'HOME',
+          icon_variant_active: 'HOME',
+          label: 'Home',
+          on_click: () => {},
+          is_active: false,
+        },
+        {
+          icon_variant: 'BOOKMARK',
+          icon_variant_active: 'BOOKMARK',
+          label: 'Bookmarks',
+          on_click: () => {},
+          is_active: true,
+        },
+        {
+          icon_variant: 'NOTIFICATIONS',
+          icon_variant_active: 'NOTIFICATIONS',
+          label: 'Notifications',
+          on_click: () => {},
+          is_active: false,
+        },
+      ]}
+    />
+    <StorybookSpacer />
+    <BottomNavigationBar
+      items={[
+        {
+          icon_variant: 'BOOKMARK',
+          icon_variant_active: 'BOOKMARK_FILLED',
+          label: 'Bookmarks',
+          on_click: () => {},
+          is_active: true,
+        },
+        {
+          icon_variant: 'ACTIVITY',
+          icon_variant_active: 'ACTIVITY',
+          label: 'Activity',
+          on_click: () => {},
+          is_active: false,
+        },
+      ]}
     />
   </StorybookMargin>
 )

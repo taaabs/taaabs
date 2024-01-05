@@ -1,5 +1,7 @@
+import Activity from '../../../../assets/icons/activity.svg'
 import Add from '../../../../assets/icons/add.svg'
 import Archive from '../../../../assets/icons/archive.svg'
+import BookmarkFilled from '../../../../assets/icons/bookmark-filled.svg'
 import Bookmark from '../../../../assets/icons/bookmark.svg'
 import Delete from '../../../../assets/icons/delete.svg'
 import Edit from '../../../../assets/icons/edit.svg'
@@ -7,6 +9,7 @@ import Globe from '../../../../assets/icons/globe.svg'
 import Google from '../../../../assets/icons/google.svg'
 import GreaterThan from '../../../../assets/icons/greater-than.svg'
 import Handle from '../../../../assets/icons/handle.svg'
+import HomeFilled from '../../../../assets/icons/home-filled.svg'
 import Home from '../../../../assets/icons/home.svg'
 import Info from '../../../../assets/icons/info.svg'
 import LessThan from '../../../../assets/icons/less-than.svg'
@@ -24,6 +27,7 @@ import Logo from '../../../../assets/icons/logo.svg'
 import MobileTitleBarMenu from '../../../../assets/icons/mobile-title-bar-menu.svg'
 import MobileTitleBarViewOptions from '../../../../assets/icons/mobile-title-bar-view-options.svg'
 import NewTab from '../../../../assets/icons/new-tab.svg'
+import NotificationsFilled from '../../../../assets/icons/notifications-filled.svg'
 import Notifications from '../../../../assets/icons/notifications.svg'
 import UserAdd from '../../../../assets/icons/user-add.svg'
 import UserRemove from '../../../../assets/icons/user-remove.svg'
@@ -31,8 +35,10 @@ import User from '../../../../assets/icons/user.svg'
 
 export namespace Icon {
   export type Variant =
+    | 'ACTIVITY'
     | 'ADD'
     | 'ARCHIVE'
+    | 'BOOKMARK_FILLED'
     | 'BOOKMARK'
     | 'DELETE'
     | 'EDIT'
@@ -40,6 +46,7 @@ export namespace Icon {
     | 'GOOGLE'
     | 'GREATER_THAN'
     | 'HANDLE'
+    | 'HOME_FILLED'
     | 'HOME'
     | 'INFO'
     | 'LESS_THAN'
@@ -57,6 +64,7 @@ export namespace Icon {
     | 'MOBILE_TITLE_BAR_MENU'
     | 'MOBILE_TITLE_BAR_VIEW_OPTIONS'
     | 'NEW_TAB'
+    | 'NOTIFICATIONS_FILLED'
     | 'NOTIFICATIONS'
     | 'USER_ADD'
     | 'USER_REMOVE'
@@ -71,11 +79,17 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
   let icon: JSX.Element
 
   switch (variant) {
+    case 'ACTIVITY':
+      icon = <Activity />
+      break
     case 'ADD':
       icon = <Add />
       break
     case 'ARCHIVE':
       icon = <Archive />
+      break
+    case 'BOOKMARK_FILLED':
+      icon = <BookmarkFilled />
       break
     case 'BOOKMARK':
       icon = <Bookmark />
@@ -98,6 +112,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'HANDLE':
       icon = <Handle />
       break
+    case 'HOME_FILLED':
+      icon = <HomeFilled />
+      break
     case 'HOME':
       icon = <Home />
       break
@@ -118,6 +135,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'NEW_TAB':
       icon = <NewTab />
+      break
+    case 'NOTIFICATIONS_FILLED':
+      icon = <NotificationsFilled />
       break
     case 'NOTIFICATIONS':
       icon = <Notifications />

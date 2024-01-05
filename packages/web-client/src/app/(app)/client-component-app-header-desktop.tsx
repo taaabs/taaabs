@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from 'next/navigation'
+import { useParams, usePathname, useSearchParams } from 'next/navigation'
 import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { useContext } from 'react'
 import { ModalContext } from './modal-provider'
@@ -22,7 +17,6 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const query_params = useSearchParams()
-  const router = useRouter()
   const params = useParams()
   const pathname = usePathname()
   const public_user_avatar = useContext(PublicUserAvatarContext)
