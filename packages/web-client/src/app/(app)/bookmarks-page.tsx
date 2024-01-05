@@ -134,6 +134,15 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
     search.set_current_filter(filter_view_options.current_filter)
   }, [filter_view_options.current_filter])
 
+  // Clear cache when user selects visited at sortby option.
+  useUpdateEffect(() => {
+    if (sortby_view_options.current_sortby == Sortby.VisitedAt) {
+      search.clear_cached_data({
+        is_archived: filter_view_options.current_filter == Filter.Archived,
+      })
+    }
+  }, [filter_view_options.current_filter, sortby_view_options.current_sortby])
+
   useUpdateEffect(() => {
     if (search.db || search.archived_db) {
       search.set_current_filter(filter_view_options.current_filter)

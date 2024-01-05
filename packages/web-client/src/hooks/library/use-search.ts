@@ -325,6 +325,31 @@ export const use_search = () => {
     set_is_caching_bookmarks(false)
   }
 
+  const clear_cached_data = async (params: { is_archived: boolean }) => {
+    await localforage.removeItem(
+      !params.is_archived
+        ? browser_storage.local_forage.authorized_library.search.index
+        : browser_storage.local_forage.authorized_library.search.archived_index,
+    )
+    await localforage.removeItem(
+      !params.is_archived
+        ? browser_storage.local_forage.authorized_library.search.bookmarks
+        : browser_storage.local_forage.authorized_library.search
+            .archived_bookmarks,
+    )
+    await localforage.removeItem(
+      !params.is_archived
+        ? browser_storage.local_forage.authorized_library.search.cached_at
+        : browser_storage.local_forage.authorized_library.search
+            .archived_cached_at,
+    )
+    if (!params.is_archived) {
+      set_db(undefined)
+    } else {
+      set_archived_db(undefined)
+    }
+  }
+
   const get_hits = async (params: {
     search_string: string
   }): Promise<Results<Result>['hits']> => {
@@ -1233,6 +1258,7 @@ export const use_search = () => {
     remove_recent_hint,
     current_filter,
     highlights_sites_variants,
+    clear_cached_data,
   }
 }
 
