@@ -55,7 +55,7 @@ export namespace Bookmark {
     set_render_height: (height: number) => void
     on_link_click?: () => void
     favicon_host: string
-    on_menu_click: () => void
+    on_menu_click: () => Promise<void>
     menu_slot: React.ReactNode
     highlights?: Highlights
     highlights_note?: Highlights
@@ -143,12 +143,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               is_menu_open,
                           },
                         )}
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           e.stopPropagation()
-                          toggle_is_menu_open()
-                          if (!is_menu_open) {
-                            props.on_menu_click()
+                          if (!is_menu_open && !props.orama_db_id) {
+                            await props.on_menu_click()
                           }
+                          toggle_is_menu_open()
                         }}
                       >
                         <Icon variant="THREE_DOTS" />

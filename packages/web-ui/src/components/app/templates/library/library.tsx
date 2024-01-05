@@ -6,7 +6,7 @@ import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import StickyBox from 'react-sticky-box'
-import { _MobileTitleBar } from './components/_mobile-title-bar'
+import { MobileTitleBar as Subcomponent_MobileTitleBar } from './components/mobile-title-bar'
 import styles from './library.module.scss'
 import { use_is_hydrated } from '@shared/hooks'
 import { useSwipeable } from 'react-swipeable'
@@ -34,10 +34,8 @@ export namespace Library {
   }
 }
 
-const SLIDABLE_WIDTH = 300
-
 export const Library: React.FC<Library.Props> = (props) => {
-  const [slidable_width, set_slidable_width] = useState(SLIDABLE_WIDTH)
+  const [slidable_width, set_slidable_width] = useState(0)
   const on_window_resize = useWindowResize()
   const sidebar = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLDivElement>(null)
@@ -51,11 +49,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   >(undefined)
 
   const get_slidable_width = () => {
-    return window.innerWidth < 370
-      ? window.innerWidth * 0.82
-      : window.innerWidth >= 992 && window.innerWidth < 1100
-      ? window.innerWidth * 0.26
-      : SLIDABLE_WIDTH
+    return window.innerWidth < 370 ? window.innerWidth * 0.82 : 300
   }
 
   on_window_resize(() => {
@@ -231,7 +225,7 @@ export const Library: React.FC<Library.Props> = (props) => {
           transform: `translateX(${translate_x}px)`,
         }}
       >
-        <_MobileTitleBar
+        <Subcomponent_MobileTitleBar
           swipe_left_on_click={
             !is_left_side_open ? toggle_left_side : undefined
           }

@@ -13,8 +13,9 @@ import LessThan from '../../../../assets/icons/less-than.svg'
 import Recent from '../../../../assets/icons/recent.svg'
 import Remove from '../../../../assets/icons/remove.svg'
 import Search from '../../../../assets/icons/search.svg'
-import Selected from '../../../../assets/icons/selected.svg'
 import SelectedBold from '../../../../assets/icons/selected-bold.svg'
+import Selected from '../../../../assets/icons/selected.svg'
+import Sidebar from '../../../../assets/icons/sidebar.svg'
 import StarFilled from '../../../../assets/icons/star-filled.svg'
 import Star from '../../../../assets/icons/star.svg'
 import Sun from '../../../../assets/icons/sun.svg'
@@ -45,8 +46,9 @@ export namespace Icon {
     | 'RECENT'
     | 'REMOVE'
     | 'SEARCH'
-    | 'SELECTED'
     | 'SELECTED_BOLD'
+    | 'SELECTED'
+    | 'SIDEBAR'
     | 'STAR_FILLED'
     | 'STAR'
     | 'SUN'
@@ -129,11 +131,14 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'SEARCH':
       icon = <Search />
       break
+    case 'SELECTED_BOLD':
+      icon = <SelectedBold />
+      break
     case 'SELECTED':
       icon = <Selected />
       break
-    case 'SELECTED_BOLD':
-      icon = <SelectedBold />
+    case 'SIDEBAR':
+      icon = <Sidebar />
       break
     case 'STAR':
       icon = <Star />

@@ -185,25 +185,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
 
   // Whenever a user updates a bookmark, we need to initialize cached search
   // to update its state.
-  const initialize_cached_search = async () => {
-    if (
-      filter_view_options.current_filter != Filter.Archived
-        ? search.db === undefined
-        : search.archived_db === undefined
-    ) {
-      const is_cache_stale = await search.check_is_cache_stale({
-        api_url: process.env.NEXT_PUBLIC_API_URL,
-        auth_token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-        is_archived: filter_view_options.current_filter == Filter.Archived,
-      })
-      if (!is_cache_stale) {
-        await search.init({
-          is_archived: filter_view_options.current_filter == Filter.Archived,
-        })
-      }
-    }
-  }
+  const initialize_cached_search = async () => {}
 
   useEffect(() => {
     initialize_cached_search()
@@ -268,7 +250,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   : search.archived_db === undefined) ||
                 is_cache_stale
               ) {
-                search.init({
+                await search.init({
                   is_archived:
                     filter_view_options.current_filter == Filter.Archived,
                 })
@@ -800,7 +782,31 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 title={bookmark.title}
                 note={bookmark.note}
                 on_click={() => {}}
-                on_menu_click={() => {}}
+                on_menu_click={async () => {
+                  const is_cache_stale = await search.check_is_cache_stale({
+                    api_url: process.env.NEXT_PUBLIC_API_URL,
+                    auth_token:
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                    is_archived:
+                      filter_view_options.current_filter == Filter.Archived,
+                  })
+                  if (!is_cache_stale) {
+                    await toast.promise(
+                      search.init({
+                        is_archived:
+                          filter_view_options.current_filter == Filter.Archived,
+                      }),
+                      {
+                        pending: {
+                          render() {
+                            return 'One moment please...'
+                          },
+                          icon: false,
+                        },
+                      },
+                    )
+                  }
+                }}
                 is_fetching_bookmarks={
                   bookmarks_slice_state.is_fetching_first_bookmarks
                 }
@@ -1596,7 +1602,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 }
                 highlights_site_variants={search.highlights_sites_variants}
                 orama_db_id={
-                  (search.db?.id || '') + (search.archived_db?.id || '')
+                  filter_view_options.current_filter == Filter.Archived
+                    ? search.archived_db?.id || ''
+                    : search.db?.id || ''
                 }
                 is_serach_result={
                   bookmarks_slice_state.showing_bookmarks_fetched_by_ids ||

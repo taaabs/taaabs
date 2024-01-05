@@ -2,6 +2,10 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
+  --aside-width: 26vw;
+  @include at1200 {
+    --aside-width: 300px;
+  }
   position: relative;
 }
 .mobile-title-bar {
@@ -46,6 +50,9 @@
     bottom: 0;
     padding-top: var(--header-mobile-height);
     padding-bottom: var(--bottom-navigation-bar-height);
+  }
+  @include at992 {
+    width: var(--aside-width) !important;
   }
   &--hidden {
     @include to992 {
@@ -200,6 +207,7 @@
   }
   @include at992 {
     margin-top: var(--header-desktop-height);
+    width: var(--aside-width) !important;
   }
   &--hidden {
     @include to992 {

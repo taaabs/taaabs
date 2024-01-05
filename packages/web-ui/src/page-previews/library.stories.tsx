@@ -103,7 +103,7 @@ const bookmark = (
       ]}
       on_tag_click={() => {}}
       on_click={() => {}}
-      on_menu_click={() => {}}
+      on_menu_click={async () => {}}
       on_selected_tag_click={() => {}}
       set_render_height={() => {}}
       favicon_host=""

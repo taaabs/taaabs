@@ -4,7 +4,7 @@ import { useParams, usePathname } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { UserForHeader as UiAppMolecule_UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
-import { LogoForHeader as UiCommonAtoms_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
 import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
 
@@ -33,7 +33,7 @@ export const ClientComponentAppHeaderMobile: React.FC = () => {
       />
     )
   } else {
-    logo_slot = <UiCommonAtoms_LogoForHeader href="/" />
+    logo_slot = <UiCommonAtom_LogoForHeader href="/" />
   }
 
   let navigation: UiAppMolecule_NavigationForHeader.Props['navigation']
