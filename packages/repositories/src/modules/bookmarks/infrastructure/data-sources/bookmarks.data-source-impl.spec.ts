@@ -1,3 +1,4 @@
+import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 import { Bookmarks_DataSourceImpl } from './bookmarks.data-source-impl'
 
 describe('Bookmarks_DataSourceImpl', () => {
@@ -32,11 +33,23 @@ describe('Bookmarks_DataSourceImpl', () => {
   describe('[record_visit]', () => {
     it('calls fetch correctly', () => {
       const sut = new Bookmarks_DataSourceImpl('http://example.com', 'token')
-      sut.record_visit({ bookmark_id: 1 })
+      const body: RecordVisit_Dto.Body = {
+        bookmark_id: 1,
+        visited_at: new Date().toISOString(),
+      }
+      sut.record_visit({
+        bookmark_id: body.bookmark_id,
+        visited_at: new Date(body.visited_at),
+      })
       expect(fetch).toHaveBeenCalledWith(
-        `http://example.com/v1/bookmarks/1/record-visit`,
+        `http://example.com/v1/bookmarks/record-visit`,
         {
-          headers: { Authorization: 'Bearer token' },
+          headers: {
+            Authorization: 'Bearer token',
+            ['Content-Type']: 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify(body),
         },
       )
     })
