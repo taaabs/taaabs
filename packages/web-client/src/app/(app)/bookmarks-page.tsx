@@ -555,25 +555,30 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                       is_selected:
                         sortby_view_options.current_sortby == Sortby.UpdatedAt,
                     },
-                    {
-                      label: _sortby_option_to_label(Sortby.VisitedAt),
-                      on_click: () => {
-                        toggle_sortby_dropdown()
-                        if (
-                          sortby_view_options.current_sortby ==
-                            Sortby.VisitedAt ||
-                          bookmarks_slice_state.is_fetching_first_bookmarks ||
-                          bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          counts.is_fetching_counts_data
-                        )
-                          return
-                        sortby_view_options.set_sortby_query_param(
-                          Sortby.VisitedAt,
-                        )
-                      },
-                      is_selected:
-                        sortby_view_options.current_sortby == Sortby.VisitedAt,
-                    },
+                    ...(props.user == 'authorized'
+                      ? [
+                          {
+                            label: _sortby_option_to_label(Sortby.VisitedAt),
+                            on_click: () => {
+                              toggle_sortby_dropdown()
+                              if (
+                                sortby_view_options.current_sortby ==
+                                  Sortby.VisitedAt ||
+                                bookmarks_slice_state.is_fetching_first_bookmarks ||
+                                bookmarks_slice_state.is_fetching_more_bookmarks ||
+                                counts.is_fetching_counts_data
+                              )
+                                return
+                              sortby_view_options.set_sortby_query_param(
+                                Sortby.VisitedAt,
+                              )
+                            },
+                            is_selected:
+                              sortby_view_options.current_sortby ==
+                              Sortby.VisitedAt,
+                          },
+                        ]
+                      : []),
                   ]}
                 />
               </OutsideClickHandler>
