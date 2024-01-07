@@ -6,7 +6,6 @@ export namespace Counts_Dto {
   export namespace QueryParams {
     class Base {
       public filter?: Filter = CountsFetchingDefaults.Common.filter
-      public category_id?: string
       public tags?: string
     }
     export class Authorized extends Base {

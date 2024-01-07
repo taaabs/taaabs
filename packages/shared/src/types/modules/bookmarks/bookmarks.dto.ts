@@ -17,8 +17,6 @@ export namespace Bookmarks_Dto {
       })
       public tags?: string
 
-      public category_id?: string
-
       @ApiProperty({ description: 'Epoch timestamp in seconds.' })
       @Type()
       public epoch_gte?: number

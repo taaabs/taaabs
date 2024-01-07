@@ -796,31 +796,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 title={bookmark.title}
                 note={bookmark.note}
                 on_click={() => {}}
-                on_menu_click={async () => {
-                  const is_cache_stale = await search.check_is_cache_stale({
-                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                    auth_token:
-                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                    is_archived:
-                      filter_view_options.current_filter == Filter.Archived,
-                  })
-                  if (!is_cache_stale) {
-                    await toast.promise(
-                      search.init({
-                        is_archived:
-                          filter_view_options.current_filter == Filter.Archived,
-                      }),
-                      {
-                        pending: {
-                          render() {
-                            return 'One moment please...'
-                          },
-                          icon: false,
-                        },
-                      },
-                    )
-                  }
-                }}
                 is_fetching_bookmarks={
                   bookmarks_slice_state.is_fetching_first_bookmarks
                 }
@@ -928,6 +903,32 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   )
                 }}
                 favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
+                on_menu_click={async () => {
+                  if (props.user == 'public') return
+                  const is_cache_stale = await search.check_is_cache_stale({
+                    api_url: process.env.NEXT_PUBLIC_API_URL,
+                    auth_token:
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                    is_archived:
+                      filter_view_options.current_filter == Filter.Archived,
+                  })
+                  if (!is_cache_stale) {
+                    await toast.promise(
+                      search.init({
+                        is_archived:
+                          filter_view_options.current_filter == Filter.Archived,
+                      }),
+                      {
+                        pending: {
+                          render() {
+                            return 'One moment please...'
+                          },
+                          icon: false,
+                        },
+                      },
+                    )
+                  }
+                }}
                 menu_slot={
                   <UiAppAtom_DropdownMenu
                     items={[

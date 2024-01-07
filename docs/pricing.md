@@ -8,6 +8,5 @@ Premium features
 - reminders
 - notes
 - highlights
-- categories
 - sort option: updated_at
 - sort option: last_visited

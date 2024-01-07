@@ -50,12 +50,15 @@ export const Primary = () => {
       }
       slot_bottom_navigation_bar={
         <BottomNavigationBar
-          home_on_click={() => {}}
-          my_library_on_click={() => {}}
-          add_on_click={() => {}}
-          notifications_on_click={() => {}}
-          search_on_click={() => {}}
-          user_on_click={() => {}}
+          items={[
+            {
+              icon_variant: 'HOME',
+              icon_variant_active: 'HOME_FILLED',
+              is_active: true,
+              label: 'Home',
+              on_click: () => {},
+            },
+          ]}
         />
       }
     >
@@ -65,7 +68,7 @@ export const Primary = () => {
           <NavigationForLibrarySidebar
             navigation_items={[
               { label: 'All bookmarks', is_active: true, on_click: () => {} },
-              { label: 'Categories', is_active: false, on_click: () => {} },
+              { label: 'Lorem ipsum', is_active: false, on_click: () => {} },
             ]}
           />
         }

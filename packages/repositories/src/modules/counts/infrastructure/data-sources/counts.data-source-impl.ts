@@ -13,7 +13,6 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
   ): Promise<Counts_Dto.Response.Authorized> {
     const queryParams: Counts_Dto.QueryParams.Authorized = {
       filter: params.filter,
-      category_id: params.category_id,
       public_only: params.public_only,
       tags: params.tags?.join(','),
     }
@@ -35,7 +34,6 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
   ): Promise<Counts_Dto.Response.Public> {
     const queryParams: Counts_Dto.QueryParams.Public = {
       filter: params.filter,
-      category_id: params.category_id,
       tags: params.tags?.join(','),
     }
 

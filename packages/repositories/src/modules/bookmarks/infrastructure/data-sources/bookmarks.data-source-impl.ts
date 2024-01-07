@@ -22,7 +22,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   ): Promise<Bookmarks_Dto.Response.Authorized> {
     const query_params: Bookmarks_Dto.QueryParams.Authorized = {
       tags: params.tags?.join(','),
-      category_id: params.category_id,
       after: params.after,
       filter: params.filter,
       sort_by: params.sort_by,
@@ -59,7 +58,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   ): Promise<Bookmarks_Dto.Response.Public> {
     const query_params: Bookmarks_Dto.QueryParams.Public = {
       tags: params.tags?.join(','),
-      category_id: params.category_id,
       after: params.after,
       filter: params.filter,
       sort_by: params.sort_by,

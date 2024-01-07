@@ -11,7 +11,7 @@ export const Primary = () => {
       <NavigationForLibrarySidebar
         navigation_items={[
           { label: 'All bookmarks', on_click: () => {}, is_active: true },
-          { label: 'Categories', on_click: () => {}, is_active: false },
+          { label: 'Lorem ipsum', on_click: () => {}, is_active: false },
         ]}
       />
     </StorybookMargin>

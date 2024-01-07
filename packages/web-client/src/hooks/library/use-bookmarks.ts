@@ -31,11 +31,6 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
         request_params.tags = query_tags.split(',')
       }
 
-      const query_category = query_params.get('c')
-      if (query_category) {
-        request_params.category_id = query_category
-      }
-
       const query_filter = query_params.get('f')
       if (query_filter) {
         request_params.filter = Object.values(Filter)[parseInt(query_filter)]
@@ -82,11 +77,6 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       const query_tags = query_params.get('t')
       if (query_tags) {
         request_params.tags = query_tags.split(',')
-      }
-
-      const query_category = query_params.get('c')
-      if (query_category) {
-        request_params.category_id = query_category
       }
 
       const query_filter = query_params.get('f')

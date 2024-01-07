@@ -7,7 +7,6 @@ export namespace GetBookmarks_Params {
     sort_by?: Sortby
     order?: Order
     tags?: string[]
-    category_id?: string
     after?: number
     filter?: Filter
     yyyymm_gte?: number

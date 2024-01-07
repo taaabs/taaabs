@@ -3,7 +3,6 @@ import { Filter } from '@shared/types/common/filter'
 export namespace Counts_Params {
   type Base = {
     filter?: Filter
-    category_id?: string
     tags?: string[]
   }
   export type Authorized = Base & {
