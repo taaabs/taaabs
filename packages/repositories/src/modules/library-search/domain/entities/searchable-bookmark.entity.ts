@@ -6,7 +6,7 @@ export type SearchableBookmark_Entity = {
   sites: string[]
   created_at: number
   updated_at: number
-  visited_at: number
-  is_unread: boolean
+  visited_at?: number
+  is_unread?: boolean
   stars: number
 }

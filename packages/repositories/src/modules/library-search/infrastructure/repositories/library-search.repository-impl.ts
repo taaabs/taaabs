@@ -4,6 +4,7 @@ import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
 import { GetLastUpdated_Ro } from '../../domain/types/get-last-updated.ro'
 import { LibrarySearch_DataSource } from '../data-sources/library-search.data-source'
+import { GetLastUpdatedAt_Params } from '../../domain/types/get-last-updated-at.params'
 
 export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
   constructor(
@@ -22,8 +23,24 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
     }
   }
 
+  public async get_last_updated_at_on_public_user(
+    params: GetLastUpdatedAt_Params.Public,
+  ): Promise<GetLastUpdated_Ro> {
+    const result =
+      await this._library_search_data_source.get_last_updated_on_public_user(
+        params,
+      )
+
+    return {
+      updated_at: result.updated_at ? new Date(result.updated_at) : undefined,
+      archived_updated_at: result.archived_updated_at
+        ? new Date(result.archived_updated_at)
+        : undefined,
+    }
+  }
+
   public async get_bookmarks_on_authorized_user(
-    params: GetBookmarks_Params,
+    params: GetBookmarks_Params.Authorized,
   ): Promise<GetBookmarks_Ro> {
     const { bookmarks } =
       await this._library_search_data_source.get_bookmarks_on_authorized_user(
@@ -73,6 +90,30 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
               ).toString(CryptoJS.enc.Utf8)
             }
           }),
+          stars: bookmark.stars || 0,
+        }
+      }),
+    }
+  }
+
+  public async get_bookmarks_on_public_user(
+    params: GetBookmarks_Params.Public,
+  ): Promise<GetBookmarks_Ro> {
+    const { bookmarks } =
+      await this._library_search_data_source.get_bookmarks_on_public_user(
+        params,
+      )
+
+    return {
+      bookmarks: bookmarks.map((bookmark) => {
+        return {
+          id: bookmark.id,
+          created_at: bookmark.created_at,
+          updated_at: bookmark.updated_at,
+          title: bookmark.title,
+          note: bookmark.note,
+          sites: bookmark.sites,
+          tags: bookmark.tags,
           stars: bookmark.stars || 0,
         }
       }),

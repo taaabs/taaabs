@@ -1,11 +1,17 @@
 import { ToBoolean } from '@shared/decorators/to-boolean'
 
 export namespace LibrarySearchBookmarks_Dto {
-  export class QueryParams {
-    @ToBoolean()
-    public public_only?: boolean
-    @ToBoolean()
-    public is_archived?: boolean
+  export namespace QueryParams {
+    export class Authorized {
+      @ToBoolean()
+      public public_only?: boolean
+      @ToBoolean()
+      public is_archived?: boolean
+    }
+    export class Public {
+      @ToBoolean()
+      public is_archived?: boolean
+    }
   }
   export namespace Response {
     class AuthorizedSite {
@@ -18,6 +24,7 @@ export namespace LibrarySearchBookmarks_Dto {
     }
     class Bookmark {
       public id: number
+      public title?: string
       public note?: string
       public created_at: number
       public updated_at: number
@@ -25,7 +32,6 @@ export namespace LibrarySearchBookmarks_Dto {
     }
 
     class AuthorizedBookmark extends Bookmark {
-      public title?: string
       public title_aes?: string
       public note_aes?: string
       public visited_at: number
@@ -35,7 +41,6 @@ export namespace LibrarySearchBookmarks_Dto {
     }
 
     class PublicBookmark extends Bookmark {
-      public title: string
       public sites: string[]
       public tags: string[]
     }

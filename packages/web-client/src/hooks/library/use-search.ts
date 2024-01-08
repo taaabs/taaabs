@@ -27,8 +27,12 @@ import { system_values } from '@shared/constants/system-values'
 import localforage from 'localforage'
 import { browser_storage } from '@/constants/browser-storage'
 import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-authorized-user.use-case'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search'
+import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
+import { GetSearchableBookmarksOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-searchable-bookmarks-on-public-user.user-case'
+import { GetLastUpdated_Ro } from '@repositories/modules/library-search/domain/types/get-last-updated.ro'
+import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-public-user.use-case'
 
 export type BookmarkOfSearch = {
   id: number
@@ -77,6 +81,7 @@ type BookmarkTags = { id: number; tags: string[] }
 
 export const use_search = () => {
   const query_params = useSearchParams()
+  const { username } = useParams()
   const [is_search_focused, set_is_search_focused] = useState(false)
   const [is_caching_bookmarks, set_is_caching_bookmarks] = useState(false)
   const [bookmarks_just_tags, set_bookmarks_just_tags] =
@@ -133,14 +138,22 @@ export const use_search = () => {
 
   const check_is_cache_stale = async (params: {
     api_url: string
-    auth_token: string
+    auth_token?: string
     is_archived: boolean
   }): Promise<boolean> => {
     const cache_updated_at = await localforage.getItem<Date>(
-      !params.is_archived
-        ? browser_storage.local_forage.authorized_library.search.cached_at
-        : browser_storage.local_forage.authorized_library.search
-            .archived_cached_at,
+      !username
+        ? !params.is_archived
+          ? browser_storage.local_forage.authorized_library.search.cached_at
+          : browser_storage.local_forage.authorized_library.search
+              .archived_cached_at
+        : !params.is_archived
+        ? browser_storage.local_forage.public_library.search.cached_at({
+            username: username as string,
+          })
+        : browser_storage.local_forage.public_library.search.archived_cached_at(
+            { username: username as string },
+          ),
     )
 
     if (cache_updated_at) {
@@ -151,34 +164,73 @@ export const use_search = () => {
         params.auth_token,
       )
       const repository = new LibrarySearch_RepositoryImpl(data_source)
-      const get_last_updated_at_on_authorized_user_use_case =
-        new GetLastUpdatedAtOnAuthorizedUser_UseCase(repository)
-      const result =
-        await get_last_updated_at_on_authorized_user_use_case.invoke()
+
+      let result: GetLastUpdated_Ro
+      if (!username) {
+        const get_last_updated_at_on_authorized_user_use_case =
+          new GetLastUpdatedAtOnAuthorizedUser_UseCase(repository)
+        result = await get_last_updated_at_on_authorized_user_use_case.invoke()
+      } else {
+        const get_last_updated_at_on_public_user_use_case =
+          new GetLastUpdatedAtOnPublicUser_UseCase(repository)
+        result = await get_last_updated_at_on_public_user_use_case.invoke({
+          username: username as string,
+        })
+      }
 
       !params.is_archived
         ? (updated_at = result.updated_at)
         : (updated_at = result.archived_updated_at)
 
       if (updated_at && updated_at.getTime() > cache_updated_at.getTime()) {
-        await localforage.removeItem(
-          !params.is_archived
-            ? browser_storage.local_forage.authorized_library.search.cached_at
-            : browser_storage.local_forage.authorized_library.search
-                .archived_cached_at,
-        )
-        await localforage.removeItem(
-          !params.is_archived
-            ? browser_storage.local_forage.authorized_library.search.bookmarks
-            : browser_storage.local_forage.authorized_library.search
-                .archived_bookmarks,
-        )
-        await localforage.removeItem(
-          !params.is_archived
-            ? browser_storage.local_forage.authorized_library.search.index
-            : browser_storage.local_forage.authorized_library.search
-                .archived_index,
-        )
+        if (!username) {
+          await localforage.removeItem(
+            !params.is_archived
+              ? browser_storage.local_forage.authorized_library.search.cached_at
+              : browser_storage.local_forage.authorized_library.search
+                  .archived_cached_at,
+          )
+          await localforage.removeItem(
+            !params.is_archived
+              ? browser_storage.local_forage.authorized_library.search.bookmarks
+              : browser_storage.local_forage.authorized_library.search
+                  .archived_bookmarks,
+          )
+          await localforage.removeItem(
+            !params.is_archived
+              ? browser_storage.local_forage.authorized_library.search.index
+              : browser_storage.local_forage.authorized_library.search
+                  .archived_index,
+          )
+        } else {
+          await localforage.removeItem(
+            !params.is_archived
+              ? browser_storage.local_forage.public_library.search.cached_at({
+                  username: username as string,
+                })
+              : browser_storage.local_forage.public_library.search.archived_cached_at(
+                  { username: username as string },
+                ),
+          )
+          await localforage.removeItem(
+            !params.is_archived
+              ? browser_storage.local_forage.public_library.search.bookmarks({
+                  username: username as string,
+                })
+              : browser_storage.local_forage.public_library.search.archived_bookmarks(
+                  { username: username as string },
+                ),
+          )
+          await localforage.removeItem(
+            !params.is_archived
+              ? browser_storage.local_forage.public_library.search.index({
+                  username: username as string,
+                })
+              : browser_storage.local_forage.public_library.search.archived_index(
+                  { username: username as string },
+                ),
+          )
+        }
         return true
       } else {
         return false
@@ -212,15 +264,32 @@ export const use_search = () => {
     })
 
     const cached_bookmarks = await localforage.getItem<string>(
-      !params.is_archived
-        ? browser_storage.local_forage.authorized_library.search.bookmarks
-        : browser_storage.local_forage.authorized_library.search
-            .archived_bookmarks,
+      !username
+        ? !params.is_archived
+          ? browser_storage.local_forage.authorized_library.search.bookmarks
+          : browser_storage.local_forage.authorized_library.search
+              .archived_bookmarks
+        : !params.is_archived
+        ? browser_storage.local_forage.public_library.search.bookmarks({
+            username: username as string,
+          })
+        : browser_storage.local_forage.public_library.search.archived_bookmarks(
+            { username: username as string },
+          ),
     )
     const cached_index = await localforage.getItem<string>(
-      !params.is_archived
-        ? browser_storage.local_forage.authorized_library.search.index
-        : browser_storage.local_forage.authorized_library.search.archived_index,
+      !username
+        ? !params.is_archived
+          ? browser_storage.local_forage.authorized_library.search.index
+          : browser_storage.local_forage.authorized_library.search
+              .archived_index
+        : !params.is_archived
+        ? browser_storage.local_forage.public_library.search.index({
+            username: username as string,
+          })
+        : browser_storage.local_forage.public_library.search.archived_index({
+            username: username as string,
+          }),
     )
 
     if (cached_bookmarks && cached_index) {
@@ -234,12 +303,27 @@ export const use_search = () => {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
       )
       const repository = new LibrarySearch_RepositoryImpl(data_source)
-      const get_searchable_bookmarks =
-        new GetSearchableBookmarksOnAuthorizedUser_UseCase(repository)
-      const { bookmarks } = await get_searchable_bookmarks.invoke({
-        is_archived: params.is_archived,
-        public_only: false,
-      })
+
+      let bookmarks: SearchableBookmark_Entity[]
+      if (!username) {
+        const get_searchable_bookmarks =
+          new GetSearchableBookmarksOnAuthorizedUser_UseCase(repository)
+        bookmarks = (
+          await get_searchable_bookmarks.invoke({
+            is_archived: params.is_archived,
+            public_only: false,
+          })
+        ).bookmarks
+      } else {
+        const get_searchable_bookmarks =
+          new GetSearchableBookmarksOnPublicUser_UseCase(repository)
+        bookmarks = (
+          await get_searchable_bookmarks.invoke({
+            is_archived: params.is_archived,
+            username: username as string,
+          })
+        ).bookmarks
+      }
 
       const chunk_size = 1000
       let indexed_count = 0
@@ -302,47 +386,112 @@ export const use_search = () => {
   }) => {
     set_is_caching_bookmarks(true)
     const index = await saveWithHighlight(params.db)
-    await localforage.setItem(
-      !params.is_archived
-        ? browser_storage.local_forage.authorized_library.search.index
-        : browser_storage.local_forage.authorized_library.search.archived_index,
-      JSON.stringify(index),
-    )
-    await localforage.setItem(
-      !params.is_archived
-        ? browser_storage.local_forage.authorized_library.search.bookmarks
-        : browser_storage.local_forage.authorized_library.search
-            .archived_bookmarks,
-      JSON.stringify(params.bookmarks_just_tags),
-    )
-    await localforage.setItem(
-      !params.is_archived
-        ? browser_storage.local_forage.authorized_library.search.cached_at
-        : browser_storage.local_forage.authorized_library.search
-            .archived_cached_at,
-      new Date(),
-    )
+    if (!username) {
+      await localforage.setItem(
+        !params.is_archived
+          ? browser_storage.local_forage.authorized_library.search.index
+          : browser_storage.local_forage.authorized_library.search
+              .archived_index,
+        JSON.stringify(index),
+      )
+      await localforage.setItem(
+        !params.is_archived
+          ? browser_storage.local_forage.authorized_library.search.bookmarks
+          : browser_storage.local_forage.authorized_library.search
+              .archived_bookmarks,
+        JSON.stringify(params.bookmarks_just_tags),
+      )
+      await localforage.setItem(
+        !params.is_archived
+          ? browser_storage.local_forage.authorized_library.search.cached_at
+          : browser_storage.local_forage.authorized_library.search
+              .archived_cached_at,
+        new Date(),
+      )
+    } else {
+      await localforage.setItem(
+        !params.is_archived
+          ? browser_storage.local_forage.public_library.search.index({
+              username: username as string,
+            })
+          : browser_storage.local_forage.public_library.search.archived_index({
+              username: username as string,
+            }),
+        JSON.stringify(index),
+      )
+      await localforage.setItem(
+        !params.is_archived
+          ? browser_storage.local_forage.public_library.search.bookmarks({
+              username: username as string,
+            })
+          : browser_storage.local_forage.public_library.search.archived_bookmarks(
+              { username: username as string },
+            ),
+        JSON.stringify(params.bookmarks_just_tags),
+      )
+      await localforage.setItem(
+        !params.is_archived
+          ? browser_storage.local_forage.public_library.search.cached_at({
+              username: username as string,
+            })
+          : browser_storage.local_forage.public_library.search.archived_cached_at(
+              { username: username as string },
+            ),
+        new Date(),
+      )
+    }
     set_is_caching_bookmarks(false)
   }
 
   const clear_cached_data = async (params: { is_archived: boolean }) => {
-    await localforage.removeItem(
-      !params.is_archived
-        ? browser_storage.local_forage.authorized_library.search.index
-        : browser_storage.local_forage.authorized_library.search.archived_index,
-    )
-    await localforage.removeItem(
-      !params.is_archived
-        ? browser_storage.local_forage.authorized_library.search.bookmarks
-        : browser_storage.local_forage.authorized_library.search
-            .archived_bookmarks,
-    )
-    await localforage.removeItem(
-      !params.is_archived
-        ? browser_storage.local_forage.authorized_library.search.cached_at
-        : browser_storage.local_forage.authorized_library.search
-            .archived_cached_at,
-    )
+    if (!username) {
+      await localforage.removeItem(
+        !params.is_archived
+          ? browser_storage.local_forage.authorized_library.search.index
+          : browser_storage.local_forage.authorized_library.search
+              .archived_index,
+      )
+      await localforage.removeItem(
+        !params.is_archived
+          ? browser_storage.local_forage.authorized_library.search.bookmarks
+          : browser_storage.local_forage.authorized_library.search
+              .archived_bookmarks,
+      )
+      await localforage.removeItem(
+        !params.is_archived
+          ? browser_storage.local_forage.authorized_library.search.cached_at
+          : browser_storage.local_forage.authorized_library.search
+              .archived_cached_at,
+      )
+    } else {
+      await localforage.removeItem(
+        !params.is_archived
+          ? browser_storage.local_forage.public_library.search.index({
+              username: username as string,
+            })
+          : browser_storage.local_forage.public_library.search.archived_index({
+              username: username as string,
+            }),
+      )
+      await localforage.removeItem(
+        !params.is_archived
+          ? browser_storage.local_forage.public_library.search.bookmarks({
+              username: username as string,
+            })
+          : browser_storage.local_forage.public_library.search.archived_bookmarks(
+              { username: username as string },
+            ),
+      )
+      await localforage.removeItem(
+        !params.is_archived
+          ? browser_storage.local_forage.public_library.search.cached_at({
+              username: username as string,
+            })
+          : browser_storage.local_forage.public_library.search.archived_cached_at(
+              { username: username as string },
+            ),
+      )
+    }
     if (!params.is_archived) {
       set_db(undefined)
     } else {

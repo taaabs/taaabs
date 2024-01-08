@@ -5,12 +5,27 @@ export const browser_storage = {
     authorized_library: {
       search: {
         bookmarks: 'authorized-library.search.bookmarks',
-        index: 'authorized-library-search.search.index',
-        cached_at: 'authorized-library-search.search.cached-at',
+        index: 'authorized-library.search.index',
+        cached_at: 'authorized-library.search.cached-at',
         archived_bookmarks: 'authorized-library.search.archived-bookmarks',
-        archived_index: 'authorized-library-search.search.archived-index',
-        archived_cached_at:
-          'authorized-library-search.search.archived-cached-at',
+        archived_index: 'authorized-library.search.archived-index',
+        archived_cached_at: 'authorized-library.search.archived-cached-at',
+      },
+    },
+    public_library: {
+      search: {
+        bookmarks: (params: { username: string }) =>
+          `public-library.search.bookmarks.${params.username}`,
+        index: (params: { username: string }) =>
+          `public-library.index.${params.username}`,
+        cached_at: (params: { username: string }) =>
+          `public-library.cached_at.${params.username}`,
+        archived_bookmarks: (params: { username: string }) =>
+          `public-library.archived_bookmarks.${params.username}`,
+        archived_index: (params: { username: string }) =>
+          `public-library.archived_index.${params.username}`,
+        archived_cached_at: (params: { username: string }) =>
+          `public-library.archived_cached_at.${params.username}`,
       },
     },
   },
