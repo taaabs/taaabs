@@ -208,10 +208,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
         )
       }
     } else {
-      setTimeout(() => {
-        // Thanks to timeout, skeleton can be rendered.
-        get_bookmarks({})
-      }, 0)
+      get_bookmarks({})
     }
   }, [])
 
