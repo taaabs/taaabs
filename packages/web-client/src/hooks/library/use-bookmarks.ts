@@ -12,6 +12,7 @@ import { Order } from '@shared/types/modules/bookmarks/order'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
+import { browser_storage } from '@/constants/browser-storage'
 
 export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   const query_params = useSearchParams()
@@ -120,13 +121,20 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
 
   useUpdateEffect(() => {
     const bookmarks = sessionStorage.getItem(
-      `bookmarks__${query_params.toString()}`,
+      browser_storage.session_storage.library.bookmarks({
+        username: route_params.username as string,
+        query_params: query_params.toString(),
+      }),
     )
 
     if (bookmarks) {
+      dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
       const has_more_bookmarks = sessionStorage.getItem(
-        `has_more_bookmarks__${query_params.toString()}`,
+        browser_storage.session_storage.library.has_more_bookmarks({
+          username: route_params.username as string,
+          query_params: query_params.toString(),
+        }),
       )
       if (has_more_bookmarks) {
         dispatch(
@@ -145,13 +153,20 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       bookmarks: Bookmark_Entity[]
       query_params: string
       has_more_bookmarks: boolean
+      username?: string
     }) => {
       sessionStorage.setItem(
-        `bookmarks__${params.query_params}`,
+        browser_storage.session_storage.library.bookmarks({
+          username: params.username,
+          query_params: params.query_params.toString(),
+        }),
         JSON.stringify(params.bookmarks),
       )
       sessionStorage.setItem(
-        `has_more_bookmarks__${params.query_params}`,
+        browser_storage.session_storage.library.has_more_bookmarks({
+          username: params.username,
+          query_params: params.query_params.toString(),
+        }),
         `${params.has_more_bookmarks}`,
       )
     },
@@ -165,18 +180,25 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       bookmarks: bookmarks,
       query_params: query_params.toString(),
       has_more_bookmarks,
+      username: route_params.username,
     })
   }, [bookmarks])
 
   useEffect(() => {
     const bookmarks = sessionStorage.getItem(
-      `bookmarks__${query_params.toString()}`,
+      browser_storage.session_storage.library.bookmarks({
+        username: route_params.username as string,
+        query_params: query_params.toString(),
+      }),
     )
 
     if (bookmarks) {
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
       const has_more_bookmarks = sessionStorage.getItem(
-        `has_more_bookmarks__${query_params.toString()}`,
+        browser_storage.session_storage.library.has_more_bookmarks({
+          username: route_params.username as string,
+          query_params: query_params.toString(),
+        }),
       )
       if (has_more_bookmarks) {
         dispatch(
@@ -186,17 +208,10 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
         )
       }
     } else {
-      get_bookmarks({})
-    }
-
-    return () => {
-      for (const key in sessionStorage) {
-        if (key.substring(0, 9) == 'bookmarks') {
-          sessionStorage.removeItem(key)
-        } else if (key.substring(0, 18) == 'has_more_bookmarks') {
-          sessionStorage.removeItem(key)
-        }
-      }
+      setTimeout(() => {
+        // Thanks to timeout, skeleton can be rendered.
+        get_bookmarks({})
+      }, 0)
     }
   }, [])
 

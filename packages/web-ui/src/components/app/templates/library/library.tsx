@@ -249,14 +249,7 @@ export const Library: React.FC<Library.Props> = (props) => {
             pointerEvents: is_right_side_open ? 'none' : undefined,
           }}
         >
-          <div
-            className={styles.sidebar__inner}
-            style={{
-              width: `${slidable_width}px`,
-            }}
-          >
-            {props.slot_sidebar}
-          </div>
+          <div className={styles.sidebar__inner}>{props.slot_sidebar}</div>
         </aside>
 
         <main

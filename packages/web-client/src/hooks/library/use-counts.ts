@@ -46,7 +46,7 @@ export const use_counts = () => {
       }
 
       sessionStorage.setItem(
-        browser_storage.session_storage.last_authorized_counts_params,
+        browser_storage.session_storage.library.last_authorized_counts_params,
         JSON.stringify(request_params),
       )
       dispatch(
@@ -84,7 +84,12 @@ export const use_counts = () => {
   }
 
   useEffect(() => {
-    const tags = sessionStorage.getItem(`tags__${query_params.toString()}`)
+    const tags = sessionStorage.getItem(
+      browser_storage.session_storage.library.tags({
+        username: route_params.username as string,
+        query_params: query_params.toString(),
+      }),
+    )
 
     if (tags) {
       dispatch(counts_actions.set_tags(JSON.parse(tags)))
@@ -136,28 +141,28 @@ export const use_counts = () => {
   useUpdateEffect(() => {
     if (tags) {
       sessionStorage.setItem(
-        `tags__${query_params.toString()}`,
+        browser_storage.session_storage.library.tags({
+          username: route_params.username as string,
+          query_params: query_params.toString(),
+        }),
         JSON.stringify(tags),
       )
     }
   }, [counts_data, tags])
 
   useEffect(() => {
-    const tags = sessionStorage.getItem(`tags__${query_params.toString()}`)
+    const tags = sessionStorage.getItem(
+      browser_storage.session_storage.library.tags({
+        username: route_params.username as string,
+        query_params: query_params.toString(),
+      }),
+    )
 
     if (tags) {
       dispatch(counts_actions.set_tags(JSON.parse(tags)))
     }
 
     get_counts()
-
-    return () => {
-      for (const key in sessionStorage) {
-        if (key.substring(0, 4) == 'tags') {
-          sessionStorage.removeItem(key)
-        }
-      }
-    }
   }, [])
 
   return {

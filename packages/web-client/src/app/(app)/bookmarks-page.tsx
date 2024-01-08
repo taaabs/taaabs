@@ -192,14 +192,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
     return () => window.removeEventListener('popstate', handleEvent)
   }, [])
 
-  // Whenever a user updates a bookmark, we need to initialize cached search
-  // to update its state.
-  const initialize_cached_search = async () => {}
-
-  useEffect(() => {
-    initialize_cached_search()
-  }, [filter_view_options.current_filter])
-
   return (
     <UiAppTemplate_Library
       show_bookmarks_skeleton={show_bookmarks_skeleton}
@@ -979,6 +971,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       JSON.parse(
                                         sessionStorage.getItem(
                                           browser_storage.session_storage
+                                            .library
                                             .last_authorized_counts_params,
                                         ) || '',
                                       ) || undefined,
@@ -1059,6 +1052,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       JSON.parse(
                                         sessionStorage.getItem(
                                           browser_storage.session_storage
+                                            .library
                                             .last_authorized_counts_params,
                                         ) || '',
                                       ) || undefined,
@@ -1131,6 +1125,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       JSON.parse(
                                         sessionStorage.getItem(
                                           browser_storage.session_storage
+                                            .library
                                             .last_authorized_counts_params,
                                         ) || '',
                                       ) || undefined,
@@ -1202,6 +1197,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       JSON.parse(
                                         sessionStorage.getItem(
                                           browser_storage.session_storage
+                                            .library
                                             .last_authorized_counts_params,
                                         ) || '',
                                       ) || undefined,
@@ -1273,6 +1269,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       JSON.parse(
                                         sessionStorage.getItem(
                                           browser_storage.session_storage
+                                            .library
                                             .last_authorized_counts_params,
                                         ) || '',
                                       ) || undefined,
@@ -1345,6 +1342,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       JSON.parse(
                                         sessionStorage.getItem(
                                           browser_storage.session_storage
+                                            .library
                                             .last_authorized_counts_params,
                                         ) || '',
                                       ) || undefined,
@@ -1440,6 +1438,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                           JSON.parse(
                                             sessionStorage.getItem(
                                               browser_storage.session_storage
+                                                .library
                                                 .last_authorized_counts_params,
                                             ) || '',
                                           ) || undefined,
@@ -1458,6 +1457,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                           JSON.parse(
                                             sessionStorage.getItem(
                                               browser_storage.session_storage
+                                                .library
                                                 .last_authorized_counts_params,
                                             ) || '',
                                           ) || undefined,
@@ -1529,6 +1529,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       JSON.parse(
                                         sessionStorage.getItem(
                                           browser_storage.session_storage
+                                            .library
                                             .last_authorized_counts_params,
                                         ) || '',
                                       ) || undefined,
@@ -1580,6 +1581,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                       JSON.parse(
                                         sessionStorage.getItem(
                                           browser_storage.session_storage
+                                            .library
                                             .last_authorized_counts_params,
                                         ) || '',
                                       ) || undefined,

@@ -1,5 +1,6 @@
 'use client'
 
+import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { BottomNavigationBar as UiAppMolecule_BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 
@@ -26,6 +27,7 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
           icon_variant_active: 'BOOKMARK_FILLED',
           is_active: pathname == '/bookmarks',
           on_click: () => {
+            clear_library_session_storage({})
             router.push('/bookmarks')
           },
         },
@@ -49,6 +51,9 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
           icon_variant_active: 'BOOKMARK_FILLED',
           is_active: pathname == `/${params.username}`,
           on_click: () => {
+            clear_library_session_storage({
+              username: params.username as string,
+            })
             router.push(`/${params.username}`)
           },
         },

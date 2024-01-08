@@ -6,7 +6,7 @@ export namespace ButtonUnderlined {
   export type Props = {
     label: string
     href?: string
-    on_click?: () => void
+    on_click?: (e: React.MouseEvent) => void
     is_active: boolean
   }
 }
@@ -19,6 +19,7 @@ export const ButtonUnderlined: React.FC<ButtonUnderlined.Props> = (props) => {
           [styles['button--active']]: props.is_active,
         })}
         href={props.href}
+        onClick={props.on_click ? (e) => props.on_click!(e) : undefined}
         title={props.label}
       >
         <span>{props.label}</span>
@@ -30,7 +31,7 @@ export const ButtonUnderlined: React.FC<ButtonUnderlined.Props> = (props) => {
         className={cn(styles.button, {
           [styles['button--active']]: props.is_active,
         })}
-        onClick={props.on_click}
+        onClick={props.on_click ? (e) => props.on_click!(e) : undefined}
         title={props.label}
         disabled={!props.on_click}
       >

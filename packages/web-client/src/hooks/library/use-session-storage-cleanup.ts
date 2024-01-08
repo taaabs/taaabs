@@ -10,7 +10,7 @@ export const use_session_storage_cleanup = () => {
 
   useUpdateEffect(() => {
     const query_params_history: string[] = JSON.parse(
-      sessionStorage.getItem('query_params_history') || '[""]',
+      sessionStorage.getItem('query-params-history') || '[""]',
     )
 
     if (query_params_history.length == HISTORY_LIMIT) {
@@ -24,7 +24,7 @@ export const use_session_storage_cleanup = () => {
     }
 
     sessionStorage.setItem(
-      'query_params_history',
+      'query-params-history',
       JSON.stringify([
         ...query_params_history.filter(
           (entry) => entry != query_params.toString(),
@@ -36,7 +36,7 @@ export const use_session_storage_cleanup = () => {
 
   useEffect(() => {
     return () => {
-      sessionStorage.removeItem('query_params_history')
+      sessionStorage.removeItem('query-params-history')
     }
   }, [])
 }

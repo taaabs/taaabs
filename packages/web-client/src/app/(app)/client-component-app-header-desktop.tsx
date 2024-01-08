@@ -1,6 +1,11 @@
 'use client'
 
-import { useParams, usePathname, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 import { PublicUserAvatarContext } from './public-user-avatar-provider'
 import { useContext } from 'react'
 import { ModalContext } from './modal-provider'
@@ -14,11 +19,13 @@ import { UpsertBookmark as Form_UpsertBookmarkForm } from '@/forms/upsert-bookma
 import { update_query_params } from '@/utils/update-query-params'
 import { BookmarkHash } from '@/utils/bookmark-hash'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const query_params = useSearchParams()
   const params = useParams()
   const pathname = usePathname()
+  const router = useRouter()
   const public_user_avatar = useContext(PublicUserAvatarContext)
   const modal = useContext(ModalContext)
   const is_hydrated = use_is_hydrated()
@@ -46,20 +53,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   }
 
   let navigation: UiAppMolecule_NavigationForHeader.Props['navigation']
-  if (params.username) {
-    navigation = [
-      {
-        label: 'Bookmarks',
-        href: `/${params.username}`,
-        is_active: pathname == `/${params.username}`,
-      },
-      {
-        label: 'Activity',
-        href: `/${params.username}/activity`,
-        is_active: pathname == `/${params.username}/activity`,
-      },
-    ]
-  } else {
+  if (!params.username) {
     navigation = [
       {
         label: 'Home',
@@ -70,11 +64,32 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         label: 'Bookmarks',
         href: '/bookmarks',
         is_active: pathname == '/bookmarks',
+        on_click: () => {
+          clear_library_session_storage({})
+          router.push('/bookmarks')
+        },
       },
       {
         label: 'Notifications',
         href: '/notifications',
         is_active: pathname == '/notifications',
+      },
+    ]
+  } else {
+    navigation = [
+      {
+        label: 'Bookmarks',
+        href: `/${params.username}`,
+        is_active: pathname == `/${params.username}`,
+        on_click: () => {
+          clear_library_session_storage({ username: params.username as string })
+          router.push(`/${params.username}`)
+        },
+      },
+      {
+        label: 'Activity',
+        href: `/${params.username}/activity`,
+        is_active: pathname == `/${params.username}/activity`,
       },
     ]
   }
