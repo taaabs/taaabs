@@ -6,7 +6,6 @@
   border-top: var(--border-primary);
   background-color: var(--plain-white);
   display: flex;
-  align-items: center;
 }
 .item {
   flex: 1;
@@ -14,14 +13,18 @@
   flex-direction: column;
   align-items: center;
   gap: var(--distance-2px);
-  margin-top: var(--distance-4px);
-  > svg {
-    height: var(--icon-dimension-20px);
-  }
-  &__label {
-    font-size: var(--font-size-13px);
-    &--active {
-      font-weight: var(--font-weight-inter-medium);
+  height: 100%;
+  &__button {
+    padding: var(--distance-4px) var(--distance-8px) 0 var(--distance-8px);
+    height: 100%;
+    > svg {
+      height: var(--icon-dimension-20px);
+    }
+    &__label {
+      font-size: var(--font-size-13px);
+      &--active {
+        font-weight: var(--font-weight-inter-medium);
+      }
     }
   }
 }

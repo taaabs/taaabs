@@ -21,20 +21,26 @@ export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
   return (
     <div className={styles.container}>
       {props.items.map((item, i) => (
-        <button onClick={item.on_click} className={styles.item} key={i}>
-          <Icon
-            variant={
-              !item.is_active ? item.icon_variant : item.icon_variant_active
-            }
-          />
-          <div
-            className={cn(styles.item__label, {
-              [styles['item__label--active']]: item.is_active,
-            })}
+        <div className={styles.item} key={i}>
+          <button
+            onClick={item.on_click}
+            className={styles.item__button}
+            key={i}
           >
-            {item.label}
-          </div>
-        </button>
+            <Icon
+              variant={
+                !item.is_active ? item.icon_variant : item.icon_variant_active
+              }
+            />
+            <div
+              className={cn(styles.item__button__label, {
+                [styles['item__button__label--active']]: item.is_active,
+              })}
+            >
+              {item.label}
+            </div>
+          </button>
+        </div>
       ))}
     </div>
   )

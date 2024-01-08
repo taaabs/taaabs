@@ -31,6 +31,7 @@ import NotificationsFilled from '../../../../assets/icons/notifications-filled.s
 import Notifications from '../../../../assets/icons/notifications.svg'
 import UserAdd from '../../../../assets/icons/user-add.svg'
 import UserRemove from '../../../../assets/icons/user-remove.svg'
+import UserFilled from '../../../../assets/icons/user-filled.svg'
 import User from '../../../../assets/icons/user.svg'
 
 export namespace Icon {
@@ -68,6 +69,7 @@ export namespace Icon {
     | 'NOTIFICATIONS'
     | 'USER_ADD'
     | 'USER_REMOVE'
+    | 'USER_FILLED'
     | 'USER'
 
   export type Props = {
@@ -180,6 +182,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'USER':
       icon = <User />
+      break
+    case 'USER_FILLED':
+      icon = <UserFilled />
       break
   }
 

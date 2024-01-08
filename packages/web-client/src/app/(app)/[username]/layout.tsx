@@ -3,7 +3,6 @@ import { AvatarContextSetter } from './avatar-context-setter'
 import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
 import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
 import { GetPublicMetadata } from '@repositories/modules/metadata/domain/usecases/get-public-metadata'
-import { LibraryStoreProvider } from '@/providers/library-store-provider'
 
 const Layout: React.FC<{
   children: React.ReactNode
@@ -23,7 +22,7 @@ const Layout: React.FC<{
             : undefined
         }
       />
-      <LibraryStoreProvider>{props.children}</LibraryStoreProvider>
+      {props.children}
     </>
   )
 }

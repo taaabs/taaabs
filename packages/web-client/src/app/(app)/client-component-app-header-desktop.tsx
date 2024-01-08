@@ -87,9 +87,9 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         },
       },
       {
-        label: 'Activity',
-        href: `/${params.username}/activity`,
-        is_active: pathname == `/${params.username}/activity`,
+        label: 'About',
+        href: `/${params.username}/about`,
+        is_active: pathname == `/${params.username}/about`,
       },
     ]
   }
