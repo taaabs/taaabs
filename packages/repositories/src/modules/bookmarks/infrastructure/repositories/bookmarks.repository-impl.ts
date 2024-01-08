@@ -9,6 +9,7 @@ import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params
 import { GetBookmarksByIds_Ro } from '../../domain/types/get-bookmarks-by-ids.ro'
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
+import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -51,16 +52,29 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               ),
           is_public: tag.is_public || false,
         })),
-        links: bookmark.links.map((link) => ({
-          url: link.is_public
-            ? link.url!
-            : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
-                CryptoJS.enc.Utf8,
-              ),
-          // site_path: link.site_path,
-          is_public: link.is_public || false,
-          saves: link.saves,
-        })),
+        links: bookmark.links.map((link) => {
+          let site_path: string | undefined
+          if (link.is_public) {
+            site_path = link.site_path
+          } else {
+            const site = CryptoJS.AES.decrypt(
+              link.site_aes!,
+              'my_secret_key',
+            ).toString(CryptoJS.enc.Utf8)
+            const domain = `${get_domain_from_url(site)}/`
+            site_path = site.slice(domain.length)
+          }
+          return {
+            url: link.is_public
+              ? link.url!
+              : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
+                  CryptoJS.enc.Utf8,
+                ),
+            site_path,
+            is_public: link.is_public || false,
+            saves: link.saves,
+          }
+        }),
       })),
       pagination: {
         has_more: pagination.has_more,
@@ -93,7 +107,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         links: bookmark.links.map((link) => ({
           url: link.url,
           saves: link.saves,
-          // site_path: link.site,
+          site_path: link.site_path,
           is_public: true,
         })),
       })),
@@ -141,16 +155,29 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               ),
           is_public: tag.is_public || false,
         })),
-        links: bookmark.links.map((link) => ({
-          url: link.is_public
-            ? link.url!
-            : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
-                CryptoJS.enc.Utf8,
-              ),
-          // site_path: link.site_path,
-          is_public: link.is_public || false,
-          saves: link.saves,
-        })),
+        links: bookmark.links.map((link) => {
+          let site_path: string | undefined
+          if (link.is_public) {
+            site_path = link.site_path
+          } else {
+            const site = CryptoJS.AES.decrypt(
+              link.site_aes!,
+              'my_secret_key',
+            ).toString(CryptoJS.enc.Utf8)
+            const domain = `${get_domain_from_url(site)}/`
+            site_path = site.slice(domain.length)
+          }
+          return {
+            url: link.is_public
+              ? link.url!
+              : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
+                  CryptoJS.enc.Utf8,
+                ),
+            site_path,
+            is_public: link.is_public || false,
+            saves: link.saves,
+          }
+        }),
       })),
     }
   }
@@ -180,7 +207,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         links: bookmark.links.map((link) => ({
           url: link.url,
           saves: link.saves,
-          // site_path: link.site_path,
+          site_path: link.site_path,
           is_public: true,
         })),
       })),
@@ -231,15 +258,28 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             ),
         is_public: tag.is_public || false,
       })),
-      links: bookmark.links.map((link) => ({
-        url: link.is_public
-          ? link.url!
-          : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
-              CryptoJS.enc.Utf8,
-            ),
-        // site_path: link.site_path,
-        is_public: link.is_public || false,
-      })),
+      links: bookmark.links.map((link) => {
+        let site_path: string | undefined
+        if (link.is_public) {
+          site_path = link.site_path
+        } else {
+          const site = CryptoJS.AES.decrypt(
+            link.site_aes!,
+            'my_secret_key',
+          ).toString(CryptoJS.enc.Utf8)
+          const domain = `${get_domain_from_url(site)}/`
+          site_path = site.slice(domain.length)
+        }
+        return {
+          url: link.is_public
+            ? link.url!
+            : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
+                CryptoJS.enc.Utf8,
+              ),
+          site_path,
+          is_public: link.is_public || false,
+        }
+      }),
     }
   }
 }
