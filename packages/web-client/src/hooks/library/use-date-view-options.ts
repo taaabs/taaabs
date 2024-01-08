@@ -1,9 +1,11 @@
+import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { update_query_params } from '@/utils/update-query-params'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
 export const use_date_view_options = () => {
   const query_params = useSearchParams()
+  const params = useParams()
   const [current_gte, set_current_gte] = useState<number | undefined>(
     parseInt(query_params.get('gte') || '0') || undefined,
   )
@@ -29,11 +31,10 @@ export const use_date_view_options = () => {
       `${lte}`,
     )
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},
@@ -50,11 +51,10 @@ export const use_date_view_options = () => {
     updated_query_params = update_query_params(query_params, 'gte')
     updated_query_params = update_query_params(updated_query_params, 'lte')
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},

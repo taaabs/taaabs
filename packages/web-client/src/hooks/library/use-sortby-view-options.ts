@@ -3,10 +3,12 @@ import { Sortby } from '@shared/types/modules/bookmarks/sortby'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
+import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 
 export const use_sortby_view_options = () => {
   const query_params = useSearchParams()
+  const params = useParams()
   const [current_sortby, set_current_sortby] = useState<Sortby>(
     Object.values(Sortby)[
       parseInt(
@@ -53,11 +55,10 @@ export const use_sortby_view_options = () => {
     updated_query_params = update_query_params(updated_query_params, 'lte')
     updated_query_params = update_query_params(updated_query_params, 'gte')
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},

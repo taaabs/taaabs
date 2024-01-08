@@ -1,10 +1,12 @@
+import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { update_query_params } from '@/utils/update-query-params'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
 export const use_tag_view_options = () => {
   const query_params = useSearchParams()
+  const params = useParams()
   const [selected_tags, set_selected_tags] = useState<number[]>(
     query_params.get('t')
       ? query_params
@@ -39,11 +41,15 @@ export const use_tag_view_options = () => {
       [...selected_tags, tag_id].join(','),
     )
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
+
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},
@@ -66,11 +72,10 @@ export const use_tag_view_options = () => {
       selected_tags.filter((t) => tag_ids.every((tag) => tag != t)).join(','),
     )
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},
@@ -82,11 +87,10 @@ export const use_tag_view_options = () => {
   const clear_selected_tags = () => {
     const updated_query_params = update_query_params(query_params, 't')
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},

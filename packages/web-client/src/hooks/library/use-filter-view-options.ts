@@ -3,10 +3,12 @@ import { Filter } from '@shared/types/common/filter'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
+import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 
 export const use_filter_view_options = () => {
   const query_params = useSearchParams()
+  const params = useParams()
   const [current_filter, set_current_filter] = useState<Filter>(
     Object.values(Filter)[
       parseInt(
@@ -46,11 +48,10 @@ export const use_filter_view_options = () => {
         : Object.values(Filter).indexOf(filter).toString(),
     )
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},
@@ -68,11 +69,10 @@ export const use_filter_view_options = () => {
         : Object.values(Filter).indexOf(filter).toString(),
     )
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},
@@ -93,11 +93,10 @@ export const use_filter_view_options = () => {
       updated_query_params = update_query_params(query_params, 'f')
     }
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},
@@ -118,11 +117,10 @@ export const use_filter_view_options = () => {
       updated_query_params = update_query_params(query_params, 'f')
     }
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},

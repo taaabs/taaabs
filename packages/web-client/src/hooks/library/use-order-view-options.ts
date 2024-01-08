@@ -3,10 +3,12 @@ import { Order } from '@shared/types/modules/bookmarks/order'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
+import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 
 export const use_order_view_options = () => {
   const query_params = useSearchParams()
+  const params = useParams()
   const [current_order, set_current_order] = useState<Order>(
     Object.values(Order)[
       parseInt(
@@ -44,11 +46,10 @@ export const use_order_view_options = () => {
         : Object.values(Order).indexOf(order).toString(),
     )
 
-    for (const key in sessionStorage) {
-      if (key.endsWith(`__${updated_query_params}`)) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    clear_library_session_storage({
+      username: params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
 
     window.history.pushState(
       {},
