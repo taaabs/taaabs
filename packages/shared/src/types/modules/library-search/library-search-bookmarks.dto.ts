@@ -1,17 +1,9 @@
 import { ToBoolean } from '@shared/decorators/to-boolean'
 
 export namespace LibrarySearchBookmarks_Dto {
-  export namespace QueryParams {
-    export class Authorized {
-      @ToBoolean()
-      public public_only?: boolean
-      @ToBoolean()
-      public is_archived?: boolean
-    }
-    export class Public {
-      @ToBoolean()
-      public is_archived?: boolean
-    }
+  export class QueryParams {
+    @ToBoolean()
+    public is_archived?: boolean
   }
   export namespace Response {
     class AuthorizedSite {

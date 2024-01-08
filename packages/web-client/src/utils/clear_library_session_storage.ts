@@ -5,21 +5,21 @@ export const clear_library_session_storage = (params: {
   if (!params.username) {
     if (params.query_parms) {
       for (const key in sessionStorage) {
-        if (key == `bookmarks/?${params.query_parms}`) {
+        if (key == `library.bookmarks.?${params.query_parms}`) {
           sessionStorage.removeItem(key)
-        } else if (key == `has-more-bookmarks/?${params.query_parms}`) {
+        } else if (key == `library.has-more-bookmarks.?${params.query_parms}`) {
           sessionStorage.removeItem(key)
-        } else if (key == `tags/?${params.query_parms}`) {
+        } else if (key == `library.tags.?${params.query_parms}`) {
           sessionStorage.removeItem(key)
         }
       }
     } else {
       for (const key in sessionStorage) {
-        if (key.substring(0, 9) == 'bookmarks') {
+        if (key.substring(0, 17) == 'library.bookmarks') {
           sessionStorage.removeItem(key)
-        } else if (key.substring(0, 18) == 'has-more-bookmarks') {
+        } else if (key.substring(0, 26) == 'library.has-more-bookmarks') {
           sessionStorage.removeItem(key)
-        } else if (key.substring(0, 4) == 'tags') {
+        } else if (key.substring(0, 12) == 'library.tags') {
           sessionStorage.removeItem(key)
         }
       }
@@ -27,29 +27,34 @@ export const clear_library_session_storage = (params: {
   } else {
     for (const key in sessionStorage) {
       if (params.query_parms) {
-        if (key == `bookmarks/${params.username}?${params.query_parms}`) {
-          sessionStorage.removeItem(key)
-        } else if (
-          key == `has-more-bookmarks/${params.username}?${params.query_parms}`
+        if (
+          key == `library.bookmarks.${params.username}?${params.query_parms}`
         ) {
           sessionStorage.removeItem(key)
-        } else if (key == `tags/${params.username}?${params.query_parms}`) {
+        } else if (
+          key ==
+          `library.has-more-bookmarks.${params.username}?${params.query_parms}`
+        ) {
+          sessionStorage.removeItem(key)
+        } else if (
+          key == `library.tags.${params.username}?${params.query_parms}`
+        ) {
           sessionStorage.removeItem(key)
         }
       } else {
         if (
-          key.substring(0, 10 + params.username.length) ==
-          `bookmarks/${params.username}`
+          key.substring(0, 18 + params.username.length) ==
+          `library.bookmarks.${params.username}`
         ) {
           sessionStorage.removeItem(key)
         } else if (
-          key.substring(0, 19 + params.username.length) ==
-          `has-more-bookmarks/${params.username}`
+          key.substring(0, 27 + params.username.length) ==
+          `library.has-more-bookmarks.${params.username}`
         ) {
           sessionStorage.removeItem(key)
         } else if (
-          key.substring(0, 5 + params.username.length) ==
-          `tags/${params.username}`
+          key.substring(0, 13 + params.username.length) ==
+          `library.tags.${params.username}`
         ) {
           sessionStorage.removeItem(key)
         }

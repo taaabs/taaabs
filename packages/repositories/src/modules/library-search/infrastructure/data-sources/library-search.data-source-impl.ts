@@ -40,9 +40,8 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
       )
     }
 
-    const query_params: LibrarySearchBookmarks_Dto.QueryParams.Authorized = {
+    const query_params: LibrarySearchBookmarks_Dto.QueryParams = {
       is_archived: params.is_archived ? true : undefined,
-      public_only: params.public_only ? true : undefined,
     }
 
     return fetch(
@@ -60,7 +59,7 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
   public async get_bookmarks_on_public_user(
     params: GetBookmarks_Params.Public,
   ): Promise<LibrarySearchBookmarks_Dto.Response.Public> {
-    const query_params: LibrarySearchBookmarks_Dto.QueryParams.Public = {
+    const query_params: LibrarySearchBookmarks_Dto.QueryParams = {
       is_archived: params.is_archived ? true : undefined,
     }
 

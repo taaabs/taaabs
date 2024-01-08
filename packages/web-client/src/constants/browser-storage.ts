@@ -31,16 +31,18 @@ export const browser_storage = {
   },
   session_storage: {
     library: {
-      last_authorized_counts_params: 'last-authorized-counts-params',
+      last_authorized_counts_params: 'library.last-authorized-counts-params',
       bookmarks: (params: { username?: string; query_params?: string }) =>
-        `bookmarks/${params.username || ''}?${params.query_params}`,
+        `library.bookmarks.${params.username || ''}?${params.query_params}`,
       has_more_bookmarks: (params: {
         username?: string
         query_params?: string
       }) =>
-        `has-more-bookmarks/${params.username || ''}?${params.query_params}`,
+        `library.has-more-bookmarks.${params.username || ''}?${
+          params.query_params
+        }`,
       tags: (params: { username?: string; query_params?: string }) =>
-        `tags/${params.username || ''}?${params.query_params}`,
+        `library.tags.${params.username || ''}?${params.query_params}`,
     },
   },
   local_storage: {
