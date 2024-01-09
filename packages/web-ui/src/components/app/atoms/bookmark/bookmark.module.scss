@@ -197,8 +197,10 @@
       background-color: var(--neutral25);
       border-top: var(--border-secondary);
       &:last-of-type {
-        border-bottom-left-radius: var(--border-radius-12px);
-        border-bottom-right-radius: var(--border-radius-12px);
+        @include at992 {
+          border-bottom-left-radius: var(--border-radius-12px);
+          border-bottom-right-radius: var(--border-radius-12px);
+        }
       }
       &__link {
         flex: 1;
