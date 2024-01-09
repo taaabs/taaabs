@@ -1,0 +1,13 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  gap: var(--distance-4px);
+  transform: translateY(calc(var(--distance-1px) * -1));
+  > svg {
+    fill: var(--yellow);
+    filter: var(--star-shadow);
+    height: var(--icon-dimension-20px);
+  }
+}

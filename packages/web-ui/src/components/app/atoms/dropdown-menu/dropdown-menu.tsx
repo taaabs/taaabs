@@ -4,7 +4,7 @@ import cn from 'classnames'
 
 export namespace DropdownMenu {
   type Item = {
-    label: string
+    label: React.ReactNode
     on_click: () => void
     is_selected?: boolean
     is_checked?: boolean

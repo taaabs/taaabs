@@ -132,7 +132,7 @@
           > svg {
             height: var(--distance-2-0rem);
             fill: var(--yellow);
-            filter: drop-shadow(2px 2px 2px rgba(242, 218, 0, 0.2));
+            filter: var(--star-shadow);
           }
         }
         &__text {

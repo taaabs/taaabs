@@ -35,7 +35,9 @@
   }
   > span {
     white-space: nowrap;
-
+  }
+  > * {
+    @include transition-150ms(opacity);
   }
   &__icon {
     margin-right: var(--distance-11px);

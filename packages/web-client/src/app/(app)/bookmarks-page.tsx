@@ -40,6 +40,7 @@ import { DropdownMenu as UiAppAtom_DropdownMenu } from '@web-ui/components/app/a
 import { SelectedTags as UiAppAtom_SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { Tags as UiAppAtom_Tags } from '@web-ui/components/app/atoms/tags'
 import { TagsSkeleton as UiAppAtom_TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
+import { StarsForDropdown as UiAppAtom_StarsForDropdown } from '@web-ui/components/app/atoms/stars-for-dropdown'
 import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/particles/icon'
 import { use_popstate } from '@web-ui/components/app/atoms/custom-range/hooks/use-popstate'
@@ -1009,7 +1010,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               },
                             },
                             {
-                              label: 'One star',
+                              label: <UiAppAtom_StarsForDropdown stars={1} />,
                               is_checked: bookmark.stars == 1,
                               is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
@@ -1083,7 +1084,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               },
                             },
                             {
-                              label: 'Two stars',
+                              label: <UiAppAtom_StarsForDropdown stars={2} />,
                               is_checked: bookmark.stars == 2,
                               is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
@@ -1156,7 +1157,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               },
                             },
                             {
-                              label: 'Three stars',
+                              label: <UiAppAtom_StarsForDropdown stars={3} />,
                               is_checked: bookmark.stars == 3,
                               is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
@@ -1229,7 +1230,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               },
                             },
                             {
-                              label: 'Four stars',
+                              label: <UiAppAtom_StarsForDropdown stars={4} />,
                               is_checked: bookmark.stars == 4,
                               is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
@@ -1303,7 +1304,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               },
                             },
                             {
-                              label: 'Five stars',
+                              label: <UiAppAtom_StarsForDropdown stars={5} />,
                               is_checked: bookmark.stars == 5,
                               is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
