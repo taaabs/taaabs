@@ -414,7 +414,6 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                                 Filter.Unread,
                               )
                             },
-                            is_disabled: true,
                             is_selected:
                               filter_view_options.current_filter ==
                               Filter.Unread,

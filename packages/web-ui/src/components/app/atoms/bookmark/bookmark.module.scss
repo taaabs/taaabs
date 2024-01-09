@@ -124,9 +124,11 @@
         }
         &__stars {
           display: inline-flex;
+          align-items: center;
           gap: var(--distance-0-6rem);
           transform: translateY(0.22rem);
           margin-right: var(--distance-0-7rem);
+          height: 0;
           > svg {
             height: var(--distance-2-0rem);
             fill: var(--yellow);
