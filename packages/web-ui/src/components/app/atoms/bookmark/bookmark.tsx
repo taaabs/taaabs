@@ -143,10 +143,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               is_menu_open,
                           },
                         )}
-                        onClick={async (e) => {
-                          e.stopPropagation()
-                          if (!is_menu_open && !props.orama_db_id) {
-                            await props.on_menu_click()
+                        onClick={() => {
+                          if (!is_menu_open) {
+                            props.on_menu_click()
                           }
                           toggle_is_menu_open()
                         }}

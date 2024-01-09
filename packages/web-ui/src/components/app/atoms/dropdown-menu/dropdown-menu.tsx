@@ -21,7 +21,14 @@ export const DropdownMenu: React.FC<DropdownMenu.Props> = (props) => {
     <div className={styles.container}>
       {props.items.map((item, i) =>
         item.is_selected !== undefined || item.other_icon ? (
-          <button className={styles.item} onClick={item.on_click} key={i}>
+          <button
+            className={cn([
+              styles.item,
+              { [styles['item--disabled']]: item.is_disabled },
+            ])}
+            onClick={item.on_click}
+            key={i}
+          >
             <div className={styles.item__icon}>
               {item.is_selected ? <Icon variant="SELECTED" /> : item.other_icon}
             </div>
@@ -50,7 +57,7 @@ export const DropdownMenu: React.FC<DropdownMenu.Props> = (props) => {
             <span>{item.label}</span>
           </button>
         ) : (
-          <>Missing props</>
+          <>Invalid props.</>
         ),
       )}
     </div>

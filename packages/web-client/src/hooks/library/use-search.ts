@@ -311,7 +311,6 @@ export const use_search = () => {
         bookmarks = (
           await get_searchable_bookmarks.invoke({
             is_archived: params.is_archived,
-            public_only: false,
           })
         ).bookmarks
       } else {
@@ -1252,9 +1251,14 @@ export const use_search = () => {
   const delete_searchable_bookmark = async (params: {
     bookmark_id: number
   }) => {
+    if (
+      (current_filter != Filter.Archived && !db) ||
+      (current_filter == Filter.Archived && !archived_db)
+    )
+      return
+
     if (current_filter != Filter.Archived) {
-      if (!db) return
-      await remove(db, params.bookmark_id.toString())
+      await remove(db!, params.bookmark_id.toString())
       const new_all_bookmarks = bookmarks_just_tags!.filter(
         (bookmark) => bookmark.id != params.bookmark_id,
       )
@@ -1267,8 +1271,7 @@ export const use_search = () => {
         })
       }, 0)
     } else {
-      if (!archived_db) return
-      await remove(archived_db, params.bookmark_id.toString())
+      await remove(archived_db!, params.bookmark_id.toString())
       const new_archived_bookmarks_just_tags =
         archived_bookmarks_just_tags!.filter(
           (bookmark) => bookmark.id != params.bookmark_id,

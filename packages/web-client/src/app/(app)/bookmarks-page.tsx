@@ -77,6 +77,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   const [is_sort_by_dropdown_visible, toggle_sort_by_dropdown] =
     useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
+  const [are_bookmark_menu_items_locked, set_are_bookmarks_menu_items_locked] =
+    useState(false)
 
   /** Upload deferred recent visit - START */
   const has_focus = use_has_focus()
@@ -774,7 +776,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 is_fetching_bookmarks={
                   bookmarks_slice_state.is_fetching_first_bookmarks
                 }
-                is_not_interactive={search.is_initializing}
+                is_not_interactive={
+                  search.is_initializing || are_bookmark_menu_items_locked
+                }
                 date={
                   !bookmarks_slice_state.is_fetching_first_bookmarks
                     ? sort_by_view_options.current_sort_by == SortBy.CreatedAt
@@ -880,6 +884,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
                 on_menu_click={async () => {
                   if (props.user == 'public') return
+                  set_are_bookmarks_menu_items_locked(true)
                   const is_cache_stale = await search.check_is_cache_stale({
                     api_url: process.env.NEXT_PUBLIC_API_URL,
                     auth_token:
@@ -887,22 +892,23 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                     is_archived:
                       filter_view_options.current_filter == Filter.Archived,
                   })
-                  if (!is_cache_stale) {
-                    await toast.promise(
-                      search.init({
-                        is_archived:
-                          filter_view_options.current_filter == Filter.Archived,
-                      }),
-                      {
-                        pending: {
-                          render() {
-                            return 'One moment please...'
-                          },
-                          icon: false,
-                        },
-                      },
-                    )
+                  if (
+                    !is_cache_stale &&
+                    (filter_view_options.current_filter != Filter.Archived
+                      ? !search.db
+                      : !search.archived_db)
+                  ) {
+                    await search.init({
+                      is_archived:
+                        filter_view_options.current_filter == Filter.Archived,
+                    })
+                  } else if (is_cache_stale) {
+                    await search.clear_cached_data({
+                      is_archived:
+                        filter_view_options.current_filter == Filter.Archived,
+                    })
                   }
+                  set_are_bookmarks_menu_items_locked(false)
                 }}
                 menu_slot={
                   <UiAppAtom_DropdownMenu
@@ -923,6 +929,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Mark as Unread',
                               is_checked: bookmark.is_unread,
+                              is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
                                 const is_unread = !bookmark.is_unread
                                 const modified_bookmark: UpsertBookmark_Params =
@@ -1005,6 +1012,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'One star',
                               is_checked: bookmark.stars == 1,
+                              is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
                                 const modified_bookmark: UpsertBookmark_Params =
                                   {
@@ -1078,6 +1086,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Two stars',
                               is_checked: bookmark.stars == 2,
+                              is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
                                 const modified_bookmark: UpsertBookmark_Params =
                                   {
@@ -1150,6 +1159,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Three stars',
                               is_checked: bookmark.stars == 3,
+                              is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
                                 const modified_bookmark: UpsertBookmark_Params =
                                   {
@@ -1222,6 +1232,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Four stars',
                               is_checked: bookmark.stars == 4,
+                              is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
                                 const modified_bookmark: UpsertBookmark_Params =
                                   {
@@ -1295,6 +1306,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             {
                               label: 'Five stars',
                               is_checked: bookmark.stars == 5,
+                              is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
                                 const modified_bookmark: UpsertBookmark_Params =
                                   {
@@ -1367,6 +1379,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             },
                             {
                               label: 'Edit',
+                              is_disabled: are_bookmark_menu_items_locked,
                               on_click: async () => {
                                 const updated_bookmark =
                                   await upsert_bookmark_modal({
@@ -1482,6 +1495,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                               other_icon: (
                                 <UiCommonParticles_Icon variant="ARCHIVE" />
                               ),
+                              is_disabled: are_bookmark_menu_items_locked,
                               on_click: () => {
                                 const modified_bookmark: UpsertBookmark_Params =
                                   {
@@ -1557,6 +1571,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                             },
                             {
                               label: 'Delete',
+                              is_disabled: are_bookmark_menu_items_locked,
                               on_click: () => {
                                 dispatch(
                                   bookmarks_actions.delete_bookmark({
