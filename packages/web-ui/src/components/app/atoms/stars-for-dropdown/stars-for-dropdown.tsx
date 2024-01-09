@@ -10,8 +10,8 @@ export namespace StarsForDropdown {
 export const StarsForDropdown: React.FC<StarsForDropdown.Props> = (props) => {
   return (
     <div className={styles.container}>
-      {[...new Array(props.stars)].map(() => (
-        <Icon variant="STAR_FILLED" />
+      {[...new Array(props.stars)].map((_, i) => (
+        <Icon variant="STAR_FILLED" key={i} />
       ))}
     </div>
   )

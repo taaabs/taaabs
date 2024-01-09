@@ -36,9 +36,6 @@
   > span {
     white-space: nowrap;
   }
-  > * {
-    @include transition-150ms(opacity);
-  }
   &__icon {
     margin-right: var(--distance-11px);
     display: flex;
@@ -54,9 +51,7 @@
   }
   &--disabled {
     pointer-events: none;
-    > * {
-      opacity: 0.4;
-    }
+    opacity: 0.4;
   }
   &__checkbox {
     margin-right: var(--distance-6px);
