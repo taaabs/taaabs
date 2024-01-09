@@ -15,7 +15,7 @@ export const Primary = () => {
           dropdown: <></>,
           is_dropdown_visible: false,
         }}
-        slot_sortby={{
+        slot_sort_by={{
           button: <>[sortby]</>,
           dropdown: <></>,
           is_dropdown_visible: false,
@@ -36,7 +36,7 @@ export const Primary = () => {
           dropdown: <>[dropdown]</>,
           is_dropdown_visible: true,
         }}
-        slot_sortby={{
+        slot_sort_by={{
           button: <>[sortby]</>,
           dropdown: <>[dropdown]</>,
           is_dropdown_visible: true,

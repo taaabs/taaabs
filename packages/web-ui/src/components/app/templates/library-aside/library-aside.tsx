@@ -10,7 +10,7 @@ export namespace LibraryAside {
       dropdown: React.ReactNode
       is_dropdown_visible: boolean
     }
-    slot_sortby?: {
+    slot_sort_by?: {
       button: React.ReactNode
       dropdown: React.ReactNode
       is_dropdown_visible: boolean
@@ -53,19 +53,19 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
             </div>
           </div>
         )}
-        {props.slot_sortby && (
+        {props.slot_sort_by && (
           <div className={styles['slots__button']}>
-            {props.slot_sortby.button}
+            {props.slot_sort_by.button}
             <div
               className={cn([
                 styles['slots__button__dropdown'],
                 {
                   [styles['slots__button__dropdown--hidden']]:
-                    !props.slot_sortby.is_dropdown_visible,
+                    !props.slot_sort_by.is_dropdown_visible,
                 },
               ])}
             >
-              {props.slot_sortby.dropdown}
+              {props.slot_sort_by.dropdown}
             </div>
           </div>
         )}

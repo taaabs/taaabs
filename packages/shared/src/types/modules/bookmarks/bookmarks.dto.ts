@@ -1,44 +1,32 @@
 import { PaginatedResponseDto } from '../../common/paginated-response.dto'
 import { ApiProperty } from '@nestjs/swagger'
-import { Sortby } from '@shared/types/modules/bookmarks/sortby'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { PaginationQueryParamsDto } from '@shared/types/common/pagination-options.dto'
 import { Type } from 'class-transformer'
-import { ToBoolean } from '@shared/decorators/to-boolean'
 import { Filter } from '@shared/types/common/filter'
-import { BookmarksFetchingDefaults } from './bookmarks-fetching-defaults'
 
 export namespace Bookmarks_Dto {
-  export namespace QueryParams {
-    export class Base extends PaginationQueryParamsDto {
-      @ApiProperty({
-        description: 'Comma separated list of tag ids a bookmark must include.',
-        example: '1,2,3',
-      })
-      public tags?: string
+  export class QueryParams extends PaginationQueryParamsDto {
+    @ApiProperty({
+      description: 'Comma separated list of tag ids a bookmark must include.',
+      example: '1,2,3',
+    })
+    public tags?: string
 
-      @ApiProperty({ description: 'Epoch timestamp in seconds.' })
-      @Type()
-      public epoch_gte?: number
+    @ApiProperty({ description: 'Epoch timestamp in seconds.' })
+    @Type()
+    public epoch_gte?: number
 
-      @ApiProperty({ description: 'Epoch timestamp in seconds.' })
-      @Type()
-      public epoch_lte?: number
+    @ApiProperty({ description: 'Epoch timestamp in seconds.' })
+    @Type()
+    public epoch_lte?: number
 
-      public sort_by?: Sortby = BookmarksFetchingDefaults.Common.sortby
+    public sort_by?: SortBy
 
-      public order?: Order = BookmarksFetchingDefaults.Common.order
+    public order?: Order
 
-      public filter?: Filter = BookmarksFetchingDefaults.Common.filter
-    }
-
-    export class Authorized extends Base {
-      @ToBoolean()
-      public public_only?: boolean =
-        BookmarksFetchingDefaults.Authorized.public_only
-    }
-
-    export class Public extends Base {}
+    public filter?: Filter
   }
 
   export namespace Response {

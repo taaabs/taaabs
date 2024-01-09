@@ -1,40 +1,40 @@
 import { update_query_params } from '@/utils/update-query-params'
-import { Sortby } from '@shared/types/modules/bookmarks/sortby'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useParams, useSearchParams } from 'next/navigation'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 
-export const use_sortby_view_options = () => {
+export const use_sort_by_view_options = () => {
   const query_params = useSearchParams()
   const params = useParams()
-  const [current_sortby, set_current_sortby] = useState<Sortby>(
-    Object.values(Sortby)[
+  const [current_sort_by, set_current_sort_by] = useState<SortBy>(
+    Object.values(SortBy)[
       parseInt(
         query_params.get('s') ||
-          Object.values(Sortby)
-            .indexOf(BookmarksFetchingDefaults.Common.sortby)
+          Object.values(SortBy)
+            .indexOf(BookmarksFetchingDefaults.Common.sort_by)
             .toString(),
       )
     ],
   )
   // This is set whenever new "first" bookmarks arrive and is neeeded
   // to prevent incorrect date flashing when changing sortby option.
-  const [commited_sortby, set_commited_sortby] = useState<Sortby>()
+  const [commited_sort_by, set_commited_sort_by] = useState<SortBy>()
 
   useUpdateEffect(() => {
-    const query_sortby = query_params.get('s')
+    const query_sort_by = query_params.get('s')
 
     if (
-      query_sortby != Object.values(Sortby).indexOf(current_sortby).toString()
+      query_sort_by != Object.values(SortBy).indexOf(current_sort_by).toString()
     ) {
-      set_current_sortby(
-        Object.values(Sortby)[
+      set_current_sort_by(
+        Object.values(SortBy)[
           parseInt(
-            query_sortby ||
-              Object.values(Sortby)
-                .indexOf(BookmarksFetchingDefaults.Common.sortby)
+            query_sort_by ||
+              Object.values(SortBy)
+                .indexOf(BookmarksFetchingDefaults.Common.sort_by)
                 .toString(),
           )
         ],
@@ -42,14 +42,14 @@ export const use_sortby_view_options = () => {
     }
   }, [query_params])
 
-  const set_sortby_query_param = (sortby: Sortby) => {
+  const set_sort_by_query_param = (sortby: SortBy) => {
     let updated_query_params: any
     updated_query_params = update_query_params(
       query_params,
       's',
-      sortby == BookmarksFetchingDefaults.Common.sortby
+      sortby == BookmarksFetchingDefaults.Common.sort_by
         ? undefined
-        : Object.values(Sortby).indexOf(sortby).toString(),
+        : Object.values(SortBy).indexOf(sortby).toString(),
     )
 
     updated_query_params = update_query_params(updated_query_params, 'lte')
@@ -68,9 +68,9 @@ export const use_sortby_view_options = () => {
   }
 
   return {
-    current_sortby,
-    set_sortby_query_param,
-    commited_sortby,
-    set_commited_sortby,
+    current_sort_by,
+    set_sort_by_query_param,
+    commited_sort_by,
+    set_commited_sort_by,
   }
 }

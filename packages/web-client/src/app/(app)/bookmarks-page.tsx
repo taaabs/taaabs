@@ -4,7 +4,7 @@ import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { Filter } from '@shared/types/common/filter'
-import { Sortby } from '@shared/types/modules/bookmarks/sortby'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { useContext, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
@@ -12,7 +12,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_filter_view_options } from '@/hooks/library/use-filter-view-options'
 import { use_tag_view_options } from '@/hooks/library/use-tag-view-options'
 import { use_date_view_options } from '@/hooks/library/use-date-view-options'
-import { use_sortby_view_options } from '@/hooks/library/use-sortby-view-options'
+import { use_sort_by_view_options } from '@/hooks/library/use-sort-by-view-options'
 import { use_order_view_options } from '@/hooks/library/use-order-view-options'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { use_bookmarks } from '@/hooks/library/use-bookmarks'
@@ -67,14 +67,15 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   })
   const counts = use_counts()
   const filter_view_options = use_filter_view_options()
-  const sortby_view_options = use_sortby_view_options()
+  const sort_by_view_options = use_sort_by_view_options()
   const order_view_options = use_order_view_options()
   const tag_view_options = use_tag_view_options()
   const date_view_options = use_date_view_options()
   const { pop_count } = use_popstate()
 
   const [is_filter_dropdown_visible, toggle_filter_dropdown] = useToggle(false)
-  const [is_sortby_dropdown_visible, toggle_sortby_dropdown] = useToggle(false)
+  const [is_sort_by_dropdown_visible, toggle_sort_by_dropdown] =
+    useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
 
   /** Upload deferred recent visit - START */
@@ -116,7 +117,9 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
     set_show_tags_skeleton(false)
     set_show_bookmarks_skeleton(false)
     modal_context?.set_modal()
-    sortby_view_options.set_commited_sortby(sortby_view_options.current_sortby)
+    sort_by_view_options.set_commited_sort_by(
+      sort_by_view_options.current_sort_by,
+    )
   }, [bookmarks_slice_state.bookmarks])
 
   useUpdateEffect(() => {
@@ -124,7 +127,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   }, [
     filter_view_options.current_filter,
     order_view_options.current_order,
-    sortby_view_options.current_sortby,
+    sort_by_view_options.current_sort_by,
     tag_view_options.selected_tags,
     date_view_options.current_gte,
     date_view_options.current_lte,
@@ -134,14 +137,14 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
     search.set_current_filter(filter_view_options.current_filter)
   }, [filter_view_options.current_filter])
 
-  // Clear cache when user selects visited at sortby option.
+  // Clear cache when user selects visited at sort_by option.
   useUpdateEffect(() => {
-    if (sortby_view_options.current_sortby == Sortby.VisitedAt) {
+    if (sort_by_view_options.current_sort_by == SortBy.VisitedAt) {
       search.clear_cached_data({
         is_archived: filter_view_options.current_filter == Filter.Archived,
       })
     }
-  }, [filter_view_options.current_filter, sortby_view_options.current_sortby])
+  }, [filter_view_options.current_filter, sort_by_view_options.current_sort_by])
 
   useUpdateEffect(() => {
     if (search.db || search.archived_db) {
@@ -466,86 +469,88 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
               </OutsideClickHandler>
             ),
           }}
-          slot_sortby={{
+          slot_sort_by={{
             button: is_hydrated ? (
               <UiAppAtom_ButtonSelect
                 label="Sort by"
-                current_value={_sortby_option_to_label(
-                  sortby_view_options.current_sortby,
+                current_value={_sort_by_option_to_label(
+                  sort_by_view_options.current_sort_by,
                 )}
-                is_active={is_sortby_dropdown_visible}
-                on_click={toggle_sortby_dropdown}
+                is_active={is_sort_by_dropdown_visible}
+                on_click={toggle_sort_by_dropdown}
               />
             ) : (
               <UiAppAtom_ButtonSelectSkeleton />
             ),
-            is_dropdown_visible: is_sortby_dropdown_visible,
+            is_dropdown_visible: is_sort_by_dropdown_visible,
             dropdown: is_hydrated && (
               <OutsideClickHandler
-                onOutsideClick={toggle_sortby_dropdown}
-                disabled={!is_sortby_dropdown_visible}
+                onOutsideClick={toggle_sort_by_dropdown}
+                disabled={!is_sort_by_dropdown_visible}
               >
                 <UiAppAtom_DropdownMenu
                   items={[
                     {
-                      label: _sortby_option_to_label(Sortby.CreatedAt),
+                      label: _sort_by_option_to_label(SortBy.CreatedAt),
                       on_click: () => {
-                        toggle_sortby_dropdown()
+                        toggle_sort_by_dropdown()
                         if (
-                          sortby_view_options.current_sortby ==
-                            Sortby.CreatedAt ||
+                          sort_by_view_options.current_sort_by ==
+                            SortBy.CreatedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
                           counts.is_fetching_counts_data
                         )
                           return
-                        sortby_view_options.set_sortby_query_param(
-                          Sortby.CreatedAt,
+                        sort_by_view_options.set_sort_by_query_param(
+                          SortBy.CreatedAt,
                         )
                       },
                       is_selected:
-                        sortby_view_options.current_sortby == Sortby.CreatedAt,
+                        sort_by_view_options.current_sort_by ==
+                        SortBy.CreatedAt,
                     },
                     {
-                      label: _sortby_option_to_label(Sortby.UpdatedAt),
+                      label: _sort_by_option_to_label(SortBy.UpdatedAt),
                       on_click: () => {
-                        toggle_sortby_dropdown()
+                        toggle_sort_by_dropdown()
                         if (
-                          sortby_view_options.current_sortby ==
-                            Sortby.UpdatedAt ||
+                          sort_by_view_options.current_sort_by ==
+                            SortBy.UpdatedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
                           counts.is_fetching_counts_data
                         )
                           return
-                        sortby_view_options.set_sortby_query_param(
-                          Sortby.UpdatedAt,
+                        sort_by_view_options.set_sort_by_query_param(
+                          SortBy.UpdatedAt,
                         )
                       },
                       is_selected:
-                        sortby_view_options.current_sortby == Sortby.UpdatedAt,
+                        sort_by_view_options.current_sort_by ==
+                        SortBy.UpdatedAt,
                     },
                     ...(props.user == 'authorized'
                       ? [
                           {
-                            label: _sortby_option_to_label(Sortby.VisitedAt),
+                            label: _sort_by_option_to_label(SortBy.VisitedAt),
                             on_click: () => {
-                              toggle_sortby_dropdown()
+                              toggle_sort_by_dropdown()
                               if (
-                                sortby_view_options.current_sortby ==
-                                  Sortby.VisitedAt ||
+                                sort_by_view_options.current_sort_by ==
+                                  SortBy.VisitedAt ||
                                 bookmarks_slice_state.is_fetching_first_bookmarks ||
                                 bookmarks_slice_state.is_fetching_more_bookmarks ||
                                 counts.is_fetching_counts_data
                               )
                                 return
-                              sortby_view_options.set_sortby_query_param(
-                                Sortby.VisitedAt,
+                              sort_by_view_options.set_sort_by_query_param(
+                                SortBy.VisitedAt,
                               )
                             },
                             is_selected:
-                              sortby_view_options.current_sortby ==
-                              Sortby.VisitedAt,
+                              sort_by_view_options.current_sort_by ==
+                              SortBy.VisitedAt,
                           },
                         ]
                       : []),
@@ -651,8 +656,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                     counts_slice_state.is_fetching_counts_data
                   }
                   is_range_selector_disabled={
-                    sortby_view_options.current_sortby == Sortby.UpdatedAt ||
-                    sortby_view_options.current_sortby == Sortby.VisitedAt
+                    sort_by_view_options.current_sort_by == SortBy.UpdatedAt ||
+                    sort_by_view_options.current_sort_by == SortBy.VisitedAt
                   }
                 />
               </div>
@@ -772,18 +777,18 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 is_not_interactive={search.is_initializing}
                 date={
                   !bookmarks_slice_state.is_fetching_first_bookmarks
-                    ? sortby_view_options.current_sortby == Sortby.CreatedAt
+                    ? sort_by_view_options.current_sort_by == SortBy.CreatedAt
                       ? new Date(bookmark.created_at)
-                      : sortby_view_options.current_sortby == Sortby.UpdatedAt
+                      : sort_by_view_options.current_sort_by == SortBy.UpdatedAt
                       ? new Date(bookmark.updated_at)
-                      : sortby_view_options.current_sortby == Sortby.VisitedAt
+                      : sort_by_view_options.current_sort_by == SortBy.VisitedAt
                       ? new Date(bookmark.visited_at)
                       : new Date(bookmark.created_at)
-                    : sortby_view_options.commited_sortby == Sortby.CreatedAt
+                    : sort_by_view_options.commited_sort_by == SortBy.CreatedAt
                     ? new Date(bookmark.created_at)
-                    : sortby_view_options.commited_sortby == Sortby.UpdatedAt
+                    : sort_by_view_options.commited_sort_by == SortBy.UpdatedAt
                     ? new Date(bookmark.updated_at)
-                    : sortby_view_options.commited_sortby == Sortby.VisitedAt
+                    : sort_by_view_options.commited_sort_by == SortBy.VisitedAt
                     ? new Date(bookmark.visited_at)
                     : new Date(bookmark.created_at)
                 }
@@ -1696,13 +1701,13 @@ function _filter_option_to_label(filter_option: Filter): string {
   }
 }
 
-function _sortby_option_to_label(sortby_option: Sortby): string {
-  switch (sortby_option) {
-    case Sortby.CreatedAt:
+function _sort_by_option_to_label(sort_by_option: SortBy): string {
+  switch (sort_by_option) {
+    case SortBy.CreatedAt:
       return 'Date created'
-    case Sortby.UpdatedAt:
+    case SortBy.UpdatedAt:
       return 'Date updated'
-    case Sortby.VisitedAt:
+    case SortBy.VisitedAt:
       return 'Last visited'
   }
 }

@@ -7,7 +7,7 @@ import {
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect } from 'react'
 import { Filter } from '@shared/types/common/filter'
-import { Sortby } from '@shared/types/modules/bookmarks/sortby'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
@@ -39,7 +39,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
 
       const query_sortby = query_params.get('s')
       if (query_sortby) {
-        request_params.sort_by = Object.values(Sortby)[parseInt(query_sortby)]
+        request_params.sort_by = Object.values(SortBy)[parseInt(query_sortby)]
       }
 
       const query_order = query_params.get('o')
@@ -87,7 +87,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
 
       const query_sortby = query_params.get('s')
       if (query_sortby) {
-        request_params.sort_by = Object.values(Sortby)[parseInt(query_sortby)]
+        request_params.sort_by = Object.values(SortBy)[parseInt(query_sortby)]
       }
 
       const query_order = query_params.get('o')

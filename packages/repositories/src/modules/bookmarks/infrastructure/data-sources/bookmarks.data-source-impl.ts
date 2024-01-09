@@ -20,7 +20,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async get_bookmarks_on_authorized_user(
     params: GetBookmarks_Params.Authorized,
   ): Promise<Bookmarks_Dto.Response.Authorized> {
-    const query_params: Bookmarks_Dto.QueryParams.Authorized = {
+    const query_params: Bookmarks_Dto.QueryParams = {
       tags: params.tags?.join(','),
       after: params.after,
       filter: params.filter,
@@ -38,7 +38,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
             parseInt(params.yyyymm_lte.toString().substring(4, 6)),
           ).getTime() / 1000
         : undefined,
-      public_only: params.public_only,
     }
 
     return fetch(
@@ -56,7 +55,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async get_bookmarks_on_public_user(
     params: GetBookmarks_Params.Public,
   ): Promise<Bookmarks_Dto.Response.Public> {
-    const query_params: Bookmarks_Dto.QueryParams.Public = {
+    const query_params: Bookmarks_Dto.QueryParams = {
       tags: params.tags?.join(','),
       after: params.after,
       filter: params.filter,
