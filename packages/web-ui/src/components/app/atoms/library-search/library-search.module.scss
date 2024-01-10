@@ -7,34 +7,36 @@
   gap: var(--distance-4px);
   width: 100%;
   position: relative;
-  @include to992 {
-    margin: var(--distance-12px) 0;
-  }
+  margin: var(--distance-8px) 0;
   @include at992 {
     margin: var(--distance-16px) 0;
   }
 }
-.search {
+.box {
   display: flex;
   align-items: center;
-  gap: var(--distance-13px);
-  height: var(--button-dimension-52px);
   background-color: var(--blue50-transparent);
   backdrop-filter: var(--backdrop-filter);
   border: 1px solid var(--blue100);
-  border-radius: var(--border-radius-999px);
   box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.4);
   z-index: 2;
+  border-radius: var(--border-radius-10px);
+  gap: var(--distance-8px);
+  height: var(--button-dimension-40px);
   @include transition-150ms;
   @include to992 {
-    margin: 0 var(--distance-10px);
+    margin: 0 var(--distance-8px);
   }
   @include at992 {
+    border-radius: var(--border-radius-999px);
     transform: translateX(calc(var(--distance-8px) * -1));
     width: calc(100% + (var(--distance-8px) * 2));
+    gap: var(--distance-6px);
+    height: var(--button-dimension-52px);
   }
   @include at1200 {
     transform: translateX(calc(var(--distance-16px) * -1));
+    gap: var(--distance-13px);
     width: calc(100% + (var(--distance-16px) * 2));
   }
   @include hover {
@@ -57,9 +59,9 @@
     box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.7);
   }
   &__left-side {
-    margin-left: var(--distance-8px);
-    width: var(--button-dimension-34px);
-    height: var(--button-dimension-34px);
+    margin-left: var(--distance-6px);
+    width: var(--button-dimension-28px);
+    height: var(--button-dimension-28px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -68,21 +70,34 @@
     @include hover {
       background: var(--blue100);
     }
+    @include at992 {
+      width: var(--button-dimension-34px);
+      height: var(--button-dimension-34px);
+      margin-left: var(--distance-8px);
+    }
     > svg {
-      width: var(--icon-dimension-20px);
+      width: var(--icon-dimension-16px);
       fill: var(--brand-color);
       @include transition-150ms(fill);
+      @include at992 {
+        width: var(--icon-dimension-20px);
+      }
     }
   }
   &__loader {
-    width: var(--icon-dimension-22px);
-    height: var(--icon-dimension-22px);
-    border: 2.5px solid var(--brand-color);
+    width: var(--icon-dimension-18px);
+    height: var(--icon-dimension-18px);
+    border: 2px solid var(--brand-color);
     border-bottom-color: transparent;
     border-radius: 50%;
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
+    @include at992 {
+      width: var(--icon-dimension-22px);
+      height: var(--icon-dimension-22px);
+      border: 2.5px solid var(--brand-color);
+    }
   }
   &__form {
     flex-grow: 1;
@@ -101,9 +116,9 @@
       background: var(--blue100);
       border-radius: var(--border-radius-4px);
       color: var(--blue500);
-      font-size: var(--font-size-13px);
+      font-size: var(--font-size-12px);
       font-weight: var(--font-weight-inter-medium);
-      padding: var(--distance-1px) var(--distance-5px);
+      padding: 0 var(--distance-4px);
       box-shadow: var(--box-shadow-blue);
       @include touch-screen {
         display: none;
@@ -118,9 +133,7 @@
         z-index: -1;
         position: absolute;
         color: var(--brand-color);
-        font-size: var(--font-size-17px);
-        font-weight: var(--font-weight-inter-tight-medium);
-        font-family: var(--font-family-inter-tight);
+        font-weight: var(--font-weight-inter-medium);
         @include transition-150ms(color);
         display: flex;
         align-items: center;
@@ -158,25 +171,22 @@
         height: 0;
         white-space: pre;
         visibility: hidden;
-        font-size: var(--font-size-17px);
-        font-weight: var(--font-weight-inter-tight-medium);
-        font-family: var(--font-family-inter-tight);
+        font-weight: var(--font-weight-inter-medium);
       }
       input {
         color: transparent;
         z-index: 1;
-        font-size: var(--font-size-17px);
-        font-weight: var(--font-weight-inter-tight-medium);
-        font-family: var(--font-family-inter-tight);
+        font-weight: var(--font-weight-inter-medium);
         &:focus {
           outline: none;
         }
         &::placeholder {
-          font-weight: var(--font-weight-inter-medium);
-          font-family: var(--font-family-inter);
           color: var(--brand-color);
           opacity: 0.8;
           @include transition-150ms(color);
+          @include at992 {
+            font-size: var(--font-size-17px);
+          }
         }
       }
     }
@@ -184,8 +194,12 @@
   &__right-side {
     display: flex;
     align-items: center;
-    gap: var(--distance-8px);
-    margin-right: var(--distance-11px);
+    gap: var(--distance-4px);
+    margin-right: var(--distance-6px);
+    @include at992 {
+      gap: var(--distance-8px);
+      margin-right: var(--distance-11px);
+    }
     &__press_key {
       pointer-events: none;
       color: var(--blue500);
@@ -200,6 +214,9 @@
       color: var(--blue500);
       white-space: pre;
       @include transition-150ms(color);
+      @include to992 {
+        font-size: var(--font-size-13px);
+      }
       &--yields-no-results {
         color: var(--red500);
       }
@@ -225,9 +242,12 @@
         }
       }
       > svg {
-        width: var(--icon-dimension-16px);
+        width: var(--icon-dimension-14px);
         fill: var(--brand-color);
         @include transition-150ms(fill);
+        @include at992 {
+          width: var(--icon-dimension-16px);
+        }
       }
     }
   }
@@ -236,7 +256,7 @@
   position: absolute;
   z-index: 1;
   width: 100%;
-  top: calc(var(--button-dimension-52px) + var(--distance-4px));
+  top: calc(var(--button-dimension-40px) + var(--distance-4px));
   overflow: hidden;
   border-radius: var(--border-radius-12px);
   border: var(--border-primary);
@@ -248,6 +268,9 @@
     width: calc(100% - (var(--distance-20px)));
     margin-left: 50%;
     transform: translateY(0) translateX(-50%);
+  }
+  @include at992 {
+    top: calc(var(--button-dimension-52px) + var(--distance-4px));
   }
   &--hidden {
     opacity: 0;
@@ -309,9 +332,9 @@
           background: var(--neutral100);
           border-radius: var(--border-radius-4px);
           color: var(--text-color-dimmed);
-          font-size: var(--font-size-13px);
+          font-size: var(--font-size-12px);
           font-weight: var(--font-weight-inter-medium);
-          padding: var(--distance-1px) var(--distance-5px);
+          padding: 0 var(--distance-4px);
           box-shadow: var(--box-shadow);
           margin-left: var(--distance-6px);
           @include touch-screen {

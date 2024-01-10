@@ -31,6 +31,7 @@ export namespace Library {
     clear_selected_stars?: () => void
     show_bookmarks_skeleton: boolean
     info_text?: React.ReactNode
+    close_aside_count?: number
   }
 }
 
@@ -198,6 +199,14 @@ export const Library: React.FC<Library.Props> = (props) => {
       window.scrollTo(0, 0)
     }
   }, [props.is_fetching_first_bookmarks])
+
+  useUpdateEffect(() => {
+    if (is_left_side_open) {
+      toggle_left_side()
+    } else if (is_right_side_open) {
+      toggle_right_side()
+    }
+  }, [props.close_aside_count])
 
   let translate_x = 0
 

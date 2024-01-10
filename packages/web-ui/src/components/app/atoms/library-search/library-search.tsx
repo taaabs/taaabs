@@ -124,17 +124,17 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
       <div className={styles.container}>
         <div
           className={cn(
-            styles.search,
-            { [styles['search--yields-no-results']]: props.results_count == 0 },
-            { [styles['search--focus']]: props.is_focused },
+            styles.box,
+            { [styles['box--yields-no-results']]: props.results_count == 0 },
+            { [styles['box--focus']]: props.is_focused },
             {
-              [styles['search--focus-yields-no-results']]:
+              [styles['box--focus-yields-no-results']]:
                 props.is_focused && props.results_count == 0,
             },
           )}
         >
           <button
-            className={styles['search__left-side']}
+            className={styles['box__left-side']}
             onClick={() => {
               if (!props.is_focused) {
                 input.current?.focus()
@@ -144,13 +144,13 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
             }}
           >
             {props.is_loading ? (
-              <div className={styles.search__loader} />
+              <div className={styles.box__loader} />
             ) : (
               <Icon variant="SEARCH" />
             )}
           </button>
           <form
-            className={styles.search__form}
+            className={styles.box__form}
             onSubmit={(e) => {
               e.preventDefault()
               props.on_submit()
@@ -167,11 +167,11 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
               }
             }}
           >
-            <div className={styles.search__form__content}>
+            <div className={styles.box__form__content}>
               <div
-                className={cn(styles['search__form__content__styled-value'], {
+                className={cn(styles['box__form__content__styled-value'], {
                   [styles[
-                    'search__form__content__styled-value--yields-no-results'
+                    'box__form__content__styled-value--yields-no-results'
                   ]]: props.results_count == 0,
                 })}
               >
@@ -185,7 +185,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                         <span
                           className={
                             styles[
-                              'search__form__content__styled-value__pre-highlight'
+                              'box__form__content__styled-value__pre-highlight'
                             ]
                           }
                         >
@@ -194,11 +194,11 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                         <span
                           className={cn(
                             styles[
-                              'search__form__content__styled-value__highlight'
+                              'box__form__content__styled-value__highlight'
                             ],
                             {
                               [styles[
-                                'search__form__content__styled-value__highlight--no-results'
+                                'box__form__content__styled-value__highlight--no-results'
                               ]]: props.results_count == 0,
                             },
                           )}
@@ -217,9 +217,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                     <>
                       <span
                         className={
-                          styles[
-                            'search__form__content__styled-value__completion'
-                          ]
+                          styles['box__form__content__styled-value__completion']
                         }
                       >
                         {
@@ -229,18 +227,13 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                         }
                       </span>
                       {props.hints.length > 0 && (
-                        <span className={styles['search__form__keycap']}>
-                          tab
-                        </span>
+                        <span className={styles['box__form__keycap']}>tab</span>
                       )}
                     </>
                   )}
               </div>
               <div>
-                <div
-                  className={styles.search__form__content__sizer}
-                  ref={sizer}
-                >
+                <div className={styles.box__form__content__sizer} ref={sizer}>
                   {props.search_string}
                 </div>
                 <input
@@ -278,14 +271,14 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
               </div>
             </div>
           </form>
-          <div className={styles['search__right-side']}>
+          <div className={styles['box__right-side']}>
             {props.search_string ? (
               <>
                 {props.results_count !== undefined && (
                   <div
-                    className={cn(styles['search__right-side__results-count'], {
+                    className={cn(styles['box__right-side__results-count'], {
                       [styles[
-                        'search__right-side__results-count--yields-no-results'
+                        'box__right-side__results-count--yields-no-results'
                       ]]: props.results_count == 0,
                     })}
                   >
@@ -299,8 +292,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                   </div>
                 )}
                 <button
-                  className={cn(styles['search__right-side__clear'], {
-                    [styles['search__right-side__clear--yields-no-results']]:
+                  className={cn(styles['box__right-side__clear'], {
+                    [styles['box__right-side__clear--yields-no-results']]:
                       props.results_count == 0,
                   })}
                   onClick={() => {
@@ -313,8 +306,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
               </>
             ) : (
               !props.is_focused && (
-                <div className={styles['search__right-side__press_key']}>
-                  Type <div className={styles.search__form__keycap}>/</div> to
+                <div className={styles['box__right-side__press_key']}>
+                  Type <div className={styles.box__form__keycap}>/</div> to
                   search
                 </div>
               )

@@ -15,7 +15,7 @@
     top: var(--header-mobile-height);
     width: 100%;
     z-index: 2;
-    transition: transform 30ms linear;
+    transition: transform 50ms linear;
   }
   @include at992 {
     display: none;
@@ -102,7 +102,7 @@
     z-index: 1;
     padding-top: var(--header-mobile-height);
     background: var(--background);
-    transition: transform 30ms linear;
+    transition: transform 50ms linear;
     &::before {
       content: '';
       width: 1px;

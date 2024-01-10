@@ -73,6 +73,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   const tag_view_options = use_tag_view_options()
   const date_view_options = use_date_view_options()
   const { pop_count } = use_popstate()
+  const [close_aside_count, set_close_aside_count] = useState(0)
 
   const [is_filter_dropdown_visible, toggle_filter_dropdown] = useToggle(false)
   const [is_sort_by_dropdown_visible, toggle_sort_by_dropdown] =
@@ -201,7 +202,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
   return (
     <UiAppTemplate_Library
       show_bookmarks_skeleton={show_bookmarks_skeleton}
-      mobile_title_bar={'All bookmarks'}
+      close_aside_count={close_aside_count}
+      mobile_title_bar={'Bookmarks'}
       slot_search={
         <UiAppAtom_LibrarySearch
           search_string={search.search_string}
@@ -332,6 +334,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                     bookmarks.get_bookmarks({})
                   }
                 }
+                set_close_aside_count(close_aside_count + 1)
               },
               is_active: true,
             },
