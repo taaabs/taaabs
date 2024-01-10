@@ -17,7 +17,7 @@ export const MobileTitleBar: React.FC<MobileTitleBar.Props> = (props) => {
         className={cn(styles.icon, styles['icon--left'])}
         onClick={props.swipe_left_on_click}
       >
-        <UiCommonParticle_Icon variant={'MOBILE_TITLE_BAR_MENU'} />
+        <UiCommonParticle_Icon variant={'MOBILE_TITLE_BAR_LEFT'} />
       </button>
 
       {props.text && <div className={styles.content}>{props.text}</div>}
@@ -26,7 +26,7 @@ export const MobileTitleBar: React.FC<MobileTitleBar.Props> = (props) => {
         className={cn(styles.icon, styles['icon--right'])}
         onClick={props.swipe_right_on_click}
       >
-        <UiCommonParticle_Icon variant={'MOBILE_TITLE_BAR_VIEW_OPTIONS'} />
+        <UiCommonParticle_Icon variant={'MOBILE_TITLE_BAR_RIGHT'} />
       </button>
     </div>
   )

@@ -2,9 +2,10 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  --aside-width: 26vw;
+  --_dimmed-opacity: 0.5;
+  --_aside-width: 26vw;
   @include at1200 {
-    --aside-width: 300px;
+    --_aside-width: 300px;
   }
   position: relative;
 }
@@ -18,6 +19,20 @@
   }
   @include at992 {
     display: none;
+  }
+  &::after {
+    @include transition-300ms(opacity);
+    position: absolute;
+    content: '';
+    background-color: var(--background);
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    pointer-events: none;
+  }
+  &--dimmed::after {
+    opacity: var(--_dimmed-opacity);
   }
 }
 .content {
@@ -52,7 +67,7 @@
     padding-bottom: var(--bottom-navigation-bar-height);
   }
   @include at992 {
-    width: var(--aside-width) !important;
+    width: var(--_aside-width) !important;
   }
   &--hidden {
     @include to992 {
@@ -117,6 +132,7 @@
       position: relative;
       padding-top: var(--app-bar-height);
       padding-bottom: var(--bottom-navigation-bar-height);
+      @include transition-300ms(opacity);
       &::before {
         position: absolute;
         content: '';
@@ -127,6 +143,11 @@
         right: 0;
         z-index: 1;
         background: var(--header-background);
+      }
+    }
+    &--dimmed {
+      @include to992 {
+        opacity: var(--_dimmed-opacity);
       }
     }
     &__search {
@@ -207,7 +228,7 @@
   }
   @include at992 {
     margin-top: var(--header-desktop-height);
-    width: var(--aside-width) !important;
+    width: var(--_aside-width) !important;
   }
   &--hidden {
     @include to992 {
@@ -246,7 +267,6 @@
     }
   }
 }
-
 .free-fall {
-  transition: transform 200ms ease-in-out;
+  @include transition-300ms(transform);
 }

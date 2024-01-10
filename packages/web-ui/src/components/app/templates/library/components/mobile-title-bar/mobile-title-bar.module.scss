@@ -18,14 +18,14 @@
   &--left {
     padding-left: var(--distance-16px);
     svg {
-      width: var(--distance-20px);
+      height: var(--distance-19px);
     }
   }
   &--right {
     padding-right: var(--distance-16px);
     justify-content: flex-end;
     svg {
-      width: var(--distance-27px)
+      height: var(--distance-24px);
     }
   }
 }

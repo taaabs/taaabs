@@ -218,6 +218,8 @@ export const Library: React.FC<Library.Props> = (props) => {
       <div
         className={cn(styles['mobile-title-bar'], {
           [styles['free-fall']]: !drag_distance,
+          [styles['mobile-title-bar--dimmed']]:
+            (is_right_side_open || is_left_side_open) && !drag_distance,
         })}
         style={{
           pointerEvents:
@@ -266,7 +268,10 @@ export const Library: React.FC<Library.Props> = (props) => {
           }}
         >
           <div
-            className={styles.main__inner}
+            className={cn(styles.main__inner, {
+              [styles['main__inner--dimmed']]:
+                (is_right_side_open || is_left_side_open) && !drag_distance,
+            })}
             style={{
               pointerEvents:
                 is_left_side_open || is_right_side_open ? 'none' : 'all',

@@ -24,8 +24,8 @@ import Star from '../../../../assets/icons/star.svg'
 import Sun from '../../../../assets/icons/sun.svg'
 import ThreeDots from '../../../../assets/icons/three-dots.svg'
 import Logo from '../../../../assets/icons/logo.svg'
-import MobileTitleBarMenu from '../../../../assets/icons/mobile-title-bar-menu.svg'
-import MobileTitleBarViewOptions from '../../../../assets/icons/mobile-title-bar-view-options.svg'
+import MobileTitleBarLeft from '../../../../assets/icons/mobile-title-bar-left.svg'
+import MobileTitleBarRight from '../../../../assets/icons/mobile-title-bar-right.svg'
 import NewTab from '../../../../assets/icons/new-tab.svg'
 import NotificationsFilled from '../../../../assets/icons/notifications-filled.svg'
 import Notifications from '../../../../assets/icons/notifications.svg'
@@ -62,8 +62,8 @@ export namespace Icon {
     | 'SUN'
     | 'THREE_DOTS'
     | 'LOGO'
-    | 'MOBILE_TITLE_BAR_MENU'
-    | 'MOBILE_TITLE_BAR_VIEW_OPTIONS'
+    | 'MOBILE_TITLE_BAR_LEFT'
+    | 'MOBILE_TITLE_BAR_RIGHT'
     | 'NEW_TAB'
     | 'NOTIFICATIONS_FILLED'
     | 'NOTIFICATIONS'
@@ -129,11 +129,11 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'LOGO':
       icon = <Logo />
       break
-    case 'MOBILE_TITLE_BAR_MENU':
-      icon = <MobileTitleBarMenu />
+    case 'MOBILE_TITLE_BAR_LEFT':
+      icon = <MobileTitleBarLeft />
       break
-    case 'MOBILE_TITLE_BAR_VIEW_OPTIONS':
-      icon = <MobileTitleBarViewOptions />
+    case 'MOBILE_TITLE_BAR_RIGHT':
+      icon = <MobileTitleBarRight />
       break
     case 'NEW_TAB':
       icon = <NewTab />
