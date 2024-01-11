@@ -29,8 +29,6 @@ import MobileTitleBarRight from '../../../../assets/icons/mobile-title-bar-right
 import NewTab from '../../../../assets/icons/new-tab.svg'
 import NotificationsFilled from '../../../../assets/icons/notifications-filled.svg'
 import Notifications from '../../../../assets/icons/notifications.svg'
-import UserAdd from '../../../../assets/icons/user-add.svg'
-import UserRemove from '../../../../assets/icons/user-remove.svg'
 import UserFilled from '../../../../assets/icons/user-filled.svg'
 import User from '../../../../assets/icons/user.svg'
 
@@ -67,8 +65,6 @@ export namespace Icon {
     | 'NEW_TAB'
     | 'NOTIFICATIONS_FILLED'
     | 'NOTIFICATIONS'
-    | 'USER_ADD'
-    | 'USER_REMOVE'
     | 'USER_FILLED'
     | 'USER'
 
@@ -173,12 +169,6 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'STAR_FILLED':
       icon = <StarFilled />
-      break
-    case 'USER_ADD':
-      icon = <UserAdd />
-      break
-    case 'USER_REMOVE':
-      icon = <UserRemove />
       break
     case 'USER':
       icon = <User />

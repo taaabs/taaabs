@@ -58,12 +58,12 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
           },
         },
         {
-          label: 'About',
+          label: 'Profile',
           icon_variant: 'USER',
           icon_variant_active: 'USER_FILLED',
-          is_active: pathname == `/${params.username}/about`,
+          is_active: pathname == `/${params.username}/profile`,
           on_click: () => {
-            router.push(`/${params.username}/about`)
+            router.push(`/${params.username}/profile`)
           },
         },
       ]}

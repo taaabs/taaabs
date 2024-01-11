@@ -41,6 +41,8 @@ export const browser_storage = {
         `library.has-more-bookmarks.${params.username || ''}?${
           params.query_params
         }`,
+      density: (params: { username?: string; query_params?: string }) =>
+        `library.density.${params.username || ''}?${params.query_params}`,
       tags: (params: { username?: string; query_params?: string }) =>
         `library.tags.${params.username || ''}?${params.query_params}`,
     },

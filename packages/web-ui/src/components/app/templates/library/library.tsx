@@ -291,14 +291,11 @@ export const Library: React.FC<Library.Props> = (props) => {
                 {props.slot_search}
               </div>
               <div
-                className={cn([
-                  styles.main__inner__bookmarks,
-                  {
-                    [styles['main__inner__bookmarks--loading']]:
-                      props.is_fetching_first_bookmarks ||
-                      props.is_updating_bookmarks,
-                  },
-                ])}
+                className={cn({
+                  [styles['main__inner__bookmarks--loading']]:
+                    props.is_fetching_first_bookmarks ||
+                    props.is_updating_bookmarks,
+                })}
                 style={{
                   visibility: is_hydrated ? 'visible' : 'hidden',
                 }}

@@ -20,7 +20,7 @@
   border: 1px solid var(--blue100);
   box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.4);
   z-index: 2;
-  border-radius: var(--border-radius-10px);
+  border-radius: var(--border-radius-999px);
   gap: var(--distance-8px);
   height: var(--button-dimension-40px);
   @include transition-150ms;
@@ -28,7 +28,6 @@
     margin: 0 var(--distance-8px);
   }
   @include at992 {
-    border-radius: var(--border-radius-999px);
     transform: translateX(calc(var(--distance-8px) * -1));
     width: calc(100% + (var(--distance-8px) * 2));
     gap: var(--distance-6px);
@@ -361,17 +360,20 @@
 }
 .skeleton {
   width: 100%;
+  margin: var(--distance-8px) 0;
   @include to992 {
-    margin: var(--distance-12px) 0;
-    padding: 0 var(--distance-10px);
+    padding: 0 var(--distance-8px);
   }
   @include at992 {
     margin: var(--distance-16px) 0;
     transform: translateX(calc(var(--distance-16px) * -1));
   }
   > span > span {
-    height: var(--button-dimension-52px);
+    height: var(--button-dimension-40px);
+    border-radius: var(--border-radius-10px);
     @include at992 {
+      height: var(--button-dimension-52px);
+      border-radius: var(--border-radius-999px);
       width: calc(100% + (var(--distance-16px) * 2));
     }
   }

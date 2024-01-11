@@ -10,11 +10,13 @@ type BookmarksState = {
   is_updating_bookmarks: boolean
   is_fetching_first_bookmarks: boolean
   is_fetching_more_bookmarks: boolean
+  first_bookmarks_fetched_at_timestamp?: number
   showing_bookmarks_fetched_by_ids?: boolean
   incoming_bookmarks: Bookmark_Entity[] | null
   bookmarks: Bookmark_Entity[] | null
   has_more_bookmarks: boolean | null
   toast_message?: ToastMessage
+  density: 'default' | 'compact'
 }
 
 const initial_state: BookmarksState = {
@@ -25,6 +27,7 @@ const initial_state: BookmarksState = {
   incoming_bookmarks: null,
   bookmarks: null,
   has_more_bookmarks: null,
+  density: 'default',
 }
 
 export const bookmarks_slice = createSlice({
@@ -39,6 +42,9 @@ export const bookmarks_slice = createSlice({
     },
     set_is_fetching_first_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_fetching_first_bookmarks = action.payload
+      if (action.payload == false) {
+        state.first_bookmarks_fetched_at_timestamp = Date.now()
+      }
     },
     set_is_fetching_more_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_fetching_more_bookmarks = action.payload
@@ -79,6 +85,17 @@ export const bookmarks_slice = createSlice({
       if (!state.bookmarks) return
       state.bookmarks[action.payload.index].render_height =
         action.payload.height
+    },
+    set_density(state, action: PayloadAction<BookmarksState['density']>) {
+      state.density = action.payload
+    },
+    set_bookmark_is_compact(
+      state,
+      action: PayloadAction<{ index: number; is_compact: boolean }>,
+    ) {
+      if (!state.bookmarks) return
+      state.bookmarks[action.payload.index].is_compact =
+        action.payload.is_compact
     },
     set_toast_message(
       state,

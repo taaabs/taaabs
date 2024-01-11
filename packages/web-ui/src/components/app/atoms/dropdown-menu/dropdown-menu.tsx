@@ -41,7 +41,9 @@ export const DropdownMenu: React.FC<DropdownMenu.Props> = (props) => {
               styles['item--with-checkbox'],
               { [styles['item--disabled']]: item.is_disabled },
             ])}
-            onClick={item.on_click}
+            onClick={() => {
+              item.on_click()
+            }}
             key={i}
           >
             <div

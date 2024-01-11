@@ -16,4 +16,5 @@ export type Bookmark_Entity = {
   is_unread: boolean
   stars: number
   render_height?: number
+  is_compact?: boolean
 }

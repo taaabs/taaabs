@@ -379,7 +379,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
       </div>
     ) : (
       <div className={styles.skeleton}>
-        <Skeleton borderRadius={999} />
+        <Skeleton />
       </div>
     )
   },

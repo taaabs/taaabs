@@ -343,7 +343,28 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
       }
       slot_aside={
         <UiAppTemplate_LibraryAside
-          slot_presets={<></>}
+          slot_presets={
+            <>
+              <button
+                onClick={() => {
+                  if (bookmarks_slice_state.is_fetching_first_bookmarks) return
+                  set_close_aside_count(close_aside_count + 1)
+                  setTimeout(() => {
+                    dispatch(
+                      bookmarks_actions.set_density(
+                        bookmarks_slice_state.density == 'default'
+                          ? 'compact'
+                          : 'default',
+                      ),
+                    )
+                    bookmarks.get_bookmarks({})
+                  }, 0)
+                }}
+              >
+                {bookmarks_slice_state.density || 'default'}
+              </button>
+            </>
+          }
           slot_filter={{
             button: is_hydrated ? (
               <UiAppAtom_ButtonSelect
@@ -771,11 +792,38 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
         bookmarks_slice_state.bookmarks
           ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
               <UiAppAtom_Bookmark
-                key={bookmark.id}
+                key={`${bookmark.id}
+                  ${
+                    // This fixes density change flashing bookmarks which where previously out of the viewport, thus not rendered.
+                    bookmarks_slice_state.first_bookmarks_fetched_at_timestamp ||
+                    ''
+                  }`}
+                is_compact={bookmark.is_compact}
                 updated_at={bookmark.updated_at}
                 title={bookmark.title}
                 note={bookmark.note}
-                on_click={() => {}}
+                on_click={() => {
+                  if (bookmarks_slice_state.density == 'compact') {
+                    if (
+                      bookmark.is_compact ||
+                      bookmark.is_compact === undefined
+                    ) {
+                      dispatch(
+                        bookmarks_actions.set_bookmark_is_compact({
+                          index: i,
+                          is_compact: false,
+                        }),
+                      )
+                    } else {
+                      dispatch(
+                        bookmarks_actions.set_bookmark_is_compact({
+                          index: i,
+                          is_compact: true,
+                        }),
+                      )
+                    }
+                  }
+                }}
                 is_fetching_bookmarks={
                   bookmarks_slice_state.is_fetching_first_bookmarks
                 }

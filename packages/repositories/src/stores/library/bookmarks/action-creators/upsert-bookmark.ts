@@ -74,7 +74,7 @@ export const upsert_bookmark = (params: {
             bookmarks_actions.set_incoming_bookmarks(
               state.bookmarks.bookmarks.map((bookmark) => {
                 if (bookmark.id == result.id) {
-                  return result
+                  return { ...result, is_compact: false }
                 } else {
                   return bookmark
                 }

@@ -1,12 +1,20 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
+.wrapper {
+  margin-bottom: var(--distance-8px);
+  @include at992 {
+    margin-bottom: var(--distance-16px);
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
 .container {
   background: var(--plain-white);
   border: var(--border-secondary);
   @include transition-150ms(border-color);
   @include to992 {
-    border-top: var(--border-primary);
     border-left: 0;
     border-right: 0;
   }
@@ -25,7 +33,7 @@
   flex-direction: column;
   &__main {
     padding-top: var(--distance-10px);
-    padding-bottom: var(--distance-6px);
+    padding-bottom: var(--distance-4px);
     &--search-result {
       background: linear-gradient(10deg, var(--blue50) 0%, transparent 55%);
       @include at992 {
@@ -37,6 +45,9 @@
       justify-content: space-between;
       align-items: flex-end;
       position: relative;
+      &--compact {
+        display: none;
+      }
       &__info {
         color: var(--text-color-dimmed);
         display: flex;
@@ -190,6 +201,10 @@
   }
   &__links {
     display: block;
+    &--compact {
+      visibility: hidden;
+      height: 0;
+    }
     &__item {
       display: flex;
       gap: var(--distance-12px);

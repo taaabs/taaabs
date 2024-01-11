@@ -72,7 +72,7 @@ export const Primary = () => {
             ]}
           />
         }
-        mobile_title_bar="All bookmarks"
+        mobile_title_bar="Bookmarks"
         get_more_bookmarks={() => {}}
         has_more_bookmarks={false}
         is_fetching_first_bookmarks={false}
@@ -94,29 +94,27 @@ export const Primary = () => {
 }
 
 const bookmark = (
-  <div style={{ marginBottom: 'var(--distance-8px)' }}>
-    <Bookmark
-      date={new Date()}
-      links={[]}
-      title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-      is_unread={true}
-      tags={[
-        { id: 1, name: 'foo', yields: 100 },
-        { id: 2, name: 'bar', isSelected: true },
-      ]}
-      on_tag_click={() => {}}
-      on_click={() => {}}
-      on_menu_click={async () => {}}
-      on_selected_tag_click={() => {}}
-      set_render_height={() => {}}
-      favicon_host=""
-      is_serach_result={false}
-      menu_slot={<></>}
-      number_of_selected_tags={0}
-      should_dim_visited_links={false}
-      stars={0}
-      updated_at=""
-      is_fetching_bookmarks={false}
-    />
-  </div>
+  <Bookmark
+    date={new Date()}
+    links={[]}
+    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
+    is_unread={true}
+    tags={[
+      { id: 1, name: 'foo', yields: 100 },
+      { id: 2, name: 'bar', isSelected: true },
+    ]}
+    on_tag_click={() => {}}
+    on_click={() => {}}
+    on_menu_click={async () => {}}
+    on_selected_tag_click={() => {}}
+    set_render_height={() => {}}
+    favicon_host=""
+    is_serach_result={false}
+    menu_slot={<></>}
+    number_of_selected_tags={0}
+    should_dim_visited_links={false}
+    stars={0}
+    updated_at=""
+    is_fetching_bookmarks={false}
+  />
 )

@@ -177,19 +177,9 @@
         }
       }
     }
-    &__bookmarks {
-      > div {
-        @include to992 {
-          margin-bottom: var(--distance-8px);
-        }
-        @include at992 {
-          margin-bottom: var(--distance-16px);
-        }
-      }
-      &--loading {
-        opacity: var(--opacity-loading);
-        pointer-events: none;
-      }
+    &__bookmarks--loading {
+      opacity: var(--opacity-loading);
+      pointer-events: none;
     }
     &__info {
       display: flex;
@@ -201,12 +191,9 @@
       color: var(--text-color-dimmed);
       width: 100%;
       font-size: var(--font-size-13px);
-      padding: 0 var(--distance-16px);
-      @include to992 {
-        height: 20vh;
-      }
+      padding: var(--distance-60px) var(--distance-16px);
       @include at992 {
-        height: 45vh;
+        padding: var(--distance-120px) var(--distance-16px);
       }
       button {
         @include hover {

@@ -1,9 +1,11 @@
 declare const styles: {
+  readonly wrapper: string
   readonly container: string
   readonly bookmark: string
   readonly bookmark__main: string
   readonly 'bookmark__main--search-result': string
   readonly bookmark__main__top: string
+  readonly 'bookmark__main__top--compact': string
   readonly bookmark__main__top__info: string
   readonly bookmark__main__top__menu: string
   readonly bookmark__main__top__menu__button: string
@@ -24,6 +26,7 @@ declare const styles: {
   readonly 'bookmark__main__tags__tag__name--selected': string
   readonly bookmark__main__tags__tag__yields: string
   readonly bookmark__links: string
+  readonly 'bookmark__links--compact': string
   readonly bookmark__links__item: string
   readonly bookmark__links__item__link: string
   readonly bookmark__links__item__link__site: string

@@ -26,7 +26,7 @@ export const Primary = () => (
         tags={[]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={() => {}}
+        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -59,7 +59,7 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={() => {}}
+        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -89,7 +89,7 @@ export const Primary = () => (
         tags={[]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={() => {}}
+        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -117,7 +117,39 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={() => {}}
+        on_menu_click={async () => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          { url: 'https://google.com', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+        ]}
+        set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
+        menu_slot={<>menu</>}
+        number_of_selected_tags={0}
+        is_serach_result={false}
+        should_dim_visited_links={false}
+        updated_at=""
+        is_fetching_bookmarks={false}
+      />
+      <StorybookSpacer />
+      Compact:
+      <br />
+      <br />
+      <Bookmark
+        is_compact={true}
+        stars={0}
+        title="Lorem ipsum dolor sit amet"
+        note="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies sapien nulla, at facilisis risus dictum sed."
+        is_unread={false}
+        tags={[
+          { id: 1, name: 'lorem', yields: 8 },
+          { id: 1, name: 'ipsum', isSelected: true },
+        ]}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -144,7 +176,7 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={() => {}}
+        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -178,7 +210,7 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={() => {}}
+        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -205,7 +237,7 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={() => {}}
+        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -232,7 +264,7 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={() => {}}
+        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -259,7 +291,7 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={() => {}}
+        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -285,7 +317,7 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={() => {}}
+        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[

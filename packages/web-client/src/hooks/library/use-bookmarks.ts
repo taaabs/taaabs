@@ -16,10 +16,10 @@ import { browser_storage } from '@/constants/browser-storage'
 
 export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   const query_params = useSearchParams()
-  const route_params = useParams()
+  const { username } = useParams()
   const route_pathname = usePathname()
   const dispatch = use_library_dispatch()
-  const { bookmarks, has_more_bookmarks } = use_library_selector(
+  const { bookmarks, has_more_bookmarks, density } = use_library_selector(
     (state) => state.bookmarks,
   )
 
@@ -72,7 +72,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       )
     } else {
       const request_params: GetBookmarks_Params.Public = {
-        username: route_params.username as string,
+        username: username as string,
       }
 
       const query_tags = query_params.get('t')
@@ -122,7 +122,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   useUpdateEffect(() => {
     const bookmarks = sessionStorage.getItem(
       browser_storage.session_storage.library.bookmarks({
-        username: route_params.username as string,
+        username: username as string,
         query_params: query_params.toString(),
       }),
     )
@@ -132,7 +132,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
       const has_more_bookmarks = sessionStorage.getItem(
         browser_storage.session_storage.library.has_more_bookmarks({
-          username: route_params.username as string,
+          username: username as string,
           query_params: query_params.toString(),
         }),
       )
@@ -142,6 +142,15 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
             has_more_bookmarks == 'true',
           ),
         )
+      }
+      const density = sessionStorage.getItem(
+        browser_storage.session_storage.library.density({
+          username: username as string,
+          query_params: query_params.toString(),
+        }),
+      )
+      if (density) {
+        dispatch(bookmarks_actions.set_density(density as any))
       }
     } else {
       get_bookmarks({})
@@ -153,6 +162,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       bookmarks: Bookmark_Entity[]
       query_params: string
       has_more_bookmarks: boolean
+      density: string
       username?: string
     }) => {
       sessionStorage.setItem(
@@ -169,6 +179,13 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
         }),
         `${params.has_more_bookmarks}`,
       )
+      sessionStorage.setItem(
+        browser_storage.session_storage.library.density({
+          username: params.username,
+          query_params: params.query_params.toString(),
+        }),
+        `${params.density}`,
+      )
     },
     [],
     0,
@@ -177,17 +194,18 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   useUpdateEffect(() => {
     if (params.is_in_search_mode) return
     set_bookomarks_to_session_storage({
-      bookmarks: bookmarks,
+      bookmarks,
       query_params: query_params.toString(),
       has_more_bookmarks,
-      username: route_params.username,
+      username,
+      density,
     })
   }, [bookmarks])
 
   useEffect(() => {
     const bookmarks = sessionStorage.getItem(
       browser_storage.session_storage.library.bookmarks({
-        username: route_params.username as string,
+        username: username as string,
         query_params: query_params.toString(),
       }),
     )
@@ -196,7 +214,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
       const has_more_bookmarks = sessionStorage.getItem(
         browser_storage.session_storage.library.has_more_bookmarks({
-          username: route_params.username as string,
+          username: username as string,
           query_params: query_params.toString(),
         }),
       )
@@ -206,6 +224,15 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
             has_more_bookmarks == 'true',
           ),
         )
+      }
+      const density = sessionStorage.getItem(
+        browser_storage.session_storage.library.density({
+          username: username as string,
+          query_params: query_params.toString(),
+        }),
+      )
+      if (density) {
+        dispatch(bookmarks_actions.set_density(density as any))
       }
     } else {
       get_bookmarks({})

@@ -5,11 +5,7 @@ const Layout: React.FC<{
   children: React.ReactNode
   modal: React.ReactNode
 }> = (props) => {
-  return (
-    <LibraryStoreProvider>
-      <div>{props.children}</div>
-    </LibraryStoreProvider>
-  )
+  return <LibraryStoreProvider>{props.children}</LibraryStoreProvider>
 }
 
 export default Layout

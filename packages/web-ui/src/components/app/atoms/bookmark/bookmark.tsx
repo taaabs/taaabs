@@ -41,6 +41,7 @@ export namespace Bookmark {
     title?: string
     note?: string
     date: Date
+    is_compact?: boolean
     should_display_only_month?: boolean
     on_tag_click: (tagId: number) => void
     on_selected_tag_click: (tagId: number) => void
@@ -78,7 +79,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const [render_height, set_render_height] = useState<number | undefined>(
       undefined,
     )
-
     useEffect(() => {
       if (render_height === undefined && props.render_height) {
         set_render_height(props.render_height)
@@ -91,7 +91,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           set_render_height(height)
         }, 0)
       }
-    }, [props.updated_at])
+    }, [props.updated_at, props.is_compact])
 
     const relative_time = dayjs(props.date).fromNow()
 
@@ -110,12 +110,16 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           height: render_height ? render_height : undefined,
           pointerEvents: props.is_not_interactive ? 'none' : undefined,
         }}
+        className={styles.wrapper}
       >
         {is_visible == undefined || is_visible || !props.render_height ? (
           <div
-            className={styles.container}
+            className={cn(styles.container)}
             role="button"
-            onClick={props.on_click}
+            onClick={() => {
+              if (is_menu_open) return
+              props.on_click()
+            }}
           >
             <div className={styles.bookmark}>
               <div
@@ -124,7 +128,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     props.is_serach_result,
                 })}
               >
-                <div className={styles.bookmark__main__top}>
+                <div
+                  className={cn(styles.bookmark__main__top, {
+                    [styles['bookmark__main__top--compact']]: props.is_compact,
+                  })}
+                >
                   <div className={styles.bookmark__main__top__info}>
                     {bookmark_date}
                   </div>
@@ -143,7 +151,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               is_menu_open,
                           },
                         )}
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation()
                           if (!is_menu_open) {
                             props.on_menu_click()
                           }
@@ -330,7 +339,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   )}
                 </div>
               </div>
-              <div className={styles.bookmark__links}>
+              <div
+                className={cn(styles.bookmark__links, {
+                  [styles['bookmark__links--compact']]: props.is_compact,
+                })}
+              >
                 {props.links.map((link, i) => {
                   let is_site_highlighted = false
                   if (
@@ -402,6 +415,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           )}
                           href={link.url}
                           onClick={async (e) => {
+                            e.stopPropagation()
                             e.preventDefault()
                             if (props.on_link_click) {
                               props.on_link_click()
@@ -468,7 +482,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           className={
                             styles.bookmark__links__item__actions__open
                           }
-                          onClick={async () => {
+                          onClick={async (e) => {
+                            e.stopPropagation()
                             window.open(link.url, '_blank')
                             if (props.on_link_click) {
                               props.on_link_click()
@@ -499,6 +514,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
+    o.is_compact == n.is_compact &&
     o.is_not_interactive == n.is_not_interactive &&
     o.is_fetching_bookmarks == n.is_fetching_bookmarks &&
     o.is_serach_result == n.is_serach_result &&

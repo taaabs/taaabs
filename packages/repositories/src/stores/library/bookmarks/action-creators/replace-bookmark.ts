@@ -36,7 +36,7 @@ export const replace_bookmark = (params: {
             bookmark.id ==
             state.bookmarks.bookmarks![modified_bookmark_index].id
           ) {
-            return params.bookmark
+            return { ...params.bookmark, is_compact: false }
           } else {
             return bookmark
           }

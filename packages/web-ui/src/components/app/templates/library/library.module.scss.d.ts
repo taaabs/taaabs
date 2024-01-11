@@ -11,7 +11,6 @@ declare const styles: {
   readonly 'main__inner--dimmed': string
   readonly main__inner__search: string
   readonly main__inner__skeleton: string
-  readonly main__inner__bookmarks: string
   readonly 'main__inner__bookmarks--loading': string
   readonly main__inner__info: string
   readonly aside: string
