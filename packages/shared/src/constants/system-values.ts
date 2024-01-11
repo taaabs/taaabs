@@ -6,6 +6,9 @@ export const system_values = {
   max_library_search_hints: 10,
   sortablejs_animation_duration: 150,
   library: {
+    global: {
+      redis_ttl: 60,
+    },
     bookmarks: {
       per_page: 20,
       cache_for_days: 7,

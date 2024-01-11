@@ -87,7 +87,7 @@
     width: var(--icon-dimension-18px);
     height: var(--icon-dimension-18px);
     border: 2px solid var(--brand-color);
-    border-bottom-color: transparent;
+    border-bottom-color: transparent !important;
     border-radius: 50%;
     display: inline-block;
     box-sizing: border-box;
