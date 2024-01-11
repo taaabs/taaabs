@@ -513,13 +513,15 @@ export const use_search = () => {
     const order = query_params.get('o')
     const sortby = query_params.get('s')
 
-    // 'lorem @abc.com @abc.com ipsum @abc.com'
+    // 'lorem site:abc.com site:abc.com ipsum site:abc.com'
     // ["abccom", "abccom", "abccom"]
     const sites_variants = get_sites_variants_from_search_string(
       params.search_string,
     )
 
-    const term = params.search_string.replace(/(?=@)(.*?)($|\s)/g, '').trim()
+    const term = params.search_string
+      .replace(/(?=site:)(.*?)($|\s)/g, '')
+      .trim()
 
     const result_without_tolerance: Results<Result> = await searchWithHighlight(
       current_filter != Filter.Archived ? db! : archived_db!,
@@ -797,9 +799,9 @@ export const use_search = () => {
     const words = search_string_lower.split(' ')
     const last_word = words[words.length - 1]
     const sites_variants = search_string_lower
-      .match(/(?<=@)(.*?)($|\s)/g)
+      .match(/(?<=site:)(.*?)($|\s)/g)
       ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
-    const term = search_string_lower.replace(/(?=@)(.*?)($|\s)/g, '').trim()
+    const term = search_string_lower.replace(/(?=site:)(.*?)($|\s)/g, '').trim()
 
     if (!search_string) {
       const recent_searches = JSON.parse(
@@ -837,8 +839,8 @@ export const use_search = () => {
           search_string: search_string_lower,
         }))
 
-      if (last_word.substring(0, 1) == '@') {
-        const site_term = last_word.substring(1)
+      if (last_word.substring(0, 5) == 'site:') {
+        const site_term = last_word.substring(5)
 
         const result: Results<Result> = await search(
           current_filter != Filter.Archived ? db! : archived_db!,
@@ -1416,7 +1418,7 @@ export const use_search = () => {
 
 const get_sites_variants_from_search_string = (search_string: string) => {
   return search_string
-    .match(/(?<=@)(.*?)($|\s)/g)
+    .match(/(?<=site:)(.*?)($|\s)/g)
     ?.map((site) => site.replaceAll('.', '').replaceAll('/', '').trim())
     .filter((variant) => variant != '')
 }

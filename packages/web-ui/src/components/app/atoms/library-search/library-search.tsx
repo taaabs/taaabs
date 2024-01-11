@@ -175,42 +175,44 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                   ]]: props.results_count == 0,
                 })}
               >
-                {/* /(?=@)(.*?)($|\s)/ */}
-                {/* 'lorem @abc.com @abc.com ipsum' */}
-                {/* ["lorem ", "@abc.com", " ", "@abc.com", " ipsum"] */}
-                {props.search_string.split(/(?=@)(.*?)($|\s)/).map((str, i) => {
-                  if (str.substring(0, 1) == '@') {
-                    return (
-                      <span key={i}>
-                        <span
-                          className={
-                            styles[
-                              'box__form__content__styled-value__pre-highlight'
-                            ]
-                          }
-                        >
-                          @
+                {/* /(?=site:)(.*?)($|\s)/ */}
+                {/* 'lorem site:abc.com site:abc.com ipsum' */}
+                {/* ["lorem ", "site:abc.com", " ", "site:abc.com", " ipsum"] */}
+                {props.search_string
+                  .split(/(?=site:)(.*?)($|\s)/)
+                  .map((str, i) => {
+                    if (str.substring(0, 5) == 'site:') {
+                      return (
+                        <span key={i}>
+                          <span
+                            className={
+                              styles[
+                                'box__form__content__styled-value__pre-highlight'
+                              ]
+                            }
+                          >
+                            site:
+                          </span>
+                          <span
+                            className={cn(
+                              styles[
+                                'box__form__content__styled-value__highlight'
+                              ],
+                              {
+                                [styles[
+                                  'box__form__content__styled-value__highlight--no-results'
+                                ]]: props.results_count == 0,
+                              },
+                            )}
+                          >
+                            {str.substring(5)}
+                          </span>
                         </span>
-                        <span
-                          className={cn(
-                            styles[
-                              'box__form__content__styled-value__highlight'
-                            ],
-                            {
-                              [styles[
-                                'box__form__content__styled-value__highlight--no-results'
-                              ]]: props.results_count == 0,
-                            },
-                          )}
-                        >
-                          {str.substring(1)}
-                        </span>
-                      </span>
-                    )
-                  } else {
-                    return <span key={i}>{str}</span>
-                  }
-                })}
+                      )
+                    } else {
+                      return <span key={i}>{str}</span>
+                    }
+                  })}
                 {(props.search_string || selected_hint_index != -1) &&
                   props.hints &&
                   is_focused_fix && (
