@@ -62,7 +62,6 @@ export namespace Bookmark {
     highlights_note?: Highlights
     highlights_site_variants?: string[]
     orama_db_id?: string
-    is_serach_result: boolean
     should_dim_visited_links: boolean
     current_filter?: Filter // Needs by [use_search/update_searchable_bookmarks]
     is_fetching_bookmarks: boolean
@@ -122,12 +121,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             }}
           >
             <div className={styles.bookmark}>
-              <div
-                className={cn(styles.bookmark__main, {
-                  [styles['bookmark__main--search-result']]:
-                    props.is_serach_result,
-                })}
-              >
+              <div className={styles.bookmark__main}>
                 <div
                   className={cn(styles.bookmark__main__top, {
                     [styles['bookmark__main__top--compact']]: props.is_compact,
@@ -517,7 +511,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.is_compact == n.is_compact &&
     o.is_not_interactive == n.is_not_interactive &&
     o.is_fetching_bookmarks == n.is_fetching_bookmarks &&
-    o.is_serach_result == n.is_serach_result &&
     o.updated_at == n.updated_at &&
     o.render_height == n.render_height &&
     o.query_params == n.query_params &&

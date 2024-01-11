@@ -34,12 +34,6 @@
   &__main {
     padding-top: var(--distance-10px);
     padding-bottom: var(--distance-4px);
-    &--search-result {
-      background: linear-gradient(10deg, var(--blue50) 0%, transparent 55%);
-      @include at992 {
-        border-top-left-radius: calc(var(--border-radius-12px) - 1px);
-      }
-    }
     &__top {
       display: flex;
       justify-content: space-between;

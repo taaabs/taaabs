@@ -41,7 +41,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_serach_result={false}
+        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
@@ -76,7 +76,7 @@ export const Primary = () => (
           [18, 2],
           [32, 2],
         ]}
-        is_serach_result={true}
+        is_search_result={true}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
@@ -100,7 +100,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_serach_result={false}
+        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
@@ -128,7 +128,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_serach_result={false}
+        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
@@ -160,7 +160,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_serach_result={false}
+        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
@@ -187,7 +187,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_serach_result={false}
+        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
@@ -221,7 +221,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_serach_result={false}
+        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
@@ -248,7 +248,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_serach_result={false}
+        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
@@ -275,7 +275,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_serach_result={false}
+        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
@@ -302,7 +302,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_serach_result={false}
+        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
@@ -328,7 +328,7 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_serach_result={false}
+        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
