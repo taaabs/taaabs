@@ -370,10 +370,9 @@
   }
   > span > span {
     height: var(--button-dimension-40px);
-    border-radius: var(--border-radius-10px);
+    border-radius: var(--border-radius-999px);
     @include at992 {
       height: var(--button-dimension-52px);
-      border-radius: var(--border-radius-999px);
       width: calc(100% + (var(--distance-16px) * 2));
     }
   }
