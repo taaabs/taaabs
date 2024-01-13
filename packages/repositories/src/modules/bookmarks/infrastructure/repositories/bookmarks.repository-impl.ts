@@ -277,6 +277,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                 CryptoJS.enc.Utf8,
               ),
           site_path,
+          saves: link.saves,
           is_public: link.is_public || false,
         }
       }),

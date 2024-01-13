@@ -1265,13 +1265,11 @@ export const use_search = () => {
         (bookmark) => bookmark.id != params.bookmark_id,
       )
       set_bookmarks_just_tags(new_all_bookmarks)
-      setTimeout(() => {
-        cache_data({
-          db: db!,
-          bookmarks_just_tags: new_all_bookmarks,
-          is_archived: false,
-        })
-      }, 0)
+      cache_data({
+        db: db!,
+        bookmarks_just_tags: new_all_bookmarks,
+        is_archived: false,
+      })
     } else {
       await remove(archived_db!, params.bookmark_id.toString())
       const new_archived_bookmarks_just_tags =
@@ -1279,13 +1277,11 @@ export const use_search = () => {
           (bookmark) => bookmark.id != params.bookmark_id,
         )
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      setTimeout(() => {
-        cache_data({
-          db: archived_db!,
-          bookmarks_just_tags: new_archived_bookmarks_just_tags,
-          is_archived: true,
-        })
-      }, 0)
+      cache_data({
+        db: archived_db!,
+        bookmarks_just_tags: new_archived_bookmarks_just_tags,
+        is_archived: true,
+      })
     }
   }
 
