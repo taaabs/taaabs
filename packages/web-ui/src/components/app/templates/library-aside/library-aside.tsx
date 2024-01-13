@@ -4,7 +4,8 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 
 export namespace LibraryAside {
   export type Props = {
-    slot_presets?: React.ReactNode
+    density_on_click?: () => void
+    density: 'default' | 'compact'
     slot_filter?: {
       button: React.ReactNode
       dropdown: React.ReactNode
@@ -29,10 +30,19 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.toolbar}>
-        <div className={styles.toolbar__presets}>
-          {props.slot_presets && <>{props.slot_presets}</>}
-        </div>
-        <button className={styles.toolbar__menu}>
+        <button
+          className={cn(styles.toolbar__button, {
+            [styles['toolbar__button--disabled']]: !props.density_on_click,
+          })}
+          onClick={props.density_on_click}
+        >
+          <Icon
+            variant={
+              props.density == 'default' ? 'DENSITY_DEFAULT' : 'DENSITY_COMPACT'
+            }
+          />
+        </button>
+        <button className={styles.toolbar__button}>
           <Icon variant="THREE_DOTS" />
         </button>
       </div>

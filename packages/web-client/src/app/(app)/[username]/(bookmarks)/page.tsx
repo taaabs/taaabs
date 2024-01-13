@@ -1,5 +1,5 @@
 import BookmarksPage from '../../bookmarks-page'
 
-const Page: React.FC = () => <BookmarksPage user="public" />
+const Page: React.FC = () => <BookmarksPage />
 
 export default Page

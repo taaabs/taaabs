@@ -83,7 +83,7 @@ export const use_search = () => {
   const query_params = useSearchParams()
   const { username } = useParams()
   const [is_search_focused, set_is_search_focused] = useState(false)
-  const [is_caching_bookmarks, set_is_caching_bookmarks] = useState(false)
+  const [is_caching_ongoing, set_is_caching_ongoing] = useState(false)
   const [bookmarks_just_tags, set_bookmarks_just_tags] =
     useState<BookmarkTags[]>()
   const [archived_bookmarks_just_tags, set_archived_bookmarks_just_tags] =
@@ -383,9 +383,16 @@ export const use_search = () => {
     bookmarks_just_tags: BookmarkTags[]
     is_archived: boolean
   }) => {
-    set_is_caching_bookmarks(true)
+    set_is_caching_ongoing(true)
     const index = await saveWithHighlight(params.db)
     if (!username) {
+      await localforage.setItem(
+        !params.is_archived
+          ? browser_storage.local_forage.authorized_library.search.cached_at
+          : browser_storage.local_forage.authorized_library.search
+              .archived_cached_at,
+        new Date(),
+      )
       await localforage.setItem(
         !params.is_archived
           ? browser_storage.local_forage.authorized_library.search.index
@@ -400,14 +407,17 @@ export const use_search = () => {
               .archived_bookmarks,
         JSON.stringify(params.bookmarks_just_tags),
       )
+    } else {
       await localforage.setItem(
         !params.is_archived
-          ? browser_storage.local_forage.authorized_library.search.cached_at
-          : browser_storage.local_forage.authorized_library.search
-              .archived_cached_at,
+          ? browser_storage.local_forage.public_library.search.cached_at({
+              username: username as string,
+            })
+          : browser_storage.local_forage.public_library.search.archived_cached_at(
+              { username: username as string },
+            ),
         new Date(),
       )
-    } else {
       await localforage.setItem(
         !params.is_archived
           ? browser_storage.local_forage.public_library.search.index({
@@ -428,18 +438,8 @@ export const use_search = () => {
             ),
         JSON.stringify(params.bookmarks_just_tags),
       )
-      await localforage.setItem(
-        !params.is_archived
-          ? browser_storage.local_forage.public_library.search.cached_at({
-              username: username as string,
-            })
-          : browser_storage.local_forage.public_library.search.archived_cached_at(
-              { username: username as string },
-            ),
-        new Date(),
-      )
     }
-    set_is_caching_bookmarks(false)
+    set_is_caching_ongoing(false)
   }
 
   const clear_cached_data = async (params: { is_archived: boolean }) => {
@@ -786,7 +786,7 @@ export const use_search = () => {
       (current_filter != Filter.Archived && !db) ||
       (current_filter == Filter.Archived && !archived_db)
     )
-      throw new Error('DB should be there.')
+      return
 
     const tags = query_params.get('t')
     const gte = query_params.get('gte')
@@ -1392,7 +1392,7 @@ export const use_search = () => {
     get_hints,
     init,
     query_db,
-    is_caching_bookmarks,
+    is_caching_ongoing,
     result,
     is_initializing,
     db,

@@ -53,6 +53,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
     }, [props.is_focused])
 
     const handle_keyboard = (event: any) => {
+      if (props.is_loading) return
       if (
         event.code == 'Slash' &&
         !props.is_focused &&
@@ -114,6 +115,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
       selected_hint_index,
       props.is_focused,
       props.is_slash_shortcut_disabled,
+      props.is_loading,
     ])
 
     useUpdateEffect(() => {
@@ -121,7 +123,10 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
     }, [props.hints])
 
     return is_hydrated ? (
-      <div className={styles.container}>
+      <div
+        className={styles.container}
+        style={{ pointerEvents: props.is_loading ? 'none' : undefined }}
+      >
         <div
           className={cn(
             styles.box,
@@ -246,9 +251,11 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                     width: sizer_width > 250 ? `${sizer_width}px` : undefined,
                   }}
                   placeholder={
-                    props.is_loading && props.loading_progress_percentage
+                    props.is_loading
                       ? `One moment please... ${
-                          props.loading_progress_percentage + '%'
+                          props.loading_progress_percentage
+                            ? props.loading_progress_percentage + '%'
+                            : ''
                         }`
                       : selected_hint_index != -1
                       ? undefined

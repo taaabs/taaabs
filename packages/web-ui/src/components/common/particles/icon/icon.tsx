@@ -3,7 +3,10 @@ import Add from '../../../../assets/icons/add.svg'
 import Archive from '../../../../assets/icons/archive.svg'
 import BookmarkFilled from '../../../../assets/icons/bookmark-filled.svg'
 import Bookmark from '../../../../assets/icons/bookmark.svg'
+import Copy from '../../../../assets/icons/copy.svg'
 import Delete from '../../../../assets/icons/delete.svg'
+import DensityDefault from '../../../../assets/icons/density-default.svg'
+import DensityCompact from '../../../../assets/icons/density-compact.svg'
 import Edit from '../../../../assets/icons/edit.svg'
 import Globe from '../../../../assets/icons/globe.svg'
 import Google from '../../../../assets/icons/google.svg'
@@ -26,6 +29,7 @@ import ThreeDots from '../../../../assets/icons/three-dots.svg'
 import Logo from '../../../../assets/icons/logo.svg'
 import MobileTitleBarLeft from '../../../../assets/icons/mobile-title-bar-left.svg'
 import MobileTitleBarRight from '../../../../assets/icons/mobile-title-bar-right.svg'
+import More from '../../../../assets/icons/more.svg'
 import NewTab from '../../../../assets/icons/new-tab.svg'
 import NotificationsFilled from '../../../../assets/icons/notifications-filled.svg'
 import Notifications from '../../../../assets/icons/notifications.svg'
@@ -39,7 +43,10 @@ export namespace Icon {
     | 'ARCHIVE'
     | 'BOOKMARK_FILLED'
     | 'BOOKMARK'
+    | 'COPY'
     | 'DELETE'
+    | 'DENSITY_DEFAULT'
+    | 'DENSITY_COMPACT'
     | 'EDIT'
     | 'GLOBE'
     | 'GOOGLE'
@@ -62,6 +69,7 @@ export namespace Icon {
     | 'LOGO'
     | 'MOBILE_TITLE_BAR_LEFT'
     | 'MOBILE_TITLE_BAR_RIGHT'
+    | 'MORE'
     | 'NEW_TAB'
     | 'NOTIFICATIONS_FILLED'
     | 'NOTIFICATIONS'
@@ -92,8 +100,17 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'BOOKMARK':
       icon = <Bookmark />
       break
+    case 'COPY':
+      icon = <Copy />
+      break
     case 'DELETE':
       icon = <Delete />
+      break
+    case 'DENSITY_DEFAULT':
+      icon = <DensityDefault />
+      break
+    case 'DENSITY_COMPACT':
+      icon = <DensityCompact />
       break
     case 'EDIT':
       icon = <Edit />
@@ -130,6 +147,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'MOBILE_TITLE_BAR_RIGHT':
       icon = <MobileTitleBarRight />
+      break
+    case 'MORE':
+      icon = <More />
       break
     case 'NEW_TAB':
       icon = <NewTab />

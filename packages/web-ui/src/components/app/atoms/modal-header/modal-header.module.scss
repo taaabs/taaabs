@@ -6,9 +6,8 @@
   justify-content: center;
   align-items: center;
   border-bottom: var(--border-primary);
-  background: var(--header-transparent-background);
-  backdrop-filter: var(--backdrop-filter);
-  height: var(--header-mobile-height);
+  background: var(--header-background);
+  height: var(--distance-46px);
   @include at992 {
     height: var(--distance-52px);
   }
@@ -18,7 +17,7 @@
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   letter-spacing: var(--letter-spacing-logo);
-  font-size: var(--font-size-20px);
+  font-size: var(--font-size-22px);
   @include at992 {
     font-size: var(--font-size-24px);
   }

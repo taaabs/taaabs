@@ -26,7 +26,7 @@ import { BrowserStorage, browser_storage } from '@/constants/browser-storage'
 import { use_is_hydrated } from '@shared/hooks'
 import { use_search } from '@/hooks/library/use-search'
 import { ModalContext } from './modal-provider'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { upsert_bookmark_modal } from '@/modals/upsert-bookmark-modal'
 import { toast } from 'react-toastify'
 import { CustomRangeSkeleton as UiAppAtom_CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
@@ -51,11 +51,12 @@ const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   loading: () => <UiAppAtom_CustomRangeSkeleton />,
 })
 
-const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
+const BookmarksPage: React.FC = () => {
   const is_hydrated = use_is_hydrated()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
   const query_params = useSearchParams()
+  const { username } = useParams()
   const modal_context = useContext(ModalContext)
   const [show_custom_range, set_show_custom_range] = useState(false)
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
@@ -222,14 +223,12 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
               ? 'Search in archived bookmarks'
               : 'Search here...'
           }
-          hints={search.hints}
+          hints={!search.is_initializing ? search.hints : undefined}
           on_click_hint={(i) => {
-            if (search.hints) {
-              const search_string =
-                search.search_string + search.hints[i].completion
-              search.set_search_string(search_string)
-              search.query_db({ search_string })
-            }
+            const search_string =
+              search.search_string + search.hints![i].completion
+            search.set_search_string(search_string)
+            search.query_db({ search_string })
           }}
           on_click_recent_hint_remove={(i) => {
             const search_string =
@@ -240,11 +239,32 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
           }}
           is_focused={search.is_search_focused}
           on_focus={async () => {
-            if (search.is_caching_bookmarks) return
-
-            search.set_is_search_focused(true)
-
             if (!search.is_initializing) {
+              search.set_is_search_focused(true)
+
+              search.set_selected_tags(
+                counts.selected_tags
+                  .filter((id) => {
+                    if (
+                      !bookmarks_slice_state.bookmarks ||
+                      !bookmarks_slice_state.bookmarks[0]
+                    )
+                      return false
+                    return (
+                      bookmarks_slice_state.bookmarks[0].tags?.findIndex(
+                        (tag) => tag.id == id,
+                      ) != -1
+                    )
+                  })
+                  .map((id) => {
+                    const name = bookmarks_slice_state.bookmarks![0].tags!.find(
+                      (tag) => tag.id == id,
+                    )!.name
+
+                    return name
+                  }),
+              )
+
               const is_cache_stale = await search.check_is_cache_stale({
                 api_url: process.env.NEXT_PUBLIC_API_URL,
                 auth_token:
@@ -259,34 +279,11 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                   : search.archived_db === undefined) ||
                 is_cache_stale
               ) {
+                search.reset()
                 await search.init({
                   is_archived:
                     filter_view_options.current_filter == Filter.Archived,
                 })
-              } else {
-                search.set_selected_tags(
-                  counts.selected_tags
-                    .filter((id) => {
-                      if (
-                        !bookmarks_slice_state.bookmarks ||
-                        !bookmarks_slice_state.bookmarks[0]
-                      )
-                        return false
-                      return (
-                        bookmarks_slice_state.bookmarks[0].tags?.findIndex(
-                          (tag) => tag.id == id,
-                        ) != -1
-                      )
-                    })
-                    .map((id) => {
-                      const name =
-                        bookmarks_slice_state.bookmarks![0].tags!.find(
-                          (tag) => tag.id == id,
-                        )!.name
-
-                      return name
-                    }),
-                )
               }
             }
           }}
@@ -298,6 +295,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
             }
           }}
           on_submit={() => {
+            if (search.is_initializing) return
             if (search.search_string) {
               search.query_db({ search_string: search.search_string })
             }
@@ -336,18 +334,37 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 }
                 set_close_aside_count(close_aside_count + 1)
               },
-              is_active: true,
+              is_active: query_params.entries.length == 0,
+            },
+            {
+              label: 'Label 1',
+              on_click: () => {},
+              is_active: false,
+            },
+            {
+              label: 'Label 2',
+              on_click: () => {},
+              is_active: false,
+            },
+            {
+              label: 'Label 3',
+              on_click: () => {},
+              is_active: false,
             },
           ]}
         />
       }
       slot_aside={
         <UiAppTemplate_LibraryAside
-          slot_presets={
-            <>
-              <button
-                onClick={() => {
-                  if (bookmarks_slice_state.is_fetching_first_bookmarks) return
+          density={
+            bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+              ? 'default'
+              : bookmarks_slice_state.density
+          }
+          density_on_click={
+            !bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+              ? () => {
+                  if (bookmarks_slice_state.is_fetching_data) return
                   set_close_aside_count(close_aside_count + 1)
                   setTimeout(() => {
                     dispatch(
@@ -359,11 +376,8 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                     )
                     bookmarks.get_bookmarks({})
                   }, 0)
-                }}
-              >
-                {bookmarks_slice_state.density || 'default'}
-              </button>
-            </>
+                }
+              : undefined
           }
           slot_filter={{
             button: is_hydrated ? (
@@ -421,7 +435,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                       is_selected:
                         filter_view_options.current_filter == Filter.Starred,
                     },
-                    ...(props.user == 'authorized'
+                    ...(!username
                       ? [
                           {
                             label: _filter_option_to_label(Filter.Unread),
@@ -445,7 +459,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                           },
                         ]
                       : []),
-                    ...(props.user == 'authorized'
+                    ...(!username
                       ? [
                           {
                             label: _filter_option_to_label(
@@ -556,7 +570,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                         sort_by_view_options.current_sort_by ==
                         SortBy.UpdatedAt,
                     },
-                    ...(props.user == 'authorized'
+                    ...(!username
                       ? [
                           {
                             label: _sort_by_option_to_label(SortBy.VisitedAt),
@@ -934,7 +948,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 }}
                 favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
                 on_menu_click={async () => {
-                  if (props.user == 'public') return
+                  if (username) return
                   set_are_bookmarks_menu_items_locked(true)
                   const is_cache_stale = await search.check_is_cache_stale({
                     api_url: process.env.NEXT_PUBLIC_API_URL,
@@ -964,18 +978,18 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                 menu_slot={
                   <UiAppAtom_DropdownMenu
                     items={[
-                      ...(props.user == 'public'
+                      ...(username
                         ? [
                             {
                               label: 'Copy to mine',
                               on_click: () => {},
                               other_icon: (
-                                <UiCommonParticles_Icon variant="EDIT" />
+                                <UiCommonParticles_Icon variant="COPY" />
                               ),
                             },
                           ]
                         : []),
-                      ...(props.user == 'authorized'
+                      ...(!username
                         ? [
                             {
                               label: 'Mark as Unread',
@@ -1672,7 +1686,7 @@ const BookmarksPage: React.FC<{ user: 'authorized' | 'public' }> = (props) => {
                     ? search.archived_db?.id || ''
                     : search.db?.id || ''
                 }
-                should_dim_visited_links={props.user == 'public'}
+                should_dim_visited_links={username !== undefined}
                 // It's important to wait until filter is set to search hook's state
                 current_filter={search.current_filter}
               />
