@@ -12,37 +12,39 @@ export const delete_bookmark = (params: {
   api_url: string
   auth_token: string
 }) => {
-  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
-    const state = get_state()
+  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
+    new Promise(async (resolve) => {
+      const state = get_state()
 
-    if (!state.bookmarks.bookmarks)
-      throw new Error('[delete_bookmark] Bookmarks should be there')
+      if (!state.bookmarks.bookmarks)
+        throw new Error('[delete_bookmark] Bookmarks should be there')
 
-    const data_source = new Bookmarks_DataSourceImpl(
-      params.api_url,
-      params.auth_token,
-    )
+      const data_source = new Bookmarks_DataSourceImpl(
+        params.api_url,
+        params.auth_token,
+      )
 
-    dispatch(bookmarks_actions.set_is_updating_bookmarks(true))
+      dispatch(bookmarks_actions.set_is_updating_bookmarks(true))
 
-    const repository = new Bookmarks_RepositoryImpl(data_source)
-    const delete_bookmark_use_case = new DeleteBookmark_UseCase(repository)
-    await delete_bookmark_use_case.invoke({ bookmark_id: params.bookmark_id })
+      const repository = new Bookmarks_RepositoryImpl(data_source)
+      const delete_bookmark_use_case = new DeleteBookmark_UseCase(repository)
+      await delete_bookmark_use_case.invoke({ bookmark_id: params.bookmark_id })
 
-    dispatch(
-      bookmarks_actions.set_incoming_bookmarks(
-        state.bookmarks.bookmarks.filter(
-          (bookmark) => bookmark.id != params.bookmark_id,
+      dispatch(
+        bookmarks_actions.set_incoming_bookmarks(
+          state.bookmarks.bookmarks.filter(
+            (bookmark) => bookmark.id != params.bookmark_id,
+          ),
         ),
-      ),
-    )
-    dispatch(
-      counts_actions.refresh_authorized_counts({
-        last_authorized_counts_params: params.last_authorized_counts_params,
-        api_url: params.api_url,
-        auth_token: params.auth_token,
-      }),
-    )
-    dispatch(bookmarks_actions.set_toast_message('deleted'))
-  }
+      )
+      dispatch(
+        counts_actions.refresh_authorized_counts({
+          last_authorized_counts_params: params.last_authorized_counts_params,
+          api_url: params.api_url,
+          auth_token: params.auth_token,
+        }),
+      )
+      dispatch(bookmarks_actions.set_toast_message('deleted'))
+      resolve(null)
+    })
 }

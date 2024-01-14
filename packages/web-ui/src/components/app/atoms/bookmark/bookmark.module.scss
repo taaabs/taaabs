@@ -32,13 +32,13 @@
   display: flex;
   flex-direction: column;
   &__main {
-    padding-top: var(--distance-10px);
-    padding-bottom: var(--distance-4px);
+    padding: var(--distance-10px) 0;
     &__top {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
       position: relative;
+      margin-bottom: -2px;
       &--compact {
         display: none;
       }
@@ -104,22 +104,35 @@
       }
     }
     &__content {
-      padding: 0 var(--distance-16px);
+      padding: var(--distance-2px) var(--distance-16px) 0 var(--distance-16px);
       display: flex;
       flex-direction: column;
       gap: var(--distance-2px);
+      position: relative;
+      overflow: hidden;
+      &::before {
+        position: absolute;
+        content: '';
+        top: var(--distance-6px);
+        left: 0;
+        width: var(--distance-3px);
+        height: var(--distance-1-4rem);
+        border-top-right-radius: var(--border-radius-3px);
+        border-bottom-right-radius: var(--border-radius-3px);
+        background-color: var(--brand-color);
+      }
       &__title {
         display: inline;
         color: var(--text-color-normal);
         &__unread {
           display: inline-flex;
           align-items: center;
-          transform: translateY(-0.24rem);
+          transform: translateY(-0.16rem);
           transform-origin: left;
           position: relative;
           margin-right: var(--distance-0-7rem);
-          height: var(--distance-2-0rem);
-          width: var(--distance-2-0rem);
+          height: var(--distance-1-9rem);
+          width: var(--distance-1-9rem);
           background: var(--red);
           border-radius: var(--border-radius-999px);
           filter: drop-shadow(2px 2px 2px rgba(255, 0, 0, 0.08));
@@ -163,12 +176,13 @@
     }
     &__tags {
       font-family: var(--font-family-inter-tight);
-      margin-top: var(--distance-6px);
+      margin-top: var(--distance-4px);
       padding: 0 var(--distance-16px);
       font-size: var(--font-size-1-5rem);
+      margin-bottom: calc(var(--distance-0-5rem) * -1);
       > * {
         padding-right: var(--distance-0-8rem);
-        padding-bottom: var(--distance-0-6rem);
+        padding-bottom: var(--distance-0-5rem);
       }
       > span {
         color: var(--text-color-dimmed);

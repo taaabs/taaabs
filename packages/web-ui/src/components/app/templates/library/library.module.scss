@@ -2,7 +2,6 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  --_dimmed-opacity: 0.5;
   --_aside-width: 26vw;
   @include at1200 {
     --_aside-width: 300px;
@@ -32,7 +31,7 @@
     pointer-events: none;
   }
   &--dimmed::after {
-    opacity: var(--_dimmed-opacity);
+    opacity: var(--dimmed-opacity);
   }
 }
 .content {
@@ -147,7 +146,7 @@
     }
     &--dimmed {
       @include to992 {
-        opacity: var(--_dimmed-opacity);
+        opacity: var(--dimmed-opacity);
       }
     }
     &__search {

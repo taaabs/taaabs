@@ -1259,8 +1259,12 @@ export const use_search = () => {
     )
       return
 
+    await remove(
+      current_filter != Filter.Archived ? db! : archived_db!,
+      params.bookmark_id.toString(),
+    )
+
     if (current_filter != Filter.Archived) {
-      await remove(db!, params.bookmark_id.toString())
       const new_all_bookmarks = bookmarks_just_tags!.filter(
         (bookmark) => bookmark.id != params.bookmark_id,
       )
@@ -1271,7 +1275,6 @@ export const use_search = () => {
         is_archived: false,
       })
     } else {
-      await remove(archived_db!, params.bookmark_id.toString())
       const new_archived_bookmarks_just_tags =
         archived_bookmarks_just_tags!.filter(
           (bookmark) => bookmark.id != params.bookmark_id,

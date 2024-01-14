@@ -1417,7 +1417,6 @@ const BookmarksPage: React.FC = () => {
                                     created_at: bookmark.created_at,
                                     visited_at: bookmark.visited_at,
                                     updated_at: updated_bookmark.updated_at,
-
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1561,7 +1560,7 @@ const BookmarksPage: React.FC = () => {
                                 <UiCommonParticles_Icon variant="ARCHIVE" />
                               ),
                               is_disabled: are_bookmark_menu_items_locked,
-                              on_click: () => {
+                              on_click: async () => {
                                 const modified_bookmark: UpsertBookmark_Params =
                                   {
                                     bookmark_id: bookmark.id,
@@ -1584,7 +1583,7 @@ const BookmarksPage: React.FC = () => {
                                       is_public: tag.is_public,
                                     })),
                                   }
-                                dispatch(
+                                await dispatch(
                                   bookmarks_actions.upsert_bookmark({
                                     bookmark: modified_bookmark,
                                     last_authorized_counts_params:
@@ -1637,8 +1636,8 @@ const BookmarksPage: React.FC = () => {
                             {
                               label: 'Delete',
                               is_disabled: are_bookmark_menu_items_locked,
-                              on_click: () => {
-                                dispatch(
+                              on_click: async () => {
+                                await dispatch(
                                   bookmarks_actions.delete_bookmark({
                                     last_authorized_counts_params:
                                       JSON.parse(
