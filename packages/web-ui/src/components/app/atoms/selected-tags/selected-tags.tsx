@@ -1,5 +1,7 @@
 import { memo } from 'react'
 import styles from './selected-tags.module.scss'
+import { system_values } from '@shared/constants/system-values'
+import cn from 'classnames'
 
 export namespace SelectedTags {
   export type Props = {
@@ -12,9 +14,19 @@ export const SelectedTags: React.FC<SelectedTags.Props> = memo(
   function SelectedTags(props) {
     return props.selected_tags.length ? (
       <div className={styles.container}>
+        {props.selected_tags.length >=
+          system_values.library.max_tags_selected - 1 && (
+          <div
+            className={cn(styles.count, {
+              [styles['count--limit-reached']]:
+                props.selected_tags.length ==
+                system_values.library.max_tags_selected,
+            })}
+          >{`${props.selected_tags.length}/${system_values.library.max_tags_selected}`}</div>
+        )}
         {props.selected_tags.map((tag) => (
           <button
-            className={styles.container__tag}
+            className={styles.tag}
             onClick={() => props.on_selected_tag_click(tag.id)}
             key={tag.id}
           >

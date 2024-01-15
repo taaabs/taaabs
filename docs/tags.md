@@ -7,7 +7,7 @@ To find all tags associated with a bookmark and their order lookup table "tags_o
 
 ### Bookmarks with a given tag or tags
 
-To find all bookmarks associated with given tag/s - concatenate them with a space and lookup table "tag_hierarchies_on_bookmarks".
+To find all bookmarks associated with given tag/s - concatenate them with a space and lookup table "tag_combinations_on_bookmarks".
 
 ### Update tag list on a bookmark
 
@@ -15,7 +15,7 @@ Updating tags on a bookmark is a two step process:
 
 Step one: update "tags on bookmarks" for each tag added/updated/deleted.
 
-Step two: **Recreate** (remove all present rows prior work) tag hierarchies for each combination of tags, eg. if a bookmark has following tags:
+Step two: **Recreate** (remove all present rows prior work) tag combinations for each combination of tags, eg. if a bookmark has following tags:
 
 - recipes
 - cooking
@@ -24,7 +24,7 @@ Step two: **Recreate** (remove all present rows prior work) tag hierarchies for 
 
 we will add rows for each combination **alphabetically** as follows:
 
-| user_id | bookmark_id | tag_hierarchy                   |
+| user_id | bookmark_id | tag_combination                   |
 | ------- | ----------- | ------------------------------- |
 | 1       | 1           | carbonara                       |
 | 1       | 1           | cooking                         |
@@ -51,7 +51,7 @@ Results contain above tags as well as other tags.
 
 The objective is to list in the aside all tags occuring on visible bookmarks with total number of bookmarks they will yield upon selection.
 
-| user_id | bookmark_id | tag_hierarchy             |
+| user_id | bookmark_id | tag_combination             |
 | ------- | ----------- | ------------------------- |
 | 93      | 1           | cooking recpies           |
 | 93      | 2           | cooking recpies           |
@@ -59,7 +59,7 @@ The objective is to list in the aside all tags occuring on visible bookmarks wit
 | 93      | 3           | cooking recpies           |
 | 93      | 3           | cooking recpies other     |
 
-1. Select all bookmarks which tag_hierarchy is equal to what is selected. If there are provided excluded tags, filter out all bookmarksIds containing them.
+1. Select all bookmarks which tag_combination is equal to what is selected. If there are provided excluded tags, filter out all bookmarksIds containing them.
 2. For each bookmark select all tags from "tags_on_bookmarks" ommiting current tags and count them.
 
 | tag_id | count |

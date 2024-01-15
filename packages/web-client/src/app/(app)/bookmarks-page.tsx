@@ -811,7 +811,8 @@ const BookmarksPage: React.FC = () => {
                     // This fixes density change flashing bookmarks which where previously out of the viewport, thus not rendered.
                     bookmarks_slice_state.first_bookmarks_fetched_at_timestamp ||
                     ''
-                  }`}
+                  }
+                  `}
                 is_compact={bookmark.is_compact}
                 updated_at={bookmark.updated_at}
                 title={bookmark.title}
@@ -861,7 +862,7 @@ const BookmarksPage: React.FC = () => {
                     ? new Date(bookmark.visited_at)
                     : new Date(bookmark.created_at)
                 }
-                should_display_only_month={
+                should_print_month_only={
                   bookmarks_slice_state.showing_bookmarks_fetched_by_ids
                 }
                 counts_refreshed_at_timestamp={
@@ -1773,6 +1774,12 @@ function _filter_option_to_label(filter_option: Filter): string {
       return 'Starred & Unread'
     case Filter.Archived:
       return 'Archived'
+    case Filter.ArchivedStarred:
+      return 'Archived & Starred'
+    case Filter.ArchivedUnread:
+      return 'Archived & Unread'
+    case Filter.ArchivedStarredUnread:
+      return 'Archived & Starred & Unread'
   }
 }
 

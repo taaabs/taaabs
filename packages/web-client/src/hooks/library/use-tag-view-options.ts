@@ -1,5 +1,6 @@
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { update_query_params } from '@/utils/update-query-params'
+import { system_values } from '@shared/constants/system-values'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -28,7 +29,9 @@ export const use_tag_view_options = () => {
   }, [query_params])
 
   const add_tag_to_query_params = (tag_id: number) => {
-    const selected_tags = query_params.get('t')
+    if (selected_tags.length == system_values.library.max_tags_selected) return
+
+    const current_tags = query_params.get('t')
       ? query_params
           .get('t')!
           .split(',')
@@ -38,7 +41,7 @@ export const use_tag_view_options = () => {
     const updated_query_params = update_query_params(
       query_params,
       't',
-      [...selected_tags, tag_id].join(','),
+      [...current_tags, tag_id].join(','),
     )
 
     clear_library_session_storage({

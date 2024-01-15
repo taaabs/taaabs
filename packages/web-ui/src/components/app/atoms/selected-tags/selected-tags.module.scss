@@ -3,27 +3,38 @@
 
 .container {
   display: flex;
+  flex-direction: column;
   gap: var(--distance-6px);
-  flex-wrap: wrap;
   margin-bottom: var(--distance-16px);
-  &__tag {
-    display: inline-flex;
-    font-family: var(--font-family-inter-tight);
-    font-size: var(--font-size-1-4rem);
-    overflow-wrap: anywhere;
-    text-align: left;
-    span:first-child {
-      @include hover {
-        @include text-decoration-underline;
-      }
+  position: relative;
+}
+.count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: var(--text-color-dimmed);
+  font-size: var(--font-size-13px);
+  &--limit-reached {
+    color: var(--text-color-variant);
+  }
+}
+.tag {
+  display: inline-flex;
+  font-family: var(--font-family-inter-tight);
+  font-size: var(--font-size-1-4rem);
+  overflow-wrap: anywhere;
+  text-align: left;
+  span:first-child {
+    @include hover {
+      @include text-decoration-underline;
     }
-    span:first-child {
-      color: var(--Tags-selected-foreground);
-      font-weight: var(--font-weight-inter-tight-medium);
-    }
-    span:last-child {
-      color: var(--text-color-dimmed);
-      margin-left: var(--distance-3px);
-    }
+  }
+  span:first-child {
+    color: var(--Tags-selected-foreground);
+    font-weight: var(--font-weight-inter-tight-medium);
+  }
+  span:last-child {
+    color: var(--text-color-dimmed);
+    margin-left: var(--distance-3px);
   }
 }
