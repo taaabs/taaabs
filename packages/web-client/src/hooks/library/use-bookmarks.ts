@@ -1,4 +1,4 @@
-import { useParams, usePathname, useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import {
   use_library_dispatch,
@@ -17,14 +17,13 @@ import { browser_storage } from '@/constants/browser-storage'
 export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   const query_params = useSearchParams()
   const { username } = useParams()
-  const route_pathname = usePathname()
   const dispatch = use_library_dispatch()
   const { bookmarks, has_more_bookmarks, density } = use_library_selector(
     (state) => state.bookmarks,
   )
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
-    if (route_pathname == '/bookmarks') {
+    if (!username) {
       const request_params: GetBookmarks_Params.Authorized = {}
 
       const query_tags = query_params.get('t')

@@ -29,14 +29,13 @@ export const get_authorized_bookmarks = (params: {
       dispatch(bookmarks_actions.set_has_more_bookmarks(null))
     }
 
-    let bookmarks_with_density: Bookmark_Entity[] = []
-
     const { bookmarks, pagination } = await get_bookmarks.invoke(
       params.request_params,
     )
 
-    const state = get_state()
-    if (state.bookmarks.density == 'compact') {
+    let bookmarks_with_density: Bookmark_Entity[] = []
+
+    if (get_state().bookmarks.density == 'compact') {
       bookmarks_with_density = bookmarks.map((bookmark) => ({
         ...bookmark,
         is_compact: true,

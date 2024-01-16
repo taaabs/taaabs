@@ -1,17 +1,18 @@
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
-import { LibraryDispatch } from '../../library.store'
+import { LibraryDispatch, LibraryState } from '../../library.store'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { bookmarks_actions } from '../bookmarks.slice'
 import { GetBookmarksByIds_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks-by-ids.params'
 import { GetBookmarksByIdsAuthorized_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-by-ids-authorized.use-case'
+import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 
-export const get_bookmarks_by_ids_authorized = (params: {
+export const get_authorized_bookmarks_by_ids = (params: {
   request_params: GetBookmarksByIds_Params.Authorized
   is_next_page: boolean
   api_url: string
   auth_token: string
 }) => {
-  return async (dispatch: LibraryDispatch) => {
+  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
     const data_source = new Bookmarks_DataSourceImpl(
       params.api_url,
       params.auth_token,
@@ -32,13 +33,25 @@ export const get_bookmarks_by_ids_authorized = (params: {
       params.request_params,
     )
 
+    let bookmarks_with_density: Bookmark_Entity[] = []
+
+    if (get_state().bookmarks.density == 'compact') {
+      bookmarks_with_density = bookmarks.map((bookmark) => ({
+        ...bookmark,
+        is_compact: true,
+      }))
+    } else {
+      bookmarks_with_density = bookmarks
+    }
+
+    dispatch(bookmarks_actions.set_is_fetching_data(false))
     dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
 
     if (params.is_next_page) {
-      dispatch(bookmarks_actions.set_more_bookmarks(bookmarks))
+      dispatch(bookmarks_actions.set_more_bookmarks(bookmarks_with_density))
       dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(false))
     } else {
-      dispatch(bookmarks_actions.set_bookmarks(bookmarks))
+      dispatch(bookmarks_actions.set_bookmarks(bookmarks_with_density))
       dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
     }
   }

@@ -534,7 +534,8 @@ export const use_search = () => {
           ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
             : {}),
-          ...(current_filter == Filter.Unread
+          ...(current_filter == Filter.Unread ||
+          current_filter == Filter.StarredUnread
             ? {
                 is_unread: true,
               }
@@ -684,11 +685,16 @@ export const use_search = () => {
 
   const query_db = async (params: {
     search_string: string
-    set_highlights_only?: boolean
+    refresh_highlights_and_count_only?: boolean
   }) => {
     const hits = await get_hits({ search_string: params.search_string })
 
-    if (!params.set_highlights_only) {
+    if (
+      params.refresh_highlights_and_count_only &&
+      hits.length < system_values.max_library_search_results
+    ) {
+      set_count(hits.length)
+    } else {
       set_result({
         count:
           hits.length == system_values.max_library_search_results
@@ -1210,34 +1216,40 @@ export const use_search = () => {
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
     clear_hints()
-    if (result?.count) {
-      if (!params.should_get_next_page) {
-        dispatch(
-          bookmarks_actions.get_bookmarks_by_ids_authorized({
-            api_url: process.env.NEXT_PUBLIC_API_URL,
-            auth_token:
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-            is_next_page: false,
-            request_params: {
-              ids: result.hits.slice(0, 20).map((hit) => parseInt(hit.id)),
-            },
-          }),
-        )
-      } else if (bookmarks && bookmarks.length < result.hits.length) {
-        dispatch(
-          bookmarks_actions.get_bookmarks_by_ids_authorized({
-            api_url: process.env.NEXT_PUBLIC_API_URL,
-            auth_token:
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-            is_next_page: true,
-            request_params: {
-              ids: result.hits
-                .slice(bookmarks.length, bookmarks.length + 20)
-                .map((hit) => parseInt(hit.id)),
-            },
-          }),
-        )
-      }
+
+    if (!result) return
+
+    if (!username) {
+      dispatch(
+        bookmarks_actions.get_authorized_bookmarks_by_ids({
+          api_url: process.env.NEXT_PUBLIC_API_URL,
+          auth_token:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+          is_next_page: params.should_get_next_page || false!,
+          request_params: {
+            ids: params.should_get_next_page
+              ? result.hits
+                  .slice(bookmarks!.length, bookmarks!.length + 20)
+                  .map((hit) => parseInt(hit.id))
+              : result.hits.slice(0, 20).map((hit) => parseInt(hit.id)),
+          },
+        }),
+      )
+    } else {
+      dispatch(
+        bookmarks_actions.get_public_bookmarks_by_ids({
+          api_url: process.env.NEXT_PUBLIC_API_URL,
+          is_next_page: params.should_get_next_page || false,
+          request_params: {
+            ids: params.should_get_next_page
+              ? result.hits
+                  .slice(bookmarks!.length, bookmarks!.length + 20)
+                  .map((hit) => parseInt(hit.id))
+              : result.hits.slice(0, 20).map((hit) => parseInt(hit.id)),
+            username: username as string,
+          },
+        }),
+      )
     }
   }
 
@@ -1286,6 +1298,11 @@ export const use_search = () => {
         is_archived: true,
       })
     }
+
+    await query_db({
+      search_string,
+      refresh_highlights_and_count_only: true,
+    })
   }
 
   const update_searchable_bookmark = async (params: {
@@ -1377,8 +1394,8 @@ export const use_search = () => {
         })
       }, 0)
     }
-    if (result && result.count > 0)
-      await query_db({ search_string, set_highlights_only: true })
+
+    await query_db({ search_string, refresh_highlights_and_count_only: true })
   }
 
   return {

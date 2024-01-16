@@ -296,7 +296,7 @@ const BookmarksPage: React.FC = () => {
           }}
           on_submit={() => {
             if (search.is_initializing) return
-            if (search.search_string) {
+            if (search.search_string.trim()) {
               search.query_db({ search_string: search.search_string })
             }
           }}
@@ -334,7 +334,7 @@ const BookmarksPage: React.FC = () => {
                 }
                 set_close_aside_count(close_aside_count + 1)
               },
-              is_active: query_params.entries.length == 0,
+              is_active: !tag_view_options.selected_tags.length,
             },
             {
               label: 'Label 1',
@@ -356,29 +356,25 @@ const BookmarksPage: React.FC = () => {
       }
       slot_aside={
         <UiAppTemplate_LibraryAside
-          density={
-            bookmarks_slice_state.showing_bookmarks_fetched_by_ids
-              ? 'default'
-              : bookmarks_slice_state.density
-          }
-          density_on_click={
-            !bookmarks_slice_state.showing_bookmarks_fetched_by_ids
-              ? () => {
-                  if (bookmarks_slice_state.is_fetching_data) return
-                  set_close_aside_count(close_aside_count + 1)
-                  setTimeout(() => {
-                    dispatch(
-                      bookmarks_actions.set_density(
-                        bookmarks_slice_state.density == 'default'
-                          ? 'compact'
-                          : 'default',
-                      ),
-                    )
-                    bookmarks.get_bookmarks({})
-                  }, 0)
-                }
-              : undefined
-          }
+          density={bookmarks_slice_state.density}
+          density_on_click={() => {
+            if (bookmarks_slice_state.is_fetching_data) return
+            set_close_aside_count(close_aside_count + 1)
+            setTimeout(() => {
+              dispatch(
+                bookmarks_actions.set_density(
+                  bookmarks_slice_state.density == 'default'
+                    ? 'compact'
+                    : 'default',
+                ),
+              )
+              if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
+                search.get_bookmarks({})
+              } else {
+                bookmarks.get_bookmarks({})
+              }
+            }, 0)
+          }}
           slot_filter={{
             button: is_hydrated ? (
               <UiAppAtom_ButtonSelect
@@ -795,7 +791,6 @@ const BookmarksPage: React.FC = () => {
         false
       }
       get_more_bookmarks={() => {
-        if (search.hints || !bookmarks_slice_state.bookmarks?.length) return
         if (search.search_string) {
           search.get_bookmarks({ should_get_next_page: true })
         } else {
@@ -1484,67 +1479,64 @@ const BookmarksPage: React.FC = () => {
                                     ),
                                   },
                                 })
-                                setTimeout(() => {
-                                  const updated_tag_ids =
-                                    updated_bookmark.tags.map((t) => t.id)
-                                  if (
-                                    tag_view_options.selected_tags.every((t) =>
-                                      updated_tag_ids.includes(t),
-                                    )
-                                  ) {
-                                    dispatch(
-                                      bookmarks_actions.replace_bookmark({
-                                        bookmark: updated_bookmark,
-                                        last_authorized_counts_params:
-                                          JSON.parse(
-                                            sessionStorage.getItem(
-                                              browser_storage.session_storage
-                                                .library
-                                                .last_authorized_counts_params,
-                                            ) || '',
-                                          ) || undefined,
-                                        api_url:
-                                          process.env.NEXT_PUBLIC_API_URL,
-                                        auth_token:
-                                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                      }),
-                                    )
-                                  } else {
-                                    // We filter out bookmark when there are other bookmarks still matching with selected tags.
-                                    dispatch(
-                                      bookmarks_actions.filter_out_bookmark({
-                                        bookmark_id: updated_bookmark.id,
-                                        last_authorized_counts_params:
-                                          JSON.parse(
-                                            sessionStorage.getItem(
-                                              browser_storage.session_storage
-                                                .library
-                                                .last_authorized_counts_params,
-                                            ) || '',
-                                          ) || undefined,
-                                        api_url:
-                                          process.env.NEXT_PUBLIC_API_URL,
-                                        auth_token:
-                                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                      }),
-                                    )
-                                  }
-
-                                  // Unselect removed tags when there is no more bookmarks with them.
-                                  tag_view_options.remove_tags_from_query_params(
-                                    tag_view_options.selected_tags.filter(
-                                      (t) => {
-                                        const yields = Object.values(
-                                          counts_slice_state.tags!,
-                                        ).find((tag) => tag.id == t)!.yields
-                                        return (
-                                          !updated_tag_ids.includes(t) &&
-                                          yields == 1
-                                        )
-                                      },
-                                    ),
+                                const updated_tag_ids =
+                                  updated_bookmark.tags.map((t) => t.id)
+                                if (
+                                  tag_view_options.selected_tags.every((t) =>
+                                    updated_tag_ids.includes(t),
                                   )
-                                }, 0)
+                                ) {
+                                  dispatch(
+                                    bookmarks_actions.replace_bookmark({
+                                      bookmark: updated_bookmark,
+                                      last_authorized_counts_params:
+                                        JSON.parse(
+                                          sessionStorage.getItem(
+                                            browser_storage.session_storage
+                                              .library
+                                              .last_authorized_counts_params,
+                                          ) || '',
+                                        ) || undefined,
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                } else {
+                                  // We filter out bookmark when there are other bookmarks still matching with selected tags.
+                                  dispatch(
+                                    bookmarks_actions.filter_out_bookmark({
+                                      bookmark_id: updated_bookmark.id,
+                                      last_authorized_counts_params:
+                                        JSON.parse(
+                                          sessionStorage.getItem(
+                                            browser_storage.session_storage
+                                              .library
+                                              .last_authorized_counts_params,
+                                          ) || '',
+                                        ) || undefined,
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                  if (search.count) {
+                                    search.set_count(search.count - 1)
+                                  }
+                                }
+
+                                // Unselect removed tags when there is no more bookmarks with them.
+                                tag_view_options.remove_tags_from_query_params(
+                                  tag_view_options.selected_tags.filter((t) => {
+                                    const yields = Object.values(
+                                      counts_slice_state.tags!,
+                                    ).find((tag) => tag.id == t)!.yields
+                                    return (
+                                      !updated_tag_ids.includes(t) &&
+                                      yields == 1
+                                    )
+                                  }),
+                                )
                               },
                               other_icon: (
                                 <UiCommonParticles_Icon variant="EDIT" />
@@ -1600,7 +1592,7 @@ const BookmarksPage: React.FC = () => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
-                                search.update_searchable_bookmark({
+                                await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
                                     created_at: bookmark.created_at,
@@ -1623,12 +1615,10 @@ const BookmarksPage: React.FC = () => {
                                     tag_ids: bookmark.tags.map((tag) => tag.id),
                                   },
                                 })
-                                if (search.count)
-                                  search.set_count(search.count - 1)
                                 if (
                                   bookmarks_slice_state.bookmarks &&
                                   bookmarks_slice_state.bookmarks.length == 1 &&
-                                  search.search_string.length
+                                  bookmarks_slice_state.showing_bookmarks_fetched_by_ids
                                 ) {
                                   search.reset()
                                 }
@@ -1654,15 +1644,13 @@ const BookmarksPage: React.FC = () => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
-                                search.delete_searchable_bookmark({
+                                await search.delete_searchable_bookmark({
                                   bookmark_id: bookmark.id,
                                 })
-                                if (search.count)
-                                  search.set_count(search.count - 1)
                                 if (
                                   bookmarks_slice_state.bookmarks &&
                                   bookmarks_slice_state.bookmarks.length == 1 &&
-                                  search.search_string.length
+                                  bookmarks_slice_state.showing_bookmarks_fetched_by_ids
                                 ) {
                                   search.reset()
                                 }
