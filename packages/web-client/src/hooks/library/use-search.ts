@@ -1293,11 +1293,12 @@ export const use_search = () => {
         is_archived: true,
       })
     }
-
-    await query_db({
-      search_string,
-      refresh_highlights_only: true,
-    })
+    if (result?.hits.length) {
+      await query_db({
+        search_string,
+        refresh_highlights_only: true,
+      })
+    }
   }
 
   const update_searchable_bookmark = async (params: {
@@ -1389,8 +1390,12 @@ export const use_search = () => {
         })
       }, 0)
     }
-
-    await query_db({ search_string, refresh_highlights_only: true })
+    if (result?.hits.length) {
+      await query_db({
+        search_string,
+        refresh_highlights_only: true,
+      })
+    }
   }
 
   return {
