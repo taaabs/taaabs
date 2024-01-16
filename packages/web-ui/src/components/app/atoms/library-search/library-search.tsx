@@ -292,7 +292,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                     })}
                   >
                     {props.results_count == 0
-                      ? 'no'
+                      ? 'No'
                       : props.results_count ==
                         system_values.max_library_search_results
                       ? `${system_values.max_library_search_results}+`
