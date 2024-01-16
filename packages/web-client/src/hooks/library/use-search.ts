@@ -854,10 +854,6 @@ export const use_search = () => {
           const result: Results<Result> = await search(
             current_filter != Filter.Archived ? db! : archived_db!,
             {
-              limit:
-                term.length <= 2
-                  ? 100
-                  : system_values.max_library_search_results,
               term,
               properties: ['title', 'note'],
               where: {
@@ -978,10 +974,6 @@ export const use_search = () => {
           const result: Results<Result> = await search(
             current_filter != Filter.Archived ? db! : archived_db!,
             {
-              limit:
-                term.length <= 2
-                  ? 100
-                  : system_values.max_library_search_results,
               term: term ? term : undefined,
               properties: ['title', 'note'],
               where: {
