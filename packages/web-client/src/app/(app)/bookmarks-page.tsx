@@ -1031,6 +1031,18 @@ const BookmarksPage: React.FC = () => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
+                                if (
+                                  search.count &&
+                                  (filter_view_options.current_filter ==
+                                    Filter.Unread ||
+                                    filter_view_options.current_filter ==
+                                      Filter.StarredUnread ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarredUnread) &&
+                                  bookmark.is_unread
+                                ) {
+                                  search.set_count(search.count - 1)
+                                }
                                 await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
@@ -1113,6 +1125,20 @@ const BookmarksPage: React.FC = () => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
+                                if (
+                                  search.count &&
+                                  (filter_view_options.current_filter ==
+                                    Filter.Starred ||
+                                    filter_view_options.current_filter ==
+                                      Filter.StarredUnread ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarred ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarredUnread) &&
+                                  bookmark.stars == 1
+                                ) {
+                                  search.set_count(search.count - 1)
+                                }
                                 await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
@@ -1187,7 +1213,21 @@ const BookmarksPage: React.FC = () => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
-                                search.update_searchable_bookmark({
+                                if (
+                                  search.count &&
+                                  (filter_view_options.current_filter ==
+                                    Filter.Starred ||
+                                    filter_view_options.current_filter ==
+                                      Filter.StarredUnread ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarred ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarredUnread) &&
+                                  bookmark.stars == 2
+                                ) {
+                                  search.set_count(search.count - 1)
+                                }
+                                await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
                                     created_at: bookmark.created_at,
@@ -1260,7 +1300,21 @@ const BookmarksPage: React.FC = () => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
-                                search.update_searchable_bookmark({
+                                if (
+                                  search.count &&
+                                  (filter_view_options.current_filter ==
+                                    Filter.Starred ||
+                                    filter_view_options.current_filter ==
+                                      Filter.StarredUnread ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarred ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarredUnread) &&
+                                  bookmark.stars == 3
+                                ) {
+                                  search.set_count(search.count - 1)
+                                }
+                                await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
                                     created_at: bookmark.created_at,
@@ -1333,13 +1387,26 @@ const BookmarksPage: React.FC = () => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
-                                search.update_searchable_bookmark({
+                                if (
+                                  search.count &&
+                                  (filter_view_options.current_filter ==
+                                    Filter.Starred ||
+                                    filter_view_options.current_filter ==
+                                      Filter.StarredUnread ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarred ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarredUnread) &&
+                                  bookmark.stars == 4
+                                ) {
+                                  search.set_count(search.count - 1)
+                                }
+                                await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
                                     created_at: bookmark.created_at,
                                     visited_at: bookmark.visited_at,
                                     updated_at: updated_bookmark.updated_at,
-
                                     title: bookmark.title,
                                     note: bookmark.note,
                                     is_archived:
@@ -1407,7 +1474,21 @@ const BookmarksPage: React.FC = () => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
-                                search.update_searchable_bookmark({
+                                if (
+                                  search.count &&
+                                  (filter_view_options.current_filter ==
+                                    Filter.Starred ||
+                                    filter_view_options.current_filter ==
+                                      Filter.StarredUnread ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarred ||
+                                    filter_view_options.current_filter ==
+                                      Filter.ArchivedStarredUnread) &&
+                                  bookmark.stars == 5
+                                ) {
+                                  search.set_count(search.count - 1)
+                                }
+                                await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
                                     created_at: bookmark.created_at,
@@ -1592,6 +1673,9 @@ const BookmarksPage: React.FC = () => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
+                                if (search.count) {
+                                  search.set_count(search.count - 1)
+                                }
                                 await search.update_searchable_bookmark({
                                   bookmark: {
                                     id: bookmark.id,
@@ -1644,6 +1728,9 @@ const BookmarksPage: React.FC = () => {
                                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                   }),
                                 )
+                                if (search.count) {
+                                  search.set_count(search.count - 1)
+                                }
                                 await search.delete_searchable_bookmark({
                                   bookmark_id: bookmark.id,
                                 })

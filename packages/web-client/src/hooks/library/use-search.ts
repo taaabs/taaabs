@@ -685,16 +685,11 @@ export const use_search = () => {
 
   const query_db = async (params: {
     search_string: string
-    refresh_highlights_and_count_only?: boolean
+    refresh_highlights_only?: boolean
   }) => {
     const hits = await get_hits({ search_string: params.search_string })
 
-    if (
-      params.refresh_highlights_and_count_only &&
-      hits.length < system_values.max_library_search_results
-    ) {
-      set_count(hits.length)
-    } else {
+    if (!params.refresh_highlights_only) {
       set_result({
         count:
           hits.length == system_values.max_library_search_results
@@ -1301,7 +1296,7 @@ export const use_search = () => {
 
     await query_db({
       search_string,
-      refresh_highlights_and_count_only: true,
+      refresh_highlights_only: true,
     })
   }
 
@@ -1395,7 +1390,7 @@ export const use_search = () => {
       }, 0)
     }
 
-    await query_db({ search_string, refresh_highlights_and_count_only: true })
+    await query_db({ search_string, refresh_highlights_only: true })
   }
 
   return {
