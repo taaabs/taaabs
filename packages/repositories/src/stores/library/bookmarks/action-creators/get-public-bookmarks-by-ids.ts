@@ -11,44 +11,46 @@ export const get_public_bookmarks_by_ids = (params: {
   is_next_page: boolean
   api_url: string
 }) => {
-  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
-    const data_source = new Bookmarks_DataSourceImpl(params.api_url, '')
-    const repository = new Bookmarks_RepositoryImpl(data_source)
-    const get_bookomarks_by_ids = new GetBookmarksByIdsPublic_UseCase(
-      repository,
-    )
+  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
+    new Promise<void>(async (resolve) => {
+      const data_source = new Bookmarks_DataSourceImpl(params.api_url, '')
+      const repository = new Bookmarks_RepositoryImpl(data_source)
+      const get_bookomarks_by_ids = new GetBookmarksByIdsPublic_UseCase(
+        repository,
+      )
 
-    dispatch(bookmarks_actions.set_is_fetching_data(true))
-    if (params.is_next_page) {
-      dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(true))
-    } else {
-      dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(true))
-    }
+      dispatch(bookmarks_actions.set_is_fetching_data(true))
+      if (params.is_next_page) {
+        dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(true))
+      } else {
+        dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(true))
+      }
 
-    const { bookmarks } = await get_bookomarks_by_ids.invoke(
-      params.request_params,
-    )
+      const { bookmarks } = await get_bookomarks_by_ids.invoke(
+        params.request_params,
+      )
 
-    let bookmarks_with_density: Bookmark_Entity[] = []
+      let bookmarks_with_density: Bookmark_Entity[] = []
 
-    if (get_state().bookmarks.density == 'compact') {
-      bookmarks_with_density = bookmarks.map((bookmark) => ({
-        ...bookmark,
-        is_compact: true,
-      }))
-    } else {
-      bookmarks_with_density = bookmarks
-    }
+      if (get_state().bookmarks.density == 'compact') {
+        bookmarks_with_density = bookmarks.map((bookmark) => ({
+          ...bookmark,
+          is_compact: true,
+        }))
+      } else {
+        bookmarks_with_density = bookmarks
+      }
 
-    dispatch(bookmarks_actions.set_is_fetching_data(false))
-    dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
+      dispatch(bookmarks_actions.set_is_fetching_data(false))
+      dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
 
-    if (params.is_next_page) {
-      dispatch(bookmarks_actions.set_more_bookmarks(bookmarks_with_density))
-      dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(false))
-    } else {
-      dispatch(bookmarks_actions.set_bookmarks(bookmarks_with_density))
-      dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
-    }
-  }
+      if (params.is_next_page) {
+        dispatch(bookmarks_actions.set_more_bookmarks(bookmarks_with_density))
+        dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(false))
+      } else {
+        dispatch(bookmarks_actions.set_bookmarks(bookmarks_with_density))
+        dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
+      }
+      resolve()
+    })
 }

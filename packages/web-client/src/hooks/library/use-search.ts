@@ -103,6 +103,7 @@ export const use_search = () => {
   const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =
     useState<number | undefined>()
   const [result, set_result] = useState<Results<Result>>()
+  const [result_commited, set_result_commited] = useState<Results<Result>>()
   const [highlights, set_highlights] = useState<Highlights>()
   const [highlights_note, set_highlights_note] = useState<Highlights>()
   const [highlights_sites_variants, set_highlights_sites_variants] =
@@ -498,9 +499,9 @@ export const use_search = () => {
     }
   }
 
-  const get_hits = async (params: {
+  const get_result = async (params: {
     search_string: string
-  }): Promise<Results<Result>['hits']> => {
+  }): Promise<Results<Result>> => {
     if (
       (current_filter != Filter.Archived && !db) ||
       (current_filter == Filter.Archived && !archived_db)
@@ -523,7 +524,7 @@ export const use_search = () => {
       .replace(/(?=site:)(.*?)($|\s)/g, '')
       .trim()
 
-    const result_without_tolerance: Results<Result> = await searchWithHighlight(
+    const result: Results<Result> = await searchWithHighlight(
       current_filter != Filter.Archived ? db! : archived_db!,
       {
         limit:
@@ -580,130 +581,23 @@ export const use_search = () => {
       },
     )
 
-    const result_with_tolerance: Results<Result> = await searchWithHighlight(
-      current_filter != Filter.Archived ? db! : archived_db!,
-      {
-        limit:
-          term.length <= 2 ? 100 : system_values.max_library_search_results,
-        term,
-        properties: ['title', 'note'],
-        where: {
-          ...(tags && ids_to_search_amongst
-            ? { id: ids_to_search_amongst }
-            : {}),
-          ...(current_filter == Filter.Unread ||
-          current_filter == Filter.StarredUnread
-            ? {
-                is_unread: true,
-              }
-            : {}),
-          stars: {
-            gte:
-              current_filter == Filter.Starred ||
-              current_filter == Filter.StarredUnread
-                ? 1
-                : 0,
-          },
-          ...(gte && lte
-            ? {
-                created_at: {
-                  between: [
-                    new Date(
-                      parseInt(gte.toString().substring(0, 4)),
-                      parseInt(gte.toString().substring(4, 6)) - 1,
-                    ).getTime() / 1000,
-                    new Date(
-                      parseInt(lte.toString().substring(0, 4)),
-                      parseInt(lte.toString().substring(4, 6)),
-                    ).getTime() /
-                      1000 -
-                      1,
-                  ],
-                },
-              }
-            : {}),
-          ...(sites_variants?.length ? { sites_variants } : {}),
-        },
-        sortBy: {
-          property:
-            sortby == '1'
-              ? 'updated_at'
-              : sortby == '2'
-              ? 'visited_at'
-              : 'created_at',
-          order: order == '1' ? 'ASC' : 'DESC',
-        },
-        threshold: term ? 0 : undefined,
-        tolerance: term ? 1 : undefined,
-      },
-    )
-
-    const merged_hits = [
-      ...result_without_tolerance.hits,
-      ...result_with_tolerance.hits,
-    ]
-
-    const merged_hits_no_dupes: Results<Result>['hits'] = []
-
-    merged_hits.forEach((hit) => {
-      if (
-        merged_hits_no_dupes.findIndex(
-          (merged_hit) => merged_hit.id == hit.id,
-        ) == -1
-      ) {
-        merged_hits_no_dupes.push(hit)
-      }
-    })
-
-    merged_hits_no_dupes.sort((a: any, b: any) => {
-      if (sortby == '1') {
-        if (order == '1') {
-          return a.document.updated_at - b.document.updated_at
-        } else {
-          return b.document.updated_at - a.document.updated_at
-        }
-      } else if (sortby == '2') {
-        if (order == '1') {
-          return a.document.visited_at - b.document.visited_at
-        } else {
-          return b.document.visited_at - a.document.visited_at
-        }
-      } else {
-        if (order == '1') {
-          return a.document.created_at - b.document.created_at
-        } else {
-          return b.document.created_at - a.document.created_at
-        }
-      }
-    })
-
-    return merged_hits_no_dupes.slice(
-      0,
-      system_values.max_library_search_results,
-    )
+    return result
   }
 
   const query_db = async (params: {
     search_string: string
     refresh_highlights_only?: boolean
   }) => {
-    const hits = await get_hits({ search_string: params.search_string })
+    const result = await get_result({ search_string: params.search_string })
 
     if (!params.refresh_highlights_only) {
-      set_result({
-        count:
-          hits.length == system_values.max_library_search_results
-            ? system_values.max_library_search_results
-            : hits.length,
-        elapsed: { formatted: '', raw: 0 },
-        hits,
-      })
+      set_result(result)
     }
 
     // Defer setting highlights to the next frame, just after bookmark fetching has begun.
     setTimeout(() => {
       set_highlights(
-        hits.reduce((a, v) => {
+        result.hits.reduce((a, v) => {
           const positions = Object.values((v as any).positions.title)
             .flat()
             .map((highlight: any) => [highlight.start, highlight.length])
@@ -729,7 +623,7 @@ export const use_search = () => {
       )
 
       set_highlights_note(
-        hits.reduce((a, v) => {
+        result.hits.reduce((a, v) => {
           const positions = Object.values((v as any).positions.note)
             .flat()
             .map((highlight: any) => [highlight.start, highlight.length])
@@ -759,7 +653,7 @@ export const use_search = () => {
       )
     }, 0)
 
-    if (hits.length) {
+    if (result.count) {
       let recent_searches: string[] = []
 
       recent_searches = JSON.parse(
@@ -839,6 +733,8 @@ export const use_search = () => {
           completion: recent_search_string.slice(search_string.length),
           search_string: search_string_lower,
         }))
+
+      // set_count(undefined)
 
       if (last_word.substring(0, 5) == 'site:') {
         const site_term = last_word.substring(5)
@@ -946,9 +842,13 @@ export const use_search = () => {
           ].slice(0, system_values.max_library_search_hints),
         )
       } else {
-        const ids_of_hits = (
-          await get_hits({ search_string: search_string_lower })
-        ).map((hit) => hit.id)
+        const pre_result = await get_result({
+          search_string: search_string_lower,
+        })
+
+        const ids_of_hits = pre_result.hits.map((hit) => hit.id)
+
+        set_count(pre_result.count)
 
         if (last_word.length) {
           const result: Results<Result> = await search(
@@ -1209,13 +1109,13 @@ export const use_search = () => {
     set_highlights_sites_variants(undefined)
   }
 
-  const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
+  const get_bookmarks = async (params: { should_get_next_page?: boolean }) => {
     clear_hints()
 
     if (!result) return
 
     if (!username) {
-      dispatch(
+      await dispatch(
         bookmarks_actions.get_authorized_bookmarks_by_ids({
           api_url: process.env.NEXT_PUBLIC_API_URL,
           auth_token:
@@ -1231,7 +1131,7 @@ export const use_search = () => {
         }),
       )
     } else {
-      dispatch(
+      await dispatch(
         bookmarks_actions.get_public_bookmarks_by_ids({
           api_url: process.env.NEXT_PUBLIC_API_URL,
           is_next_page: params.should_get_next_page || false,
@@ -1246,14 +1146,12 @@ export const use_search = () => {
         }),
       )
     }
+    set_result_commited(result)
   }
 
   useUpdateEffect(() => {
     if (result) {
       get_bookmarks({})
-      set_count(result.count)
-    } else {
-      set_count(undefined)
     }
   }, [result])
 
@@ -1410,6 +1308,7 @@ export const use_search = () => {
     query_db,
     is_caching_ongoing,
     result,
+    result_commited,
     is_initializing,
     db,
     archived_db,

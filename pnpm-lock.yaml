@@ -289,14 +289,14 @@ importers:
   packages/web-client:
     dependencies:
       '@orama/orama':
-        specifier: 2.0.0-beta.7
-        version: 2.0.0-beta.7
+        specifier: 2.0.0-beta.12
+        version: 2.0.0-beta.12
       '@orama/plugin-data-persistence':
-        specifier: 2.0.0-beta.7
-        version: 2.0.0-beta.7
+        specifier: 2.0.0-beta.12
+        version: 2.0.0-beta.12
       '@orama/plugin-match-highlight':
-        specifier: 2.0.0-beta.7
-        version: 2.0.0-beta.7
+        specifier: 2.0.0-beta.12
+        version: 2.0.0-beta.12
       '@reduxjs/toolkit':
         specifier: ^1.9.7
         version: 1.9.7(react-redux@8.1.3)(react@18.2.0)
@@ -3454,23 +3454,23 @@ packages:
     transitivePeerDependencies:
       - encoding
 
-  /@orama/orama@2.0.0-beta.7:
-    resolution: {integrity: sha512-7JlCMVoqJ2QBZtJ7H1shYbiVnaJJf5M/LI/H+b/YUyop0wnYTNfi6bRHuGhEMqh8ACXkHPNs0IHkyCKz+mFIXg==}
+  /@orama/orama@2.0.0-beta.12:
+    resolution: {integrity: sha512-svPT72gxR1zyF7bMz+itmZBdZB1ndI97YdzArCqo5esIfWy1u5Ht/K8EEYJ/EuC35Di3j9czjCzhL1e/zVEARQ==}
     engines: {node: '>= 16.0.0'}
     dev: false
 
-  /@orama/plugin-data-persistence@2.0.0-beta.7:
-    resolution: {integrity: sha512-3Mv5CtaM0g6+KNEQc0hVhLwXwYKUfxpTAeA/k/Y4UBk2ug1ajgTj1fhAObspOzy5jMdBMUmQL3tujv9clYfjvQ==}
+  /@orama/plugin-data-persistence@2.0.0-beta.12:
+    resolution: {integrity: sha512-u3xjv/IIL1i9+uEViWuEmyy6t/iVrPD+dz7PLO40Fo5cCDZxebW1R6fm9cBYFJ49vYk8pTNViGxlWw2hd4uRWg==}
     dependencies:
       '@msgpack/msgpack': 2.8.0
-      '@orama/orama': 2.0.0-beta.7
+      '@orama/orama': 2.0.0-beta.12
       dpack: 0.6.22
     dev: false
 
-  /@orama/plugin-match-highlight@2.0.0-beta.7:
-    resolution: {integrity: sha512-kbh4HkfO1FaRL0ldtvWVqmixwOTLZD/Lm16bL/JT2BR2SzgGZkdVyQgMCG3yRagwTGFGZYQTFY/Z6ogi3Mtc5w==}
+  /@orama/plugin-match-highlight@2.0.0-beta.12:
+    resolution: {integrity: sha512-ZQA1eEgDUUQ8y4uLcQuykx5izqc7RcTM+kN71AWyJKefmN2epGzOpglQXwVbzwk7lw+CR1i0QwG5kpoNTNXshQ==}
     dependencies:
-      '@orama/orama': 2.0.0-beta.7
+      '@orama/orama': 2.0.0-beta.12
     dev: false
 
   /@phc/format@1.0.0:

@@ -295,7 +295,7 @@ const BookmarksPage: React.FC = () => {
             }
           }}
           on_submit={() => {
-            if (search.is_initializing) return
+            if (search.is_initializing || search.count == 0) return
             if (search.search_string.trim()) {
               search.query_db({ search_string: search.search_string })
             }
@@ -787,7 +787,7 @@ const BookmarksPage: React.FC = () => {
         (search.search_string &&
           bookmarks_slice_state.bookmarks &&
           search.result !== undefined &&
-          search.result.count > bookmarks_slice_state.bookmarks.length) ||
+          bookmarks_slice_state.bookmarks.length < search.result.hits.length) ||
         false
       }
       get_more_bookmarks={() => {
@@ -856,9 +856,6 @@ const BookmarksPage: React.FC = () => {
                     : sort_by_view_options.commited_sort_by == SortBy.VisitedAt
                     ? new Date(bookmark.visited_at)
                     : new Date(bookmark.created_at)
-                }
-                should_print_month_only={
-                  bookmarks_slice_state.showing_bookmarks_fetched_by_ids
                 }
                 counts_refreshed_at_timestamp={
                   counts_slice_state.refreshed_at_timestamp
@@ -1820,14 +1817,18 @@ const BookmarksPage: React.FC = () => {
         bookmarks_slice_state.is_fetching_first_bookmarks ||
         bookmarks_slice_state.is_fetching_more_bookmarks
           ? 'Loading...'
-          : !search.search_string.length &&
-            !bookmarks_slice_state.is_fetching_first_bookmarks &&
-            (!bookmarks_slice_state.bookmarks ||
-              bookmarks_slice_state.bookmarks.length == 0)
+          : (!search.search_string.length &&
+              !bookmarks_slice_state.is_fetching_first_bookmarks &&
+              (!bookmarks_slice_state.bookmarks ||
+                bookmarks_slice_state.bookmarks.length == 0)) ||
+            (search.search_string.length &&
+              (!bookmarks_slice_state.bookmarks ||
+                bookmarks_slice_state.bookmarks.length == 0) &&
+              search.result_commited?.count == 0)
           ? 'No results'
           : !bookmarks_slice_state.has_more_bookmarks ||
             bookmarks_slice_state.bookmarks?.length ==
-              search.result?.hits.length
+              search.result_commited?.hits.length
           ? 'End of results'
           : ''
       }
