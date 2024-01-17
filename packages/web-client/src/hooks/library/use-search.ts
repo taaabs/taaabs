@@ -110,16 +110,22 @@ export const use_search = () => {
     useState<string[]>()
   const [count, set_count] = useState<number>()
 
+  const is_archived_filter =
+    current_filter == Filter.Archived ||
+    current_filter == Filter.ArchivedStarred ||
+    current_filter == Filter.ArchivedStarredUnread ||
+    current_filter == Filter.ArchivedUnread
+
   useUpdateEffect(() => {
     if (
-      (current_filter != Filter.Archived && !bookmarks_just_tags) ||
-      (current_filter == Filter.Archived && !archived_bookmarks_just_tags)
+      (!is_archived_filter && !bookmarks_just_tags) ||
+      (is_archived_filter && !archived_bookmarks_just_tags)
     )
       return
 
     if (selected_tags.length) {
       set_ids_to_search_amongst(
-        (current_filter != Filter.Archived
+        (!is_archived_filter
           ? bookmarks_just_tags!
           : archived_bookmarks_just_tags!
         )
@@ -502,10 +508,7 @@ export const use_search = () => {
   const get_result = async (params: {
     search_string: string
   }): Promise<Results<Result>> => {
-    if (
-      (current_filter != Filter.Archived && !db) ||
-      (current_filter == Filter.Archived && !archived_db)
-    )
+    if ((!is_archived_filter && !db) || (is_archived_filter && !archived_db))
       throw new Error('DB should be there.')
 
     const tags = query_params.get('t')
@@ -525,7 +528,7 @@ export const use_search = () => {
       .trim()
 
     const result: Results<Result> = await searchWithHighlight(
-      current_filter != Filter.Archived ? db! : archived_db!,
+      !is_archived_filter ? db! : archived_db!,
       {
         limit:
           term.length <= 2 ? 100 : system_values.max_library_search_results,
@@ -677,10 +680,7 @@ export const use_search = () => {
   }
 
   const get_hints = async () => {
-    if (
-      (current_filter != Filter.Archived && !db) ||
-      (current_filter == Filter.Archived && !archived_db)
-    )
+    if ((!is_archived_filter && !db) || (is_archived_filter && !archived_db))
       return
 
     const tags = query_params.get('t')
@@ -740,7 +740,7 @@ export const use_search = () => {
         const site_term = last_word.substring(5)
 
         const result: Results<Result> = await search(
-          current_filter != Filter.Archived ? db! : archived_db!,
+          !is_archived_filter ? db! : archived_db!,
           {
             limit:
               site_term.length <= 2
@@ -852,7 +852,7 @@ export const use_search = () => {
 
         if (last_word.length) {
           const result: Results<Result> = await search(
-            current_filter != Filter.Archived ? db! : archived_db!,
+            !is_archived_filter ? db! : archived_db!,
             {
               term,
               properties: ['title', 'note'],
@@ -972,7 +972,7 @@ export const use_search = () => {
           )
         } else {
           const result: Results<Result> = await search(
-            current_filter != Filter.Archived ? db! : archived_db!,
+            !is_archived_filter ? db! : archived_db!,
             {
               term: term ? term : undefined,
               properties: ['title', 'note'],
@@ -1150,18 +1150,15 @@ export const use_search = () => {
   const delete_searchable_bookmark = async (params: {
     bookmark_id: number
   }) => {
-    if (
-      (current_filter != Filter.Archived && !db) ||
-      (current_filter == Filter.Archived && !archived_db)
-    )
+    if ((!is_archived_filter && !db) || (is_archived_filter && !archived_db))
       return
 
     await remove(
-      current_filter != Filter.Archived ? db! : archived_db!,
+      !is_archived_filter ? db! : archived_db!,
       params.bookmark_id.toString(),
     )
 
-    if (current_filter != Filter.Archived) {
+    if (!is_archived_filter) {
       const new_all_bookmarks = bookmarks_just_tags!.filter(
         (bookmark) => bookmark.id != params.bookmark_id,
       )
@@ -1194,15 +1191,7 @@ export const use_search = () => {
   const update_searchable_bookmark = async (params: {
     bookmark: BookmarkOfSearch
   }) => {
-    const is_archived_filter =
-      current_filter == Filter.Archived ||
-      current_filter == Filter.ArchivedStarred ||
-      current_filter == Filter.ArchivedStarredUnread ||
-      current_filter == Filter.ArchivedUnread
-    if (
-      (current_filter != Filter.Archived && !db) ||
-      (is_archived_filter && !archived_db)
-    )
+    if ((!is_archived_filter && !db) || (is_archived_filter && !archived_db))
       return
 
     await remove(
@@ -1218,7 +1207,7 @@ export const use_search = () => {
 
     if (
       (is_archived_filter && params.bookmark.is_archived) ||
-      (current_filter != Filter.Archived && !params.bookmark.is_archived)
+      (!is_archived_filter && !params.bookmark.is_archived)
     ) {
       await insert(!is_archived_filter ? db! : archived_db!, {
         id: params.bookmark.id.toString(),

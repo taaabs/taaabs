@@ -25,15 +25,15 @@ declare const styles: {
   readonly 'box__right-side__clear--yields-no-results': string
   readonly hints: string
   readonly 'hints--hidden': string
-  readonly hints__inner: string
-  readonly hints__inner__item: string
-  readonly 'hints__inner__item--selected': string
-  readonly hints__inner__item__icon: string
-  readonly hints__inner__item__content: string
-  readonly 'hints__inner__item__content--recent': string
-  readonly hints__inner__item__content__keycap: string
-  readonly hints__inner__item__remove: string
-  readonly text: string
+  readonly hints__list: string
+  readonly hints__list__item: string
+  readonly 'hints__list__item--selected': string
+  readonly hints__list__item__icon: string
+  readonly hints__list__item__content: string
+  readonly 'hints__list__item__content--recent': string
+  readonly hints__list__item__content__keycap: string
+  readonly hints__list__item__remove: string
+  readonly hints__footer: string
   readonly skeleton: string
 }
 export = styles

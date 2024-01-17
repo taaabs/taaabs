@@ -29,6 +29,8 @@ export namespace LibrarySearch {
     hints?: Hint[]
     results_count?: number
     is_slash_shortcut_disabled: boolean
+    on_click_give_feedback: () => void
+    on_click_syntax_tips: () => void
   }
 }
 
@@ -328,8 +330,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
             [styles['hints--hidden']]: !(props.hints && is_focused_fix),
           })}
         >
-          {props.hints && is_focused_fix && (
-            <div className={styles.hints__inner}>
+          {props.hints && props.hints.length > 0 && is_focused_fix && (
+            <div className={styles.hints__list}>
               {props.hints.map((hint, i) => (
                 <button
                   key={
@@ -337,8 +339,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                     (hint.completion ? hint.completion : '') +
                     hint.type
                   }
-                  className={cn(styles.hints__inner__item, {
-                    [styles['hints__inner__item--selected']]:
+                  className={cn(styles.hints__list__item, {
+                    [styles['hints__list__item--selected']]:
                       selected_hint_index == i,
                   })}
                   onClick={() => {
@@ -346,13 +348,13 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                     set_is_focused_fix(false)
                   }}
                 >
-                  <div className={styles.hints__inner__item__icon}>
+                  <div className={styles.hints__list__item__icon}>
                     {hint.type == 'new' && <Icon variant="SEARCH" />}
                     {hint.type == 'recent' && <Icon variant="RECENT" />}
                   </div>
                   <div
-                    className={cn(styles.hints__inner__item__content, {
-                      [styles['hints__inner__item__content--recent']]:
+                    className={cn(styles.hints__list__item__content, {
+                      [styles['hints__list__item__content--recent']]:
                         hint.type == 'recent',
                     })}
                   >
@@ -360,9 +362,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                     <span>{hint.completion}</span>
                     {selected_hint_index == i && (
                       <div
-                        className={
-                          styles['hints__inner__item__content__keycap']
-                        }
+                        className={styles['hints__list__item__content__keycap']}
                       >
                         enter
                       </div>
@@ -370,7 +370,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                   </div>
                   {hint.type == 'recent' && (
                     <div
-                      className={styles.hints__inner__item__remove}
+                      className={styles.hints__list__item__remove}
                       onClick={(e) => {
                         e.stopPropagation()
                         props.on_click_recent_hint_remove(i)
@@ -384,6 +384,14 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
               ))}
             </div>
           )}
+          <div className={styles.hints__footer}>
+            <button onClick={props.on_click_syntax_tips}>
+              Search syntax tips
+            </button>
+            <button onClick={props.on_click_give_feedback}>
+              Give feedback
+            </button>
+          </div>
         </div>
       </div>
     ) : (

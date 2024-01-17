@@ -23,6 +23,8 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={false}
         is_slash_shortcut_disabled={false}
+        on_click_give_feedback={() => {}}
+        on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -40,6 +42,8 @@ export const Primary = () => (
         results_count={2137}
         is_focused={false}
         is_slash_shortcut_disabled={false}
+        on_click_give_feedback={() => {}}
+        on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -57,6 +61,8 @@ export const Primary = () => (
         results_count={2137}
         is_focused={false}
         is_slash_shortcut_disabled={false}
+        on_click_give_feedback={() => {}}
+        on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -74,6 +80,8 @@ export const Primary = () => (
         results_count={0}
         is_focused={false}
         is_slash_shortcut_disabled={false}
+        on_click_give_feedback={() => {}}
+        on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -91,6 +99,8 @@ export const Primary = () => (
         results_count={0}
         is_focused={false}
         is_slash_shortcut_disabled={false}
+        on_click_give_feedback={() => {}}
+        on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -107,6 +117,8 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={false}
         is_slash_shortcut_disabled={false}
+        on_click_give_feedback={() => {}}
+        on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -123,6 +135,8 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={false}
         is_slash_shortcut_disabled={false}
+        on_click_give_feedback={() => {}}
+        on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -150,6 +164,28 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={true}
         is_slash_shortcut_disabled={false}
+        on_click_give_feedback={() => {}}
+        on_click_syntax_tips={() => {}}
+      />
+      <StorybookSpacer />
+      <StorybookSpacer />
+      <StorybookSpacer />
+      <LibrarySearch
+        placeholder={'Search in all bookmarks'}
+        search_string={'mid'}
+        hints={[]}
+        on_click_hint={() => {}}
+        on_click_recent_hint_remove={() => {}}
+        is_loading={false}
+        on_change={() => {}}
+        on_focus={() => {}}
+        on_submit={() => {}}
+        on_blur={() => {}}
+        on_clear_click={() => {}}
+        is_focused={true}
+        is_slash_shortcut_disabled={false}
+        on_click_give_feedback={() => {}}
+        on_click_syntax_tips={() => {}}
       />
     </div>
   </div>

@@ -132,7 +132,8 @@
         z-index: -1;
         position: absolute;
         color: var(--brand-color);
-        font-weight: var(--font-weight-inter-medium);
+        font-family: var(--font-family-inter-tight);
+        font-weight: var(--font-weight-inter-tight-medium);
         @include transition-150ms(color);
         display: flex;
         align-items: center;
@@ -170,12 +171,14 @@
         height: 0;
         white-space: pre;
         visibility: hidden;
-        font-weight: var(--font-weight-inter-medium);
+        font-family: var(--font-family-inter-tight);
+        font-weight: var(--font-weight-inter-tight-medium);
       }
       input {
         color: transparent;
         z-index: 1;
-        font-weight: var(--font-weight-inter-medium);
+        font-family: var(--font-family-inter-tight);
+        font-weight: var(--font-weight-inter-tight-medium);
         width: 100vw; // TODO: Rework workaround.
         &:focus {
           outline: none;
@@ -261,6 +264,7 @@
   border-radius: var(--border-radius-12px);
   border: var(--border-primary);
   box-shadow: var(--box-shadow);
+  background-color: var(--plain-white);
   opacity: 1;
   @include transition-150ms;
   transform: translateY(0);
@@ -283,17 +287,15 @@
       transform: translateY(calc(var(--distance-4px) * -1));
     }
   }
-  &__inner {
-    background-color: var(--plain-white);
-    padding: var(--distance-8px) 0;
-    box-shadow: var(--box-shadow);
+  &__list {
+    margin: var(--distance-8px) 0;
     &__item {
       display: flex;
       align-items: center;
       width: 100%;
       gap: var(--distance-10px);
       height: var(--distance-32px);
-      padding: 0 var(--distance-16px) 0 var(--distance-14px);
+      padding: 0 var(--distance-14px);
       @include hover {
         background-color: var(--neutral100);
       }
@@ -322,10 +324,11 @@
         > span {
           color: var(--text-color-variant);
           white-space: pre-wrap;
+          font-family: var(--font-family-inter-tight);
         }
         > span:nth-child(2) {
           color: var(--text-color-normal);
-          font-weight: var(--font-weight-inter-semi-bold);
+          font-weight: var(--font-weight-inter-tight-medium);
         }
         &__keycap {
           border: 1px solid var(--neutral300);
@@ -347,17 +350,23 @@
         font-size: var(--font-size-13px);
         color: var(--text-color-dimmed);
         @include hover {
-          text-decoration: underline;
+          @include text-decoration-underlinie-thin;
         }
       }
     }
   }
-}
-.text {
-  font-family: var(--font-family-plus-jakarta-sans);
-  font-weight: var(--font-weight-plus-jakarta-sans-bold);
-  font-size: var(--font-size-22px);
-  color: var(--TitleBar-primary-foreground);
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-13px);
+    margin: var(--distance-8px) var(--distance-14px);
+    > button {
+      color: var(--brand-color);
+      @include hover {
+        @include text-decoration-underlinie-thin;
+      }
+    }
+  }
 }
 .skeleton {
   width: 100%;
@@ -378,7 +387,6 @@
     }
   }
 }
-
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

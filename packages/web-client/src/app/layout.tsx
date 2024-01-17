@@ -15,13 +15,13 @@ const inter = Inter({
   display: 'swap',
 })
 
-const interTight = Inter_Tight({
+const inter_tight = Inter_Tight({
   subsets: ['latin-ext'],
   variable: '--font-family-inter-tight',
   display: 'swap',
 })
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const plus_jakarta_sans = Plus_Jakarta_Sans({
   subsets: ['latin-ext'],
   variable: '--font-family-plus-jakarta-sans',
   display: 'swap',
@@ -31,7 +31,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${interTight.variable} ${plusJakartaSans.variable}`}
+      className={`${inter.variable} ${inter_tight.variable} ${plus_jakarta_sans.variable}`}
       // color-scheme="dark"
     >
       <body>

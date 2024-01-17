@@ -216,7 +216,7 @@ const BookmarksPage: React.FC = () => {
           search_string={search.search_string}
           is_loading={search.is_initializing}
           loading_progress_percentage={search.indexed_bookmarks_percentage}
-          placeholder={'Search in titles, notes, tags and sites...'}
+          placeholder={'Search in titles, notes, tags and links...'}
           hints={!search.is_initializing ? search.hints : undefined}
           on_click_hint={(i) => {
             const search_string =
@@ -267,7 +267,7 @@ const BookmarksPage: React.FC = () => {
               })
 
               if (
-                (filter_view_options.current_filter != Filter.Archived
+                (!is_archived_filter
                   ? search.db === undefined
                   : search.archived_db === undefined) ||
                 is_cache_stale
@@ -302,6 +302,8 @@ const BookmarksPage: React.FC = () => {
             bookmarks.get_bookmarks({})
           }}
           is_slash_shortcut_disabled={modal_context?.modal !== undefined}
+          on_click_give_feedback={() => {}}
+          on_click_syntax_tips={() => {}}
         />
       }
       slot_sidebar={
@@ -391,7 +393,6 @@ const BookmarksPage: React.FC = () => {
                     {
                       label: 'Starred',
                       on_click: () => {
-                        toggle_filter_dropdown()
                         if (
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
@@ -464,7 +465,6 @@ const BookmarksPage: React.FC = () => {
                           {
                             label: 'Unread',
                             on_click: () => {
-                              toggle_filter_dropdown()
                               if (
                                 bookmarks_slice_state.is_fetching_first_bookmarks ||
                                 bookmarks_slice_state.is_fetching_more_bookmarks ||
@@ -545,7 +545,6 @@ const BookmarksPage: React.FC = () => {
                     {
                       label: 'Archived',
                       on_click: () => {
-                        toggle_filter_dropdown()
                         if (
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
