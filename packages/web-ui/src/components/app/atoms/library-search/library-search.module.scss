@@ -132,12 +132,15 @@
         z-index: -1;
         position: absolute;
         color: var(--brand-color);
-        font-family: var(--font-family-inter-tight);
-        font-weight: var(--font-weight-inter-tight-medium);
         @include transition-150ms(color);
         display: flex;
         align-items: center;
         pointer-events: none;
+        font-weight: var(--font-weight-inter-medium);
+        @include to1200 {
+          font-family: var(--font-family-inter-tight);
+          font-weight: var(--font-weight-inter-tight-medium);
+        }
         &--yields-no-results {
           color: var(--red600) !important;
           &::placeholder {
@@ -157,8 +160,12 @@
         }
         &__completion {
           opacity: 0.5;
-          font-weight: var(--font-weight-inter-regular);
           margin-right: var(--distance-6px);
+          font-weight: var(--font-weight-inter-regular);
+          @include to1200 {
+            font-family: var(--font-family-inter-tight);
+            font-weight: var(--font-weight-inter-tight-regular);
+          }
           @include touch-screen {
             display: none;
           }
@@ -171,15 +178,21 @@
         height: 0;
         white-space: pre;
         visibility: hidden;
-        font-family: var(--font-family-inter-tight);
-        font-weight: var(--font-weight-inter-tight-medium);
+        font-weight: var(--font-weight-inter-medium);
+        @include to1200 {
+          font-family: var(--font-family-inter-tight);
+          font-weight: var(--font-weight-inter-tight-medium);
+        }
       }
       input {
         color: transparent;
         z-index: 1;
-        font-family: var(--font-family-inter-tight);
-        font-weight: var(--font-weight-inter-tight-medium);
         width: 100vw; // TODO: Rework workaround.
+        font-weight: var(--font-weight-inter-medium);
+        @include to1200 {
+          font-family: var(--font-family-inter-tight);
+          font-weight: var(--font-weight-inter-tight-medium);
+        }
         &:focus {
           outline: none;
         }
@@ -324,7 +337,9 @@
         > span {
           color: var(--text-color-variant);
           white-space: pre-wrap;
-          font-family: var(--font-family-inter-tight);
+          @include to1200 {
+            font-family: var(--font-family-inter-tight);
+          }
         }
         > span:nth-child(2) {
           color: var(--text-color-normal);
