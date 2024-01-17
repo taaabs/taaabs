@@ -1194,14 +1194,19 @@ export const use_search = () => {
   const update_searchable_bookmark = async (params: {
     bookmark: BookmarkOfSearch
   }) => {
+    const is_archived_filter =
+      current_filter == Filter.Archived ||
+      current_filter == Filter.ArchivedStarred ||
+      current_filter == Filter.ArchivedStarredUnread ||
+      current_filter == Filter.ArchivedUnread
     if (
       (current_filter != Filter.Archived && !db) ||
-      (current_filter == Filter.Archived && !archived_db)
+      (is_archived_filter && !archived_db)
     )
       return
 
     await remove(
-      current_filter != Filter.Archived ? db! : archived_db!,
+      !is_archived_filter ? db! : archived_db!,
       params.bookmark.id.toString(),
     )
     const sites = params.bookmark.links.map(
@@ -1212,10 +1217,10 @@ export const use_search = () => {
     )
 
     if (
-      (current_filter == Filter.Archived && params.bookmark.is_archived) ||
+      (is_archived_filter && params.bookmark.is_archived) ||
       (current_filter != Filter.Archived && !params.bookmark.is_archived)
     ) {
-      await insert(current_filter != Filter.Archived ? db! : archived_db!, {
+      await insert(!is_archived_filter ? db! : archived_db!, {
         id: params.bookmark.id.toString(),
         title:
           (params.bookmark.title ? `${params.bookmark.title} ` : '') +
@@ -1242,7 +1247,7 @@ export const use_search = () => {
       })
     }
 
-    if (current_filter != Filter.Archived) {
+    if (!is_archived_filter) {
       const new_bookmarks_just_tags = bookmarks_just_tags!.filter(
         (bookmark) => bookmark.id != params.bookmark.id,
       )
