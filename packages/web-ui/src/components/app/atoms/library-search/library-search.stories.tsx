@@ -23,7 +23,6 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_give_feedback={() => {}}
         on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
@@ -42,7 +41,6 @@ export const Primary = () => (
         results_count={2137}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_give_feedback={() => {}}
         on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
@@ -61,7 +59,6 @@ export const Primary = () => (
         results_count={2137}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_give_feedback={() => {}}
         on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
@@ -80,7 +77,6 @@ export const Primary = () => (
         results_count={0}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_give_feedback={() => {}}
         on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
@@ -99,7 +95,6 @@ export const Primary = () => (
         results_count={0}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_give_feedback={() => {}}
         on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
@@ -117,7 +112,6 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_give_feedback={() => {}}
         on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
@@ -135,7 +129,6 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_give_feedback={() => {}}
         on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
@@ -164,7 +157,6 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={true}
         is_slash_shortcut_disabled={false}
-        on_click_give_feedback={() => {}}
         on_click_syntax_tips={() => {}}
       />
       <StorybookSpacer />
@@ -184,7 +176,6 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={true}
         is_slash_shortcut_disabled={false}
-        on_click_give_feedback={() => {}}
         on_click_syntax_tips={() => {}}
       />
     </div>

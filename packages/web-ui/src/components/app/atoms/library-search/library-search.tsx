@@ -29,7 +29,6 @@ export namespace LibrarySearch {
     hints?: Hint[]
     results_count?: number
     is_slash_shortcut_disabled: boolean
-    on_click_give_feedback: () => void
     on_click_syntax_tips: () => void
   }
 }
@@ -388,9 +387,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
             <button onClick={props.on_click_syntax_tips}>
               Search syntax tips
             </button>
-            <button onClick={props.on_click_give_feedback}>
-              Give feedback
-            </button>
+            <span></span>
           </div>
         </div>
       </div>

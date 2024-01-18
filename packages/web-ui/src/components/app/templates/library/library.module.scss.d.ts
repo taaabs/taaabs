@@ -2,6 +2,8 @@ declare const styles: {
   readonly container: string
   readonly 'mobile-title-bar': string
   readonly 'mobile-title-bar--dimmed': string
+  readonly 'mobile-title-bar__inner': string
+  readonly 'mobile-title-bar__inner--scrolled': string
   readonly toolbar: string
   readonly 'toolbar--dimmed': string
   readonly content: string
@@ -12,6 +14,7 @@ declare const styles: {
   readonly main__inner: string
   readonly 'main__inner--dimmed': string
   readonly main__inner__search: string
+  readonly 'main__inner__search--scrolled': string
   readonly main__inner__skeleton: string
   readonly 'main__inner__bookmarks--loading': string
   readonly main__inner__info: string

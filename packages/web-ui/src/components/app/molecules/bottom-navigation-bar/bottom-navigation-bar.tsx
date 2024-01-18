@@ -12,6 +12,7 @@ export namespace BottomNavigationBar {
   }
   export type Props = {
     items: Item[]
+    reset_scrolled_opacity_count?: number
   }
 }
 

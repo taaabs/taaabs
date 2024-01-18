@@ -1,9 +1,9 @@
 import useWindowScroll from 'beautiful-react-hooks/useWindowScroll'
 import { useState } from 'react'
 
-export const use_scrolled_opacity = () => {
+export const use_is_scrolled = () => {
   const on_window_scroll = useWindowScroll()
-  const [opacity, set_opacity] = useState(1)
+  const [is_scrolled, set_is_scrolled] = useState(false)
   const [first_scroll_y_down_direction, set_first_scroll_y_down_direction] =
     useState(0)
   const [previous_scroll_y, set_previous_scroll_y] = useState(0)
@@ -12,31 +12,20 @@ export const use_scrolled_opacity = () => {
     const scroll_y = window.scrollY
 
     if (document.body.scrollHeight == scroll_y + window.innerHeight) {
-      reset()
+      set_is_scrolled(false)
       return
     }
 
     set_previous_scroll_y(scroll_y)
     if (scroll_y > previous_scroll_y) {
-      const scrolled_down = scroll_y - first_scroll_y_down_direction
-      const ratio = scrolled_down / window.innerHeight
-      const minimum_opacity = 0.15
-      if (1 - ratio > minimum_opacity) {
-        set_opacity(1 - ratio)
-      } else {
-        set_opacity(minimum_opacity)
+      if (scroll_y - first_scroll_y_down_direction > window.innerHeight) {
+        set_is_scrolled(true)
       }
     } else {
       set_first_scroll_y_down_direction(scroll_y)
-      set_opacity(1)
+      set_is_scrolled(false)
     }
   })
 
-  const reset = () => {
-    set_opacity(1)
-    set_first_scroll_y_down_direction(0)
-    set_previous_scroll_y(0)
-  }
-
-  return { opacity, reset }
+  return is_scrolled
 }

@@ -11,6 +11,7 @@ import styles from './library.module.scss'
 import { use_is_hydrated } from '@shared/hooks'
 import { useSwipeable } from 'react-swipeable'
 import { shared_values } from '@web-ui/constants'
+import { use_is_scrolled } from '@web-ui/hooks/use-is-scrolled'
 
 export namespace Library {
   export type Props = {
@@ -47,6 +48,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   const [initial_swipe_direction, set_initial_swipe_direction] = useState<
     'Left' | 'Right' | undefined
   >(undefined)
+  const is_scrolled = use_is_scrolled()
 
   const get_slidable_width = () => {
     return window.innerWidth < 370 ? window.innerWidth * 0.82 : 300
@@ -238,15 +240,21 @@ export const Library: React.FC<Library.Props> = (props) => {
           transform: `translateX(${translate_x}px)`,
         }}
       >
-        <Subcomponent_MobileTitleBar
-          swipe_left_on_click={
-            !is_left_side_open ? toggle_left_side : undefined
-          }
-          swipe_right_on_click={
-            !is_right_side_open ? toggle_right_side : undefined
-          }
-          text={props.mobile_title_bar ? props.mobile_title_bar : undefined}
-        />
+        <div
+          className={cn(styles['mobile-title-bar__inner'], {
+            [styles['mobile-title-bar__inner--scrolled']]: is_scrolled,
+          })}
+        >
+          <Subcomponent_MobileTitleBar
+            swipe_left_on_click={
+              !is_left_side_open ? toggle_left_side : undefined
+            }
+            swipe_right_on_click={
+              !is_right_side_open ? toggle_right_side : undefined
+            }
+            text={props.mobile_title_bar ? props.mobile_title_bar : undefined}
+          />
+        </div>
       </div>
       <div
         className={cn(
@@ -306,7 +314,11 @@ export const Library: React.FC<Library.Props> = (props) => {
             }}
           >
             <div>
-              <div className={styles.main__inner__search}>
+              <div
+                className={cn(styles.main__inner__search, {
+                  [styles['main__inner__search--scrolled']]: is_scrolled,
+                })}
+              >
                 {props.slot_search}
               </div>
               <div

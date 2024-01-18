@@ -33,6 +33,12 @@
   &--dimmed::after {
     opacity: var(--dimmed-opacity);
   }
+  &__inner {
+    @include transition-300ms(transform);
+    &--scrolled {
+      transform: translateY(-100%);
+    }
+  }
 }
 .toolbar {
   position: fixed;
@@ -40,7 +46,7 @@
   justify-content: center;
   z-index: 2;
   width: 100%;
-  bottom: calc(var(--bottom-navigation-bar-height) + var(--distance-8px));
+  bottom: var(--bottom-navigation-bar-height);
   @include to992 {
     transition: transform 40ms linear;
   }
@@ -48,20 +54,12 @@
     bottom: var(--distance-24px);
   }
   > div {
-    &::after {
-      @include transition-300ms(opacity);
-      position: absolute;
-      content: '';
-      background-color: var(--background);
-      border-radius: var(--border-radius-999px);
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      pointer-events: none;
+    @include transition-300ms(opacity);
+    @include to992 {
+      padding: var(--distance-16px) 0 var(--distance-8px) 0;
     }
   }
-  &--dimmed > div::after {
+  &--dimmed > div {
     opacity: var(--dimmed-opacity);
   }
 }
@@ -187,6 +185,13 @@
       top: calc(var(--app-bar-height) + var(--header-mobile-height));
       @include at992 {
         top: var(--header-desktop-height);
+      }
+      @include transition-300ms(transform);
+      @include at992 {
+        transform: none !important;
+      }
+      &--scrolled {
+        transform: translateY(calc(var(--app-bar-height) * -1));
       }
     }
     &__skeleton {
