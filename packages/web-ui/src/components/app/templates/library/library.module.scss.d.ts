@@ -1,5 +1,6 @@
 declare const styles: {
   readonly container: string
+  readonly toolbar: string
   readonly 'mobile-title-bar': string
   readonly 'mobile-title-bar--dimmed': string
   readonly content: string

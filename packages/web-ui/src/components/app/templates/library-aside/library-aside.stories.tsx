@@ -9,12 +9,8 @@ export const Primary = () => {
   return (
     <>
       <LibraryAside
-        slot_presets={<>[presets]</>}
-        slot_filter={{
-          button: <>[filter]</>,
-          dropdown: <></>,
-          is_dropdown_visible: false,
-        }}
+        on_feedback_click={() => {}}
+        feedback_label="Give feedback"
         slot_sort_by={{
           button: <>[sortby]</>,
           dropdown: <></>,
@@ -30,12 +26,8 @@ export const Primary = () => {
       />
       <StorybookSpacer />
       <LibraryAside
-        slot_presets={<>[presets]</>}
-        slot_filter={{
-          button: <>[filter]</>,
-          dropdown: <>[dropdown]</>,
-          is_dropdown_visible: true,
-        }}
+        on_feedback_click={() => {}}
+        feedback_label="Give feedback"
         slot_sort_by={{
           button: <>[sortby]</>,
           dropdown: <>[dropdown]</>,

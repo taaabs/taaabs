@@ -5,43 +5,20 @@
   display: flex;
   flex-direction: column;
 }
-.toolbar {
+.feedback {
   height: calc(var(--app-bar-height) - 1px);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  gap: var(--distance-8px);
   @include at992 {
     margin-bottom: var(--distance-16px);
     height: var(--button-dimension-52px);
   }
-  &__button {
-    width: var(--button-dimension-40px);
-    height: var(--button-dimension-40px);
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    @include transition-150ms(background-color);
+  > button {
+    color: var(--brand-color);
+    font-size: var(--font-size-13px);
     @include hover {
-      background-color: var(--neutral200);
-    }
-    &--disabled {
-      opacity: var(--dimmed-opacity);
-      pointer-events: none;
-    }
-    > svg {
-      height: var(--icon-dimension-18px);
-      width: var(--icon-dimension-18px);
-      @include at992 {
-        height: var(--icon-dimension-20px);
-        width: var(--icon-dimension-20px);
-      }
-    }
-    > span {
-      font-size: var(--font-size-13px);
+      @include text-decoration-underlinie-thin;
     }
   }
 }

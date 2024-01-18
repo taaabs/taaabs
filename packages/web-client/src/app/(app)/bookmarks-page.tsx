@@ -43,6 +43,7 @@ import { TagsSkeleton as UiAppAtom_TagsSkeleton } from '@web-ui/components/app/a
 import { StarsForDropdown as UiAppAtom_StarsForDropdown } from '@web-ui/components/app/atoms/stars-for-dropdown'
 import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/particles/icon'
+import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolbar'
 import { use_popstate } from '@web-ui/components/app/atoms/custom-range/hooks/use-popstate'
 import { use_has_focus } from '@/hooks/misc/use-has-focus'
 
@@ -76,7 +77,6 @@ const BookmarksPage: React.FC = () => {
   const { pop_count } = use_popstate()
   const [close_aside_count, set_close_aside_count] = useState(0)
 
-  const [is_filter_dropdown_visible, toggle_filter_dropdown] = useToggle(false)
   const [is_sort_by_dropdown_visible, toggle_sort_by_dropdown] =
     useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
@@ -306,6 +306,227 @@ const BookmarksPage: React.FC = () => {
           on_click_syntax_tips={() => {}}
         />
       }
+      slot_toolbar={
+        <UiAppAtom_Toolbar
+          toggleable_buttons={[
+            {
+              label: 'Starred',
+              is_toggled:
+                filter_view_options.current_filter == Filter.Starred ||
+                filter_view_options.current_filter == Filter.StarredUnread ||
+                filter_view_options.current_filter == Filter.ArchivedStarred ||
+                filter_view_options.current_filter ==
+                  Filter.ArchivedStarredUnread,
+              on_click: () => {
+                if (
+                  bookmarks_slice_state.is_fetching_first_bookmarks ||
+                  bookmarks_slice_state.is_fetching_more_bookmarks ||
+                  counts.is_fetching_counts_data
+                )
+                  return
+                if (filter_view_options.current_filter == Filter.None) {
+                  filter_view_options.set_filter_query_param(Filter.Starred)
+                } else if (
+                  filter_view_options.current_filter == Filter.Starred
+                ) {
+                  filter_view_options.set_filter_query_param(Filter.None)
+                } else if (
+                  filter_view_options.current_filter == Filter.StarredUnread
+                ) {
+                  filter_view_options.set_filter_query_param(Filter.Unread)
+                } else if (
+                  filter_view_options.current_filter == Filter.ArchivedStarred
+                ) {
+                  filter_view_options.set_filter_query_param(Filter.Archived)
+                } else if (
+                  filter_view_options.current_filter ==
+                  Filter.ArchivedStarredUnread
+                ) {
+                  filter_view_options.set_filter_query_param(
+                    Filter.ArchivedUnread,
+                  )
+                } else if (
+                  filter_view_options.current_filter == Filter.Unread
+                ) {
+                  filter_view_options.set_filter_query_param(
+                    Filter.StarredUnread,
+                  )
+                } else if (
+                  filter_view_options.current_filter == Filter.Archived
+                ) {
+                  filter_view_options.set_filter_query_param(
+                    Filter.ArchivedStarred,
+                  )
+                } else if (
+                  filter_view_options.current_filter == Filter.ArchivedUnread
+                ) {
+                  filter_view_options.set_filter_query_param(
+                    Filter.ArchivedStarredUnread,
+                  )
+                }
+              },
+            },
+            ...(!username
+              ? [
+                  {
+                    label: 'Unread',
+                    is_toggled:
+                      filter_view_options.current_filter == Filter.Unread ||
+                      filter_view_options.current_filter ==
+                        Filter.StarredUnread ||
+                      filter_view_options.current_filter ==
+                        Filter.ArchivedUnread ||
+                      filter_view_options.current_filter ==
+                        Filter.ArchivedStarredUnread,
+                    on_click: () => {
+                      if (
+                        bookmarks_slice_state.is_fetching_first_bookmarks ||
+                        bookmarks_slice_state.is_fetching_more_bookmarks ||
+                        counts.is_fetching_counts_data
+                      )
+                        return
+
+                      if (filter_view_options.current_filter == Filter.None) {
+                        filter_view_options.set_filter_query_param(
+                          Filter.Unread,
+                        )
+                      } else if (
+                        filter_view_options.current_filter == Filter.Unread
+                      ) {
+                        filter_view_options.set_filter_query_param(Filter.None)
+                      } else if (
+                        filter_view_options.current_filter ==
+                        Filter.StarredUnread
+                      ) {
+                        filter_view_options.set_filter_query_param(
+                          Filter.Starred,
+                        )
+                      } else if (
+                        filter_view_options.current_filter ==
+                        Filter.ArchivedUnread
+                      ) {
+                        filter_view_options.set_filter_query_param(
+                          Filter.Archived,
+                        )
+                      } else if (
+                        filter_view_options.current_filter ==
+                        Filter.ArchivedStarredUnread
+                      ) {
+                        filter_view_options.set_filter_query_param(
+                          Filter.ArchivedStarred,
+                        )
+                      } else if (
+                        filter_view_options.current_filter == Filter.Starred
+                      ) {
+                        filter_view_options.set_filter_query_param(
+                          Filter.StarredUnread,
+                        )
+                      } else if (
+                        filter_view_options.current_filter == Filter.Archived
+                      ) {
+                        filter_view_options.set_filter_query_param(
+                          Filter.ArchivedUnread,
+                        )
+                      } else if (
+                        filter_view_options.current_filter ==
+                        Filter.ArchivedStarred
+                      ) {
+                        filter_view_options.set_filter_query_param(
+                          Filter.ArchivedStarredUnread,
+                        )
+                      }
+                    },
+                  },
+                ]
+              : []),
+            {
+              label: 'Archived',
+              is_toggled:
+                filter_view_options.current_filter == Filter.Archived ||
+                filter_view_options.current_filter == Filter.ArchivedStarred ||
+                filter_view_options.current_filter == Filter.ArchivedUnread ||
+                filter_view_options.current_filter ==
+                  Filter.ArchivedStarredUnread,
+              on_click: () => {
+                if (
+                  bookmarks_slice_state.is_fetching_first_bookmarks ||
+                  bookmarks_slice_state.is_fetching_more_bookmarks ||
+                  counts.is_fetching_counts_data
+                )
+                  return
+
+                if (filter_view_options.current_filter == Filter.None) {
+                  filter_view_options.set_filter_query_param(Filter.Archived)
+                } else if (
+                  filter_view_options.current_filter == Filter.Starred
+                ) {
+                  filter_view_options.set_filter_query_param(
+                    Filter.ArchivedStarred,
+                  )
+                } else if (
+                  filter_view_options.current_filter == Filter.Unread
+                ) {
+                  filter_view_options.set_filter_query_param(
+                    Filter.ArchivedUnread,
+                  )
+                } else if (
+                  filter_view_options.current_filter == Filter.StarredUnread
+                ) {
+                  filter_view_options.set_filter_query_param(
+                    Filter.ArchivedStarredUnread,
+                  )
+                } else if (
+                  filter_view_options.current_filter == Filter.Archived
+                ) {
+                  filter_view_options.set_filter_query_param(Filter.None)
+                } else if (
+                  filter_view_options.current_filter == Filter.ArchivedStarred
+                ) {
+                  filter_view_options.set_filter_query_param(Filter.Starred)
+                } else if (
+                  filter_view_options.current_filter == Filter.ArchivedUnread
+                ) {
+                  filter_view_options.set_filter_query_param(Filter.Unread)
+                } else if (
+                  filter_view_options.current_filter ==
+                  Filter.ArchivedStarredUnread
+                ) {
+                  filter_view_options.set_filter_query_param(
+                    Filter.StarredUnread,
+                  )
+                }
+              },
+            },
+          ]}
+          icon_buttons={[
+            {
+              icon_variant:
+                bookmarks_slice_state.density == 'default'
+                  ? 'DENSITY_DEFAULT'
+                  : 'DENSITY_COMPACT',
+              on_click: () => {
+                if (bookmarks_slice_state.is_fetching_data) return
+                set_close_aside_count(close_aside_count + 1)
+                setTimeout(() => {
+                  dispatch(
+                    bookmarks_actions.set_density(
+                      bookmarks_slice_state.density == 'default'
+                        ? 'compact'
+                        : 'default',
+                    ),
+                  )
+                  if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
+                    search.get_bookmarks({})
+                  } else {
+                    bookmarks.get_bookmarks({})
+                  }
+                }, 0)
+              },
+            },
+            { icon_variant: 'THREE_DOTS', on_click: () => {} },
+          ]}
+        />
+      }
       slot_sidebar={
         <UiAppAtom_NavigationForLibrarySidebar
           navigation_items={[
@@ -350,267 +571,8 @@ const BookmarksPage: React.FC = () => {
       }
       slot_aside={
         <UiAppTemplate_LibraryAside
-          density={bookmarks_slice_state.density}
-          density_on_click={() => {
-            if (bookmarks_slice_state.is_fetching_data) return
-            set_close_aside_count(close_aside_count + 1)
-            setTimeout(() => {
-              dispatch(
-                bookmarks_actions.set_density(
-                  bookmarks_slice_state.density == 'default'
-                    ? 'compact'
-                    : 'default',
-                ),
-              )
-              if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
-                search.get_bookmarks({})
-              } else {
-                bookmarks.get_bookmarks({})
-              }
-            }, 0)
-          }}
-          slot_filter={{
-            button: is_hydrated ? (
-              <UiAppAtom_ButtonSelect
-                label="Filters"
-                current_value={_filter_option_to_label(
-                  filter_view_options.current_filter,
-                )}
-                is_active={is_filter_dropdown_visible}
-                on_click={toggle_filter_dropdown}
-              />
-            ) : (
-              <UiAppAtom_ButtonSelectSkeleton />
-            ),
-            is_dropdown_visible: is_filter_dropdown_visible,
-            dropdown: is_hydrated && (
-              <OutsideClickHandler
-                onOutsideClick={toggle_filter_dropdown}
-                disabled={!is_filter_dropdown_visible}
-              >
-                <UiAppAtom_DropdownMenu
-                  items={[
-                    {
-                      label: 'Starred',
-                      on_click: () => {
-                        if (
-                          bookmarks_slice_state.is_fetching_first_bookmarks ||
-                          bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          counts.is_fetching_counts_data
-                        )
-                          return
-                        if (filter_view_options.current_filter == Filter.None) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.Starred,
-                          )
-                        } else if (
-                          filter_view_options.current_filter == Filter.Starred
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.None,
-                          )
-                        } else if (
-                          filter_view_options.current_filter ==
-                          Filter.StarredUnread
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.Unread,
-                          )
-                        } else if (
-                          filter_view_options.current_filter ==
-                          Filter.ArchivedStarred
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.Archived,
-                          )
-                        } else if (
-                          filter_view_options.current_filter ==
-                          Filter.ArchivedStarredUnread
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.ArchivedUnread,
-                          )
-                        } else if (
-                          filter_view_options.current_filter == Filter.Unread
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.StarredUnread,
-                          )
-                        } else if (
-                          filter_view_options.current_filter == Filter.Archived
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.ArchivedStarred,
-                          )
-                        } else if (
-                          filter_view_options.current_filter ==
-                          Filter.ArchivedUnread
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.ArchivedStarredUnread,
-                          )
-                        }
-                      },
-                      is_checked:
-                        filter_view_options.current_filter == Filter.Starred ||
-                        filter_view_options.current_filter ==
-                          Filter.StarredUnread ||
-                        filter_view_options.current_filter ==
-                          Filter.ArchivedStarred ||
-                        filter_view_options.current_filter ==
-                          Filter.ArchivedStarredUnread,
-                    },
-                    ...(!username
-                      ? [
-                          {
-                            label: 'Unread',
-                            on_click: () => {
-                              if (
-                                bookmarks_slice_state.is_fetching_first_bookmarks ||
-                                bookmarks_slice_state.is_fetching_more_bookmarks ||
-                                counts.is_fetching_counts_data
-                              )
-                                return
-
-                              if (
-                                filter_view_options.current_filter ==
-                                Filter.None
-                              ) {
-                                filter_view_options.set_filter_query_param(
-                                  Filter.Unread,
-                                )
-                              } else if (
-                                filter_view_options.current_filter ==
-                                Filter.Unread
-                              ) {
-                                filter_view_options.set_filter_query_param(
-                                  Filter.None,
-                                )
-                              } else if (
-                                filter_view_options.current_filter ==
-                                Filter.StarredUnread
-                              ) {
-                                filter_view_options.set_filter_query_param(
-                                  Filter.Starred,
-                                )
-                              } else if (
-                                filter_view_options.current_filter ==
-                                Filter.ArchivedUnread
-                              ) {
-                                filter_view_options.set_filter_query_param(
-                                  Filter.Archived,
-                                )
-                              } else if (
-                                filter_view_options.current_filter ==
-                                Filter.ArchivedStarredUnread
-                              ) {
-                                filter_view_options.set_filter_query_param(
-                                  Filter.ArchivedStarred,
-                                )
-                              } else if (
-                                filter_view_options.current_filter ==
-                                Filter.Starred
-                              ) {
-                                filter_view_options.set_filter_query_param(
-                                  Filter.StarredUnread,
-                                )
-                              } else if (
-                                filter_view_options.current_filter ==
-                                Filter.Archived
-                              ) {
-                                filter_view_options.set_filter_query_param(
-                                  Filter.ArchivedUnread,
-                                )
-                              } else if (
-                                filter_view_options.current_filter ==
-                                Filter.ArchivedStarred
-                              ) {
-                                filter_view_options.set_filter_query_param(
-                                  Filter.ArchivedStarredUnread,
-                                )
-                              }
-                            },
-                            is_checked:
-                              filter_view_options.current_filter ==
-                                Filter.Unread ||
-                              filter_view_options.current_filter ==
-                                Filter.StarredUnread ||
-                              filter_view_options.current_filter ==
-                                Filter.ArchivedUnread ||
-                              filter_view_options.current_filter ==
-                                Filter.ArchivedStarredUnread,
-                          },
-                        ]
-                      : []),
-                    {
-                      label: 'Archived',
-                      on_click: () => {
-                        if (
-                          bookmarks_slice_state.is_fetching_first_bookmarks ||
-                          bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          counts.is_fetching_counts_data
-                        )
-                          return
-
-                        if (filter_view_options.current_filter == Filter.None) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.Archived,
-                          )
-                        } else if (
-                          filter_view_options.current_filter == Filter.Starred
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.ArchivedStarred,
-                          )
-                        } else if (
-                          filter_view_options.current_filter == Filter.Unread
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.ArchivedUnread,
-                          )
-                        } else if (
-                          filter_view_options.current_filter ==
-                          Filter.StarredUnread
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.ArchivedStarredUnread,
-                          )
-                        } else if (
-                          filter_view_options.current_filter == Filter.Archived
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.None,
-                          )
-                        } else if (
-                          filter_view_options.current_filter ==
-                          Filter.ArchivedStarred
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.Starred,
-                          )
-                        } else if (
-                          filter_view_options.current_filter ==
-                          Filter.ArchivedUnread
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.Unread,
-                          )
-                        } else if (
-                          filter_view_options.current_filter ==
-                          Filter.ArchivedStarredUnread
-                        ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.StarredUnread,
-                          )
-                        }
-                      },
-                      is_checked: is_archived_filter,
-                    },
-                  ]}
-                />
-              </OutsideClickHandler>
-            ),
-          }}
+          feedback_label="Give feedback"
+          on_feedback_click={() => {}}
           slot_sort_by={{
             button: is_hydrated ? (
               <UiAppAtom_ButtonSelect
@@ -1843,28 +1805,6 @@ const BookmarksPage: React.FC = () => {
             }
           : undefined
       }
-      clear_unread={
-        !bookmarks_slice_state.is_fetching_first_bookmarks &&
-        (!bookmarks_slice_state.bookmarks ||
-          bookmarks_slice_state.bookmarks.length == 0) &&
-        (filter_view_options.current_filter == Filter.Unread ||
-          filter_view_options.current_filter == Filter.StarredUnread)
-          ? () => {
-              filter_view_options.clear_unread()
-            }
-          : undefined
-      }
-      clear_selected_stars={
-        !bookmarks_slice_state.is_fetching_first_bookmarks &&
-        (!bookmarks_slice_state.bookmarks ||
-          bookmarks_slice_state.bookmarks.length == 0) &&
-        (filter_view_options.current_filter == Filter.Starred ||
-          filter_view_options.current_filter == Filter.StarredUnread)
-          ? () => {
-              filter_view_options.clear_selected_stars()
-            }
-          : undefined
-      }
       clear_selected_tags={
         !bookmarks_slice_state.is_fetching_first_bookmarks &&
         (!bookmarks_slice_state.bookmarks ||
@@ -1905,27 +1845,6 @@ const BookmarksPage: React.FC = () => {
 }
 
 export default BookmarksPage
-
-function _filter_option_to_label(filter_option: Filter): string {
-  switch (filter_option) {
-    case Filter.None:
-      return 'Select...'
-    case Filter.Starred:
-      return '1 selected'
-    case Filter.Unread:
-      return '1 selected'
-    case Filter.StarredUnread:
-      return '2 selected'
-    case Filter.Archived:
-      return '1 selected'
-    case Filter.ArchivedStarred:
-      return '2 selected'
-    case Filter.ArchivedUnread:
-      return '2 selected'
-    case Filter.ArchivedStarredUnread:
-      return '3 selected'
-  }
-}
 
 function _sort_by_option_to_label(sort_by_option: SortBy): string {
   switch (sort_by_option) {

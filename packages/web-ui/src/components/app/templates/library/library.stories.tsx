@@ -8,6 +8,7 @@ export const Primary = () => (
   <Library
     slot_sidebar={<>[SIDEBAR]</>}
     slot_aside={<>[ASIDE]</>}
+    slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     get_more_bookmarks={() => {}}
     has_more_bookmarks={false}
@@ -23,6 +24,7 @@ export const Scrolling = () => (
   <Library
     slot_sidebar={<div>{lorem}</div>}
     slot_aside={<div>{lorem}</div>}
+    slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     get_more_bookmarks={() => {}}
     has_more_bookmarks={false}
@@ -42,6 +44,7 @@ export const Loading = () => (
   <Library
     slot_sidebar={<>slot sidebar</>}
     slot_aside={<>slot aside</>}
+    slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     get_more_bookmarks={() => {}}
     has_more_bookmarks={false}
