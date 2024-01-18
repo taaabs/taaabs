@@ -200,10 +200,11 @@
       color: var(--text-color-dimmed);
       width: 100%;
       font-size: var(--font-size-13px);
-      padding: var(--distance-60px) var(--distance-16px) var(--distance-110px)
-        var(--distance-16px);
+      padding: var(--distance-60px) var(--distance-16px)
+        calc(var(--distance-60px) + 50px) var(--distance-16px);
       @include at992 {
-        padding: var(--distance-120px) var(--distance-16px);
+        padding: var(--distance-120px) var(--distance-16px)
+          calc(var(--distance-120px) + 76px) var(--distance-16px);
       }
       button {
         @include hover {
