@@ -20,7 +20,7 @@ export const use_scrolled_opacity = () => {
     if (scroll_y > previous_scroll_y) {
       const scrolled_down = scroll_y - first_scroll_y_down_direction
       const ratio = scrolled_down / window.innerHeight
-      const minimum_opacity = 0.25
+      const minimum_opacity = 0.15
       if (1 - ratio > minimum_opacity) {
         set_opacity(1 - ratio)
       } else {
