@@ -83,7 +83,7 @@ const BookmarksPage: React.FC = () => {
   const [are_bookmark_menu_items_locked, set_are_bookmarks_menu_items_locked] =
     useState(false)
 
-  /** Upload deferred recent visit - START */
+  // Upload deferred recent visit - START
   const has_focus = use_has_focus()
 
   useUpdateEffect(() => {
@@ -114,7 +114,7 @@ const BookmarksPage: React.FC = () => {
       }
     }
   }, [has_focus])
-  /** Upload deferred recent visit - END */
+  // Upload deferred recent visit - END
 
   useUpdateEffect(() => {
     if (bookmarks_slice_state.bookmarks == null) return
@@ -571,7 +571,7 @@ const BookmarksPage: React.FC = () => {
       }
       slot_aside={
         <UiAppTemplate_LibraryAside
-          feedback_label="Give feedback"
+          feedback_label="Send feedback"
           on_feedback_click={() => {}}
           slot_sort_by={{
             button: is_hydrated ? (

@@ -40,7 +40,7 @@
       position: relative;
       margin-bottom: calc(
         var(--distance-3px) * -1
-      ); // Needed by "compact" view mode.
+      ); // Needed by "compact" density.
       &--compact {
         display: none;
       }
@@ -55,12 +55,7 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        @include to992 {
-          margin-right: var(--distance-8px);
-        }
-        @include at992 {
-          margin-right: var(--distance-10px);
-        }
+        margin-right: var(--distance-10px);
         &__button {
           display: flex;
           align-items: center;

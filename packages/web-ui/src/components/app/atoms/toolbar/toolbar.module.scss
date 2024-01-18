@@ -9,9 +9,14 @@
   padding: var(--distance-4px);
   gap: var(--distance-4px);
   box-shadow: var(--box-shadow-blue-strong);
+  @include transition-300ms;
   @include at992 {
     padding: var(--distance-6px);
     gap: var(--distance-6px);
+  }
+  &--scrolled {
+    box-shadow: none;
+    transition: none;
   }
   &__toggleable_button {
     font-weight: var(--font-weight-inter-medium);

@@ -223,13 +223,15 @@ export const Library: React.FC<Library.Props> = (props) => {
 
   return (
     <div className={styles.container} {...swipeable_handlers}>
-      <div className={styles.toolbar}>{props.slot_toolbar}</div>
       <div
-        className={cn(styles['mobile-title-bar'], {
-          [styles['free-fall']]: !drag_distance,
-          [styles['mobile-title-bar--dimmed']]:
-            (is_right_side_open || is_left_side_open) && !drag_distance,
-        })}
+        className={cn(
+          styles['mobile-title-bar'],
+          {
+            [styles['mobile-title-bar--dimmed']]:
+              (is_right_side_open || is_left_side_open) && !drag_distance,
+          },
+          { [styles['free-fall']]: !drag_distance },
+        )}
         style={{
           pointerEvents:
             is_right_side_open || is_left_side_open ? 'none' : undefined,
@@ -245,6 +247,23 @@ export const Library: React.FC<Library.Props> = (props) => {
           }
           text={props.mobile_title_bar ? props.mobile_title_bar : undefined}
         />
+      </div>
+      <div
+        className={cn(
+          styles.toolbar,
+          {
+            [styles['toolbar--dimmed']]:
+              (is_right_side_open || is_left_side_open) && !drag_distance,
+          },
+          { [styles['free-fall']]: !drag_distance },
+        )}
+        style={{
+          pointerEvents:
+            is_right_side_open || is_left_side_open ? 'none' : undefined,
+          transform: `translateX(${translate_x}px)`,
+        }}
+      >
+        <div>{props.slot_toolbar}</div>
       </div>
       <div className={styles.content}>
         <aside
@@ -326,7 +345,7 @@ export const Library: React.FC<Library.Props> = (props) => {
                 )}
                 {props.clear_selected_tags && (
                   <button onClick={props.clear_selected_tags}>
-                    Clear tags
+                    Clear selected tags
                   </button>
                 )}
               </div>
