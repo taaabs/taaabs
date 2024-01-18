@@ -1,0 +1,77 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  background-color: var(--blue700);
+  border-radius: var(--border-radius-999px);
+  padding: var(--distance-4px);
+  gap: var(--distance-4px);
+  box-shadow: var(--box-shadow-blue-strong);
+  @include at992 {
+    padding: var(--distance-6px);
+    gap: var(--distance-6px);
+  }
+  &__toggleable_button {
+    font-weight: var(--font-weight-inter-medium);
+    border-radius: var(--border-radius-999px);
+    height: var(--button-dimension-28px);
+    padding: 0 var(--distance-10px);
+    display: flex;
+    align-items: center;
+    color: var(--white);
+    @include hover {
+      background-color: var(--blue600);
+    }
+    @include to992 {
+      font-size: var(--font-size-14px);
+    }
+    @include at992 {
+      height: var(--button-dimension-40px);
+      padding: 0 var(--distance-16px);
+    }
+    &--toggled {
+      background-color: var(--white);
+      color: var(--blue700);
+      @include hover {
+        background-color: var(--white);
+      }
+    }
+  }
+  &__separator {
+    height: var(--distance-20px);
+    width: var(--distance-1px);
+    background-color: var(--blue600);
+    margin: 0 var(--distance-2px) 0;
+    @include at992 {
+      height: var(--distance-28px);
+      margin: 0 var(--distance-4px) 0;
+    }
+  }
+  &__icon_button {
+    border-radius: var(--border-radius-999px);
+    height: var(--button-dimension-28px);
+    width: var(--button-dimension-28px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include hover {
+      background-color: var(--blue600);
+    }
+    @include at992 {
+      height: var(--button-dimension-40px);
+      width: var(--button-dimension-40px);
+    }
+    @include transition-150ms(background-color);
+    > svg {
+      fill: var(--white);
+      height: var(--icon-dimension-15px);
+      width: var(--icon-dimension-15px);
+      @include at992 {
+        height: var(--icon-dimension-20px);
+        width: var(--icon-dimension-20px);
+      }
+    }
+  }
+}

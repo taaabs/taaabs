@@ -72,6 +72,7 @@ export const Primary = () => {
             ]}
           />
         }
+        slot_toolbar={<>toolbar</>}
         mobile_title_bar="Bookmarks"
         get_more_bookmarks={() => {}}
         has_more_bookmarks={false}
@@ -109,7 +110,6 @@ const bookmark = (
     on_selected_tag_click={() => {}}
     set_render_height={() => {}}
     favicon_host=""
-    is_search_result={false}
     menu_slot={<></>}
     number_of_selected_tags={0}
     should_dim_visited_links={false}

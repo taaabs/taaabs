@@ -16,6 +16,7 @@ export namespace Library {
   export type Props = {
     slot_sidebar: React.ReactNode
     slot_aside: React.ReactNode
+    slot_toolbar: React.ReactNode
     mobile_title_bar?: string
     slot_search: React.ReactNode
     slot_bookmarks: React.ReactNode
@@ -27,8 +28,6 @@ export namespace Library {
     refresh_results?: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
-    clear_unread?: () => void
-    clear_selected_stars?: () => void
     show_bookmarks_skeleton: boolean
     info_text?: React.ReactNode
     close_aside_count?: number
@@ -224,6 +223,7 @@ export const Library: React.FC<Library.Props> = (props) => {
 
   return (
     <div className={styles.container} {...swipeable_handlers}>
+      <div className={styles.toolbar}>{props.slot_toolbar}</div>
       <div
         className={cn(styles['mobile-title-bar'], {
           [styles['free-fall']]: !drag_distance,
@@ -317,14 +317,6 @@ export const Library: React.FC<Library.Props> = (props) => {
                 {props.refresh_results && (
                   <button onClick={props.refresh_results}>
                     Refresh results
-                  </button>
-                )}
-                {props.clear_unread && (
-                  <button onClick={props.clear_unread}>Clear unread</button>
-                )}
-                {props.clear_selected_stars && (
-                  <button onClick={props.clear_selected_stars}>
-                    Clear stars
                   </button>
                 )}
                 {props.clear_date_range && (
