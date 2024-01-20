@@ -12,7 +12,6 @@
 .top {
   display: flex;
   flex-direction: column;
-  gap: var(--distance-10px);
   &__name {
     color: var(--brand-color);
     font-size: var(--font-size-34px);

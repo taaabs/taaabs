@@ -29,7 +29,11 @@ export namespace LibrarySearch {
     hints?: Hint[]
     results_count?: number
     is_slash_shortcut_disabled: boolean
-    on_click_syntax_tips: () => void
+    on_click_get_help: () => void
+    translations: {
+      footer_tip: string
+      get_help_link: string
+    }
   }
 }
 
@@ -384,10 +388,10 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
             </div>
           )}
           <div className={styles.hints__footer}>
-            <button onClick={props.on_click_syntax_tips}>
-              Search syntax tips
+            <span>{props.translations.footer_tip}</span>
+            <button onClick={props.on_click_get_help}>
+              {props.translations.get_help_link}
             </button>
-            <span></span>
           </div>
         </div>
       </div>

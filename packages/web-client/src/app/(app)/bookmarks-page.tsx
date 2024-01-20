@@ -87,14 +87,14 @@ const BookmarksPage: React.FC = () => {
   const has_focus = use_has_focus()
 
   useUpdateEffect(() => {
-    const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit | null =
-      JSON.parse(
-        localStorage.getItem(
-          browser_storage.local_storage.authorized_library.recent_visit,
-        ) || 'null',
-      )
-    if (recent_visit) {
-      if (has_focus) {
+    if (has_focus) {
+      const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit | null =
+        JSON.parse(
+          localStorage.getItem(
+            browser_storage.local_storage.authorized_library.recent_visit,
+          ) || 'null',
+        )
+      if (recent_visit) {
         // Timeout prevents white screen when navigating back.
         setTimeout(() => {
           localStorage.removeItem(
@@ -110,7 +110,7 @@ const BookmarksPage: React.FC = () => {
             bookmark_id: recent_visit.bookmark.id,
             visited_at: new Date(recent_visit.visited_at),
           })
-        }, 0)
+        }, 1000)
       }
     }
   }, [has_focus])
@@ -143,11 +143,15 @@ const BookmarksPage: React.FC = () => {
   }, [filter_view_options.current_filter])
 
   // Clear cache when user selects visited at sort_by option.
+  // Filter is in deps because we want to clear cache when setting to archive.
+  // NOTE: Could be reworked to avoid unnecesary invalidations.
+  const [search_cache_to_be_cleared, set_search_cache_to_be_cleared] =
+    useState(false)
   useUpdateEffect(() => {
     if (sort_by_view_options.current_sort_by == SortBy.VisitedAt) {
-      search.clear_cached_data({
-        is_archived: is_archived_filter,
-      })
+      set_search_cache_to_be_cleared(true)
+    } else {
+      set_search_cache_to_be_cleared(false)
     }
   }, [filter_view_options.current_filter, sort_by_view_options.current_sort_by])
 
@@ -259,6 +263,13 @@ const BookmarksPage: React.FC = () => {
                   }),
               )
 
+              if (search_cache_to_be_cleared) {
+                await search.clear_cached_data({
+                  is_archived: is_archived_filter,
+                })
+                set_search_cache_to_be_cleared(false)
+              }
+
               const is_cache_stale = await search.check_is_cache_stale({
                 api_url: process.env.NEXT_PUBLIC_API_URL,
                 auth_token:
@@ -302,8 +313,11 @@ const BookmarksPage: React.FC = () => {
             bookmarks.get_bookmarks({})
           }}
           is_slash_shortcut_disabled={modal_context?.modal !== undefined}
-          on_click_give_feedback={() => {}}
-          on_click_syntax_tips={() => {}}
+          on_click_get_help={() => {}}
+          translations={{
+            footer_tip: 'Tags, filters and custom range affect results.',
+            get_help_link: 'Get help',
+          }}
         />
       }
       slot_toolbar={

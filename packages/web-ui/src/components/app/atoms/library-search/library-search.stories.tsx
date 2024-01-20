@@ -23,7 +23,11 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_syntax_tips={() => {}}
+        on_click_get_help={() => {}}
+        translations={{
+          footer_tip: 'Lorem ipsum',
+          get_help_link: 'Lorem',
+        }}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -41,7 +45,11 @@ export const Primary = () => (
         results_count={2137}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_syntax_tips={() => {}}
+        on_click_get_help={() => {}}
+        translations={{
+          footer_tip: 'Lorem ipsum',
+          get_help_link: 'Lorem',
+        }}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -59,7 +67,11 @@ export const Primary = () => (
         results_count={2137}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_syntax_tips={() => {}}
+        on_click_get_help={() => {}}
+        translations={{
+          footer_tip: 'Lorem ipsum',
+          get_help_link: 'Lorem',
+        }}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -77,7 +89,11 @@ export const Primary = () => (
         results_count={0}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_syntax_tips={() => {}}
+        on_click_get_help={() => {}}
+        translations={{
+          footer_tip: 'Lorem ipsum',
+          get_help_link: 'Lorem',
+        }}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -95,7 +111,11 @@ export const Primary = () => (
         results_count={0}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_syntax_tips={() => {}}
+        on_click_get_help={() => {}}
+        translations={{
+          footer_tip: 'Lorem ipsum',
+          get_help_link: 'Lorem',
+        }}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -112,7 +132,11 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_syntax_tips={() => {}}
+        on_click_get_help={() => {}}
+        translations={{
+          footer_tip: 'Lorem ipsum',
+          get_help_link: 'Lorem',
+        }}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -129,7 +153,11 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={false}
         is_slash_shortcut_disabled={false}
-        on_click_syntax_tips={() => {}}
+        on_click_get_help={() => {}}
+        translations={{
+          footer_tip: 'Lorem ipsum',
+          get_help_link: 'Lorem',
+        }}
       />
       <StorybookSpacer />
       <LibrarySearch
@@ -157,7 +185,11 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={true}
         is_slash_shortcut_disabled={false}
-        on_click_syntax_tips={() => {}}
+        on_click_get_help={() => {}}
+        translations={{
+          footer_tip: 'Lorem ipsum',
+          get_help_link: 'Lorem',
+        }}
       />
       <StorybookSpacer />
       <StorybookSpacer />
@@ -176,7 +208,11 @@ export const Primary = () => (
         on_clear_click={() => {}}
         is_focused={true}
         is_slash_shortcut_disabled={false}
-        on_click_syntax_tips={() => {}}
+        on_click_get_help={() => {}}
+        translations={{
+          footer_tip: 'Lorem ipsum',
+          get_help_link: 'Lorem',
+        }}
       />
     </div>
   </div>

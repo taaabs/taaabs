@@ -18,7 +18,7 @@ export const use_is_scrolled = () => {
 
     set_previous_scroll_y(scroll_y)
     if (scroll_y > previous_scroll_y) {
-      if (scroll_y - first_scroll_y_down_direction > window.innerHeight) {
+      if (scroll_y - first_scroll_y_down_direction > window.innerHeight / 2) {
         set_is_scrolled(true)
       }
     } else {

@@ -372,9 +372,18 @@
   }
   &__footer {
     display: flex;
-    justify-content: space-between;
     font-size: var(--font-size-13px);
     margin: var(--distance-8px) var(--distance-14px);
+    @include to768 {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    @include at768 {
+      justify-content: space-between;
+    }
+    > span {
+      color: var(--text-color-dimmed);
+    }
     > button {
       color: var(--brand-color);
       @include hover {

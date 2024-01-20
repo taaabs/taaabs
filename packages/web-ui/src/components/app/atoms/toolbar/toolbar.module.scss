@@ -7,15 +7,16 @@
   background-color: var(--blue700);
   border-radius: var(--border-radius-999px);
   padding: var(--distance-4px);
-  gap: var(--distance-4px);
+  gap: var(--distance-3px);
   box-shadow: var(--box-shadow-blue-strong);
   @include transition-300ms;
   @include at992 {
     padding: var(--distance-6px);
-    gap: var(--distance-6px);
+    gap: var(--distance-4px);
   }
   &__toggleable_button {
-    font-weight: var(--font-weight-inter-medium);
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-bold);
     border-radius: var(--border-radius-999px);
     height: var(--button-dimension-28px);
     padding: 0 var(--distance-10px);

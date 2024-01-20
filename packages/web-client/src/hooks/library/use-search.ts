@@ -367,9 +367,7 @@ export const use_search = () => {
         const progress_percentage = Math.floor(
           (indexed_count / bookmarks.length) * 100,
         )
-        set_indexed_bookmarks_percentage(
-          progress_percentage < 100 ? progress_percentage : undefined,
-        )
+        set_indexed_bookmarks_percentage(progress_percentage)
       }
       const bookmarks_just_tags: BookmarkTags[] = bookmarks.map((bookmark) => ({
         id: bookmark.id,
@@ -378,7 +376,12 @@ export const use_search = () => {
       !params.is_archived
         ? set_bookmarks_just_tags(bookmarks_just_tags)
         : set_archived_bookmarks_just_tags(bookmarks_just_tags)
-      cache_data({ db, bookmarks_just_tags, is_archived: params.is_archived })
+      await cache_data({
+        db,
+        bookmarks_just_tags,
+        is_archived: params.is_archived,
+      })
+      set_indexed_bookmarks_percentage(undefined)
     }
 
     !params.is_archived ? set_db(db) : set_archived_db(db)
@@ -530,8 +533,7 @@ export const use_search = () => {
     const result: Results<Result> = await searchWithHighlight(
       !is_archived_filter ? db! : archived_db!,
       {
-        limit:
-          term.length <= 2 ? 100 : system_values.max_library_search_results,
+        limit: system_values.max_library_search_results,
         term,
         properties: ['title', 'note'],
         where: {
@@ -734,18 +736,13 @@ export const use_search = () => {
           search_string: search_string_lower,
         }))
 
-      // set_count(undefined)
-
       if (last_word.substring(0, 5) == 'site:') {
         const site_term = last_word.substring(5)
 
         const result: Results<Result> = await search(
           !is_archived_filter ? db! : archived_db!,
           {
-            limit:
-              site_term.length <= 2
-                ? 100
-                : system_values.max_library_search_results,
+            limit: system_values.max_library_search_results,
             term: site_term ? site_term : undefined,
             properties: ['sites'],
             where: {
@@ -1163,7 +1160,7 @@ export const use_search = () => {
         (bookmark) => bookmark.id != params.bookmark_id,
       )
       set_bookmarks_just_tags(new_all_bookmarks)
-      cache_data({
+      await cache_data({
         db: db!,
         bookmarks_just_tags: new_all_bookmarks,
         is_archived: false,
@@ -1174,7 +1171,7 @@ export const use_search = () => {
           (bookmark) => bookmark.id != params.bookmark_id,
         )
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      cache_data({
+      await cache_data({
         db: archived_db!,
         bookmarks_just_tags: new_archived_bookmarks_just_tags,
         is_archived: true,
@@ -1247,8 +1244,8 @@ export const use_search = () => {
         })
       }
       set_bookmarks_just_tags(new_bookmarks_just_tags)
-      setTimeout(() => {
-        cache_data({
+      setTimeout(async () => {
+        await cache_data({
           db: db!,
           bookmarks_just_tags: new_bookmarks_just_tags,
           is_archived: false,
@@ -1266,8 +1263,8 @@ export const use_search = () => {
         })
       }
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      setTimeout(() => {
-        cache_data({
+      setTimeout(async () => {
+        await cache_data({
           db: archived_db!,
           bookmarks_just_tags: new_archived_bookmarks_just_tags,
           is_archived: true,
