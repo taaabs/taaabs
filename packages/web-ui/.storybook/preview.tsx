@@ -1,4 +1,5 @@
 import 'react-loading-skeleton/dist/skeleton.css'
+import 'react-nestable/dist/styles/index.css';
 import './fonts.css'
 import '../src/styles/style.scss'
 

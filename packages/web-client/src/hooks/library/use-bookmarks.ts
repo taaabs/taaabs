@@ -16,7 +16,7 @@ import { browser_storage } from '@/constants/browser-storage'
 
 export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   const query_params = useSearchParams()
-  const { username } = useParams()
+  const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
   const { bookmarks, has_more_bookmarks, density } = use_library_selector(
     (state) => state.bookmarks,
@@ -71,7 +71,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       )
     } else {
       const request_params: GetBookmarks_Params.Public = {
-        username: username as string,
+        username,
       }
 
       const query_tags = query_params.get('t')

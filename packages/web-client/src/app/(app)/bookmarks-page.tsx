@@ -46,6 +46,9 @@ import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/partic
 import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolbar'
 import { use_popstate } from '@web-ui/components/app/atoms/custom-range/hooks/use-popstate'
 import { use_has_focus } from '@/hooks/misc/use-has-focus'
+import { TagHierarchies as UiAppAtom_TagHierarchies } from '@web-ui/components/app/atoms/tag-hierarchies'
+import { use_tag_hierarchies } from '@/hooks/library/use-tag-hierarchies'
+import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -69,6 +72,7 @@ const BookmarksPage: React.FC = () => {
     is_in_search_mode: !!search.search_string,
   })
   const counts = use_counts()
+  const tag_hierarchies = use_tag_hierarchies()
   const filter_view_options = use_filter_view_options()
   const sort_by_view_options = use_sort_by_view_options()
   const order_view_options = use_order_view_options()
@@ -110,7 +114,7 @@ const BookmarksPage: React.FC = () => {
             bookmark_id: recent_visit.bookmark.id,
             visited_at: new Date(recent_visit.visited_at),
           })
-        }, 1000)
+        }, 0)
       }
     }
   }, [has_focus])
@@ -542,46 +546,51 @@ const BookmarksPage: React.FC = () => {
         />
       }
       slot_sidebar={
-        <UiAppAtom_NavigationForLibrarySidebar
-          navigation_items={[
-            {
-              label: 'All bookmarks',
-              on_click: () => {
-                if (
-                  bookmarks_slice_state.is_fetching_first_bookmarks ||
-                  bookmarks_slice_state.is_updating_bookmarks
-                )
-                  return
-                filter_view_options.set_filter_query_param_and_clear_others(
-                  Filter.None,
-                )
-                if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
-                  search.reset()
-                  if (filter_view_options.current_filter == Filter.None) {
-                    bookmarks.get_bookmarks({})
+        <>
+          <UiAppAtom_NavigationForLibrarySidebar
+            navigation_items={[
+              {
+                label: 'All bookmarks',
+                on_click: () => {
+                  if (
+                    bookmarks_slice_state.is_fetching_first_bookmarks ||
+                    bookmarks_slice_state.is_updating_bookmarks
+                  )
+                    return
+                  filter_view_options.set_filter_query_param_and_clear_others(
+                    Filter.None,
+                  )
+                  if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
+                    search.reset()
+                    if (filter_view_options.current_filter == Filter.None) {
+                      bookmarks.get_bookmarks({})
+                    }
                   }
-                }
-                set_close_aside_count(close_aside_count + 1)
+                  set_close_aside_count(close_aside_count + 1)
+                },
+                is_active: !tag_view_options.selected_tags.length,
               },
-              is_active: !tag_view_options.selected_tags.length,
-            },
-            {
-              label: 'Label 1',
-              on_click: () => {},
-              is_active: false,
-            },
-            {
-              label: 'Label 2',
-              on_click: () => {},
-              is_active: false,
-            },
-            {
-              label: 'Label 3',
-              on_click: () => {},
-              is_active: false,
-            },
-          ]}
-        />
+            ]}
+          />
+          {tag_hierarchies.tree !== undefined && (
+            <UiAppAtom_TagHierarchies
+              tree={tag_hierarchies.tree}
+              on_update={(tree) => {
+                dispatch(
+                  tag_hierarchies_actions.update_tag_hierarchies({
+                    update_tag_hierarchies_params: {
+                      tree,
+                    },
+                    api_url: process.env.NEXT_PUBLIC_API_URL,
+                    auth_token:
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                  }),
+                )
+              }}
+              on_item_click={() => {}}
+            />
+          )}
+        </>
       }
       slot_aside={
         <UiAppTemplate_LibraryAside

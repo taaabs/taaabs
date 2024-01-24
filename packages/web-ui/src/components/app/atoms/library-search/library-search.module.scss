@@ -186,7 +186,6 @@
       }
       input {
         color: transparent;
-        z-index: 1;
         width: 100vw; // TODO: Rework workaround.
         font-weight: var(--font-weight-inter-medium);
         @include to1200 {

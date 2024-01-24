@@ -40,21 +40,45 @@ export const upsert_bookmark = (params: {
 
         const is_archived_toggled_should_remove =
           params.bookmark.is_archived &&
-          !(params.last_authorized_counts_params.filter == Filter.Archived)
+          !(
+            params.last_authorized_counts_params.filter == Filter.Archived ||
+            params.last_authorized_counts_params.filter ==
+              Filter.ArchivedStarred ||
+            params.last_authorized_counts_params.filter ==
+              Filter.ArchivedUnread ||
+            params.last_authorized_counts_params.filter ==
+              Filter.ArchivedStarredUnread
+          )
 
         const is_restored_toggled_should_remove =
           !params.bookmark.is_archived &&
-          params.last_authorized_counts_params.filter == Filter.Archived
+          (params.last_authorized_counts_params.filter == Filter.Archived ||
+            params.last_authorized_counts_params.filter ==
+              Filter.ArchivedStarred ||
+            params.last_authorized_counts_params.filter ==
+              Filter.ArchivedUnread ||
+            params.last_authorized_counts_params.filter ==
+              Filter.ArchivedStarredUnread)
 
         const is_starred_toggled_should_remove =
           params.bookmark.stars == 0 &&
           (params.last_authorized_counts_params.filter == Filter.Starred ||
-            params.last_authorized_counts_params.filter == Filter.StarredUnread)
+            params.last_authorized_counts_params.filter ==
+              Filter.StarredUnread ||
+            params.last_authorized_counts_params.filter ==
+              Filter.ArchivedStarred ||
+            params.last_authorized_counts_params.filter ==
+              Filter.ArchivedStarredUnread)
 
         const is_unread_toggled_should_remove =
           !params.bookmark.is_unread &&
           (params.last_authorized_counts_params.filter == Filter.Unread ||
-            params.last_authorized_counts_params.filter == Filter.StarredUnread)
+            params.last_authorized_counts_params.filter ==
+              Filter.StarredUnread ||
+            params.last_authorized_counts_params.filter ==
+              Filter.ArchivedUnread ||
+            params.last_authorized_counts_params.filter ==
+              Filter.ArchivedStarredUnread)
 
         if (
           is_archived_toggled_should_remove ||

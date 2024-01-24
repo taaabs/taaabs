@@ -1,0 +1,55 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  width: 100%;
+  > div > ol {
+    border: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+    > li > div .tag__spacer {
+      display: none;
+    }
+  }
+}
+.collapse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--button-dimension-34px);
+  padding-left: 3px;
+  padding-right: 8px;
+  svg {
+    transform: rotate(-90deg);
+    height: var(--distance-12px);
+    fill: var(--brand-color);
+  }
+  &--collapsed svg {
+    transform: rotate(180deg);
+  }
+}
+.tag {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  &__spacer {
+    width: var(--distance-16px);
+    margin-right: var(--distance-2px);
+    height: 1px;
+    background-color: var(--neutral200);
+    transform: translateX(calc(var(--distance-7px) * -1));
+  }
+  > button {
+    height: var(--button-dimension-34px);
+    display: flex;
+    align-items: center;
+    color: var(--text-color-dimmed);
+    font-size: var(--font-size-16px);
+    &--active {
+      color: var(--text-color-normal);
+    }
+    @include hover {
+      color: var(--text-color-normal);
+    }
+  }
+}

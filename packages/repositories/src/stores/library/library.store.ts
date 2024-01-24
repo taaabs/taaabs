@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { bookmarks_slice } from './bookmarks/bookmarks.slice'
 import { counts_slice } from './counts/counts.slice'
+import { tag_hierarchies_slice } from './tag-hierarchies/tag-hierarchies.slice'
 
 const reducer = {
   bookmarks: bookmarks_slice.reducer,
   counts: counts_slice.reducer,
+  tag_hierarchies: tag_hierarchies_slice.reducer,
 }
 
 export const configure_library_store = () => {

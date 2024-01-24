@@ -67,7 +67,15 @@ export const Library: React.FC<Library.Props> = (props) => {
   })
 
   const swipeable_handlers = useSwipeable({
-    onSwipeStart: ({ dir }) => {
+    onSwipeStart: ({ dir, event }) => {
+      // Check if user is not dragging over "custom range" handlers.
+      if (
+        (event.target as any)?.nodeName == 'rect' ||
+        (event.target as any)?.nodeName == 'line' ||
+        window.innerWidth >= 992
+      )
+        return
+
       if (dir == 'Left' || dir == 'Right') {
         document.body.style.overflow = 'hidden'
         set_initial_swipe_direction(dir)
@@ -82,7 +90,14 @@ export const Library: React.FC<Library.Props> = (props) => {
         set_is_right_side_moving(true)
       }
     },
-    onSwiping: ({ deltaX, dir }) => {
+    onSwiping: ({ deltaX, dir, event }) => {
+      if (
+        (event.target as any)?.nodeName == 'rect' ||
+        (event.target as any)?.nodeName == 'line' ||
+        window.innerWidth >= 992
+      )
+        return
+
       if (
         (initial_swipe_direction == 'Left' &&
           dir == 'Left' &&
@@ -98,7 +113,14 @@ export const Library: React.FC<Library.Props> = (props) => {
         set_drag_distance(deltaX)
       }
     },
-    onSwiped: ({ dir, velocity }) => {
+    onSwiped: ({ dir, velocity, event }) => {
+      if (
+        (event.target as any)?.nodeName == 'rect' ||
+        (event.target as any)?.nodeName == 'line' ||
+        window.innerWidth >= 992
+      )
+        return
+
       if (dir == 'Left' || dir == 'Right') {
         if (velocity > 0.2) {
           if (dir == 'Right') {
@@ -287,7 +309,12 @@ export const Library: React.FC<Library.Props> = (props) => {
             pointerEvents: is_right_side_open ? 'none' : undefined,
           }}
         >
-          <div className={styles.sidebar__inner}>{props.slot_sidebar}</div>
+          <div
+            className={styles.sidebar__inner}
+            style={{ width: `${slidable_width}px` }}
+          >
+            {props.slot_sidebar}
+          </div>
         </aside>
 
         <main
