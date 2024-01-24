@@ -15,14 +15,14 @@ export const SelectedTags: React.FC<SelectedTags.Props> = memo(
     return props.selected_tags.length ? (
       <div className={styles.container}>
         {props.selected_tags.length >=
-          system_values.library.max_tags_selected - 1 && (
+          system_values.library.max_selected_tags - 1 && (
           <div
             className={cn(styles.count, {
               [styles['count--limit-reached']]:
                 props.selected_tags.length ==
-                system_values.library.max_tags_selected,
+                system_values.library.max_selected_tags,
             })}
-          >{`${props.selected_tags.length}/${system_values.library.max_tags_selected}`}</div>
+          >{`${props.selected_tags.length}/${system_values.library.max_selected_tags}`}</div>
         )}
         {props.selected_tags.map((tag) => (
           <button

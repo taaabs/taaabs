@@ -575,8 +575,8 @@ const BookmarksPage: React.FC = () => {
           {tag_hierarchies.tree !== undefined && (
             <UiAppAtom_TagHierarchies
               tree={tag_hierarchies.tree}
-              on_update={(tree) => {
-                dispatch(
+              on_update={async (tree) => {
+                await dispatch(
                   tag_hierarchies_actions.update_tag_hierarchies({
                     update_tag_hierarchies_params: {
                       tree,
@@ -586,8 +586,15 @@ const BookmarksPage: React.FC = () => {
                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                   }),
                 )
+                toast.success('Tag hierarchies has beed updated')
               }}
-              on_item_click={() => {}}
+              selected_tag_ids={tag_view_options.selected_tags}
+              is_updating={tag_hierarchies.is_updating || false}
+              on_item_click={(tag_ids) => {
+                tag_view_options.set_many_tags_to_query_params({
+                  tag_ids,
+                })
+              }}
             />
           )}
         </>

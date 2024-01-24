@@ -9,7 +9,5 @@ export type TagHierarchies_DataSource = {
     params: GetTagHierarchies_Params.Public,
   ): Promise<TagHierarchies_Dto.Response.Public>
 
-  update_tag_hierarchies(
-    params: UpdateTagHierarchies_Params,
-  ): Promise<TagHierarchies_Dto.Response.Authorized>
+  update_tag_hierarchies(params: UpdateTagHierarchies_Params): Promise<void>
 }

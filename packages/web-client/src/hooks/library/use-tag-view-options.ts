@@ -7,7 +7,7 @@ import { useState } from 'react'
 
 export const use_tag_view_options = () => {
   const query_params = useSearchParams()
-  const params = useParams()
+  const path_params = useParams()
   const [selected_tags, set_selected_tags] = useState<number[]>(
     query_params.get('t')
       ? query_params
@@ -29,7 +29,7 @@ export const use_tag_view_options = () => {
   }, [query_params])
 
   const add_tag_to_query_params = (tag_id: number) => {
-    if (selected_tags.length == system_values.library.max_tags_selected) return
+    if (selected_tags.length == system_values.library.max_selected_tags) return
 
     const current_tags = query_params.get('t')
       ? query_params
@@ -45,12 +45,12 @@ export const use_tag_view_options = () => {
     )
 
     clear_library_session_storage({
-      username: params.username as string,
+      username: path_params.username as string,
       query_parms: updated_query_params.toString(),
     })
 
     clear_library_session_storage({
-      username: params.username as string,
+      username: path_params.username as string,
       query_parms: updated_query_params.toString(),
     })
 
@@ -76,7 +76,28 @@ export const use_tag_view_options = () => {
     )
 
     clear_library_session_storage({
-      username: params.username as string,
+      username: path_params.username as string,
+      query_parms: updated_query_params.toString(),
+    })
+
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updated_query_params,
+    )
+  }
+
+  const set_many_tags_to_query_params = (params: { tag_ids: number[] }) => {
+    if (params.tag_ids.length >= system_values.library.max_selected_tags) return
+
+    const updated_query_params = update_query_params(
+      query_params,
+      't',
+      params.tag_ids.join(','),
+    )
+
+    clear_library_session_storage({
+      username: path_params.username as string,
       query_parms: updated_query_params.toString(),
     })
 
@@ -91,7 +112,7 @@ export const use_tag_view_options = () => {
     const updated_query_params = update_query_params(query_params, 't')
 
     clear_library_session_storage({
-      username: params.username as string,
+      username: path_params.username as string,
       query_parms: updated_query_params.toString(),
     })
 
@@ -108,5 +129,6 @@ export const use_tag_view_options = () => {
     add_tag_to_query_params,
     remove_tags_from_query_params,
     clear_selected_tags,
+    set_many_tags_to_query_params,
   }
 }

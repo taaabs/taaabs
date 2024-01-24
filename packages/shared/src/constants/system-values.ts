@@ -6,7 +6,7 @@ export const system_values = {
   max_library_search_hints: 10,
   sortablejs_animation_duration: 150,
   library: {
-    max_tags_selected: 5,
+    max_selected_tags: 5,
     global: {
       redis_ttl: 60,
     },

@@ -9,7 +9,5 @@ export type TagHierarchies_Repository = {
     params: GetTagHierarchies_Params.Public,
   ): Promise<GetTagHierarchies_Ro>
 
-  update_tag_hierarchies(
-    params: UpdateTagHierarchies_Params,
-  ): Promise<GetTagHierarchies_Ro>
+  update_tag_hierarchies(params: UpdateTagHierarchies_Params): Promise<void>
 }

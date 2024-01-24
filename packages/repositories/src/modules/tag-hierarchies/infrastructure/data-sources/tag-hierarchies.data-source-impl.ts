@@ -32,7 +32,7 @@ export class TagHierarchies_DataSourceImpl
 
   public async update_tag_hierarchies(
     params: UpdateTagHierarchies_Params,
-  ): Promise<TagHierarchies_Dto.Response.Authorized> {
+  ): Promise<void> {
     const parse_node = (
       node: TagHierarchyNode_Entity,
     ): UpdateTagHierarchies_Dto.Node => {
@@ -46,19 +46,13 @@ export class TagHierarchies_DataSourceImpl
       tree: params.tree.map((node) => parse_node(node)),
     }
 
-    return fetch(`${this._api_url}/v1/tag-hierarchies`, {
+    await fetch(`${this._api_url}/v1/tag-hierarchies`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${this._auth_token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
-    }).then((r) => {
-      if (r.ok) {
-        return r.json()
-      } else {
-        throw new Error()
-      }
     })
   }
 }

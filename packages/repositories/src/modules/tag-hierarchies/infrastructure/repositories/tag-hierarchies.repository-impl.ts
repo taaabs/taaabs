@@ -22,6 +22,7 @@ export class TagHierarchies_RepositoryImpl
       node: TagHierarchies_Dto.AuthorizedNode,
     ): TagHierarchyNode_Entity => {
       return {
+        id: node.id,
         name: node.name
           ? node.name
           : node.name_aes
@@ -48,6 +49,7 @@ export class TagHierarchies_RepositoryImpl
       node: TagHierarchies_Dto.PublicNode,
     ): TagHierarchyNode_Entity => {
       return {
+        id: node.id,
         name: node.name,
         children: node.children?.map((node) => parse_tree_node(node)) || [],
       }
@@ -60,27 +62,7 @@ export class TagHierarchies_RepositoryImpl
 
   public async update_tag_hierarchies(
     params: UpdateTagHierarchies_Params,
-  ): Promise<GetTagHierarchies_Ro> {
-    const { tree } =
-      await this._tag_hierarchies_data_source.update_tag_hierarchies(params)
-
-    const parse_tree_node = (
-      node: TagHierarchies_Dto.AuthorizedNode,
-    ): TagHierarchyNode_Entity => {
-      return {
-        name: node.name
-          ? node.name
-          : node.name_aes
-          ? CryptoJS.AES.decrypt(node.name_aes, 'my_secret_key').toString(
-              CryptoJS.enc.Utf8,
-            )
-          : '',
-        children: node.children?.map((node) => parse_tree_node(node)) || [],
-      }
-    }
-
-    return {
-      tree: tree.map((node) => parse_tree_node(node)),
-    }
+  ): Promise<void> {
+    await this._tag_hierarchies_data_source.update_tag_hierarchies(params)
   }
 }

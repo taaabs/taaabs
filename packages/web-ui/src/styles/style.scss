@@ -288,7 +288,7 @@ strong {
 .nestable .nestable-list,
 .nestable .nestable-list {
   padding-left: var(--distance-7px);
-  margin-left: var(--distance-6px);
+  margin-left: var(--distance-8px);
   border-left: var(--border-primary);
 }
 .nestable-item,
@@ -296,7 +296,7 @@ strong {
   margin: 0;
 }
 .nestable-item.is-dragging::before {
-  background: var(--neutral100);
+  background: var(--neutral200);
   border: none;
   border-radius: var(--border-radius-12px);
   outline: var(--distance-3px) solid var(--background);
