@@ -4,8 +4,8 @@ import { Metadata, Viewport } from 'next'
 import { Inter, Plus_Jakarta_Sans, Inter_Tight } from 'next/font/google'
 import { ToastContainer } from 'react-toastify'
 
-import 'react-toastify/dist/ReactToastify.css'
 import 'react-nestable/dist/styles/index.css'
+import 'react-toastify/dist/ReactToastify.css'
 import '@web-ui/styles/style.scss'
 
 export const revalidate = 0

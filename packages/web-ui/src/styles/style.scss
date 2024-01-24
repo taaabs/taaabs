@@ -281,10 +281,12 @@ strong {
   text-align: center;
 }
 
-.nestable-item .nestable-list, .nestable-item-copy .nestable-list {
+.nestable-item .nestable-list,
+.nestable-item-copy .nestable-list {
   margin-top: 0;
 }
-.nestable .nestable-list,.nestable .nestable-list{
+.nestable .nestable-list,
+.nestable .nestable-list {
   padding-left: var(--distance-7px);
   margin-left: var(--distance-6px);
   border-left: var(--border-primary);
