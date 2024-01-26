@@ -56,6 +56,7 @@ export const Primary = () => {
       on_item_click={() => {}}
       is_updating={false}
       selected_tag_ids={[1, 3, 5]}
+      query_params=""
     />
   )
 }

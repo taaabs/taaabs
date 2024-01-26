@@ -4,7 +4,7 @@
 .container {
   width: 100%;
   border-radius: var(--border-radius-12px);
-  background-color: var(--SimpleSelectDropdown-background);
+  background-color: var(--plain-white);
   display: flex;
   flex-direction: column;
   border: var(--border-primary);
@@ -24,7 +24,7 @@
   align-items: center;
   @include transition-150ms;
   @include hover {
-    background-color: var(--SimpleSelectDropdown-background-hover);
+    background-color: var(--neutral50);
     border-top: var(--border-primary);
     & + .item {
       border-top: var(--border-primary);
@@ -58,11 +58,11 @@
     display: flex;
     align-items: center;
     border-radius: var(--border-radius-4px);
-    background-color: var(--SimpleSelectDropdown-checkbox-background);
+    background-color: var(--blue100);
     padding: var(--distance-4px);
-    border: 1px solid var(--SimpleSelectDropdown-checkbox-border-color);
+    border: 1px solid var(--blue300);
     svg {
-      fill: var(--SimpleSelectDropdown-checkbox-foreground);
+      fill: var(--blue800);
       visibility: hidden;
       width: var(--icon-dimension-12px);
       height: var(--icon-dimension-12px);

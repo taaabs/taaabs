@@ -568,9 +568,7 @@ const BookmarksPage: React.FC = () => {
                       bookmarks_slice_state.is_updating_bookmarks
                     )
                       return
-                    filter_view_options.set_filter_query_param_and_clear_others(
-                      Filter.None,
-                    )
+                    tag_view_options.clear_selected_tags()
                     if (
                       bookmarks_slice_state.showing_bookmarks_fetched_by_ids
                     ) {
@@ -606,8 +604,10 @@ const BookmarksPage: React.FC = () => {
                   tag_view_options.set_many_tags_to_query_params({
                     tag_ids,
                   })
+                  set_close_aside_count(close_aside_count + 1)
                 }}
                 dragged_tag={tag_view_options.dragged_tag}
+                query_params={query_params.toString()}
               />
             )}
           </>
@@ -1094,7 +1094,6 @@ const BookmarksPage: React.FC = () => {
                   // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed).
                   dragged_tag={tag_view_options.dragged_tag}
                   on_mouse_up={async () => {
-                    // Mouse up tries to add potentially dragged tag.
                     if (
                       !tag_view_options.dragged_tag ||
                       tag_view_options.dragged_tag.source_bookmark_id ==

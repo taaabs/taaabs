@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify'
 
 import 'react-nestable/dist/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
+import 'use-context-menu/styles.css'
 import '@web-ui/styles/style.scss'
 
 export const revalidate = 0

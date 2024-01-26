@@ -443,12 +443,12 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     >
                       <stop
                         offset="0%"
-                        stopColor="var(--Months-chart-fill)"
+                        stopColor="#2563eb"
                         stopOpacity={1}
                       />
                       <stop
                         offset="100%"
-                        stopColor="var(--Months-chart-fill)"
+                        stopColor="#2563eb"
                         stopOpacity={0}
                       />
                     </linearGradient>
@@ -472,7 +472,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     type="basis"
                     dataKey="bookmark_count"
                     strokeWidth={2}
-                    stroke="var(--Months-chart-stroke)"
+                    stroke="#1d4ed8"
                     isAnimationActive={false}
                     fill="transparent"
                     strokeOpacity={bookmark_count == 0 ? 0 : 1}

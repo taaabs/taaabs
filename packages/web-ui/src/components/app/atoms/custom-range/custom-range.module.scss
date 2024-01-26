@@ -54,7 +54,7 @@
         border-radius: 6px;
       }
       &__total::before {
-        background: var(--Months-chart-stroke);
+        background: #1d4ed8;
       }
 
       &__starred::before {
@@ -89,7 +89,7 @@
     @include transition-150ms(background-color);
     border-radius: var(--border-radius-999px);
     @include hover {
-      background: var(--Months-clear-background-hover);
+      background: var(--neutral100);
     }
     svg {
       width: var(--icon-dimension-16px);
@@ -123,13 +123,13 @@
       }
       > g > rect {
         @include transition-150ms(stroke);
-        fill: var(--Months-chart-brush-handle-fill);
+        fill: #fff;
         rx: var(--border-radius-8px);
         stroke: var(--neutral350);
       }
       > g > line {
         @include transition-150ms(stroke);
-        stroke: var(--Months-chart-brush-handle);
+        stroke: var(--neutral350);
         &:first-of-type {
           transform: translateY(-0.6px);
         }

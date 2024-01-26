@@ -31,40 +31,17 @@
   --header-transparent-background: rgba(255, 255, 255, 0.8);
   --blue-box-background: var(--blue50);
 
-  // Components
-  --Icon-fill: var(--plain-black);
-  --Button-background: var(--brand-color);
-  --Button-background-hover: var(--blue800);
-  --ButtonOutlined-icon-background: var(--plain-white);
-  --UserForHeader-icon-background: var(--neutral100);
-  --SearchBox-background: var(--plain-white);
-  --SearchBox-shadow: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.03);
-  --SearchBox-shadow-hover: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.06);
-  --TitleBar-background-desktop: var(--blue50);
-  --TitleBar-background-mobile: rgba(219, 234, 254, 0.5);
-  --TitleBar-primary-foreground: var(--brand-color);
   --skeleton-base-color: var(--neutral100);
   --skeleton-highlight-color: var(--neutral25);
-  --SimpleSelectDropdown-background: var(--plain-white);
-  --SimpleSelectDropdown-background-hover: var(--neutral50);
-  --SimpleSelectDropdown-checkbox-background: var(--blue100);
-  --SimpleSelectDropdown-checkbox-border-color: var(--blue300);
-  --SimpleSelectDropdown-checkbox-foreground: var(--blue800);
-  --Months-background: var(--plain-white);
-  --Months-clear-background-hover: var(--neutral100);
-  --Months-chart-fill: #2563eb; // Values for recharts must be passed directly.
-  --Months-chart-stroke: #1d4ed8;
-  --Months-chart-brush-handle-fill: #fff;
-  --Months-chart-brush-handle: var(--neutral350);
-  --Tags-selected-foreground: var(--yellow800);
-  --Tags-first-char-foregrouond: var(--brand-color);
-  --Tags-first-char-background: var(--blue50);
 
   // Toast overrides
   --toastify-color-success: var(--brand-color);
   --toastify-color-info: var(--brand-color);
   --toastify-color-error: var(--red);
   --toastify-text-color-light: var(--text-color-normal);
+
+  // Context menu overrides
+  --context-menu-background-color: transparent;
 }
 
 *,
@@ -286,9 +263,8 @@ strong {
 .nestable-item-copy .nestable-list {
   margin-top: 0;
 }
-.nestable .nestable-list,
 .nestable .nestable-list {
-  padding-left: var(--distance-7px);
+  padding-left: 0;
   margin-left: var(--distance-8px);
   border-left: var(--border-primary);
 }
@@ -296,9 +272,20 @@ strong {
 .nestable-item-copy {
   margin: 0;
 }
+.nestable-item {
+  margin-left: var(--distance-7px);
+}
 .nestable-item.is-dragging::before {
   background: var(--neutral200);
   border: none;
   border-radius: var(--border-radius-12px);
-  outline: var(--distance-3px) solid var(--background);
+}
+.nestable-drag-layer {
+  visibility: hidden;
+}
+
+.useContextMenu_ContextMenu {
+  overflow: visible;
+  animation: fade-in var(--transition-duration-150ms)
+    var(--transition-timing-function) forwards;
 }

@@ -16,6 +16,8 @@ import HomeFilled from '../../../../assets/icons/home-filled.svg'
 import Home from '../../../../assets/icons/home.svg'
 import Info from '../../../../assets/icons/info.svg'
 import LessThan from '../../../../assets/icons/less-than.svg'
+import OverviewFilled from '../../../../assets/icons/overview-filled.svg'
+import Overview from '../../../../assets/icons/overview.svg'
 import Recent from '../../../../assets/icons/recent.svg'
 import Remove from '../../../../assets/icons/remove.svg'
 import Search from '../../../../assets/icons/search.svg'
@@ -56,6 +58,8 @@ export namespace Icon {
     | 'HOME'
     | 'INFO'
     | 'LESS_THAN'
+    | 'OVERVIEW'
+    | 'OVERVIEW_FILLED'
     | 'RECENT'
     | 'REMOVE'
     | 'SEARCH'
@@ -159,6 +163,12 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'NOTIFICATIONS':
       icon = <Notifications />
+      break
+    case 'OVERVIEW':
+      icon = <Overview />
+      break
+    case 'OVERVIEW_FILLED':
+      icon = <OverviewFilled />
       break
     case 'RECENT':
       icon = <Recent />

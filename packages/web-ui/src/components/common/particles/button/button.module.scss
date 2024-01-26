@@ -6,13 +6,13 @@
   align-items: center;
   flex-shrink: 0;
   color: var(--plain-white);
-  background: var(--Button-background);
+  background: var(--brand-color);
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   @include transition-150ms(background-color);
   border-radius: var(--border-radius-999px);
   @include hover {
-    background: var(--Button-background-hover);
+    background: var(--blue800);
   }
   padding-bottom: 0.1em !important;
   &--loading {

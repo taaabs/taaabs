@@ -20,12 +20,12 @@
   font-size: var(--font-size-14px);
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-  color: var(--Tags-first-char-foregrouond);
+  color: var(--brand-color);
   width: var(--distance-22px);
   margin-right: var(--distance-2px);
   &::before {
     content: '';
-    background: var(--Tags-first-char-background);
+    background: var(--blue50);
     position: absolute;
     width: var(--distance-24px);
     height: var(--distance-24px);

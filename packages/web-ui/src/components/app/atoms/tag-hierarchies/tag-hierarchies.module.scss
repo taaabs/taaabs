@@ -3,13 +3,13 @@
 
 .container {
   width: 100%;
-  > div > ol {
-    border: none !important;
-    padding-left: 0 !important;
-    margin-left: 0 !important;
-    > li > div .tag__spacer {
-      display: none;
-    }
+}
+.drop-zone {
+  height: var(--distance-60px);
+  opacity: 0.5;
+  @include transition-150ms(opacity);
+  &--visible {
+    opacity: 1;
   }
 }
 .collapse {
@@ -34,10 +34,12 @@
   white-space: nowrap;
   position: relative;
   &__spacer {
-    width: var(--distance-20px);
-    margin-right: var(--distance-3px);
-    height: var(--distance-1px);
-    background-color: var(--border-color-primary);
+    width: 4px;
+    height: 4px;
+    margin-right: 4px;
+    margin-left: 14px;
+    border-radius: 50%;
+    background-color: var(--brand-color);
     transform: translateX(calc(var(--distance-7px) * -1));
   }
   &__button {

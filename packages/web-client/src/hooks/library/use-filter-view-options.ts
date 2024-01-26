@@ -60,27 +60,6 @@ export const use_filter_view_options = () => {
     )
   }
 
-  const set_filter_query_param_and_clear_others = (filter: Filter) => {
-    const updated_query_params = update_query_params(
-      new URLSearchParams(),
-      'f',
-      filter == BookmarksFetchingDefaults.Common.filter
-        ? undefined
-        : Object.values(Filter).indexOf(filter).toString(),
-    )
-
-    clear_library_session_storage({
-      username: params.username as string,
-      query_parms: updated_query_params.toString(),
-    })
-
-    window.history.pushState(
-      {},
-      '',
-      window.location.pathname + '?' + updated_query_params,
-    )
-  }
-
   const clear_selected_stars = () => {
     let updated_query_params: URLSearchParams
     if (current_filter == Filter.StarredUnread) {
@@ -132,7 +111,6 @@ export const use_filter_view_options = () => {
   return {
     current_filter,
     set_filter_query_param,
-    set_filter_query_param_and_clear_others,
     clear_selected_stars,
     clear_unread,
   }
