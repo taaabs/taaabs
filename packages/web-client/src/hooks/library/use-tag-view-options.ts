@@ -3,7 +3,8 @@ import { update_query_params } from '@/utils/update-query-params'
 import { system_values } from '@shared/constants/system-values'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useParams, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 export const use_tag_view_options = () => {
   const query_params = useSearchParams()
@@ -16,6 +17,22 @@ export const use_tag_view_options = () => {
           .map((t) => parseInt(t))
       : [],
   )
+  const [dragged_tag, set_dragged_tag] = useState<{
+    id: number
+    name: string
+    source_bookmark_id?: number
+  }>()
+
+  // Clear dragged tag.
+  useEffect(() => {
+    const on_mouse_up = () => {
+      set_dragged_tag(undefined)
+    }
+    addEventListener('mouseup', on_mouse_up)
+    return () => {
+      removeEventListener('mouseup', on_mouse_up)
+    }
+  }, [])
 
   useUpdateEffect(() => {
     set_selected_tags(
@@ -29,7 +46,12 @@ export const use_tag_view_options = () => {
   }, [query_params])
 
   const add_tag_to_query_params = (tag_id: number) => {
-    if (selected_tags.length == system_values.library.max_selected_tags) return
+    if (selected_tags.length == system_values.library.max_selected_tags) {
+      toast.info(
+        `Up to ${system_values.library.max_selected_tags} tags can be selected at a time`,
+      )
+      return
+    }
 
     const current_tags = query_params.get('t')
       ? query_params
@@ -88,7 +110,7 @@ export const use_tag_view_options = () => {
   }
 
   const set_many_tags_to_query_params = (params: { tag_ids: number[] }) => {
-    if (params.tag_ids.length >= system_values.library.max_selected_tags) return
+    if (params.tag_ids.length > system_values.library.max_selected_tags) return
 
     const updated_query_params = update_query_params(
       query_params,
@@ -130,5 +152,7 @@ export const use_tag_view_options = () => {
     remove_tags_from_query_params,
     clear_selected_tags,
     set_many_tags_to_query_params,
+    dragged_tag,
+    set_dragged_tag,
   }
 }

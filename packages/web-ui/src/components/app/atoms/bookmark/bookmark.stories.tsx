@@ -19,6 +19,7 @@ export const Primary = () => (
       }}
     >
       <Bookmark
+        bookmark_id={1}
         stars={0}
         title="Lorem ipsum dolor sit amet"
         note="Lorem ipsum dolor sit amet"
@@ -41,13 +42,14 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
+        bookmark_id={1}
         stars={0}
         title="Lorem ipsum"
         note="Lorem ipsum dolor sit amet"
@@ -76,13 +78,14 @@ export const Primary = () => (
           [18, 2],
           [32, 2],
         ]}
-        is_search_result={true}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
+        bookmark_id={1}
         stars={0}
         title="Lorem ipsum dolor sit amet"
         is_unread={false}
@@ -100,13 +103,14 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
+        bookmark_id={1}
         stars={0}
         title="Lorem ipsum dolor sit amet"
         note="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies sapien nulla, at facilisis risus dictum sed."
@@ -128,16 +132,17 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       Compact:
       <br />
       <br />
       <Bookmark
+        bookmark_id={1}
         is_compact={true}
         stars={0}
         title="Lorem ipsum dolor sit amet"
@@ -160,13 +165,14 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
+        bookmark_id={1}
         stars={2}
         title="Lorem ipsum dolor sit amet"
         is_unread={false}
@@ -187,13 +193,14 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
+        bookmark_id={1}
         stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={true}
@@ -221,13 +228,14 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
+        bookmark_id={1}
         stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={false}
@@ -248,13 +256,14 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
+        bookmark_id={1}
         stars={2}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={true}
@@ -275,13 +284,14 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
+        bookmark_id={1}
         stars={2}
         title="Lorem ipsum dolor sit amet"
         is_unread={true}
@@ -302,13 +312,14 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
+        bookmark_id={1}
         stars={2}
         is_unread={true}
         tags={[
@@ -328,10 +339,10 @@ export const Primary = () => (
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         number_of_selected_tags={0}
-        is_search_result={false}
         should_dim_visited_links={false}
         updated_at=""
         is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
     </div>

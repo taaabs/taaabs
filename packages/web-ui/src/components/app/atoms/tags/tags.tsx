@@ -5,6 +5,7 @@ export namespace Tags {
   export type Props = {
     tags: Record<string, { id: number; yields: number }>
     on_click: (tag: number) => void
+    on_tag_drag_start: (params: { id: number; name: string }) => void
   }
 }
 
@@ -39,6 +40,12 @@ export const Tags: React.FC<Tags.Props> = memo(
                 className={styles.tag}
                 onClick={() => props.on_click(props.tags[tag_name].id)}
                 key={tag_name}
+                onMouseDown={() => {
+                  props.on_tag_drag_start({
+                    id: props.tags[tag_name].id,
+                    name: tag_name,
+                  })
+                }}
               >
                 <span>{tag_name}</span>
                 {props.tags[tag_name] && (

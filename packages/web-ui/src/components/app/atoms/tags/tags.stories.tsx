@@ -44,6 +44,7 @@ export const Primary = () => (
           },
         }}
         on_click={() => {}}
+        on_tag_drag_start={() => {}}
       />
       <StorybookSpacer />
       <Tags
@@ -74,6 +75,7 @@ export const Primary = () => (
           },
         }}
         on_click={() => {}}
+        on_tag_drag_start={() => {}}
       />
     </div>
   </StorybookMargin>

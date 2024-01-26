@@ -1,0 +1,20 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.tag {
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  color: var(--plain-white);
+  font-size: var(--font-size-13px);
+  display: flex;
+  align-items: center;
+  background-color: var(--blue700);
+  font-weight: var(--font-weight-inter-medium);
+  border-radius: var(--border-radius-999px);
+  padding: var(--distance-8px) var(--distance-12px);
+  box-shadow: var(--box-shadow-blue-strong);
+  opacity: 0;
+  @include transition-150ms(opacity);
+}

@@ -1,5 +1,3 @@
-'use client'
-
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import OutsideClickHandler from 'react-outside-click-handler'
@@ -47,8 +45,10 @@ import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolb
 import { use_popstate } from '@web-ui/components/app/atoms/custom-range/hooks/use-popstate'
 import { use_has_focus } from '@/hooks/misc/use-has-focus'
 import { TagHierarchies as UiAppAtom_TagHierarchies } from '@web-ui/components/app/atoms/tag-hierarchies'
+import { DraggedCursorTag as UiAppAtom_DraggedCursorTag } from '@web-ui/components/app/atoms/dragged-cursor-tag'
 import { use_tag_hierarchies } from '@/hooks/library/use-tag-hierarchies'
 import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
+import { system_values } from '@shared/constants/system-values'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -215,593 +215,558 @@ const BookmarksPage: React.FC = () => {
     filter_view_options.current_filter == Filter.ArchivedUnread
 
   return (
-    <UiAppTemplate_Library
-      show_bookmarks_skeleton={show_bookmarks_skeleton}
-      close_aside_count={close_aside_count}
-      mobile_title_bar={'Bookmarks'}
-      slot_search={
-        <UiAppAtom_LibrarySearch
-          search_string={search.search_string}
-          is_loading={search.is_initializing}
-          loading_progress_percentage={search.indexed_bookmarks_percentage}
-          placeholder={'Search in titles, notes, tags and links...'}
-          hints={!search.is_initializing ? search.hints : undefined}
-          on_click_hint={(i) => {
-            const search_string =
-              search.search_string + search.hints![i].completion
-            search.set_search_string(search_string)
-            search.query_db({ search_string })
-          }}
-          on_click_recent_hint_remove={(i) => {
-            const search_string =
-              search.hints![i].search_string + search.hints![i].completion
-            search.remove_recent_hint({ search_string })
-            search.clear_hints()
-            search.set_is_search_focused(false)
-          }}
-          is_focused={search.is_search_focused}
-          on_focus={async () => {
-            if (!search.is_initializing) {
-              search.set_is_search_focused(true)
+    <>
+      <UiAppAtom_DraggedCursorTag
+        tag_name={tag_view_options.dragged_tag?.name}
+      />
+      <UiAppTemplate_Library
+        show_bookmarks_skeleton={show_bookmarks_skeleton}
+        close_aside_count={close_aside_count}
+        mobile_title_bar={'Bookmarks'}
+        slot_search={
+          <UiAppAtom_LibrarySearch
+            search_string={search.search_string}
+            is_loading={search.is_initializing}
+            loading_progress_percentage={search.indexed_bookmarks_percentage}
+            placeholder={'Search in titles, notes, tags and links...'}
+            hints={!search.is_initializing ? search.hints : undefined}
+            on_click_hint={(i) => {
+              const search_string =
+                search.search_string + search.hints![i].completion
+              search.set_search_string(search_string)
+              search.query_db({ search_string })
+            }}
+            on_click_recent_hint_remove={(i) => {
+              const search_string =
+                search.hints![i].search_string + search.hints![i].completion
+              search.remove_recent_hint({ search_string })
+              search.clear_hints()
+              search.set_is_search_focused(false)
+            }}
+            is_focused={search.is_search_focused}
+            on_focus={async () => {
+              if (!search.is_initializing) {
+                search.set_is_search_focused(true)
 
-              search.set_selected_tags(
-                counts.selected_tags
-                  .filter((id) => {
-                    if (
-                      !bookmarks_slice_state.bookmarks ||
-                      !bookmarks_slice_state.bookmarks[0]
-                    )
-                      return false
-                    return (
-                      bookmarks_slice_state.bookmarks[0].tags?.findIndex(
-                        (tag) => tag.id == id,
-                      ) != -1
-                    )
-                  })
-                  .map((id) => {
-                    const name = bookmarks_slice_state.bookmarks![0].tags!.find(
-                      (tag) => tag.id == id,
-                    )!.name
-
-                    return name
-                  }),
-              )
-
-              if (search_cache_to_be_cleared) {
-                await search.clear_cached_data({
-                  is_archived: is_archived_filter,
-                })
-                set_search_cache_to_be_cleared(false)
-              }
-
-              const is_cache_stale = await search.check_is_cache_stale({
-                api_url: process.env.NEXT_PUBLIC_API_URL,
-                auth_token:
-                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                is_archived: is_archived_filter,
-              })
-
-              if (
-                (!is_archived_filter
-                  ? search.db === undefined
-                  : search.archived_db === undefined) ||
-                is_cache_stale
-              ) {
-                search.reset()
-                await search.init({
-                  is_archived: is_archived_filter,
-                })
-              }
-            }
-          }}
-          on_change={(value) => {
-            if (search.is_initializing) return
-            search.set_search_string(value)
-            if (!value) {
-              bookmarks.get_bookmarks({})
-            }
-          }}
-          on_submit={() => {
-            if (search.is_initializing || search.count == 0) return
-            if (search.search_string.trim()) {
-              search.query_db({ search_string: search.search_string })
-            }
-          }}
-          on_blur={() => {
-            search.clear_hints()
-            search.set_is_search_focused(false)
-          }}
-          results_count={search.search_string ? search?.count : undefined}
-          on_clear_click={() => {
-            search.reset()
-            bookmarks.get_bookmarks({})
-          }}
-          is_slash_shortcut_disabled={modal_context?.modal !== undefined}
-          on_click_get_help={() => {}}
-          translations={{
-            footer_tip: 'Tags, filters and custom range affect results.',
-            get_help_link: 'Get help',
-          }}
-        />
-      }
-      slot_toolbar={
-        <UiAppAtom_Toolbar
-          toggleable_buttons={[
-            {
-              label: 'Starred',
-              is_toggled:
-                filter_view_options.current_filter == Filter.Starred ||
-                filter_view_options.current_filter == Filter.StarredUnread ||
-                filter_view_options.current_filter == Filter.ArchivedStarred ||
-                filter_view_options.current_filter ==
-                  Filter.ArchivedStarredUnread,
-              on_click: () => {
-                if (
-                  bookmarks_slice_state.is_fetching_first_bookmarks ||
-                  bookmarks_slice_state.is_fetching_more_bookmarks ||
-                  counts.is_fetching_counts_data
-                )
-                  return
-                if (filter_view_options.current_filter == Filter.None) {
-                  filter_view_options.set_filter_query_param(Filter.Starred)
-                } else if (
-                  filter_view_options.current_filter == Filter.Starred
-                ) {
-                  filter_view_options.set_filter_query_param(Filter.None)
-                } else if (
-                  filter_view_options.current_filter == Filter.StarredUnread
-                ) {
-                  filter_view_options.set_filter_query_param(Filter.Unread)
-                } else if (
-                  filter_view_options.current_filter == Filter.ArchivedStarred
-                ) {
-                  filter_view_options.set_filter_query_param(Filter.Archived)
-                } else if (
-                  filter_view_options.current_filter ==
-                  Filter.ArchivedStarredUnread
-                ) {
-                  filter_view_options.set_filter_query_param(
-                    Filter.ArchivedUnread,
-                  )
-                } else if (
-                  filter_view_options.current_filter == Filter.Unread
-                ) {
-                  filter_view_options.set_filter_query_param(
-                    Filter.StarredUnread,
-                  )
-                } else if (
-                  filter_view_options.current_filter == Filter.Archived
-                ) {
-                  filter_view_options.set_filter_query_param(
-                    Filter.ArchivedStarred,
-                  )
-                } else if (
-                  filter_view_options.current_filter == Filter.ArchivedUnread
-                ) {
-                  filter_view_options.set_filter_query_param(
-                    Filter.ArchivedStarredUnread,
-                  )
-                }
-              },
-            },
-            ...(!username
-              ? [
-                  {
-                    label: 'Unread',
-                    is_toggled:
-                      filter_view_options.current_filter == Filter.Unread ||
-                      filter_view_options.current_filter ==
-                        Filter.StarredUnread ||
-                      filter_view_options.current_filter ==
-                        Filter.ArchivedUnread ||
-                      filter_view_options.current_filter ==
-                        Filter.ArchivedStarredUnread,
-                    on_click: () => {
+                search.set_selected_tags(
+                  counts.selected_tags
+                    .filter((id) => {
                       if (
-                        bookmarks_slice_state.is_fetching_first_bookmarks ||
-                        bookmarks_slice_state.is_fetching_more_bookmarks ||
-                        counts.is_fetching_counts_data
+                        !bookmarks_slice_state.bookmarks ||
+                        !bookmarks_slice_state.bookmarks[0]
                       )
-                        return
+                        return false
+                      return (
+                        bookmarks_slice_state.bookmarks[0].tags?.findIndex(
+                          (tag) => tag.id == id,
+                        ) != -1
+                      )
+                    })
+                    .map((id) => {
+                      const name =
+                        bookmarks_slice_state.bookmarks![0].tags!.find(
+                          (tag) => tag.id == id,
+                        )!.name
 
-                      if (filter_view_options.current_filter == Filter.None) {
-                        filter_view_options.set_filter_query_param(
-                          Filter.Unread,
-                        )
-                      } else if (
-                        filter_view_options.current_filter == Filter.Unread
-                      ) {
-                        filter_view_options.set_filter_query_param(Filter.None)
-                      } else if (
-                        filter_view_options.current_filter ==
-                        Filter.StarredUnread
-                      ) {
-                        filter_view_options.set_filter_query_param(
-                          Filter.Starred,
-                        )
-                      } else if (
-                        filter_view_options.current_filter ==
-                        Filter.ArchivedUnread
-                      ) {
-                        filter_view_options.set_filter_query_param(
-                          Filter.Archived,
-                        )
-                      } else if (
-                        filter_view_options.current_filter ==
-                        Filter.ArchivedStarredUnread
-                      ) {
-                        filter_view_options.set_filter_query_param(
-                          Filter.ArchivedStarred,
-                        )
-                      } else if (
-                        filter_view_options.current_filter == Filter.Starred
-                      ) {
-                        filter_view_options.set_filter_query_param(
-                          Filter.StarredUnread,
-                        )
-                      } else if (
-                        filter_view_options.current_filter == Filter.Archived
-                      ) {
-                        filter_view_options.set_filter_query_param(
-                          Filter.ArchivedUnread,
-                        )
-                      } else if (
-                        filter_view_options.current_filter ==
-                        Filter.ArchivedStarred
-                      ) {
-                        filter_view_options.set_filter_query_param(
-                          Filter.ArchivedStarredUnread,
-                        )
-                      }
-                    },
-                  },
-                ]
-              : []),
-            {
-              label: 'Archived',
-              is_toggled:
-                filter_view_options.current_filter == Filter.Archived ||
-                filter_view_options.current_filter == Filter.ArchivedStarred ||
-                filter_view_options.current_filter == Filter.ArchivedUnread ||
-                filter_view_options.current_filter ==
-                  Filter.ArchivedStarredUnread,
-              on_click: () => {
-                if (
-                  bookmarks_slice_state.is_fetching_first_bookmarks ||
-                  bookmarks_slice_state.is_fetching_more_bookmarks ||
-                  counts.is_fetching_counts_data
+                      return name
+                    }),
                 )
-                  return
 
-                if (filter_view_options.current_filter == Filter.None) {
-                  filter_view_options.set_filter_query_param(Filter.Archived)
-                } else if (
-                  filter_view_options.current_filter == Filter.Starred
-                ) {
-                  filter_view_options.set_filter_query_param(
-                    Filter.ArchivedStarred,
-                  )
-                } else if (
-                  filter_view_options.current_filter == Filter.Unread
-                ) {
-                  filter_view_options.set_filter_query_param(
-                    Filter.ArchivedUnread,
-                  )
-                } else if (
-                  filter_view_options.current_filter == Filter.StarredUnread
-                ) {
-                  filter_view_options.set_filter_query_param(
-                    Filter.ArchivedStarredUnread,
-                  )
-                } else if (
-                  filter_view_options.current_filter == Filter.Archived
-                ) {
-                  filter_view_options.set_filter_query_param(Filter.None)
-                } else if (
-                  filter_view_options.current_filter == Filter.ArchivedStarred
-                ) {
-                  filter_view_options.set_filter_query_param(Filter.Starred)
-                } else if (
-                  filter_view_options.current_filter == Filter.ArchivedUnread
-                ) {
-                  filter_view_options.set_filter_query_param(Filter.Unread)
-                } else if (
-                  filter_view_options.current_filter ==
-                  Filter.ArchivedStarredUnread
-                ) {
-                  filter_view_options.set_filter_query_param(
-                    Filter.StarredUnread,
-                  )
+                if (search_cache_to_be_cleared) {
+                  await search.clear_cached_data({
+                    is_archived: is_archived_filter,
+                  })
+                  set_search_cache_to_be_cleared(false)
                 }
-              },
-            },
-          ]}
-          icon_buttons={[
-            {
-              icon_variant:
-                bookmarks_slice_state.density == 'default'
-                  ? 'DENSITY_DEFAULT'
-                  : 'DENSITY_COMPACT',
-              on_click: () => {
-                if (bookmarks_slice_state.is_fetching_data) return
-                set_close_aside_count(close_aside_count + 1)
-                setTimeout(() => {
-                  dispatch(
-                    bookmarks_actions.set_density(
-                      bookmarks_slice_state.density == 'default'
-                        ? 'compact'
-                        : 'default',
-                    ),
-                  )
-                  if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
-                    search.get_bookmarks({})
-                  } else {
-                    bookmarks.get_bookmarks({})
-                  }
-                }, 0)
-              },
-            },
-            { icon_variant: 'THREE_DOTS', on_click: () => {} },
-          ]}
-        />
-      }
-      slot_sidebar={
-        <>
-          <UiAppAtom_NavigationForLibrarySidebar
-            navigation_items={[
+
+                const is_cache_stale = await search.check_is_cache_stale({
+                  api_url: process.env.NEXT_PUBLIC_API_URL,
+                  auth_token:
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                  is_archived: is_archived_filter,
+                })
+
+                if (
+                  (!is_archived_filter
+                    ? search.db === undefined
+                    : search.archived_db === undefined) ||
+                  is_cache_stale
+                ) {
+                  search.reset()
+                  await search.init({
+                    is_archived: is_archived_filter,
+                  })
+                }
+              }
+            }}
+            on_change={(value) => {
+              if (search.is_initializing) return
+              search.set_search_string(value)
+              if (!value) {
+                bookmarks.get_bookmarks({})
+              }
+            }}
+            on_submit={() => {
+              if (search.is_initializing || search.count == 0) return
+              if (search.search_string.trim()) {
+                search.query_db({ search_string: search.search_string })
+              }
+            }}
+            on_blur={() => {
+              search.clear_hints()
+              search.set_is_search_focused(false)
+            }}
+            results_count={search.search_string ? search?.count : undefined}
+            on_clear_click={() => {
+              search.reset()
+              bookmarks.get_bookmarks({})
+            }}
+            is_slash_shortcut_disabled={modal_context?.modal !== undefined}
+            on_click_get_help={() => {}}
+            translations={{
+              footer_tip: 'Tags, filters and custom range affect results.',
+              get_help_link: 'Get help',
+            }}
+          />
+        }
+        slot_toolbar={
+          <UiAppAtom_Toolbar
+            toggleable_buttons={[
               {
-                label: 'All bookmarks',
+                label: 'Starred',
+                is_toggled:
+                  filter_view_options.current_filter == Filter.Starred ||
+                  filter_view_options.current_filter == Filter.StarredUnread ||
+                  filter_view_options.current_filter ==
+                    Filter.ArchivedStarred ||
+                  filter_view_options.current_filter ==
+                    Filter.ArchivedStarredUnread,
                 on_click: () => {
                   if (
                     bookmarks_slice_state.is_fetching_first_bookmarks ||
-                    bookmarks_slice_state.is_updating_bookmarks
+                    bookmarks_slice_state.is_fetching_more_bookmarks ||
+                    counts.is_fetching_counts_data
                   )
                     return
-                  filter_view_options.set_filter_query_param_and_clear_others(
-                    Filter.None,
-                  )
-                  if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
-                    search.reset()
-                    if (filter_view_options.current_filter == Filter.None) {
-                      bookmarks.get_bookmarks({})
-                    }
+                  if (filter_view_options.current_filter == Filter.None) {
+                    filter_view_options.set_filter_query_param(Filter.Starred)
+                  } else if (
+                    filter_view_options.current_filter == Filter.Starred
+                  ) {
+                    filter_view_options.set_filter_query_param(Filter.None)
+                  } else if (
+                    filter_view_options.current_filter == Filter.StarredUnread
+                  ) {
+                    filter_view_options.set_filter_query_param(Filter.Unread)
+                  } else if (
+                    filter_view_options.current_filter == Filter.ArchivedStarred
+                  ) {
+                    filter_view_options.set_filter_query_param(Filter.Archived)
+                  } else if (
+                    filter_view_options.current_filter ==
+                    Filter.ArchivedStarredUnread
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      Filter.ArchivedUnread,
+                    )
+                  } else if (
+                    filter_view_options.current_filter == Filter.Unread
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      Filter.StarredUnread,
+                    )
+                  } else if (
+                    filter_view_options.current_filter == Filter.Archived
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      Filter.ArchivedStarred,
+                    )
+                  } else if (
+                    filter_view_options.current_filter == Filter.ArchivedUnread
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      Filter.ArchivedStarredUnread,
+                    )
                   }
-                  set_close_aside_count(close_aside_count + 1)
                 },
-                is_active: !tag_view_options.selected_tags.length,
               },
-            ]}
-          />
-          {tag_hierarchies.tree !== undefined && (
-            <UiAppAtom_TagHierarchies
-              tree={tag_hierarchies.tree}
-              on_update={async (tree) => {
-                await dispatch(
-                  tag_hierarchies_actions.update_tag_hierarchies({
-                    update_tag_hierarchies_params: {
-                      tree,
-                    },
-                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                    auth_token:
-                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                  }),
-                )
-                toast.success('Tag hierarchies has beed updated')
-              }}
-              selected_tag_ids={tag_view_options.selected_tags}
-              is_updating={tag_hierarchies.is_updating || false}
-              on_item_click={(tag_ids) => {
-                tag_view_options.set_many_tags_to_query_params({
-                  tag_ids,
-                })
-              }}
-            />
-          )}
-        </>
-      }
-      slot_aside={
-        <UiAppTemplate_LibraryAside
-          feedback_label="Send feedback"
-          on_feedback_click={() => {}}
-          slot_sort_by={{
-            button: is_hydrated ? (
-              <UiAppAtom_ButtonSelect
-                label="Sort by"
-                current_value={_sort_by_option_to_label(
-                  sort_by_view_options.current_sort_by,
-                )}
-                is_active={is_sort_by_dropdown_visible}
-                on_click={toggle_sort_by_dropdown}
-              />
-            ) : (
-              <UiAppAtom_ButtonSelectSkeleton />
-            ),
-            is_dropdown_visible: is_sort_by_dropdown_visible,
-            dropdown: is_hydrated && (
-              <OutsideClickHandler
-                onOutsideClick={toggle_sort_by_dropdown}
-                disabled={!is_sort_by_dropdown_visible}
-              >
-                <UiAppAtom_DropdownMenu
-                  items={[
+              ...(!username
+                ? [
                     {
-                      label: _sort_by_option_to_label(SortBy.CreatedAt),
+                      label: 'Unread',
+                      is_toggled:
+                        filter_view_options.current_filter == Filter.Unread ||
+                        filter_view_options.current_filter ==
+                          Filter.StarredUnread ||
+                        filter_view_options.current_filter ==
+                          Filter.ArchivedUnread ||
+                        filter_view_options.current_filter ==
+                          Filter.ArchivedStarredUnread,
                       on_click: () => {
-                        toggle_sort_by_dropdown()
                         if (
-                          sort_by_view_options.current_sort_by ==
-                            SortBy.CreatedAt ||
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
                           bookmarks_slice_state.is_fetching_more_bookmarks ||
                           counts.is_fetching_counts_data
                         )
                           return
-                        sort_by_view_options.set_sort_by_query_param(
-                          SortBy.CreatedAt,
-                        )
-                      },
-                      is_selected:
-                        sort_by_view_options.current_sort_by ==
-                        SortBy.CreatedAt,
-                    },
-                    {
-                      label: _sort_by_option_to_label(SortBy.UpdatedAt),
-                      on_click: () => {
-                        toggle_sort_by_dropdown()
-                        if (
-                          sort_by_view_options.current_sort_by ==
-                            SortBy.UpdatedAt ||
-                          bookmarks_slice_state.is_fetching_first_bookmarks ||
-                          bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          counts.is_fetching_counts_data
-                        )
-                          return
-                        sort_by_view_options.set_sort_by_query_param(
-                          SortBy.UpdatedAt,
-                        )
-                      },
-                      is_selected:
-                        sort_by_view_options.current_sort_by ==
-                        SortBy.UpdatedAt,
-                    },
-                    ...(!username
-                      ? [
-                          {
-                            label: _sort_by_option_to_label(SortBy.VisitedAt),
-                            on_click: () => {
-                              toggle_sort_by_dropdown()
-                              if (
-                                sort_by_view_options.current_sort_by ==
-                                  SortBy.VisitedAt ||
-                                bookmarks_slice_state.is_fetching_first_bookmarks ||
-                                bookmarks_slice_state.is_fetching_more_bookmarks ||
-                                counts.is_fetching_counts_data
-                              )
-                                return
-                              sort_by_view_options.set_sort_by_query_param(
-                                SortBy.VisitedAt,
-                              )
-                            },
-                            is_selected:
-                              sort_by_view_options.current_sort_by ==
-                              SortBy.VisitedAt,
-                          },
-                        ]
-                      : []),
-                  ]}
-                />
-              </OutsideClickHandler>
-            ),
-          }}
-          slot_order={{
-            button: is_hydrated ? (
-              <UiAppAtom_ButtonSelect
-                label="Order"
-                current_value={_order_option_to_label(
-                  order_view_options.current_order,
-                )}
-                is_active={is_order_dropdown_visible}
-                on_click={toggle_order_dropdown}
-              />
-            ) : (
-              <UiAppAtom_ButtonSelectSkeleton />
-            ),
-            is_dropdown_visible: is_order_dropdown_visible,
-            dropdown: is_hydrated && (
-              <OutsideClickHandler
-                onOutsideClick={toggle_order_dropdown}
-                disabled={!is_order_dropdown_visible}
-              >
-                <UiAppAtom_DropdownMenu
-                  items={[
-                    {
-                      label: _order_option_to_label(Order.Desc),
-                      on_click: () => {
-                        toggle_order_dropdown()
-                        if (
-                          order_view_options.current_order == Order.Desc ||
-                          bookmarks_slice_state.is_fetching_first_bookmarks ||
-                          bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          counts.is_fetching_counts_data
-                        )
-                          return
-                        order_view_options.set_order_query_param(Order.Desc)
-                      },
 
-                      is_selected:
-                        order_view_options.current_order == Order.Desc,
-                    },
-                    {
-                      label: _order_option_to_label(Order.Asc),
-                      on_click: () => {
-                        toggle_order_dropdown()
-                        if (
-                          order_view_options.current_order == Order.Asc ||
-                          bookmarks_slice_state.is_fetching_first_bookmarks ||
-                          bookmarks_slice_state.is_fetching_more_bookmarks ||
-                          counts.is_fetching_counts_data
-                        )
-                          return
-                        order_view_options.set_order_query_param(Order.Asc)
+                        if (filter_view_options.current_filter == Filter.None) {
+                          filter_view_options.set_filter_query_param(
+                            Filter.Unread,
+                          )
+                        } else if (
+                          filter_view_options.current_filter == Filter.Unread
+                        ) {
+                          filter_view_options.set_filter_query_param(
+                            Filter.None,
+                          )
+                        } else if (
+                          filter_view_options.current_filter ==
+                          Filter.StarredUnread
+                        ) {
+                          filter_view_options.set_filter_query_param(
+                            Filter.Starred,
+                          )
+                        } else if (
+                          filter_view_options.current_filter ==
+                          Filter.ArchivedUnread
+                        ) {
+                          filter_view_options.set_filter_query_param(
+                            Filter.Archived,
+                          )
+                        } else if (
+                          filter_view_options.current_filter ==
+                          Filter.ArchivedStarredUnread
+                        ) {
+                          filter_view_options.set_filter_query_param(
+                            Filter.ArchivedStarred,
+                          )
+                        } else if (
+                          filter_view_options.current_filter == Filter.Starred
+                        ) {
+                          filter_view_options.set_filter_query_param(
+                            Filter.StarredUnread,
+                          )
+                        } else if (
+                          filter_view_options.current_filter == Filter.Archived
+                        ) {
+                          filter_view_options.set_filter_query_param(
+                            Filter.ArchivedUnread,
+                          )
+                        } else if (
+                          filter_view_options.current_filter ==
+                          Filter.ArchivedStarred
+                        ) {
+                          filter_view_options.set_filter_query_param(
+                            Filter.ArchivedStarredUnread,
+                          )
+                        }
                       },
-                      is_selected:
-                        order_view_options.current_order == Order.Asc,
                     },
-                  ]}
-                />
-              </OutsideClickHandler>
-            ),
-          }}
-          slot_custom_range={
-            show_custom_range ? (
-              <div
-                style={{
-                  pointerEvents:
+                  ]
+                : []),
+              {
+                label: 'Archived',
+                is_toggled:
+                  filter_view_options.current_filter == Filter.Archived ||
+                  filter_view_options.current_filter ==
+                    Filter.ArchivedStarred ||
+                  filter_view_options.current_filter == Filter.ArchivedUnread ||
+                  filter_view_options.current_filter ==
+                    Filter.ArchivedStarredUnread,
+                on_click: () => {
+                  if (
                     bookmarks_slice_state.is_fetching_first_bookmarks ||
                     bookmarks_slice_state.is_fetching_more_bookmarks ||
                     counts.is_fetching_counts_data
-                      ? 'none'
-                      : 'all',
+                  )
+                    return
+
+                  if (filter_view_options.current_filter == Filter.None) {
+                    filter_view_options.set_filter_query_param(Filter.Archived)
+                  } else if (
+                    filter_view_options.current_filter == Filter.Starred
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      Filter.ArchivedStarred,
+                    )
+                  } else if (
+                    filter_view_options.current_filter == Filter.Unread
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      Filter.ArchivedUnread,
+                    )
+                  } else if (
+                    filter_view_options.current_filter == Filter.StarredUnread
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      Filter.ArchivedStarredUnread,
+                    )
+                  } else if (
+                    filter_view_options.current_filter == Filter.Archived
+                  ) {
+                    filter_view_options.set_filter_query_param(Filter.None)
+                  } else if (
+                    filter_view_options.current_filter == Filter.ArchivedStarred
+                  ) {
+                    filter_view_options.set_filter_query_param(Filter.Starred)
+                  } else if (
+                    filter_view_options.current_filter == Filter.ArchivedUnread
+                  ) {
+                    filter_view_options.set_filter_query_param(Filter.Unread)
+                  } else if (
+                    filter_view_options.current_filter ==
+                    Filter.ArchivedStarredUnread
+                  ) {
+                    filter_view_options.set_filter_query_param(
+                      Filter.StarredUnread,
+                    )
+                  }
+                },
+              },
+            ]}
+            icon_buttons={[
+              {
+                icon_variant:
+                  bookmarks_slice_state.density == 'default'
+                    ? 'DENSITY_DEFAULT'
+                    : 'DENSITY_COMPACT',
+                on_click: () => {
+                  if (bookmarks_slice_state.is_fetching_data) return
+                  set_close_aside_count(close_aside_count + 1)
+                  setTimeout(() => {
+                    dispatch(
+                      bookmarks_actions.set_density(
+                        bookmarks_slice_state.density == 'default'
+                          ? 'compact'
+                          : 'default',
+                      ),
+                    )
+                    if (
+                      bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+                    ) {
+                      search.get_bookmarks({})
+                    } else {
+                      bookmarks.get_bookmarks({})
+                    }
+                  }, 0)
+                },
+              },
+              { icon_variant: 'THREE_DOTS', on_click: () => {} },
+            ]}
+          />
+        }
+        slot_sidebar={
+          <>
+            <UiAppAtom_NavigationForLibrarySidebar
+              navigation_items={[
+                {
+                  label: 'All bookmarks',
+                  on_click: () => {
+                    if (
+                      bookmarks_slice_state.is_fetching_first_bookmarks ||
+                      bookmarks_slice_state.is_updating_bookmarks
+                    )
+                      return
+                    filter_view_options.set_filter_query_param_and_clear_others(
+                      Filter.None,
+                    )
+                    if (
+                      bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+                    ) {
+                      search.reset()
+                      if (filter_view_options.current_filter == Filter.None) {
+                        bookmarks.get_bookmarks({})
+                      }
+                    }
+                    set_close_aside_count(close_aside_count + 1)
+                  },
+                  is_active: !tag_view_options.selected_tags.length,
+                },
+              ]}
+            />
+            {tag_hierarchies.tree !== undefined && (
+              <UiAppAtom_TagHierarchies
+                tree={tag_hierarchies.tree}
+                on_update={(tree) => {
+                  dispatch(
+                    tag_hierarchies_actions.update_tag_hierarchies({
+                      update_tag_hierarchies_params: {
+                        tree,
+                      },
+                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                      auth_token:
+                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                    }),
+                  )
                 }}
-              >
-                <CustomRange
-                  counts={counts.months || undefined}
-                  on_yyyymm_change={date_view_options.set_gte_lte_query_params}
-                  clear_date_range={
-                    date_view_options.clear_gte_lte_query_params
-                  }
-                  current_gte={
-                    parseInt(query_params.get('gte') || '0') || undefined
-                  }
-                  current_lte={
-                    parseInt(query_params.get('lte') || '0') || undefined
-                  }
-                  selected_tags={query_params.get('t') || undefined}
-                  has_results={
-                    bookmarks_slice_state.bookmarks &&
-                    !bookmarks_slice_state.is_fetching_first_bookmarks
-                      ? bookmarks_slice_state.bookmarks.length > 0
-                      : undefined
-                  }
-                  is_fetching_data={
-                    bookmarks_slice_state.is_fetching_first_bookmarks
-                  }
-                  is_fetching_counts_data={
-                    counts_slice_state.is_fetching_counts_data
-                  }
-                  is_range_selector_disabled={
-                    sort_by_view_options.current_sort_by == SortBy.UpdatedAt ||
-                    sort_by_view_options.current_sort_by == SortBy.VisitedAt
-                  }
+                selected_tag_ids={tag_view_options.selected_tags}
+                is_updating={tag_hierarchies.is_updating || false}
+                on_item_click={(tag_ids) => {
+                  tag_view_options.set_many_tags_to_query_params({
+                    tag_ids,
+                  })
+                }}
+                dragged_tag={tag_view_options.dragged_tag}
+              />
+            )}
+          </>
+        }
+        slot_aside={
+          <UiAppTemplate_LibraryAside
+            feedback_label="Send feedback"
+            on_feedback_click={() => {}}
+            slot_sort_by={{
+              button: is_hydrated ? (
+                <UiAppAtom_ButtonSelect
+                  label="Sort by"
+                  current_value={_sort_by_option_to_label(
+                    sort_by_view_options.current_sort_by,
+                  )}
+                  is_active={is_sort_by_dropdown_visible}
+                  on_click={toggle_sort_by_dropdown}
                 />
-              </div>
-            ) : (
-              <UiAppAtom_CustomRangeSkeleton />
-            )
-          }
-          slot_tags={
-            <>
-              {!show_tags_skeleton ? (
+              ) : (
+                <UiAppAtom_ButtonSelectSkeleton />
+              ),
+              is_dropdown_visible: is_sort_by_dropdown_visible,
+              dropdown: is_hydrated && (
+                <OutsideClickHandler
+                  onOutsideClick={toggle_sort_by_dropdown}
+                  disabled={!is_sort_by_dropdown_visible}
+                >
+                  <UiAppAtom_DropdownMenu
+                    items={[
+                      {
+                        label: _sort_by_option_to_label(SortBy.CreatedAt),
+                        on_click: () => {
+                          toggle_sort_by_dropdown()
+                          if (
+                            sort_by_view_options.current_sort_by ==
+                              SortBy.CreatedAt ||
+                            bookmarks_slice_state.is_fetching_first_bookmarks ||
+                            bookmarks_slice_state.is_fetching_more_bookmarks ||
+                            counts.is_fetching_counts_data
+                          )
+                            return
+                          sort_by_view_options.set_sort_by_query_param(
+                            SortBy.CreatedAt,
+                          )
+                        },
+                        is_selected:
+                          sort_by_view_options.current_sort_by ==
+                          SortBy.CreatedAt,
+                      },
+                      {
+                        label: _sort_by_option_to_label(SortBy.UpdatedAt),
+                        on_click: () => {
+                          toggle_sort_by_dropdown()
+                          if (
+                            sort_by_view_options.current_sort_by ==
+                              SortBy.UpdatedAt ||
+                            bookmarks_slice_state.is_fetching_first_bookmarks ||
+                            bookmarks_slice_state.is_fetching_more_bookmarks ||
+                            counts.is_fetching_counts_data
+                          )
+                            return
+                          sort_by_view_options.set_sort_by_query_param(
+                            SortBy.UpdatedAt,
+                          )
+                        },
+                        is_selected:
+                          sort_by_view_options.current_sort_by ==
+                          SortBy.UpdatedAt,
+                      },
+                      ...(!username
+                        ? [
+                            {
+                              label: _sort_by_option_to_label(SortBy.VisitedAt),
+                              on_click: () => {
+                                toggle_sort_by_dropdown()
+                                if (
+                                  sort_by_view_options.current_sort_by ==
+                                    SortBy.VisitedAt ||
+                                  bookmarks_slice_state.is_fetching_first_bookmarks ||
+                                  bookmarks_slice_state.is_fetching_more_bookmarks ||
+                                  counts.is_fetching_counts_data
+                                )
+                                  return
+                                sort_by_view_options.set_sort_by_query_param(
+                                  SortBy.VisitedAt,
+                                )
+                              },
+                              is_selected:
+                                sort_by_view_options.current_sort_by ==
+                                SortBy.VisitedAt,
+                            },
+                          ]
+                        : []),
+                    ]}
+                  />
+                </OutsideClickHandler>
+              ),
+            }}
+            slot_order={{
+              button: is_hydrated ? (
+                <UiAppAtom_ButtonSelect
+                  label="Order"
+                  current_value={_order_option_to_label(
+                    order_view_options.current_order,
+                  )}
+                  is_active={is_order_dropdown_visible}
+                  on_click={toggle_order_dropdown}
+                />
+              ) : (
+                <UiAppAtom_ButtonSelectSkeleton />
+              ),
+              is_dropdown_visible: is_order_dropdown_visible,
+              dropdown: is_hydrated && (
+                <OutsideClickHandler
+                  onOutsideClick={toggle_order_dropdown}
+                  disabled={!is_order_dropdown_visible}
+                >
+                  <UiAppAtom_DropdownMenu
+                    items={[
+                      {
+                        label: _order_option_to_label(Order.Desc),
+                        on_click: () => {
+                          toggle_order_dropdown()
+                          if (
+                            order_view_options.current_order == Order.Desc ||
+                            bookmarks_slice_state.is_fetching_first_bookmarks ||
+                            bookmarks_slice_state.is_fetching_more_bookmarks ||
+                            counts.is_fetching_counts_data
+                          )
+                            return
+                          order_view_options.set_order_query_param(Order.Desc)
+                        },
+
+                        is_selected:
+                          order_view_options.current_order == Order.Desc,
+                      },
+                      {
+                        label: _order_option_to_label(Order.Asc),
+                        on_click: () => {
+                          toggle_order_dropdown()
+                          if (
+                            order_view_options.current_order == Order.Asc ||
+                            bookmarks_slice_state.is_fetching_first_bookmarks ||
+                            bookmarks_slice_state.is_fetching_more_bookmarks ||
+                            counts.is_fetching_counts_data
+                          )
+                            return
+                          order_view_options.set_order_query_param(Order.Asc)
+                        },
+                        is_selected:
+                          order_view_options.current_order == Order.Asc,
+                      },
+                    ]}
+                  />
+                </OutsideClickHandler>
+              ),
+            }}
+            slot_custom_range={
+              show_custom_range ? (
                 <div
                   style={{
                     pointerEvents:
@@ -809,212 +774,392 @@ const BookmarksPage: React.FC = () => {
                       bookmarks_slice_state.is_fetching_more_bookmarks ||
                       counts.is_fetching_counts_data
                         ? 'none'
-                        : undefined,
+                        : 'all',
                   }}
                 >
-                  {(bookmarks_slice_state.is_fetching_first_bookmarks
-                    ? counts.selected_tags.length > 0
-                    : tag_view_options.selected_tags.length > 0) && (
-                    <UiAppAtom_SelectedTags
-                      key={`${pop_count}${bookmarks_slice_state.is_fetching_first_bookmarks}`}
-                      selected_tags={(bookmarks_slice_state.is_fetching_first_bookmarks
-                        ? counts.selected_tags
-                        : tag_view_options.selected_tags
-                      )
-                        .filter((id) => {
-                          if (
-                            !bookmarks_slice_state.bookmarks ||
-                            !bookmarks_slice_state.bookmarks[0]
-                          )
-                            return false
-                          return (
-                            bookmarks_slice_state.bookmarks[0].tags?.findIndex(
-                              (tag) => tag.id == id,
-                            ) != -1
-                          )
-                        })
-                        .map((id) => {
-                          const name =
-                            bookmarks_slice_state.bookmarks![0].tags!.find(
-                              (tag) => tag.id == id,
-                            )!.name
-
-                          return {
-                            id,
-                            name,
-                          }
-                        })}
-                      on_selected_tag_click={(tag_id) =>
-                        tag_view_options.remove_tags_from_query_params([tag_id])
-                      }
-                    />
-                  )}
-                  <UiAppAtom_Tags
-                    tags={
-                      counts.tags
-                        ? Object.fromEntries(
-                            Object.entries(counts.tags).filter((tag) =>
-                              bookmarks_slice_state.is_fetching_first_bookmarks
-                                ? !counts.selected_tags.includes(tag[1].id)
-                                : !tag_view_options.selected_tags.includes(
-                                    tag[1].id,
-                                  ),
-                            ),
-                          )
-                        : {}
+                  <CustomRange
+                    counts={counts.months || undefined}
+                    on_yyyymm_change={
+                      date_view_options.set_gte_lte_query_params
                     }
-                    on_click={tag_view_options.add_tag_to_query_params}
+                    clear_date_range={
+                      date_view_options.clear_gte_lte_query_params
+                    }
+                    current_gte={
+                      parseInt(query_params.get('gte') || '0') || undefined
+                    }
+                    current_lte={
+                      parseInt(query_params.get('lte') || '0') || undefined
+                    }
+                    selected_tags={query_params.get('t') || undefined}
+                    has_results={
+                      bookmarks_slice_state.bookmarks &&
+                      !bookmarks_slice_state.is_fetching_first_bookmarks
+                        ? bookmarks_slice_state.bookmarks.length > 0
+                        : undefined
+                    }
+                    is_fetching_data={
+                      bookmarks_slice_state.is_fetching_first_bookmarks
+                    }
+                    is_fetching_counts_data={
+                      counts_slice_state.is_fetching_counts_data
+                    }
+                    is_range_selector_disabled={
+                      sort_by_view_options.current_sort_by ==
+                        SortBy.UpdatedAt ||
+                      sort_by_view_options.current_sort_by == SortBy.VisitedAt
+                    }
                   />
                 </div>
               ) : (
-                <UiAppAtom_TagsSkeleton />
-              )}
-            </>
-          }
-        />
-      }
-      is_updating_bookmarks={bookmarks_slice_state.is_updating_bookmarks}
-      is_fetching_first_bookmarks={
-        bookmarks_slice_state.is_fetching_first_bookmarks
-      }
-      is_fetching_more_bookmarks={
-        bookmarks_slice_state.is_fetching_more_bookmarks
-      }
-      has_more_bookmarks={
-        (!search.search_string && bookmarks_slice_state.has_more_bookmarks) ||
-        (search.search_string &&
-          bookmarks_slice_state.bookmarks &&
-          search.result !== undefined &&
-          bookmarks_slice_state.bookmarks.length < search.result.hits.length) ||
-        false
-      }
-      get_more_bookmarks={() => {
-        if (search.search_string) {
-          search.get_bookmarks({ should_get_next_page: true })
-        } else {
-          bookmarks.get_bookmarks({ should_get_next_page: true })
+                <UiAppAtom_CustomRangeSkeleton />
+              )
+            }
+            slot_tags={
+              <>
+                {!show_tags_skeleton ? (
+                  <div
+                    style={{
+                      pointerEvents:
+                        bookmarks_slice_state.is_fetching_first_bookmarks ||
+                        bookmarks_slice_state.is_fetching_more_bookmarks ||
+                        counts.is_fetching_counts_data
+                          ? 'none'
+                          : undefined,
+                    }}
+                  >
+                    {(bookmarks_slice_state.is_fetching_first_bookmarks
+                      ? counts.selected_tags.length > 0
+                      : tag_view_options.selected_tags.length > 0) && (
+                      <UiAppAtom_SelectedTags
+                        key={`${pop_count}${bookmarks_slice_state.is_fetching_first_bookmarks}`}
+                        selected_tags={(bookmarks_slice_state.is_fetching_first_bookmarks
+                          ? counts.selected_tags
+                          : tag_view_options.selected_tags
+                        )
+                          .filter((id) => {
+                            if (
+                              !bookmarks_slice_state.bookmarks ||
+                              !bookmarks_slice_state.bookmarks[0]
+                            )
+                              return false
+                            return (
+                              bookmarks_slice_state.bookmarks[0].tags?.findIndex(
+                                (tag) => tag.id == id,
+                              ) != -1
+                            )
+                          })
+                          .map((id) => {
+                            const name =
+                              bookmarks_slice_state.bookmarks![0].tags!.find(
+                                (tag) => tag.id == id,
+                              )!.name
+
+                            return {
+                              id,
+                              name,
+                            }
+                          })}
+                        on_selected_tag_click={(tag_id) =>
+                          tag_view_options.remove_tags_from_query_params([
+                            tag_id,
+                          ])
+                        }
+                      />
+                    )}
+                    <UiAppAtom_Tags
+                      tags={
+                        counts.tags
+                          ? Object.fromEntries(
+                              Object.entries(counts.tags).filter((tag) =>
+                                bookmarks_slice_state.is_fetching_first_bookmarks
+                                  ? !counts.selected_tags.includes(tag[1].id)
+                                  : !tag_view_options.selected_tags.includes(
+                                      tag[1].id,
+                                    ),
+                              ),
+                            )
+                          : {}
+                      }
+                      on_click={tag_view_options.add_tag_to_query_params}
+                      on_tag_drag_start={tag_view_options.set_dragged_tag}
+                    />
+                  </div>
+                ) : (
+                  <UiAppAtom_TagsSkeleton />
+                )}
+              </>
+            }
+          />
         }
-      }}
-      slot_bookmarks={
-        bookmarks_slice_state.bookmarks
-          ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
-              <UiAppAtom_Bookmark
-                key={`${bookmark.id}
+        is_updating_bookmarks={bookmarks_slice_state.is_updating_bookmarks}
+        is_fetching_first_bookmarks={
+          bookmarks_slice_state.is_fetching_first_bookmarks
+        }
+        is_fetching_more_bookmarks={
+          bookmarks_slice_state.is_fetching_more_bookmarks
+        }
+        has_more_bookmarks={
+          (!search.search_string && bookmarks_slice_state.has_more_bookmarks) ||
+          (search.search_string &&
+            bookmarks_slice_state.bookmarks &&
+            search.result !== undefined &&
+            bookmarks_slice_state.bookmarks.length <
+              search.result.hits.length) ||
+          false
+        }
+        get_more_bookmarks={() => {
+          if (search.search_string) {
+            search.get_bookmarks({ should_get_next_page: true })
+          } else {
+            bookmarks.get_bookmarks({ should_get_next_page: true })
+          }
+        }}
+        slot_bookmarks={
+          bookmarks_slice_state.bookmarks
+            ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
+                <UiAppAtom_Bookmark
+                  bookmark_id={bookmark.id}
+                  on_tag_drag_start={tag_view_options.set_dragged_tag}
+                  key={`${bookmark.id}
                   ${
                     // This fixes density change flashing bookmarks which where previously out of the viewport, thus not rendered.
                     bookmarks_slice_state.first_bookmarks_fetched_at_timestamp ||
                     ''
                   }
                   `}
-                is_compact={bookmark.is_compact}
-                updated_at={bookmark.updated_at}
-                title={bookmark.title}
-                note={bookmark.note}
-                on_click={() => {
-                  if (bookmarks_slice_state.density == 'compact') {
-                    if (
-                      bookmark.is_compact ||
-                      bookmark.is_compact === undefined
-                    ) {
-                      dispatch(
-                        bookmarks_actions.set_bookmark_is_compact({
-                          index: i,
-                          is_compact: false,
-                        }),
-                      )
-                    } else {
-                      dispatch(
-                        bookmarks_actions.set_bookmark_is_compact({
-                          index: i,
-                          is_compact: true,
-                        }),
-                      )
+                  is_compact={bookmark.is_compact}
+                  updated_at={bookmark.updated_at}
+                  title={bookmark.title}
+                  note={bookmark.note}
+                  on_click={() => {
+                    if (bookmarks_slice_state.density == 'compact') {
+                      if (
+                        bookmark.is_compact ||
+                        bookmark.is_compact === undefined
+                      ) {
+                        dispatch(
+                          bookmarks_actions.set_bookmark_is_compact({
+                            index: i,
+                            is_compact: false,
+                          }),
+                        )
+                      } else {
+                        dispatch(
+                          bookmarks_actions.set_bookmark_is_compact({
+                            index: i,
+                            is_compact: true,
+                          }),
+                        )
+                      }
                     }
+                  }}
+                  is_fetching_bookmarks={
+                    bookmarks_slice_state.is_fetching_first_bookmarks
                   }
-                }}
-                is_fetching_bookmarks={
-                  bookmarks_slice_state.is_fetching_first_bookmarks
-                }
-                is_not_interactive={
-                  search.is_initializing || are_bookmark_menu_items_locked
-                }
-                date={
-                  !bookmarks_slice_state.is_fetching_first_bookmarks
-                    ? sort_by_view_options.current_sort_by == SortBy.CreatedAt
+                  is_not_interactive={
+                    search.is_initializing || are_bookmark_menu_items_locked
+                  }
+                  date={
+                    !bookmarks_slice_state.is_fetching_first_bookmarks
+                      ? sort_by_view_options.current_sort_by == SortBy.CreatedAt
+                        ? new Date(bookmark.created_at)
+                        : sort_by_view_options.current_sort_by ==
+                          SortBy.UpdatedAt
+                        ? new Date(bookmark.updated_at)
+                        : sort_by_view_options.current_sort_by ==
+                          SortBy.VisitedAt
+                        ? new Date(bookmark.visited_at)
+                        : new Date(bookmark.created_at)
+                      : sort_by_view_options.commited_sort_by ==
+                        SortBy.CreatedAt
                       ? new Date(bookmark.created_at)
-                      : sort_by_view_options.current_sort_by == SortBy.UpdatedAt
+                      : sort_by_view_options.commited_sort_by ==
+                        SortBy.UpdatedAt
                       ? new Date(bookmark.updated_at)
-                      : sort_by_view_options.current_sort_by == SortBy.VisitedAt
+                      : sort_by_view_options.commited_sort_by ==
+                        SortBy.VisitedAt
                       ? new Date(bookmark.visited_at)
                       : new Date(bookmark.created_at)
-                    : sort_by_view_options.commited_sort_by == SortBy.CreatedAt
-                    ? new Date(bookmark.created_at)
-                    : sort_by_view_options.commited_sort_by == SortBy.UpdatedAt
-                    ? new Date(bookmark.updated_at)
-                    : sort_by_view_options.commited_sort_by == SortBy.VisitedAt
-                    ? new Date(bookmark.visited_at)
-                    : new Date(bookmark.created_at)
-                }
-                counts_refreshed_at_timestamp={
-                  counts_slice_state.refreshed_at_timestamp
-                }
-                links={bookmark.links.map((link) => ({
-                  url: link.url,
-                  saves: link.saves,
-                  site_path: link.site_path,
-                }))}
-                number_of_selected_tags={
-                  bookmarks_slice_state.is_fetching_first_bookmarks
-                    ? counts.selected_tags.length
-                    : tag_view_options.selected_tags.length
-                }
-                query_params={query_params.toString()}
-                tags={
-                  bookmark.tags
-                    ? bookmark.tags.map((tag) => {
-                        const isSelected =
-                          bookmarks_slice_state.is_fetching_first_bookmarks
-                            ? counts.selected_tags.find((t) => t == tag.id) !=
-                              undefined
-                            : tag_view_options.selected_tags.find(
-                                (t) => t == tag.id,
-                              ) !== undefined
+                  }
+                  counts_refreshed_at_timestamp={
+                    counts_slice_state.refreshed_at_timestamp
+                  }
+                  links={bookmark.links.map((link) => ({
+                    url: link.url,
+                    saves: link.saves,
+                    site_path: link.site_path,
+                  }))}
+                  number_of_selected_tags={
+                    bookmarks_slice_state.is_fetching_first_bookmarks
+                      ? counts.selected_tags.length
+                      : tag_view_options.selected_tags.length
+                  }
+                  query_params={query_params.toString()}
+                  tags={
+                    bookmark.tags
+                      ? bookmark.tags.map((tag) => {
+                          const isSelected =
+                            bookmarks_slice_state.is_fetching_first_bookmarks
+                              ? counts.selected_tags.find((t) => t == tag.id) !=
+                                undefined
+                              : tag_view_options.selected_tags.find(
+                                  (t) => t == tag.id,
+                                ) !== undefined
 
-                        return {
-                          name: tag.name,
-                          isSelected,
-                          id: tag.id,
-                          yields:
-                            !isSelected && counts.tags && counts.tags[tag.name]
-                              ? counts.tags[tag.name].yields
-                              : undefined,
-                        }
+                          return {
+                            name: tag.name,
+                            isSelected,
+                            id: tag.id,
+                            yields:
+                              !isSelected &&
+                              counts.tags &&
+                              counts.tags[tag.name]
+                                ? counts.tags[tag.name].yields
+                                : undefined,
+                          }
+                        })
+                      : []
+                  }
+                  is_unread={bookmark.is_unread}
+                  stars={bookmark.stars}
+                  on_tag_click={tag_view_options.add_tag_to_query_params}
+                  on_selected_tag_click={(tag_id) =>
+                    tag_view_options.remove_tags_from_query_params([tag_id])
+                  }
+                  render_height={bookmark.render_height}
+                  set_render_height={(height) => {
+                    dispatch(
+                      bookmarks_actions.set_bookmark_render_height({
+                        index: i,
+                        height,
+                      }),
+                    )
+                  }}
+                  on_link_click={() => {
+                    const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit =
+                      {
+                        bookmark: {
+                          id: bookmark.id,
+                          created_at: bookmark.created_at,
+                          visited_at: bookmark.visited_at,
+                          updated_at: bookmark.updated_at,
+                          title: bookmark.title,
+                          note: bookmark.note,
+                          is_archived: is_archived_filter,
+                          is_unread: bookmark.is_unread,
+                          stars: bookmark.stars,
+                          links: bookmark.links.map((link) => ({
+                            url: link.url,
+                            site_path: link.site_path,
+                            is_public: link.is_public,
+                          })),
+                          tags: bookmark.tags.map((tag) => tag.name),
+                          tag_ids: bookmark.tags.map((tag) => tag.id),
+                        },
+                        visited_at: new Date().toISOString(),
+                      }
+                    localStorage.setItem(
+                      browser_storage.local_storage.authorized_library
+                        .recent_visit,
+                      JSON.stringify(recent_visit),
+                    )
+                  }}
+                  favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
+                  on_menu_click={async () => {
+                    if (username) return
+                    set_are_bookmarks_menu_items_locked(true)
+                    const is_cache_stale = await search.check_is_cache_stale({
+                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                      auth_token:
+                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                      is_archived: is_archived_filter,
+                    })
+                    if (
+                      !is_cache_stale &&
+                      (filter_view_options.current_filter != Filter.Archived
+                        ? !search.db
+                        : !search.archived_db)
+                    ) {
+                      await search.init({
+                        is_archived: is_archived_filter,
                       })
-                    : []
-                }
-                is_unread={bookmark.is_unread}
-                stars={bookmark.stars}
-                on_tag_click={tag_view_options.add_tag_to_query_params}
-                on_selected_tag_click={(tag_id) =>
-                  tag_view_options.remove_tags_from_query_params([tag_id])
-                }
-                render_height={bookmark.render_height}
-                set_render_height={(height) => {
-                  dispatch(
-                    bookmarks_actions.set_bookmark_render_height({
-                      index: i,
-                      height,
-                    }),
-                  )
-                }}
-                on_link_click={() => {
-                  const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit =
-                    {
+                    } else if (is_cache_stale) {
+                      await search.clear_cached_data({
+                        is_archived: is_archived_filter,
+                      })
+                    }
+                    set_are_bookmarks_menu_items_locked(false)
+                  }}
+                  // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed).
+                  dragged_tag={tag_view_options.dragged_tag}
+                  on_mouse_up={async () => {
+                    // Mouse up tries to add potentially dragged tag.
+                    if (
+                      !tag_view_options.dragged_tag ||
+                      tag_view_options.dragged_tag.source_bookmark_id ==
+                        bookmark.id
+                    )
+                      return
+                    if (
+                      bookmark.tags.length == system_values.bookmark.tags.limit
+                    ) {
+                      toast.error('Maximum number of tags is reached')
+                      return
+                    }
+                    if (
+                      bookmark.tags.findIndex(
+                        (tag) => tag.id == tag_view_options.dragged_tag!.id,
+                      ) != -1
+                    ) {
+                      return
+                    }
+                    const modified_bookmark: UpsertBookmark_Params = {
+                      bookmark_id: bookmark.id,
+                      is_public: bookmark.is_public,
+                      created_at: new Date(bookmark.created_at),
+                      title: bookmark.title,
+                      note: bookmark.note,
+                      is_archived: is_archived_filter,
+                      is_unread: bookmark.is_unread,
+                      stars: bookmark.stars,
+                      links: bookmark.links.map((link) => ({
+                        url: link.url,
+                        site_path: link.site_path,
+                        is_public: link.is_public,
+                      })),
+                      tags: [
+                        ...bookmark.tags.map((tag) => ({
+                          name: tag.name,
+                          is_public: tag.is_public,
+                        })),
+                        {
+                          name: tag_view_options.dragged_tag.name,
+                          is_public: bookmark.is_public,
+                        },
+                      ],
+                    }
+                    const updated_bookmark = await dispatch(
+                      bookmarks_actions.upsert_bookmark({
+                        bookmark: modified_bookmark,
+                        last_authorized_counts_params:
+                          JSON.parse(
+                            sessionStorage.getItem(
+                              browser_storage.session_storage.library
+                                .last_authorized_counts_params,
+                            ) || '',
+                          ) || undefined,
+                        api_url: process.env.NEXT_PUBLIC_API_URL,
+                        auth_token:
+                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                      }),
+                    )
+                    await search.update_searchable_bookmark({
                       bookmark: {
                         id: bookmark.id,
                         created_at: bookmark.created_at,
                         visited_at: bookmark.visited_at,
-                        updated_at: bookmark.updated_at,
+                        updated_at: updated_bookmark.updated_at,
                         title: bookmark.title,
                         note: bookmark.note,
                         is_archived: is_archived_filter,
@@ -1023,616 +1168,719 @@ const BookmarksPage: React.FC = () => {
                         links: bookmark.links.map((link) => ({
                           url: link.url,
                           site_path: link.site_path,
-                          is_public: link.is_public,
                         })),
                         tags: bookmark.tags.map((tag) => tag.name),
                         tag_ids: bookmark.tags.map((tag) => tag.id),
                       },
-                      visited_at: new Date().toISOString(),
-                    }
-                  localStorage.setItem(
-                    browser_storage.local_storage.authorized_library
-                      .recent_visit,
-                    JSON.stringify(recent_visit),
-                  )
-                }}
-                favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
-                on_menu_click={async () => {
-                  if (username) return
-                  set_are_bookmarks_menu_items_locked(true)
-                  const is_cache_stale = await search.check_is_cache_stale({
-                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                    auth_token:
-                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                    is_archived: is_archived_filter,
-                  })
-                  if (
-                    !is_cache_stale &&
-                    (filter_view_options.current_filter != Filter.Archived
-                      ? !search.db
-                      : !search.archived_db)
-                  ) {
-                    await search.init({
-                      is_archived: is_archived_filter,
                     })
-                  } else if (is_cache_stale) {
-                    await search.clear_cached_data({
-                      is_archived: is_archived_filter,
-                    })
-                  }
-                  set_are_bookmarks_menu_items_locked(false)
-                }}
-                menu_slot={
-                  <UiAppAtom_DropdownMenu
-                    items={[
-                      ...(username
-                        ? [
-                            {
-                              label: 'Copy to mine',
-                              on_click: () => {},
-                              other_icon: (
-                                <UiCommonParticles_Icon variant="COPY" />
-                              ),
-                            },
-                          ]
-                        : []),
-                      ...(!username
-                        ? [
-                            {
-                              label: 'Mark as Unread',
-                              is_checked: bookmark.is_unread,
-                              is_disabled: are_bookmark_menu_items_locked,
-                              on_click: async () => {
-                                const is_unread = !bookmark.is_unread
-                                const modified_bookmark: UpsertBookmark_Params =
-                                  {
-                                    bookmark_id: bookmark.id,
-                                    is_public: bookmark.is_public,
-                                    created_at: new Date(bookmark.created_at),
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread,
-                                    stars: bookmark.stars,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                      is_public: link.is_public,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => ({
-                                      name: tag.name,
-                                      is_public: tag.is_public,
-                                    })),
-                                  }
-                                const updated_bookmark = await dispatch(
-                                  bookmarks_actions.upsert_bookmark({
-                                    bookmark: modified_bookmark,
-                                    last_authorized_counts_params:
-                                      JSON.parse(
-                                        sessionStorage.getItem(
-                                          browser_storage.session_storage
-                                            .library
-                                            .last_authorized_counts_params,
-                                        ) || '',
-                                      ) || undefined,
-                                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                                    auth_token:
-                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                  }),
-                                )
-                                await search.update_searchable_bookmark({
-                                  bookmark: {
-                                    id: bookmark.id,
-                                    created_at: bookmark.created_at,
-                                    visited_at: bookmark.visited_at,
-                                    updated_at: updated_bookmark.updated_at,
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread,
-                                    stars: bookmark.stars,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                      is_public: link.is_public,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => tag.name),
-                                    tag_ids: bookmark.tags.map((tag) => tag.id),
-                                  },
-                                })
-                                if (
-                                  search.count &&
-                                  (filter_view_options.current_filter ==
-                                    Filter.Unread ||
-                                    filter_view_options.current_filter ==
-                                      Filter.StarredUnread ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarredUnread) &&
-                                  bookmark.is_unread
-                                ) {
-                                  search.set_count(search.count! - 1)
-                                }
-                                if (
-                                  bookmarks_slice_state.bookmarks &&
-                                  bookmarks_slice_state.bookmarks.length == 1 &&
-                                  search.search_string.length
-                                ) {
+                    dispatch(
+                      bookmarks_actions.replace_bookmark({
+                        bookmark: updated_bookmark,
+                        last_authorized_counts_params:
+                          JSON.parse(
+                            sessionStorage.getItem(
+                              browser_storage.session_storage.library
+                                .last_authorized_counts_params,
+                            ) || '',
+                          ) || undefined,
+                        api_url: process.env.NEXT_PUBLIC_API_URL,
+                        auth_token:
+                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                      }),
+                    )
+                  }}
+                  menu_slot={
+                    <UiAppAtom_DropdownMenu
+                      items={[
+                        ...(username
+                          ? [
+                              {
+                                label: 'Copy to mine',
+                                on_click: () => {},
+                                other_icon: (
+                                  <UiCommonParticles_Icon variant="COPY" />
+                                ),
+                              },
+                            ]
+                          : []),
+                        ...(!username
+                          ? [
+                              {
+                                label: 'Mark as Unread',
+                                is_checked: bookmark.is_unread,
+                                is_disabled: are_bookmark_menu_items_locked,
+                                on_click: async () => {
+                                  const is_unread = !bookmark.is_unread
+                                  const modified_bookmark: UpsertBookmark_Params =
+                                    {
+                                      bookmark_id: bookmark.id,
+                                      is_public: bookmark.is_public,
+                                      created_at: new Date(bookmark.created_at),
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread,
+                                      stars: bookmark.stars,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                        is_public: link.is_public,
+                                      })),
+                                      tags: bookmark.tags.map((tag) => ({
+                                        name: tag.name,
+                                        is_public: tag.is_public,
+                                      })),
+                                    }
+                                  const updated_bookmark = await dispatch(
+                                    bookmarks_actions.upsert_bookmark({
+                                      bookmark: modified_bookmark,
+                                      last_authorized_counts_params:
+                                        JSON.parse(
+                                          sessionStorage.getItem(
+                                            browser_storage.session_storage
+                                              .library
+                                              .last_authorized_counts_params,
+                                          ) || '',
+                                        ) || undefined,
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                  await search.update_searchable_bookmark({
+                                    bookmark: {
+                                      id: bookmark.id,
+                                      created_at: bookmark.created_at,
+                                      visited_at: bookmark.visited_at,
+                                      updated_at: updated_bookmark.updated_at,
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread,
+                                      stars: bookmark.stars,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                        is_public: link.is_public,
+                                      })),
+                                      tags: bookmark.tags.map(
+                                        (tag) => tag.name,
+                                      ),
+                                      tag_ids: bookmark.tags.map(
+                                        (tag) => tag.id,
+                                      ),
+                                    },
+                                  })
                                   if (
-                                    !is_unread &&
+                                    search.count &&
                                     (filter_view_options.current_filter ==
                                       Filter.Unread ||
                                       filter_view_options.current_filter ==
-                                        Filter.StarredUnread)
+                                        Filter.StarredUnread ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarredUnread) &&
+                                    bookmark.is_unread
+                                  ) {
+                                    search.set_count(search.count! - 1)
+                                  }
+                                  if (
+                                    bookmarks_slice_state.bookmarks &&
+                                    bookmarks_slice_state.bookmarks.length ==
+                                      1 &&
+                                    search.search_string.length
+                                  ) {
+                                    if (
+                                      !is_unread &&
+                                      (filter_view_options.current_filter ==
+                                        Filter.Unread ||
+                                        filter_view_options.current_filter ==
+                                          Filter.StarredUnread)
+                                    ) {
+                                      search.reset()
+                                    }
+                                  }
+                                },
+                              },
+                              {
+                                label: <UiAppAtom_StarsForDropdown stars={1} />,
+                                is_checked: bookmark.stars == 1,
+                                is_disabled: are_bookmark_menu_items_locked,
+                                on_click: async () => {
+                                  const modified_bookmark: UpsertBookmark_Params =
+                                    {
+                                      bookmark_id: bookmark.id,
+                                      is_public: bookmark.is_public,
+                                      created_at: new Date(bookmark.created_at),
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars == 1 ? 0 : 1,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                        is_public: link.is_public,
+                                      })),
+                                      tags: bookmark.tags.map((tag) => ({
+                                        name: tag.name,
+                                        is_public: tag.is_public,
+                                      })),
+                                    }
+                                  const updated_bookmark = await dispatch(
+                                    bookmarks_actions.upsert_bookmark({
+                                      bookmark: modified_bookmark,
+                                      last_authorized_counts_params:
+                                        JSON.parse(
+                                          sessionStorage.getItem(
+                                            browser_storage.session_storage
+                                              .library
+                                              .last_authorized_counts_params,
+                                          ) || '',
+                                        ) || undefined,
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                  await search.update_searchable_bookmark({
+                                    bookmark: {
+                                      id: bookmark.id,
+                                      created_at: bookmark.created_at,
+                                      visited_at: bookmark.visited_at,
+                                      updated_at: updated_bookmark.updated_at,
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars == 1 ? 0 : 1,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                        is_public: link.is_public,
+                                      })),
+                                      tags: bookmark.tags.map(
+                                        (tag) => tag.name,
+                                      ),
+                                      tag_ids: bookmark.tags.map(
+                                        (tag) => tag.id,
+                                      ),
+                                    },
+                                  })
+                                  if (
+                                    search.count &&
+                                    (filter_view_options.current_filter ==
+                                      Filter.Starred ||
+                                      filter_view_options.current_filter ==
+                                        Filter.StarredUnread ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarred ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarredUnread) &&
+                                    bookmark.stars == 1
+                                  ) {
+                                    search.set_count(search.count - 1)
+                                  }
+                                  if (
+                                    bookmarks_slice_state.bookmarks &&
+                                    bookmarks_slice_state.bookmarks.length ==
+                                      1 &&
+                                    search.search_string.length
                                   ) {
                                     search.reset()
                                   }
-                                }
+                                },
                               },
-                            },
-                            {
-                              label: <UiAppAtom_StarsForDropdown stars={1} />,
-                              is_checked: bookmark.stars == 1,
-                              is_disabled: are_bookmark_menu_items_locked,
-                              on_click: async () => {
-                                const modified_bookmark: UpsertBookmark_Params =
-                                  {
-                                    bookmark_id: bookmark.id,
-                                    is_public: bookmark.is_public,
-                                    created_at: new Date(bookmark.created_at),
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars == 1 ? 0 : 1,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                      is_public: link.is_public,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => ({
-                                      name: tag.name,
-                                      is_public: tag.is_public,
-                                    })),
-                                  }
-                                const updated_bookmark = await dispatch(
-                                  bookmarks_actions.upsert_bookmark({
-                                    bookmark: modified_bookmark,
-                                    last_authorized_counts_params:
-                                      JSON.parse(
-                                        sessionStorage.getItem(
-                                          browser_storage.session_storage
-                                            .library
-                                            .last_authorized_counts_params,
-                                        ) || '',
-                                      ) || undefined,
-                                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                                    auth_token:
-                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                  }),
-                                )
-                                await search.update_searchable_bookmark({
-                                  bookmark: {
-                                    id: bookmark.id,
-                                    created_at: bookmark.created_at,
-                                    visited_at: bookmark.visited_at,
-                                    updated_at: updated_bookmark.updated_at,
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars == 1 ? 0 : 1,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                      is_public: link.is_public,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => tag.name),
-                                    tag_ids: bookmark.tags.map((tag) => tag.id),
-                                  },
-                                })
-                                if (
-                                  search.count &&
-                                  (filter_view_options.current_filter ==
-                                    Filter.Starred ||
-                                    filter_view_options.current_filter ==
-                                      Filter.StarredUnread ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarred ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarredUnread) &&
-                                  bookmark.stars == 1
-                                ) {
-                                  search.set_count(search.count - 1)
-                                }
-                                if (
-                                  bookmarks_slice_state.bookmarks &&
-                                  bookmarks_slice_state.bookmarks.length == 1 &&
-                                  search.search_string.length
-                                ) {
-                                  search.reset()
-                                }
-                              },
-                            },
-                            {
-                              label: <UiAppAtom_StarsForDropdown stars={2} />,
-                              is_checked: bookmark.stars == 2,
-                              is_disabled: are_bookmark_menu_items_locked,
-                              on_click: async () => {
-                                const modified_bookmark: UpsertBookmark_Params =
-                                  {
-                                    bookmark_id: bookmark.id,
-                                    is_public: bookmark.is_public,
-                                    created_at: new Date(bookmark.created_at),
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars == 2 ? 0 : 2,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                      is_public: link.is_public,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => ({
-                                      name: tag.name,
-                                      is_public: tag.is_public,
-                                    })),
-                                  }
-                                const updated_bookmark = await dispatch(
-                                  bookmarks_actions.upsert_bookmark({
-                                    bookmark: modified_bookmark,
-                                    last_authorized_counts_params:
-                                      JSON.parse(
-                                        sessionStorage.getItem(
-                                          browser_storage.session_storage
-                                            .library
-                                            .last_authorized_counts_params,
-                                        ) || '',
-                                      ) || undefined,
-                                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                                    auth_token:
-                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                  }),
-                                )
-                                await search.update_searchable_bookmark({
-                                  bookmark: {
-                                    id: bookmark.id,
-                                    created_at: bookmark.created_at,
-                                    visited_at: bookmark.visited_at,
-                                    updated_at: updated_bookmark.updated_at,
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars == 2 ? 0 : 2,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => tag.name),
-                                    tag_ids: bookmark.tags.map((tag) => tag.id),
-                                  },
-                                })
-                                if (
-                                  search.count &&
-                                  (filter_view_options.current_filter ==
-                                    Filter.Starred ||
-                                    filter_view_options.current_filter ==
-                                      Filter.StarredUnread ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarred ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarredUnread) &&
-                                  bookmark.stars == 2
-                                ) {
-                                  search.set_count(search.count - 1)
-                                }
-                                if (
-                                  bookmarks_slice_state.bookmarks &&
-                                  bookmarks_slice_state.bookmarks.length == 1 &&
-                                  search.search_string.length
-                                ) {
-                                  search.reset()
-                                }
-                              },
-                            },
-                            {
-                              label: <UiAppAtom_StarsForDropdown stars={3} />,
-                              is_checked: bookmark.stars == 3,
-                              is_disabled: are_bookmark_menu_items_locked,
-                              on_click: async () => {
-                                const modified_bookmark: UpsertBookmark_Params =
-                                  {
-                                    bookmark_id: bookmark.id,
-                                    is_public: bookmark.is_public,
-                                    created_at: new Date(bookmark.created_at),
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars == 3 ? 0 : 3,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                      is_public: link.is_public,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => ({
-                                      name: tag.name,
-                                      is_public: tag.is_public,
-                                    })),
-                                  }
-                                const updated_bookmark = await dispatch(
-                                  bookmarks_actions.upsert_bookmark({
-                                    bookmark: modified_bookmark,
-                                    last_authorized_counts_params:
-                                      JSON.parse(
-                                        sessionStorage.getItem(
-                                          browser_storage.session_storage
-                                            .library
-                                            .last_authorized_counts_params,
-                                        ) || '',
-                                      ) || undefined,
-                                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                                    auth_token:
-                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                  }),
-                                )
-                                await search.update_searchable_bookmark({
-                                  bookmark: {
-                                    id: bookmark.id,
-                                    created_at: bookmark.created_at,
-                                    visited_at: bookmark.visited_at,
-                                    updated_at: updated_bookmark.updated_at,
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars == 3 ? 0 : 3,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => tag.name),
-                                    tag_ids: bookmark.tags.map((tag) => tag.id),
-                                  },
-                                })
-                                if (
-                                  search.count &&
-                                  (filter_view_options.current_filter ==
-                                    Filter.Starred ||
-                                    filter_view_options.current_filter ==
-                                      Filter.StarredUnread ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarred ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarredUnread) &&
-                                  bookmark.stars == 3
-                                ) {
-                                  search.set_count(search.count - 1)
-                                }
-                                if (
-                                  bookmarks_slice_state.bookmarks &&
-                                  bookmarks_slice_state.bookmarks.length == 1 &&
-                                  search.search_string.length
-                                ) {
-                                  search.reset()
-                                }
-                              },
-                            },
-                            {
-                              label: <UiAppAtom_StarsForDropdown stars={4} />,
-                              is_checked: bookmark.stars == 4,
-                              is_disabled: are_bookmark_menu_items_locked,
-                              on_click: async () => {
-                                const modified_bookmark: UpsertBookmark_Params =
-                                  {
-                                    bookmark_id: bookmark.id,
-                                    is_public: bookmark.is_public,
-                                    created_at: new Date(bookmark.created_at),
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars == 4 ? 0 : 4,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                      is_public: link.is_public,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => ({
-                                      name: tag.name,
-                                      is_public: tag.is_public,
-                                    })),
-                                  }
-                                const updated_bookmark = await dispatch(
-                                  bookmarks_actions.upsert_bookmark({
-                                    bookmark: modified_bookmark,
-                                    last_authorized_counts_params:
-                                      JSON.parse(
-                                        sessionStorage.getItem(
-                                          browser_storage.session_storage
-                                            .library
-                                            .last_authorized_counts_params,
-                                        ) || '',
-                                      ) || undefined,
-                                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                                    auth_token:
-                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                  }),
-                                )
-                                await search.update_searchable_bookmark({
-                                  bookmark: {
-                                    id: bookmark.id,
-                                    created_at: bookmark.created_at,
-                                    visited_at: bookmark.visited_at,
-                                    updated_at: updated_bookmark.updated_at,
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars == 4 ? 0 : 4,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => tag.name),
-                                    tag_ids: bookmark.tags.map((tag) => tag.id),
-                                  },
-                                })
-                                if (
-                                  search.count &&
-                                  (filter_view_options.current_filter ==
-                                    Filter.Starred ||
-                                    filter_view_options.current_filter ==
-                                      Filter.StarredUnread ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarred ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarredUnread) &&
-                                  bookmark.stars == 4
-                                ) {
-                                  search.set_count(search.count - 1)
-                                }
-                                if (
-                                  bookmarks_slice_state.bookmarks &&
-                                  bookmarks_slice_state.bookmarks.length == 1 &&
-                                  search.search_string.length
-                                ) {
-                                  search.reset()
-                                }
-                              },
-                            },
-                            {
-                              label: <UiAppAtom_StarsForDropdown stars={5} />,
-                              is_checked: bookmark.stars == 5,
-                              is_disabled: are_bookmark_menu_items_locked,
-                              on_click: async () => {
-                                const modified_bookmark: UpsertBookmark_Params =
-                                  {
-                                    bookmark_id: bookmark.id,
-                                    is_public: bookmark.is_public,
-                                    created_at: new Date(bookmark.created_at),
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars == 5 ? 0 : 5,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                      is_public: link.is_public,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => ({
-                                      name: tag.name,
-                                      is_public: tag.is_public,
-                                    })),
-                                  }
-                                const updated_bookmark = await dispatch(
-                                  bookmarks_actions.upsert_bookmark({
-                                    bookmark: modified_bookmark,
-                                    last_authorized_counts_params:
-                                      JSON.parse(
-                                        sessionStorage.getItem(
-                                          browser_storage.session_storage
-                                            .library
-                                            .last_authorized_counts_params,
-                                        ) || '',
-                                      ) || undefined,
-                                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                                    auth_token:
-                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                  }),
-                                )
-                                await search.update_searchable_bookmark({
-                                  bookmark: {
-                                    id: bookmark.id,
-                                    created_at: bookmark.created_at,
-                                    visited_at: bookmark.visited_at,
-                                    updated_at: updated_bookmark.updated_at,
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars == 4 ? 0 : 4,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => tag.name),
-                                    tag_ids: bookmark.tags.map((tag) => tag.id),
-                                  },
-                                })
-                                if (
-                                  search.count &&
-                                  (filter_view_options.current_filter ==
-                                    Filter.Starred ||
-                                    filter_view_options.current_filter ==
-                                      Filter.StarredUnread ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarred ||
-                                    filter_view_options.current_filter ==
-                                      Filter.ArchivedStarredUnread) &&
-                                  bookmark.stars == 5
-                                ) {
-                                  search.set_count(search.count - 1)
-                                }
-                                if (
-                                  bookmarks_slice_state.bookmarks &&
-                                  bookmarks_slice_state.bookmarks.length == 1 &&
-                                  search.search_string.length
-                                ) {
-                                  search.reset()
-                                }
-                              },
-                            },
-                            {
-                              label: 'Edit',
-                              is_disabled: are_bookmark_menu_items_locked,
-                              on_click: async () => {
-                                const updated_bookmark =
-                                  await upsert_bookmark_modal({
-                                    modal_context,
-                                    bookmark,
-                                    is_archived: is_archived_filter,
-                                    auth_token:
-                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                  })
-                                await search.update_searchable_bookmark({
-                                  bookmark: {
-                                    id: bookmark.id,
-                                    is_archived: is_archived_filter,
-                                    is_unread: updated_bookmark.is_unread,
-                                    title: updated_bookmark.title,
-                                    note: updated_bookmark.note,
-                                    tags: updated_bookmark.tags.map(
-                                      (tag) => tag.name,
-                                    ),
-                                    links: updated_bookmark.links.map(
-                                      (link) => ({
+                              {
+                                label: <UiAppAtom_StarsForDropdown stars={2} />,
+                                is_checked: bookmark.stars == 2,
+                                is_disabled: are_bookmark_menu_items_locked,
+                                on_click: async () => {
+                                  const modified_bookmark: UpsertBookmark_Params =
+                                    {
+                                      bookmark_id: bookmark.id,
+                                      is_public: bookmark.is_public,
+                                      created_at: new Date(bookmark.created_at),
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars == 2 ? 0 : 2,
+                                      links: bookmark.links.map((link) => ({
                                         url: link.url,
                                         site_path: link.site_path,
-                                      }),
-                                    ),
-                                    created_at: updated_bookmark.created_at,
-                                    visited_at: bookmark.visited_at,
-                                    updated_at: updated_bookmark.updated_at,
+                                        is_public: link.is_public,
+                                      })),
+                                      tags: bookmark.tags.map((tag) => ({
+                                        name: tag.name,
+                                        is_public: tag.is_public,
+                                      })),
+                                    }
+                                  const updated_bookmark = await dispatch(
+                                    bookmarks_actions.upsert_bookmark({
+                                      bookmark: modified_bookmark,
+                                      last_authorized_counts_params:
+                                        JSON.parse(
+                                          sessionStorage.getItem(
+                                            browser_storage.session_storage
+                                              .library
+                                              .last_authorized_counts_params,
+                                          ) || '',
+                                        ) || undefined,
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                  await search.update_searchable_bookmark({
+                                    bookmark: {
+                                      id: bookmark.id,
+                                      created_at: bookmark.created_at,
+                                      visited_at: bookmark.visited_at,
+                                      updated_at: updated_bookmark.updated_at,
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars == 2 ? 0 : 2,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                      })),
+                                      tags: bookmark.tags.map(
+                                        (tag) => tag.name,
+                                      ),
+                                      tag_ids: bookmark.tags.map(
+                                        (tag) => tag.id,
+                                      ),
+                                    },
+                                  })
+                                  if (
+                                    search.count &&
+                                    (filter_view_options.current_filter ==
+                                      Filter.Starred ||
+                                      filter_view_options.current_filter ==
+                                        Filter.StarredUnread ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarred ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarredUnread) &&
+                                    bookmark.stars == 2
+                                  ) {
+                                    search.set_count(search.count - 1)
+                                  }
+                                  if (
+                                    bookmarks_slice_state.bookmarks &&
+                                    bookmarks_slice_state.bookmarks.length ==
+                                      1 &&
+                                    search.search_string.length
+                                  ) {
+                                    search.reset()
+                                  }
+                                },
+                              },
+                              {
+                                label: <UiAppAtom_StarsForDropdown stars={3} />,
+                                is_checked: bookmark.stars == 3,
+                                is_disabled: are_bookmark_menu_items_locked,
+                                on_click: async () => {
+                                  const modified_bookmark: UpsertBookmark_Params =
+                                    {
+                                      bookmark_id: bookmark.id,
+                                      is_public: bookmark.is_public,
+                                      created_at: new Date(bookmark.created_at),
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars == 3 ? 0 : 3,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                        is_public: link.is_public,
+                                      })),
+                                      tags: bookmark.tags.map((tag) => ({
+                                        name: tag.name,
+                                        is_public: tag.is_public,
+                                      })),
+                                    }
+                                  const updated_bookmark = await dispatch(
+                                    bookmarks_actions.upsert_bookmark({
+                                      bookmark: modified_bookmark,
+                                      last_authorized_counts_params:
+                                        JSON.parse(
+                                          sessionStorage.getItem(
+                                            browser_storage.session_storage
+                                              .library
+                                              .last_authorized_counts_params,
+                                          ) || '',
+                                        ) || undefined,
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                  await search.update_searchable_bookmark({
+                                    bookmark: {
+                                      id: bookmark.id,
+                                      created_at: bookmark.created_at,
+                                      visited_at: bookmark.visited_at,
+                                      updated_at: updated_bookmark.updated_at,
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars == 3 ? 0 : 3,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                      })),
+                                      tags: bookmark.tags.map(
+                                        (tag) => tag.name,
+                                      ),
+                                      tag_ids: bookmark.tags.map(
+                                        (tag) => tag.id,
+                                      ),
+                                    },
+                                  })
+                                  if (
+                                    search.count &&
+                                    (filter_view_options.current_filter ==
+                                      Filter.Starred ||
+                                      filter_view_options.current_filter ==
+                                        Filter.StarredUnread ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarred ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarredUnread) &&
+                                    bookmark.stars == 3
+                                  ) {
+                                    search.set_count(search.count - 1)
+                                  }
+                                  if (
+                                    bookmarks_slice_state.bookmarks &&
+                                    bookmarks_slice_state.bookmarks.length ==
+                                      1 &&
+                                    search.search_string.length
+                                  ) {
+                                    search.reset()
+                                  }
+                                },
+                              },
+                              {
+                                label: <UiAppAtom_StarsForDropdown stars={4} />,
+                                is_checked: bookmark.stars == 4,
+                                is_disabled: are_bookmark_menu_items_locked,
+                                on_click: async () => {
+                                  const modified_bookmark: UpsertBookmark_Params =
+                                    {
+                                      bookmark_id: bookmark.id,
+                                      is_public: bookmark.is_public,
+                                      created_at: new Date(bookmark.created_at),
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars == 4 ? 0 : 4,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                        is_public: link.is_public,
+                                      })),
+                                      tags: bookmark.tags.map((tag) => ({
+                                        name: tag.name,
+                                        is_public: tag.is_public,
+                                      })),
+                                    }
+                                  const updated_bookmark = await dispatch(
+                                    bookmarks_actions.upsert_bookmark({
+                                      bookmark: modified_bookmark,
+                                      last_authorized_counts_params:
+                                        JSON.parse(
+                                          sessionStorage.getItem(
+                                            browser_storage.session_storage
+                                              .library
+                                              .last_authorized_counts_params,
+                                          ) || '',
+                                        ) || undefined,
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                  await search.update_searchable_bookmark({
+                                    bookmark: {
+                                      id: bookmark.id,
+                                      created_at: bookmark.created_at,
+                                      visited_at: bookmark.visited_at,
+                                      updated_at: updated_bookmark.updated_at,
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars == 4 ? 0 : 4,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                      })),
+                                      tags: bookmark.tags.map(
+                                        (tag) => tag.name,
+                                      ),
+                                      tag_ids: bookmark.tags.map(
+                                        (tag) => tag.id,
+                                      ),
+                                    },
+                                  })
+                                  if (
+                                    search.count &&
+                                    (filter_view_options.current_filter ==
+                                      Filter.Starred ||
+                                      filter_view_options.current_filter ==
+                                        Filter.StarredUnread ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarred ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarredUnread) &&
+                                    bookmark.stars == 4
+                                  ) {
+                                    search.set_count(search.count - 1)
+                                  }
+                                  if (
+                                    bookmarks_slice_state.bookmarks &&
+                                    bookmarks_slice_state.bookmarks.length ==
+                                      1 &&
+                                    search.search_string.length
+                                  ) {
+                                    search.reset()
+                                  }
+                                },
+                              },
+                              {
+                                label: <UiAppAtom_StarsForDropdown stars={5} />,
+                                is_checked: bookmark.stars == 5,
+                                is_disabled: are_bookmark_menu_items_locked,
+                                on_click: async () => {
+                                  const modified_bookmark: UpsertBookmark_Params =
+                                    {
+                                      bookmark_id: bookmark.id,
+                                      is_public: bookmark.is_public,
+                                      created_at: new Date(bookmark.created_at),
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars == 5 ? 0 : 5,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                        is_public: link.is_public,
+                                      })),
+                                      tags: bookmark.tags.map((tag) => ({
+                                        name: tag.name,
+                                        is_public: tag.is_public,
+                                      })),
+                                    }
+                                  const updated_bookmark = await dispatch(
+                                    bookmarks_actions.upsert_bookmark({
+                                      bookmark: modified_bookmark,
+                                      last_authorized_counts_params:
+                                        JSON.parse(
+                                          sessionStorage.getItem(
+                                            browser_storage.session_storage
+                                              .library
+                                              .last_authorized_counts_params,
+                                          ) || '',
+                                        ) || undefined,
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                  await search.update_searchable_bookmark({
+                                    bookmark: {
+                                      id: bookmark.id,
+                                      created_at: bookmark.created_at,
+                                      visited_at: bookmark.visited_at,
+                                      updated_at: updated_bookmark.updated_at,
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars == 4 ? 0 : 4,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                      })),
+                                      tags: bookmark.tags.map(
+                                        (tag) => tag.name,
+                                      ),
+                                      tag_ids: bookmark.tags.map(
+                                        (tag) => tag.id,
+                                      ),
+                                    },
+                                  })
+                                  if (
+                                    search.count &&
+                                    (filter_view_options.current_filter ==
+                                      Filter.Starred ||
+                                      filter_view_options.current_filter ==
+                                        Filter.StarredUnread ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarred ||
+                                      filter_view_options.current_filter ==
+                                        Filter.ArchivedStarredUnread) &&
+                                    bookmark.stars == 5
+                                  ) {
+                                    search.set_count(search.count - 1)
+                                  }
+                                  if (
+                                    bookmarks_slice_state.bookmarks &&
+                                    bookmarks_slice_state.bookmarks.length ==
+                                      1 &&
+                                    search.search_string.length
+                                  ) {
+                                    search.reset()
+                                  }
+                                },
+                              },
+                              {
+                                label: 'Edit',
+                                is_disabled: are_bookmark_menu_items_locked,
+                                on_click: async () => {
+                                  const updated_bookmark =
+                                    await upsert_bookmark_modal({
+                                      modal_context,
+                                      bookmark,
+                                      is_archived: is_archived_filter,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    })
+                                  await search.update_searchable_bookmark({
+                                    bookmark: {
+                                      id: bookmark.id,
+                                      is_archived: is_archived_filter,
+                                      is_unread: updated_bookmark.is_unread,
+                                      title: updated_bookmark.title,
+                                      note: updated_bookmark.note,
+                                      tags: updated_bookmark.tags.map(
+                                        (tag) => tag.name,
+                                      ),
+                                      links: updated_bookmark.links.map(
+                                        (link) => ({
+                                          url: link.url,
+                                          site_path: link.site_path,
+                                        }),
+                                      ),
+                                      created_at: updated_bookmark.created_at,
+                                      visited_at: bookmark.visited_at,
+                                      updated_at: updated_bookmark.updated_at,
 
-                                    stars: updated_bookmark.stars,
-                                    tag_ids: updated_bookmark.tags.map(
-                                      (tag) => tag.id,
+                                      stars: updated_bookmark.stars,
+                                      tag_ids: updated_bookmark.tags.map(
+                                        (tag) => tag.id,
+                                      ),
+                                    },
+                                  })
+                                  const updated_tag_ids =
+                                    updated_bookmark.tags.map((t) => t.id)
+                                  if (
+                                    tag_view_options.selected_tags.every((t) =>
+                                      updated_tag_ids.includes(t),
+                                    )
+                                  ) {
+                                    dispatch(
+                                      bookmarks_actions.replace_bookmark({
+                                        bookmark: updated_bookmark,
+                                        last_authorized_counts_params:
+                                          JSON.parse(
+                                            sessionStorage.getItem(
+                                              browser_storage.session_storage
+                                                .library
+                                                .last_authorized_counts_params,
+                                            ) || '',
+                                          ) || undefined,
+                                        api_url:
+                                          process.env.NEXT_PUBLIC_API_URL,
+                                        auth_token:
+                                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                      }),
+                                    )
+                                  } else {
+                                    // We filter out bookmark when there are other bookmarks still matching with selected tags.
+                                    dispatch(
+                                      bookmarks_actions.filter_out_bookmark({
+                                        bookmark_id: updated_bookmark.id,
+                                        last_authorized_counts_params:
+                                          JSON.parse(
+                                            sessionStorage.getItem(
+                                              browser_storage.session_storage
+                                                .library
+                                                .last_authorized_counts_params,
+                                            ) || '',
+                                          ) || undefined,
+                                        api_url:
+                                          process.env.NEXT_PUBLIC_API_URL,
+                                        auth_token:
+                                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                      }),
+                                    )
+                                    if (search.count) {
+                                      search.set_count(search.count - 1)
+                                    }
+                                  }
+                                  // Unselect removed tags when there is no more bookmarks with them.
+                                  tag_view_options.remove_tags_from_query_params(
+                                    tag_view_options.selected_tags.filter(
+                                      (t) => {
+                                        const yields = Object.values(
+                                          counts_slice_state.tags!,
+                                        ).find((tag) => tag.id == t)!.yields
+                                        return (
+                                          !updated_tag_ids.includes(t) &&
+                                          yields == 1
+                                        )
+                                      },
                                     ),
-                                  },
-                                })
-                                const updated_tag_ids =
-                                  updated_bookmark.tags.map((t) => t.id)
-                                if (
-                                  tag_view_options.selected_tags.every((t) =>
-                                    updated_tag_ids.includes(t),
                                   )
-                                ) {
-                                  dispatch(
-                                    bookmarks_actions.replace_bookmark({
-                                      bookmark: updated_bookmark,
+                                  tag_hierarchies.get_tag_hierarchies()
+                                },
+                                other_icon: (
+                                  <UiCommonParticles_Icon variant="EDIT" />
+                                ),
+                              },
+                              {
+                                label: !(
+                                  filter_view_options.current_filter ==
+                                  Filter.Archived
+                                )
+                                  ? 'Archive'
+                                  : 'Restore',
+                                other_icon: (
+                                  <UiCommonParticles_Icon variant="ARCHIVE" />
+                                ),
+                                is_disabled: are_bookmark_menu_items_locked,
+                                on_click: async () => {
+                                  const modified_bookmark: UpsertBookmark_Params =
+                                    {
+                                      bookmark_id: bookmark.id,
+                                      is_public: bookmark.is_public,
+                                      created_at: new Date(bookmark.created_at),
+                                      title: bookmark.title,
+                                      is_archived: !is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                        is_public: link.is_public,
+                                      })),
+                                      tags: bookmark.tags.map((tag) => ({
+                                        name: tag.name,
+                                        is_public: tag.is_public,
+                                      })),
+                                    }
+                                  await dispatch(
+                                    bookmarks_actions.upsert_bookmark({
+                                      bookmark: modified_bookmark,
                                       last_authorized_counts_params:
                                         JSON.parse(
                                           sessionStorage.getItem(
@@ -1646,231 +1894,152 @@ const BookmarksPage: React.FC = () => {
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                     }),
                                   )
-                                } else {
-                                  // We filter out bookmark when there are other bookmarks still matching with selected tags.
-                                  dispatch(
-                                    bookmarks_actions.filter_out_bookmark({
-                                      bookmark_id: updated_bookmark.id,
-                                      last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .library
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                    }),
-                                  )
+                                  await search.update_searchable_bookmark({
+                                    bookmark: {
+                                      id: bookmark.id,
+                                      created_at: bookmark.created_at,
+                                      visited_at: bookmark.visited_at,
+                                      updated_at: new Date().toISOString(),
+                                      title: bookmark.title,
+                                      note: bookmark.note,
+                                      is_archived: !is_archived_filter,
+                                      is_unread: bookmark.is_unread,
+                                      stars: bookmark.stars,
+                                      links: bookmark.links.map((link) => ({
+                                        url: link.url,
+                                        site_path: link.site_path,
+                                        is_public: link.is_public,
+                                      })),
+                                      tags: bookmark.tags.map(
+                                        (tag) => tag.name,
+                                      ),
+                                      tag_ids: bookmark.tags.map(
+                                        (tag) => tag.id,
+                                      ),
+                                    },
+                                  })
                                   if (search.count) {
                                     search.set_count(search.count - 1)
                                   }
-                                }
-
-                                // Unselect removed tags when there is no more bookmarks with them.
-                                tag_view_options.remove_tags_from_query_params(
-                                  tag_view_options.selected_tags.filter((t) => {
-                                    const yields = Object.values(
-                                      counts_slice_state.tags!,
-                                    ).find((tag) => tag.id == t)!.yields
-                                    return (
-                                      !updated_tag_ids.includes(t) &&
-                                      yields == 1
-                                    )
-                                  }),
-                                )
-                              },
-                              other_icon: (
-                                <UiCommonParticles_Icon variant="EDIT" />
-                              ),
-                            },
-                            {
-                              label: !(
-                                filter_view_options.current_filter ==
-                                Filter.Archived
-                              )
-                                ? 'Archive'
-                                : 'Restore',
-                              other_icon: (
-                                <UiCommonParticles_Icon variant="ARCHIVE" />
-                              ),
-                              is_disabled: are_bookmark_menu_items_locked,
-                              on_click: async () => {
-                                const modified_bookmark: UpsertBookmark_Params =
-                                  {
-                                    bookmark_id: bookmark.id,
-                                    is_public: bookmark.is_public,
-                                    created_at: new Date(bookmark.created_at),
-                                    title: bookmark.title,
-                                    is_archived: !is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                      is_public: link.is_public,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => ({
-                                      name: tag.name,
-                                      is_public: tag.is_public,
-                                    })),
+                                  if (
+                                    bookmarks_slice_state.bookmarks &&
+                                    bookmarks_slice_state.bookmarks.length ==
+                                      1 &&
+                                    bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+                                  ) {
+                                    search.reset()
                                   }
-                                await dispatch(
-                                  bookmarks_actions.upsert_bookmark({
-                                    bookmark: modified_bookmark,
-                                    last_authorized_counts_params:
-                                      JSON.parse(
-                                        sessionStorage.getItem(
-                                          browser_storage.session_storage
-                                            .library
-                                            .last_authorized_counts_params,
-                                        ) || '',
-                                      ) || undefined,
-                                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                                    auth_token:
-                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                  }),
-                                )
-                                await search.update_searchable_bookmark({
-                                  bookmark: {
-                                    id: bookmark.id,
-                                    created_at: bookmark.created_at,
-                                    visited_at: bookmark.visited_at,
-                                    updated_at: new Date().toISOString(),
-                                    title: bookmark.title,
-                                    note: bookmark.note,
-                                    is_archived: !is_archived_filter,
-                                    is_unread: bookmark.is_unread,
-                                    stars: bookmark.stars,
-                                    links: bookmark.links.map((link) => ({
-                                      url: link.url,
-                                      site_path: link.site_path,
-                                      is_public: link.is_public,
-                                    })),
-                                    tags: bookmark.tags.map((tag) => tag.name),
-                                    tag_ids: bookmark.tags.map((tag) => tag.id),
-                                  },
-                                })
-                                if (search.count) {
-                                  search.set_count(search.count - 1)
-                                }
-                                if (
-                                  bookmarks_slice_state.bookmarks &&
-                                  bookmarks_slice_state.bookmarks.length == 1 &&
-                                  bookmarks_slice_state.showing_bookmarks_fetched_by_ids
-                                ) {
-                                  search.reset()
-                                }
+                                },
                               },
-                            },
-                            {
-                              label: 'Delete',
-                              is_disabled: are_bookmark_menu_items_locked,
-                              on_click: async () => {
-                                await dispatch(
-                                  bookmarks_actions.delete_bookmark({
-                                    last_authorized_counts_params:
-                                      JSON.parse(
-                                        sessionStorage.getItem(
-                                          browser_storage.session_storage
-                                            .library
-                                            .last_authorized_counts_params,
-                                        ) || '',
-                                      ) || undefined,
+                              {
+                                label: 'Delete',
+                                is_disabled: are_bookmark_menu_items_locked,
+                                on_click: async () => {
+                                  await dispatch(
+                                    bookmarks_actions.delete_bookmark({
+                                      last_authorized_counts_params:
+                                        JSON.parse(
+                                          sessionStorage.getItem(
+                                            browser_storage.session_storage
+                                              .library
+                                              .last_authorized_counts_params,
+                                          ) || '',
+                                        ) || undefined,
+                                      bookmark_id: bookmark.id,
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                  await search.delete_searchable_bookmark({
                                     bookmark_id: bookmark.id,
-                                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                                    auth_token:
-                                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                  }),
-                                )
-                                await search.delete_searchable_bookmark({
-                                  bookmark_id: bookmark.id,
-                                })
-                                if (search.count) {
-                                  search.set_count(search.count - 1)
-                                }
-                                if (
-                                  bookmarks_slice_state.bookmarks &&
-                                  bookmarks_slice_state.bookmarks.length == 1 &&
-                                  bookmarks_slice_state.showing_bookmarks_fetched_by_ids
-                                ) {
-                                  search.reset()
-                                }
+                                  })
+                                  if (search.count) {
+                                    search.set_count(search.count - 1)
+                                  }
+                                  if (
+                                    bookmarks_slice_state.bookmarks &&
+                                    bookmarks_slice_state.bookmarks.length ==
+                                      1 &&
+                                    bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+                                  ) {
+                                    search.reset()
+                                  }
+                                  tag_hierarchies.get_tag_hierarchies()
+                                },
+                                other_icon: (
+                                  <UiCommonParticles_Icon variant="DELETE" />
+                                ),
                               },
-                              other_icon: (
-                                <UiCommonParticles_Icon variant="DELETE" />
-                              ),
-                            },
-                          ]
-                        : []),
-                    ]}
-                  />
-                }
-                highlights={search.highlights?.[bookmark.id.toString()]}
-                highlights_note={
-                  search.highlights_note?.[bookmark.id.toString()]
-                }
-                highlights_site_variants={search.highlights_sites_variants}
-                orama_db_id={
-                  is_archived_filter
-                    ? search.archived_db?.id || ''
-                    : search.db?.id || ''
-                }
-                should_dim_visited_links={username !== undefined}
-                // It's important to wait until filter is set to search hook's state
-                current_filter={search.current_filter}
-              />
-            ))
-          : []
-      }
-      refresh_results={
-        !search.search_string.length &&
-        !bookmarks_slice_state.is_fetching_first_bookmarks &&
-        (!bookmarks_slice_state.bookmarks ||
-          bookmarks_slice_state.bookmarks.length == 0)
-          ? () => {
-              bookmarks.get_bookmarks({})
-            }
-          : undefined
-      }
-      clear_selected_tags={
-        !bookmarks_slice_state.is_fetching_first_bookmarks &&
-        (!bookmarks_slice_state.bookmarks ||
-          bookmarks_slice_state.bookmarks.length == 0) &&
-        query_params.get('t')
-          ? tag_view_options.clear_selected_tags
-          : undefined
-      }
-      clear_date_range={
-        !bookmarks_slice_state.is_fetching_first_bookmarks &&
-        (!bookmarks_slice_state.bookmarks ||
-          bookmarks_slice_state.bookmarks.length == 0) &&
-        (query_params.get('gte') || query_params.get('lte'))
-          ? date_view_options.clear_gte_lte_query_params
-          : undefined
-      }
-      info_text={
-        bookmarks_slice_state.is_fetching_first_bookmarks ||
-        bookmarks_slice_state.is_fetching_more_bookmarks
-          ? 'Loading...'
-          : (!search.search_string.length &&
-              !bookmarks_slice_state.is_fetching_first_bookmarks &&
-              (!bookmarks_slice_state.bookmarks ||
-                bookmarks_slice_state.bookmarks.length == 0)) ||
-            (search.search_string.length &&
-              (!bookmarks_slice_state.bookmarks ||
-                bookmarks_slice_state.bookmarks.length == 0) &&
-              search.result_commited?.count == 0)
-          ? 'No results'
-          : !bookmarks_slice_state.has_more_bookmarks ||
-            bookmarks_slice_state.bookmarks?.length ==
-              search.result_commited?.hits.length
-          ? 'End of results'
-          : ''
-      }
-    />
+                            ]
+                          : []),
+                      ]}
+                    />
+                  }
+                  highlights={search.highlights?.[bookmark.id.toString()]}
+                  highlights_note={
+                    search.highlights_note?.[bookmark.id.toString()]
+                  }
+                  highlights_site_variants={search.highlights_sites_variants}
+                  orama_db_id={
+                    is_archived_filter
+                      ? search.archived_db?.id || ''
+                      : search.db?.id || ''
+                  }
+                  should_dim_visited_links={username !== undefined}
+                  // It's important to wait until filter is set to search hook's state
+                  current_filter={search.current_filter}
+                />
+              ))
+            : []
+        }
+        refresh_results={
+          !search.search_string.length &&
+          !bookmarks_slice_state.is_fetching_first_bookmarks &&
+          (!bookmarks_slice_state.bookmarks ||
+            bookmarks_slice_state.bookmarks.length == 0)
+            ? () => {
+                bookmarks.get_bookmarks({})
+              }
+            : undefined
+        }
+        clear_selected_tags={
+          !bookmarks_slice_state.is_fetching_first_bookmarks &&
+          (!bookmarks_slice_state.bookmarks ||
+            bookmarks_slice_state.bookmarks.length == 0) &&
+          query_params.get('t')
+            ? tag_view_options.clear_selected_tags
+            : undefined
+        }
+        clear_date_range={
+          !bookmarks_slice_state.is_fetching_first_bookmarks &&
+          (!bookmarks_slice_state.bookmarks ||
+            bookmarks_slice_state.bookmarks.length == 0) &&
+          (query_params.get('gte') || query_params.get('lte'))
+            ? date_view_options.clear_gte_lte_query_params
+            : undefined
+        }
+        info_text={
+          bookmarks_slice_state.is_fetching_first_bookmarks ||
+          bookmarks_slice_state.is_fetching_more_bookmarks
+            ? 'Loading...'
+            : (!search.search_string.length &&
+                !bookmarks_slice_state.is_fetching_first_bookmarks &&
+                (!bookmarks_slice_state.bookmarks ||
+                  bookmarks_slice_state.bookmarks.length == 0)) ||
+              (search.search_string.length &&
+                (!bookmarks_slice_state.bookmarks ||
+                  bookmarks_slice_state.bookmarks.length == 0) &&
+                search.result_commited?.count == 0)
+            ? 'No results'
+            : !bookmarks_slice_state.has_more_bookmarks ||
+              bookmarks_slice_state.bookmarks?.length ==
+                search.result_commited?.hits.length
+            ? 'End of results'
+            : ''
+        }
+      />
+    </>
   )
 }
 

@@ -38,6 +38,7 @@ export const use_tag_hierarchies = () => {
   }, [])
 
   return {
+    get_tag_hierarchies,
     tree,
     is_fetching,
     is_updating,

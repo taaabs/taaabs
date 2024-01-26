@@ -37,6 +37,7 @@ export namespace Bookmark {
   export type Highlights = [number, number][]
 
   export type Props = {
+    bookmark_id: number
     updated_at: string
     title?: string
     note?: string
@@ -66,6 +67,13 @@ export namespace Bookmark {
     is_fetching_bookmarks: boolean
     counts_refreshed_at_timestamp?: number // When updating other bookmark, we refetch counts and this is needed to trigger a rerender of all bookmarks
     is_not_interactive?: boolean
+    on_tag_drag_start: (params: {
+      id: number
+      name: string
+      source_bookmark_id: number
+    }) => void
+    dragged_tag?: { id: number; name: string }
+    on_mouse_up?: () => void
   }
 }
 
@@ -77,6 +85,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const [render_height, set_render_height] = useState<number | undefined>(
       undefined,
     )
+
     useEffect(() => {
       if (render_height === undefined && props.render_height) {
         set_render_height(props.render_height)
@@ -114,6 +123,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             onClick={() => {
               if (is_menu_open) return
               props.on_click()
+            }}
+            onMouseUp={() => {
+              if (props.on_mouse_up && props.dragged_tag) props.on_mouse_up()
             }}
           >
             <div className={styles.bookmark}>
@@ -258,6 +270,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
                         return (
                           <button
+                            key={tag.id}
                             className={styles.bookmark__main__tags__tag}
                             onClick={(e) => {
                               e.stopPropagation()
@@ -267,7 +280,13 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                 props.on_tag_click(tag.id)
                               }
                             }}
-                            key={tag.id}
+                            onMouseDown={() => {
+                              props.on_tag_drag_start({
+                                id: tag.id,
+                                name: tag.name,
+                                source_bookmark_id: props.bookmark_id,
+                              })
+                            }}
                           >
                             <div>
                               <span
@@ -513,7 +532,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.number_of_selected_tags == n.number_of_selected_tags &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&
-    o.counts_refreshed_at_timestamp == n.counts_refreshed_at_timestamp,
+    o.counts_refreshed_at_timestamp == n.counts_refreshed_at_timestamp &&
+    o.dragged_tag?.id == n.dragged_tag?.id,
 )
 
 function get_url_domain(url: string): string {

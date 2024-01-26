@@ -47,6 +47,7 @@
   z-index: 2;
   width: 100%;
   bottom: var(--bottom-navigation-bar-height);
+  pointer-events: none;
   @include to992 {
     transition: transform 40ms linear;
   }
@@ -54,6 +55,7 @@
     bottom: var(--distance-24px);
   }
   > div {
+    pointer-events: all;
     @include transition-300ms(opacity);
     @include to992 {
       padding: var(--distance-16px) 0 var(--distance-8px) 0;
@@ -137,6 +139,10 @@
       position: fixed;
       overflow: auto;
       padding: var(--distance-16px) var(--distance-16px) var(--distance-16px) 0;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
     @include at1200 {
       padding: var(--distance-16px) var(--distance-32px) var(--distance-16px) 0;

@@ -1,10 +1,10 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import styles from './tag-hierarchies.module.scss'
 import cn from 'classnames'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import Nestable from 'react-nestable'
 import { Icon } from '@web-ui/components/common/particles/icon'
 import { toast } from 'react-toastify'
+import { system_values } from '@shared/constants/system-values'
 
 export namespace TagHierarchies {
   export type Node = {
@@ -18,6 +18,7 @@ export namespace TagHierarchies {
     on_item_click: (hierarchy_ids: number[]) => void
     selected_tag_ids: number[]
     is_updating: boolean
+    dragged_tag?: { id: number; name: string }
   }
 }
 
@@ -34,17 +35,19 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
   (props) => {
     const [count, set_count] = useState(0)
     const [is_dragging, set_is_dragging] = useState(false)
-    const [items, set_items] = useState<Item[]>(
-      props.tree.map((node) =>
-        tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
-      ),
-    )
+    const [items, set_items] = useState<Item[]>([])
     const [mouseover_ids, set_mouseover_ids] = useState<number[]>([])
+    const clear_mouseover_ids = () => {
+      set_mouseover_ids([])
+    }
 
-    useUpdateEffect(() => {
-      props.on_update(items.map((item) => item_to_tag(item)))
-      set_count(count + 1)
-    }, [items])
+    useEffect(() => {
+      set_items(
+        props.tree.map((node) =>
+          tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
+        ),
+      )
+    }, [props.tree])
 
     const render_tag = ({
       item,
@@ -74,6 +77,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             })}
             onClick={() => {
               props.on_item_click((item as Item).hierarchy_tag_ids)
+              clear_mouseover_ids()
             }}
             onMouseEnter={() => {
               if (!is_dragging) set_mouseover_ids((item as Item).hierarchy_ids)
@@ -85,10 +89,52 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               setTimeout(() => {
                 set_is_dragging(false)
               }, 0)
+              if (props.dragged_tag) {
+                if (
+                  (item as Item).hierarchy_ids.length >=
+                  system_values.library.max_selected_tags
+                ) {
+                  toast.error('Maximum tree depth reached')
+                  return
+                }
+                const parent_id = (item as Item).hierarchy_ids.slice(-1)[0]
+                const loop_over_items = (item: Item): Item => {
+                  if (item.id == parent_id) {
+                    const id = Math.floor(Math.random() * 1e12)
+                    return {
+                      ...item,
+                      children: [
+                        {
+                          id,
+                          text: props.dragged_tag!.name,
+                          tag_id: props.dragged_tag!.id,
+                          children: [],
+                          hierarchy_ids: [...(item as Item).hierarchy_ids, id],
+                          hierarchy_tag_ids: [
+                            ...(item as Item).hierarchy_tag_ids,
+                            props.dragged_tag!.id,
+                          ],
+                        },
+                        ...item.children,
+                      ],
+                    }
+                  } else {
+                    return {
+                      ...item,
+                      children: item.children.map((item) =>
+                        loop_over_items(item),
+                      ),
+                    }
+                  }
+                }
+                update_items({
+                  items: items.map((item) => loop_over_items(item)),
+                })
+              }
             }}
             onMouseLeave={() => {
               if (!is_dragging) {
-                set_mouseover_ids([])
+                clear_mouseover_ids()
               }
             }}
           >
@@ -114,6 +160,21 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
       )
     }
 
+    const update_items = (params: { items: Item[] }) => {
+      clear_mouseover_ids()
+      if (JSON.stringify(params.items) == JSON.stringify(items)) return
+
+      // We need to regenerate ids so on mouseover highlight can work with the new tree.
+      const new_tree = params.items.map((item) => item_to_tag(item))
+      set_items(
+        new_tree.map((node) =>
+          tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
+        ),
+      )
+      props.on_update(params.items.map((item) => item_to_tag(item)))
+      set_count(count + 1)
+    }
+
     return (
       <div className={styles.container}>
         <Nestable
@@ -121,72 +182,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           items={items}
           renderItem={render_tag}
           onChange={(params) => {
-            set_mouseover_ids([])
-            if (JSON.stringify(params.items) == JSON.stringify(items)) return
-
-            // Perform validation: check for duplicates in a node, in a branch and in the root.
-            // If invalid, revert changes and dispatch toast.
-            const adjecency_list: { text: string; parent_text?: string }[] = []
-            const node_to_adjecency_list_item = (params: {
-              node: Item
-              parent_text?: string
-            }) => {
-              adjecency_list.push({
-                text: params.node.text,
-                parent_text: params.parent_text,
-              })
-              params.node.children.forEach((node) =>
-                node_to_adjecency_list_item({
-                  node,
-                  parent_text: params.node.text,
-                }),
-              )
-            }
-            ;(params.items as Item[]).forEach((node) =>
-              node_to_adjecency_list_item({ node }),
-            )
-
-            // Filter duplicated siblings.
-            const adjecency_list_without_dupes = adjecency_list.filter(
-              (item, i) =>
-                i ===
-                adjecency_list.findIndex(
-                  (el) =>
-                    el.text == item.text && el.parent_text == item.parent_text,
-                ),
-            )
-            if (
-              JSON.stringify(adjecency_list) !=
-              JSON.stringify(adjecency_list_without_dupes)
-            ) {
-              set_count(count + 1)
-              toast.error('Siblings must be unique')
-              return
-            }
-
-            // Verify if adjecency list converts back to tree (don't have duplicates in branches).
-            const adjecency_list_to_tree = (params: {
-              text: string | null
-              adjecency_list: { text: string; parent_text?: string }[]
-            }): any =>
-              params.adjecency_list
-                .filter(({ parent_text }) => parent_text == params.text)
-                .map(({ text }) => ({
-                  children: adjecency_list_to_tree({
-                    text,
-                    adjecency_list: params.adjecency_list,
-                  }),
-                }))
-
-            try {
-              adjecency_list_to_tree({ text: null, adjecency_list })
-            } catch {
-              set_count(count + 1)
-              toast.error('Hierarchy cannot have duplicates')
-              return
-            }
-
-            set_items(params.items as Item[])
+            update_items({ items: params.items as Item[] })
           }}
           maxDepth={5}
           disableDrag={props.is_updating}
@@ -200,7 +196,10 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
       </div>
     )
   },
-  (o, n) => o.selected_tag_ids.length == n.selected_tag_ids.length,
+  (o, n) =>
+    JSON.stringify(o.selected_tag_ids) == JSON.stringify(n.selected_tag_ids) &&
+    o.dragged_tag == n.dragged_tag &&
+    JSON.stringify(o.tree) == JSON.stringify(n.tree),
 )
 
 const tag_to_item = (params: {
