@@ -1169,7 +1169,7 @@ const BookmarksPage: React.FC = () => {
                           url: link.url,
                           site_path: link.site_path,
                         })),
-                        tags: bookmark.tags.map((tag) => tag.name),
+                        tags: updated_bookmark.tags.map((tag) => tag.name),
                         tag_ids: bookmark.tags.map((tag) => tag.id),
                       },
                     })
