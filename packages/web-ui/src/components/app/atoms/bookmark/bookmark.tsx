@@ -11,6 +11,8 @@ import useToggle from 'beautiful-react-hooks/useToggle'
 import { Filter } from '@shared/types/common/filter'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search/get-site-variants-for-search'
 import { Icon } from '@web-ui/components/common/particles/icon'
+import { useContextMenu } from 'use-context-menu'
+import { DropdownMenu } from '../dropdown-menu'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -43,8 +45,10 @@ export namespace Bookmark {
     note?: string
     date: Date
     is_compact?: boolean
-    on_tag_click: (tagId: number) => void
-    on_selected_tag_click: (tagId: number) => void
+    on_tag_click: (tag_id: number) => void
+    on_tag_delete_click: (tag_id: number) => void
+    on_selected_tag_click: (tag_id: number) => void
+    on_mouse_up_on_tag: (tag_id: number) => void
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
     number_of_selected_tags: number
     query_params?: string
@@ -71,8 +75,9 @@ export namespace Bookmark {
       id: number
       name: string
       source_bookmark_id: number
+      over_sibling_tag_name?: string
     }) => void
-    dragged_tag?: { id: number; name: string }
+    dragged_tag?: { id: number; name: string; source_bookmark_id?: number }
     on_mouse_up?: () => void
   }
 }
@@ -84,6 +89,24 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const [is_menu_open, toggle_is_menu_open] = useToggle(false)
     const [render_height, set_render_height] = useState<number | undefined>(
       undefined,
+    )
+    const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
+      useState<number>()
+    const { contextMenu, onContextMenu } = useContextMenu(
+      <>
+        <DropdownMenu
+          items={[
+            {
+              label: 'Delete',
+              on_click: () => {
+                if (!context_menu_of_tag_id) return
+                props.on_tag_delete_click(context_menu_of_tag_id)
+              },
+              other_icon: <Icon variant="DELETE" />,
+            },
+          ]}
+        />
+      </>,
     )
 
     useEffect(() => {
@@ -129,6 +152,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             }}
           >
             <div className={styles.bookmark}>
+              {contextMenu}
               <div className={styles.bookmark__main}>
                 <div
                   className={cn(styles.bookmark__main__top, {
@@ -286,6 +310,43 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                 name: tag.name,
                                 source_bookmark_id: props.bookmark_id,
                               })
+                            }}
+                            onMouseEnter={() => {
+                              if (
+                                props.dragged_tag &&
+                                props.dragged_tag.source_bookmark_id ==
+                                  props.bookmark_id &&
+                                tag.name != props.dragged_tag.name &&
+                                props.tags.findIndex(
+                                  (tag) => tag.id == props.dragged_tag!.id,
+                                ) != -1
+                              ) {
+                                props.on_tag_drag_start({
+                                  id: props.dragged_tag.id,
+                                  name: props.dragged_tag.name,
+                                  source_bookmark_id: props.bookmark_id,
+                                  over_sibling_tag_name: tag.name,
+                                })
+                              }
+                            }}
+                            onMouseLeave={() => {
+                              if (props.dragged_tag) {
+                                props.on_tag_drag_start({
+                                  id: props.dragged_tag.id,
+                                  name: props.dragged_tag.name,
+                                  source_bookmark_id: props.bookmark_id,
+                                })
+                              }
+                            }}
+                            onContextMenu={(e) => {
+                              set_context_menu_of_tag_id(tag.id)
+                              onContextMenu(e)
+                            }}
+                            onMouseUp={() => {
+                              // Fixes interference with loading state when selecting.
+                              setTimeout(() => {
+                                props.on_mouse_up_on_tag(tag.id)
+                              }, 0)
                             }}
                           >
                             <div>

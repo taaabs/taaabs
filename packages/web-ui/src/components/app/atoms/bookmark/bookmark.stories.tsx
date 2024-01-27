@@ -46,6 +46,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -82,6 +84,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -107,6 +111,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -136,6 +142,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
       Compact:
@@ -169,6 +177,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -197,6 +207,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -232,6 +244,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -260,6 +274,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -288,6 +304,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -316,6 +334,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -343,6 +363,8 @@ export const Primary = () => (
         updated_at=""
         is_fetching_bookmarks={false}
         on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
       />
       <StorybookSpacer />
     </div>

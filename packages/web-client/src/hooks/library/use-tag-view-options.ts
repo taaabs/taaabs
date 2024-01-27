@@ -21,6 +21,7 @@ export const use_tag_view_options = () => {
     id: number
     name: string
     source_bookmark_id?: number
+    over_sibling_tag_name?: string
   }>()
 
   // Clear dragged tag.

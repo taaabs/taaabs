@@ -218,6 +218,7 @@ const BookmarksPage: React.FC = () => {
     <>
       <UiAppAtom_DraggedCursorTag
         tag_name={tag_view_options.dragged_tag?.name}
+        sibling_tag_name={tag_view_options.dragged_tag?.over_sibling_tag_name}
       />
       <UiAppTemplate_Library
         show_bookmarks_skeleton={show_bookmarks_skeleton}
@@ -597,6 +598,7 @@ const BookmarksPage: React.FC = () => {
                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                     }),
                   )
+                  toast.success('Tag hierarchies has been updated')
                 }}
                 selected_tag_ids={tag_view_options.selected_tags}
                 is_updating={tag_hierarchies.is_updating || false}
@@ -1187,6 +1189,175 @@ const BookmarksPage: React.FC = () => {
                           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                       }),
                     )
+                    toast.success('Bookmark has been updated')
+                  }}
+                  // Change tag order by swapping them.
+                  on_mouse_up_on_tag={async (tag_id) => {
+                    if (
+                      !tag_view_options.dragged_tag ||
+                      tag_view_options.dragged_tag.source_bookmark_id !=
+                        bookmark.id
+                    )
+                      return
+
+                    const index_a = bookmark.tags.findIndex(
+                      (tag) => tag.id == tag_id,
+                    )
+                    const index_b = bookmark.tags.findIndex(
+                      (tag) => tag.id == tag_view_options.dragged_tag!.id,
+                    )
+
+                    if (index_a == index_b) return
+
+                    const tags = [...bookmark.tags]
+
+                    ;[tags[index_a], tags[index_b]] = [
+                      tags[index_b],
+                      tags[index_a],
+                    ]
+
+                    const modified_bookmark: UpsertBookmark_Params = {
+                      bookmark_id: bookmark.id,
+                      is_public: bookmark.is_public,
+                      created_at: new Date(bookmark.created_at),
+                      title: bookmark.title,
+                      note: bookmark.note,
+                      is_archived: is_archived_filter,
+                      is_unread: bookmark.is_unread,
+                      stars: bookmark.stars,
+                      links: bookmark.links.map((link) => ({
+                        url: link.url,
+                        site_path: link.site_path,
+                        is_public: link.is_public,
+                      })),
+                      tags: tags.map((tag) => ({
+                        name: tag.name,
+                        is_public: tag.is_public,
+                      })),
+                    }
+                    const updated_bookmark = await dispatch(
+                      bookmarks_actions.upsert_bookmark({
+                        bookmark: modified_bookmark,
+                        last_authorized_counts_params:
+                          JSON.parse(
+                            sessionStorage.getItem(
+                              browser_storage.session_storage.library
+                                .last_authorized_counts_params,
+                            ) || '',
+                          ) || undefined,
+                        api_url: process.env.NEXT_PUBLIC_API_URL,
+                        auth_token:
+                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                      }),
+                    )
+                    await search.update_searchable_bookmark({
+                      bookmark: {
+                        id: bookmark.id,
+                        created_at: bookmark.created_at,
+                        visited_at: bookmark.visited_at,
+                        updated_at: updated_bookmark.updated_at,
+                        title: bookmark.title,
+                        note: bookmark.note,
+                        is_archived: is_archived_filter,
+                        is_unread: bookmark.is_unread,
+                        stars: bookmark.stars,
+                        links: bookmark.links.map((link) => ({
+                          url: link.url,
+                          site_path: link.site_path,
+                        })),
+                        tags: updated_bookmark.tags.map((tag) => tag.name),
+                        tag_ids: bookmark.tags.map((tag) => tag.id),
+                      },
+                    })
+                    dispatch(
+                      bookmarks_actions.replace_bookmark({
+                        bookmark: updated_bookmark,
+                        last_authorized_counts_params:
+                          JSON.parse(
+                            sessionStorage.getItem(
+                              browser_storage.session_storage.library
+                                .last_authorized_counts_params,
+                            ) || '',
+                          ) || undefined,
+                        api_url: process.env.NEXT_PUBLIC_API_URL,
+                        auth_token:
+                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                      }),
+                    )
+                    toast.success('Bookmark has been updated')
+                  }}
+                  on_tag_delete_click={async (tag_id) => {
+                    const modified_bookmark: UpsertBookmark_Params = {
+                      bookmark_id: bookmark.id,
+                      is_public: bookmark.is_public,
+                      created_at: new Date(bookmark.created_at),
+                      title: bookmark.title,
+                      note: bookmark.note,
+                      is_archived: is_archived_filter,
+                      is_unread: bookmark.is_unread,
+                      stars: bookmark.stars,
+                      links: bookmark.links.map((link) => ({
+                        url: link.url,
+                        site_path: link.site_path,
+                        is_public: link.is_public,
+                      })),
+                      tags: bookmark.tags
+                        .filter((tag) => tag.id !== tag_id)
+                        .map((tag) => ({
+                          name: tag.name,
+                          is_public: tag.is_public,
+                        })),
+                    }
+                    const updated_bookmark = await dispatch(
+                      bookmarks_actions.upsert_bookmark({
+                        bookmark: modified_bookmark,
+                        last_authorized_counts_params:
+                          JSON.parse(
+                            sessionStorage.getItem(
+                              browser_storage.session_storage.library
+                                .last_authorized_counts_params,
+                            ) || '',
+                          ) || undefined,
+                        api_url: process.env.NEXT_PUBLIC_API_URL,
+                        auth_token:
+                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                      }),
+                    )
+                    await search.update_searchable_bookmark({
+                      bookmark: {
+                        id: bookmark.id,
+                        created_at: bookmark.created_at,
+                        visited_at: bookmark.visited_at,
+                        updated_at: updated_bookmark.updated_at,
+                        title: bookmark.title,
+                        note: bookmark.note,
+                        is_archived: is_archived_filter,
+                        is_unread: bookmark.is_unread,
+                        stars: bookmark.stars,
+                        links: bookmark.links.map((link) => ({
+                          url: link.url,
+                          site_path: link.site_path,
+                        })),
+                        tags: updated_bookmark.tags.map((tag) => tag.name),
+                        tag_ids: bookmark.tags.map((tag) => tag.id),
+                      },
+                    })
+                    dispatch(
+                      bookmarks_actions.replace_bookmark({
+                        bookmark: updated_bookmark,
+                        last_authorized_counts_params:
+                          JSON.parse(
+                            sessionStorage.getItem(
+                              browser_storage.session_storage.library
+                                .last_authorized_counts_params,
+                            ) || '',
+                          ) || undefined,
+                        api_url: process.env.NEXT_PUBLIC_API_URL,
+                        auth_token:
+                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                      }),
+                    )
+                    toast.success('Bookmark has been updated')
                   }}
                   menu_slot={
                     <UiAppAtom_DropdownMenu
@@ -1298,6 +1469,7 @@ const BookmarksPage: React.FC = () => {
                                       search.reset()
                                     }
                                   }
+                                  toast.success('Bookmark has been updated')
                                 },
                               },
                               {
@@ -1387,6 +1559,7 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  toast.success('Bookmark has been updated')
                                 },
                               },
                               {
@@ -1475,6 +1648,7 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  toast.success('Bookmark has been updated')
                                 },
                               },
                               {
@@ -1563,6 +1737,7 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  toast.success('Bookmark has been updated')
                                 },
                               },
                               {
@@ -1651,6 +1826,7 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  toast.success('Bookmark has been updated')
                                 },
                               },
                               {
@@ -1739,6 +1915,7 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  toast.success('Bookmark has been updated')
                                 },
                               },
                               {
