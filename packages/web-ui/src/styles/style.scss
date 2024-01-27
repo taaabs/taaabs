@@ -237,55 +237,57 @@ strong {
   opacity: 0;
 }
 
+// !important below set because of a bug: https://github.com/vercel/next.js/issues/13092
+
 .Toastify__progress-bar {
-  height: var(--distance-4px);
+  height: var(--distance-4px) !important;
 }
 .Toastify__toast-container {
-  top: 0;
-  padding: 0;
+  top: 0 !important;
+  padding: 0 !important;
 }
 .Toastify__toast {
-  border-radius: var(--border-radius-12px);
-  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius-12px) !important;
+  box-shadow: var(--box-shadow) !important;
   @include to992 {
     margin: var(--distance-12px) var(--distance-24px) var(--distance-8px)
-      var(--distance-24px);
+      var(--distance-24px) !important;
   }
   @include at992 {
-    margin-top: var(--distance-18px);
+    margin-top: var(--distance-18px) !important;
   }
 }
 .Toastify__toast-body {
-  text-align: center;
+  text-align: center !important;
 }
 
 .nestable-item .nestable-list,
 .nestable-item-copy .nestable-list {
-  margin-top: 0;
+  margin-top: 0 !important;
 }
 .nestable .nestable-list {
-  padding-left: 0;
-  margin-left: var(--distance-8px);
-  border-left: var(--border-primary);
+  padding-left: 0 !important;
+  margin-left: var(--distance-8px) !important;
+  border-left: var(--border-primary) !important;
 }
 .nestable-item,
 .nestable-item-copy {
-  margin: 0;
+  margin: 0 !important;
 }
 .nestable-item {
-  margin-left: var(--distance-7px);
+  margin-left: var(--distance-7px) !important;
 }
 .nestable-item.is-dragging::before {
-  background: var(--neutral200);
-  border: none;
-  border-radius: var(--border-radius-12px);
+  background: var(--neutral200) !important;
+  border: none !important;
+  border-radius: var(--border-radius-12px) !important;
 }
 .nestable-drag-layer {
-  visibility: hidden;
+  visibility: hidden !important;
 }
 
 .useContextMenu_ContextMenu {
-  overflow: visible;
+  overflow: visible !important;
   animation: fade-in var(--transition-duration-150ms)
-    var(--transition-timing-function) forwards;
+    var(--transition-timing-function) forwards !important;
 }
