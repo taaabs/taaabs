@@ -204,6 +204,43 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             }}
           />
         </UiAppAtom_Box>
+
+        <UiAppAtom_Box>
+          <UiAppAtom_BoxHeading heading="Links" />
+          <Controller
+            name="is_public"
+            control={control}
+            defaultValue={props.bookmark?.is_public}
+            render={({ field }) => {
+              return (
+                <UiAppAtom_DraggableFormInputs
+                  items={links.map((link) => ({
+                    value: link.url,
+                    is_public:
+                      props.bookmark?.is_public == false
+                        ? true
+                        : link.is_public,
+                  }))}
+                  on_change={(links) => {
+                    set_links(
+                      links.map((el) => ({
+                        url: el.value,
+                        is_public: el.is_public,
+                      })),
+                    )
+                  }}
+                  button_text="Add link"
+                  show_visibility_toggler={
+                    (field.value === undefined && props.bookmark?.is_public) ||
+                    field.value ||
+                    false
+                  }
+                />
+              )
+            }}
+          />
+        </UiAppAtom_Box>
+
         <UiAppAtom_Box>
           <UiAppAtom_BoxHeading heading="Title" />
           <UiCommonTemplate_FormControllerFix>
@@ -244,41 +281,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             />
           </UiCommonTemplate_FormControllerFix>
         </UiAppAtom_Box>
-        <UiAppAtom_Box>
-          <UiAppAtom_BoxHeading heading="Links" />
-          <Controller
-            name="is_public"
-            control={control}
-            defaultValue={props.bookmark?.is_public}
-            render={({ field }) => {
-              return (
-                <UiAppAtom_DraggableFormInputs
-                  items={links.map((link) => ({
-                    value: link.url,
-                    is_public:
-                      props.bookmark?.is_public == false
-                        ? true
-                        : link.is_public,
-                  }))}
-                  on_change={(links) => {
-                    set_links(
-                      links.map((el) => ({
-                        url: el.value,
-                        is_public: el.is_public,
-                      })),
-                    )
-                  }}
-                  button_text="Add link"
-                  show_visibility_toggler={
-                    (field.value === undefined && props.bookmark?.is_public) ||
-                    field.value ||
-                    false
-                  }
-                />
-              )
-            }}
-          />
-        </UiAppAtom_Box>
+
         <UiAppAtom_Box>
           <UiAppAtom_BoxHeading heading="Tags" />
           <Controller
@@ -313,6 +316,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             }}
           />
         </UiAppAtom_Box>
+
         <UiAppAtom_Box>
           <UiAppAtom_BoxHeading heading="Note" />
           <UiCommonTemplate_FormControllerFix>
