@@ -9,7 +9,7 @@
   padding: var(--distance-4px);
   gap: var(--distance-3px);
   box-shadow: var(--box-shadow-blue-strong);
-  @include transition-300ms;
+  @include transition-250ms;
   @include at992 {
     padding: var(--distance-6px);
     gap: var(--distance-4px);

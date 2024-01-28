@@ -17,7 +17,7 @@
   &__header {
     position: relative;
     z-index: 1;
-    @include transition-300ms(box-shadow);
+    @include transition-250ms(box-shadow);
     &--shadow {
       box-shadow: var(--box-shadow);
     }
@@ -45,7 +45,7 @@
   &__footer {
     z-index: 1;
     width: 100%;
-    @include transition-300ms(box-shadow);
+    @include transition-250ms(box-shadow);
     &--shadow {
       box-shadow: var(--box-shadow-up);
     }

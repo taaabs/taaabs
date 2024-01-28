@@ -121,31 +121,29 @@ export const Library: React.FC<Library.Props> = (props) => {
       )
         return
 
-      if (dir == 'Left' || dir == 'Right') {
-        if (velocity > 0.2) {
-          if (dir == 'Right') {
-            if (!is_left_side_open && !is_right_side_open) {
-              toggle_left_side()
-            } else if (is_right_side_open) {
-              toggle_right_side()
-            }
+      if (velocity > 0.2) {
+        if (dir == 'Right') {
+          if (!is_left_side_open && !is_right_side_open) {
+            toggle_left_side()
+          } else if (is_right_side_open) {
+            toggle_right_side()
           }
-          if (dir == 'Left') {
-            if (!is_right_side_open && !is_left_side_open) {
-              toggle_right_side()
-            } else if (is_left_side_open) {
-              toggle_left_side()
-            }
-          }
-        } else if (!is_left_side_open && !is_right_side_open) {
-          document.body.style.overflow = ''
         }
-
-        setTimeout(() => {
-          set_is_right_side_moving(false)
-          set_is_left_side_moving(false)
-        }, 300)
+        if (dir == 'Left') {
+          if (!is_right_side_open && !is_left_side_open) {
+            toggle_right_side()
+          } else if (is_left_side_open) {
+            toggle_left_side()
+          }
+        }
+      } else if (!is_left_side_open && !is_right_side_open) {
+        document.body.style.overflow = ''
       }
+
+      setTimeout(() => {
+        set_is_right_side_moving(false)
+        set_is_left_side_moving(false)
+      }, 250)
       set_drag_distance(0)
     },
   })
@@ -180,12 +178,12 @@ export const Library: React.FC<Library.Props> = (props) => {
       set_is_right_side_open(false)
       setTimeout(() => {
         document.body.style.overflow = ''
-      }, 300)
+      }, 250)
     }
 
     setTimeout(() => {
       set_is_right_side_moving(false)
-    }, 300)
+    }, 250)
   }
 
   const toggle_left_side = () => {
@@ -198,12 +196,12 @@ export const Library: React.FC<Library.Props> = (props) => {
       set_is_left_side_open(false)
       setTimeout(() => {
         document.body.style.overflow = ''
-      }, 300)
+      }, 250)
     }
 
     setTimeout(() => {
       set_is_left_side_moving(false)
-    }, 300)
+    }, 250)
   }
 
   useUpdateEffect(() => {
@@ -247,52 +245,7 @@ export const Library: React.FC<Library.Props> = (props) => {
 
   return (
     <div className={styles.container} {...swipeable_handlers}>
-      <div
-        className={cn(
-          styles['mobile-title-bar'],
-          {
-            [styles['mobile-title-bar--dimmed']]:
-              (is_right_side_open || is_left_side_open) && !drag_distance,
-          },
-          { [styles['free-fall']]: !drag_distance },
-        )}
-        style={{
-          pointerEvents:
-            is_right_side_open || is_left_side_open ? 'none' : undefined,
-          transform: `translateX(${translate_x}px)`,
-        }}
-      >
-        <div
-          className={cn(styles['mobile-title-bar__inner'], {
-            [styles['mobile-title-bar__inner--scrolled']]: is_scrolled,
-          })}
-        >
-          <Subcomponent_MobileTitleBar
-            swipe_left_on_click={
-              !is_left_side_open ? toggle_left_side : undefined
-            }
-            swipe_right_on_click={
-              !is_right_side_open ? toggle_right_side : undefined
-            }
-            text={props.mobile_title_bar ? props.mobile_title_bar : undefined}
-          />
-        </div>
-      </div>
-      <div
-        className={cn(
-          styles.toolbar,
-          {
-            [styles['toolbar--dimmed']]:
-              (is_right_side_open || is_left_side_open) && !drag_distance,
-          },
-          { [styles['free-fall']]: !drag_distance },
-        )}
-        style={{
-          pointerEvents:
-            is_right_side_open || is_left_side_open ? 'none' : undefined,
-          transform: `translateX(${translate_x}px)`,
-        }}
-      >
+      <div className={styles.toolbar}>
         <div>{props.slot_toolbar}</div>
       </div>
       <div className={styles.content}>
@@ -342,11 +295,30 @@ export const Library: React.FC<Library.Props> = (props) => {
           >
             <div>
               <div
-                className={cn(styles.main__inner__search, {
-                  [styles['main__inner__search--scrolled']]: is_scrolled,
+                className={cn(styles.main__inner__sticky, {
+                  [styles['main__inner__sticky--scrolled']]: is_scrolled,
                 })}
               >
-                {props.slot_search}
+                <div
+                  className={styles['main__inner__sticky__mobile-title-bar']}
+                >
+                  <Subcomponent_MobileTitleBar
+                    swipe_left_on_click={
+                      !is_left_side_open ? toggle_left_side : undefined
+                    }
+                    swipe_right_on_click={
+                      !is_right_side_open ? toggle_right_side : undefined
+                    }
+                    text={
+                      props.mobile_title_bar
+                        ? props.mobile_title_bar
+                        : undefined
+                    }
+                  />
+                </div>
+                <div className={styles.main__inner__sticky__search}>
+                  {props.slot_search}
+                </div>
               </div>
               <div
                 className={cn({

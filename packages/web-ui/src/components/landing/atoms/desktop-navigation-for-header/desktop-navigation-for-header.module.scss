@@ -58,7 +58,7 @@
       &::after {
         // Transition is purposely on active modifier to avoid rendering
         // two indicators at the same time (one fading out, another in).
-        @include transition-300ms;
+        @include transition-250ms;
         background: var(--brand-color);
         transform: translateX(-50%);
       }

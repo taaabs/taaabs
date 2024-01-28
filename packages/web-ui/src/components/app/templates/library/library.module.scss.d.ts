@@ -1,11 +1,6 @@
 declare const styles: {
   readonly container: string
-  readonly 'mobile-title-bar': string
-  readonly 'mobile-title-bar--dimmed': string
-  readonly 'mobile-title-bar__inner': string
-  readonly 'mobile-title-bar__inner--scrolled': string
   readonly toolbar: string
-  readonly 'toolbar--dimmed': string
   readonly content: string
   readonly sidebar: string
   readonly 'sidebar--hidden': string
@@ -13,8 +8,10 @@ declare const styles: {
   readonly main: string
   readonly main__inner: string
   readonly 'main__inner--dimmed': string
-  readonly main__inner__search: string
-  readonly 'main__inner__search--scrolled': string
+  readonly main__inner__sticky: string
+  readonly 'main__inner__sticky--scrolled': string
+  readonly 'main__inner__sticky__mobile-title-bar': string
+  readonly main__inner__sticky__search: string
   readonly main__inner__skeleton: string
   readonly 'main__inner__bookmarks--loading': string
   readonly main__inner__info: string

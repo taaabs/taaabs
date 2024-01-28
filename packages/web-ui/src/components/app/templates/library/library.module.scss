@@ -8,38 +8,6 @@
   }
   position: relative;
 }
-.mobile-title-bar {
-  @include to992 {
-    position: fixed;
-    top: var(--header-mobile-height);
-    width: 100%;
-    z-index: 2;
-    transition: transform 40ms linear;
-  }
-  @include at992 {
-    display: none;
-  }
-  &::after {
-    @include transition-300ms(opacity);
-    position: absolute;
-    content: '';
-    background-color: var(--background);
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    pointer-events: none;
-  }
-  &--dimmed::after {
-    opacity: var(--dimmed-opacity);
-  }
-  &__inner {
-    @include transition-300ms(transform);
-    &--scrolled {
-      transform: translateY(-100%);
-    }
-  }
-}
 .toolbar {
   position: fixed;
   display: flex;
@@ -56,7 +24,7 @@
   }
   > div {
     pointer-events: all;
-    @include transition-300ms(opacity);
+    @include transition-150ms(opacity);
     @include to992 {
       padding: var(--distance-16px) 0 var(--distance-8px) 0;
     }
@@ -71,15 +39,9 @@
         background-color: var(--white);
         border-radius: var(--border-radius-999px);
         opacity: 0;
-        @include transition-300ms(opacity);
+        @include transition-150ms(opacity);
         pointer-events: none;
       }
-    }
-  }
-  &--dimmed > div > div {
-    box-shadow: none;
-    &::after {
-      opacity: var(--dimmed-opacity);
     }
   }
 }
@@ -129,8 +91,8 @@
       height: 100%;
       overflow: auto;
       background: var(--background);
-      padding: var(--distance-8px) var(--distance-17px) var(--distance-16px)
-        var(--distance-16px);
+      padding: var(--distance-8px) var(--distance-17px)
+        calc(var(--distance-16px) + 36px + 8px) var(--distance-16px);
     }
     @include at992 {
       width: var(--_aside-width) !important;
@@ -154,16 +116,14 @@
     min-height: 100vh;
     position: relative;
     z-index: 1;
-    padding-top: var(--header-mobile-height);
     background: var(--background);
-    transition: transform 40ms linear;
     &::before {
       content: '';
       width: 1px;
       height: 100%;
       top: 0;
       left: 0;
-      box-shadow: -1px 0 0 0 var(--border-color-primary);
+      box-shadow: -1px 0 0 0 var(--border-color-secondary);
       position: absolute;
     }
     &::after {
@@ -172,7 +132,7 @@
       height: 100%;
       top: 0;
       right: 0;
-      box-shadow: 1px 0 0 0 var(--border-color-primary);
+      box-shadow: 1px 0 0 0 var(--border-color-secondary);
       position: absolute;
     }
   }
@@ -183,41 +143,36 @@
   }
   &__inner {
     @include to992 {
-      position: relative;
-      padding-top: var(--app-bar-height);
+      padding-top: var(--header-mobile-height);
       padding-bottom: var(--bottom-navigation-bar-height);
-      @include transition-300ms(opacity);
-      &::before {
-        position: absolute;
-        content: '';
-        height: var(--app-bar-height);
-        width: 100%;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1;
-        background: var(--header-background);
-      }
+      @include transition-150ms(opacity);
     }
     &--dimmed {
       @include to992 {
         opacity: var(--dimmed-opacity);
       }
     }
-    &__search {
+    &__sticky {
       position: sticky;
-      display: flex;
       z-index: 2;
-      top: calc(var(--app-bar-height) + var(--header-mobile-height));
+      top: var(--header-mobile-height);
       @include at992 {
-        top: var(--header-desktop-height);
+        top: calc(var(--header-desktop-height) + var(--distance-16px));
       }
-      @include transition-300ms(transform);
+      @include transition-150ms(transform);
       @include at992 {
         transform: none !important;
       }
       &--scrolled {
         transform: translateY(calc(var(--app-bar-height) * -1));
+      }
+      &__mobile-title-bar {
+        @include at992 {
+          display: none;
+        }
+      }
+      &__search {
+        font-size: inherit;
       }
     }
     &__skeleton {
@@ -274,7 +229,6 @@
     top: 0;
     bottom: 0;
     right: 0;
-    height: 100lvh;
     padding-top: var(--header-mobile-height);
     padding-bottom: var(--bottom-navigation-bar-height);
   }
@@ -293,7 +247,6 @@
     @include to992 {
       overflow: auto;
       background: var(--Library-background);
-      padding-bottom: calc(100lvh - 100svh);
     }
     &__stickybox {
       @include at992 {
@@ -301,8 +254,8 @@
       }
       > div {
         @include to992 {
-          padding: 0 var(--distance-16px) var(--distance-16px)
-            var(--distance-17px);
+          padding: 0 var(--distance-16px)
+            calc(var(--distance-16px) + 36px + 12px) var(--distance-17px);
           // Overrides inline values coming from stickybox.
           position: relative !important;
           top: 0 !important;
@@ -320,5 +273,5 @@
   }
 }
 .free-fall {
-  @include transition-300ms(transform);
+  @include transition-250ms(transform);
 }
