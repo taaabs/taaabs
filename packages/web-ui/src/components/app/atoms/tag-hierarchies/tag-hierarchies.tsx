@@ -194,6 +194,66 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const update_items = (params: { items: Item[] }) => {
       if (JSON.stringify(params.items) == JSON.stringify(items)) return
 
+      // Find duplicates in nodes.
+      const filter_duplicated_siblings = (items: Item[]) => {
+        const unique_siblings: Item[] = []
+        items.forEach((item) => {
+          if (
+            unique_siblings.findIndex(
+              (sibling) => sibling.tag_id == item.tag_id,
+            ) == -1
+          ) {
+            unique_siblings.push({
+              ...item,
+              children: filter_duplicated_siblings(item.children),
+            })
+          }
+        })
+        return unique_siblings
+      }
+
+      if (
+        JSON.stringify(filter_duplicated_siblings(params.items)) !=
+        JSON.stringify(params.items)
+      ) {
+        toast.error('Siblings must be unique')
+        return
+      }
+
+      // Find duplicates in branches.
+      const filter_branches_with_duplicates = (
+        item: Item | undefined,
+        seen_tag_ids: Set<number>,
+      ): Item | undefined => {
+        if (item === undefined) {
+          return undefined
+        }
+        if (seen_tag_ids.has(item?.tag_id)) {
+          return undefined
+        }
+        seen_tag_ids.add(item.tag_id)
+        const filtered_children = item.children.map((child) =>
+          filter_branches_with_duplicates(child, new Set(seen_tag_ids)),
+        )
+        const valid_children: any = filtered_children.filter((child) => child)
+        return {
+          ...item,
+          children: valid_children,
+        }
+      }
+
+      for (let i = 0; i <= params.items.length; i++) {
+        if (
+          JSON.stringify(params.items[i]) !=
+          JSON.stringify(
+            filter_branches_with_duplicates(params.items[i], new Set()),
+          )
+        ) {
+          toast.error('Hierarchies cannot have duplicates')
+          return
+        }
+      }
+
       // We need to regenerate ids so on mouseover highlight can work with the new tree.
       const new_tree = params.items.map((item) => item_to_tag(item))
       set_items(
