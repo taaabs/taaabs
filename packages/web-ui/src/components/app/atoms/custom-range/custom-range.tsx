@@ -5,7 +5,6 @@ import useSwipe from 'beautiful-react-hooks/useSwipe'
 import { memo, useEffect, useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
-import { use_popstate } from './hooks/use-popstate'
 import { Icon } from '@web-ui/components/common/particles/icon'
 
 type Counts = {
@@ -32,7 +31,6 @@ export namespace CustomRange {
 
 export const CustomRange: React.FC<CustomRange.Props> = memo(
   function CustomRange(props) {
-    const { pop_count } = use_popstate()
     const [counts_to_render, set_counts_to_render] = useState<Counts>()
     const [date, set_date] = useState<string>()
     const custom_range = useRef<HTMLDivElement>(null)
@@ -49,11 +47,12 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     const [starred_count, set_starred_count] = useState<number>()
     const [unread_count, set_unread_count] = useState<number>()
 
-    useUpdateEffect(() => {
-      set_bookmark_count(undefined)
-      set_starred_count(undefined)
-      set_unread_count(undefined)
-    }, [pop_count])
+    // useUpdateEffect(() => {
+    //   // set_bookmark_count(undefined)
+    //   // set_starred_count(undefined)
+    //   // set_unread_count(undefined)
+    //   // console.log('x')
+    // }, [pop_count])
 
     useUpdateEffect(() => {
       if (props.is_range_selector_disabled) return
@@ -424,13 +423,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
               <ResponsiveContainer
                 width={'100%'}
                 height={135}
-                key={
-                  pop_count +
-                  (props.current_gte === undefined &&
-                  props.current_lte === undefined
-                    ? 1
-                    : 0)
-                }
+                key={`${props.current_gte}${props.current_lte}`}
               >
                 <AreaChart margin={{ left: 0, top: 5 }} data={counts_to_render}>
                   <defs>
@@ -441,16 +434,8 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                       x2="0"
                       y2="1"
                     >
-                      <stop
-                        offset="0%"
-                        stopColor="#2563eb"
-                        stopOpacity={1}
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor="#2563eb"
-                        stopOpacity={0}
-                      />
+                      <stop offset="0%" stopColor="#2563eb" stopOpacity={1} />
+                      <stop offset="100%" stopColor="#2563eb" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <Area

@@ -42,7 +42,6 @@ import { StarsForDropdown as UiAppAtom_StarsForDropdown } from '@web-ui/componen
 import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/particles/icon'
 import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolbar'
-import { use_popstate } from '@web-ui/components/app/atoms/custom-range/hooks/use-popstate'
 import { use_has_focus } from '@/hooks/misc/use-has-focus'
 import { TagHierarchies as UiAppAtom_TagHierarchies } from '@web-ui/components/app/atoms/tag-hierarchies'
 import { DraggedCursorTag as UiAppAtom_DraggedCursorTag } from '@web-ui/components/app/atoms/dragged-cursor-tag'
@@ -78,7 +77,6 @@ const BookmarksPage: React.FC = () => {
   const order_view_options = use_order_view_options()
   const tag_view_options = use_tag_view_options()
   const date_view_options = use_date_view_options()
-  const { pop_count } = use_popstate()
   const [close_aside_count, set_close_aside_count] = useState(0)
 
   const [is_sort_by_dropdown_visible, toggle_sort_by_dropdown] =
@@ -834,7 +832,6 @@ const BookmarksPage: React.FC = () => {
                       ? counts.selected_tags.length > 0
                       : tag_view_options.selected_tags.length > 0) && (
                       <UiAppAtom_SelectedTags
-                        key={`${pop_count}${bookmarks_slice_state.is_fetching_first_bookmarks}`}
                         selected_tags={(bookmarks_slice_state.is_fetching_first_bookmarks
                           ? counts.selected_tags
                           : tag_view_options.selected_tags
