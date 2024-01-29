@@ -192,7 +192,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     }
 
     const update_items = (params: { items: Item[] }) => {
-      clear_mouseover_ids()
       if (JSON.stringify(params.items) == JSON.stringify(items)) return
 
       // We need to regenerate ids so on mouseover highlight can work with the new tree.
@@ -228,7 +227,9 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           items={items}
           renderItem={render_tag}
           onChange={(params) => {
+            clear_mouseover_ids()
             update_items({ items: params.items as Item[] })
+            set_is_dragging(false)
           }}
           maxDepth={5}
           disableDrag={props.is_updating}

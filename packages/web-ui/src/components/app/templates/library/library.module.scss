@@ -16,32 +16,13 @@
   width: 100%;
   bottom: var(--bottom-navigation-bar-height);
   pointer-events: none;
-  @include to992 {
-    transition: transform 40ms linear;
-  }
   @include at992 {
     bottom: var(--distance-24px);
   }
   > div {
     pointer-events: all;
-    @include transition-150ms(opacity);
     @include to992 {
       padding: var(--distance-16px) 0 var(--distance-8px) 0;
-    }
-    > div {
-      position: relative;
-      &::after {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        content: '';
-        background-color: var(--white);
-        border-radius: var(--border-radius-999px);
-        opacity: 0;
-        @include transition-150ms(opacity);
-        pointer-events: none;
-      }
     }
   }
 }

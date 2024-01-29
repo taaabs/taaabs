@@ -1,6 +1,9 @@
 declare const styles: {
   readonly wrapper: string
+  readonly 'wrapper--compact': string
+  readonly 'wrapper--margin-override': string
   readonly container: string
+  readonly 'container--clickable': string
   readonly bookmark: string
   readonly bookmark__main: string
   readonly bookmark__main__top: string

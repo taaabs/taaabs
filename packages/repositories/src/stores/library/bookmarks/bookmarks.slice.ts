@@ -17,6 +17,7 @@ type BookmarksState = {
   has_more_bookmarks: boolean | null
   toast_message?: ToastMessage
   density: 'default' | 'compact'
+  density_commited: 'default' | 'compact'
 }
 
 const initial_state: BookmarksState = {
@@ -28,6 +29,7 @@ const initial_state: BookmarksState = {
   bookmarks: null,
   has_more_bookmarks: null,
   density: 'default',
+  density_commited: 'default',
 }
 
 export const bookmarks_slice = createSlice({
@@ -88,6 +90,12 @@ export const bookmarks_slice = createSlice({
     },
     set_density(state, action: PayloadAction<BookmarksState['density']>) {
       state.density = action.payload
+    },
+    set_density_commited(
+      state,
+      action: PayloadAction<BookmarksState['density_commited']>,
+    ) {
+      state.density_commited = action.payload
     },
     set_bookmark_is_compact(
       state,

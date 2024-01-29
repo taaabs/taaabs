@@ -40,8 +40,10 @@ export const get_authorized_bookmarks = (params: {
         ...bookmark,
         is_compact: true,
       }))
+      dispatch(bookmarks_actions.set_density_commited('compact'))
     } else {
       bookmarks_with_density = bookmarks
+      dispatch(bookmarks_actions.set_density_commited('default'))
     }
 
     dispatch(bookmarks_actions.set_is_fetching_data(false))

@@ -44,6 +44,7 @@ export namespace Bookmark {
     title?: string
     note?: string
     date: Date
+    density: 'default' | 'compact'
     is_compact?: boolean
     on_tag_click: (tag_id: number) => void
     on_tag_delete_click: (tag_id: number) => void
@@ -137,11 +138,16 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           height: render_height ? render_height : undefined,
           pointerEvents: props.is_not_interactive ? 'none' : undefined,
         }}
-        className={styles.wrapper}
+        className={cn(styles.wrapper, {
+          [styles['wrapper--compact']]: props.density == 'compact',
+          [styles['wrapper--margin-override']]: !props.is_compact,
+        })}
       >
         {is_visible == undefined || is_visible || !props.render_height ? (
           <div
-            className={cn(styles.container)}
+            className={cn(styles.container, {
+              [styles['container--clickable']]: props.density == 'compact',
+            })}
             role="button"
             onClick={() => {
               if (is_menu_open) return
@@ -585,6 +591,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
   },
   (o, n) =>
     o.is_compact == n.is_compact &&
+    o.density == n.density &&
     o.is_not_interactive == n.is_not_interactive &&
     o.is_fetching_bookmarks == n.is_fetching_bookmarks &&
     o.updated_at == n.updated_at &&

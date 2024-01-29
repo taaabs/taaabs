@@ -6,6 +6,18 @@
   @include at992 {
     margin-bottom: var(--distance-16px);
   }
+  &--compact {
+    margin-bottom: -1px;
+    @include at992 {
+      margin-bottom: var(--distance-8px);
+    }
+  }
+  &--margin-override {
+    margin: var(--distance-8px) 0;
+    @include at992 {
+      margin: var(--distance-16px) 0;
+    }
+  }
   &:last-child {
     margin-bottom: 0;
   }
@@ -20,11 +32,15 @@
   }
   @include at992 {
     border-radius: var(--border-radius-12px);
-    @include hover {
-      border-color: var(--border-color-hover);
-    }
     @include dark {
       background: blue;
+    }
+  }
+  &--clickable {
+    @include at992 {
+      @include hover {
+        border-color: var(--border-color-hover);
+      }
     }
   }
 }

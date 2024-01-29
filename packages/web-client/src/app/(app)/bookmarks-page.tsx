@@ -930,6 +930,7 @@ const BookmarksPage: React.FC = () => {
                     ''
                   }
                   `}
+                  density={bookmarks_slice_state.density_commited}
                   is_compact={bookmark.is_compact}
                   updated_at={bookmark.updated_at}
                   title={bookmark.title}
