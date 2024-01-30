@@ -595,7 +595,7 @@ export const use_search = () => {
   }) => {
     const result = await get_result({ search_string: params.search_string })
 
-    if (!params.refresh_highlights_only) {
+    if (!params.refresh_highlights_only && result.count) {
       set_result(result)
     }
 

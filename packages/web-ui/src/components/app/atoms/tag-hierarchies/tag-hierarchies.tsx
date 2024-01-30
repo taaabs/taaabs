@@ -23,6 +23,7 @@ export namespace TagHierarchies {
     is_updating: boolean
     dragged_tag?: { id: number; name: string }
     query_params: string
+    is_draggable: boolean
   }
 }
 
@@ -292,7 +293,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             set_is_dragging(false)
           }}
           maxDepth={5}
-          disableDrag={props.is_updating}
+          disableDrag={!props.is_draggable || props.is_updating}
           renderCollapseIcon={({ isCollapsed }) =>
             render_collapse_icon({ is_collapsed: isCollapsed })
           }

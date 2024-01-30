@@ -7,6 +7,7 @@ export default {
 export const Primary = () => {
   return (
     <TagHierarchies
+      is_draggable={true}
       tree={[
         {
           name: 'AAA',

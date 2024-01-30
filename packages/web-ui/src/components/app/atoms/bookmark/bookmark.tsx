@@ -72,7 +72,7 @@ export namespace Bookmark {
     is_fetching_bookmarks: boolean
     counts_refreshed_at_timestamp?: number // When updating other bookmark, we refetch counts and this is needed to trigger a rerender of all bookmarks
     is_not_interactive?: boolean
-    on_tag_drag_start: (params: {
+    on_tag_drag_start?: (params: {
       id: number
       name: string
       source_bookmark_id: number
@@ -311,6 +311,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               }
                             }}
                             onMouseDown={() => {
+                              if (!props.on_tag_drag_start) return
                               props.on_tag_drag_start({
                                 id: tag.id,
                                 name: tag.name,
@@ -318,6 +319,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               })
                             }}
                             onMouseEnter={() => {
+                              if (!props.on_tag_drag_start) return
                               if (
                                 props.dragged_tag &&
                                 props.dragged_tag.source_bookmark_id ==
@@ -336,6 +338,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               }
                             }}
                             onMouseLeave={() => {
+                              if (!props.on_tag_drag_start) return
                               if (props.dragged_tag) {
                                 props.on_tag_drag_start({
                                   id: props.dragged_tag.id,

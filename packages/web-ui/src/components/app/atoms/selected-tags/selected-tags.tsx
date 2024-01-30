@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styles from './selected-tags.module.scss'
 import { system_values } from '@shared/constants/system-values'
 import cn from 'classnames'
@@ -10,33 +9,31 @@ export namespace SelectedTags {
   }
 }
 
-export const SelectedTags: React.FC<SelectedTags.Props> = memo(
-  function SelectedTags(props) {
-    return props.selected_tags.length ? (
-      <div className={styles.container}>
-        {props.selected_tags.length >=
-          system_values.library.max_selected_tags - 1 && (
-          <div
-            className={cn(styles.count, {
-              [styles['count--limit-reached']]:
-                props.selected_tags.length ==
-                system_values.library.max_selected_tags,
-            })}
-          >{`${props.selected_tags.length}/${system_values.library.max_selected_tags}`}</div>
-        )}
-        {props.selected_tags.map((tag) => (
-          <button
-            className={styles.tag}
-            onClick={() => props.on_selected_tag_click(tag.id)}
-            key={tag.id}
-          >
-            <span>{tag.name}</span>
-            <span>×</span>
-          </button>
-        ))}
-      </div>
-    ) : (
-      <></>
-    )
-  },
-)
+export const SelectedTags: React.FC<SelectedTags.Props> = (props) => {
+  return props.selected_tags.length ? (
+    <div className={styles.container}>
+      {props.selected_tags.length >=
+        system_values.library.max_selected_tags - 1 && (
+        <div
+          className={cn(styles.count, {
+            [styles['count--limit-reached']]:
+              props.selected_tags.length ==
+              system_values.library.max_selected_tags,
+          })}
+        >{`${props.selected_tags.length}/${system_values.library.max_selected_tags}`}</div>
+      )}
+      {props.selected_tags.map((tag) => (
+        <button
+          className={styles.tag}
+          onClick={() => props.on_selected_tag_click(tag.id)}
+          key={tag.id}
+        >
+          <span>{tag.name}</span>
+          <span>×</span>
+        </button>
+      ))}
+    </div>
+  ) : (
+    <></>
+  )
+}

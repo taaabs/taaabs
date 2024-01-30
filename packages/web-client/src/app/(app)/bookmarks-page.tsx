@@ -584,6 +584,7 @@ const BookmarksPage: React.FC = () => {
             />
             {tag_hierarchies.tree !== undefined && (
               <UiAppAtom_TagHierarchies
+                is_draggable={!username}
                 tree={tag_hierarchies.tree}
                 on_update={(tree) => {
                   dispatch(
@@ -881,7 +882,9 @@ const BookmarksPage: React.FC = () => {
                           : {}
                       }
                       on_click={tag_view_options.add_tag_to_query_params}
-                      on_tag_drag_start={tag_view_options.set_dragged_tag}
+                      on_tag_drag_start={
+                        !username ? tag_view_options.set_dragged_tag : undefined
+                      }
                     />
                   </div>
                 ) : (
@@ -919,7 +922,9 @@ const BookmarksPage: React.FC = () => {
             ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
                 <UiAppAtom_Bookmark
                   bookmark_id={bookmark.id}
-                  on_tag_drag_start={tag_view_options.set_dragged_tag}
+                  on_tag_drag_start={
+                    !username ? tag_view_options.set_dragged_tag : undefined
+                  }
                   key={`${bookmark.id}
                   ${
                     // This fixes density change flashing bookmarks which where previously out of the viewport, thus not rendered.
