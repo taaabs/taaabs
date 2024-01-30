@@ -14,46 +14,57 @@ export namespace Tags {
  * to the next frame causing render jitter.
  */
 
+type Tag = {
+  name: string
+  id: number
+  yields: number
+}
+
 export const Tags: React.FC<Tags.Props> = memo(
   function Tags(props) {
     const first_chars_processed: string[] = []
-    const new_tags_grouped: string[][] = []
-    Object.entries(props.tags).map(([tag_name]) => {
-      const current_tag_first_char = tag_name.substring(0, 1)
+    const new_tags_grouped: Tag[][] = []
+    Object.entries(props.tags).map(([name, details]) => {
+      const current_tag_first_char = name.substring(0, 1)
       first_chars_processed.find(
         (group) => current_tag_first_char == group[0].substring(0, 1),
       )
-        ? new_tags_grouped[new_tags_grouped.length - 1].push(tag_name)
-        : new_tags_grouped.push([tag_name]) &&
-          first_chars_processed.push(current_tag_first_char)
+        ? new_tags_grouped[new_tags_grouped.length - 1].push({
+            name,
+            id: details.id,
+            yields: details.yields,
+          })
+        : new_tags_grouped.push([
+            { name, yields: details.yields, id: details.id },
+          ]) && first_chars_processed.push(current_tag_first_char)
     })
 
     return (
       <div className={styles.container}>
         {new_tags_grouped.map((group) => (
-          <div className={styles.group} key={group[0].substring(0, 1)}>
+          <div className={styles.group} key={group[0].name.substring(0, 1)}>
             <div className={styles['first-char']}>
-              <span>{group[0].substring(0, 1)}</span>
+              <span>{group[0].name.substring(0, 1)}</span>
             </div>
-            {group.map((tag_name) => (
-              <button
-                className={styles.tag}
-                onClick={() => props.on_click(props.tags[tag_name].id)}
-                key={tag_name}
-                onMouseDown={() => {
-                  if (!props.on_tag_drag_start) return
-                  props.on_tag_drag_start({
-                    id: props.tags[tag_name].id,
-                    name: tag_name,
-                  })
-                }}
-              >
-                <span>{tag_name}</span>
-                {props.tags[tag_name] && (
-                  <span> {props.tags[tag_name].yields}</span>
-                )}
-              </button>
-            ))}
+            {group
+              .sort((a, b) => b.yields - a.yields)
+              .map((tag) => (
+                <button
+                  className={styles.tag}
+                  onClick={() => props.on_click(tag.id)}
+                  key={tag.id}
+                  onMouseDown={() => {
+                    if (!props.on_tag_drag_start) return
+                    props.on_tag_drag_start({
+                      id: tag.id,
+                      name: tag.name,
+                    })
+                  }}
+                >
+                  <span>{tag.name}</span>
+                  <span> {tag.yields}</span>
+                </button>
+              ))}
           </div>
         ))}
       </div>

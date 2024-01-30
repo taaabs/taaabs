@@ -26,7 +26,6 @@ export namespace Library {
     is_fetching_more_bookmarks: boolean
     has_more_bookmarks: boolean
     get_more_bookmarks: () => void
-    refresh_results?: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
     show_bookmarks_skeleton: boolean
@@ -344,11 +343,6 @@ export const Library: React.FC<Library.Props> = (props) => {
                 ref={end_of_bookmarks}
               >
                 {props.info_text && <span>{props.info_text}</span>}
-                {props.refresh_results && (
-                  <button onClick={props.refresh_results}>
-                    Refresh results
-                  </button>
-                )}
                 {props.clear_date_range && (
                   <button onClick={props.clear_date_range}>
                     Clear custom range

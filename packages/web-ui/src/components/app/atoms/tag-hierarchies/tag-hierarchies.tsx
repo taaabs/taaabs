@@ -43,9 +43,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const [items, set_items] = useState<Item[]>([])
     const [mouseover_ids, set_mouseover_ids] = useState<number[]>([])
     const [selected_ids, set_selected_ids] = useState<number[]>([])
-    const clear_mouseover_ids = () => {
-      set_mouseover_ids([])
-    }
     const [context_menu_of_item_id, set_context_menu_of_item_id] =
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
@@ -56,6 +53,8 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               label: 'Delete',
               on_click: () => {
                 if (!context_menu_of_item_id) return
+                clear_mouseover_ids()
+                clear_selected_ids()
                 delete_item({ item_id: context_menu_of_item_id })
               },
               other_icon: <Icon variant="DELETE" />,
@@ -64,6 +63,13 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         />
       </>,
     )
+
+    const clear_mouseover_ids = () => {
+      set_mouseover_ids([])
+    }
+    const clear_selected_ids = () => {
+      set_selected_ids([])
+    }
 
     useEffect(() => {
       set_items(

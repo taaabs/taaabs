@@ -2211,16 +2211,6 @@ const BookmarksPage: React.FC = () => {
               ))
             : []
         }
-        refresh_results={
-          !search.search_string.length &&
-          !bookmarks_slice_state.is_fetching_first_bookmarks &&
-          (!bookmarks_slice_state.bookmarks ||
-            bookmarks_slice_state.bookmarks.length == 0)
-            ? () => {
-                bookmarks.get_bookmarks({})
-              }
-            : undefined
-        }
         clear_selected_tags={
           !bookmarks_slice_state.is_fetching_first_bookmarks &&
           (!bookmarks_slice_state.bookmarks ||
