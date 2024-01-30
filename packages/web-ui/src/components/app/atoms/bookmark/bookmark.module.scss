@@ -48,8 +48,12 @@
   display: flex;
   flex-direction: column;
   &__main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     padding: var(--distance-10px) 0;
     &__top {
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;

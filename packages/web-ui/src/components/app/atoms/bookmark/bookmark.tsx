@@ -149,8 +149,13 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               [styles['container--clickable']]: props.density == 'compact',
             })}
             role="button"
-            onClick={() => {
-              if (is_menu_open) return
+            onClick={(e) => {
+              if (
+                is_menu_open ||
+                // Fixes bug when dragging tags (reordering) toggles density for a duration of data fetching.
+                (e.target as any).classList[0] == styles.bookmark__main__tags
+              )
+                return
               props.on_click()
             }}
             onMouseUp={() => {
@@ -310,7 +315,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                 props.on_tag_click(tag.id)
                               }
                             }}
-                            onMouseDown={() => {
+                            onMouseDown={(e) => {
+                              e.stopPropagation()
                               if (!props.on_tag_drag_start) return
                               props.on_tag_drag_start({
                                 id: tag.id,
