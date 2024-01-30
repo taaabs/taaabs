@@ -7,7 +7,6 @@ import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
 import { useContextMenu } from 'use-context-menu'
 import { DropdownMenu } from '../dropdown-menu'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace TagHierarchies {
   export type Node = {
@@ -38,11 +37,9 @@ type Item = {
 
 export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
   (props) => {
-    const [count, set_count] = useState(0)
     const [is_dragging, set_is_dragging] = useState(false)
     const [items, set_items] = useState<Item[]>([])
     const [mouseover_ids, set_mouseover_ids] = useState<number[]>([])
-    const [selected_ids, set_selected_ids] = useState<number[]>([])
     const [context_menu_of_item_id, set_context_menu_of_item_id] =
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
@@ -54,7 +51,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               on_click: () => {
                 if (!context_menu_of_item_id) return
                 clear_mouseover_ids()
-                clear_selected_ids()
                 delete_item({ item_id: context_menu_of_item_id })
               },
               other_icon: <Icon variant="DELETE" />,
@@ -67,9 +63,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const clear_mouseover_ids = () => {
       set_mouseover_ids([])
     }
-    const clear_selected_ids = () => {
-      set_selected_ids([])
-    }
 
     useEffect(() => {
       set_items(
@@ -78,10 +71,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         ),
       )
     }, [props.tree])
-
-    useUpdateEffect(() => {
-      set_selected_ids([])
-    }, [props.selected_tag_ids])
 
     const render_tag = ({
       item,
@@ -95,20 +84,21 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           {collapseIcon ? collapseIcon : <div className={styles.tag__spacer} />}
           <button
             className={cn(styles.tag__button, {
-              [styles['tag__button--active']]: selected_ids.includes(
-                (item as Item).id,
-              ),
+              [styles['tag__button--active']]:
+                JSON.stringify(item.hierarchy_tag_ids) ==
+                JSON.stringify(
+                  props.selected_tag_ids.slice(
+                    0,
+                    item.hierarchy_tag_ids.length,
+                  ),
+                ),
               [styles['tag__button--highlighted']]: mouseover_ids.includes(
                 (item as Item).id,
               ),
             })}
             onClick={() => {
               props.on_item_click((item as Item).hierarchy_tag_ids)
-              // We must wait for props.selected_tag_ids to update.
-              setTimeout(() => {
-                set_selected_ids([...mouseover_ids])
-                clear_mouseover_ids()
-              }, 0)
+              clear_mouseover_ids()
             }}
             onMouseEnter={() => {
               if (!is_dragging) set_mouseover_ids((item as Item).hierarchy_ids)
@@ -269,9 +259,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         ),
       )
       props.on_update(new_tree)
-      setTimeout(() => {
-        set_count(count + 1)
-      }, 0)
     }
 
     const delete_item = (params: { item_id: number }) => {
@@ -290,7 +277,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     return (
       <div className={styles.container}>
         <Nestable
-          key={count}
           items={items}
           renderItem={render_tag}
           onChange={(params) => {
