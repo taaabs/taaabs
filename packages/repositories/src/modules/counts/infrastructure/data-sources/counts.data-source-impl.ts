@@ -12,7 +12,9 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
     params: Counts_Params.Authorized,
   ): Promise<Counts_Dto.Response.Authorized> {
     const queryParams: Counts_Dto.QueryParams.Authorized = {
-      filter: params.filter,
+      starred_only: params.starred_only,
+      unread_only: params.unread_only,
+      is_archived: params.is_archived,
       public_only: params.public_only,
       tags: params.tags?.join(','),
     }
@@ -33,7 +35,8 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
     params: Counts_Params.Public,
   ): Promise<Counts_Dto.Response.Public> {
     const queryParams: Counts_Dto.QueryParams.Public = {
-      filter: params.filter,
+      starred_only: params.starred_only,
+      is_archived: params.is_archived,
       tags: params.tags?.join(','),
     }
 

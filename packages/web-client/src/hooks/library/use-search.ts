@@ -10,7 +10,6 @@ import {
 } from '@orama/orama'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { Filter } from '@shared/types/common/filter'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { LibrarySearch_DataSourceImpl } from '@repositories/modules/library-search/infrastructure/data-sources/library-search.data-source-impl'
@@ -33,6 +32,7 @@ import { SearchableBookmark_Entity } from '@repositories/modules/library-search/
 import { GetSearchableBookmarksOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-searchable-bookmarks-on-public-user.user-case'
 import { GetLastUpdated_Ro } from '@repositories/modules/library-search/domain/types/get-last-updated.ro'
 import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-public-user.use-case'
+import { Filter } from '@/types/library/filter'
 
 export type BookmarkOfSearch = {
   id: number

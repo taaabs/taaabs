@@ -23,7 +23,9 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     const query_params: Bookmarks_Dto.QueryParams = {
       tags: params.tags?.join(','),
       after: params.after,
-      filter: params.filter,
+      starred_only: params.starred_only,
+      unread_only: params.unread_only,
+      is_archived: params.is_archived,
       sort_by: params.sort_by,
       order: params.order,
       epoch_gte: params.yyyymm_gte
@@ -58,7 +60,8 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     const query_params: Bookmarks_Dto.QueryParams = {
       tags: params.tags?.join(','),
       after: params.after,
-      filter: params.filter,
+      starred_only: params.starred_only,
+      is_archived: params.is_archived,
       sort_by: params.sort_by,
       order: params.order,
       epoch_gte: params.yyyymm_gte

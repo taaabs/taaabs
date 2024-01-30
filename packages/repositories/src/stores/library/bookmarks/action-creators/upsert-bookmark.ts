@@ -5,7 +5,6 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/upsert-bookmark.use-case'
 import { bookmarks_actions } from '../bookmarks.slice'
 import { counts_actions } from '../../counts/counts.slice'
-import { Filter } from '@shared/types/common/filter'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 
@@ -35,50 +34,24 @@ export const upsert_bookmark = (params: {
           throw new Error('[upsert_bookmark] Bookmarks should be there.')
         if (!params.last_authorized_counts_params)
           throw new Error(
-            '[upsert_bookmark] Last authorized months params should be there.',
+            '[upsert_bookmark] Last authorized counts params should be there.',
           )
 
         const is_archived_toggled_should_remove =
           params.bookmark.is_archived &&
-          !(
-            params.last_authorized_counts_params.filter == Filter.Archived ||
-            params.last_authorized_counts_params.filter ==
-              Filter.ArchivedStarred ||
-            params.last_authorized_counts_params.filter ==
-              Filter.ArchivedUnread ||
-            params.last_authorized_counts_params.filter ==
-              Filter.ArchivedStarredUnread
-          )
+          !params.last_authorized_counts_params.is_archived
 
         const is_restored_toggled_should_remove =
           !params.bookmark.is_archived &&
-          (params.last_authorized_counts_params.filter == Filter.Archived ||
-            params.last_authorized_counts_params.filter ==
-              Filter.ArchivedStarred ||
-            params.last_authorized_counts_params.filter ==
-              Filter.ArchivedUnread ||
-            params.last_authorized_counts_params.filter ==
-              Filter.ArchivedStarredUnread)
+          params.last_authorized_counts_params.is_archived
 
         const is_starred_toggled_should_remove =
           params.bookmark.stars == 0 &&
-          (params.last_authorized_counts_params.filter == Filter.Starred ||
-            params.last_authorized_counts_params.filter ==
-              Filter.StarredUnread ||
-            params.last_authorized_counts_params.filter ==
-              Filter.ArchivedStarred ||
-            params.last_authorized_counts_params.filter ==
-              Filter.ArchivedStarredUnread)
+          params.last_authorized_counts_params.starred_only
 
         const is_unread_toggled_should_remove =
           !params.bookmark.is_unread &&
-          (params.last_authorized_counts_params.filter == Filter.Unread ||
-            params.last_authorized_counts_params.filter ==
-              Filter.StarredUnread ||
-            params.last_authorized_counts_params.filter ==
-              Filter.ArchivedUnread ||
-            params.last_authorized_counts_params.filter ==
-              Filter.ArchivedStarredUnread)
+          params.last_authorized_counts_params.unread_only
 
         if (
           is_archived_toggled_should_remove ||

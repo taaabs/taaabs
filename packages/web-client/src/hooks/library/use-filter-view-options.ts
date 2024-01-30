@@ -1,10 +1,9 @@
 import { update_query_params } from '@/utils/update-query-params'
-import { Filter } from '@shared/types/common/filter'
-import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
+import { Filter } from '@/types/library/filter'
 
 export const use_filter_view_options = () => {
   const query_params = useSearchParams()
@@ -13,9 +12,7 @@ export const use_filter_view_options = () => {
     Object.values(Filter)[
       parseInt(
         query_params.get('f') ||
-          Object.values(Filter)
-            .indexOf(BookmarksFetchingDefaults.Common.filter)
-            .toString(),
+          Object.values(Filter).indexOf(Filter.None).toString(),
       )
     ],
   )
@@ -30,9 +27,7 @@ export const use_filter_view_options = () => {
         Object.values(Filter)[
           parseInt(
             query_filter ||
-              Object.values(Filter)
-                .indexOf(BookmarksFetchingDefaults.Common.filter)
-                .toString(),
+              Object.values(Filter).indexOf(Filter.None).toString(),
           )
         ],
       )
@@ -43,7 +38,7 @@ export const use_filter_view_options = () => {
     const updated_query_params = update_query_params(
       query_params,
       'f',
-      filter == BookmarksFetchingDefaults.Common.filter
+      filter == Filter.None
         ? undefined
         : Object.values(Filter).indexOf(filter).toString(),
     )

@@ -4,11 +4,11 @@ import {
   use_library_selector,
 } from '../../stores/library'
 import { useEffect, useState } from 'react'
-import { Filter } from '@shared/types/common/filter'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 import { browser_storage } from '@/constants/browser-storage'
+import { Filter } from '@/types/library/filter'
 
 export const use_counts = () => {
   const query_params = useSearchParams()
@@ -42,7 +42,35 @@ export const use_counts = () => {
       const query_filter = query_params.get('f')
       set_last_query_filter(query_filter || undefined)
       if (query_filter) {
-        request_params.filter = Object.values(Filter)[parseInt(query_filter)]
+        request_params.starred_only =
+          Object.values(Filter)[parseInt(query_filter)] == Filter.Starred ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.StarredUnread ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedStarred ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedStarredUnread ||
+          undefined
+
+        request_params.unread_only =
+          Object.values(Filter)[parseInt(query_filter)] == Filter.Unread ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.StarredUnread ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedUnread ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedStarredUnread ||
+          undefined
+
+        request_params.is_archived =
+          Object.values(Filter)[parseInt(query_filter)] == Filter.Archived ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedStarred ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedUnread ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedStarredUnread ||
+          undefined
       }
 
       sessionStorage.setItem(
@@ -71,7 +99,25 @@ export const use_counts = () => {
       const query_filter = query_params.get('f')
       set_last_query_filter(query_filter || undefined)
       if (query_filter) {
-        request_params.filter = Object.values(Filter)[parseInt(query_filter)]
+        request_params.starred_only =
+          Object.values(Filter)[parseInt(query_filter)] == Filter.Starred ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.StarredUnread ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedStarred ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedStarredUnread ||
+          undefined
+
+        request_params.is_archived =
+          Object.values(Filter)[parseInt(query_filter)] == Filter.Archived ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedStarred ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedUnread ||
+          Object.values(Filter)[parseInt(query_filter)] ==
+            Filter.ArchivedStarredUnread ||
+          undefined
       }
 
       dispatch(

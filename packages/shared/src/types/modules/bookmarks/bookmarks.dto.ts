@@ -4,7 +4,7 @@ import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { PaginationQueryParamsDto } from '@shared/types/common/pagination-options.dto'
 import { Type } from 'class-transformer'
-import { Filter } from '@shared/types/common/filter'
+import { ToBoolean } from '@shared/decorators/to-boolean'
 
 export namespace Bookmarks_Dto {
   export class QueryParams extends PaginationQueryParamsDto {
@@ -26,7 +26,14 @@ export namespace Bookmarks_Dto {
 
     public order?: Order
 
-    public filter?: Filter
+    @ToBoolean()
+    public starred_only?: boolean
+
+    @ToBoolean()
+    public unread_only?: boolean
+
+    @ToBoolean()
+    public is_archived?: boolean
   }
 
   export namespace Response {

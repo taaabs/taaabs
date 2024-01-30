@@ -1,11 +1,18 @@
-import { Filter } from '@shared/types/common/filter'
 import { CountsFetchingDefaults } from './counts-fetching-defaults'
 import { ToBoolean } from '@shared/decorators/to-boolean'
 
 export namespace Counts_Dto {
   export namespace QueryParams {
     class Base {
-      public filter?: Filter = CountsFetchingDefaults.Common.filter
+      @ToBoolean()
+      public starred_only?: boolean
+
+      @ToBoolean()
+      public unread_only?: boolean
+
+      @ToBoolean()
+      public is_archived?: boolean
+
       public tags?: string
     }
     export class Authorized extends Base {

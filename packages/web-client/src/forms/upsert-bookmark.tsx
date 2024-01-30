@@ -283,41 +283,6 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         </UiAppAtom_Box>
 
         <UiAppAtom_Box>
-          <UiAppAtom_BoxHeading heading="Tags" />
-          <Controller
-            name="is_public"
-            control={control}
-            defaultValue={props.bookmark?.is_public}
-            render={({ field }) => {
-              return (
-                <UiAppAtom_DraggableFormInputs
-                  items={tags.map((tag) => ({
-                    value: tag.name,
-                    is_public:
-                      props.bookmark?.is_public == false ? true : tag.is_public,
-                  }))}
-                  on_change={(tags) => {
-                    set_tags(
-                      tags.map((el) => ({
-                        name: el.value,
-                        is_public: el.is_public,
-                      })),
-                    )
-                  }}
-                  button_text="Add tag"
-                  show_visibility_toggler={
-                    (field.value === undefined && props.bookmark?.is_public) ||
-                    field.value ||
-                    false
-                  }
-                  max_items={system_values.bookmark.tags.limit}
-                />
-              )
-            }}
-          />
-        </UiAppAtom_Box>
-
-        <UiAppAtom_Box>
           <UiAppAtom_BoxHeading heading="Note" />
           <UiCommonTemplate_FormControllerFix>
             <Controller
@@ -356,6 +321,41 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               }}
             />
           </UiCommonTemplate_FormControllerFix>
+        </UiAppAtom_Box>
+
+        <UiAppAtom_Box>
+          <UiAppAtom_BoxHeading heading="Tags" />
+          <Controller
+            name="is_public"
+            control={control}
+            defaultValue={props.bookmark?.is_public}
+            render={({ field }) => {
+              return (
+                <UiAppAtom_DraggableFormInputs
+                  items={tags.map((tag) => ({
+                    value: tag.name,
+                    is_public:
+                      props.bookmark?.is_public == false ? true : tag.is_public,
+                  }))}
+                  on_change={(tags) => {
+                    set_tags(
+                      tags.map((el) => ({
+                        name: el.value,
+                        is_public: el.is_public,
+                      })),
+                    )
+                  }}
+                  button_text="Add tag"
+                  show_visibility_toggler={
+                    (field.value === undefined && props.bookmark?.is_public) ||
+                    field.value ||
+                    false
+                  }
+                  max_items={system_values.bookmark.tags.limit}
+                />
+              )
+            }}
+          />
         </UiAppAtom_Box>
       </UiAppTemplate_FormModal>
     </form>

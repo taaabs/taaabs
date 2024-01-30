@@ -8,7 +8,6 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useToggle from 'beautiful-react-hooks/useToggle'
-import { Filter } from '@shared/types/common/filter'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search/get-site-variants-for-search'
 import { Icon } from '@web-ui/components/common/particles/icon'
 import { useContextMenu } from 'use-context-menu'
@@ -68,7 +67,7 @@ export namespace Bookmark {
     highlights_site_variants?: string[]
     orama_db_id?: string
     should_dim_visited_links: boolean
-    current_filter?: Filter // Needs by [use_search/update_searchable_bookmarks]
+    current_filter?: string // Needs by [use_search/update_searchable_bookmarks]
     is_fetching_bookmarks: boolean
     counts_refreshed_at_timestamp?: number // When updating other bookmark, we refetch counts and this is needed to trigger a rerender of all bookmarks
     is_not_interactive?: boolean

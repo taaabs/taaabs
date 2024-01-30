@@ -1,7 +1,6 @@
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import OutsideClickHandler from 'react-outside-click-handler'
-import { Filter } from '@shared/types/common/filter'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { useContext, useEffect, useState } from 'react'
@@ -48,6 +47,7 @@ import { DraggedCursorTag as UiAppAtom_DraggedCursorTag } from '@web-ui/componen
 import { use_tag_hierarchies } from '@/hooks/library/use-tag-hierarchies'
 import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
 import { system_values } from '@shared/constants/system-values'
+import { Filter } from '@/types/library/filter'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -1418,7 +1418,7 @@ const BookmarksPage: React.FC = () => {
                         ...(!username
                           ? [
                               {
-                                label: 'Mark as Unread',
+                                label: 'Mark as unread',
                                 is_checked: bookmark.is_unread,
                                 is_disabled: are_bookmark_menu_items_locked,
                                 on_click: async () => {

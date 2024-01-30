@@ -1,4 +1,3 @@
-import { Filter } from '@shared/types/common/filter'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 
@@ -8,7 +7,9 @@ export namespace GetBookmarks_Params {
     order?: Order
     tags?: string[]
     after?: number
-    filter?: Filter
+    starred_only?: boolean
+    unread_only?: boolean
+    is_archived?: boolean
     yyyymm_gte?: number
     yyyymm_lte?: number
   }
