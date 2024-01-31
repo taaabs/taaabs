@@ -1,6 +1,7 @@
 export namespace TagHierarchies_Dto {
   class Node {
     public id: number
+    public yields?: number
   }
   export class AuthorizedNode extends Node {
     public name?: string

@@ -26,6 +26,7 @@ export class TagHierarchies_RepositoryImpl
             CryptoJS.enc.Utf8,
           )
         : '',
+      yields: node.yields,
       children:
         node.children?.map((node) => this._parse_authorized_tree_node(node)) ||
         [],
@@ -53,6 +54,7 @@ export class TagHierarchies_RepositoryImpl
       return {
         id: node.id,
         name: node.name,
+        yields: node.yields,
         children: node.children?.map((node) => parse_tree_node(node)) || [],
       }
     }

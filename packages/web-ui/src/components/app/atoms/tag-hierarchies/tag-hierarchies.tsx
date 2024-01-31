@@ -7,11 +7,13 @@ import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
 import { useContextMenu } from 'use-context-menu'
 import { DropdownMenu } from '../dropdown-menu'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace TagHierarchies {
   export type Node = {
     name: string
     id: number
+    yields?: number
     children: Node[]
   }
   export type Props = {
@@ -30,6 +32,7 @@ type Item = {
   id: number
   tag_id: number
   text: string
+  yields?: number
   hierarchy_ids: number[]
   hierarchy_tag_ids: number[]
   children: Item[]
@@ -40,6 +43,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const [is_dragging, set_is_dragging] = useState(false)
     const [items, set_items] = useState<Item[]>([])
     const [mouseover_ids, set_mouseover_ids] = useState<number[]>([])
+    const [selected_tag_ids, set_selected_tag_ids] = useState<number[]>([])
     const [context_menu_of_item_id, set_context_menu_of_item_id] =
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
@@ -63,6 +67,20 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const clear_mouseover_ids = () => {
       set_mouseover_ids([])
     }
+    const clear_selected_tag_ids = () => {
+      set_selected_tag_ids([])
+    }
+
+    useUpdateEffect(() => {
+      if (
+        JSON.stringify(props.selected_tag_ids) !=
+        JSON.stringify(selected_tag_ids)
+      ) {
+        setTimeout(() => {
+          clear_selected_tag_ids()
+        }, 0)
+      }
+    }, [props.selected_tag_ids])
 
     useEffect(() => {
       set_items(
@@ -87,10 +105,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               [styles['tag__button--active']]:
                 JSON.stringify(item.hierarchy_tag_ids) ==
                 JSON.stringify(
-                  props.selected_tag_ids.slice(
-                    0,
-                    item.hierarchy_tag_ids.length,
-                  ),
+                  selected_tag_ids.slice(0, item.hierarchy_tag_ids.length),
                 ),
               [styles['tag__button--highlighted']]: mouseover_ids.includes(
                 (item as Item).id,
@@ -98,6 +113,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             })}
             onClick={() => {
               props.on_item_click((item as Item).hierarchy_tag_ids)
+              set_selected_tag_ids((item as Item).hierarchy_tag_ids)
               clear_mouseover_ids()
             }}
             onMouseEnter={() => {
@@ -166,7 +182,10 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               onContextMenu(e)
             }}
           >
-            {(item as Item).text}
+            <div>
+              <span>{(item as Item).text}</span>
+              {<span> {(item as Item).yields || 0}</span>}
+            </div>
           </button>
         </div>
       )
@@ -317,6 +336,7 @@ const tag_to_item = (params: {
     id,
     tag_id: params.node.id,
     text: params.node.name,
+    yields: params.node.yields,
     hierarchy_ids,
     hierarchy_tag_ids,
     children: params.node.children.map((node) =>
@@ -329,6 +349,7 @@ const item_to_tag = (item: Item): TagHierarchies.Node => {
   return {
     name: item.text,
     id: item.tag_id,
+    yields: item.yields,
     children: item.children.map((i) => item_to_tag(i)),
   }
 }

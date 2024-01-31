@@ -1192,6 +1192,7 @@ const BookmarksPage: React.FC = () => {
                           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                       }),
                     )
+                    tag_hierarchies.get_tag_hierarchies()
                     toast.success('Bookmark has been updated')
                   }}
                   // Change tag order by swapping them.

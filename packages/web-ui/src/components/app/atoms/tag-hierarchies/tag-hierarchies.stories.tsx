@@ -12,10 +12,12 @@ export const Primary = () => {
         {
           name: 'AAA',
           id: 1,
+          yields: 100,
           children: [
             {
               name: 'BBB',
               id: 2,
+              yields: 50,
               children: [],
             },
             {

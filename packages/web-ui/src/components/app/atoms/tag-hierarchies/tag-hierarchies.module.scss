@@ -47,17 +47,29 @@
     height: var(--button-dimension-34px);
     display: flex;
     align-items: center;
-    color: var(--text-color-dimmed);
-    font-size: var(--font-size-16px);
-    @include hover {
-      color: var(--text-color-normal);
+    > div > span {
+      color: var(--text-color-dimmed);
+    }
+    > div > span:first-child {
+      font-size: var(--font-size-16px);
+      @include hover {
+        color: var(--text-color-normal);
+      }
+    }
+    > div > span:nth-child(2) {
+      color: var(--text-color-dimmed);
+      font-size: var(--font-size-13px);
     }
     &--active {
-      color: var(--text-color-normal);
-      font-weight: var(--font-weight-inter-medium);
+      > div > span:first-child {
+        color: var(--text-color-normal);
+        font-weight: var(--font-weight-inter-medium);
+      }
     }
     &--highlighted {
-      color: var(--text-color-normal);
+      > div > span:first-child {
+        color: var(--text-color-normal);
+      }
     }
   }
 }

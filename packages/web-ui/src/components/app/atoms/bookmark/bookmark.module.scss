@@ -125,23 +125,24 @@
       display: flex;
       flex-direction: column;
       gap: var(--distance-2px);
+      overflow: hidden;
+      position: relative;
       &__title {
         display: inline;
         color: var(--text-color-normal);
+        overflow: hidden;
         &__unread {
           display: inline-flex;
           align-items: center;
-          transform: translateX(-10px) translateY(0.8rem);
+          transform: translateX(-7px) translateY(-0.2rem) rotate(45deg);
+          left: 0;
           transform-origin: left;
           position: absolute;
-          height: var(--distance-6px);
-          width: var(--distance-6px);
+          border-radius: var(--border-radius-4px);
+          height: var(--distance-16px);
+          width: var(--distance-16px);
           background: var(--red);
-          border-radius: var(--border-radius-999px);
-          filter: drop-shadow(2px 2px 2px rgba(255, 0, 0, 0.08));
-          &:after {
-            content: '⠀';
-          }
+          filter: drop-shadow(2px -1px 2px rgba(255, 0, 0, 0.1));
         }
         &__stars {
           display: inline-flex;
@@ -149,7 +150,7 @@
           gap: var(--distance-0-6rem);
           transform: translateY(0.22rem);
           margin-left: var(--distance-0-1rem);
-          margin-right: var(--distance-0-7rem);
+          margin-right: var(--distance-0-6rem);
           height: 0;
           > svg {
             height: var(--distance-2-0rem);

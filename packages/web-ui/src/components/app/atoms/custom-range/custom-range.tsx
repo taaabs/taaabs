@@ -47,13 +47,6 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     const [starred_count, set_starred_count] = useState<number>()
     const [unread_count, set_unread_count] = useState<number>()
 
-    // useUpdateEffect(() => {
-    //   // set_bookmark_count(undefined)
-    //   // set_starred_count(undefined)
-    //   // set_unread_count(undefined)
-    //   // console.log('x')
-    // }, [pop_count])
-
     useUpdateEffect(() => {
       if (props.is_range_selector_disabled) return
 
