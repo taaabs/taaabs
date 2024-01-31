@@ -76,9 +76,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         JSON.stringify(props.selected_tag_ids) !=
         JSON.stringify(selected_tag_ids)
       ) {
-        setTimeout(() => {
-          clear_selected_tag_ids()
-        }, 0)
+        clear_selected_tag_ids()
       }
     }, [props.selected_tag_ids])
 
@@ -113,7 +111,12 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             })}
             onClick={() => {
               props.on_item_click((item as Item).hierarchy_tag_ids)
+              // Calling before timeout fixes issue when selecting tag after changing filter.
+              // TODO: Investigate root cause.
               set_selected_tag_ids((item as Item).hierarchy_tag_ids)
+              setTimeout(() => {
+                set_selected_tag_ids((item as Item).hierarchy_tag_ids)
+              }, 0)
               clear_mouseover_ids()
             }}
             onMouseEnter={() => {
