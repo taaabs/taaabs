@@ -376,9 +376,6 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
             ) : bookmark_count == unread_count &&
               bookmark_count != starred_count ? (
               <div className={styles['custom-range__details__counts']}>
-                <div
-                  className={styles['custom-range__details__counts__total']}
-                />
                 {starred_count !== undefined &&
                   starred_count > unread_count &&
                   starred_count > 0 && (
@@ -411,9 +408,6 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
               bookmark_count != unread_count ? (
               <div className={styles['custom-range__details__counts']}>
                 <div
-                  className={styles['custom-range__details__counts__total']}
-                />
-                <div
                   className={styles['custom-range__details__counts__starred']}
                 >
                   <span>{starred_count}</span>
@@ -428,9 +422,6 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
               </div>
             ) : (
               <div className={styles['custom-range__details__counts']}>
-                <div
-                  className={styles['custom-range__details__counts__total']}
-                />
                 <div
                   className={styles['custom-range__details__counts__starred']}
                 />
