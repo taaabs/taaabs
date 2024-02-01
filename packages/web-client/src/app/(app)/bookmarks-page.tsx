@@ -375,7 +375,7 @@ const BookmarksPage: React.FC = () => {
                   } else if (
                     filter_view_options.current_filter == Filter.ArchivedStarred
                   ) {
-                    filter = Filter.ArchivedStarredUnread
+                    filter = Filter.Archived
                   } else if (
                     filter_view_options.current_filter ==
                     Filter.ArchivedStarredUnread

@@ -1,5 +1,6 @@
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { update_query_params } from '@/utils/update-query-params'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
@@ -12,6 +13,16 @@ export const use_date_view_options = () => {
   const [current_lte, set_current_lte] = useState<number | undefined>(
     parseInt(query_params.get('lte') || '0') || undefined,
   )
+
+  useUpdateEffect(() => {
+    const query_gte = parseInt(query_params.get('gte') || '0')
+    const query_lte = parseInt(query_params.get('lte') || '0')
+
+    if (query_gte != current_gte && query_lte != current_lte) {
+      set_current_gte(query_gte || undefined)
+      set_current_lte(query_lte || undefined)
+    }
+  }, [query_params])
 
   const set_gte_lte_query_params = ({
     gte,

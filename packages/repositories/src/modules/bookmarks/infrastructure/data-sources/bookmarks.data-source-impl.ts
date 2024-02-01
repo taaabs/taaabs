@@ -199,6 +199,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           [] as UpsertBookmark_Params['links'],
         )
         .map((link) => {
+          const domain = get_domain_from_url(link.url)
           return {
             url: link.is_public ? link.url.trim() : undefined,
             url_aes: !link.is_public
@@ -209,9 +210,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
               : undefined,
             site_aes: !link.is_public
               ? CryptoJS.AES.encrypt(
-                  get_domain_from_url(link.url) + link.site_path
-                    ? `/${link.site_path}`
-                    : '',
+                  link.site_path ? `${domain}/${link.site_path}` : domain,
                   'my_secret_key',
                 ).toString()
               : undefined,

@@ -32,10 +32,13 @@ export namespace TagHierarchies_Dto {
     export class Public extends Base {}
   }
   export namespace Response {
-    export class Authorized {
+    class Base {
+      public total?: number
+    }
+    export class Authorized extends Base {
       public tree: AuthorizedNode[]
     }
-    export class Public {
+    export class Public extends Base {
       public tree: PublicNode[]
     }
   }

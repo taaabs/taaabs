@@ -17,7 +17,10 @@ export const use_tag_hierarchies = () => {
     lte?: number
   }) => {
     if (!username) {
-      const request_params: GetTagHierarchies_Params.Authorized = {}
+      const request_params: GetTagHierarchies_Params.Authorized = {
+        gte: params.gte,
+        lte: params.lte,
+      }
 
       if (params.filter) {
         request_params.starred_only =
@@ -42,9 +45,6 @@ export const use_tag_hierarchies = () => {
           undefined
       }
 
-      request_params.gte = params.gte
-      request_params.lte = params.lte
-
       dispatch(
         tag_hierarchies_actions.get_tag_hierarchies_authorized({
           request_params,
@@ -56,6 +56,8 @@ export const use_tag_hierarchies = () => {
     } else {
       const request_params: GetTagHierarchies_Params.Public = {
         username,
+        gte: params.gte,
+        lte: params.lte,
       }
 
       if (params.filter) {
