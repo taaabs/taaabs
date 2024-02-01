@@ -3,7 +3,9 @@ import { GetTagHierarchies_Ro } from '../types/get-tag-hierarchies.ro'
 import { UpdateTagHierarchies_Params } from '../types/update-tag-hierarchies.params'
 
 export type TagHierarchies_Repository = {
-  get_tag_hierarchies_authorized(): Promise<GetTagHierarchies_Ro>
+  get_tag_hierarchies_authorized(
+    params: GetTagHierarchies_Params.Authorized,
+  ): Promise<GetTagHierarchies_Ro>
 
   get_tag_hierarchies_public(
     params: GetTagHierarchies_Params.Public,

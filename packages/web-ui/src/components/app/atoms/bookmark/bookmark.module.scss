@@ -138,7 +138,8 @@
           left: 0;
           transform-origin: left;
           position: absolute;
-          border-radius: var(--border-radius-4px);
+          border-top-right-radius: var(--border-radius-4px);
+
           height: var(--distance-16px);
           width: var(--distance-16px);
           background: var(--red);
@@ -150,7 +151,7 @@
           gap: var(--distance-0-6rem);
           transform: translateY(0.22rem);
           margin-left: var(--distance-0-1rem);
-          margin-right: var(--distance-0-6rem);
+          margin-right: var(--distance-0-7rem);
           height: 0;
           > svg {
             height: var(--distance-2-0rem);

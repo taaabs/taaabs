@@ -187,7 +187,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           >
             <div>
               <span>{(item as Item).text}</span>
-              {<span> {(item as Item).yields || 0}</span>}
+              {!props.is_updating && <span> {(item as Item).yields || 0}</span>}
             </div>
           </button>
         </div>
@@ -320,6 +320,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     )
   },
   (o, n) =>
+    o.is_updating == n.is_updating &&
     o.query_params == n.query_params &&
     JSON.stringify(o.selected_tag_ids) == JSON.stringify(n.selected_tag_ids) &&
     o.dragged_tag == n.dragged_tag &&

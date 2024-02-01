@@ -47,6 +47,13 @@
     height: var(--button-dimension-34px);
     display: flex;
     align-items: center;
+    width: 100%;
+    > div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
     > div > span {
       color: var(--text-color-dimmed);
     }
@@ -57,7 +64,7 @@
       }
     }
     > div > span:nth-child(2) {
-      color: var(--text-color-dimmed);
+      color: var(--neutral300);
       font-size: var(--font-size-13px);
     }
     &--active {
