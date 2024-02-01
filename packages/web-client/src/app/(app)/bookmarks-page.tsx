@@ -48,6 +48,7 @@ import { use_tag_hierarchies } from '@/hooks/library/use-tag-hierarchies'
 import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
 import { system_values } from '@shared/constants/system-values'
 import { Filter } from '@/types/library/filter'
+import { UpdateTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/update-tag-hierarchies.params'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -206,6 +207,18 @@ const BookmarksPage: React.FC = () => {
     return () => window.removeEventListener('popstate', handleEvent)
   }, [])
 
+  useEffect(() => {
+    tag_hierarchies.get_tag_hierarchies({
+      filter: filter_view_options.current_filter,
+      gte: date_view_options.current_gte,
+      lte: date_view_options.current_lte,
+    })
+  }, [
+    date_view_options.current_gte,
+    date_view_options.current_lte,
+    filter_view_options.current_filter,
+  ])
+
   const is_archived_filter =
     filter_view_options.current_filter == Filter.Archived ||
     filter_view_options.current_filter == Filter.ArchivedStarred ||
@@ -347,46 +360,41 @@ const BookmarksPage: React.FC = () => {
                     counts.is_fetching_counts_data
                   )
                     return
+
+                  let filter = Filter.None
                   if (filter_view_options.current_filter == Filter.None) {
-                    filter_view_options.set_filter_query_param(Filter.Starred)
+                    filter = Filter.Starred
                   } else if (
                     filter_view_options.current_filter == Filter.Starred
                   ) {
-                    filter_view_options.set_filter_query_param(Filter.None)
+                    filter = Filter.None
                   } else if (
                     filter_view_options.current_filter == Filter.StarredUnread
                   ) {
-                    filter_view_options.set_filter_query_param(Filter.Unread)
+                    filter = Filter.Unread
                   } else if (
                     filter_view_options.current_filter == Filter.ArchivedStarred
                   ) {
-                    filter_view_options.set_filter_query_param(Filter.Archived)
+                    filter = Filter.ArchivedStarredUnread
                   } else if (
                     filter_view_options.current_filter ==
                     Filter.ArchivedStarredUnread
                   ) {
-                    filter_view_options.set_filter_query_param(
-                      Filter.ArchivedUnread,
-                    )
+                    filter = Filter.ArchivedUnread
                   } else if (
                     filter_view_options.current_filter == Filter.Unread
                   ) {
-                    filter_view_options.set_filter_query_param(
-                      Filter.StarredUnread,
-                    )
+                    filter = Filter.StarredUnread
                   } else if (
                     filter_view_options.current_filter == Filter.Archived
                   ) {
-                    filter_view_options.set_filter_query_param(
-                      Filter.ArchivedStarred,
-                    )
+                    filter = Filter.ArchivedStarred
                   } else if (
                     filter_view_options.current_filter == Filter.ArchivedUnread
                   ) {
-                    filter_view_options.set_filter_query_param(
-                      Filter.ArchivedStarredUnread,
-                    )
+                    filter = Filter.ArchivedStarredUnread
                   }
+                  filter_view_options.set_filter_query_param(filter)
                 },
               },
               ...(!username
@@ -409,57 +417,43 @@ const BookmarksPage: React.FC = () => {
                         )
                           return
 
+                        let filter = Filter.None
                         if (filter_view_options.current_filter == Filter.None) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.Unread,
-                          )
+                          filter = Filter.Unread
                         } else if (
                           filter_view_options.current_filter == Filter.Unread
                         ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.None,
-                          )
+                          filter = Filter.None
                         } else if (
                           filter_view_options.current_filter ==
                           Filter.StarredUnread
                         ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.Starred,
-                          )
+                          filter = Filter.Starred
                         } else if (
                           filter_view_options.current_filter ==
                           Filter.ArchivedUnread
                         ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.Archived,
-                          )
+                          filter = Filter.Archived
                         } else if (
                           filter_view_options.current_filter ==
                           Filter.ArchivedStarredUnread
                         ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.ArchivedStarred,
-                          )
+                          filter = Filter.ArchivedStarred
                         } else if (
                           filter_view_options.current_filter == Filter.Starred
                         ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.StarredUnread,
-                          )
+                          filter = Filter.StarredUnread
                         } else if (
                           filter_view_options.current_filter == Filter.Archived
                         ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.ArchivedUnread,
-                          )
+                          filter = Filter.ArchivedUnread
                         } else if (
                           filter_view_options.current_filter ==
                           Filter.ArchivedStarred
                         ) {
-                          filter_view_options.set_filter_query_param(
-                            Filter.ArchivedStarredUnread,
-                          )
+                          filter = Filter.ArchivedStarredUnread
                         }
+                        filter_view_options.set_filter_query_param(filter)
                       },
                     },
                   ]
@@ -481,46 +475,42 @@ const BookmarksPage: React.FC = () => {
                   )
                     return
 
+                  let filter = Filter.None
+
                   if (filter_view_options.current_filter == Filter.None) {
-                    filter_view_options.set_filter_query_param(Filter.Archived)
+                    filter = Filter.Archived
                   } else if (
                     filter_view_options.current_filter == Filter.Starred
                   ) {
-                    filter_view_options.set_filter_query_param(
-                      Filter.ArchivedStarred,
-                    )
+                    filter = Filter.ArchivedStarred
                   } else if (
                     filter_view_options.current_filter == Filter.Unread
                   ) {
-                    filter_view_options.set_filter_query_param(
-                      Filter.ArchivedUnread,
-                    )
+                    filter = Filter.ArchivedUnread
                   } else if (
                     filter_view_options.current_filter == Filter.StarredUnread
                   ) {
-                    filter_view_options.set_filter_query_param(
-                      Filter.ArchivedStarredUnread,
-                    )
+                    filter = Filter.ArchivedStarredUnread
                   } else if (
                     filter_view_options.current_filter == Filter.Archived
                   ) {
-                    filter_view_options.set_filter_query_param(Filter.None)
+                    filter = Filter.None
                   } else if (
                     filter_view_options.current_filter == Filter.ArchivedStarred
                   ) {
-                    filter_view_options.set_filter_query_param(Filter.Starred)
+                    filter = Filter.Starred
                   } else if (
                     filter_view_options.current_filter == Filter.ArchivedUnread
                   ) {
-                    filter_view_options.set_filter_query_param(Filter.Unread)
+                    filter = Filter.Unread
                   } else if (
                     filter_view_options.current_filter ==
                     Filter.ArchivedStarredUnread
                   ) {
-                    filter_view_options.set_filter_query_param(
-                      Filter.StarredUnread,
-                    )
+                    filter = Filter.StarredUnread
                   }
+
+                  filter_view_options.set_filter_query_param(filter)
                 },
               },
             ]}
@@ -586,12 +576,37 @@ const BookmarksPage: React.FC = () => {
               <UiAppAtom_TagHierarchies
                 is_draggable={!username}
                 tree={tag_hierarchies.tree}
-                on_update={(tree) => {
-                  dispatch(
+                on_update={async (tree) => {
+                  const filter = filter_view_options.current_filter
+
+                  const update_tag_hierarchies_params: UpdateTagHierarchies_Params =
+                    {
+                      tree,
+                      gte: date_view_options.current_gte,
+                      lte: date_view_options.current_lte,
+                      starred_only:
+                        filter == Filter.Starred ||
+                        filter == Filter.StarredUnread ||
+                        filter == Filter.ArchivedStarred ||
+                        filter == Filter.ArchivedStarredUnread ||
+                        undefined,
+                      unread_only:
+                        filter == Filter.Unread ||
+                        filter == Filter.StarredUnread ||
+                        filter == Filter.ArchivedUnread ||
+                        filter == Filter.ArchivedStarredUnread ||
+                        undefined,
+                      is_archived:
+                        filter == Filter.Archived ||
+                        filter == Filter.ArchivedStarred ||
+                        filter == Filter.ArchivedUnread ||
+                        filter == Filter.ArchivedStarredUnread ||
+                        undefined,
+                    }
+
+                  await dispatch(
                     tag_hierarchies_actions.update_tag_hierarchies({
-                      update_tag_hierarchies_params: {
-                        tree,
-                      },
+                      update_tag_hierarchies_params,
                       api_url: process.env.NEXT_PUBLIC_API_URL,
                       auth_token:
                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -1192,7 +1207,11 @@ const BookmarksPage: React.FC = () => {
                           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                       }),
                     )
-                    tag_hierarchies.get_tag_hierarchies()
+                    tag_hierarchies.get_tag_hierarchies({
+                      filter: filter_view_options.current_filter,
+                      gte: date_view_options.current_gte,
+                      lte: date_view_options.current_lte,
+                    })
                     toast.success('Bookmark has been updated')
                   }}
                   // Change tag order by swapping them.
@@ -1399,7 +1418,11 @@ const BookmarksPage: React.FC = () => {
                         return !updated_tag_ids.includes(t) && yields == 1
                       }),
                     )
-                    tag_hierarchies.get_tag_hierarchies()
+                    tag_hierarchies.get_tag_hierarchies({
+                      filter: filter_view_options.current_filter,
+                      gte: date_view_options.current_gte,
+                      lte: date_view_options.current_lte,
+                    })
                     toast.success('Bookmark has been updated')
                   }}
                   menu_slot={
@@ -1512,6 +1535,11 @@ const BookmarksPage: React.FC = () => {
                                       search.reset()
                                     }
                                   }
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
                                   toast.success('Bookmark has been updated')
                                 },
                               },
@@ -1602,6 +1630,11 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
                                   toast.success('Bookmark has been updated')
                                 },
                               },
@@ -1691,6 +1724,11 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
                                   toast.success('Bookmark has been updated')
                                 },
                               },
@@ -1780,6 +1818,11 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
                                   toast.success('Bookmark has been updated')
                                 },
                               },
@@ -1869,6 +1912,11 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
                                   toast.success('Bookmark has been updated')
                                 },
                               },
@@ -1958,6 +2006,11 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
                                   toast.success('Bookmark has been updated')
                                 },
                               },
@@ -2060,7 +2113,11 @@ const BookmarksPage: React.FC = () => {
                                       },
                                     ),
                                   )
-                                  tag_hierarchies.get_tag_hierarchies()
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
                                 },
                                 other_icon: (
                                   <UiCommonParticles_Icon variant="EDIT" />
@@ -2148,6 +2205,11 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
                                 },
                               },
                               {
@@ -2184,7 +2246,11 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
-                                  tag_hierarchies.get_tag_hierarchies()
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
                                 },
                                 other_icon: (
                                   <UiCommonParticles_Icon variant="DELETE" />

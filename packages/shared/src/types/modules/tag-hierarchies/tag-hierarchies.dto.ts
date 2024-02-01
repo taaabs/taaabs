@@ -1,3 +1,5 @@
+import { ToBoolean } from '@shared/decorators/to-boolean'
+
 export namespace TagHierarchies_Dto {
   class Node {
     public id: number
@@ -11,6 +13,23 @@ export namespace TagHierarchies_Dto {
   export class PublicNode extends Node {
     public name: string
     public children?: PublicNode[]
+  }
+  export namespace QueryParams {
+    class Base {
+      @ToBoolean()
+      public starred_only?: boolean
+
+      @ToBoolean()
+      public is_archived?: boolean
+
+      public gte?: number
+      public lte?: number
+    }
+    export class Authorized extends Base {
+      @ToBoolean()
+      public unread_only?: boolean
+    }
+    export class Public extends Base {}
   }
   export namespace Response {
     export class Authorized {

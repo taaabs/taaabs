@@ -270,6 +270,14 @@ strong {
   margin-left: var(--distance-8px) !important;
   border-left: var(--border-primary) !important;
 }
+.nestable > .nestable-list {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  border-left: none !important;
+}
+.nestable > .nestable-list > li {
+  margin-left: 0 !important;
+}
 .nestable-item,
 .nestable-item-copy {
   margin: 0 !important;

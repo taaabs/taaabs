@@ -14,20 +14,46 @@ export class TagHierarchies_DataSourceImpl
     private readonly _auth_token: string,
   ) {}
 
-  public async get_tag_hierarchies_authorized(): Promise<TagHierarchies_Dto.Response.Authorized> {
-    return fetch(`${this._api_url}/v1/tag-hierarchies`, {
-      headers: {
-        Authorization: `Bearer ${this._auth_token}`,
+  public async get_tag_hierarchies_authorized(
+    params: GetTagHierarchies_Params.Authorized,
+  ): Promise<TagHierarchies_Dto.Response.Authorized> {
+    const query_params: GetTagHierarchies_Params.Authorized = {
+      starred_only: params.starred_only,
+      unread_only: params.unread_only,
+      is_archived: params.is_archived,
+      gte: params.gte,
+      lte: params.lte,
+    }
+
+    return fetch(
+      `${this._api_url}/v1/tag-hierarchies?${new URLSearchParams(
+        JSON.parse(JSON.stringify(query_params)),
+      ).toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
+        },
       },
-    }).then((r) => r.json())
+    ).then((r) => r.json())
   }
 
   public async get_tag_hierarchies_public(
     params: GetTagHierarchies_Params.Public,
   ): Promise<TagHierarchies_Dto.Response.Public> {
-    return fetch(`${this._api_url}/v1/tag-hierarchies/${params.username}`).then(
-      (r) => r.json(),
-    )
+    const query_params: GetTagHierarchies_Params.Authorized = {
+      starred_only: params.starred_only,
+      is_archived: params.is_archived,
+      gte: params.gte,
+      lte: params.lte,
+    }
+
+    return fetch(
+      `${this._api_url}/v1/tag-hierarchies/${
+        params.username
+      }?${new URLSearchParams(
+        JSON.parse(JSON.stringify(query_params)),
+      ).toString()}`,
+    ).then((r) => r.json())
   }
 
   public async update_tag_hierarchies(
@@ -42,17 +68,30 @@ export class TagHierarchies_DataSourceImpl
       }
     }
 
+    const query_params: GetTagHierarchies_Params.Authorized = {
+      starred_only: params.starred_only,
+      unread_only: params.unread_only,
+      is_archived: params.is_archived,
+      gte: params.gte,
+      lte: params.lte,
+    }
+
     const body: UpdateTagHierarchies_Dto.Body = {
       tree: params.tree.map((node) => parse_node(node)),
     }
 
-    return await fetch(`${this._api_url}/v1/tag-hierarchies`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${this._auth_token}`,
-        'Content-Type': 'application/json',
+    return await fetch(
+      `${this._api_url}/v1/tag-hierarchies?${new URLSearchParams(
+        JSON.parse(JSON.stringify(query_params)),
+      ).toString()}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
       },
-      body: JSON.stringify(body),
-    }).then((r) => r.json())
+    ).then((r) => r.json())
   }
 }

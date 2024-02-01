@@ -33,9 +33,13 @@ export class TagHierarchies_RepositoryImpl
     }
   }
 
-  public async get_tag_hierarchies_authorized(): Promise<GetTagHierarchies_Ro> {
+  public async get_tag_hierarchies_authorized(
+    params: GetTagHierarchies_Params.Authorized,
+  ): Promise<GetTagHierarchies_Ro> {
     const { tree } =
-      await this._tag_hierarchies_data_source.get_tag_hierarchies_authorized()
+      await this._tag_hierarchies_data_source.get_tag_hierarchies_authorized(
+        params,
+      )
 
     return {
       tree: tree.map((node) => this._parse_authorized_tree_node(node)),
