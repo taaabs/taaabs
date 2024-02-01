@@ -838,6 +838,7 @@ export const use_search = () => {
             ),
           ].slice(0, system_values.max_library_search_hints),
         )
+        set_count(undefined)
       } else {
         const pre_result = await get_result({
           search_string: search_string_lower,
