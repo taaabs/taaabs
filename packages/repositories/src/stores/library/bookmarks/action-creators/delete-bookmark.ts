@@ -44,7 +44,6 @@ export const delete_bookmark = (params: {
           auth_token: params.auth_token,
         }),
       )
-      dispatch(bookmarks_actions.set_toast_message('deleted'))
       resolve(null)
     })
 }

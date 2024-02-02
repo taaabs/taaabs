@@ -5,7 +5,6 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { system_values } from '@shared/constants/system-values'
 import { useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
 import { FormModal as UiAppTemplate_FormModal } from '../../../web-ui/src/components/app/templates/form-modal'
 import { ModalHeader as UiAppAtom_ModalHeader } from '../../../web-ui/src/components/app/atoms/modal-header'
 import { ModalFooter as UiAppAtom_ModalFooter } from '../../../web-ui/src/components/app/atoms/modal-footer'
@@ -128,30 +127,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        toast.promise(handleSubmit(on_submit), {
-          pending: {
-            render() {
-              return 'Updading...'
-            },
-            icon: false,
-          },
-          success: {
-            render() {
-              return `Bookmark has been ${
-                props.bookmark ? 'updated' : 'created'
-              }`
-            },
-          },
-          error: {
-            render() {
-              props.on_close()
-              return 'Something went wrong... Try again later.'
-            },
-          },
-        })
-      }}
+      onSubmit={handleSubmit(on_submit)}
       onKeyDown={(e) => {
         if (e.code == 'Enter') {
           e.preventDefault()

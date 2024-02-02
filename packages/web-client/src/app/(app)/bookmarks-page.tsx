@@ -29,7 +29,6 @@ import { toast } from 'react-toastify'
 import { CustomRangeSkeleton as UiAppAtom_CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
 import { Library as UiAppTemplate_Library } from '@web-ui/components/app/templates/library'
 import { LibrarySearch as UiAppAtom_LibrarySearch } from '@web-ui/components/app/atoms/library-search'
-import { NavigationForLibrarySidebar as UiAppAtom_NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
 import { LibraryAside as UiAppTemplate_LibraryAside } from '@web-ui/components/app/templates/library-aside'
 import { ButtonSelect as UiAppAtom_ButtonSelect } from '@web-ui/components/app/atoms/button-select'
 import { ButtonSelectSkeleton as UiAppAtom_ButtonSelectSkeleton } from '@web-ui/components/app/atoms/button-select-skeleton'
@@ -49,6 +48,7 @@ import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierar
 import { system_values } from '@shared/constants/system-values'
 import { Filter } from '@/types/library/filter'
 import { UpdateTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/update-tag-hierarchies.params'
+import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -185,17 +185,6 @@ const BookmarksPage: React.FC = () => {
       )
     }
   }, [search.db, search.archived_db])
-
-  useUpdateEffect(() => {
-    if (bookmarks_slice_state.toast_message == 'archived') {
-      toast.success('Bookmark has been archived')
-    } else if (bookmarks_slice_state.toast_message == 'restored') {
-      toast.success('Bookmark has been restored')
-    } else if (bookmarks_slice_state.toast_message == 'deleted') {
-      toast.success('Bookmark has been deleted')
-    }
-    dispatch(bookmarks_actions.set_toast_message())
-  }, [bookmarks_slice_state.toast_message])
 
   // We don't refetch bookmarks on back/forward navigation, therefore we need
   // to clear "searching" state this way.
@@ -531,13 +520,14 @@ const BookmarksPage: React.FC = () => {
                           : 'default',
                       ),
                     )
-                    if (
-                      bookmarks_slice_state.showing_bookmarks_fetched_by_ids
-                    ) {
-                      search.get_bookmarks({})
-                    } else {
-                      bookmarks.get_bookmarks({})
-                    }
+                    // if (
+                    //   bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+                    // ) {
+                    //   search.get_bookmarks({})
+                    // } else {
+                    //   bookmarks.get_bookmarks({})
+                    // }
+                    window.scrollTo(0, 0)
                   }, 0)
                 },
               },
@@ -547,32 +537,7 @@ const BookmarksPage: React.FC = () => {
         }
         slot_sidebar={
           <>
-            <UiAppAtom_NavigationForLibrarySidebar
-              navigation_items={[
-                {
-                  label: 'All bookmarks',
-                  on_click: () => {
-                    if (
-                      bookmarks_slice_state.is_fetching_first_bookmarks ||
-                      bookmarks_slice_state.is_updating_bookmarks
-                    )
-                      return
-                    tag_view_options.clear_selected_tags()
-                    if (
-                      bookmarks_slice_state.showing_bookmarks_fetched_by_ids
-                    ) {
-                      search.reset()
-                      if (filter_view_options.current_filter == Filter.None) {
-                        bookmarks.get_bookmarks({})
-                      }
-                    }
-                    set_close_aside_count(close_aside_count + 1)
-                  },
-                  is_active: !tag_view_options.selected_tags.length,
-                },
-              ]}
-            />
-            {tag_hierarchies.tree !== undefined && (
+            {tag_hierarchies.is_initialized && (
               <UiAppAtom_TagHierarchies
                 is_draggable={!username}
                 tree={tag_hierarchies.tree}
@@ -624,6 +589,26 @@ const BookmarksPage: React.FC = () => {
                 }}
                 dragged_tag={tag_view_options.dragged_tag}
                 query_params={query_params.toString()}
+                all_bookmarks_label="All bookmarks"
+                all_bookmarks_yields={tag_hierarchies.total}
+                is_all_bookmarks_selected={
+                  !tag_view_options.selected_tags.length
+                }
+                on_click_all_bookmarks={() => {
+                  if (
+                    bookmarks_slice_state.is_fetching_first_bookmarks ||
+                    bookmarks_slice_state.is_updating_bookmarks
+                  )
+                    return
+                  tag_view_options.clear_selected_tags()
+                  if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
+                    search.reset()
+                    if (filter_view_options.current_filter == Filter.None) {
+                      bookmarks.get_bookmarks({})
+                    }
+                  }
+                  set_close_aside_count(close_aside_count + 1)
+                }}
               />
             )}
           </>
@@ -1162,12 +1147,7 @@ const BookmarksPage: React.FC = () => {
                       bookmarks_actions.upsert_bookmark({
                         bookmark: modified_bookmark,
                         last_authorized_counts_params:
-                          JSON.parse(
-                            sessionStorage.getItem(
-                              browser_storage.session_storage.library
-                                .last_authorized_counts_params,
-                            ) || '',
-                          ) || undefined,
+                          get_last_authorized_counts_params(),
                         api_url: process.env.NEXT_PUBLIC_API_URL,
                         auth_token:
                           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -1195,16 +1175,6 @@ const BookmarksPage: React.FC = () => {
                     dispatch(
                       bookmarks_actions.replace_bookmark({
                         bookmark: updated_bookmark,
-                        last_authorized_counts_params:
-                          JSON.parse(
-                            sessionStorage.getItem(
-                              browser_storage.session_storage.library
-                                .last_authorized_counts_params,
-                            ) || '',
-                          ) || undefined,
-                        api_url: process.env.NEXT_PUBLIC_API_URL,
-                        auth_token:
-                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                       }),
                     )
                     tag_hierarchies.get_tag_hierarchies({
@@ -1262,12 +1232,7 @@ const BookmarksPage: React.FC = () => {
                       bookmarks_actions.upsert_bookmark({
                         bookmark: modified_bookmark,
                         last_authorized_counts_params:
-                          JSON.parse(
-                            sessionStorage.getItem(
-                              browser_storage.session_storage.library
-                                .last_authorized_counts_params,
-                            ) || '',
-                          ) || undefined,
+                          get_last_authorized_counts_params(),
                         api_url: process.env.NEXT_PUBLIC_API_URL,
                         auth_token:
                           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -1295,16 +1260,6 @@ const BookmarksPage: React.FC = () => {
                     dispatch(
                       bookmarks_actions.replace_bookmark({
                         bookmark: updated_bookmark,
-                        last_authorized_counts_params:
-                          JSON.parse(
-                            sessionStorage.getItem(
-                              browser_storage.session_storage.library
-                                .last_authorized_counts_params,
-                            ) || '',
-                          ) || undefined,
-                        api_url: process.env.NEXT_PUBLIC_API_URL,
-                        auth_token:
-                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                       }),
                     )
                     toast.success('Bookmark has been updated')
@@ -1335,12 +1290,7 @@ const BookmarksPage: React.FC = () => {
                       bookmarks_actions.upsert_bookmark({
                         bookmark: modified_bookmark,
                         last_authorized_counts_params:
-                          JSON.parse(
-                            sessionStorage.getItem(
-                              browser_storage.session_storage.library
-                                .last_authorized_counts_params,
-                            ) || '',
-                          ) || undefined,
+                          get_last_authorized_counts_params(),
                         api_url: process.env.NEXT_PUBLIC_API_URL,
                         auth_token:
                           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -1376,16 +1326,6 @@ const BookmarksPage: React.FC = () => {
                       dispatch(
                         bookmarks_actions.replace_bookmark({
                           bookmark: updated_bookmark,
-                          last_authorized_counts_params:
-                            JSON.parse(
-                              sessionStorage.getItem(
-                                browser_storage.session_storage.library
-                                  .last_authorized_counts_params,
-                              ) || '',
-                            ) || undefined,
-                          api_url: process.env.NEXT_PUBLIC_API_URL,
-                          auth_token:
-                            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                         }),
                       )
                     } else {
@@ -1393,16 +1333,6 @@ const BookmarksPage: React.FC = () => {
                       dispatch(
                         bookmarks_actions.filter_out_bookmark({
                           bookmark_id: updated_bookmark.id,
-                          last_authorized_counts_params:
-                            JSON.parse(
-                              sessionStorage.getItem(
-                                browser_storage.session_storage.library
-                                  .last_authorized_counts_params,
-                              ) || '',
-                            ) || undefined,
-                          api_url: process.env.NEXT_PUBLIC_API_URL,
-                          auth_token:
-                            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                         }),
                       )
                       if (search.count) {
@@ -1471,13 +1401,7 @@ const BookmarksPage: React.FC = () => {
                                     bookmarks_actions.upsert_bookmark({
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .library
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
+                                        get_last_authorized_counts_params(),
                                       api_url: process.env.NEXT_PUBLIC_API_URL,
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -1572,13 +1496,7 @@ const BookmarksPage: React.FC = () => {
                                     bookmarks_actions.upsert_bookmark({
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .library
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
+                                        get_last_authorized_counts_params(),
                                       api_url: process.env.NEXT_PUBLIC_API_URL,
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -1667,13 +1585,7 @@ const BookmarksPage: React.FC = () => {
                                     bookmarks_actions.upsert_bookmark({
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .library
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
+                                        get_last_authorized_counts_params(),
                                       api_url: process.env.NEXT_PUBLIC_API_URL,
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -1761,13 +1673,7 @@ const BookmarksPage: React.FC = () => {
                                     bookmarks_actions.upsert_bookmark({
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .library
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
+                                        get_last_authorized_counts_params(),
                                       api_url: process.env.NEXT_PUBLIC_API_URL,
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -1855,13 +1761,7 @@ const BookmarksPage: React.FC = () => {
                                     bookmarks_actions.upsert_bookmark({
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .library
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
+                                        get_last_authorized_counts_params(),
                                       api_url: process.env.NEXT_PUBLIC_API_URL,
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -1949,13 +1849,7 @@ const BookmarksPage: React.FC = () => {
                                     bookmarks_actions.upsert_bookmark({
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .library
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
+                                        get_last_authorized_counts_params(),
                                       api_url: process.env.NEXT_PUBLIC_API_URL,
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
@@ -2026,6 +1920,61 @@ const BookmarksPage: React.FC = () => {
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                     })
+                                  const updated_tag_ids =
+                                    updated_bookmark.tags.map((t) => t.id)
+                                  if (
+                                    tag_view_options.selected_tags.every((t) =>
+                                      updated_tag_ids.includes(t),
+                                    )
+                                  ) {
+                                    dispatch(
+                                      bookmarks_actions.replace_bookmark({
+                                        bookmark: updated_bookmark,
+                                      }),
+                                    )
+                                  } else {
+                                    // We filter out bookmark when there are other bookmarks still matching with selected tags.
+                                    dispatch(
+                                      bookmarks_actions.filter_out_bookmark({
+                                        bookmark_id: updated_bookmark.id,
+                                      }),
+                                    )
+                                    if (search.count) {
+                                      search.set_count(search.count - 1)
+                                    }
+                                  }
+                                  await dispatch(
+                                    counts_actions.refresh_authorized_counts({
+                                      last_authorized_counts_params:
+                                        get_last_authorized_counts_params(),
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                  modal_context?.set_modal()
+                                  toast.success('Bookmark has beed updated')
+
+                                  // Unselect removed tags when there is no more bookmarks with them.
+                                  tag_view_options.remove_tags_from_query_params(
+                                    tag_view_options.selected_tags.filter(
+                                      (t) => {
+                                        const yields = Object.values(
+                                          counts_slice_state.tags!,
+                                        ).find((tag) => tag.id == t)!.yields
+                                        return (
+                                          !updated_tag_ids.includes(t) &&
+                                          yields == 1
+                                        )
+                                      },
+                                    ),
+                                  )
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
+
                                   await search.update_searchable_bookmark({
                                     bookmark: {
                                       id: bookmark.id,
@@ -2051,72 +2000,6 @@ const BookmarksPage: React.FC = () => {
                                         (tag) => tag.id,
                                       ),
                                     },
-                                  })
-                                  const updated_tag_ids =
-                                    updated_bookmark.tags.map((t) => t.id)
-                                  if (
-                                    tag_view_options.selected_tags.every((t) =>
-                                      updated_tag_ids.includes(t),
-                                    )
-                                  ) {
-                                    dispatch(
-                                      bookmarks_actions.replace_bookmark({
-                                        bookmark: updated_bookmark,
-                                        last_authorized_counts_params:
-                                          JSON.parse(
-                                            sessionStorage.getItem(
-                                              browser_storage.session_storage
-                                                .library
-                                                .last_authorized_counts_params,
-                                            ) || '',
-                                          ) || undefined,
-                                        api_url:
-                                          process.env.NEXT_PUBLIC_API_URL,
-                                        auth_token:
-                                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                      }),
-                                    )
-                                  } else {
-                                    // We filter out bookmark when there are other bookmarks still matching with selected tags.
-                                    dispatch(
-                                      bookmarks_actions.filter_out_bookmark({
-                                        bookmark_id: updated_bookmark.id,
-                                        last_authorized_counts_params:
-                                          JSON.parse(
-                                            sessionStorage.getItem(
-                                              browser_storage.session_storage
-                                                .library
-                                                .last_authorized_counts_params,
-                                            ) || '',
-                                          ) || undefined,
-                                        api_url:
-                                          process.env.NEXT_PUBLIC_API_URL,
-                                        auth_token:
-                                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                      }),
-                                    )
-                                    if (search.count) {
-                                      search.set_count(search.count - 1)
-                                    }
-                                  }
-                                  // Unselect removed tags when there is no more bookmarks with them.
-                                  tag_view_options.remove_tags_from_query_params(
-                                    tag_view_options.selected_tags.filter(
-                                      (t) => {
-                                        const yields = Object.values(
-                                          counts_slice_state.tags!,
-                                        ).find((tag) => tag.id == t)!.yields
-                                        return (
-                                          !updated_tag_ids.includes(t) &&
-                                          yields == 1
-                                        )
-                                      },
-                                    ),
-                                  )
-                                  tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
                                   })
                                 },
                                 other_icon: (
@@ -2158,19 +2041,28 @@ const BookmarksPage: React.FC = () => {
                                     bookmarks_actions.upsert_bookmark({
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .library
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
+                                        get_last_authorized_counts_params(),
                                       api_url: process.env.NEXT_PUBLIC_API_URL,
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                     }),
                                   )
-                                  await search.update_searchable_bookmark({
+                                  toast.success(
+                                    `Bookmark has been ${
+                                      is_archived_filter
+                                        ? 'restored'
+                                        : 'archived'
+                                    }`,
+                                  )
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
+                                  if (search.count) {
+                                    search.set_count(search.count - 1)
+                                  }
+                                  search.update_searchable_bookmark({
                                     bookmark: {
                                       id: bookmark.id,
                                       created_at: bookmark.created_at,
@@ -2194,9 +2086,6 @@ const BookmarksPage: React.FC = () => {
                                       ),
                                     },
                                   })
-                                  if (search.count) {
-                                    search.set_count(search.count - 1)
-                                  }
                                   if (
                                     bookmarks_slice_state.bookmarks &&
                                     bookmarks_slice_state.bookmarks.length ==
@@ -2205,11 +2094,6 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
-                                  tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
                                 },
                               },
                               {
@@ -2219,25 +2103,25 @@ const BookmarksPage: React.FC = () => {
                                   await dispatch(
                                     bookmarks_actions.delete_bookmark({
                                       last_authorized_counts_params:
-                                        JSON.parse(
-                                          sessionStorage.getItem(
-                                            browser_storage.session_storage
-                                              .library
-                                              .last_authorized_counts_params,
-                                          ) || '',
-                                        ) || undefined,
+                                        get_last_authorized_counts_params(),
                                       bookmark_id: bookmark.id,
                                       api_url: process.env.NEXT_PUBLIC_API_URL,
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                     }),
                                   )
-                                  await search.delete_searchable_bookmark({
-                                    bookmark_id: bookmark.id,
+                                  toast.success('Bookmark has been deleted')
+                                  tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
                                   })
                                   if (search.count) {
                                     search.set_count(search.count - 1)
                                   }
+                                  search.delete_searchable_bookmark({
+                                    bookmark_id: bookmark.id,
+                                  })
                                   if (
                                     bookmarks_slice_state.bookmarks &&
                                     bookmarks_slice_state.bookmarks.length ==
@@ -2246,11 +2130,6 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
-                                  tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
                                 },
                                 other_icon: (
                                   <UiCommonParticles_Icon variant="DELETE" />
@@ -2338,4 +2217,14 @@ function _order_option_to_label(order_option: Order): string {
     case Order.Asc:
       return 'Oldest first'
   }
+}
+
+const get_last_authorized_counts_params = () => {
+  return (
+    JSON.parse(
+      sessionStorage.getItem(
+        browser_storage.session_storage.library.last_authorized_counts_params,
+      ) || '',
+    ) || undefined
+  )
 }

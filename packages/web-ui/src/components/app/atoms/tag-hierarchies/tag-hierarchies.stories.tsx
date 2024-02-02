@@ -8,6 +8,10 @@ export const Primary = () => {
   return (
     <TagHierarchies
       is_draggable={true}
+      all_bookmarks_label="All bookmarks"
+      all_bookmarks_yields={2137}
+      is_all_bookmarks_selected={false}
+      on_click_all_bookmarks={() => {}}
       tree={[
         {
           name: 'AAA',

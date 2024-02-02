@@ -36,20 +36,21 @@ export class TagHierarchies_RepositoryImpl
   public async get_tag_hierarchies_authorized(
     params: GetTagHierarchies_Params.Authorized,
   ): Promise<GetTagHierarchies_Ro> {
-    const { tree } =
+    const { tree, total } =
       await this._tag_hierarchies_data_source.get_tag_hierarchies_authorized(
         params,
       )
 
     return {
       tree: tree.map((node) => this._parse_authorized_tree_node(node)),
+      total,
     }
   }
 
   public async get_tag_hierarchies_public(
     params: GetTagHierarchies_Params.Public,
   ): Promise<GetTagHierarchies_Ro> {
-    const { tree } =
+    const { tree, total } =
       await this._tag_hierarchies_data_source.get_tag_hierarchies_public(params)
 
     const parse_tree_node = (
@@ -65,17 +66,19 @@ export class TagHierarchies_RepositoryImpl
 
     return {
       tree: tree.map((node) => parse_tree_node(node)),
+      total,
     }
   }
 
   public async update_tag_hierarchies(
     params: UpdateTagHierarchies_Params,
   ): Promise<GetTagHierarchies_Ro> {
-    const { tree } =
+    const { tree, total } =
       await this._tag_hierarchies_data_source.update_tag_hierarchies(params)
 
     return {
       tree: tree.map((node) => this._parse_authorized_tree_node(node)),
+      total,
     }
   }
 }

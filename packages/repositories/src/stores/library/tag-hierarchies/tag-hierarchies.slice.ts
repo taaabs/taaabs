@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { TagHierarchyNode_Entity } from '@repositories/modules/tag-hierarchies/domain/entities/tag-hierarchy.entity'
 
 import * as thunks from './action-creators'
+import { TagHierarchyNode_Entity } from '@repositories/modules/tag-hierarchies/domain/entities/tag-hierarchy-node.entity'
 
 type TagHierarchiesState = {
+  is_initialized?: boolean
   is_fetching?: boolean
   is_updating?: boolean
+  total?: number
   tree?: TagHierarchyNode_Entity[]
 }
 
@@ -15,6 +17,12 @@ export const tag_hierarchies_slice = createSlice({
   name: 'tag-hierarchies',
   initialState: initial_state,
   reducers: {
+    set_is_initialized(
+      state,
+      action: PayloadAction<TagHierarchiesState['is_initialized']>,
+    ) {
+      state.is_initialized = action.payload
+    },
     set_is_fetching_data(
       state,
       action: PayloadAction<TagHierarchiesState['is_fetching']>,
@@ -26,6 +34,9 @@ export const tag_hierarchies_slice = createSlice({
       action: PayloadAction<TagHierarchiesState['is_updating']>,
     ) {
       state.is_updating = action.payload
+    },
+    set_total(state, action: PayloadAction<TagHierarchiesState['total']>) {
+      state.total = action.payload
     },
     set_tree(state, action: PayloadAction<TagHierarchiesState['tree']>) {
       state.tree = action.payload

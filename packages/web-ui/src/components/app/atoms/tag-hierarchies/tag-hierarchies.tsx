@@ -17,7 +17,7 @@ export namespace TagHierarchies {
     children: Node[]
   }
   export type Props = {
-    tree: Node[]
+    tree?: Node[]
     on_update: (tags: Node[]) => void
     on_item_click: (hierarchy_ids: number[]) => void
     selected_tag_ids: number[]
@@ -25,6 +25,10 @@ export namespace TagHierarchies {
     dragged_tag?: { id: number; name: string }
     query_params: string
     is_draggable: boolean
+    all_bookmarks_label: string
+    all_bookmarks_yields?: number
+    is_all_bookmarks_selected: boolean
+    on_click_all_bookmarks: () => void
   }
 }
 
@@ -81,6 +85,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     }, [props.selected_tag_ids])
 
     useEffect(() => {
+      if (!props.tree) return
       set_items(
         props.tree.map((node) =>
           tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
@@ -92,7 +97,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
       item,
       collapseIcon,
     }: {
-      item: any
+      item: Item
       collapseIcon: any
     }) => {
       return (
@@ -298,9 +303,20 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
 
     return (
       <div className={styles.container}>
+        <button
+          className={cn(styles.tag__button, {
+            [styles['tag__button--active']]: props.is_all_bookmarks_selected,
+          })}
+          onClick={props.on_click_all_bookmarks}
+        >
+          <div>
+            <span>{props.all_bookmarks_label}</span>
+            {!props.is_updating && <span>{props.all_bookmarks_yields}</span>}
+          </div>
+        </button>
         <Nestable
           items={items}
-          renderItem={render_tag}
+          renderItem={render_tag as any}
           onChange={(params) => {
             clear_mouseover_ids()
             update_items({ items: params.items as Item[] })
@@ -320,6 +336,8 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     )
   },
   (o, n) =>
+    o.on_click_all_bookmarks == n.on_click_all_bookmarks &&
+    o.is_all_bookmarks_selected == n.is_all_bookmarks_selected &&
     o.is_updating == n.is_updating &&
     o.query_params == n.query_params &&
     JSON.stringify(o.selected_tag_ids) == JSON.stringify(n.selected_tag_ids) &&

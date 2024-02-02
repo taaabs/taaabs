@@ -7,9 +7,8 @@ import { useParams } from 'next/navigation'
 export const use_tag_hierarchies = () => {
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
-  const { tree, is_fetching, is_updating } = use_library_selector(
-    (state) => state.tag_hierarchies,
-  )
+  const { tree, total, is_fetching, is_updating, is_initialized } =
+    use_library_selector((state) => state.tag_hierarchies)
 
   const get_tag_hierarchies = (params: {
     filter?: Filter
@@ -89,7 +88,9 @@ export const use_tag_hierarchies = () => {
   return {
     get_tag_hierarchies,
     tree,
+    total,
     is_fetching,
     is_updating,
+    is_initialized,
   }
 }

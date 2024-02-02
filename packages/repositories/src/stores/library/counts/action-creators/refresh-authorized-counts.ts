@@ -17,13 +17,13 @@ export const refresh_authorized_counts = (params: {
       params.auth_token,
     )
     const repository = new Counts_RepositoryImpl(data_source)
-    const get_months_use_case = new GetCountsOnAuthorizedUser_UseCase(
+    const get_counts_use_case = new GetCountsOnAuthorizedUser_UseCase(
       repository,
     )
 
     dispatch(counts_actions.set_is_fetching_data(true))
 
-    const result = await get_months_use_case.invoke(
+    const result = await get_counts_use_case.invoke(
       params.last_authorized_counts_params,
     )
 

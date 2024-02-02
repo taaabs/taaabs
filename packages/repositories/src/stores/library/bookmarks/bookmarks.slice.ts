@@ -3,8 +3,6 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as thunks from './action-creators'
 
-type ToastMessage = 'restored' | 'archived' | 'deleted'
-
 type BookmarksState = {
   is_fetching_data: boolean
   is_updating_bookmarks: boolean
@@ -15,7 +13,6 @@ type BookmarksState = {
   incoming_bookmarks: Bookmark_Entity[] | null
   bookmarks: Bookmark_Entity[] | null
   has_more_bookmarks: boolean | null
-  toast_message?: ToastMessage
   density: 'default' | 'compact'
   density_commited: 'default' | 'compact'
 }
@@ -104,12 +101,6 @@ export const bookmarks_slice = createSlice({
       if (!state.bookmarks) return
       state.bookmarks[action.payload.index].is_compact =
         action.payload.is_compact
-    },
-    set_toast_message(
-      state,
-      action: PayloadAction<BookmarksState['toast_message']>,
-    ) {
-      state.toast_message = action.payload
     },
   },
 })
