@@ -602,7 +602,8 @@ export const use_search = () => {
       }
     }
 
-    // Defer setting highlights to the next frame, just after bookmark fetching has begun.
+    // Defer setting highlights to the next frame, just after bookmark fetching has begun
+    // so we don't see them on dimmed bookmarks (in a loading state).
     setTimeout(() => {
       set_highlights(
         result.hits.reduce((a, v) => {

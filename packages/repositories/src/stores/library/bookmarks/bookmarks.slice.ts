@@ -14,7 +14,6 @@ type BookmarksState = {
   bookmarks: Bookmark_Entity[] | null
   has_more_bookmarks: boolean | null
   density: 'default' | 'compact'
-  density_commited: 'default' | 'compact'
 }
 
 const initial_state: BookmarksState = {
@@ -26,7 +25,6 @@ const initial_state: BookmarksState = {
   bookmarks: null,
   has_more_bookmarks: null,
   density: 'default',
-  density_commited: 'default',
 }
 
 export const bookmarks_slice = createSlice({
@@ -87,12 +85,15 @@ export const bookmarks_slice = createSlice({
     },
     set_density(state, action: PayloadAction<BookmarksState['density']>) {
       state.density = action.payload
-    },
-    set_density_commited(
-      state,
-      action: PayloadAction<BookmarksState['density_commited']>,
-    ) {
-      state.density_commited = action.payload
+      if (state.bookmarks) {
+        state.bookmarks = state.bookmarks.slice(0, 20).map((bookmark) => ({
+          ...bookmark,
+          is_compact: action.payload == 'compact',
+        }))
+        // Placing it after dispatching action causes jitter.
+        // NOTE: Should be rethinked.
+        window.scrollTo(0, 0)
+      }
     },
     set_bookmark_is_compact(
       state,

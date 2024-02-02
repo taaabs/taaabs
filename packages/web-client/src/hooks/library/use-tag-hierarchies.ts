@@ -10,7 +10,7 @@ export const use_tag_hierarchies = () => {
   const { tree, total, is_fetching, is_updating, is_initialized } =
     use_library_selector((state) => state.tag_hierarchies)
 
-  const get_tag_hierarchies = (params: {
+  const get_tag_hierarchies = async (params: {
     filter?: Filter
     gte?: number
     lte?: number
@@ -44,7 +44,7 @@ export const use_tag_hierarchies = () => {
           undefined
       }
 
-      dispatch(
+      await dispatch(
         tag_hierarchies_actions.get_tag_hierarchies_authorized({
           request_params,
           api_url: process.env.NEXT_PUBLIC_API_URL,
@@ -74,7 +74,7 @@ export const use_tag_hierarchies = () => {
           params.filter == Filter.ArchivedStarredUnread ||
           undefined
       }
-      dispatch(
+      await dispatch(
         tag_hierarchies_actions.get_tag_hierarchies_public({
           request_params,
           api_url: process.env.NEXT_PUBLIC_API_URL,

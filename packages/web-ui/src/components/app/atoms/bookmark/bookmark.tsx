@@ -428,7 +428,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   [styles['bookmark__links--compact']]: props.is_compact,
                 })}
               >
-                {props.links.map((link, i) => {
+                {props.links.map((link, link_idx) => {
                   let is_site_highlighted = false
                   if (
                     props.highlights_site_variants !== undefined &&
@@ -459,8 +459,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             link.site_path ? ` › ${link.site_path}` : ''
                           }${i > 0 ? ' ' : ''}`,
                       )
-                      .slice(0, i)
-                      .join(' ')
+                      .slice(0, link_idx)
+                      .join('')
                   ).length
 
                   return (
@@ -515,7 +515,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                   .split('')
                                   .map((char, i) => {
                                     const real_i =
-                                      link_first_char_index_in_search_title + i
+                                      link_first_char_index_in_search_title +
+                                      i +
+                                      (link_idx > 0 ? 1 : 0)
                                     const is_highlighted =
                                       props.highlights!.find(
                                         ([index, length]) =>

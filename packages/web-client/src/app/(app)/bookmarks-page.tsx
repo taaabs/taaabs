@@ -512,23 +512,13 @@ const BookmarksPage: React.FC = () => {
                 on_click: () => {
                   if (bookmarks_slice_state.is_fetching_data) return
                   set_close_aside_count(close_aside_count + 1)
-                  setTimeout(() => {
-                    dispatch(
-                      bookmarks_actions.set_density(
-                        bookmarks_slice_state.density == 'default'
-                          ? 'compact'
-                          : 'default',
-                      ),
-                    )
-                    // if (
-                    //   bookmarks_slice_state.showing_bookmarks_fetched_by_ids
-                    // ) {
-                    //   search.get_bookmarks({})
-                    // } else {
-                    //   bookmarks.get_bookmarks({})
-                    // }
-                    window.scrollTo(0, 0)
-                  }, 0)
+                  dispatch(
+                    bookmarks_actions.set_density(
+                      bookmarks_slice_state.density == 'default'
+                        ? 'compact'
+                        : 'default',
+                    ),
+                  )
                 },
               },
               { icon_variant: 'THREE_DOTS', on_click: () => {} },
@@ -925,14 +915,8 @@ const BookmarksPage: React.FC = () => {
                   on_tag_drag_start={
                     !username ? tag_view_options.set_dragged_tag : undefined
                   }
-                  key={`${bookmark.id}
-                  ${
-                    // This fixes density change flashing bookmarks which where previously out of the viewport, thus not rendered.
-                    bookmarks_slice_state.first_bookmarks_fetched_at_timestamp ||
-                    ''
-                  }
-                  `}
-                  density={bookmarks_slice_state.density_commited}
+                  key={bookmark.id}
+                  density={bookmarks_slice_state.density}
                   is_compact={bookmark.is_compact}
                   updated_at={bookmark.updated_at}
                   title={bookmark.title}
@@ -1943,38 +1927,8 @@ const BookmarksPage: React.FC = () => {
                                       search.set_count(search.count - 1)
                                     }
                                   }
-                                  await dispatch(
-                                    counts_actions.refresh_authorized_counts({
-                                      last_authorized_counts_params:
-                                        get_last_authorized_counts_params(),
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                                    }),
-                                  )
-                                  modal_context?.set_modal()
-                                  toast.success('Bookmark has beed updated')
-
-                                  // Unselect removed tags when there is no more bookmarks with them.
-                                  tag_view_options.remove_tags_from_query_params(
-                                    tag_view_options.selected_tags.filter(
-                                      (t) => {
-                                        const yields = Object.values(
-                                          counts_slice_state.tags!,
-                                        ).find((tag) => tag.id == t)!.yields
-                                        return (
-                                          !updated_tag_ids.includes(t) &&
-                                          yields == 1
-                                        )
-                                      },
-                                    ),
-                                  )
-                                  tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
-
+                                  // It's critically important to run [search.update_searchable_bookmark] before [counts_actions.refresh_authorized_counts]
+                                  // otherwise updating bookmark from search will mess highlights.
                                   await search.update_searchable_bookmark({
                                     bookmark: {
                                       id: bookmark.id,
@@ -2001,6 +1955,38 @@ const BookmarksPage: React.FC = () => {
                                       ),
                                     },
                                   })
+                                  await dispatch(
+                                    counts_actions.refresh_authorized_counts({
+                                      last_authorized_counts_params:
+                                        get_last_authorized_counts_params(),
+                                      api_url: process.env.NEXT_PUBLIC_API_URL,
+                                      auth_token:
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                                    }),
+                                  )
+                                  await tag_hierarchies.get_tag_hierarchies({
+                                    filter: filter_view_options.current_filter,
+                                    gte: date_view_options.current_gte,
+                                    lte: date_view_options.current_lte,
+                                  })
+
+                                  modal_context?.set_modal()
+                                  toast.success('Bookmark has beed updated')
+
+                                  // Unselect removed tags when there is no more bookmarks with them.
+                                  tag_view_options.remove_tags_from_query_params(
+                                    tag_view_options.selected_tags.filter(
+                                      (t) => {
+                                        const yields = Object.values(
+                                          counts_slice_state.tags!,
+                                        ).find((tag) => tag.id == t)!.yields
+                                        return (
+                                          !updated_tag_ids.includes(t) &&
+                                          yields == 1
+                                        )
+                                      },
+                                    ),
+                                  )
                                 },
                                 other_icon: (
                                   <UiCommonParticles_Icon variant="EDIT" />
