@@ -48,7 +48,7 @@ export const use_tag_view_options = () => {
 
   const add_tag_to_query_params = (tag_id: number) => {
     if (selected_tags.length == system_values.library.max_selected_tags) {
-      toast.info(
+      toast.error(
         `Up to ${system_values.library.max_selected_tags} tags can be selected at a time`,
       )
       return

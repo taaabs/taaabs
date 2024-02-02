@@ -1092,7 +1092,9 @@ const BookmarksPage: React.FC = () => {
                     if (
                       bookmark.tags.length == system_values.bookmark.tags.limit
                     ) {
-                      toast.error('Maximum number of tags is reached')
+                      toast.error(
+                        `Bookmark can have at most ${system_values.bookmark.tags.limit} tags`,
+                      )
                       return
                     }
                     if (
