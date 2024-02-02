@@ -34,6 +34,7 @@
   white-space: nowrap;
   position: relative;
   &__spacer {
+    flex-shrink: 0;
     width: 4px;
     height: 4px;
     margin-right: 4px;
