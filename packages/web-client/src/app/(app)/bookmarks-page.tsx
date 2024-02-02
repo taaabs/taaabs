@@ -1928,7 +1928,7 @@ const BookmarksPage: React.FC = () => {
                                     }
                                   }
                                   // It's critically important to run [search.update_searchable_bookmark] before [counts_actions.refresh_authorized_counts]
-                                  // otherwise updating bookmark from search will mess highlights.
+                                  // otherwise updating bookmark from search will mess highlights. Bookmark is refreshed because of counts_refreshed_at_timestamp prop change.
                                   await search.update_searchable_bookmark({
                                     bookmark: {
                                       id: bookmark.id,
