@@ -2096,15 +2096,16 @@ const BookmarksPage: React.FC = () => {
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                                     }),
                                   )
+                                  if (search.count) {
+                                    search.set_count(search.count - 1)
+                                  }
                                   toast.success('Bookmark has been deleted')
                                   tag_hierarchies.get_tag_hierarchies({
                                     filter: filter_view_options.current_filter,
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  if (search.count) {
-                                    search.set_count(search.count - 1)
-                                  }
+
                                   search.delete_searchable_bookmark({
                                     bookmark_id: bookmark.id,
                                   })
