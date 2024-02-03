@@ -2118,6 +2118,7 @@ const BookmarksPage: React.FC = () => {
                                     bookmarks_slice_state.showing_bookmarks_fetched_by_ids
                                   ) {
                                     search.reset()
+                                    bookmarks.get_bookmarks({})
                                   }
                                 },
                                 other_icon: (
