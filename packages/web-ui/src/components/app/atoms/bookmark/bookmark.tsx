@@ -113,22 +113,27 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
 
     useUpdateEffect(() => {
+      if (render_height === undefined) {
+        if (!ref.current) return
+        const height = ref.current.getBoundingClientRect().height
+        set_render_height(height)
+        props.set_render_height(height)
+      }
+    }, [render_height])
+
+    useUpdateEffect(() => {
       if (!DOMRect) return
+      set_render_height(undefined)
     }, [DOMRect])
 
     useEffect(() => {
-      if (render_height === undefined && props.render_height) {
-        // set_render_height(props.render_height)
-      } else {
-        set_render_height(0)
-        setTimeout(() => {
-          if (!ref.current) return
-          const height = ref.current.getBoundingClientRect().height
-          props.set_render_height(height)
-          set_render_height(height)
-        }, 0)
+      if (is_visible && !render_height) {
+        if (!ref.current) return
+        const height = ref.current.getBoundingClientRect().height
+        set_render_height(height)
+        props.set_render_height(height)
       }
-    }, [props.updated_at, props.is_compact])
+    }, [is_visible])
 
     const relative_time = dayjs(props.date).fromNow()
 
@@ -141,7 +146,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       <div
         ref={ref}
         style={{
-          height: render_height ? render_height : undefined,
+          height: !is_visible && render_height ? render_height : undefined,
           pointerEvents: props.is_not_interactive ? 'none' : undefined,
         }}
         className={cn(styles.wrapper, {
@@ -149,7 +154,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           [styles['wrapper--margin-override']]: !props.is_compact,
         })}
       >
-        {is_visible == undefined || is_visible || !props.render_height ? (
+        {is_visible == undefined || is_visible || !render_height ? (
           <div
             className={cn(styles.container, {
               [styles['container--clickable']]: props.density == 'compact',
