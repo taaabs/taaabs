@@ -58,6 +58,8 @@ export const Library: React.FC<Library.Props> = (props) => {
   >(undefined)
   const is_scrolled = use_is_scrolled()
   const [is_sidebar_collapsed, set_is_sidebar_collapsed] = useState(false)
+  const [are_tag_hierarchies_hovered, set_are_tag_hieararchies_hovered] =
+    useState(false)
 
   const get_slidable_width = () => {
     return window.innerWidth < 370 ? window.innerWidth * 0.82 : 300
@@ -264,6 +266,8 @@ export const Library: React.FC<Library.Props> = (props) => {
               (is_right_side_open || is_right_side_moving) &&
               !is_left_side_moving,
             [styles['sidebar--collapsed']]: is_sidebar_collapsed,
+            [styles['sidebar--collapsed-hovered']]:
+              is_sidebar_collapsed && are_tag_hierarchies_hovered,
           })}
           ref={sidebar}
           style={{
@@ -272,9 +276,7 @@ export const Library: React.FC<Library.Props> = (props) => {
           }}
         >
           <div
-            className={cn(styles.sidebar__inner, {
-              [styles['sidebar__inner--collapsed']]: is_sidebar_collapsed,
-            })}
+            className={cn(styles.sidebar__inner)}
             style={{ width: `${slidable_width}px` }}
             onClick={() => {
               is_sidebar_collapsed && set_is_sidebar_collapsed(false)
@@ -318,7 +320,20 @@ export const Library: React.FC<Library.Props> = (props) => {
                 </Button>
               )}
             </div>
-            <div className={styles['sidebar__inner__tag-hierarchies']}>
+            <div
+              className={cn(styles['sidebar__inner__tag-hierarchies'], {
+                [styles['sidebar__inner__tag-hierarchies--collapsed']]:
+                  is_sidebar_collapsed,
+                [styles['sidebar__inner__tag-hierarchies--collapsed-hovered']]:
+                  is_sidebar_collapsed && are_tag_hierarchies_hovered,
+              })}
+              onMouseEnter={() => {
+                set_are_tag_hieararchies_hovered(true)
+              }}
+              onMouseLeave={() => {
+                set_are_tag_hieararchies_hovered(false)
+              }}
+            >
               {props.slot_tag_hierarchies}
             </div>
           </div>

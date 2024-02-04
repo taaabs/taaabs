@@ -93,9 +93,6 @@ export const bookmarks_slice = createSlice({
           render_height: undefined,
           is_compact: action.payload == 'compact',
         }))
-        window.scrollTo(0, 0)
-        // Placing it after dispatching action causes jitter.
-        // NOTE: Should be rethinked.
       }
     },
     set_bookmark_is_compact(

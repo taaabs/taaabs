@@ -4,6 +4,9 @@
 .container {
   --_aside-width: 26vw;
   --_collapsed_aside_width: 58px;
+  --_collapsed_hovered_aside_width: calc(
+    var(--_collapsed_aside_width) + var(--distance-8px)
+  );
   @include at1200 {
     --_aside-width: 300px;
   }
@@ -72,6 +75,9 @@
   &--collapsed {
     width: var(--_collapsed_aside_width);
   }
+  &--collapsed-hovered {
+    width: var(--_collapsed_hovered_aside_width);
+  }
   &__inner {
     width: 100%;
     @include to992 {
@@ -88,30 +94,9 @@
       top: var(--header-desktop-height);
       position: fixed;
       padding: var(--distance-16px) var(--distance-16px) var(--distance-16px) 0;
-      &::after {
-        pointer-events: none;
-        opacity: 0;
-        @include transition-250ms(opacity);
-        background-image: linear-gradient(
-          to right,
-          rgba(251, 251, 251, 0.5),
-          var(--background) var(--_collapsed_aside_width)
-        );
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: calc(var(--search-desktop-height) + var(--distance-16px));
-      }
     }
     @include at1200 {
       padding: var(--distance-16px) var(--distance-32px) var(--distance-16px) 0;
-    }
-    &--collapsed {
-      &::after {
-        opacity: 1;
-        pointer-events: all;
-      }
     }
     &__desktop-actions {
       @include to992 {
@@ -120,6 +105,7 @@
       height: var(--distance-52px);
       display: flex;
       align-items: center;
+      margin-bottom: var(--distance-16px);
       &__collapse-button {
         display: flex;
         align-items: center;
@@ -147,24 +133,65 @@
       }
     }
     &__tag-hierarchies {
-      margin-top: var(--distance-4px);
       @include at992 {
+        position: relative;
+        border-top: var(--border-secondary);
         overflow: auto;
-        margin-top: var(--distance-12px);
+        padding-top: var(--distance-4px);
+        padding-bottom: var(--distance-16px);
         height: calc(
           100vh - var(--header-desktop-height) - var(--distance-16px) -
             var(--search-desktop-height) - var(--distance-12px)
         );
       }
+      @include at992 {
+        @include transition-250ms(opacity);
+        &::after {
+          pointer-events: none;
+          opacity: 0;
+          @include transition-250ms;
+          background-image: linear-gradient(
+            to right,
+            transparent,
+            var(--background) var(--_collapsed_aside_width)
+          );
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+        }
+      }
+      &--collapsed {
+        @include at992 {
+          overflow: hidden;
+          opacity: 0.4;
+          &::after {
+            opacity: 1;
+            pointer-events: all;
+          }
+        }
+      }
+      &--collapsed-hovered {
+        opacity: 1;
+        &::after {
+          transform: translateX(
+            calc(
+              var(--_collapsed_hovered_aside_width) -
+                var(--_collapsed_aside_width)
+            )
+          );
+        }
+      }
     }
   }
 }
 .main {
+  background: var(--background);
   @include to992 {
     min-height: 100vh;
     position: relative;
     z-index: 1;
-    background: var(--background);
     &::before {
       content: '';
       width: 1px;

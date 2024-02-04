@@ -528,6 +528,7 @@ const BookmarksPage: React.FC = () => {
                         : 'default',
                     ),
                   )
+                  window.scrollTo(0, 0)
                 },
               },
               { icon_variant: 'THREE_DOTS', on_click: () => {} },
