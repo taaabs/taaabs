@@ -12,10 +12,11 @@ import { use_is_hydrated } from '@shared/hooks'
 import { useSwipeable } from 'react-swipeable'
 import { shared_values } from '@web-ui/constants'
 import { use_is_scrolled } from '@web-ui/hooks/use-is-scrolled'
+import { Button } from '@web-ui/components/common/particles/button'
 
 export namespace Library {
   export type Props = {
-    slot_sidebar: React.ReactNode
+    slot_tag_hierarchies: React.ReactNode
     slot_aside: React.ReactNode
     slot_toolbar: React.ReactNode
     mobile_title_bar?: string
@@ -31,6 +32,14 @@ export namespace Library {
     show_bookmarks_skeleton: boolean
     info_text?: React.ReactNode
     close_aside_count?: number
+    welcome_text?: string
+    on_subscribe_click?: () => void
+    is_subscribed?: boolean
+    translations: {
+      collapse_alt: string
+      subscribe: string
+      unsubscribe: string
+    }
   }
 }
 
@@ -43,11 +52,12 @@ export const Library: React.FC<Library.Props> = (props) => {
   const end_of_bookmarks = useRef<HTMLDivElement>(null)
   const is_hydrated = use_is_hydrated()
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
-  const [drag_distance, set_drag_distance] = useState<number>(0)
+  const [drag_distance, set_drag_distance] = useState(0)
   const [initial_swipe_direction, set_initial_swipe_direction] = useState<
     'Left' | 'Right' | undefined
   >(undefined)
   const is_scrolled = use_is_scrolled()
+  const [is_sidebar_collapsed, set_is_sidebar_collapsed] = useState(false)
 
   const get_slidable_width = () => {
     return window.innerWidth < 370 ? window.innerWidth * 0.82 : 300
@@ -250,22 +260,67 @@ export const Library: React.FC<Library.Props> = (props) => {
       <div className={styles.content}>
         <aside
           className={cn(styles.sidebar, {
-            [styles['aside--hidden']]:
+            [styles['sidebar--hidden']]:
               (is_right_side_open || is_right_side_moving) &&
               !is_left_side_moving,
+            [styles['sidebar--collapsed']]: is_sidebar_collapsed,
           })}
           ref={sidebar}
           style={{
-            width: `${slidable_width}px`,
             zIndex: !is_right_side_open ? undefined : 1,
             pointerEvents: is_right_side_open ? 'none' : undefined,
           }}
         >
           <div
-            className={styles.sidebar__inner}
+            className={cn(styles.sidebar__inner, {
+              [styles['sidebar__inner--collapsed']]: is_sidebar_collapsed,
+            })}
             style={{ width: `${slidable_width}px` }}
+            onClick={() => {
+              is_sidebar_collapsed && set_is_sidebar_collapsed(false)
+            }}
           >
-            {props.slot_sidebar}
+            <div className={styles['sidebar__inner__desktop-actions']}>
+              <button
+                className={
+                  styles['sidebar__inner__desktop-actions__collapse-button']
+                }
+                onClick={() => {
+                  set_is_sidebar_collapsed(!is_sidebar_collapsed)
+                }}
+                title={props.translations.collapse_alt}
+              >
+                <svg
+                  viewBox="0 0 5 30"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M2.35714 0C3.65895 0 4.71429 1.07453 4.71429 2.4V27.6C4.71429 28.9255 3.65897 30 2.35714 30C1.05534 30 0 28.9255 0 27.6V2.4C0 1.07453 1.05534 0 2.35714 0Z" />
+                </svg>
+                <svg viewBox="0 0 27 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.1667 1.10294C11.2462 0.16569 9.75379 0.16569 8.83325 1.10294L0.0950623 10L8.83325 18.897C9.75379 19.8342 11.2462 19.8342 12.1667 18.897C13.0873 17.9598 13.0873 16.4402 12.1667 15.503L9.11922 12.4H24.6429C25.9447 12.4 27 11.3255 27 10C27 8.67453 25.9447 7.6 24.6429 7.6H9.11922L12.1667 4.49707C13.0873 3.55979 13.0873 2.04021 12.1667 1.10294Z" />
+                </svg>
+              </button>
+              {props.welcome_text && (
+                <div
+                  className={
+                    styles['sidebar__inner__desktop-actions__welcome-text']
+                  }
+                >
+                  {props.welcome_text}
+                </div>
+              )}
+              {props.on_subscribe_click && (
+                <Button is_outlined={true}>
+                  {!props.is_subscribed
+                    ? props.translations.subscribe
+                    : props.translations.unsubscribe}
+                </Button>
+              )}
+            </div>
+            <div className={styles['sidebar__inner__tag-hierarchies']}>
+              {props.slot_tag_hierarchies}
+            </div>
           </div>
         </aside>
 

@@ -21,5 +21,10 @@ export const Primary = () => (
     <br />
     <br />
     <Button size="large">Click me!</Button>
+    <StorybookSpacer />
+    Outlined:
+    <br />
+    <br />
+    <Button is_outlined={true}>Click me!</Button>
   </StorybookMargin>
 )

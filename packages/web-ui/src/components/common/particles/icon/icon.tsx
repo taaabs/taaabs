@@ -3,6 +3,7 @@ import Add from '../../../../assets/icons/add.svg'
 import Archive from '../../../../assets/icons/archive.svg'
 import BookmarkFilled from '../../../../assets/icons/bookmark-filled.svg'
 import Bookmark from '../../../../assets/icons/bookmark.svg'
+import Collapse from '../../../../assets/icons/collapse.svg'
 import Copy from '../../../../assets/icons/copy.svg'
 import Delete from '../../../../assets/icons/delete.svg'
 import DensityDefault from '../../../../assets/icons/density-default.svg'
@@ -45,6 +46,7 @@ export namespace Icon {
     | 'ARCHIVE'
     | 'BOOKMARK_FILLED'
     | 'BOOKMARK'
+    | 'COLLAPSE'
     | 'COPY'
     | 'DELETE'
     | 'DENSITY_DEFAULT'
@@ -103,6 +105,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'BOOKMARK':
       icon = <Bookmark />
+      break
+    case 'COLLAPSE':
+      icon = <Collapse />
       break
     case 'COPY':
       icon = <Copy />

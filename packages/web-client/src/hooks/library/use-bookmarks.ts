@@ -188,6 +188,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
           ),
         )
       }
+
       const density = sessionStorage.getItem(
         browser_storage.session_storage.library.density({
           username: username as string,

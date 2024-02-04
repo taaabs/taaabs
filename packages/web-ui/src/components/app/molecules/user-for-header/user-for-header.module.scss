@@ -13,7 +13,7 @@
   margin-left: calc(var(--distance-16px) * -1);
   height: var(--button-dimension-34px);
   @include at992 {
-    padding-right: var(--distance-24px);
+    padding-right: var(--distance-30px);
     height: var(--button-dimension-40px);
   }
   @include hover {

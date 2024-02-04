@@ -14,6 +14,7 @@ export namespace Button {
     aria_labelledby?: string
     is_loading?: boolean
     is_disabled?: boolean
+    is_outlined?: boolean
   }
 }
 
@@ -21,6 +22,7 @@ export const Button: React.FC<Button.Props> = (props) => {
   const class_names = cn([
     styles.container,
     styles[`container--${props.size ? props.size : 'default'}`],
+    { [styles['container--outlined']]: props.is_outlined },
     { [styles['container--loading']]: props.is_loading },
     { [styles['container--disabled']]: props.is_disabled },
   ])

@@ -3,6 +3,7 @@
 
 .container {
   --_aside-width: 26vw;
+  --_collapsed_aside_width: 58px;
   @include at1200 {
     --_aside-width: 300px;
   }
@@ -58,13 +59,18 @@
     padding-bottom: var(--bottom-navigation-bar-height);
   }
   @include at992 {
-    width: var(--_aside-width) !important;
+    width: var(--_aside-width);
+    @include transition-250ms(width);
+    position: relative;
   }
   &--hidden {
     @include to992 {
       visibility: hidden;
       pointer-events: none;
     }
+  }
+  &--collapsed {
+    width: var(--_collapsed_aside_width);
   }
   &__inner {
     width: 100%;
@@ -76,19 +82,80 @@
         calc(var(--distance-16px) + 36px + 8px) var(--distance-16px);
     }
     @include at992 {
+      position: relative;
       width: var(--_aside-width) !important;
       height: calc(100vh - var(--header-desktop-height));
       top: var(--header-desktop-height);
       position: fixed;
-      overflow: auto;
       padding: var(--distance-16px) var(--distance-16px) var(--distance-16px) 0;
-      scrollbar-width: none;
-      &::-webkit-scrollbar {
-        display: none;
+      &::after {
+        pointer-events: none;
+        opacity: 0;
+        @include transition-250ms(opacity);
+        background-image: linear-gradient(
+          to right,
+          rgba(251, 251, 251, 0.5),
+          var(--background) var(--_collapsed_aside_width)
+        );
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: calc(var(--search-desktop-height) + var(--distance-16px));
       }
     }
     @include at1200 {
       padding: var(--distance-16px) var(--distance-32px) var(--distance-16px) 0;
+    }
+    &--collapsed {
+      &::after {
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
+    &__desktop-actions {
+      @include to992 {
+        display: none;
+      }
+      height: var(--distance-52px);
+      display: flex;
+      align-items: center;
+      &__collapse-button {
+        display: flex;
+        align-items: center;
+        width: var(--distance-42px);
+        height: var(--button-dimension-40px);
+        > svg {
+          fill: var(--brand-color);
+        }
+        > svg:first-child {
+          height: var(--distance-20px);
+        }
+        > svg:last-child {
+          height: var(--distance-12px);
+          margin-left: 4px;
+          @include transition-150ms(transform);
+        }
+        @include hover {
+          > svg:last-child {
+            transform: translateX(-2px);
+          }
+        }
+      }
+      &__welcome-text {
+        padding-left: var(--distance-8px);
+      }
+    }
+    &__tag-hierarchies {
+      margin-top: var(--distance-4px);
+      @include at992 {
+        overflow: auto;
+        margin-top: var(--distance-12px);
+        height: calc(
+          100vh - var(--header-desktop-height) - var(--distance-16px) -
+            var(--search-desktop-height) - var(--distance-12px)
+        );
+      }
     }
   }
 }
@@ -180,6 +247,7 @@
       pointer-events: none;
     }
     &__info {
+      background-color: red;
       display: flex;
       flex-direction: column;
       gap: var(--distance-8px);

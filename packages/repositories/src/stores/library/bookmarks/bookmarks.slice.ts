@@ -8,7 +8,6 @@ type BookmarksState = {
   is_updating_bookmarks: boolean
   is_fetching_first_bookmarks: boolean
   is_fetching_more_bookmarks: boolean
-  first_bookmarks_fetched_at_timestamp?: number
   showing_bookmarks_fetched_by_ids?: boolean
   incoming_bookmarks: Bookmark_Entity[] | null
   bookmarks: Bookmark_Entity[] | null
@@ -39,9 +38,6 @@ export const bookmarks_slice = createSlice({
     },
     set_is_fetching_first_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_fetching_first_bookmarks = action.payload
-      if (action.payload == false) {
-        state.first_bookmarks_fetched_at_timestamp = Date.now()
-      }
     },
     set_is_fetching_more_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_fetching_more_bookmarks = action.payload
@@ -85,14 +81,21 @@ export const bookmarks_slice = createSlice({
     },
     set_density(state, action: PayloadAction<BookmarksState['density']>) {
       state.density = action.payload
+    },
+    set_density_of_current_bookmarks(
+      state,
+      action: PayloadAction<BookmarksState['density']>,
+    ) {
+      state.density = action.payload
       if (state.bookmarks) {
         state.bookmarks = state.bookmarks.slice(0, 20).map((bookmark) => ({
           ...bookmark,
+          render_height: undefined,
           is_compact: action.payload == 'compact',
         }))
+        window.scrollTo(0, 0)
         // Placing it after dispatching action causes jitter.
         // NOTE: Should be rethinked.
-        window.scrollTo(0, 0)
       }
     },
     set_bookmark_is_compact(

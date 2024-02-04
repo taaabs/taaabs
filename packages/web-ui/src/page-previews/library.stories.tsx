@@ -1,5 +1,4 @@
 import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
-import { NavigationForLibrarySidebar } from '@web-ui/components/app/atoms/navigation-for-library-sidebar'
 import { BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
 import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
 import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
@@ -64,13 +63,30 @@ export const Primary = () => {
     >
       <Library
         slot_aside={<>aside</>}
-        slot_sidebar={
-          <NavigationForLibrarySidebar
-            navigation_items={[
-              { label: 'All bookmarks', is_active: true, on_click: () => {} },
-              { label: 'Lorem ipsum', is_active: false, on_click: () => {} },
-            ]}
-          />
+        slot_tag_hierarchies={
+          <>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a dui
+            felis. Donec ultrices placerat est. Cras eget pellentesque neque,
+            quis aliquam sem. Nulla interdum eu nibh at efficitur. Nunc ut nulla
+            non neque rutrum luctus. Cras iaculis lectus id mi vestibulum
+            sollicitudin. Fusce nec egestas nibh. Nulla ullamcorper ipsum nisi,
+            eget volutpat justo varius non. Pellentesque venenatis, lacus non
+            rutrum blandit, quam mi gravida libero, a finibus leo mauris et
+            elit. Morbi elit lectus, pellentesque ac ipsum vel, ullamcorper
+            rutrum quam. In justo sapien, sagittis vel sapien vel, pretium
+            posuere augue. Suspendisse ligula lorem, laoreet ut sagittis in,
+            maximus tincidunt dui. Cras eleifend quam ex, ut bibendum nulla
+            interdum a. Cras imperdiet consequat lorem vel fermentum. Mauris
+            consequat porttitor magna vitae semper. Nam pretium fermentum tellus
+            nec vestibulum. Maecenas interdum ligula vitae dui dictum,
+            scelerisque malesuada nisi tempus. Vestibulum congue lacus euismod
+            blandit accumsan. Integer rutrum sapien a massa commodo laoreet. Nam
+            elementum mollis tortor sed feugiat. Cras ultrices risus faucibus
+            ipsum pellentesque volutpat sit amet sed tortor. Fusce eu erat elit.
+            Etiam pretium velit non malesuada tristique. Etiam et nisl id ligula
+            tincidunt fringilla. Nulla quis finibus enim. Cras sollicitudin nibh
+            velit.
+          </>
         }
         slot_toolbar={<>toolbar</>}
         mobile_title_bar="Bookmarks"
@@ -89,6 +105,11 @@ export const Primary = () => {
         }
         show_bookmarks_skeleton={false}
         slot_search={<>search</>}
+        translations={{
+          collapse_alt: '',
+          subscribe: '',
+          unsubscribe: '',
+        }}
       />
     </App>
   )
@@ -98,7 +119,7 @@ const bookmark = (
   <Bookmark
     date={new Date()}
     links={[]}
-    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
+    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
     is_unread={true}
     tags={[
       { id: 1, name: 'foo', yields: 100 },
@@ -116,5 +137,9 @@ const bookmark = (
     stars={0}
     updated_at=""
     is_fetching_bookmarks={false}
+    bookmark_id={1}
+    density="default"
+    on_mouse_up_on_tag={() => {}}
+    on_tag_delete_click={() => {}}
   />
 )

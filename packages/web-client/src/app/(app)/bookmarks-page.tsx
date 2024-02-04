@@ -40,6 +40,7 @@ import { StarsForDropdown as UiAppAtom_StarsForDropdown } from '@web-ui/componen
 import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/particles/icon'
 import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolbar'
+import { TagHierarchiesSkeleton as UiAppAtom_TagHierarchiesSkeleton } from '@web-ui/components/app/atoms/tag-hierarchies-skeleton'
 import { use_has_focus } from '@/hooks/misc/use-has-focus'
 import { TagHierarchies as UiAppAtom_TagHierarchies } from '@web-ui/components/app/atoms/tag-hierarchies'
 import { DraggedCursorTag as UiAppAtom_DraggedCursorTag } from '@web-ui/components/app/atoms/dragged-cursor-tag'
@@ -221,6 +222,14 @@ const BookmarksPage: React.FC = () => {
         sibling_tag_name={tag_view_options.dragged_tag?.over_sibling_tag_name}
       />
       <UiAppTemplate_Library
+        translations={{
+          collapse_alt: 'Collapse sidebar',
+          subscribe: 'Subscribe',
+          unsubscribe: 'Unsubscribe',
+        }}
+        is_subscribed={undefined}
+        welcome_text={!username ? `Howdy, username` : undefined}
+        on_subscribe_click={username ? () => {} : undefined}
         show_bookmarks_skeleton={show_bookmarks_skeleton}
         close_aside_count={close_aside_count}
         mobile_title_bar={'Bookmarks'}
@@ -513,7 +522,7 @@ const BookmarksPage: React.FC = () => {
                   if (bookmarks_slice_state.is_fetching_data) return
                   set_close_aside_count(close_aside_count + 1)
                   dispatch(
-                    bookmarks_actions.set_density(
+                    bookmarks_actions.set_density_of_current_bookmarks(
                       bookmarks_slice_state.density == 'default'
                         ? 'compact'
                         : 'default',
@@ -525,83 +534,81 @@ const BookmarksPage: React.FC = () => {
             ]}
           />
         }
-        slot_sidebar={
-          <>
-            {tag_hierarchies.is_initialized && (
-              <UiAppAtom_TagHierarchies
-                is_draggable={!username}
-                tree={tag_hierarchies.tree}
-                on_update={async (tree) => {
-                  const filter = filter_view_options.current_filter
+        slot_tag_hierarchies={
+          tag_hierarchies.is_initialized ? (
+            <UiAppAtom_TagHierarchies
+              is_draggable={!username}
+              tree={tag_hierarchies.tree}
+              on_update={async (tree) => {
+                const filter = filter_view_options.current_filter
 
-                  const update_tag_hierarchies_params: UpdateTagHierarchies_Params =
-                    {
-                      tree,
-                      gte: date_view_options.current_gte,
-                      lte: date_view_options.current_lte,
-                      starred_only:
-                        filter == Filter.Starred ||
-                        filter == Filter.StarredUnread ||
-                        filter == Filter.ArchivedStarred ||
-                        filter == Filter.ArchivedStarredUnread ||
-                        undefined,
-                      unread_only:
-                        filter == Filter.Unread ||
-                        filter == Filter.StarredUnread ||
-                        filter == Filter.ArchivedUnread ||
-                        filter == Filter.ArchivedStarredUnread ||
-                        undefined,
-                      is_archived:
-                        filter == Filter.Archived ||
-                        filter == Filter.ArchivedStarred ||
-                        filter == Filter.ArchivedUnread ||
-                        filter == Filter.ArchivedStarredUnread ||
-                        undefined,
-                    }
-
-                  await dispatch(
-                    tag_hierarchies_actions.update_tag_hierarchies({
-                      update_tag_hierarchies_params,
-                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                      auth_token:
-                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
-                    }),
-                  )
-                  toast.success('Tag hierarchies has been updated')
-                }}
-                selected_tag_ids={tag_view_options.selected_tags}
-                is_updating={tag_hierarchies.is_updating || false}
-                on_item_click={(tag_ids) => {
-                  tag_view_options.set_many_tags_to_query_params({
-                    tag_ids,
-                  })
-                  set_close_aside_count(close_aside_count + 1)
-                }}
-                dragged_tag={tag_view_options.dragged_tag}
-                query_params={query_params.toString()}
-                all_bookmarks_label="All bookmarks"
-                all_bookmarks_yields={tag_hierarchies.total}
-                is_all_bookmarks_selected={
-                  !tag_view_options.selected_tags.length
-                }
-                on_click_all_bookmarks={() => {
-                  if (
-                    bookmarks_slice_state.is_fetching_first_bookmarks ||
-                    bookmarks_slice_state.is_updating_bookmarks
-                  )
-                    return
-                  tag_view_options.clear_selected_tags()
-                  if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
-                    search.reset()
-                    if (filter_view_options.current_filter == Filter.None) {
-                      bookmarks.get_bookmarks({})
-                    }
+                const update_tag_hierarchies_params: UpdateTagHierarchies_Params =
+                  {
+                    tree,
+                    gte: date_view_options.current_gte,
+                    lte: date_view_options.current_lte,
+                    starred_only:
+                      filter == Filter.Starred ||
+                      filter == Filter.StarredUnread ||
+                      filter == Filter.ArchivedStarred ||
+                      filter == Filter.ArchivedStarredUnread ||
+                      undefined,
+                    unread_only:
+                      filter == Filter.Unread ||
+                      filter == Filter.StarredUnread ||
+                      filter == Filter.ArchivedUnread ||
+                      filter == Filter.ArchivedStarredUnread ||
+                      undefined,
+                    is_archived:
+                      filter == Filter.Archived ||
+                      filter == Filter.ArchivedStarred ||
+                      filter == Filter.ArchivedUnread ||
+                      filter == Filter.ArchivedStarredUnread ||
+                      undefined,
                   }
-                  set_close_aside_count(close_aside_count + 1)
-                }}
-              />
-            )}
-          </>
+
+                await dispatch(
+                  tag_hierarchies_actions.update_tag_hierarchies({
+                    update_tag_hierarchies_params,
+                    api_url: process.env.NEXT_PUBLIC_API_URL,
+                    auth_token:
+                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+                  }),
+                )
+                toast.success('Tag hierarchies has been updated')
+              }}
+              selected_tag_ids={tag_view_options.selected_tags}
+              is_updating={tag_hierarchies.is_updating || false}
+              on_item_click={(tag_ids) => {
+                tag_view_options.set_many_tags_to_query_params({
+                  tag_ids,
+                })
+                set_close_aside_count(close_aside_count + 1)
+              }}
+              dragged_tag={tag_view_options.dragged_tag}
+              query_params={query_params.toString()}
+              all_bookmarks_label="All bookmarks"
+              all_bookmarks_yields={tag_hierarchies.total}
+              is_all_bookmarks_selected={!tag_view_options.selected_tags.length}
+              on_click_all_bookmarks={() => {
+                if (
+                  bookmarks_slice_state.is_fetching_first_bookmarks ||
+                  bookmarks_slice_state.is_updating_bookmarks
+                )
+                  return
+                tag_view_options.clear_selected_tags()
+                if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
+                  search.reset()
+                  if (filter_view_options.current_filter == Filter.None) {
+                    bookmarks.get_bookmarks({})
+                  }
+                }
+                set_close_aside_count(close_aside_count + 1)
+              }}
+            />
+          ) : (
+            <UiAppAtom_TagHierarchiesSkeleton />
+          )
         }
         slot_aside={
           <UiAppTemplate_LibraryAside
@@ -901,6 +908,7 @@ const BookmarksPage: React.FC = () => {
           false
         }
         get_more_bookmarks={() => {
+          if (search.hints || !bookmarks_slice_state.bookmarks?.length) return
           if (search.search_string) {
             search.get_bookmarks({ should_get_next_page: true })
           } else {

@@ -9,12 +9,21 @@
   background: var(--brand-color);
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
-  @include transition-150ms(background-color);
+  @include transition-150ms;
   border-radius: var(--border-radius-999px);
   @include hover {
     background: var(--blue800);
   }
   padding-bottom: 0.1em !important;
+  &--outlined {
+    background-color: var(--white);
+    border: var(--border-secondary);
+    color: var(--text-color-normal);
+    @include hover {
+      background-color: var(--white);
+      border-color: var(--border-color-hover);
+    }
+  }
   &--loading {
     opacity: 0.7;
     pointer-events: none;

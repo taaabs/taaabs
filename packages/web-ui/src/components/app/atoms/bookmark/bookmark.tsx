@@ -1,5 +1,6 @@
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
+import useResizeObserver from 'beautiful-react-hooks/useResizeObserver'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import { memo, useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
@@ -12,6 +13,7 @@ import { get_site_variants_for_search } from '@shared/utils/get-site-variants-fo
 import { Icon } from '@web-ui/components/common/particles/icon'
 import { useContextMenu } from 'use-context-menu'
 import { DropdownMenu } from '../dropdown-menu'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -85,10 +87,11 @@ export namespace Bookmark {
 export const Bookmark: React.FC<Bookmark.Props> = memo(
   function Bookmark(props) {
     const ref = useRef<HTMLDivElement>(null)
+    const DOMRect = useResizeObserver(ref)
     const is_visible = useViewportSpy(ref)
     const [is_menu_open, toggle_is_menu_open] = useToggle(false)
     const [render_height, set_render_height] = useState<number | undefined>(
-      undefined,
+      props.render_height,
     )
     const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
       useState<number>()
@@ -109,9 +112,13 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       </>,
     )
 
+    useUpdateEffect(() => {
+      if (!DOMRect) return
+    }, [DOMRect])
+
     useEffect(() => {
       if (render_height === undefined && props.render_height) {
-        set_render_height(props.render_height)
+        // set_render_height(props.render_height)
       } else {
         set_render_height(0)
         setTimeout(() => {
