@@ -18,7 +18,7 @@ const Page: React.FC = () => {
         }
       />
       <div>
-        <Link href="/">test_user</Link>
+        <Link href="/test_user">test_user</Link>
       </div>
     </>
   )

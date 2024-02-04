@@ -5,7 +5,6 @@ declare const styles: {
   readonly sidebar: string
   readonly 'sidebar--hidden': string
   readonly 'sidebar--collapsed': string
-  readonly 'sidebar--collapsed-hovered': string
   readonly sidebar__inner: string
   readonly 'sidebar__inner__desktop-actions': string
   readonly 'sidebar__inner__desktop-actions__collapse-button': string
@@ -15,6 +14,7 @@ declare const styles: {
   readonly 'sidebar__inner__tag-hierarchies--collapsed-hovered': string
   readonly main: string
   readonly main__inner: string
+  readonly 'main__inner--collapsed-sidebar-hovered': string
   readonly 'main__inner--dimmed': string
   readonly main__inner__sticky: string
   readonly 'main__inner__sticky--scrolled': string

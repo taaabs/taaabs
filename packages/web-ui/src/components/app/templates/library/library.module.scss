@@ -5,7 +5,7 @@
   --_aside-width: 26vw;
   --_collapsed_aside_width: 58px;
   --_collapsed_hovered_aside_width: calc(
-    var(--_collapsed_aside_width) + var(--distance-8px)
+    var(--_collapsed_aside_width) + var(--distance-4px)
   );
   @include at1200 {
     --_aside-width: 300px;
@@ -74,9 +74,6 @@
   }
   &--collapsed {
     width: var(--_collapsed_aside_width);
-  }
-  &--collapsed-hovered {
-    width: var(--_collapsed_hovered_aside_width);
   }
   &__inner {
     width: 100%;
@@ -153,7 +150,7 @@
           background-image: linear-gradient(
             to right,
             transparent,
-            var(--background) var(--_collapsed_aside_width)
+            var(--background) 80px
           );
           content: '';
           position: absolute;
@@ -163,9 +160,14 @@
         }
       }
       &--collapsed {
+        > div {
+          @include at992 {
+            opacity: 0.4;
+            @include transition-250ms(opacity);
+          }
+        }
         @include at992 {
           overflow: hidden;
-          opacity: 0.4;
           &::after {
             opacity: 1;
             pointer-events: all;
@@ -173,22 +175,16 @@
         }
       }
       &--collapsed-hovered {
-        opacity: 1;
-        &::after {
-          transform: translateX(
-            calc(
-              var(--_collapsed_hovered_aside_width) -
-                var(--_collapsed_aside_width)
-            )
-          );
+        > div {
+          opacity: 1;
         }
       }
     }
   }
 }
 .main {
-  background: var(--background);
   @include to992 {
+    background: var(--background);
     min-height: 100vh;
     position: relative;
     z-index: 1;
@@ -216,11 +212,22 @@
     transform: translateX(0px) !important;
     margin-top: var(--header-desktop-height);
   }
+
   &__inner {
     @include to992 {
       padding-top: var(--header-mobile-height);
       padding-bottom: var(--bottom-navigation-bar-height);
       @include transition-150ms(opacity);
+    }
+    @include at992 {
+      background: var(--background);
+      @include transition-250ms(transform);
+      transform-origin: right;
+    }
+    &--collapsed-sidebar-hovered {
+      @include at992 {
+        transform: scaleX(0.98);
+      }
     }
     &--dimmed {
       @include to992 {

@@ -266,8 +266,8 @@ export const Library: React.FC<Library.Props> = (props) => {
               (is_right_side_open || is_right_side_moving) &&
               !is_left_side_moving,
             [styles['sidebar--collapsed']]: is_sidebar_collapsed,
-            [styles['sidebar--collapsed-hovered']]:
-              is_sidebar_collapsed && are_tag_hierarchies_hovered,
+            // [styles['sidebar--collapsed-hovered']]:
+            //   is_sidebar_collapsed && are_tag_hierarchies_hovered,
           })}
           ref={sidebar}
           style={{
@@ -356,6 +356,8 @@ export const Library: React.FC<Library.Props> = (props) => {
             className={cn(styles.main__inner, {
               [styles['main__inner--dimmed']]:
                 (is_right_side_open || is_left_side_open) && !drag_distance,
+              [styles['main__inner--collapsed-sidebar-hovered']]:
+                is_sidebar_collapsed && are_tag_hierarchies_hovered,
             })}
             style={{
               pointerEvents:
