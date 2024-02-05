@@ -8,6 +8,7 @@ declare const styles: {
   readonly sidebar__inner: string
   readonly 'sidebar__inner__desktop-actions': string
   readonly 'sidebar__inner__desktop-actions__collapse-button': string
+  readonly 'sidebar__inner__desktop-actions__collapse-button--collapsed': string
   readonly 'sidebar__inner__desktop-actions__welcome-text': string
   readonly 'sidebar__inner__tag-hierarchies': string
   readonly 'sidebar__inner__tag-hierarchies--collapsed': string

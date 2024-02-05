@@ -266,8 +266,6 @@ export const Library: React.FC<Library.Props> = (props) => {
               (is_right_side_open || is_right_side_moving) &&
               !is_left_side_moving,
             [styles['sidebar--collapsed']]: is_sidebar_collapsed,
-            // [styles['sidebar--collapsed-hovered']]:
-            //   is_sidebar_collapsed && are_tag_hierarchies_hovered,
           })}
           ref={sidebar}
           style={{
@@ -284,9 +282,14 @@ export const Library: React.FC<Library.Props> = (props) => {
           >
             <div className={styles['sidebar__inner__desktop-actions']}>
               <button
-                className={
-                  styles['sidebar__inner__desktop-actions__collapse-button']
-                }
+                className={cn(
+                  styles['sidebar__inner__desktop-actions__collapse-button'],
+                  {
+                    [styles[
+                      'sidebar__inner__desktop-actions__collapse-button--collapsed'
+                    ]]: is_sidebar_collapsed,
+                  },
+                )}
                 onClick={() => {
                   set_is_sidebar_collapsed(!is_sidebar_collapsed)
                 }}

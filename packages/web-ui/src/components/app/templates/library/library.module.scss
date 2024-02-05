@@ -117,11 +117,21 @@
         > svg:last-child {
           height: var(--distance-12px);
           margin-left: 4px;
-          @include transition-150ms(transform);
+          @include transition-250ms(transform);
         }
         @include hover {
           > svg:last-child {
             transform: translateX(-2px);
+          }
+        }
+        &--collapsed {
+          > svg:last-child {
+            transform: ScaleX(-1);
+          }
+          @include hover {
+            > svg:last-child {
+              transform: ScaleX(-1) translateX(-2px);
+            }
           }
         }
       }
@@ -134,7 +144,7 @@
         position: relative;
         border-top: var(--border-secondary);
         overflow: auto;
-        padding-top: var(--distance-4px);
+        padding-top: var(--distance-8px);
         padding-bottom: var(--distance-16px);
         height: calc(
           100vh - var(--header-desktop-height) - var(--distance-16px) -
