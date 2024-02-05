@@ -91,6 +91,7 @@ const BookmarksPage: React.FC = () => {
   const has_focus = use_has_focus()
 
   useUpdateEffect(() => {
+    if (username) return
     if (has_focus) {
       const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit | null =
         JSON.parse(
@@ -1035,6 +1036,7 @@ const BookmarksPage: React.FC = () => {
                     )
                   }}
                   on_link_click={() => {
+                    if (username) return
                     const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit =
                       {
                         bookmark: {
