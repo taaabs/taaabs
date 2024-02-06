@@ -170,7 +170,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               props.on_click()
             }}
             onMouseUp={() => {
-              if (props.on_mouse_up && props.dragged_tag) {
+              if (
+                props.on_mouse_up &&
+                props.dragged_tag &&
+                !props.tags.find((tag) => tag.name == props.dragged_tag!.name)
+              ) {
                 document.body.classList.remove('adding-tag')
                 props.on_mouse_up()
               }
