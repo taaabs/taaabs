@@ -170,7 +170,23 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               props.on_click()
             }}
             onMouseUp={() => {
-              if (props.on_mouse_up && props.dragged_tag) props.on_mouse_up()
+              if (props.on_mouse_up && props.dragged_tag) {
+                document.body.classList.remove('adding-tag')
+                props.on_mouse_up()
+              }
+            }}
+            onMouseEnter={() => {
+              if (
+                props.dragged_tag &&
+                !props.tags.find((tag) => tag.name == props.dragged_tag!.name)
+              ) {
+                document.body.classList.add('adding-tag')
+              }
+            }}
+            onMouseLeave={() => {
+              if (props.dragged_tag) {
+                document.body.classList.remove('adding-tag')
+              }
             }}
           >
             <div className={styles.bookmark}>

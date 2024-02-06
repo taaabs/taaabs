@@ -141,6 +141,14 @@ strong {
   font-weight: var(--font-weight-inter-semi-bold);
 }
 
+// Cursor overrides.
+.grabbing * {
+  cursor: grabbing;
+}
+.adding-tag * {
+  cursor: copy;
+}
+
 @keyframes fade-in {
   0% {
     opacity: 0;
