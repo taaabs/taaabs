@@ -56,6 +56,9 @@
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   text-size-adjust: none;
+  // @include desktop {
+  //   scrollbar-color: var(--neutral200) transparent;
+  // }
 }
 
 html {
@@ -139,6 +142,11 @@ svg {
 
 strong {
   font-weight: var(--font-weight-inter-semi-bold);
+}
+
+small {
+  font-size: var(--font-size-13px);
+  color: var(--text-color-variant);
 }
 
 // Cursor overrides.

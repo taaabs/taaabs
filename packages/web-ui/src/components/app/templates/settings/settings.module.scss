@@ -7,24 +7,37 @@
   top: 0;
   width: 100%;
 }
+.wrapper {
+  height: 100%;
+  width: 100%;
+  max-width: var(--site-max-width);
+  margin: 0 auto;
+  padding: 0 var(--distance-16px);
+  @include at768 {
+    padding: 0;
+  }
+  @include at1200 {
+    padding: 0 var(--distance-40px);
+  }
+}
 .content {
-  @include to992 {
+  @include to768 {
     padding-top: var(--header-mobile-height);
   }
-  @include at992 {
+  @include at768 {
     display: flex;
   }
   &__mobile-nav {
-    @include at992 {
+    @include at768 {
       display: none;
     }
   }
   &__sidebar {
     display: flex;
-    @include to992 {
+    @include to768 {
       display: none;
     }
-    @include at992 {
+    @include at768 {
       position: sticky;
       top: 0;
       flex: 1;
@@ -49,20 +62,25 @@
   &__main {
     display: flex;
     flex-direction: column;
-    @include to992 {
+    @include to768 {
       gap: var(--distance-16px);
+    }
+    @include at768 {
+      flex: 1.9;
+      gap: var(--distance-40px);
+      padding: var(--distance-68px) var(--distance-24px);
     }
     @include at992 {
       flex: 1.5;
       gap: var(--distance-40px);
-      padding: var(--distance-80px) var(--distance-24px);
+      padding: var(--distance-68px) var(--distance-24px);
     }
     @include at1200 {
       flex: 1.9;
-      padding: var(--distance-80px) var(--distance-40px);
+      padding: var(--distance-68px) var(--distance-40px);
     }
     @include at1380 {
-      padding: var(--distance-80px) var(--distance-60px);
+      padding: var(--distance-68px) var(--distance-60px);
     }
   }
   &__aside {

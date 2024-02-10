@@ -22,7 +22,10 @@ const Page: React.FC = () => {
       }),
     )
   }, [])
-  return <>{my_username && <Username current_username={my_username} />}</>
+
+  return (
+    <>{my_username ? <Username current_username={my_username} /> : 'LOADING'}</>
+  )
 }
 
 export default Page

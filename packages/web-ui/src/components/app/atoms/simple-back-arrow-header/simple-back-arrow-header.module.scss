@@ -6,11 +6,11 @@
   border-bottom: var(--border-primary);
   background: var(--header-transparent-background);
   backdrop-filter: var(--backdrop-filter);
-  @include at992 {
+  @include at768 {
     height: var(--header-desktop-height);
   }
   &--is-transparent-on-desktop {
-    @include at992 {
+    @include at768 {
       background: none;
       border-bottom-color: transparent;
       backdrop-filter: none;
@@ -28,7 +28,7 @@
     padding-left: var(--distance-16px);
     margin-left: calc(var(--distance-16px) * -1);
     height: var(--button-dimension-34px);
-    @include at992 {
+    @include at768 {
       padding-right: var(--distance-24px);
       height: var(--button-dimension-40px);
     }
@@ -42,7 +42,7 @@
       @include transition-150ms(transform);
       height: 18px;
       width: 10px;
-      @include at992 {
+      @include at768 {
         height: 20px;
         width: 12px;
       }
@@ -55,7 +55,7 @@
     letter-spacing: var(--letter-spacing-logo);
     font-size: var(--font-size-23px);
     padding-left: var(--distance-7px);
-    @include at992 {
+    @include at768 {
       font-size: var(--font-size-28px);
       padding-left: var(--distance-9px);
     }

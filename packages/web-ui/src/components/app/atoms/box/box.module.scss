@@ -2,19 +2,48 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  display: flex;
-  flex-direction: column;
   background: var(--blue-box-background);
-  gap: var(--distance-14px);
   padding: var(--distance-14px) var(--distance-16px) var(--distance-16px)
     var(--distance-16px);
   border-radius: var(--border-radius-20px);
   @include at768 {
-    gap: var(--distance-18px);
-  }
-  @include at992 {
     padding: var(--distance-26px) var(--distance-40px) var(--distance-34px)
       var(--distance-40px);
     border-radius: var(--border-radius-20px);
+  }
+  > * {
+    margin-top: 0.8em;
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  > h1,
+  h2,
+  h3 {
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-bold);
+    color: var(--brand-color);
+    margin-top: 1.5em;
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  > h1 {
+    font-size: var(--font-size-24px);
+    @include at768 {
+      font-size: var(--font-size-26px);
+    }
+  }
+  > h2 {
+    font-size: var(--font-size-22px);
+    @include at768 {
+      font-size: var(--font-size-24px);
+    }
+  }
+  > h3 {
+    font-size: var(--font-size-20px);
+    @include at768 {
+      font-size: var(--font-size-22px);
+    }
   }
 }

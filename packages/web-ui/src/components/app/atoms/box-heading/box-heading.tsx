@@ -2,8 +2,8 @@ import styles from './box-heading.module.scss'
 
 export namespace BoxHeading {
   export type Props = {
-    heading: string
-    subheading?: string
+    heading: React.ReactNode
+    subheading?: React.ReactNode
   }
 }
 

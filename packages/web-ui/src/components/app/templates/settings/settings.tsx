@@ -1,4 +1,3 @@
-import { Wrapper } from '@web-ui/components/common/templates/wrapper'
 import styles from './settings.module.scss'
 
 export namespace Settings {
@@ -14,7 +13,7 @@ export const Settings: React.FC<Settings.Props> = (props) => {
   return (
     <>
       <div className={styles.header}>{props.slot_header}</div>
-      <Wrapper>
+      <div className={styles.wrapper}>
         <div className={styles.content}>
           <div className={styles['content__mobile-nav']}>
             {props.slot_mobile_navigation}
@@ -27,7 +26,7 @@ export const Settings: React.FC<Settings.Props> = (props) => {
           <main className={styles.content__main}>{props.slot_main}</main>
           <div className={styles.content__aside} />
         </div>
-      </Wrapper>
+      </div>
     </>
   )
 }

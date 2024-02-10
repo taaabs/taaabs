@@ -5,16 +5,16 @@
   display: flex;
   flex-direction: column;
   gap: var(--distance-6px);
-  h2 {
+  > h2 {
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     color: var(--brand-color);
-    font-size: var(--font-size-22px);
-    @include at992 {
+    font-size: var(--font-size-24px);
+    @include at768 {
       font-size: var(--font-size-26px);
     }
   }
-  p {
+  > p {
     color: var(--text-color-variant);
   }
 }

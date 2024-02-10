@@ -24,9 +24,9 @@ export const DynamicDesktopNavigation: React.FC = () => {
         label="Subscription"
       />
       <UiAppAtom_DesktopMenuItem
-        href="/settings/import-bookmarks"
-        is_active={pathname == '/settings/import-bookmarks'}
-        label="Import bookmarks"
+        href="/settings/import"
+        is_active={pathname == '/settings/import'}
+        label="Import"
       />
       <UiAppAtom_DesktopMenuItem
         href="/settings/backups"

@@ -1,5 +1,5 @@
 const Page: React.FC = () => {
-  return <div>subscription</div>
+  return <div>This section is under active development...</div>
 }
 
 export default Page

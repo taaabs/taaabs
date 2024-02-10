@@ -19,6 +19,7 @@
     "@taaabs/web-ui": "workspace:*",
     "awesome-debounce-promise": "^2.1.0",
     "beautiful-react-hooks": "^5.0.0",
+    "bookmarks-to-json": "^1.0.5",
     "eslint": "^8.50.0",
     "eslint-config-next": "^13.5.4",
     "localforage": "^1.10.0",

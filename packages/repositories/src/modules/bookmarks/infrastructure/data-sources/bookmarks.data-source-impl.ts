@@ -159,7 +159,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         !params.is_public && params.note
           ? CryptoJS.AES.encrypt(params.note, 'my_secret_key').toString()
           : undefined,
-      is_public: params.is_public,
+      is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,
       stars: params.stars || undefined,
       is_unread: params.is_unread || undefined,
@@ -182,7 +182,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
             ? CryptoJS.AES.encrypt(tag.name.trim(), 'my_secret_key').toString()
             : undefined,
           hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
-          is_public: tag.is_public,
+          is_public: tag.is_public || undefined,
         })),
       links: params.links
         .filter((link) => link.url.trim().length > 0)
@@ -216,7 +216,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
               : undefined,
             hash: CryptoJS.SHA256(link.url.trim() + 'my_secret_key').toString(),
             site: link.is_public ? link.site_path : undefined,
-            is_public: link.is_public,
+            is_public: link.is_public || undefined,
           }
         }),
     }

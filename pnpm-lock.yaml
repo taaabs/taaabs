@@ -318,6 +318,9 @@ importers:
       beautiful-react-hooks:
         specifier: ^5.0.0
         version: 5.0.0(react-dom@18.2.0)(react-router-dom@6.12.1)(react@18.2.0)(rxjs@7.8.1)
+      bookmarks-to-json:
+        specifier: ^1.0.5
+        version: 1.0.5
       eslint:
         specifier: ^8.50.0
         version: 8.50.0
@@ -6005,6 +6008,10 @@ packages:
       unpipe: 1.0.0
     transitivePeerDependencies:
       - supports-color
+
+  /bookmarks-to-json@1.0.5:
+    resolution: {integrity: sha512-9okEABisbnAOPLTqoiILw1ir0lG2xwCCrC30xHc3Pw7nQrJ5uX+dKk/YrZt16ZOB3d5sJycCltOQYieaZbLXWA==}
+    dev: false
 
   /boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
