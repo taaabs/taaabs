@@ -10,7 +10,7 @@ export namespace BoxHeading {
 export const BoxHeading: React.FC<BoxHeading.Props> = (props) => {
   return (
     <div className={styles.container}>
-      <h2>{props.heading}</h2>
+      <h1>{props.heading}</h1>
       {props.subheading && <p>{props.subheading}</p>}
     </div>
   )

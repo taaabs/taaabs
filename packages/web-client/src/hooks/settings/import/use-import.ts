@@ -69,9 +69,12 @@ export const use_import = () => {
         }
       }
       json.forEach((item) => flatten_tree({ node: item, path: '' }))
-      set_parsed_bookmarks(parsed_bookmarks)
+      if (parsed_bookmarks.length) {
+        set_parsed_bookmarks(parsed_bookmarks)
+      } else {
+        throw new Error()
+      }
     } catch {
-      set_netscape_document(undefined)
       toast.error('Selected file is invalid')
       // Do nothing.
     }

@@ -111,7 +111,11 @@ export const Username: React.FC<Username.Props> = (props) => {
           }}
         />
         <div>
-          <UiCommonParticle_Button type="submit" is_loading={isSubmitting}>
+          <UiCommonParticle_Button
+            type="submit"
+            is_loading={isSubmitting}
+            size="medium"
+          >
             Save
           </UiCommonParticle_Button>
         </div>

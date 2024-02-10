@@ -5,7 +5,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--distance-6px);
-  > h2 {
+  margin-bottom: var(--distance-14px);
+  @include at768 {
+    margin-bottom: var(--distance-20px);
+  }
+  > h1 {
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     color: var(--brand-color);

@@ -44,11 +44,11 @@
   }
   &--medium {
     height: var(--button-dimension-42px);
-    font-size: var(--font-size-17px);
+    font-size: var(--font-size-16px);
     padding: 0 var(--distance-18px);
     @include at1200 {
       height: var(--button-dimension-44px);
-      font-size: var(--font-size-18px);
+      font-size: var(--font-size-17px);
       padding: 0 var(--distance-20px);
     }
   }
