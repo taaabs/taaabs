@@ -195,7 +195,13 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           >
             <div>
               <span>{(item as Item).text}</span>
-              {!props.is_updating && <span> {(item as Item).yields || 0}</span>}
+              <span>
+                {(item as Item).yields
+                  ? (item as Item).yields
+                  : !(item as Item).yields && props.is_updating
+                  ? ''
+                  : 0}
+              </span>
             </div>
           </button>
         </div>
@@ -314,7 +320,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         >
           <div>
             <span>{props.all_bookmarks_label}</span>
-            {!props.is_updating && <span>{props.all_bookmarks_yields}</span>}
+            <span>{props.all_bookmarks_yields}</span>
           </div>
         </button>
         <Nestable
