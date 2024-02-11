@@ -111,10 +111,10 @@ export const use_search = () => {
   const [count, set_count] = useState<number>()
 
   const is_archived_filter =
-    current_filter == Filter.Archived ||
-    current_filter == Filter.ArchivedStarred ||
-    current_filter == Filter.ArchivedStarredUnread ||
-    current_filter == Filter.ArchivedUnread
+    current_filter == Filter.ARCHIVED ||
+    current_filter == Filter.ARCHIVED_STARRED ||
+    current_filter == Filter.ARCHIVED_STARRED_UNREAD ||
+    current_filter == Filter.ARCHIVED_UNREAD
 
   useUpdateEffect(() => {
     if (
@@ -540,16 +540,16 @@ export const use_search = () => {
           ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
             : {}),
-          ...(current_filter == Filter.Unread ||
-          current_filter == Filter.StarredUnread
+          ...(current_filter == Filter.UNREAD ||
+          current_filter == Filter.STARRED_UNREAD
             ? {
                 is_unread: true,
               }
             : {}),
           stars: {
             gte:
-              current_filter == Filter.Starred ||
-              current_filter == Filter.StarredUnread
+              current_filter == Filter.STARRED ||
+              current_filter == Filter.STARRED_UNREAD
                 ? 1
                 : 0,
           },
@@ -753,16 +753,16 @@ export const use_search = () => {
               ...(tags && ids_to_search_amongst
                 ? { id: ids_to_search_amongst }
                 : {}),
-              ...(current_filter == Filter.Unread ||
-              current_filter == Filter.StarredUnread
+              ...(current_filter == Filter.UNREAD ||
+              current_filter == Filter.STARRED_UNREAD
                 ? {
                     is_unread: true,
                   }
                 : {}),
               stars: {
                 gte:
-                  current_filter == Filter.Starred ||
-                  current_filter == Filter.StarredUnread
+                  current_filter == Filter.STARRED ||
+                  current_filter == Filter.STARRED_UNREAD
                     ? 1
                     : 0,
               },
@@ -860,16 +860,16 @@ export const use_search = () => {
               properties: ['title', 'note'],
               where: {
                 id: ids_of_hits,
-                ...(current_filter == Filter.Unread ||
-                current_filter == Filter.StarredUnread
+                ...(current_filter == Filter.UNREAD ||
+                current_filter == Filter.STARRED_UNREAD
                   ? {
                       is_unread: true,
                     }
                   : {}),
                 stars: {
                   gte:
-                    current_filter == Filter.Starred ||
-                    current_filter == Filter.StarredUnread
+                    current_filter == Filter.STARRED ||
+                    current_filter == Filter.STARRED_UNREAD
                       ? 1
                       : 0,
                 },
@@ -980,16 +980,16 @@ export const use_search = () => {
               properties: ['title', 'note'],
               where: {
                 id: ids_of_hits,
-                ...(current_filter == Filter.Unread ||
-                current_filter == Filter.StarredUnread
+                ...(current_filter == Filter.UNREAD ||
+                current_filter == Filter.STARRED_UNREAD
                   ? {
                       is_unread: true,
                     }
                   : {}),
                 stars: {
                   gte:
-                    current_filter == Filter.Starred ||
-                    current_filter == Filter.StarredUnread
+                    current_filter == Filter.STARRED ||
+                    current_filter == Filter.STARRED_UNREAD
                       ? 1
                       : 0,
                 },

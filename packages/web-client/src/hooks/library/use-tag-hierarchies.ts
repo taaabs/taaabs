@@ -23,24 +23,24 @@ export const use_tag_hierarchies = () => {
 
       if (params.filter) {
         request_params.starred_only =
-          params.filter == Filter.Starred ||
-          params.filter == Filter.StarredUnread ||
-          params.filter == Filter.ArchivedStarred ||
-          params.filter == Filter.ArchivedStarredUnread ||
+          params.filter == Filter.STARRED ||
+          params.filter == Filter.STARRED_UNREAD ||
+          params.filter == Filter.ARCHIVED_STARRED ||
+          params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
           undefined
 
         request_params.unread_only =
-          params.filter == Filter.Unread ||
-          params.filter == Filter.StarredUnread ||
-          params.filter == Filter.ArchivedUnread ||
-          params.filter == Filter.ArchivedStarredUnread ||
+          params.filter == Filter.UNREAD ||
+          params.filter == Filter.STARRED_UNREAD ||
+          params.filter == Filter.ARCHIVED_UNREAD ||
+          params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
           undefined
 
         request_params.is_archived =
-          params.filter == Filter.Archived ||
-          params.filter == Filter.ArchivedStarred ||
-          params.filter == Filter.ArchivedUnread ||
-          params.filter == Filter.ArchivedStarredUnread ||
+          params.filter == Filter.ARCHIVED ||
+          params.filter == Filter.ARCHIVED_STARRED ||
+          params.filter == Filter.ARCHIVED_UNREAD ||
+          params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
           undefined
       }
 
@@ -61,17 +61,17 @@ export const use_tag_hierarchies = () => {
 
       if (params.filter) {
         request_params.starred_only =
-          params.filter == Filter.Starred ||
-          params.filter == Filter.StarredUnread ||
-          params.filter == Filter.ArchivedStarred ||
-          params.filter == Filter.ArchivedStarredUnread ||
+          params.filter == Filter.STARRED ||
+          params.filter == Filter.STARRED_UNREAD ||
+          params.filter == Filter.ARCHIVED_STARRED ||
+          params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
           undefined
 
         request_params.is_archived =
-          params.filter == Filter.Archived ||
-          params.filter == Filter.ArchivedStarred ||
-          params.filter == Filter.ArchivedUnread ||
-          params.filter == Filter.ArchivedStarredUnread ||
+          params.filter == Filter.ARCHIVED ||
+          params.filter == Filter.ARCHIVED_STARRED ||
+          params.filter == Filter.ARCHIVED_UNREAD ||
+          params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
           undefined
       }
       await dispatch(

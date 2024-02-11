@@ -12,7 +12,7 @@ export const use_filter_view_options = () => {
     Object.values(Filter)[
       parseInt(
         query_params.get('f') ||
-          Object.values(Filter).indexOf(Filter.None).toString(),
+          Object.values(Filter).indexOf(Filter.NONE).toString(),
       )
     ],
   )
@@ -27,7 +27,7 @@ export const use_filter_view_options = () => {
         Object.values(Filter)[
           parseInt(
             query_filter ||
-              Object.values(Filter).indexOf(Filter.None).toString(),
+              Object.values(Filter).indexOf(Filter.NONE).toString(),
           )
         ],
       )
@@ -38,7 +38,7 @@ export const use_filter_view_options = () => {
     const updated_query_params = update_query_params(
       query_params,
       'f',
-      filter == Filter.None
+      filter == Filter.NONE
         ? undefined
         : Object.values(Filter).indexOf(filter).toString(),
     )
@@ -57,11 +57,11 @@ export const use_filter_view_options = () => {
 
   const clear_selected_stars = () => {
     let updated_query_params: URLSearchParams
-    if (current_filter == Filter.StarredUnread) {
+    if (current_filter == Filter.STARRED_UNREAD) {
       updated_query_params = update_query_params(
         query_params,
         'f',
-        Object.values(Filter).indexOf(Filter.Unread).toString(),
+        Object.values(Filter).indexOf(Filter.UNREAD).toString(),
       )
     } else {
       updated_query_params = update_query_params(query_params, 'f')
@@ -81,11 +81,11 @@ export const use_filter_view_options = () => {
 
   const clear_unread = () => {
     let updated_query_params: URLSearchParams
-    if (current_filter == Filter.StarredUnread) {
+    if (current_filter == Filter.STARRED_UNREAD) {
       updated_query_params = update_query_params(
         query_params,
         'f',
-        Object.values(Filter).indexOf(Filter.Starred).toString(),
+        Object.values(Filter).indexOf(Filter.STARRED).toString(),
       )
     } else {
       updated_query_params = update_query_params(query_params, 'f')

@@ -3,8 +3,8 @@ import { Order } from './order'
 
 export namespace BookmarksFetchingDefaults {
   export namespace Common {
-    export const order = Order.Desc
-    export const sort_by = SortBy.CreatedAt
+    export const order = Order.DESC
+    export const sort_by = SortBy.CREATED_AT
   }
 
   export namespace Authorized {

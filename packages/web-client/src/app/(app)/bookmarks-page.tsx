@@ -153,7 +153,7 @@ const BookmarksPage: React.FC = () => {
   const [search_cache_to_be_cleared, set_search_cache_to_be_cleared] =
     useState(false)
   useUpdateEffect(() => {
-    if (sort_by_view_options.current_sort_by == SortBy.VisitedAt) {
+    if (sort_by_view_options.current_sort_by == SortBy.VISITED_AT) {
       set_search_cache_to_be_cleared(true)
     } else {
       set_search_cache_to_be_cleared(false)
@@ -211,10 +211,10 @@ const BookmarksPage: React.FC = () => {
   ])
 
   const is_archived_filter =
-    filter_view_options.current_filter == Filter.Archived ||
-    filter_view_options.current_filter == Filter.ArchivedStarred ||
-    filter_view_options.current_filter == Filter.ArchivedStarredUnread ||
-    filter_view_options.current_filter == Filter.ArchivedUnread
+    filter_view_options.current_filter == Filter.ARCHIVED ||
+    filter_view_options.current_filter == Filter.ARCHIVED_STARRED ||
+    filter_view_options.current_filter == Filter.ARCHIVED_STARRED_UNREAD ||
+    filter_view_options.current_filter == Filter.ARCHIVED_UNREAD
 
   return (
     <>
@@ -346,12 +346,12 @@ const BookmarksPage: React.FC = () => {
               {
                 label: 'Starred',
                 is_toggled:
-                  filter_view_options.current_filter == Filter.Starred ||
-                  filter_view_options.current_filter == Filter.StarredUnread ||
+                  filter_view_options.current_filter == Filter.STARRED ||
+                  filter_view_options.current_filter == Filter.STARRED_UNREAD ||
                   filter_view_options.current_filter ==
-                    Filter.ArchivedStarred ||
+                    Filter.ARCHIVED_STARRED ||
                   filter_view_options.current_filter ==
-                    Filter.ArchivedStarredUnread,
+                    Filter.ARCHIVED_STARRED_UNREAD,
                 on_click: () => {
                   if (
                     bookmarks_slice_state.is_fetching_first_bookmarks ||
@@ -360,38 +360,39 @@ const BookmarksPage: React.FC = () => {
                   )
                     return
 
-                  let filter = Filter.None
-                  if (filter_view_options.current_filter == Filter.None) {
-                    filter = Filter.Starred
+                  let filter = Filter.NONE
+                  if (filter_view_options.current_filter == Filter.NONE) {
+                    filter = Filter.STARRED
                   } else if (
-                    filter_view_options.current_filter == Filter.Starred
+                    filter_view_options.current_filter == Filter.STARRED
                   ) {
-                    filter = Filter.None
+                    filter = Filter.NONE
                   } else if (
-                    filter_view_options.current_filter == Filter.StarredUnread
+                    filter_view_options.current_filter == Filter.STARRED_UNREAD
                   ) {
-                    filter = Filter.Unread
-                  } else if (
-                    filter_view_options.current_filter == Filter.ArchivedStarred
-                  ) {
-                    filter = Filter.Archived
+                    filter = Filter.UNREAD
                   } else if (
                     filter_view_options.current_filter ==
-                    Filter.ArchivedStarredUnread
+                    Filter.ARCHIVED_STARRED
                   ) {
-                    filter = Filter.ArchivedUnread
+                    filter = Filter.ARCHIVED
                   } else if (
-                    filter_view_options.current_filter == Filter.Unread
+                    filter_view_options.current_filter ==
+                    Filter.ARCHIVED_STARRED_UNREAD
                   ) {
-                    filter = Filter.StarredUnread
+                    filter = Filter.ARCHIVED_UNREAD
                   } else if (
-                    filter_view_options.current_filter == Filter.Archived
+                    filter_view_options.current_filter == Filter.UNREAD
                   ) {
-                    filter = Filter.ArchivedStarred
+                    filter = Filter.STARRED_UNREAD
                   } else if (
-                    filter_view_options.current_filter == Filter.ArchivedUnread
+                    filter_view_options.current_filter == Filter.ARCHIVED
                   ) {
-                    filter = Filter.ArchivedStarredUnread
+                    filter = Filter.ARCHIVED_STARRED
+                  } else if (
+                    filter_view_options.current_filter == Filter.ARCHIVED_UNREAD
+                  ) {
+                    filter = Filter.ARCHIVED_STARRED_UNREAD
                   }
                   filter_view_options.set_filter_query_param(filter)
                 },
@@ -401,13 +402,13 @@ const BookmarksPage: React.FC = () => {
                     {
                       label: 'Unread',
                       is_toggled:
-                        filter_view_options.current_filter == Filter.Unread ||
+                        filter_view_options.current_filter == Filter.UNREAD ||
                         filter_view_options.current_filter ==
-                          Filter.StarredUnread ||
+                          Filter.STARRED_UNREAD ||
                         filter_view_options.current_filter ==
-                          Filter.ArchivedUnread ||
+                          Filter.ARCHIVED_UNREAD ||
                         filter_view_options.current_filter ==
-                          Filter.ArchivedStarredUnread,
+                          Filter.ARCHIVED_STARRED_UNREAD,
                       on_click: () => {
                         if (
                           bookmarks_slice_state.is_fetching_first_bookmarks ||
@@ -416,41 +417,41 @@ const BookmarksPage: React.FC = () => {
                         )
                           return
 
-                        let filter = Filter.None
-                        if (filter_view_options.current_filter == Filter.None) {
-                          filter = Filter.Unread
+                        let filter = Filter.NONE
+                        if (filter_view_options.current_filter == Filter.NONE) {
+                          filter = Filter.UNREAD
                         } else if (
-                          filter_view_options.current_filter == Filter.Unread
+                          filter_view_options.current_filter == Filter.UNREAD
                         ) {
-                          filter = Filter.None
-                        } else if (
-                          filter_view_options.current_filter ==
-                          Filter.StarredUnread
-                        ) {
-                          filter = Filter.Starred
+                          filter = Filter.NONE
                         } else if (
                           filter_view_options.current_filter ==
-                          Filter.ArchivedUnread
+                          Filter.STARRED_UNREAD
                         ) {
-                          filter = Filter.Archived
+                          filter = Filter.STARRED
                         } else if (
                           filter_view_options.current_filter ==
-                          Filter.ArchivedStarredUnread
+                          Filter.ARCHIVED_UNREAD
                         ) {
-                          filter = Filter.ArchivedStarred
-                        } else if (
-                          filter_view_options.current_filter == Filter.Starred
-                        ) {
-                          filter = Filter.StarredUnread
-                        } else if (
-                          filter_view_options.current_filter == Filter.Archived
-                        ) {
-                          filter = Filter.ArchivedUnread
+                          filter = Filter.ARCHIVED
                         } else if (
                           filter_view_options.current_filter ==
-                          Filter.ArchivedStarred
+                          Filter.ARCHIVED_STARRED_UNREAD
                         ) {
-                          filter = Filter.ArchivedStarredUnread
+                          filter = Filter.ARCHIVED_STARRED
+                        } else if (
+                          filter_view_options.current_filter == Filter.STARRED
+                        ) {
+                          filter = Filter.STARRED_UNREAD
+                        } else if (
+                          filter_view_options.current_filter == Filter.ARCHIVED
+                        ) {
+                          filter = Filter.ARCHIVED_UNREAD
+                        } else if (
+                          filter_view_options.current_filter ==
+                          Filter.ARCHIVED_STARRED
+                        ) {
+                          filter = Filter.ARCHIVED_STARRED_UNREAD
                         }
                         filter_view_options.set_filter_query_param(filter)
                       },
@@ -460,12 +461,13 @@ const BookmarksPage: React.FC = () => {
               {
                 label: 'Archived',
                 is_toggled:
-                  filter_view_options.current_filter == Filter.Archived ||
+                  filter_view_options.current_filter == Filter.ARCHIVED ||
                   filter_view_options.current_filter ==
-                    Filter.ArchivedStarred ||
-                  filter_view_options.current_filter == Filter.ArchivedUnread ||
+                    Filter.ARCHIVED_STARRED ||
                   filter_view_options.current_filter ==
-                    Filter.ArchivedStarredUnread,
+                    Filter.ARCHIVED_UNREAD ||
+                  filter_view_options.current_filter ==
+                    Filter.ARCHIVED_STARRED_UNREAD,
                 on_click: () => {
                   if (
                     bookmarks_slice_state.is_fetching_first_bookmarks ||
@@ -474,39 +476,40 @@ const BookmarksPage: React.FC = () => {
                   )
                     return
 
-                  let filter = Filter.None
+                  let filter = Filter.NONE
 
-                  if (filter_view_options.current_filter == Filter.None) {
-                    filter = Filter.Archived
+                  if (filter_view_options.current_filter == Filter.NONE) {
+                    filter = Filter.ARCHIVED
                   } else if (
-                    filter_view_options.current_filter == Filter.Starred
+                    filter_view_options.current_filter == Filter.STARRED
                   ) {
-                    filter = Filter.ArchivedStarred
+                    filter = Filter.ARCHIVED_STARRED
                   } else if (
-                    filter_view_options.current_filter == Filter.Unread
+                    filter_view_options.current_filter == Filter.UNREAD
                   ) {
-                    filter = Filter.ArchivedUnread
+                    filter = Filter.ARCHIVED_UNREAD
                   } else if (
-                    filter_view_options.current_filter == Filter.StarredUnread
+                    filter_view_options.current_filter == Filter.STARRED_UNREAD
                   ) {
-                    filter = Filter.ArchivedStarredUnread
+                    filter = Filter.ARCHIVED_STARRED_UNREAD
                   } else if (
-                    filter_view_options.current_filter == Filter.Archived
+                    filter_view_options.current_filter == Filter.ARCHIVED
                   ) {
-                    filter = Filter.None
-                  } else if (
-                    filter_view_options.current_filter == Filter.ArchivedStarred
-                  ) {
-                    filter = Filter.Starred
-                  } else if (
-                    filter_view_options.current_filter == Filter.ArchivedUnread
-                  ) {
-                    filter = Filter.Unread
+                    filter = Filter.NONE
                   } else if (
                     filter_view_options.current_filter ==
-                    Filter.ArchivedStarredUnread
+                    Filter.ARCHIVED_STARRED
                   ) {
-                    filter = Filter.StarredUnread
+                    filter = Filter.STARRED
+                  } else if (
+                    filter_view_options.current_filter == Filter.ARCHIVED_UNREAD
+                  ) {
+                    filter = Filter.UNREAD
+                  } else if (
+                    filter_view_options.current_filter ==
+                    Filter.ARCHIVED_STARRED_UNREAD
+                  ) {
+                    filter = Filter.STARRED_UNREAD
                   }
 
                   filter_view_options.set_filter_query_param(filter)
@@ -550,22 +553,22 @@ const BookmarksPage: React.FC = () => {
                     gte: date_view_options.current_gte,
                     lte: date_view_options.current_lte,
                     starred_only:
-                      filter == Filter.Starred ||
-                      filter == Filter.StarredUnread ||
-                      filter == Filter.ArchivedStarred ||
-                      filter == Filter.ArchivedStarredUnread ||
+                      filter == Filter.STARRED ||
+                      filter == Filter.STARRED_UNREAD ||
+                      filter == Filter.ARCHIVED_STARRED ||
+                      filter == Filter.ARCHIVED_STARRED_UNREAD ||
                       undefined,
                     unread_only:
-                      filter == Filter.Unread ||
-                      filter == Filter.StarredUnread ||
-                      filter == Filter.ArchivedUnread ||
-                      filter == Filter.ArchivedStarredUnread ||
+                      filter == Filter.UNREAD ||
+                      filter == Filter.STARRED_UNREAD ||
+                      filter == Filter.ARCHIVED_UNREAD ||
+                      filter == Filter.ARCHIVED_STARRED_UNREAD ||
                       undefined,
                     is_archived:
-                      filter == Filter.Archived ||
-                      filter == Filter.ArchivedStarred ||
-                      filter == Filter.ArchivedUnread ||
-                      filter == Filter.ArchivedStarredUnread ||
+                      filter == Filter.ARCHIVED ||
+                      filter == Filter.ARCHIVED_STARRED ||
+                      filter == Filter.ARCHIVED_UNREAD ||
+                      filter == Filter.ARCHIVED_STARRED_UNREAD ||
                       undefined,
                   }
 
@@ -601,7 +604,7 @@ const BookmarksPage: React.FC = () => {
                 tag_view_options.clear_selected_tags()
                 if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
                   search.reset()
-                  if (filter_view_options.current_filter == Filter.None) {
+                  if (filter_view_options.current_filter == Filter.NONE) {
                     bookmarks.get_bookmarks({})
                   }
                 }
@@ -638,66 +641,68 @@ const BookmarksPage: React.FC = () => {
                   <UiAppAtom_DropdownMenu
                     items={[
                       {
-                        label: _sort_by_option_to_label(SortBy.CreatedAt),
+                        label: _sort_by_option_to_label(SortBy.CREATED_AT),
                         on_click: () => {
                           toggle_sort_by_dropdown()
                           if (
                             sort_by_view_options.current_sort_by ==
-                              SortBy.CreatedAt ||
+                              SortBy.CREATED_AT ||
                             bookmarks_slice_state.is_fetching_first_bookmarks ||
                             bookmarks_slice_state.is_fetching_more_bookmarks ||
                             counts.is_fetching_counts_data
                           )
                             return
                           sort_by_view_options.set_sort_by_query_param(
-                            SortBy.CreatedAt,
+                            SortBy.CREATED_AT,
                           )
                         },
                         is_selected:
                           sort_by_view_options.current_sort_by ==
-                          SortBy.CreatedAt,
+                          SortBy.CREATED_AT,
                       },
                       {
-                        label: _sort_by_option_to_label(SortBy.UpdatedAt),
+                        label: _sort_by_option_to_label(SortBy.UPDATED_AT),
                         on_click: () => {
                           toggle_sort_by_dropdown()
                           if (
                             sort_by_view_options.current_sort_by ==
-                              SortBy.UpdatedAt ||
+                              SortBy.UPDATED_AT ||
                             bookmarks_slice_state.is_fetching_first_bookmarks ||
                             bookmarks_slice_state.is_fetching_more_bookmarks ||
                             counts.is_fetching_counts_data
                           )
                             return
                           sort_by_view_options.set_sort_by_query_param(
-                            SortBy.UpdatedAt,
+                            SortBy.UPDATED_AT,
                           )
                         },
                         is_selected:
                           sort_by_view_options.current_sort_by ==
-                          SortBy.UpdatedAt,
+                          SortBy.UPDATED_AT,
                       },
                       ...(!username
                         ? [
                             {
-                              label: _sort_by_option_to_label(SortBy.VisitedAt),
+                              label: _sort_by_option_to_label(
+                                SortBy.VISITED_AT,
+                              ),
                               on_click: () => {
                                 toggle_sort_by_dropdown()
                                 if (
                                   sort_by_view_options.current_sort_by ==
-                                    SortBy.VisitedAt ||
+                                    SortBy.VISITED_AT ||
                                   bookmarks_slice_state.is_fetching_first_bookmarks ||
                                   bookmarks_slice_state.is_fetching_more_bookmarks ||
                                   counts.is_fetching_counts_data
                                 )
                                   return
                                 sort_by_view_options.set_sort_by_query_param(
-                                  SortBy.VisitedAt,
+                                  SortBy.VISITED_AT,
                                 )
                               },
                               is_selected:
                                 sort_by_view_options.current_sort_by ==
-                                SortBy.VisitedAt,
+                                SortBy.VISITED_AT,
                             },
                           ]
                         : []),
@@ -728,37 +733,37 @@ const BookmarksPage: React.FC = () => {
                   <UiAppAtom_DropdownMenu
                     items={[
                       {
-                        label: _order_option_to_label(Order.Desc),
+                        label: _order_option_to_label(Order.DESC),
                         on_click: () => {
                           toggle_order_dropdown()
                           if (
-                            order_view_options.current_order == Order.Desc ||
+                            order_view_options.current_order == Order.DESC ||
                             bookmarks_slice_state.is_fetching_first_bookmarks ||
                             bookmarks_slice_state.is_fetching_more_bookmarks ||
                             counts.is_fetching_counts_data
                           )
                             return
-                          order_view_options.set_order_query_param(Order.Desc)
+                          order_view_options.set_order_query_param(Order.DESC)
                         },
 
                         is_selected:
-                          order_view_options.current_order == Order.Desc,
+                          order_view_options.current_order == Order.DESC,
                       },
                       {
-                        label: _order_option_to_label(Order.Asc),
+                        label: _order_option_to_label(Order.ASC),
                         on_click: () => {
                           toggle_order_dropdown()
                           if (
-                            order_view_options.current_order == Order.Asc ||
+                            order_view_options.current_order == Order.ASC ||
                             bookmarks_slice_state.is_fetching_first_bookmarks ||
                             bookmarks_slice_state.is_fetching_more_bookmarks ||
                             counts.is_fetching_counts_data
                           )
                             return
-                          order_view_options.set_order_query_param(Order.Asc)
+                          order_view_options.set_order_query_param(Order.ASC)
                         },
                         is_selected:
-                          order_view_options.current_order == Order.Asc,
+                          order_view_options.current_order == Order.ASC,
                       },
                     ]}
                   />
@@ -806,8 +811,8 @@ const BookmarksPage: React.FC = () => {
                     }
                     is_range_selector_disabled={
                       sort_by_view_options.current_sort_by ==
-                        SortBy.UpdatedAt ||
-                      sort_by_view_options.current_sort_by == SortBy.VisitedAt
+                        SortBy.UPDATED_AT ||
+                      sort_by_view_options.current_sort_by == SortBy.VISITED_AT
                     }
                   />
                 </div>
@@ -961,23 +966,24 @@ const BookmarksPage: React.FC = () => {
                   }
                   date={
                     !bookmarks_slice_state.is_fetching_first_bookmarks
-                      ? sort_by_view_options.current_sort_by == SortBy.CreatedAt
+                      ? sort_by_view_options.current_sort_by ==
+                        SortBy.CREATED_AT
                         ? new Date(bookmark.created_at)
                         : sort_by_view_options.current_sort_by ==
-                          SortBy.UpdatedAt
+                          SortBy.UPDATED_AT
                         ? new Date(bookmark.updated_at)
                         : sort_by_view_options.current_sort_by ==
-                          SortBy.VisitedAt
+                          SortBy.VISITED_AT
                         ? new Date(bookmark.visited_at)
                         : new Date(bookmark.created_at)
                       : sort_by_view_options.commited_sort_by ==
-                        SortBy.CreatedAt
+                        SortBy.CREATED_AT
                       ? new Date(bookmark.created_at)
                       : sort_by_view_options.commited_sort_by ==
-                        SortBy.UpdatedAt
+                        SortBy.UPDATED_AT
                       ? new Date(bookmark.updated_at)
                       : sort_by_view_options.commited_sort_by ==
-                        SortBy.VisitedAt
+                        SortBy.VISITED_AT
                       ? new Date(bookmark.visited_at)
                       : new Date(bookmark.created_at)
                   }
@@ -1077,7 +1083,7 @@ const BookmarksPage: React.FC = () => {
                     })
                     if (
                       !is_cache_stale &&
-                      (filter_view_options.current_filter != Filter.Archived
+                      (filter_view_options.current_filter != Filter.ARCHIVED
                         ? !search.db
                         : !search.archived_db)
                     ) {
@@ -1431,11 +1437,11 @@ const BookmarksPage: React.FC = () => {
                                   if (
                                     search.count &&
                                     (filter_view_options.current_filter ==
-                                      Filter.Unread ||
+                                      Filter.UNREAD ||
                                       filter_view_options.current_filter ==
-                                        Filter.StarredUnread ||
+                                        Filter.STARRED_UNREAD ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarredUnread) &&
+                                        Filter.ARCHIVED_STARRED_UNREAD) &&
                                     bookmark.is_unread
                                   ) {
                                     search.set_count(search.count! - 1)
@@ -1449,9 +1455,9 @@ const BookmarksPage: React.FC = () => {
                                     if (
                                       !is_unread &&
                                       (filter_view_options.current_filter ==
-                                        Filter.Unread ||
+                                        Filter.UNREAD ||
                                         filter_view_options.current_filter ==
-                                          Filter.StarredUnread)
+                                          Filter.STARRED_UNREAD)
                                     ) {
                                       search.reset()
                                     }
@@ -1526,13 +1532,13 @@ const BookmarksPage: React.FC = () => {
                                   if (
                                     search.count &&
                                     (filter_view_options.current_filter ==
-                                      Filter.Starred ||
+                                      Filter.STARRED ||
                                       filter_view_options.current_filter ==
-                                        Filter.StarredUnread ||
+                                        Filter.STARRED_UNREAD ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarred ||
+                                        Filter.ARCHIVED_STARRED ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarredUnread) &&
+                                        Filter.ARCHIVED_STARRED_UNREAD) &&
                                     bookmark.stars == 1
                                   ) {
                                     search.set_count(search.count - 1)
@@ -1614,13 +1620,13 @@ const BookmarksPage: React.FC = () => {
                                   if (
                                     search.count &&
                                     (filter_view_options.current_filter ==
-                                      Filter.Starred ||
+                                      Filter.STARRED ||
                                       filter_view_options.current_filter ==
-                                        Filter.StarredUnread ||
+                                        Filter.STARRED_UNREAD ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarred ||
+                                        Filter.ARCHIVED_STARRED ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarredUnread) &&
+                                        Filter.ARCHIVED_STARRED_UNREAD) &&
                                     bookmark.stars == 2
                                   ) {
                                     search.set_count(search.count - 1)
@@ -1702,13 +1708,13 @@ const BookmarksPage: React.FC = () => {
                                   if (
                                     search.count &&
                                     (filter_view_options.current_filter ==
-                                      Filter.Starred ||
+                                      Filter.STARRED ||
                                       filter_view_options.current_filter ==
-                                        Filter.StarredUnread ||
+                                        Filter.STARRED_UNREAD ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarred ||
+                                        Filter.ARCHIVED_STARRED ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarredUnread) &&
+                                        Filter.ARCHIVED_STARRED_UNREAD) &&
                                     bookmark.stars == 3
                                   ) {
                                     search.set_count(search.count - 1)
@@ -1790,13 +1796,13 @@ const BookmarksPage: React.FC = () => {
                                   if (
                                     search.count &&
                                     (filter_view_options.current_filter ==
-                                      Filter.Starred ||
+                                      Filter.STARRED ||
                                       filter_view_options.current_filter ==
-                                        Filter.StarredUnread ||
+                                        Filter.STARRED_UNREAD ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarred ||
+                                        Filter.ARCHIVED_STARRED ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarredUnread) &&
+                                        Filter.ARCHIVED_STARRED_UNREAD) &&
                                     bookmark.stars == 4
                                   ) {
                                     search.set_count(search.count - 1)
@@ -1878,13 +1884,13 @@ const BookmarksPage: React.FC = () => {
                                   if (
                                     search.count &&
                                     (filter_view_options.current_filter ==
-                                      Filter.Starred ||
+                                      Filter.STARRED ||
                                       filter_view_options.current_filter ==
-                                        Filter.StarredUnread ||
+                                        Filter.STARRED_UNREAD ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarred ||
+                                        Filter.ARCHIVED_STARRED ||
                                       filter_view_options.current_filter ==
-                                        Filter.ArchivedStarredUnread) &&
+                                        Filter.ARCHIVED_STARRED_UNREAD) &&
                                     bookmark.stars == 5
                                   ) {
                                     search.set_count(search.count - 1)
@@ -2008,7 +2014,7 @@ const BookmarksPage: React.FC = () => {
                               {
                                 label: !(
                                   filter_view_options.current_filter ==
-                                  Filter.Archived
+                                  Filter.ARCHIVED
                                 )
                                   ? 'Archive'
                                   : 'Restore',
@@ -2202,20 +2208,20 @@ export default BookmarksPage
 
 function _sort_by_option_to_label(sort_by_option: SortBy): string {
   switch (sort_by_option) {
-    case SortBy.CreatedAt:
+    case SortBy.CREATED_AT:
       return 'Date created'
-    case SortBy.UpdatedAt:
+    case SortBy.UPDATED_AT:
       return 'Date updated'
-    case SortBy.VisitedAt:
+    case SortBy.VISITED_AT:
       return 'Last visited'
   }
 }
 
 function _order_option_to_label(order_option: Order): string {
   switch (order_option) {
-    case Order.Desc:
+    case Order.DESC:
       return 'Newest first'
-    case Order.Asc:
+    case Order.ASC:
       return 'Oldest first'
   }
 }

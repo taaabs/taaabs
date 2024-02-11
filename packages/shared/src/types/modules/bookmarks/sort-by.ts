@@ -1,5 +1,5 @@
 export enum SortBy {
-  CreatedAt = 'created_at',
-  UpdatedAt = 'updated_at',
-  VisitedAt = 'visited_at',
+  CREATED_AT = 'created_at',
+  UPDATED_AT = 'updated_at',
+  VISITED_AT = 'visited_at',
 }

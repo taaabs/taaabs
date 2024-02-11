@@ -34,33 +34,33 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       const query_filter = query_params.get('f')
       if (query_filter) {
         request_params.starred_only =
-          Object.values(Filter)[parseInt(query_filter)] == Filter.Starred ||
+          Object.values(Filter)[parseInt(query_filter)] == Filter.STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.StarredUnread ||
+            Filter.STARRED_UNREAD ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedStarred ||
+            Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedStarredUnread ||
+            Filter.ARCHIVED_STARRED_UNREAD ||
           undefined
 
         request_params.unread_only =
-          Object.values(Filter)[parseInt(query_filter)] == Filter.Unread ||
+          Object.values(Filter)[parseInt(query_filter)] == Filter.UNREAD ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.StarredUnread ||
+            Filter.STARRED_UNREAD ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedUnread ||
+            Filter.ARCHIVED_UNREAD ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedStarredUnread ||
+            Filter.ARCHIVED_STARRED_UNREAD ||
           undefined
 
         request_params.is_archived =
-          Object.values(Filter)[parseInt(query_filter)] == Filter.Archived ||
+          Object.values(Filter)[parseInt(query_filter)] == Filter.ARCHIVED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedStarred ||
+            Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedUnread ||
+            Filter.ARCHIVED_UNREAD ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedStarredUnread ||
+            Filter.ARCHIVED_STARRED_UNREAD ||
           undefined
       }
 
@@ -110,23 +110,23 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       const query_filter = query_params.get('f')
       if (query_filter) {
         request_params.starred_only =
-          Object.values(Filter)[parseInt(query_filter)] == Filter.Starred ||
+          Object.values(Filter)[parseInt(query_filter)] == Filter.STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.StarredUnread ||
+            Filter.STARRED_UNREAD ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedStarred ||
+            Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedStarredUnread ||
+            Filter.ARCHIVED_STARRED_UNREAD ||
           undefined
 
         request_params.is_archived =
-          Object.values(Filter)[parseInt(query_filter)] == Filter.Archived ||
+          Object.values(Filter)[parseInt(query_filter)] == Filter.ARCHIVED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedStarred ||
+            Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedUnread ||
+            Filter.ARCHIVED_UNREAD ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ArchivedStarredUnread ||
+            Filter.ARCHIVED_STARRED_UNREAD ||
           undefined
       }
 
