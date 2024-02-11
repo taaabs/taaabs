@@ -37,11 +37,6 @@ module.exports = {
       },
       {
         selector: 'function',
-        format: ['snake_case'],
-        leadingUnderscore: 'require',
-      },
-      {
-        selector: 'function',
         modifiers: ['exported'],
         format: ['snake_case'],
         leadingUnderscore: 'forbid',

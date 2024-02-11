@@ -327,7 +327,7 @@ const BookmarksPage: React.FC = () => {
               search.clear_hints()
               search.set_is_search_focused(false)
             }}
-            results_count={search.search_string ? search?.count : undefined}
+            results_count={search.search_string ? search.count : undefined}
             on_clear_click={() => {
               search.reset()
               bookmarks.get_bookmarks({})
@@ -610,6 +610,7 @@ const BookmarksPage: React.FC = () => {
                 }
                 set_close_aside_count(close_aside_count + 1)
               }}
+              translations={{ drag_here: 'Drag and drop tags here' }}
             />
           ) : (
             <UiAppAtom_TagHierarchiesSkeleton />

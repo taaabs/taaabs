@@ -29,6 +29,9 @@ export namespace TagHierarchies {
     all_bookmarks_yields?: number
     is_all_bookmarks_selected: boolean
     on_click_all_bookmarks: () => void
+    translations: {
+      drag_here: string
+    }
   }
 }
 
@@ -331,6 +334,47 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           // deeper in the tree if there is a problem higher up.
           // confirmChange={}
         />
+        {props.is_draggable && (
+          <div
+            className={cn(
+              styles['drop-zone'],
+              {
+                [styles['drop-zone--active']]: props.dragged_tag,
+              },
+              {
+                [styles['drop-zone--slim']]: items.length,
+              },
+            )}
+            onMouseUp={() => {
+              if (!props.tree || !props.dragged_tag) return
+              document.body.classList.remove('adding-tag')
+              update_items({
+                items: [
+                  ...items,
+                  tag_to_item({
+                    node: {
+                      id: props.dragged_tag.id,
+                      name: props.dragged_tag.name,
+                      children: [],
+                    },
+                    hierarchy_ids: [],
+                    hierarchy_tag_ids: [],
+                  }),
+                ],
+              })
+            }}
+            onMouseEnter={() => {
+              if (!props.dragged_tag) return
+              document.body.classList.add('adding-tag')
+            }}
+            onMouseLeave={() => {
+              if (!props.dragged_tag) return
+              document.body.classList.remove('adding-tag')
+            }}
+          >
+            {!items.length && props.translations.drag_here}
+          </div>
+        )}
         {contextMenu}
       </div>
     )
