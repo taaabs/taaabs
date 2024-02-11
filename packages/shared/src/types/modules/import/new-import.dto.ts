@@ -14,9 +14,11 @@ export namespace NewImport_Dto {
     public is_public?: boolean
   }
   export class Bookmark {
+    public id?: string
     public title?: string
     public title_aes?: string
     public created_at: string
+    public visited_at?: string
     public is_public?: boolean
     public is_archived?: boolean
     public stars?: number

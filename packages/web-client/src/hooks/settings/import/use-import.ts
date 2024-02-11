@@ -33,15 +33,13 @@ export const use_import = () => {
   const [import_as_public, set_import_as_public] = useState<boolean>(false)
   const [is_sending, set_is_sending] = useState<boolean>(false)
 
-  const reset_state = () => {
-    if (is_sending) return
+  useUpdateEffect(() => {
+    if (!netscape_document || is_sending) return
+
     set_netscape_document(undefined)
     set_parsed_bookmarks(undefined)
     set_import_as_public(false)
-  }
 
-  useUpdateEffect(() => {
-    if (!netscape_document) return
     try {
       const json = JSON.parse(
         bookmarksToJSON(netscape_document),
@@ -112,7 +110,7 @@ export const use_import = () => {
     set_is_sending(true)
     try {
       await new_import_use_case.invoke(params)
-      toast.success('Your import is set for processing!')
+      toast.success('Your import file is processed...')
     } catch {
       toast.error('Something went wrong, try again later')
     }
@@ -123,7 +121,6 @@ export const use_import = () => {
   }
 
   return {
-    reset_state,
     netscape_document,
     set_netscape_document,
     parsed_bookmarks,
