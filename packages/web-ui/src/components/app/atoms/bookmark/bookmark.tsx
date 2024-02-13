@@ -42,6 +42,8 @@ export namespace Bookmark {
   export type Props = {
     bookmark_id: number
     updated_at: string
+    is_public: boolean
+    points?: number
     title?: string
     note?: string
     date: Date
@@ -51,6 +53,7 @@ export namespace Bookmark {
     on_tag_delete_click: (tag_id: number) => void
     on_selected_tag_click: (tag_id: number) => void
     on_mouse_up_on_tag: (tag_id: number) => void
+    on_give_point_click: () => void
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
     number_of_selected_tags: number
     query_params?: string
@@ -252,15 +255,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         }
                       />
                     )}
-                    {props.stars >= 1 && (
-                      <div
-                        className={styles.bookmark__main__content__title__stars}
-                      >
-                        {[...new Array(props.stars)].map((_, i) => (
-                          <Icon variant="STAR_FILLED" key={i} />
-                        ))}
-                      </div>
-                    )}
+
                     {props.title ? (
                       <div
                         className={cn(
@@ -301,6 +296,15 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         (Untitled)
                       </div>
                     )}
+                    {props.stars >= 1 && (
+                      <div
+                        className={styles.bookmark__main__content__title__stars}
+                      >
+                        {[...new Array(props.stars)].map((_, i) => (
+                          <Icon variant="STAR_FILLED" key={i} />
+                        ))}
+                      </div>
+                    )}
                   </div>
                   {props.note && (
                     <div className={styles.bookmark__main__content__note}>
@@ -322,137 +326,301 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     </div>
                   )}
                 </div>
-                <div className={styles.bookmark__main__tags}>
-                  {props.tags.length > 0 && (
-                    <>
-                      {props.tags.map((tag, i) => {
-                        const tag_first_char_index_in_search_title = (
-                          (props.title ? `${props.title} ` : '') +
-                          props.tags
-                            .map((tag) => ` ${tag.name}`)
-                            .slice(0, i)
-                            .join('')
-                        ).length
 
-                        return (
-                          <button
-                            key={tag.id}
-                            className={styles.bookmark__main__tags__tag}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              if (tag.isSelected) {
-                                props.on_selected_tag_click(tag.id)
-                              } else {
-                                props.on_tag_click(tag.id)
-                              }
-                            }}
-                            onMouseDown={(e) => {
-                              e.stopPropagation()
-                              if (!props.on_tag_drag_start) return
-                              props.on_tag_drag_start({
-                                id: tag.id,
-                                name: tag.name,
-                                source_bookmark_id: props.bookmark_id,
-                              })
-                            }}
-                            onMouseEnter={() => {
-                              if (!props.on_tag_drag_start) return
-                              if (
-                                props.dragged_tag &&
-                                props.dragged_tag.source_bookmark_id ==
-                                  props.bookmark_id &&
-                                tag.name != props.dragged_tag.name &&
-                                props.tags.findIndex(
-                                  (tag) => tag.id == props.dragged_tag!.id,
-                                ) != -1
-                              ) {
-                                props.on_tag_drag_start({
-                                  id: props.dragged_tag.id,
-                                  name: props.dragged_tag.name,
-                                  source_bookmark_id: props.bookmark_id,
-                                  over_sibling_tag_name: tag.name,
-                                })
-                              }
-                            }}
-                            onMouseLeave={() => {
-                              if (!props.on_tag_drag_start) return
-                              if (props.dragged_tag) {
-                                props.on_tag_drag_start({
-                                  id: props.dragged_tag.id,
-                                  name: props.dragged_tag.name,
-                                  source_bookmark_id: props.bookmark_id,
-                                })
-                              }
-                            }}
-                            onContextMenu={(e) => {
-                              set_context_menu_of_tag_id(tag.id)
-                              onContextMenu(e)
-                            }}
-                            onMouseUp={() => {
-                              // Fixes interference with loading state when selecting.
-                              setTimeout(() => {
-                                props.on_mouse_up_on_tag(tag.id)
-                              }, 0)
-                            }}
-                          >
-                            <div>
-                              <span
-                                className={cn([
-                                  styles.bookmark__main__tags__tag__name,
-                                  {
-                                    [styles[
-                                      'bookmark__main__tags__tag__name--selected'
-                                    ]]: tag.isSelected,
-                                  },
-                                ])}
-                              >
-                                {props.highlights
-                                  ? tag.name.split('').map((char, i) => {
-                                      const real_i =
-                                        tag_first_char_index_in_search_title + i
-                                      const is_highlighted =
-                                        props.highlights!.find(
-                                          ([index, length]) =>
-                                            real_i >= index &&
-                                            real_i < index + length,
-                                        )
-                                      return is_highlighted ? (
-                                        <span
-                                          className={styles.highlight}
-                                          key={i}
-                                        >
-                                          {char}
-                                        </span>
-                                      ) : (
-                                        <span key={i}>{char}</span>
-                                      )
-                                    })
-                                  : tag.name}
-                              </span>
-                              {!tag.isSelected && tag.yields && (
-                                <span
-                                  className={
-                                    styles.bookmark__main__tags__tag__yields
-                                  }
-                                >
-                                  {tag.yields}
-                                </span>
-                              )}
-                              {tag.isSelected && (
-                                <span
-                                  className={
-                                    styles.bookmark__main__tags__tag__yields
-                                  }
-                                >
-                                  ×
-                                </span>
-                              )}
-                            </div>
-                          </button>
-                        )
-                      })}
-                    </>
+                <div className={styles.bookmark__main__tags}>
+                  {props.is_public ? (
+                    <button
+                      className={styles.bookmark__main__tags__emoji}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        props.on_give_point_click()
+                      }}
+                    >
+                      {/* Empty space needed by inline element to render correctly. */}
+                      ⠀
+                      <div
+                        className={
+                          styles.bookmark__main__tags__emoji__hugging__eyes
+                        }
+                      >
+                        <svg
+                          viewBox="0 0 18 5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="var(--neutral950)"
+                        >
+                          <path d="M14.4915 3.47358C15.1131 3.69079 15.3559 4.98422 15.9824 4.64852C16.4067 4.41958 16.7546 4.06789 16.9821 3.63794C17.2097 3.20799 17.3067 2.71909 17.261 2.23308C17.2152 1.74707 17.0286 1.28578 16.7249 0.907545C16.4212 0.529311 16.014 0.251126 15.5547 0.108175C15.0955 -0.034777 14.6048 -0.0360746 14.1449 0.104447C13.6849 0.244968 13.2762 0.520996 12.9706 0.89762C12.665 1.27424 12.4761 1.73454 12.4278 2.22031C12.3795 2.70607 12.4741 3.19547 12.6994 3.62662C12.9957 4.19434 13.9378 3.27117 14.4963 3.46864L14.4915 3.47358ZM3.0544 3.47358C2.43276 3.69079 2.18508 4.98422 1.56345 4.64852C1.13923 4.41958 0.79133 4.06789 0.563752 3.63794C0.336175 3.20799 0.239141 2.71909 0.284923 2.23308C0.330705 1.74707 0.517246 1.28578 0.820954 0.907545C1.12466 0.529311 1.53189 0.251126 1.99115 0.108175C2.4504 -0.034777 2.94104 -0.0360746 3.40101 0.104447C3.86099 0.244968 4.26964 0.520996 4.57528 0.89762C4.88092 1.27424 5.06982 1.73454 5.11809 2.22031C5.16636 2.70607 5.07182 3.19547 4.84645 3.62662C4.5502 4.19434 3.60318 3.27117 3.04954 3.46864L3.0544 3.47358Z" />
+                        </svg>
+                      </div>
+                      <div
+                        className={
+                          styles.bookmark__main__tags__emoji__hugging__mouth
+                        }
+                      >
+                        <svg
+                          viewBox="0 0 12 7"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5.85206 6.70256C9.91819 6.70256 11.2294 3.06782 11.2294 1.20066C11.2294 0.229731 10.58 0.536776 9.53764 1.05128C8.57385 1.52845 7.27914 2.18818 5.8562 2.18818C2.8821 2.18818 0.478821 -0.666506 0.478821 1.20066C0.478821 3.06782 1.78594 6.70256 5.8562 6.70256H5.85206Z"
+                            fill="var(--red)"
+                          />
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M2.74059 5.76168C2.95877 5.31262 3.26596 4.9139 3.643 4.59038C4.02004 4.26687 4.45885 4.0255 4.93206 3.88134C5.09745 3.83108 5.38657 3.71082 6.00561 3.71082C6.62466 3.71082 6.87544 3.84783 7.05324 3.90228C7.9415 4.18788 8.68377 4.81487 9.12067 5.64861C10.663 4.41738 11.2294 2.40721 11.2294 1.16761C11.2294 0.187649 10.5803 0.49755 9.53829 1.01684L9.4804 1.04616C8.52525 1.52776 7.25171 2.16432 5.85413 2.16432C4.45655 2.16432 3.18715 1.52776 2.22786 1.04616C1.1528 0.505927 0.478821 0.16671 0.478821 1.16761C0.478821 2.4449 1.08251 4.54302 2.74059 5.76168Z"
+                            fill="var(--neutral950)"
+                          />
+                        </svg>
+                      </div>
+                      <div
+                        className={
+                          styles[
+                            'bookmark__main__tags__emoji__hugging__left-hand'
+                          ]
+                        }
+                      >
+                        <svg
+                          viewBox="0 0 12 11"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M9.83136 8.96455C9.46853 9.55133 8.94003 9.93714 8.61491 10.0895C8.28979 10.2419 7.59645 10.5082 7.03657 10.3569C6.47668 10.2057 3.41948 9.37974 2.45077 9.11803C1.48206 8.85633 0.527558 7.52332 0.697742 6.05857C0.867925 4.59382 1.49254 3.96967 2.04424 3.58115C2.59595 3.19263 3.48669 3.28602 4.05196 3.33963C4.14921 3.34885 4.28591 3.37271 4.42198 3.39779C4.42198 3.39779 4.9159 3.49621 5.21661 3.56971C5.51732 3.6432 6.03314 3.77576 6.03314 3.77576C5.99569 3.44571 5.96904 3.18787 6.18718 2.82626C6.63736 2.07998 7.50432 2.10085 7.91838 2.60018C8.33243 3.09951 9.86903 5.77911 10.1624 6.60924C10.4558 7.43937 10.1942 8.37777 9.83136 8.96455Z"
+                            fill="var(--blue500)"
+                          />
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M4.42198 3.39779C4.42198 3.39779 4.9159 3.49621 5.21661 3.56971C5.51732 3.6432 6.03314 3.77576 6.03314 3.77576C5.74425 4.86279 6.03708 4.73977 6.04866 5.62698C6.06024 6.5142 5.51732 7.2631 4.6451 7.2631C3.77288 7.2631 3.28606 6.69046 3.28606 5.9133C3.28607 5.13614 3.96026 4.2827 4.42198 3.39779Z"
+                            fill="var(--blue600)"
+                          />
+                        </svg>
+                      </div>
+                      <div
+                        className={
+                          styles[
+                            'bookmark__main__tags__emoji__hugging__right-hand'
+                          ]
+                        }
+                      >
+                        <svg
+                          width="12"
+                          height="11"
+                          viewBox="0 0 12 11"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M2.16864 8.96284C2.53147 9.54962 3.05997 9.93543 3.38509 10.0878C3.71021 10.2402 4.40355 10.5065 4.96343 10.3552C5.52332 10.204 8.58052 9.37803 9.54923 9.11632C10.5179 8.85462 11.4724 7.52161 11.3023 6.05686C11.1321 4.59211 10.5075 3.96796 9.95576 3.57944C9.40405 3.19092 8.51331 3.28431 7.94804 3.33792C7.85079 3.34715 7.71409 3.37101 7.57802 3.39608C7.57802 3.39608 7.0841 3.49451 6.78339 3.568C6.48268 3.64149 5.96686 3.77405 5.96686 3.77405C6.00431 3.444 6.03096 3.18616 5.81282 2.82455C5.36264 2.07827 4.49568 2.09914 4.08162 2.59847C3.66757 3.0978 2.13097 5.7774 1.8376 6.60753C1.54423 7.43766 1.80581 8.37606 2.16864 8.96284Z"
+                            fill="var(--blue500)"
+                          />
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M7.57802 3.39608C7.57802 3.39608 7.0841 3.49451 6.78339 3.568C6.48268 3.64149 5.96686 3.77405 5.96686 3.77405C6.25575 4.86108 5.96292 4.73806 5.95134 5.62528C5.93976 6.51249 6.48268 7.26139 7.3549 7.26139C8.22712 7.26139 8.71394 6.68875 8.71394 5.91159C8.71393 5.13443 8.03974 4.28099 7.57802 3.39608Z"
+                            fill="var(--blue600)"
+                          />
+                        </svg>
+                      </div>
+                    </button>
+                  ) : (
+                    <button
+                      className={styles.bookmark__main__tags__emoji}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        props.on_give_point_click()
+                      }}
+                    >
+                      ⠀
+                      <div
+                        className={
+                          styles.bookmark__main__tags__emoji__silent__eyes
+                        }
+                      >
+                        <svg
+                          viewBox="0 0 18 5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="var(--neutral950)"
+                        >
+                          <path d="M14.4915 3.47358C15.1131 3.69079 15.3559 4.98422 15.9824 4.64852C16.4067 4.41958 16.7546 4.06789 16.9821 3.63794C17.2097 3.20799 17.3067 2.71909 17.261 2.23308C17.2152 1.74707 17.0286 1.28578 16.7249 0.907545C16.4212 0.529311 16.014 0.251126 15.5547 0.108175C15.0955 -0.034777 14.6048 -0.0360746 14.1449 0.104447C13.6849 0.244968 13.2762 0.520996 12.9706 0.89762C12.665 1.27424 12.4761 1.73454 12.4278 2.22031C12.3795 2.70607 12.4741 3.19547 12.6994 3.62662C12.9957 4.19434 13.9378 3.27117 14.4963 3.46864L14.4915 3.47358ZM3.0544 3.47358C2.43276 3.69079 2.18508 4.98422 1.56345 4.64852C1.13923 4.41958 0.79133 4.06789 0.563752 3.63794C0.336175 3.20799 0.239141 2.71909 0.284923 2.23308C0.330705 1.74707 0.517246 1.28578 0.820954 0.907545C1.12466 0.529311 1.53189 0.251126 1.99115 0.108175C2.4504 -0.034777 2.94104 -0.0360746 3.40101 0.104447C3.86099 0.244968 4.26964 0.520996 4.57528 0.89762C4.88092 1.27424 5.06982 1.73454 5.11809 2.22031C5.16636 2.70607 5.07182 3.19547 4.84645 3.62662C4.5502 4.19434 3.60318 3.27117 3.04954 3.46864L3.0544 3.47358Z" />
+                        </svg>
+                      </div>
+                      <div
+                        className={
+                          styles.bookmark__main__tags__emoji__silent__zip
+                        }
+                      >
+                        <svg
+                          viewBox="0 0 9 3"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M0.573393 1.26148C0.645952 0.91131 0.900727 0.670167 1.14245 0.722872L2.66279 1.05437C2.90451 1.10707 3.04164 1.43367 2.96909 1.78383V1.78383C2.89653 2.134 2.64175 2.37515 2.40003 2.32244L0.879688 1.99095C0.637967 1.93824 0.500834 1.61165 0.573393 1.26148V1.26148Z"
+                            fill="#0A0A0A"
+                          />
+                          <path
+                            d="M3.70923 1.896C3.70923 1.53801 3.88841 1.2478 4.10943 1.2478H5.49962C5.72064 1.2478 5.89982 1.53801 5.89982 1.896V1.896C5.89982 2.254 5.72064 2.54421 5.49962 2.54421H4.10943C3.88841 2.54421 3.70923 2.254 3.70923 1.896V1.896Z"
+                            fill="#0A0A0A"
+                          />
+                          <path
+                            d="M6.63262 1.96135C6.57202 1.6088 6.69934 1.29108 6.91701 1.25171L8.28608 1.00408C8.50375 0.96471 8.72933 1.21859 8.78993 1.57115C8.85053 1.9237 8.7232 2.24142 8.50553 2.28079L7.13647 2.52842C6.9188 2.56779 6.69322 2.31391 6.63262 1.96135Z"
+                            fill="#0A0A0A"
+                          />
+                        </svg>
+                      </div>
+                      <div
+                        className={
+                          styles.bookmark__main__tags__emoji__silent__handle
+                        }
+                      >
+                        <svg
+                          viewBox="0 0 12 11"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M11.3396 3.73331C10.9324 2.32792 3.80375 0.286184 1.91168 0.853799C0.019618 1.42141 -0.331868 3.26096 0.446892 4.63621C1.22565 6.01146 5.88454 10.8776 6.9675 10.7489C8.05046 10.6202 11.7469 5.1387 11.3396 3.73331ZM6.66955 7.22569C7.30513 7.27632 8.8027 5.23113 8.16981 4.56013C7.53693 3.88914 5.44112 3.71413 4.99439 4.45654C4.54766 5.19896 6.03398 7.17507 6.66955 7.22569Z"
+                            fill="var(--blue600)"
+                          />
+                        </svg>
+                      </div>
+                    </button>
                   )}
+                  {props.points !== undefined && (
+                    <button
+                      className={styles.bookmark__main__tags__amount}
+                      onClick={() => {}}
+                    >
+                      {props.points}
+                    </button>
+                  )}
+                  {props.tags.map((tag, i) => {
+                    const tag_first_char_index_in_search_title = (
+                      (props.title ? `${props.title} ` : '') +
+                      props.tags
+                        .map((tag) => ` ${tag.name}`)
+                        .slice(0, i)
+                        .join('')
+                    ).length
+
+                    return (
+                      <button
+                        key={tag.id}
+                        className={styles.bookmark__main__tags__tag}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (tag.isSelected) {
+                            props.on_selected_tag_click(tag.id)
+                          } else {
+                            props.on_tag_click(tag.id)
+                          }
+                        }}
+                        onMouseDown={(e) => {
+                          e.stopPropagation()
+                          if (!props.on_tag_drag_start) return
+                          props.on_tag_drag_start({
+                            id: tag.id,
+                            name: tag.name,
+                            source_bookmark_id: props.bookmark_id,
+                          })
+                        }}
+                        onMouseEnter={() => {
+                          if (!props.on_tag_drag_start) return
+                          if (
+                            props.dragged_tag &&
+                            props.dragged_tag.source_bookmark_id ==
+                              props.bookmark_id &&
+                            tag.name != props.dragged_tag.name &&
+                            props.tags.findIndex(
+                              (tag) => tag.id == props.dragged_tag!.id,
+                            ) != -1
+                          ) {
+                            props.on_tag_drag_start({
+                              id: props.dragged_tag.id,
+                              name: props.dragged_tag.name,
+                              source_bookmark_id: props.bookmark_id,
+                              over_sibling_tag_name: tag.name,
+                            })
+                          }
+                        }}
+                        onMouseLeave={() => {
+                          if (!props.on_tag_drag_start) return
+                          if (props.dragged_tag) {
+                            props.on_tag_drag_start({
+                              id: props.dragged_tag.id,
+                              name: props.dragged_tag.name,
+                              source_bookmark_id: props.bookmark_id,
+                            })
+                          }
+                        }}
+                        onContextMenu={(e) => {
+                          set_context_menu_of_tag_id(tag.id)
+                          onContextMenu(e)
+                        }}
+                        onMouseUp={() => {
+                          // Fixes interference with loading state when selecting.
+                          setTimeout(() => {
+                            props.on_mouse_up_on_tag(tag.id)
+                          }, 0)
+                        }}
+                      >
+                        <div>
+                          <span
+                            className={cn([
+                              styles.bookmark__main__tags__tag__name,
+                              {
+                                [styles[
+                                  'bookmark__main__tags__tag__name--selected'
+                                ]]: tag.isSelected,
+                              },
+                            ])}
+                          >
+                            {props.highlights
+                              ? tag.name.split('').map((char, i) => {
+                                  const real_i =
+                                    tag_first_char_index_in_search_title + i
+                                  const is_highlighted = props.highlights!.find(
+                                    ([index, length]) =>
+                                      real_i >= index &&
+                                      real_i < index + length,
+                                  )
+                                  return is_highlighted ? (
+                                    <span className={styles.highlight} key={i}>
+                                      {char}
+                                    </span>
+                                  ) : (
+                                    <span key={i}>{char}</span>
+                                  )
+                                })
+                              : tag.name}
+                          </span>
+                          {!tag.isSelected && tag.yields && (
+                            <span
+                              className={
+                                styles.bookmark__main__tags__tag__yields
+                              }
+                            >
+                              {tag.yields}
+                            </span>
+                          )}
+                          {tag.isSelected && (
+                            <span
+                              className={
+                                styles.bookmark__main__tags__tag__yields
+                              }
+                            >
+                              ×
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
               <div
@@ -632,6 +800,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
+    o.points == n.points &&
     o.is_compact == n.is_compact &&
     o.density == n.density &&
     o.is_not_interactive == n.is_not_interactive &&

@@ -10,7 +10,6 @@ export const Primary = () => {
     <>
       <TagHierarchies
         is_draggable={true}
-        all_bookmarks_label="All bookmarks"
         all_bookmarks_yields={2137}
         is_all_bookmarks_selected={false}
         on_click_all_bookmarks={() => {}}
@@ -66,7 +65,10 @@ export const Primary = () => {
         is_updating={false}
         selected_tag_ids={[1, 3, 5]}
         query_params=""
-        translations={{ drag_here: 'Drag and drop tags here' }}
+        translations={{
+          all_bookmarks: 'All bookmarks',
+          drag_here: 'Drag and drop tags here',
+        }}
       />
       <StorybookSpacer />
       No tree:
@@ -74,7 +76,6 @@ export const Primary = () => {
       <StorybookMargin>
         <TagHierarchies
           is_draggable={true}
-          all_bookmarks_label="All bookmarks"
           all_bookmarks_yields={2137}
           is_all_bookmarks_selected={false}
           on_click_all_bookmarks={() => {}}
@@ -83,7 +84,10 @@ export const Primary = () => {
           is_updating={false}
           selected_tag_ids={[1, 3, 5]}
           query_params=""
-          translations={{ drag_here: 'Drag and drop tags here' }}
+          translations={{
+            all_bookmarks: 'All bookmarks',
+            drag_here: 'Drag and drop tags here',
+          }}
         />
       </StorybookMargin>
     </>

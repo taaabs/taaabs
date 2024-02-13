@@ -50,6 +50,7 @@ import { system_values } from '@shared/constants/system-values'
 import { Filter } from '@/types/library/filter'
 import { UpdateTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/update-tag-hierarchies.params'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
+import { use_points } from '@/hooks/library/use-points'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -73,6 +74,7 @@ const BookmarksPage: React.FC = () => {
     is_in_search_mode: !!search.search_string,
   })
   const counts = use_counts()
+  const points_hook = use_points()
   const tag_hierarchies = use_tag_hierarchies()
   const filter_view_options = use_filter_view_options()
   const sort_by_view_options = use_sort_by_view_options()
@@ -80,7 +82,6 @@ const BookmarksPage: React.FC = () => {
   const tag_view_options = use_tag_view_options()
   const date_view_options = use_date_view_options()
   const [close_aside_count, set_close_aside_count] = useState(0)
-
   const [is_sort_by_dropdown_visible, toggle_sort_by_dropdown] =
     useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
@@ -592,7 +593,6 @@ const BookmarksPage: React.FC = () => {
               }}
               dragged_tag={tag_view_options.dragged_tag}
               query_params={query_params.toString()}
-              all_bookmarks_label="All bookmarks"
               all_bookmarks_yields={tag_hierarchies.total}
               is_all_bookmarks_selected={!tag_view_options.selected_tags.length}
               on_click_all_bookmarks={() => {
@@ -610,7 +610,11 @@ const BookmarksPage: React.FC = () => {
                 }
                 set_close_aside_count(close_aside_count + 1)
               }}
-              translations={{ drag_here: 'Drag and drop tags here' }}
+              translations={{
+                all_bookmarks: 'All bookmarks',
+                drag_here:
+                  'Organize  your tags by dragging & dropping - build a visual hierarchy!',
+              }}
             />
           ) : (
             <UiAppAtom_TagHierarchiesSkeleton />
@@ -935,6 +939,13 @@ const BookmarksPage: React.FC = () => {
                   density={bookmarks_slice_state.density}
                   is_compact={bookmark.is_compact}
                   updated_at={bookmark.updated_at}
+                  is_public={bookmark.is_public}
+                  points={bookmark.points_total}
+                  on_give_point_click={() => {
+                    points_hook.give_point({
+                      bookmark_id: bookmark.id,
+                    })
+                  }}
                   title={bookmark.title}
                   note={bookmark.note}
                   on_click={() => {
@@ -1176,11 +1187,6 @@ const BookmarksPage: React.FC = () => {
                         tag_ids: bookmark.tags.map((tag) => tag.id),
                       },
                     })
-                    dispatch(
-                      bookmarks_actions.replace_bookmark({
-                        bookmark: updated_bookmark,
-                      }),
-                    )
                     tag_hierarchies.get_tag_hierarchies({
                       filter: filter_view_options.current_filter,
                       gte: date_view_options.current_gte,
@@ -1188,7 +1194,7 @@ const BookmarksPage: React.FC = () => {
                     })
                     toast.success('Bookmark has been updated')
                   }}
-                  // Change tag order by swapping them.
+                  // Changes tag order by swapping them.
                   on_mouse_up_on_tag={async (tag_id) => {
                     if (
                       !tag_view_options.dragged_tag ||
@@ -1261,11 +1267,6 @@ const BookmarksPage: React.FC = () => {
                         tag_ids: bookmark.tags.map((tag) => tag.id),
                       },
                     })
-                    dispatch(
-                      bookmarks_actions.replace_bookmark({
-                        bookmark: updated_bookmark,
-                      }),
-                    )
                     toast.success('Bookmark has been updated')
                   }}
                   on_tag_delete_click={async (tag_id) => {
@@ -1323,16 +1324,10 @@ const BookmarksPage: React.FC = () => {
                       (t) => t.id,
                     )
                     if (
-                      tag_view_options.selected_tags.every((t) =>
+                      !tag_view_options.selected_tags.every((t) =>
                         updated_tag_ids.includes(t),
                       )
                     ) {
-                      dispatch(
-                        bookmarks_actions.replace_bookmark({
-                          bookmark: updated_bookmark,
-                        }),
-                      )
-                    } else {
                       // We filter out bookmark when there are other bookmarks still matching with selected tags.
                       dispatch(
                         bookmarks_actions.filter_out_bookmark({
@@ -1932,9 +1927,17 @@ const BookmarksPage: React.FC = () => {
                                     )
                                   ) {
                                     dispatch(
-                                      bookmarks_actions.replace_bookmark({
-                                        bookmark: updated_bookmark,
-                                      }),
+                                      bookmarks_actions.set_incoming_bookmarks(
+                                        bookmarks_slice_state.bookmarks!.map(
+                                          (b) => {
+                                            if (b.id == updated_bookmark.id) {
+                                              return updated_bookmark
+                                            } else {
+                                              return b
+                                            }
+                                          },
+                                        ),
+                                      ),
                                     )
                                   } else {
                                     // We filter out bookmark when there are other bookmarks still matching with selected tags.

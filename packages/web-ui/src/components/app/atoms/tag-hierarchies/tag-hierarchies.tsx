@@ -25,12 +25,12 @@ export namespace TagHierarchies {
     dragged_tag?: { id: number; name: string }
     query_params: string
     is_draggable: boolean
-    all_bookmarks_label: string
     all_bookmarks_yields?: number
     is_all_bookmarks_selected: boolean
     on_click_all_bookmarks: () => void
     translations: {
       drag_here: string
+      all_bookmarks: string
     }
   }
 }
@@ -195,13 +195,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           >
             <div>
               <span>{(item as Item).text}</span>
-              <span>
-                {(item as Item).yields
-                  ? (item as Item).yields
-                  : !(item as Item).yields && props.is_updating
-                  ? ''
-                  : 0}
-              </span>
+              <span>{(item as Item).yields ? (item as Item).yields : 0}</span>
             </div>
           </button>
         </div>
@@ -319,7 +313,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           onClick={props.on_click_all_bookmarks}
         >
           <div>
-            <span>{props.all_bookmarks_label}</span>
+            <span>{props.translations.all_bookmarks}</span>
             <span>{props.all_bookmarks_yields}</span>
           </div>
         </button>

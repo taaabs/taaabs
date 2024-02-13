@@ -20,6 +20,9 @@ export const Primary = () => (
     >
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         stars={0}
         title="Lorem ipsum dolor sit amet"
         note="Lorem ipsum dolor sit amet"
@@ -48,10 +51,14 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         stars={0}
         title="Lorem ipsum"
         note="Lorem ipsum dolor sit amet"
@@ -86,10 +93,14 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         stars={0}
         title="Lorem ipsum dolor sit amet"
         is_unread={false}
@@ -113,10 +124,43 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
+      />
+      <Bookmark
+        bookmark_id={1}
+        is_public={false}
+        density="default"
+        stars={0}
+        title="Lorem ipsum dolor sit amet"
+        is_unread={false}
+        tags={[]}
+        date={new Date('2022-02-20')}
+        on_click={() => {}}
+        on_menu_click={async () => {}}
+        on_selected_tag_click={() => {}}
+        on_tag_click={() => {}}
+        links={[
+          { url: 'https://google.com', saves: 99 },
+          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+        ]}
+        set_render_height={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
+        menu_slot={<>menu</>}
+        number_of_selected_tags={0}
+        should_dim_visited_links={false}
+        updated_at=""
+        is_fetching_bookmarks={false}
+        on_tag_drag_start={() => {}}
+        on_mouse_up_on_tag={() => {}}
+        on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         stars={0}
         title="Lorem ipsum dolor sit amet"
         note="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies sapien nulla, at facilisis risus dictum sed."
@@ -144,6 +188,7 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
       Compact:
@@ -151,6 +196,9 @@ export const Primary = () => (
       <br />
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         is_compact={true}
         stars={0}
         title="Lorem ipsum dolor sit amet"
@@ -179,10 +227,14 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         stars={2}
         title="Lorem ipsum dolor sit amet"
         is_unread={false}
@@ -209,10 +261,14 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={true}
@@ -246,10 +302,14 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         stars={0}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={false}
@@ -276,10 +336,14 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         stars={2}
         title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
         is_unread={true}
@@ -306,10 +370,14 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         stars={2}
         title="Lorem ipsum dolor sit amet"
         is_unread={true}
@@ -336,10 +404,14 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
         bookmark_id={1}
+        is_public={true}
+        points={100}
+        density="default"
         stars={2}
         is_unread={true}
         tags={[
@@ -365,6 +437,7 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
+        on_give_point_click={() => {}}
       />
       <StorybookSpacer />
     </div>

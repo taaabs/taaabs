@@ -32,5 +32,8 @@ export const system_values = {
     stars: {
       limit: 5,
     },
+    points: {
+      limit_per_user: 50,
+    },
   },
 }

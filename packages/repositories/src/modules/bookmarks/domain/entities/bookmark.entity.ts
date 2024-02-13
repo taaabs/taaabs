@@ -17,4 +17,5 @@ export type Bookmark_Entity = {
   stars: number
   render_height?: number
   is_compact?: boolean
+  points_total?: number
 }
