@@ -88,7 +88,7 @@ export const bookmarks_slice = createSlice({
     ) {
       state.density = action.payload
       if (state.bookmarks) {
-        state.bookmarks = state.bookmarks.map((bookmark) => ({
+        state.bookmarks = state.bookmarks.slice(0, 20).map((bookmark) => ({
           ...bookmark,
           render_height: undefined,
           is_compact: action.payload == 'compact',
