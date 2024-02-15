@@ -154,12 +154,19 @@ const BookmarksPage: React.FC = () => {
   const [search_cache_to_be_cleared, set_search_cache_to_be_cleared] =
     useState(false)
   useUpdateEffect(() => {
-    if (sort_by_view_options.current_sort_by == SortBy.VISITED_AT) {
+    if (
+      sort_by_view_options.current_sort_by == SortBy.VISITED_AT ||
+      order_view_options.current_order == Order.POPULARITY
+    ) {
       set_search_cache_to_be_cleared(true)
     } else {
       set_search_cache_to_be_cleared(false)
     }
-  }, [filter_view_options.current_filter, sort_by_view_options.current_sort_by])
+  }, [
+    filter_view_options.current_filter,
+    sort_by_view_options.current_sort_by,
+    order_view_options.current_order,
+  ])
 
   useUpdateEffect(() => {
     if (search.db || search.archived_db) {
