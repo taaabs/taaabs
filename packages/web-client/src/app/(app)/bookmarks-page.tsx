@@ -148,7 +148,7 @@ const BookmarksPage: React.FC = () => {
     search.set_current_filter(filter_view_options.current_filter)
   }, [filter_view_options.current_filter])
 
-  // Clear cache when user selects visited at sort_by option.
+  // Clear cache when user selects visited at sort_by option or popularity order.
   // Filter is in deps because we want to clear cache when setting to archive.
   // NOTE: Could be reworked to avoid unnecesary invalidations.
   const [search_cache_to_be_cleared, set_search_cache_to_be_cleared] =
