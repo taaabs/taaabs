@@ -14,9 +14,7 @@ export const add_point = (params: { bookmark_id: number }) => {
           if (bookmark.id == params.bookmark_id) {
             return {
               ...bookmark,
-              points_total: bookmark.points_total
-                ? bookmark.points_total + 1
-                : 1,
+              points: bookmark.points ? bookmark.points + 1 : 1,
             }
           } else {
             return bookmark

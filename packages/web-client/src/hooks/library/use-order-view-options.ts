@@ -5,6 +5,7 @@ import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useParams, useSearchParams } from 'next/navigation'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 
 export const use_order_view_options = () => {
   const query_params = useSearchParams()
@@ -38,13 +39,23 @@ export const use_order_view_options = () => {
   }, [query_params])
 
   const set_order_query_param = (order: Order) => {
-    const updated_query_params = update_query_params(
+    let updated_query_params: any
+    updated_query_params = update_query_params(
       query_params,
       'o',
       order == BookmarksFetchingDefaults.Common.order
         ? undefined
         : Object.values(Order).indexOf(order).toString(),
     )
+
+    const query_sort = query_params.get('s')
+    if (
+      query_sort ==
+        Object.values(SortBy).indexOf(SortBy.UPDATED_AT).toString() ||
+      query_sort == Object.values(SortBy).indexOf(SortBy.VISITED_AT).toString()
+    ) {
+      updated_query_params = update_query_params(updated_query_params, 's')
+    }
 
     clear_library_session_storage({
       username: params.username as string,

@@ -91,6 +91,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
             }
           }),
           stars: bookmark.stars || 0,
+          points: bookmark.points || 0,
         }
       }),
     }
@@ -115,6 +116,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           sites: bookmark.sites,
           tags: bookmark.tags,
           stars: bookmark.stars || 0,
+          points: bookmark.points || 0,
         }
       }),
     }

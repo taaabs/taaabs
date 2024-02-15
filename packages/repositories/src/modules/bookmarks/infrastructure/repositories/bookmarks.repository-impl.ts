@@ -43,7 +43,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           : undefined,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
-        points_total: bookmark.points_total,
+        points: bookmark.points,
         tags: bookmark.tags.map((tag) => ({
           id: tag.id,
           name: tag.name
@@ -100,7 +100,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         note: bookmark.note,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
-        points_total: bookmark.points_total,
+        points: bookmark.points,
         tags: bookmark.tags.map((tag) => ({
           id: tag.id,
           name: tag.name,
@@ -148,6 +148,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           : undefined,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
+        points: bookmark.points,
         tags: bookmark.tags.map((tag) => ({
           id: tag.id,
           name: tag.name
@@ -201,6 +202,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         is_public: true,
         is_unread: bookmark.is_unread || false,
         stars: bookmark.stars || 0,
+        points: bookmark.points,
         tags: bookmark.tags.map((tag) => ({
           id: tag.id,
           name: tag.name,
@@ -251,7 +253,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         : undefined,
       is_unread: bookmark.is_unread || false,
       stars: bookmark.stars || 0,
-      points_total: bookmark.points_total,
+      points: bookmark.points,
       tags: bookmark.tags.map((tag) => ({
         id: tag.id,
         name: tag.name

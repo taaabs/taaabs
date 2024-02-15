@@ -9,4 +9,5 @@ export type SearchableBookmark_Entity = {
   visited_at?: number
   is_unread?: boolean
   stars: number
+  points: number
 }

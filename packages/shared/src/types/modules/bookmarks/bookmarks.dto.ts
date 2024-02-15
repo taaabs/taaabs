@@ -73,7 +73,7 @@ export namespace Bookmarks_Dto {
       public stars?: number
       public is_unread?: boolean
       public note?: string
-      public points_total?: number
+      public points?: number
     }
 
     export class AuthorizedBookmark extends Bookmark {

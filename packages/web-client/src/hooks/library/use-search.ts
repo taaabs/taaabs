@@ -33,6 +33,8 @@ import { GetSearchableBookmarksOnPublicUser_UseCase } from '@repositories/module
 import { GetLastUpdated_Ro } from '@repositories/modules/library-search/domain/types/get-last-updated.ro'
 import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-public-user.use-case'
 import { Filter } from '@/types/library/filter'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
+import { Order } from '@shared/types/modules/bookmarks/order'
 
 export type BookmarkOfSearch = {
   id: number
@@ -73,6 +75,7 @@ const schema = {
   visited_at: 'number',
   is_unread: 'boolean',
   stars: 'number',
+  points: 'number',
 } as const
 
 type Result = TypedDocument<Orama<typeof schema>>
@@ -360,6 +363,9 @@ export const use_search = () => {
             visited_at: bookmark.visited_at,
             is_unread: bookmark.is_unread,
             stars: bookmark.stars,
+            points: bookmark.points
+              ? parseInt(`${bookmark.points}${bookmark.created_at}`)
+              : bookmark.created_at,
           })),
           chunk_size,
         )
@@ -575,12 +581,19 @@ export const use_search = () => {
         },
         sortBy: {
           property:
-            sortby == '1'
+            order == Object.values(Order).indexOf(Order.POPULARITY).toString()
+              ? 'points'
+              : sortby ==
+                Object.values(SortBy).indexOf(SortBy.UPDATED_AT).toString()
               ? 'updated_at'
-              : sortby == '2'
+              : sortby ==
+                Object.values(SortBy).indexOf(SortBy.VISITED_AT).toString()
               ? 'visited_at'
               : 'created_at',
-          order: order == '1' ? 'ASC' : 'DESC',
+          order:
+            order == Object.values(Order).indexOf(Order.ASC).toString()
+              ? 'ASC'
+              : 'DESC',
         },
         threshold: term ? 0 : undefined,
       },

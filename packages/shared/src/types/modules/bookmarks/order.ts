@@ -1,4 +1,5 @@
 export enum Order {
-  DESC = 'desc',
-  ASC = 'asc',
+  DESC = 'date_desc',
+  ASC = 'date_asc',
+  POPULARITY = 'popularity',
 }

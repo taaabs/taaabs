@@ -755,6 +755,25 @@ const BookmarksPage: React.FC = () => {
                           order_view_options.current_order == Order.DESC,
                       },
                       {
+                        label: _order_option_to_label(Order.POPULARITY),
+                        on_click: () => {
+                          toggle_order_dropdown()
+                          if (
+                            order_view_options.current_order ==
+                              Order.POPULARITY ||
+                            bookmarks_slice_state.is_fetching_first_bookmarks ||
+                            bookmarks_slice_state.is_fetching_more_bookmarks ||
+                            counts.is_fetching_counts_data
+                          )
+                            return
+                          order_view_options.set_order_query_param(
+                            Order.POPULARITY,
+                          )
+                        },
+                        is_selected:
+                          order_view_options.current_order == Order.POPULARITY,
+                      },
+                      {
                         label: _order_option_to_label(Order.ASC),
                         on_click: () => {
                           toggle_order_dropdown()
@@ -940,7 +959,7 @@ const BookmarksPage: React.FC = () => {
                   is_compact={bookmark.is_compact}
                   updated_at={bookmark.updated_at}
                   is_public={bookmark.is_public}
-                  points={bookmark.points_total}
+                  points={bookmark.points}
                   on_give_point_click={() => {
                     points_hook.give_point({
                       bookmark_id: bookmark.id,
@@ -2227,6 +2246,8 @@ function _order_option_to_label(order_option: Order): string {
       return 'Newest first'
     case Order.ASC:
       return 'Oldest first'
+    case Order.POPULARITY:
+      return 'Huggiest first'
   }
 }
 

@@ -21,6 +21,7 @@ export namespace LibrarySearchBookmarks_Dto {
       public created_at: number
       public updated_at: number
       public stars?: number
+      public points?: number
     }
 
     class AuthorizedBookmark extends Bookmark {

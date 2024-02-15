@@ -76,7 +76,9 @@ export const use_points = () => {
     }
 
     if (given_overall == system_values.bookmark.points.limit_per_user) {
-      toast.info('Maximum number of points reached')
+      toast.info(
+        `You can add up to ${system_values.bookmark.points.limit_per_user} points`,
+      )
       return
     }
 
