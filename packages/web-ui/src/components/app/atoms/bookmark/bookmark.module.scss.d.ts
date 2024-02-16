@@ -27,16 +27,17 @@ declare const styles: {
   readonly bookmark__main__tags__tag__name: string
   readonly 'bookmark__main__tags__tag__name--selected': string
   readonly bookmark__main__tags__tag__yields: string
-  readonly bookmark__main__tags__emoji: string
-  readonly bookmark__main__tags__emoji__hugging__eyes: string
-  readonly bookmark__main__tags__emoji__hugging__mouth: string
-  readonly 'bookmark__main__tags__emoji__hugging__left-hand': string
-  readonly 'bookmark__main__tags__emoji__hugging__right-hand': string
-  readonly bookmark__main__tags__emoji__silent__handle: string
+  readonly bookmark__main__tags__huggs: string
+  readonly bookmark__main__tags__huggs__emoji: string
+  readonly bookmark__main__tags__huggs__emoji__hugging__eyes: string
+  readonly bookmark__main__tags__huggs__emoji__hugging__mouth: string
+  readonly 'bookmark__main__tags__huggs__emoji__hugging__left-hand': string
+  readonly 'bookmark__main__tags__huggs__emoji__hugging__right-hand': string
+  readonly bookmark__main__tags__huggs__emoji__silent__handle: string
   readonly bookmark_shake: string
-  readonly bookmark__main__tags__emoji__silent__eyes: string
-  readonly bookmark__main__tags__emoji__silent__zip: string
-  readonly bookmark__main__tags__amount: string
+  readonly bookmark__main__tags__huggs__emoji__silent__eyes: string
+  readonly bookmark__main__tags__huggs__emoji__silent__zip: string
+  readonly bookmark__main__tags__huggs__amount: string
   readonly bookmark__links: string
   readonly 'bookmark__links--compact': string
   readonly bookmark__links__item: string

@@ -13,6 +13,7 @@ export class Import_DataSourceImpl implements Import_DataSource {
   public async new_import(params: NewImport_Params): Promise<void> {
     const body: NewImport_Dto.Body = {
       bookmarks: params.bookmarks.map((bookmark) => ({
+        id: bookmark.id,
         title: bookmark.is_public ? bookmark.title : undefined,
         title_aes:
           !bookmark.is_public && bookmark.title
@@ -24,6 +25,7 @@ export class Import_DataSourceImpl implements Import_DataSource {
             ? CryptoJS.AES.encrypt(bookmark.note, 'my_secret_key').toString()
             : undefined,
         created_at: bookmark.created_at,
+        visited_at: bookmark.visited_at,
         is_public: bookmark.is_public || undefined,
         is_archived: bookmark.is_archived || undefined,
         is_unread: bookmark.is_unread || undefined,

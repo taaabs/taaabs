@@ -16,7 +16,6 @@
     top: 50%;
     right: 0;
     transform: translateY(-50%) translateX(100%);
-    @include transition-150ms;
     $bar-width: 3px;
     width: $bar-width;
     border-top-left-radius: $bar-width;

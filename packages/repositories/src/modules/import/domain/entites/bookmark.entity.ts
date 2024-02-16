@@ -10,9 +10,11 @@ type Link = {
 }
 
 export type Bookmark_Entity = {
+  id?: string
   title?: string
   note?: string
   created_at: string
+  visited_at?: string
   is_public?: boolean
   is_archived?: boolean
   is_unread?: boolean
