@@ -1237,9 +1237,15 @@ export const use_search = () => {
             (sites.length ? ' ' : '') +
             sites.join(' ')
           : '',
-        created_at: new Date(params.bookmark.created_at).getTime() / 1000,
-        updated_at: new Date(params.bookmark.updated_at).getTime() / 1000,
-        visited_at: new Date(params.bookmark.visited_at).getTime() / 1000,
+        created_at: Math.round(
+          new Date(params.bookmark.created_at).getTime() / 1000,
+        ),
+        updated_at: Math.round(
+          new Date(params.bookmark.updated_at).getTime() / 1000,
+        ),
+        visited_at: Math.round(
+          new Date(params.bookmark.visited_at).getTime() / 1000,
+        ),
         is_unread: params.bookmark.is_unread,
         sites,
         sites_variants: sites
