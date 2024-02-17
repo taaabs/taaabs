@@ -67,25 +67,24 @@ export namespace Bookmarks_Dto {
 
     class Bookmark {
       public id: number
+      public title?: string
+      public note?: string
       public created_at: string
       public updated_at: string
       public visited_at: string
       public stars?: number
       public is_unread?: boolean
-      public note?: string
       public points?: number
     }
 
     export class AuthorizedBookmark extends Bookmark {
       public is_public?: boolean
-      public title?: string
       public title_aes?: string
       public links: AuthorizedLink[]
       public tags: AuthorizedTag[]
       public note_aes?: string
     }
     export class PublicBookmark extends Bookmark {
-      public title: string
       public links: PublicLink[]
       public tags: PublicTag[]
     }

@@ -74,7 +74,10 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        margin-right: var(--distance-10px);
+        margin-right: var(--distance-16px);
+        @include at992 {
+          margin-right: var(--distance-10px);
+        }
         &__button {
           display: flex;
           align-items: center;
@@ -217,7 +220,10 @@
         &__emoji {
           position: relative;
           width: var(--distance-23px);
-          margin-right: calc(var(--distance-4px) * -1);
+          margin-right: var(--distance-2px);
+          @include at992 {
+            margin-right: calc(var(--distance-4px) * -1);
+          }
           > div {
             @include transition-150ms(transform);
           }
@@ -255,7 +261,7 @@
               position: absolute;
               bottom: 0;
               top: -8px;
-              left: 3.2px;
+              left: 3px;
               > svg {
                 width: 17.5px;
               }
@@ -291,7 +297,7 @@
               position: absolute;
               bottom: 0;
               top: -7.6px;
-              left: 3.2px;
+              left: 3px;
               > svg {
                 width: 17.5px;
               }
@@ -335,10 +341,14 @@
       display: flex;
       gap: var(--distance-12px);
       justify-content: space-between;
-      padding: var(--distance-10px) var(--distance-10px) var(--distance-10px)
+      padding: var(--distance-10px) var(--distance-16px) var(--distance-10px)
         var(--distance-12px);
       background-color: var(--neutral25);
       border-top: var(--border-secondary);
+      @include at992 {
+        padding: var(--distance-10px) var(--distance-10px) var(--distance-10px)
+          var(--distance-12px);
+      }
       &:last-of-type {
         @include at992 {
           border-bottom-left-radius: var(--border-radius-12px);

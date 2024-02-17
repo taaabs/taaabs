@@ -2044,7 +2044,13 @@ const BookmarksPage: React.FC = () => {
                               {
                                 label: !(
                                   filter_view_options.current_filter ==
-                                  Filter.ARCHIVED
+                                    Filter.ARCHIVED ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_UNREAD ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED_UNREAD
                                 )
                                   ? 'Archive'
                                   : 'Restore',
