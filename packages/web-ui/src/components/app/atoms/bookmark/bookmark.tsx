@@ -558,12 +558,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         </div>
                       </button>
                     ) : (
-                      <button
+                      <div
                         className={styles.bookmark__main__tags__huggs__emoji}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          props.on_give_point_click()
-                        }}
                       >
                         ⠀
                         <div
@@ -620,7 +616,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             />
                           </svg>
                         </div>
-                      </button>
+                      </div>
                     )}
                   </div>
                 </div>
