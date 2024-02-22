@@ -8,6 +8,10 @@ import { Box as UiAppAtom_Box } from '@web-ui/components/app/atoms/box'
 import { BoxHeading as UiAppAtom_BoxHeading } from '@web-ui/components/app/atoms/box-heading'
 import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
+import { useState } from 'react'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { toast } from 'react-toastify'
+import { system_values } from '@shared/constants/system-values'
 
 type FormValues = {
   username: string
@@ -15,7 +19,7 @@ type FormValues = {
 
 export namespace Username {
   export type Props = {
-    current_username: string
+    current_username?: string
   }
 }
 
@@ -27,25 +31,36 @@ export const Username: React.FC<Username.Props> = (props) => {
   } = useForm<FormValues>({
     mode: 'all',
   })
+  const [username, set_username] = useState<string>()
+
+  useUpdateEffect(() => {
+    if (props.current_username) {
+      set_username(props.current_username)
+    }
+  }, [props.current_username])
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
+    if (form_data.username == username) {
+      toast.success('Your username is left unchanged')
+      return
+    }
     const data_source = new Settings_DataSourceImpl(
       process.env.NEXT_PUBLIC_API_URL,
     )
     const repository = new Settings_RepositoryImpl(data_source)
     const update_username_use_case = new UpdateUsername_UseCase(repository)
-
     await update_username_use_case.invoke({ username: form_data.username })
+    set_username(form_data.username)
+    toast.success('Username has been changed')
   }
 
-  const is_username_available = async (username: string) => {
+  const get_is_username_available = async (username: string) => {
     const data_source = new Settings_DataSourceImpl(
       process.env.NEXT_PUBLIC_API_URL,
     )
     const repository = new Settings_RepositoryImpl(data_source)
     const check_username_availability_use_case =
       new CheckUsernameAvailability_UseCase(repository)
-
     const is_available = (
       await check_username_availability_use_case.invoke({
         username,
@@ -56,24 +71,25 @@ export const Username: React.FC<Username.Props> = (props) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(on_submit)}>
+    <form onSubmit={handleSubmit(on_submit)} key={username}>
       <UiAppAtom_Box>
         <UiAppAtom_BoxHeading
           heading="Username"
-          subheading="The username determines the default link of your public profile."
+          subheading="Accessing your account and sharing your public profile requires using unique username."
         />
 
         <Controller
           name="username"
           control={control}
-          defaultValue={props.current_username}
+          defaultValue={username}
           rules={{
             required: true,
-            minLength: 8,
-            maxLength: 30,
+            minLength: system_values.username_min_length,
+            maxLength: system_values.username_max_length,
             pattern: /^[a-z0-9\-\_]+$/,
             validate: awesomeDebouncePromise(async (value) => {
-              return await is_username_available(value)
+              if (value == username) return true
+              return await get_is_username_available(value)
             }, 500),
           }}
           render={({ field }) => {
@@ -86,18 +102,19 @@ export const Username: React.FC<Username.Props> = (props) => {
             )
 
             if (errors.username?.type == 'minLength') {
-              error_message = 'Username must have at least 8 characters'
+              error_message = `Username must have at least ${system_values.username_min_length} characters.`
             } else if (errors.username?.type == 'maxLength') {
-              error_message = 'Maximum length of a username is 30 characters'
+              error_message = `Maximum length of a username is ${system_values.username_max_length} characters.`
             } else if (errors.username?.type == 'pattern') {
               error_message =
-                'Only lowercase letters, numbers, periods, and underscores are allowed'
+                'Only lowercase letters, numbers, periods, and underscores are allowed.'
             } else if (errors.username?.type == 'validate') {
-              error_message = 'This username is already in use'
+              error_message = 'This username is already in use.'
             }
 
             return (
               <UiCommonAtom_Input
+                is_disabled={!username}
                 value={field.value}
                 on_change={(value) => {
                   if (isSubmitting) return
@@ -114,7 +131,7 @@ export const Username: React.FC<Username.Props> = (props) => {
           <UiCommonParticle_Button
             type="submit"
             is_loading={isSubmitting}
-            size="medium"
+            is_disabled={!username}
           >
             Save
           </UiCommonParticle_Button>

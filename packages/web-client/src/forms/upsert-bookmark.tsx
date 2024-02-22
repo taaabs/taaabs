@@ -211,6 +211,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                     field.value ||
                     false
                   }
+                  max_items={system_values.bookmark.links.limit}
                 />
               )
             }}

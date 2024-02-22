@@ -370,10 +370,12 @@ export const use_search = () => {
           chunk_size,
         )
         indexed_count += chunk.length
-        const progress_percentage = Math.floor(
+        const progress_percentage = Math.round(
           (indexed_count / bookmarks.length) * 100,
         )
-        set_indexed_bookmarks_percentage(progress_percentage)
+        set_indexed_bookmarks_percentage(
+          progress_percentage < 100 ? progress_percentage : undefined,
+        )
       }
       const bookmarks_just_tags: BookmarkTags[] = bookmarks.map((bookmark) => ({
         id: bookmark.id,

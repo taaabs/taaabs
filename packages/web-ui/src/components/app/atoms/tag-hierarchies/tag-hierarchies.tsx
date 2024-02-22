@@ -148,7 +148,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                 const parent_id = (item as Item).hierarchy_ids.slice(-1)[0]
                 const loop_over_items = (item: Item): Item => {
                   if (item.id == parent_id) {
-                    const id = Math.floor(Math.random() * 1e12)
+                    const id = Math.round(Math.random() * 1e12)
                     return {
                       ...item,
                       children: [
@@ -394,7 +394,7 @@ const tag_to_item = (params: {
   hierarchy_ids: number[]
   hierarchy_tag_ids: number[]
 }): Item => {
-  const id = Math.floor(Math.random() * 1e12)
+  const id = Math.round(Math.random() * 1e12)
   const hierarchy_ids = [...params.hierarchy_ids, id]
   const hierarchy_tag_ids = [...params.hierarchy_tag_ids, params.node.id]
   return {

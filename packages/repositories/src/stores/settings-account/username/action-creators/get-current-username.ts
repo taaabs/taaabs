@@ -4,7 +4,7 @@ import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastr
 import { GetMyUsername_UseCase } from '@repositories/modules/settings/domain/use-cases/get-my-username.use-case'
 import { username_actions } from '../username.slice'
 
-export const get_my_username = (params: {
+export const get_current_username = (params: {
   user_id: string
   api_url: string
 }) => {
@@ -18,6 +18,6 @@ export const get_my_username = (params: {
     const { username } = await get_my_username.invoke()
 
     dispatch(username_actions.set_is_getting_my_username(false))
-    dispatch(username_actions.set_my_username(username))
+    dispatch(username_actions.set_current_username(username))
   }
 }

@@ -71,7 +71,7 @@
       padding: var(--distance-68px) var(--distance-24px);
     }
     @include at992 {
-      flex: 1.5;
+      flex: 2.2;
       gap: var(--distance-40px);
       padding: var(--distance-68px) var(--distance-24px);
     }
@@ -85,7 +85,7 @@
   }
   &__aside {
     display: flex;
-    @include at992 {
+    @include at1200 {
       flex: 1;
     }
   }

@@ -27,6 +27,7 @@ export const Input: React.FC<Input.Props> = ({
             styles.field,
             styles.textarea,
             { [styles['field--error']]: message_type == 'error' },
+            { [styles['field--disabled']]: props.is_disabled },
           ])}
           onChange={(e) => props.on_change(e.target.value)}
           value={props.value}
@@ -39,6 +40,7 @@ export const Input: React.FC<Input.Props> = ({
             styles.field,
             styles.input,
             { [styles['field--error']]: message_type == 'error' },
+            { [styles['field--disabled']]: props.is_disabled },
           ])}
           onChange={(e) => props.on_change(e.target.value)}
           value={props.value}

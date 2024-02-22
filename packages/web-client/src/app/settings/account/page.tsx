@@ -10,13 +10,13 @@ import { username_actions } from '@repositories/stores/settings-account/username
 
 const Page: React.FC = () => {
   const dispatch = use_settings_account_dispatch()
-  const { my_username } = use_settings_account_selector(
+  const username_slice_state = use_settings_account_selector(
     (state) => state.username,
   )
 
   useEffect(() => {
     dispatch(
-      username_actions.get_my_username({
+      username_actions.get_current_username({
         api_url: process.env.NEXT_PUBLIC_API_URL,
         user_id: 'da73e988-abe7-40a5-af67-f5b38ccbd935',
       }),
@@ -24,7 +24,9 @@ const Page: React.FC = () => {
   }, [])
 
   return (
-    <>{my_username ? <Username current_username={my_username} /> : 'LOADING'}</>
+    <>
+      <Username current_username={username_slice_state.current_username} />
+    </>
   )
 }
 

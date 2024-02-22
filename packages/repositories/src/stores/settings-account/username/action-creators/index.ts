@@ -1,1 +1,1 @@
-export * from './get-my-username'
+export * from './get-current-username'

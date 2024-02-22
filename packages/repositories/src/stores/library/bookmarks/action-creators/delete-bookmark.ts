@@ -23,13 +23,10 @@ export const delete_bookmark = (params: {
         params.api_url,
         params.auth_token,
       )
-
-      dispatch(bookmarks_actions.set_is_updating_bookmarks(true))
-
       const repository = new Bookmarks_RepositoryImpl(data_source)
       const delete_bookmark_use_case = new DeleteBookmark_UseCase(repository)
+      dispatch(bookmarks_actions.set_is_updating_bookmarks(true))
       await delete_bookmark_use_case.invoke({ bookmark_id: params.bookmark_id })
-
       dispatch(
         bookmarks_actions.set_incoming_bookmarks(
           state.bookmarks.bookmarks.filter(

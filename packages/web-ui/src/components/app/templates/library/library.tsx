@@ -270,7 +270,6 @@ export const Library: React.FC<Library.Props> = (props) => {
           ref={sidebar}
           style={{
             zIndex: !is_right_side_open ? undefined : 1,
-            pointerEvents: is_right_side_open ? 'none' : undefined,
           }}
         >
           <div
@@ -364,7 +363,7 @@ export const Library: React.FC<Library.Props> = (props) => {
             })}
             style={{
               pointerEvents:
-                is_left_side_open || is_right_side_open ? 'none' : 'all',
+                is_left_side_open || is_right_side_open ? 'none' : undefined,
             }}
           >
             <div>

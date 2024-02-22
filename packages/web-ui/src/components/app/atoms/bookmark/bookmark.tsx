@@ -14,6 +14,7 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import { useContextMenu } from 'use-context-menu'
 import { DropdownMenu } from '../dropdown-menu'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -72,9 +73,9 @@ export namespace Bookmark {
     highlights_site_variants?: string[]
     orama_db_id?: string
     should_dim_visited_links: boolean
-    current_filter?: string // Needs by [use_search/update_searchable_bookmarks]
+    current_filter?: string // Needs by [use_search/update_searchable_bookmarks].
     is_fetching_bookmarks: boolean
-    counts_refreshed_at_timestamp?: number // When updating other bookmark, we refetch counts and this is needed to trigger a rerender of all bookmarks
+    counts_refreshed_at_timestamp?: number // When updating other bookmark, we refetch counts and this is needed to trigger a rerender of all bookmarks.
     is_not_interactive?: boolean
     on_tag_drag_start?: (params: {
       id: number
@@ -90,6 +91,17 @@ export namespace Bookmark {
 export const Bookmark: React.FC<Bookmark.Props> = memo(
   function Bookmark(props) {
     const ref = useRef<HTMLDivElement>(null)
+    // Detecing swiping is mitigates interference between tag reordering and toggling density.
+    const [is_swiping, set_is_swiping] = useState(false)
+    const { onSwipeStart, onSwipeEnd } = useSwipeEvents(ref, {
+      preventDefault: false,
+    })
+    onSwipeStart(() => {
+      set_is_swiping(false)
+    })
+    onSwipeEnd(() => {
+      set_is_swiping(true)
+    })
     const DOMRect = useResizeObserver(ref)
     const is_visible = useViewportSpy(ref)
     const [is_menu_open, toggle_is_menu_open] = useToggle(false)
@@ -163,14 +175,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               [styles['container--clickable']]: props.density == 'compact',
             })}
             role="button"
-            onClick={(e) => {
-              if (
-                is_menu_open ||
-                // Fixes bug when dragging tags (reordering) toggles density for a duration of data fetching.
-                (e.target as any).classList[0] == styles.bookmark__main__tags
-              )
-                return
-              props.on_click()
+            onClick={() => {
+              if (!is_swiping && !is_menu_open) props.on_click()
             }}
             onMouseUp={() => {
               if (
@@ -255,7 +261,15 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         }
                       />
                     )}
-
+                    {props.stars >= 1 && (
+                      <div
+                        className={styles.bookmark__main__content__title__stars}
+                      >
+                        {[...new Array(props.stars)].map((_, i) => (
+                          <Icon variant="STAR_FILLED" key={i} />
+                        ))}
+                      </div>
+                    )}
                     {props.title ? (
                       <div
                         className={cn(
@@ -294,15 +308,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         )}
                       >
                         (Untitled)
-                      </div>
-                    )}
-                    {props.stars >= 1 && (
-                      <div
-                        className={styles.bookmark__main__content__title__stars}
-                      >
-                        {[...new Array(props.stars)].map((_, i) => (
-                          <Icon variant="STAR_FILLED" key={i} />
-                        ))}
                       </div>
                     )}
                   </div>

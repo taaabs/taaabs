@@ -17,9 +17,6 @@ export const system_values = {
     counts: {
       cache_for_days: 7,
     },
-    import: {
-      max_concurrent_imports: 10,
-    },
   },
   bookmark: {
     title: {
@@ -31,6 +28,9 @@ export const system_values = {
     tags: {
       limit: 8,
       max_length: 30,
+    },
+    links: {
+      limit: 20,
     },
     stars: {
       limit: 5,
