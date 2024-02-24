@@ -7,9 +7,6 @@ export const system_values = {
   sortablejs_animation_duration: 150,
   library: {
     max_selected_tags: 5,
-    global: {
-      redis_ttl: 60,
-    },
     bookmarks: {
       per_page: 20,
       cache_for_days: 7,
