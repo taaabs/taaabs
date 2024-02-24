@@ -88,9 +88,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async get_bookmarks_by_ids_authorized(
     params: GetBookmarksByIds_Params.Authorized,
   ): Promise<BookmarksByIds_Dto.Response.Authorized> {
-    const body: BookmarksByIds_Dto.Body = {
-      ids: params.ids,
-    }
+    const body: BookmarksByIds_Dto.Body = params.ids
     return await fetch(`${this._api_url}/v1/bookmarks/by-ids`, {
       method: 'POST',
       headers: {
@@ -104,9 +102,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async get_bookmarks_by_ids_public(
     params: GetBookmarksByIds_Params.Public,
   ): Promise<BookmarksByIds_Dto.Response.Public> {
-    const body: BookmarksByIds_Dto.Body = {
-      ids: params.ids,
-    }
+    const body: BookmarksByIds_Dto.Body = params.ids
     return await fetch(
       `${this._api_url}/v1/bookmarks/by-ids/${params.username}`,
       {
