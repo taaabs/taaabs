@@ -91,6 +91,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
           : undefined,
       })),
       tree: [],
+      erase_library: params.erase_library || undefined,
     }
 
     await fetch(`${this._api_url}/v1/import-export/send-import-data`, {

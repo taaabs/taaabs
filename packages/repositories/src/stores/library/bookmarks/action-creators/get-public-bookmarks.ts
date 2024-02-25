@@ -32,16 +32,22 @@ export const get_public_bookmarks = (params: {
     let bookmarks_with_density: Bookmark_Entity[] = []
 
     if (get_state().bookmarks.density == 'compact') {
-      bookmarks_with_density = bookmarks.map((bookmark) => ({
-        ...bookmark,
-        is_compact: true,
-      }))
-    } else {
       bookmarks_with_density = bookmarks
+        ? bookmarks.map((bookmark) => ({
+            ...bookmark,
+            is_compact: true,
+          }))
+        : []
+    } else {
+      bookmarks_with_density = bookmarks || []
     }
 
     dispatch(bookmarks_actions.set_is_fetching_data(false))
-    dispatch(bookmarks_actions.set_has_more_bookmarks(pagination.has_more))
+    dispatch(
+      bookmarks_actions.set_has_more_bookmarks(
+        pagination ? pagination.has_more || false : false,
+      ),
+    )
 
     if (params.request_params.after) {
       dispatch(bookmarks_actions.set_more_bookmarks(bookmarks_with_density))

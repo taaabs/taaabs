@@ -21,65 +21,72 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       await this._bookmarks_data_source.get_bookmarks_on_authorized_user(params)
 
     return {
-      bookmarks: bookmarks.map((bookmark) => ({
-        id: bookmark.id,
-        is_public: bookmark.is_public || false,
-        created_at: bookmark.created_at,
-        updated_at: bookmark.updated_at,
-        visited_at: bookmark.visited_at,
-        title: bookmark.title
-          ? bookmark.title
-          : bookmark.title_aes
-          ? CryptoJS.AES.decrypt(bookmark.title_aes, 'my_secret_key').toString(
-              CryptoJS.enc.Utf8,
-            )
-          : undefined,
-        note: bookmark.note
-          ? bookmark.note
-          : bookmark.note_aes
-          ? CryptoJS.AES.decrypt(bookmark.note_aes, 'my_secret_key').toString(
-              CryptoJS.enc.Utf8,
-            )
-          : undefined,
-        is_unread: bookmark.is_unread || false,
-        stars: bookmark.stars || 0,
-        points: bookmark.points,
-        tags: bookmark.tags.map((tag) => ({
-          id: tag.id,
-          name: tag.name
-            ? tag.name
-            : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
-                CryptoJS.enc.Utf8,
-              ),
-          is_public: tag.is_public || false,
-        })),
-        links: bookmark.links.map((link) => {
-          let site_path: string | undefined
-          if (link.is_public) {
-            site_path = link.site_path
-          } else {
-            const site = CryptoJS.AES.decrypt(
-              link.site_aes!,
-              'my_secret_key',
-            ).toString(CryptoJS.enc.Utf8)
-            const domain = `${get_domain_from_url(site)}/`
-            site_path = site.slice(domain.length)
+      bookmarks: bookmarks
+        ? bookmarks.map((bookmark) => ({
+            id: bookmark.id,
+            is_public: bookmark.is_public || false,
+            created_at: bookmark.created_at,
+            updated_at: bookmark.updated_at,
+            visited_at: bookmark.visited_at,
+            title: bookmark.title
+              ? bookmark.title
+              : bookmark.title_aes
+              ? CryptoJS.AES.decrypt(
+                  bookmark.title_aes,
+                  'my_secret_key',
+                ).toString(CryptoJS.enc.Utf8)
+              : undefined,
+            note: bookmark.note
+              ? bookmark.note
+              : bookmark.note_aes
+              ? CryptoJS.AES.decrypt(
+                  bookmark.note_aes,
+                  'my_secret_key',
+                ).toString(CryptoJS.enc.Utf8)
+              : undefined,
+            is_unread: bookmark.is_unread || false,
+            stars: bookmark.stars || 0,
+            points: bookmark.points,
+            tags: bookmark.tags.map((tag) => ({
+              id: tag.id,
+              name: tag.name
+                ? tag.name
+                : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
+                    CryptoJS.enc.Utf8,
+                  ),
+              is_public: tag.is_public || false,
+            })),
+            links: bookmark.links.map((link) => {
+              let site_path: string | undefined
+              if (link.is_public) {
+                site_path = link.site_path
+              } else {
+                const site = CryptoJS.AES.decrypt(
+                  link.site_aes!,
+                  'my_secret_key',
+                ).toString(CryptoJS.enc.Utf8)
+                const domain = `${get_domain_from_url(site)}/`
+                site_path = site.slice(domain.length)
+              }
+              return {
+                url: link.is_public
+                  ? link.url!
+                  : CryptoJS.AES.decrypt(
+                      link.url_aes!,
+                      'my_secret_key',
+                    ).toString(CryptoJS.enc.Utf8),
+                site_path,
+                is_public: link.is_public || false,
+                saves: link.saves,
+              }
+            }),
+          }))
+        : undefined,
+      pagination: pagination
+        ? {
+            has_more: pagination.has_more,
           }
-          return {
-            url: link.is_public
-              ? link.url!
-              : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
-                  CryptoJS.enc.Utf8,
-                ),
-            site_path,
-            is_public: link.is_public || false,
-            saves: link.saves,
-          }
-        }),
-      })),
-      pagination: {
-        has_more: pagination.has_more,
-      },
+        : undefined,
     }
   }
 
@@ -90,32 +97,36 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       await this._bookmarks_data_source.get_bookmarks_on_public_user(params)
 
     return {
-      bookmarks: bookmarks.map((bookmark) => ({
-        id: bookmark.id,
-        is_public: true,
-        created_at: bookmark.created_at,
-        updated_at: bookmark.updated_at,
-        visited_at: bookmark.visited_at,
-        title: bookmark.title,
-        note: bookmark.note,
-        is_unread: bookmark.is_unread || false,
-        stars: bookmark.stars || 0,
-        points: bookmark.points,
-        tags: bookmark.tags.map((tag) => ({
-          id: tag.id,
-          name: tag.name,
-          is_public: true,
-        })),
-        links: bookmark.links.map((link) => ({
-          url: link.url,
-          saves: link.saves,
-          site_path: link.site_path,
-          is_public: true,
-        })),
-      })),
-      pagination: {
-        has_more: pagination.has_more,
-      },
+      bookmarks: bookmarks
+        ? bookmarks.map((bookmark) => ({
+            id: bookmark.id,
+            is_public: true,
+            created_at: bookmark.created_at,
+            updated_at: bookmark.updated_at,
+            visited_at: bookmark.visited_at,
+            title: bookmark.title,
+            note: bookmark.note,
+            is_unread: bookmark.is_unread || false,
+            stars: bookmark.stars || 0,
+            points: bookmark.points,
+            tags: bookmark.tags.map((tag) => ({
+              id: tag.id,
+              name: tag.name,
+              is_public: true,
+            })),
+            links: bookmark.links.map((link) => ({
+              url: link.url,
+              saves: link.saves,
+              site_path: link.site_path,
+              is_public: true,
+            })),
+          }))
+        : undefined,
+      pagination: pagination
+        ? {
+            has_more: pagination.has_more,
+          }
+        : undefined,
     }
   }
 
@@ -126,62 +137,67 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       await this._bookmarks_data_source.get_bookmarks_by_ids_authorized(params)
 
     return {
-      bookmarks: bookmarks.map((bookmark) => ({
-        id: bookmark.id,
-        is_public: bookmark.is_public || false,
-        created_at: bookmark.created_at,
-        updated_at: bookmark.updated_at,
-        visited_at: bookmark.visited_at,
-        title: bookmark.title
-          ? bookmark.title
-          : bookmark.title_aes
-          ? CryptoJS.AES.decrypt(bookmark.title_aes, 'my_secret_key').toString(
-              CryptoJS.enc.Utf8,
-            )
-          : undefined,
-        note: bookmark.note
-          ? bookmark.note
-          : bookmark.note_aes
-          ? CryptoJS.AES.decrypt(bookmark.note_aes, 'my_secret_key').toString(
-              CryptoJS.enc.Utf8,
-            )
-          : undefined,
-        is_unread: bookmark.is_unread || false,
-        stars: bookmark.stars || 0,
-        points: bookmark.points,
-        tags: bookmark.tags.map((tag) => ({
-          id: tag.id,
-          name: tag.name
-            ? tag.name
-            : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
-                CryptoJS.enc.Utf8,
-              ),
-          is_public: tag.is_public || false,
-        })),
-        links: bookmark.links.map((link) => {
-          let site_path: string | undefined
-          if (link.is_public) {
-            site_path = link.site_path
-          } else {
-            const site = CryptoJS.AES.decrypt(
-              link.site_aes!,
-              'my_secret_key',
-            ).toString(CryptoJS.enc.Utf8)
-            const domain = `${get_domain_from_url(site)}/`
-            site_path = site.slice(domain.length)
-          }
-          return {
-            url: link.is_public
-              ? link.url!
-              : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
-                  CryptoJS.enc.Utf8,
-                ),
-            site_path,
-            is_public: link.is_public || false,
-            saves: link.saves,
-          }
-        }),
-      })),
+      bookmarks: bookmarks
+        ? bookmarks.map((bookmark) => ({
+            id: bookmark.id,
+            is_public: bookmark.is_public || false,
+            created_at: bookmark.created_at,
+            updated_at: bookmark.updated_at,
+            visited_at: bookmark.visited_at,
+            title: bookmark.title
+              ? bookmark.title
+              : bookmark.title_aes
+              ? CryptoJS.AES.decrypt(
+                  bookmark.title_aes,
+                  'my_secret_key',
+                ).toString(CryptoJS.enc.Utf8)
+              : undefined,
+            note: bookmark.note
+              ? bookmark.note
+              : bookmark.note_aes
+              ? CryptoJS.AES.decrypt(
+                  bookmark.note_aes,
+                  'my_secret_key',
+                ).toString(CryptoJS.enc.Utf8)
+              : undefined,
+            is_unread: bookmark.is_unread || false,
+            stars: bookmark.stars || 0,
+            points: bookmark.points,
+            tags: bookmark.tags.map((tag) => ({
+              id: tag.id,
+              name: tag.name
+                ? tag.name
+                : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
+                    CryptoJS.enc.Utf8,
+                  ),
+              is_public: tag.is_public || false,
+            })),
+            links: bookmark.links.map((link) => {
+              let site_path: string | undefined
+              if (link.is_public) {
+                site_path = link.site_path
+              } else {
+                const site = CryptoJS.AES.decrypt(
+                  link.site_aes!,
+                  'my_secret_key',
+                ).toString(CryptoJS.enc.Utf8)
+                const domain = `${get_domain_from_url(site)}/`
+                site_path = site.slice(domain.length)
+              }
+              return {
+                url: link.is_public
+                  ? link.url!
+                  : CryptoJS.AES.decrypt(
+                      link.url_aes!,
+                      'my_secret_key',
+                    ).toString(CryptoJS.enc.Utf8),
+                site_path,
+                is_public: link.is_public || false,
+                saves: link.saves,
+              }
+            }),
+          }))
+        : undefined,
     }
   }
 
@@ -192,29 +208,31 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       await this._bookmarks_data_source.get_bookmarks_by_ids_public(params)
 
     return {
-      bookmarks: bookmarks.map((bookmark) => ({
-        id: bookmark.id,
-        created_at: bookmark.created_at,
-        updated_at: bookmark.updated_at,
-        visited_at: bookmark.visited_at,
-        title: bookmark.title,
-        note: bookmark.note,
-        is_public: true,
-        is_unread: bookmark.is_unread || false,
-        stars: bookmark.stars || 0,
-        points: bookmark.points,
-        tags: bookmark.tags.map((tag) => ({
-          id: tag.id,
-          name: tag.name,
-          is_public: true,
-        })),
-        links: bookmark.links.map((link) => ({
-          url: link.url,
-          saves: link.saves,
-          site_path: link.site_path,
-          is_public: true,
-        })),
-      })),
+      bookmarks: bookmarks
+        ? bookmarks.map((bookmark) => ({
+            id: bookmark.id,
+            created_at: bookmark.created_at,
+            updated_at: bookmark.updated_at,
+            visited_at: bookmark.visited_at,
+            title: bookmark.title,
+            note: bookmark.note,
+            is_public: true,
+            is_unread: bookmark.is_unread || false,
+            stars: bookmark.stars || 0,
+            points: bookmark.points,
+            tags: bookmark.tags.map((tag) => ({
+              id: tag.id,
+              name: tag.name,
+              is_public: true,
+            })),
+            links: bookmark.links.map((link) => ({
+              url: link.url,
+              saves: link.saves,
+              site_path: link.site_path,
+              is_public: true,
+            })),
+          }))
+        : undefined,
     }
   }
 

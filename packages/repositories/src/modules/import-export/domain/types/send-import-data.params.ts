@@ -5,6 +5,7 @@ import { tag_hierarchy_node_entity_schema } from '../entites/tag-hierarchy-node.
 export const send_import_data_params_schema = z.object({
   bookmarks: z.array(bookmark_entity_schema),
   tree: z.array(tag_hierarchy_node_entity_schema),
+  erase_library: z.boolean().optional(),
 })
 
 export type SendImportData_Params = z.infer<

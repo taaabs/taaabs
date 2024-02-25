@@ -97,6 +97,15 @@ const Page: React.FC = () => {
             <UiAppAtom_BoxDivider />
             <h3>File contents</h3>
             <p>Found {import_hook.import_data.bookmarks.length} bookmarks.</p>
+            <h3>Options</h3>
+            <UiAppAtom_RadioSetting
+              top_line="Erase library"
+              bottom_line="Import will completely overwrite your library"
+              on_click={() => {
+                import_hook.set_erase_library(!import_hook.erase_library)
+              }}
+              is_checked={import_hook.erase_library}
+            />
             <h3>Summary</h3>
             <p>
               This operation will restore deleted bookmarks. Changes to any

@@ -2,6 +2,9 @@ import { z } from 'zod'
 import { data_schema } from './data'
 
 export namespace SendImportData_Dto {
-  export const body_schema = data_schema
-  export type Body = z.infer<typeof data_schema>
+  const options = z.object({
+    erase_library: z.boolean().optional(),
+  })
+  export const body_schema = data_schema.and(options)
+  export type Body = z.infer<typeof body_schema>
 }

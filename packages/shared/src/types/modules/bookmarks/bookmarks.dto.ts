@@ -90,10 +90,10 @@ export namespace Bookmarks_Dto {
     }
 
     export class Authorized extends PaginatedResponseDto {
-      public bookmarks: AuthorizedBookmark[]
+      public bookmarks?: AuthorizedBookmark[]
     }
     export class Public extends PaginatedResponseDto {
-      public bookmarks: PublicBookmark[]
+      public bookmarks?: PublicBookmark[]
     }
   }
 }

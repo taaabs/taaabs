@@ -35,8 +35,9 @@ export const use_import = () => {
   const [import_data, set_import_data] = useState<SendImportData_Params>()
   // Processed third party file.
   const [parsed_xml, set_parsed_xml] = useState<ParsedXMLBookmark[]>()
-  const [import_as_public, set_import_as_public] = useState<boolean>(false)
-  const [is_sending, set_is_sending] = useState<boolean>(false)
+  const [import_as_public, set_import_as_public] = useState<boolean>()
+  const [is_sending, set_is_sending] = useState<boolean>()
+  const [erase_library, set_erase_library] = useState<boolean>()
 
   useUpdateEffect(() => {
     if (!file_text || is_sending) return
@@ -132,8 +133,11 @@ export const use_import = () => {
     const send_import_data_use_case = new SendImportData_UseCase(repository)
     set_is_sending(true)
     try {
-      await send_import_data_use_case.invoke(params)
-      toast.success('Your import data is processed')
+      await send_import_data_use_case.invoke({
+        ...params,
+        erase_library,
+      })
+      toast.success('Import file has been sent for processing')
     } catch {
       toast.error('Something went wrong, try again later')
     }
@@ -153,5 +157,7 @@ export const use_import = () => {
     import_as_public,
     set_import_as_public,
     is_sending,
+    erase_library,
+    set_erase_library,
   }
 }
