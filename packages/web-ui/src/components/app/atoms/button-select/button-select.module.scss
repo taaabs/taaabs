@@ -19,6 +19,10 @@
     border-color: var(--border-color-hover);
     pointer-events: none;
   }
+  &--disabled {
+    pointer-events: none;
+    opacity: var(--dimmed-opacity);
+  }
 }
 .inner {
   display: flex;

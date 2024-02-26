@@ -338,13 +338,12 @@
       display: flex;
       gap: var(--distance-12px);
       justify-content: space-between;
-      padding: var(--distance-10px) var(--distance-16px) var(--distance-10px)
-        var(--distance-12px);
+      padding: 0 var(--distance-16px) 0 var(--distance-12px);
       background-color: var(--neutral25);
       border-top: var(--border-secondary);
+      height: var(--distance-52px);
       @include at992 {
-        padding: var(--distance-10px) var(--distance-10px) var(--distance-10px)
-          var(--distance-12px);
+        padding: 0 var(--distance-10px) 0 var(--distance-12px);
       }
       &:last-of-type {
         @include at992 {

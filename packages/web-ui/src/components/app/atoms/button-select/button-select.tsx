@@ -8,6 +8,7 @@ export namespace ButtonSelect {
     current_value: string
     is_active?: boolean
     on_click: () => void
+    is_disabled?: boolean
   }
 }
 
@@ -17,6 +18,7 @@ export const ButtonSelect: React.FC<ButtonSelect.Props> = (props) => {
       className={cn([
         styles.container,
         { [styles['container--toggled']]: props.is_active },
+        { [styles['container--disabled']]: props.is_disabled },
       ])}
       onClick={props.on_click}
     >

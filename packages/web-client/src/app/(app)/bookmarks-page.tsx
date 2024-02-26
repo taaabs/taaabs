@@ -156,7 +156,7 @@ const BookmarksPage: React.FC = () => {
   useUpdateEffect(() => {
     if (
       sort_by_view_options.current_sort_by == SortBy.VISITED_AT ||
-      order_view_options.current_order == Order.POPULARITY
+      sort_by_view_options.current_sort_by == SortBy.POPULARITY
     ) {
       set_search_cache_to_be_cleared(true)
     } else {
@@ -653,6 +653,26 @@ const BookmarksPage: React.FC = () => {
                   <UiAppAtom_DropdownMenu
                     items={[
                       {
+                        label: _sort_by_option_to_label(SortBy.POPULARITY),
+                        on_click: () => {
+                          toggle_sort_by_dropdown()
+                          if (
+                            sort_by_view_options.current_sort_by ==
+                              SortBy.POPULARITY ||
+                            bookmarks_slice_state.is_fetching_first_bookmarks ||
+                            bookmarks_slice_state.is_fetching_more_bookmarks ||
+                            counts.is_fetching_counts_data
+                          )
+                            return
+                          sort_by_view_options.set_sort_by_query_param(
+                            SortBy.POPULARITY,
+                          )
+                        },
+                        is_selected:
+                          sort_by_view_options.current_sort_by ==
+                          SortBy.POPULARITY,
+                      },
+                      {
                         label: _sort_by_option_to_label(SortBy.CREATED_AT),
                         on_click: () => {
                           toggle_sort_by_dropdown()
@@ -732,6 +752,9 @@ const BookmarksPage: React.FC = () => {
                   )}
                   is_active={is_order_dropdown_visible}
                   on_click={toggle_order_dropdown}
+                  is_disabled={
+                    sort_by_view_options.current_sort_by == SortBy.POPULARITY
+                  }
                 />
               ) : (
                 <UiAppAtom_ButtonSelectSkeleton />
@@ -760,25 +783,6 @@ const BookmarksPage: React.FC = () => {
 
                         is_selected:
                           order_view_options.current_order == Order.DESC,
-                      },
-                      {
-                        label: _order_option_to_label(Order.POPULARITY),
-                        on_click: () => {
-                          toggle_order_dropdown()
-                          if (
-                            order_view_options.current_order ==
-                              Order.POPULARITY ||
-                            bookmarks_slice_state.is_fetching_first_bookmarks ||
-                            bookmarks_slice_state.is_fetching_more_bookmarks ||
-                            counts.is_fetching_counts_data
-                          )
-                            return
-                          order_view_options.set_order_query_param(
-                            Order.POPULARITY,
-                          )
-                        },
-                        is_selected:
-                          order_view_options.current_order == Order.POPULARITY,
                       },
                       {
                         label: _order_option_to_label(Order.ASC),
@@ -843,7 +847,9 @@ const BookmarksPage: React.FC = () => {
                     is_range_selector_disabled={
                       sort_by_view_options.current_sort_by ==
                         SortBy.UPDATED_AT ||
-                      sort_by_view_options.current_sort_by == SortBy.VISITED_AT
+                      sort_by_view_options.current_sort_by ==
+                        SortBy.VISITED_AT ||
+                      sort_by_view_options.current_sort_by == SortBy.POPULARITY
                     }
                   />
                 </div>
@@ -2245,11 +2251,13 @@ export default BookmarksPage
 function _sort_by_option_to_label(sort_by_option: SortBy): string {
   switch (sort_by_option) {
     case SortBy.CREATED_AT:
-      return 'Date created'
+      return 'Created at'
     case SortBy.UPDATED_AT:
-      return 'Date updated'
+      return 'Updated at'
     case SortBy.VISITED_AT:
-      return 'Last visited'
+      return 'Visited at'
+    case SortBy.POPULARITY:
+      return 'The huggiest'
   }
 }
 
@@ -2259,8 +2267,6 @@ function _order_option_to_label(order_option: Order): string {
       return 'Newest first'
     case Order.ASC:
       return 'Oldest first'
-    case Order.POPULARITY:
-      return 'Huggiest first'
   }
 }
 
