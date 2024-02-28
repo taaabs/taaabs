@@ -2257,7 +2257,7 @@ function _sort_by_option_to_label(sort_by_option: SortBy): string {
     case SortBy.VISITED_AT:
       return 'Visited at'
     case SortBy.POPULARITY:
-      return 'The huggiest'
+      return 'Huggiest first'
   }
 }
 

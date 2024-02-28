@@ -400,24 +400,19 @@
             color: var(--text-color-normal);
             text-overflow: ellipsis;
             overflow: hidden;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
           }
           > span:first-child {
-            -webkit-line-clamp: 1;
             display: -webkit-box;
-            -webkit-box-orient: vertical;
           }
           > span:last-child {
             color: var(--text-color-variant);
             font-size: var(--font-size-13px);
-            -webkit-line-clamp: 2;
             word-wrap: break-word;
             display: -webkit-box;
-            -webkit-box-orient: vertical;
             @include to768 {
               font-family: var(--font-family-inter-tight);
-            }
-            @include at1200 {
-              -webkit-line-clamp: 1;
             }
           }
           &--dim-visited:visited > span {
