@@ -653,26 +653,6 @@ const BookmarksPage: React.FC = () => {
                   <UiAppAtom_DropdownMenu
                     items={[
                       {
-                        label: _sort_by_option_to_label(SortBy.POPULARITY),
-                        on_click: () => {
-                          toggle_sort_by_dropdown()
-                          if (
-                            sort_by_view_options.current_sort_by ==
-                              SortBy.POPULARITY ||
-                            bookmarks_slice_state.is_fetching_first_bookmarks ||
-                            bookmarks_slice_state.is_fetching_more_bookmarks ||
-                            counts.is_fetching_counts_data
-                          )
-                            return
-                          sort_by_view_options.set_sort_by_query_param(
-                            SortBy.POPULARITY,
-                          )
-                        },
-                        is_selected:
-                          sort_by_view_options.current_sort_by ==
-                          SortBy.POPULARITY,
-                      },
-                      {
                         label: _sort_by_option_to_label(SortBy.CREATED_AT),
                         on_click: () => {
                           toggle_sort_by_dropdown()
@@ -691,6 +671,26 @@ const BookmarksPage: React.FC = () => {
                         is_selected:
                           sort_by_view_options.current_sort_by ==
                           SortBy.CREATED_AT,
+                      },
+                      {
+                        label: _sort_by_option_to_label(SortBy.POPULARITY),
+                        on_click: () => {
+                          toggle_sort_by_dropdown()
+                          if (
+                            sort_by_view_options.current_sort_by ==
+                              SortBy.POPULARITY ||
+                            bookmarks_slice_state.is_fetching_first_bookmarks ||
+                            bookmarks_slice_state.is_fetching_more_bookmarks ||
+                            counts.is_fetching_counts_data
+                          )
+                            return
+                          sort_by_view_options.set_sort_by_query_param(
+                            SortBy.POPULARITY,
+                          )
+                        },
+                        is_selected:
+                          sort_by_view_options.current_sort_by ==
+                          SortBy.POPULARITY,
                       },
                       {
                         label: _sort_by_option_to_label(SortBy.UPDATED_AT),
