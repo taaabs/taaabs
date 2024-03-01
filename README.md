@@ -28,6 +28,11 @@ API documentation is generated from code and accessible from two web interfaces:
 
 TODO: create diagrams with mermaid, explain static/dynamic deployments, backend server topology
 
+Two node processes:
+
+- POST/PUT/DELETE requests receiver.
+- GET requests receiver.
+
 ## Application business logic
 
 TODO: explain what are main data structures and how different things are wired together

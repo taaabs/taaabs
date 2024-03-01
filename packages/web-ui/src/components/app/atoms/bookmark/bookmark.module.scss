@@ -237,16 +237,16 @@
           }
           @include hover {
             .bookmark__main__tags__huggs__emoji__hugging__eyes {
-              transform: translateY(-0.5px);
+              transform: translateY(-0.3px);
             }
             .bookmark__main__tags__huggs__emoji__hugging__mouth {
-              transform: scale(1.06);
+              transform: translateY(-0.3px) scaleY(1.15);
             }
             .bookmark__main__tags__huggs__emoji__hugging__left-hand {
-              transform: scale(1.06) rotate(5deg) translateX(1px);
+              transform: rotate(5deg) translateX(1px);
             }
             .bookmark__main__tags__huggs__emoji__hugging__right-hand {
-              transform: scale(1.06) rotate(-5deg) translateX(-1px);
+              transform: scaleX(-1) rotate(5deg) translateX(1px);
             }
             .bookmark__main__tags__huggs__emoji__silent__handle {
               animation: bookmark_shake 0.8s ease-in-out both;
@@ -257,30 +257,40 @@
             &__eyes {
               position: absolute;
               bottom: 0;
-              top: -8px;
-              left: 3px;
+              top: -8.4px;
+              left: 4px;
               > svg {
-                width: 17.5px;
+                width: 15px;
               }
             }
             &__mouth {
               position: absolute;
               bottom: 0;
               top: 0px;
-              left: 5.3px;
+              left: 6px;
               > svg {
-                width: 12px;
+                width: 11px;
+              }
+            }
+            &__blush {
+              position: absolute;
+              bottom: 0;
+              top: -5px;
+              left: 2px;
+              > svg {
+                width: 19px;
               }
             }
             &__left-hand {
               position: absolute;
               top: 8px;
-              left: -2px;
+              left: -1.5px;
               > svg {
                 width: 12px;
               }
             }
             &__right-hand {
+              transform: scaleX(-1);
               position: absolute;
               top: 8px;
               left: 12.5px;
@@ -293,10 +303,10 @@
             &__eyes {
               position: absolute;
               bottom: 0;
-              top: -7.6px;
-              left: 3px;
+              top: -8.4px;
+              left: 4px;
               > svg {
-                width: 17.5px;
+                width: 15px;
               }
             }
             &__zip {

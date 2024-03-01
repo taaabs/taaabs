@@ -35,6 +35,7 @@ declare const styles: {
   readonly 'bookmark__main__tags__huggs__emoji__hugging__right-hand': string
   readonly bookmark__main__tags__huggs__emoji__silent__handle: string
   readonly bookmark_shake: string
+  readonly bookmark__main__tags__huggs__emoji__hugging__blush: string
   readonly bookmark__main__tags__huggs__emoji__silent__eyes: string
   readonly bookmark__main__tags__huggs__emoji__silent__zip: string
   readonly bookmark__main__tags__huggs__amount: string

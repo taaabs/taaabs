@@ -583,7 +583,8 @@ export const use_search = () => {
         },
         sortBy: {
           property:
-            order == Object.values(Order).indexOf(Order.POPULARITY).toString()
+            sortby ==
+            Object.values(SortBy).indexOf(SortBy.POPULARITY).toString()
               ? 'points'
               : sortby ==
                 Object.values(SortBy).indexOf(SortBy.UPDATED_AT).toString()
@@ -593,7 +594,10 @@ export const use_search = () => {
               ? 'visited_at'
               : 'created_at',
           order:
-            order == Object.values(Order).indexOf(Order.ASC).toString()
+            sortby ==
+            Object.values(SortBy).indexOf(SortBy.POPULARITY).toString()
+              ? 'DESC'
+              : order == Object.values(Order).indexOf(Order.ASC).toString()
               ? 'ASC'
               : 'DESC',
         },
