@@ -1,3 +1,5 @@
+'use client'
+
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import OutsideClickHandler from 'react-outside-click-handler'
@@ -51,13 +53,22 @@ import { Filter } from '@/types/library/filter'
 import { UpdateTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/update-tag-hierarchies.params'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { use_points } from '@/hooks/library/use-points'
+import { Dictionary } from '@/dictionaries/dictionary'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
   loading: () => <UiAppAtom_CustomRangeSkeleton />,
 })
 
-const BookmarksPage: React.FC = () => {
+export namespace BookmarksPage {
+  export type Props = {
+    dictionary: Dictionary
+  }
+}
+
+const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
+  dictionary: Dictionary
+}) => {
   const is_hydrated = use_is_hydrated()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
@@ -224,6 +235,28 @@ const BookmarksPage: React.FC = () => {
     filter_view_options.current_filter == Filter.ARCHIVED_STARRED_UNREAD ||
     filter_view_options.current_filter == Filter.ARCHIVED_UNREAD
 
+  function sort_by_option_to_label(sort_by_option: SortBy): string {
+    switch (sort_by_option) {
+      case SortBy.CREATED_AT:
+        return params.dictionary.library.sort_by_options.created_at
+      case SortBy.UPDATED_AT:
+        return params.dictionary.library.sort_by_options.updated_at
+      case SortBy.VISITED_AT:
+        return params.dictionary.library.sort_by_options.visited_at
+      case SortBy.POPULARITY:
+        return params.dictionary.library.sort_by_options.popularity
+    }
+  }
+
+  function order_option_to_label(order_option: Order): string {
+    switch (order_option) {
+      case Order.DESC:
+        return params.dictionary.library.order_options.newest_first
+      case Order.ASC:
+        return params.dictionary.library.order_options.oldest_first
+    }
+  }
+
   return (
     <>
       <UiAppAtom_DraggedCursorTag
@@ -237,7 +270,11 @@ const BookmarksPage: React.FC = () => {
           unsubscribe: 'Unsubscribe',
         }}
         is_subscribed={undefined}
-        welcome_text={!username ? `Howdy, username` : undefined}
+        welcome_text={
+          !username
+            ? `${params.dictionary.library.welcome}, username`
+            : undefined
+        }
         on_subscribe_click={username ? () => {} : undefined}
         show_bookmarks_skeleton={show_bookmarks_skeleton}
         close_aside_count={close_aside_count}
@@ -247,7 +284,7 @@ const BookmarksPage: React.FC = () => {
             search_string={search.search_string}
             is_loading={search.is_initializing}
             loading_progress_percentage={search.indexed_bookmarks_percentage}
-            placeholder={'Search in titles, notes, tags and links...'}
+            placeholder={params.dictionary.library.search_placeholder}
             hints={!search.is_initializing ? search.hints : undefined}
             on_click_hint={(i) => {
               const search_string =
@@ -588,7 +625,7 @@ const BookmarksPage: React.FC = () => {
                       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
                   }),
                 )
-                toast.success('Tag hierarchies has been updated')
+                toast.success(params.dictionary.library.tag_hierarchies_upated)
               }}
               selected_tag_ids={tag_view_options.selected_tags}
               is_updating={tag_hierarchies.is_updating || false}
@@ -618,9 +655,8 @@ const BookmarksPage: React.FC = () => {
                 set_close_aside_count(close_aside_count + 1)
               }}
               translations={{
-                all_bookmarks: 'All bookmarks',
-                drag_here:
-                  'Organize  your tags by dragging & dropping - build a visual hierarchy!',
+                all_bookmarks: params.dictionary.library.all_bookmarks,
+                drag_here: params.dictionary.library.drag_tag_here,
               }}
             />
           ) : (
@@ -629,13 +665,13 @@ const BookmarksPage: React.FC = () => {
         }
         slot_aside={
           <UiAppTemplate_LibraryAside
-            feedback_label="Send feedback"
+            feedback_label={params.dictionary.library.send_feedback}
             on_feedback_click={() => {}}
             slot_sort_by={{
               button: is_hydrated ? (
                 <UiAppAtom_ButtonSelect
-                  label="Sort by"
-                  current_value={_sort_by_option_to_label(
+                  label={params.dictionary.library.sort_by}
+                  current_value={sort_by_option_to_label(
                     sort_by_view_options.current_sort_by,
                   )}
                   is_active={is_sort_by_dropdown_visible}
@@ -653,7 +689,7 @@ const BookmarksPage: React.FC = () => {
                   <UiAppAtom_DropdownMenu
                     items={[
                       {
-                        label: _sort_by_option_to_label(SortBy.CREATED_AT),
+                        label: sort_by_option_to_label(SortBy.CREATED_AT),
                         on_click: () => {
                           toggle_sort_by_dropdown()
                           if (
@@ -673,7 +709,7 @@ const BookmarksPage: React.FC = () => {
                           SortBy.CREATED_AT,
                       },
                       {
-                        label: _sort_by_option_to_label(SortBy.UPDATED_AT),
+                        label: sort_by_option_to_label(SortBy.UPDATED_AT),
                         on_click: () => {
                           toggle_sort_by_dropdown()
                           if (
@@ -695,9 +731,7 @@ const BookmarksPage: React.FC = () => {
                       ...(!username
                         ? [
                             {
-                              label: _sort_by_option_to_label(
-                                SortBy.VISITED_AT,
-                              ),
+                              label: sort_by_option_to_label(SortBy.VISITED_AT),
                               on_click: () => {
                                 toggle_sort_by_dropdown()
                                 if (
@@ -719,7 +753,7 @@ const BookmarksPage: React.FC = () => {
                           ]
                         : []),
                       {
-                        label: _sort_by_option_to_label(SortBy.POPULARITY),
+                        label: sort_by_option_to_label(SortBy.POPULARITY),
                         on_click: () => {
                           toggle_sort_by_dropdown()
                           if (
@@ -746,8 +780,8 @@ const BookmarksPage: React.FC = () => {
             slot_order={{
               button: is_hydrated ? (
                 <UiAppAtom_ButtonSelect
-                  label="Order"
-                  current_value={_order_option_to_label(
+                  label={params.dictionary.library.order}
+                  current_value={order_option_to_label(
                     order_view_options.current_order,
                   )}
                   is_active={is_order_dropdown_visible}
@@ -768,7 +802,7 @@ const BookmarksPage: React.FC = () => {
                   <UiAppAtom_DropdownMenu
                     items={[
                       {
-                        label: _order_option_to_label(Order.DESC),
+                        label: order_option_to_label(Order.DESC),
                         on_click: () => {
                           toggle_order_dropdown()
                           if (
@@ -785,7 +819,7 @@ const BookmarksPage: React.FC = () => {
                           order_view_options.current_order == Order.DESC,
                       },
                       {
-                        label: _order_option_to_label(Order.ASC),
+                        label: order_option_to_label(Order.ASC),
                         on_click: () => {
                           toggle_order_dropdown()
                           if (
@@ -1219,12 +1253,12 @@ const BookmarksPage: React.FC = () => {
                         tag_ids: bookmark.tags.map((tag) => tag.id),
                       },
                     })
-                    tag_hierarchies.get_tag_hierarchies({
+                    await tag_hierarchies.get_tag_hierarchies({
                       filter: filter_view_options.current_filter,
                       gte: date_view_options.current_gte,
                       lte: date_view_options.current_lte,
                     })
-                    toast.success('Bookmark has been updated')
+                    toast.success(params.dictionary.library.bookmark_updated)
                   }}
                   // Changes tag order by swapping them.
                   on_mouse_up_on_tag={async (tag_id) => {
@@ -1299,7 +1333,7 @@ const BookmarksPage: React.FC = () => {
                         tag_ids: bookmark.tags.map((tag) => tag.id),
                       },
                     })
-                    toast.success('Bookmark has been updated')
+                    toast.success(params.dictionary.library.bookmark_updated)
                   }}
                   on_tag_delete_click={async (tag_id) => {
                     const modified_bookmark: UpsertBookmark_Params = {
@@ -1379,12 +1413,12 @@ const BookmarksPage: React.FC = () => {
                         return !updated_tag_ids.includes(t) && yields == 1
                       }),
                     )
-                    tag_hierarchies.get_tag_hierarchies({
+                    await tag_hierarchies.get_tag_hierarchies({
                       filter: filter_view_options.current_filter,
                       gte: date_view_options.current_gte,
                       lte: date_view_options.current_lte,
                     })
-                    toast.success('Bookmark has been updated')
+                    toast.success(params.dictionary.library.bookmark_updated)
                   }}
                   menu_slot={
                     <UiAppAtom_DropdownMenu
@@ -1490,12 +1524,14 @@ const BookmarksPage: React.FC = () => {
                                       search.reset()
                                     }
                                   }
-                                  tag_hierarchies.get_tag_hierarchies({
+                                  await tag_hierarchies.get_tag_hierarchies({
                                     filter: filter_view_options.current_filter,
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success('Bookmark has been updated')
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
+                                  )
                                 },
                               },
                               {
@@ -1579,12 +1615,14 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
-                                  tag_hierarchies.get_tag_hierarchies({
+                                  await tag_hierarchies.get_tag_hierarchies({
                                     filter: filter_view_options.current_filter,
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success('Bookmark has been updated')
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
+                                  )
                                 },
                               },
                               {
@@ -1667,12 +1705,14 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
-                                  tag_hierarchies.get_tag_hierarchies({
+                                  await tag_hierarchies.get_tag_hierarchies({
                                     filter: filter_view_options.current_filter,
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success('Bookmark has been updated')
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
+                                  )
                                 },
                               },
                               {
@@ -1755,12 +1795,14 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
-                                  tag_hierarchies.get_tag_hierarchies({
+                                  await tag_hierarchies.get_tag_hierarchies({
                                     filter: filter_view_options.current_filter,
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success('Bookmark has been updated')
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
+                                  )
                                 },
                               },
                               {
@@ -1843,12 +1885,14 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
-                                  tag_hierarchies.get_tag_hierarchies({
+                                  await tag_hierarchies.get_tag_hierarchies({
                                     filter: filter_view_options.current_filter,
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success('Bookmark has been updated')
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
+                                  )
                                 },
                               },
                               {
@@ -1931,12 +1975,14 @@ const BookmarksPage: React.FC = () => {
                                   ) {
                                     search.reset()
                                   }
-                                  tag_hierarchies.get_tag_hierarchies({
+                                  await tag_hierarchies.get_tag_hierarchies({
                                     filter: filter_view_options.current_filter,
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success('Bookmark has been updated')
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
+                                  )
                                 },
                               },
                               {
@@ -2247,28 +2293,6 @@ const BookmarksPage: React.FC = () => {
 }
 
 export default BookmarksPage
-
-function _sort_by_option_to_label(sort_by_option: SortBy): string {
-  switch (sort_by_option) {
-    case SortBy.CREATED_AT:
-      return 'Created at'
-    case SortBy.UPDATED_AT:
-      return 'Updated at'
-    case SortBy.VISITED_AT:
-      return 'Visited at'
-    case SortBy.POPULARITY:
-      return 'Huggiest'
-  }
-}
-
-function _order_option_to_label(order_option: Order): string {
-  switch (order_option) {
-    case Order.DESC:
-      return 'Newest first'
-    case Order.ASC:
-      return 'Oldest first'
-  }
-}
 
 const get_last_authorized_counts_params = () => {
   return (
