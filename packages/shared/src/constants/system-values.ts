@@ -5,6 +5,7 @@ export const system_values = {
   max_library_search_results: 1000,
   max_library_search_hints: 10,
   sortablejs_animation_duration: 150,
+  concurrent_importing_users_limit: 10,
   library: {
     max_selected_tags: 5,
     bookmarks: {

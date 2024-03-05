@@ -62,10 +62,10 @@ namespace TagHierarchy {
   }
   export const tag_hierarchy_schema: z.ZodType<TagHierarchyNode> =
     base_tag_hierarchy_schema.extend({
-      children: z.lazy(() => tag_hierarchy_schema.array()),
+      children: z.lazy(() => tag_hierarchy_schema.array().max(100)),
     })
 }
 export const data_schema = z.object({
-  bookmarks: z.array(bookmark_schema),
-  tree: z.array(TagHierarchy.tag_hierarchy_schema),
+  bookmarks: z.array(bookmark_schema).max(200000),
+  tree: z.array(TagHierarchy.tag_hierarchy_schema).max(100),
 })

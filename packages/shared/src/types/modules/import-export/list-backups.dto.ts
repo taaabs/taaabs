@@ -3,7 +3,7 @@ import { z } from 'zod'
 export namespace ListBackups_Dto {
   export const response_schema = z.array(
     z.object({
-      id: z.string().uuid(),
+      id: z.number(),
       name: z.string().optional(),
       created_at: z.string().datetime(),
     }),
