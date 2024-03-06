@@ -4,7 +4,7 @@ import { z } from 'zod'
 const public_tag_schema = z.object({
   is_public: z.literal(true),
   hash: z.string().length(64),
-  name: z.string().min(1).max(50),
+  name: z.string().trim().min(1).max(50),
 })
 const private_tag_schema = z.object({
   is_public: z.literal(false),
@@ -15,7 +15,7 @@ const public_link_schema = z.object({
   is_public: z.literal(true),
   hash: z.string().length(64),
   url: z.string().max(500).url(),
-  site_path: z.string().max(150).optional(),
+  site_path: z.string().trim().max(150).optional(),
 })
 const private_link_schema = z.object({
   is_public: z.literal(false),
@@ -25,11 +25,17 @@ const private_link_schema = z.object({
 })
 export const bookmark_schema = z.object({
   id: z.string().uuid().optional(),
-  title: z.string().max(500).optional(),
-  title_aes: z.string().max(1000).optional(),
+  title: z.string().max(system_values.bookmark.title.max_length).optional(),
+  title_aes: z
+    .string()
+    .max(system_values.bookmark.title.max_length * 2)
+    .optional(),
   note: z.string().max(system_values.bookmark.note.max_length).optional(),
-  note_aes: z.string().max(5000).optional(),
-  created_at: z.string().datetime(),
+  note_aes: z
+    .string()
+    .max(system_values.bookmark.note.max_length * 2)
+    .optional(),
+  created_at: z.string().datetime(), // TODO make optional
   is_public: z.boolean().optional(),
   is_archived: z.boolean().optional(),
   stars: z.number().int().min(0).max(5).optional(),

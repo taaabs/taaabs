@@ -296,8 +296,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               const search_string =
                 search.hints![i].search_string + search.hints![i].completion
               search.remove_recent_hint({ search_string })
-              search.clear_hints()
-              search.set_is_search_focused(false)
             }}
             is_focused={search.is_search_focused}
             on_focus={async () => {

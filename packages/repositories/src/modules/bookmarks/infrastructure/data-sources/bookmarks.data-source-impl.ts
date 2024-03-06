@@ -172,14 +172,24 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           },
           [] as UpsertBookmark_Params['tags'],
         )
-        .map((tag) => ({
-          name: tag.is_public ? tag.name.trim() : undefined,
-          name_aes: !tag.is_public
-            ? CryptoJS.AES.encrypt(tag.name.trim(), 'my_secret_key').toString()
-            : undefined,
-          hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
-          is_public: tag.is_public || undefined,
-        })),
+        .map((tag) => {
+          if (tag.is_public) {
+            return {
+              is_public: true,
+              hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
+              name: tag.name.trim(),
+            }
+          } else {
+            return {
+              is_public: false,
+              hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
+              name_aes: CryptoJS.AES.encrypt(
+                tag.name.trim(),
+                'my_secret_key',
+              ).toString(),
+            }
+          }
+        }),
       links: params.links
         .filter((link) => link.url.trim().length > 0)
         .reduce(
@@ -196,23 +206,30 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         )
         .map((link) => {
           const domain = get_domain_from_url(link.url)
-          return {
-            url: link.is_public ? link.url.trim() : undefined,
-            url_aes: !link.is_public
-              ? CryptoJS.AES.encrypt(
-                  link.url.trim(),
-                  'my_secret_key',
-                ).toString()
-              : undefined,
-            site_aes: !link.is_public
-              ? CryptoJS.AES.encrypt(
-                  link.site_path ? `${domain}/${link.site_path}` : domain,
-                  'my_secret_key',
-                ).toString()
-              : undefined,
-            hash: CryptoJS.SHA256(link.url.trim() + 'my_secret_key').toString(),
-            site: link.is_public ? link.site_path : undefined,
-            is_public: link.is_public || undefined,
+          if (link.is_public) {
+            return {
+              is_public: true,
+              url: link.url.trim(),
+              hash: CryptoJS.SHA256(
+                link.url.trim() + 'my_secret_key',
+              ).toString(),
+              site: link.is_public ? link.site_path : undefined,
+            }
+          } else {
+            return {
+              is_public: false,
+              url_aes: CryptoJS.AES.encrypt(
+                link.url.trim(),
+                'my_secret_key',
+              ).toString(),
+              site_aes: CryptoJS.AES.encrypt(
+                link.site_path ? `${domain}/${link.site_path}` : domain,
+                'my_secret_key',
+              ).toString(),
+              hash: CryptoJS.SHA256(
+                link.url.trim() + 'my_secret_key',
+              ).toString(),
+            }
           }
         }),
     }

@@ -1,12 +1,12 @@
 'use client'
 
-import { use_import } from '@/hooks/settings/import/use-import'
 import { Box as UiAppAtom_Box } from '@web-ui/components/app/atoms/box'
 import { BoxHeading as UiAppAtom_BoxHeading } from '@web-ui/components/app/atoms/box-heading'
 import { RadioSetting as UiAppAtom_RadioSetting } from '@web-ui/components/app/atoms/radio-setting'
 import { FormRadio as UiAppTemplate_FormRadio } from '@web-ui/components/app/templates/form-radio'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
 import { BoxDivider as UiAppAtom_BoxDivider } from '@web-ui/components/app/atoms/box-divider'
+import { use_import } from './_hooks/use-import'
 
 const Page: React.FC = () => {
   const import_hook = use_import()

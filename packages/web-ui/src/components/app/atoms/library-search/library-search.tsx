@@ -6,6 +6,7 @@ import cn from 'classnames'
 import { system_values } from '@shared/constants/system-values'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { Icon } from '@web-ui/components/common/particles/icon'
+import OutsideClickHandler from 'react-outside-click-handler'
 
 export namespace LibrarySearch {
   type Hint = {
@@ -132,268 +133,281 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
         className={styles.container}
         style={{ pointerEvents: props.is_loading ? 'none' : undefined }}
       >
-        <div
-          className={cn(
-            styles.box,
-            { [styles['box--yields-no-results']]: props.results_count == 0 },
-            { [styles['box--focus']]: props.is_focused },
-            {
-              [styles['box--focus-yields-no-results']]:
-                props.is_focused && props.results_count == 0,
-            },
-          )}
-        >
-          <button
-            className={styles['box__left-side']}
-            onClick={() => {
-              if (!props.is_focused) {
-                input.current?.focus()
-                input.current!.value = ''
-                input.current!.value = props.search_string
-              }
-            }}
-          >
-            {props.is_loading ? (
-              <div className={styles.box__loader} />
-            ) : (
-              <Icon variant="SEARCH" />
+        <OutsideClickHandler onOutsideClick={props.on_blur}>
+          <div
+            className={cn(
+              styles.box,
+              { [styles['box--yields-no-results']]: props.results_count == 0 },
+              { [styles['box--focus']]: props.is_focused },
+              {
+                [styles['box--focus-yields-no-results']]:
+                  props.is_focused && props.results_count == 0,
+              },
             )}
-          </button>
-          <form
-            className={styles.box__form}
-            onSubmit={(e) => {
-              e.preventDefault()
-              props.on_submit()
-              input.current?.blur()
-              props.on_blur()
-              set_is_focused_fix(false)
-            }}
-            onClick={() => {
-              if (!props.is_focused) {
-                input.current?.focus()
-                input.current?.focus()
-                input.current!.value = ''
-                input.current!.value = props.search_string
-              }
-            }}
           >
-            <div className={styles.box__form__content}>
-              <div
-                className={cn(styles['box__form__content__styled-value'], {
-                  [styles[
-                    'box__form__content__styled-value--yields-no-results'
-                  ]]: props.results_count == 0,
-                })}
-              >
-                {/* /(?=site:)(.*?)($|\s)/ */}
-                {/* 'lorem site:abc.com site:abc.com ipsum' */}
-                {/* ["lorem ", "site:abc.com", " ", "site:abc.com", " ipsum"] */}
-                {props.search_string
-                  .split(/(?=site:)(.*?)($|\s)/)
-                  .map((str, i) => {
-                    if (str.substring(0, 5) == 'site:') {
-                      return (
-                        <span key={i}>
-                          <span
-                            className={
-                              styles[
-                                'box__form__content__styled-value__pre-highlight'
-                              ]
-                            }
-                          >
-                            site:
+            <button
+              className={styles['box__left-side']}
+              onClick={() => {
+                if (!props.is_focused) {
+                  input.current?.focus()
+                  input.current!.value = ''
+                  input.current!.value = props.search_string
+                }
+              }}
+            >
+              {props.is_loading ? (
+                <div className={styles.box__loader} />
+              ) : (
+                <Icon variant="SEARCH" />
+              )}
+            </button>
+            <form
+              className={styles.box__form}
+              onSubmit={(e) => {
+                e.preventDefault()
+                props.on_submit()
+                input.current?.blur()
+                props.on_blur()
+                set_is_focused_fix(false)
+              }}
+              onClick={() => {
+                if (!props.is_focused) {
+                  input.current?.focus()
+                  input.current?.focus()
+                  input.current!.value = ''
+                  input.current!.value = props.search_string
+                }
+              }}
+            >
+              <div className={styles.box__form__content}>
+                <div
+                  className={cn(styles['box__form__content__styled-value'], {
+                    [styles[
+                      'box__form__content__styled-value--yields-no-results'
+                    ]]: props.results_count == 0,
+                  })}
+                >
+                  {/* /(?=site:)(.*?)($|\s)/ */}
+                  {/* 'lorem site:abc.com site:abc.com ipsum' */}
+                  {/* ["lorem ", "site:abc.com", " ", "site:abc.com", " ipsum"] */}
+                  {props.search_string
+                    .split(/(?=site:)(.*?)($|\s)/)
+                    .map((str, i) => {
+                      if (str.substring(0, 5) == 'site:') {
+                        return (
+                          <span key={i}>
+                            <span
+                              className={
+                                styles[
+                                  'box__form__content__styled-value__pre-highlight'
+                                ]
+                              }
+                            >
+                              site:
+                            </span>
+                            <span
+                              className={cn(
+                                styles[
+                                  'box__form__content__styled-value__highlight'
+                                ],
+                                {
+                                  [styles[
+                                    'box__form__content__styled-value__highlight--no-results'
+                                  ]]: props.results_count == 0,
+                                },
+                              )}
+                            >
+                              {str.substring(5)}
+                            </span>
                           </span>
-                          <span
-                            className={cn(
-                              styles[
-                                'box__form__content__styled-value__highlight'
-                              ],
-                              {
-                                [styles[
-                                  'box__form__content__styled-value__highlight--no-results'
-                                ]]: props.results_count == 0,
-                              },
-                            )}
-                          >
-                            {str.substring(5)}
-                          </span>
+                        )
+                      } else {
+                        return <span key={i}>{str}</span>
+                      }
+                    })}
+                  {(props.search_string || selected_hint_index != -1) &&
+                    props.hints &&
+                    is_focused_fix && (
+                      <>
+                        <span
+                          className={
+                            styles[
+                              'box__form__content__styled-value__completion'
+                            ]
+                          }
+                        >
+                          {
+                            props.hints[
+                              selected_hint_index == -1
+                                ? 0
+                                : selected_hint_index
+                            ]?.completion
+                          }
                         </span>
-                      )
-                    } else {
-                      return <span key={i}>{str}</span>
-                    }
-                  })}
-                {(props.search_string || selected_hint_index != -1) &&
-                  props.hints &&
-                  is_focused_fix && (
-                    <>
-                      <span
-                        className={
-                          styles['box__form__content__styled-value__completion']
-                        }
-                      >
-                        {
-                          props.hints[
-                            selected_hint_index == -1 ? 0 : selected_hint_index
-                          ]?.completion
-                        }
-                      </span>
-                      {props.hints.length > 0 && (
-                        <span className={styles['box__form__keycap']}>tab</span>
-                      )}
-                    </>
-                  )}
-              </div>
-              <div>
-                <div className={styles.box__form__content__sizer} ref={sizer}>
-                  {props.search_string}
-                </div>
-                <input
-                  ref={input}
-                  value={props.search_string}
-                  style={{
-                    pointerEvents: !props.is_focused ? 'none' : undefined,
-                    width: sizer_width > 250 ? `${sizer_width}px` : undefined,
-                  }}
-                  placeholder={
-                    props.is_loading
-                      ? `One moment please... ${
-                          props.loading_progress_percentage
-                            ? props.loading_progress_percentage + '%'
-                            : ''
-                        }`
-                      : selected_hint_index != -1
-                      ? undefined
-                      : props.placeholder
-                  }
-                  onBlur={() => {
-                    setTimeout(() => {
-                      props.on_blur()
-                    }, 100)
-                  }}
-                  onFocus={() => {
-                    if (!props.is_focused) {
-                      props.on_focus()
-                    }
-                  }}
-                  onChange={(e) => {
-                    if (!e.target.value.endsWith('  ')) {
-                      props.on_change(e.target.value)
-                    }
-                  }}
-                />
-              </div>
-            </div>
-          </form>
-          <div className={styles['box__right-side']}>
-            {props.search_string ? (
-              <>
-                {props.results_count !== undefined && (
-                  <div
-                    className={cn(styles['box__right-side__results-count'], {
-                      [styles[
-                        'box__right-side__results-count--yields-no-results'
-                      ]]: props.results_count == 0,
-                    })}
-                  >
-                    {props.results_count == 0
-                      ? 'No'
-                      : props.results_count ==
-                        system_values.max_library_search_results
-                      ? `${system_values.max_library_search_results}+`
-                      : props.results_count}{' '}
-                    {props.results_count == 1 ? 'result' : 'results'}
-                  </div>
-                )}
-                <button
-                  className={cn(styles['box__right-side__clear'], {
-                    [styles['box__right-side__clear--yields-no-results']]:
-                      props.results_count == 0,
-                  })}
-                  onClick={() => {
-                    set_is_focused_fix(false)
-                    props.on_clear_click()
-                  }}
-                >
-                  <Icon variant="ADD" />
-                </button>
-              </>
-            ) : (
-              !props.is_focused && (
-                <div className={styles['box__right-side__press_key']}>
-                  Type <div className={styles.box__form__keycap}>/</div> to
-                  search
-                </div>
-              )
-            )}
-          </div>
-        </div>
-        <div
-          className={cn(styles.hints, {
-            [styles['hints--hidden']]: !(props.hints && is_focused_fix),
-          })}
-        >
-          {props.hints && props.hints.length > 0 && is_focused_fix && (
-            <div className={styles.hints__list}>
-              {props.hints.map((hint, i) => (
-                <button
-                  key={
-                    props.search_string +
-                    (hint.completion ? hint.completion : '') +
-                    hint.type
-                  }
-                  className={cn(styles.hints__list__item, {
-                    [styles['hints__list__item--selected']]:
-                      selected_hint_index == i,
-                  })}
-                  onClick={() => {
-                    props.on_click_hint(i)
-                    set_is_focused_fix(false)
-                  }}
-                >
-                  <div className={styles.hints__list__item__icon}>
-                    {hint.type == 'new' && <Icon variant="SEARCH" />}
-                    {hint.type == 'recent' && <Icon variant="RECENT" />}
-                  </div>
-                  <div
-                    className={cn(styles.hints__list__item__content, {
-                      [styles['hints__list__item__content--recent']]:
-                        hint.type == 'recent',
-                    })}
-                  >
-                    <span>{hint.search_string}</span>
-                    <span>{hint.completion}</span>
-                    {selected_hint_index == i && (
-                      <div
-                        className={styles['hints__list__item__content__keycap']}
-                      >
-                        enter
-                      </div>
+                        {props.hints.length > 0 && (
+                          <span className={styles['box__form__keycap']}>
+                            tab
+                          </span>
+                        )}
+                      </>
                     )}
+                </div>
+                <div>
+                  <div className={styles.box__form__content__sizer} ref={sizer}>
+                    {props.search_string}
                   </div>
-                  {hint.type == 'recent' && (
+                  <input
+                    ref={input}
+                    value={props.search_string}
+                    style={{
+                      pointerEvents: !props.is_focused ? 'none' : undefined,
+                      width: sizer_width > 250 ? `${sizer_width}px` : undefined,
+                    }}
+                    placeholder={
+                      props.is_loading
+                        ? `One moment please... ${
+                            props.loading_progress_percentage
+                              ? props.loading_progress_percentage + '%'
+                              : ''
+                          }`
+                        : selected_hint_index != -1
+                        ? undefined
+                        : props.placeholder
+                    }
+                    onBlur={(e) => {
+                      if (
+                        e.relatedTarget?.className != styles.hints__list__item
+                      ) {
+                        props.on_blur()
+                      }
+                    }}
+                    onFocus={() => {
+                      if (!props.is_focused) {
+                        props.on_focus()
+                      }
+                    }}
+                    onChange={(e) => {
+                      if (!e.target.value.endsWith('  ')) {
+                        props.on_change(e.target.value)
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            </form>
+            <div className={styles['box__right-side']}>
+              {props.search_string ? (
+                <>
+                  {props.results_count !== undefined && (
                     <div
-                      className={styles.hints__list__item__remove}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        props.on_click_recent_hint_remove(i)
-                      }}
-                      role="button"
+                      className={cn(styles['box__right-side__results-count'], {
+                        [styles[
+                          'box__right-side__results-count--yields-no-results'
+                        ]]: props.results_count == 0,
+                      })}
                     >
-                      Remove
+                      {props.results_count == 0
+                        ? 'No'
+                        : props.results_count ==
+                          system_values.max_library_search_results
+                        ? `${system_values.max_library_search_results}+`
+                        : props.results_count}{' '}
+                      {props.results_count == 1 ? 'result' : 'results'}
                     </div>
                   )}
-                </button>
-              ))}
+                  <button
+                    className={cn(styles['box__right-side__clear'], {
+                      [styles['box__right-side__clear--yields-no-results']]:
+                        props.results_count == 0,
+                    })}
+                    onClick={() => {
+                      set_is_focused_fix(false)
+                      props.on_clear_click()
+                    }}
+                  >
+                    <Icon variant="ADD" />
+                  </button>
+                </>
+              ) : (
+                !props.is_focused && (
+                  <div className={styles['box__right-side__press_key']}>
+                    Type <div className={styles.box__form__keycap}>/</div> to
+                    search
+                  </div>
+                )
+              )}
             </div>
-          )}
-          <div className={styles.hints__footer}>
-            <span>{props.translations.footer_tip}</span>
-            <button onClick={props.on_click_get_help}>
-              {props.translations.get_help_link}
-            </button>
           </div>
-        </div>
+          <div
+            className={cn(styles.hints, {
+              [styles['hints--hidden']]: !(props.hints && is_focused_fix),
+            })}
+          >
+            {props.hints && props.hints.length > 0 && is_focused_fix && (
+              <div className={styles.hints__list}>
+                {props.hints.map((hint, i) => (
+                  <button
+                    key={
+                      props.search_string +
+                      (hint.completion ? hint.completion : '') +
+                      hint.type
+                    }
+                    className={cn(styles.hints__list__item, {
+                      [styles['hints__list__item--selected']]:
+                        selected_hint_index == i,
+                    })}
+                    onClick={() => {
+                      props.on_click_hint(i)
+                      set_is_focused_fix(false)
+                      props.on_blur()
+                    }}
+                  >
+                    <div className={styles.hints__list__item__icon}>
+                      {hint.type == 'new' && <Icon variant="SEARCH" />}
+                      {hint.type == 'recent' && <Icon variant="RECENT" />}
+                    </div>
+                    <div
+                      className={cn(styles.hints__list__item__content, {
+                        [styles['hints__list__item__content--recent']]:
+                          hint.type == 'recent',
+                      })}
+                    >
+                      <span>{hint.search_string}</span>
+                      <span>{hint.completion}</span>
+                      {selected_hint_index == i && (
+                        <div
+                          className={
+                            styles['hints__list__item__content__keycap']
+                          }
+                        >
+                          enter
+                        </div>
+                      )}
+                    </div>
+                    {hint.type == 'recent' && (
+                      <div
+                        className={styles.hints__list__item__remove}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          props.on_click_recent_hint_remove(i)
+                        }}
+                        role="button"
+                      >
+                        Remove
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+            <div className={styles.hints__footer}>
+              <span>{props.translations.footer_tip}</span>
+              <button onClick={props.on_click_get_help}>
+                {props.translations.get_help_link}
+              </button>
+            </div>
+          </div>
+        </OutsideClickHandler>
       </div>
     ) : (
       <div className={styles.skeleton}>
