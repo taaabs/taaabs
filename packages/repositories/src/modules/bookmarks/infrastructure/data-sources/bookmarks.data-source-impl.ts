@@ -10,6 +10,7 @@ import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
+import { AES } from '@repositories/utils/aes/aes'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -143,17 +144,19 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async upsert_bookmark(
     params: UpsertBookmark_Params,
   ): Promise<Bookmarks_Dto.Response.AuthorizedBookmark> {
-    const bookmark: CreateBookmark_Dto = {
+    const argon2di_hash = await AES.derive_key_from_password('my_secret_key')
+
+    const body: CreateBookmark_Dto.Body = {
       created_at: params.created_at?.toISOString(),
       title: params.is_public ? params.title : undefined,
       title_aes:
         !params.is_public && params.title
-          ? CryptoJS.AES.encrypt(params.title, 'my_secret_key').toString()
+          ? AES.encrypt(params.title, argon2di_hash)
           : undefined,
       note: params.is_public ? params.note : undefined,
       note_aes:
         !params.is_public && params.note
-          ? CryptoJS.AES.encrypt(params.note, 'my_secret_key').toString()
+          ? AES.encrypt(params.note, argon2di_hash)
           : undefined,
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,
@@ -176,17 +179,14 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           if (tag.is_public) {
             return {
               is_public: true,
-              hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
+              hash: CryptoJS.SHA256(tag.name + argon2di_hash).toString(),
               name: tag.name.trim(),
             }
           } else {
             return {
               is_public: false,
-              hash: CryptoJS.SHA256(tag.name + 'my_secret_key').toString(),
-              name_aes: CryptoJS.AES.encrypt(
-                tag.name.trim(),
-                'my_secret_key',
-              ).toString(),
+              hash: CryptoJS.SHA256(tag.name + argon2di_hash).toString(),
+              name_aes: AES.encrypt(tag.name.trim(), argon2di_hash),
             }
           }
         }),
@@ -211,23 +211,20 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
               is_public: true,
               url: link.url.trim(),
               hash: CryptoJS.SHA256(
-                link.url.trim() + 'my_secret_key',
+                link.url.trim() + argon2di_hash,
               ).toString(),
               site: link.is_public ? link.site_path : undefined,
             }
           } else {
             return {
               is_public: false,
-              url_aes: CryptoJS.AES.encrypt(
-                link.url.trim(),
-                'my_secret_key',
-              ).toString(),
-              site_aes: CryptoJS.AES.encrypt(
+              url_aes: AES.encrypt(link.url.trim(), argon2di_hash),
+              site_aes: AES.encrypt(
                 link.site_path ? `${domain}/${link.site_path}` : domain,
-                'my_secret_key',
-              ).toString(),
+                argon2di_hash,
+              ),
               hash: CryptoJS.SHA256(
-                link.url.trim() + 'my_secret_key',
+                link.url.trim() + argon2di_hash,
               ).toString(),
             }
           }
@@ -241,7 +238,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           Authorization: `Bearer ${this._auth_token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bookmark),
+        body: JSON.stringify(body),
       }).then((r) => {
         if (r.ok) {
           return r.json()
@@ -256,7 +253,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           Authorization: `Bearer ${this._auth_token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bookmark),
+        body: JSON.stringify(body),
       }).then((r) => {
         if (r.ok) {
           return r.json()

@@ -1,8 +1,8 @@
+import { AES } from '@repositories/utils/aes/aes'
 import { Counts_Repository } from '../../domain/repositories/counts.repository'
 import { Counts_Params } from '../../domain/types/counts.params'
 import { Counts_Ro } from '../../domain/types/counts.ro'
 import { Counts_DataSource } from '../data-sources/counts.data-source'
-import CryptoJS from 'crypto-js'
 
 export class Counts_RepositoryImpl implements Counts_Repository {
   constructor(private readonly _counts_data_source: Counts_DataSource) {}
@@ -12,6 +12,8 @@ export class Counts_RepositoryImpl implements Counts_Repository {
   ): Promise<Counts_Ro> {
     const data =
       await this._counts_data_source.get_counts_on_authorized_user(params)
+
+    const argon2di_hash = await AES.derive_key_from_password('my_secret_key')
 
     return {
       months: data.months
@@ -27,10 +29,7 @@ export class Counts_RepositoryImpl implements Counts_Repository {
                     ...tag,
                     name: tag.name
                       ? tag.name
-                      : CryptoJS.AES.decrypt(
-                          tag.name_aes!,
-                          'my_secret_key',
-                        ).toString(CryptoJS.enc.Utf8),
+                      : AES.decrypt(tag.name_aes!, argon2di_hash),
                   }))
                   .reduce(
                     (acc, el) => ({

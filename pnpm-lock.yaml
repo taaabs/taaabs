@@ -111,9 +111,6 @@ importers:
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
-      pako:
-        specifier: ^2.1.0
-        version: 2.1.0
       passport:
         specifier: ^0.6.0
         version: 0.6.0
@@ -169,9 +166,410 @@ importers:
       '@types/node':
         specifier: ^20.8.2
         version: 20.8.2
-      '@types/pako':
-        specifier: ^2.0.3
-        version: 2.0.3
+      '@types/passport-local':
+        specifier: ^1.0.36
+        version: 1.0.36
+      '@types/supertest':
+        specifier: ^2.0.14
+        version: 2.0.14
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.7.4
+        version: 6.7.4(@typescript-eslint/parser@6.7.4)(eslint@8.50.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.7.4
+        version: 6.7.4(eslint@8.50.0)(typescript@5.2.2)
+      eslint:
+        specifier: ^8.50.0
+        version: 8.50.0
+      eslint-config-airbnb-typescript:
+        specifier: ^17.1.0
+        version: 17.1.0(@typescript-eslint/eslint-plugin@6.7.4)(@typescript-eslint/parser@6.7.4)(eslint-plugin-import@2.28.1)(eslint@8.50.0)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.0.0(eslint@8.50.0)
+      eslint-plugin-import:
+        specifier: ^2.28.1
+        version: 2.28.1(@typescript-eslint/parser@6.7.4)(eslint-import-resolver-typescript@3.5.5)(eslint@8.50.0)
+      eslint-plugin-prettier:
+        specifier: ^5.0.0
+        version: 5.0.0(@types/eslint@8.44.3)(eslint-config-prettier@9.0.0)(eslint@8.50.0)(prettier@3.0.3)
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@20.8.2)(ts-node@10.9.1)
+      jest-mock:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-mock-extended:
+        specifier: 3.0.5
+        version: 3.0.5(jest@29.7.0)(typescript@5.2.2)
+      prettier:
+        specifier: ^3.0.3
+        version: 3.0.3
+      prisma:
+        specifier: ^5.10.0
+        version: 5.10.0
+      supertest:
+        specifier: ^6.3.3
+        version: 6.3.3
+      ts-jest:
+        specifier: ^29.1.1
+        version: 29.1.1(@babel/core@7.23.0)(esbuild@0.18.17)(jest@29.7.0)(typescript@5.2.2)
+      ts-loader:
+        specifier: ^9.4.4
+        version: 9.4.4(typescript@5.2.2)(webpack@5.88.2)
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.1(@types/node@20.8.2)(typescript@5.2.2)
+      tsconfig-paths:
+        specifier: ^4.2.0
+        version: 4.2.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
+  packages/api-load-balancer:
+    dependencies:
+      '@fastify/static':
+        specifier: ^6.11.2
+        version: 6.11.2
+      '@fastify/view':
+        specifier: ^8.2.0
+        version: 8.2.0
+      '@nestjs/bull':
+        specifier: ^10.0.1
+        version: 10.0.1(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(bull@4.11.3)
+      '@nestjs/cache-manager':
+        specifier: ^2.1.0
+        version: 2.1.0(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(cache-manager@5.2.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/common':
+        specifier: ^10.2.7
+        version: 10.2.7(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/config':
+        specifier: ^3.1.1
+        version: 3.1.1(@nestjs/common@10.2.7)(reflect-metadata@0.1.13)
+      '@nestjs/core':
+        specifier: ^10.2.7
+        version: 10.2.7(@nestjs/common@10.2.7)(@nestjs/platform-express@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/jwt':
+        specifier: ^10.1.1
+        version: 10.1.1(@nestjs/common@10.2.7)
+      '@nestjs/passport':
+        specifier: ^10.0.2
+        version: 10.0.2(@nestjs/common@10.2.7)(passport@0.6.0)
+      '@nestjs/platform-express':
+        specifier: ^10.2.7
+        version: 10.2.7(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)
+      '@nestjs/platform-fastify':
+        specifier: ^10.2.7
+        version: 10.2.7(@fastify/static@6.11.2)(@fastify/view@8.2.0)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)
+      '@nestjs/schedule':
+        specifier: ^4.0.0
+        version: 4.0.0(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(reflect-metadata@0.1.13)
+      '@nestjs/swagger':
+        specifier: ^7.1.13
+        version: 7.1.13(@fastify/static@6.11.2)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)
+      '@prisma/client':
+        specifier: ^5.10.0
+        version: 5.10.0(prisma@5.10.0)
+      '@taaabs/shared':
+        specifier: workspace:*
+        version: link:../shared
+      '@tirke/node-cache-manager-ioredis':
+        specifier: ^3.4.0
+        version: 3.4.0
+      axios:
+        specifier: ^1.5.1
+        version: 1.5.1
+      blocked:
+        specifier: ^1.3.0
+        version: 1.3.0
+      cache-manager:
+        specifier: ^5.2.3
+        version: 5.2.3
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: ^0.14.0
+        version: 0.14.0
+      crypto-js:
+        specifier: ^4.1.1
+        version: 4.1.1
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
+      exponential-backoff:
+        specifier: ^3.1.1
+        version: 3.1.1
+      fastify:
+        specifier: ^4.23.2
+        version: 4.23.2
+      ioredis:
+        specifier: ^5.3.2
+        version: 5.3.2
+      is-domain-name:
+        specifier: ^1.0.1
+        version: 1.0.1
+      jsonwebtoken:
+        specifier: ^9.0.2
+        version: 9.0.2
+      passport:
+        specifier: ^0.6.0
+        version: 0.6.0
+      passport-jwt:
+        specifier: ^4.0.1
+        version: 4.0.1
+      passport-local:
+        specifier: ^1.0.0
+        version: 1.0.0
+      piscina:
+        specifier: ^4.1.0
+        version: 4.1.0
+      reflect-metadata:
+        specifier: ^0.1.13
+        version: 0.1.13
+      rimraf:
+        specifier: ^5.0.5
+        version: 5.0.5
+      rxjs:
+        specifier: ^7.8.1
+        version: 7.8.1
+      snappy:
+        specifier: ^7.2.2
+        version: 7.2.2
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@nestjs/cli':
+        specifier: ^10.1.18
+        version: 10.1.18
+      '@nestjs/schematics':
+        specifier: ^10.0.2
+        version: 10.0.2(chokidar@3.5.3)(typescript@5.2.2)
+      '@nestjs/testing':
+        specifier: ^10.2.7
+        version: 10.2.7(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(@nestjs/platform-express@10.2.7)
+      '@types/crypto-js':
+        specifier: ^4.1.2
+        version: 4.1.2
+      '@types/eslint':
+        specifier: ^8.44.3
+        version: 8.44.3
+      '@types/is-domain-name':
+        specifier: ^1.0.0
+        version: 1.0.0
+      '@types/jest':
+        specifier: ^29.5.5
+        version: 29.5.5
+      '@types/jsonwebtoken':
+        specifier: ^9.0.3
+        version: 9.0.3
+      '@types/node':
+        specifier: ^20.8.2
+        version: 20.8.2
+      '@types/passport-local':
+        specifier: ^1.0.36
+        version: 1.0.36
+      '@types/supertest':
+        specifier: ^2.0.14
+        version: 2.0.14
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.7.4
+        version: 6.7.4(@typescript-eslint/parser@6.7.4)(eslint@8.50.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.7.4
+        version: 6.7.4(eslint@8.50.0)(typescript@5.2.2)
+      eslint:
+        specifier: ^8.50.0
+        version: 8.50.0
+      eslint-config-airbnb-typescript:
+        specifier: ^17.1.0
+        version: 17.1.0(@typescript-eslint/eslint-plugin@6.7.4)(@typescript-eslint/parser@6.7.4)(eslint-plugin-import@2.28.1)(eslint@8.50.0)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.0.0(eslint@8.50.0)
+      eslint-plugin-import:
+        specifier: ^2.28.1
+        version: 2.28.1(@typescript-eslint/parser@6.7.4)(eslint-import-resolver-typescript@3.5.5)(eslint@8.50.0)
+      eslint-plugin-prettier:
+        specifier: ^5.0.0
+        version: 5.0.0(@types/eslint@8.44.3)(eslint-config-prettier@9.0.0)(eslint@8.50.0)(prettier@3.0.3)
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@20.8.2)(ts-node@10.9.1)
+      jest-mock:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-mock-extended:
+        specifier: 3.0.5
+        version: 3.0.5(jest@29.7.0)(typescript@5.2.2)
+      prettier:
+        specifier: ^3.0.3
+        version: 3.0.3
+      prisma:
+        specifier: ^5.10.0
+        version: 5.10.0
+      supertest:
+        specifier: ^6.3.3
+        version: 6.3.3
+      ts-jest:
+        specifier: ^29.1.1
+        version: 29.1.1(@babel/core@7.23.0)(esbuild@0.18.17)(jest@29.7.0)(typescript@5.2.2)
+      ts-loader:
+        specifier: ^9.4.4
+        version: 9.4.4(typescript@5.2.2)(webpack@5.88.2)
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.1(@types/node@20.8.2)(typescript@5.2.2)
+      tsconfig-paths:
+        specifier: ^4.2.0
+        version: 4.2.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
+  packages/api-pop:
+    dependencies:
+      '@fastify/static':
+        specifier: ^6.11.2
+        version: 6.11.2
+      '@fastify/view':
+        specifier: ^8.2.0
+        version: 8.2.0
+      '@nestjs/bull':
+        specifier: ^10.0.1
+        version: 10.0.1(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(bull@4.11.3)
+      '@nestjs/cache-manager':
+        specifier: ^2.1.0
+        version: 2.1.0(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(cache-manager@5.2.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/common':
+        specifier: ^10.2.7
+        version: 10.2.7(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/config':
+        specifier: ^3.1.1
+        version: 3.1.1(@nestjs/common@10.2.7)(reflect-metadata@0.1.13)
+      '@nestjs/core':
+        specifier: ^10.2.7
+        version: 10.2.7(@nestjs/common@10.2.7)(@nestjs/platform-express@10.2.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/jwt':
+        specifier: ^10.1.1
+        version: 10.1.1(@nestjs/common@10.2.7)
+      '@nestjs/passport':
+        specifier: ^10.0.2
+        version: 10.0.2(@nestjs/common@10.2.7)(passport@0.6.0)
+      '@nestjs/platform-express':
+        specifier: ^10.2.7
+        version: 10.2.7(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)
+      '@nestjs/platform-fastify':
+        specifier: ^10.2.7
+        version: 10.2.7(@fastify/static@6.11.2)(@fastify/view@8.2.0)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)
+      '@nestjs/schedule':
+        specifier: ^4.0.0
+        version: 4.0.0(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(reflect-metadata@0.1.13)
+      '@nestjs/swagger':
+        specifier: ^7.1.13
+        version: 7.1.13(@fastify/static@6.11.2)(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)
+      '@prisma/client':
+        specifier: ^5.10.0
+        version: 5.10.0(prisma@5.10.0)
+      '@taaabs/shared':
+        specifier: workspace:*
+        version: link:../shared
+      '@tirke/node-cache-manager-ioredis':
+        specifier: ^3.4.0
+        version: 3.4.0
+      axios:
+        specifier: ^1.5.1
+        version: 1.5.1
+      blocked:
+        specifier: ^1.3.0
+        version: 1.3.0
+      cache-manager:
+        specifier: ^5.2.3
+        version: 5.2.3
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: ^0.14.0
+        version: 0.14.0
+      crypto-js:
+        specifier: ^4.1.1
+        version: 4.1.1
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
+      exponential-backoff:
+        specifier: ^3.1.1
+        version: 3.1.1
+      fastify:
+        specifier: ^4.23.2
+        version: 4.23.2
+      ioredis:
+        specifier: ^5.3.2
+        version: 5.3.2
+      is-domain-name:
+        specifier: ^1.0.1
+        version: 1.0.1
+      jsonwebtoken:
+        specifier: ^9.0.2
+        version: 9.0.2
+      passport:
+        specifier: ^0.6.0
+        version: 0.6.0
+      passport-jwt:
+        specifier: ^4.0.1
+        version: 4.0.1
+      passport-local:
+        specifier: ^1.0.0
+        version: 1.0.0
+      piscina:
+        specifier: ^4.1.0
+        version: 4.1.0
+      reflect-metadata:
+        specifier: ^0.1.13
+        version: 0.1.13
+      rimraf:
+        specifier: ^5.0.5
+        version: 5.0.5
+      rxjs:
+        specifier: ^7.8.1
+        version: 7.8.1
+      snappy:
+        specifier: ^7.2.2
+        version: 7.2.2
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@nestjs/cli':
+        specifier: ^10.1.18
+        version: 10.1.18
+      '@nestjs/schematics':
+        specifier: ^10.0.2
+        version: 10.0.2(chokidar@3.5.3)(typescript@5.2.2)
+      '@nestjs/testing':
+        specifier: ^10.2.7
+        version: 10.2.7(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(@nestjs/platform-express@10.2.7)
+      '@types/crypto-js':
+        specifier: ^4.1.2
+        version: 4.1.2
+      '@types/eslint':
+        specifier: ^8.44.3
+        version: 8.44.3
+      '@types/is-domain-name':
+        specifier: ^1.0.0
+        version: 1.0.0
+      '@types/jest':
+        specifier: ^29.5.5
+        version: 29.5.5
+      '@types/jsonwebtoken':
+        specifier: ^9.0.3
+        version: 9.0.3
+      '@types/node':
+        specifier: ^20.8.2
+        version: 20.8.2
       '@types/passport-local':
         specifier: ^1.0.36
         version: 1.0.36
@@ -241,6 +639,9 @@ importers:
       '@taaabs/shared':
         specifier: workspace:*
         version: link:../shared
+      argon2id:
+        specifier: ^1.0.1
+        version: 1.0.1
       crypto-js:
         specifier: ^4.1.1
         version: 4.1.1
@@ -333,6 +734,9 @@ importers:
       '@taaabs/web-ui':
         specifier: workspace:*
         version: link:../web-ui
+      argon2id:
+        specifier: ^1.0.1
+        version: 1.0.1
       awesome-debounce-promise:
         specifier: ^2.1.0
         version: 2.1.0
@@ -378,6 +782,9 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+      wasm-loader:
+        specifier: ^1.3.0
+        version: 1.3.0(wasm-dce@1.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.23.0
@@ -4908,10 +5315,6 @@ packages:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
     dev: true
 
-  /@types/pako@2.0.3:
-    resolution: {integrity: sha512-bq0hMV9opAcrmE0Byyo0fY3Ew4tgOevJmQ9grUhpXQhYfyLJ1Kqg3P33JT5fdbT2AjeAjR51zqqVjAL/HMkx7Q==}
-    dev: true
-
   /@types/parse-json@4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
     dev: true
@@ -5696,6 +6099,10 @@ packages:
       - supports-color
     dev: false
 
+  /argon2id@1.0.1:
+    resolution: {integrity: sha512-rsiD3lX+0L0CsiZARp3bf9EGxprtuWAT7PpiJd+Fk53URV0/USOQkBIP1dLTV8t6aui0ECbymQ9W9YCcTd6XgA==}
+    dev: false
+
   /argparse@1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
     dependencies:
@@ -5724,8 +6131,8 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      define-properties: 1.2.1
+      es-abstract: 1.22.2
       get-intrinsic: 1.2.1
       is-string: 1.0.7
 
@@ -5778,8 +6185,8 @@ packages:
     resolution: {integrity: sha512-pZYPXPRl2PqWcsUs6LOMn+1f1532nEoPTYowBtqLwAW+W8vSVhkIGnmOX1t/UQjD6YGI0vcD2B1U7ZFGQH9jnQ==}
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      define-properties: 1.2.1
+      es-abstract: 1.22.2
       es-shim-unscopables: 1.0.0
       get-intrinsic: 1.2.1
     dev: false
@@ -5795,7 +6202,6 @@ packages:
       get-intrinsic: 1.2.1
       is-array-buffer: 3.0.2
       is-shared-array-buffer: 1.0.2
-    dev: false
 
   /asap@2.0.6:
     resolution: {integrity: sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==}
@@ -6061,6 +6467,12 @@ packages:
       babel-preset-current-node-syntax: 1.0.1(@babel/core@7.23.0)
     dev: true
 
+  /babylon@7.0.0-beta.47:
+    resolution: {integrity: sha512-+rq2cr4GDhtToEzKFD6KZZMDBXhjFAr9JjPw9pAppZACeEWqNM294j+NdBzkSHYXwzzBmVjZ3nEVJlOhbR2gOQ==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+    dev: false
+
   /balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
@@ -6093,6 +6505,10 @@ packages:
   /big-integer@1.6.51:
     resolution: {integrity: sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==}
     engines: {node: '>=0.6'}
+
+  /big.js@5.2.2:
+    resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==}
+    dev: false
 
   /binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
@@ -7336,6 +7752,11 @@ packages:
   /emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
 
+  /emojis-list@3.0.0:
+    resolution: {integrity: sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==}
+    engines: {node: '>= 4'}
+    dev: false
+
   /encodeurl@1.0.2:
     resolution: {integrity: sha512-TPJXq8JqFaVYm2CWmPvnP2Iyo4ZSM7/QKcSmuMLDObfpH5fi7RUGmd/rTDf+rut/saiDiQEeVTNgAmJEdAOx0w==}
     engines: {node: '>= 0.8'}
@@ -7450,7 +7871,6 @@ packages:
       typed-array-length: 1.0.4
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.11
-    dev: false
 
   /es-get-iterator@1.1.3:
     resolution: {integrity: sha512-sPZmqHBe6JIiTfN5q2pEi//TwxmAFHwj/XEuYjTuse78i8KxaqMTTzxPoFKuzRpDpTJ+0NAbpfenkmH2rePtuw==}
@@ -8506,7 +8926,6 @@ packages:
       define-properties: 1.2.1
       es-abstract: 1.22.2
       functions-have-names: 1.2.3
-    dev: false
 
   /functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
@@ -9309,7 +9728,6 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       which-typed-array: 1.1.11
-    dev: false
 
   /is-unicode-supported@0.1.0:
     resolution: {integrity: sha512-knxG2q4UC3u8stRGyAVJCOdxFmv5DZiRcdlIaAQXAbSfJya+OhopNotLQrstBhququ4ZpuKbDc/8S6mgXgPFPw==}
@@ -10600,6 +11018,15 @@ packages:
     engines: {node: '>=6.11.5'}
     dev: true
 
+  /loader-utils@1.4.2:
+    resolution: {integrity: sha512-I5d00Pd/jwMD2QCduo657+YM/6L3KZu++pmX9VFncxaxvHcru9jx1lBaFft+r4Mt2jK0Yhp41XlRAihzPxHNCg==}
+    engines: {node: '>=4.0.0'}
+    dependencies:
+      big.js: 5.2.2
+      emojis-list: 3.0.0
+      json5: 1.0.2
+    dev: false
+
   /localforage@1.10.0:
     resolution: {integrity: sha512-14/H1aX7hzBBmmh7sGPd+AOMkkIrHM3Z1PAyGgZigA1H1p5O5ANnMyWzvpAETtG68/dC4pC0ncy3+PPGzXZHPg==}
     dependencies:
@@ -10701,6 +11128,11 @@ packages:
       slice-ansi: 4.0.0
       wrap-ansi: 6.2.0
     dev: true
+
+  /long@3.2.0:
+    resolution: {integrity: sha512-ZYvPPOMqUwPoDsbJaR10iQJYnMuZhRTvHYl62ErLIEX7RgFlziSBUUvrt3OVfc47QlHHpzPZYP17g3Fv7oeJkg==}
+    engines: {node: '>=0.6'}
+    dev: false
 
   /loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -11301,8 +11733,8 @@ packages:
   /object.hasown@1.1.2:
     resolution: {integrity: sha512-B5UIT3J1W+WuWIU55h0mjlwaqxiE5vYENJXIXZ4VFe05pNYrkKuK0U/6aFcb0pKywYJh7IhfoqUfKVmrJJHZHw==}
     dependencies:
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      define-properties: 1.2.1
+      es-abstract: 1.22.2
     dev: false
 
   /object.values@1.1.6:
@@ -11457,10 +11889,6 @@ packages:
 
   /pako@1.0.11:
     resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
-    dev: false
-
-  /pako@2.1.0:
-    resolution: {integrity: sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==}
     dev: false
 
   /parent-module@1.0.1:
@@ -12516,7 +12944,6 @@ packages:
       call-bind: 1.0.2
       define-properties: 1.2.1
       set-function-name: 2.0.1
-    dev: false
 
   /regexpu-core@5.3.2:
     resolution: {integrity: sha512-RAM5FlZz+Lhmo7db9L298p2vHP5ZywrVXmVXpmAD9GuL5MPH6t9ROw1iA/wfHkQ76Qe7AaPF0nGuim96/IrQMQ==}
@@ -12726,7 +13153,6 @@ packages:
       get-intrinsic: 1.2.1
       has-symbols: 1.0.3
       isarray: 2.0.5
-    dev: false
 
   /safe-buffer@5.1.2:
     resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
@@ -12864,7 +13290,6 @@ packages:
       define-data-property: 1.1.0
       functions-have-names: 1.2.3
       has-property-descriptors: 1.0.0
-    dev: false
 
   /setprototypeof@1.2.0:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
@@ -13138,8 +13563,8 @@ packages:
     resolution: {integrity: sha512-6zOCOcJ+RJAQshcTvXPHoxoQGONa3e/Lqx90wUA+wEzX78sg5Bo+1tQo4N0pohS0erG9qtCqJDjNCQBjeWVxyg==}
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      define-properties: 1.2.1
+      es-abstract: 1.22.2
       get-intrinsic: 1.2.1
       has-symbols: 1.0.3
       internal-slot: 1.0.5
@@ -13162,7 +13587,6 @@ packages:
       call-bind: 1.0.2
       define-properties: 1.2.1
       es-abstract: 1.22.2
-    dev: false
 
   /string.prototype.trimend@1.0.6:
     resolution: {integrity: sha512-JySq+4mrPf9EsDBEDYMOb/lM7XQLulwg5R/m1r0PXEFqrV0qHvl58sdTilSXtKOflCsK2E8jxf+GKC0T07RWwQ==}
@@ -13177,7 +13601,6 @@ packages:
       call-bind: 1.0.2
       define-properties: 1.2.1
       es-abstract: 1.22.2
-    dev: false
 
   /string.prototype.trimstart@1.0.6:
     resolution: {integrity: sha512-omqjMDaY92pbn5HOX7f9IccLA+U1tA9GvtU4JrodiXFfYB7jPzzHpRzpglLAjtUV6bB557zwClJezTqnAiYnQA==}
@@ -13192,7 +13615,6 @@ packages:
       call-bind: 1.0.2
       define-properties: 1.2.1
       es-abstract: 1.22.2
-    dev: false
 
   /string_decoder@1.1.1:
     resolution: {integrity: sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==}
@@ -13821,7 +14243,6 @@ packages:
       call-bind: 1.0.2
       get-intrinsic: 1.2.1
       is-typed-array: 1.1.12
-    dev: false
 
   /typed-array-byte-length@1.0.0:
     resolution: {integrity: sha512-Or/+kvLxNpeQ9DtSydonMxCx+9ZXOswtwJn17SNLvhptaXYDJvkFFP5zbfU/uLmvnBJlI4yrnXRxpdWH/M5tNA==}
@@ -13831,7 +14252,6 @@ packages:
       for-each: 0.3.3
       has-proto: 1.0.1
       is-typed-array: 1.1.12
-    dev: false
 
   /typed-array-byte-offset@1.0.0:
     resolution: {integrity: sha512-RD97prjEt9EL8YgAgpOkf3O4IF9lhJFr9g0htQkm0rchFp/Vx7LW5Q8fSXXub7BXAODyUQohRMyOc3faCPd0hg==}
@@ -13842,7 +14262,6 @@ packages:
       for-each: 0.3.3
       has-proto: 1.0.1
       is-typed-array: 1.1.12
-    dev: false
 
   /typed-array-length@1.0.4:
     resolution: {integrity: sha512-KjZypGq+I/H7HI5HlOoGHkWUUGq+Q0TPhQurLbyrVrvnKTBgzLhIJ7j6J/XTQOi0d1RjyZ0wdas8bKs2p0x3Ng==}
@@ -14157,6 +14576,27 @@ packages:
       makeerror: 1.0.12
     dev: true
 
+  /wasm-dce@1.0.2:
+    resolution: {integrity: sha512-Fq1+nu43ybsjSnBquLrW/cULmKs61qbv9k8ep13QUe0nABBezMoNAA+j6QY66MW0/eoDVDp1rjXDqQ2VKyS/Xg==}
+    dependencies:
+      '@babel/core': 7.23.0
+      '@babel/traverse': 7.23.0
+      '@babel/types': 7.23.0
+      babylon: 7.0.0-beta.47
+      webassembly-interpreter: 0.0.30
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /wasm-loader@1.3.0(wasm-dce@1.0.2):
+    resolution: {integrity: sha512-R4s75XH+o8qM+WaRrAU9S2rbAMDzob18/S3V8R9ZoFpZkPWLAohWWlzWAp1ybeTkOuuku/X1zJtxiV0pBYxZww==}
+    peerDependencies:
+      wasm-dce: 1.x
+    dependencies:
+      loader-utils: 1.4.2
+      wasm-dce: 1.0.2
+    dev: false
+
   /watchpack@2.4.0:
     resolution: {integrity: sha512-Lcvm7MGST/4fup+ifyKi2hjyIAwcdI4HRgtvTpIUxBRhB+RFtUh8XtDOxUfctVCnhVi+QQj49i91OyvzkJl6cg==}
     engines: {node: '>=10.13.0'}
@@ -14169,6 +14609,19 @@ packages:
     dependencies:
       defaults: 1.0.4
     dev: true
+
+  /webassembly-floating-point-hex-parser@0.1.2:
+    resolution: {integrity: sha512-TUf1H++8U10+stJbFydnvrpG5Sznz5Rilez/oZlV5zI0C/e4cSxd8rALAJ8VpTvjVWxLmL3SVSJUK6Ap9AoiNg==}
+    dev: false
+
+  /webassembly-interpreter@0.0.30:
+    resolution: {integrity: sha512-+Jdy2piEvz9T5j751mOE8+rBO12p+nNW6Fg4kJZ+zP1oUfsm+151sbAbM8AFxWTURmWCGP+r8Lxwfv3pzN1bCQ==}
+    hasBin: true
+    dependencies:
+      '@babel/code-frame': 7.22.13
+      long: 3.2.0
+      webassembly-floating-point-hex-parser: 0.1.2
+    dev: false
 
   /webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
@@ -14306,7 +14759,6 @@ packages:
       for-each: 0.3.3
       gopd: 1.0.1
       has-tostringtag: 1.0.0
-    dev: false
 
   /which-typed-array@1.1.9:
     resolution: {integrity: sha512-w9c4xkx6mPidwp7180ckYWfMmvxpjlZuIudNtDf4N/tTAUB8VJbX25qZoAsrtGuYNnGw3pa0AXgbGKRB8/EceA==}

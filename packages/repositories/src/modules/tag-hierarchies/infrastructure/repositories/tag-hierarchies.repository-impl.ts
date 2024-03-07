@@ -22,9 +22,7 @@ export class TagHierarchies_RepositoryImpl
       name: node.name
         ? node.name
         : node.name_aes
-        ? CryptoJS.AES.decrypt(node.name_aes, 'my_secret_key').toString(
-            CryptoJS.enc.Utf8,
-          )
+        ? AES.decrypt(node.name_aes, 'my_secret_key')
         : '',
       yields: node.yields,
       children:

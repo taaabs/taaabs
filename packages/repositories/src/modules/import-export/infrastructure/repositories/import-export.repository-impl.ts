@@ -34,14 +34,14 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
         title: bookmark.title
           ? bookmark.title
           : bookmark.title_aes
-          ? CryptoJS.AES.decrypt(bookmark.title_aes, 'my_secret_key').toString(
+          ? AES.decrypt(bookmark.title_aes, 'my_secret_key').toString(
               CryptoJS.enc.Utf8,
             )
           : undefined,
         note: bookmark.note
           ? bookmark.note
           : bookmark.note_aes
-          ? CryptoJS.AES.decrypt(bookmark.note_aes, 'my_secret_key').toString(
+          ? AES.decrypt(bookmark.note_aes, 'my_secret_key').toString(
               CryptoJS.enc.Utf8,
             )
           : undefined,
@@ -57,10 +57,10 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                 }
               } else {
                 return {
-                  name: CryptoJS.AES.decrypt(
+                  name: AES.decrypt(
                     tag.name_aes,
                     'my_secret_key',
-                  ).toString(CryptoJS.enc.Utf8),
+                  ),
                   is_public: false,
                 }
               }
@@ -75,18 +75,18 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                   site_path: link.site_path,
                 }
               } else {
-                const site = CryptoJS.AES.decrypt(
+                const site = AES.decrypt(
                   link.site_aes,
                   'my_secret_key',
-                ).toString(CryptoJS.enc.Utf8)
+                )
                 const domain = `${get_domain_from_url(site)}/`
                 const site_path = site.slice(domain.length)
                 return {
                   is_public: false,
-                  url: CryptoJS.AES.decrypt(
+                  url: AES.decrypt(
                     link.url_aes,
                     'my_secret_key',
-                  ).toString(CryptoJS.enc.Utf8),
+                  ),
                   site_path: site_path,
                 }
               }

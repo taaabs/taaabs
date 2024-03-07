@@ -5,12 +5,12 @@ export namespace CreateBookmark_Dto {
   const public_tag_schema = z.object({
     is_public: z.literal(true),
     hash: z.string().length(64),
-    name: z.string().trim().min(1).max(50),
+    name: z.string().trim().min(1).max(system_values.bookmark.tags.max_length),
   })
   const private_tag_schema = z.object({
     is_public: z.literal(false),
     hash: z.string().length(64),
-    name_aes: z.string().min(44).max(64),
+    name_aes: z.string().max(system_values.bookmark.tags.max_length * 10),
   })
   const public_link_schema = z.object({
     is_public: z.literal(true),
@@ -22,7 +22,7 @@ export namespace CreateBookmark_Dto {
     is_public: z.literal(false),
     hash: z.string().length(64),
     url_aes: z.string().max(1000),
-    site_aes: z.string().max(100),
+    site_aes: z.string().max(300),
   })
 
   export const body_schema = z.object({

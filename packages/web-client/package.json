@@ -17,6 +17,7 @@
     "@taaabs/repositories": "workspace:*",
     "@taaabs/shared": "workspace:*",
     "@taaabs/web-ui": "workspace:*",
+    "argon2id": "^1.0.1",
     "awesome-debounce-promise": "^2.1.0",
     "beautiful-react-hooks": "^5.0.0",
     "bookmarks-to-json": "^1.0.5",
@@ -31,7 +32,8 @@
     "react-outside-click-handler": "^1.3.0",
     "react-redux": "^8.1.3",
     "react-toastify": "^9.1.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "wasm-loader": "^1.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",

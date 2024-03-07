@@ -16,6 +16,14 @@ const nextConfig = {
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     })
+    config.module.rules.push({
+      test: /\.wasm$/,
+      use: [
+        {
+          loader: 'wasm-loader',
+        },
+      ],
+    })
 
     return config
   },

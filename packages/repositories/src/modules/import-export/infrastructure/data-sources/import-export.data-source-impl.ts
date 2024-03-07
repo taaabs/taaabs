@@ -7,6 +7,7 @@ import { ListBackups_Dto } from '@shared/types/modules/import-export/list-backup
 import { DownloadBackup_Dto } from '@shared/types/modules/import-export/download-backup.dto'
 import { DownloadBackup_Params } from '../../domain/types/download-backup.params'
 import { system_values } from '@shared/constants/system-values'
+import { AES } from '@repositories/utils/aes/aes'
 
 export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
   constructor(
@@ -37,12 +38,12 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
           title: bookmark.is_public ? title : undefined,
           title_aes:
             !bookmark.is_public && title
-              ? CryptoJS.AES.encrypt(title, 'my_secret_key').toString()
+              ? AES.encrypt(title, 'my_secret_key')
               : undefined,
           note: bookmark.is_public ? note : undefined,
           note_aes:
             !bookmark.is_public && note
-              ? CryptoJS.AES.encrypt(note, 'my_secret_key').toString()
+              ? AES.encrypt(note, 'my_secret_key')
               : undefined,
           created_at: bookmark.created_at || created_at_fallback.toISOString(),
           is_public: bookmark.is_public || undefined,
@@ -67,10 +68,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                       hash: CryptoJS.SHA256(
                         tag.name.trim() + 'my_secret_key',
                       ).toString(),
-                      name_aes: CryptoJS.AES.encrypt(
-                        tag.name.trim(),
-                        'my_secret_key',
-                      ).toString(),
+                      name_aes: AES.encrypt(tag.name.trim(), 'my_secret_key'),
                     }
                   }
                 })
@@ -96,14 +94,11 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                       hash: CryptoJS.SHA256(
                         link.url.trim() + 'my_secret_key',
                       ).toString(),
-                      url_aes: CryptoJS.AES.encrypt(
-                        link.url.trim(),
-                        'my_secret_key',
-                      ).toString(),
-                      site_aes: CryptoJS.AES.encrypt(
+                      url_aes: AES.encrypt(link.url.trim(), 'my_secret_key'),
+                      site_aes: AES.encrypt(
                         link.site_path ? `${domain}/${link.site_path}` : domain,
                         'my_secret_key',
-                      ).toString(),
+                      ),
                     }
                   }
                 })

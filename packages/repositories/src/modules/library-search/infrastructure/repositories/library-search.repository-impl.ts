@@ -5,6 +5,7 @@ import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
 import { GetLastUpdated_Ro } from '../../domain/types/get-last-updated.ro'
 import { LibrarySearch_DataSource } from '../data-sources/library-search.data-source'
 import { GetLastUpdatedAt_Params } from '../../domain/types/get-last-updated-at.params'
+import { AES } from '@repositories/utils/aes/aes'
 
 export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
   constructor(
@@ -57,37 +58,26 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           title: bookmark.title
             ? bookmark.title
             : bookmark.title_aes
-            ? CryptoJS.AES.decrypt(
-                bookmark.title_aes,
-                'my_secret_key',
-              ).toString(CryptoJS.enc.Utf8)
+            ? AES.decrypt(bookmark.title_aes, 'my_secret_key')
             : undefined,
           note: bookmark.note
             ? bookmark.note
             : bookmark.note_aes
-            ? CryptoJS.AES.decrypt(bookmark.note_aes, 'my_secret_key').toString(
-                CryptoJS.enc.Utf8,
-              )
+            ? AES.decrypt(bookmark.note_aes, 'my_secret_key')
             : undefined,
           is_unread: bookmark.is_unread || false,
           sites: bookmark.sites.map((site) => {
             if (site.site) {
               return site.site
             } else {
-              return CryptoJS.AES.decrypt(
-                site.site_aes!,
-                'my_secret_key',
-              ).toString(CryptoJS.enc.Utf8)
+              return AES.decrypt(site.site_aes!, 'my_secret_key')
             }
           }),
           tags: bookmark.tags.map((tag) => {
             if (tag.name) {
               return tag.name
             } else {
-              return CryptoJS.AES.decrypt(
-                tag.name_aes!,
-                'my_secret_key',
-              ).toString(CryptoJS.enc.Utf8)
+              return AES.decrypt(tag.name_aes!, 'my_secret_key')
             }
           }),
           stars: bookmark.stars || 0,

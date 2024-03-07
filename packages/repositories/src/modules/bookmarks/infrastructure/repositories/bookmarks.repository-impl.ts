@@ -1,4 +1,3 @@
-import CryptoJS from 'crypto-js'
 import { Bookmarks_Repository } from '../../domain/repositories/bookmarks.repository'
 import { Bookmarks_DataSource } from '../data-sources/bookmarks.data-source'
 import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
@@ -10,6 +9,7 @@ import { GetBookmarksByIds_Ro } from '../../domain/types/get-bookmarks-by-ids.ro
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
+import { AES } from '@repositories/utils/aes/aes'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -19,6 +19,15 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   ): Promise<GetBookmarks_Ro> {
     const { bookmarks, pagination } =
       await this._bookmarks_data_source.get_bookmarks_on_authorized_user(params)
+
+    const key = await AES.derive_key_from_password('my_secret_key')
+
+    const key2 = await AES.derive_key_from_password2('my_secret_key')
+    const text = 'test'
+    const encrypted_text = await AES.encrypt2(text, key2)
+    console.log(encrypted_text)
+    const decrypted_text = await AES.decrypt2(encrypted_text, key2)
+    console.log(decrypted_text)
 
     return {
       bookmarks: bookmarks
@@ -31,29 +40,19 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             title: bookmark.title
               ? bookmark.title
               : bookmark.title_aes
-              ? CryptoJS.AES.decrypt(
-                  bookmark.title_aes,
-                  'my_secret_key',
-                ).toString(CryptoJS.enc.Utf8)
+              ? AES.decrypt(bookmark.title_aes, key)
               : undefined,
             note: bookmark.note
               ? bookmark.note
               : bookmark.note_aes
-              ? CryptoJS.AES.decrypt(
-                  bookmark.note_aes,
-                  'my_secret_key',
-                ).toString(CryptoJS.enc.Utf8)
+              ? AES.decrypt(bookmark.note_aes, key)
               : undefined,
             is_unread: bookmark.is_unread || false,
             stars: bookmark.stars || 0,
             points: bookmark.points,
             tags: bookmark.tags.map((tag) => ({
               id: tag.id,
-              name: tag.name
-                ? tag.name
-                : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
-                    CryptoJS.enc.Utf8,
-                  ),
+              name: tag.name ? tag.name : AES.decrypt(tag.name_aes!, key),
               is_public: tag.is_public || false,
             })),
             links: bookmark.links.map((link) => {
@@ -61,20 +60,14 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               if (link.is_public) {
                 site_path = link.site_path
               } else {
-                const site = CryptoJS.AES.decrypt(
-                  link.site_aes!,
-                  'my_secret_key',
-                ).toString(CryptoJS.enc.Utf8)
+                const site = AES.decrypt(link.site_aes!, key)
                 const domain = `${get_domain_from_url(site)}/`
                 site_path = site.slice(domain.length)
               }
               return {
                 url: link.is_public
                   ? link.url!
-                  : CryptoJS.AES.decrypt(
-                      link.url_aes!,
-                      'my_secret_key',
-                    ).toString(CryptoJS.enc.Utf8),
+                  : AES.decrypt(link.url_aes!, key),
                 site_path,
                 is_public: link.is_public || false,
                 saves: link.saves,
@@ -147,18 +140,12 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             title: bookmark.title
               ? bookmark.title
               : bookmark.title_aes
-              ? CryptoJS.AES.decrypt(
-                  bookmark.title_aes,
-                  'my_secret_key',
-                ).toString(CryptoJS.enc.Utf8)
+              ? AES.decrypt(bookmark.title_aes, 'my_secret_key')
               : undefined,
             note: bookmark.note
               ? bookmark.note
               : bookmark.note_aes
-              ? CryptoJS.AES.decrypt(
-                  bookmark.note_aes,
-                  'my_secret_key',
-                ).toString(CryptoJS.enc.Utf8)
+              ? AES.decrypt(bookmark.note_aes, 'my_secret_key')
               : undefined,
             is_unread: bookmark.is_unread || false,
             stars: bookmark.stars || 0,
@@ -167,9 +154,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               id: tag.id,
               name: tag.name
                 ? tag.name
-                : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
-                    CryptoJS.enc.Utf8,
-                  ),
+                : AES.decrypt(tag.name_aes!, 'my_secret_key'),
               is_public: tag.is_public || false,
             })),
             links: bookmark.links.map((link) => {
@@ -177,20 +162,14 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               if (link.is_public) {
                 site_path = link.site_path
               } else {
-                const site = CryptoJS.AES.decrypt(
-                  link.site_aes!,
-                  'my_secret_key',
-                ).toString(CryptoJS.enc.Utf8)
+                const site = AES.decrypt(link.site_aes!, 'my_secret_key')
                 const domain = `${get_domain_from_url(site)}/`
                 site_path = site.slice(domain.length)
               }
               return {
                 url: link.is_public
                   ? link.url!
-                  : CryptoJS.AES.decrypt(
-                      link.url_aes!,
-                      'my_secret_key',
-                    ).toString(CryptoJS.enc.Utf8),
+                  : AES.decrypt(link.url_aes!, 'my_secret_key'),
                 site_path,
                 is_public: link.is_public || false,
                 saves: link.saves,
@@ -249,6 +228,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   ): Promise<Bookmark_Entity> {
     const bookmark = await this._bookmarks_data_source.upsert_bookmark(params)
 
+    const argon2di_hash = await AES.derive_key_from_password('my_secret_key')
+
     return {
       id: bookmark.id,
       is_public: bookmark.is_public || false,
@@ -258,27 +239,19 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       title: bookmark.title
         ? bookmark.title
         : bookmark.title_aes
-        ? CryptoJS.AES.decrypt(bookmark.title_aes, 'my_secret_key').toString(
-            CryptoJS.enc.Utf8,
-          )
+        ? AES.decrypt(bookmark.title_aes, argon2di_hash)
         : undefined,
       note: bookmark.note
         ? bookmark.note
         : bookmark.note_aes
-        ? CryptoJS.AES.decrypt(bookmark.note_aes, 'my_secret_key').toString(
-            CryptoJS.enc.Utf8,
-          )
+        ? AES.decrypt(bookmark.note_aes, argon2di_hash)
         : undefined,
       is_unread: bookmark.is_unread || false,
       stars: bookmark.stars || 0,
       points: bookmark.points,
       tags: bookmark.tags.map((tag) => ({
         id: tag.id,
-        name: tag.name
-          ? tag.name
-          : CryptoJS.AES.decrypt(tag.name_aes!, 'my_secret_key').toString(
-              CryptoJS.enc.Utf8,
-            ),
+        name: tag.name ? tag.name : AES.decrypt(tag.name_aes!, argon2di_hash),
         is_public: tag.is_public || false,
       })),
       links: bookmark.links.map((link) => {
@@ -286,19 +259,14 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         if (link.is_public) {
           site_path = link.site_path
         } else {
-          const site = CryptoJS.AES.decrypt(
-            link.site_aes!,
-            'my_secret_key',
-          ).toString(CryptoJS.enc.Utf8)
+          const site = AES.decrypt(link.site_aes!, argon2di_hash)
           const domain = `${get_domain_from_url(site)}/`
           site_path = site.slice(domain.length)
         }
         return {
           url: link.is_public
             ? link.url!
-            : CryptoJS.AES.decrypt(link.url_aes!, 'my_secret_key').toString(
-                CryptoJS.enc.Utf8,
-              ),
+            : AES.decrypt(link.url_aes!, argon2di_hash),
           site_path,
           saves: link.saves,
           is_public: link.is_public || false,
