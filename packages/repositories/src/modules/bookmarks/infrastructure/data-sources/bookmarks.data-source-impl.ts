@@ -1,4 +1,3 @@
-import CryptoJS from 'crypto-js'
 import { Bookmarks_DataSource } from './bookmarks.data-source'
 import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
@@ -10,7 +9,7 @@ import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
-import { AES } from '@repositories/utils/aes/aes'
+import { Crypto } from '@repositories/utils/crypto'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -144,91 +143,92 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async upsert_bookmark(
     params: UpsertBookmark_Params,
   ): Promise<Bookmarks_Dto.Response.AuthorizedBookmark> {
-    const argon2di_hash = await AES.derive_key_from_password('my_secret_key')
+    const key = await Crypto.derive_key_from_password('my_secret_key')
 
     const body: CreateBookmark_Dto.Body = {
       created_at: params.created_at?.toISOString(),
       title: params.is_public ? params.title : undefined,
       title_aes:
         !params.is_public && params.title
-          ? AES.encrypt(params.title, argon2di_hash)
+          ? await Crypto.AES.encrypt(params.title, key)
           : undefined,
       note: params.is_public ? params.note : undefined,
       note_aes:
         !params.is_public && params.note
-          ? AES.encrypt(params.note, argon2di_hash)
+          ? await Crypto.AES.encrypt(params.note, key)
           : undefined,
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,
       stars: params.stars || undefined,
       is_unread: params.is_unread || undefined,
-      tags: params.tags
-        .filter((tag) => tag.name.trim().length > 0)
-        .reduce(
-          (acc, tag) => {
-            const is_duplicate = acc.findIndex((t) => t.name == tag.name) != -1
-            if (is_duplicate) {
-              return acc
+      tags: await Promise.all(
+        params.tags
+          .filter((tag) => tag.name.trim().length > 0)
+          .reduce(
+            (acc, tag) => {
+              const is_duplicate =
+                acc.findIndex((t) => t.name == tag.name) != -1
+              if (is_duplicate) {
+                return acc
+              } else {
+                return [...acc, tag]
+              }
+            },
+            [] as UpsertBookmark_Params['tags'],
+          )
+          .map(async (tag) => {
+            if (tag.is_public) {
+              return {
+                is_public: true,
+                hash: await Crypto.SHA256(tag.name, key),
+                name: tag.name.trim(),
+              }
             } else {
-              return [...acc, tag]
+              return {
+                is_public: false,
+                hash: await Crypto.SHA256(tag.name, key),
+                name_aes: await Crypto.AES.encrypt(tag.name.trim(), key),
+              }
             }
-          },
-          [] as UpsertBookmark_Params['tags'],
-        )
-        .map((tag) => {
-          if (tag.is_public) {
-            return {
-              is_public: true,
-              hash: CryptoJS.SHA256(tag.name + argon2di_hash).toString(),
-              name: tag.name.trim(),
-            }
-          } else {
-            return {
-              is_public: false,
-              hash: CryptoJS.SHA256(tag.name + argon2di_hash).toString(),
-              name_aes: AES.encrypt(tag.name.trim(), argon2di_hash),
-            }
-          }
-        }),
-      links: params.links
-        .filter((link) => link.url.trim().length > 0)
-        .reduce(
-          (acc, link) => {
-            const is_duplicate =
-              acc.findIndex((l) => l.url == link.url.trim()) != -1
-            if (is_duplicate) {
-              return acc
+          }),
+      ),
+      links: await Promise.all(
+        params.links
+          .filter((link) => link.url.trim().length > 0)
+          .reduce(
+            (acc, link) => {
+              const is_duplicate =
+                acc.findIndex((l) => l.url == link.url.trim()) != -1
+              if (is_duplicate) {
+                return acc
+              } else {
+                return [...acc, link]
+              }
+            },
+            [] as UpsertBookmark_Params['links'],
+          )
+          .map(async (link) => {
+            const domain = get_domain_from_url(link.url)
+            if (link.is_public) {
+              return {
+                is_public: true,
+                url: link.url.trim(),
+                hash: await Crypto.SHA256(link.url.trim(), key),
+                site: link.is_public ? link.site_path : undefined,
+              }
             } else {
-              return [...acc, link]
+              return {
+                is_public: false,
+                url_aes: await Crypto.AES.encrypt(link.url.trim(), key),
+                site_aes: await Crypto.AES.encrypt(
+                  link.site_path ? `${domain}/${link.site_path}` : domain,
+                  key,
+                ),
+                hash: await Crypto.SHA256(link.url.trim(), key),
+              }
             }
-          },
-          [] as UpsertBookmark_Params['links'],
-        )
-        .map((link) => {
-          const domain = get_domain_from_url(link.url)
-          if (link.is_public) {
-            return {
-              is_public: true,
-              url: link.url.trim(),
-              hash: CryptoJS.SHA256(
-                link.url.trim() + argon2di_hash,
-              ).toString(),
-              site: link.is_public ? link.site_path : undefined,
-            }
-          } else {
-            return {
-              is_public: false,
-              url_aes: AES.encrypt(link.url.trim(), argon2di_hash),
-              site_aes: AES.encrypt(
-                link.site_path ? `${domain}/${link.site_path}` : domain,
-                argon2di_hash,
-              ),
-              hash: CryptoJS.SHA256(
-                link.url.trim() + argon2di_hash,
-              ).toString(),
-            }
-          }
-        }),
+          }),
+      ),
     }
 
     if (params.bookmark_id) {

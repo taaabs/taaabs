@@ -1,8 +1,8 @@
-import { AES } from '@repositories/utils/aes/aes'
 import { Counts_Repository } from '../../domain/repositories/counts.repository'
 import { Counts_Params } from '../../domain/types/counts.params'
 import { Counts_Ro } from '../../domain/types/counts.ro'
 import { Counts_DataSource } from '../data-sources/counts.data-source'
+import { Crypto } from '@repositories/utils/crypto'
 
 export class Counts_RepositoryImpl implements Counts_Repository {
   constructor(private readonly _counts_data_source: Counts_DataSource) {}
@@ -13,31 +13,34 @@ export class Counts_RepositoryImpl implements Counts_Repository {
     const data =
       await this._counts_data_source.get_counts_on_authorized_user(params)
 
-    const argon2di_hash = await AES.derive_key_from_password('my_secret_key')
+    const key = await Crypto.derive_key_from_password('my_secret_key')
 
     return {
       months: data.months
-        ? Object.entries(data.months).reduce(
-            (acc, [k, v]) => ({
+        ? await async_reduce(
+            Object.entries(data.months),
+            async (acc, [k, v]) => ({
               ...acc,
               [k]: {
                 bookmark_count: v.bookmark_count,
                 starred_count: v.starred_count,
                 unread_count: v.unread_count,
-                tags: v.tags
-                  .map((tag) => ({
-                    ...tag,
-                    name: tag.name
-                      ? tag.name
-                      : AES.decrypt(tag.name_aes!, argon2di_hash),
-                  }))
-                  .reduce(
-                    (acc, el) => ({
-                      ...acc,
-                      [el.name]: { id: el.id, yields: el.yields },
-                    }),
-                    {},
-                  ),
+                tags: (
+                  await Promise.all(
+                    v.tags.map(async (tag) => ({
+                      ...tag,
+                      name: tag.name
+                        ? tag.name
+                        : await Crypto.AES.decrypt(tag.name_aes!, key),
+                    })),
+                  )
+                ).reduce(
+                  (acc, el) => ({
+                    ...acc,
+                    [el.name]: { id: el.id, yields: el.yields },
+                  }),
+                  {},
+                ),
               },
             }),
             {},
@@ -76,4 +79,16 @@ export class Counts_RepositoryImpl implements Counts_Repository {
       is_stale: data.is_stale,
     }
   }
+}
+
+async function async_reduce<T, U>(
+  array: T[],
+  reducer: (accumulator: U, current_value: T) => Promise<U>,
+  initial_value: U,
+): Promise<U> {
+  let accumulator = initial_value
+  for (const current_value of array) {
+    accumulator = await reducer(accumulator, current_value)
+  }
+  return accumulator
 }

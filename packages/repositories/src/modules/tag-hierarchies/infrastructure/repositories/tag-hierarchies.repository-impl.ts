@@ -1,4 +1,3 @@
-import CryptoJS from 'crypto-js'
 import { TagHierarchies_Dto } from '@shared/types/modules/tag-hierarchies/tag-hierarchies.dto'
 import { TagHierarchyNode_Entity } from '../../domain/entities/tag-hierarchy-node.entity'
 import { TagHierarchies_Repository } from '../../domain/repositories/tag-hierarchies.repository'
@@ -6,6 +5,7 @@ import { GetTagHierarchies_Ro } from '../../domain/types/get-tag-hierarchies.ro'
 import { TagHierarchies_DataSource } from '../data-sources/tag-hierarchies.data-source'
 import { GetTagHierarchies_Params } from '../../domain/types/get-tag-hierarchies.params'
 import { UpdateTagHierarchies_Params } from '../../domain/types/update-tag-hierarchies.params'
+import { Crypto } from '@repositories/utils/crypto'
 
 export class TagHierarchies_RepositoryImpl
   implements TagHierarchies_Repository
@@ -14,20 +14,24 @@ export class TagHierarchies_RepositoryImpl
     private readonly _tag_hierarchies_data_source: TagHierarchies_DataSource,
   ) {}
 
-  private _parse_authorized_tree_node(
+  private async _parse_authorized_tree_node(
     node: TagHierarchies_Dto.AuthorizedNode,
-  ): TagHierarchyNode_Entity {
+  ): Promise<TagHierarchyNode_Entity> {
+    const key = await Crypto.derive_key_from_password('my_secret_key')
+
     return {
       id: node.id,
       name: node.name
         ? node.name
         : node.name_aes
-        ? AES.decrypt(node.name_aes, 'my_secret_key')
+        ? await Crypto.AES.decrypt(node.name_aes, key)
         : '',
       yields: node.yields,
-      children:
-        node.children?.map((node) => this._parse_authorized_tree_node(node)) ||
-        [],
+      children: await Promise.all(
+        node.children?.map(
+          async (node) => await this._parse_authorized_tree_node(node),
+        ) || [],
+      ),
     }
   }
 
@@ -40,7 +44,9 @@ export class TagHierarchies_RepositoryImpl
       )
 
     return {
-      tree: tree.map((node) => this._parse_authorized_tree_node(node)),
+      tree: await Promise.all(
+        tree.map(async (node) => await this._parse_authorized_tree_node(node)),
+      ),
       total,
     }
   }
@@ -75,7 +81,9 @@ export class TagHierarchies_RepositoryImpl
       await this._tag_hierarchies_data_source.update_tag_hierarchies(params)
 
     return {
-      tree: tree.map((node) => this._parse_authorized_tree_node(node)),
+      tree: await Promise.all(
+        tree.map((node) => this._parse_authorized_tree_node(node)),
+      ),
       total,
     }
   }

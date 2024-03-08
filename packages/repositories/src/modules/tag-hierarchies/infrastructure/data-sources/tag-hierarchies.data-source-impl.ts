@@ -1,10 +1,10 @@
-import CryptoJS from 'crypto-js'
 import { TagHierarchies_Dto } from '@shared/types/modules/tag-hierarchies/tag-hierarchies.dto'
 import { TagHierarchies_DataSource } from './tag-hierarchies.data-source'
 import { GetTagHierarchies_Params } from '../../domain/types/get-tag-hierarchies.params'
 import { UpdateTagHierarchies_Params } from '../../domain/types/update-tag-hierarchies.params'
 import { TagHierarchyNode_Entity } from '../../domain/entities/tag-hierarchy-node.entity'
 import { UpdateTagHierarchies_Dto } from '@shared/types/modules/tag-hierarchies/update-tag-hierarchies.dto'
+import { Crypto } from '@repositories/utils/crypto'
 
 export class TagHierarchies_DataSourceImpl
   implements TagHierarchies_DataSource
@@ -59,12 +59,15 @@ export class TagHierarchies_DataSourceImpl
   public async update_tag_hierarchies(
     params: UpdateTagHierarchies_Params,
   ): Promise<TagHierarchies_Dto.Response.Authorized> {
-    const parse_node = (
+    const key = await Crypto.derive_key_from_password('my_secret_key')
+    const parse_node = async (
       node: TagHierarchyNode_Entity,
-    ): UpdateTagHierarchies_Dto.Node => {
+    ): Promise<UpdateTagHierarchies_Dto.Node> => {
       return {
-        hash: CryptoJS.SHA256(node.name + 'my_secret_key').toString(),
-        children: node.children.map((node) => parse_node(node)),
+        hash: await Crypto.SHA256(node.name, key),
+        children: await Promise.all(
+          node.children.map(async (node) => await parse_node(node)),
+        ),
       }
     }
 
@@ -77,7 +80,9 @@ export class TagHierarchies_DataSourceImpl
     }
 
     const body: UpdateTagHierarchies_Dto.Body = {
-      tree: params.tree.map((node) => parse_node(node)),
+      tree: await Promise.all(
+        params.tree.map(async (node) => await parse_node(node)),
+      ),
     }
 
     return await fetch(

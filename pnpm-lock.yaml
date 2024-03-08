@@ -90,9 +90,6 @@ importers:
       class-validator:
         specifier: ^0.14.0
         version: 0.14.0
-      crypto-js:
-        specifier: ^4.1.1
-        version: 4.1.1
       dotenv:
         specifier: ^16.3.1
         version: 16.3.1
@@ -148,9 +145,6 @@ importers:
       '@nestjs/testing':
         specifier: ^10.2.7
         version: 10.2.7(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(@nestjs/platform-express@10.2.7)
-      '@types/crypto-js':
-        specifier: ^4.1.2
-        version: 4.1.2
       '@types/eslint':
         specifier: ^8.44.3
         version: 8.44.3
@@ -292,9 +286,6 @@ importers:
       class-validator:
         specifier: ^0.14.0
         version: 0.14.0
-      crypto-js:
-        specifier: ^4.1.1
-        version: 4.1.1
       dotenv:
         specifier: ^16.3.1
         version: 16.3.1
@@ -350,9 +341,6 @@ importers:
       '@nestjs/testing':
         specifier: ^10.2.7
         version: 10.2.7(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(@nestjs/platform-express@10.2.7)
-      '@types/crypto-js':
-        specifier: ^4.1.2
-        version: 4.1.2
       '@types/eslint':
         specifier: ^8.44.3
         version: 8.44.3
@@ -494,9 +482,6 @@ importers:
       class-validator:
         specifier: ^0.14.0
         version: 0.14.0
-      crypto-js:
-        specifier: ^4.1.1
-        version: 4.1.1
       dotenv:
         specifier: ^16.3.1
         version: 16.3.1
@@ -552,9 +537,6 @@ importers:
       '@nestjs/testing':
         specifier: ^10.2.7
         version: 10.2.7(@nestjs/common@10.2.7)(@nestjs/core@10.2.7)(@nestjs/platform-express@10.2.7)
-      '@types/crypto-js':
-        specifier: ^4.1.2
-        version: 4.1.2
       '@types/eslint':
         specifier: ^8.44.3
         version: 8.44.3
@@ -642,9 +624,6 @@ importers:
       argon2id:
         specifier: ^1.0.1
         version: 1.0.1
-      crypto-js:
-        specifier: ^4.1.1
-        version: 4.1.1
       query-string:
         specifier: ^8.1.0
         version: 8.1.0
@@ -655,9 +634,6 @@ importers:
         specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
-      '@types/crypto-js':
-        specifier: ^4.1.2
-        version: 4.1.2
       '@types/jest':
         specifier: ^29.4.0
         version: 29.5.1
@@ -5073,10 +5049,6 @@ packages:
       '@types/node': 20.8.2
     dev: true
 
-  /@types/crypto-js@4.1.2:
-    resolution: {integrity: sha512-t33RNmTu5ufG/sorROIafiCVJMx3jz95bXUMoPAZcUD14fxMXnuTzqzXZoxpR0tNx2xpw11Dlmem9vGCsrSOfA==}
-    dev: true
-
   /@types/css-modules-loader-core@1.1.0:
     resolution: {integrity: sha512-LMbyf7THPqLCPHIXAj79v9Pa193MeOHgp1fBFRR6s6VvEVHUFIcM5bc/WttslOf+lao4TURNN1X1zfW5wr2CHQ==}
     dependencies:
@@ -7193,10 +7165,6 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
-
-  /crypto-js@4.1.1:
-    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
-    dev: false
 
   /crypto-random-string@2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}
