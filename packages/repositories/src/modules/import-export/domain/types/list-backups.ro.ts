@@ -1,5 +1,5 @@
 export type ListBackups_Ro = {
-  id: number
+  id: string
   created_at: string
   name?: string
 }[]

@@ -17,7 +17,7 @@ export const use_session_storage_cleanup = () => {
     if (query_params_history.length == HISTORY_LIMIT) {
       const oldest_query_params = query_params_history[0]
       for (const key in sessionStorage) {
-        if (key.endsWith(`/${params.username}?${oldest_query_params}`)) {
+        if (key.endsWith(oldest_query_params)) {
           sessionStorage.removeItem(key)
         }
       }
@@ -30,7 +30,7 @@ export const use_session_storage_cleanup = () => {
         ...query_params_history.filter(
           (entry) => entry != query_params.toString(),
         ),
-        `${params.username}?${query_params.toString()}`,
+        `${params.username || ''}?${query_params.toString()}`,
       ]),
     )
   }, [query_params])
