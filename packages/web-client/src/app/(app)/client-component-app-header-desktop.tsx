@@ -82,7 +82,9 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         href: `/${params.username}`,
         is_active: pathname == `/${params.username}`,
         on_click: () => {
-          clear_library_session_storage({ username: params.username as string })
+          clear_library_session_storage({
+            username: params.username as string,
+          })
           router.push(`/${params.username}`)
         },
       },

@@ -69,12 +69,12 @@ export const use_tag_view_options = () => {
 
     clear_library_session_storage({
       username: path_params.username as string,
-      query_parms: updated_query_params.toString(),
+      query_params: updated_query_params.toString(),
     })
 
     clear_library_session_storage({
       username: path_params.username as string,
-      query_parms: updated_query_params.toString(),
+      query_params: updated_query_params.toString(),
     })
 
     window.history.pushState(
@@ -100,7 +100,7 @@ export const use_tag_view_options = () => {
 
     clear_library_session_storage({
       username: path_params.username as string,
-      query_parms: updated_query_params.toString(),
+      query_params: updated_query_params.toString(),
     })
 
     window.history.pushState(
@@ -121,7 +121,7 @@ export const use_tag_view_options = () => {
 
     clear_library_session_storage({
       username: path_params.username as string,
-      query_parms: updated_query_params.toString(),
+      query_params: updated_query_params.toString(),
     })
 
     window.history.pushState(
@@ -136,7 +136,7 @@ export const use_tag_view_options = () => {
 
     clear_library_session_storage({
       username: path_params.username as string,
-      query_parms: updated_query_params.toString(),
+      query_params: updated_query_params.toString(),
     })
 
     window.history.pushState(

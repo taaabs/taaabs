@@ -44,7 +44,7 @@ export const use_date_view_options = () => {
 
     clear_library_session_storage({
       username: params.username as string,
-      query_parms: updated_query_params.toString(),
+      query_params: updated_query_params.toString(),
     })
 
     window.history.pushState(
@@ -64,7 +64,7 @@ export const use_date_view_options = () => {
 
     clear_library_session_storage({
       username: params.username as string,
-      query_parms: updated_query_params.toString(),
+      query_params: updated_query_params.toString(),
     })
 
     window.history.pushState(
