@@ -127,7 +127,7 @@ export const use_import = () => {
 
     const data_source = new ImportExport_DataSourceImpl(
       process.env.NEXT_PUBLIC_API_URL,
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
     )
     const repository = new ImportExport_RepositoryImpl(data_source)
     const send_import_data_use_case = new SendImportData_UseCase(repository)

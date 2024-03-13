@@ -108,6 +108,9 @@ importers:
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
+      nanoid:
+        specifier: ^3
+        version: 3.3.6
       passport:
         specifier: ^0.6.0
         version: 0.6.0

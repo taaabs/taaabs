@@ -30,7 +30,7 @@ export const use_points = () => {
     async (params: { bookmark_id: number; points: number }) => {
       const data_source = new Points_DataSourceImpl(
         process.env.NEXT_PUBLIC_API_URL,
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
       )
       const repository = new Points_RepositoryImpl(data_source)
       const give_points = new GivePoints_UseCase(repository)
@@ -59,7 +59,7 @@ export const use_points = () => {
       set_is_fetching_given_amount(true)
       const data_source = new Points_DataSourceImpl(
         process.env.NEXT_PUBLIC_API_URL,
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NzVhYzkyMS00MjA2LTQwYmMtYmJmNS01NjRjOWE2NDdmMmUiLCJpYXQiOjE2OTUyOTc3MDB9.gEnNaBw72l1ETDUwS5z3JUQy3qFhm_rwBGX_ctgzYbg',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
       )
       const repository = new Points_RepositoryImpl(data_source)
       const check_given_points_amount = new CheckTotalGivenPoints_UseCase(
