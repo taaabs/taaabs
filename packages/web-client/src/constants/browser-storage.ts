@@ -45,6 +45,7 @@ export const browser_storage = {
         `library.density.${params.username || ''}?${params.query_params}`,
       tags: (params: { username?: string; query_params?: string }) =>
         `library.tags.${params.username || ''}?${params.query_params}`,
+      scroll_y: `library.scroll_y`,
     },
   },
   local_storage: {
