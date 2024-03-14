@@ -54,7 +54,7 @@ import { UpdateTagHierarchies_Params } from '@repositories/modules/tag-hierarchi
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { use_points } from '@/hooks/library/use-points'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { use_scroll_restore } from '@/hooks/library/use-scroll-restore'
+import { use_scroll_restore } from '@/hooks/misc/use-scroll-restore'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,

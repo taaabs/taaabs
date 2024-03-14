@@ -5,6 +5,8 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useWindowScroll from 'beautiful-react-hooks/useWindowScroll'
 import { useEffect, useState } from 'react'
 
+// Browser can offload site from memory, so immediate back navigation won't be possible.
+// In such case scroll must be restored manually.
 export const use_scroll_restore = () => {
   const [scroll_y, set_scroll_y] = useState(0)
   const on_window_scroll = useWindowScroll()
