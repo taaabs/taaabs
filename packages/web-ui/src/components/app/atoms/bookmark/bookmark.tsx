@@ -473,9 +473,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           props.on_give_point_click()
                           confetti({
                             particleCount: 20,
-                            startVelocity: 10,
+                            startVelocity: 11,
                             spread: 200,
-                            gravity: 0,
+                            gravity: 0.3,
                             ticks: 30,
                             decay: 0.91,
                             scalar: 0.8,
@@ -483,7 +483,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             colors: ['#FFD21E', '#1d4ed8'],
                             origin: {
                               x: e.clientX / window.innerWidth,
-                              y: e.clientY / window.innerHeight,
+                              y: e.clientY / window.innerHeight - 0.015,
                             },
                           })
                         }}
