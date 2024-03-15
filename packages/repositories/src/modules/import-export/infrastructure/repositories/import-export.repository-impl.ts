@@ -50,16 +50,18 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
           tags: bookmark.tags
             ? await Promise.all(
                 bookmark.tags.map(async (tag) => {
-                  if (tag.is_public) {
+                  if (tag.name) {
                     return {
                       name: tag.name,
                       is_public: true,
                     }
-                  } else {
+                  } else if (tag.name_aes) {
                     return {
                       name: await Crypto.AES.decrypt(tag.name_aes, key),
                       is_public: false,
                     }
+                  } else {
+                    throw new Error('Tag name or name_aes should be there.')
                   }
                 }),
               )
@@ -67,21 +69,23 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
           links: bookmark.links
             ? await Promise.all(
                 bookmark.links.map(async (link) => {
-                  if (link.is_public) {
+                  if (link.url) {
                     return {
                       is_public: true,
                       url: link.url,
-                      site_path: link.site_path,
+                      site_path: link.site_path || undefined,
                     }
-                  } else {
+                  } else if (link.url_aes && link.site_aes) {
                     const site = await Crypto.AES.decrypt(link.site_aes, key)
                     const domain = `${get_domain_from_url(site)}/`
                     const site_path = site.slice(domain.length)
                     return {
                       is_public: false,
                       url: await Crypto.AES.decrypt(link.url_aes, key),
-                      site_path: site_path,
+                      site_path: site_path || undefined,
                     }
+                  } else {
+                    throw new Error('Url aes and site aes should be there')
                   }
                 }),
               )

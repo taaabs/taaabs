@@ -4,7 +4,11 @@ export namespace Crypto {
   export const derive_key_from_password = async (
     password: string,
   ): Promise<Uint8Array> => {
-    return new Uint8Array([195, 191, 116, 218, 165, 49, 173, 108, 101, 226, 173, 56, 202, 224, 89, 53, 3, 39, 171, 203, 189, 178, 221, 93, 110, 192, 236, 232, 253, 212, 199, 84])
+    return new Uint8Array([
+      195, 191, 116, 218, 165, 49, 173, 108, 101, 226, 173, 56, 202, 224, 89,
+      53, 3, 39, 171, 203, 189, 178, 221, 93, 110, 192, 236, 232, 253, 212, 199,
+      84,
+    ])
     const argon2id = await loadArgon2idWasm()
     const encoder = new TextEncoder()
     const hash = argon2id({
@@ -19,6 +23,7 @@ export namespace Crypto {
     return hash
   }
 
+  // Hash of concatenated data and key.
   export const SHA256 = async (
     data: string,
     key: Uint8Array,

@@ -33,19 +33,24 @@ export const browser_storage = {
     library: {
       last_authorized_counts_params: 'library.last-authorized-counts-params',
       bookmarks: (params: { username?: string; query_params?: string }) =>
-        `library.bookmarks.${params.username || ''}?${params.query_params}`,
+        `library.bookmarks.${params.username || ''}?${
+          params.query_params || ''
+        }`,
       has_more_bookmarks: (params: {
         username?: string
         query_params?: string
       }) =>
         `library.has-more-bookmarks.${params.username || ''}?${
-          params.query_params
+          params.query_params || ''
         }`,
       density: (params: { username?: string; query_params?: string }) =>
-        `library.density.${params.username || ''}?${params.query_params}`,
+        `library.density.${params.username || ''}?${params.query_params || ''}`,
       tags: (params: { username?: string; query_params?: string }) =>
-        `library.tags.${params.username || ''}?${params.query_params}`,
-      scroll_y: `library.scroll_y`,
+        `library.tags.${params.username || ''}?${params.query_params || ''}`,
+      scroll_y: (params: { username?: string; query_params?: string }) =>
+        `library.scroll_y.${params.username || ''}?${
+          params.query_params || ''
+        }`,
     },
   },
   local_storage: {
