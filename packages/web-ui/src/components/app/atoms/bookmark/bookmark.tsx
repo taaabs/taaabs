@@ -479,11 +479,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             ticks: 30,
                             decay: 0.91,
                             scalar: 0.8,
+                            angle: 110,
                             shapes: ['square'],
                             colors: ['#FFD21E', '#1d4ed8'],
                             origin: {
                               x: e.clientX / window.innerWidth,
-                              y: e.clientY / window.innerHeight - 0.015,
+                              y: e.clientY / window.innerHeight,
                             },
                           })
                         }}
