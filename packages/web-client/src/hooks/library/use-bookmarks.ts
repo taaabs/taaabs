@@ -234,7 +234,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       )
     },
     [],
-    0,
+    100,
   )
 
   useUpdateEffect(() => {

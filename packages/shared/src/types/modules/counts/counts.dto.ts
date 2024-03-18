@@ -47,7 +47,7 @@ export namespace Counts_Dto {
     }
 
     class Counts {
-      public is_stale?: boolean
+      public awaits_generation?: boolean
     }
 
     export class Authorized extends Counts {

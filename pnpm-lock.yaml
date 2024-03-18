@@ -618,6 +618,9 @@ importers:
       argon2id:
         specifier: ^1.0.1
         version: 1.0.1
+      exponential-backoff:
+        specifier: ^3.1.1
+        version: 3.1.1
       query-string:
         specifier: ^8.1.0
         version: 8.1.0
