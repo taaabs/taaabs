@@ -41,8 +41,9 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
       ).then((r) => r.json() as Counts_Dto.Response.Authorized)
       if (result.awaits_processing) {
         throw new Error()
+      } else {
+        return result
       }
-      return result
     }
 
     return backOff(get_result, this._backoff_options)
@@ -65,8 +66,9 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
       ).then((r) => r.json() as Counts_Dto.Response.Public)
       if (result.awaits_processing) {
         throw new Error()
+      } else {
+        return result
       }
-      return result
     }
 
     return backOff(get_result, this._backoff_options)
