@@ -16,6 +16,7 @@ import { DropdownMenu } from '../dropdown-menu'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
 import confetti from 'canvas-confetti'
+import { shared_values } from '@web-ui/constants'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -471,15 +472,17 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         onClick={(e) => {
                           e.stopPropagation()
                           props.on_give_point_click()
+                          const is_mobile =
+                            window.innerWidth < shared_values.media_query_992
                           confetti({
                             particleCount: 20,
                             startVelocity: 11,
-                            spread: 200,
+                            spread: 100,
                             gravity: 0.3,
                             ticks: 30,
                             decay: 0.91,
                             scalar: 0.8,
-                            angle: 110,
+                            angle: is_mobile ? 120 : undefined,
                             shapes: ['square'],
                             colors: ['#FFD21E', '#1d4ed8'],
                             origin: {

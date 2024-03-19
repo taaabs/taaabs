@@ -195,7 +195,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           >
             <div>
               <span>{(item as Item).text}</span>
-              <span>{(item as Item).yields ? (item as Item).yields : 0}</span>
+              <span>{(item as Item).yields ? (item as Item).yields : ''}</span>
             </div>
           </button>
         </div>

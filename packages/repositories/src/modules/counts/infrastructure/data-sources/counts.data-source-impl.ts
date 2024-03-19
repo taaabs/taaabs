@@ -12,7 +12,7 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
   private readonly _backoff_options: Partial<IBackOffOptions> = {
     delayFirstAttempt: false,
     startingDelay: 500,
-    maxDelay: 3000,
+    maxDelay: 2500,
     numOfAttempts: 20,
     timeMultiple: 1.2,
   }
@@ -39,7 +39,7 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
           },
         },
       ).then((r) => r.json() as Counts_Dto.Response.Authorized)
-      if (result.awaits_generation) {
+      if (result.awaits_processing) {
         throw new Error()
       }
       return result
@@ -63,7 +63,7 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
           JSON.parse(JSON.stringify(queryParams)),
         ).toString()}`,
       ).then((r) => r.json() as Counts_Dto.Response.Public)
-      if (result.awaits_generation) {
+      if (result.awaits_processing) {
         throw new Error()
       }
       return result
