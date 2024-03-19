@@ -1,13 +1,13 @@
-import { PaginatedResponseDto } from '../../common/paginated-response.dto'
+import { PaginatedResponse_Dto } from '../../common/paginated-response.dto'
 import { ApiProperty } from '@nestjs/swagger'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { PaginationQueryParamsDto } from '@shared/types/common/pagination-options.dto'
+import { PaginationQueryParams_Dto } from '@shared/types/common/pagination-options.dto'
 import { Type } from 'class-transformer'
 import { ToBoolean } from '@shared/decorators/to-boolean'
 
 export namespace Bookmarks_Dto {
-  export class QueryParams extends PaginationQueryParamsDto {
+  export class QueryParams extends PaginationQueryParams_Dto {
     @ApiProperty({
       description: 'Comma separated list of tag ids a bookmark must include.',
       example: '1,2,3',
@@ -89,10 +89,10 @@ export namespace Bookmarks_Dto {
       public tags: PublicTag[]
     }
 
-    export class Authorized extends PaginatedResponseDto {
+    export class Authorized extends PaginatedResponse_Dto {
       public bookmarks?: AuthorizedBookmark[]
     }
-    export class Public extends PaginatedResponseDto {
+    export class Public extends PaginatedResponse_Dto {
       public bookmarks?: PublicBookmark[]
     }
   }
