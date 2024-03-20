@@ -12,8 +12,8 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
   private readonly _backoff_options: Partial<IBackOffOptions> = {
     delayFirstAttempt: false,
     startingDelay: 250,
-    maxDelay: 1000,
-    numOfAttempts: 20,
+    maxDelay: 2000,
+    numOfAttempts: 100,
     timeMultiple: 1.2,
   }
 
