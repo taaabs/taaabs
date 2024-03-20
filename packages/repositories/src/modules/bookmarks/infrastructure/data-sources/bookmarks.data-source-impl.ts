@@ -20,8 +20,8 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
 
   private readonly _backoff_options: Partial<IBackOffOptions> = {
     delayFirstAttempt: false,
-    startingDelay: 500,
-    maxDelay: 2500,
+    startingDelay: 250,
+    maxDelay: 1000,
     numOfAttempts: 20,
     timeMultiple: 1.2,
   }
