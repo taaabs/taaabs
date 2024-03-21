@@ -288,111 +288,108 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
         close_aside_count={close_aside_count}
         mobile_title_bar={'Bookmarks'}
         slot_search={
-          <>
-            <div>{bookmarks_slice_state.processing_progress}</div>
-            <UiAppAtom_LibrarySearch
-              search_string={search.search_string}
-              is_loading={search.is_initializing}
-              loading_progress_percentage={search.indexed_bookmarks_percentage}
-              placeholder={params.dictionary.library.search_placeholder}
-              hints={!search.is_initializing ? search.hints : undefined}
-              on_click_hint={(i) => {
-                const search_string =
-                  search.search_string + search.hints![i].completion
-                search.set_search_string(search_string)
-                search.query_db({ search_string })
-              }}
-              on_click_recent_hint_remove={(i) => {
-                const search_string =
-                  search.hints![i].search_string + search.hints![i].completion
-                search.remove_recent_hint({ search_string })
-              }}
-              is_focused={search.is_search_focused}
-              on_focus={async () => {
-                if (!search.is_initializing) {
-                  search.set_is_search_focused(true)
+          <UiAppAtom_LibrarySearch
+            search_string={search.search_string}
+            is_loading={search.is_initializing}
+            loading_progress_percentage={search.indexed_bookmarks_percentage}
+            placeholder={params.dictionary.library.search_placeholder}
+            hints={!search.is_initializing ? search.hints : undefined}
+            on_click_hint={(i) => {
+              const search_string =
+                search.search_string + search.hints![i].completion
+              search.set_search_string(search_string)
+              search.query_db({ search_string })
+            }}
+            on_click_recent_hint_remove={(i) => {
+              const search_string =
+                search.hints![i].search_string + search.hints![i].completion
+              search.remove_recent_hint({ search_string })
+            }}
+            is_focused={search.is_search_focused}
+            on_focus={async () => {
+              if (!search.is_initializing) {
+                search.set_is_search_focused(true)
 
-                  search.set_selected_tags(
-                    counts.selected_tags
-                      .filter((id) => {
-                        if (
-                          !bookmarks_slice_state.bookmarks ||
-                          !bookmarks_slice_state.bookmarks[0]
-                        )
-                          return false
-                        return (
-                          bookmarks_slice_state.bookmarks[0].tags?.findIndex(
-                            (tag) => tag.id == id,
-                          ) != -1
-                        )
-                      })
-                      .map((id) => {
-                        const name =
-                          bookmarks_slice_state.bookmarks![0].tags!.find(
-                            (tag) => tag.id == id,
-                          )!.name
-
-                        return name
-                      }),
-                  )
-
-                  if (search_cache_to_be_cleared) {
-                    await search.clear_cached_data({
-                      is_archived: is_archived_filter,
+                search.set_selected_tags(
+                  counts.selected_tags
+                    .filter((id) => {
+                      if (
+                        !bookmarks_slice_state.bookmarks ||
+                        !bookmarks_slice_state.bookmarks[0]
+                      )
+                        return false
+                      return (
+                        bookmarks_slice_state.bookmarks[0].tags?.findIndex(
+                          (tag) => tag.id == id,
+                        ) != -1
+                      )
                     })
-                    set_search_cache_to_be_cleared(false)
-                  }
+                    .map((id) => {
+                      const name =
+                        bookmarks_slice_state.bookmarks![0].tags!.find(
+                          (tag) => tag.id == id,
+                        )!.name
 
-                  const is_cache_stale = await search.check_is_cache_stale({
-                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                    auth_token:
-                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                      return name
+                    }),
+                )
+
+                if (search_cache_to_be_cleared) {
+                  await search.clear_cached_data({
                     is_archived: is_archived_filter,
                   })
+                  set_search_cache_to_be_cleared(false)
+                }
 
-                  if (
-                    (!is_archived_filter
-                      ? search.db === undefined
-                      : search.archived_db === undefined) ||
-                    is_cache_stale
-                  ) {
-                    search.reset()
-                    await search.init({
-                      is_archived: is_archived_filter,
-                    })
-                  }
+                const is_cache_stale = await search.check_is_cache_stale({
+                  api_url: process.env.NEXT_PUBLIC_API_URL,
+                  auth_token:
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                  is_archived: is_archived_filter,
+                })
+
+                if (
+                  (!is_archived_filter
+                    ? search.db === undefined
+                    : search.archived_db === undefined) ||
+                  is_cache_stale
+                ) {
+                  search.reset()
+                  await search.init({
+                    is_archived: is_archived_filter,
+                  })
                 }
-              }}
-              on_change={(value) => {
-                if (search.is_initializing) return
-                search.set_search_string(value)
-                if (!value) {
-                  bookmarks.get_bookmarks({})
-                }
-              }}
-              on_submit={() => {
-                if (search.is_initializing || search.count == 0) return
-                if (search.search_string.trim()) {
-                  search.query_db({ search_string: search.search_string })
-                }
-              }}
-              on_blur={() => {
-                search.clear_hints()
-                search.set_is_search_focused(false)
-              }}
-              results_count={search.search_string ? search.count : undefined}
-              on_clear_click={() => {
-                search.reset()
+              }
+            }}
+            on_change={(value) => {
+              if (search.is_initializing) return
+              search.set_search_string(value)
+              if (!value) {
                 bookmarks.get_bookmarks({})
-              }}
-              is_slash_shortcut_disabled={modal_context?.modal !== undefined}
-              on_click_get_help={() => {}}
-              translations={{
-                footer_tip: 'Tags, filters and custom range affect results.',
-                get_help_link: 'Get help',
-              }}
-            />
-          </>
+              }
+            }}
+            on_submit={() => {
+              if (search.is_initializing || search.count == 0) return
+              if (search.search_string.trim()) {
+                search.query_db({ search_string: search.search_string })
+              }
+            }}
+            on_blur={() => {
+              search.clear_hints()
+              search.set_is_search_focused(false)
+            }}
+            results_count={search.search_string ? search.count : undefined}
+            on_clear_click={() => {
+              search.reset()
+              bookmarks.get_bookmarks({})
+            }}
+            is_slash_shortcut_disabled={modal_context?.modal !== undefined}
+            on_click_get_help={() => {}}
+            translations={{
+              footer_tip: 'Tags, filters and custom range affect results.',
+              get_help_link: 'Get help',
+            }}
+          />
         }
         slot_toolbar={
           <UiAppAtom_Toolbar
