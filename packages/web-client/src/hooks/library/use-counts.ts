@@ -212,6 +212,7 @@ export const use_counts = () => {
   }, [])
 
   return {
+    get_counts,
     months,
     is_fetching_counts_data,
     tags,

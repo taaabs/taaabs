@@ -25,13 +25,16 @@ export const get_authorized_counts = (params: {
 
     const result = await get_months_use_case.invoke(params.request_params)
 
+    if (result.awaits_processing) return
+
     dispatch(counts_actions.set_data(result))
     dispatch(counts_actions.set_is_fetching_data(false))
 
     const state = get_state()
     if (
-      !state.bookmarks.is_fetching_data &&
-      state.bookmarks.is_fetching_first_bookmarks
+      (!state.bookmarks.is_fetching_data &&
+        state.bookmarks.is_fetching_first_bookmarks) ||
+      state.bookmarks.should_refetch_counts
     ) {
       dispatch(counts_actions.process_tags())
       dispatch(
@@ -39,6 +42,9 @@ export const get_authorized_counts = (params: {
       )
       dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
       dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
+      if (state.bookmarks.should_refetch_counts) {
+        dispatch(bookmarks_actions.set_should_refetch_counts(false))
+      }
     }
   }
 }

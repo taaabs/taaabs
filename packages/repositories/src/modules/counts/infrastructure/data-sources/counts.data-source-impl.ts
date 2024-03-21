@@ -1,21 +1,12 @@
 import { Counts_Dto } from '@shared/types/modules/counts/counts.dto'
 import { Counts_Params } from '../../domain/types/counts.params'
 import { Counts_DataSource } from './counts.data-source'
-import { IBackOffOptions, backOff } from 'exponential-backoff'
 
 export class Counts_DataSourceImpl implements Counts_DataSource {
   constructor(
     private readonly _api_url: string,
     private readonly _auth_token: string,
   ) {}
-
-  private readonly _backoff_options: Partial<IBackOffOptions> = {
-    delayFirstAttempt: false,
-    startingDelay: 250,
-    maxDelay: 2000,
-    numOfAttempts: 100,
-    timeMultiple: 1.2,
-  }
 
   public async get_counts_on_authorized_user(
     params: Counts_Params.Authorized,
@@ -28,25 +19,16 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
       tags: params.tags?.join(','),
     }
 
-    const get_result = async () => {
-      const result = await fetch(
-        `${this._api_url}/v1/counts?${new URLSearchParams(
-          JSON.parse(JSON.stringify(query_params)),
-        ).toString()}`,
-        {
-          headers: {
-            Authorization: `Bearer ${this._auth_token}`,
-          },
+    return await fetch(
+      `${this._api_url}/v1/counts?${new URLSearchParams(
+        JSON.parse(JSON.stringify(query_params)),
+      ).toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
         },
-      ).then((r) => r.json() as Counts_Dto.Response.Authorized)
-      if (result.awaits_processing) {
-        throw new Error()
-      } else {
-        return result
-      }
-    }
-
-    return backOff(get_result, this._backoff_options)
+      },
+    ).then((r) => r.json())
   }
 
   public async get_counts_on_public_user(
@@ -58,19 +40,10 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
       tags: params.tags?.join(','),
     }
 
-    const get_result = async () => {
-      const result = await fetch(
-        `${this._api_url}/v1/counts/${params.username}?${new URLSearchParams(
-          JSON.parse(JSON.stringify(queryParams)),
-        ).toString()}`,
-      ).then((r) => r.json() as Counts_Dto.Response.Public)
-      if (result.awaits_processing) {
-        throw new Error()
-      } else {
-        return result
-      }
-    }
-
-    return backOff(get_result, this._backoff_options)
+    return fetch(
+      `${this._api_url}/v1/counts/${params.username}?${new URLSearchParams(
+        JSON.parse(JSON.stringify(queryParams)),
+      ).toString()}`,
+    ).then((r) => r.json())
   }
 }

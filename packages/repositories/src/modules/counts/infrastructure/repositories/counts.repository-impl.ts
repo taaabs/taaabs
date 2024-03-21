@@ -10,15 +10,15 @@ export class Counts_RepositoryImpl implements Counts_Repository {
   public async get_counts_on_authorized_user(
     params: Counts_Params.Authorized,
   ): Promise<Counts_Ro> {
-    const data =
+    const result =
       await this._counts_data_source.get_counts_on_authorized_user(params)
 
     const key = await Crypto.derive_key_from_password('my_secret_key')
 
     return {
-      months: data.months
+      months: result.months
         ? await async_reduce(
-            Object.entries(data.months),
+            Object.entries(result.months),
             async (acc, [k, v]) => ({
               ...acc,
               [k]: {
@@ -46,18 +46,19 @@ export class Counts_RepositoryImpl implements Counts_Repository {
             {},
           )
         : {},
+      awaits_processing: result.awaits_processing,
     }
   }
 
   public async get_counts_on_public_user(
     params: Counts_Params.Public,
   ): Promise<Counts_Ro> {
-    const data =
+    const result =
       await this._counts_data_source.get_counts_on_public_user(params)
 
     return {
-      months: data.months
-        ? Object.entries(data.months).reduce(
+      months: result.months
+        ? Object.entries(result.months).reduce(
             (acc, [k, v]) => ({
               ...acc,
               [k]: {
@@ -75,6 +76,7 @@ export class Counts_RepositoryImpl implements Counts_Repository {
             {},
           )
         : {},
+      awaits_processing: result.awaits_processing,
     }
   }
 }

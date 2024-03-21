@@ -10,7 +10,6 @@ import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-id
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { Crypto } from '@repositories/utils/crypto'
-import { IBackOffOptions, backOff } from 'exponential-backoff'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(
@@ -18,13 +17,13 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     private readonly _auth_token: string,
   ) {}
 
-  private readonly _backoff_options: Partial<IBackOffOptions> = {
-    delayFirstAttempt: false,
-    startingDelay: 250,
-    maxDelay: 2000,
-    numOfAttempts: 100,
-    timeMultiple: 1.2,
-  }
+  // private readonly _backoff_options: Partial<IBackOffOptions> = {
+  //   delayFirstAttempt: false,
+  //   startingDelay: 250,
+  //   maxDelay: 2000,
+  //   numOfAttempts: 100,
+  //   timeMultiple: 1.2,
+  // }
 
   public async get_bookmarks_on_authorized_user(
     params: GetBookmarks_Params.Authorized,
@@ -51,25 +50,35 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         : undefined,
     }
 
-    const get_result = async () => {
-      const result = await fetch(
-        `${this._api_url}/v1/bookmarks?${new URLSearchParams(
-          JSON.parse(JSON.stringify(query_params)),
-        ).toString()}`,
-        {
-          headers: {
-            Authorization: `Bearer ${this._auth_token}`,
-          },
-        },
-      ).then((r) => r.json() as Bookmarks_Dto.Response.Authorized)
-      if (result.awaits_processing) {
-        throw new Error()
-      } else {
-        return result
-      }
-    }
+    // const get_result = async () => {
+    //   const result = await fetch(
+    //     `${this._api_url}/v1/bookmarks?${new URLSearchParams(
+    //       JSON.parse(JSON.stringify(query_params)),
+    //     ).toString()}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${this._auth_token}`,
+    //       },
+    //     },
+    //   ).then((r) => r.json() as Bookmarks_Dto.Response.Authorized)
+    //   if (result.awaits_processing) {
+    //     throw new Error()
+    //   } else {
+    //     return result
+    //   }
+    // }
 
-    return backOff(get_result, this._backoff_options)
+    // return backOff(get_result, this._backoff_options)
+    return fetch(
+      `${this._api_url}/v1/bookmarks?${new URLSearchParams(
+        JSON.parse(JSON.stringify(query_params)),
+      ).toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this._auth_token}`,
+        },
+      },
+    ).then((r) => r.json())
   }
 
   public async get_bookmarks_on_public_user(
@@ -96,20 +105,11 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         : undefined,
     }
 
-    const get_result = async () => {
-      const result = await fetch(
-        `${this._api_url}/v1/bookmarks/${params.username}?${new URLSearchParams(
-          JSON.parse(JSON.stringify(query_params)),
-        ).toString()}`,
-      ).then((r) => r.json() as Bookmarks_Dto.Response.Public)
-      if (result.awaits_processing) {
-        throw new Error()
-      } else {
-        return result
-      }
-    }
-
-    return backOff(get_result, this._backoff_options)
+    return fetch(
+      `${this._api_url}/v1/bookmarks/${params.username}?${new URLSearchParams(
+        JSON.parse(JSON.stringify(query_params)),
+      ).toString()}`,
+    ).then((r) => r.json())
   }
 
   public async get_bookmarks_by_ids_authorized(

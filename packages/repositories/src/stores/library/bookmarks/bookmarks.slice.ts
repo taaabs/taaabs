@@ -12,6 +12,8 @@ type BookmarksState = {
   incoming_bookmarks: Bookmark_Entity[] | null
   bookmarks: Bookmark_Entity[] | null
   has_more_bookmarks: boolean | null
+  processing_progress?: number
+  should_refetch_counts?: boolean
   density: 'default' | 'compact'
 }
 
@@ -78,6 +80,18 @@ export const bookmarks_slice = createSlice({
       if (!state.bookmarks) return
       state.bookmarks[action.payload.index].render_height =
         action.payload.height
+    },
+    set_should_refetch_counts(
+      state,
+      action: PayloadAction<BookmarksState['should_refetch_counts']>,
+    ) {
+      state.should_refetch_counts = action.payload
+    },
+    set_processing_progress(
+      state,
+      action: PayloadAction<BookmarksState['processing_progress']>,
+    ) {
+      state.processing_progress = action.payload
     },
     set_density(state, action: PayloadAction<BookmarksState['density']>) {
       state.density = action.payload

@@ -6,6 +6,8 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { GetBookmarksOnAuthorizedUser_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-authorized-user.use-case'
 import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
+import { backOff } from 'exponential-backoff'
+import { backoff_options } from '@repositories/core/backoff-options'
 
 export const get_authorized_bookmarks = (params: {
   request_params: GetBookmarks_Params.Authorized
@@ -29,27 +31,43 @@ export const get_authorized_bookmarks = (params: {
       dispatch(bookmarks_actions.set_has_more_bookmarks(null))
     }
 
-    const { bookmarks, pagination } = await get_bookmarks.invoke(
-      params.request_params,
-    )
+    const get_result = async () => {
+      const result = await get_bookmarks.invoke(params.request_params)
+      dispatch(
+        bookmarks_actions.set_processing_progress(result.processing_progress),
+      )
+      if (result.awaits_processing) {
+        throw new Error()
+      } else {
+        return result
+      }
+    }
+
+    const result = await backOff(get_result, {
+      ...backoff_options,
+      retry: () => {
+        dispatch(bookmarks_actions.set_should_refetch_counts(true))
+        return true
+      },
+    })
 
     let bookmarks_with_density: Bookmark_Entity[] = []
 
     if (get_state().bookmarks.density == 'compact') {
-      bookmarks_with_density = bookmarks
-        ? bookmarks.map((bookmark) => ({
+      bookmarks_with_density = result.bookmarks
+        ? result.bookmarks.map((bookmark) => ({
             ...bookmark,
             is_compact: true,
           }))
         : []
     } else {
-      bookmarks_with_density = bookmarks || []
+      bookmarks_with_density = result.bookmarks || []
     }
 
     dispatch(bookmarks_actions.set_is_fetching_data(false))
     dispatch(
       bookmarks_actions.set_has_more_bookmarks(
-        pagination ? pagination.has_more || false : false,
+        result.pagination?.has_more || false,
       ),
     )
 
@@ -58,11 +76,15 @@ export const get_authorized_bookmarks = (params: {
       dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(false))
     } else {
       dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks_with_density))
-      if (!get_state().counts.is_fetching_counts_data) {
+      const state = get_state()
+      if (
+        !state.counts.is_fetching_counts_data &&
+        !state.bookmarks.should_refetch_counts
+      ) {
         dispatch(counts_actions.process_tags())
         dispatch(bookmarks_actions.set_bookmarks(bookmarks_with_density))
-        dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
+        dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
       }
     }
   }

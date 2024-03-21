@@ -17,15 +17,15 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   public async get_bookmarks_on_authorized_user(
     params: GetBookmarks_Params.Authorized,
   ): Promise<GetBookmarks_Ro> {
-    const { bookmarks, pagination } =
+    const result =
       await this._bookmarks_data_source.get_bookmarks_on_authorized_user(params)
 
     const key = await Crypto.derive_key_from_password('my_secret_key')
 
     return {
-      bookmarks: bookmarks
+      bookmarks: result.bookmarks
         ? await Promise.all(
-            bookmarks.map(async (bookmark) => ({
+            result.bookmarks.map(async (bookmark) => ({
               id: bookmark.id,
               is_public: bookmark.is_public || false,
               created_at: bookmark.created_at,
@@ -76,23 +76,25 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             })),
           )
         : undefined,
-      pagination: pagination
+      pagination: result.pagination
         ? {
-            has_more: pagination.has_more,
+            has_more: result.pagination.has_more,
           }
         : undefined,
+      awaits_processing: result.awaits_processing,
+      processing_progress: result.processing_progress,
     }
   }
 
   public async get_bookmarks_on_public_user(
     params: GetBookmarks_Params.Public,
   ): Promise<GetBookmarks_Ro> {
-    const { bookmarks, pagination } =
+    const result =
       await this._bookmarks_data_source.get_bookmarks_on_public_user(params)
 
     return {
-      bookmarks: bookmarks
-        ? bookmarks.map((bookmark) => ({
+      bookmarks: result.bookmarks
+        ? result.bookmarks.map((bookmark) => ({
             id: bookmark.id,
             is_public: true,
             created_at: bookmark.created_at,
@@ -116,11 +118,13 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             })),
           }))
         : undefined,
-      pagination: pagination
+      pagination: result.pagination
         ? {
-            has_more: pagination.has_more,
+            has_more: result.pagination.has_more,
           }
         : undefined,
+      awaits_processing: result.awaits_processing,
+      processing_progress: result.processing_progress,
     }
   }
 
