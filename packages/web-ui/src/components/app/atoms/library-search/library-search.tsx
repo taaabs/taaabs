@@ -60,7 +60,10 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
 
     const handle_keyboard = (event: any) => {
       if (props.is_loading) return
-      if (
+
+      if (event.code == 'Escape' && props.is_focused) {
+        input.current?.blur()
+      } else if (
         event.code == 'Slash' &&
         !props.is_focused &&
         !props.is_slash_shortcut_disabled
