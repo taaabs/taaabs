@@ -1,14 +1,14 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
-.container {
+.link {
   position: relative;
   padding-right: var(--distance-24px);
   height: var(--button-dimension-48px);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  overflow: hidden;
+  width: 100%;
   &::after {
     position: absolute;
     content: '';
@@ -27,48 +27,46 @@
       transform: translateY(-50%) translateX(0);
     }
   }
-}
-.link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  white-space: nowrap;
-  font-size: var(--font-size-18px);
-  &::before {
-    content: attr(title);
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
   @include hover {
-    &::before {
-      @include text-decoration-underline;
-    }
+    background: linear-gradient(to right, var(--white), var(--neutral50));
   }
-  > span {
-    height: 100%;
+  &__inner {
     display: flex;
     align-items: center;
+    justify-content: center;
     position: relative;
-    font-weight: var(--font-weight-inter-medium);
-    color: transparent;
-  }
-  &--active {
+    white-space: nowrap;
+    font-size: var(--font-size-18px);
     &::before {
-      color: transparent;
+      content: attr(title);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
     > span {
-      color: inherit;
-    }
-  }
-  &:disabled {
-    pointer-events: none;
-    &::before {
-      color: var(--text-color-dimmed);
-    }
-    > span {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      position: relative;
+      font-weight: var(--font-weight-inter-medium);
       color: transparent;
+    }
+    &--active {
+      &::before {
+        color: transparent;
+      }
+      > span {
+        color: inherit;
+      }
+    }
+    &:disabled {
+      pointer-events: none;
+      &::before {
+        color: var(--text-color-dimmed);
+      }
+      > span {
+        color: transparent;
+      }
     }
   }
 }

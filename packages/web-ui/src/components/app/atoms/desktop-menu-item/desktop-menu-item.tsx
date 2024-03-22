@@ -12,20 +12,20 @@ export namespace DesktopMenuItem {
 
 export const DesktopMenuItem: React.FC<DesktopMenuItem.Props> = (props) => {
   return (
-    <div
-      className={cn(styles.container, {
-        [styles['container--active']]: props.is_active,
+    <Link
+      className={cn(styles.link, {
+        [styles['link--active']]: props.is_active,
       })}
+      href={props.href}
     >
-      <Link
-        className={cn(styles.link, {
-          [styles['link--active']]: props.is_active,
+      <div
+        className={cn(styles.link__inner, {
+          [styles['link__inner--active']]: props.is_active,
         })}
-        href={props.href}
         title={props.label}
       >
         <span>{props.label}</span>
-      </Link>
-    </div>
+      </div>
+    </Link>
   )
 }

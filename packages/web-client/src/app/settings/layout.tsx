@@ -1,10 +1,10 @@
-import { Settings } from '@web-ui/components/app/templates/settings'
+import { Settings as UiAppTemplates_Settings } from '@web-ui/components/app/templates/settings'
 import { DynamicDesktopNavigation } from './DynamicDesktopNavigation'
 import { SimpleBackArrowHeader as UiAppAtom_SimpleBackArrowHeader } from '@web-ui/components/app/atoms/simple-back-arrow-header'
 
 const Layout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
-    <Settings
+    <UiAppTemplates_Settings
       slot_header={
         <UiAppAtom_SimpleBackArrowHeader
           back_href="/"

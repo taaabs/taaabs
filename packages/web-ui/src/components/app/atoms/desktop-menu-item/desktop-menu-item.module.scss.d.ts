@@ -1,7 +1,7 @@
 declare const styles: {
-  readonly container: string
-  readonly 'container--active': string
   readonly link: string
   readonly 'link--active': string
+  readonly link__inner: string
+  readonly 'link__inner--active': string
 }
 export = styles

@@ -141,8 +141,8 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
 
   return (
     <UiAppTemplate_AppHeaderDesktop
-      slot_left_side_logo={logo}
-      slot_left_side_navigation={
+      slot_logo={logo}
+      slot_navigation={
         <UiAppMolecule_NavigationForHeader navigation={navigation} />
       }
       slot_right_side={

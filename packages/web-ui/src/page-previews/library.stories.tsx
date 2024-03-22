@@ -17,8 +17,8 @@ export const Primary = () => {
     <App
       slot_header_desktop={
         <AppHeaderDesktop
-          slot_left_side_logo={<LogoForHeader href="" />}
-          slot_left_side_navigation={
+          slot_logo={<LogoForHeader href="" />}
+          slot_navigation={
             <NavigationForHeader
               navigation={[
                 { label: 'Lorem', href: '/lorem', is_active: false },

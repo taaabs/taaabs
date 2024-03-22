@@ -8,8 +8,8 @@ export default {
 export const Primary = () => (
   <StorybookMargin>
     <AppHeaderDesktop
-      slot_left_side_logo={<div>logo</div>}
-      slot_left_side_navigation={<div>navigation</div>}
+      slot_logo={<div>logo</div>}
+      slot_navigation={<div>navigation</div>}
       slot_right_side={<div>right side</div>}
     />
     <StorybookSpacer />

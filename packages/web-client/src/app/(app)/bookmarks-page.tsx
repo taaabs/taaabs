@@ -1240,6 +1240,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
                       }),
                     )
+                    toast.success(params.dictionary.library.bookmark_updated)
                     await search.update_searchable_bookmark({
                       bookmark: {
                         id: bookmark.id,
@@ -1264,7 +1265,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       gte: date_view_options.current_gte,
                       lte: date_view_options.current_lte,
                     })
-                    toast.success(params.dictionary.library.bookmark_updated)
                   }}
                   // Changes tag order by swapping them.
                   on_mouse_up_on_tag={async (tag_id) => {
@@ -1320,6 +1320,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
                       }),
                     )
+                    toast.success(params.dictionary.library.bookmark_updated)
                     await search.update_searchable_bookmark({
                       bookmark: {
                         id: bookmark.id,
@@ -1339,7 +1340,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         tag_ids: bookmark.tags.map((tag) => tag.id),
                       },
                     })
-                    toast.success(params.dictionary.library.bookmark_updated)
                   }}
                   on_tag_delete_click={async (tag_id) => {
                     const modified_bookmark: UpsertBookmark_Params = {
@@ -1373,6 +1373,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
                       }),
                     )
+                    toast.success(params.dictionary.library.bookmark_updated)
                     await search.update_searchable_bookmark({
                       bookmark: {
                         id: bookmark.id,
@@ -1424,7 +1425,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       gte: date_view_options.current_gte,
                       lte: date_view_options.current_lte,
                     })
-                    toast.success(params.dictionary.library.bookmark_updated)
                   }}
                   menu_slot={
                     <UiAppAtom_DropdownMenu
@@ -1477,6 +1477,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
                                     }),
+                                  )
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
                                   )
                                   await search.update_searchable_bookmark({
                                     bookmark: {
@@ -1535,9 +1538,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
                                 },
                               },
                               {
@@ -1574,6 +1574,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
                                     }),
+                                  )
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
                                   )
                                   await search.update_searchable_bookmark({
                                     bookmark: {
@@ -1626,9 +1629,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
                                 },
                               },
                               {
@@ -1665,6 +1665,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
                                     }),
+                                  )
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
                                   )
                                   await search.update_searchable_bookmark({
                                     bookmark: {
@@ -1716,9 +1719,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
                                 },
                               },
                               {
@@ -1755,6 +1755,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
                                     }),
+                                  )
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
                                   )
                                   await search.update_searchable_bookmark({
                                     bookmark: {
@@ -1806,9 +1809,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
                                 },
                               },
                               {
@@ -1845,6 +1845,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
                                     }),
+                                  )
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
                                   )
                                   await search.update_searchable_bookmark({
                                     bookmark: {
@@ -1896,9 +1899,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
                                 },
                               },
                               {
@@ -1935,6 +1935,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       auth_token:
                                         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
                                     }),
+                                  )
+                                  toast.success(
+                                    params.dictionary.library.bookmark_updated,
                                   )
                                   await search.update_searchable_bookmark({
                                     bookmark: {
@@ -1986,9 +1989,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     gte: date_view_options.current_gte,
                                     lte: date_view_options.current_lte,
                                   })
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
                                 },
                               },
                               {

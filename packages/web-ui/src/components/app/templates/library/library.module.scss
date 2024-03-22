@@ -90,10 +90,12 @@
       height: calc(100vh - var(--header-desktop-height));
       top: var(--header-desktop-height);
       position: fixed;
-      padding: var(--distance-16px) var(--distance-16px) var(--distance-16px) 0;
+      padding-top: var(--distance-16px);
+      padding-right: var(--distance-16px);
     }
     @include at1200 {
-      padding: var(--distance-16px) var(--distance-32px) var(--distance-16px) 0;
+      padding-top: var(--distance-16px);
+      padding-right: var(--distance-32px);
     }
     &__desktop-actions {
       @include to992 {
@@ -148,7 +150,7 @@
         padding-bottom: var(--distance-16px);
         height: calc(
           100vh - var(--header-desktop-height) - var(--distance-16px) -
-            var(--search-desktop-height) - var(--distance-12px)
+            var(--search-desktop-height) - var(--distance-16px)
         );
       }
       @include at992 {
