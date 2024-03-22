@@ -28,7 +28,7 @@
     }
   }
   @include hover {
-    background: linear-gradient(to right, var(--white), var(--neutral50));
+    background: linear-gradient(to right, var(--white), var(--neutral100));
   }
   &__inner {
     display: flex;
