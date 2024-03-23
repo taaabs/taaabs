@@ -12,6 +12,7 @@ import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
+import ky from 'ky'
 
 type FormValues = {
   username: string
@@ -33,6 +34,14 @@ export const Username: React.FC<Username.Props> = (props) => {
   })
   const [username, set_username] = useState<string>()
 
+  const ky_instance = ky.create({
+    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+      'Content-Type': 'application/json',
+    },
+  })
+
   useUpdateEffect(() => {
     if (props.current_username) {
       set_username(props.current_username)
@@ -44,9 +53,7 @@ export const Username: React.FC<Username.Props> = (props) => {
       toast.success('Your username is left unchanged')
       return
     }
-    const data_source = new Settings_DataSourceImpl(
-      process.env.NEXT_PUBLIC_API_URL,
-    )
+    const data_source = new Settings_DataSourceImpl(ky_instance)
     const repository = new Settings_RepositoryImpl(data_source)
     const update_username_use_case = new UpdateUsername_UseCase(repository)
     await update_username_use_case.invoke({ username: form_data.username })
@@ -55,9 +62,7 @@ export const Username: React.FC<Username.Props> = (props) => {
   }
 
   const get_is_username_available = async (username: string) => {
-    const data_source = new Settings_DataSourceImpl(
-      process.env.NEXT_PUBLIC_API_URL,
-    )
+    const data_source = new Settings_DataSourceImpl(ky_instance)
     const repository = new Settings_RepositoryImpl(data_source)
     const check_username_availability_use_case =
       new CheckUsernameAvailability_UseCase(repository)
