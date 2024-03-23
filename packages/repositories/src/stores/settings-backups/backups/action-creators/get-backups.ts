@@ -3,16 +3,11 @@ import { SettingsBackupsDispatch } from '../../settings-backups.store'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
 import { ListBackups_UseCase } from '@repositories/modules/import-export/domain/usecases/list-backups.use-case'
 import { backups_actions } from '../backups.slice'
+import { KyInstance } from 'ky'
 
-export const get_backups = (params: {
-  api_url: string
-  auth_token: string
-}) => {
+export const get_backups = (params: { ky: KyInstance }) => {
   return async (dispatch: SettingsBackupsDispatch) => {
-    const data_source = new ImportExport_DataSourceImpl(
-      params.api_url,
-      params.auth_token,
-    )
+    const data_source = new ImportExport_DataSourceImpl(params.ky)
     const repository = new ImportExport_RepositoryImpl(data_source)
     const list_backups_use_case = new ListBackups_UseCase(repository)
     dispatch(backups_actions.set_is_fetching_backups(true))

@@ -3,13 +3,11 @@ import { SettingsAccountDispatch } from '../../settings-account.store'
 import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastructure/repositories/settings.repository-impl'
 import { GetMyUsername_UseCase } from '@repositories/modules/settings/domain/use-cases/get-my-username.use-case'
 import { username_actions } from '../username.slice'
+import { KyInstance } from 'ky'
 
-export const get_current_username = (params: {
-  user_id: string
-  api_url: string
-}) => {
+export const get_current_username = (params: { ky: KyInstance }) => {
   return async (dispatch: SettingsAccountDispatch) => {
-    const data_source = new Settings_DataSourceImpl(params.api_url)
+    const data_source = new Settings_DataSourceImpl(params.ky)
     const repository = new Settings_RepositoryImpl(data_source)
     const get_my_username = new GetMyUsername_UseCase(repository)
 

@@ -1990,8 +1990,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       modal_context,
                                       bookmark,
                                       is_archived: is_archived_filter,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                                      ky: ky_instance,
                                     })
                                   const updated_tag_ids =
                                     updated_bookmark.tags.map((t) => t.id)

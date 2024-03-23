@@ -1,11 +1,12 @@
 import { UpsertBookmark as Form_UpsertBookmark } from '@/forms/upsert-bookmark'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
+import { KyInstance } from 'ky'
 
 export const upsert_bookmark_modal = (params: {
   modal_context: any
   bookmark?: Bookmark_Entity
   is_archived?: boolean
-  auth_token: string
+  ky: KyInstance
 }) =>
   new Promise<Bookmark_Entity>((resolve) => {
     const on_submit_handler = (bookmark: Bookmark_Entity) => resolve(bookmark)
@@ -17,7 +18,7 @@ export const upsert_bookmark_modal = (params: {
         is_archived={params.is_archived}
         on_submit={on_submit_handler}
         on_close={on_close_handler}
-        auth_token={params.auth_token}
+        ky={params.ky}
       />,
     )
   })

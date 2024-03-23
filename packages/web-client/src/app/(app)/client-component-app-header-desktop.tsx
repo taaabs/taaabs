@@ -20,6 +20,7 @@ import { update_search_params } from '@/utils/update-query-params'
 import { BookmarkHash } from '@/utils/bookmark-hash'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
+import ky from 'ky'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const search_params = useSearchParams()
@@ -29,6 +30,14 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const public_user_avatar = useContext(PublicUserAvatarContext)
   const modal = useContext(ModalContext)
   const is_hydrated = use_is_hydrated()
+
+  const ky_instance = ky.create({
+    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+      'Content-Type': 'application/json',
+    },
+  })
 
   let logo: JSX.Element
   // TODO: backHref should be smarter :^)
@@ -112,7 +121,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
               }
             : undefined
         }
-        auth_token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY"
+        ky={ky_instance}
         on_close={modal?.set_modal}
         on_submit={(bookmark) => {
           modal?.set_modal()

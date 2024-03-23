@@ -7,12 +7,10 @@ import { DownloadBackup_Dto } from '@shared/types/modules/import-export/download
 import { DownloadBackup_Params } from '../../domain/types/download-backup.params'
 import { system_values } from '@shared/constants/system-values'
 import { Crypto } from '@repositories/utils/crypto'
+import { KyInstance } from 'ky'
 
 export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
-  constructor(
-    private readonly _api_url: string,
-    private readonly _auth_token: string,
-  ) {}
+  constructor(private readonly _ky: KyInstance) {}
 
   public async send_import_data(params: SendImportData_Params): Promise<void> {
     const key = await Crypto.derive_key_from_password('my_secret_key')
@@ -117,45 +115,20 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
       erase_library: params.erase_library || undefined,
     }
 
-    await fetch(`${this._api_url}/v1/import-export/send-import-data`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this._auth_token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    }).then((r) => {
-      if (!r.ok) {
-        throw new Error()
-      }
-    })
+    await this._ky
+      .post(`v1/import-export/send-import-data`, {
+        body: JSON.stringify(body),
+      })
+      .json()
   }
 
   public async list_backups(): Promise<ListBackups_Dto.Response> {
-    return fetch(`${this._api_url}/v1/import-export/list-backups`, {
-      headers: {
-        Authorization: `Bearer ${this._auth_token}`,
-        'Content-Type': 'application/json',
-      },
-    }).then((r) => {
-      if (r.ok) {
-        return r.json()
-      } else {
-        throw new Error()
-      }
-    })
+    return this._ky.get(`v1/import-export/list-backups`).json()
   }
 
   public async download_backup(
     params: DownloadBackup_Params,
   ): Promise<DownloadBackup_Dto.Response> {
-    return fetch(
-      `${this._api_url}/v1/import-export/download-backup/${params.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${this._auth_token}`,
-        },
-      },
-    ).then((r) => r.json())
+    return this._ky.get(`v1/import-export/download-backup/${params.id}`).json()
   }
 }

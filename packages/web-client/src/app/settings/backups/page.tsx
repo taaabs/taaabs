@@ -8,22 +8,27 @@ import {
 import { backups_actions } from '@repositories/stores/settings-backups/backups/backups.slice'
 import { Box as UiAppAtom_Box } from '@web-ui/components/app/atoms/box'
 import { BoxHeading as UiAppAtom_BoxHeading } from '@web-ui/components/app/atoms/box-heading'
-import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
 import { DownloadBackup_UseCase } from '@repositories/modules/import-export/domain/usecases/download-backup.use-case'
+import ky from 'ky'
 
 const Page: React.FC = () => {
   const dispatch = use_settings_backups_dispatch()
   const state = use_settings_backups_selector((state) => state.backups)
+  const ky_instance = ky.create({
+    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+      'Content-Type': 'application/json',
+    },
+  })
 
   useEffect(() => {
     dispatch(
       backups_actions.get_backups({
         ky: ky_instance,
-        auth_token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
       }),
     )
   }, [])
@@ -42,10 +47,7 @@ const Page: React.FC = () => {
             <div>{backup.created_at}</div>
             <UiCommonParticle_Button
               on_click={async () => {
-                const data_source = new ImportExport_DataSourceImpl(
-                  process.env.NEXT_PUBLIC_API_URL,
-                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
-                )
+                const data_source = new ImportExport_DataSourceImpl(ky)
                 const repository = new ImportExport_RepositoryImpl(data_source)
                 const download_backup_use_case = new DownloadBackup_UseCase(
                   repository,

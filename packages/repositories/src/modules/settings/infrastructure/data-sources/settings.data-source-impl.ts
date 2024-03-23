@@ -4,18 +4,13 @@ import { UsernameAvailability } from '../../domain/types/username-availability'
 import { MyUsername_Dto } from '@shared/types/modules/users/my-username.dto'
 import { UpdateUsername_Params } from '../../domain/types/update-username.params'
 import { UpdateUser_Dto } from '@shared/types/modules/users/update-user.dto'
+import { KyInstance } from 'ky'
 
 export class Settings_DataSourceImpl implements Settings_DataSource {
-  constructor(private readonly _api_url: string) {}
+  constructor(private readonly _ky: KyInstance) {}
 
   public async get_my_username(): Promise<MyUsername_Dto.Response> {
-    return fetch(`${this._api_url}/v1/user/my-username`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
-      },
-    }).then((r) => r.json())
+    return this._ky.get(`v1/user/my-username`, {}).json()
   }
 
   public async check_username_availability(
@@ -25,15 +20,11 @@ export class Settings_DataSourceImpl implements Settings_DataSource {
       username: params.username,
     }
 
-    return fetch(`${this._api_url}/v1/user/username-availability`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
-      },
-      body: JSON.stringify(body),
-    }).then((r) => r.json())
+    return this._ky
+      .post(`v1/user/username-availability`, {
+        body: JSON.stringify(body),
+      })
+      .json()
   }
 
   public async update_username(params: UpdateUsername_Params): Promise<void> {
@@ -41,13 +32,7 @@ export class Settings_DataSourceImpl implements Settings_DataSource {
       username: params.username,
     }
 
-    await fetch(`${this._api_url}/v1/user`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
-      },
+    await this._ky.patch(`v1/user`, {
       body: JSON.stringify(body),
     })
   }
