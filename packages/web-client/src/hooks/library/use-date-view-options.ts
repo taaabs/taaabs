@@ -1,30 +1,30 @@
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
-import { update_query_params } from '@/utils/update-query-params'
+import { update_search_params } from '@/utils/update-query-params'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
 export const use_date_view_options = () => {
-  const query_params = useSearchParams()
+  const search_params = useSearchParams()
   const params = useParams()
   const [current_gte, set_current_gte] = useState<number | undefined>(
-    parseInt(query_params.get('gte') || '0') || undefined,
+    parseInt(search_params.get('gte') || '0') || undefined,
   )
   const [current_lte, set_current_lte] = useState<number | undefined>(
-    parseInt(query_params.get('lte') || '0') || undefined,
+    parseInt(search_params.get('lte') || '0') || undefined,
   )
 
   useUpdateEffect(() => {
-    const query_gte = parseInt(query_params.get('gte') || '0')
-    const query_lte = parseInt(query_params.get('lte') || '0')
+    const query_gte = parseInt(search_params.get('gte') || '0')
+    const query_lte = parseInt(search_params.get('lte') || '0')
 
     if (query_gte != current_gte && query_lte != current_lte) {
       set_current_gte(query_gte || undefined)
       set_current_lte(query_lte || undefined)
     }
-  }, [query_params])
+  }, [search_params])
 
-  const set_gte_lte_query_params = ({
+  const set_gte_lte_search_params = ({
     gte,
     lte,
   }: {
@@ -34,49 +34,49 @@ export const use_date_view_options = () => {
     set_current_gte(gte)
     set_current_lte(lte)
 
-    let updated_query_params: any
-    updated_query_params = update_query_params(query_params, 'gte', `${gte}`)
-    updated_query_params = update_query_params(
-      updated_query_params,
+    let updated_search_params: any
+    updated_search_params = update_search_params(search_params, 'gte', `${gte}`)
+    updated_search_params = update_search_params(
+      updated_search_params,
       'lte',
       `${lte}`,
     )
 
     clear_library_session_storage({
       username: params.username as string,
-      query_params: updated_query_params.toString(),
+      search_params: updated_search_params.toString(),
     })
 
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updated_query_params,
+      window.location.pathname + '?' + updated_search_params,
     )
   }
 
-  const clear_gte_lte_query_params = useCallback(() => {
+  const clear_gte_lte_search_params = useCallback(() => {
     set_current_gte(undefined)
     set_current_lte(undefined)
 
-    let updated_query_params: any
-    updated_query_params = update_query_params(query_params, 'gte')
-    updated_query_params = update_query_params(updated_query_params, 'lte')
+    let updated_search_params: any
+    updated_search_params = update_search_params(search_params, 'gte')
+    updated_search_params = update_search_params(updated_search_params, 'lte')
 
     clear_library_session_storage({
       username: params.username as string,
-      query_params: updated_query_params.toString(),
+      search_params: updated_search_params.toString(),
     })
 
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updated_query_params,
+      window.location.pathname + '?' + updated_search_params,
     )
-  }, [query_params])
+  }, [search_params])
 
   return {
-    set_gte_lte_query_params,
-    clear_gte_lte_query_params,
+    set_gte_lte_search_params,
+    clear_gte_lte_search_params,
     current_gte,
     current_lte,
   }

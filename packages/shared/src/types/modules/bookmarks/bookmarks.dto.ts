@@ -2,12 +2,12 @@ import { PaginatedResponse } from '../../common/paginated-response'
 import { ApiProperty } from '@nestjs/swagger'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { PaginationQueryParams } from '@shared/types/common/pagination-options'
+import { PaginationSearchParams } from '@shared/types/common/pagination-options'
 import { Type } from 'class-transformer'
 import { ToBoolean } from '@shared/decorators/to-boolean'
 
 export namespace Bookmarks_Dto {
-  export class QueryParams extends PaginationQueryParams {
+  export class SearchParams extends PaginationSearchParams {
     @ApiProperty({
       description: 'Comma separated list of tag ids a bookmark must include.',
       example: '1,2,3',

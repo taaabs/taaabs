@@ -17,7 +17,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     dispatch(
       username_actions.get_current_username({
-        api_url: process.env.NEXT_PUBLIC_API_URL,
+        ky: ky_instance,
         user_id: 'da73e988-abe7-40a5-af67-f5b38ccbd935',
       }),
     )

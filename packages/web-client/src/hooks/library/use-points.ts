@@ -14,7 +14,7 @@ import { CheckTotalGivenPoints_UseCase } from '@repositories/modules/points/doma
 // This logic works only because of referential nature of "points_given" obejct. It works but could be moved to redux.
 export const use_points = () => {
   const dispatch = use_library_dispatch()
-  const query_params = useSearchParams()
+  const search_params = useSearchParams()
   const username = 'test_user'
   const [points_given, set_points_given] = useState<{
     [bookmark_id: string]: number
@@ -24,7 +24,7 @@ export const use_points = () => {
 
   useUpdateEffect(() => {
     set_points_given({})
-  }, [query_params])
+  }, [search_params])
 
   const submit_points_debounced = useDebouncedCallback(
     async (params: { bookmark_id: number; points: number }) => {

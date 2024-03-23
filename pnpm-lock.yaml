@@ -624,6 +624,9 @@ importers:
       exponential-backoff:
         specifier: ^3.1.1
         version: 3.1.1
+      ky:
+        specifier: ^1.2.2
+        version: 1.2.2
       query-string:
         specifier: ^8.1.0
         version: 8.1.0
@@ -728,6 +731,9 @@ importers:
       eslint-config-next:
         specifier: ^13.5.4
         version: 13.5.4(eslint@8.50.0)(typescript@5.2.2)
+      ky:
+        specifier: ^1.2.2
+        version: 1.2.2
       localforage:
         specifier: ^1.10.0
         version: 1.10.0
@@ -10776,6 +10782,11 @@ packages:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
     engines: {node: '>=6'}
     dev: true
+
+  /ky@1.2.2:
+    resolution: {integrity: sha512-gYA2QOI3uIaImJPJjaBbLCdvKHzwxsuB03s7PjrXmoO6tcn6k53rwYoSRgqrmVsEV6wFFegOXDVjABxFZ0aRSg==}
+    engines: {node: '>=18'}
+    dev: false
 
   /language-subtag-registry@0.3.22:
     resolution: {integrity: sha512-tN0MCzyWnoz/4nHS6uxdlFWoUZT7ABptwKPQ52Ea7URk6vll88bWBVhodtnlfEuCcKWNGoc+uGbw1cwa9IKh/w==}

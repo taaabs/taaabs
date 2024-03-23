@@ -2,6 +2,7 @@ import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { Filter } from '@/types/library/filter'
 import { GetTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/get-tag-hierarchies.params'
 import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
+import ky from 'ky'
 import { useParams } from 'next/navigation'
 
 export const use_tag_hierarchies = () => {
@@ -15,6 +16,13 @@ export const use_tag_hierarchies = () => {
     gte?: number
     lte?: number
   }) => {
+    const ky_instance = ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+        'Content-Type': 'application/json',
+      },
+    })
     if (!username) {
       const request_params: GetTagHierarchies_Params.Authorized = {
         gte: params.gte,
@@ -47,9 +55,7 @@ export const use_tag_hierarchies = () => {
       await dispatch(
         tag_hierarchies_actions.get_tag_hierarchies_authorized({
           request_params,
-          api_url: process.env.NEXT_PUBLIC_API_URL,
-          auth_token:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+          ky: ky_instance,
         }),
       )
     } else {
@@ -77,9 +83,7 @@ export const use_tag_hierarchies = () => {
       await dispatch(
         tag_hierarchies_actions.get_tag_hierarchies_public({
           request_params,
-          api_url: process.env.NEXT_PUBLIC_API_URL,
-          auth_token:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+          ky: ky_instance,
         }),
       )
     }

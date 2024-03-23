@@ -5,15 +5,16 @@ import { bookmarks_actions } from '../bookmarks.slice'
 import { GetBookmarksByIds_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks-by-ids.params'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { GetBookmarksByIdsPublic_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-by-ids-public.use-case'
+import { KyInstance } from 'ky'
 
 export const get_public_bookmarks_by_ids = (params: {
   request_params: GetBookmarksByIds_Params.Public
   is_next_page: boolean
-  api_url: string
+  ky: KyInstance
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
     new Promise<void>(async (resolve) => {
-      const data_source = new Bookmarks_DataSourceImpl(params.api_url, '')
+      const data_source = new Bookmarks_DataSourceImpl(params.ky)
       const repository = new Bookmarks_RepositoryImpl(data_source)
       const get_bookomarks_by_ids = new GetBookmarksByIdsPublic_UseCase(
         repository,

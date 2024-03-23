@@ -14,7 +14,7 @@ export namespace TagHierarchies_Dto {
     public name: string
     public children?: PublicNode[]
   }
-  export namespace QueryParams {
+  export namespace SearchParams {
     class Base {
       @ToBoolean()
       public starred_only?: boolean

@@ -5,17 +5,14 @@ import { Counts_RepositoryImpl } from '@repositories/modules/counts/infrastructu
 import { GetCountsOnAuthorizedUser_UseCase } from '@repositories/modules/counts/domain/usecases/get-counts-on-authorized-user.use-case'
 import { Counts_DataSourceImpl } from '@repositories/modules/counts/infrastructure/data-sources/counts.data-source-impl'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
+import { KyInstance } from 'ky'
 
 export const get_authorized_counts = (params: {
   request_params: Counts_Params.Authorized
-  api_url: string
-  auth_token: string
+  ky: KyInstance
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
-    const data_source = new Counts_DataSourceImpl(
-      params.api_url,
-      params.auth_token,
-    )
+    const data_source = new Counts_DataSourceImpl(params.ky)
     const repository = new Counts_RepositoryImpl(data_source)
     const get_months_use_case = new GetCountsOnAuthorizedUser_UseCase(
       repository,

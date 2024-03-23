@@ -59,7 +59,7 @@ export namespace Bookmark {
     on_give_point_click: () => void
     tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
     number_of_selected_tags: number
-    query_params?: string
+    search_params?: string
     on_click: () => void
     is_unread?: boolean
     stars: number
@@ -860,7 +860,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.is_fetching_bookmarks == n.is_fetching_bookmarks &&
     o.updated_at == n.updated_at &&
     o.render_height == n.render_height &&
-    o.query_params == n.query_params &&
+    o.search_params == n.search_params &&
     o.number_of_selected_tags == n.number_of_selected_tags &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&

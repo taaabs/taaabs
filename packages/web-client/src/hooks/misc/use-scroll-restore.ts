@@ -12,14 +12,14 @@ export const use_scroll_restore = () => {
   const [scroll_y, set_scroll_y] = useState(0)
   const on_window_scroll = useWindowScroll()
   const is_hydrated = use_is_hydrated()
-  const query_params = useSearchParams()
+  const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
 
   const on_scroll_y = useDebouncedCallback(
-    (scrollY: number, query_params: string, username?: string) => {
+    (scrollY: number, search_params: string, username?: string) => {
       sessionStorage.setItem(
         browser_storage.session_storage.library.scroll_y({
-          query_params,
+          search_params,
           username,
         }),
         scrollY.toString(),
@@ -30,7 +30,7 @@ export const use_scroll_restore = () => {
   )
 
   useUpdateEffect(() => {
-    on_scroll_y(scroll_y, query_params.toString(), username)
+    on_scroll_y(scroll_y, search_params.toString(), username)
   }, [scroll_y])
 
   on_window_scroll(() => {
@@ -40,7 +40,7 @@ export const use_scroll_restore = () => {
   useUpdateEffect(() => {
     const scroll_y = sessionStorage.getItem(
       browser_storage.session_storage.library.scroll_y({
-        query_params: query_params.toString(),
+        search_params: search_params.toString(),
         username,
       }),
     )
@@ -49,12 +49,12 @@ export const use_scroll_restore = () => {
         window.scrollTo(0, parseInt(scroll_y))
       }, 0)
     }
-  }, [query_params])
+  }, [search_params])
 
   useUpdateEffect(() => {
     const scroll_y = sessionStorage.getItem(
       browser_storage.session_storage.library.scroll_y({
-        query_params: query_params.toString(),
+        search_params: search_params.toString(),
         username,
       }),
     )

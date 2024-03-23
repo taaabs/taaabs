@@ -1,4 +1,4 @@
-function update_query_params(
+function update_search_params(
   searchParams: URLSearchParams,
   param: string,
   value?: string,
@@ -15,4 +15,4 @@ function update_query_params(
   return current_search_params
 }
 
-export { update_query_params }
+export { update_search_params }

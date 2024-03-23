@@ -55,6 +55,7 @@ import { counts_actions } from '@repositories/stores/library/counts/counts.slice
 import { use_points } from '@/hooks/library/use-points'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { use_scroll_restore } from '@/hooks/misc/use-scroll-restore'
+import ky from 'ky'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -74,7 +75,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   const is_hydrated = use_is_hydrated()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
-  const query_params = useSearchParams()
+  const search_params = useSearchParams()
   const { username } = useParams()
   const modal_context = useContext(ModalContext)
   const [show_custom_range, set_show_custom_range] = useState(false)
@@ -101,10 +102,26 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   const [are_bookmark_menu_items_locked, set_are_bookmarks_menu_items_locked] =
     useState(false)
 
+  const ky_instance = ky.create({
+    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+      'Content-Type': 'application/json',
+    },
+  })
+
   // Upload deferred recent visit - START
   const has_focus = use_has_focus()
 
   useUpdateEffect(() => {
+    const ky_instance = ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+        'Content-Type': 'application/json',
+      },
+    })
+
     if (username) return
     if (has_focus) {
       const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit | null =
@@ -119,10 +136,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           localStorage.removeItem(
             browser_storage.local_storage.authorized_library.recent_visit,
           )
-          const data_source = new Bookmarks_DataSourceImpl(
-            process.env.NEXT_PUBLIC_API_URL,
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
-          )
+          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
           const repository = new Bookmarks_RepositoryImpl(data_source)
           const record_visit = new RecordVisit_UseCase(repository)
           record_visit.invoke({
@@ -342,9 +356,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 }
 
                 const is_cache_stale = await search.check_is_cache_stale({
-                  api_url: process.env.NEXT_PUBLIC_API_URL,
-                  auth_token:
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                  ky: ky_instance,
                   is_archived: is_archived_filter,
                 })
 
@@ -626,9 +638,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 await dispatch(
                   tag_hierarchies_actions.update_tag_hierarchies({
                     update_tag_hierarchies_params,
-                    api_url: process.env.NEXT_PUBLIC_API_URL,
-                    auth_token:
-                      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                    ky: ky_instance,
                   }),
                 )
                 toast.success(params.dictionary.library.tag_hierarchies_upated)
@@ -636,13 +646,13 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               selected_tag_ids={tag_view_options.selected_tags}
               is_updating={tag_hierarchies.is_updating || false}
               on_item_click={(tag_ids) => {
-                tag_view_options.set_many_tags_to_query_params({
+                tag_view_options.set_many_tags_to_search_params({
                   tag_ids,
                 })
                 set_close_aside_count(close_aside_count + 1)
               }}
               dragged_tag={tag_view_options.dragged_tag}
-              query_params={query_params.toString()}
+              search_params={search_params.toString()}
               all_bookmarks_yields={tag_hierarchies.total}
               is_all_bookmarks_selected={!tag_view_options.selected_tags.length}
               on_click_all_bookmarks={() => {
@@ -860,18 +870,18 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   <CustomRange
                     counts={counts.months || undefined}
                     on_yyyymm_change={
-                      date_view_options.set_gte_lte_query_params
+                      date_view_options.set_gte_lte_search_params
                     }
                     clear_date_range={
-                      date_view_options.clear_gte_lte_query_params
+                      date_view_options.clear_gte_lte_search_params
                     }
                     current_gte={
-                      parseInt(query_params.get('gte') || '0') || undefined
+                      parseInt(search_params.get('gte') || '0') || undefined
                     }
                     current_lte={
-                      parseInt(query_params.get('lte') || '0') || undefined
+                      parseInt(search_params.get('lte') || '0') || undefined
                     }
-                    selected_tags={query_params.get('t') || undefined}
+                    selected_tags={search_params.get('t') || undefined}
                     has_results={
                       bookmarks_slice_state.bookmarks &&
                       !bookmarks_slice_state.is_fetching_first_bookmarks
@@ -942,7 +952,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                             }
                           })}
                         on_selected_tag_click={(tag_id) =>
-                          tag_view_options.remove_tags_from_query_params([
+                          tag_view_options.remove_tags_from_search_params([
                             tag_id,
                           ])
                         }
@@ -962,7 +972,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                             )
                           : {}
                       }
-                      on_click={tag_view_options.add_tag_to_query_params}
+                      on_click={tag_view_options.add_tag_to_search_params}
                       on_tag_drag_start={
                         !username ? tag_view_options.set_dragged_tag : undefined
                       }
@@ -1084,7 +1094,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       ? counts.selected_tags.length
                       : tag_view_options.selected_tags.length
                   }
-                  query_params={query_params.toString()}
+                  search_params={search_params.toString()}
                   tags={
                     bookmark.tags
                       ? bookmark.tags.map((tag) => {
@@ -1112,9 +1122,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   }
                   is_unread={bookmark.is_unread}
                   stars={bookmark.stars}
-                  on_tag_click={tag_view_options.add_tag_to_query_params}
+                  on_tag_click={tag_view_options.add_tag_to_search_params}
                   on_selected_tag_click={(tag_id) =>
-                    tag_view_options.remove_tags_from_query_params([tag_id])
+                    tag_view_options.remove_tags_from_search_params([tag_id])
                   }
                   render_height={bookmark.render_height}
                   set_render_height={(height) => {
@@ -1160,9 +1170,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     if (username) return
                     set_are_bookmarks_menu_items_locked(true)
                     const is_cache_stale = await search.check_is_cache_stale({
-                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                      auth_token:
-                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                      ky: ky_instance,
                       is_archived: is_archived_filter,
                     })
                     if (
@@ -1235,9 +1243,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         bookmark: modified_bookmark,
                         last_authorized_counts_params:
                           get_last_authorized_counts_params(),
-                        api_url: process.env.NEXT_PUBLIC_API_URL,
-                        auth_token:
-                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                        ky: ky_instance,
                       }),
                     )
                     toast.success(params.dictionary.library.bookmark_updated)
@@ -1315,9 +1321,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         bookmark: modified_bookmark,
                         last_authorized_counts_params:
                           get_last_authorized_counts_params(),
-                        api_url: process.env.NEXT_PUBLIC_API_URL,
-                        auth_token:
-                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                        ky: ky_instance,
                       }),
                     )
                     toast.success(params.dictionary.library.bookmark_updated)
@@ -1368,9 +1372,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         bookmark: modified_bookmark,
                         last_authorized_counts_params:
                           get_last_authorized_counts_params(),
-                        api_url: process.env.NEXT_PUBLIC_API_URL,
-                        auth_token:
-                          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                        ky: ky_instance,
                       }),
                     )
                     toast.success(params.dictionary.library.bookmark_updated)
@@ -1412,7 +1414,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       }
                     }
                     // Unselect removed tags when there is no more bookmarks with them.
-                    tag_view_options.remove_tags_from_query_params(
+                    tag_view_options.remove_tags_from_search_params(
                       tag_view_options.selected_tags.filter((t) => {
                         const yields = Object.values(
                           counts_slice_state.tags!,
@@ -1473,9 +1475,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
                                         get_last_authorized_counts_params(),
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                                      ky: ky_instance,
                                     }),
                                   )
                                   toast.success(
@@ -1570,9 +1570,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
                                         get_last_authorized_counts_params(),
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                                      ky: ky_instance,
                                     }),
                                   )
                                   toast.success(
@@ -1661,9 +1659,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
                                         get_last_authorized_counts_params(),
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                                      ky: ky_instance,
                                     }),
                                   )
                                   toast.success(
@@ -1751,9 +1747,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
                                         get_last_authorized_counts_params(),
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                                      ky: ky_instance,
                                     }),
                                   )
                                   toast.success(
@@ -1841,9 +1835,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
                                         get_last_authorized_counts_params(),
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                                      ky: ky_instance,
                                     }),
                                   )
                                   toast.success(
@@ -1931,9 +1923,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
                                         get_last_authorized_counts_params(),
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                                      ky: ky_instance,
                                     }),
                                   )
                                   toast.success(
@@ -2066,9 +2056,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     counts_actions.refresh_authorized_counts({
                                       last_authorized_counts_params:
                                         get_last_authorized_counts_params(),
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                                      ky: ky_instance,
                                     }),
                                   )
                                   await tag_hierarchies.get_tag_hierarchies({
@@ -2081,7 +2069,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   toast.success('Bookmark has beed updated')
 
                                   // Unselect removed tags when there is no more bookmarks with them.
-                                  tag_view_options.remove_tags_from_query_params(
+                                  tag_view_options.remove_tags_from_search_params(
                                     tag_view_options.selected_tags.filter(
                                       (t) => {
                                         const yields = Object.values(
@@ -2141,9 +2129,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       bookmark: modified_bookmark,
                                       last_authorized_counts_params:
                                         get_last_authorized_counts_params(),
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                                      ky: ky_instance,
                                     }),
                                   )
                                   toast.success(
@@ -2204,9 +2190,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                       last_authorized_counts_params:
                                         get_last_authorized_counts_params(),
                                       bookmark_id: bookmark.id,
-                                      api_url: process.env.NEXT_PUBLIC_API_URL,
-                                      auth_token:
-                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+                                      ky: ky_instance,
                                     }),
                                   )
                                   if (search.count) {
@@ -2262,7 +2246,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           !bookmarks_slice_state.is_fetching_first_bookmarks &&
           (!bookmarks_slice_state.bookmarks ||
             bookmarks_slice_state.bookmarks.length == 0) &&
-          query_params.get('t')
+          search_params.get('t')
             ? tag_view_options.clear_selected_tags
             : undefined
         }
@@ -2270,8 +2254,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           !bookmarks_slice_state.is_fetching_first_bookmarks &&
           (!bookmarks_slice_state.bookmarks ||
             bookmarks_slice_state.bookmarks.length == 0) &&
-          (query_params.get('gte') || query_params.get('lte'))
-            ? date_view_options.clear_gte_lte_query_params
+          (search_params.get('gte') || search_params.get('lte'))
+            ? date_view_options.clear_gte_lte_search_params
             : undefined
         }
         info_text={

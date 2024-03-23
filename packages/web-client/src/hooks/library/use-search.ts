@@ -35,6 +35,7 @@ import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/libr
 import { Filter } from '@/types/library/filter'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
+import ky, { KyInstance } from 'ky'
 
 export type BookmarkOfSearch = {
   id: number
@@ -83,7 +84,7 @@ type Result = TypedDocument<Orama<typeof schema>>
 type BookmarkTags = { id: number; tags: string[] }
 
 export const use_search = () => {
-  const query_params = useSearchParams()
+  const search_params = useSearchParams()
   const { username } = useParams()
   const [is_search_focused, set_is_search_focused] = useState(false)
   const [is_caching_ongoing, set_is_caching_ongoing] = useState(false)
@@ -147,8 +148,7 @@ export const use_search = () => {
   }, [ids_to_search_amongst])
 
   const check_is_cache_stale = async (params: {
-    api_url: string
-    auth_token?: string
+    ky: KyInstance
     is_archived: boolean
   }): Promise<boolean> => {
     const cache_updated_at = await localforage.getItem<Date>(
@@ -169,10 +169,7 @@ export const use_search = () => {
     if (cache_updated_at) {
       let updated_at: Date | undefined
 
-      const data_source = new LibrarySearch_DataSourceImpl(
-        params.api_url,
-        params.auth_token,
-      )
+      const data_source = new LibrarySearch_DataSourceImpl(params.ky)
       const repository = new LibrarySearch_RepositoryImpl(data_source)
 
       let result: GetLastUpdated_Ro
@@ -250,6 +247,14 @@ export const use_search = () => {
   }
 
   const init = async (params: { is_archived: boolean }) => {
+    const ky_instance = ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+        'Content-Type': 'application/json',
+      },
+    })
+
     set_is_initializing(true)
 
     const db = await create({
@@ -308,10 +313,7 @@ export const use_search = () => {
         : set_archived_bookmarks_just_tags(JSON.parse(cached_bookmarks))
       await loadWithHighlight(db, JSON.parse(cached_index as any))
     } else {
-      const data_source = new LibrarySearch_DataSourceImpl(
-        process.env.NEXT_PUBLIC_API_URL,
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
-      )
+      const data_source = new LibrarySearch_DataSourceImpl(ky_instance)
       const repository = new LibrarySearch_RepositoryImpl(data_source)
 
       let bookmarks: SearchableBookmark_Entity[]
@@ -522,11 +524,11 @@ export const use_search = () => {
     if ((!is_archived_filter && !db) || (is_archived_filter && !archived_db))
       throw new Error('DB should be there.')
 
-    const tags = query_params.get('t')
-    const gte = query_params.get('gte')
-    const lte = query_params.get('lte')
-    const order = query_params.get('o')
-    const sortby = query_params.get('s')
+    const tags = search_params.get('t')
+    const gte = search_params.get('gte')
+    const lte = search_params.get('lte')
+    const order = search_params.get('o')
+    const sortby = search_params.get('s')
 
     // 'lorem site:abc.com site:abc.com ipsum site:abc.com'
     // ["abccom", "abccom", "abccom"]
@@ -708,11 +710,11 @@ export const use_search = () => {
     if ((!is_archived_filter && !db) || (is_archived_filter && !archived_db))
       return
 
-    const tags = query_params.get('t')
-    const gte = query_params.get('gte')
-    const lte = query_params.get('lte')
-    const order = query_params.get('o')
-    const sortby = query_params.get('s')
+    const tags = search_params.get('t')
+    const gte = search_params.get('gte')
+    const lte = search_params.get('lte')
+    const order = search_params.get('o')
+    const sortby = search_params.get('s')
 
     const search_string_lower = search_string.toLowerCase()
 
@@ -1123,6 +1125,14 @@ export const use_search = () => {
   }
 
   const get_bookmarks = async (params: { should_get_next_page?: boolean }) => {
+    const ky_instance = ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+        'Content-Type': 'application/json',
+      },
+    })
+
     clear_hints()
 
     if (!result) return
@@ -1130,9 +1140,7 @@ export const use_search = () => {
     if (!username) {
       await dispatch(
         bookmarks_actions.get_authorized_bookmarks_by_ids({
-          api_url: process.env.NEXT_PUBLIC_API_URL,
-          auth_token:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+          ky: ky_instance,
           is_next_page: params.should_get_next_page || false!,
           request_params: {
             ids: params.should_get_next_page
@@ -1146,7 +1154,7 @@ export const use_search = () => {
     } else {
       await dispatch(
         bookmarks_actions.get_public_bookmarks_by_ids({
-          api_url: process.env.NEXT_PUBLIC_API_URL,
+          ky: ky_instance,
           is_next_page: params.should_get_next_page || false,
           request_params: {
             ids: params.should_get_next_page

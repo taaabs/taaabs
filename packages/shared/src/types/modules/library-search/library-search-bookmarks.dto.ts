@@ -1,7 +1,7 @@
 import { ToBoolean } from '@shared/decorators/to-boolean'
 
 export namespace LibrarySearchBookmarks_Dto {
-  export class QueryParams {
+  export class SearchParams {
     @ToBoolean()
     public is_archived?: boolean
   }

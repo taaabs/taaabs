@@ -10,25 +10,15 @@ import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-id
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { Crypto } from '@repositories/utils/crypto'
+import { KyInstance } from 'ky'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
-  constructor(
-    private readonly _api_url: string,
-    private readonly _auth_token: string,
-  ) {}
-
-  // private readonly _backoff_options: Partial<IBackOffOptions> = {
-  //   delayFirstAttempt: false,
-  //   startingDelay: 250,
-  //   maxDelay: 2000,
-  //   numOfAttempts: 100,
-  //   timeMultiple: 1.2,
-  // }
+  constructor(private readonly _ky: KyInstance) {}
 
   public async get_bookmarks_on_authorized_user(
     params: GetBookmarks_Params.Authorized,
   ): Promise<Bookmarks_Dto.Response.Authorized> {
-    const query_params: Bookmarks_Dto.QueryParams = {
+    const search_params: Bookmarks_Dto.SearchParams = {
       tags: params.tags?.join(','),
       after: params.after,
       starred_only: params.starred_only,
@@ -50,41 +40,17 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         : undefined,
     }
 
-    // const get_result = async () => {
-    //   const result = await fetch(
-    //     `${this._api_url}/v1/bookmarks?${new URLSearchParams(
-    //       JSON.parse(JSON.stringify(query_params)),
-    //     ).toString()}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${this._auth_token}`,
-    //       },
-    //     },
-    //   ).then((r) => r.json() as Bookmarks_Dto.Response.Authorized)
-    //   if (result.awaits_processing) {
-    //     throw new Error()
-    //   } else {
-    //     return result
-    //   }
-    // }
-
-    // return backOff(get_result, this._backoff_options)
-    return fetch(
-      `${this._api_url}/v1/bookmarks?${new URLSearchParams(
-        JSON.parse(JSON.stringify(query_params)),
-      ).toString()}`,
-      {
-        headers: {
-          Authorization: `Bearer ${this._auth_token}`,
-        },
-      },
-    ).then((r) => r.json())
+    return this._ky
+      .get(`v1/bookmarks`, {
+        searchParams: JSON.parse(JSON.stringify(search_params)),
+      })
+      .json()
   }
 
   public async get_bookmarks_on_public_user(
     params: GetBookmarks_Params.Public,
   ): Promise<Bookmarks_Dto.Response.Public> {
-    const query_params: Bookmarks_Dto.QueryParams = {
+    const search_params: Bookmarks_Dto.SearchParams = {
       tags: params.tags?.join(','),
       after: params.after,
       starred_only: params.starred_only,
@@ -105,42 +71,33 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         : undefined,
     }
 
-    return fetch(
-      `${this._api_url}/v1/bookmarks/${params.username}?${new URLSearchParams(
-        JSON.parse(JSON.stringify(query_params)),
-      ).toString()}`,
-    ).then((r) => r.json())
+    return this._ky
+      .get(`v1/bookmarks/${params.username}`, {
+        searchParams: JSON.parse(JSON.stringify(search_params)),
+      })
+      .json()
   }
 
   public async get_bookmarks_by_ids_authorized(
     params: GetBookmarksByIds_Params.Authorized,
   ): Promise<BookmarksByIds_Dto.Response.Authorized> {
     const body: BookmarksByIds_Dto.Body = params.ids
-    return await fetch(`${this._api_url}/v1/bookmarks/by-ids`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this._auth_token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    }).then((r) => r.json())
+    return this._ky
+      .post('v1/bookmarks/by-ids', {
+        body: JSON.stringify(body),
+      })
+      .json()
   }
 
   public async get_bookmarks_by_ids_public(
     params: GetBookmarksByIds_Params.Public,
   ): Promise<BookmarksByIds_Dto.Response.Public> {
     const body: BookmarksByIds_Dto.Body = params.ids
-    return await fetch(
-      `${this._api_url}/v1/bookmarks/by-ids/${params.username}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${this._auth_token}`,
-          'Content-Type': 'application/json',
-        },
+    return this._ky
+      .post(`v1/bookmarks/by-ids/${params.username}`, {
         body: JSON.stringify(body),
-      },
-    ).then((r) => r.json())
+      })
+      .json()
   }
 
   public async record_visit(params: RecordVisit_Params): Promise<void> {
@@ -148,23 +105,13 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       bookmark_id: params.bookmark_id,
       visited_at: params.visited_at.toISOString(),
     }
-    await fetch(`${this._api_url}/v1/bookmarks/record-visit`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this._auth_token}`,
-        'Content-Type': 'application/json',
-      },
+    await this._ky.post(`v1/bookmarks/record-visit`, {
       body: JSON.stringify(body),
     })
   }
 
   public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
-    await fetch(`${this._api_url}/v1/bookmarks/${params.bookmark_id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${this._auth_token}`,
-      },
-    })
+    await this._ky.delete(`v1/bookmarks/${params.bookmark_id}`)
   }
 
   public async upsert_bookmark(
@@ -259,35 +206,17 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     }
 
     if (params.bookmark_id) {
-      return fetch(`${this._api_url}/v1/bookmarks/${params.bookmark_id}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${this._auth_token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      }).then((r) => {
-        if (r.ok) {
-          return r.json()
-        } else {
-          throw new Error()
-        }
-      })
+      return this._ky
+        .put(`v1/bookmarks/${params.bookmark_id}`, {
+          body: JSON.stringify(body),
+        })
+        .json()
     } else {
-      return fetch(`${this._api_url}/v1/bookmarks`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${this._auth_token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      }).then((r) => {
-        if (r.ok) {
-          return r.json()
-        } else {
-          throw new Error()
-        }
-      })
+      return this._ky
+        .post('v1/bookmarks', {
+          body: JSON.stringify(body),
+        })
+        .json()
     }
   }
 }

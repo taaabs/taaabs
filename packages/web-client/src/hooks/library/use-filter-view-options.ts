@@ -1,4 +1,4 @@
-import { update_query_params } from '@/utils/update-query-params'
+import { update_search_params } from '@/utils/update-query-params'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
@@ -6,19 +6,19 @@ import { clear_library_session_storage } from '@/utils/clear_library_session_sto
 import { Filter } from '@/types/library/filter'
 
 export const use_filter_view_options = () => {
-  const query_params = useSearchParams()
+  const search_params = useSearchParams()
   const params = useParams()
   const [current_filter, set_current_filter] = useState<Filter>(
     Object.values(Filter)[
       parseInt(
-        query_params.get('f') ||
+        search_params.get('f') ||
           Object.values(Filter).indexOf(Filter.NONE).toString(),
       )
     ],
   )
 
   useUpdateEffect(() => {
-    const query_filter = query_params.get('f')
+    const query_filter = search_params.get('f')
 
     if (
       query_filter != Object.values(Filter).indexOf(current_filter).toString()
@@ -32,11 +32,11 @@ export const use_filter_view_options = () => {
         ],
       )
     }
-  }, [query_params])
+  }, [search_params])
 
   const set_filter_query_param = (filter: Filter) => {
-    const updated_query_params = update_query_params(
-      query_params,
+    const updated_search_params = update_search_params(
+      search_params,
       'f',
       filter == Filter.NONE
         ? undefined
@@ -45,61 +45,61 @@ export const use_filter_view_options = () => {
 
     clear_library_session_storage({
       username: params.username as string,
-      query_params: updated_query_params.toString(),
+      search_params: updated_search_params.toString(),
     })
 
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updated_query_params,
+      window.location.pathname + '?' + updated_search_params,
     )
   }
 
   const clear_selected_stars = () => {
-    let updated_query_params: URLSearchParams
+    let updated_search_params: URLSearchParams
     if (current_filter == Filter.STARRED_UNREAD) {
-      updated_query_params = update_query_params(
-        query_params,
+      updated_search_params = update_search_params(
+        search_params,
         'f',
         Object.values(Filter).indexOf(Filter.UNREAD).toString(),
       )
     } else {
-      updated_query_params = update_query_params(query_params, 'f')
+      updated_search_params = update_search_params(search_params, 'f')
     }
 
     clear_library_session_storage({
       username: params.username as string,
-      query_params: updated_query_params.toString(),
+      search_params: updated_search_params.toString(),
     })
 
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updated_query_params,
+      window.location.pathname + '?' + updated_search_params,
     )
   }
 
   const clear_unread = () => {
-    let updated_query_params: URLSearchParams
+    let updated_search_params: URLSearchParams
     if (current_filter == Filter.STARRED_UNREAD) {
-      updated_query_params = update_query_params(
-        query_params,
+      updated_search_params = update_search_params(
+        search_params,
         'f',
         Object.values(Filter).indexOf(Filter.STARRED).toString(),
       )
     } else {
-      updated_query_params = update_query_params(query_params, 'f')
+      updated_search_params = update_search_params(search_params, 'f')
     }
 
     clear_library_session_storage({
       username: params.username as string,
-      query_params: updated_query_params.toString(),
+      search_params: updated_search_params.toString(),
     })
 
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updated_query_params,
+      window.location.pathname + '?' + updated_search_params,
     )
   }
 

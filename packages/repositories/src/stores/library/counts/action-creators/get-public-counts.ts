@@ -5,13 +5,14 @@ import { Counts_DataSourceImpl } from '@repositories/modules/counts/infrastructu
 import { Counts_RepositoryImpl } from '@repositories/modules/counts/infrastructure/repositories/counts.repository-impl'
 import { GetCountsOnPublicUser_UseCase } from '@repositories/modules/counts/domain/usecases/get-counts-on-public-user.use-case'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
+import { KyInstance } from 'ky'
 
 export const get_public_counts = (params: {
   request_params: Counts_Params.Public
-  api_url: string
+  ky: KyInstance
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
-    const data_source = new Counts_DataSourceImpl(params.api_url, '')
+    const data_source = new Counts_DataSourceImpl(params.ky)
     const repository = new Counts_RepositoryImpl(data_source)
     const get_months = new GetCountsOnPublicUser_UseCase(repository)
 

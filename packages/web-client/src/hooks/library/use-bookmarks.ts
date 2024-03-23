@@ -13,9 +13,10 @@ import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/type
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { browser_storage } from '@/constants/browser-storage'
 import { Filter } from '@/types/library/filter'
+import ky from 'ky'
 
 export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
-  const query_params = useSearchParams()
+  const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
   const { bookmarks, has_more_bookmarks, density } = use_library_selector(
@@ -23,15 +24,23 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   )
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
+    const ky_instance = ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+        'Content-Type': 'application/json',
+      },
+    })
+
     if (!username) {
       const request_params: GetBookmarks_Params.Authorized = {}
 
-      const query_tags = query_params.get('t')
+      const query_tags = search_params.get('t')
       if (query_tags) {
         request_params.tags = query_tags.split(',')
       }
 
-      const query_filter = query_params.get('f')
+      const query_filter = search_params.get('f')
       if (query_filter) {
         request_params.starred_only =
           Object.values(Filter)[parseInt(query_filter)] == Filter.STARRED ||
@@ -64,22 +73,22 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
           undefined
       }
 
-      const query_sortby = query_params.get('s')
+      const query_sortby = search_params.get('s')
       if (query_sortby) {
         request_params.sort_by = Object.values(SortBy)[parseInt(query_sortby)]
       }
 
-      const query_order = query_params.get('o')
+      const query_order = search_params.get('o')
       if (query_order) {
         request_params.order = Object.values(Order)[parseInt(query_order)]
       }
 
-      const query_yyyymm_gte = query_params.get('gte')
+      const query_yyyymm_gte = search_params.get('gte')
       if (query_yyyymm_gte) {
         request_params.yyyymm_gte = parseInt(query_yyyymm_gte)
       }
 
-      const query_yyyymm_lte = query_params.get('lte')
+      const query_yyyymm_lte = search_params.get('lte')
       if (query_yyyymm_lte) {
         request_params.yyyymm_lte = parseInt(query_yyyymm_lte)
       }
@@ -92,9 +101,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       dispatch(
         bookmarks_actions.get_authorized_bookmarks({
           request_params,
-          api_url: process.env.NEXT_PUBLIC_API_URL,
-          auth_token:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
+          ky: ky_instance,
         }),
       )
     } else {
@@ -102,12 +109,12 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
         username,
       }
 
-      const query_tags = query_params.get('t')
+      const query_tags = search_params.get('t')
       if (query_tags) {
         request_params.tags = query_tags.split(',')
       }
 
-      const query_filter = query_params.get('f')
+      const query_filter = search_params.get('f')
       if (query_filter) {
         request_params.starred_only =
           Object.values(Filter)[parseInt(query_filter)] == Filter.STARRED ||
@@ -130,22 +137,22 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
           undefined
       }
 
-      const query_sortby = query_params.get('s')
+      const query_sortby = search_params.get('s')
       if (query_sortby) {
         request_params.sort_by = Object.values(SortBy)[parseInt(query_sortby)]
       }
 
-      const query_order = query_params.get('o')
+      const query_order = search_params.get('o')
       if (query_order) {
         request_params.order = Object.values(Order)[parseInt(query_order)]
       }
 
-      const query_yyyymm_gte = query_params.get('gte')
+      const query_yyyymm_gte = search_params.get('gte')
       if (query_yyyymm_gte) {
         request_params.yyyymm_gte = parseInt(query_yyyymm_gte)
       }
 
-      const query_yyyymm_lte = query_params.get('lte')
+      const query_yyyymm_lte = search_params.get('lte')
       if (query_yyyymm_lte) {
         request_params.yyyymm_lte = parseInt(query_yyyymm_lte)
       }
@@ -158,7 +165,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       dispatch(
         bookmarks_actions.get_public_bookmarks({
           request_params,
-          api_url: process.env.NEXT_PUBLIC_API_URL,
+          ky: ky_instance,
         }),
       )
     }
@@ -168,7 +175,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
     const bookmarks = sessionStorage.getItem(
       browser_storage.session_storage.library.bookmarks({
         username: username as string,
-        query_params: query_params.toString(),
+        search_params: search_params.toString(),
       }),
     )
 
@@ -178,7 +185,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       const has_more_bookmarks = sessionStorage.getItem(
         browser_storage.session_storage.library.has_more_bookmarks({
           username: username as string,
-          query_params: query_params.toString(),
+          search_params: search_params.toString(),
         }),
       )
       if (has_more_bookmarks) {
@@ -192,7 +199,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       const density = sessionStorage.getItem(
         browser_storage.session_storage.library.density({
           username: username as string,
-          query_params: query_params.toString(),
+          search_params: search_params.toString(),
         }),
       )
       if (density) {
@@ -201,12 +208,12 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
     } else {
       get_bookmarks({})
     }
-  }, [query_params])
+  }, [search_params])
 
   const set_bookomarks_to_session_storage = useDebouncedCallback(
     (params: {
       bookmarks: Bookmark_Entity[]
-      query_params: string
+      search_params: string
       has_more_bookmarks: boolean
       density: string
       username?: string
@@ -214,21 +221,21 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       sessionStorage.setItem(
         browser_storage.session_storage.library.bookmarks({
           username: params.username,
-          query_params: params.query_params.toString(),
+          search_params: params.search_params.toString(),
         }),
         JSON.stringify(params.bookmarks),
       )
       sessionStorage.setItem(
         browser_storage.session_storage.library.has_more_bookmarks({
           username: params.username,
-          query_params: params.query_params.toString(),
+          search_params: params.search_params.toString(),
         }),
         `${params.has_more_bookmarks}`,
       )
       sessionStorage.setItem(
         browser_storage.session_storage.library.density({
           username: params.username,
-          query_params: params.query_params.toString(),
+          search_params: params.search_params.toString(),
         }),
         `${params.density}`,
       )
@@ -241,7 +248,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
     if (params.is_in_search_mode) return
     set_bookomarks_to_session_storage({
       bookmarks,
-      query_params: query_params.toString(),
+      search_params: search_params.toString(),
       has_more_bookmarks,
       username,
       density,
@@ -252,7 +259,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
     const bookmarks = sessionStorage.getItem(
       browser_storage.session_storage.library.bookmarks({
         username: username as string,
-        query_params: query_params.toString(),
+        search_params: search_params.toString(),
       }),
     )
 
@@ -261,7 +268,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       const has_more_bookmarks = sessionStorage.getItem(
         browser_storage.session_storage.library.has_more_bookmarks({
           username: username as string,
-          query_params: query_params.toString(),
+          search_params: search_params.toString(),
         }),
       )
       if (has_more_bookmarks) {
@@ -274,7 +281,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       const density = sessionStorage.getItem(
         browser_storage.session_storage.library.density({
           username: username as string,
-          query_params: query_params.toString(),
+          search_params: search_params.toString(),
         }),
       )
       if (density) {

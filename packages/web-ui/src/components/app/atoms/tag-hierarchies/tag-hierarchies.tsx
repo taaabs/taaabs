@@ -23,7 +23,7 @@ export namespace TagHierarchies {
     selected_tag_ids: number[]
     is_updating: boolean
     dragged_tag?: { id: number; name: string }
-    query_params: string
+    search_params: string
     is_draggable: boolean
     all_bookmarks_yields?: number
     is_all_bookmarks_selected: boolean
@@ -383,7 +383,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     o.on_click_all_bookmarks == n.on_click_all_bookmarks &&
     o.is_all_bookmarks_selected == n.is_all_bookmarks_selected &&
     o.is_updating == n.is_updating &&
-    o.query_params == n.query_params &&
+    o.search_params == n.search_params &&
     JSON.stringify(o.selected_tag_ids) == JSON.stringify(n.selected_tag_ids) &&
     o.dragged_tag == n.dragged_tag &&
     JSON.stringify(o.tree) == JSON.stringify(n.tree),

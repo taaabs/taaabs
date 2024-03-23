@@ -1,4 +1,4 @@
-import { update_query_params } from '@/utils/update-query-params'
+import { update_search_params } from '@/utils/update-query-params'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
 import { useState } from 'react'
@@ -7,12 +7,12 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 
 export const use_sort_by_view_options = () => {
-  const query_params = useSearchParams()
+  const search_params = useSearchParams()
   const params = useParams()
   const [current_sort_by, set_current_sort_by] = useState<SortBy>(
     Object.values(SortBy)[
       parseInt(
-        query_params.get('s') ||
+        search_params.get('s') ||
           Object.values(SortBy)
             .indexOf(BookmarksFetchingDefaults.Common.sort_by)
             .toString(),
@@ -24,7 +24,7 @@ export const use_sort_by_view_options = () => {
   const [commited_sort_by, set_commited_sort_by] = useState<SortBy>()
 
   useUpdateEffect(() => {
-    const query_sort_by = query_params.get('s')
+    const query_sort_by = search_params.get('s')
 
     if (
       query_sort_by != Object.values(SortBy).indexOf(current_sort_by).toString()
@@ -40,30 +40,30 @@ export const use_sort_by_view_options = () => {
         ],
       )
     }
-  }, [query_params])
+  }, [search_params])
 
   const set_sort_by_query_param = (sort_by: SortBy) => {
-    let updated_query_params: any
-    updated_query_params = update_query_params(
-      query_params,
+    let updated_search_params: any
+    updated_search_params = update_search_params(
+      search_params,
       's',
       sort_by == BookmarksFetchingDefaults.Common.sort_by
         ? undefined
         : Object.values(SortBy).indexOf(sort_by).toString(),
     )
 
-    updated_query_params = update_query_params(updated_query_params, 'lte')
-    updated_query_params = update_query_params(updated_query_params, 'gte')
+    updated_search_params = update_search_params(updated_search_params, 'lte')
+    updated_search_params = update_search_params(updated_search_params, 'gte')
 
     clear_library_session_storage({
       username: params.username as string,
-      query_params: updated_query_params.toString(),
+      search_params: updated_search_params.toString(),
     })
 
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updated_query_params,
+      window.location.pathname + '?' + updated_search_params,
     )
   }
 

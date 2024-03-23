@@ -8,13 +8,14 @@ import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/type
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { backOff } from 'exponential-backoff'
 import { backoff_options } from '@repositories/core/backoff-options'
+import { KyInstance } from 'ky'
 
 export const get_public_bookmarks = (params: {
   request_params: GetBookmarks_Params.Public
-  api_url: string
+  ky: KyInstance
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
-    const data_source = new Bookmarks_DataSourceImpl(params.api_url, '')
+    const data_source = new Bookmarks_DataSourceImpl(params.ky)
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const get_bookmarks = new GetBookmarksOnPublicUser_UseCase(repository)
 

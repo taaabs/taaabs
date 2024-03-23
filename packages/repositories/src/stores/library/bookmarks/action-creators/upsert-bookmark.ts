@@ -7,21 +7,18 @@ import { bookmarks_actions } from '../bookmarks.slice'
 import { counts_actions } from '../../counts/counts.slice'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
+import { KyInstance } from 'ky'
 
 export const upsert_bookmark = (params: {
   bookmark: UpsertBookmark_Params
   last_authorized_counts_params?: Counts_Params.Authorized
-  api_url: string
-  auth_token: string
+  ky: KyInstance
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
     new Promise<Bookmark_Entity>(async (resolve) => {
       dispatch(bookmarks_actions.set_is_updating_bookmarks(true))
 
-      const data_source = new Bookmarks_DataSourceImpl(
-        params.api_url,
-        params.auth_token,
-      )
+      const data_source = new Bookmarks_DataSourceImpl(params.ky)
       const repository = new Bookmarks_RepositoryImpl(data_source)
       const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
 
@@ -83,8 +80,7 @@ export const upsert_bookmark = (params: {
         dispatch(
           counts_actions.refresh_authorized_counts({
             last_authorized_counts_params: params.last_authorized_counts_params,
-            api_url: params.api_url,
-            auth_token: params.auth_token,
+            ky: params.ky,
           }),
         )
       }

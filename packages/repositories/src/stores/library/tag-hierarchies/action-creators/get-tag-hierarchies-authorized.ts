@@ -4,17 +4,14 @@ import { TagHierarchies_RepositoryImpl } from '@repositories/modules/tag-hierarc
 import { GetTagHierarchiesAuthorized_UseCase } from '@repositories/modules/tag-hierarchies/domain/usecases/get-tag-hierarchies-authorized.use-case'
 import { tag_hierarchies_actions } from '../tag-hierarchies.slice'
 import { GetTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/get-tag-hierarchies.params'
+import { KyInstance } from 'ky'
 
 export const get_tag_hierarchies_authorized = (params: {
   request_params: GetTagHierarchies_Params.Authorized
-  api_url: string
-  auth_token: string
+  ky: KyInstance
 }) => {
   return async (dispatch: LibraryDispatch) => {
-    const data_source = new TagHierarchies_DataSourceImpl(
-      params.api_url,
-      params.auth_token,
-    )
+    const data_source = new TagHierarchies_DataSourceImpl(params.ky)
     const repository = new TagHierarchies_RepositoryImpl(data_source)
     const get_tag_hierarchies = new GetTagHierarchiesAuthorized_UseCase(
       repository,

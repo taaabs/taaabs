@@ -5,19 +5,16 @@ import { bookmarks_actions } from '../bookmarks.slice'
 import { GetBookmarksByIds_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks-by-ids.params'
 import { GetBookmarksByIdsAuthorized_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-by-ids-authorized.use-case'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
+import { KyInstance } from 'ky'
 
 export const get_authorized_bookmarks_by_ids = (params: {
   request_params: GetBookmarksByIds_Params.Authorized
   is_next_page: boolean
-  api_url: string
-  auth_token: string
+  ky: KyInstance
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
     new Promise<void>(async (resolve) => {
-      const data_source = new Bookmarks_DataSourceImpl(
-        params.api_url,
-        params.auth_token,
-      )
+      const data_source = new Bookmarks_DataSourceImpl(params.ky)
       const repository = new Bookmarks_RepositoryImpl(data_source)
       const get_bookomarks_by_ids = new GetBookmarksByIdsAuthorized_UseCase(
         repository,

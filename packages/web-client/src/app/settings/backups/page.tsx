@@ -21,7 +21,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     dispatch(
       backups_actions.get_backups({
-        api_url: process.env.NEXT_PUBLIC_API_URL,
+        ky: ky_instance,
         auth_token:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
       }),

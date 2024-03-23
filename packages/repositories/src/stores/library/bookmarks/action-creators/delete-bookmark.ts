@@ -5,12 +5,12 @@ import { DeleteBookmark_UseCase } from '@repositories/modules/bookmarks/domain/u
 import { bookmarks_actions } from '../bookmarks.slice'
 import { counts_actions } from '../../counts/counts.slice'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
+import { KyInstance } from 'ky'
 
 export const delete_bookmark = (params: {
   bookmark_id: number
   last_authorized_counts_params: Counts_Params.Authorized
-  api_url: string
-  auth_token: string
+  ky: KyInstance
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
     new Promise(async (resolve) => {
@@ -19,10 +19,7 @@ export const delete_bookmark = (params: {
       if (!state.bookmarks.bookmarks)
         throw new Error('[delete_bookmark] Bookmarks should be there')
 
-      const data_source = new Bookmarks_DataSourceImpl(
-        params.api_url,
-        params.auth_token,
-      )
+      const data_source = new Bookmarks_DataSourceImpl(params.ky)
       const repository = new Bookmarks_RepositoryImpl(data_source)
       const delete_bookmark_use_case = new DeleteBookmark_UseCase(repository)
       dispatch(bookmarks_actions.set_is_updating_bookmarks(true))
@@ -37,8 +34,7 @@ export const delete_bookmark = (params: {
       dispatch(
         counts_actions.refresh_authorized_counts({
           last_authorized_counts_params: params.last_authorized_counts_params,
-          api_url: params.api_url,
-          auth_token: params.auth_token,
+          ky: params.ky,
         }),
       )
       resolve(null)

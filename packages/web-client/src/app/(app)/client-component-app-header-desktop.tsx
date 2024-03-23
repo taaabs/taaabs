@@ -16,13 +16,13 @@ import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-u
 import { AppHeaderDesktop as UiAppTemplate_AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
 import { DesktopUserAreaForAppHeader as UiAppOrganism_DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
 import { UpsertBookmark as Form_UpsertBookmarkForm } from '@/forms/upsert-bookmark'
-import { update_query_params } from '@/utils/update-query-params'
+import { update_search_params } from '@/utils/update-query-params'
 import { BookmarkHash } from '@/utils/bookmark-hash'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
-  const query_params = useSearchParams()
+  const search_params = useSearchParams()
   const params = useParams()
   const pathname = usePathname()
   const router = useRouter()
@@ -117,15 +117,15 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         on_submit={(bookmark) => {
           modal?.set_modal()
           if (pathname == '/bookmarks') {
-            const updated_query_params = update_query_params(
-              query_params,
+            const updated_search_params = update_search_params(
+              search_params,
               'r', // Bookmarks (r)efetch trigger.
               bookmark.id.toString(),
             )
             window.history.pushState(
               {},
               '',
-              window.location.pathname + '?' + updated_query_params,
+              window.location.pathname + '?' + updated_search_params,
             )
           }
         }}

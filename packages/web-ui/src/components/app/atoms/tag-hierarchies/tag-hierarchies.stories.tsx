@@ -64,7 +64,7 @@ export const Primary = () => {
         on_item_click={() => {}}
         is_updating={false}
         selected_tag_ids={[1, 3, 5]}
-        query_params=""
+        search_params=""
         translations={{
           all_bookmarks: 'All bookmarks',
           drag_here: 'Drag and drop tags here',
@@ -83,7 +83,7 @@ export const Primary = () => {
           on_item_click={() => {}}
           is_updating={false}
           selected_tag_ids={[1, 3, 5]}
-          query_params=""
+          search_params=""
           translations={{
             all_bookmarks: 'All bookmarks',
             drag_here: 'Drag and drop tags here',
