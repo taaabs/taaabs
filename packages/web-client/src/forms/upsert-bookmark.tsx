@@ -15,6 +15,7 @@ import { Box as UiAppAtom_Box } from '../../../web-ui/src/components/app/atoms/b
 import { Input as UiCommonAtom_Input } from '../../../web-ui/src/components/common/atoms/input'
 import { DraggableFormInputs as UiAppAtom_DraggableFormInputs } from '../../../web-ui/src/components/app/atoms/draggable-form-inputs'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
+import ky from 'ky'
 
 type FormValues = {
   title: string
@@ -79,10 +80,14 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   )
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
-    const data_source = new Bookmarks_DataSourceImpl(
-      process.env.NEXT_PUBLIC_API_URL,
-      props.auth_token,
-    )
+    const ky_instance = ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+        'Content-Type': 'application/json',
+      },
+    })
+    const data_source = new Bookmarks_DataSourceImpl(ky_instance)
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
     const bookmark = await upsert_bookmark_use_case.invoke({
