@@ -63,7 +63,13 @@ export namespace Bookmark {
     on_click: () => void
     is_unread?: boolean
     stars: number
-    links: { url: string; site_path?: string; saves?: number }[]
+    pinned_links_count: number
+    links: {
+      url: string
+      site_path?: string
+      saves?: number
+      menu_slot: React.ReactNode
+    }[]
     render_height?: number
     set_render_height: (height: number) => void
     on_link_click?: () => void
@@ -107,6 +113,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const DOMRect = useResizeObserver(ref)
     const is_visible = useViewportSpy(ref)
     const [is_menu_open, toggle_is_menu_open] = useToggle(false)
+    const [link_url_menu_opened, set_link_url_menu_opened] = useState<string>()
     const [render_height, set_render_height] = useState<number | undefined>(
       props.render_height,
     )
@@ -241,9 +248,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         <Icon variant="THREE_DOTS" />
                       </button>
                       <div
-                        className={cn(styles.bookmark__main__top__menu__slot, {
-                          [styles['bookmark__main__top__menu__slot--hidden']]:
-                            !is_menu_open,
+                        className={cn(styles.slot, {
+                          [styles['slot--hidden']]: !is_menu_open,
                         })}
                         onClick={() => {
                           toggle_is_menu_open()
@@ -831,14 +837,43 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         >
                           <Icon variant="NEW_TAB" />
                         </button>
-                        <button
+                        <div
                           className={
                             styles.bookmark__links__item__actions__menu
                           }
-                          onClick={async () => {}}
                         >
-                          <Icon variant="THREE_DOTS" />
-                        </button>
+                          <OutsideClickHandler
+                            disabled={link_url_menu_opened != link.url}
+                            onOutsideClick={() => {
+                              set_link_url_menu_opened(undefined)
+                            }}
+                          >
+                            <button
+                              className={
+                                styles.bookmark__links__item__actions__menu__button
+                              }
+                              onClick={async (e) => {
+                                e.stopPropagation()
+                                link_url_menu_opened != link.url
+                                  ? set_link_url_menu_opened(link.url)
+                                  : set_link_url_menu_opened(undefined)
+                              }}
+                            >
+                              <Icon variant="THREE_DOTS" />
+                            </button>
+                            <div
+                              className={cn(styles.slot, {
+                                [styles['slot--hidden']]:
+                                  link_url_menu_opened != link.url,
+                              })}
+                              onClick={() => {
+                                set_link_url_menu_opened(undefined)
+                              }}
+                            >
+                              {link.menu_slot}
+                            </div>
+                          </OutsideClickHandler>
+                        </div>
                       </div>
                     </div>
                   )
@@ -865,7 +900,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&
     o.counts_refreshed_at_timestamp == n.counts_refreshed_at_timestamp &&
-    o.dragged_tag?.id == n.dragged_tag?.id,
+    o.dragged_tag?.id == n.dragged_tag?.id &&
+    o.pinned_links_count == n.pinned_links_count,
 )
 
 function get_url_domain(url: string): string {

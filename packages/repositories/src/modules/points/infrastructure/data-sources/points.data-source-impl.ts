@@ -15,7 +15,7 @@ export class Points_DataSourceImpl implements Points_DataSource {
       points: params.points,
     }
 
-    await this._ky.post(`/v1/points`, {
+    await this._ky.post(`v1/points`, {
       body: JSON.stringify(body),
     })
   }

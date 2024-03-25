@@ -9,6 +9,7 @@ import {
   SendImportData_Params,
   send_import_data_params_schema,
 } from '@repositories/modules/import-export/domain/types/send-import-data.params'
+import ky from 'ky'
 
 type BookmarkNode = {
   type: 'link'
@@ -125,10 +126,15 @@ export const use_import = () => {
 
     if (!params) return
 
-    const data_source = new ImportExport_DataSourceImpl(
-      process.env.NEXT_PUBLIC_API_URL,
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
-    )
+    const ky_instance = ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data_source = new ImportExport_DataSourceImpl(ky_instance)
     const repository = new ImportExport_RepositoryImpl(data_source)
     const send_import_data_use_case = new SendImportData_UseCase(repository)
     set_is_sending(true)

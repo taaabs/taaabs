@@ -189,6 +189,9 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                 url: link.url.trim(),
                 hash: await Crypto.SHA256(link.url.trim(), key),
                 site: link.is_public ? link.site_path : undefined,
+                is_pinned: link.is_pinned,
+                pin_title: link.pin_title,
+                pin_order: link.pin_order,
               }
             } else {
               return {
@@ -199,6 +202,11 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                   key,
                 ),
                 hash: await Crypto.SHA256(link.url.trim(), key),
+                is_pinned: link.is_pinned,
+                pin_title_aes: link.pin_title
+                  ? await Crypto.AES.encrypt(link.pin_title, key)
+                  : undefined,
+                pin_order: link.pin_order,
               }
             }
           }),

@@ -1013,11 +1013,11 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           bookmarks_slice_state.bookmarks
             ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
                 <UiAppAtom_Bookmark
+                  key={bookmark.id}
                   bookmark_id={bookmark.id}
                   on_tag_drag_start={
                     !username ? tag_view_options.set_dragged_tag : undefined
                   }
-                  key={bookmark.id}
                   density={bookmarks_slice_state.density}
                   is_compact={bookmark.is_compact}
                   updated_at={bookmark.updated_at}
@@ -1084,11 +1084,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   counts_refreshed_at_timestamp={
                     counts_slice_state.refreshed_at_timestamp
                   }
-                  links={bookmark.links.map((link) => ({
-                    url: link.url,
-                    saves: link.saves,
-                    site_path: link.site_path,
-                  }))}
                   number_of_selected_tags={
                     bookmarks_slice_state.is_fetching_first_bookmarks
                       ? counts.selected_tags.length
@@ -1226,6 +1221,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         url: link.url,
                         site_path: link.site_path,
                         is_public: link.is_public,
+                        is_pinned: link.is_pinned,
+                        pin_title: link.pin_title,
+                        pin_order: link.pin_order,
                       })),
                       tags: [
                         ...bookmark.tags.map((tag) => ({
@@ -1310,6 +1308,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         url: link.url,
                         site_path: link.site_path,
                         is_public: link.is_public,
+                        is_pinned: link.is_pinned,
+                        pin_title: link.pin_title,
+                        pin_order: link.pin_order,
                       })),
                       tags: tags.map((tag) => ({
                         name: tag.name,
@@ -1359,6 +1360,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         url: link.url,
                         site_path: link.site_path,
                         is_public: link.is_public,
+                        is_pinned: link.is_pinned,
+                        pin_title: link.pin_title,
+                        pin_order: link.pin_order,
                       })),
                       tags: bookmark.tags
                         .filter((tag) => tag.id !== tag_id)
@@ -1428,801 +1432,837 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       lte: date_view_options.current_lte,
                     })
                   }}
+                  pinned_links_count={bookmark.links.reduce(
+                    (acc, link) => (link.is_pinned ? acc + 1 : acc),
+                    0,
+                  )}
+                  links={bookmark.links.map((link) => ({
+                    url: link.url,
+                    saves: link.saves,
+                    site_path: link.site_path,
+                    menu_slot: !username ? (
+                      <UiAppAtom_DropdownMenu
+                        items={[
+                          {
+                            label: link.is_pinned
+                              ? params.dictionary.library.remove_from_pinned
+                              : params.dictionary.library.add_to_pinned,
+                            on_click: async () => {
+                              const is_pinned = !link.is_pinned
+                              const modified_bookmark: UpsertBookmark_Params = {
+                                bookmark_id: bookmark.id,
+                                is_public: bookmark.is_public,
+                                created_at: new Date(bookmark.created_at),
+                                title: bookmark.title,
+                                note: bookmark.note,
+                                is_archived: is_archived_filter,
+                                is_unread: bookmark.is_unread,
+                                stars: bookmark.stars,
+                                links: bookmark.links.map((l) => ({
+                                  url: l.url,
+                                  site_path: l.site_path,
+                                  is_public: l.is_public,
+                                  is_pinned:
+                                    link.url == l.url ? is_pinned : l.is_pinned,
+                                  pin_title: l.pin_title,
+                                  pin_order: l.pin_order,
+                                })),
+                                tags: bookmark.tags.map((tag) => ({
+                                  name: tag.name,
+                                  is_public: tag.is_public,
+                                })),
+                              }
+                              await dispatch(
+                                bookmarks_actions.upsert_bookmark({
+                                  bookmark: modified_bookmark,
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  ky: ky_instance,
+                                }),
+                              )
+                              toast.success(
+                                is_pinned
+                                  ? params.dictionary.library.link_is_now_pinned
+                                  : params.dictionary.library
+                                      .pin_has_been_removed,
+                              )
+                            },
+                            other_icon: (
+                              <UiCommonParticles_Icon variant="ARCHIVE" />
+                            ),
+                          },
+                        ]}
+                      />
+                    ) : (
+                      <></>
+                    ),
+                  }))}
                   menu_slot={
-                    <UiAppAtom_DropdownMenu
-                      items={[
-                        ...(username
-                          ? [
-                              {
-                                label: 'Copy to mine',
-                                on_click: () => {},
-                                other_icon: (
-                                  <UiCommonParticles_Icon variant="COPY" />
-                                ),
-                              },
-                            ]
-                          : []),
-                        ...(!username
-                          ? [
-                              {
-                                label: 'Mark as unread',
-                                is_checked: bookmark.is_unread,
-                                is_disabled: are_bookmark_menu_items_locked,
-                                on_click: async () => {
-                                  const is_unread = !bookmark.is_unread
-                                  const modified_bookmark: UpsertBookmark_Params =
-                                    {
-                                      bookmark_id: bookmark.id,
-                                      is_public: bookmark.is_public,
-                                      created_at: new Date(bookmark.created_at),
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread,
-                                      stars: bookmark.stars,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                        is_public: link.is_public,
-                                      })),
-                                      tags: bookmark.tags.map((tag) => ({
-                                        name: tag.name,
-                                        is_public: tag.is_public,
-                                      })),
-                                    }
-                                  const updated_bookmark = await dispatch(
-                                    bookmarks_actions.upsert_bookmark({
-                                      bookmark: modified_bookmark,
-                                      last_authorized_counts_params:
-                                        get_last_authorized_counts_params(),
-                                      ky: ky_instance,
-                                    }),
-                                  )
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
-                                  await search.update_searchable_bookmark({
-                                    bookmark: {
-                                      id: bookmark.id,
-                                      created_at: bookmark.created_at,
-                                      visited_at: bookmark.visited_at,
-                                      updated_at: updated_bookmark.updated_at,
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread,
-                                      stars: bookmark.stars,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                        is_public: link.is_public,
-                                      })),
-                                      tags: bookmark.tags.map(
-                                        (tag) => tag.name,
-                                      ),
-                                      tag_ids: bookmark.tags.map(
-                                        (tag) => tag.id,
-                                      ),
-                                    },
-                                  })
-                                  if (
-                                    search.count &&
-                                    (filter_view_options.current_filter ==
-                                      Filter.UNREAD ||
-                                      filter_view_options.current_filter ==
-                                        Filter.STARRED_UNREAD ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                                    bookmark.is_unread
-                                  ) {
-                                    search.set_count(search.count! - 1)
-                                  }
-                                  if (
-                                    bookmarks_slice_state.bookmarks &&
-                                    bookmarks_slice_state.bookmarks.length ==
-                                      1 &&
-                                    search.search_string.length
-                                  ) {
-                                    if (
-                                      !is_unread &&
-                                      (filter_view_options.current_filter ==
-                                        Filter.UNREAD ||
-                                        filter_view_options.current_filter ==
-                                          Filter.STARRED_UNREAD)
-                                    ) {
-                                      search.reset()
-                                    }
-                                  }
-                                  await tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
+                    !username ? (
+                      <UiAppAtom_DropdownMenu
+                        items={[
+                          {
+                            label: 'Mark as unread',
+                            is_checked: bookmark.is_unread,
+                            is_disabled: are_bookmark_menu_items_locked,
+                            on_click: async () => {
+                              const is_unread = !bookmark.is_unread
+                              const modified_bookmark: UpsertBookmark_Params = {
+                                bookmark_id: bookmark.id,
+                                is_public: bookmark.is_public,
+                                created_at: new Date(bookmark.created_at),
+                                title: bookmark.title,
+                                note: bookmark.note,
+                                is_archived: is_archived_filter,
+                                is_unread,
+                                stars: bookmark.stars,
+                                links: bookmark.links.map((link) => ({
+                                  url: link.url,
+                                  site_path: link.site_path,
+                                  is_public: link.is_public,
+                                  is_pinned: link.is_pinned,
+                                  pin_title: link.pin_title,
+                                  pin_order: link.pin_order,
+                                })),
+                                tags: bookmark.tags.map((tag) => ({
+                                  name: tag.name,
+                                  is_public: tag.is_public,
+                                })),
+                              }
+                              const updated_bookmark = await dispatch(
+                                bookmarks_actions.upsert_bookmark({
+                                  bookmark: modified_bookmark,
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  ky: ky_instance,
+                                }),
+                              )
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
+                              await search.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread,
+                                  stars: bookmark.stars,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                    is_public: link.is_public,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
                                 },
-                              },
-                              {
-                                label: <UiAppAtom_StarsForDropdown stars={1} />,
-                                is_checked: bookmark.stars == 1,
-                                is_disabled: are_bookmark_menu_items_locked,
-                                on_click: async () => {
-                                  const modified_bookmark: UpsertBookmark_Params =
-                                    {
-                                      bookmark_id: bookmark.id,
-                                      is_public: bookmark.is_public,
-                                      created_at: new Date(bookmark.created_at),
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars == 1 ? 0 : 1,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                        is_public: link.is_public,
-                                      })),
-                                      tags: bookmark.tags.map((tag) => ({
-                                        name: tag.name,
-                                        is_public: tag.is_public,
-                                      })),
-                                    }
-                                  const updated_bookmark = await dispatch(
-                                    bookmarks_actions.upsert_bookmark({
-                                      bookmark: modified_bookmark,
-                                      last_authorized_counts_params:
-                                        get_last_authorized_counts_params(),
-                                      ky: ky_instance,
-                                    }),
-                                  )
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
-                                  await search.update_searchable_bookmark({
-                                    bookmark: {
-                                      id: bookmark.id,
-                                      created_at: bookmark.created_at,
-                                      visited_at: bookmark.visited_at,
-                                      updated_at: updated_bookmark.updated_at,
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars == 1 ? 0 : 1,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                        is_public: link.is_public,
-                                      })),
-                                      tags: bookmark.tags.map(
-                                        (tag) => tag.name,
-                                      ),
-                                      tag_ids: bookmark.tags.map(
-                                        (tag) => tag.id,
-                                      ),
-                                    },
-                                  })
-                                  if (
-                                    search.count &&
-                                    (filter_view_options.current_filter ==
-                                      Filter.STARRED ||
-                                      filter_view_options.current_filter ==
-                                        Filter.STARRED_UNREAD ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                                    bookmark.stars == 1
-                                  ) {
-                                    search.set_count(search.count - 1)
-                                  }
-                                  if (
-                                    bookmarks_slice_state.bookmarks &&
-                                    bookmarks_slice_state.bookmarks.length ==
-                                      1 &&
-                                    search.search_string.length
-                                  ) {
-                                    search.reset()
-                                  }
-                                  await tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
-                                },
-                              },
-                              {
-                                label: <UiAppAtom_StarsForDropdown stars={2} />,
-                                is_checked: bookmark.stars == 2,
-                                is_disabled: are_bookmark_menu_items_locked,
-                                on_click: async () => {
-                                  const modified_bookmark: UpsertBookmark_Params =
-                                    {
-                                      bookmark_id: bookmark.id,
-                                      is_public: bookmark.is_public,
-                                      created_at: new Date(bookmark.created_at),
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars == 2 ? 0 : 2,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                        is_public: link.is_public,
-                                      })),
-                                      tags: bookmark.tags.map((tag) => ({
-                                        name: tag.name,
-                                        is_public: tag.is_public,
-                                      })),
-                                    }
-                                  const updated_bookmark = await dispatch(
-                                    bookmarks_actions.upsert_bookmark({
-                                      bookmark: modified_bookmark,
-                                      last_authorized_counts_params:
-                                        get_last_authorized_counts_params(),
-                                      ky: ky_instance,
-                                    }),
-                                  )
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
-                                  await search.update_searchable_bookmark({
-                                    bookmark: {
-                                      id: bookmark.id,
-                                      created_at: bookmark.created_at,
-                                      visited_at: bookmark.visited_at,
-                                      updated_at: updated_bookmark.updated_at,
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars == 2 ? 0 : 2,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                      })),
-                                      tags: bookmark.tags.map(
-                                        (tag) => tag.name,
-                                      ),
-                                      tag_ids: bookmark.tags.map(
-                                        (tag) => tag.id,
-                                      ),
-                                    },
-                                  })
-                                  if (
-                                    search.count &&
-                                    (filter_view_options.current_filter ==
-                                      Filter.STARRED ||
-                                      filter_view_options.current_filter ==
-                                        Filter.STARRED_UNREAD ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                                    bookmark.stars == 2
-                                  ) {
-                                    search.set_count(search.count - 1)
-                                  }
-                                  if (
-                                    bookmarks_slice_state.bookmarks &&
-                                    bookmarks_slice_state.bookmarks.length ==
-                                      1 &&
-                                    search.search_string.length
-                                  ) {
-                                    search.reset()
-                                  }
-                                  await tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
-                                },
-                              },
-                              {
-                                label: <UiAppAtom_StarsForDropdown stars={3} />,
-                                is_checked: bookmark.stars == 3,
-                                is_disabled: are_bookmark_menu_items_locked,
-                                on_click: async () => {
-                                  const modified_bookmark: UpsertBookmark_Params =
-                                    {
-                                      bookmark_id: bookmark.id,
-                                      is_public: bookmark.is_public,
-                                      created_at: new Date(bookmark.created_at),
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars == 3 ? 0 : 3,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                        is_public: link.is_public,
-                                      })),
-                                      tags: bookmark.tags.map((tag) => ({
-                                        name: tag.name,
-                                        is_public: tag.is_public,
-                                      })),
-                                    }
-                                  const updated_bookmark = await dispatch(
-                                    bookmarks_actions.upsert_bookmark({
-                                      bookmark: modified_bookmark,
-                                      last_authorized_counts_params:
-                                        get_last_authorized_counts_params(),
-                                      ky: ky_instance,
-                                    }),
-                                  )
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
-                                  await search.update_searchable_bookmark({
-                                    bookmark: {
-                                      id: bookmark.id,
-                                      created_at: bookmark.created_at,
-                                      visited_at: bookmark.visited_at,
-                                      updated_at: updated_bookmark.updated_at,
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars == 3 ? 0 : 3,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                      })),
-                                      tags: bookmark.tags.map(
-                                        (tag) => tag.name,
-                                      ),
-                                      tag_ids: bookmark.tags.map(
-                                        (tag) => tag.id,
-                                      ),
-                                    },
-                                  })
-                                  if (
-                                    search.count &&
-                                    (filter_view_options.current_filter ==
-                                      Filter.STARRED ||
-                                      filter_view_options.current_filter ==
-                                        Filter.STARRED_UNREAD ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                                    bookmark.stars == 3
-                                  ) {
-                                    search.set_count(search.count - 1)
-                                  }
-                                  if (
-                                    bookmarks_slice_state.bookmarks &&
-                                    bookmarks_slice_state.bookmarks.length ==
-                                      1 &&
-                                    search.search_string.length
-                                  ) {
-                                    search.reset()
-                                  }
-                                  await tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
-                                },
-                              },
-                              {
-                                label: <UiAppAtom_StarsForDropdown stars={4} />,
-                                is_checked: bookmark.stars == 4,
-                                is_disabled: are_bookmark_menu_items_locked,
-                                on_click: async () => {
-                                  const modified_bookmark: UpsertBookmark_Params =
-                                    {
-                                      bookmark_id: bookmark.id,
-                                      is_public: bookmark.is_public,
-                                      created_at: new Date(bookmark.created_at),
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars == 4 ? 0 : 4,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                        is_public: link.is_public,
-                                      })),
-                                      tags: bookmark.tags.map((tag) => ({
-                                        name: tag.name,
-                                        is_public: tag.is_public,
-                                      })),
-                                    }
-                                  const updated_bookmark = await dispatch(
-                                    bookmarks_actions.upsert_bookmark({
-                                      bookmark: modified_bookmark,
-                                      last_authorized_counts_params:
-                                        get_last_authorized_counts_params(),
-                                      ky: ky_instance,
-                                    }),
-                                  )
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
-                                  await search.update_searchable_bookmark({
-                                    bookmark: {
-                                      id: bookmark.id,
-                                      created_at: bookmark.created_at,
-                                      visited_at: bookmark.visited_at,
-                                      updated_at: updated_bookmark.updated_at,
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars == 4 ? 0 : 4,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                      })),
-                                      tags: bookmark.tags.map(
-                                        (tag) => tag.name,
-                                      ),
-                                      tag_ids: bookmark.tags.map(
-                                        (tag) => tag.id,
-                                      ),
-                                    },
-                                  })
-                                  if (
-                                    search.count &&
-                                    (filter_view_options.current_filter ==
-                                      Filter.STARRED ||
-                                      filter_view_options.current_filter ==
-                                        Filter.STARRED_UNREAD ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                                    bookmark.stars == 4
-                                  ) {
-                                    search.set_count(search.count - 1)
-                                  }
-                                  if (
-                                    bookmarks_slice_state.bookmarks &&
-                                    bookmarks_slice_state.bookmarks.length ==
-                                      1 &&
-                                    search.search_string.length
-                                  ) {
-                                    search.reset()
-                                  }
-                                  await tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
-                                },
-                              },
-                              {
-                                label: <UiAppAtom_StarsForDropdown stars={5} />,
-                                is_checked: bookmark.stars == 5,
-                                is_disabled: are_bookmark_menu_items_locked,
-                                on_click: async () => {
-                                  const modified_bookmark: UpsertBookmark_Params =
-                                    {
-                                      bookmark_id: bookmark.id,
-                                      is_public: bookmark.is_public,
-                                      created_at: new Date(bookmark.created_at),
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars == 5 ? 0 : 5,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                        is_public: link.is_public,
-                                      })),
-                                      tags: bookmark.tags.map((tag) => ({
-                                        name: tag.name,
-                                        is_public: tag.is_public,
-                                      })),
-                                    }
-                                  const updated_bookmark = await dispatch(
-                                    bookmarks_actions.upsert_bookmark({
-                                      bookmark: modified_bookmark,
-                                      last_authorized_counts_params:
-                                        get_last_authorized_counts_params(),
-                                      ky: ky_instance,
-                                    }),
-                                  )
-                                  toast.success(
-                                    params.dictionary.library.bookmark_updated,
-                                  )
-                                  await search.update_searchable_bookmark({
-                                    bookmark: {
-                                      id: bookmark.id,
-                                      created_at: bookmark.created_at,
-                                      visited_at: bookmark.visited_at,
-                                      updated_at: updated_bookmark.updated_at,
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars == 4 ? 0 : 4,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                      })),
-                                      tags: bookmark.tags.map(
-                                        (tag) => tag.name,
-                                      ),
-                                      tag_ids: bookmark.tags.map(
-                                        (tag) => tag.id,
-                                      ),
-                                    },
-                                  })
-                                  if (
-                                    search.count &&
-                                    (filter_view_options.current_filter ==
-                                      Filter.STARRED ||
-                                      filter_view_options.current_filter ==
-                                        Filter.STARRED_UNREAD ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED ||
-                                      filter_view_options.current_filter ==
-                                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                                    bookmark.stars == 5
-                                  ) {
-                                    search.set_count(search.count - 1)
-                                  }
-                                  if (
-                                    bookmarks_slice_state.bookmarks &&
-                                    bookmarks_slice_state.bookmarks.length ==
-                                      1 &&
-                                    search.search_string.length
-                                  ) {
-                                    search.reset()
-                                  }
-                                  await tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
-                                },
-                              },
-                              {
-                                label: 'Edit',
-                                is_disabled: are_bookmark_menu_items_locked,
-                                on_click: async () => {
-                                  const updated_bookmark =
-                                    await upsert_bookmark_modal({
-                                      modal_context,
-                                      bookmark,
-                                      is_archived: is_archived_filter,
-                                      ky: ky_instance,
-                                    })
-                                  const updated_tag_ids =
-                                    updated_bookmark.tags.map((t) => t.id)
-                                  if (
-                                    tag_view_options.selected_tags.every((t) =>
-                                      updated_tag_ids.includes(t),
-                                    )
-                                  ) {
-                                    dispatch(
-                                      bookmarks_actions.set_incoming_bookmarks(
-                                        bookmarks_slice_state.bookmarks!.map(
-                                          (b) => {
-                                            if (b.id == updated_bookmark.id) {
-                                              return updated_bookmark
-                                            } else {
-                                              return b
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    )
-                                  } else {
-                                    // We filter out bookmark when there are other bookmarks still matching with selected tags.
-                                    dispatch(
-                                      bookmarks_actions.filter_out_bookmark({
-                                        bookmark_id: updated_bookmark.id,
-                                      }),
-                                    )
-                                    if (search.count) {
-                                      search.set_count(search.count - 1)
-                                    }
-                                  }
-                                  // It's critically important to run [search.update_searchable_bookmark] before [counts_actions.refresh_authorized_counts]
-                                  // otherwise updating bookmark from search will mess highlights. Bookmark is refreshed because of counts_refreshed_at_timestamp prop change.
-                                  await search.update_searchable_bookmark({
-                                    bookmark: {
-                                      id: bookmark.id,
-                                      is_archived: is_archived_filter,
-                                      is_unread: updated_bookmark.is_unread,
-                                      title: updated_bookmark.title,
-                                      note: updated_bookmark.note,
-                                      tags: updated_bookmark.tags.map(
-                                        (tag) => tag.name,
-                                      ),
-                                      links: updated_bookmark.links.map(
-                                        (link) => ({
-                                          url: link.url,
-                                          site_path: link.site_path,
-                                        }),
-                                      ),
-                                      created_at: updated_bookmark.created_at,
-                                      visited_at: bookmark.visited_at,
-                                      updated_at: updated_bookmark.updated_at,
-
-                                      stars: updated_bookmark.stars,
-                                      tag_ids: updated_bookmark.tags.map(
-                                        (tag) => tag.id,
-                                      ),
-                                    },
-                                  })
-                                  await dispatch(
-                                    counts_actions.refresh_authorized_counts({
-                                      last_authorized_counts_params:
-                                        get_last_authorized_counts_params(),
-                                      ky: ky_instance,
-                                    }),
-                                  )
-                                  await tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
-
-                                  modal_context?.set_modal()
-                                  toast.success('Bookmark has beed updated')
-
-                                  // Unselect removed tags when there is no more bookmarks with them.
-                                  tag_view_options.remove_tags_from_search_params(
-                                    tag_view_options.selected_tags.filter(
-                                      (t) => {
-                                        const yields = Object.values(
-                                          counts_slice_state.tags!,
-                                        ).find((tag) => tag.id == t)!.yields
-                                        return (
-                                          !updated_tag_ids.includes(t) &&
-                                          yields == 1
-                                        )
-                                      },
-                                    ),
-                                  )
-                                },
-                                other_icon: (
-                                  <UiCommonParticles_Icon variant="EDIT" />
-                                ),
-                              },
-                              {
-                                label: !(
+                              })
+                              if (
+                                search.count &&
+                                (filter_view_options.current_filter ==
+                                  Filter.UNREAD ||
                                   filter_view_options.current_filter ==
-                                    Filter.ARCHIVED ||
+                                    Filter.STARRED_UNREAD ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED_UNREAD) &&
+                                bookmark.is_unread
+                              ) {
+                                search.set_count(search.count! - 1)
+                              }
+                              if (
+                                bookmarks_slice_state.bookmarks &&
+                                bookmarks_slice_state.bookmarks.length == 1 &&
+                                search.search_string.length
+                              ) {
+                                if (
+                                  !is_unread &&
+                                  (filter_view_options.current_filter ==
+                                    Filter.UNREAD ||
+                                    filter_view_options.current_filter ==
+                                      Filter.STARRED_UNREAD)
+                                ) {
+                                  search.reset()
+                                }
+                              }
+                              await tag_hierarchies.get_tag_hierarchies({
+                                filter: filter_view_options.current_filter,
+                                gte: date_view_options.current_gte,
+                                lte: date_view_options.current_lte,
+                              })
+                            },
+                          },
+                          {
+                            label: <UiAppAtom_StarsForDropdown stars={1} />,
+                            is_checked: bookmark.stars == 1,
+                            is_disabled: are_bookmark_menu_items_locked,
+                            on_click: async () => {
+                              const modified_bookmark: UpsertBookmark_Params = {
+                                bookmark_id: bookmark.id,
+                                is_public: bookmark.is_public,
+                                created_at: new Date(bookmark.created_at),
+                                title: bookmark.title,
+                                note: bookmark.note,
+                                is_archived: is_archived_filter,
+                                is_unread: bookmark.is_unread,
+                                stars: bookmark.stars == 1 ? 0 : 1,
+                                links: bookmark.links.map((link) => ({
+                                  url: link.url,
+                                  site_path: link.site_path,
+                                  is_public: link.is_public,
+                                  is_pinned: link.is_pinned,
+                                  pin_title: link.pin_title,
+                                  pin_order: link.pin_order,
+                                })),
+                                tags: bookmark.tags.map((tag) => ({
+                                  name: tag.name,
+                                  is_public: tag.is_public,
+                                })),
+                              }
+                              const updated_bookmark = await dispatch(
+                                bookmarks_actions.upsert_bookmark({
+                                  bookmark: modified_bookmark,
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  ky: ky_instance,
+                                }),
+                              )
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
+                              await search.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars == 1 ? 0 : 1,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                    is_public: link.is_public,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              if (
+                                search.count &&
+                                (filter_view_options.current_filter ==
+                                  Filter.STARRED ||
+                                  filter_view_options.current_filter ==
+                                    Filter.STARRED_UNREAD ||
                                   filter_view_options.current_filter ==
                                     Filter.ARCHIVED_STARRED ||
                                   filter_view_options.current_filter ==
-                                    Filter.ARCHIVED_UNREAD ||
+                                    Filter.ARCHIVED_STARRED_UNREAD) &&
+                                bookmark.stars == 1
+                              ) {
+                                search.set_count(search.count - 1)
+                              }
+                              if (
+                                bookmarks_slice_state.bookmarks &&
+                                bookmarks_slice_state.bookmarks.length == 1 &&
+                                search.search_string.length
+                              ) {
+                                search.reset()
+                              }
+                              await tag_hierarchies.get_tag_hierarchies({
+                                filter: filter_view_options.current_filter,
+                                gte: date_view_options.current_gte,
+                                lte: date_view_options.current_lte,
+                              })
+                            },
+                          },
+                          {
+                            label: <UiAppAtom_StarsForDropdown stars={2} />,
+                            is_checked: bookmark.stars == 2,
+                            is_disabled: are_bookmark_menu_items_locked,
+                            on_click: async () => {
+                              const modified_bookmark: UpsertBookmark_Params = {
+                                bookmark_id: bookmark.id,
+                                is_public: bookmark.is_public,
+                                created_at: new Date(bookmark.created_at),
+                                title: bookmark.title,
+                                note: bookmark.note,
+                                is_archived: is_archived_filter,
+                                is_unread: bookmark.is_unread,
+                                stars: bookmark.stars == 2 ? 0 : 2,
+                                links: bookmark.links.map((link) => ({
+                                  url: link.url,
+                                  site_path: link.site_path,
+                                  is_public: link.is_public,
+                                  is_pinned: link.is_pinned,
+                                  pin_title: link.pin_title,
+                                  pin_order: link.pin_order,
+                                })),
+                                tags: bookmark.tags.map((tag) => ({
+                                  name: tag.name,
+                                  is_public: tag.is_public,
+                                })),
+                              }
+                              const updated_bookmark = await dispatch(
+                                bookmarks_actions.upsert_bookmark({
+                                  bookmark: modified_bookmark,
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  ky: ky_instance,
+                                }),
+                              )
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
+                              await search.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars == 2 ? 0 : 2,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              if (
+                                search.count &&
+                                (filter_view_options.current_filter ==
+                                  Filter.STARRED ||
                                   filter_view_options.current_filter ==
-                                    Filter.ARCHIVED_STARRED_UNREAD
+                                    Filter.STARRED_UNREAD ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED_UNREAD) &&
+                                bookmark.stars == 2
+                              ) {
+                                search.set_count(search.count - 1)
+                              }
+                              if (
+                                bookmarks_slice_state.bookmarks &&
+                                bookmarks_slice_state.bookmarks.length == 1 &&
+                                search.search_string.length
+                              ) {
+                                search.reset()
+                              }
+                              await tag_hierarchies.get_tag_hierarchies({
+                                filter: filter_view_options.current_filter,
+                                gte: date_view_options.current_gte,
+                                lte: date_view_options.current_lte,
+                              })
+                            },
+                          },
+                          {
+                            label: <UiAppAtom_StarsForDropdown stars={3} />,
+                            is_checked: bookmark.stars == 3,
+                            is_disabled: are_bookmark_menu_items_locked,
+                            on_click: async () => {
+                              const modified_bookmark: UpsertBookmark_Params = {
+                                bookmark_id: bookmark.id,
+                                is_public: bookmark.is_public,
+                                created_at: new Date(bookmark.created_at),
+                                title: bookmark.title,
+                                note: bookmark.note,
+                                is_archived: is_archived_filter,
+                                is_unread: bookmark.is_unread,
+                                stars: bookmark.stars == 3 ? 0 : 3,
+                                links: bookmark.links.map((link) => ({
+                                  url: link.url,
+                                  site_path: link.site_path,
+                                  is_public: link.is_public,
+                                  is_pinned: link.is_pinned,
+                                  pin_title: link.pin_title,
+                                  pin_order: link.pin_order,
+                                })),
+                                tags: bookmark.tags.map((tag) => ({
+                                  name: tag.name,
+                                  is_public: tag.is_public,
+                                })),
+                              }
+                              const updated_bookmark = await dispatch(
+                                bookmarks_actions.upsert_bookmark({
+                                  bookmark: modified_bookmark,
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  ky: ky_instance,
+                                }),
+                              )
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
+                              await search.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars == 3 ? 0 : 3,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              if (
+                                search.count &&
+                                (filter_view_options.current_filter ==
+                                  Filter.STARRED ||
+                                  filter_view_options.current_filter ==
+                                    Filter.STARRED_UNREAD ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED_UNREAD) &&
+                                bookmark.stars == 3
+                              ) {
+                                search.set_count(search.count - 1)
+                              }
+                              if (
+                                bookmarks_slice_state.bookmarks &&
+                                bookmarks_slice_state.bookmarks.length == 1 &&
+                                search.search_string.length
+                              ) {
+                                search.reset()
+                              }
+                              await tag_hierarchies.get_tag_hierarchies({
+                                filter: filter_view_options.current_filter,
+                                gte: date_view_options.current_gte,
+                                lte: date_view_options.current_lte,
+                              })
+                            },
+                          },
+                          {
+                            label: <UiAppAtom_StarsForDropdown stars={4} />,
+                            is_checked: bookmark.stars == 4,
+                            is_disabled: are_bookmark_menu_items_locked,
+                            on_click: async () => {
+                              const modified_bookmark: UpsertBookmark_Params = {
+                                bookmark_id: bookmark.id,
+                                is_public: bookmark.is_public,
+                                created_at: new Date(bookmark.created_at),
+                                title: bookmark.title,
+                                note: bookmark.note,
+                                is_archived: is_archived_filter,
+                                is_unread: bookmark.is_unread,
+                                stars: bookmark.stars == 4 ? 0 : 4,
+                                links: bookmark.links.map((link) => ({
+                                  url: link.url,
+                                  site_path: link.site_path,
+                                  is_public: link.is_public,
+                                  is_pinned: link.is_pinned,
+                                  pin_title: link.pin_title,
+                                  pin_order: link.pin_order,
+                                })),
+                                tags: bookmark.tags.map((tag) => ({
+                                  name: tag.name,
+                                  is_public: tag.is_public,
+                                })),
+                              }
+                              const updated_bookmark = await dispatch(
+                                bookmarks_actions.upsert_bookmark({
+                                  bookmark: modified_bookmark,
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  ky: ky_instance,
+                                }),
+                              )
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
+                              await search.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars == 4 ? 0 : 4,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              if (
+                                search.count &&
+                                (filter_view_options.current_filter ==
+                                  Filter.STARRED ||
+                                  filter_view_options.current_filter ==
+                                    Filter.STARRED_UNREAD ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED_UNREAD) &&
+                                bookmark.stars == 4
+                              ) {
+                                search.set_count(search.count - 1)
+                              }
+                              if (
+                                bookmarks_slice_state.bookmarks &&
+                                bookmarks_slice_state.bookmarks.length == 1 &&
+                                search.search_string.length
+                              ) {
+                                search.reset()
+                              }
+                              await tag_hierarchies.get_tag_hierarchies({
+                                filter: filter_view_options.current_filter,
+                                gte: date_view_options.current_gte,
+                                lte: date_view_options.current_lte,
+                              })
+                            },
+                          },
+                          {
+                            label: <UiAppAtom_StarsForDropdown stars={5} />,
+                            is_checked: bookmark.stars == 5,
+                            is_disabled: are_bookmark_menu_items_locked,
+                            on_click: async () => {
+                              const modified_bookmark: UpsertBookmark_Params = {
+                                bookmark_id: bookmark.id,
+                                is_public: bookmark.is_public,
+                                created_at: new Date(bookmark.created_at),
+                                title: bookmark.title,
+                                note: bookmark.note,
+                                is_archived: is_archived_filter,
+                                is_unread: bookmark.is_unread,
+                                stars: bookmark.stars == 5 ? 0 : 5,
+                                links: bookmark.links.map((link) => ({
+                                  url: link.url,
+                                  site_path: link.site_path,
+                                  is_public: link.is_public,
+                                  is_pinned: link.is_pinned,
+                                  pin_title: link.pin_title,
+                                  pin_order: link.pin_order,
+                                })),
+                                tags: bookmark.tags.map((tag) => ({
+                                  name: tag.name,
+                                  is_public: tag.is_public,
+                                })),
+                              }
+                              const updated_bookmark = await dispatch(
+                                bookmarks_actions.upsert_bookmark({
+                                  bookmark: modified_bookmark,
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  ky: ky_instance,
+                                }),
+                              )
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
+                              await search.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars == 4 ? 0 : 4,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              if (
+                                search.count &&
+                                (filter_view_options.current_filter ==
+                                  Filter.STARRED ||
+                                  filter_view_options.current_filter ==
+                                    Filter.STARRED_UNREAD ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED ||
+                                  filter_view_options.current_filter ==
+                                    Filter.ARCHIVED_STARRED_UNREAD) &&
+                                bookmark.stars == 5
+                              ) {
+                                search.set_count(search.count - 1)
+                              }
+                              if (
+                                bookmarks_slice_state.bookmarks &&
+                                bookmarks_slice_state.bookmarks.length == 1 &&
+                                search.search_string.length
+                              ) {
+                                search.reset()
+                              }
+                              await tag_hierarchies.get_tag_hierarchies({
+                                filter: filter_view_options.current_filter,
+                                gte: date_view_options.current_gte,
+                                lte: date_view_options.current_lte,
+                              })
+                            },
+                          },
+                          {
+                            label: 'Edit',
+                            is_disabled: are_bookmark_menu_items_locked,
+                            on_click: async () => {
+                              const updated_bookmark =
+                                await upsert_bookmark_modal({
+                                  modal_context,
+                                  bookmark,
+                                  is_archived: is_archived_filter,
+                                  ky: ky_instance,
+                                })
+                              const updated_tag_ids = updated_bookmark.tags.map(
+                                (t) => t.id,
+                              )
+                              if (
+                                tag_view_options.selected_tags.every((t) =>
+                                  updated_tag_ids.includes(t),
                                 )
-                                  ? 'Archive'
-                                  : 'Restore',
-                                other_icon: (
-                                  <UiCommonParticles_Icon variant="ARCHIVE" />
-                                ),
-                                is_disabled: are_bookmark_menu_items_locked,
-                                on_click: async () => {
-                                  const modified_bookmark: UpsertBookmark_Params =
-                                    {
-                                      bookmark_id: bookmark.id,
-                                      is_public: bookmark.is_public,
-                                      created_at: new Date(bookmark.created_at),
-                                      title: bookmark.title,
-                                      is_archived: !is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                        is_public: link.is_public,
-                                      })),
-                                      tags: bookmark.tags.map((tag) => ({
-                                        name: tag.name,
-                                        is_public: tag.is_public,
-                                      })),
-                                    }
-                                  await dispatch(
-                                    bookmarks_actions.upsert_bookmark({
-                                      bookmark: modified_bookmark,
-                                      last_authorized_counts_params:
-                                        get_last_authorized_counts_params(),
-                                      ky: ky_instance,
-                                    }),
-                                  )
-                                  toast.success(
-                                    `Bookmark has been ${
-                                      is_archived_filter
-                                        ? 'restored'
-                                        : 'archived'
-                                    }`,
-                                  )
-                                  tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
-                                  if (search.count) {
-                                    search.set_count(search.count - 1)
-                                  }
-                                  search.update_searchable_bookmark({
-                                    bookmark: {
-                                      id: bookmark.id,
-                                      created_at: bookmark.created_at,
-                                      visited_at: bookmark.visited_at,
-                                      updated_at: new Date().toISOString(),
-                                      title: bookmark.title,
-                                      note: bookmark.note,
-                                      is_archived: !is_archived_filter,
-                                      is_unread: bookmark.is_unread,
-                                      stars: bookmark.stars,
-                                      links: bookmark.links.map((link) => ({
-                                        url: link.url,
-                                        site_path: link.site_path,
-                                        is_public: link.is_public,
-                                      })),
-                                      tags: bookmark.tags.map(
-                                        (tag) => tag.name,
-                                      ),
-                                      tag_ids: bookmark.tags.map(
-                                        (tag) => tag.id,
-                                      ),
-                                    },
-                                  })
-                                  if (
-                                    bookmarks_slice_state.bookmarks &&
-                                    bookmarks_slice_state.bookmarks.length ==
-                                      1 &&
-                                    bookmarks_slice_state.showing_bookmarks_fetched_by_ids
-                                  ) {
-                                    search.reset()
-                                  }
-                                },
-                              },
-                              {
-                                label: 'Delete',
-                                is_disabled: are_bookmark_menu_items_locked,
-                                on_click: async () => {
-                                  await dispatch(
-                                    bookmarks_actions.delete_bookmark({
-                                      last_authorized_counts_params:
-                                        get_last_authorized_counts_params(),
-                                      bookmark_id: bookmark.id,
-                                      ky: ky_instance,
-                                    }),
-                                  )
-                                  if (search.count) {
-                                    search.set_count(search.count - 1)
-                                  }
-                                  toast.success('Bookmark has been deleted')
-                                  tag_hierarchies.get_tag_hierarchies({
-                                    filter: filter_view_options.current_filter,
-                                    gte: date_view_options.current_gte,
-                                    lte: date_view_options.current_lte,
-                                  })
+                              ) {
+                                dispatch(
+                                  bookmarks_actions.set_incoming_bookmarks(
+                                    bookmarks_slice_state.bookmarks!.map(
+                                      (b) => {
+                                        if (b.id == updated_bookmark.id) {
+                                          return updated_bookmark
+                                        } else {
+                                          return b
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                )
+                              } else {
+                                // We filter out bookmark when there are other bookmarks still matching with selected tags.
+                                dispatch(
+                                  bookmarks_actions.filter_out_bookmark({
+                                    bookmark_id: updated_bookmark.id,
+                                  }),
+                                )
+                                if (search.count) {
+                                  search.set_count(search.count - 1)
+                                }
+                              }
+                              // It's critically important to run [search.update_searchable_bookmark] before [counts_actions.refresh_authorized_counts]
+                              // otherwise updating bookmark from search will mess highlights. Bookmark is refreshed because of counts_refreshed_at_timestamp prop change.
+                              await search.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  is_archived: is_archived_filter,
+                                  is_unread: updated_bookmark.is_unread,
+                                  title: updated_bookmark.title,
+                                  note: updated_bookmark.note,
+                                  tags: updated_bookmark.tags.map(
+                                    (tag) => tag.name,
+                                  ),
+                                  links: updated_bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                  })),
+                                  created_at: updated_bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
 
-                                  search.delete_searchable_bookmark({
-                                    bookmark_id: bookmark.id,
-                                  })
-                                  if (
-                                    bookmarks_slice_state.bookmarks &&
-                                    bookmarks_slice_state.bookmarks.length ==
-                                      1 &&
-                                    bookmarks_slice_state.showing_bookmarks_fetched_by_ids
-                                  ) {
-                                    search.reset()
-                                    bookmarks.get_bookmarks({})
-                                  }
+                                  stars: updated_bookmark.stars,
+                                  tag_ids: updated_bookmark.tags.map(
+                                    (tag) => tag.id,
+                                  ),
                                 },
-                                other_icon: (
-                                  <UiCommonParticles_Icon variant="DELETE" />
-                                ),
-                              },
-                            ]
-                          : []),
-                      ]}
-                    />
+                              })
+                              await dispatch(
+                                counts_actions.refresh_authorized_counts({
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  ky: ky_instance,
+                                }),
+                              )
+                              await tag_hierarchies.get_tag_hierarchies({
+                                filter: filter_view_options.current_filter,
+                                gte: date_view_options.current_gte,
+                                lte: date_view_options.current_lte,
+                              })
+
+                              modal_context?.set_modal()
+                              toast.success('Bookmark has beed updated')
+
+                              // Unselect removed tags when there is no more bookmarks with them.
+                              tag_view_options.remove_tags_from_search_params(
+                                tag_view_options.selected_tags.filter((t) => {
+                                  const yields = Object.values(
+                                    counts_slice_state.tags!,
+                                  ).find((tag) => tag.id == t)!.yields
+                                  return (
+                                    !updated_tag_ids.includes(t) && yields == 1
+                                  )
+                                }),
+                              )
+                            },
+                            other_icon: (
+                              <UiCommonParticles_Icon variant="EDIT" />
+                            ),
+                          },
+                          {
+                            label: !(
+                              filter_view_options.current_filter ==
+                                Filter.ARCHIVED ||
+                              filter_view_options.current_filter ==
+                                Filter.ARCHIVED_STARRED ||
+                              filter_view_options.current_filter ==
+                                Filter.ARCHIVED_UNREAD ||
+                              filter_view_options.current_filter ==
+                                Filter.ARCHIVED_STARRED_UNREAD
+                            )
+                              ? 'Archive'
+                              : 'Restore',
+                            other_icon: (
+                              <UiCommonParticles_Icon variant="ARCHIVE" />
+                            ),
+                            is_disabled: are_bookmark_menu_items_locked,
+                            on_click: async () => {
+                              const modified_bookmark: UpsertBookmark_Params = {
+                                bookmark_id: bookmark.id,
+                                is_public: bookmark.is_public,
+                                created_at: new Date(bookmark.created_at),
+                                title: bookmark.title,
+                                is_archived: !is_archived_filter,
+                                is_unread: bookmark.is_unread,
+                                stars: bookmark.stars,
+                                links: bookmark.links.map((link) => ({
+                                  url: link.url,
+                                  site_path: link.site_path,
+                                  is_public: link.is_public,
+                                  is_pinned: link.is_pinned,
+                                  pin_title: link.pin_title,
+                                  pin_order: link.pin_order,
+                                })),
+                                tags: bookmark.tags.map((tag) => ({
+                                  name: tag.name,
+                                  is_public: tag.is_public,
+                                })),
+                              }
+                              await dispatch(
+                                bookmarks_actions.upsert_bookmark({
+                                  bookmark: modified_bookmark,
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  ky: ky_instance,
+                                }),
+                              )
+                              toast.success(
+                                `Bookmark has been ${
+                                  is_archived_filter ? 'restored' : 'archived'
+                                }`,
+                              )
+                              tag_hierarchies.get_tag_hierarchies({
+                                filter: filter_view_options.current_filter,
+                                gte: date_view_options.current_gte,
+                                lte: date_view_options.current_lte,
+                              })
+                              if (search.count) {
+                                search.set_count(search.count - 1)
+                              }
+                              search.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: new Date().toISOString(),
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: !is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                    is_public: link.is_public,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              if (
+                                bookmarks_slice_state.bookmarks &&
+                                bookmarks_slice_state.bookmarks.length == 1 &&
+                                bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+                              ) {
+                                search.reset()
+                              }
+                            },
+                          },
+                          {
+                            label: 'Delete',
+                            is_disabled: are_bookmark_menu_items_locked,
+                            on_click: async () => {
+                              await dispatch(
+                                bookmarks_actions.delete_bookmark({
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  bookmark_id: bookmark.id,
+                                  ky: ky_instance,
+                                }),
+                              )
+                              if (search.count) {
+                                search.set_count(search.count - 1)
+                              }
+                              toast.success('Bookmark has been deleted')
+                              tag_hierarchies.get_tag_hierarchies({
+                                filter: filter_view_options.current_filter,
+                                gte: date_view_options.current_gte,
+                                lte: date_view_options.current_lte,
+                              })
+
+                              search.delete_searchable_bookmark({
+                                bookmark_id: bookmark.id,
+                              })
+                              if (
+                                bookmarks_slice_state.bookmarks &&
+                                bookmarks_slice_state.bookmarks.length == 1 &&
+                                bookmarks_slice_state.showing_bookmarks_fetched_by_ids
+                              ) {
+                                search.reset()
+                                bookmarks.get_bookmarks({})
+                              }
+                            },
+                            other_icon: (
+                              <UiCommonParticles_Icon variant="DELETE" />
+                            ),
+                          },
+                        ]}
+                      />
+                    ) : (
+                      <UiAppAtom_DropdownMenu
+                        items={[
+                          {
+                            label: 'Copy to mine',
+                            on_click: () => {},
+                            other_icon: (
+                              <UiCommonParticles_Icon variant="COPY" />
+                            ),
+                          },
+                        ]}
+                      />
+                    )
                   }
                   highlights={search.highlights?.[bookmark.id.toString()]}
                   highlights_note={

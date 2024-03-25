@@ -39,6 +39,9 @@ export namespace Bookmarks_Dto {
   export namespace Response {
     class Link {
       public site_path?: string
+      public is_pinned?: boolean
+      public pin_order?: number
+      public pin_title?: string
     }
     class AuthorizedLink extends Link {
       public url?: string
@@ -46,6 +49,7 @@ export namespace Bookmarks_Dto {
       public site_aes?: string
       public is_public?: boolean
       public saves?: number
+      public pin_title_aes?: string
     }
     class PublicLink extends Link {
       public url: string

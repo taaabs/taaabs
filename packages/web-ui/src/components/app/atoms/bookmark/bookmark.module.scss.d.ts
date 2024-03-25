@@ -12,8 +12,6 @@ declare const styles: {
   readonly bookmark__main__top__menu: string
   readonly bookmark__main__top__menu__button: string
   readonly 'bookmark__main__top__menu--toggled': string
-  readonly bookmark__main__top__menu__slot: string
-  readonly 'bookmark__main__top__menu__slot--hidden': string
   readonly bookmark__main__content: string
   readonly bookmark__main__content__title: string
   readonly bookmark__main__content__title__unread: string
@@ -50,7 +48,10 @@ declare const styles: {
   readonly bookmark__links__item__actions: string
   readonly bookmark__links__item__actions__open: string
   readonly bookmark__links__item__actions__menu: string
+  readonly bookmark__links__item__actions__menu__button: string
   readonly 'bookmark__links__item__actions__public-saves': string
   readonly highlight: string
+  readonly slot: string
+  readonly 'slot--hidden': string
 }
 export = styles

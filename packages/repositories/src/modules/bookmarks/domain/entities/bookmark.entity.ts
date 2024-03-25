@@ -12,6 +12,9 @@ export type Bookmark_Entity = {
     saves?: number
     site_path?: string
     is_public: boolean
+    is_pinned?: boolean
+    pin_title?: string
+    pin_order?: number
   }[]
   is_unread: boolean
   stars: number

@@ -104,22 +104,6 @@
             fill: var(--neutral600);
           }
         }
-        &__slot {
-          position: absolute;
-          z-index: 1;
-          top: calc(var(--button-dimension-28px) + var(--distance-4px));
-          right: 0;
-          bottom: calc(var(--distance-4px) * -1);
-          opacity: 1;
-          @include transition-150ms;
-          transform: translateY(0);
-          &--hidden {
-            opacity: 0;
-            transform: translateY(calc(var(--distance-4px) * -1));
-            pointer-events: none;
-            transition: none;
-          }
-        }
       }
     }
     &__content {
@@ -457,22 +441,25 @@
           }
         }
         &__menu {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: var(--border-radius-999px);
-          @include transition-150ms(background-color);
-          width: var(--button-dimension-28px);
-          height: var(--button-dimension-28px);
-          svg {
-            fill: var(--neutral400);
-            @include transition-150ms(fill);
-            height: var(--icon-dimension-16px);
-          }
-          @include hover {
-            background: var(--neutral200);
+          position: relative;
+          &__button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius-999px);
+            @include transition-150ms(background-color);
+            width: var(--button-dimension-28px);
+            height: var(--button-dimension-28px);
             svg {
-              fill: var(--neutral600);
+              fill: var(--neutral400);
+              @include transition-150ms(fill);
+              height: var(--icon-dimension-16px);
+            }
+            @include hover {
+              background: var(--neutral200);
+              svg {
+                fill: var(--neutral600);
+              }
             }
           }
         }
@@ -490,6 +477,22 @@
 }
 .highlight {
   background-color: var(--highlight);
+}
+.slot {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--button-dimension-28px) + var(--distance-4px));
+  right: 0;
+  bottom: calc(var(--distance-4px) * -1);
+  opacity: 1;
+  @include transition-150ms;
+  transform: translateY(0);
+  &--hidden {
+    opacity: 0;
+    transform: translateY(calc(var(--distance-4px) * -1));
+    pointer-events: none;
+    transition: none;
+  }
 }
 
 @keyframes bookmark_shake {
@@ -514,3 +517,4 @@
     transform: translate3d(0.5px, 0, 0);
   }
 }
+

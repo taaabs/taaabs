@@ -17,12 +17,18 @@ export namespace CreateBookmark_Dto {
     hash: z.string().length(64),
     url: z.string().max(500).url(),
     site_path: z.string().trim().max(150).optional(),
+    is_pinned: z.boolean().optional(),
+    pin_title: z.string().max(100).optional(),
+    pin_order: z.number().int().optional(),
   })
   const private_link_schema = z.object({
     is_public: z.literal(false),
     hash: z.string().length(64),
     url_aes: z.string().max(1000),
     site_aes: z.string().max(300),
+    is_pinned: z.boolean().optional(),
+    pin_title_aes: z.string().max(200).optional(),
+    pin_order: z.number().int().optional(),
   })
 
   export const body_schema = z.object({

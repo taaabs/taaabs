@@ -6,9 +6,13 @@ export type Dictionary = {
     bookmark_updated: string
     all_bookmarks: string
     drag_tag_here: string
+    link_is_now_pinned: string
+    pin_has_been_removed: string
     tag_hierarchies_upated: string
     collapse_sidebar: string
     sort_by: string
+    add_to_pinned: string
+    remove_from_pinned: string
     sort_by_options: {
       created_at: string
       updated_at: string

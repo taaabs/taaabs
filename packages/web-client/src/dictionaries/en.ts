@@ -11,6 +11,10 @@ const dictionary: Dictionary = {
       'Organize your tags by dragging & dropping - build a visual hierarchy!',
     tag_hierarchies_upated: 'Tag hierarchies has been updated',
     collapse_sidebar: 'Collapse sidebar',
+    add_to_pinned: 'Add to pinned',
+    remove_from_pinned: 'Remove from pinned',
+    link_is_now_pinned: 'Link is now pinned',
+    pin_has_been_removed: 'Pin has been removed',
     sort_by: 'Sort by',
     sort_by_options: {
       created_at: 'Created at',

@@ -10,6 +10,7 @@ import { system_values } from '@shared/constants/system-values'
 import { use_library_dispatch } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { CheckTotalGivenPoints_UseCase } from '@repositories/modules/points/domain/usecases/check-total-given-points.use-case'
+import ky from 'ky'
 
 // This logic works only because of referential nature of "points_given" obejct. It works but could be moved to redux.
 export const use_points = () => {
@@ -22,16 +23,21 @@ export const use_points = () => {
   const [is_fetching_given_amount, set_is_fetching_given_amount] =
     useState(false)
 
+  const ky_instance = ky.create({
+    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+      'Content-Type': 'application/json',
+    },
+  })
+
   useUpdateEffect(() => {
     set_points_given({})
   }, [search_params])
 
   const submit_points_debounced = useDebouncedCallback(
     async (params: { bookmark_id: number; points: number }) => {
-      const data_source = new Points_DataSourceImpl(
-        process.env.NEXT_PUBLIC_API_URL,
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
-      )
+      const data_source = new Points_DataSourceImpl(ky_instance)
       const repository = new Points_RepositoryImpl(data_source)
       const give_points = new GivePoints_UseCase(repository)
       try {
@@ -57,10 +63,7 @@ export const use_points = () => {
       given_overall = points_given[params.bookmark_id]
     } else {
       set_is_fetching_given_amount(true)
-      const data_source = new Points_DataSourceImpl(
-        process.env.NEXT_PUBLIC_API_URL,
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY',
-      )
+      const data_source = new Points_DataSourceImpl(ky_instance)
       const repository = new Points_RepositoryImpl(data_source)
       const check_given_points_amount = new CheckTotalGivenPoints_UseCase(
         repository,

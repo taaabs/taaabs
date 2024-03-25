@@ -10,6 +10,10 @@ export const dictionary: Dictionary = {
     drag_tag_here: 'Upuść tag tutaj i zbuduj ich wizualną hierarchię!',
     tag_hierarchies_upated: 'Hierarchie tagów zostały zaktualizowane',
     collapse_sidebar: 'Zwiń panel',
+    add_to_pinned: 'Dodaj do przypiętych',
+    remove_from_pinned: 'Usuń z przypiętych',
+    link_is_now_pinned: 'Link został dodany do przypiętych',
+    pin_has_been_removed: 'Link został usunięty z przypiętych',
     sort_by: 'Sortowanie',
     sort_by_options: {
       created_at: 'Data utworzenia',
