@@ -27,21 +27,28 @@
 .item {
   background-color: var(--neutral100);
   display: flex;
-  gap: var(--distance-8px);
+  gap: var(--distance-6px);
   align-items: center;
-  padding: var(--distance-8px) var(--distance-12px) var(--distance-8px)
-    var(--distance-10px);
-  border-radius: var(--border-radius-8px);
+  padding: 0 var(--distance-10px) 0 var(--distance-8px);
+  height: 30px;
+  border-radius: var(--border-radius-999px);
   position: relative;
   @include transition-150ms(background-color);
   @include hover {
     background-color: var(--neutral200);
+  }
+  &--not-relevant {
+    opacity: var(--dimmed-opacity);
+    @include hover {
+      opacity: 1;
+    }
   }
   &__title {
     display: flex;
     align-items: start;
     & > span {
       font-family: var(--font-family-inter-tight);
+      line-height: 1;
     }
     &--unread > span {
       font-weight: var(--font-weight-inter-tight-medium);

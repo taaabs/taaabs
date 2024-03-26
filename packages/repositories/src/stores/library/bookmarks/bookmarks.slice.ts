@@ -7,12 +7,13 @@ type BookmarksState = {
   is_fetching_data: boolean
   is_updating_bookmarks: boolean
   is_fetching_first_bookmarks: boolean
+  first_bookmarks_fetched_at_timestamp?: number // Used for synchronization of pinned links re-render.
   is_fetching_more_bookmarks: boolean
   showing_bookmarks_fetched_by_ids?: boolean
   incoming_bookmarks: Bookmark_Entity[] | null
   bookmarks: Bookmark_Entity[] | null
   has_more_bookmarks: boolean | null
-  processing_progress?: number
+  processing_progress?: number // Filling tag combinations and generating counts.
   should_refetch_counts?: boolean
   density: 'default' | 'compact'
 }
@@ -40,6 +41,14 @@ export const bookmarks_slice = createSlice({
     },
     set_is_fetching_first_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_fetching_first_bookmarks = action.payload
+    },
+    set_first_bookmarks_fetched_at_timestamp(
+      state,
+      action: PayloadAction<
+        BookmarksState['first_bookmarks_fetched_at_timestamp']
+      >,
+    ) {
+      state.first_bookmarks_fetched_at_timestamp = action.payload
     },
     set_is_fetching_more_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_fetching_more_bookmarks = action.payload

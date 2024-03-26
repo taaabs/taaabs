@@ -1017,9 +1017,11 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
         }}
         slot_pinned={
           pinned.items &&
-          pinned.items.length > 0 && (
+          pinned.items.length > 0 &&
+          !bookmarks.showing_bookmarks_fetched_by_ids && (
             <UiAppAtom_Pinned
-              key={pinned.fetched_at_timestamp}
+              key={`${pinned.fetched_at_timestamp}
+                ${bookmarks.first_bookmarks_fetched_at_timestamp}`}
               favicon_host={favicon_host}
               header_title={params.dictionary.library.pinned}
               items={pinned.items.map((item) => ({
@@ -1027,6 +1029,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 title: item.title,
                 is_unread: item.is_unread,
                 stars: item.stars,
+                tags: item.tags,
               }))}
               is_draggable={!username}
               on_change={async (updated_pinned) => {
@@ -1043,6 +1046,22 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 )
               }}
               on_link_click={() => {}}
+              selected_tags={tag_view_options.selected_tags}
+              selected_starred={
+                filter_view_options.current_filter == Filter.STARRED ||
+                filter_view_options.current_filter == Filter.STARRED_UNREAD
+              }
+              selected_unread={
+                filter_view_options.current_filter == Filter.UNREAD ||
+                filter_view_options.current_filter == Filter.STARRED_UNREAD
+              }
+              selected_archived={
+                filter_view_options.current_filter == Filter.ARCHIVED ||
+                filter_view_options.current_filter == Filter.ARCHIVED_STARRED ||
+                filter_view_options.current_filter ==
+                  Filter.ARCHIVED_STARRED_UNREAD ||
+                filter_view_options.current_filter == Filter.ARCHIVED_UNREAD
+              }
             />
           )
         }

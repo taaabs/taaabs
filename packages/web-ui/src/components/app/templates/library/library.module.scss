@@ -291,7 +291,7 @@
     &__pinned {
       @include to992 {
         margin-bottom: var(--distance-8px);
-        padding: 0 var(--distance-12px);
+        padding: 0 var(--distance-8px);
       }
       @include at992 {
         margin-bottom: var(--distance-16px);

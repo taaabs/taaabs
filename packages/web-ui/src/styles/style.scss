@@ -250,7 +250,7 @@ small {
 }
 
 .sortable-ghost {
-  opacity: 0;
+  opacity: 0 !important; // Must be important to override pinned "not relevant" dimmed opacity.
 }
 
 // !important below set because of a bug: https://github.com/vercel/next.js/issues/13092

@@ -19,8 +19,13 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
-  const { bookmarks, has_more_bookmarks, density, updated_at_timestamp } =
-    use_library_selector((state) => state.bookmarks)
+  const {
+    bookmarks,
+    has_more_bookmarks,
+    density,
+    showing_bookmarks_fetched_by_ids,
+    first_bookmarks_fetched_at_timestamp,
+  } = use_library_selector((state) => state.bookmarks)
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
     const ky_instance = ky.create({
@@ -291,5 +296,9 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
     }
   }, [])
 
-  return { get_bookmarks, updated_at_timestamp }
+  return {
+    get_bookmarks,
+    showing_bookmarks_fetched_by_ids,
+    first_bookmarks_fetched_at_timestamp,
+  }
 }
