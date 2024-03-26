@@ -44,7 +44,9 @@ export const browser_storage = {
           params.search_params || ''
         }`,
       density: (params: { username?: string; search_params?: string }) =>
-        `library.density.${params.username || ''}?${params.search_params || ''}`,
+        `library.density.${params.username || ''}?${
+          params.search_params || ''
+        }`,
       tags: (params: { username?: string; search_params?: string }) =>
         `library.tags.${params.username || ''}?${params.search_params || ''}`,
       scroll_y: (params: { username?: string; search_params?: string }) =>

@@ -40,7 +40,6 @@
   svg {
     transform: rotate(-90deg);
     @include transition-150ms(transform);
-    width: var(--icon-dimension-12px);
     height: var(--icon-dimension-12px);
   }
   &--toggled {

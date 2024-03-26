@@ -22,6 +22,7 @@ declare const styles: {
   readonly 'main__inner__sticky__mobile-title-bar': string
   readonly main__inner__sticky__search: string
   readonly main__inner__skeleton: string
+  readonly main__inner__pinned: string
   readonly 'main__inner__bookmarks--loading': string
   readonly main__inner__info: string
   readonly aside: string

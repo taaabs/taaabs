@@ -21,6 +21,7 @@ export namespace Library {
     slot_toolbar: React.ReactNode
     mobile_title_bar?: string
     slot_search: React.ReactNode
+    slot_pinned: React.ReactNode
     slot_bookmarks: React.ReactNode
     is_updating_bookmarks?: boolean
     is_fetching_first_bookmarks: boolean
@@ -392,6 +393,9 @@ export const Library: React.FC<Library.Props> = (props) => {
                 <div className={styles.main__inner__sticky__search}>
                   {props.slot_search}
                 </div>
+              </div>
+              <div className={styles.main__inner__pinned}>
+                {props.slot_pinned}
               </div>
               <div
                 className={cn({

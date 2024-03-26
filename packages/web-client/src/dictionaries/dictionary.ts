@@ -13,6 +13,7 @@ export type Dictionary = {
     sort_by: string
     add_to_pinned: string
     remove_from_pinned: string
+    pinned: string
     sort_by_options: {
       created_at: string
       updated_at: string

@@ -17,6 +17,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
 import confetti from 'canvas-confetti'
 import { shared_values } from '@web-ui/constants'
+import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -694,7 +695,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     props.highlights_site_variants.length
                   ) {
                     const site =
-                      get_url_domain(link.url) +
+                      get_domain_from_url(link.url) +
                       (link.site_path ? `/${link.site_path}` : '')
                     const link_site_variants =
                       get_site_variants_for_search(site)
@@ -714,7 +715,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     props.links
                       .map(
                         (link, i) =>
-                          `${get_url_domain(link.url)}${
+                          `${get_domain_from_url(link.url)}${
                             link.site_path ? ` › ${link.site_path}` : ''
                           }${i > 0 ? ' ' : ''}`,
                       )
@@ -742,7 +743,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             alt={'Favicon'}
                             width={16}
                             height={16}
-                            src={`${props.favicon_host}/${get_url_domain(
+                            src={`${props.favicon_host}/${get_domain_from_url(
                               link.url,
                             )}`}
                           />
@@ -768,7 +769,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         >
                           <span>
                             {props.highlights
-                              ? `${get_url_domain(link.url)} ${
+                              ? `${get_domain_from_url(link.url)} ${
                                   link.site_path ? `› ${link.site_path} ` : ''
                                 }`
                                   .split('')
@@ -794,7 +795,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                       <span key={i}>{char}</span>
                                     )
                                   })
-                              : `${get_url_domain(link.url)
+                              : `${get_domain_from_url(link.url)
                                   .split('.')
                                   .map((segment) =>
                                     segment.replace(/(.{5})/g, '$1​'),
@@ -903,19 +904,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.dragged_tag?.id == n.dragged_tag?.id &&
     o.pinned_links_count == n.pinned_links_count,
 )
-
-function get_url_domain(url: string): string {
-  let parsed_url = ''
-  if (url.substring(0, 8) == 'https://') {
-    parsed_url = url.substring(8)
-  } else if (url.substring(0, 7) == 'http://') {
-    parsed_url = url.substring(7)
-  } else {
-    parsed_url = url
-  }
-
-  return parsed_url.split('/')[0]
-}
 
 function url_path_for_display(params: {
   url: string

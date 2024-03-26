@@ -39,6 +39,7 @@ import { SelectedTags as UiAppAtom_SelectedTags } from '@web-ui/components/app/a
 import { Tags as UiAppAtom_Tags } from '@web-ui/components/app/atoms/tags'
 import { TagsSkeleton as UiAppAtom_TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
 import { StarsForDropdown as UiAppAtom_StarsForDropdown } from '@web-ui/components/app/atoms/stars-for-dropdown'
+import { Pinned as UiAppAtom_Pinned } from '@web-ui/components/app/atoms/pinned'
 import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/particles/icon'
 import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolbar'
@@ -56,6 +57,7 @@ import { use_points } from '@/hooks/library/use-points'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { use_scroll_restore } from '@/hooks/misc/use-scroll-restore'
 import ky from 'ky'
+import { use_pinned } from '@/hooks/library/use-pinned'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -90,6 +92,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   const counts = use_counts()
   const points_hook = use_points()
   const tag_hierarchies = use_tag_hierarchies()
+  const pinned = use_pinned()
   const filter_view_options = use_filter_view_options()
   const sort_by_view_options = use_sort_by_view_options()
   const order_view_options = use_order_view_options()
@@ -109,6 +112,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
       'Content-Type': 'application/json',
     },
   })
+
+  const favicon_host = `${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`
 
   // Upload deferred recent visit - START
   const has_focus = use_has_focus()
@@ -1009,6 +1014,23 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             bookmarks.get_bookmarks({ should_get_next_page: true })
           }
         }}
+        slot_pinned={
+          <UiAppAtom_Pinned
+            key={pinned.fetched_at_timestamp}
+            favicon_host={favicon_host}
+            header_title={params.dictionary.library.pinned}
+            items={
+              pinned.items?.map((item) => ({
+                url: item.url,
+                title: item.title,
+                is_unread: item.is_unread,
+                stars: item.stars,
+              })) || []
+            }
+            on_change={() => {}}
+            on_link_click={() => {}}
+          />
+        }
         slot_bookmarks={
           bookmarks_slice_state.bookmarks
             ? bookmarks_slice_state.bookmarks.map((bookmark, i) => (
@@ -1160,7 +1182,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       JSON.stringify(recent_visit),
                     )
                   }}
-                  favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
+                  favicon_host={favicon_host}
                   on_menu_click={async () => {
                     if (username) return
                     set_are_bookmarks_menu_items_locked(true)
@@ -1486,6 +1508,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   : params.dictionary.library
                                       .pin_has_been_removed,
                               )
+                              pinned.get_pinned()
                             },
                             other_icon: (
                               <UiCommonParticles_Icon variant="ARCHIVE" />
@@ -1592,6 +1615,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options.current_gte,
                                 lte: date_view_options.current_lte,
                               })
+                              await pinned.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -1678,6 +1702,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options.current_gte,
                                 lte: date_view_options.current_lte,
                               })
+                              await pinned.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -1763,6 +1788,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options.current_gte,
                                 lte: date_view_options.current_lte,
                               })
+                              await pinned.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -1848,6 +1874,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options.current_gte,
                                 lte: date_view_options.current_lte,
                               })
+                              await pinned.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -1933,6 +1960,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options.current_gte,
                                 lte: date_view_options.current_lte,
                               })
+                              await pinned.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -2018,6 +2046,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options.current_gte,
                                 lte: date_view_options.current_lte,
                               })
+                              await pinned.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -2031,6 +2060,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_archived: is_archived_filter,
                                   ky: ky_instance,
                                 })
+                              pinned.reload_pinned(bookmark.id)
                               const updated_tag_ids = updated_bookmark.tags.map(
                                 (t) => t.id,
                               )

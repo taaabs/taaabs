@@ -23,6 +23,7 @@ type FormValues = {
   is_public?: boolean
 }
 
+// Data from a fragment.
 type BookmarkAutofill = {
   title?: string
   note?: string
@@ -97,10 +98,19 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       stars: props.bookmark?.stars,
       is_archived: props.is_archived || false,
       is_unread: props.bookmark?.is_unread || false,
-      links: links.map((link) => ({
-        url: link.url,
-        is_public: form_data.is_public ? link.is_public : false,
-      })),
+      links: links.map((link) => {
+        const current_link = props.bookmark?.links.find(
+          (l) => l.url == link.url,
+        )
+        return {
+          url: link.url,
+          is_public: form_data.is_public ? link.is_public : false,
+          site_path: current_link?.site_path,
+          is_pinned: current_link?.is_pinned,
+          pin_order: current_link?.pin_order,
+          pin_title: current_link?.pin_title,
+        }
+      }),
       tags: tags.map((tag) => ({
         name: tag.name,
         is_public: form_data.is_public ? tag.is_public : false,

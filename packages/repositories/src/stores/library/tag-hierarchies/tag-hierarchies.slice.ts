@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
 import * as thunks from './action-creators'
 import { TagHierarchyNode_Entity } from '@repositories/modules/tag-hierarchies/domain/entities/tag-hierarchy-node.entity'
 

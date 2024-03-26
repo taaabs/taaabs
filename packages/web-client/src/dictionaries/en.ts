@@ -15,6 +15,7 @@ const dictionary: Dictionary = {
     remove_from_pinned: 'Remove from pinned',
     link_is_now_pinned: 'Link is now pinned',
     pin_has_been_removed: 'Pin has been removed',
+    pinned: 'Pinned',
     sort_by: 'Sort by',
     sort_by_options: {
       created_at: 'Created at',

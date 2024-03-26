@@ -288,6 +288,12 @@
         }
       }
     }
+    &__pinned {
+      margin-bottom: var(--distance-8px);
+      @include at992 {
+        margin-bottom: var(--distance-16px);
+      }
+    }
     &__bookmarks--loading {
       opacity: var(--opacity-loading);
       pointer-events: none;

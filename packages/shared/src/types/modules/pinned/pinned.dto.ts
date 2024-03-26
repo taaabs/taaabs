@@ -10,7 +10,4 @@ export namespace Pinned_Dto {
     tags?: number[]
   }
   export type Response = Item[]
-  export type SearchParams = {
-    is_archived?: 1 | 0
-  }
 }

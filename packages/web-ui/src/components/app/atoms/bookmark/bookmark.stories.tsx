@@ -37,9 +37,19 @@ export const Primary = () => (
           {
             url: 'https://foooooooooooooooooooooooooooooooooooooooooooooooooooo.com/baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar',
             saves: 99,
+            menu_slot: <>menu</>,
           },
-          { url: 'https://google.com/bar/baz', site_path: 'bar', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          {
+            url: 'https://google.com/bar/baz',
+            site_path: 'bar',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -52,6 +62,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -74,8 +85,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -94,6 +109,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -111,8 +127,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -125,6 +145,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <Bookmark
         bookmark_id={1}
@@ -140,8 +161,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -154,6 +179,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -175,8 +201,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -189,6 +219,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
       Compact:
@@ -214,8 +245,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -228,6 +263,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -248,8 +284,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -262,6 +302,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -289,8 +330,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -303,6 +348,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -323,8 +369,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -337,6 +387,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -357,8 +408,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -371,6 +426,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -391,8 +447,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -405,6 +465,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
       <Bookmark
@@ -424,8 +485,12 @@ export const Primary = () => (
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
-          { url: 'https://google.com', saves: 99 },
-          { url: 'https://github.com/lorem/ipsum', saves: 99 },
+          { url: 'https://google.com', saves: 99, menu_slot: <>menu</> },
+          {
+            url: 'https://github.com/lorem/ipsum',
+            saves: 99,
+            menu_slot: <>menu</>,
+          },
         ]}
         set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
@@ -438,6 +503,7 @@ export const Primary = () => (
         on_mouse_up_on_tag={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
+        pinned_links_count={0}
       />
       <StorybookSpacer />
     </div>
