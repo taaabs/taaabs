@@ -3,6 +3,7 @@ import { Pinned_Repository } from '../../domain/repositories/pinned.repository'
 import { GetPinned_Params } from '../../domain/types/get-pinned.params'
 import { GetPinned_Ro } from '../../domain/types/get-pinned.ro'
 import { Pinned_DataSource } from '../data-sources/pinned.data-source'
+import { UpdatePinned_Params } from '../../domain/types/update-pinned.params'
 
 export class Pinned_RepositoryImpl implements Pinned_Repository {
   constructor(private readonly _pinned_data_source: Pinned_DataSource) {}
@@ -45,5 +46,9 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
         tags: el.tags,
       })),
     )
+  }
+
+  public async update_pinned(params: UpdatePinned_Params): Promise<void> {
+    return this._pinned_data_source.update_pinned(params)
   }
 }

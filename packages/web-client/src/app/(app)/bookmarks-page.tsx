@@ -58,6 +58,7 @@ import { Dictionary } from '@/dictionaries/dictionary'
 import { use_scroll_restore } from '@/hooks/misc/use-scroll-restore'
 import ky from 'ky'
 import { use_pinned } from '@/hooks/library/use-pinned'
+import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -1015,21 +1016,33 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           }
         }}
         slot_pinned={
-          <UiAppAtom_Pinned
-            key={pinned.fetched_at_timestamp}
-            favicon_host={favicon_host}
-            header_title={params.dictionary.library.pinned}
-            items={
-              pinned.items?.map((item) => ({
+          pinned.items && (
+            <UiAppAtom_Pinned
+              key={pinned.fetched_at_timestamp}
+              favicon_host={favicon_host}
+              header_title={params.dictionary.library.pinned}
+              items={pinned.items.map((item) => ({
                 url: item.url,
                 title: item.title,
                 is_unread: item.is_unread,
                 stars: item.stars,
-              })) || []
-            }
-            on_change={() => {}}
-            on_link_click={() => {}}
-          />
+              }))}
+              on_change={async (updated_pinned) => {
+                dispatch(
+                  pinned_actions.update_pinned({
+                    update_pinned_params: updated_pinned.map((pin) => ({
+                      url: pin.url,
+                    })),
+                    ky: ky_instance,
+                  }),
+                )
+                toast.success(
+                  params.dictionary.library.pinned_items_has_beed_updated,
+                )
+              }}
+              on_link_click={() => {}}
+            />
+          )
         }
         slot_bookmarks={
           bookmarks_slice_state.bookmarks

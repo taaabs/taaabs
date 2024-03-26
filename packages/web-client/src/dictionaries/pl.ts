@@ -15,6 +15,7 @@ export const dictionary: Dictionary = {
     link_is_now_pinned: 'Link został dodany do przypiętych',
     pin_has_been_removed: 'Link został usunięty z przypiętych',
     pinned: 'Przypięte',
+    pinned_items_has_beed_updated: 'Przypięte linki zostały zaktualizowana',
     sort_by: 'Sortowanie',
     sort_by_options: {
       created_at: 'Data utworzenia',
