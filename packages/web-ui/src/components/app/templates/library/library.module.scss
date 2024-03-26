@@ -289,7 +289,10 @@
       }
     }
     &__pinned {
-      margin-bottom: var(--distance-8px);
+      @include to992 {
+        margin-bottom: var(--distance-8px);
+        padding: 0 var(--distance-12px);
+      }
       @include at992 {
         margin-bottom: var(--distance-16px);
       }

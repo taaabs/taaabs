@@ -19,7 +19,16 @@ export const use_pinned = () => {
       },
     })
     if (!username) {
-      await dispatch(pinned_actions.get_pinned_authorized({ ky: ky_instance }))
+      dispatch(pinned_actions.get_pinned_authorized({ ky: ky_instance }))
+    } else {
+      dispatch(
+        pinned_actions.get_pinned_public({
+          ky: ky_instance,
+          get_pinned_params: {
+            username,
+          },
+        }),
+      )
     }
   }
 

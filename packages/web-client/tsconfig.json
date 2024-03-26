@@ -48,7 +48,7 @@
     "../web-ui/src/**/*.ts",
     "../repositories/src/**/*.ts",
     "../shared/src/**/*.ts"
-  ],
+, "../repositories/src/stores/library/pinned/action-creators/get-pinned-public.ts"  ],
   "exclude": [
     "node_modules",
   ]

@@ -16,6 +16,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
     return await Promise.all(
       result.map(async (el) => ({
         bookmark_id: el.bookmark_id,
+        is_link_public: el.is_link_public,
         url: el.url ? el.url : await Crypto.AES.decrypt(el.url_aes!, key),
         title: el.title
           ? el.title

@@ -1016,7 +1016,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           }
         }}
         slot_pinned={
-          pinned.items && (
+          pinned.items &&
+          pinned.items.length > 0 && (
             <UiAppAtom_Pinned
               key={pinned.fetched_at_timestamp}
               favicon_host={favicon_host}
@@ -1027,8 +1028,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 is_unread: item.is_unread,
                 stars: item.stars,
               }))}
+              is_draggable={!username}
               on_change={async (updated_pinned) => {
-                dispatch(
+                await dispatch(
                   pinned_actions.update_pinned({
                     update_pinned_params: updated_pinned.map((pin) => ({
                       url: pin.url,
@@ -1480,8 +1482,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         items={[
                           {
                             label: link.is_pinned
-                              ? params.dictionary.library.remove_from_pinned
-                              : params.dictionary.library.add_to_pinned,
+                              ? params.dictionary.library.unpin
+                              : params.dictionary.library.pin,
                             on_click: async () => {
                               const is_pinned = !link.is_pinned
                               const modified_bookmark: UpsertBookmark_Params = {

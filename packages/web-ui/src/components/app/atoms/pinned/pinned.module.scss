@@ -33,6 +33,7 @@
     var(--distance-10px);
   border-radius: var(--border-radius-8px);
   position: relative;
+  @include transition-150ms(background-color);
   @include hover {
     background-color: var(--neutral200);
   }

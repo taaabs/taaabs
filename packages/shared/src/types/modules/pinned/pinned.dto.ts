@@ -1,6 +1,7 @@
 export namespace Pinned_Dto {
   type Item = {
     bookmark_id: number
+    is_link_public?: boolean
     url?: string
     url_aes?: string
     title?: string

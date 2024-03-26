@@ -12,6 +12,7 @@
   font-size: var(--font-size-15px);
   white-space: nowrap;
   overflow: hidden;
+  @include transition-150ms(background-color);
   @include at992 {
     padding: 0 var(--distance-12px);
     font-size: var(--font-size-16px);
@@ -21,10 +22,9 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    
   }
   @include hover {
-    background: rgba(15, 20, 25, 0.05);
+    background-color: rgba(15, 20, 25, 0.05);
   }
   > span {
     height: 100%;

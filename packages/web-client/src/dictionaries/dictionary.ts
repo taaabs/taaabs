@@ -11,8 +11,8 @@ export type Dictionary = {
     tag_hierarchies_upated: string
     collapse_sidebar: string
     sort_by: string
-    add_to_pinned: string
-    remove_from_pinned: string
+    pin: string
+    unpin: string
     pinned: string
     pinned_items_has_beed_updated: string
     sort_by_options: {

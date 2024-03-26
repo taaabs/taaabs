@@ -20,6 +20,7 @@ export namespace Pinned {
     favicon_host: string
     header_title: string
     on_link_click: (url: string) => void
+    is_draggable: boolean
   }
 }
 
@@ -47,7 +48,43 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       props.on_change(items)
     }, [items])
 
-    return (
+    const items_dom = items.map((item) => (
+      <a
+        key={item.url}
+        href={item.url}
+        className={styles.item}
+        onClick={async (e) => {
+          e.preventDefault()
+          props.on_link_click(item.url)
+          location.href = item.url
+        }}
+      >
+        <img
+          alt={'Favicon'}
+          width={16}
+          height={16}
+          src={`${props.favicon_host}/${get_domain_from_url(item.url)}`}
+        />
+        <div>
+          <div
+            className={cn(styles.item__title, {
+              [styles['item__title--unread']]: item.is_unread,
+            })}
+          >
+            <span>{item.title}</span>
+          </div>
+          {item.stars && (
+            <div className={styles.item__stars}>
+              {[...Array(item.stars)].map((_, i) => (
+                <Icon variant="STAR_FILLED" key={i} />
+              ))}
+            </div>
+          )}
+        </div>
+      </a>
+    ))
+
+    return props.is_draggable ? (
       <ReactSortable
         list={items}
         setList={(new_items) => {
@@ -58,42 +95,10 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         forceFallback={true}
         className={styles.items}
       >
-        {items.map((item) => (
-          <a
-            key={item.url}
-            href={item.url}
-            className={styles.item}
-            onClick={async (e) => {
-              e.preventDefault()
-              props.on_link_click(item.url)
-              location.href = item.url
-            }}
-          >
-            <img
-              alt={'Favicon'}
-              width={16}
-              height={16}
-              src={`${props.favicon_host}/${get_domain_from_url(item.url)}`}
-            />
-            <div>
-              <div
-                className={cn(styles.item__title, {
-                  [styles['item__title--unread']]: item.is_unread,
-                })}
-              >
-                <span>{item.title}</span>
-              </div>
-              {item.stars && (
-                <div className={styles.item__stars}>
-                  {[...Array(item.stars)].map((_, i) => (
-                    <Icon variant="STAR_FILLED" key={i} />
-                  ))}
-                </div>
-              )}
-            </div>
-          </a>
-        ))}
+        {items_dom}
       </ReactSortable>
+    ) : (
+      <div className={styles.items}>{items_dom}</div>
     )
   },
   (o, n) => o.items.length == n.items.length,

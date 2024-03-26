@@ -47,7 +47,7 @@ const Page: React.FC = () => {
             <div>{backup.created_at}</div>
             <UiCommonParticle_Button
               on_click={async () => {
-                const data_source = new ImportExport_DataSourceImpl(ky)
+                const data_source = new ImportExport_DataSourceImpl(ky_instance)
                 const repository = new ImportExport_RepositoryImpl(data_source)
                 const download_backup_use_case = new DownloadBackup_UseCase(
                   repository,
