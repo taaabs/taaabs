@@ -24,7 +24,6 @@ export namespace TagHierarchies {
     selected_tag_ids: number[]
     is_updating: boolean
     dragged_tag?: { id: number; name: string }
-    search_params: string
     is_draggable: boolean
     all_bookmarks_yields?: number
     is_all_bookmarks_selected: boolean

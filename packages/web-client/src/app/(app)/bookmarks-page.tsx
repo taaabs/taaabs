@@ -665,7 +665,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 set_close_aside_count(close_aside_count + 1)
               }}
               dragged_tag={tag_view_options.dragged_tag}
-              search_params={search_params.toString()}
               all_bookmarks_yields={tag_hierarchies.total}
               is_all_bookmarks_selected={!tag_view_options.selected_tags.length}
               on_click_all_bookmarks={() => {
