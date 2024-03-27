@@ -17,6 +17,7 @@ export namespace TagHierarchies {
     children: Node[]
   }
   export type Props = {
+    results_fetched_at_timestamp: number // Synchronizes UI updates of the library.
     tree?: Node[]
     on_update: (tags: Node[]) => void
     on_item_click: (hierarchy_ids: number[]) => void
@@ -46,7 +47,7 @@ type Item = {
 }
 
 export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
-  (props) => {
+  function TagHierarchies(props) {
     const [is_dragging, set_is_dragging] = useState(false)
     const [items, set_items] = useState<Item[]>([])
     const [mouseover_ids, set_mouseover_ids] = useState<number[]>([])
@@ -380,13 +381,10 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     )
   },
   (o, n) =>
-    o.on_click_all_bookmarks == n.on_click_all_bookmarks &&
+    o.results_fetched_at_timestamp == n.results_fetched_at_timestamp &&
     o.is_all_bookmarks_selected == n.is_all_bookmarks_selected &&
     o.is_updating == n.is_updating &&
-    o.search_params == n.search_params &&
-    JSON.stringify(o.selected_tag_ids) == JSON.stringify(n.selected_tag_ids) &&
-    o.dragged_tag == n.dragged_tag &&
-    JSON.stringify(o.tree) == JSON.stringify(n.tree),
+    o.dragged_tag == n.dragged_tag,
 )
 
 const tag_to_item = (params: {

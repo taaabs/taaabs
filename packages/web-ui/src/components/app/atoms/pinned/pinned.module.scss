@@ -1,54 +1,41 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
-.header {
-  height: var(--distance-50px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--distance-20px) 0 var(--distance-16px);
-  &__title {
-    display: flex;
-    align-items: center;
-    gap: var(--distance-10px);
-    > svg {
-      height: var(--icon-dimension-20px);
-    }
-    > span {
-      font-weight: var(--font-weight-inter-medium);
-    }
-  }
-}
 .items {
   display: flex;
   flex-wrap: wrap;
   gap: var(--distance-8px);
 }
 .item {
-  background-color: var(--neutral100);
+  background-color: var(--white);
+  border: var(--border-secondary);
   display: flex;
-  gap: var(--distance-6px);
   align-items: center;
-  padding: 0 var(--distance-10px) 0 var(--distance-8px);
-  height: 30px;
-  border-radius: var(--border-radius-999px);
+  gap: var(--distance-6px);
+  padding: 0 var(--distance-7px);
+  min-height: var(--distance-32px);
+  border-radius: var(--distance-16px);
   position: relative;
   @include transition-150ms(background-color);
-  @include hover {
-    background-color: var(--neutral200);
-  }
-  &--not-relevant {
-    opacity: var(--dimmed-opacity);
-    @include hover {
-      opacity: 1;
+  &__favicon {
+    align-self: self-start;
+    height: var(--distance-30px);
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    &--not-relevant {
+      opacity: var(--dimmed-opacity);
     }
   }
   &__title {
     display: flex;
     align-items: start;
+    padding: var(--distance-4px) var(--distance-2px) var(--distance-4px) 0;
     & > span {
       font-family: var(--font-family-inter-tight);
-      line-height: 1;
+      @include hover {
+        @include text-decoration-underlinie-thin;
+      }
     }
     &--unread > span {
       font-weight: var(--font-weight-inter-tight-medium);
@@ -66,7 +53,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    transform: translate(-10px, -4px);
+    transform: translate(-8px, -5px);
     display: flex;
     gap: 2px;
     > svg {

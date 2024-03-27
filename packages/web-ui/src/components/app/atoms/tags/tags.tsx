@@ -3,6 +3,7 @@ import styles from './tags.module.scss'
 
 export namespace Tags {
   export type Props = {
+    results_fetched_at_timestamp: number // Synchonizes UI updates.
     tags: Record<string, { id: number; yields: number }>
     on_click: (tag: number) => void
     on_tag_drag_start?: (params: { id: number; name: string }) => void
@@ -70,7 +71,5 @@ export const Tags: React.FC<Tags.Props> = memo(
       </div>
     )
   },
-  (o, n) =>
-    o.on_click == n.on_click &&
-    JSON.stringify(o.tags) == JSON.stringify(n.tags),
+  (o, n) => o.results_fetched_at_timestamp == n.results_fetched_at_timestamp,
 )

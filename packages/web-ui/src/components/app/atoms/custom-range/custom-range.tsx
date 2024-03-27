@@ -16,6 +16,7 @@ type Counts = {
 
 export namespace CustomRange {
   export type Props = {
+    results_fetched_at_timestamp: number // Synchonizes UI updates.
     counts?: Counts
     current_gte?: number
     current_lte?: number
@@ -567,11 +568,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       </div>
     )
   },
-  (o, n) =>
-    o.is_fetching_counts_data == n.is_fetching_counts_data &&
-    o.has_results == n.has_results &&
-    o.clear_date_range == n.clear_date_range &&
-    o.is_range_selector_disabled == n.is_range_selector_disabled,
+  (o, n) => o.results_fetched_at_timestamp == n.results_fetched_at_timestamp,
 )
 
 function yyyymm_to_display(yyyymm: number) {

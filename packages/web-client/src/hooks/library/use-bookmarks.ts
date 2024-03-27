@@ -25,6 +25,8 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
     density,
     showing_bookmarks_fetched_by_ids,
     first_bookmarks_fetched_at_timestamp,
+    is_fetching_first_bookmarks,
+    is_updating_bookmarks,
   } = use_library_selector((state) => state.bookmarks)
 
   const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
@@ -300,5 +302,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
     get_bookmarks,
     showing_bookmarks_fetched_by_ids,
     first_bookmarks_fetched_at_timestamp,
+    is_fetching_first_bookmarks,
+    is_updating_bookmarks,
   }
 }

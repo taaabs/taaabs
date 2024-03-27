@@ -45,7 +45,10 @@ import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/partic
 import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolbar'
 import { TagHierarchiesSkeleton as UiAppAtom_TagHierarchiesSkeleton } from '@web-ui/components/app/atoms/tag-hierarchies-skeleton'
 import { use_has_focus } from '@/hooks/misc/use-has-focus'
-import { TagHierarchies as UiAppAtom_TagHierarchies } from '@web-ui/components/app/atoms/tag-hierarchies'
+import {
+  TagHierarchies,
+  TagHierarchies as UiAppAtom_TagHierarchies,
+} from '@web-ui/components/app/atoms/tag-hierarchies'
 import { DraggedCursorTag as UiAppAtom_DraggedCursorTag } from '@web-ui/components/app/atoms/dragged-cursor-tag'
 import { use_tag_hierarchies } from '@/hooks/library/use-tag-hierarchies'
 import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
@@ -611,9 +614,12 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
         slot_tag_hierarchies={
           tag_hierarchies.is_initialized ? (
             <UiAppAtom_TagHierarchies
+              results_fetched_at_timestamp={
+                bookmarks.first_bookmarks_fetched_at_timestamp || 0
+              }
               is_draggable={!username}
               tree={tag_hierarchies.tree}
-              on_update={async (tree) => {
+              on_update={async (tree: TagHierarchies.Node[]) => {
                 const filter = filter_view_options.current_filter
 
                 const update_tag_hierarchies_params: UpdateTagHierarchies_Params =
@@ -651,7 +657,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               }}
               selected_tag_ids={tag_view_options.selected_tags}
               is_updating={tag_hierarchies.is_updating || false}
-              on_item_click={(tag_ids) => {
+              on_item_click={(tag_ids: number[]) => {
                 tag_view_options.set_many_tags_to_search_params({
                   tag_ids,
                 })
@@ -663,12 +669,12 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               is_all_bookmarks_selected={!tag_view_options.selected_tags.length}
               on_click_all_bookmarks={() => {
                 if (
-                  bookmarks_slice_state.is_fetching_first_bookmarks ||
-                  bookmarks_slice_state.is_updating_bookmarks
+                  bookmarks.is_fetching_first_bookmarks ||
+                  bookmarks.is_updating_bookmarks
                 )
                   return
                 tag_view_options.clear_selected_tags()
-                if (bookmarks_slice_state.showing_bookmarks_fetched_by_ids) {
+                if (bookmarks.showing_bookmarks_fetched_by_ids) {
                   search.reset()
                   if (filter_view_options.current_filter == Filter.NONE) {
                     bookmarks.get_bookmarks({})
@@ -874,6 +880,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   }}
                 >
                   <CustomRange
+                    results_fetched_at_timestamp={
+                      bookmarks.first_bookmarks_fetched_at_timestamp || 0
+                    }
                     counts={counts.months || undefined}
                     on_yyyymm_change={
                       date_view_options.set_gte_lte_search_params
@@ -965,6 +974,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       />
                     )}
                     <UiAppAtom_Tags
+                      results_fetched_at_timestamp={
+                        bookmarks.first_bookmarks_fetched_at_timestamp || 0
+                      }
                       tags={
                         counts.tags
                           ? Object.fromEntries(
@@ -1018,6 +1030,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
         slot_pinned={
           pinned.items &&
           pinned.items.length > 0 &&
+          bookmarks.first_bookmarks_fetched_at_timestamp &&
           !bookmarks.showing_bookmarks_fetched_by_ids && (
             <UiAppAtom_Pinned
               key={`${pinned.fetched_at_timestamp}
@@ -1026,6 +1039,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               header_title={params.dictionary.library.pinned}
               items={pinned.items.map((item) => ({
                 url: item.url,
+                created_at: item.created_at,
                 title: item.title,
                 is_unread: item.is_unread,
                 stars: item.stars,
@@ -1062,6 +1076,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   Filter.ARCHIVED_STARRED_UNREAD ||
                 filter_view_options.current_filter == Filter.ARCHIVED_UNREAD
               }
+              current_gte={date_view_options.current_gte}
+              current_lte={date_view_options.current_lte}
             />
           )
         }

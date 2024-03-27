@@ -10,6 +10,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 export namespace Pinned {
   type Item = {
     url: string
+    created_at: number
     title?: string
     stars?: number
     is_unread?: boolean
@@ -26,11 +27,14 @@ export namespace Pinned {
     selected_starred: boolean
     selected_unread: boolean
     selected_archived: boolean
+    current_gte?: number
+    current_lte?: number
   }
 }
 
 type SortableItem = {
   id: number
+  created_at: number
   url: string
   title?: string
   stars?: number
@@ -43,6 +47,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
     const [items, set_items] = useState<SortableItem[]>(
       props.items.map((item, i) => ({
         id: i,
+        created_at: item.created_at,
         url: item.url,
         title: item.title,
         stars: item.stars,
@@ -67,27 +72,49 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         !props.selected_tags.every((t) => item.tags!.includes(t))
       ) {
         is_not_relevant = true
+      } else if (
+        props.current_gte &&
+        props.current_lte &&
+        (item.created_at <
+          new Date(
+            parseInt(props.current_gte.toString().substring(0, 4)),
+            parseInt(props.current_gte.toString().substring(4, 6)) - 1,
+          ).getTime() /
+            1000 ||
+          item.created_at >
+            new Date(
+              parseInt(props.current_lte.toString().substring(0, 4)),
+              parseInt(props.current_lte.toString().substring(4, 6)),
+            ).getTime() /
+              1000 -
+              1)
+      ) {
+        is_not_relevant = true
       }
       return (
         <a
           key={item.url}
           href={item.url}
           title={item.title}
-          className={cn(styles.item, {
-            [styles['item--not-relevant']]: is_not_relevant,
-          })}
+          className={styles.item}
           onClick={async (e) => {
             e.preventDefault()
             props.on_link_click(item.url)
             location.href = item.url
           }}
         >
-          <img
-            alt={'Favicon'}
-            width={16}
-            height={16}
-            src={`${props.favicon_host}/${get_domain_from_url(item.url)}`}
-          />
+          <div
+            className={cn(styles.item__favicon, {
+              [styles['item__favicon--not-relevant']]: is_not_relevant,
+            })}
+          >
+            <img
+              alt={'Favicon'}
+              width={16}
+              height={16}
+              src={`${props.favicon_host}/${get_domain_from_url(item.url)}`}
+            />
+          </div>
           {!is_not_relevant && (
             <div>
               <div
