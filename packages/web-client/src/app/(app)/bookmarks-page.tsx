@@ -612,7 +612,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           />
         }
         slot_tag_hierarchies={
-          tag_hierarchies.is_initialized ? (
+          tag_hierarchies.is_initialized &&
+          bookmarks.first_bookmarks_fetched_at_timestamp ? (
             <UiAppAtom_TagHierarchies
               results_fetched_at_timestamp={
                 bookmarks.first_bookmarks_fetched_at_timestamp || 0
@@ -1033,8 +1034,10 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           bookmarks.first_bookmarks_fetched_at_timestamp &&
           !bookmarks.showing_bookmarks_fetched_by_ids && (
             <UiAppAtom_Pinned
-              key={`${pinned.fetched_at_timestamp}
-                ${bookmarks.first_bookmarks_fetched_at_timestamp}`}
+              key={pinned.fetched_at_timestamp} // State for sortable must be rebuilt.
+              first_bookmarks_fetched_at={
+                bookmarks.first_bookmarks_fetched_at_timestamp
+              }
               favicon_host={favicon_host}
               header_title={params.dictionary.library.pinned}
               items={pinned.items.map((item) => ({
