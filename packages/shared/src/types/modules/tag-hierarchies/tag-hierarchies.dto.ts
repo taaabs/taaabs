@@ -36,10 +36,10 @@ export namespace TagHierarchies_Dto {
       public total?: number
     }
     export class Authorized extends Base {
-      public tag_hierarchies: AuthorizedNode[]
+      public tag_hierarchies?: AuthorizedNode[]
     }
     export class Public extends Base {
-      public tag_hierarchies: PublicNode[]
+      public tag_hierarchies?: PublicNode[]
     }
   }
 }
