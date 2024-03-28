@@ -80,11 +80,14 @@ export const Library: React.FC<Library.Props> = (props) => {
 
   const swipeable_handlers = useSwipeable({
     onSwipeStart: ({ dir, event }) => {
-      // Check if user is not dragging over "custom range" handlers.
+      // Check if user is not dragging over "custom range" handlers or draggable pinned.
       if (
+        window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
         (event.target as any)?.nodeName == 'line' ||
-        window.innerWidth >= 992
+        (event as any).srcElement.offsetParent?.className.includes(
+          'sortable-ghost',
+        )
       )
         return
 
@@ -104,9 +107,12 @@ export const Library: React.FC<Library.Props> = (props) => {
     },
     onSwiping: ({ deltaX, dir, event }) => {
       if (
+        window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
         (event.target as any)?.nodeName == 'line' ||
-        window.innerWidth >= 992
+        (event as any).srcElement.offsetParent?.className.includes(
+          'sortable-ghost',
+        )
       )
         return
 
@@ -127,9 +133,12 @@ export const Library: React.FC<Library.Props> = (props) => {
     },
     onSwiped: ({ dir, velocity, event }) => {
       if (
+        window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
         (event.target as any)?.nodeName == 'line' ||
-        window.innerWidth >= 992
+        (event as any).srcElement.offsetParent?.className.includes(
+          'sortable-ghost',
+        )
       )
         return
 

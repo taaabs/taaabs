@@ -153,7 +153,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         forceFallback={true}
         className={styles.items}
         chosenClass={styles['item--dragging']}
-        delay={300}
+        delay={100}
         delayOnTouchOnly={true}
       >
         {items_dom}
