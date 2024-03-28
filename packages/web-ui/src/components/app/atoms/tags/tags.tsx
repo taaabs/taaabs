@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import styles from './tags.module.scss'
-import cn from 'classnames'
 
 export namespace Tags {
   export type Props = {
@@ -8,7 +7,6 @@ export namespace Tags {
     tags: Record<string, { id: number; yields: number }>
     on_click: (tag: number) => void
     on_tag_drag_start?: (params: { id: number; name: string }) => void
-    is_fetching_first_bookmarks?: boolean
   }
 }
 
@@ -43,11 +41,7 @@ export const Tags: React.FC<Tags.Props> = memo(
     })
 
     return (
-      <div
-        className={cn(styles.container, {
-          [styles['container--dimmed']]: props.is_fetching_first_bookmarks,
-        })}
-      >
+      <div className={styles.container}>
         {new_tags_grouped.map((group) => (
           <div className={styles.group} key={group[0].name.substring(0, 1)}>
             <div className={styles['first-char']}>
@@ -77,7 +71,5 @@ export const Tags: React.FC<Tags.Props> = memo(
       </div>
     )
   },
-  (o, n) =>
-    o.results_fetched_at_timestamp == n.results_fetched_at_timestamp &&
-    o.is_fetching_first_bookmarks == n.is_fetching_first_bookmarks,
+  (o, n) => o.results_fetched_at_timestamp == n.results_fetched_at_timestamp,
 )

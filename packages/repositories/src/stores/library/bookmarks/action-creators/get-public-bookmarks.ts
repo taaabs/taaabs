@@ -33,6 +33,9 @@ export const get_public_bookmarks = (params: {
       dispatch(
         bookmarks_actions.set_processing_progress(result.processing_progress),
       )
+      dispatch(
+        bookmarks_actions.set_processing_progress(result.import_progress),
+      )
       if (result.awaits_processing) {
         throw new Error()
       } else {

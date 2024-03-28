@@ -200,7 +200,6 @@
     min-height: 100vh;
     position: relative;
     z-index: 1;
-    transition: transform 50ms linear;
     &::before {
       content: '';
       width: 1px;

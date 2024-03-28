@@ -14,6 +14,7 @@ type BookmarksState = {
   bookmarks: Bookmark_Entity[] | null
   has_more_bookmarks: boolean | null
   processing_progress?: number // Filling tag combinations and generating counts.
+  import_progress?: number
   should_refetch_counts?: boolean
   density: 'default' | 'compact'
 }

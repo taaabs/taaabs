@@ -90,6 +90,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         : undefined,
       awaits_processing: result.awaits_processing,
       processing_progress: result.processing_progress,
+      import_progress: result.import_progress,
     }
   }
 

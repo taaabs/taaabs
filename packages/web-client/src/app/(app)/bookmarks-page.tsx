@@ -917,7 +917,13 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               )
             }
             slot_tags={
-              <>
+              <div
+                style={{
+                  opacity: bookmarks_hook.is_fetching_first_bookmarks
+                    ? 'var(--dimmed-opacity)'
+                    : undefined,
+                }}
+              >
                 {!show_tags_skeleton ? (
                   <>
                     {(bookmarks_hook.is_fetching_first_bookmarks
@@ -983,15 +989,12 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                           ? tag_view_options_hook.set_dragged_tag
                           : undefined
                       }
-                      is_fetching_first_bookmarks={
-                        bookmarks_hook.is_fetching_first_bookmarks
-                      }
                     />
                   </>
                 ) : (
                   <UiAppAtom_TagsSkeleton />
                 )}
-              </>
+              </div>
             }
           />
         }
