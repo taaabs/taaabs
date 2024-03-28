@@ -7,6 +7,8 @@ declare const styles: {
   readonly item__title: string
   readonly 'item__title--unread': string
   readonly item__title__unread: string
-  readonly item__stars: string
+  readonly 'item__stars-unread': string
+  readonly 'item__stars-unread__stars': string
+  readonly 'item__stars-unread__unread': string
 }
 export = styles

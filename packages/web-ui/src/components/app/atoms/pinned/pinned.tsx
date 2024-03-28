@@ -125,13 +125,18 @@ export const Pinned: React.FC<Pinned.Props> = memo(
               >
                 <span>{item.title}</span>
               </div>
-              {item.stars && item.title && (
-                <div className={styles.item__stars}>
-                  {[...Array(item.stars)].map((_, i) => (
-                    <Icon variant="STAR_FILLED" key={i} />
-                  ))}
-                </div>
-              )}
+              <div className={styles['item__stars-unread']}>
+                {item.stars && item.title && (
+                  <div className={styles['item__stars-unread__stars']}>
+                    {[...Array(item.stars)].map((_, i) => (
+                      <Icon variant="STAR_FILLED" key={i} />
+                    ))}
+                  </div>
+                )}
+                {item.is_unread && (
+                  <div className={styles['item__stars-unread__unread']} />
+                )}
+              </div>
             </div>
           )}
         </a>

@@ -53,16 +53,28 @@
       margin-left: var(--distance-2px);
     }
   }
-  &__stars {
+  &__stars-unread {
     position: absolute;
     top: 0;
     right: 0;
     transform: translate(-8px, -5px);
     display: flex;
-    gap: 2px;
-    > svg {
-      fill: var(--yellow);
-      width: var(--distance-10px);
+    align-items: center;
+    gap: var(--distance-3px);
+    &__stars {
+      display: flex;
+      gap: 2px;
+      > svg {
+        fill: var(--yellow);
+        width: var(--distance-10px);
+      }
+    }
+    &__unread {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--red);
+      margin-top: 1px;
     }
   }
 }
