@@ -1084,7 +1084,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   }),
                 )
                 toast.success(
-                  params.dictionary.library.pinned_items_has_beed_updated,
+                  params.dictionary.library.pinned_links_has_beed_updated,
                 )
               }}
               on_link_click={() => {}}
@@ -1597,7 +1597,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   : params.dictionary.library
                                       .pin_has_been_removed,
                               )
-                              pinned_hook.get_pinned()
                             },
                             other_icon: (
                               <UiCommonParticles_Icon variant="ARCHIVE" />

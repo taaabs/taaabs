@@ -14,7 +14,7 @@ export type Dictionary = {
     pin: string
     unpin: string
     pinned: string
-    pinned_items_has_beed_updated: string
+    pinned_links_has_beed_updated: string
     sort_by_options: {
       created_at: string
       updated_at: string

@@ -23,12 +23,12 @@ declare const styles: {
   readonly main__inner__sticky__search: string
   readonly main__inner__skeleton: string
   readonly main__inner__pinned: string
-  readonly 'main__inner__bookmarks--loading': string
   readonly main__inner__info: string
   readonly aside: string
   readonly 'aside--hidden': string
   readonly aside__inner: string
   readonly aside__inner__stickybox: string
   readonly 'free-fall': string
+  readonly dimmed: string
 }
 export = styles

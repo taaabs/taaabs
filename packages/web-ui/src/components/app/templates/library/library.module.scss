@@ -298,10 +298,6 @@
         margin-bottom: var(--distance-16px);
       }
     }
-    &__bookmarks--loading {
-      opacity: var(--opacity-loading);
-      pointer-events: none;
-    }
     &__info {
       display: flex;
       flex-direction: column;
@@ -378,4 +374,8 @@
 }
 .free-fall {
   @include transition-250ms(transform);
+}
+.dimmed {
+  opacity: var(--opacity-loading);
+  pointer-events: none;
 }

@@ -8,7 +8,6 @@ import Skeleton from 'react-loading-skeleton'
 import StickyBox from 'react-sticky-box'
 import { MobileTitleBar as Subcomponent_MobileTitleBar } from './components/mobile-title-bar'
 import styles from './library.module.scss'
-import { use_is_hydrated } from '@shared/hooks'
 import { useSwipeable } from 'react-swipeable'
 import { shared_values } from '@web-ui/constants'
 import { use_is_scrolled } from '@web-ui/hooks/use-is-scrolled'
@@ -51,7 +50,6 @@ export const Library: React.FC<Library.Props> = (props) => {
   const main = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLDivElement>(null)
   const end_of_bookmarks = useRef<HTMLDivElement>(null)
-  const is_hydrated = use_is_hydrated()
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
   const [drag_distance, set_drag_distance] = useState(0)
   const [initial_swipe_direction, set_initial_swipe_direction] = useState<
@@ -403,19 +401,16 @@ export const Library: React.FC<Library.Props> = (props) => {
                   {props.slot_search}
                 </div>
               </div>
-              <div className={styles.main__inner__pinned}>
-                {props.slot_pinned}
-              </div>
               <div
                 className={cn({
-                  [styles['main__inner__bookmarks--loading']]:
+                  [styles.dimmed]:
                     props.is_fetching_first_bookmarks ||
                     props.is_updating_bookmarks,
                 })}
-                style={{
-                  visibility: is_hydrated ? 'visible' : 'hidden',
-                }}
               >
+                <div className={styles.main__inner__pinned}>
+                  {props.slot_pinned}
+                </div>
                 {props.slot_bookmarks}
               </div>
               {props.show_bookmarks_skeleton && (
