@@ -3,7 +3,6 @@ import { Bookmark_Entity } from '../entities/bookmark.entity'
 
 export type GetBookmarks_Ro = {
   bookmarks?: Bookmark_Entity[]
-  awaits_processing?: boolean
   processing_progress?: number
   import_progress?: number
 } & Pagination

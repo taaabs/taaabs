@@ -46,14 +46,10 @@ export namespace Counts_Dto {
       public starred_count?: number
     }
 
-    class Counts {
-      public awaits_processing?: boolean
-    }
-
-    export class Authorized extends Counts {
+    export class Authorized {
       public months?: Record<string, AuthorizedMonth>
     }
-    export class Public extends Counts {
+    export class Public {
       public months?: Record<string, PublicMonth>
     }
   }

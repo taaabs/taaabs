@@ -36,7 +36,10 @@ export const get_authorized_bookmarks = (params: {
       dispatch(
         bookmarks_actions.set_processing_progress(result.import_progress),
       )
-      if (result.awaits_processing) {
+      if (
+        result.processing_progress !== undefined ||
+        result.import_progress !== undefined
+      ) {
         throw new Error()
       } else {
         return result

@@ -33,7 +33,7 @@
   }
   &__title {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     padding: var(--distance-4px) var(--distance-2px) var(--distance-4px) 0;
     & > span {
       font-family: var(--font-family-inter-tight);

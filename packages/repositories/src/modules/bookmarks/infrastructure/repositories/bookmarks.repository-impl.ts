@@ -88,7 +88,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             has_more: result.pagination.has_more,
           }
         : undefined,
-      awaits_processing: result.awaits_processing,
       processing_progress: result.processing_progress,
       import_progress: result.import_progress,
     }
@@ -131,7 +130,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             has_more: result.pagination.has_more,
           }
         : undefined,
-      awaits_processing: result.awaits_processing,
       processing_progress: result.processing_progress,
     }
   }

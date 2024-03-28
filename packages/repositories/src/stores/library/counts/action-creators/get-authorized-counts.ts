@@ -22,8 +22,6 @@ export const get_authorized_counts = (params: {
 
     const result = await get_months_use_case.invoke(params.request_params)
 
-    if (result.awaits_processing) return
-
     dispatch(counts_actions.set_data(result))
     dispatch(counts_actions.set_is_fetching_data(false))
 

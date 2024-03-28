@@ -46,7 +46,6 @@ export class Counts_RepositoryImpl implements Counts_Repository {
             {},
           )
         : {},
-      awaits_processing: result.awaits_processing,
     }
   }
 
@@ -76,7 +75,6 @@ export class Counts_RepositoryImpl implements Counts_Repository {
             {},
           )
         : {},
-      awaits_processing: result.awaits_processing,
     }
   }
 }
