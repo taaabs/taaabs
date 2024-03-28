@@ -568,7 +568,9 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       </div>
     )
   },
-  (o, n) => o.results_fetched_at_timestamp == n.results_fetched_at_timestamp,
+  (o, n) =>
+    o.results_fetched_at_timestamp == n.results_fetched_at_timestamp &&
+    o.is_fetching_counts_data == n.is_fetching_counts_data,
 )
 
 function yyyymm_to_display(yyyymm: number) {

@@ -53,6 +53,8 @@ export const browser_storage = {
         `library.scroll_y.${params.username || ''}?${
           params.search_params || ''
         }`,
+      pinned: (params: { username?: string; search_params?: string }) =>
+        `library.pinned.${params.username || ''}?${params.search_params || ''}`,
     },
   },
   local_storage: {

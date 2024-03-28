@@ -930,7 +930,10 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       bookmarks_hook.is_fetching_first_bookmarks
                     }
                     is_fetching_counts_data={
-                      counts_hook.is_fetching_counts_data
+                      // We need to trigger render only when counts data is fetched on back/forward navigation.
+                      !bookmarks_hook.is_fetching_first_bookmarks
+                        ? counts_hook.is_fetching_counts_data
+                        : undefined
                     }
                     is_range_selector_disabled={
                       sort_by_view_options_hook.current_sort_by ==

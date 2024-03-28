@@ -192,6 +192,9 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
     if (bookmarks) {
       dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
+      dispatch(
+        bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
+      )
       const has_more_bookmarks = sessionStorage.getItem(
         browser_storage.session_storage.library.has_more_bookmarks({
           username: username as string,
@@ -231,21 +234,21 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       sessionStorage.setItem(
         browser_storage.session_storage.library.bookmarks({
           username: params.username,
-          search_params: params.search_params.toString(),
+          search_params: params.search_params,
         }),
         JSON.stringify(params.bookmarks),
       )
       sessionStorage.setItem(
         browser_storage.session_storage.library.has_more_bookmarks({
           username: params.username,
-          search_params: params.search_params.toString(),
+          search_params: params.search_params,
         }),
         `${params.has_more_bookmarks}`,
       )
       sessionStorage.setItem(
         browser_storage.session_storage.library.density({
           username: params.username,
-          search_params: params.search_params.toString(),
+          search_params: params.search_params,
         }),
         `${params.density}`,
       )
@@ -268,16 +271,19 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   useEffect(() => {
     const bookmarks = sessionStorage.getItem(
       browser_storage.session_storage.library.bookmarks({
-        username: username as string,
+        username,
         search_params: search_params.toString(),
       }),
     )
 
     if (bookmarks) {
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
+      dispatch(
+        bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
+      )
       const has_more_bookmarks = sessionStorage.getItem(
         browser_storage.session_storage.library.has_more_bookmarks({
-          username: username as string,
+          username,
           search_params: search_params.toString(),
         }),
       )
@@ -290,7 +296,7 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       }
       const density = sessionStorage.getItem(
         browser_storage.session_storage.library.density({
-          username: username as string,
+          username,
           search_params: search_params.toString(),
         }),
       )

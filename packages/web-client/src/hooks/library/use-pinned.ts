@@ -1,10 +1,13 @@
+import { browser_storage } from '@/constants/browser-storage'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import ky from 'ky'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 
 export const use_pinned = () => {
+  const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
   const { is_fetching, is_updating, items, fetched_at_timestamp } =
@@ -38,8 +41,30 @@ export const use_pinned = () => {
     }
   }
 
+  useUpdateEffect(() => {
+    if (items) {
+      sessionStorage.setItem(
+        browser_storage.session_storage.library.pinned({
+          username,
+          search_params: search_params.toString(),
+        }),
+        JSON.stringify(items),
+      )
+    }
+  }, [items])
+
   useEffect(() => {
-    get_pinned()
+    const pinned_items = sessionStorage.getItem(
+      browser_storage.session_storage.library.pinned({
+        username,
+        search_params: search_params.toString(),
+      }),
+    )
+    if (pinned_items) {
+      dispatch(pinned_actions.set_items(JSON.parse(pinned_items)))
+    } else {
+      get_pinned()
+    }
   }, [])
 
   return {
