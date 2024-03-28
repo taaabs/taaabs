@@ -152,6 +152,9 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         animation={system_values.sortablejs_animation_duration}
         forceFallback={true}
         className={styles.items}
+        chosenClass={styles['item--dragging']}
+        delay={300}
+        delayOnTouchOnly={true}
       >
         {items_dom}
       </ReactSortable>

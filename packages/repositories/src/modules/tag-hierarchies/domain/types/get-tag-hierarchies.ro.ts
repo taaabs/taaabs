@@ -1,6 +1,6 @@
-import { TagHierarchyNode_Entity } from '../entities/tag-hierarchy-node.entity'
+import { TagHierarchy_Entity } from '../entities/tag-hierarchy.entity'
 
 export type GetTagHierarchies_Ro = {
-  tree: TagHierarchyNode_Entity[]
+  tag_hierarchies: TagHierarchy_Entity[]
   total?: number
 }

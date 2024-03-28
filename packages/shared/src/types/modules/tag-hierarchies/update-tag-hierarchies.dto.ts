@@ -5,6 +5,6 @@ export namespace UpdateTagHierarchies_Dto {
   }
 
   export class Body {
-    public tree: Node[]
+    public tag_hierarchies: Node[]
   }
 }

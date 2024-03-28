@@ -17,6 +17,10 @@
   border-radius: var(--distance-16px);
   position: relative;
   @include transition-150ms(background-color);
+  &--dragging {
+    background-color: var(--border-color-secondary);
+    cursor: grabbing;
+  }
   &__favicon {
     align-self: self-start;
     height: var(--distance-30px);

@@ -1,6 +1,7 @@
 declare const styles: {
   readonly items: string
   readonly item: string
+  readonly 'item--dragging': string
   readonly item__favicon: string
   readonly 'item__favicon--not-relevant': string
   readonly item__title: string

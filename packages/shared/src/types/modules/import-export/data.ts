@@ -73,5 +73,5 @@ namespace TagHierarchy {
 }
 export const data_schema = z.object({
   bookmarks: z.array(bookmark_schema).max(200000),
-  tree: z.array(TagHierarchy.tag_hierarchy_schema).max(100),
+  tag_hierarchies: z.array(TagHierarchy.tag_hierarchy_schema).max(100),
 })

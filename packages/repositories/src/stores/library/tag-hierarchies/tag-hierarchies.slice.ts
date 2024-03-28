@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import * as thunks from './action-creators'
-import { TagHierarchyNode_Entity } from '@repositories/modules/tag-hierarchies/domain/entities/tag-hierarchy-node.entity'
+import { TagHierarchy_Entity } from '@repositories/modules/tag-hierarchies/domain/entities/tag-hierarchy.entity'
 
 type TagHierarchiesState = {
   is_initialized?: boolean
   is_fetching?: boolean
   is_updating?: boolean
   total?: number
-  tree?: TagHierarchyNode_Entity[]
+  tag_hierarchies?: TagHierarchy_Entity[]
 }
 
 const initial_state: TagHierarchiesState = {}
@@ -37,8 +37,11 @@ export const tag_hierarchies_slice = createSlice({
     set_total(state, action: PayloadAction<TagHierarchiesState['total']>) {
       state.total = action.payload
     },
-    set_tree(state, action: PayloadAction<TagHierarchiesState['tree']>) {
-      state.tree = action.payload
+    set_tag_hierarchies(
+      state,
+      action: PayloadAction<TagHierarchiesState['tag_hierarchies']>,
+    ) {
+      state.tag_hierarchies = action.payload
     },
   },
 })

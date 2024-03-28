@@ -5,10 +5,7 @@ import { toast } from 'react-toastify'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
 import { SendImportData_UseCase } from '@repositories/modules/import-export/domain/usecases/send-import-data.use-case'
-import {
-  SendImportData_Params,
-  send_import_data_params_schema,
-} from '@repositories/modules/import-export/domain/types/send-import-data.params'
+import { SendImportData_Params } from '@repositories/modules/import-export/domain/types/send-import-data.params'
 import ky from 'ky'
 
 type BookmarkNode = {
@@ -49,9 +46,7 @@ export const use_import = () => {
     set_import_data(undefined)
 
     try {
-      set_import_data(
-        send_import_data_params_schema.parse(JSON.parse(file_text)),
-      )
+      set_import_data(JSON.parse(file_text))
       return
     } catch {
       // JSON is invalid, do nothing.
@@ -120,7 +115,7 @@ export const use_import = () => {
               is_public: import_as_public,
             })),
         })),
-        tree: [],
+        tag_hierarchies: [],
       }
     }
 

@@ -4,10 +4,15 @@ type Tag = {
 }
 
 type Link = {
+  is_public?: boolean
   url?: string
   site_path?: string
   url_aes?: string
   site_aes?: string
+  is_pinned?: boolean
+  pin_order?: number
+  pin_title?: string
+  pin_title_aes?: string
 }
 
 export type Bookmark = {
@@ -19,18 +24,18 @@ export type Bookmark = {
   created_at: string // TODO make optional
   is_public?: boolean
   is_archived?: boolean
-  stars: number
+  stars?: number
   is_unread?: boolean
   tags: Tag[]
   links: Link[]
 }
 
-export type TagHierarchyNode = {
+export type TagHierarchy = {
   hash: string
-  children: TagHierarchyNode[]
+  children: TagHierarchy[]
 }
 
 export type ExportData = {
   bookmarks: Bookmark[]
-  tree: TagHierarchyNode[]
+  tag_hierarchies: TagHierarchy[]
 }

@@ -21,8 +21,12 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   const dispatch = use_library_dispatch()
   const {
     bookmarks,
+    should_refetch_counts,
+    incoming_bookmarks,
+    is_fetching_more_bookmarks,
     has_more_bookmarks,
     density,
+    is_fetching_data,
     showing_bookmarks_fetched_by_ids,
     first_bookmarks_fetched_at_timestamp,
     is_fetching_first_bookmarks,
@@ -299,7 +303,14 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
   }, [])
 
   return {
+    bookmarks,
     get_bookmarks,
+    should_refetch_counts,
+    incoming_bookmarks,
+    is_fetching_data,
+    is_fetching_more_bookmarks,
+    has_more_bookmarks,
+    density,
     showing_bookmarks_fetched_by_ids,
     first_bookmarks_fetched_at_timestamp,
     is_fetching_first_bookmarks,

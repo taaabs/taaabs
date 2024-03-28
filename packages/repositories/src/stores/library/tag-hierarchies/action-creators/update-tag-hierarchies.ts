@@ -19,11 +19,11 @@ export const update_tag_hierarchies = (params: {
 
     dispatch(tag_hierarchies_actions.set_is_updating(true))
 
-    const { tree } = await update_tag_hierarchies_use_case.invoke(
+    const { tag_hierarchies } = await update_tag_hierarchies_use_case.invoke(
       params.update_tag_hierarchies_params,
     )
 
-    dispatch(tag_hierarchies_actions.set_tree(tree))
+    dispatch(tag_hierarchies_actions.set_tag_hierarchies(tag_hierarchies))
     dispatch(tag_hierarchies_actions.set_is_updating(false))
   }
 }

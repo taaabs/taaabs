@@ -32,7 +32,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
       bookmarks: await Promise.all(
         data.bookmarks.map(async (bookmark) => ({
           id: bookmark.id,
-          is_public: bookmark.is_public || false,
+          is_public: bookmark.is_public || undefined,
           created_at: bookmark.created_at,
           title: bookmark.title
             ? bookmark.title
@@ -44,9 +44,9 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
             : bookmark.note_aes
             ? await Crypto.AES.decrypt(bookmark.note_aes, key)
             : undefined,
-          is_unread: bookmark.is_unread || false,
+          is_unread: bookmark.is_unread || undefined,
           is_archived: bookmark.is_archived,
-          stars: bookmark.stars || 0,
+          stars: bookmark.stars || undefined,
           tags: bookmark.tags
             ? await Promise.all(
                 bookmark.tags.map(async (tag) => {
@@ -74,15 +74,22 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                       is_public: true,
                       url: link.url,
                       site_path: link.site_path || undefined,
+                      is_pinned: link.is_pinned || undefined,
+                      pin_order: link.pin_order || undefined,
+                      pin_title: link.pin_title || undefined,
                     }
                   } else if (link.url_aes && link.site_aes) {
                     const site = await Crypto.AES.decrypt(link.site_aes, key)
                     const domain = `${get_domain_from_url(site)}/`
                     const site_path = site.slice(domain.length)
                     return {
-                      is_public: false,
                       url: await Crypto.AES.decrypt(link.url_aes, key),
                       site_path: site_path || undefined,
+                      is_pinned: link.is_pinned || undefined,
+                      pin_order: link.pin_order || undefined,
+                      pin_title: link.pin_title_aes
+                        ? await Crypto.AES.decrypt(link.pin_title_aes, key)
+                        : undefined,
                     }
                   } else {
                     throw new Error('Url aes and site aes should be there')
@@ -92,7 +99,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
             : undefined,
         })),
       ),
-      tree: [],
+      tag_hierarchies: [],
     }
 
     return JSON.stringify(downloadable_json)
