@@ -738,10 +738,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                           toggle_sort_by_dropdown()
                           if (
                             sort_by_view_options_hook.current_sort_by ==
-                              SortBy.CREATED_AT ||
-                            bookmarks_hook.is_fetching_first_bookmarks ||
-                            bookmarks_hook.is_fetching_more_bookmarks ||
-                            counts_hook.is_fetching_counts_data
+                            SortBy.CREATED_AT
                           )
                             return
                           sort_by_view_options_hook.set_sort_by_query_param(
@@ -758,10 +755,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                           toggle_sort_by_dropdown()
                           if (
                             sort_by_view_options_hook.current_sort_by ==
-                              SortBy.UPDATED_AT ||
-                            bookmarks_hook.is_fetching_first_bookmarks ||
-                            bookmarks_hook.is_fetching_more_bookmarks ||
-                            counts_hook.is_fetching_counts_data
+                            SortBy.UPDATED_AT
                           )
                             return
                           sort_by_view_options_hook.set_sort_by_query_param(
@@ -780,10 +774,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 toggle_sort_by_dropdown()
                                 if (
                                   sort_by_view_options_hook.current_sort_by ==
-                                    SortBy.VISITED_AT ||
-                                  bookmarks_hook.is_fetching_first_bookmarks ||
-                                  bookmarks_hook.is_fetching_more_bookmarks ||
-                                  counts_hook.is_fetching_counts_data
+                                  SortBy.VISITED_AT
                                 )
                                   return
                                 sort_by_view_options_hook.set_sort_by_query_param(
@@ -802,10 +793,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                           toggle_sort_by_dropdown()
                           if (
                             sort_by_view_options_hook.current_sort_by ==
-                              SortBy.POPULARITY ||
-                            bookmarks_hook.is_fetching_first_bookmarks ||
-                            bookmarks_hook.is_fetching_more_bookmarks ||
-                            counts_hook.is_fetching_counts_data
+                            SortBy.POPULARITY
                           )
                             return
                           sort_by_view_options_hook.set_sort_by_query_param(
@@ -851,11 +839,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         on_click: () => {
                           toggle_order_dropdown()
                           if (
-                            order_view_options_hook.current_order ==
-                              Order.DESC ||
-                            bookmarks_hook.is_fetching_first_bookmarks ||
-                            bookmarks_hook.is_fetching_more_bookmarks ||
-                            counts_hook.is_fetching_counts_data
+                            order_view_options_hook.current_order == Order.DESC
                           )
                             return
                           order_view_options_hook.set_order_query_param(
@@ -871,11 +855,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         on_click: () => {
                           toggle_order_dropdown()
                           if (
-                            order_view_options_hook.current_order ==
-                              Order.ASC ||
-                            bookmarks_hook.is_fetching_first_bookmarks ||
-                            bookmarks_hook.is_fetching_more_bookmarks ||
-                            counts_hook.is_fetching_counts_data
+                            order_view_options_hook.current_order == Order.ASC
                           )
                             return
                           order_view_options_hook.set_order_query_param(
@@ -892,59 +872,46 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             }}
             slot_custom_range={
               show_custom_range ? (
-                <div
-                  style={{
-                    pointerEvents:
-                      bookmarks_hook.is_fetching_first_bookmarks ||
-                      bookmarks_hook.is_fetching_more_bookmarks ||
-                      counts_hook.is_fetching_counts_data
-                        ? 'none'
-                        : 'all',
-                  }}
-                >
-                  <CustomRange
-                    results_fetched_at_timestamp={
-                      bookmarks_hook.first_bookmarks_fetched_at_timestamp || 0
-                    }
-                    counts={counts_hook.months || undefined}
-                    on_yyyymm_change={
-                      date_view_options_hook.set_gte_lte_search_params
-                    }
-                    clear_date_range={
-                      date_view_options_hook.clear_gte_lte_search_params
-                    }
-                    current_gte={
-                      parseInt(search_params.get('gte') || '0') || undefined
-                    }
-                    current_lte={
-                      parseInt(search_params.get('lte') || '0') || undefined
-                    }
-                    selected_tags={search_params.get('t') || undefined}
-                    has_results={
-                      bookmarks_hook.bookmarks &&
-                      !bookmarks_hook.is_fetching_first_bookmarks
-                        ? bookmarks_hook.bookmarks.length > 0
-                        : undefined
-                    }
-                    is_fetching_data={
-                      bookmarks_hook.is_fetching_first_bookmarks
-                    }
-                    is_fetching_counts_data={
-                      // We need to trigger render only when counts data is fetched on back/forward navigation.
-                      !bookmarks_hook.is_fetching_first_bookmarks
-                        ? counts_hook.is_fetching_counts_data
-                        : undefined
-                    }
-                    is_range_selector_disabled={
-                      sort_by_view_options_hook.current_sort_by ==
-                        SortBy.UPDATED_AT ||
-                      sort_by_view_options_hook.current_sort_by ==
-                        SortBy.VISITED_AT ||
-                      sort_by_view_options_hook.current_sort_by ==
-                        SortBy.POPULARITY
-                    }
-                  />
-                </div>
+                <CustomRange
+                  results_fetched_at_timestamp={
+                    bookmarks_hook.first_bookmarks_fetched_at_timestamp || 0
+                  }
+                  counts={counts_hook.months || undefined}
+                  on_yyyymm_change={
+                    date_view_options_hook.set_gte_lte_search_params
+                  }
+                  clear_date_range={
+                    date_view_options_hook.clear_gte_lte_search_params
+                  }
+                  current_gte={
+                    parseInt(search_params.get('gte') || '0') || undefined
+                  }
+                  current_lte={
+                    parseInt(search_params.get('lte') || '0') || undefined
+                  }
+                  selected_tags={search_params.get('t') || undefined}
+                  has_results={
+                    bookmarks_hook.bookmarks &&
+                    !bookmarks_hook.is_fetching_first_bookmarks
+                      ? bookmarks_hook.bookmarks.length > 0
+                      : undefined
+                  }
+                  is_fetching_data={bookmarks_hook.is_fetching_first_bookmarks}
+                  is_fetching_counts_data={
+                    // We need to trigger render only when counts data is fetched on back/forward navigation.
+                    !bookmarks_hook.is_fetching_first_bookmarks
+                      ? counts_hook.is_fetching_counts_data
+                      : undefined
+                  }
+                  is_range_selector_disabled={
+                    sort_by_view_options_hook.current_sort_by ==
+                      SortBy.UPDATED_AT ||
+                    sort_by_view_options_hook.current_sort_by ==
+                      SortBy.VISITED_AT ||
+                    sort_by_view_options_hook.current_sort_by ==
+                      SortBy.POPULARITY
+                  }
+                />
               ) : (
                 <UiAppAtom_CustomRangeSkeleton />
               )
@@ -952,16 +919,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             slot_tags={
               <>
                 {!show_tags_skeleton ? (
-                  <div
-                    style={{
-                      pointerEvents:
-                        bookmarks_hook.is_fetching_first_bookmarks ||
-                        bookmarks_hook.is_fetching_more_bookmarks ||
-                        counts_hook.is_fetching_counts_data
-                          ? 'none'
-                          : undefined,
-                    }}
-                  >
+                  <>
                     {(bookmarks_hook.is_fetching_first_bookmarks
                       ? counts_hook.selected_tags.length > 0
                       : tag_view_options_hook.selected_tags.length > 0) && (
@@ -1025,8 +983,11 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                           ? tag_view_options_hook.set_dragged_tag
                           : undefined
                       }
+                      is_fetching_first_bookmarks={
+                        bookmarks_hook.is_fetching_first_bookmarks
+                      }
                     />
-                  </div>
+                  </>
                 ) : (
                   <UiAppAtom_TagsSkeleton />
                 )}

@@ -5,6 +5,9 @@
   display: flex;
   flex-direction: column;
   row-gap: var(--distance-16px);
+  &--dimmed {
+    opacity: var(--dimmed-opacity);
+  }
 }
 .group {
   display: flex;

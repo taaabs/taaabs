@@ -263,7 +263,16 @@ export const Library: React.FC<Library.Props> = (props) => {
   }
 
   return (
-    <div className={styles.container} {...swipeable_handlers}>
+    <div
+      className={styles.container}
+      {...swipeable_handlers}
+      style={{
+        pointerEvents:
+          props.is_fetching_first_bookmarks || props.is_fetching_more_bookmarks
+            ? 'none'
+            : 'all',
+      }}
+    >
       <div className={styles.toolbar}>
         <div>{props.slot_toolbar}</div>
       </div>
