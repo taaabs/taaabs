@@ -97,11 +97,13 @@ export namespace Bookmarks_Dto {
       public bookmarks?: AuthorizedBookmark[]
       public awaits_processing?: boolean
       public processing_progress?: number
+      public import_progress?: number
     }
     export class Public extends PaginatedResponse {
       public bookmarks?: PublicBookmark[]
       public awaits_processing?: boolean
       public processing_progress?: number
+      public import_progress?: number
     }
   }
 }
