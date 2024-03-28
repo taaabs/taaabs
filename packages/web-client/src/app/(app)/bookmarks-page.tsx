@@ -1704,7 +1704,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
                               })
-                              await pinned_hook.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -1791,7 +1790,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
                               })
-                              await pinned_hook.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -1877,7 +1875,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
                               })
-                              await pinned_hook.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -1963,7 +1960,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
                               })
-                              await pinned_hook.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -2049,7 +2045,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
                               })
-                              await pinned_hook.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -2135,7 +2130,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
                               })
-                              await pinned_hook.reload_pinned(bookmark.id)
                             },
                           },
                           {
@@ -2149,7 +2143,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_archived: is_archived_filter,
                                   ky: ky_instance,
                                 })
-                              pinned_hook.reload_pinned(bookmark.id)
                               const updated_tag_ids = updated_bookmark.tags.map(
                                 (t) => t.id,
                               )

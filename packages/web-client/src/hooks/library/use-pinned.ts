@@ -35,12 +35,6 @@ export const use_pinned = () => {
     }
   }
 
-  const reload_pinned = async (bookmark_id: number) => {
-    if (items?.find((item) => item.bookmark_id == bookmark_id)) {
-      await get_pinned()
-    }
-  }
-
   useUpdateEffect(() => {
     if (items) {
       sessionStorage.setItem(
@@ -69,7 +63,6 @@ export const use_pinned = () => {
 
   return {
     get_pinned,
-    reload_pinned,
     fetched_at_timestamp,
     is_fetching,
     is_updating,
