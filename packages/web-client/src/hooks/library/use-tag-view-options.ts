@@ -36,14 +36,15 @@ export const use_tag_view_options = () => {
   }, [])
 
   useUpdateEffect(() => {
-    set_selected_tags(
-      search_params.get('t')
-        ? search_params
-            .get('t')!
-            .split(',')
-            .map((t) => parseInt(t))
-        : [],
-    )
+    const search_params_tags = search_params.get('t')
+    if (
+      search_params_tags &&
+      search_params_tags.split(',').length != selected_tags.length
+    ) {
+      set_selected_tags(search_params_tags.split(',').map((t) => parseInt(t)))
+    } else if (!search_params_tags && selected_tags.length) {
+      set_selected_tags([])
+    }
   }, [search_params])
 
   const add_tag_to_search_params = (tag_id: number) => {

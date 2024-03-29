@@ -19,6 +19,7 @@ export const use_scroll_restore = () => {
         browser_storage.session_storage.library.scroll_y({
           search_params,
           username,
+          hash: window.location.hash,
         }),
         scrollY.toString(),
       )
@@ -36,6 +37,7 @@ export const use_scroll_restore = () => {
       browser_storage.session_storage.library.scroll_y({
         search_params: search_params.toString(),
         username,
+        hash: window.location.hash,
       }),
     )
     if (scroll_y && window.scrollY != parseInt(scroll_y)) {
@@ -50,6 +52,7 @@ export const use_scroll_restore = () => {
       browser_storage.session_storage.library.scroll_y({
         search_params: search_params.toString(),
         username,
+        hash: window.location.hash,
       }),
     )
     if (scroll_y) {

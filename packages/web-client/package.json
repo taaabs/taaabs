@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@orama/orama": "2.0.1",
-    "@orama/plugin-data-persistence": "2.0.1",
-    "@orama/plugin-match-highlight": "2.0.1",
+    "@orama/orama": "^2.0.12",
+    "@orama/plugin-data-persistence": "^2.0.12",
+    "@orama/plugin-match-highlight": "^2.0.12",
     "@reduxjs/toolkit": "^1.9.7",
     "@svgr/webpack": "^8.1.0",
     "@taaabs/repositories": "workspace:*",

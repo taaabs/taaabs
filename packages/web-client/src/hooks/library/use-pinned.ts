@@ -40,7 +40,6 @@ export const use_pinned = () => {
       sessionStorage.setItem(
         browser_storage.session_storage.library.pinned({
           username,
-          search_params: search_params.toString(),
         }),
         JSON.stringify(items),
       )
@@ -51,7 +50,6 @@ export const use_pinned = () => {
     const pinned_items = sessionStorage.getItem(
       browser_storage.session_storage.library.pinned({
         username,
-        search_params: search_params.toString(),
       }),
     )
     if (pinned_items) {

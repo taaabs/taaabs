@@ -231,16 +231,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
     }
   }, [search_hook.db, search_hook.archived_db])
 
-  // We don't refetch bookmarks on back/forward navigation, therefore we need
-  // to clear "searching" state this way.
-  useEffect(() => {
-    const handleEvent = () => {
-      dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
-    }
-    window.addEventListener('popstate', handleEvent)
-    return () => window.removeEventListener('popstate', handleEvent)
-  }, [])
-
   useEffect(() => {
     tag_hierarchies_hook.get_tag_hierarchies({
       filter: filter_view_options_hook.current_filter,
@@ -382,13 +372,17 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               if (search_hook.is_initializing) return
               search_hook.set_search_string(value)
               if (!value) {
-                bookmarks_hook.get_bookmarks({})
+                window.history.pushState(
+                  {},
+                  '',
+                  window.location.pathname + `?${search_params.toString()}`,
+                )
               }
             }}
-            on_submit={() => {
+            on_submit={async () => {
               if (search_hook.is_initializing || search_hook.count == 0) return
               if (search_hook.search_string.trim()) {
-                search_hook.query_db({
+                await search_hook.query_db({
                   search_string: search_hook.search_string,
                 })
               }
@@ -402,7 +396,11 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             }
             on_clear_click={() => {
               search_hook.reset()
-              bookmarks_hook.get_bookmarks({})
+              window.history.pushState(
+                {},
+                '',
+                window.location.pathname + `?${search_params.toString()}`,
+              )
             }}
             is_slash_shortcut_disabled={modal_context?.modal !== undefined}
             on_click_get_help={() => {}}
@@ -1009,7 +1007,10 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
         get_more_bookmarks={() => {
           if (search_hook.hints || !bookmarks_hook.bookmarks?.length) return
           if (search_hook.search_string) {
-            search_hook.get_bookmarks({ should_get_next_page: true })
+            search_hook.get_bookmarks({
+              result: search_hook.result!,
+              should_get_next_page: true,
+            })
           } else {
             bookmarks_hook.get_bookmarks({ should_get_next_page: true })
           }
@@ -1018,7 +1019,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           pinned_hook.items &&
           pinned_hook.items.length > 0 &&
           bookmarks_hook.first_bookmarks_fetched_at_timestamp &&
-          !search_hook.search_string && (
+          !bookmarks_hook.showing_bookmarks_fetched_by_ids && (
             <UiAppAtom_Pinned
               key={pinned_hook.fetched_at_timestamp} // State for sortable must be rebuilt.
               first_bookmarks_fetched_at={
@@ -2152,7 +2153,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   created_at: updated_bookmark.created_at,
                                   visited_at: bookmark.visited_at,
                                   updated_at: updated_bookmark.updated_at,
-
                                   stars: updated_bookmark.stars,
                                   tag_ids: updated_bookmark.tags.map(
                                     (tag) => tag.id,

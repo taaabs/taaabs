@@ -32,41 +32,85 @@ export const browser_storage = {
   session_storage: {
     library: {
       last_authorized_counts_params: 'library.last-authorized-counts-params',
-      bookmarks: (params: { username?: string; search_params?: string }) =>
+      bookmarks: (params: {
+        username?: string
+        search_params: string
+        hash: string
+      }) =>
         `library.bookmarks.${params.username || ''}?${
           params.search_params || ''
-        }`,
+        }${params.hash}`,
       has_more_bookmarks: (params: {
         username?: string
-        search_params?: string
+        search_params: string
       }) =>
         `library.has_more_bookmarks.${params.username || ''}?${
           params.search_params || ''
         }`,
-      density: (params: { username?: string; search_params?: string }) =>
+      density: (params: { username?: string; search_params: string }) =>
         `library.density.${params.username || ''}?${
           params.search_params || ''
         }`,
       tags: (params: { username?: string; search_params?: string }) =>
         `library.tags.${params.username || ''}?${params.search_params || ''}`,
-      scroll_y: (params: { username?: string; search_params?: string }) =>
+      scroll_y: (params: {
+        username?: string
+        search_params: string
+        hash: string
+      }) =>
         `library.scroll_y.${params.username || ''}?${
           params.search_params || ''
-        }`,
-      pinned: (params: { username?: string; search_params?: string }) =>
-        `library.pinned.${params.username || ''}?${params.search_params || ''}`,
-      search_string: (params: { username?: string }) =>
-        `library.search_string.${params.username || ''}`,
-      highlights: (params: { username?: string }) =>
-        `library.hightlights.${params.username || ''}`,
-      highlights_note: (params: { username?: string }) =>
-        `library.hightlights_note.${params.username || ''}`,
-      highlights_sites_variants: (params: { username?: string }) =>
-        `library.hightlights_sites_variants.${params.username || ''}`,
-      search_results_count: (params: { username?: string }) =>
-        `library.search_results_count.${params.username || ''}`,
-      search_result: (params: { username?: string }) =>
-        `library.search_result.${params.username || ''}`,
+        }${params.hash}`,
+      pinned: (params: { username?: string }) =>
+        `library.pinned.${params.username || ''}`,
+      search_string: (params: {
+        username?: string
+        search_params: string
+        hash: string
+      }) =>
+        `library.search_string.${params.username || ''}?${
+          params.search_params || ''
+        }${params.hash}`,
+      highlights: (params: {
+        username?: string
+        search_params: string
+        hash: string
+      }) =>
+        `library.hightlights.${params.username || ''}?${
+          params.search_params || ''
+        }${params.hash}`,
+      highlights_note: (params: {
+        username?: string
+        search_params: string
+        hash: string
+      }) =>
+        `library.hightlights_note.${params.username || ''}?${
+          params.search_params || ''
+        }${params.hash}`,
+      highlights_sites_variants: (params: {
+        username?: string
+        search_params: string
+        hash: string
+      }) =>
+        `library.hightlights_sites_variants.${params.username || ''}?${
+          params.search_params || ''
+        }${params.hash}`,
+      search_results_count: (params: {
+        username?: string
+        search_params: string
+        hash: string
+      }) =>
+        `library.search_results_count.${params.username || ''}?${
+          params.search_params || ''
+        }${params.hash}`,
+      search_result: (params: {
+        username?: string
+        search_params: string
+        hash: string
+      }) =>
+        `library.search_result.${params.username || ''}?${
+          params.search_params || ''
+        }${params.hash}`,
     },
   },
   local_storage: {

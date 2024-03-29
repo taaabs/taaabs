@@ -1,4 +1,4 @@
-import { useParams, usePathname, useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import {
   use_library_dispatch,
   use_library_selector,
@@ -13,8 +13,7 @@ import ky from 'ky'
 
 export const use_counts = () => {
   const search_params = useSearchParams()
-  const route_params = useParams()
-  const route_pathname = usePathname()
+  const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
   const {
     counts_data,
@@ -41,7 +40,7 @@ export const use_counts = () => {
       },
     })
 
-    if (route_pathname == '/bookmarks') {
+    if (!username) {
       const request_params: Counts_Params.Authorized = {}
 
       const query_refresh_trigger = search_params.get('r')
@@ -99,7 +98,7 @@ export const use_counts = () => {
       )
     } else {
       const request_params: Counts_Params.Public = {
-        username: route_params.username as string,
+        username,
       }
 
       const query_tags = search_params.get('t')
@@ -144,7 +143,7 @@ export const use_counts = () => {
   useEffect(() => {
     const tags = sessionStorage.getItem(
       browser_storage.session_storage.library.tags({
-        username: route_params.username as string,
+        username,
         search_params: search_params.toString(),
       }),
     )
@@ -200,7 +199,7 @@ export const use_counts = () => {
     if (tags) {
       sessionStorage.setItem(
         browser_storage.session_storage.library.tags({
-          username: route_params.username as string,
+          username,
           search_params: search_params.toString(),
         }),
         JSON.stringify(tags),
@@ -211,7 +210,7 @@ export const use_counts = () => {
   useEffect(() => {
     const tags = sessionStorage.getItem(
       browser_storage.session_storage.library.tags({
-        username: route_params.username as string,
+        username,
         search_params: search_params.toString(),
       }),
     )

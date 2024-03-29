@@ -38,7 +38,9 @@ export const use_session_storage_cleanup = () => {
         ...search_params_history.filter(
           (entry) => entry != search_params_hook.toString(),
         ),
-        `${params_hook.username || ''}?${search_params_hook.toString()}`,
+        `${params_hook.username || ''}?${search_params_hook.toString()}${
+          window.location.hash
+        }`,
       ]),
     )
   }, [search_params_hook])

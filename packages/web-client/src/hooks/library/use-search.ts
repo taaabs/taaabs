@@ -36,7 +36,7 @@ import { Filter } from '@/types/library/filter'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import ky, { KyInstance } from 'ky'
-import { update_search_params } from '@/utils/update-query-params'
+import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 
 export type BookmarkOfSearch = {
   id: number
@@ -129,16 +129,14 @@ export const use_search = () => {
   //   }
   // }, [search_params])
 
-  const set_search_param = (params: { search_string: string }) => {
-    const updated_search_params = update_search_params(
-      search_params,
-      'q',
-      params.search_string,
-    )
+  const set_search_fragment = (params: { search_string: string }) => {
     window.history.pushState(
       {},
       '',
-      window.location.pathname + '?' + updated_search_params,
+      window.location.pathname +
+        (search_params.toString() ? `?${search_params.toString()}` : '') +
+        '#' +
+        params.search_string,
     )
   }
 
@@ -639,9 +637,36 @@ export const use_search = () => {
     const result = await get_result({ search_string: params.search_string })
 
     if (!params.refresh_highlights_only) {
+      clear_library_session_storage({
+        username,
+        search_params: search_params.toString(),
+        hash: '#' + encodeURIComponent(params.search_string),
+      })
       set_count(result.count)
       if (result.count) {
         set_result(result)
+        await get_bookmarks({
+          result,
+        })
+        set_search_fragment({
+          search_string: params.search_string,
+        })
+        sessionStorage.setItem(
+          browser_storage.session_storage.library.search_string({
+            username,
+            search_params: search_params.toString(),
+            hash: '#' + encodeURIComponent(params.search_string),
+          }),
+          params.search_string,
+        )
+        sessionStorage.setItem(
+          browser_storage.session_storage.library.search_results_count({
+            username,
+            search_params: search_params.toString(),
+            hash: '#' + encodeURIComponent(params.search_string),
+          }),
+          result.count.toString(),
+        )
       }
     }
 
@@ -1146,7 +1171,10 @@ export const use_search = () => {
     set_highlights_sites_variants(undefined)
   }
 
-  const get_bookmarks = async (params: { should_get_next_page?: boolean }) => {
+  const get_bookmarks = async (params: {
+    result: Results<Result>
+    should_get_next_page?: boolean
+  }) => {
     const ky_instance = ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
       headers: {
@@ -1157,8 +1185,6 @@ export const use_search = () => {
 
     clear_hints()
 
-    if (!result) return
-
     if (!username) {
       await dispatch(
         bookmarks_actions.get_authorized_bookmarks_by_ids({
@@ -1166,10 +1192,10 @@ export const use_search = () => {
           is_next_page: params.should_get_next_page || false!,
           request_params: {
             ids: params.should_get_next_page
-              ? result.hits
+              ? params.result.hits
                   .slice(bookmarks!.length, bookmarks!.length + 20)
                   .map((hit) => parseInt(hit.id))
-              : result.hits.slice(0, 20).map((hit) => parseInt(hit.id)),
+              : params.result.hits.slice(0, 20).map((hit) => parseInt(hit.id)),
           },
         }),
       )
@@ -1180,25 +1206,17 @@ export const use_search = () => {
           is_next_page: params.should_get_next_page || false,
           request_params: {
             ids: params.should_get_next_page
-              ? result.hits
+              ? params.result.hits
                   .slice(bookmarks!.length, bookmarks!.length + 20)
                   .map((hit) => parseInt(hit.id))
-              : result.hits.slice(0, 20).map((hit) => parseInt(hit.id)),
+              : params.result.hits.slice(0, 20).map((hit) => parseInt(hit.id)),
             username: username as string,
           },
         }),
       )
     }
-    set_result_commited(result)
+    set_result_commited(params.result)
   }
-
-  useUpdateEffect(() => {
-    // After page refresh, when result is restored from session storage we
-    // should not fetch bookmarks.
-    if (result && (db || archived_db)) {
-      get_bookmarks({})
-    }
-  }, [result])
 
   const delete_searchable_bookmark = async (params: {
     bookmark_id: number
@@ -1342,16 +1360,13 @@ export const use_search = () => {
   }
 
   useUpdateEffect(() => {
-    sessionStorage.setItem(
-      browser_storage.session_storage.library.search_string({ username }),
-      search_string,
-    )
-  }, [search_string])
-
-  useUpdateEffect(() => {
     if (!highlights) return
     sessionStorage.setItem(
-      browser_storage.session_storage.library.highlights({ username }),
+      browser_storage.session_storage.library.highlights({
+        username,
+        search_params: search_params.toString(),
+        hash: '#' + encodeURIComponent(search_string),
+      }),
       JSON.stringify(highlights),
     )
   }, [highlights])
@@ -1359,7 +1374,11 @@ export const use_search = () => {
   useUpdateEffect(() => {
     if (!highlights_note) return
     sessionStorage.setItem(
-      browser_storage.session_storage.library.highlights_note({ username }),
+      browser_storage.session_storage.library.highlights_note({
+        username,
+        search_params: search_params.toString(),
+        hash: '#' + encodeURIComponent(search_string),
+      }),
       JSON.stringify(highlights_note),
     )
   }, [highlights_note])
@@ -1369,46 +1388,123 @@ export const use_search = () => {
     sessionStorage.setItem(
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
+        search_params: search_params.toString(),
+        hash: '#' + encodeURIComponent(search_string),
       }),
       JSON.stringify(highlights_sites_variants),
     )
   }, [highlights_sites_variants])
 
   useUpdateEffect(() => {
-    if (!count) return
-    sessionStorage.setItem(
-      browser_storage.session_storage.library.search_results_count({
-        username,
-      }),
-      JSON.stringify(count),
-    )
-  }, [count])
-
-  useUpdateEffect(() => {
     if (!result) return
     sessionStorage.setItem(
       browser_storage.session_storage.library.search_result({
         username,
+        search_params: search_params.toString(),
+        hash: '#' + encodeURIComponent(search_string),
       }),
       JSON.stringify(result),
     )
   }, [result])
 
+  useUpdateEffect(() => {
+    if (window.location.hash == encodeURIComponent(search_string)) return
+
+    const sp = search_params.toString()
+
+    if (!window.location.hash) reset()
+
+    const stored_search_string = sessionStorage.getItem(
+      browser_storage.session_storage.library.search_string({
+        username,
+        search_params: sp,
+        hash: window.location.hash,
+      }),
+    )
+    if (stored_search_string) {
+      set_search_string(stored_search_string)
+    }
+    const stored_highlights = sessionStorage.getItem(
+      browser_storage.session_storage.library.highlights({
+        username,
+        search_params: sp,
+        hash: window.location.hash,
+      }),
+    )
+    if (stored_highlights) {
+      set_highlights(JSON.parse(stored_highlights))
+    }
+    const stored_highlights_note = sessionStorage.getItem(
+      browser_storage.session_storage.library.highlights_note({
+        username,
+        search_params: sp,
+        hash: window.location.hash,
+      }),
+    )
+    if (stored_highlights_note) {
+      set_highlights_note(JSON.parse(stored_highlights_note))
+    }
+    const stored_highlights_sites_variants = sessionStorage.getItem(
+      browser_storage.session_storage.library.highlights_sites_variants({
+        username,
+        search_params: sp,
+        hash: window.location.hash,
+      }),
+    )
+    if (stored_highlights_sites_variants) {
+      set_highlights_sites_variants(
+        JSON.parse(stored_highlights_sites_variants),
+      )
+    }
+    const stored_results_count = sessionStorage.getItem(
+      browser_storage.session_storage.library.search_results_count({
+        username,
+        search_params: sp,
+        hash: window.location.hash,
+      }),
+    )
+    if (stored_results_count) {
+      set_count(parseInt(stored_results_count))
+    }
+    const stored_search_result = sessionStorage.getItem(
+      browser_storage.session_storage.library.search_result({
+        username,
+        search_params: sp,
+        hash: window.location.hash,
+      }),
+    )
+    if (stored_search_result) {
+      set_result(JSON.parse(stored_search_result))
+    }
+  }, [search_params])
+
   useEffect(() => {
     const search_string = sessionStorage.getItem(
-      browser_storage.session_storage.library.search_string({ username }),
+      browser_storage.session_storage.library.search_string({
+        username,
+        search_params: search_params.toString(),
+        hash: window.location.hash,
+      }),
     )
     if (search_string) {
       set_search_string(search_string)
     }
     const highlights = sessionStorage.getItem(
-      browser_storage.session_storage.library.highlights({ username }),
+      browser_storage.session_storage.library.highlights({
+        username,
+        search_params: search_params.toString(),
+        hash: window.location.hash,
+      }),
     )
     if (highlights) {
       set_highlights(JSON.parse(highlights))
     }
     const highlights_note = sessionStorage.getItem(
-      browser_storage.session_storage.library.highlights_note({ username }),
+      browser_storage.session_storage.library.highlights_note({
+        username,
+        search_params: search_params.toString(),
+        hash: window.location.hash,
+      }),
     )
     if (highlights_note) {
       set_highlights_note(JSON.parse(highlights_note))
@@ -1416,6 +1512,8 @@ export const use_search = () => {
     const highlights_sites_variants = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
+        search_params: search_params.toString(),
+        hash: window.location.hash,
       }),
     )
     if (highlights_sites_variants) {
@@ -1424,6 +1522,8 @@ export const use_search = () => {
     const count = sessionStorage.getItem(
       browser_storage.session_storage.library.search_results_count({
         username,
+        search_params: search_params.toString(),
+        hash: window.location.hash,
       }),
     )
     if (count) {
@@ -1432,6 +1532,8 @@ export const use_search = () => {
     const result = sessionStorage.getItem(
       browser_storage.session_storage.library.search_result({
         username,
+        search_params: search_params.toString(),
+        hash: window.location.hash,
       }),
     )
     if (result) {
@@ -1443,7 +1545,7 @@ export const use_search = () => {
     is_search_focused,
     set_is_search_focused,
     search_string,
-    set_search_param,
+    set_search_fragment,
     set_search_string,
     hints,
     clear_hints,

@@ -74,7 +74,9 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         href: '/bookmarks',
         is_active: pathname == '/bookmarks',
         on_click: () => {
-          clear_library_session_storage({})
+          clear_library_session_storage({
+            search_params: search_params.toString(),
+          })
           router.push('/bookmarks')
         },
       },
@@ -93,6 +95,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         on_click: () => {
           clear_library_session_storage({
             username: params.username as string,
+            search_params: search_params.toString(),
           })
           router.push(`/${params.username}`)
         },

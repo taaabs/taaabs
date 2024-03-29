@@ -186,11 +186,16 @@ export const use_bookmarks = () => {
       browser_storage.session_storage.library.bookmarks({
         username: username as string,
         search_params: search_params.toString(),
+        hash: window.location.hash,
       }),
     )
 
     if (bookmarks) {
-      dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
+      if (window.location.hash) {
+        dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
+      } else {
+        dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
+      }
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
       dispatch(
         bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
@@ -219,6 +224,7 @@ export const use_bookmarks = () => {
         dispatch(bookmarks_actions.set_density(density as any))
       }
     } else {
+      if (window.location.hash) return
       get_bookmarks({})
     }
   }, [search_params])
@@ -235,6 +241,7 @@ export const use_bookmarks = () => {
         browser_storage.session_storage.library.bookmarks({
           username: params.username,
           search_params: params.search_params,
+          hash: window.location.hash,
         }),
         JSON.stringify(params.bookmarks),
       )
@@ -258,7 +265,6 @@ export const use_bookmarks = () => {
   )
 
   useUpdateEffect(() => {
-    // if (params.is_in_search_mode) return
     set_bookomarks_to_session_storage({
       bookmarks,
       search_params: search_params.toString(),
@@ -273,11 +279,15 @@ export const use_bookmarks = () => {
       browser_storage.session_storage.library.bookmarks({
         username,
         search_params: search_params.toString(),
+        hash: window.location.hash,
       }),
     )
 
     if (bookmarks) {
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
+      if (window.location.hash) {
+        dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
+      }
       dispatch(
         bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
       )
