@@ -2304,7 +2304,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
                               })
-
                               search_hook.delete_searchable_bookmark({
                                 bookmark_id: bookmark.id,
                               })

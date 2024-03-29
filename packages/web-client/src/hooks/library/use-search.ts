@@ -36,6 +36,7 @@ import { Filter } from '@/types/library/filter'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import ky, { KyInstance } from 'ky'
+import { update_search_params } from '@/utils/update-query-params'
 
 export type BookmarkOfSearch = {
   id: number
@@ -119,6 +120,27 @@ export const use_search = () => {
     current_filter == Filter.ARCHIVED_STARRED ||
     current_filter == Filter.ARCHIVED_STARRED_UNREAD ||
     current_filter == Filter.ARCHIVED_UNREAD
+
+  // useUpdateEffect(() => {
+  //   const query_search = search_params.get('q')
+
+  //   if (query_search && search_string != query_search) {
+  //     set_search_string(query_search)
+  //   }
+  // }, [search_params])
+
+  const set_search_param = (params: { search_string: string }) => {
+    const updated_search_params = update_search_params(
+      search_params,
+      'q',
+      params.search_string,
+    )
+    window.history.pushState(
+      {},
+      '',
+      window.location.pathname + '?' + updated_search_params,
+    )
+  }
 
   useUpdateEffect(() => {
     if (
@@ -1421,6 +1443,7 @@ export const use_search = () => {
     is_search_focused,
     set_is_search_focused,
     search_string,
+    set_search_param,
     set_search_string,
     hints,
     clear_hints,

@@ -65,9 +65,6 @@
     > svg {
       fill: var(--yellow);
       width: var(--distance-10px);
-      &:last-of-type {
-        margin-top: var(--distance-1px);
-      }
     }
   }
   &__unread {
