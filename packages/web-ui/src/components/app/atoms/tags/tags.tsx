@@ -3,7 +3,7 @@ import styles from './tags.module.scss'
 
 export namespace Tags {
   export type Props = {
-    results_fetched_at_timestamp: number // Synchonizes UI updates.
+    first_bookmarks_fetched_at_timestamp?: number
     tags: Record<string, { id: number; yields: number }>
     on_click: (tag: number) => void
     on_tag_drag_start?: (params: { id: number; name: string }) => void
@@ -71,5 +71,7 @@ export const Tags: React.FC<Tags.Props> = memo(
       </div>
     )
   },
-  (o, n) => o.results_fetched_at_timestamp == n.results_fetched_at_timestamp,
+  (o, n) =>
+    o.first_bookmarks_fetched_at_timestamp ==
+    n.first_bookmarks_fetched_at_timestamp,
 )

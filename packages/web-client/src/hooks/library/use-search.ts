@@ -628,6 +628,62 @@ export const use_search = () => {
   }) => {
     const result = await get_result({ search_string: params.search_string })
 
+    set_highlights(
+      result.hits.reduce((a, v) => {
+        const positions = Object.values((v as any).positions.title)
+          .flat()
+          .map((highlight: any) => [highlight.start, highlight.length])
+
+        const new_positions: any = []
+
+        for (let i = 0; i < positions.length; i++) {
+          if (
+            positions[i + 1] &&
+            positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
+          ) {
+            new_positions.push([positions[i][0], positions[i][1] + 1])
+          } else {
+            new_positions.push([positions[i][0], positions[i][1]])
+          }
+        }
+
+        return {
+          ...a,
+          [v.id]: new_positions,
+        }
+      }, {}),
+    )
+
+    set_highlights_note(
+      result.hits.reduce((a, v) => {
+        const positions = Object.values((v as any).positions.note)
+          .flat()
+          .map((highlight: any) => [highlight.start, highlight.length])
+
+        const new_positions: any = []
+
+        for (let i = 0; i < positions.length; i++) {
+          if (
+            positions[i + 1] &&
+            positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
+          ) {
+            new_positions.push([positions[i][0], positions[i][1] + 1])
+          } else {
+            new_positions.push([positions[i][0], positions[i][1]])
+          }
+        }
+
+        return {
+          ...a,
+          [v.id]: new_positions,
+        }
+      }, {}),
+    )
+
+    set_highlights_sites_variants(
+      get_sites_variants_from_search_string(params.search_string),
+    )
+
     if (!params.refresh_highlights_only) {
       clear_library_session_storage({
         username,
@@ -659,89 +715,27 @@ export const use_search = () => {
           }),
           result.count.toString(),
         )
-      }
-    }
 
-    // Defer setting highlights to the next frame, just after bookmark fetching has begun
-    // so we don't see them on dimmed bookmarks (in a loading state).
-    setTimeout(() => {
-      set_highlights(
-        result.hits.reduce((a, v) => {
-          const positions = Object.values((v as any).positions.title)
-            .flat()
-            .map((highlight: any) => [highlight.start, highlight.length])
+        let recent_searches: string[] = []
 
-          const new_positions: any = []
+        recent_searches = JSON.parse(
+          localStorage.getItem(
+            browser_storage.local_storage.authorized_library.recent_searches,
+          ) || '[]',
+        )
 
-          for (let i = 0; i < positions.length; i++) {
-            if (
-              positions[i + 1] &&
-              positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
-            ) {
-              new_positions.push([positions[i][0], positions[i][1] + 1])
-            } else {
-              new_positions.push([positions[i][0], positions[i][1]])
-            }
-          }
-
-          return {
-            ...a,
-            [v.id]: new_positions,
-          }
-        }, {}),
-      )
-
-      set_highlights_note(
-        result.hits.reduce((a, v) => {
-          const positions = Object.values((v as any).positions.note)
-            .flat()
-            .map((highlight: any) => [highlight.start, highlight.length])
-
-          const new_positions: any = []
-
-          for (let i = 0; i < positions.length; i++) {
-            if (
-              positions[i + 1] &&
-              positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
-            ) {
-              new_positions.push([positions[i][0], positions[i][1] + 1])
-            } else {
-              new_positions.push([positions[i][0], positions[i][1]])
-            }
-          }
-
-          return {
-            ...a,
-            [v.id]: new_positions,
-          }
-        }, {}),
-      )
-
-      set_highlights_sites_variants(
-        get_sites_variants_from_search_string(params.search_string),
-      )
-    }, 0)
-
-    if (result.count) {
-      let recent_searches: string[] = []
-
-      recent_searches = JSON.parse(
-        localStorage.getItem(
+        localStorage.setItem(
           browser_storage.local_storage.authorized_library.recent_searches,
-        ) || '[]',
-      )
-
-      localStorage.setItem(
-        browser_storage.local_storage.authorized_library.recent_searches,
-        JSON.stringify([
-          ...new Set(
-            [
-              params.search_string.toLowerCase().trim(),
-              ...recent_searches,
-            ].slice(0, 1000),
-          ),
-        ]),
-      )
+          JSON.stringify([
+            ...new Set(
+              [
+                params.search_string.toLowerCase().trim(),
+                ...recent_searches,
+              ].slice(0, 1000),
+            ),
+          ]),
+        )
+      }
     }
   }
 

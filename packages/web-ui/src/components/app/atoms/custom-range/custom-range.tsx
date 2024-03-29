@@ -16,7 +16,7 @@ type Counts = {
 
 export namespace CustomRange {
   export type Props = {
-    results_fetched_at_timestamp: number // Synchonizes UI updates.
+    first_bookmarks_fetched_at_timestamp?: number
     counts?: Counts
     current_gte?: number
     current_lte?: number
@@ -569,7 +569,8 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     )
   },
   (o, n) =>
-    o.results_fetched_at_timestamp == n.results_fetched_at_timestamp &&
+    o.first_bookmarks_fetched_at_timestamp ==
+      n.first_bookmarks_fetched_at_timestamp &&
     o.is_fetching_counts_data == n.is_fetching_counts_data,
 )
 

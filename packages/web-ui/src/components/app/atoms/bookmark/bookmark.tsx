@@ -44,6 +44,8 @@ export namespace Bookmark {
   export type Highlights = [number, number][]
 
   export type Props = {
+    first_bookmarks_fetched_at_timestamp?: number
+    is_search_result?: boolean
     bookmark_id: number
     updated_at: string
     is_public: boolean
@@ -83,9 +85,7 @@ export namespace Bookmark {
     orama_db_id?: string
     should_dim_visited_links: boolean
     current_filter?: string // Needs by [use_search/update_searchable_bookmarks].
-    is_fetching_bookmarks: boolean
     counts_refreshed_at_timestamp?: number // When updating other bookmark, we refetch counts and this is needed to trigger a rerender of all bookmarks.
-    is_not_interactive?: boolean
     on_tag_drag_start?: (params: {
       id: number
       name: string
@@ -99,6 +99,7 @@ export namespace Bookmark {
 
 export const Bookmark: React.FC<Bookmark.Props> = memo(
   function Bookmark(props) {
+    console.log(props.highlights)
     const ref = useRef<HTMLDivElement>(null)
     // Detecing swiping is mitigates interference between tag reordering and toggling density.
     const [is_swiping, set_is_swiping] = useState(false)
@@ -172,7 +173,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         ref={ref}
         style={{
           height: !is_visible && render_height ? render_height : undefined,
-          pointerEvents: props.is_not_interactive ? 'none' : undefined,
         }}
         className={cn(styles.wrapper, {
           [styles['wrapper--compact']]: props.density == 'compact',
@@ -889,20 +889,21 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
+    o.first_bookmarks_fetched_at_timestamp ==
+      n.first_bookmarks_fetched_at_timestamp &&
     o.points == n.points &&
     o.is_compact == n.is_compact &&
     o.density == n.density &&
-    o.is_not_interactive == n.is_not_interactive &&
-    o.is_fetching_bookmarks == n.is_fetching_bookmarks &&
     o.updated_at == n.updated_at &&
-    o.render_height == n.render_height &&
-    o.search_params == n.search_params &&
-    o.number_of_selected_tags == n.number_of_selected_tags &&
+    o.pinned_links_count == n.pinned_links_count &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&
     o.counts_refreshed_at_timestamp == n.counts_refreshed_at_timestamp &&
-    o.dragged_tag?.id == n.dragged_tag?.id &&
-    o.pinned_links_count == n.pinned_links_count,
+    o.dragged_tag?.id == n.dragged_tag?.id,
+
+  // o.render_height == n.render_height,
+  // o.search_params == n.search_params &&
+  // o.number_of_selected_tags == n.number_of_selected_tags &&
 )
 
 function url_path_for_display(params: {

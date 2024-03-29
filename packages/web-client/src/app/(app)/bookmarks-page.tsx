@@ -624,8 +624,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           tag_hierarchies_hook.is_initialized &&
           bookmarks_hook.first_bookmarks_fetched_at_timestamp ? (
             <UiAppAtom_TagHierarchies
-              results_fetched_at_timestamp={
-                bookmarks_hook.first_bookmarks_fetched_at_timestamp || 0
+              first_bookmarks_fetched_at_timestamp={
+                bookmarks_hook.first_bookmarks_fetched_at_timestamp
               }
               is_draggable={!username}
               tree={tag_hierarchies_hook.tag_hierarchies}
@@ -868,8 +868,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             slot_custom_range={
               show_custom_range ? (
                 <CustomRange
-                  results_fetched_at_timestamp={
-                    bookmarks_hook.first_bookmarks_fetched_at_timestamp || 0
+                  first_bookmarks_fetched_at_timestamp={
+                    bookmarks_hook.first_bookmarks_fetched_at_timestamp
                   }
                   counts={counts_hook.months || undefined}
                   on_yyyymm_change={
@@ -960,8 +960,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       />
                     )}
                     <UiAppAtom_Tags
-                      results_fetched_at_timestamp={
-                        bookmarks_hook.first_bookmarks_fetched_at_timestamp || 0
+                      first_bookmarks_fetched_at_timestamp={
+                        bookmarks_hook.first_bookmarks_fetched_at_timestamp
                       }
                       tags={
                         counts_hook.tags
@@ -995,7 +995,10 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
         }
         is_updating_bookmarks={bookmarks_hook.is_updating_bookmarks}
         is_fetching_first_bookmarks={bookmarks_hook.is_fetching_first_bookmarks}
-        is_fetching_more_bookmarks={bookmarks_hook.is_fetching_more_bookmarks}
+        is_fetching_more_bookmarks={
+          bookmarks_hook.is_fetching_more_bookmarks ||
+          search_hook.is_initializing
+        }
         has_more_bookmarks={
           (!search_hook.search_string && bookmarks_hook.has_more_bookmarks) ||
           (search_hook.search_string &&
@@ -1022,7 +1025,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           !bookmarks_hook.showing_bookmarks_fetched_by_ids && (
             <UiAppAtom_Pinned
               key={pinned_hook.fetched_at_timestamp} // State for sortable must be rebuilt.
-              first_bookmarks_fetched_at={
+              first_bookmarks_fetched_at_timestamp={
                 bookmarks_hook.first_bookmarks_fetched_at_timestamp
               }
               favicon_host={favicon_host}
@@ -1077,7 +1080,10 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           bookmarks_hook.bookmarks
             ? bookmarks_hook.bookmarks.map((bookmark, i) => (
                 <UiAppAtom_Bookmark
-                  key={`${bookmark.id}${bookmarks_hook.first_bookmarks_fetched_at_timestamp}`}
+                  key={bookmark.id}
+                  first_bookmarks_fetched_at_timestamp={
+                    bookmarks_hook.first_bookmarks_fetched_at_timestamp
+                  }
                   bookmark_id={bookmark.id}
                   on_tag_drag_start={
                     !username
@@ -1118,13 +1124,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       }
                     }
                   }}
-                  is_fetching_bookmarks={
-                    bookmarks_hook.is_fetching_first_bookmarks
-                  }
-                  is_not_interactive={
-                    search_hook.is_initializing ||
-                    are_bookmark_menu_items_locked
-                  }
                   date={
                     !bookmarks_hook.is_fetching_first_bookmarks
                       ? sort_by_view_options_hook.current_sort_by ==

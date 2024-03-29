@@ -17,7 +17,7 @@ export namespace TagHierarchies {
     children: Node[]
   }
   export type Props = {
-    results_fetched_at_timestamp: number // Synchronizes UI updates of the library.
+    first_bookmarks_fetched_at_timestamp?: number
     tree?: Node[]
     on_update: (tags: Node[]) => void
     on_item_click: (hierarchy_ids: number[]) => void
@@ -380,7 +380,8 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     )
   },
   (o, n) =>
-    o.results_fetched_at_timestamp == n.results_fetched_at_timestamp &&
+    o.first_bookmarks_fetched_at_timestamp ==
+      n.first_bookmarks_fetched_at_timestamp &&
     o.is_all_bookmarks_selected == n.is_all_bookmarks_selected &&
     o.is_updating == n.is_updating &&
     o.dragged_tag == n.dragged_tag,
