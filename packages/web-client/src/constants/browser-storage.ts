@@ -67,8 +67,6 @@ export const browser_storage = {
         `library.search_results_count.${params.username || ''}`,
       search_result: (params: { username?: string }) =>
         `library.search_result.${params.username || ''}`,
-      ids_to_search_amongst: (params: { username?: string }) =>
-        `library.ids_to_search_amongst.${params.username || ''}`,
     },
   },
   local_storage: {

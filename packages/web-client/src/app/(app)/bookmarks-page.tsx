@@ -1018,7 +1018,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           pinned_hook.items &&
           pinned_hook.items.length > 0 &&
           bookmarks_hook.first_bookmarks_fetched_at_timestamp &&
-          !bookmarks_hook.showing_bookmarks_fetched_by_ids && (
+          !search_hook.search_string && (
             <UiAppAtom_Pinned
               key={pinned_hook.fetched_at_timestamp} // State for sortable must be rebuilt.
               first_bookmarks_fetched_at={

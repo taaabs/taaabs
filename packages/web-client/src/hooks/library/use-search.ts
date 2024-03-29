@@ -1372,16 +1372,6 @@ export const use_search = () => {
     )
   }, [result])
 
-  useUpdateEffect(() => {
-    if (!ids_to_search_amongst) return
-    sessionStorage.setItem(
-      browser_storage.session_storage.library.ids_to_search_amongst({
-        username,
-      }),
-      JSON.stringify(ids_to_search_amongst),
-    )
-  }, [ids_to_search_amongst])
-
   useEffect(() => {
     const search_string = sessionStorage.getItem(
       browser_storage.session_storage.library.search_string({ username }),
@@ -1424,15 +1414,6 @@ export const use_search = () => {
     )
     if (result) {
       set_result(JSON.parse(result))
-      set_result_commited(JSON.parse(result))
-    }
-    const ids_to_search_amongst = sessionStorage.getItem(
-      browser_storage.session_storage.library.ids_to_search_amongst({
-        username,
-      }),
-    )
-    if (ids_to_search_amongst) {
-      set_ids_to_search_amongst(JSON.parse(ids_to_search_amongst))
     }
   }, [])
 
