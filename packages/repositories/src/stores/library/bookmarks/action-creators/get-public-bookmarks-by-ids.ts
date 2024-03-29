@@ -53,6 +53,11 @@ export const get_public_bookmarks_by_ids = (params: {
       } else {
         dispatch(bookmarks_actions.set_bookmarks(bookmarks_with_density))
         dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
+        dispatch(
+          bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(
+            Date.now(),
+          ),
+        )
       }
       resolve()
     })

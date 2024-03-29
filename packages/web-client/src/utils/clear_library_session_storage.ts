@@ -34,9 +34,10 @@ export const clear_library_session_storage = (params: {
       sessionStorage.removeItem(key)
     } else if (
       key ==
-      browser_storage.session_storage.library.pinned({
-        username: params.username,
-      })
+        browser_storage.session_storage.library.pinned({
+          username: params.username,
+        }) &&
+      !params.hash
     ) {
       sessionStorage.removeItem(key)
     } else if (

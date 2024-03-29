@@ -121,14 +121,6 @@ export const use_search = () => {
     current_filter == Filter.ARCHIVED_STARRED_UNREAD ||
     current_filter == Filter.ARCHIVED_UNREAD
 
-  // useUpdateEffect(() => {
-  //   const query_search = search_params.get('q')
-
-  //   if (query_search && search_string != query_search) {
-  //     set_search_string(query_search)
-  //   }
-  // }, [search_params])
-
   const set_search_fragment = (params: { search_string: string }) => {
     window.history.pushState(
       {},

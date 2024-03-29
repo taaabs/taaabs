@@ -1077,7 +1077,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           bookmarks_hook.bookmarks
             ? bookmarks_hook.bookmarks.map((bookmark, i) => (
                 <UiAppAtom_Bookmark
-                  key={bookmark.id}
+                  key={`${bookmark.id}${bookmarks_hook.first_bookmarks_fetched_at_timestamp}`}
                   bookmark_id={bookmark.id}
                   on_tag_drag_start={
                     !username
