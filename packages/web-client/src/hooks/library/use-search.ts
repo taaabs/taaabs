@@ -8,7 +8,7 @@ import {
   insert,
   search,
 } from '@orama/orama'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
@@ -85,7 +85,7 @@ type BookmarkTags = { id: number; tags: string[] }
 
 export const use_search = () => {
   const search_params = useSearchParams()
-  const { username } = useParams()
+  const { username }: { username?: string } = useParams()
   const [is_search_focused, set_is_search_focused] = useState(false)
   const [is_caching_ongoing, set_is_caching_ongoing] = useState(false)
   const [bookmarks_just_tags, set_bookmarks_just_tags] =
@@ -1171,7 +1171,9 @@ export const use_search = () => {
   }
 
   useUpdateEffect(() => {
-    if (result) {
+    // After page refresh, when result is restored from session storage we
+    // should not fetch bookmarks.
+    if (result && (db || archived_db)) {
       get_bookmarks({})
     }
   }, [result])
@@ -1316,6 +1318,123 @@ export const use_search = () => {
       })
     }
   }
+
+  useUpdateEffect(() => {
+    sessionStorage.setItem(
+      browser_storage.session_storage.library.search_string({ username }),
+      search_string,
+    )
+  }, [search_string])
+
+  useUpdateEffect(() => {
+    if (!highlights) return
+    sessionStorage.setItem(
+      browser_storage.session_storage.library.highlights({ username }),
+      JSON.stringify(highlights),
+    )
+  }, [highlights])
+
+  useUpdateEffect(() => {
+    if (!highlights_note) return
+    sessionStorage.setItem(
+      browser_storage.session_storage.library.highlights_note({ username }),
+      JSON.stringify(highlights_note),
+    )
+  }, [highlights_note])
+
+  useUpdateEffect(() => {
+    if (!highlights_sites_variants) return
+    sessionStorage.setItem(
+      browser_storage.session_storage.library.highlights_sites_variants({
+        username,
+      }),
+      JSON.stringify(highlights_sites_variants),
+    )
+  }, [highlights_sites_variants])
+
+  useUpdateEffect(() => {
+    if (!count) return
+    sessionStorage.setItem(
+      browser_storage.session_storage.library.search_results_count({
+        username,
+      }),
+      JSON.stringify(count),
+    )
+  }, [count])
+
+  useUpdateEffect(() => {
+    if (!result) return
+    sessionStorage.setItem(
+      browser_storage.session_storage.library.search_result({
+        username,
+      }),
+      JSON.stringify(result),
+    )
+  }, [result])
+
+  useUpdateEffect(() => {
+    if (!ids_to_search_amongst) return
+    sessionStorage.setItem(
+      browser_storage.session_storage.library.ids_to_search_amongst({
+        username,
+      }),
+      JSON.stringify(ids_to_search_amongst),
+    )
+  }, [ids_to_search_amongst])
+
+  useEffect(() => {
+    const search_string = sessionStorage.getItem(
+      browser_storage.session_storage.library.search_string({ username }),
+    )
+    if (search_string) {
+      set_search_string(search_string)
+    }
+    const highlights = sessionStorage.getItem(
+      browser_storage.session_storage.library.highlights({ username }),
+    )
+    if (highlights) {
+      set_highlights(JSON.parse(highlights))
+    }
+    const highlights_note = sessionStorage.getItem(
+      browser_storage.session_storage.library.highlights_note({ username }),
+    )
+    if (highlights_note) {
+      set_highlights_note(JSON.parse(highlights_note))
+    }
+    const highlights_sites_variants = sessionStorage.getItem(
+      browser_storage.session_storage.library.highlights_sites_variants({
+        username,
+      }),
+    )
+    if (highlights_sites_variants) {
+      set_highlights_sites_variants(JSON.parse(highlights_sites_variants))
+    }
+    const count = sessionStorage.getItem(
+      browser_storage.session_storage.library.search_results_count({
+        username,
+      }),
+    )
+    if (count) {
+      set_count(parseInt(count))
+    }
+    const result = sessionStorage.getItem(
+      browser_storage.session_storage.library.search_result({
+        username,
+      }),
+    )
+    if (result) {
+      set_result(JSON.parse(result))
+      set_result_commited(JSON.parse(result))
+    }
+    const ids_to_search_amongst = sessionStorage.getItem(
+      browser_storage.session_storage.library.ids_to_search_amongst({
+        username,
+      }),
+    )
+    if (ids_to_search_amongst) {
+      set_ids_to_search_amongst(JSON.parse(ids_to_search_amongst))
+    }
+  }, [])
 
   return {
     is_search_focused,

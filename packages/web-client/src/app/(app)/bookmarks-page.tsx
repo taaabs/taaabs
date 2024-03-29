@@ -88,9 +88,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
   const [show_bookmarks_skeleton, set_show_bookmarks_skeleton] = useState(true)
   const search_hook = use_search()
-  const bookmarks_hook = use_bookmarks({
-    is_in_search_mode: !!search_hook.search_string,
-  })
+  const bookmarks_hook = use_bookmarks()
   const counts_hook = use_counts()
   const points_hook = use_points()
   const tag_hierarchies_hook = use_tag_hierarchies()
@@ -374,7 +372,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     : search_hook.archived_db === undefined) ||
                   is_cache_stale
                 ) {
-                  search_hook.reset()
                   await search_hook.init({
                     is_archived: is_archived_filter,
                   })

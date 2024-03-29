@@ -53,6 +53,48 @@ export const clear_library_session_storage = (params: {
       })
     ) {
       sessionStorage.removeItem(key)
+    } else if (
+      key ==
+      browser_storage.session_storage.library.search_string({
+        username: params.username,
+      })
+    ) {
+      sessionStorage.removeItem(key)
+    } else if (
+      key ==
+      browser_storage.session_storage.library.highlights({
+        username: params.username,
+      })
+    ) {
+      sessionStorage.removeItem(key)
+    } else if (
+      key ==
+      browser_storage.session_storage.library.highlights_note({
+        username: params.username,
+      })
+    ) {
+      sessionStorage.removeItem(key)
+    } else if (
+      key ==
+      browser_storage.session_storage.library.highlights_sites_variants({
+        username: params.username,
+      })
+    ) {
+      sessionStorage.removeItem(key)
+    } else if (
+      key ==
+      browser_storage.session_storage.library.search_result({
+        username: params.username,
+      })
+    ) {
+      sessionStorage.removeItem(key)
+    } else if (
+      key ==
+      browser_storage.session_storage.library.ids_to_search_amongst({
+        username: params.username,
+      })
+    ) {
+      sessionStorage.removeItem(key)
     }
   }
 }

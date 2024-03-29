@@ -15,7 +15,7 @@ import { browser_storage } from '@/constants/browser-storage'
 import { Filter } from '@/types/library/filter'
 import ky from 'ky'
 
-export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
+export const use_bookmarks = () => {
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
@@ -254,11 +254,11 @@ export const use_bookmarks = (params: { is_in_search_mode: boolean }) => {
       )
     },
     [],
-    100,
+    500,
   )
 
   useUpdateEffect(() => {
-    if (params.is_in_search_mode) return
+    // if (params.is_in_search_mode) return
     set_bookomarks_to_session_storage({
       bookmarks,
       search_params: search_params.toString(),

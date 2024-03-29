@@ -40,7 +40,7 @@ export const browser_storage = {
         username?: string
         search_params?: string
       }) =>
-        `library.has-more-bookmarks.${params.username || ''}?${
+        `library.has_more_bookmarks.${params.username || ''}?${
           params.search_params || ''
         }`,
       density: (params: { username?: string; search_params?: string }) =>
@@ -55,6 +55,20 @@ export const browser_storage = {
         }`,
       pinned: (params: { username?: string; search_params?: string }) =>
         `library.pinned.${params.username || ''}?${params.search_params || ''}`,
+      search_string: (params: { username?: string }) =>
+        `library.search_string.${params.username || ''}`,
+      highlights: (params: { username?: string }) =>
+        `library.hightlights.${params.username || ''}`,
+      highlights_note: (params: { username?: string }) =>
+        `library.hightlights_note.${params.username || ''}`,
+      highlights_sites_variants: (params: { username?: string }) =>
+        `library.hightlights_sites_variants.${params.username || ''}`,
+      search_results_count: (params: { username?: string }) =>
+        `library.search_results_count.${params.username || ''}`,
+      search_result: (params: { username?: string }) =>
+        `library.search_result.${params.username || ''}`,
+      ids_to_search_amongst: (params: { username?: string }) =>
+        `library.ids_to_search_amongst.${params.username || ''}`,
     },
   },
   local_storage: {
