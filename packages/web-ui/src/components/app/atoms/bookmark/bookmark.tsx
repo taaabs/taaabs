@@ -99,7 +99,6 @@ export namespace Bookmark {
 
 export const Bookmark: React.FC<Bookmark.Props> = memo(
   function Bookmark(props) {
-    console.log(props.highlights)
     const ref = useRef<HTMLDivElement>(null)
     // Detecing swiping is mitigates interference between tag reordering and toggling density.
     const [is_swiping, set_is_swiping] = useState(false)

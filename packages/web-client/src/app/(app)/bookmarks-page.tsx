@@ -1019,61 +1019,72 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           }
         }}
         slot_pinned={
-          pinned_hook.items &&
-          pinned_hook.items.length > 0 &&
-          bookmarks_hook.first_bookmarks_fetched_at_timestamp &&
-          !bookmarks_hook.showing_bookmarks_fetched_by_ids && (
-            <UiAppAtom_Pinned
-              key={pinned_hook.fetched_at_timestamp} // State for sortable must be rebuilt.
-              first_bookmarks_fetched_at_timestamp={
-                bookmarks_hook.first_bookmarks_fetched_at_timestamp
-              }
-              favicon_host={favicon_host}
-              header_title={params.dictionary.library.pinned}
-              items={pinned_hook.items.map((item) => ({
-                url: item.url,
-                created_at: item.created_at,
-                title: item.title,
-                is_unread: item.is_unread,
-                stars: item.stars,
-                tags: item.tags,
-              }))}
-              is_draggable={!username}
-              on_change={async (updated_pinned) => {
-                await dispatch(
-                  pinned_actions.update_pinned({
-                    update_pinned_params: updated_pinned.map((pin) => ({
-                      url: pin.url,
-                    })),
-                    ky: ky_instance,
-                  }),
-                )
-                toast.success(
-                  params.dictionary.library.pinned_links_has_beed_updated,
-                )
+          pinned_hook.items && (
+            <div
+              style={{
+                display:
+                  !bookmarks_hook.first_bookmarks_fetched_at_timestamp ||
+                  bookmarks_hook.showing_bookmarks_fetched_by_ids
+                    ? 'none'
+                    : undefined,
               }}
-              on_link_click={() => {}}
-              selected_tags={tag_view_options_hook.selected_tags}
-              selected_starred={
-                filter_view_options_hook.current_filter == Filter.STARRED ||
-                filter_view_options_hook.current_filter == Filter.STARRED_UNREAD
-              }
-              selected_unread={
-                filter_view_options_hook.current_filter == Filter.UNREAD ||
-                filter_view_options_hook.current_filter == Filter.STARRED_UNREAD
-              }
-              selected_archived={
-                filter_view_options_hook.current_filter == Filter.ARCHIVED ||
-                filter_view_options_hook.current_filter ==
-                  Filter.ARCHIVED_STARRED ||
-                filter_view_options_hook.current_filter ==
-                  Filter.ARCHIVED_STARRED_UNREAD ||
-                filter_view_options_hook.current_filter ==
-                  Filter.ARCHIVED_UNREAD
-              }
-              current_gte={date_view_options_hook.current_gte}
-              current_lte={date_view_options_hook.current_lte}
-            />
+            >
+              <UiAppAtom_Pinned
+                key={pinned_hook.fetched_at_timestamp} // State for sortable must be rebuilt.
+                first_bookmarks_fetched_at_timestamp={
+                  bookmarks_hook.first_bookmarks_fetched_at_timestamp
+                }
+                favicon_host={favicon_host}
+                header_title={params.dictionary.library.pinned}
+                items={
+                  pinned_hook.items?.map((item) => ({
+                    url: item.url,
+                    created_at: item.created_at,
+                    title: item.title,
+                    is_unread: item.is_unread,
+                    stars: item.stars,
+                    tags: item.tags,
+                  })) || []
+                }
+                is_draggable={!username}
+                on_change={async (updated_pinned) => {
+                  await dispatch(
+                    pinned_actions.update_pinned({
+                      update_pinned_params: updated_pinned.map((pin) => ({
+                        url: pin.url,
+                      })),
+                      ky: ky_instance,
+                    }),
+                  )
+                  toast.success(
+                    params.dictionary.library.pinned_links_has_beed_updated,
+                  )
+                }}
+                on_link_click={() => {}}
+                selected_tags={tag_view_options_hook.selected_tags}
+                selected_starred={
+                  filter_view_options_hook.current_filter == Filter.STARRED ||
+                  filter_view_options_hook.current_filter ==
+                    Filter.STARRED_UNREAD
+                }
+                selected_unread={
+                  filter_view_options_hook.current_filter == Filter.UNREAD ||
+                  filter_view_options_hook.current_filter ==
+                    Filter.STARRED_UNREAD
+                }
+                selected_archived={
+                  filter_view_options_hook.current_filter == Filter.ARCHIVED ||
+                  filter_view_options_hook.current_filter ==
+                    Filter.ARCHIVED_STARRED ||
+                  filter_view_options_hook.current_filter ==
+                    Filter.ARCHIVED_STARRED_UNREAD ||
+                  filter_view_options_hook.current_filter ==
+                    Filter.ARCHIVED_UNREAD
+                }
+                current_gte={date_view_options_hook.current_gte}
+                current_lte={date_view_options_hook.current_lte}
+              />
+            </div>
           )
         }
         slot_bookmarks={
