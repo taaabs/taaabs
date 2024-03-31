@@ -62,6 +62,7 @@ import { use_scroll_restore } from '@/hooks/misc/use-scroll-restore'
 import ky from 'ky'
 import { use_pinned } from '@/hooks/library/use-pinned'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
+import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -959,32 +960,41 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         }
                       />
                     )}
-                    <UiAppAtom_Tags
-                      first_bookmarks_fetched_at_timestamp={
-                        bookmarks_hook.first_bookmarks_fetched_at_timestamp
-                      }
-                      tags={
-                        counts_hook.tags
-                          ? Object.fromEntries(
-                              Object.entries(counts_hook.tags).filter((tag) =>
-                                bookmarks_hook.is_fetching_first_bookmarks
-                                  ? !counts_hook.selected_tags.includes(
-                                      tag[1].id,
-                                    )
-                                  : !tag_view_options_hook.selected_tags.includes(
-                                      tag[1].id,
-                                    ),
-                              ),
-                            )
-                          : {}
-                      }
-                      on_click={tag_view_options_hook.add_tag_to_search_params}
-                      on_tag_drag_start={
-                        !username
-                          ? tag_view_options_hook.set_dragged_tag
-                          : undefined
-                      }
-                    />
+                    {bookmarks_hook.bookmarks &&
+                      bookmarks_hook.bookmarks.length > 0 && (
+                        <UiAppAtom_Tags
+                          refreshed_at_timestamp={
+                            (bookmarks_hook.first_bookmarks_fetched_at_timestamp ||
+                              0) > (counts_hook.refreshed_at_timestamp || 0)
+                              ? bookmarks_hook.first_bookmarks_fetched_at_timestamp
+                              : counts_hook.refreshed_at_timestamp
+                          }
+                          tags={
+                            counts_hook.tags
+                              ? Object.fromEntries(
+                                  Object.entries(counts_hook.tags).filter(
+                                    (tag) =>
+                                      bookmarks_hook.is_fetching_first_bookmarks
+                                        ? !counts_hook.selected_tags.includes(
+                                            tag[1].id,
+                                          )
+                                        : !tag_view_options_hook.selected_tags.includes(
+                                            tag[1].id,
+                                          ),
+                                  ),
+                                )
+                              : {}
+                          }
+                          on_click={
+                            tag_view_options_hook.add_tag_to_search_params
+                          }
+                          on_tag_drag_start={
+                            !username
+                              ? tag_view_options_hook.set_dragged_tag
+                              : undefined
+                          }
+                        />
+                      )}
                   </>
                 ) : (
                   <UiAppAtom_TagsSkeleton />
@@ -1655,19 +1665,27 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count! - 1)
                               }
-                              if (
-                                bookmarks_hook.bookmarks &&
-                                bookmarks_hook.bookmarks.length == 1 &&
-                                search_hook.search_string.length
-                              ) {
-                                if (
-                                  !is_unread &&
-                                  (filter_view_options_hook.current_filter ==
-                                    Filter.UNREAD ||
-                                    filter_view_options_hook.current_filter ==
-                                      Filter.STARRED_UNREAD)
-                                ) {
-                                  search_hook.reset()
+                              // Delete bookmarks from session storage from filtered results.
+                              if (bookmark.is_unread) {
+                                for (const key in sessionStorage) {
+                                  if (
+                                    key.startsWith('library.bookmarks.?') &&
+                                    (key.includes('f=2') ||
+                                      key.includes('f=3') ||
+                                      key.includes('f=6') ||
+                                      key.includes('f=7'))
+                                  ) {
+                                    const bookmarks: Bookmark_Entity[] =
+                                      JSON.parse(sessionStorage.getItem(key)!)
+                                    sessionStorage.setItem(
+                                      key,
+                                      JSON.stringify(
+                                        bookmarks.filter(
+                                          (b) => b.id != bookmark.id,
+                                        ),
+                                      ),
+                                    )
+                                  }
                                 }
                               }
                               await tag_hierarchies_hook.get_tag_hierarchies({
@@ -1749,12 +1767,28 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count - 1)
                               }
-                              if (
-                                bookmarks_hook.bookmarks &&
-                                bookmarks_hook.bookmarks.length == 1 &&
-                                search_hook.search_string.length
-                              ) {
-                                search_hook.reset()
+                              // Delete bookmarks from session storage from filtered results.
+                              if (bookmark.stars == 1) {
+                                for (const key in sessionStorage) {
+                                  if (
+                                    key.startsWith('library.bookmarks.?') &&
+                                    (key.includes('f=1') ||
+                                      key.includes('f=3') ||
+                                      key.includes('f=5') ||
+                                      key.includes('f=7'))
+                                  ) {
+                                    const bookmarks: Bookmark_Entity[] =
+                                      JSON.parse(sessionStorage.getItem(key)!)
+                                    sessionStorage.setItem(
+                                      key,
+                                      JSON.stringify(
+                                        bookmarks.filter(
+                                          (b) => b.id != bookmark.id,
+                                        ),
+                                      ),
+                                    )
+                                  }
+                                }
                               }
                               await tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
@@ -1834,12 +1868,27 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count - 1)
                               }
-                              if (
-                                bookmarks_hook.bookmarks &&
-                                bookmarks_hook.bookmarks.length == 1 &&
-                                search_hook.search_string.length
-                              ) {
-                                search_hook.reset()
+                              if (bookmark.stars == 2) {
+                                for (const key in sessionStorage) {
+                                  if (
+                                    key.startsWith('library.bookmarks.?') &&
+                                    (key.includes('f=1') ||
+                                      key.includes('f=3') ||
+                                      key.includes('f=5') ||
+                                      key.includes('f=7'))
+                                  ) {
+                                    const bookmarks: Bookmark_Entity[] =
+                                      JSON.parse(sessionStorage.getItem(key)!)
+                                    sessionStorage.setItem(
+                                      key,
+                                      JSON.stringify(
+                                        bookmarks.filter(
+                                          (b) => b.id != bookmark.id,
+                                        ),
+                                      ),
+                                    )
+                                  }
+                                }
                               }
                               await tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
@@ -1919,12 +1968,27 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count - 1)
                               }
-                              if (
-                                bookmarks_hook.bookmarks &&
-                                bookmarks_hook.bookmarks.length == 1 &&
-                                search_hook.search_string.length
-                              ) {
-                                search_hook.reset()
+                              if (bookmark.stars == 3) {
+                                for (const key in sessionStorage) {
+                                  if (
+                                    key.startsWith('library.bookmarks.?') &&
+                                    (key.includes('f=1') ||
+                                      key.includes('f=3') ||
+                                      key.includes('f=5') ||
+                                      key.includes('f=7'))
+                                  ) {
+                                    const bookmarks: Bookmark_Entity[] =
+                                      JSON.parse(sessionStorage.getItem(key)!)
+                                    sessionStorage.setItem(
+                                      key,
+                                      JSON.stringify(
+                                        bookmarks.filter(
+                                          (b) => b.id != bookmark.id,
+                                        ),
+                                      ),
+                                    )
+                                  }
+                                }
                               }
                               await tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
@@ -2004,12 +2068,27 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count - 1)
                               }
-                              if (
-                                bookmarks_hook.bookmarks &&
-                                bookmarks_hook.bookmarks.length == 1 &&
-                                search_hook.search_string.length
-                              ) {
-                                search_hook.reset()
+                              if (bookmark.stars == 4) {
+                                for (const key in sessionStorage) {
+                                  if (
+                                    key.startsWith('library.bookmarks.?') &&
+                                    (key.includes('f=1') ||
+                                      key.includes('f=3') ||
+                                      key.includes('f=5') ||
+                                      key.includes('f=7'))
+                                  ) {
+                                    const bookmarks: Bookmark_Entity[] =
+                                      JSON.parse(sessionStorage.getItem(key)!)
+                                    sessionStorage.setItem(
+                                      key,
+                                      JSON.stringify(
+                                        bookmarks.filter(
+                                          (b) => b.id != bookmark.id,
+                                        ),
+                                      ),
+                                    )
+                                  }
+                                }
                               }
                               await tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
@@ -2089,12 +2168,27 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count - 1)
                               }
-                              if (
-                                bookmarks_hook.bookmarks &&
-                                bookmarks_hook.bookmarks.length == 1 &&
-                                search_hook.search_string.length
-                              ) {
-                                search_hook.reset()
+                              if (bookmark.stars == 5) {
+                                for (const key in sessionStorage) {
+                                  if (
+                                    key.startsWith('library.bookmarks.?') &&
+                                    (key.includes('f=1') ||
+                                      key.includes('f=3') ||
+                                      key.includes('f=5') ||
+                                      key.includes('f=7'))
+                                  ) {
+                                    const bookmarks: Bookmark_Entity[] =
+                                      JSON.parse(sessionStorage.getItem(key)!)
+                                    sessionStorage.setItem(
+                                      key,
+                                      JSON.stringify(
+                                        bookmarks.filter(
+                                          (b) => b.id != bookmark.id,
+                                        ),
+                                      ),
+                                    )
+                                  }
+                                }
                               }
                               await tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
@@ -2317,13 +2411,20 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               search_hook.delete_searchable_bookmark({
                                 bookmark_id: bookmark.id,
                               })
-                              if (
-                                bookmarks_hook.bookmarks &&
-                                bookmarks_hook.bookmarks.length == 1 &&
-                                bookmarks_hook.showing_bookmarks_fetched_by_ids
-                              ) {
-                                search_hook.reset()
-                                bookmarks_hook.get_bookmarks({})
+                              // Delete bookmark from session storage, so user, when navigating back will not see it.
+                              for (const key in sessionStorage) {
+                                if (key.startsWith('library.bookmarks.?')) {
+                                  const bookmarks: Bookmark_Entity[] =
+                                    JSON.parse(sessionStorage.getItem(key)!)
+                                  sessionStorage.setItem(
+                                    key,
+                                    JSON.stringify(
+                                      bookmarks.filter(
+                                        (b) => b.id != bookmark.id,
+                                      ),
+                                    ),
+                                  )
+                                }
                               }
                             },
                             other_icon: (
@@ -2367,15 +2468,18 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
         }
         clear_selected_tags={
           !bookmarks_hook.is_fetching_first_bookmarks &&
+          !search_hook.result &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
-          search_params.get('t')
+          tag_view_options_hook.selected_tags.length
             ? tag_view_options_hook.clear_selected_tags
             : undefined
         }
         clear_date_range={
           !bookmarks_hook.is_fetching_first_bookmarks &&
+          !search_hook.result &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
-          (search_params.get('gte') || search_params.get('lte'))
+          (date_view_options_hook.current_gte ||
+            date_view_options_hook.current_lte)
             ? date_view_options_hook.clear_gte_lte_search_params
             : undefined
         }
@@ -2389,12 +2493,10 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   bookmarks_hook.bookmarks.length == 0)) ||
               (search_hook.search_string.length &&
                 (!bookmarks_hook.bookmarks ||
-                  bookmarks_hook.bookmarks.length == 0) &&
-                search_hook.result_commited?.count == 0)
+                  bookmarks_hook.bookmarks.length == 0))
             ? 'No results'
             : !bookmarks_hook.has_more_bookmarks ||
-              bookmarks_hook.bookmarks?.length ==
-                search_hook.result_commited?.hits.length
+              bookmarks_hook.bookmarks?.length == search_hook.count
             ? 'End of results'
             : ''
         }

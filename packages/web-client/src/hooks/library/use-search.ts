@@ -108,7 +108,6 @@ export const use_search = () => {
   const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =
     useState<number | undefined>()
   const [result, set_result] = useState<Results<Result>>()
-  const [result_commited, set_result_commited] = useState<Results<Result>>()
   const [highlights, set_highlights] = useState<Highlights>()
   const [highlights_note, set_highlights_note] = useState<Highlights>()
   const [highlights_sites_variants, set_highlights_sites_variants] =
@@ -1201,7 +1200,6 @@ export const use_search = () => {
         }),
       )
     }
-    set_result_commited(params.result)
   }
 
   const delete_searchable_bookmark = async (params: {
@@ -1540,7 +1538,6 @@ export const use_search = () => {
     query_db,
     is_caching_ongoing,
     result,
-    result_commited,
     is_initializing,
     db,
     archived_db,

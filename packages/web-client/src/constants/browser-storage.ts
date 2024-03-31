@@ -29,6 +29,11 @@ export const browser_storage = {
       },
     },
   },
+  // ATTETION: If ever considering renaming keys,
+  // remember to take care about "Delete" bookmark
+  // menu option handler. It loops through session
+  // storage entries of a user and delete there as well.
+  // NOTE: ".?" for authorized user is not a mistake!
   session_storage: {
     library: {
       last_authorized_counts_params: 'library.last-authorized-counts-params',
