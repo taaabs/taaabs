@@ -1029,7 +1029,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           }
         }}
         slot_pinned={
-          pinned_hook.items && (
+          pinned_hook.items &&
+          pinned_hook.items.length > 0 && (
             <div
               style={{
                 display:

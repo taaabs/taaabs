@@ -94,6 +94,14 @@ export const clear_library_session_storage = (params: {
       })
     ) {
       sessionStorage.removeItem(key)
+    } else if (
+      !params.search_params &&
+      key ==
+        browser_storage.session_storage.library.pinned({
+          username: params.username,
+        })
+    ) {
+      sessionStorage.removeItem(key)
     }
   }
 }
