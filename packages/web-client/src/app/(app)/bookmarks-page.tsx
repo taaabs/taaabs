@@ -901,79 +901,55 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               >
                 {!show_tags_skeleton ? (
                   <>
-                    {(bookmarks_hook.is_fetching_first_bookmarks
-                      ? counts_hook.selected_tags.length > 0
-                      : tag_view_options_hook.selected_tags.length > 0) && (
-                      <UiAppAtom_SelectedTags
-                        selected_tags={(bookmarks_hook.is_fetching_first_bookmarks
-                          ? counts_hook.selected_tags
-                          : tag_view_options_hook.selected_tags
+                    <UiAppAtom_SelectedTags
+                      selected_tags={counts_hook.selected_tags
+                        .filter((id) =>
+                          !counts_hook.tags ? false : counts_hook.tags[id],
                         )
-                          .filter((id) => {
-                            if (
-                              !bookmarks_hook.bookmarks ||
-                              !bookmarks_hook.bookmarks[0]
-                            )
-                              return false
-                            return (
-                              bookmarks_hook.bookmarks[0].tags?.findIndex(
-                                (tag) => tag.id == id,
-                              ) != -1
-                            )
-                          })
-                          .map((id) => {
-                            const name =
-                              bookmarks_hook.bookmarks![0].tags!.find(
-                                (tag) => tag.id == id,
-                              )!.name
-
-                            return {
-                              id,
-                              name,
-                            }
-                          })}
-                        on_selected_tag_click={(tag_id) =>
-                          tag_view_options_hook.remove_tags_from_search_params([
-                            tag_id,
-                          ])
-                        }
-                      />
-                    )}
-                    {bookmarks_hook.bookmarks &&
-                      bookmarks_hook.bookmarks.length > 0 && (
-                        <UiAppAtom_Tags
-                          refreshed_at_timestamp={
-                            (bookmarks_hook.first_bookmarks_fetched_at_timestamp ||
-                              0) > (counts_hook.refreshed_at_timestamp || 0)
-                              ? bookmarks_hook.first_bookmarks_fetched_at_timestamp
-                              : counts_hook.refreshed_at_timestamp
+                        .map((id) => {
+                          return {
+                            id,
+                            name: counts_hook.tags
+                              ? counts_hook.tags![id].name
+                              : '',
                           }
-                          tags={
-                            counts_hook.tags
-                              ? Object.fromEntries(
-                                  Object.entries(counts_hook.tags).filter(
-                                    (tag) =>
-                                      bookmarks_hook.is_fetching_first_bookmarks
-                                        ? !counts_hook.selected_tags.includes(
-                                            tag[1].id,
-                                          )
-                                        : !tag_view_options_hook.selected_tags.includes(
-                                            tag[1].id,
-                                          ),
+                        })}
+                      on_selected_tag_click={(tag_id) =>
+                        tag_view_options_hook.remove_tags_from_search_params([
+                          tag_id,
+                        ])
+                      }
+                    />
+                    <UiAppAtom_Tags
+                      refreshed_at_timestamp={
+                        (bookmarks_hook.first_bookmarks_fetched_at_timestamp ||
+                          0) > (counts_hook.refreshed_at_timestamp || 0)
+                          ? bookmarks_hook.first_bookmarks_fetched_at_timestamp
+                          : counts_hook.refreshed_at_timestamp
+                      }
+                      tags={
+                        counts_hook.tags
+                          ? Object.entries(counts_hook.tags)
+                              .filter(
+                                (tag) =>
+                                  !tag_view_options_hook.selected_tags.includes(
+                                    parseInt(tag[0]),
                                   ),
-                                )
-                              : {}
-                          }
-                          on_click={
-                            tag_view_options_hook.add_tag_to_search_params
-                          }
-                          on_tag_drag_start={
-                            !username
-                              ? tag_view_options_hook.set_dragged_tag
-                              : undefined
-                          }
-                        />
-                      )}
+                              )
+                              .map((tag) => ({
+                                id: parseInt(tag[0]),
+                                name: tag[1].name,
+                                yields: tag[1].yields,
+                              }))
+                          : []
+                      }
+                      on_click={tag_view_options_hook.add_tag_to_search_params}
+                      on_tag_drag_start={
+                        !username
+                          ? tag_view_options_hook.set_dragged_tag
+                          : undefined
+                      }
+                    />
                   </>
                 ) : (
                   <UiAppAtom_TagsSkeleton />
@@ -1161,13 +1137,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     bookmark.tags
                       ? bookmark.tags.map((tag) => {
                           const isSelected =
-                            bookmarks_hook.is_fetching_first_bookmarks
-                              ? counts_hook.selected_tags.find(
-                                  (t) => t == tag.id,
-                                ) != undefined
-                              : tag_view_options_hook.selected_tags.find(
-                                  (t) => t == tag.id,
-                                ) !== undefined
+                            tag_view_options_hook.selected_tags.find(
+                              (t) => t == tag.id,
+                            ) !== undefined
 
                           return {
                             name: tag.name,
@@ -1176,8 +1148,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                             yields:
                               !isSelected &&
                               counts_hook.tags &&
-                              counts_hook.tags[tag.name]
-                                ? counts_hook.tags[tag.name].yields
+                              counts_hook.tags[tag.id]
+                                ? counts_hook.tags[tag.id].yields
                                 : undefined,
                           }
                         })
@@ -1493,9 +1465,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     // Unselect removed tags when there is no more bookmarks with them.
                     tag_view_options_hook.remove_tags_from_search_params(
                       tag_view_options_hook.selected_tags.filter((t) => {
-                        const yields = Object.values(counts_hook.tags!).find(
-                          (tag) => tag.id == t,
-                        )!.yields
+                        const yields = Object.entries(counts_hook.tags!).find(
+                          (tag) => parseInt(tag[0]) == t,
+                        )![1].yields
                         return !updated_tag_ids.includes(t) && yields == 1
                       }),
                     )
@@ -2257,15 +2229,18 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               })
 
                               modal_context?.set_modal()
-                              toast.success('Bookmark has beed updated')
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
 
                               // Unselect removed tags when there is no more bookmarks with them.
                               tag_view_options_hook.remove_tags_from_search_params(
                                 tag_view_options_hook.selected_tags.filter(
                                   (t) => {
-                                    const yields = Object.values(
+                                    const yields = Object.entries(
                                       counts_hook.tags!,
-                                    ).find((tag) => tag.id == t)!.yields
+                                    ).find((tag) => parseInt(tag[0]) == t)![1]
+                                      .yields
                                     return (
                                       !updated_tag_ids.includes(t) &&
                                       yields == 1

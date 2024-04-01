@@ -16,7 +16,7 @@
   --brand-color: var(--blue700);
 
   // Shared
-  --background: var(--neutral25);
+  --background: var(--neutral50);
   --selection-background: var(--brand-color);
   --selection-foreground: var(--plain-white);
   --border-color-primary: var(--neutral200);
@@ -32,7 +32,7 @@
   --blue-box-background: var(--blue50);
 
   --skeleton-base-color: var(--neutral100);
-  --skeleton-highlight-color: var(--neutral25);
+  --skeleton-highlight-color: var(--neutral50);
 
   // Toast overrides
   --toastify-color-success: var(--brand-color);

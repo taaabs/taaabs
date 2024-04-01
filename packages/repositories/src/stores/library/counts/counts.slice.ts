@@ -8,14 +8,14 @@ export type Months = {
   starred_count: number
   unread_count: number
 }[]
-export type Tags = Record<string, { id: number; yields: number }>
+export type Tags = Record<string, { name: string; yields: number }>
 
 export type CountsState = {
   refreshed_at_timestamp?: number // Used solely to trigger tag counts refresh on other bookmarks.
   is_fetching_counts_data: boolean
   counts_data: Counts_Ro | null
   months: Months | null
-  tags: Tags | null
+  tags?: Tags
   yyyymm_gte: number | null
   yyyymm_lte: number | null
 }
@@ -24,7 +24,6 @@ const initial_state: CountsState = {
   is_fetching_counts_data: false,
   counts_data: null,
   months: null,
-  tags: null,
   yyyymm_gte: null,
   yyyymm_lte: null,
 }

@@ -45,10 +45,10 @@ export const process_tags = () => {
 
       Object.values(monthsFiltered).forEach((month) => {
         Object.entries(month.tags).forEach(([name, { id, yields }]) => {
-          if (tags[name]) {
-            tags[name].yields += yields
+          if (tags[id]) {
+            tags[id].yields += yields
           } else {
-            tags[name] = { id, yields }
+            tags[id] = { name, yields }
           }
         })
       })

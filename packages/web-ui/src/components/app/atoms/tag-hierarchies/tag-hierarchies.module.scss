@@ -79,7 +79,7 @@
   justify-content: center;
   border-radius: var(--border-radius-12px);
   @include transition-150ms(opacity);
-  border: 1px dashed var(--border-color-primary);
+  border: 1px dashed var(--neutral200);
   color: var(--text-color-dimmed);
   transition: color var(--transition-duration-150ms)
       var(--transition-timing-function),
@@ -89,7 +89,6 @@
       var(--transition-timing-function);
   margin-top: var(--distance-6px);
   font-size: var(--font-size-13px);
-  background-color: var(--neutral50);
   text-align: center;
   &--slim {
     padding: 0 var(--distance-16px);
