@@ -218,6 +218,7 @@ export const use_bookmarks = () => {
         browser_storage.session_storage.library.density({
           username: username as string,
           search_params: search_params.toString(),
+          hash: window.location.hash,
         }),
       )
       if (density) {
@@ -256,6 +257,7 @@ export const use_bookmarks = () => {
         browser_storage.session_storage.library.density({
           username: params.username,
           search_params: params.search_params,
+          hash: window.location.hash,
         }),
         `${params.density}`,
       )
@@ -308,6 +310,7 @@ export const use_bookmarks = () => {
         browser_storage.session_storage.library.density({
           username,
           search_params: search_params.toString(),
+          hash: window.location.hash,
         }),
       )
       if (density) {

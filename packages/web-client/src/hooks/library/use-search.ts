@@ -1463,10 +1463,12 @@ export const use_search = () => {
   }, [search_params])
 
   useEffect(() => {
+    const sp = search_params.toString()
+
     const search_string = sessionStorage.getItem(
       browser_storage.session_storage.library.search_string({
         username,
-        search_params: search_params.toString(),
+        search_params: sp,
         hash: window.location.hash,
       }),
     )
@@ -1476,7 +1478,7 @@ export const use_search = () => {
     const highlights = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights({
         username,
-        search_params: search_params.toString(),
+        search_params: sp,
         hash: window.location.hash,
       }),
     )
@@ -1486,7 +1488,7 @@ export const use_search = () => {
     const highlights_note = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights_note({
         username,
-        search_params: search_params.toString(),
+        search_params: sp,
         hash: window.location.hash,
       }),
     )
@@ -1496,7 +1498,7 @@ export const use_search = () => {
     const highlights_sites_variants = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
-        search_params: search_params.toString(),
+        search_params: sp,
         hash: window.location.hash,
       }),
     )
@@ -1506,7 +1508,7 @@ export const use_search = () => {
     const count = sessionStorage.getItem(
       browser_storage.session_storage.library.search_results_count({
         username,
-        search_params: search_params.toString(),
+        search_params: sp,
         hash: window.location.hash,
       }),
     )
@@ -1516,7 +1518,7 @@ export const use_search = () => {
     const result = sessionStorage.getItem(
       browser_storage.session_storage.library.search_result({
         username,
-        search_params: search_params.toString(),
+        search_params: sp,
         hash: window.location.hash,
       }),
     )

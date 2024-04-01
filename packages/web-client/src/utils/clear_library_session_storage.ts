@@ -37,6 +37,7 @@ export const clear_library_session_storage = (params: {
       browser_storage.session_storage.library.density({
         search_params: params.search_params,
         username: params.username,
+        hash: params.hash ? params.hash : '',
       })
     ) {
       sessionStorage.removeItem(key)

@@ -32,7 +32,7 @@ export const browser_storage = {
   // ATTETION: If ever considering renaming keys,
   // remember to take care about "Delete" bookmark
   // menu option handler. It loops through session
-  // storage entries of a user and delete there as well.
+  // storage entries of a user and deletes there as well.
   // NOTE: ".?" for authorized user is not a mistake!
   session_storage: {
     library: {
@@ -52,10 +52,14 @@ export const browser_storage = {
         `library.has_more_bookmarks.${params.username || ''}?${
           params.search_params || ''
         }`,
-      density: (params: { username?: string; search_params: string }) =>
+      density: (params: {
+        username?: string
+        search_params: string
+        hash: string
+      }) =>
         `library.density.${params.username || ''}?${
           params.search_params || ''
-        }`,
+        }${params.hash}`,
       tags: (params: { username?: string; search_params?: string }) =>
         `library.tags.${params.username || ''}?${params.search_params || ''}`,
       scroll_y: (params: {

@@ -173,17 +173,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   }, [bookmarks_hook.incoming_bookmarks])
 
   useUpdateEffect(() => {
-    search_hook.reset()
-  }, [
-    filter_view_options_hook.current_filter,
-    order_view_options_hook.current_order,
-    sort_by_view_options_hook.current_sort_by,
-    tag_view_options_hook.selected_tags,
-    date_view_options_hook.current_gte,
-    date_view_options_hook.current_lte,
-  ])
-
-  useUpdateEffect(() => {
     search_hook.set_current_filter(filter_view_options_hook.current_filter)
   }, [filter_view_options_hook.current_filter])
 
