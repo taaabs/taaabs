@@ -50,6 +50,6 @@ export const refresh_authorized_counts = (params: {
       bookmarks_actions.set_bookmarks(state.bookmarks.incoming_bookmarks),
     )
     dispatch(bookmarks_actions.set_is_updating_bookmarks(false))
-    dispatch(counts_actions.set_refreshed_at_timestamp(Date.now()))
+    dispatch(counts_actions.set_fetched_at_timestamp(Date.now()))
   }
 }

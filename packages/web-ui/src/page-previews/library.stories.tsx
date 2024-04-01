@@ -123,7 +123,7 @@ const bookmark = (
     is_unread={true}
     tags={[
       { id: 1, name: 'foo', yields: 100 },
-      { id: 2, name: 'bar', isSelected: true },
+      { id: 2, name: 'bar', is_selected: true },
     ]}
     on_tag_click={() => {}}
     on_click={() => {}}

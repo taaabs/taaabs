@@ -156,15 +156,30 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   // Upload deferred recent visit - END
 
   useUpdateEffect(() => {
-    if (bookmarks_hook.bookmarks == null) return
-    set_show_custom_range(true)
-    set_show_tags_skeleton(false)
-    set_show_bookmarks_skeleton(false)
+    if (!bookmarks_hook.bookmarks) return
     modal_context?.set_modal()
     sort_by_view_options_hook.set_commited_sort_by(
       sort_by_view_options_hook.current_sort_by,
     )
   }, [bookmarks_hook.bookmarks])
+
+  useUpdateEffect(() => {
+    if (
+      bookmarks_hook.first_bookmarks_fetched_at_timestamp &&
+      counts_hook.fetched_at_timestamp &&
+      tag_hierarchies_hook.fetched_at_timestamp &&
+      pinned_hook.fetched_at_timestamp
+    ) {
+      set_show_tags_skeleton(false)
+      set_show_bookmarks_skeleton(false)
+      set_show_custom_range(true)
+    }
+  }, [
+    bookmarks_hook.first_bookmarks_fetched_at_timestamp,
+    counts_hook.fetched_at_timestamp,
+    tag_hierarchies_hook.fetched_at_timestamp,
+    pinned_hook.fetched_at_timestamp,
+  ])
 
   useUpdateEffect(() => {
     if (bookmarks_hook.should_refetch_counts) {
@@ -611,12 +626,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           />
         }
         slot_tag_hierarchies={
-          tag_hierarchies_hook.is_initialized &&
-          bookmarks_hook.first_bookmarks_fetched_at_timestamp ? (
+          !show_bookmarks_skeleton ? (
             <UiAppAtom_TagHierarchies
-              first_bookmarks_fetched_at_timestamp={
-                bookmarks_hook.first_bookmarks_fetched_at_timestamp
-              }
+              fetched_at_timestamp={tag_hierarchies_hook.fetched_at_timestamp}
               is_draggable={!username}
               tree={tag_hierarchies_hook.tag_hierarchies}
               on_update={async (tag_hierarchies: TagHierarchies.Node[]) => {
@@ -861,9 +873,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   first_bookmarks_fetched_at_timestamp={
                     bookmarks_hook.first_bookmarks_fetched_at_timestamp
                   }
-                  counts_fetched_at_timestamp={
-                    counts_hook.refreshed_at_timestamp
-                  }
+                  counts_fetched_at_timestamp={counts_hook.fetched_at_timestamp}
                   counts={counts_hook.months || undefined}
                   on_yyyymm_change={
                     date_view_options_hook.set_gte_lte_search_params
@@ -902,7 +912,10 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 {!show_tags_skeleton ? (
                   <>
                     <UiAppAtom_SelectedTags
-                      selected_tags={counts_hook.selected_tags
+                      selected_tags={(bookmarks_hook.is_fetching_first_bookmarks
+                        ? counts_hook.selected_tags
+                        : tag_view_options_hook.selected_tags
+                      )
                         .filter((id) =>
                           !counts_hook.tags ? false : counts_hook.tags[id],
                         )
@@ -923,18 +936,21 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     <UiAppAtom_Tags
                       refreshed_at_timestamp={
                         (bookmarks_hook.first_bookmarks_fetched_at_timestamp ||
-                          0) > (counts_hook.refreshed_at_timestamp || 0)
+                          0) > (counts_hook.fetched_at_timestamp || 0)
                           ? bookmarks_hook.first_bookmarks_fetched_at_timestamp
-                          : counts_hook.refreshed_at_timestamp
+                          : counts_hook.fetched_at_timestamp
                       }
                       tags={
                         counts_hook.tags
                           ? Object.entries(counts_hook.tags)
-                              .filter(
-                                (tag) =>
-                                  !tag_view_options_hook.selected_tags.includes(
-                                    parseInt(tag[0]),
-                                  ),
+                              .filter((tag) =>
+                                bookmarks_hook.is_fetching_first_bookmarks
+                                  ? !counts_hook.selected_tags.includes(
+                                      parseInt(tag[0]),
+                                    )
+                                  : !tag_view_options_hook.selected_tags.includes(
+                                      parseInt(tag[0]),
+                                    ),
                               )
                               .map((tag) => ({
                                 id: parseInt(tag[0]),
@@ -1125,7 +1141,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       : new Date(bookmark.created_at)
                   }
                   counts_refreshed_at_timestamp={
-                    counts_hook.refreshed_at_timestamp
+                    counts_hook.fetched_at_timestamp
                   }
                   number_of_selected_tags={
                     bookmarks_hook.is_fetching_first_bookmarks
@@ -1136,17 +1152,21 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   tags={
                     bookmark.tags
                       ? bookmark.tags.map((tag) => {
-                          const isSelected =
-                            tag_view_options_hook.selected_tags.find(
-                              (t) => t == tag.id,
-                            ) !== undefined
+                          const is_selected =
+                            bookmarks_hook.is_fetching_first_bookmarks
+                              ? counts_hook.selected_tags.find(
+                                  (t) => t == tag.id,
+                                ) != undefined
+                              : tag_view_options_hook.selected_tags.find(
+                                  (t) => t == tag.id,
+                                ) !== undefined
 
                           return {
                             name: tag.name,
-                            isSelected,
+                            is_selected,
                             id: tag.id,
                             yields:
-                              !isSelected &&
+                              !is_selected &&
                               counts_hook.tags &&
                               counts_hook.tags[tag.id]
                                 ? counts_hook.tags[tag.id].yields

@@ -53,6 +53,7 @@ export const use_pinned = () => {
     )
     if (pinned_items) {
       dispatch(pinned_actions.set_items(JSON.parse(pinned_items)))
+      dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
     } else {
       get_pinned()
     }

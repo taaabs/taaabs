@@ -93,6 +93,7 @@ export const get_public_bookmarks = (params: {
             Date.now(),
           ),
         )
+        dispatch(counts_actions.set_fetched_at_timestamp(Date.now()))
       }
     }
   }

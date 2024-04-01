@@ -11,7 +11,7 @@ export type Months = {
 export type Tags = Record<string, { name: string; yields: number }>
 
 export type CountsState = {
-  refreshed_at_timestamp?: number // Used solely to trigger tag counts refresh on other bookmarks.
+  fetched_at_timestamp?: number
   is_fetching_counts_data: boolean
   counts_data: Counts_Ro | null
   months: Months | null
@@ -32,8 +32,8 @@ export const counts_slice = createSlice({
   name: 'counts',
   initialState: initial_state,
   reducers: {
-    set_refreshed_at_timestamp(state, action: PayloadAction<number>) {
-      state.refreshed_at_timestamp = action.payload
+    set_fetched_at_timestamp(state, action: PayloadAction<number>) {
+      state.fetched_at_timestamp = action.payload
     },
     set_is_fetching_data(state, action: PayloadAction<boolean>) {
       state.is_fetching_counts_data = action.payload

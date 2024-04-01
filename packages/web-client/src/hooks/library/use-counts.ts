@@ -20,7 +20,7 @@ export const use_counts = () => {
     months,
     tags,
     is_fetching_counts_data,
-    refreshed_at_timestamp,
+    fetched_at_timestamp,
   } = use_library_selector((state) => state.counts)
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
   const [last_query_tags, set_last_query_tags] = useState<string>()
@@ -228,6 +228,6 @@ export const use_counts = () => {
     is_fetching_counts_data,
     tags,
     selected_tags,
-    refreshed_at_timestamp,
+    fetched_at_timestamp,
   }
 }

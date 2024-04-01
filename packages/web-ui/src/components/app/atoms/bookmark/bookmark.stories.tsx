@@ -193,7 +193,7 @@ export const Primary = () => (
         is_unread={false}
         tags={[
           { id: 1, name: 'lorem', yields: 8 },
-          { id: 1, name: 'ipsum', isSelected: true },
+          { id: 1, name: 'ipsum', is_selected: true },
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
@@ -237,7 +237,7 @@ export const Primary = () => (
         is_unread={false}
         tags={[
           { id: 1, name: 'lorem', yields: 8 },
-          { id: 1, name: 'ipsum', isSelected: true },
+          { id: 1, name: 'ipsum', is_selected: true },
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}

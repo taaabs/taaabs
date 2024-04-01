@@ -17,15 +17,12 @@ export const get_tag_hierarchies_authorized = (params: {
       repository,
     )
 
-    dispatch(tag_hierarchies_actions.set_is_fetching_data(true))
-
     const { tag_hierarchies, total } = await get_tag_hierarchies.invoke(
       params.request_params,
     )
 
     dispatch(tag_hierarchies_actions.set_tag_hierarchies(tag_hierarchies))
     dispatch(tag_hierarchies_actions.set_total(total))
-    dispatch(tag_hierarchies_actions.set_is_fetching_data(false))
-    dispatch(tag_hierarchies_actions.set_is_initialized(true))
+    dispatch(tag_hierarchies_actions.set_fetched_at_timestamp(Date.now()))
   }
 }

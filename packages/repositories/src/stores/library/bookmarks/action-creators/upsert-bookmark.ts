@@ -77,7 +77,7 @@ export const upsert_bookmark = (params: {
           )
         }
 
-        dispatch(
+        await dispatch(
           counts_actions.refresh_authorized_counts({
             last_authorized_counts_params: params.last_authorized_counts_params,
             ky: params.ky,

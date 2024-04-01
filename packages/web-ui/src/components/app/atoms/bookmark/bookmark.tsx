@@ -60,7 +60,7 @@ export namespace Bookmark {
     on_selected_tag_click: (tag_id: number) => void
     on_mouse_up_on_tag: (tag_id: number) => void
     on_give_point_click: () => void
-    tags: { id: number; name: string; yields?: number; isSelected?: boolean }[]
+    tags: { id: number; name: string; yields?: number; is_selected?: boolean }[]
     number_of_selected_tags: number
     search_params?: string
     on_click: () => void
@@ -356,7 +356,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         className={styles.bookmark__main__tags__tag}
                         onClick={(e) => {
                           e.stopPropagation()
-                          if (tag.isSelected) {
+                          if (tag.is_selected) {
                             props.on_selected_tag_click(tag.id)
                           } else {
                             props.on_tag_click(tag.id)
@@ -418,7 +418,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               {
                                 [styles[
                                   'bookmark__main__tags__tag__name--selected'
-                                ]]: tag.isSelected,
+                                ]]: tag.is_selected,
                               },
                             ])}
                           >
@@ -441,7 +441,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                 })
                               : tag.name}
                           </span>
-                          {!tag.isSelected && tag.yields && (
+                          {!tag.is_selected && tag.yields && (
                             <span
                               className={
                                 styles.bookmark__main__tags__tag__yields
@@ -450,7 +450,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               {tag.yields}
                             </span>
                           )}
-                          {tag.isSelected && (
+                          {tag.is_selected && (
                             <span
                               className={
                                 styles.bookmark__main__tags__tag__yields

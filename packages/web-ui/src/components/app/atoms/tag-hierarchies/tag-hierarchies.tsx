@@ -17,7 +17,7 @@ export namespace TagHierarchies {
     children: Node[]
   }
   export type Props = {
-    first_bookmarks_fetched_at_timestamp?: number
+    fetched_at_timestamp?: number
     tree?: Node[]
     on_update: (tags: Node[]) => void
     on_item_click: (hierarchy_ids: number[]) => void
@@ -380,8 +380,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     )
   },
   (o, n) =>
-    o.first_bookmarks_fetched_at_timestamp ==
-      n.first_bookmarks_fetched_at_timestamp &&
+    o.fetched_at_timestamp == n.fetched_at_timestamp &&
     o.is_all_bookmarks_selected == n.is_all_bookmarks_selected &&
     o.is_updating == n.is_updating &&
     o.dragged_tag == n.dragged_tag,
