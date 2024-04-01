@@ -872,6 +872,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   first_bookmarks_fetched_at_timestamp={
                     bookmarks_hook.first_bookmarks_fetched_at_timestamp
                   }
+                  counts_fetched_at_timestamp={
+                    counts_hook.refreshed_at_timestamp
+                  }
                   counts={counts_hook.months || undefined}
                   on_yyyymm_change={
                     date_view_options_hook.set_gte_lte_search_params
@@ -886,19 +889,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     parseInt(search_params.get('lte') || '0') || undefined
                   }
                   selected_tags={search_params.get('t') || undefined}
-                  has_results={
-                    bookmarks_hook.bookmarks &&
-                    !bookmarks_hook.is_fetching_first_bookmarks
-                      ? bookmarks_hook.bookmarks.length > 0
-                      : undefined
-                  }
-                  is_fetching_data={bookmarks_hook.is_fetching_first_bookmarks}
-                  is_fetching_counts_data={
-                    // We need to trigger render only when counts data is fetched on back/forward navigation.
-                    !bookmarks_hook.is_fetching_first_bookmarks
-                      ? counts_hook.is_fetching_counts_data
-                      : undefined
-                  }
                   is_range_selector_disabled={
                     sort_by_view_options_hook.current_sort_by ==
                       SortBy.UPDATED_AT ||

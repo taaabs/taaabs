@@ -17,15 +17,13 @@ type Counts = {
 export namespace CustomRange {
   export type Props = {
     first_bookmarks_fetched_at_timestamp?: number
+    counts_fetched_at_timestamp?: number
     counts?: Counts
     current_gte?: number
     current_lte?: number
     on_yyyymm_change: ({ gte, lte }: { gte: number; lte: number }) => void
     clear_date_range: () => void
     selected_tags?: string
-    has_results?: boolean
-    is_fetching_data?: boolean
-    is_fetching_counts_data?: boolean
     is_range_selector_disabled?: boolean
   }
 }
@@ -74,7 +72,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       start_index?: number
       end_index?: number
     }) => {
-      if (!params.counts || props.has_results === false) {
+      if (!params.counts) {
         set_bookmark_count(undefined)
         return
       }
@@ -297,9 +295,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
             Custom range
           </div>
           <div className={styles['custom-range__details__current-range']}>
-            {!props.has_results &&
-            !props.is_fetching_data &&
-            !props.is_fetching_counts_data ? (
+            {!bookmark_count ? (
               props.current_gte && props.current_lte ? (
                 yyyymm_to_display(props.current_gte) +
                 (props.current_gte != props.current_lte
@@ -323,9 +319,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
               'All history'
             )}
           </div>
-          {(props.has_results || props.is_fetching_data) &&
-          bookmark_count &&
-          bookmark_count > 0 ? (
+          {bookmark_count && bookmark_count > 0 ? (
             bookmark_count != unread_count &&
             bookmark_count != starred_count ? (
               <div className={styles['custom-range__details__counts']}>
@@ -459,7 +453,6 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
         )}
 
         {!props.is_range_selector_disabled &&
-          (props.has_results || props.is_fetching_data) &&
           counts_to_render &&
           counts_to_render.length >= 2 &&
           bookmark_count &&
@@ -541,24 +534,21 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
             </div>
           )}
 
-        {props.has_results &&
+        {bookmark_count !== undefined &&
+          bookmark_count > 0 &&
           counts_to_render &&
           counts_to_render.length <= 1 &&
-          !props.is_range_selector_disabled &&
-          !props.is_fetching_counts_data && (
+          !props.is_range_selector_disabled && (
             <div className={styles['custom-range__info']}>
               All results fit in one month
             </div>
           )}
 
-        {!props.is_range_selector_disabled &&
-          !props.has_results &&
-          !props.is_fetching_data &&
-          !props.is_fetching_counts_data && (
-            <div className={styles['custom-range__info']}>
-              There is nothing to plot
-            </div>
-          )}
+        {!props.is_range_selector_disabled && !bookmark_count && (
+          <div className={styles['custom-range__info']}>
+            There is nothing to plot
+          </div>
+        )}
 
         {props.is_range_selector_disabled && (
           <div className={styles['custom-range__info']}>
@@ -571,7 +561,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
   (o, n) =>
     o.first_bookmarks_fetched_at_timestamp ==
       n.first_bookmarks_fetched_at_timestamp &&
-    o.is_fetching_counts_data == n.is_fetching_counts_data,
+    o.counts_fetched_at_timestamp == n.counts_fetched_at_timestamp,
 )
 
 function yyyymm_to_display(yyyymm: number) {
