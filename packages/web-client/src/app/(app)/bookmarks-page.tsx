@@ -1405,88 +1405,102 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       },
                     })
                   }}
-                  on_tag_delete_click={async (tag_id) => {
-                    if (tag_view_options_hook.selected_tags.includes(tag_id)) {
-                      dispatch(
-                        bookmarks_actions.filter_out_bookmark({
-                          bookmark_id: bookmark.id,
-                        }),
-                      )
-                      if (search_hook.count) {
-                        search_hook.set_count(search_hook.count - 1)
-                      }
-                    }
+                  on_tag_delete_click={
+                    !username
+                      ? async (tag_id) => {
+                          if (
+                            tag_view_options_hook.selected_tags.includes(tag_id)
+                          ) {
+                            dispatch(
+                              bookmarks_actions.filter_out_bookmark({
+                                bookmark_id: bookmark.id,
+                              }),
+                            )
+                            if (search_hook.count) {
+                              search_hook.set_count(search_hook.count - 1)
+                            }
+                          }
 
-                    const modified_bookmark: UpsertBookmark_Params = {
-                      bookmark_id: bookmark.id,
-                      is_public: bookmark.is_public,
-                      created_at: new Date(bookmark.created_at),
-                      title: bookmark.title,
-                      note: bookmark.note,
-                      is_archived: is_archived_filter,
-                      is_unread: bookmark.is_unread,
-                      stars: bookmark.stars,
-                      links: bookmark.links.map((link) => ({
-                        url: link.url,
-                        site_path: link.site_path,
-                        is_public: link.is_public,
-                        is_pinned: link.is_pinned,
-                        pin_title: link.pin_title,
-                        pin_order: link.pin_order,
-                      })),
-                      tags: bookmark.tags
-                        .filter((tag) => tag.id !== tag_id)
-                        .map((tag) => ({
-                          name: tag.name,
-                          is_public: tag.is_public,
-                        })),
-                    }
-                    const updated_bookmark = await dispatch(
-                      bookmarks_actions.upsert_bookmark({
-                        bookmark: modified_bookmark,
-                        last_authorized_counts_params:
-                          get_last_authorized_counts_params(),
-                        ky: ky_instance,
-                      }),
-                    )
+                          const modified_bookmark: UpsertBookmark_Params = {
+                            bookmark_id: bookmark.id,
+                            is_public: bookmark.is_public,
+                            created_at: new Date(bookmark.created_at),
+                            title: bookmark.title,
+                            note: bookmark.note,
+                            is_archived: is_archived_filter,
+                            is_unread: bookmark.is_unread,
+                            stars: bookmark.stars,
+                            links: bookmark.links.map((link) => ({
+                              url: link.url,
+                              site_path: link.site_path,
+                              is_public: link.is_public,
+                              is_pinned: link.is_pinned,
+                              pin_title: link.pin_title,
+                              pin_order: link.pin_order,
+                            })),
+                            tags: bookmark.tags
+                              .filter((tag) => tag.id !== tag_id)
+                              .map((tag) => ({
+                                name: tag.name,
+                                is_public: tag.is_public,
+                              })),
+                          }
+                          const updated_bookmark = await dispatch(
+                            bookmarks_actions.upsert_bookmark({
+                              bookmark: modified_bookmark,
+                              last_authorized_counts_params:
+                                get_last_authorized_counts_params(),
+                              ky: ky_instance,
+                            }),
+                          )
 
-                    toast.success(params.dictionary.library.bookmark_updated)
+                          toast.success(
+                            params.dictionary.library.bookmark_updated,
+                          )
 
-                    if (counts_hook.tags![tag_id].yields == 1) {
-                      dispatch(bookmarks_actions.set_bookmarks([]))
-                      dispatch(
-                        bookmarks_actions.set_is_fetching_first_bookmarks(true),
-                      )
-                      tag_view_options_hook.remove_tags_from_search_params([
-                        tag_id,
-                      ])
-                    }
+                          if (counts_hook.tags![tag_id].yields == 1) {
+                            dispatch(bookmarks_actions.set_bookmarks([]))
+                            dispatch(
+                              bookmarks_actions.set_is_fetching_first_bookmarks(
+                                true,
+                              ),
+                            )
+                            tag_view_options_hook.remove_tags_from_search_params(
+                              [tag_id],
+                            )
+                          }
 
-                    search_hook.update_searchable_bookmark({
-                      bookmark: {
-                        id: bookmark.id,
-                        created_at: bookmark.created_at,
-                        visited_at: bookmark.visited_at,
-                        updated_at: updated_bookmark.updated_at,
-                        title: bookmark.title,
-                        note: bookmark.note,
-                        is_archived: is_archived_filter,
-                        is_unread: bookmark.is_unread,
-                        stars: bookmark.stars,
-                        links: bookmark.links.map((link) => ({
-                          url: link.url,
-                          site_path: link.site_path,
-                        })),
-                        tags: updated_bookmark.tags.map((tag) => tag.name),
-                        tag_ids: updated_bookmark.tags.map((tag) => tag.id),
-                      },
-                    })
-                    tag_hierarchies_hook.get_tag_hierarchies({
-                      filter: filter_view_options_hook.current_filter,
-                      gte: date_view_options_hook.current_gte,
-                      lte: date_view_options_hook.current_lte,
-                    })
-                  }}
+                          search_hook.update_searchable_bookmark({
+                            bookmark: {
+                              id: bookmark.id,
+                              created_at: bookmark.created_at,
+                              visited_at: bookmark.visited_at,
+                              updated_at: updated_bookmark.updated_at,
+                              title: bookmark.title,
+                              note: bookmark.note,
+                              is_archived: is_archived_filter,
+                              is_unread: bookmark.is_unread,
+                              stars: bookmark.stars,
+                              links: bookmark.links.map((link) => ({
+                                url: link.url,
+                                site_path: link.site_path,
+                              })),
+                              tags: updated_bookmark.tags.map(
+                                (tag) => tag.name,
+                              ),
+                              tag_ids: updated_bookmark.tags.map(
+                                (tag) => tag.id,
+                              ),
+                            },
+                          })
+                          tag_hierarchies_hook.get_tag_hierarchies({
+                            filter: filter_view_options_hook.current_filter,
+                            gte: date_view_options_hook.current_gte,
+                            lte: date_view_options_hook.current_lte,
+                          })
+                        }
+                      : undefined
+                  }
                   pinned_links_count={bookmark.links.reduce(
                     (acc, link) => (link.is_pinned ? acc + 1 : acc),
                     0,

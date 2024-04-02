@@ -53,7 +53,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const [selected_tag_ids, set_selected_tag_ids] = useState<number[]>([])
     const [context_menu_of_item_id, set_context_menu_of_item_id] =
       useState<number>()
-    const { contextMenu, onContextMenu } = useContextMenu(
+    const { context_menu, on_context_menu } = useContextMenu(
       <>
         <DropdownMenu
           items={[
@@ -190,7 +190,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             }}
             onContextMenu={(e) => {
               set_context_menu_of_item_id((item as Item).id)
-              onContextMenu(e)
+              on_context_menu(e)
             }}
           >
             <div>
@@ -375,7 +375,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             {!items.length && props.translations.drag_here}
           </div>
         )}
-        {contextMenu}
+        {context_menu}
       </div>
     )
   },

@@ -56,7 +56,7 @@ export namespace Bookmark {
     density: 'default' | 'compact'
     is_compact?: boolean
     on_tag_click: (tag_id: number) => void
-    on_tag_delete_click: (tag_id: number) => void
+    on_tag_delete_click?: (tag_id: number) => void
     on_selected_tag_click: (tag_id: number) => void
     on_mouse_up_on_tag: (tag_id: number) => void
     on_give_point_click: () => void
@@ -120,7 +120,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
     const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
       useState<number>()
-    const { contextMenu, onContextMenu } = useContextMenu(
+    const { context_menu, on_context_menu } = useContextMenu(
       <>
         <DropdownMenu
           items={[
@@ -128,7 +128,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               label: 'Delete',
               on_click: () => {
                 if (!context_menu_of_tag_id) return
-                props.on_tag_delete_click(context_menu_of_tag_id)
+                props.on_tag_delete_click!(context_menu_of_tag_id)
               },
               other_icon: <Icon variant="DELETE" />,
             },
@@ -212,7 +212,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             }}
           >
             <div className={styles.bookmark}>
-              {contextMenu}
+              {context_menu}
               <div className={styles.bookmark__main}>
                 <div
                   className={cn(styles.bookmark__main__top, {
@@ -400,10 +400,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             })
                           }
                         }}
-                        onContextMenu={(e) => {
-                          set_context_menu_of_tag_id(tag.id)
-                          onContextMenu(e)
-                        }}
+                        onContextMenu={
+                          props.on_tag_delete_click
+                            ? (e) => {
+                                set_context_menu_of_tag_id(tag.id)
+                                on_context_menu(e)
+                              }
+                            : undefined
+                        }
                         onMouseUp={() => {
                           // Fixes interference with loading state when selecting.
                           setTimeout(() => {
