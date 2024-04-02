@@ -3,6 +3,7 @@ import Add from '../../../../assets/icons/add.svg'
 import Archive from '../../../../assets/icons/archive.svg'
 import BookmarkFilled from '../../../../assets/icons/bookmark-filled.svg'
 import Bookmark from '../../../../assets/icons/bookmark.svg'
+import Check from '../../../../assets/icons/check.svg'
 import Collapse from '../../../../assets/icons/collapse.svg'
 import Copy from '../../../../assets/icons/copy.svg'
 import Delete from '../../../../assets/icons/delete.svg'
@@ -15,6 +16,8 @@ import GreaterThan from '../../../../assets/icons/greater-than.svg'
 import Handle from '../../../../assets/icons/handle.svg'
 import HomeFilled from '../../../../assets/icons/home-filled.svg'
 import Home from '../../../../assets/icons/home.svg'
+import HuggingFaceHands from '../../../../assets/icons/hugging-face-hands.svg'
+import HuggingFaceNoHands from '../../../../assets/icons/hugging-face-no-hands.svg'
 import Info from '../../../../assets/icons/info.svg'
 import LessThan from '../../../../assets/icons/less-than.svg'
 import OverviewFilled from '../../../../assets/icons/overview-filled.svg'
@@ -47,6 +50,7 @@ export namespace Icon {
     | 'ARCHIVE'
     | 'BOOKMARK_FILLED'
     | 'BOOKMARK'
+    | 'CHECK'
     | 'COLLAPSE'
     | 'COPY'
     | 'DELETE'
@@ -59,6 +63,8 @@ export namespace Icon {
     | 'HANDLE'
     | 'HOME_FILLED'
     | 'HOME'
+    | 'HUGGING_FACE_HANDS'
+    | 'HUGGING_FACE_NO_HANDS'
     | 'INFO'
     | 'LESS_THAN'
     | 'OVERVIEW_FILLED'
@@ -108,6 +114,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'BOOKMARK':
       icon = <Bookmark />
       break
+    case 'CHECK':
+      icon = <Check />
+      break
     case 'COLLAPSE':
       icon = <Collapse />
       break
@@ -143,6 +152,12 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'HOME':
       icon = <Home />
+      break
+    case 'HUGGING_FACE_HANDS':
+      icon = <HuggingFaceHands />
+      break
+    case 'HUGGING_FACE_NO_HANDS':
+      icon = <HuggingFaceNoHands />
       break
     case 'INFO':
       icon = <Info />

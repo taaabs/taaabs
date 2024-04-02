@@ -5,7 +5,7 @@
   @include colors;
 
   --plain-white: var(--white);
-  --plain-black: var(--neutral950);
+  --plain-black: var(--neutral900);
 
   // Text
   --text-color-normal: var(--neutral900);
@@ -114,6 +114,7 @@ input,
 button,
 textarea,
 select {
+  outline: none;
   font: inherit;
   color: var(--text-color-normal); // iOS
 }

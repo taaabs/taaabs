@@ -16,7 +16,6 @@
   > h1 {
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-    letter-spacing: var(--letter-spacing-landing-heading);
     animation: var(--animation-fade-in);
     font-size: var(--font-size-32px);
     @include at768 {
@@ -26,7 +25,7 @@
       font-size: var(--font-size-64px);
     }
     @include at1380 {
-      font-size: var(--font-size-70px);
+      font-size: var(--font-size-72px);
     }
   }
   > p {

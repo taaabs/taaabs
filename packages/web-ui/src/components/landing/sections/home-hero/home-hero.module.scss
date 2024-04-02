@@ -1,0 +1,169 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  background: var(--header-background);
+  border-bottom: var(--border-primary);
+}
+.content {
+  padding: 150px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--distance-50px);
+}
+.top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--distance-10px);
+  text-align: center;
+  &__logo {
+    > svg {
+      width: 85px;
+      fill: var(--brand-color);
+    }
+  }
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
+    font-size: 30px;
+    @include at768 {
+      font-size: 44px;
+    }
+    @include at1200 {
+      font-size: var(--font-size-64px);
+    }
+    @include at1380 {
+      font-size: var(--font-size-72px);
+    }
+    &__first-line {
+      --emoji-width: 34px;
+      white-space: nowrap;
+      position: relative;
+      margin-right: var(--emoji-width);
+      @include at768 {
+        --emoji-width: 55px;
+      }
+      @include at1200 {
+        --emoji-width: 75px;
+      }
+      @include at1380 {
+        --emoji-width: 85px;
+      }
+      > span {
+        z-index: 1;
+        position: relative;
+        display: inline-block;
+      }
+      &__head {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 0;
+        transform: rotate(15deg) translateX(calc(100% - 0.28em))
+          translateY(-0.28em);
+        @include at768 {
+          transform: rotate(15deg) translateX(calc(100% - 0.28em))
+            translateY(-0.28em);
+        }
+        @include at1200 {
+          transform: rotate(15deg) translateX(calc(100% - 0.28em))
+            translateY(-0.28em);
+        }
+        @include at1380 {
+          transform: rotate(15deg) translateX(calc(100% - 20px))
+            translateY(-22px);
+        }
+        > svg {
+          width: var(--emoji-width);
+        }
+      }
+      &__hands {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 2;
+        transform: rotate(15deg) translateX(calc(100% - 8px)) translateY(-4px);
+        @include at768 {
+          transform: rotate(15deg) translateX(calc(100% - 11px))
+            translateY(-5px);
+        }
+        @include at1200 {
+          transform: rotate(15deg) translateX(calc(100% - 16px))
+            translateY(-9px);
+        }
+        @include at1380 {
+          transform: rotate(15deg) translateX(calc(100% - 18px))
+            translateY(-10px);
+        }
+        > svg {
+          width: calc(var(--emoji-width) * 0.95);
+        }
+      }
+    }
+  }
+  &__subheading {
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-bold);
+    font-size: var(--font-size-16px);
+    @include at768 {
+      font-size: var(--font-size-18px);
+    }
+    @include at1200 {
+      font-size: var(--font-size-24px);
+    }
+    @include at1380 {
+      font-size: var(--font-size-28px);
+    }
+  }
+}
+.claim-username {
+  display: flex;
+  gap: var(--distance-16px);
+  &__input {
+    position: relative;
+    &::before {
+      content: 'taaabs.com/';
+      position: absolute;
+      font-size: var(--font-size-19px);
+      top: 50%;
+      transform: translateX(var(--distance-18px)) translateY(-50%);
+      pointer-events: none;
+    }
+    > input {
+      border: var(--border-secondary);
+      border-width: 2px;
+      border-radius: var(--border-radius-12px);
+      font-size: var(--font-size-19px);
+      padding: 0 var(--distance-18px) 0 128px;
+      width: 280px;
+      height: 100%;
+      &::before {
+        content: 'taaabs.com';
+      }
+      &:focus {
+        border-color: var(--border-color-primary);
+      }
+    }
+  }
+}
+.checks {
+  display: flex;
+  justify-content: center;
+  gap: var(--distance-40px);
+  &__item {
+    display: flex;
+    gap: var(--distance-12px);
+    > svg {
+      width: var(--icon-dimension-20px);
+      fill: var(--brand-color);
+    }
+    > span {
+      font-size: var(--font-size-20px);
+    }
+  }
+}
