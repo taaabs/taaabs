@@ -4,7 +4,6 @@
 .container {
   background: var(--header-background);
   border-bottom: var(--border-primary);
-  animation: var(--animation-move-from-top);
 }
 .inner {
   display: flex;
@@ -16,7 +15,6 @@
   > h1 {
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-    animation: var(--animation-fade-in);
     font-size: var(--font-size-32px);
     @include at768 {
       font-size: var(--font-size-40px);
@@ -32,7 +30,6 @@
     white-space: pre-wrap;
     margin: 0 auto;
     max-width: var(--distance-900px);
-    animation: var(--animation-fade-in-move-from-top-delayed);
     font-size: var(--font-size-18px);
     @include at768 {
       font-size: var(--font-size-20px);
