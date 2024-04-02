@@ -147,7 +147,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
 
   useUpdateEffect(() => {
     if (window.location.hash.slice(1).length) {
-      open_new_bookmark_modal({ with_autofill: true })
+      // open_new_bookmark_modal({ with_autofill: true })
     }
   }, [is_hydrated])
 

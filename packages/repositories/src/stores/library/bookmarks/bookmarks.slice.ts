@@ -73,8 +73,10 @@ export const bookmarks_slice = createSlice({
       state,
       action: PayloadAction<BookmarksState['bookmarks']>,
     ) {
-      if (!state.bookmarks || !action.payload)
+      if (!state.bookmarks || !state.incoming_bookmarks || !action.payload)
         throw new Error('Some bookmarks should be there.')
+      // Keeping incoming bookmarks up-to-date is important for filtering out lazy loaded bookmarks.
+      state.incoming_bookmarks.push(...action.payload)
       state.bookmarks.push(...action.payload)
     },
     set_has_more_bookmarks(

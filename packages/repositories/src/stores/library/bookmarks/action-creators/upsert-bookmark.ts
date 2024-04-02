@@ -27,8 +27,10 @@ export const upsert_bookmark = (params: {
       const state = get_state()
 
       if (params.bookmark.bookmark_id) {
-        if (!state.bookmarks.bookmarks)
-          throw new Error('[upsert_bookmark] Bookmarks should be there.')
+        if (!state.bookmarks.incoming_bookmarks)
+          throw new Error(
+            '[upsert_bookmark] Incoming bookmarks should be there.',
+          )
         if (!params.last_authorized_counts_params)
           throw new Error(
             '[upsert_bookmark] Last authorized counts params should be there.',
@@ -58,7 +60,7 @@ export const upsert_bookmark = (params: {
         ) {
           dispatch(
             bookmarks_actions.set_incoming_bookmarks(
-              state.bookmarks.bookmarks.filter(
+              state.bookmarks.incoming_bookmarks.filter(
                 (bookmark) => bookmark.id != params.bookmark.bookmark_id,
               ),
             ),
@@ -66,7 +68,7 @@ export const upsert_bookmark = (params: {
         } else {
           dispatch(
             bookmarks_actions.set_incoming_bookmarks(
-              state.bookmarks.bookmarks.map((bookmark) => {
+              state.bookmarks.incoming_bookmarks.map((bookmark) => {
                 if (bookmark.id == result.id) {
                   return { ...result, is_compact: false }
                 } else {

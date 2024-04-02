@@ -63,6 +63,7 @@ import ky from 'ky'
 import { use_pinned } from '@/hooks/library/use-pinned'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
+import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -83,7 +84,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
-  const { username } = useParams()
+  const { username }: { username?: string } = useParams()
   const modal_context = useContext(ModalContext)
   const [show_custom_range, set_show_custom_range] = useState(false)
   const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
@@ -401,6 +402,10 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             }
             on_clear_click={() => {
               search_hook.reset()
+              clear_library_session_storage({
+                username,
+                search_params: search_params.toString(),
+              })
               window.history.pushState(
                 {},
                 '',
@@ -988,17 +993,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             bookmarks_hook.bookmarks.length < search_hook.result.hits.length) ||
           false
         }
-        get_more_bookmarks={() => {
-          if (search_hook.hints || !bookmarks_hook.bookmarks?.length) return
-          if (search_hook.search_string) {
-            search_hook.get_bookmarks({
-              result: search_hook.result!,
-              should_get_next_page: true,
-            })
-          } else {
-            bookmarks_hook.get_bookmarks({ should_get_next_page: true })
-          }
-        }}
         slot_pinned={
           pinned_hook.items &&
           pinned_hook.items.length > 0 && (
@@ -1412,6 +1406,17 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     })
                   }}
                   on_tag_delete_click={async (tag_id) => {
+                    if (tag_view_options_hook.selected_tags.includes(tag_id)) {
+                      dispatch(
+                        bookmarks_actions.filter_out_bookmark({
+                          bookmark_id: bookmark.id,
+                        }),
+                      )
+                      if (search_hook.count) {
+                        search_hook.set_count(search_hook.count - 1)
+                      }
+                    }
+
                     const modified_bookmark: UpsertBookmark_Params = {
                       bookmark_id: bookmark.id,
                       is_public: bookmark.is_public,
@@ -1444,8 +1449,20 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         ky: ky_instance,
                       }),
                     )
+
                     toast.success(params.dictionary.library.bookmark_updated)
-                    await search_hook.update_searchable_bookmark({
+
+                    if (counts_hook.tags![tag_id].yields == 1) {
+                      dispatch(bookmarks_actions.set_bookmarks([]))
+                      dispatch(
+                        bookmarks_actions.set_is_fetching_first_bookmarks(true),
+                      )
+                      tag_view_options_hook.remove_tags_from_search_params([
+                        tag_id,
+                      ])
+                    }
+
+                    search_hook.update_searchable_bookmark({
                       bookmark: {
                         id: bookmark.id,
                         created_at: bookmark.created_at,
@@ -1461,37 +1478,10 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                           site_path: link.site_path,
                         })),
                         tags: updated_bookmark.tags.map((tag) => tag.name),
-                        tag_ids: bookmark.tags.map((tag) => tag.id),
+                        tag_ids: updated_bookmark.tags.map((tag) => tag.id),
                       },
                     })
-                    const updated_tag_ids = updated_bookmark.tags.map(
-                      (t) => t.id,
-                    )
-                    if (
-                      !tag_view_options_hook.selected_tags.every((t) =>
-                        updated_tag_ids.includes(t),
-                      )
-                    ) {
-                      // We filter out bookmark when there are other bookmarks still matching with selected tags.
-                      dispatch(
-                        bookmarks_actions.filter_out_bookmark({
-                          bookmark_id: updated_bookmark.id,
-                        }),
-                      )
-                      if (search_hook.count) {
-                        search_hook.set_count(search_hook.count - 1)
-                      }
-                    }
-                    // Unselect removed tags when there is no more bookmarks with them.
-                    tag_view_options_hook.remove_tags_from_search_params(
-                      tag_view_options_hook.selected_tags.filter((t) => {
-                        const yields = Object.entries(counts_hook.tags!).find(
-                          (tag) => parseInt(tag[0]) == t,
-                        )![1].yields
-                        return !updated_tag_ids.includes(t) && yields == 1
-                      }),
-                    )
-                    await tag_hierarchies_hook.get_tag_hierarchies({
+                    tag_hierarchies_hook.get_tag_hierarchies({
                       filter: filter_view_options_hook.current_filter,
                       gte: date_view_options_hook.current_gte,
                       lte: date_view_options_hook.current_lte,
@@ -2206,13 +2196,56 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     bookmark_id: updated_bookmark.id,
                                   }),
                                 )
-                                if (search_hook.count) {
-                                  search_hook.set_count(search_hook.count - 1)
-                                }
                               }
+
+                              await dispatch(
+                                counts_actions.refresh_authorized_counts({
+                                  last_authorized_counts_params:
+                                    get_last_authorized_counts_params(),
+                                  ky: ky_instance,
+                                }),
+                              )
+
+                              // Unselect removed tags when there is no more bookmarks with them.
+                              const tags_to_remove_from_search_params =
+                                tag_view_options_hook.selected_tags.filter(
+                                  (t) => {
+                                    const yields = Object.entries(
+                                      counts_hook.tags!,
+                                    ).find((tag) => parseInt(tag[0]) == t)![1]
+                                      .yields
+                                    return (
+                                      !updated_tag_ids.includes(t) &&
+                                      yields == 1
+                                    )
+                                  },
+                                )
+
+                              if (tags_to_remove_from_search_params.length) {
+                                dispatch(bookmarks_actions.set_bookmarks([]))
+                                dispatch(
+                                  bookmarks_actions.set_is_fetching_first_bookmarks(
+                                    true,
+                                  ),
+                                )
+                                tag_view_options_hook.remove_tags_from_search_params(
+                                  tags_to_remove_from_search_params,
+                                )
+                              }
+
+                              modal_context?.set_modal()
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
+
+                              tag_hierarchies_hook.get_tag_hierarchies({
+                                filter: filter_view_options_hook.current_filter,
+                                gte: date_view_options_hook.current_gte,
+                                lte: date_view_options_hook.current_lte,
+                              })
                               // It's critically important to run [search.update_searchable_bookmark] before [counts_actions.refresh_authorized_counts]
                               // otherwise updating bookmark from search will mess highlights. Bookmark is refreshed because of counts_refreshed_at_timestamp prop change.
-                              await search_hook.update_searchable_bookmark({
+                              search_hook.update_searchable_bookmark({
                                 bookmark: {
                                   id: bookmark.id,
                                   is_archived: is_archived_filter,
@@ -2235,39 +2268,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   ),
                                 },
                               })
-                              await dispatch(
-                                counts_actions.refresh_authorized_counts({
-                                  last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
-                                  ky: ky_instance,
-                                }),
-                              )
-                              await tag_hierarchies_hook.get_tag_hierarchies({
-                                filter: filter_view_options_hook.current_filter,
-                                gte: date_view_options_hook.current_gte,
-                                lte: date_view_options_hook.current_lte,
-                              })
-
-                              modal_context?.set_modal()
-                              toast.success(
-                                params.dictionary.library.bookmark_updated,
-                              )
-
-                              // Unselect removed tags when there is no more bookmarks with them.
-                              tag_view_options_hook.remove_tags_from_search_params(
-                                tag_view_options_hook.selected_tags.filter(
-                                  (t) => {
-                                    const yields = Object.entries(
-                                      counts_hook.tags!,
-                                    ).find((tag) => parseInt(tag[0]) == t)![1]
-                                      .yields
-                                    return (
-                                      !updated_tag_ids.includes(t) &&
-                                      yields == 1
-                                    )
-                                  },
-                                ),
-                              )
                             },
                             other_icon: (
                               <UiCommonParticles_Icon variant="EDIT" />
@@ -2441,6 +2441,18 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               ))
             : []
         }
+        get_more_bookmarks={() => {
+          if (!bookmarks_hook.bookmarks?.length) return
+          if (search_hook.search_string) {
+            if (bookmarks_hook.bookmarks?.length == search_hook.count) return
+            search_hook.get_bookmarks({
+              result: search_hook.result!,
+              should_get_next_page: true,
+            })
+          } else {
+            bookmarks_hook.get_bookmarks({ should_get_next_page: true })
+          }
+        }}
         clear_selected_tags={
           !bookmarks_hook.is_fetching_first_bookmarks &&
           !search_hook.result &&

@@ -1170,17 +1170,31 @@ export const use_search = () => {
 
     clear_hints()
 
+    let ids: number[] = []
+    if (params.should_get_next_page) {
+      // Bookmark could be filtered out.
+      const last_id = bookmarks![bookmarks!.length - 1].id.toString()
+      const idx_of_hit =
+        params.result.hits.findIndex((hit) => hit.document.id == last_id) + 1
+      ids = params.result.hits
+        .slice(
+          idx_of_hit,
+          idx_of_hit + system_values.library.bookmarks.per_page,
+        )
+        .map((hit) => parseInt(hit.id))
+    } else {
+      ids = params.result.hits
+        .slice(0, system_values.library.bookmarks.per_page)
+        .map((hit) => parseInt(hit.id))
+    }
+
     if (!username) {
       await dispatch(
         bookmarks_actions.get_authorized_bookmarks_by_ids({
           ky: ky_instance,
           is_next_page: params.should_get_next_page || false!,
           request_params: {
-            ids: params.should_get_next_page
-              ? params.result.hits
-                  .slice(bookmarks!.length, bookmarks!.length + 20)
-                  .map((hit) => parseInt(hit.id))
-              : params.result.hits.slice(0, 20).map((hit) => parseInt(hit.id)),
+            ids,
           },
         }),
       )
@@ -1190,12 +1204,8 @@ export const use_search = () => {
           ky: ky_instance,
           is_next_page: params.should_get_next_page || false,
           request_params: {
-            ids: params.should_get_next_page
-              ? params.result.hits
-                  .slice(bookmarks!.length, bookmarks!.length + 20)
-                  .map((hit) => parseInt(hit.id))
-              : params.result.hits.slice(0, 20).map((hit) => parseInt(hit.id)),
-            username: username as string,
+            ids,
+            username,
           },
         }),
       )
@@ -1525,6 +1535,8 @@ export const use_search = () => {
     if (result) {
       set_result(JSON.parse(result))
     }
+
+    // Query for resutls if hash is present and cache is not.
   }, [])
 
   return {
