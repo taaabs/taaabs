@@ -673,7 +673,12 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 toast.success(params.dictionary.library.tag_hierarchies_upated)
               }}
               selected_tag_ids={tag_view_options_hook.selected_tags}
-              is_updating={tag_hierarchies_hook.is_updating || false}
+              is_updating={
+                tag_hierarchies_hook.is_updating ||
+                bookmarks_hook.is_fetching_first_bookmarks ||
+                bookmarks_hook.is_updating_bookmarks ||
+                false
+              }
               on_item_click={(tag_ids: number[]) => {
                 tag_view_options_hook.set_many_tags_to_search_params({
                   tag_ids,
@@ -686,11 +691,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 !tag_view_options_hook.selected_tags.length
               }
               on_click_all_bookmarks={() => {
-                if (
-                  bookmarks_hook.is_fetching_first_bookmarks ||
-                  bookmarks_hook.is_updating_bookmarks
-                )
-                  return
                 tag_view_options_hook.clear_selected_tags()
                 if (bookmarks_hook.showing_bookmarks_fetched_by_ids) {
                   search_hook.reset()

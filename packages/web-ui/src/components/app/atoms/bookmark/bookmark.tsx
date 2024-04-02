@@ -120,7 +120,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
     const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
       useState<number>()
-    const { context_menu, on_context_menu } = useContextMenu(
+    const { contextMenu, onContextMenu } = useContextMenu(
       <>
         <DropdownMenu
           items={[
@@ -212,7 +212,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             }}
           >
             <div className={styles.bookmark}>
-              {context_menu}
+              {contextMenu}
               <div className={styles.bookmark__main}>
                 <div
                   className={cn(styles.bookmark__main__top, {
@@ -404,7 +404,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           props.on_tag_delete_click
                             ? (e) => {
                                 set_context_menu_of_tag_id(tag.id)
-                                on_context_menu(e)
+                                onContextMenu(e)
                               }
                             : undefined
                         }

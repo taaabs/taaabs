@@ -53,7 +53,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const [selected_tag_ids, set_selected_tag_ids] = useState<number[]>([])
     const [context_menu_of_item_id, set_context_menu_of_item_id] =
       useState<number>()
-    const { context_menu, on_context_menu } = useContextMenu(
+    const { contextMenu, onContextMenu } = useContextMenu(
       <>
         <DropdownMenu
           items={[
@@ -190,7 +190,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             }}
             onContextMenu={(e) => {
               set_context_menu_of_item_id((item as Item).id)
-              on_context_menu(e)
+              onContextMenu(e)
             }}
           >
             <div>
@@ -305,7 +305,10 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     }
 
     return (
-      <div className={styles.container}>
+      <div
+        className={styles.container}
+        style={{ pointerEvents: props.is_updating ? 'none' : undefined }}
+      >
         <button
           className={cn(styles.tag__button, {
             [styles['tag__button--active']]: props.is_all_bookmarks_selected,
@@ -326,7 +329,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             set_is_dragging(false)
           }}
           maxDepth={5}
-          disableDrag={!props.is_draggable || props.is_updating}
+          disableDrag={!props.is_draggable}
           renderCollapseIcon={({ isCollapsed }) =>
             render_collapse_icon({ is_collapsed: isCollapsed })
           }
@@ -375,7 +378,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             {!items.length && props.translations.drag_here}
           </div>
         )}
-        {context_menu}
+        {contextMenu}
       </div>
     )
   },
