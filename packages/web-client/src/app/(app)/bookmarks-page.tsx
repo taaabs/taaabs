@@ -310,6 +310,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             }
             placeholder={params.dictionary.library.search_placeholder}
             hints={!search_hook.is_initializing ? search_hook.hints : undefined}
+            hints_set_at_timestamp={search_hook.hints_set_at_timestamp}
+            queried_at_timestamp={search_hook.queried_at_timestamp}
             on_click_hint={(i) => {
               const search_string =
                 search_hook.search_string + search_hook.hints![i].completion
@@ -985,14 +987,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           bookmarks_hook.is_fetching_more_bookmarks ||
           search_hook.is_initializing
         }
-        has_more_bookmarks={
-          (!search_hook.search_string && bookmarks_hook.has_more_bookmarks) ||
-          (search_hook.search_string &&
-            bookmarks_hook.bookmarks &&
-            search_hook.result !== undefined &&
-            bookmarks_hook.bookmarks.length < search_hook.result.hits.length) ||
-          false
-        }
         slot_pinned={
           pinned_hook.items &&
           pinned_hook.items.length > 0 && (
@@ -1071,6 +1065,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   first_bookmarks_fetched_at_timestamp={
                     bookmarks_hook.first_bookmarks_fetched_at_timestamp
                   }
+                  search_queried_at_timestamp={search_hook.queried_at_timestamp}
                   bookmark_id={bookmark.id}
                   on_tag_drag_start={
                     !username
@@ -1078,6 +1073,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       : undefined
                   }
                   density={bookmarks_hook.density}
+                  is_search_result={
+                    bookmarks_hook.showing_bookmarks_fetched_by_ids
+                  }
                   is_compact={bookmark.is_compact}
                   updated_at={bookmark.updated_at}
                   is_public={bookmark.is_public}
@@ -1136,11 +1134,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   }
                   counts_refreshed_at_timestamp={
                     counts_hook.fetched_at_timestamp
-                  }
-                  number_of_selected_tags={
-                    bookmarks_hook.is_fetching_first_bookmarks
-                      ? counts_hook.selected_tags.length
-                      : tag_view_options_hook.selected_tags.length
                   }
                   search_params={search_params.toString()}
                   tags={
@@ -1299,12 +1292,17 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       bookmarks_actions.upsert_bookmark({
                         bookmark: modified_bookmark,
                         last_authorized_counts_params:
-                          get_last_authorized_counts_params(),
+                          JSON.parse(
+                            sessionStorage.getItem(
+                              browser_storage.session_storage.library
+                                .last_authorized_counts_params,
+                            ) || 'null',
+                          ) || undefined,
                         ky: ky_instance,
                       }),
                     )
                     toast.success(params.dictionary.library.bookmark_updated)
-                    await search_hook.update_searchable_bookmark({
+                    search_hook.update_searchable_bookmark({
                       bookmark: {
                         id: bookmark.id,
                         created_at: bookmark.created_at,
@@ -1323,7 +1321,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         tag_ids: bookmark.tags.map((tag) => tag.id),
                       },
                     })
-                    await tag_hierarchies_hook.get_tag_hierarchies({
+                    tag_hierarchies_hook.get_tag_hierarchies({
                       filter: filter_view_options_hook.current_filter,
                       gte: date_view_options_hook.current_gte,
                       lte: date_view_options_hook.current_lte,
@@ -1380,12 +1378,17 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       bookmarks_actions.upsert_bookmark({
                         bookmark: modified_bookmark,
                         last_authorized_counts_params:
-                          get_last_authorized_counts_params(),
+                          JSON.parse(
+                            sessionStorage.getItem(
+                              browser_storage.session_storage.library
+                                .last_authorized_counts_params,
+                            ) || 'null',
+                          ) || undefined,
                         ky: ky_instance,
                       }),
                     )
                     toast.success(params.dictionary.library.bookmark_updated)
-                    await search_hook.update_searchable_bookmark({
+                    search_hook.update_searchable_bookmark({
                       bookmark: {
                         id: bookmark.id,
                         created_at: bookmark.created_at,
@@ -1416,11 +1419,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 bookmark_id: bookmark.id,
                               }),
                             )
-                            if (search_hook.count) {
-                              search_hook.set_count(search_hook.count - 1)
-                            }
                           }
-
                           const modified_bookmark: UpsertBookmark_Params = {
                             bookmark_id: bookmark.id,
                             is_public: bookmark.is_public,
@@ -1449,15 +1448,21 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                             bookmarks_actions.upsert_bookmark({
                               bookmark: modified_bookmark,
                               last_authorized_counts_params:
-                                get_last_authorized_counts_params(),
+                                JSON.parse(
+                                  sessionStorage.getItem(
+                                    browser_storage.session_storage.library
+                                      .last_authorized_counts_params,
+                                  ) || 'null',
+                                ) || undefined,
                               ky: ky_instance,
                             }),
                           )
-
+                          if (search_hook.count) {
+                            search_hook.set_count(search_hook.count - 1)
+                          }
                           toast.success(
                             params.dictionary.library.bookmark_updated,
                           )
-
                           if (counts_hook.tags![tag_id].yields == 1) {
                             dispatch(bookmarks_actions.set_bookmarks([]))
                             dispatch(
@@ -1469,7 +1474,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               [tag_id],
                             )
                           }
-
                           search_hook.update_searchable_bookmark({
                             bookmark: {
                               id: bookmark.id,
@@ -1545,7 +1549,12 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 bookmarks_actions.upsert_bookmark({
                                   bookmark: modified_bookmark,
                                   last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
                                   ky: ky_instance,
                                 }),
                               )
@@ -1602,33 +1611,15 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 bookmarks_actions.upsert_bookmark({
                                   bookmark: modified_bookmark,
                                   last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
                                   ky: ky_instance,
                                 }),
                               )
-                              toast.success(
-                                params.dictionary.library.bookmark_updated,
-                              )
-                              await search_hook.update_searchable_bookmark({
-                                bookmark: {
-                                  id: bookmark.id,
-                                  created_at: bookmark.created_at,
-                                  visited_at: bookmark.visited_at,
-                                  updated_at: updated_bookmark.updated_at,
-                                  title: bookmark.title,
-                                  note: bookmark.note,
-                                  is_archived: is_archived_filter,
-                                  is_unread,
-                                  stars: bookmark.stars,
-                                  links: bookmark.links.map((link) => ({
-                                    url: link.url,
-                                    site_path: link.site_path,
-                                    is_public: link.is_public,
-                                  })),
-                                  tags: bookmark.tags.map((tag) => tag.name),
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
-                                },
-                              })
                               if (
                                 search_hook.count &&
                                 (filter_view_options_hook.current_filter ==
@@ -1641,6 +1632,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count! - 1)
                               }
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
                               // Delete bookmarks from session storage from filtered results.
                               if (bookmark.is_unread) {
                                 for (const key in sessionStorage) {
@@ -1664,7 +1658,27 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   }
                                 }
                               }
-                              await tag_hierarchies_hook.get_tag_hierarchies({
+                              search_hook.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread,
+                                  stars: bookmark.stars,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                    is_public: link.is_public,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
@@ -1702,33 +1716,15 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 bookmarks_actions.upsert_bookmark({
                                   bookmark: modified_bookmark,
                                   last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
                                   ky: ky_instance,
                                 }),
                               )
-                              toast.success(
-                                params.dictionary.library.bookmark_updated,
-                              )
-                              await search_hook.update_searchable_bookmark({
-                                bookmark: {
-                                  id: bookmark.id,
-                                  created_at: bookmark.created_at,
-                                  visited_at: bookmark.visited_at,
-                                  updated_at: updated_bookmark.updated_at,
-                                  title: bookmark.title,
-                                  note: bookmark.note,
-                                  is_archived: is_archived_filter,
-                                  is_unread: bookmark.is_unread,
-                                  stars: bookmark.stars == 1 ? 0 : 1,
-                                  links: bookmark.links.map((link) => ({
-                                    url: link.url,
-                                    site_path: link.site_path,
-                                    is_public: link.is_public,
-                                  })),
-                                  tags: bookmark.tags.map((tag) => tag.name),
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
-                                },
-                              })
                               if (
                                 search_hook.count &&
                                 (filter_view_options_hook.current_filter ==
@@ -1743,6 +1739,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count - 1)
                               }
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
                               // Delete bookmarks from session storage from filtered results.
                               if (bookmark.stars == 1) {
                                 for (const key in sessionStorage) {
@@ -1766,7 +1765,27 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   }
                                 }
                               }
-                              await tag_hierarchies_hook.get_tag_hierarchies({
+                              search_hook.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars == 1 ? 0 : 1,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                    is_public: link.is_public,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
@@ -1804,32 +1823,15 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 bookmarks_actions.upsert_bookmark({
                                   bookmark: modified_bookmark,
                                   last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
                                   ky: ky_instance,
                                 }),
                               )
-                              toast.success(
-                                params.dictionary.library.bookmark_updated,
-                              )
-                              await search_hook.update_searchable_bookmark({
-                                bookmark: {
-                                  id: bookmark.id,
-                                  created_at: bookmark.created_at,
-                                  visited_at: bookmark.visited_at,
-                                  updated_at: updated_bookmark.updated_at,
-                                  title: bookmark.title,
-                                  note: bookmark.note,
-                                  is_archived: is_archived_filter,
-                                  is_unread: bookmark.is_unread,
-                                  stars: bookmark.stars == 2 ? 0 : 2,
-                                  links: bookmark.links.map((link) => ({
-                                    url: link.url,
-                                    site_path: link.site_path,
-                                  })),
-                                  tags: bookmark.tags.map((tag) => tag.name),
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
-                                },
-                              })
                               if (
                                 search_hook.count &&
                                 (filter_view_options_hook.current_filter ==
@@ -1844,6 +1846,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count - 1)
                               }
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
                               if (bookmark.stars == 2) {
                                 for (const key in sessionStorage) {
                                   if (
@@ -1866,7 +1871,26 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   }
                                 }
                               }
-                              await tag_hierarchies_hook.get_tag_hierarchies({
+                              search_hook.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars == 2 ? 0 : 2,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
@@ -1904,32 +1928,15 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 bookmarks_actions.upsert_bookmark({
                                   bookmark: modified_bookmark,
                                   last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
                                   ky: ky_instance,
                                 }),
                               )
-                              toast.success(
-                                params.dictionary.library.bookmark_updated,
-                              )
-                              await search_hook.update_searchable_bookmark({
-                                bookmark: {
-                                  id: bookmark.id,
-                                  created_at: bookmark.created_at,
-                                  visited_at: bookmark.visited_at,
-                                  updated_at: updated_bookmark.updated_at,
-                                  title: bookmark.title,
-                                  note: bookmark.note,
-                                  is_archived: is_archived_filter,
-                                  is_unread: bookmark.is_unread,
-                                  stars: bookmark.stars == 3 ? 0 : 3,
-                                  links: bookmark.links.map((link) => ({
-                                    url: link.url,
-                                    site_path: link.site_path,
-                                  })),
-                                  tags: bookmark.tags.map((tag) => tag.name),
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
-                                },
-                              })
                               if (
                                 search_hook.count &&
                                 (filter_view_options_hook.current_filter ==
@@ -1944,6 +1951,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count - 1)
                               }
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
                               if (bookmark.stars == 3) {
                                 for (const key in sessionStorage) {
                                   if (
@@ -1966,7 +1976,26 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   }
                                 }
                               }
-                              await tag_hierarchies_hook.get_tag_hierarchies({
+                              search_hook.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars == 3 ? 0 : 3,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
@@ -2004,32 +2033,15 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 bookmarks_actions.upsert_bookmark({
                                   bookmark: modified_bookmark,
                                   last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
                                   ky: ky_instance,
                                 }),
                               )
-                              toast.success(
-                                params.dictionary.library.bookmark_updated,
-                              )
-                              await search_hook.update_searchable_bookmark({
-                                bookmark: {
-                                  id: bookmark.id,
-                                  created_at: bookmark.created_at,
-                                  visited_at: bookmark.visited_at,
-                                  updated_at: updated_bookmark.updated_at,
-                                  title: bookmark.title,
-                                  note: bookmark.note,
-                                  is_archived: is_archived_filter,
-                                  is_unread: bookmark.is_unread,
-                                  stars: bookmark.stars == 4 ? 0 : 4,
-                                  links: bookmark.links.map((link) => ({
-                                    url: link.url,
-                                    site_path: link.site_path,
-                                  })),
-                                  tags: bookmark.tags.map((tag) => tag.name),
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
-                                },
-                              })
                               if (
                                 search_hook.count &&
                                 (filter_view_options_hook.current_filter ==
@@ -2044,6 +2056,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count - 1)
                               }
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
                               if (bookmark.stars == 4) {
                                 for (const key in sessionStorage) {
                                   if (
@@ -2066,7 +2081,26 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   }
                                 }
                               }
-                              await tag_hierarchies_hook.get_tag_hierarchies({
+                              search_hook.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars == 4 ? 0 : 4,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
@@ -2104,32 +2138,15 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 bookmarks_actions.upsert_bookmark({
                                   bookmark: modified_bookmark,
                                   last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
                                   ky: ky_instance,
                                 }),
                               )
-                              toast.success(
-                                params.dictionary.library.bookmark_updated,
-                              )
-                              await search_hook.update_searchable_bookmark({
-                                bookmark: {
-                                  id: bookmark.id,
-                                  created_at: bookmark.created_at,
-                                  visited_at: bookmark.visited_at,
-                                  updated_at: updated_bookmark.updated_at,
-                                  title: bookmark.title,
-                                  note: bookmark.note,
-                                  is_archived: is_archived_filter,
-                                  is_unread: bookmark.is_unread,
-                                  stars: bookmark.stars == 4 ? 0 : 4,
-                                  links: bookmark.links.map((link) => ({
-                                    url: link.url,
-                                    site_path: link.site_path,
-                                  })),
-                                  tags: bookmark.tags.map((tag) => tag.name),
-                                  tag_ids: bookmark.tags.map((tag) => tag.id),
-                                },
-                              })
                               if (
                                 search_hook.count &&
                                 (filter_view_options_hook.current_filter ==
@@ -2144,6 +2161,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               ) {
                                 search_hook.set_count(search_hook.count - 1)
                               }
+                              toast.success(
+                                params.dictionary.library.bookmark_updated,
+                              )
                               if (bookmark.stars == 5) {
                                 for (const key in sessionStorage) {
                                   if (
@@ -2166,7 +2186,26 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   }
                                 }
                               }
-                              await tag_hierarchies_hook.get_tag_hierarchies({
+                              search_hook.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars == 4 ? 0 : 4,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                              tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
@@ -2210,12 +2249,20 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     bookmark_id: updated_bookmark.id,
                                   }),
                                 )
+                                if (search_hook.count) {
+                                  search_hook.set_count(search_hook.count - 1)
+                                }
                               }
 
                               await dispatch(
                                 counts_actions.refresh_authorized_counts({
                                   last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
                                   ky: ky_instance,
                                 }),
                               )
@@ -2330,23 +2377,23 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 bookmarks_actions.upsert_bookmark({
                                   bookmark: modified_bookmark,
                                   last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
                                   ky: ky_instance,
                                 }),
                               )
+                              if (search_hook.count) {
+                                search_hook.set_count(search_hook.count - 1)
+                              }
                               toast.success(
                                 `Bookmark has been ${
                                   is_archived_filter ? 'restored' : 'archived'
                                 }`,
                               )
-                              tag_hierarchies_hook.get_tag_hierarchies({
-                                filter: filter_view_options_hook.current_filter,
-                                gte: date_view_options_hook.current_gte,
-                                lte: date_view_options_hook.current_lte,
-                              })
-                              if (search_hook.count) {
-                                search_hook.set_count(search_hook.count - 1)
-                              }
                               search_hook.update_searchable_bookmark({
                                 bookmark: {
                                   id: bookmark.id,
@@ -2367,6 +2414,11 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   tag_ids: bookmark.tags.map((tag) => tag.id),
                                 },
                               })
+                              tag_hierarchies_hook.get_tag_hierarchies({
+                                filter: filter_view_options_hook.current_filter,
+                                gte: date_view_options_hook.current_gte,
+                                lte: date_view_options_hook.current_lte,
+                              })
                               if (
                                 bookmarks_hook.bookmarks &&
                                 bookmarks_hook.bookmarks.length == 1 &&
@@ -2383,7 +2435,12 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               await dispatch(
                                 bookmarks_actions.delete_bookmark({
                                   last_authorized_counts_params:
-                                    get_last_authorized_counts_params(),
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
                                   bookmark_id: bookmark.id,
                                   ky: ky_instance,
                                 }),
@@ -2392,29 +2449,14 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                 search_hook.set_count(search_hook.count - 1)
                               }
                               toast.success('Bookmark has been deleted')
+                              search_hook.delete_searchable_bookmark({
+                                bookmark_id: bookmark.id,
+                              })
                               tag_hierarchies_hook.get_tag_hierarchies({
                                 filter: filter_view_options_hook.current_filter,
                                 gte: date_view_options_hook.current_gte,
                                 lte: date_view_options_hook.current_lte,
                               })
-                              search_hook.delete_searchable_bookmark({
-                                bookmark_id: bookmark.id,
-                              })
-                              // Delete bookmark from session storage, so user, when navigating back will not see it.
-                              for (const key in sessionStorage) {
-                                if (key.startsWith('library.bookmarks.?')) {
-                                  const bookmarks: Bookmark_Entity[] =
-                                    JSON.parse(sessionStorage.getItem(key)!)
-                                  sessionStorage.setItem(
-                                    key,
-                                    JSON.stringify(
-                                      bookmarks.filter(
-                                        (b) => b.id != bookmark.id,
-                                      ),
-                                    ),
-                                  )
-                                }
-                              }
                             },
                             other_icon: (
                               <UiCommonParticles_Icon variant="DELETE" />
@@ -2455,16 +2497,21 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               ))
             : []
         }
-        get_more_bookmarks={() => {
-          if (!bookmarks_hook.bookmarks?.length) return
-          if (search_hook.search_string) {
-            if (bookmarks_hook.bookmarks?.length == search_hook.count) return
+        on_page_bottom_reached={() => {
+          if (bookmarks_hook.is_fetching_data) return
+          if (!search_hook.search_string && bookmarks_hook.has_more_bookmarks) {
+            bookmarks_hook.get_bookmarks({ should_get_next_page: true })
+          } else if (
+            search_hook.search_string &&
+            search_hook.count &&
+            bookmarks_hook.bookmarks &&
+            bookmarks_hook.bookmarks.length &&
+            bookmarks_hook.bookmarks.length < search_hook.count
+          ) {
             search_hook.get_bookmarks({
               result: search_hook.result!,
               should_get_next_page: true,
             })
-          } else {
-            bookmarks_hook.get_bookmarks({ should_get_next_page: true })
           }
         }}
         clear_selected_tags={
@@ -2507,13 +2554,3 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
 }
 
 export default BookmarksPage
-
-const get_last_authorized_counts_params = () => {
-  return (
-    JSON.parse(
-      sessionStorage.getItem(
-        browser_storage.session_storage.library.last_authorized_counts_params,
-      ) || '',
-    ) || undefined
-  )
-}

@@ -25,8 +25,7 @@ export namespace Library {
     is_updating_bookmarks?: boolean
     is_fetching_first_bookmarks: boolean
     is_fetching_more_bookmarks: boolean
-    has_more_bookmarks: boolean
-    get_more_bookmarks: () => void
+    on_page_bottom_reached: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
     show_bookmarks_skeleton: boolean
@@ -224,14 +223,8 @@ export const Library: React.FC<Library.Props> = (props) => {
   }
 
   useUpdateEffect(() => {
-    if (
-      is_end_of_bookmarks_visible &&
-      props.has_more_bookmarks &&
-      !props.is_fetching_more_bookmarks &&
-      !props.is_fetching_first_bookmarks
-    ) {
-      props.get_more_bookmarks()
-    }
+    if (!is_end_of_bookmarks_visible) return
+    props.on_page_bottom_reached()
   }, [is_end_of_bookmarks_visible])
 
   useUpdateEffect(() => {
@@ -383,70 +376,61 @@ export const Library: React.FC<Library.Props> = (props) => {
                 is_left_side_open || is_right_side_open ? 'none' : undefined,
             }}
           >
-            <div>
+            <div
+              className={cn(styles.main__inner__sticky, {
+                [styles['main__inner__sticky--scrolled']]: is_scrolled,
+              })}
+            >
+              <div className={styles['main__inner__sticky__mobile-title-bar']}>
+                <Subcomponent_MobileTitleBar
+                  swipe_left_on_click={
+                    !is_left_side_open ? toggle_left_side : undefined
+                  }
+                  swipe_right_on_click={
+                    !is_right_side_open ? toggle_right_side : undefined
+                  }
+                  text={
+                    props.mobile_title_bar ? props.mobile_title_bar : undefined
+                  }
+                />
+              </div>
+              <div className={styles.main__inner__sticky__search}>
+                {props.slot_search}
+              </div>
+            </div>
+
+            {props.show_bookmarks_skeleton ? (
+              <div className={styles['main__inner__skeleton']}>
+                {[...Array(20)].map((_, i) => (
+                  <Skeleton key={i} />
+                ))}
+              </div>
+            ) : (
               <div
-                className={cn(styles.main__inner__sticky, {
-                  [styles['main__inner__sticky--scrolled']]: is_scrolled,
+                className={cn({
+                  [styles.dimmed]:
+                    props.is_fetching_first_bookmarks ||
+                    props.is_updating_bookmarks,
                 })}
               >
-                <div
-                  className={styles['main__inner__sticky__mobile-title-bar']}
-                >
-                  <Subcomponent_MobileTitleBar
-                    swipe_left_on_click={
-                      !is_left_side_open ? toggle_left_side : undefined
-                    }
-                    swipe_right_on_click={
-                      !is_right_side_open ? toggle_right_side : undefined
-                    }
-                    text={
-                      props.mobile_title_bar
-                        ? props.mobile_title_bar
-                        : undefined
-                    }
-                  />
+                <div className={styles.main__inner__pinned}>
+                  {props.slot_pinned}
                 </div>
-                <div className={styles.main__inner__sticky__search}>
-                  {props.slot_search}
-                </div>
+                {props.slot_bookmarks}
               </div>
-
-              {props.show_bookmarks_skeleton ? (
-                <div className={styles['main__inner__skeleton']}>
-                  {[...Array(20)].map((_, i) => (
-                    <Skeleton key={i} />
-                  ))}
-                </div>
-              ) : (
-                <div
-                  className={cn({
-                    [styles.dimmed]:
-                      props.is_fetching_first_bookmarks ||
-                      props.is_updating_bookmarks,
-                  })}
-                >
-                  <div className={styles.main__inner__pinned}>
-                    {props.slot_pinned}
-                  </div>
-                  {props.slot_bookmarks}
-                </div>
+            )}
+            <div className={styles['main__inner__info']} ref={end_of_bookmarks}>
+              {props.info_text && <span>{props.info_text}</span>}
+              {props.clear_date_range && (
+                <button onClick={props.clear_date_range}>
+                  Clear custom range
+                </button>
               )}
-              <div
-                className={styles['main__inner__info']}
-                ref={end_of_bookmarks}
-              >
-                {props.info_text && <span>{props.info_text}</span>}
-                {props.clear_date_range && (
-                  <button onClick={props.clear_date_range}>
-                    Clear custom range
-                  </button>
-                )}
-                {props.clear_selected_tags && (
-                  <button onClick={props.clear_selected_tags}>
-                    Clear selected tags
-                  </button>
-                )}
-              </div>
+              {props.clear_selected_tags && (
+                <button onClick={props.clear_selected_tags}>
+                  Clear selected tags
+                </button>
+              )}
             </div>
           </div>
         </main>

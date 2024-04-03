@@ -142,11 +142,15 @@
       padding: 0 var(--distance-18px) 0 128px;
       width: 280px;
       height: 100%;
+      @include transition-150ms(border-color);
       &::before {
         content: 'taaabs.com';
       }
+      &:hover {
+        border-color: var(--border-color-hover);
+      }
       &:focus {
-        border-color: var(--border-color-primary);
+        border-color: var(--brand-color);
       }
     }
   }

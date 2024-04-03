@@ -45,6 +45,7 @@ export namespace Bookmark {
 
   export type Props = {
     first_bookmarks_fetched_at_timestamp?: number
+    search_queried_at_timestamp?: number
     is_search_result?: boolean
     bookmark_id: number
     updated_at: string
@@ -61,7 +62,6 @@ export namespace Bookmark {
     on_mouse_up_on_tag: (tag_id: number) => void
     on_give_point_click: () => void
     tags: { id: number; name: string; yields?: number; is_selected?: boolean }[]
-    number_of_selected_tags: number
     search_params?: string
     on_click: () => void
     is_unread?: boolean
@@ -182,6 +182,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           <div
             className={cn(styles.container, {
               [styles['container--clickable']]: props.density == 'compact',
+              [styles['container--search-result']]: props.is_search_result,
             })}
             role="button"
             onClick={() => {
@@ -894,19 +895,18 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
   (o, n) =>
     o.first_bookmarks_fetched_at_timestamp ==
       n.first_bookmarks_fetched_at_timestamp &&
+    o.search_queried_at_timestamp == n.search_queried_at_timestamp &&
+    o.is_search_result == n.is_search_result &&
     o.points == n.points &&
     o.is_compact == n.is_compact &&
     o.density == n.density &&
+    o.render_height == n.render_height &&
     o.updated_at == n.updated_at &&
     o.pinned_links_count == n.pinned_links_count &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&
     o.counts_refreshed_at_timestamp == n.counts_refreshed_at_timestamp &&
     o.dragged_tag?.id == n.dragged_tag?.id,
-
-  // o.render_height == n.render_height,
-  // o.search_params == n.search_params &&
-  // o.number_of_selected_tags == n.number_of_selected_tags &&
 )
 
 function url_path_for_display(params: {

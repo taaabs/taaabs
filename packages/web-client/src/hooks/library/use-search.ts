@@ -113,6 +113,10 @@ export const use_search = () => {
   const [highlights_sites_variants, set_highlights_sites_variants] =
     useState<string[]>()
   const [count, set_count] = useState<number>()
+  // Used for refreshing highlights after bookmark update.
+  const [queried_at_timestamp, set_queried_at_timestamp] = useState<number>()
+  const [hints_set_at_timestamp, set_hints_set_at_timestamp] =
+    useState<number>()
 
   const is_archived_filter =
     current_filter == Filter.ARCHIVED ||
@@ -562,7 +566,9 @@ export const use_search = () => {
             ? { id: ids_to_search_amongst }
             : {}),
           ...(current_filter == Filter.UNREAD ||
-          current_filter == Filter.STARRED_UNREAD
+          current_filter == Filter.STARRED_UNREAD ||
+          current_filter == Filter.ARCHIVED_UNREAD ||
+          current_filter == Filter.ARCHIVED_STARRED_UNREAD
             ? {
                 is_unread: true,
               }
@@ -570,7 +576,9 @@ export const use_search = () => {
           stars: {
             gte:
               current_filter == Filter.STARRED ||
-              current_filter == Filter.STARRED_UNREAD
+              current_filter == Filter.STARRED_UNREAD ||
+              current_filter == Filter.ARCHIVED_STARRED ||
+              current_filter == Filter.ARCHIVED_STARRED_UNREAD
                 ? 1
                 : 0,
           },
@@ -736,6 +744,7 @@ export const use_search = () => {
         )
       }
     }
+    set_queried_at_timestamp(Date.now())
   }
 
   const get_hints = async () => {
@@ -807,7 +816,9 @@ export const use_search = () => {
                 ? { id: ids_to_search_amongst }
                 : {}),
               ...(current_filter == Filter.UNREAD ||
-              current_filter == Filter.STARRED_UNREAD
+              current_filter == Filter.STARRED_UNREAD ||
+              current_filter == Filter.ARCHIVED_UNREAD ||
+              current_filter == Filter.ARCHIVED_STARRED_UNREAD
                 ? {
                     is_unread: true,
                   }
@@ -815,7 +826,9 @@ export const use_search = () => {
               stars: {
                 gte:
                   current_filter == Filter.STARRED ||
-                  current_filter == Filter.STARRED_UNREAD
+                  current_filter == Filter.STARRED_UNREAD ||
+                  current_filter == Filter.ARCHIVED_STARRED ||
+                  current_filter == Filter.ARCHIVED_STARRED_UNREAD
                     ? 1
                     : 0,
               },
@@ -914,7 +927,9 @@ export const use_search = () => {
               where: {
                 id: ids_of_hits,
                 ...(current_filter == Filter.UNREAD ||
-                current_filter == Filter.STARRED_UNREAD
+                current_filter == Filter.STARRED_UNREAD ||
+                current_filter == Filter.ARCHIVED_UNREAD ||
+                current_filter == Filter.ARCHIVED_STARRED_UNREAD
                   ? {
                       is_unread: true,
                     }
@@ -922,7 +937,9 @@ export const use_search = () => {
                 stars: {
                   gte:
                     current_filter == Filter.STARRED ||
-                    current_filter == Filter.STARRED_UNREAD
+                    current_filter == Filter.STARRED_UNREAD ||
+                    current_filter == Filter.ARCHIVED_STARRED ||
+                    current_filter == Filter.ARCHIVED_STARRED_UNREAD
                       ? 1
                       : 0,
                 },
@@ -1034,7 +1051,9 @@ export const use_search = () => {
               where: {
                 id: ids_of_hits,
                 ...(current_filter == Filter.UNREAD ||
-                current_filter == Filter.STARRED_UNREAD
+                current_filter == Filter.STARRED_UNREAD ||
+                current_filter == Filter.ARCHIVED_UNREAD ||
+                current_filter == Filter.ARCHIVED_STARRED_UNREAD
                   ? {
                       is_unread: true,
                     }
@@ -1042,7 +1061,9 @@ export const use_search = () => {
                 stars: {
                   gte:
                     current_filter == Filter.STARRED ||
-                    current_filter == Filter.STARRED_UNREAD
+                    current_filter == Filter.STARRED_UNREAD ||
+                    current_filter == Filter.ARCHIVED_STARRED ||
+                    current_filter == Filter.ARCHIVED_STARRED_UNREAD
                       ? 1
                       : 0,
                 },
@@ -1114,6 +1135,7 @@ export const use_search = () => {
         }
       }
     }
+    set_hints_set_at_timestamp(Date.now())
   }
 
   useUpdateEffect(() => {
@@ -1149,6 +1171,7 @@ export const use_search = () => {
 
   const reset = () => {
     set_search_string('')
+    set_count(undefined)
     set_result(undefined)
     set_hints(undefined)
     set_highlights(undefined)
@@ -1224,26 +1247,30 @@ export const use_search = () => {
     )
 
     if (!is_archived_filter) {
-      const new_all_bookmarks = bookmarks_just_tags!.filter(
+      const new_bookmarks_just_tags = bookmarks_just_tags!.filter(
         (bookmark) => bookmark.id != params.bookmark_id,
       )
-      set_bookmarks_just_tags(new_all_bookmarks)
-      await cache_data({
-        db: db!,
-        bookmarks_just_tags: new_all_bookmarks,
-        is_archived: false,
-      })
+      set_bookmarks_just_tags(new_bookmarks_just_tags)
+      setTimeout(() => {
+        cache_data({
+          db: db!,
+          bookmarks_just_tags: new_bookmarks_just_tags,
+          is_archived: false,
+        })
+      }, 0)
     } else {
       const new_archived_bookmarks_just_tags =
         archived_bookmarks_just_tags!.filter(
           (bookmark) => bookmark.id != params.bookmark_id,
         )
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      await cache_data({
-        db: archived_db!,
-        bookmarks_just_tags: new_archived_bookmarks_just_tags,
-        is_archived: true,
-      })
+      setTimeout(() => {
+        cache_data({
+          db: archived_db!,
+          bookmarks_just_tags: new_archived_bookmarks_just_tags,
+          is_archived: true,
+        })
+      }, 0)
     }
     if (result?.hits.length) {
       await query_db({
@@ -1318,8 +1345,8 @@ export const use_search = () => {
         })
       }
       set_bookmarks_just_tags(new_bookmarks_just_tags)
-      setTimeout(async () => {
-        await cache_data({
+      setTimeout(() => {
+        cache_data({
           db: db!,
           bookmarks_just_tags: new_bookmarks_just_tags,
           is_archived: false,
@@ -1337,8 +1364,8 @@ export const use_search = () => {
         })
       }
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      setTimeout(async () => {
-        await cache_data({
+      setTimeout(() => {
+        cache_data({
           db: archived_db!,
           bookmarks_just_tags: new_archived_bookmarks_just_tags,
           is_archived: true,
@@ -1571,6 +1598,8 @@ export const use_search = () => {
     current_filter,
     highlights_sites_variants,
     clear_cached_data,
+    queried_at_timestamp,
+    hints_set_at_timestamp,
   }
 }
 

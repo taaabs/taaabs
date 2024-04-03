@@ -51,6 +51,9 @@ export const get_public_bookmarks_by_ids = (params: {
         dispatch(bookmarks_actions.set_more_bookmarks(bookmarks_with_density))
         dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(false))
       } else {
+        dispatch(
+          bookmarks_actions.set_incoming_bookmarks(bookmarks_with_density),
+        )
         dispatch(bookmarks_actions.set_bookmarks(bookmarks_with_density))
         dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
         dispatch(

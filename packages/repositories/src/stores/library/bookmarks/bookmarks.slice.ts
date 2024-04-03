@@ -2,6 +2,7 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as thunks from './action-creators'
+import { system_values } from '@shared/constants/system-values'
 
 type BookmarksState = {
   is_fetching_data: boolean
@@ -114,11 +115,13 @@ export const bookmarks_slice = createSlice({
     ) {
       state.density = action.payload
       if (state.bookmarks) {
-        state.bookmarks = state.bookmarks.slice(0, 20).map((bookmark) => ({
-          ...bookmark,
-          render_height: undefined,
-          is_compact: action.payload == 'compact',
-        }))
+        state.bookmarks = state.bookmarks
+          .slice(0, system_values.library.bookmarks.per_page)
+          .map((bookmark) => ({
+            ...bookmark,
+            render_height: undefined,
+            is_compact: action.payload == 'compact',
+          }))
       }
     },
     set_bookmark_is_compact(

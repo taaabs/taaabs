@@ -28,6 +28,8 @@ export namespace LibrarySearch {
     on_click_recent_hint_remove: (index: number) => void
     on_clear_click: () => void
     hints?: Hint[]
+    hints_set_at_timestamp?: number
+    queried_at_timestamp?: number
     results_count?: number
     is_slash_shortcut_disabled: boolean
     on_click_get_help: () => void
@@ -422,7 +424,6 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
     o.is_loading == n.is_loading &&
     o.is_focused == n.is_focused &&
     o.search_string == n.search_string &&
-    o.is_slash_shortcut_disabled == n.is_slash_shortcut_disabled &&
     o.loading_progress_percentage == n.loading_progress_percentage &&
     o.placeholder == n.placeholder &&
     o.results_count == n.results_count &&
@@ -432,5 +433,6 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
     o.on_clear_click == n.on_clear_click &&
     o.on_click_hint == n.on_click_hint &&
     o.on_click_recent_hint_remove == n.on_click_recent_hint_remove &&
-    JSON.stringify(o.hints) == JSON.stringify(n.hints),
+    o.hints_set_at_timestamp == n.hints_set_at_timestamp &&
+    o.queried_at_timestamp == n.queried_at_timestamp,
 )

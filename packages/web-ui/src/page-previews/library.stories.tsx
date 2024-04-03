@@ -90,7 +90,7 @@ export const Primary = () => {
         }
         slot_toolbar={<>toolbar</>}
         mobile_title_bar="Bookmarks"
-        get_more_bookmarks={() => {}}
+        on_page_bottom_reached={() => {}}
         has_more_bookmarks={false}
         is_fetching_first_bookmarks={false}
         is_fetching_more_bookmarks={false}
