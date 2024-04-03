@@ -33,9 +33,7 @@ export const get_authorized_bookmarks = (params: {
       dispatch(
         bookmarks_actions.set_processing_progress(result.processing_progress),
       )
-      dispatch(
-        bookmarks_actions.set_processing_progress(result.import_progress),
-      )
+      dispatch(bookmarks_actions.set_import_progress(result.import_progress))
       if (
         result.processing_progress !== undefined ||
         result.import_progress !== undefined

@@ -106,6 +106,12 @@ export const bookmarks_slice = createSlice({
     ) {
       state.processing_progress = action.payload
     },
+    set_import_progress(
+      state,
+      action: PayloadAction<BookmarksState['import_progress']>,
+    ) {
+      state.import_progress = action.payload
+    },
     set_density(state, action: PayloadAction<BookmarksState['density']>) {
       state.density = action.payload
     },
