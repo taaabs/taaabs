@@ -286,6 +286,7 @@ export const use_bookmarks = () => {
     )
 
     if (bookmarks) {
+      dispatch(bookmarks_actions.set_incoming_bookmarks(JSON.parse(bookmarks)))
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
       if (window.location.hash) {
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))

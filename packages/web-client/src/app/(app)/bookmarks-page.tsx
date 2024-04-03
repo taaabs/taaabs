@@ -158,29 +158,14 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
 
   useUpdateEffect(() => {
     if (!bookmarks_hook.bookmarks) return
+    set_show_custom_range(true)
+    set_show_tags_skeleton(false)
+    set_show_bookmarks_skeleton(false)
     modal_context?.set_modal()
     sort_by_view_options_hook.set_commited_sort_by(
       sort_by_view_options_hook.current_sort_by,
     )
   }, [bookmarks_hook.bookmarks])
-
-  useUpdateEffect(() => {
-    if (
-      bookmarks_hook.first_bookmarks_fetched_at_timestamp &&
-      counts_hook.fetched_at_timestamp &&
-      tag_hierarchies_hook.fetched_at_timestamp &&
-      pinned_hook.fetched_at_timestamp
-    ) {
-      set_show_tags_skeleton(false)
-      set_show_bookmarks_skeleton(false)
-      set_show_custom_range(true)
-    }
-  }, [
-    bookmarks_hook.first_bookmarks_fetched_at_timestamp,
-    counts_hook.fetched_at_timestamp,
-    tag_hierarchies_hook.fetched_at_timestamp,
-    pinned_hook.fetched_at_timestamp,
-  ])
 
   useUpdateEffect(() => {
     if (bookmarks_hook.should_refetch_counts) {
@@ -2518,7 +2503,11 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             : []
         }
         on_page_bottom_reached={() => {
-          if (bookmarks_hook.is_fetching_data) return
+          if (
+            bookmarks_hook.is_fetching_data ||
+            !bookmarks_hook.bookmarks?.length
+          )
+            return
           if (!search_hook.search_string && bookmarks_hook.has_more_bookmarks) {
             bookmarks_hook.get_bookmarks({ should_get_next_page: true })
           } else if (

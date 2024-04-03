@@ -399,26 +399,27 @@ export const Library: React.FC<Library.Props> = (props) => {
               </div>
             </div>
 
-            {props.show_bookmarks_skeleton ? (
+            <div
+              className={cn({
+                [styles.dimmed]:
+                  props.is_fetching_first_bookmarks ||
+                  props.is_updating_bookmarks,
+              })}
+            >
+              <div className={styles.main__inner__pinned}>
+                {props.slot_pinned}
+              </div>
+              {props.slot_bookmarks}
+            </div>
+
+            {props.show_bookmarks_skeleton && (
               <div className={styles['main__inner__skeleton']}>
                 {[...Array(20)].map((_, i) => (
                   <Skeleton key={i} />
                 ))}
               </div>
-            ) : (
-              <div
-                className={cn({
-                  [styles.dimmed]:
-                    props.is_fetching_first_bookmarks ||
-                    props.is_updating_bookmarks,
-                })}
-              >
-                <div className={styles.main__inner__pinned}>
-                  {props.slot_pinned}
-                </div>
-                {props.slot_bookmarks}
-              </div>
             )}
+
             <div className={styles['main__inner__info']} ref={end_of_bookmarks}>
               {props.info_text && <span>{props.info_text}</span>}
               {props.clear_date_range && (

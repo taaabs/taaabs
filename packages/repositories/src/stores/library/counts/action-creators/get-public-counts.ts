@@ -43,8 +43,6 @@ export const get_public_counts = (params: {
       }
     }
 
-    if (!state.bookmarks.is_fetching_data) {
-      dispatch(counts_actions.set_fetched_at_timestamp(Date.now()))
-    }
+    dispatch(counts_actions.set_fetched_at_timestamp(Date.now()))
   }
 }
