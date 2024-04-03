@@ -9,6 +9,7 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { backOff } from 'exponential-backoff'
 import { backoff_options } from '@repositories/core/backoff-options'
 import { KyInstance } from 'ky'
+import { tag_hierarchies_actions } from '../../tag-hierarchies/tag-hierarchies.slice'
 
 export const get_authorized_bookmarks = (params: {
   request_params: GetBookmarks_Params.Authorized
@@ -30,6 +31,25 @@ export const get_authorized_bookmarks = (params: {
 
     const get_result = async () => {
       const result = await get_bookmarks.invoke(params.request_params)
+      const state = get_state()
+      if (
+        state.bookmarks.processing_progress !== undefined &&
+        result.processing_progress === undefined
+      ) {
+        // Refresh tag hierarchies so they can have newly generated counts.
+        dispatch(
+          tag_hierarchies_actions.get_tag_hierarchies_authorized({
+            request_params: {
+              gte: params.request_params.yyyymm_gte,
+              lte: params.request_params.yyyymm_lte,
+              is_archived: params.request_params.is_archived,
+              starred_only: params.request_params.starred_only,
+              unread_only: params.request_params.unread_only,
+            },
+            ky: params.ky,
+          }),
+        )
+      }
       dispatch(
         bookmarks_actions.set_processing_progress(result.processing_progress),
       )
