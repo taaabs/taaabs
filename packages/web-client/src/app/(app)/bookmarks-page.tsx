@@ -1545,7 +1545,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_public: tag.is_public,
                                 })),
                               }
-                              await dispatch(
+                              const updated_bookmark = await dispatch(
                                 bookmarks_actions.upsert_bookmark({
                                   bookmark: modified_bookmark,
                                   last_authorized_counts_params:
@@ -1564,6 +1564,26 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   : params.dictionary.library
                                       .pin_has_been_removed,
                               )
+                              search_hook.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                    is_public: link.is_public,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
                             },
                             other_icon: (
                               <UiCommonParticles_Icon variant="ARCHIVE" />
