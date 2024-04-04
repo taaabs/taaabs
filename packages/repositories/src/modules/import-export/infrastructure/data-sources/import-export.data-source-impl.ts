@@ -111,7 +111,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
           }
         }),
       ),
-      tag_hierarchies: [],
+      tag_hierarchies: params.tag_hierarchies,
       erase_library: params.erase_library || undefined,
     }
 

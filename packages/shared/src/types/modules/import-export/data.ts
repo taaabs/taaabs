@@ -59,11 +59,11 @@ export const bookmark_schema = z.object({
     .max(system_values.bookmark.links.limit)
     .optional(),
 })
-namespace TagHierarchy {
+export namespace TagHierarchy {
   const base_tag_hierarchy_schema = z.object({
     hash: z.string().length(64),
   })
-  type TagHierarchyNode = z.infer<typeof base_tag_hierarchy_schema> & {
+  export type TagHierarchyNode = z.infer<typeof base_tag_hierarchy_schema> & {
     children: TagHierarchyNode[]
   }
   export const tag_hierarchy_schema: z.ZodType<TagHierarchyNode> =

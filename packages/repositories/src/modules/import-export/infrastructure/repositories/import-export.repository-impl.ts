@@ -99,7 +99,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
             : undefined,
         })),
       ),
-      tag_hierarchies: [],
+      tag_hierarchies: JSON.parse(data.tag_hierarchies as any),
     }
 
     return JSON.stringify(downloadable_json)
