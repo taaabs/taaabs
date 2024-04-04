@@ -90,6 +90,7 @@ export const bookmarks_slice = createSlice({
       state,
       action: PayloadAction<{ index: number; height: number }>,
     ) {
+      // state.bookmarks[action.payload.index] is an important check, without it we sometimes get error during fast tag changes.
       if (!state.bookmarks || !state.bookmarks[action.payload.index]) return
       state.bookmarks[action.payload.index].render_height =
         action.payload.height
