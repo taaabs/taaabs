@@ -298,7 +298,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             : undefined
         }
         on_subscribe_click={username ? () => {} : undefined}
-        show_bookmarks_skeleton={window.scrollY == 0 && show_skeletons}
+        show_bookmarks_skeleton={show_skeletons}
         close_aside_count={close_aside_count}
         mobile_title_bar={'Bookmarks'}
         slot_search={
