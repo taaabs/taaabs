@@ -9,6 +9,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace Pinned {
   type Item = {
+    bookmark_id: number
     url: string
     created_at: number
     title?: string
@@ -17,12 +18,12 @@ export namespace Pinned {
     tags?: number[]
   }
   export type Props = {
-    first_bookmarks_fetched_at_timestamp?: number // Hiding not relevant pins.
+    library_updated_at_timestamp?: number // Hiding not relevant pins.
     items: Item[]
     on_change: (items: Item[]) => void
     favicon_host: string
     header_title: string
-    on_link_click: (url: string) => void
+    on_link_click?: (bookmark_id: number) => void
     is_draggable: boolean
     selected_tags: number[]
     selected_starred: boolean
@@ -35,6 +36,7 @@ export namespace Pinned {
 
 type SortableItem = {
   id: number
+  bookmark_id: number
   created_at: number
   url: string
   title?: string
@@ -48,6 +50,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
     const [items, set_items] = useState<SortableItem[]>(
       props.items.map((item, i) => ({
         id: i,
+        bookmark_id: item.bookmark_id,
         created_at: item.created_at,
         url: item.url,
         title: item.title,
@@ -100,7 +103,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
           className={styles.item}
           onClick={async (e) => {
             e.preventDefault()
-            props.on_link_click(item.url)
+            props.on_link_click?.(item.bookmark_id)
             location.href = item.url
           }}
         >
@@ -163,5 +166,5 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       <div className={styles.items}>{items_dom}</div>
     )
   },
-  (o, n) => o.first_bookmarks_fetched_at_timestamp == n.first_bookmarks_fetched_at_timestamp,
+  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
 )

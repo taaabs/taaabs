@@ -22,7 +22,7 @@ export const refresh_authorized_counts = (params: {
       repository,
     )
 
-    dispatch(counts_actions.set_is_fetching_data(true))
+    dispatch(counts_actions.set_is_fetching(true))
 
     const result = await get_counts_use_case.invoke(
       params.last_authorized_counts_params,
@@ -44,12 +44,11 @@ export const refresh_authorized_counts = (params: {
 
     const state = get_state()
     dispatch(counts_actions.set_data(result))
-    dispatch(counts_actions.set_is_fetching_data(false))
+    dispatch(counts_actions.set_is_fetching(false))
     dispatch(counts_actions.process_tags())
     dispatch(
       bookmarks_actions.set_bookmarks(state.bookmarks.incoming_bookmarks),
     )
     dispatch(bookmarks_actions.set_is_updating_bookmarks(false))
-    dispatch(counts_actions.set_fetched_at_timestamp(Date.now()))
   }
 }

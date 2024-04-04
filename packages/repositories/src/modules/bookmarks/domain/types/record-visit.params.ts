@@ -1,4 +1,4 @@
 export type RecordVisit_Params = {
   bookmark_id: number
-  visited_at: Date
+  visited_at: string
 }

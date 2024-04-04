@@ -21,7 +21,7 @@ import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infras
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
-import { BrowserStorage, browser_storage } from '@/constants/browser-storage'
+import { browser_storage } from '@/constants/browser-storage'
 import { use_is_hydrated } from '@shared/hooks'
 import { use_search } from '@/hooks/library/use-search'
 import { ModalContext } from './modal-provider'
@@ -64,6 +64,7 @@ import { use_pinned } from '@/hooks/library/use-pinned'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
+import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types/record-visit.params'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -106,6 +107,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
   const [are_bookmark_menu_items_locked, set_are_bookmarks_menu_items_locked] =
     useState(false)
+  const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
+    useState<number>()
 
   const ky_instance = ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -119,8 +122,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
 
   // Upload deferred recent visit - START
   const has_focus = use_has_focus()
-
-  useUpdateEffect(() => {
+  useEffect(() => {
     const ky_instance = ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
       headers: {
@@ -131,24 +133,24 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
 
     if (username) return
     if (has_focus) {
-      const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit | null =
-        JSON.parse(
-          localStorage.getItem(
-            browser_storage.local_storage.authorized_library.recent_visit,
-          ) || 'null',
-        )
-      if (recent_visit) {
+      const record_visit_params: RecordVisit_Params | null = JSON.parse(
+        localStorage.getItem(
+          browser_storage.local_storage.authorized_library.record_visit_params,
+        ) || 'null',
+      )
+      if (record_visit_params) {
         // Timeout prevents white screen when navigating back.
         setTimeout(() => {
           localStorage.removeItem(
-            browser_storage.local_storage.authorized_library.recent_visit,
+            browser_storage.local_storage.authorized_library
+              .record_visit_params,
           )
           const data_source = new Bookmarks_DataSourceImpl(ky_instance)
           const repository = new Bookmarks_RepositoryImpl(data_source)
           const record_visit = new RecordVisit_UseCase(repository)
           record_visit.invoke({
-            bookmark_id: recent_visit.bookmark.id,
-            visited_at: new Date(recent_visit.visited_at),
+            bookmark_id: record_visit_params.bookmark_id,
+            visited_at: record_visit_params.visited_at,
           })
         }, 0)
       }
@@ -166,6 +168,22 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
       sort_by_view_options_hook.current_sort_by,
     )
   }, [bookmarks_hook.bookmarks])
+
+  useUpdateEffect(() => {
+    if (
+      !bookmarks_hook.is_fetching &&
+      !counts_hook.is_fetching &&
+      !tag_hierarchies_hook.is_fetching &&
+      !pinned_hook.is_fetching
+    ) {
+      set_library_updated_at_timestamp(Date.now())
+    }
+  }, [
+    bookmarks_hook.is_fetching,
+    counts_hook.is_fetching,
+    tag_hierarchies_hook.is_fetching,
+    pinned_hook.is_fetching,
+  ])
 
   useUpdateEffect(() => {
     if (bookmarks_hook.should_refetch_counts) {
@@ -424,7 +442,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   if (
                     bookmarks_hook.is_fetching_first_bookmarks ||
                     bookmarks_hook.is_fetching_more_bookmarks ||
-                    counts_hook.is_fetching_counts_data
+                    counts_hook.is_fetching
                   )
                     return
 
@@ -484,7 +502,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         if (
                           bookmarks_hook.is_fetching_first_bookmarks ||
                           bookmarks_hook.is_fetching_more_bookmarks ||
-                          counts_hook.is_fetching_counts_data
+                          counts_hook.is_fetching
                         )
                           return
 
@@ -548,7 +566,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   if (
                     bookmarks_hook.is_fetching_first_bookmarks ||
                     bookmarks_hook.is_fetching_more_bookmarks ||
-                    counts_hook.is_fetching_counts_data
+                    counts_hook.is_fetching
                   )
                     return
 
@@ -601,7 +619,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     ? 'DENSITY_DEFAULT'
                     : 'DENSITY_COMPACT',
                 on_click: () => {
-                  if (bookmarks_hook.is_fetching_data) return
+                  if (bookmarks_hook.is_fetching) return
                   set_close_aside_count(close_aside_count + 1)
                   dispatch(
                     bookmarks_actions.set_density_of_current_bookmarks(
@@ -620,7 +638,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
         slot_tag_hierarchies={
           !show_bookmarks_skeleton ? (
             <UiAppAtom_TagHierarchies
-              fetched_at_timestamp={tag_hierarchies_hook.fetched_at_timestamp}
+              library_updated_at_timestamp={library_updated_at_timestamp}
               is_draggable={!username}
               tree={tag_hierarchies_hook.tag_hierarchies}
               on_update={async (tag_hierarchies: TagHierarchies.Node[]) => {
@@ -862,10 +880,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             slot_custom_range={
               show_custom_range ? (
                 <CustomRange
-                  first_bookmarks_fetched_at_timestamp={
-                    bookmarks_hook.first_bookmarks_fetched_at_timestamp
-                  }
-                  counts_fetched_at_timestamp={counts_hook.fetched_at_timestamp}
+                  library_updated_at_timestamp={library_updated_at_timestamp}
                   counts={counts_hook.months || undefined}
                   on_yyyymm_change={
                     date_view_options_hook.set_gte_lte_search_params
@@ -926,11 +941,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       }
                     />
                     <UiAppAtom_Tags
-                      refreshed_at_timestamp={
-                        (bookmarks_hook.first_bookmarks_fetched_at_timestamp ||
-                          0) > (counts_hook.fetched_at_timestamp || 0)
-                          ? bookmarks_hook.first_bookmarks_fetched_at_timestamp
-                          : counts_hook.fetched_at_timestamp
+                      library_updated_at_timestamp={
+                        library_updated_at_timestamp
                       }
                       tags={
                         counts_hook.tags
@@ -986,13 +998,12 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             >
               <UiAppAtom_Pinned
                 key={pinned_hook.fetched_at_timestamp} // State for sortable must be rebuilt.
-                first_bookmarks_fetched_at_timestamp={
-                  bookmarks_hook.first_bookmarks_fetched_at_timestamp
-                }
+                library_updated_at_timestamp={library_updated_at_timestamp}
                 favicon_host={favicon_host}
                 header_title={params.dictionary.library.pinned}
                 items={
                   pinned_hook.items?.map((item) => ({
+                    bookmark_id: item.bookmark_id,
                     url: item.url,
                     created_at: item.created_at,
                     title: item.title,
@@ -1015,7 +1026,21 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     params.dictionary.library.pinned_links_has_beed_updated,
                   )
                 }}
-                on_link_click={() => {}}
+                on_link_click={
+                  !username
+                    ? (bookmark_id) => {
+                        const record_visit_params: RecordVisit_Params = {
+                          bookmark_id,
+                          visited_at: new Date().toISOString(),
+                        }
+                        localStorage.setItem(
+                          browser_storage.local_storage.authorized_library
+                            .record_visit_params,
+                          JSON.stringify(record_visit_params),
+                        )
+                      }
+                    : undefined
+                }
                 selected_tags={tag_view_options_hook.selected_tags}
                 selected_starred={
                   filter_view_options_hook.current_filter == Filter.STARRED ||
@@ -1047,9 +1072,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             ? bookmarks_hook.bookmarks.map((bookmark, i) => (
                 <UiAppAtom_Bookmark
                   key={bookmark.id}
-                  first_bookmarks_fetched_at_timestamp={
-                    bookmarks_hook.first_bookmarks_fetched_at_timestamp
-                  }
+                  library_updated_at_timestamp={library_updated_at_timestamp}
                   search_queried_at_timestamp={search_hook.queried_at_timestamp}
                   bookmark_id={bookmark.id}
                   on_tag_drag_start={
@@ -1117,9 +1140,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       ? new Date(bookmark.visited_at)
                       : new Date(bookmark.created_at)
                   }
-                  counts_refreshed_at_timestamp={
-                    counts_hook.fetched_at_timestamp
-                  }
                   search_params={search_params.toString()}
                   tags={
                     bookmark.tags
@@ -1164,36 +1184,21 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       }),
                     )
                   }}
-                  on_link_click={() => {
-                    if (username) return
-                    const recent_visit: BrowserStorage.LocalStorage.AuthorizedLibrary.RecentVisit =
-                      {
-                        bookmark: {
-                          id: bookmark.id,
-                          created_at: bookmark.created_at,
-                          visited_at: bookmark.visited_at,
-                          updated_at: bookmark.updated_at,
-                          title: bookmark.title,
-                          note: bookmark.note,
-                          is_archived: is_archived_filter,
-                          is_unread: bookmark.is_unread,
-                          stars: bookmark.stars,
-                          links: bookmark.links.map((link) => ({
-                            url: link.url,
-                            site_path: link.site_path,
-                            is_public: link.is_public,
-                          })),
-                          tags: bookmark.tags.map((tag) => tag.name),
-                          tag_ids: bookmark.tags.map((tag) => tag.id),
-                        },
-                        visited_at: new Date().toISOString(),
-                      }
-                    localStorage.setItem(
-                      browser_storage.local_storage.authorized_library
-                        .recent_visit,
-                      JSON.stringify(recent_visit),
-                    )
-                  }}
+                  on_link_click={
+                    !username
+                      ? () => {
+                          const record_visit_params: RecordVisit_Params = {
+                            bookmark_id: bookmark.id,
+                            visited_at: new Date().toISOString(),
+                          }
+                          localStorage.setItem(
+                            browser_storage.local_storage.authorized_library
+                              .record_visit_params,
+                            JSON.stringify(record_visit_params),
+                          )
+                        }
+                      : undefined
+                  }
                   favicon_host={favicon_host}
                   on_menu_click={async () => {
                     if (username) return
@@ -2503,10 +2508,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             : []
         }
         on_page_bottom_reached={() => {
-          if (
-            bookmarks_hook.is_fetching_data ||
-            !bookmarks_hook.bookmarks?.length
-          )
+          if (bookmarks_hook.is_fetching || !bookmarks_hook.bookmarks?.length)
             return
           if (!search_hook.search_string && bookmarks_hook.has_more_bookmarks) {
             bookmarks_hook.get_bookmarks({ should_get_next_page: true })

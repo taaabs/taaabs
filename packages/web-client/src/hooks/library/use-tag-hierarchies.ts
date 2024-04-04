@@ -8,8 +8,13 @@ import { useParams } from 'next/navigation'
 export const use_tag_hierarchies = () => {
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
-  const { tag_hierarchies, total, is_updating, fetched_at_timestamp } =
-    use_library_selector((state) => state.tag_hierarchies)
+  const {
+    is_fetching,
+    tag_hierarchies,
+    total,
+    is_updating,
+    fetched_at_timestamp,
+  } = use_library_selector((state) => state.tag_hierarchies)
 
   const get_tag_hierarchies = async (params: {
     filter?: Filter
@@ -90,6 +95,7 @@ export const use_tag_hierarchies = () => {
   }
 
   return {
+    is_fetching,
     get_tag_hierarchies,
     fetched_at_timestamp,
     tag_hierarchies,

@@ -17,8 +17,9 @@ export const get_pinned_public = (params: {
 
     const result = await repository.get_pinned_public(params.get_pinned_params)
 
-    dispatch(pinned_actions.set_items(result))
     dispatch(pinned_actions.set_is_fetching(false))
+
+    dispatch(pinned_actions.set_items(result))
     dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
   }
 }

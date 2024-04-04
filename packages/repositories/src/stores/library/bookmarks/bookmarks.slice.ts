@@ -5,7 +5,7 @@ import * as thunks from './action-creators'
 import { system_values } from '@shared/constants/system-values'
 
 type BookmarksState = {
-  is_fetching_data: boolean
+  is_fetching: boolean
   is_updating_bookmarks: boolean
   is_fetching_first_bookmarks: boolean
   first_bookmarks_fetched_at_timestamp?: number // Used for synchronization of pinned links re-render.
@@ -21,7 +21,7 @@ type BookmarksState = {
 }
 
 const initial_state: BookmarksState = {
-  is_fetching_data: false,
+  is_fetching: false,
   is_updating_bookmarks: false,
   is_fetching_first_bookmarks: false,
   is_fetching_more_bookmarks: false,
@@ -35,8 +35,8 @@ export const bookmarks_slice = createSlice({
   name: 'bookmarks',
   initialState: initial_state,
   reducers: {
-    set_is_fetching_data(state, action: PayloadAction<boolean>) {
-      state.is_fetching_data = action.payload
+    set_is_fetching(state, action: PayloadAction<boolean>) {
+      state.is_fetching = action.payload
     },
     set_is_updating_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_updating_bookmarks = action.payload

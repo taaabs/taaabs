@@ -11,8 +11,7 @@ export type Months = {
 export type Tags = Record<string, { name: string; yields: number }>
 
 export type CountsState = {
-  fetched_at_timestamp?: number
-  is_fetching_counts_data: boolean
+  is_fetching: boolean
   counts_data: Counts_Ro | null
   months: Months | null
   tags?: Tags
@@ -21,7 +20,7 @@ export type CountsState = {
 }
 
 const initial_state: CountsState = {
-  is_fetching_counts_data: false,
+  is_fetching: false,
   counts_data: null,
   months: null,
   yyyymm_gte: null,
@@ -32,11 +31,8 @@ export const counts_slice = createSlice({
   name: 'counts',
   initialState: initial_state,
   reducers: {
-    set_fetched_at_timestamp(state, action: PayloadAction<number>) {
-      state.fetched_at_timestamp = action.payload
-    },
-    set_is_fetching_data(state, action: PayloadAction<boolean>) {
-      state.is_fetching_counts_data = action.payload
+    set_is_fetching(state, action: PayloadAction<boolean>) {
+      state.is_fetching = action.payload
     },
     set_data(state, action: PayloadAction<Counts_Ro>) {
       state.counts_data = action.payload

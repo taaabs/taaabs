@@ -15,9 +15,13 @@ export const get_tag_hierarchies_public = (params: {
     const repository = new TagHierarchies_RepositoryImpl(data_source)
     const get_tag_hierarchies = new GetTagHierarchiesPublic_UseCase(repository)
 
+    dispatch(tag_hierarchies_actions.set_is_fetching(true))
+
     const { tag_hierarchies, total } = await get_tag_hierarchies.invoke(
       params.request_params,
     )
+
+    dispatch(tag_hierarchies_actions.set_is_fetching(false))
 
     dispatch(tag_hierarchies_actions.set_tag_hierarchies(tag_hierarchies))
     dispatch(tag_hierarchies_actions.set_total(total))

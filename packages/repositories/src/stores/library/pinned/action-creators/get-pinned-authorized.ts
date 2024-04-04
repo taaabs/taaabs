@@ -15,8 +15,9 @@ export const get_pinned_authorized = (params: { ky: KyInstance }) => {
 
     const result = await get_pinned.invoke()
 
-    dispatch(pinned_actions.set_items(result))
     dispatch(pinned_actions.set_is_fetching(false))
+
+    dispatch(pinned_actions.set_items(result))
     dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
   }
 }

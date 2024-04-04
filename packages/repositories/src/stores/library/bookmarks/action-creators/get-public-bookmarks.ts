@@ -20,7 +20,7 @@ export const get_public_bookmarks = (params: {
     const repository = new Bookmarks_RepositoryImpl(data_source)
     const get_bookmarks = new GetBookmarksOnPublicUser_UseCase(repository)
 
-    dispatch(bookmarks_actions.set_is_fetching_data(true))
+    dispatch(bookmarks_actions.set_is_fetching(true))
 
     if (params.request_params.after) {
       dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(true))
@@ -84,7 +84,7 @@ export const get_public_bookmarks = (params: {
       bookmarks_with_density = result.bookmarks || []
     }
 
-    dispatch(bookmarks_actions.set_is_fetching_data(false))
+    dispatch(bookmarks_actions.set_is_fetching(false))
     dispatch(
       bookmarks_actions.set_has_more_bookmarks(
         result.pagination?.has_more || false,
@@ -97,10 +97,7 @@ export const get_public_bookmarks = (params: {
     } else {
       dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks_with_density))
       const state = get_state()
-      if (
-        !state.counts.is_fetching_counts_data &&
-        !state.bookmarks.should_refetch_counts
-      ) {
+      if (!state.counts.is_fetching && !state.bookmarks.should_refetch_counts) {
         dispatch(counts_actions.process_tags())
         dispatch(bookmarks_actions.set_bookmarks(bookmarks_with_density))
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
@@ -110,7 +107,6 @@ export const get_public_bookmarks = (params: {
             Date.now(),
           ),
         )
-        dispatch(counts_actions.set_fetched_at_timestamp(Date.now()))
       }
     }
   }

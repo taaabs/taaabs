@@ -20,7 +20,7 @@ export const get_authorized_bookmarks_by_ids = (params: {
         repository,
       )
 
-      dispatch(bookmarks_actions.set_is_fetching_data(true))
+      dispatch(bookmarks_actions.set_is_fetching(true))
       if (params.is_next_page) {
         dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(true))
       } else {
@@ -44,7 +44,7 @@ export const get_authorized_bookmarks_by_ids = (params: {
         bookmarks_with_density = bookmarks || []
       }
 
-      dispatch(bookmarks_actions.set_is_fetching_data(false))
+      dispatch(bookmarks_actions.set_is_fetching(false))
       dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
 
       if (params.is_next_page) {

@@ -103,7 +103,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async record_visit(params: RecordVisit_Params): Promise<void> {
     const body: RecordVisit_Dto.Body = {
       bookmark_id: params.bookmark_id,
-      visited_at: params.visited_at.toISOString(),
+      visited_at: params.visited_at,
     }
     await this._ky.post(`v1/bookmarks/record-visit`, {
       body: JSON.stringify(body),

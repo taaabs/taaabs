@@ -44,7 +44,7 @@ export namespace Bookmark {
   export type Highlights = [number, number][]
 
   export type Props = {
-    first_bookmarks_fetched_at_timestamp?: number
+    library_updated_at_timestamp?: number
     search_queried_at_timestamp?: number
     is_search_result?: boolean
     bookmark_id: number
@@ -85,7 +85,6 @@ export namespace Bookmark {
     orama_db_id?: string
     should_dim_visited_links: boolean
     current_filter?: string // Needs by [use_search/update_searchable_bookmarks].
-    counts_refreshed_at_timestamp?: number // When updating other bookmark, we refetch counts and this is needed to trigger a rerender of all bookmarks.
     on_tag_drag_start?: (params: {
       id: number
       name: string
@@ -893,8 +892,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
-    o.first_bookmarks_fetched_at_timestamp ==
-      n.first_bookmarks_fetched_at_timestamp &&
+    o.library_updated_at_timestamp == n.library_updated_at_timestamp &&
     o.search_queried_at_timestamp == n.search_queried_at_timestamp &&
     o.is_search_result == n.is_search_result &&
     o.points == n.points &&
@@ -905,7 +903,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.pinned_links_count == n.pinned_links_count &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&
-    o.counts_refreshed_at_timestamp == n.counts_refreshed_at_timestamp &&
     o.dragged_tag?.id == n.dragged_tag?.id,
 )
 

@@ -16,8 +16,7 @@ type Counts = {
 
 export namespace CustomRange {
   export type Props = {
-    first_bookmarks_fetched_at_timestamp?: number
-    counts_fetched_at_timestamp?: number
+    library_updated_at_timestamp?: number
     counts?: Counts
     current_gte?: number
     current_lte?: number
@@ -558,10 +557,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       </div>
     )
   },
-  (o, n) =>
-    o.first_bookmarks_fetched_at_timestamp ==
-      n.first_bookmarks_fetched_at_timestamp &&
-    o.counts_fetched_at_timestamp == n.counts_fetched_at_timestamp,
+  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
 )
 
 function yyyymm_to_display(yyyymm: number) {

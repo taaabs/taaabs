@@ -18,16 +18,16 @@ export const get_authorized_counts = (params: {
       repository,
     )
 
-    dispatch(counts_actions.set_is_fetching_data(true))
+    dispatch(counts_actions.set_is_fetching(true))
 
     const result = await get_months_use_case.invoke(params.request_params)
 
     dispatch(counts_actions.set_data(result))
-    dispatch(counts_actions.set_is_fetching_data(false))
+    dispatch(counts_actions.set_is_fetching(false))
 
     const state = get_state()
     if (
-      (!state.bookmarks.is_fetching_data &&
+      (!state.bookmarks.is_fetching &&
         state.bookmarks.is_fetching_first_bookmarks) ||
       state.bookmarks.should_refetch_counts
     ) {
@@ -44,7 +44,5 @@ export const get_authorized_counts = (params: {
         dispatch(bookmarks_actions.set_should_refetch_counts(false))
       }
     }
-
-    dispatch(counts_actions.set_fetched_at_timestamp(Date.now()))
   }
 }

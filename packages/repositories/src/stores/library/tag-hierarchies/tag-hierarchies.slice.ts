@@ -3,6 +3,7 @@ import * as thunks from './action-creators'
 import { TagHierarchy_Entity } from '@repositories/modules/tag-hierarchies/domain/entities/tag-hierarchy.entity'
 
 type TagHierarchiesState = {
+  is_fetching?: boolean
   is_updating?: boolean
   fetched_at_timestamp?: number
   total?: number
@@ -15,6 +16,12 @@ export const tag_hierarchies_slice = createSlice({
   name: 'tag-hierarchies',
   initialState: initial_state,
   reducers: {
+    set_is_fetching(
+      state,
+      action: PayloadAction<TagHierarchiesState['is_fetching']>,
+    ) {
+      state.is_fetching = action.payload
+    },
     set_is_updating(
       state,
       action: PayloadAction<TagHierarchiesState['is_updating']>,

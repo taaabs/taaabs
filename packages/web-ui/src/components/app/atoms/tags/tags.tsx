@@ -9,7 +9,7 @@ export namespace Tags {
   }
 
   export type Props = {
-    refreshed_at_timestamp?: number
+    library_updated_at_timestamp?: number
     tags: Tag[]
     on_click: (tag: number) => void
     on_tag_drag_start?: (params: { id: number; name: string }) => void
@@ -70,5 +70,5 @@ export const Tags: React.FC<Tags.Props> = memo(
       </div>
     )
   },
-  (o, n) => o.refreshed_at_timestamp == n.refreshed_at_timestamp,
+  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
 )

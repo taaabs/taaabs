@@ -1,5 +1,3 @@
-import { BookmarkOfSearch } from '@/hooks/library/use-search'
-
 export const browser_storage = {
   local_forage: {
     authorized_library: {
@@ -125,18 +123,7 @@ export const browser_storage = {
   local_storage: {
     authorized_library: {
       recent_searches: 'authorized-library-search.recent-searches',
-      recent_visit: 'authorized-library.recent-visit',
+      record_visit_params: 'authorized-library.recent-visit',
     },
   },
-}
-
-export namespace BrowserStorage {
-  export namespace LocalStorage {
-    export namespace AuthorizedLibrary {
-      export type RecentVisit = {
-        bookmark: BookmarkOfSearch
-        visited_at: string
-      }
-    }
-  }
 }
