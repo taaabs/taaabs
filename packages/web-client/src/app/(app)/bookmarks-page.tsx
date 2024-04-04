@@ -277,6 +277,13 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
     }
   }
 
+  useEffect(() => {
+    history.scrollRestoration = 'manual'
+    return () => {
+      history.scrollRestoration = 'auto'
+    }
+  }, [])
+
   return (
     <>
       <UiAppAtom_DraggedCursorTag

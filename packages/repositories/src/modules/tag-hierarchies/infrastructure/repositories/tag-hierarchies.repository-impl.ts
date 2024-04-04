@@ -44,13 +44,11 @@ export class TagHierarchies_RepositoryImpl
       )
 
     return {
-      tag_hierarchies: tag_hierarchies
-        ? await Promise.all(
-            tag_hierarchies.map(
-              async (node) => await this._parse_authorized_tree_node(node),
-            ),
-          )
-        : undefined,
+      tag_hierarchies: await Promise.all(
+        tag_hierarchies.map(
+          async (node) => await this._parse_authorized_tree_node(node),
+        ),
+      ),
       total,
     }
   }
@@ -87,13 +85,9 @@ export class TagHierarchies_RepositoryImpl
       await this._tag_hierarchies_data_source.update_tag_hierarchies(params)
 
     return {
-      tag_hierarchies: tag_hierarchies
-        ? await Promise.all(
-            tag_hierarchies.map((node) =>
-              this._parse_authorized_tree_node(node),
-            ),
-          )
-        : undefined,
+      tag_hierarchies: await Promise.all(
+        tag_hierarchies.map((node) => this._parse_authorized_tree_node(node)),
+      ),
       total,
     }
   }

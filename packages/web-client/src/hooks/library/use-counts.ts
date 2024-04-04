@@ -136,7 +136,7 @@ export const use_counts = () => {
     }
   }
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     const tags = sessionStorage.getItem(
       browser_storage.session_storage.library.tags({
         username,

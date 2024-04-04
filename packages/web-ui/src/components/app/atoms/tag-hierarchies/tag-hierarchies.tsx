@@ -128,12 +128,18 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               clear_mouseover_ids()
             }}
             onMouseEnter={() => {
+              if (props.dragged_tag) {
+                document.body.classList.add('adding-tag')
+              }
               if (!is_dragging) set_mouseover_ids((item as Item).hierarchy_ids)
             }}
             onMouseDown={() => {
               set_is_dragging(true)
             }}
             onMouseUp={() => {
+              if (props.dragged_tag) {
+                document.body.classList.remove('adding-tag')
+              }
               setTimeout(() => {
                 set_is_dragging(false)
               }, 0)
@@ -184,6 +190,9 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               }
             }}
             onMouseLeave={() => {
+              if (props.dragged_tag) {
+                document.body.classList.remove('adding-tag')
+              }
               if (!is_dragging) {
                 clear_mouseover_ids()
               }
@@ -195,7 +204,11 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           >
             <div>
               <span>{(item as Item).text}</span>
-              <span>{(item as Item).yields ? (item as Item).yields : ''}</span>
+              <span>
+                {(item as Item).yields !== undefined
+                  ? (item as Item).yields
+                  : ''}
+              </span>
             </div>
           </button>
         </div>
@@ -367,12 +380,14 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               })
             }}
             onMouseEnter={() => {
-              if (!props.dragged_tag) return
-              document.body.classList.add('adding-tag')
+              if (props.dragged_tag) {
+                document.body.classList.add('adding-tag')
+              }
             }}
             onMouseLeave={() => {
-              if (!props.dragged_tag) return
-              document.body.classList.remove('adding-tag')
+              if (props.dragged_tag) {
+                document.body.classList.remove('adding-tag')
+              }
             }}
           >
             {!items.length && props.translations.drag_here}

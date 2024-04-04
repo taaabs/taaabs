@@ -70,5 +70,7 @@ export const Tags: React.FC<Tags.Props> = memo(
       </div>
     )
   },
-  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
+  (o, n) =>
+    o.library_updated_at_timestamp == n.library_updated_at_timestamp &&
+    o.tags == n.tags,
 )
