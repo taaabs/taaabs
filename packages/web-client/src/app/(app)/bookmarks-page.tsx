@@ -87,9 +87,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const modal_context = useContext(ModalContext)
-  const [show_custom_range, set_show_custom_range] = useState(false)
-  const [show_tags_skeleton, set_show_tags_skeleton] = useState(true)
-  const [show_bookmarks_skeleton, set_show_bookmarks_skeleton] = useState(true)
+  const [show_skeletons, set_show_skeletons] = useState(true)
   const search_hook = use_search()
   const bookmarks_hook = use_bookmarks()
   const counts_hook = use_counts()
@@ -160,9 +158,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
 
   useUpdateEffect(() => {
     if (!bookmarks_hook.bookmarks) return
-    set_show_custom_range(true)
-    set_show_tags_skeleton(false)
-    set_show_bookmarks_skeleton(false)
+
     modal_context?.set_modal()
     sort_by_view_options_hook.set_commited_sort_by(
       sort_by_view_options_hook.current_sort_by,
@@ -176,6 +172,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
       !tag_hierarchies_hook.is_fetching &&
       !pinned_hook.is_fetching
     ) {
+      set_show_skeletons(false)
       set_library_updated_at_timestamp(Date.now())
     }
   }, [
@@ -301,7 +298,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             : undefined
         }
         on_subscribe_click={username ? () => {} : undefined}
-        show_bookmarks_skeleton={show_bookmarks_skeleton}
+        show_bookmarks_skeleton={window.scrollY == 0 && show_skeletons}
         close_aside_count={close_aside_count}
         mobile_title_bar={'Bookmarks'}
         slot_search={
@@ -314,7 +311,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             placeholder={params.dictionary.library.search_placeholder}
             hints={!search_hook.is_initializing ? search_hook.hints : undefined}
             hints_set_at_timestamp={search_hook.hints_set_at_timestamp}
-            queried_at_timestamp={search_hook.queried_at_timestamp}
+            queried_at_timestamp={library_updated_at_timestamp}
             on_click_hint={(i) => {
               const search_string =
                 search_hook.search_string + search_hook.hints![i].completion
@@ -636,7 +633,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           />
         }
         slot_tag_hierarchies={
-          !show_bookmarks_skeleton ? (
+          !show_skeletons ? (
             <UiAppAtom_TagHierarchies
               library_updated_at_timestamp={library_updated_at_timestamp}
               is_draggable={!username}
@@ -878,7 +875,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
               ),
             }}
             slot_custom_range={
-              show_custom_range ? (
+              !show_skeletons ? (
                 <CustomRange
                   library_updated_at_timestamp={library_updated_at_timestamp}
                   counts={counts_hook.months || undefined}
@@ -916,7 +913,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     : undefined,
                 }}
               >
-                {!show_tags_skeleton ? (
+                {!show_skeletons ? (
                   <>
                     <UiAppAtom_SelectedTags
                       selected_tags={(bookmarks_hook.is_fetching_first_bookmarks

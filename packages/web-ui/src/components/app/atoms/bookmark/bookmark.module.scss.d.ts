@@ -4,7 +4,6 @@ declare const styles: {
   readonly 'wrapper--margin-override': string
   readonly container: string
   readonly 'container--clickable': string
-  readonly 'container--search-result': string
   readonly bookmark: string
   readonly bookmark__main: string
   readonly bookmark__main__top: string
@@ -16,6 +15,7 @@ declare const styles: {
   readonly bookmark__main__content: string
   readonly bookmark__main__content__title: string
   readonly bookmark__main__content__title__unread: string
+  readonly 'bookmark__main__content__title__search-result': string
   readonly bookmark__main__content__title__stars: string
   readonly bookmark__main__content__title__text: string
   readonly 'bookmark__main__content__title__text--unread': string

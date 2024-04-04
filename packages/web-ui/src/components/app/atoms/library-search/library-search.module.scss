@@ -22,7 +22,7 @@
   z-index: 2;
   border-radius: var(--border-radius-999px);
   gap: var(--distance-8px);
-  height: var(--button-dimension-40px);
+  height: var(--search-mobile-height);
   @include transition-150ms;
   @include to992 {
     margin: 0 var(--distance-8px);
@@ -31,7 +31,7 @@
     transform: translateX(calc(var(--distance-8px) * -1));
     width: calc(100% + (var(--distance-8px) * 2));
     gap: var(--distance-6px);
-    height: var(--button-dimension-52px);
+    height: var(--search-desktop-height);
   }
   @include at1200 {
     transform: translateX(calc(var(--distance-16px) * -1));

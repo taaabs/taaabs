@@ -272,8 +272,10 @@
     &__skeleton {
       display: flex;
       flex-direction: column;
-      position: relative;
-      z-index: 0;
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      background: var(--background);
       @include to992 {
         gap: var(--distance-8px);
       }

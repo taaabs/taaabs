@@ -1,7 +1,6 @@
 'use client'
 
 import { HomeHero as UiLandingSection_HomeHero } from '@web-ui/components/landing/sections/home-hero'
-import Link from 'next/link'
 
 const Page: React.FC = () => {
   return (
@@ -21,7 +20,7 @@ const Page: React.FC = () => {
             <strong>End-to-end encryption</strong> of private bookmarks
           </>,
           <>
-            <strong>Free forever</strong> for core features
+            <strong>Free to try</strong> for as long as you'd like
           </>,
         ]}
         username=""

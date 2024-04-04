@@ -399,6 +399,14 @@ export const Library: React.FC<Library.Props> = (props) => {
               </div>
             </div>
 
+            {props.show_bookmarks_skeleton && (
+              <div className={styles['main__inner__skeleton']}>
+                {[...Array(10)].map((_, i) => (
+                  <Skeleton key={i} />
+                ))}
+              </div>
+            )}
+
             <div
               className={cn({
                 [styles.dimmed]:
@@ -411,14 +419,6 @@ export const Library: React.FC<Library.Props> = (props) => {
               </div>
               {props.slot_bookmarks}
             </div>
-
-            {props.show_bookmarks_skeleton && (
-              <div className={styles['main__inner__skeleton']}>
-                {[...Array(20)].map((_, i) => (
-                  <Skeleton key={i} />
-                ))}
-              </div>
-            )}
 
             <div className={styles['main__inner__info']} ref={end_of_bookmarks}>
               {props.info_text && <span>{props.info_text}</span>}

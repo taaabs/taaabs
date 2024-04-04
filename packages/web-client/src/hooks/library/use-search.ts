@@ -1598,8 +1598,8 @@ export const use_search = () => {
     current_filter,
     highlights_sites_variants,
     clear_cached_data,
-    queried_at_timestamp,
     hints_set_at_timestamp,
+    queried_at_timestamp,
   }
 }
 

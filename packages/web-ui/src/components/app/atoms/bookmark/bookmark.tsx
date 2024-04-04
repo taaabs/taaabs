@@ -181,7 +181,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           <div
             className={cn(styles.container, {
               [styles['container--clickable']]: props.density == 'compact',
-              [styles['container--search-result']]: props.is_search_result,
             })}
             role="button"
             onClick={() => {
@@ -268,6 +267,17 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           styles.bookmark__main__content__title__unread
                         }
                       />
+                    )}
+                    {props.is_search_result && (
+                      <div
+                        className={
+                          styles[
+                            'bookmark__main__content__title__search-result'
+                          ]
+                        }
+                      >
+                        <Icon variant="SEARCH" />
+                      </div>
                     )}
                     {props.stars >= 1 && (
                       <div

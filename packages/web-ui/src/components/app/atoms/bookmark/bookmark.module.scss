@@ -43,9 +43,6 @@
       }
     }
   }
-  &--search-result {
-    background: linear-gradient(172deg, rgba(239,246,255,1) 0%, rgba(255,255,255,1) 30%);
-  }
 }
 .bookmark {
   display: flex;
@@ -131,6 +128,16 @@
           height: var(--distance-18px);
           width: var(--distance-18px);
           background: var(--red);
+        }
+        &__search-result {
+          display: inline-flex;
+          height: 0;
+          margin-right: var(--distance-5px);
+          transform: translateY(0.2rem);
+          > svg {
+            height: var(--distance-18px);
+            fill: var(--brand-color);
+          }
         }
         &__stars {
           display: inline-flex;
