@@ -912,7 +912,7 @@ function url_path_for_display(params: {
   url: string
   site_path?: string
 }): string {
-  let parsed_url = params.url.replace('://', '').split('?')[0]
+  let parsed_url = params.url.replace('://', '')
 
   if (parsed_url.substring(parsed_url.length - 1, parsed_url.length) == '/') {
     parsed_url = parsed_url.substring(0, parsed_url.length - 1)

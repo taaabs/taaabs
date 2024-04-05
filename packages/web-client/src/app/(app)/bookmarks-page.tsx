@@ -1069,7 +1069,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           bookmarks_hook.bookmarks
             ? bookmarks_hook.bookmarks.map((bookmark, i) => (
                 <UiAppAtom_Bookmark
-                  key={bookmark.id}
+                  key={`${i}-${bookmarks_hook.first_bookmarks_fetched_at_timestamp}`}
                   index={i}
                   library_updated_at_timestamp={library_updated_at_timestamp}
                   search_queried_at_timestamp={search_hook.queried_at_timestamp}
