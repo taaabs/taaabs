@@ -636,7 +636,11 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           !show_skeletons ? (
             <UiAppAtom_TagHierarchies
               library_updated_at_timestamp={library_updated_at_timestamp}
-              is_draggable={!username}
+              is_draggable={
+                !username &&
+                !bookmarks_hook.is_fetching_first_bookmarks &&
+                !bookmarks_hook.is_updating_bookmarks
+              }
               tree={tag_hierarchies_hook.tag_hierarchies}
               on_update={async (tag_hierarchies: TagHierarchies.Node[]) => {
                 const filter = filter_view_options_hook.current_filter
@@ -675,12 +679,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 toast.success(params.dictionary.library.tag_hierarchies_upated)
               }}
               selected_tag_ids={tag_view_options_hook.selected_tags}
-              is_updating={
-                tag_hierarchies_hook.is_updating ||
-                bookmarks_hook.is_fetching_first_bookmarks ||
-                bookmarks_hook.is_updating_bookmarks ||
-                false
-              }
+              is_updating={tag_hierarchies_hook.is_updating}
               on_item_click={(tag_ids: number[]) => {
                 tag_view_options_hook.set_many_tags_to_search_params({
                   tag_ids,

@@ -22,9 +22,9 @@ export namespace TagHierarchies {
     on_update: (tags: Node[]) => void
     on_item_click: (hierarchy_ids: number[]) => void
     selected_tag_ids: number[]
-    is_updating: boolean
+    is_updating?: boolean
     dragged_tag?: { id: number; name: string }
-    is_draggable: boolean
+    is_draggable?: boolean
     all_bookmarks_yields?: number
     is_all_bookmarks_selected: boolean
     on_click_all_bookmarks: () => void
@@ -204,11 +204,13 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           >
             <div>
               <span>{(item as Item).text}</span>
-              <span>
-                {(item as Item).yields !== undefined
-                  ? (item as Item).yields
-                  : '?'}
-              </span>
+              {!props.is_updating && (
+                <span>
+                  {(item as Item).yields !== undefined
+                    ? (item as Item).yields
+                    : '?'}
+                </span>
+              )}
             </div>
           </button>
         </div>
