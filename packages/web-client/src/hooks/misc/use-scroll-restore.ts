@@ -1,7 +1,5 @@
 import { browser_storage } from '@/constants/browser-storage'
-import { use_is_hydrated } from '@shared/hooks'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useWindowScroll from 'beautiful-react-hooks/useWindowScroll'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
@@ -10,7 +8,6 @@ import { useEffect } from 'react'
 // In such case scroll must be restored manually.
 export const use_scroll_restore = () => {
   const on_window_scroll = useWindowScroll()
-  const is_hydrated = use_is_hydrated()
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
 
@@ -34,25 +31,9 @@ export const use_scroll_restore = () => {
     on_scroll_y(window.scrollY, username)
   })
 
+  // This is needed when site gets erased from browser cache and needs reload,
+  // thus history scroll positions won't be remembered.
   useEffect(() => {
-    const handleEvent = () => {
-      const params = new URLSearchParams(window.location.search)
-      const scroll_y = sessionStorage.getItem(
-        browser_storage.session_storage.library.scroll_y({
-          search_params: params.toString(),
-          username,
-          hash: window.location.hash,
-        }),
-      )
-      if (scroll_y && window.scrollY != parseInt(scroll_y)) {
-        window.scrollTo(0, parseInt(scroll_y))
-      }
-    }
-    window.addEventListener('popstate', handleEvent)
-    return () => window.removeEventListener('popstate', handleEvent)
-  }, [])
-
-  useUpdateEffect(() => {
     const scroll_y = sessionStorage.getItem(
       browser_storage.session_storage.library.scroll_y({
         search_params: search_params.toString(),
@@ -61,7 +42,9 @@ export const use_scroll_restore = () => {
       }),
     )
     if (scroll_y) {
-      window.scrollTo(0, parseInt(scroll_y))
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(scroll_y))
+      }, 0)
     }
-  }, [is_hydrated])
+  }, [search_params])
 }

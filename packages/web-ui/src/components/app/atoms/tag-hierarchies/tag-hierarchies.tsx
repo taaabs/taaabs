@@ -207,7 +207,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               <span>
                 {(item as Item).yields !== undefined
                   ? (item as Item).yields
-                  : ''}
+                  : '?'}
               </span>
             </div>
           </button>

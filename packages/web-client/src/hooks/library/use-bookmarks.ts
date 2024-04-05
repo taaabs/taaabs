@@ -263,7 +263,7 @@ export const use_bookmarks = () => {
       )
     },
     [],
-    500,
+    100,
   )
 
   useUpdateEffect(() => {
