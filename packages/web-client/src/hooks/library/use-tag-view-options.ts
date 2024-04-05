@@ -37,12 +37,9 @@ export const use_tag_view_options = () => {
 
   useUpdateEffect(() => {
     const search_params_tags = search_params.get('t')
-    if (
-      search_params_tags &&
-      search_params_tags.split(',').length != selected_tags.length
-    ) {
+    if (search_params_tags) {
       set_selected_tags(search_params_tags.split(',').map((t) => parseInt(t)))
-    } else if (!search_params_tags && selected_tags.length) {
+    } else if (!search_params_tags) {
       set_selected_tags([])
     }
   }, [search_params])

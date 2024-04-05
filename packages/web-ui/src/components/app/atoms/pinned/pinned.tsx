@@ -18,7 +18,7 @@ export namespace Pinned {
     tags?: number[]
   }
   export type Props = {
-    library_updated_at_timestamp?: number // Hiding not relevant pins.
+    first_bookmarks_fetched_at_timestamp?: number // Hiding not relevant pins.
     items: Item[]
     on_change: (items: Item[]) => void
     favicon_host: string
@@ -166,5 +166,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       <div className={styles.items}>{items_dom}</div>
     )
   },
-  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
+  (o, n) =>
+    o.first_bookmarks_fetched_at_timestamp ==
+    n.first_bookmarks_fetched_at_timestamp,
 )

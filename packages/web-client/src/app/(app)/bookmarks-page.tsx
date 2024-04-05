@@ -1002,7 +1002,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             >
               <UiAppAtom_Pinned
                 key={pinned_hook.fetched_at_timestamp} // State for sortable must be rebuilt.
-                library_updated_at_timestamp={
+                first_bookmarks_fetched_at_timestamp={
                   bookmarks_hook.first_bookmarks_fetched_at_timestamp
                 }
                 favicon_host={favicon_host}
