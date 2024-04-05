@@ -43,6 +43,13 @@
       }
     }
   }
+  &--search-result {
+    background: linear-gradient(
+      172deg,
+      rgba(239, 246, 255, 1) 0%,
+      rgba(255, 255, 255, 1) 30%
+    );
+  }
 }
 .bookmark {
   display: flex;

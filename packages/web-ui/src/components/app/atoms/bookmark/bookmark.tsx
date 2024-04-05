@@ -47,6 +47,7 @@ export namespace Bookmark {
     library_updated_at_timestamp?: number
     search_queried_at_timestamp?: number
     is_search_result?: boolean
+    index: number
     bookmark_id: number
     updated_at: string
     is_public: boolean
@@ -181,10 +182,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           <div
             className={cn(styles.container, {
               [styles['container--clickable']]: props.density == 'compact',
+              [styles['container--search-result']]: props.is_search_result,
             })}
             role="button"
             onClick={() => {
-              if (!is_swiping && !is_menu_open) props.on_click()
+              if (!is_swiping && !is_menu_open && !link_url_menu_opened)
+                props.on_click()
             }}
             onMouseUp={() => {
               if (
@@ -219,7 +222,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   })}
                 >
                   <div className={styles.bookmark__main__top__info}>
-                    {bookmark_date}
+                    {props.index + 1} · {bookmark_date}
                   </div>
                   <div className={styles.bookmark__main__top__menu}>
                     <OutsideClickHandler
@@ -267,17 +270,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           styles.bookmark__main__content__title__unread
                         }
                       />
-                    )}
-                    {props.is_search_result && (
-                      <div
-                        className={
-                          styles[
-                            'bookmark__main__content__title__search-result'
-                          ]
-                        }
-                      >
-                        <Icon variant="SEARCH" />
-                      </div>
                     )}
                     {props.stars >= 1 && (
                       <div
