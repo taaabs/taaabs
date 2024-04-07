@@ -157,15 +157,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   // Upload deferred recent visit - END
 
   useUpdateEffect(() => {
-    if (!bookmarks_hook.bookmarks) return
-
-    modal_context?.set_modal()
-    sort_by_view_options_hook.set_commited_sort_by(
-      sort_by_view_options_hook.current_sort_by,
-    )
-  }, [bookmarks_hook.bookmarks])
-
-  useUpdateEffect(() => {
     if (
       !bookmarks_hook.is_fetching &&
       !counts_hook.is_fetching &&
@@ -186,7 +177,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
     if (bookmarks_hook.should_refetch_counts) {
       counts_hook.get_counts()
     }
-  }, [bookmarks_hook.incoming_bookmarks])
+  }, [bookmarks_hook.should_refetch_counts])
 
   useUpdateEffect(() => {
     search_hook.set_current_filter(filter_view_options_hook.current_filter)
@@ -288,16 +279,16 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
       <UiAppTemplate_Library
         translations={{
           collapse_alt: 'Collapse sidebar',
-          subscribe: 'Subscribe',
-          unsubscribe: 'Unsubscribe',
+          follow: 'Subscribe',
+          unfollow: 'Unsubscribe',
         }}
-        is_subscribed={undefined}
+        is_following={undefined}
         welcome_text={
           !username
             ? `${params.dictionary.library.welcome}, username`
             : undefined
         }
-        on_subscribe_click={username ? () => {} : undefined}
+        on_follow_click={username ? () => {} : undefined}
         show_bookmarks_skeleton={show_skeletons}
         close_aside_count={close_aside_count}
         mobile_title_bar={'Bookmarks'}
@@ -636,11 +627,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           !show_skeletons ? (
             <UiAppAtom_TagHierarchies
               library_updated_at_timestamp={library_updated_at_timestamp}
-              is_draggable={
-                !username &&
-                !bookmarks_hook.is_fetching_first_bookmarks &&
-                !bookmarks_hook.is_updating_bookmarks
-              }
+              is_draggable={!username}
               tree={tag_hierarchies_hook.tag_hierarchies}
               on_update={async (tag_hierarchies: TagHierarchies.Node[]) => {
                 const filter = filter_view_options_hook.current_filter
@@ -974,7 +961,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             }
           />
         }
-        is_updating_bookmarks={bookmarks_hook.is_updating_bookmarks}
+        is_upserting={bookmarks_hook.is_upserting}
         is_fetching_first_bookmarks={bookmarks_hook.is_fetching_first_bookmarks}
         is_fetching_more_bookmarks={
           bookmarks_hook.is_fetching_more_bookmarks ||
@@ -1117,24 +1104,13 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     }
                   }}
                   date={
-                    !bookmarks_hook.is_fetching_first_bookmarks
-                      ? sort_by_view_options_hook.current_sort_by ==
-                        SortBy.CREATED_AT
-                        ? new Date(bookmark.created_at)
-                        : sort_by_view_options_hook.current_sort_by ==
-                          SortBy.UPDATED_AT
-                        ? new Date(bookmark.updated_at)
-                        : sort_by_view_options_hook.current_sort_by ==
-                          SortBy.VISITED_AT
-                        ? new Date(bookmark.visited_at)
-                        : new Date(bookmark.created_at)
-                      : sort_by_view_options_hook.commited_sort_by ==
-                        SortBy.CREATED_AT
+                    sort_by_view_options_hook.current_sort_by ==
+                    SortBy.CREATED_AT
                       ? new Date(bookmark.created_at)
-                      : sort_by_view_options_hook.commited_sort_by ==
+                      : sort_by_view_options_hook.current_sort_by ==
                         SortBy.UPDATED_AT
                       ? new Date(bookmark.updated_at)
-                      : sort_by_view_options_hook.commited_sort_by ==
+                      : sort_by_view_options_hook.current_sort_by ==
                         SortBy.VISITED_AT
                       ? new Date(bookmark.visited_at)
                       : new Date(bookmark.created_at)

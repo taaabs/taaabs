@@ -165,6 +165,8 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
           on_click_search={() => {}}
         />
       }
+      cockroach_url="https://bit.ly/cockroachdb-cloud"
+      translations={{ powered_by: 'Powered by' }}
     />
   )
 }

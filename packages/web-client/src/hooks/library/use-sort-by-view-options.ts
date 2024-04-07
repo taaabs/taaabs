@@ -19,9 +19,6 @@ export const use_sort_by_view_options = () => {
       )
     ],
   )
-  // This is set whenever new "first" bookmarks arrive and is neeeded
-  // to prevent incorrect date flashing when changing sortby option.
-  const [commited_sort_by, set_commited_sort_by] = useState<SortBy>()
 
   useUpdateEffect(() => {
     const query_sort_by = search_params.get('s')
@@ -70,7 +67,5 @@ export const use_sort_by_view_options = () => {
   return {
     current_sort_by,
     set_sort_by_query_param,
-    commited_sort_by,
-    set_commited_sort_by,
   }
 }

@@ -14,11 +14,47 @@
   height: 100%;
   gap: var(--distance-40px);
   position: relative;
-  &__navigation {
-    position: absolute;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+.left {
+  display: flex;
+  align-items: center;
+  gap: var(--distance-12px);
+}
+.cockroachdb {
+  display: flex;
+  align-items: center;
+  gap: var(--distance-8px);
+  border: var(--border-secondary);
+  border-radius: var(--border-radius-10px);
+  padding: var(--distance-4px) var(--distance-8px);
+  @include transition-150ms(border-color);
+  @include hover {
+    border-color: var(--border-color-hover);
   }
+  > img {
+    height: var(--distance-20px);
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--distance-2px);
+    > span {
+      line-height: 1;
+    }
+    > span:first-child {
+      font-size: var(--font-size-10px);
+      color: var(--text-color-dimmed);
+    }
+    > span:last-child {
+      font-size: var(--font-size-13px);
+      font-weight: var(--font-weight-inter-medium);
+    }
+  }
+}
+.navigation {
+  position: absolute;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

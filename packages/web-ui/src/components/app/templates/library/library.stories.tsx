@@ -7,7 +7,7 @@ export default {
 export const Primary = () => (
   <Library
     slot_tag_hierarchies={<>[TAG HIERARCHIES]</>}
-    translations={{ collapse_alt: '', subscribe: '', unsubscribe: '' }}
+    translations={{ collapse_alt: '', follow: '', unfollow: '' }}
     slot_aside={<>[ASIDE]</>}
     slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
@@ -24,7 +24,7 @@ export const Primary = () => (
 export const Scrolling = () => (
   <Library
     slot_tag_hierarchies={<>[TAG HIERARCHIES]</>}
-    translations={{ collapse_alt: '', subscribe: '', unsubscribe: '' }}
+    translations={{ collapse_alt: '', follow: '', unfollow: '' }}
     slot_aside={<div>{lorem}</div>}
     slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
@@ -45,7 +45,7 @@ export const Scrolling = () => (
 export const Loading = () => (
   <Library
     slot_tag_hierarchies={<>[TAG HIERARCHIES]</>}
-    translations={{ collapse_alt: '', subscribe: '', unsubscribe: '' }}
+    translations={{ collapse_alt: '', follow: '', unfollow: '' }}
     slot_aside={<>slot aside</>}
     slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}

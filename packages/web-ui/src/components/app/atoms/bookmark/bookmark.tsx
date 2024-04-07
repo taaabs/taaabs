@@ -152,13 +152,15 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     }, [DOMRect])
 
     useEffect(() => {
-      if (is_visible && !render_height) {
-        if (!ref.current) return
+      if (!render_height) {
+        if (!ref.current) {
+          throw new Error('Ref should be there.')
+        }
         const height = ref.current.getBoundingClientRect().height
         set_render_height(height)
         props.set_render_height(height)
       }
-    }, [is_visible])
+    }, [])
 
     const relative_time = dayjs(props.date).fromNow()
 

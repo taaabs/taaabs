@@ -1,12 +1,12 @@
-import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
-import { BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
-import { NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
-import { App } from '@web-ui/components/app/templates/app'
-import { AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
-import { AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
-import { Library } from '@web-ui/components/app/templates/library'
-import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
+import { BottomNavigationBar as UiAppMolecule_BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
+import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
+import { DesktopUserAreaForAppHeader as UiAppOrganism_DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
+import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
+import { AppHeaderDesktop as UiAppTemplate_AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
+import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
+import { Library as UiAppTemplate_Library } from '@web-ui/components/app/templates/library'
+import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 
 export default {
   title: 'page-previews/library',
@@ -14,12 +14,12 @@ export default {
 
 export const Primary = () => {
   return (
-    <App
+    <UiAppTemplate_App
       slot_header_desktop={
-        <AppHeaderDesktop
-          slot_logo={<LogoForHeader href="" />}
+        <UiAppTemplate_AppHeaderDesktop
+          slot_logo={<UiCommonAtom_LogoForHeader href="" />}
           slot_navigation={
-            <NavigationForHeader
+            <UiAppMolecule_NavigationForHeader
               navigation={[
                 { label: 'Lorem', href: '/lorem', is_active: false },
                 { label: 'Ipsum', href: '/ipsum', is_active: true },
@@ -27,18 +27,20 @@ export const Primary = () => {
             />
           }
           slot_right_side={
-            <DesktopUserAreaForAppHeader
+            <UiAppOrganism_DesktopUserAreaForAppHeader
               on_click_add={() => {}}
               on_click_search={() => {}}
             />
           }
+          translations={{ powered_by: 'Powered by' }}
+          cockroach_url="https://example.com"
         />
       }
       slot_header_mobile={
-        <AppHeaderMobile
-          slot_logo={<LogoForHeader href="" />}
+        <UiAppTemplate_AppHeaderMobile
+          slot_logo={<UiCommonAtom_LogoForHeader href="" />}
           slot_navigation={
-            <NavigationForHeader
+            <UiAppMolecule_NavigationForHeader
               navigation={[
                 { label: 'Lorem', href: '/lorem', is_active: false },
                 { label: 'Ipsum', href: '/ipsum', is_active: true },
@@ -48,7 +50,7 @@ export const Primary = () => {
         />
       }
       slot_bottom_navigation_bar={
-        <BottomNavigationBar
+        <UiAppMolecule_BottomNavigationBar
           items={[
             {
               icon_variant: 'HOME',
@@ -61,7 +63,7 @@ export const Primary = () => {
         />
       }
     >
-      <Library
+      <UiAppTemplate_Library
         slot_aside={<>aside</>}
         slot_tag_hierarchies={
           <>
@@ -91,7 +93,7 @@ export const Primary = () => {
         slot_toolbar={<>toolbar</>}
         mobile_title_bar="Bookmarks"
         on_page_bottom_reached={() => {}}
-        has_more_bookmarks={false}
+        slot_pinned={<>pinned</>}
         is_fetching_first_bookmarks={false}
         is_fetching_more_bookmarks={false}
         slot_bookmarks={
@@ -107,16 +109,16 @@ export const Primary = () => {
         slot_search={<>search</>}
         translations={{
           collapse_alt: '',
-          subscribe: '',
-          unsubscribe: '',
+          follow: '',
+          unfollow: '',
         }}
       />
-    </App>
+    </UiAppTemplate_App>
   )
 }
 
 const bookmark = (
-  <Bookmark
+  <UiAppAtom_Bookmark
     date={new Date()}
     links={[]}
     title="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
@@ -132,14 +134,16 @@ const bookmark = (
     set_render_height={() => {}}
     favicon_host=""
     menu_slot={<></>}
-    number_of_selected_tags={0}
     should_dim_visited_links={false}
     stars={0}
     updated_at=""
-    is_fetching_bookmarks={false}
     bookmark_id={1}
     density="default"
     on_mouse_up_on_tag={() => {}}
     on_tag_delete_click={() => {}}
+    index={0}
+    is_public={true}
+    on_give_point_click={() => {}}
+    pinned_links_count={0}
   />
 )

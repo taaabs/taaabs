@@ -38,9 +38,7 @@ export const get_public_counts = (params: {
         bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
       )
       dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
-      if (state.bookmarks.should_refetch_counts) {
-        dispatch(bookmarks_actions.set_should_refetch_counts(false))
-      }
+      dispatch(bookmarks_actions.set_should_refetch_counts(false))
     }
   }
 }

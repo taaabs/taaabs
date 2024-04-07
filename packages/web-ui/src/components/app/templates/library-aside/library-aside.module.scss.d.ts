@@ -1,4 +1,5 @@
 declare const styles: {
+  readonly stickybox: string
   readonly container: string
   readonly feedback: string
   readonly slots: string

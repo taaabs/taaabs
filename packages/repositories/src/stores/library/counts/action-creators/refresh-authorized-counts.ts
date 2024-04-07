@@ -49,6 +49,6 @@ export const refresh_authorized_counts = (params: {
     dispatch(
       bookmarks_actions.set_bookmarks(state.bookmarks.incoming_bookmarks),
     )
-    dispatch(bookmarks_actions.set_is_updating_bookmarks(false))
+    dispatch(bookmarks_actions.set_is_upserting(false))
   }
 }

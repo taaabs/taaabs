@@ -6,7 +6,7 @@ import { system_values } from '@shared/constants/system-values'
 
 type BookmarksState = {
   is_fetching: boolean
-  is_updating_bookmarks: boolean
+  is_upserting: boolean
   is_fetching_first_bookmarks: boolean
   first_bookmarks_fetched_at_timestamp?: number // Used for synchronization of pinned links re-render.
   is_fetching_more_bookmarks: boolean
@@ -22,7 +22,7 @@ type BookmarksState = {
 
 const initial_state: BookmarksState = {
   is_fetching: false,
-  is_updating_bookmarks: false,
+  is_upserting: false,
   is_fetching_first_bookmarks: false,
   is_fetching_more_bookmarks: false,
   incoming_bookmarks: null,
@@ -38,8 +38,8 @@ export const bookmarks_slice = createSlice({
     set_is_fetching(state, action: PayloadAction<boolean>) {
       state.is_fetching = action.payload
     },
-    set_is_updating_bookmarks(state, action: PayloadAction<boolean>) {
-      state.is_updating_bookmarks = action.payload
+    set_is_upserting(state, action: PayloadAction<boolean>) {
+      state.is_upserting = action.payload
     },
     set_is_fetching_first_bookmarks(state, action: PayloadAction<boolean>) {
       state.is_fetching_first_bookmarks = action.payload

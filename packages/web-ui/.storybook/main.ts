@@ -11,6 +11,7 @@ const config: StorybookConfig = {
   core: {
     disableTelemetry: true,
   },
+  staticDirs: ['../../web-client/public'],
   viteFinal(config) {
     config.plugins?.push(
       svgr({

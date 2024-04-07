@@ -64,13 +64,19 @@ export const get_authorized_bookmarks = (params: {
       }
     }
 
+    let should_refetch_counts = false
+
     const result = await backOff(get_result, {
       ...backoff_options,
       retry: () => {
-        dispatch(bookmarks_actions.set_should_refetch_counts(true))
+        should_refetch_counts = true
         return true
       },
     })
+
+    if (should_refetch_counts) {
+      dispatch(bookmarks_actions.set_should_refetch_counts(true))
+    }
 
     let bookmarks_with_density: Bookmark_Entity[] = []
 

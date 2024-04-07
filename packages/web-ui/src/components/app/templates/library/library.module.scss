@@ -349,28 +349,6 @@
       overflow: auto;
       background: var(--Library-background);
     }
-    &__stickybox {
-      @include at992 {
-        height: 100%;
-      }
-      > div {
-        @include to992 {
-          padding: 0 var(--distance-16px)
-            calc(var(--distance-16px) + 36px + 12px) var(--distance-17px);
-          // Overrides inline values coming from stickybox.
-          position: relative !important;
-          top: 0 !important;
-        }
-        @include at992 {
-          padding: var(--distance-16px) 0 var(--distance-16px)
-            var(--distance-16px);
-        }
-        @include at1200 {
-          padding: var(--distance-16px) 0 var(--distance-16px)
-            var(--distance-32px);
-        }
-      }
-    }
   }
 }
 .free-fall {

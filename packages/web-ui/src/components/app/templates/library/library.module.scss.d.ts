@@ -27,7 +27,6 @@ declare const styles: {
   readonly aside: string
   readonly 'aside--hidden': string
   readonly aside__inner: string
-  readonly aside__inner__stickybox: string
   readonly 'free-fall': string
   readonly dimmed: string
 }

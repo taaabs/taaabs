@@ -5,11 +5,9 @@ import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import StickyBox from 'react-sticky-box'
 import { MobileTitleBar as Subcomponent_MobileTitleBar } from './components/mobile-title-bar'
 import styles from './library.module.scss'
 import { useSwipeable } from 'react-swipeable'
-import { shared_values } from '@web-ui/constants'
 import { use_is_scrolled } from '@web-ui/hooks/use-is-scrolled'
 import { Button } from '@web-ui/components/common/particles/button'
 
@@ -22,7 +20,7 @@ export namespace Library {
     slot_search: React.ReactNode
     slot_pinned: React.ReactNode
     slot_bookmarks: React.ReactNode
-    is_updating_bookmarks?: boolean
+    is_upserting?: boolean
     is_fetching_first_bookmarks: boolean
     is_fetching_more_bookmarks: boolean
     on_page_bottom_reached: () => void
@@ -32,12 +30,12 @@ export namespace Library {
     info_text?: React.ReactNode
     close_aside_count?: number
     welcome_text?: string
-    on_subscribe_click?: () => void
-    is_subscribed?: boolean
+    on_follow_click?: () => void
+    is_following?: boolean
     translations: {
       collapse_alt: string
-      subscribe: string
-      unsubscribe: string
+      follow: string
+      unfollow: string
     }
   }
 }
@@ -324,11 +322,11 @@ export const Library: React.FC<Library.Props> = (props) => {
                   {props.welcome_text}
                 </div>
               )}
-              {props.on_subscribe_click && (
+              {props.on_follow_click && (
                 <Button is_outlined={true}>
-                  {!props.is_subscribed
-                    ? props.translations.subscribe
-                    : props.translations.unsubscribe}
+                  {!props.is_following
+                    ? props.translations.follow
+                    : props.translations.unfollow}
                 </Button>
               )}
             </div>
@@ -410,8 +408,7 @@ export const Library: React.FC<Library.Props> = (props) => {
             <div
               className={cn({
                 [styles.dimmed]:
-                  props.is_fetching_first_bookmarks ||
-                  props.is_updating_bookmarks,
+                  props.is_fetching_first_bookmarks || props.is_upserting,
               })}
             >
               <div className={styles.main__inner__pinned}>
@@ -443,13 +440,7 @@ export const Library: React.FC<Library.Props> = (props) => {
             width: `${slidable_width}px`,
           }}
         >
-          <div className={styles.aside__inner}>
-            <div className={styles.aside__inner__stickybox}>
-              <StickyBox offsetTop={shared_values.app_header_desktop}>
-                {props.slot_aside}
-              </StickyBox>
-            </div>
-          </div>
+          <div className={styles.aside__inner}>{props.slot_aside}</div>
         </aside>
       </div>
     </div>
