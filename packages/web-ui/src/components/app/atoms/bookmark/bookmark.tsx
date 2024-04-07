@@ -472,7 +472,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     )
                   })}
                   <div className={styles.bookmark__main__tags__huggs}>
-                    {props.points !== undefined && (
+                    {props.is_public && props.points !== undefined && (
                       <button
                         className={styles.bookmark__main__tags__huggs__amount}
                         onClick={() => {}}

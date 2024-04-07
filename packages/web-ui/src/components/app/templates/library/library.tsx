@@ -323,7 +323,7 @@ export const Library: React.FC<Library.Props> = (props) => {
                 </div>
               )}
               {props.on_follow_click && (
-                <Button is_outlined={true}>
+                <Button on_click={props.on_follow_click}>
                   {!props.is_following
                     ? props.translations.follow
                     : props.translations.unfollow}
