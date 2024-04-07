@@ -84,6 +84,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                       if (link.is_public) {
                         return {
                           is_public: true,
+                          is_pinned: link.is_pinned,
                           url: link.url.trim(),
                           hash: await Crypto.SHA256(link.url.trim(), key),
                           site_path: link.site_path,
@@ -92,6 +93,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                         const domain = get_domain_from_url(link.url)
                         return {
                           is_public: false,
+                          is_pinned: link.is_pinned,
                           hash: await Crypto.SHA256(link.url.trim(), key),
                           url_aes: await Crypto.AES.encrypt(
                             link.url.trim(),
