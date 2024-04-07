@@ -55,5 +55,6 @@ declare const styles: {
   readonly highlight: string
   readonly slot: string
   readonly 'slot--hidden': string
+  readonly 'sortable-fallback': string
 }
 export = styles

@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react'
 export namespace DraggedCursorTag {
   export type Props = {
     tag_name?: string
-    sibling_tag_name?: string
   }
 }
 
@@ -33,7 +32,6 @@ export const DraggedCursorTag: React.FC<DraggedCursorTag.Props> = (props) => {
   return props.tag_name ? (
     <div ref={tag} className={styles.tag}>
       <div>{props.tag_name}</div>
-      {props.sibling_tag_name && <div>&nbsp;⇆ {props.sibling_tag_name}</div>}
     </div>
   ) : (
     <></>

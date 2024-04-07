@@ -355,5 +355,6 @@
   @include transition-250ms(transform);
 }
 .dimmed {
+  pointer-events: none;
   opacity: var(--opacity-loading);
 }

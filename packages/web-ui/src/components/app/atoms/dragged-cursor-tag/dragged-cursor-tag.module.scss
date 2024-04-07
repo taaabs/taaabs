@@ -4,16 +4,16 @@
 .tag {
   position: fixed;
   z-index: 3;
-  top: 0;
-  left: 0;
+  top: -5px;
+  left: -5px;
   color: var(--plain-white);
   font-size: var(--font-size-13px);
   display: flex;
   align-items: center;
   background-color: var(--blue700);
   font-weight: var(--font-weight-inter-medium);
-  border-radius: var(--border-radius-999px);
-  padding: var(--distance-6px) var(--distance-10px);
+  border-radius: var(--border-radius-8px);
+  padding: var(--distance-4px) var(--distance-8px);
   box-shadow: var(--box-shadow-blue-strong);
   opacity: 0;
   @include transition-150ms(opacity);
