@@ -2,6 +2,8 @@ import { Dictionary } from './dictionary'
 
 const dictionary: Dictionary = {
   library: {
+    follow: 'Follow',
+    unfollow: 'Unfollow',
     welcome: 'Howdy',
     send_feedback: 'Send feedback',
     search_placeholder: 'Search in titles, notes, tags and links...',

@@ -1,5 +1,7 @@
 export type Dictionary = {
   library: {
+    follow: string
+    unfollow: string
     welcome: string
     send_feedback: string
     search_placeholder: string

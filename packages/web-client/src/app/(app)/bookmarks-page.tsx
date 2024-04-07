@@ -65,6 +65,7 @@ import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types/record-visit.params'
+import dictionary from '@/dictionaries/en'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -278,9 +279,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
       />
       <UiAppTemplate_Library
         translations={{
-          collapse_alt: 'Collapse sidebar',
-          follow: 'Subscribe',
-          unfollow: 'Unsubscribe',
+          collapse_alt: dictionary.library.collapse_sidebar,
+          follow: dictionary.library.follow,
+          unfollow: dictionary.library.unfollow,
         }}
         is_following={undefined}
         welcome_text={
