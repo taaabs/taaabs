@@ -17,9 +17,6 @@ import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookma
 import { use_bookmarks } from '@/hooks/library/use-bookmarks'
 import { use_counts } from '@/hooks/library/use-counts'
 import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage-cleanup'
-import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
-import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
-import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { browser_storage } from '@/constants/browser-storage'
 import { use_is_hydrated } from '@shared/hooks'
@@ -44,7 +41,6 @@ import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/boo
 import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/particles/icon'
 import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolbar'
 import { TagHierarchiesSkeleton as UiAppAtom_TagHierarchiesSkeleton } from '@web-ui/components/app/atoms/tag-hierarchies-skeleton'
-import { use_has_focus } from '@/hooks/misc/use-has-focus'
 import {
   TagHierarchies,
   TagHierarchies as UiAppAtom_TagHierarchies,
@@ -118,44 +114,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   })
 
   const favicon_host = `${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`
-
-  // Upload deferred recent visit - START
-  const has_focus = use_has_focus()
-  useEffect(() => {
-    const ky_instance = ky.create({
-      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-        'Content-Type': 'application/json',
-      },
-    })
-
-    if (username) return
-    if (has_focus) {
-      const record_visit_params: RecordVisit_Params | null = JSON.parse(
-        localStorage.getItem(
-          browser_storage.local_storage.authorized_library.record_visit_params,
-        ) || 'null',
-      )
-      if (record_visit_params) {
-        // Timeout prevents white screen when navigating back.
-        setTimeout(() => {
-          localStorage.removeItem(
-            browser_storage.local_storage.authorized_library
-              .record_visit_params,
-          )
-          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          const record_visit = new RecordVisit_UseCase(repository)
-          record_visit.invoke({
-            bookmark_id: record_visit_params.bookmark_id,
-            visited_at: record_visit_params.visited_at,
-          })
-        }, 0)
-      }
-    }
-  }, [has_focus])
-  // Upload deferred recent visit - END
 
   useUpdateEffect(() => {
     if (
