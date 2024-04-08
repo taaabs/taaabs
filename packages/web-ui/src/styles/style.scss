@@ -250,6 +250,10 @@ small {
   fill-opacity: 0;
 }
 
+.sortable-chosen {
+  opacity: var(--dimmed-opacity);
+}
+
 // !important below set because of a bug: https://github.com/vercel/next.js/issues/13092
 .Toastify__progress-bar {
   height: var(--distance-4px) !important;

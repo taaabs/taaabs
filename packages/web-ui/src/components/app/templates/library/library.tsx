@@ -80,9 +80,7 @@ export const Library: React.FC<Library.Props> = (props) => {
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
         (event.target as any)?.nodeName == 'line' ||
-        (event as any).srcElement.offsetParent?.className.includes(
-          'sortable-ghost',
-        )
+        (event as any).target.className.includes('sortable-ghost')
       )
         return
 
@@ -105,9 +103,7 @@ export const Library: React.FC<Library.Props> = (props) => {
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
         (event.target as any)?.nodeName == 'line' ||
-        (event as any).srcElement.offsetParent?.className.includes(
-          'sortable-ghost',
-        )
+        (event as any).target.className.includes('sortable-ghost')
       )
         return
 
@@ -131,9 +127,7 @@ export const Library: React.FC<Library.Props> = (props) => {
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
         (event.target as any)?.nodeName == 'line' ||
-        (event as any).srcElement.offsetParent?.className.includes(
-          'sortable-ghost',
-        )
+        (event as any).target.className.includes('sortable-ghost')
       )
         return
 

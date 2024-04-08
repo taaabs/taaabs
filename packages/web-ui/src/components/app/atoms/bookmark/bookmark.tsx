@@ -110,6 +110,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const ref = useRef<HTMLDivElement>(null)
     const [tags, set_tags] = useState<Bookmark.Props['tags']>(props.tags)
     // Detecing swiping is mitigates interference between tag reordering and toggling density.
+    const [is_mouse_over, set_is_mouse_over] = useState(false)
     const [is_swiping, set_is_swiping] = useState(false)
     const { onSwipeStart, onSwipeEnd } = useSwipeEvents(ref, {
       preventDefault: false,
@@ -175,73 +176,74 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       set_tags(props.tags)
     }, [props.updated_at, props.library_updated_at_timestamp])
 
-    const tags_dom = tags.map((tag, i) => {
-      const tag_first_char_index_in_search_title = (
-        (props.title ? `${props.title} ` : '') +
-        props.tags
-          .map((tag) => ` ${tag.name}`)
-          .slice(0, i)
-          .join('')
-      ).length
+    const tags_dom = [
+      ...tags.map((tag, i) => {
+        const tag_first_char_index_in_search_title = (
+          (props.title ? `${props.title} ` : '') +
+          props.tags
+            .map((tag) => ` ${tag.name}`)
+            .slice(0, i)
+            .join('')
+        ).length
 
-      return (
-        <button
-          key={tag.id}
-          className={styles.bookmark__main__tags__tag}
-          onClick={(e) => {
-            e.stopPropagation()
-            if (tag.is_selected) {
-              props.on_selected_tag_click(tag.id)
-            } else {
-              props.on_tag_click(tag.id)
-            }
-          }}
-          onMouseDown={(e) => {
-            e.stopPropagation()
-            if (!props.on_tag_drag_start) return
-            props.on_tag_drag_start({
-              id: tag.id,
-              name: tag.name,
-              source_bookmark_id: props.bookmark_id,
-            })
-          }}
-          onMouseEnter={() => {
-            if (!props.on_tag_drag_start) return
-            if (
-              props.dragged_tag &&
-              props.dragged_tag.source_bookmark_id == props.bookmark_id &&
-              tag.name != props.dragged_tag.name &&
-              props.tags.findIndex((tag) => tag.id == props.dragged_tag!.id) !=
-                -1
-            ) {
+        return (
+          <button
+            key={tag.id}
+            className={styles.bookmark__main__tags__tag}
+            onClick={(e) => {
+              e.stopPropagation()
+              if (tag.is_selected) {
+                props.on_selected_tag_click(tag.id)
+              } else {
+                props.on_tag_click(tag.id)
+              }
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation()
+              if (!props.on_tag_drag_start) return
               props.on_tag_drag_start({
-                id: props.dragged_tag.id,
-                name: props.dragged_tag.name,
-                source_bookmark_id: props.bookmark_id,
-                over_sibling_tag_name: tag.name,
-              })
-            }
-          }}
-          onMouseLeave={() => {
-            if (!props.on_tag_drag_start) return
-            if (props.dragged_tag) {
-              props.on_tag_drag_start({
-                id: props.dragged_tag.id,
-                name: props.dragged_tag.name,
+                id: tag.id,
+                name: tag.name,
                 source_bookmark_id: props.bookmark_id,
               })
+            }}
+            onMouseEnter={() => {
+              if (!props.on_tag_drag_start) return
+              if (
+                props.dragged_tag &&
+                props.dragged_tag.source_bookmark_id == props.bookmark_id &&
+                tag.name != props.dragged_tag.name &&
+                props.tags.findIndex(
+                  (tag) => tag.id == props.dragged_tag!.id,
+                ) != -1
+              ) {
+                props.on_tag_drag_start({
+                  id: props.dragged_tag.id,
+                  name: props.dragged_tag.name,
+                  source_bookmark_id: props.bookmark_id,
+                  over_sibling_tag_name: tag.name,
+                })
+              }
+            }}
+            onMouseLeave={() => {
+              if (!props.on_tag_drag_start) return
+              if (props.dragged_tag) {
+                props.on_tag_drag_start({
+                  id: props.dragged_tag.id,
+                  name: props.dragged_tag.name,
+                  source_bookmark_id: props.bookmark_id,
+                })
+              }
+            }}
+            onContextMenu={
+              props.on_tag_delete_click
+                ? (e) => {
+                    set_context_menu_of_tag_id(tag.id)
+                    onContextMenu(e)
+                  }
+                : undefined
             }
-          }}
-          onContextMenu={
-            props.on_tag_delete_click
-              ? (e) => {
-                  set_context_menu_of_tag_id(tag.id)
-                  onContextMenu(e)
-                }
-              : undefined
-          }
-        >
-          <div>
+          >
             <span
               className={cn([
                 styles.bookmark__main__tags__tag__name,
@@ -278,10 +280,24 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 ×
               </span>
             )}
-          </div>
+          </button>
+        )
+      }),
+      is_mouse_over &&
+      props.dragged_tag &&
+      props.tags.length < system_values.bookmark.tags.limit &&
+      props.tags.findIndex((tag) => tag.id == props.dragged_tag!.id) == -1 ? (
+        <button
+          className={cn(styles.bookmark__main__tags__tag, 'sortable-chosen')}
+        >
+          <span className={styles.bookmark__main__tags__tag__name}>
+            {props.dragged_tag?.name}
+          </span>
         </button>
-      )
-    })
+      ) : (
+        <></>
+      ),
+    ]
 
     const huggs_dom = (
       <div className={styles.bookmark__main__tags__huggs}>
@@ -523,12 +539,15 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             onMouseEnter={() => {
               if (
                 props.dragged_tag &&
+                props.tags.length < system_values.bookmark.tags.limit &&
                 !props.tags.find((tag) => tag.name == props.dragged_tag!.name)
               ) {
                 document.body.classList.add('adding-tag')
+                set_is_mouse_over(true)
               }
             }}
             onMouseLeave={() => {
+              set_is_mouse_over(false)
               if (props.dragged_tag) {
                 document.body.classList.remove('adding-tag')
               }
@@ -679,7 +698,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     delayOnTouchOnly={true}
                     className={styles.bookmark__main__tags}
                     filter={`.${styles.bookmark__main__tags__huggs}`}
-                    fallbackClass={styles['sortable-fallback']}
+                    fallbackClass={
+                      !('ontouchstart' in window)
+                        ? styles['sortable-fallback']
+                        : undefined
+                    }
                   >
                     {tags_dom}
                     {huggs_dom}
