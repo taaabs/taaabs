@@ -12,7 +12,11 @@ export namespace Tags {
     library_updated_at_timestamp?: number
     tags: Tag[]
     on_click: (tag: number) => void
-    on_tag_drag_start?: (params: { id: number; name: string }) => void
+    on_tag_drag_start?: (params: {
+      id: number
+      name: string
+      yields: number
+    }) => void
   }
 }
 
@@ -58,6 +62,7 @@ export const Tags: React.FC<Tags.Props> = memo(
                       props.on_tag_drag_start({
                         id: tag.id,
                         name: tag.name,
+                        yields: tag.yields,
                       })
                     }}
                   >

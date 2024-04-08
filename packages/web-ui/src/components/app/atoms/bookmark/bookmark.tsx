@@ -98,9 +98,14 @@ export namespace Bookmark {
       id: number
       name: string
       source_bookmark_id: number
-      over_sibling_tag_name?: string
+      yields: number
     }) => void
-    dragged_tag?: { id: number; name: string; source_bookmark_id?: number }
+    dragged_tag?: {
+      id: number
+      name: string
+      source_bookmark_id?: number
+      yields: number
+    }
     on_mouse_up?: () => void
   }
 }
@@ -205,6 +210,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 id: tag.id,
                 name: tag.name,
                 source_bookmark_id: props.bookmark_id,
+                yields: tag.yields || 0,
               })
             }}
             onMouseEnter={() => {
@@ -221,7 +227,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   id: props.dragged_tag.id,
                   name: props.dragged_tag.name,
                   source_bookmark_id: props.bookmark_id,
-                  over_sibling_tag_name: tag.name,
+                  yields: tag.yields || 0,
                 })
               }
             }}
@@ -232,6 +238,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   id: props.dragged_tag.id,
                   name: props.dragged_tag.name,
                   source_bookmark_id: props.bookmark_id,
+                  yields: tag.yields || 0,
                 })
               }
             }}
@@ -287,11 +294,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       props.dragged_tag &&
       props.tags.length < system_values.bookmark.tags.limit &&
       props.tags.findIndex((tag) => tag.id == props.dragged_tag!.id) == -1 ? (
-        <button
-          className={cn(styles.bookmark__main__tags__tag, 'sortable-chosen')}
-        >
+        <button className={styles.bookmark__main__tags__tag}>
           <span className={styles.bookmark__main__tags__tag__name}>
-            {props.dragged_tag?.name}
+            {props.dragged_tag.name}
+          </span>
+          <span className={styles.bookmark__main__tags__tag__yields}>
+            {props.dragged_tag.yields + 1}
           </span>
         </button>
       ) : (
@@ -534,6 +542,15 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               ) {
                 document.body.classList.remove('adding-tag')
                 props.on_mouse_up()
+                set_tags([
+                  ...tags,
+                  {
+                    id: 0,
+                    is_public: true,
+                    name: props.dragged_tag.name,
+                    yields: props.dragged_tag.yields + 1,
+                  },
+                ])
               }
             }}
             onMouseEnter={() => {

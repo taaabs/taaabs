@@ -20,6 +20,7 @@ export const use_tag_view_options = () => {
   const [dragged_tag, set_dragged_tag] = useState<{
     id: number
     name: string
+    yields: number
     source_bookmark_id?: number
   }>()
 
