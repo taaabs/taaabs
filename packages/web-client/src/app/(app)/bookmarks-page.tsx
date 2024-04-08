@@ -883,6 +883,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                       library_updated_at_timestamp={
                         library_updated_at_timestamp
                       }
+                      library_url={username ? `/${username}` : '/bookmarks'}
                       tags={
                         counts_hook.tags
                           ? Object.entries(counts_hook.tags)
@@ -1017,6 +1018,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   library_updated_at_timestamp={library_updated_at_timestamp}
                   search_queried_at_timestamp={search_hook.queried_at_timestamp}
                   bookmark_id={bookmark.id}
+                  library_url={username ? `/${username}` : '/bookmarks'}
                   on_tag_drag_start={
                     !username
                       ? tag_view_options_hook.set_dragged_tag
@@ -1271,7 +1273,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                             })),
                             tags: tags.map((tag) => ({
                               name: tag.name,
-                              is_public: tag.is_public,
+                              is_public: tag.is_public || false,
                             })),
                           }
                           const updated_bookmark = await dispatch(

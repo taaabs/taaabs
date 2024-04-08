@@ -12,6 +12,7 @@ export namespace Tags {
     library_updated_at_timestamp?: number
     tags: Tag[]
     on_click: (tag: number) => void
+    library_url: string
     on_tag_drag_start?: (params: {
       id: number
       name: string
@@ -52,24 +53,36 @@ export const Tags: React.FC<Tags.Props> = memo(
               </div>
               {group
                 .sort((a, b) => b.yields - a.yields)
-                .map((tag) => (
-                  <button
-                    className={styles.tag}
-                    onClick={() => props.on_click(tag.id)}
-                    key={tag.id}
-                    onMouseDown={() => {
-                      if (!props.on_tag_drag_start) return
-                      props.on_tag_drag_start({
-                        id: tag.id,
-                        name: tag.name,
-                        yields: tag.yields,
-                      })
-                    }}
-                  >
-                    <span>{tag.name}</span>
-                    <span> {tag.yields}</span>
-                  </button>
-                ))}
+                .map((tag) => {
+                  const search_params = new URLSearchParams(
+                    window.location.search,
+                  )
+                  const tags = search_params.get('t')?.split(',') || []
+                  search_params.set('t', [...tags, tag.id].join(','))
+                  return (
+                    <a
+                      key={tag.id}
+                      className={styles.tag}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        props.on_click(tag.id)
+                      }}
+                      href={`${props.library_url}?${search_params.toString()}`}
+                      onMouseDown={() => {
+                        if (!props.on_tag_drag_start) return
+                        props.on_tag_drag_start({
+                          id: tag.id,
+                          name: tag.name,
+                          yields: tag.yields,
+                        })
+                      }}
+                      draggable={false}
+                    >
+                      <span>{tag.name}</span>
+                      <span> {tag.yields}</span>
+                    </a>
+                  )
+                })}
             </div>
           ))}
       </div>

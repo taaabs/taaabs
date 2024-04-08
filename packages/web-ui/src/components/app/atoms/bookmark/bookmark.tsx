@@ -59,6 +59,7 @@ export namespace Bookmark {
     date: Date
     density: 'default' | 'compact'
     is_compact?: boolean
+    library_url: string
     on_tag_click: (tag_id: number) => void
     on_tag_delete_click?: (tag_id: number) => void
     on_tags_order_change?: (tags: Bookmark.Props['tags']) => void
@@ -66,7 +67,7 @@ export namespace Bookmark {
     on_give_point_click: () => void
     tags: {
       id: number
-      is_public: boolean
+      is_public?: boolean
       name: string
       yields?: number
       is_selected?: boolean
@@ -191,11 +192,16 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             .join('')
         ).length
 
+        const search_params = new URLSearchParams(window.location.search)
+        const tags = search_params.get('t')?.split(',') || []
+        search_params.set('t', [...tags, tag.id].join(','))
+
         return (
-          <button
+          <a
             key={tag.id}
             className={styles.bookmark__main__tags__tag}
             onClick={(e) => {
+              e.preventDefault()
               e.stopPropagation()
               if (tag.is_selected) {
                 props.on_selected_tag_click(tag.id)
@@ -203,6 +209,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 props.on_tag_click(tag.id)
               }
             }}
+            href={`${props.library_url}?${search_params.toString()}`}
             onMouseDown={(e) => {
               e.stopPropagation()
               if (!props.on_tag_drag_start) return
@@ -287,14 +294,17 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 ×
               </span>
             )}
-          </button>
+          </a>
         )
       }),
       is_mouse_over &&
       props.dragged_tag &&
       props.tags.length < system_values.bookmark.tags.limit &&
       props.tags.findIndex((tag) => tag.id == props.dragged_tag!.id) == -1 ? (
-        <button className={styles.bookmark__main__tags__tag}>
+        <button
+          className={styles.bookmark__main__tags__tag}
+          style={{ opacity: 'var(--dimmed-opacity)' }}
+        >
           <span className={styles.bookmark__main__tags__tag__name}>
             {props.dragged_tag.name}
           </span>

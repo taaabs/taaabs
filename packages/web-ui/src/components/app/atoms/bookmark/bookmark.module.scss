@@ -194,6 +194,7 @@
         color: var(--text-color-dimmed);
       }
       &__tag {
+        display: inline-block;
         // Needed by swipable and sortable - element touch hold detection.
         > * {
           pointer-events: none;
