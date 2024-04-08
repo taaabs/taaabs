@@ -721,8 +721,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     animation={system_values.sortablejs_animation_duration}
                     forceFallback={true}
                     dropBubble={true} // Needed for clearing dragged tag UI.
-                    delay={system_values.sortablejs_delay}
-                    delayOnTouchOnly={true}
+                    delay={
+                      'ontouchstart' in window
+                        ? system_values.sortablejs_delay_mobile
+                        : system_values.sortablejs_delay_desktop
+                    }
                     className={styles.bookmark__main__tags}
                     filter={`.${styles.bookmark__main__tags__huggs}`}
                     fallbackClass={
