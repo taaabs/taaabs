@@ -5,7 +5,7 @@ export const system_values = {
   max_library_search_results: 1000,
   max_library_search_hints: 10,
   sortablejs_animation_duration: 150,
-  sortablejs_delay: 200,
+  sortablejs_delay: 250,
   concurrent_importing_users_limit: 10,
   import_bookmarks_batch_size: 100,
   library: {

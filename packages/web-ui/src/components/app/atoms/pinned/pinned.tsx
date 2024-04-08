@@ -47,7 +47,6 @@ type SortableItem = {
 
 export const Pinned: React.FC<Pinned.Props> = memo(
   function Pinned(props) {
-    const [is_holding_item, set_is_holding_item] = useState(false)
     const [items, set_items] = useState<SortableItem[]>(
       props.items.map((item, i) => ({
         id: i,
@@ -108,9 +107,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
             location.href = item.url
           }}
           onContextMenu={(e) => {
-            if (is_holding_item) {
-              e.preventDefault()
-            }
+            e.preventDefault()
           }}
         >
           <div
@@ -165,12 +162,6 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         fallbackClass={styles['item--dragging']}
         delay={system_values.sortablejs_delay}
         delayOnTouchOnly={true}
-        onStart={() => {
-          set_is_holding_item(true)
-        }}
-        onEnd={() => {
-          set_is_holding_item(false)
-        }}
       >
         {items_dom}
       </ReactSortable>
