@@ -2,7 +2,7 @@
 // import { GlobalStoreProvider } from './global-store-provider'
 import { Metadata, Viewport } from 'next'
 import { Inter, Plus_Jakarta_Sans, Inter_Tight } from 'next/font/google'
-import { ToastContainer, Zoom } from 'react-toastify'
+import { ToastContainer, Slide } from 'react-toastify'
 
 import 'react-nestable/dist/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -52,7 +52,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           theme="light"
           closeButton={false}
           icon={false}
-          transition={Zoom}
+          transition={Slide}
           draggablePercent={20}
         />
         {children}
