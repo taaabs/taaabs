@@ -250,7 +250,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               }
             }}
             onContextMenu={(e) => {
-              if (props.on_tag_delete_click) {
+              if ('ontouchstart' in window) {
+                e.preventDefault()
+              } else if (props.on_tag_delete_click) {
                 set_context_menu_of_tag_id(tag.id)
                 onContextMenu(e)
               }
