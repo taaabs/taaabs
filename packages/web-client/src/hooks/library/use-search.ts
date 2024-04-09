@@ -1259,15 +1259,10 @@ export const use_search = () => {
         id: params.bookmark.id.toString(),
         text:
           (params.bookmark.title ? `${params.bookmark.title} ` : '') +
+          (params.bookmark.note ? `${params.bookmark.note} ` : '') +
           params.bookmark.tags.join(' ') +
           (sites.length ? ' ' : '') +
           sites.join(' '),
-        note: params.bookmark.note
-          ? `${params.bookmark.note} ` +
-            params.bookmark.tags.join(' ') +
-            (sites.length ? ' ' : '') +
-            sites.join(' ')
-          : '',
         created_at: Math.round(
           new Date(params.bookmark.created_at).getTime() / 1000,
         ),

@@ -23,7 +23,7 @@
   }
 }
 .container {
-  background: var(--plain-white);
+  background: var(--white);
   border: var(--border-secondary);
   @include transition-150ms(border-color);
   @include to992 {

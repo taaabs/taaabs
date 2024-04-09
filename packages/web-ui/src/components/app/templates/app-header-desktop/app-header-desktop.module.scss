@@ -27,7 +27,8 @@
   border: var(--border-secondary);
   border-radius: var(--border-radius-10px);
   padding: var(--distance-4px) var(--distance-8px);
-  @include transition-150ms(border-color);
+  background-color: var(--white);
+  @include transition-150ms();
   @include hover {
     border-color: var(--border-color-hover);
   }

@@ -1,11 +1,13 @@
 @mixin colors {
   --white: #fff;
+  --black: var(--neutral900);
   --red: red;
-  --yellow: #FFD21E;
+  --yellow: #ffd21e;
   --highlight: #ffff00;
 
   --neutral25: #fbfbfb;
   --neutral50: #f9f9f9;
+  --neutral50-transparent: rgba(15, 20, 25, 0.05);
   --neutral100: #efefef;
   --neutral200: #e2e2e2;
   --neutral250: #d7d7d7;

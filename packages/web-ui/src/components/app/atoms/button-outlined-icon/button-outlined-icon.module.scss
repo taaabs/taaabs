@@ -13,7 +13,7 @@
   @include transition-150ms(border-color);
   width: var(--button-dimension-40px);
   height: var(--button-dimension-40px);
-  background: var(--plain-white);
+  background: var(--white);
   @include hover {
     border-color: var(--border-color-hover);
   }
