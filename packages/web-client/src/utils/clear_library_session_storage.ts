@@ -70,15 +70,6 @@ export const clear_library_session_storage = (params: {
       sessionStorage.removeItem(key)
     } else if (
       key ==
-      browser_storage.session_storage.library.highlights_note({
-        username: params.username,
-        search_params: params.search_params,
-        hash: params.hash ? params.hash : '',
-      })
-    ) {
-      sessionStorage.removeItem(key)
-    } else if (
-      key ==
       browser_storage.session_storage.library.highlights_sites_variants({
         username: params.username,
         search_params: params.search_params,

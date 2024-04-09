@@ -91,7 +91,6 @@ export namespace Bookmark {
     on_menu_click: () => Promise<void>
     menu_slot: React.ReactNode
     highlights?: Highlights
-    highlights_note?: Highlights
     highlights_site_variants?: string[]
     orama_db_id?: string
     should_dim_visited_links: boolean
@@ -187,6 +186,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       ...tags.map((tag, i) => {
         const tag_first_char_index_in_search_title = (
           (props.title ? `${props.title} ` : '') +
+          (props.note ? `${props.note} ` : '') +
           props.tags
             .map((tag) => ` ${tag.name}`)
             .slice(0, i)
@@ -692,11 +692,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   </div>
                   {props.note && (
                     <div className={styles.bookmark__main__content__note}>
-                      {props.highlights_note
+                      {props.highlights
                         ? props.note.split('').map((char, i) => {
-                            const is_highlighted = props.highlights_note!.find(
+                            const real_i =
+                              (props.title ? `${props.title} ` : '').length + i
+
+                            const is_highlighted = props.highlights!.find(
                               ([index, length]) =>
-                                i >= index && i < index + length,
+                                real_i >= index && real_i < index + length,
                             )
                             return is_highlighted ? (
                               <span className={styles.highlight} key={i}>
@@ -770,6 +773,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
                   const link_first_char_index_in_search_title = (
                     (props.title ? `${props.title} ` : '') +
+                    (props.note ? `${props.note} ` : '') +
                     props.tags.map((tag) => tag.name).join(' ') +
                     (props.tags.length ? ' ' : '') +
                     props.links

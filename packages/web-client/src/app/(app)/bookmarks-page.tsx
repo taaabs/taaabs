@@ -2408,9 +2408,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     )
                   }
                   highlights={search_hook.highlights?.[bookmark.id.toString()]}
-                  highlights_note={
-                    search_hook.highlights_note?.[bookmark.id.toString()]
-                  }
                   highlights_site_variants={
                     search_hook.highlights_sites_variants
                   }

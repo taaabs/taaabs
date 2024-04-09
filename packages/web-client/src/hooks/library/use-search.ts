@@ -66,8 +66,7 @@ type Highlights = {
 
 const schema = {
   id: 'string',
-  title: 'string',
-  note: 'string',
+  text: 'string',
   tag_ids: 'string[]',
   sites: 'string[]',
   sites_variants: 'string[]',
@@ -109,7 +108,6 @@ export const use_search = () => {
     useState<number | undefined>()
   const [result, set_result] = useState<Results<Result>>()
   const [highlights, set_highlights] = useState<Highlights>()
-  const [highlights_note, set_highlights_note] = useState<Highlights>()
   const [highlights_sites_variants, set_highlights_sites_variants] =
     useState<string[]>()
   const [count, set_count] = useState<number>()
@@ -278,7 +276,6 @@ export const use_search = () => {
         unsortableProperties: [
           'id',
           'title',
-          'note',
           'sites',
           'sites_variants',
           'is_unread',
@@ -359,17 +356,12 @@ export const use_search = () => {
           db,
           chunk.map((bookmark) => ({
             id: bookmark.id.toString(),
-            title:
+            text:
               (bookmark.title ? `${bookmark.title} ` : '') +
+              (bookmark.note ? `${bookmark.note} ` : '') +
               bookmark.tags.join(' ') +
               (bookmark.tags.length ? ' ' : '') +
               bookmark.sites.map((site) => site.replace('/', ' › ')).join(' '),
-            note: bookmark.note
-              ? `${bookmark.note} ` +
-                bookmark.tags.join(' ') +
-                (bookmark.tags.length ? ' ' : '') +
-                bookmark.sites.map((site) => site.replace('/', ' › ')).join(' ')
-              : '',
             sites: bookmark.sites,
             sites_variants: bookmark.sites
               .map((site) => get_site_variants_for_search(site))
@@ -560,7 +552,7 @@ export const use_search = () => {
       {
         limit: system_values.max_library_search_results,
         term,
-        properties: ['title', 'note'],
+        properties: ['text'],
         where: {
           ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
@@ -637,33 +629,7 @@ export const use_search = () => {
 
     set_highlights(
       result.hits.reduce((a, v) => {
-        const positions = Object.values((v as any).positions.title)
-          .flat()
-          .map((highlight: any) => [highlight.start, highlight.length])
-
-        const new_positions: any = []
-
-        for (let i = 0; i < positions.length; i++) {
-          if (
-            positions[i + 1] &&
-            positions[i][0] + positions[i][1] == positions[i + 1][0] - 1
-          ) {
-            new_positions.push([positions[i][0], positions[i][1] + 1])
-          } else {
-            new_positions.push([positions[i][0], positions[i][1]])
-          }
-        }
-
-        return {
-          ...a,
-          [v.id]: new_positions,
-        }
-      }, {}),
-    )
-
-    set_highlights_note(
-      result.hits.reduce((a, v) => {
-        const positions = Object.values((v as any).positions.note)
+        const positions = Object.values((v as any).positions.text)
           .flat()
           .map((highlight: any) => [highlight.start, highlight.length])
 
@@ -757,14 +723,16 @@ export const use_search = () => {
     const order = search_params.get('o')
     const sortby = search_params.get('s')
 
-    const search_string_lower = search_string.toLowerCase()
+    const search_string_lower_case = search_string.toLowerCase()
 
-    const words = search_string_lower.split(' ')
+    const words = search_string_lower_case.split(' ')
     const last_word = words[words.length - 1]
-    const sites_variants = search_string_lower
+    const sites_variants = search_string_lower_case
       .match(/(?<=site:)(.*?)($|\s)/g)
       ?.map((site) => site.replaceAll('.', '').replaceAll('/', ''))
-    const term = search_string_lower.replace(/(?=site:)(.*?)($|\s)/g, '').trim()
+    const term = search_string_lower_case
+      .replace(/(?=site:)(.*?)($|\s)/g, '')
+      .trim()
 
     if (!search_string) {
       const recent_searches = JSON.parse(
@@ -792,14 +760,14 @@ export const use_search = () => {
       )
         .filter(
           (recent_search_string) =>
-            recent_search_string != search_string_lower &&
-            recent_search_string.startsWith(search_string_lower),
+            recent_search_string != search_string_lower_case &&
+            recent_search_string.startsWith(search_string_lower_case),
         )
         .slice(0, 3)
         .map((recent_search_string) => ({
           type: 'recent',
           completion: recent_search_string.slice(search_string.length),
-          search_string: search_string_lower,
+          search_string: search_string_lower_case,
         }))
 
       if (last_word.substring(0, 5) == 'site:') {
@@ -876,7 +844,7 @@ export const use_search = () => {
         sites.sort((a, b) => b.occurences - a.occurences)
 
         const hints: Hint[] = sites.map((site) => ({
-          search_string: search_string_lower,
+          search_string: search_string_lower_case,
           completion: site_term ? site.site.split(site_term)[1] : site.site,
           type: 'new',
         }))
@@ -911,7 +879,7 @@ export const use_search = () => {
         set_count(undefined)
       } else {
         const pre_result = await get_result({
-          search_string: search_string_lower,
+          search_string: search_string_lower_case,
         })
 
         const ids_of_hits = pre_result.hits.map((hit) => hit.id)
@@ -923,7 +891,7 @@ export const use_search = () => {
             !is_archived_filter ? db! : archived_db!,
             {
               term,
-              properties: ['title', 'note'],
+              properties: ['text'],
               where: {
                 id: ids_of_hits,
                 ...(current_filter == Filter.UNREAD ||
@@ -979,7 +947,7 @@ export const use_search = () => {
           let words_hashmap: { [word: string]: number } = {}
 
           result.hits.forEach(({ document }) => {
-            const word = document.title
+            const word = document.text
               .toLowerCase()
               .split(last_word)[1]
               ?.replace(/[^a-zA-Z ]/g, ' ')
@@ -991,19 +959,6 @@ export const use_search = () => {
               } else {
                 words_hashmap = { ...words_hashmap, [word]: 1 }
               }
-            } else {
-              const word = document.note
-                .toLowerCase()
-                .split(last_word)[1]
-                ?.replace(/[^a-zA-Z ]/g, ' ')
-                .split(' ')[0]
-              if (word) {
-                if (words_hashmap[word]) {
-                  words_hashmap[word] = words_hashmap[word] + 1
-                } else {
-                  words_hashmap = { ...words_hashmap, [word]: 1 }
-                }
-              }
             }
           })
 
@@ -1012,7 +967,7 @@ export const use_search = () => {
           Object.entries(words_hashmap).map(([k, v]) => {
             if (!words.includes(last_word + k)) {
               new_hints.push({
-                search_string: search_string_lower,
+                search_string: search_string_lower_case,
                 completion: k,
                 type: 'new',
                 yields: v,
@@ -1047,7 +1002,7 @@ export const use_search = () => {
             !is_archived_filter ? db! : archived_db!,
             {
               term: term ? term : undefined,
-              properties: ['title', 'note'],
+              properties: ['text'],
               where: {
                 id: ids_of_hits,
                 ...(current_filter == Filter.UNREAD ||
@@ -1118,7 +1073,7 @@ export const use_search = () => {
 
           Object.keys(tags_hashmap).map((k) => {
             new_hints.push({
-              search_string: search_string_lower,
+              search_string: search_string_lower_case,
               completion: k,
               type: 'new',
             })
@@ -1175,7 +1130,6 @@ export const use_search = () => {
     set_result(undefined)
     set_hints(undefined)
     set_highlights(undefined)
-    set_highlights_note(undefined)
     set_highlights_sites_variants(undefined)
   }
 
@@ -1303,7 +1257,7 @@ export const use_search = () => {
     ) {
       await insert(!is_archived_filter ? db! : archived_db!, {
         id: params.bookmark.id.toString(),
-        title:
+        text:
           (params.bookmark.title ? `${params.bookmark.title} ` : '') +
           params.bookmark.tags.join(' ') +
           (sites.length ? ' ' : '') +
@@ -1393,18 +1347,6 @@ export const use_search = () => {
   }, [highlights])
 
   useUpdateEffect(() => {
-    if (!highlights_note) return
-    sessionStorage.setItem(
-      browser_storage.session_storage.library.highlights_note({
-        username,
-        search_params: search_params.toString(),
-        hash: '#' + encodeURIComponent(search_string),
-      }),
-      JSON.stringify(highlights_note),
-    )
-  }, [highlights_note])
-
-  useUpdateEffect(() => {
     if (!highlights_sites_variants) return
     sessionStorage.setItem(
       browser_storage.session_storage.library.highlights_sites_variants({
@@ -1454,16 +1396,6 @@ export const use_search = () => {
     )
     if (stored_highlights) {
       set_highlights(JSON.parse(stored_highlights))
-    }
-    const stored_highlights_note = sessionStorage.getItem(
-      browser_storage.session_storage.library.highlights_note({
-        username,
-        search_params: sp,
-        hash: window.location.hash,
-      }),
-    )
-    if (stored_highlights_note) {
-      set_highlights_note(JSON.parse(stored_highlights_note))
     }
     const stored_highlights_sites_variants = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights_sites_variants({
@@ -1521,16 +1453,6 @@ export const use_search = () => {
     )
     if (highlights) {
       set_highlights(JSON.parse(highlights))
-    }
-    const highlights_note = sessionStorage.getItem(
-      browser_storage.session_storage.library.highlights_note({
-        username,
-        search_params: sp,
-        hash: window.location.hash,
-      }),
-    )
-    if (highlights_note) {
-      set_highlights_note(JSON.parse(highlights_note))
     }
     const highlights_sites_variants = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights_sites_variants({
@@ -1592,7 +1514,6 @@ export const use_search = () => {
     count,
     set_count,
     highlights,
-    highlights_note,
     check_is_cache_stale,
     remove_recent_hint,
     current_filter,

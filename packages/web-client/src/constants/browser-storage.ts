@@ -86,14 +86,6 @@ export const browser_storage = {
         `library.hightlights.${params.username || ''}?${
           params.search_params || ''
         }${params.hash}`,
-      highlights_note: (params: {
-        username?: string
-        search_params: string
-        hash: string
-      }) =>
-        `library.hightlights_note.${params.username || ''}?${
-          params.search_params || ''
-        }${params.hash}`,
       highlights_sites_variants: (params: {
         username?: string
         search_params: string
