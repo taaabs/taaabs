@@ -252,6 +252,12 @@ small {
 
 .sortable-chosen {
   opacity: var(--dimmed-opacity);
+  transition-delay: 100ms;
+}
+
+.sortable-drag {
+  // Fixes pinned fallback , where tansition delay applies and blocks movement.
+  transition: none;
 }
 
 // !important below set because of a bug: https://github.com/vercel/next.js/issues/13092

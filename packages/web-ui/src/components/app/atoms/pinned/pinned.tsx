@@ -160,11 +160,8 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         forceFallback={true}
         className={styles.items}
         fallbackClass={styles['item--dragging']}
-        delay={
-          'ontouchstart' in window
-            ? system_values.sortablejs_delay_mobile
-            : system_values.sortablejs_delay_desktop
-        }
+        delay={system_values.sortablejs_delay}
+        delayOnTouchOnly={true}
       >
         {items_dom}
       </ReactSortable>

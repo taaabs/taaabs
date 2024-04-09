@@ -196,17 +196,17 @@
       &__tag {
         display: inline-block;
         // Needed by swipable and sortable - element touch hold detection.
-        > * {
-          pointer-events: none;
-        }
-        > div > span:first-child {
-          @include hover {
-            @include text-decoration-underline;
+        @include touch-screen {
+          > * {
+            pointer-events: none;
           }
         }
         &__name {
           color: var(--green800);
           font-weight: var(--font-weight-inter-medium);
+          @include hover {
+            @include text-decoration-underline;
+          }
           &--selected {
             color: var(--yellow800);
           }

@@ -16,10 +16,11 @@
   min-height: var(--distance-32px);
   border-radius: var(--distance-16px);
   position: relative;
-  @include transition-150ms(background-color);
   // Needed by swipable and sortable - element touch hold detection.
-  & > * {
-    pointer-events: none;
+  @include touch-screen {
+    & > * {
+      pointer-events: none;
+    }
   }
   &--dragging {
     background-color: var(--border-color-secondary);
