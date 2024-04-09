@@ -354,6 +354,7 @@
       display: flex;
       gap: var(--distance-12px);
       justify-content: space-between;
+      position: relative;
       padding: 0 var(--distance-16px) 0 var(--distance-12px);
       background-color: var(--neutral25);
       border-top: var(--border-secondary);
@@ -492,6 +493,15 @@
           @include hover {
             text-decoration: underline;
           }
+        }
+      }
+      &__pinned {
+        position: absolute;
+        top: var(--distance-2px);
+        left: var(--distance-3px);
+        > svg {
+          width: var(--distance-9px);
+          fill: var(--neutral500);
         }
       }
     }

@@ -82,6 +82,7 @@ export namespace Bookmark {
       site_path?: string
       saves?: number
       menu_slot: React.ReactNode
+      is_pinned?: boolean
     }[]
     render_height?: number
     set_render_height: (height: number) => void
@@ -936,6 +937,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           </OutsideClickHandler>
                         </div>
                       </div>
+                      {link.is_pinned && (
+                        <div className={styles.bookmark__links__item__pinned}>
+                          <Icon variant="PIN" />
+                        </div>
+                      )}
                     </div>
                   )
                 })}

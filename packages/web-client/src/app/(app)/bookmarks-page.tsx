@@ -954,7 +954,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     tags: item.tags,
                   })) || []
                 }
-                is_draggable={!username}
+                is_draggable={!username && !pinned_hook.is_updating}
                 on_change={async (updated_pinned) => {
                   await dispatch(
                     pinned_actions.update_pinned({
@@ -1421,6 +1421,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                     url: link.url,
                     saves: link.saves,
                     site_path: link.site_path,
+                    is_pinned: link.is_pinned,
                     menu_slot: !username ? (
                       <UiAppAtom_DropdownMenu
                         items={[
@@ -1494,7 +1495,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               })
                             },
                             other_icon: (
-                              <UiCommonParticles_Icon variant="ARCHIVE" />
+                              <UiCommonParticles_Icon variant="PIN" />
                             ),
                           },
                         ]}

@@ -38,6 +38,7 @@ export const Primary = () => (
             url: 'https://foooooooooooooooooooooooooooooooooooooooooooooooooooo.com/baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar',
             saves: 99,
             menu_slot: <>menu</>,
+            is_pinned: true,
           },
           {
             url: 'https://google.com/bar/baz',
