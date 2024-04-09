@@ -17,6 +17,9 @@ export type Dictionary = {
     unpin: string
     pinned: string
     pinned_links_has_beed_updated: string
+    via_archive_org: string
+    redirect_set: string
+    redirect_unset: string
     sort_by_options: {
       created_at: string
       updated_at: string

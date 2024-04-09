@@ -62,6 +62,7 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types/record-visit.params'
 import dictionary from '@/dictionaries/en'
+import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -919,7 +920,9 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
           />
         }
         is_upserting={bookmarks_hook.is_upserting}
-        is_fetching_first_bookmarks={bookmarks_hook.is_fetching_first_bookmarks}
+        is_fetching_first_bookmarks={
+          bookmarks_hook.is_fetching_first_bookmarks || false
+        }
         is_fetching_more_bookmarks={
           bookmarks_hook.is_fetching_more_bookmarks ||
           search_hook.is_initializing
@@ -947,11 +950,12 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                   pinned_hook.items?.map((item) => ({
                     bookmark_id: item.bookmark_id,
                     url: item.url,
-                    created_at: item.created_at,
+                    created_at: new Date(item.created_at),
                     title: item.title,
                     is_unread: item.is_unread,
                     stars: item.stars,
                     tags: item.tags,
+                    via_wayback: item.via_wayback,
                   })) || []
                 }
                 is_draggable={!username && !pinned_hook.is_updating}
@@ -1015,6 +1019,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                 <UiAppAtom_Bookmark
                   key={`${i}-${bookmarks_hook.first_bookmarks_fetched_at_timestamp}`}
                   index={i}
+                  created_at={new Date(bookmark.created_at)}
                   library_updated_at_timestamp={library_updated_at_timestamp}
                   search_queried_at_timestamp={search_hook.queried_at_timestamp}
                   bookmark_id={bookmark.id}
@@ -1200,6 +1205,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         is_pinned: link.is_pinned,
                         pin_title: link.pin_title,
                         pin_order: link.pin_order,
+                        via_wayback: link.via_wayback,
                       })),
                       tags: [
                         ...bookmark.tags.map((tag) => ({
@@ -1270,6 +1276,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               is_pinned: link.is_pinned,
                               pin_title: link.pin_title,
                               pin_order: link.pin_order,
+                              via_wayback: link.via_wayback,
                             })),
                             tags: tags.map((tag) => ({
                               name: tag.name,
@@ -1344,6 +1351,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               is_pinned: link.is_pinned,
                               pin_title: link.pin_title,
                               pin_order: link.pin_order,
+                              via_wayback: link.via_wayback,
                             })),
                             tags: bookmark.tags
                               .filter((tag) => tag.id !== tag_id)
@@ -1413,15 +1421,12 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         }
                       : undefined
                   }
-                  pinned_links_count={bookmark.links.reduce(
-                    (acc, link) => (link.is_pinned ? acc + 1 : acc),
-                    0,
-                  )}
                   links={bookmark.links.map((link) => ({
                     url: link.url,
                     saves: link.saves,
                     site_path: link.site_path,
                     is_pinned: link.is_pinned,
+                    via_wayback: link.via_wayback,
                     menu_slot: !username ? (
                       <UiAppAtom_DropdownMenu
                         items={[
@@ -1448,6 +1453,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     link.url == l.url ? is_pinned : l.is_pinned,
                                   pin_title: l.pin_title,
                                   pin_order: l.pin_order,
+                                  via_wayback: l.via_wayback,
                                 })),
                                 tags: bookmark.tags.map((tag) => ({
                                   name: tag.name,
@@ -1498,10 +1504,125 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                               <UiCommonParticles_Icon variant="PIN" />
                             ),
                           },
+                          link.via_wayback
+                            ? {
+                                label: 'Open original',
+                                other_icon: (
+                                  <UiCommonParticles_Icon variant="LINK" />
+                                ),
+                                on_click: async () => {
+                                  document.location = link.url
+                                },
+                              }
+                            : {
+                                label: 'Open snapshot',
+                                other_icon: (
+                                  <UiCommonParticles_Icon variant="LINK" />
+                                ),
+                                on_click: async () => {
+                                  document.location = url_to_wayback({
+                                    date: new Date(bookmark.created_at),
+                                    url: link.url,
+                                  })
+                                },
+                              },
+                          {
+                            label: params.dictionary.library.via_archive_org,
+                            is_checked: link.via_wayback || false,
+                            on_click: async () => {
+                              const via_wayback = !link.via_wayback
+                              const modified_bookmark: UpsertBookmark_Params = {
+                                bookmark_id: bookmark.id,
+                                is_public: bookmark.is_public,
+                                created_at: new Date(bookmark.created_at),
+                                title: bookmark.title,
+                                note: bookmark.note,
+                                is_archived: is_archived_filter,
+                                is_unread: bookmark.is_unread,
+                                stars: bookmark.stars,
+                                links: bookmark.links.map((l) => ({
+                                  url: l.url,
+                                  site_path: l.site_path,
+                                  is_public: l.is_public,
+                                  is_pinned: l.is_pinned,
+                                  pin_title: l.pin_title,
+                                  pin_order: l.pin_order,
+                                  via_wayback,
+                                })),
+                                tags: bookmark.tags.map((tag) => ({
+                                  name: tag.name,
+                                  is_public: tag.is_public,
+                                })),
+                              }
+                              const updated_bookmark = await dispatch(
+                                bookmarks_actions.upsert_bookmark({
+                                  bookmark: modified_bookmark,
+                                  last_authorized_counts_params:
+                                    JSON.parse(
+                                      sessionStorage.getItem(
+                                        browser_storage.session_storage.library
+                                          .last_authorized_counts_params,
+                                      ) || 'null',
+                                    ) || undefined,
+                                  ky: ky_instance,
+                                }),
+                              )
+                              toast.success(
+                                via_wayback
+                                  ? params.dictionary.library.redirect_set
+                                  : params.dictionary.library.redirect_unset,
+                              )
+                              search_hook.update_searchable_bookmark({
+                                bookmark: {
+                                  id: bookmark.id,
+                                  created_at: bookmark.created_at,
+                                  visited_at: bookmark.visited_at,
+                                  updated_at: updated_bookmark.updated_at,
+                                  title: bookmark.title,
+                                  note: bookmark.note,
+                                  is_archived: is_archived_filter,
+                                  is_unread: bookmark.is_unread,
+                                  stars: bookmark.stars,
+                                  links: bookmark.links.map((link) => ({
+                                    url: link.url,
+                                    site_path: link.site_path,
+                                    is_public: link.is_public,
+                                  })),
+                                  tags: bookmark.tags.map((tag) => tag.name),
+                                  tag_ids: bookmark.tags.map((tag) => tag.id),
+                                },
+                              })
+                            },
+                          },
                         ]}
                       />
                     ) : (
-                      <></>
+                      <UiAppAtom_DropdownMenu
+                        items={[
+                          link.via_wayback
+                            ? {
+                                label: 'Open original',
+                                other_icon: (
+                                  <UiCommonParticles_Icon variant="LINK" />
+                                ),
+                                on_click: async () => {
+                                  document.location = link.url
+                                },
+                              }
+                            : {
+                                label: 'Open snapshot',
+                                other_icon: (
+                                  <UiCommonParticles_Icon variant="LINK" />
+                                ),
+                                on_click: async () => {
+                                  document.location = url_to_wayback({
+                                    date: new Date(bookmark.created_at),
+                                    url: link.url,
+                                  })
+                                },
+                              },
+                        ]}
+                      />
                     ),
                   }))}
                   menu_slot={
@@ -1530,6 +1651,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_pinned: link.is_pinned,
                                   pin_title: link.pin_title,
                                   pin_order: link.pin_order,
+                                  via_wayback: link.via_wayback,
                                 })),
                                 tags: bookmark.tags.map((tag) => ({
                                   name: tag.name,
@@ -1635,6 +1757,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_pinned: link.is_pinned,
                                   pin_title: link.pin_title,
                                   pin_order: link.pin_order,
+                                  via_wayback: link.via_wayback,
                                 })),
                                 tags: bookmark.tags.map((tag) => ({
                                   name: tag.name,
@@ -1742,6 +1865,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_pinned: link.is_pinned,
                                   pin_title: link.pin_title,
                                   pin_order: link.pin_order,
+                                  via_wayback: link.via_wayback,
                                 })),
                                 tags: bookmark.tags.map((tag) => ({
                                   name: tag.name,
@@ -1847,6 +1971,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_pinned: link.is_pinned,
                                   pin_title: link.pin_title,
                                   pin_order: link.pin_order,
+                                  via_wayback: link.via_wayback,
                                 })),
                                 tags: bookmark.tags.map((tag) => ({
                                   name: tag.name,
@@ -1952,6 +2077,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_pinned: link.is_pinned,
                                   pin_title: link.pin_title,
                                   pin_order: link.pin_order,
+                                  via_wayback: link.via_wayback,
                                 })),
                                 tags: bookmark.tags.map((tag) => ({
                                   name: tag.name,
@@ -2057,6 +2183,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_pinned: link.is_pinned,
                                   pin_title: link.pin_title,
                                   pin_order: link.pin_order,
+                                  via_wayback: link.via_wayback,
                                 })),
                                 tags: bookmark.tags.map((tag) => ({
                                   name: tag.name,
@@ -2296,6 +2423,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_pinned: link.is_pinned,
                                   pin_title: link.pin_title,
                                   pin_order: link.pin_order,
+                                  via_wayback: link.via_wayback,
                                 })),
                                 tags: bookmark.tags.map((tag) => ({
                                   name: tag.name,

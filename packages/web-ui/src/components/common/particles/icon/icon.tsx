@@ -20,6 +20,7 @@ import HuggingFaceHands from '../../../../assets/icons/hugging-face-hands.svg'
 import HuggingFaceNoHands from '../../../../assets/icons/hugging-face-no-hands.svg'
 import Info from '../../../../assets/icons/info.svg'
 import LessThan from '../../../../assets/icons/less-than.svg'
+import Link from '../../../../assets/icons/link.svg'
 import OverviewFilled from '../../../../assets/icons/overview-filled.svg'
 import Overview from '../../../../assets/icons/overview.svg'
 import Pin from '../../../../assets/icons/pin.svg'
@@ -67,6 +68,7 @@ export namespace Icon {
     | 'HUGGING_FACE_NO_HANDS'
     | 'INFO'
     | 'LESS_THAN'
+    | 'LINK'
     | 'OVERVIEW_FILLED'
     | 'OVERVIEW'
     | 'PIN'
@@ -164,6 +166,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'LESS_THAN':
       icon = <LessThan />
+      break
+    case 'LINK':
+      icon = <Link />
       break
     case 'LOGO':
       icon = <Logo />

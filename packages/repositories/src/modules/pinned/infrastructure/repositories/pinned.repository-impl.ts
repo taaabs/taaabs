@@ -27,6 +27,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
         stars: el.stars,
         is_unread: el.is_unread,
         tags: el.tags,
+        via_wayback: el.via_wayback,
       })),
     )
   }
@@ -38,17 +39,16 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
       username: params.username,
     })
 
-    return await Promise.all(
-      result.map(async (el) => ({
-        bookmark_id: el.bookmark_id,
-        created_at: el.created_at,
-        url: el.url!,
-        title: el.title,
-        stars: el.stars,
-        is_unread: el.is_unread,
-        tags: el.tags,
-      })),
-    )
+    return result.map((el) => ({
+      bookmark_id: el.bookmark_id,
+      created_at: el.created_at,
+      url: el.url!,
+      title: el.title,
+      stars: el.stars,
+      is_unread: el.is_unread,
+      tags: el.tags,
+      via_wayback: el.via_wayback,
+    }))
   }
 
   public async update_pinned(params: UpdatePinned_Params): Promise<void> {

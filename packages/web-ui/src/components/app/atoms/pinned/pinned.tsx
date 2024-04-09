@@ -6,16 +6,18 @@ import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import cn from 'classnames'
 import { Icon } from '@web-ui/components/common/particles/icon'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 
 export namespace Pinned {
   type Item = {
     bookmark_id: number
     url: string
-    created_at: number
+    created_at: Date
     title?: string
     stars?: number
     is_unread?: boolean
     tags?: number[]
+    via_wayback?: boolean
   }
   export type Props = {
     first_bookmarks_fetched_at_timestamp?: number // Hiding not relevant pins.
@@ -37,12 +39,13 @@ export namespace Pinned {
 type SortableItem = {
   id: number
   bookmark_id: number
-  created_at: number
+  created_at: Date
   url: string
   title?: string
   stars?: number
   is_unread?: boolean
   tags?: number[]
+  via_wayback?: boolean
 }
 
 export const Pinned: React.FC<Pinned.Props> = memo(
@@ -57,6 +60,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         stars: item.stars,
         is_unread: item.is_unread,
         tags: item.tags,
+        via_wayback: item.via_wayback,
       })),
     )
 
@@ -65,6 +69,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
     }, [items])
 
     const items_dom = items.map((item) => {
+      const created_at_timestamp = Math.round(item.created_at.getTime() / 1000)
       let is_not_relevant = false
       // check if item includes every selected tags
       if (props.selected_starred && !item.stars) {
@@ -79,13 +84,13 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       } else if (
         props.current_gte &&
         props.current_lte &&
-        (item.created_at <
+        (created_at_timestamp <
           new Date(
             parseInt(props.current_gte.toString().substring(0, 4)),
             parseInt(props.current_gte.toString().substring(4, 6)) - 1,
           ).getTime() /
             1000 ||
-          item.created_at >
+          created_at_timestamp >
             new Date(
               parseInt(props.current_lte.toString().substring(0, 4)),
               parseInt(props.current_lte.toString().substring(4, 6)),
@@ -95,17 +100,22 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       ) {
         is_not_relevant = true
       }
+
+      const url = item.via_wayback
+        ? url_to_wayback({ date: item.created_at, url: item.url })
+        : item.url
+
       return (
         <a
-          key={item.url}
-          href={item.url}
+          key={url}
+          href={url}
           title={item.title}
           className={styles.item}
           onClick={async (e) => {
             e.preventDefault()
             props.on_link_click?.(item.bookmark_id)
             window.onbeforeunload = null
-            location.href = item.url
+            location.href = url
           }}
           onContextMenu={(e) => {
             e.preventDefault()
