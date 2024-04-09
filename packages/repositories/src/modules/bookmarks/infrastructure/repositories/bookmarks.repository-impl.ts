@@ -77,6 +77,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                       ? await Crypto.AES.decrypt(link.pin_title_aes!, key)
                       : undefined,
                     pin_order: link.pin_order,
+                    via_wayback: link.via_wayback,
                   }
                 }),
               ),
@@ -122,6 +123,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               saves: link.saves,
               site_path: link.site_path,
               is_public: true,
+              via_wayback: link.via_wayback,
             })),
           }))
         : undefined,
@@ -197,6 +199,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                       ? await Crypto.AES.decrypt(link.pin_title_aes!, key)
                       : undefined,
                     pin_order: link.pin_order,
+                    via_wayback: link.via_wayback,
                   }
                 }),
               ),
@@ -235,6 +238,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               saves: link.saves,
               site_path: link.site_path,
               is_public: true,
+              via_wayback: link.via_wayback,
             })),
           }))
         : undefined,
@@ -308,6 +312,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               ? await Crypto.AES.decrypt(link.pin_title_aes, key)
               : undefined,
             pin_order: link.pin_order,
+            via_wayback: link.via_wayback,
           }
         }),
       ),

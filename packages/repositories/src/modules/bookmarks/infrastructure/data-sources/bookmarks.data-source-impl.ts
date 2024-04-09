@@ -192,6 +192,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                 is_pinned: link.is_pinned,
                 pin_title: link.pin_title,
                 pin_order: link.pin_order,
+                via_wayback: link.via_wayback,
               }
             } else {
               return {
@@ -207,6 +208,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                   ? await Crypto.AES.encrypt(link.pin_title, key)
                   : undefined,
                 pin_order: link.pin_order,
+                via_wayback: link.via_wayback,
               }
             }
           }),

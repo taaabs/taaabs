@@ -20,6 +20,7 @@ import confetti from 'canvas-confetti'
 import { shared_values } from '@web-ui/constants'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { system_values } from '@shared/constants/system-values'
+import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -57,6 +58,7 @@ export namespace Bookmark {
     title?: string
     note?: string
     date: Date
+    created_at: Date
     density: 'default' | 'compact'
     is_compact?: boolean
     library_url: string
@@ -76,13 +78,13 @@ export namespace Bookmark {
     on_click: () => void
     is_unread?: boolean
     stars: number
-    pinned_links_count: number
     links: {
       url: string
       site_path?: string
       saves?: number
       menu_slot: React.ReactNode
       is_pinned?: boolean
+      via_wayback?: boolean
     }[]
     render_height?: number
     set_render_height: (height: number) => void
@@ -752,6 +754,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 })}
               >
                 {props.links.map((link, link_idx) => {
+                  const url = link.via_wayback
+                    ? url_to_wayback({ date: props.created_at, url: link.url })
+                    : link.url
+
                   let is_site_highlighted = false
                   if (
                     props.highlights_site_variants !== undefined &&
@@ -820,8 +826,13 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                 'bookmark__links__item__link__url--dim-visited'
                               ]]: props.should_dim_visited_links,
                             },
+                            {
+                              [styles[
+                                'bookmark__links__item__link__url--via-wayback'
+                              ]]: link.via_wayback,
+                            },
                           )}
-                          href={link.url}
+                          href={url}
                           onClick={async (e) => {
                             e.stopPropagation()
                             e.preventDefault()
@@ -829,7 +840,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               props.on_link_click()
                             }
                             window.onbeforeunload = null
-                            location.href = link.url
+                            location.href = url
                           }}
                         >
                           <span>
@@ -895,7 +906,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           }
                           onClick={async (e) => {
                             e.stopPropagation()
-                            window.open(link.url, '_blank')
+                            window.open(url, '_blank')
                             if (props.on_link_click) {
                               props.on_link_click()
                             }
@@ -967,7 +978,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.density == n.density &&
     o.render_height == n.render_height &&
     o.updated_at == n.updated_at &&
-    o.pinned_links_count == n.pinned_links_count &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&
     o.dragged_tag?.id == n.dragged_tag?.id,

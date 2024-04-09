@@ -18,6 +18,9 @@ export const dictionary: Dictionary = {
     pin_has_been_removed: 'Link został usunięty z przypiętych',
     pinned: 'Przypięte',
     pinned_links_has_beed_updated: 'Przypięte linki zostały zaktualizowana',
+    via_archive_org: 'Przez Archive.org',
+    redirect_set: 'Przekierowanie włączone',
+    redirect_unset: 'Przekierowanie wyłączone',
     sort_by: 'Sortowanie',
     sort_by_options: {
       created_at: 'Data utworzenia',

@@ -15,5 +15,6 @@ export type UpsertBookmark_Params = {
     is_pinned?: boolean
     pin_title?: string
     pin_order?: number
+    via_wayback?: boolean
   }[]
 }

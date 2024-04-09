@@ -406,6 +406,11 @@
               text-decoration-color: var(--text-color-variant);
             }
           }
+          &--via-wayback {
+            > span:first-child::before {
+              content: 'archive.org › ';
+            }
+          }
           &--dim-visited {
             @include hover {
               &:visited > span {
@@ -501,7 +506,7 @@
         left: var(--distance-3-5px);
         > svg {
           width: var(--distance-9px);
-          fill: var(--neutral500);
+          fill: var(--neutral300);
         }
       }
     }
