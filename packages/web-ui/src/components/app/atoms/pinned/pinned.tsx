@@ -104,6 +104,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
           onClick={async (e) => {
             e.preventDefault()
             props.on_link_click?.(item.bookmark_id)
+            window.onbeforeunload = null
             location.href = item.url
           }}
           onContextMenu={(e) => {
