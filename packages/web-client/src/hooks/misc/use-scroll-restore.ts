@@ -32,7 +32,7 @@ export const use_scroll_restore = () => {
   })
 
   // This is needed when site gets erased from browser cache and needs reload,
-  // thus history scroll positions won't be remembered.
+  // thus all recent history scroll positions won't be remembered.
   useEffect(() => {
     const scroll_y = sessionStorage.getItem(
       browser_storage.session_storage.library.scroll_y({

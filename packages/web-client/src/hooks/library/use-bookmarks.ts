@@ -181,7 +181,7 @@ export const use_bookmarks = () => {
     }
   }
 
-  useUpdateEffect(() => {
+  useEffect(() => {
     const bookmarks = sessionStorage.getItem(
       browser_storage.session_storage.library.bookmarks({
         username: username as string,
@@ -196,6 +196,7 @@ export const use_bookmarks = () => {
       } else {
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
       }
+      dispatch(bookmarks_actions.set_incoming_bookmarks(JSON.parse(bookmarks)))
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
       dispatch(
         bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
@@ -213,7 +214,6 @@ export const use_bookmarks = () => {
           ),
         )
       }
-
       const density = sessionStorage.getItem(
         browser_storage.session_storage.library.density({
           username: username as string,
@@ -275,52 +275,6 @@ export const use_bookmarks = () => {
       density,
     })
   }, [bookmarks])
-
-  useEffect(() => {
-    const bookmarks = sessionStorage.getItem(
-      browser_storage.session_storage.library.bookmarks({
-        username,
-        search_params: search_params.toString(),
-        hash: window.location.hash,
-      }),
-    )
-
-    if (bookmarks) {
-      dispatch(bookmarks_actions.set_incoming_bookmarks(JSON.parse(bookmarks)))
-      dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
-      if (window.location.hash) {
-        dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
-      }
-      dispatch(
-        bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
-      )
-      const has_more_bookmarks = sessionStorage.getItem(
-        browser_storage.session_storage.library.has_more_bookmarks({
-          username,
-          search_params: search_params.toString(),
-        }),
-      )
-      if (has_more_bookmarks) {
-        dispatch(
-          bookmarks_actions.set_has_more_bookmarks(
-            has_more_bookmarks == 'true',
-          ),
-        )
-      }
-      const density = sessionStorage.getItem(
-        browser_storage.session_storage.library.density({
-          username,
-          search_params: search_params.toString(),
-          hash: window.location.hash,
-        }),
-      )
-      if (density) {
-        dispatch(bookmarks_actions.set_density(density as any))
-      }
-    } else {
-      get_bookmarks({})
-    }
-  }, [])
 
   return {
     bookmarks,
