@@ -11,6 +11,7 @@ import { useEffect } from 'react'
 
 export const RecentVisitSubmitter: React.FC = () => {
   const has_focus = use_has_focus()
+
   useEffect(() => {
     const ky_instance = ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -44,6 +45,6 @@ export const RecentVisitSubmitter: React.FC = () => {
       }
     }
   }, [has_focus])
-  // Upload deferred recent visit - END
+
   return <></>
 }

@@ -297,24 +297,25 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           </a>
         )
       }),
-      is_mouse_over &&
+      ...(is_mouse_over &&
       props.dragged_tag &&
       props.tags.length < system_values.bookmark.tags.limit &&
-      props.tags.findIndex((tag) => tag.id == props.dragged_tag!.id) == -1 ? (
-        <button
-          className={styles.bookmark__main__tags__tag}
-          style={{ opacity: 'var(--dimmed-opacity)' }}
-        >
-          <span className={styles.bookmark__main__tags__tag__name}>
-            {props.dragged_tag.name}
-          </span>
-          <span className={styles.bookmark__main__tags__tag__yields}>
-            {props.dragged_tag.yields + 1}
-          </span>
-        </button>
-      ) : (
-        <></>
-      ),
+      props.tags.findIndex((tag) => tag.id == props.dragged_tag!.id) == -1
+        ? [
+            <button
+              className={styles.bookmark__main__tags__tag}
+              style={{ opacity: 'var(--dimmed-opacity)' }}
+              key="candidate"
+            >
+              <span className={styles.bookmark__main__tags__tag__name}>
+                {props.dragged_tag.name}
+              </span>
+              <span className={styles.bookmark__main__tags__tag__yields}>
+                {props.dragged_tag.yields + 1}
+              </span>
+            </button>,
+          ]
+        : []),
     ]
 
     const huggs_dom = (
@@ -822,6 +823,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             if (props.on_link_click) {
                               props.on_link_click()
                             }
+                            window.onbeforeunload = null
                             location.href = link.url
                           }}
                         >
