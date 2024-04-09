@@ -1432,8 +1432,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                         items={[
                           {
                             label: link.is_pinned
-                              ? params.dictionary.library.unpin
-                              : params.dictionary.library.pin,
+                              ? params.dictionary.library.unpin_from_top
+                              : params.dictionary.library.pin_on_top,
                             on_click: async () => {
                               const is_pinned = !link.is_pinned
                               const modified_bookmark: UpsertBookmark_Params = {
@@ -1511,7 +1511,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   <UiCommonParticles_Icon variant="LINK" />
                                 ),
                                 on_click: async () => {
-                                  document.location = link.url
+                                  window.onbeforeunload = null
+                                  location.href = link.url
                                 },
                               }
                             : {
@@ -1520,7 +1521,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   <UiCommonParticles_Icon variant="LINK" />
                                 ),
                                 on_click: async () => {
-                                  document.location = url_to_wayback({
+                                  window.onbeforeunload = null
+                                  location.href = url_to_wayback({
                                     date: new Date(bookmark.created_at),
                                     url: link.url,
                                   })
@@ -1547,7 +1549,10 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   is_pinned: l.is_pinned,
                                   pin_title: l.pin_title,
                                   pin_order: l.pin_order,
-                                  via_wayback,
+                                  via_wayback:
+                                    link.url == l.url
+                                      ? via_wayback
+                                      : l.via_wayback,
                                 })),
                                 tags: bookmark.tags.map((tag) => ({
                                   name: tag.name,
@@ -1606,7 +1611,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   <UiCommonParticles_Icon variant="LINK" />
                                 ),
                                 on_click: async () => {
-                                  document.location = link.url
+                                  window.onbeforeunload = null
+                                  location.href = link.url
                                 },
                               }
                             : {
@@ -1615,7 +1621,8 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   <UiCommonParticles_Icon variant="LINK" />
                                 ),
                                 on_click: async () => {
-                                  document.location = url_to_wayback({
+                                  window.onbeforeunload = null
+                                  location.href = url_to_wayback({
                                     date: new Date(bookmark.created_at),
                                     url: link.url,
                                   })
