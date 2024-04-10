@@ -323,8 +323,9 @@
       &__content {
         display: flex;
         align-items: center;
-        flex-grow: 1;
+        flex: 1;
         height: 100%;
+        overflow: hidden;
         &--recent {
           > span {
             color: var(--text-color-dimmed) !important;
@@ -335,7 +336,7 @@
         }
         > span {
           color: var(--text-color-variant);
-          white-space: pre-wrap;
+          white-space: nowrap;
           @include to1200 {
             font-family: var(--font-family-inter-tight);
           }

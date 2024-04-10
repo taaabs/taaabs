@@ -123,6 +123,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               saves: link.saves,
               site_path: link.site_path,
               is_public: true,
+              is_pinned: link.is_pinned,
               via_wayback: link.via_wayback,
             })),
           }))
