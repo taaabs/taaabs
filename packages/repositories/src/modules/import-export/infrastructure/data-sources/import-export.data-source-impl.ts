@@ -88,6 +88,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                           url: link.url.trim(),
                           hash: await Crypto.SHA256(link.url.trim(), key),
                           site_path: link.site_path,
+                          via_wayback: link.via_wayback,
                         }
                       } else {
                         const domain = get_domain_from_url(link.url)
@@ -105,6 +106,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                               : domain,
                             key,
                           ),
+                          via_wayback: link.via_wayback,
                         }
                       }
                     }),

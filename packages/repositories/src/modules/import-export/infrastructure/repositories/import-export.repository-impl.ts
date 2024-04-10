@@ -77,6 +77,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                       is_pinned: link.is_pinned || undefined,
                       pin_order: link.pin_order || undefined,
                       pin_title: link.pin_title || undefined,
+                      via_wayback: link.via_wayback || undefined,
                     }
                   } else if (link.url_aes && link.site_aes) {
                     const site = await Crypto.AES.decrypt(link.site_aes, key)
@@ -90,6 +91,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                       pin_title: link.pin_title_aes
                         ? await Crypto.AES.decrypt(link.pin_title_aes, key)
                         : undefined,
+                      via_wayback: link.via_wayback || undefined,
                     }
                   } else {
                     throw new Error('Url aes and site aes should be there')

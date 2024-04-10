@@ -13,6 +13,7 @@ type Link = {
   pin_order?: number
   pin_title?: string
   pin_title_aes?: string
+  via_wayback?: boolean
 }
 
 export type Bookmark = {

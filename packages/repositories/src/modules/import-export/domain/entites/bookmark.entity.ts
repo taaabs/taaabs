@@ -15,5 +15,6 @@ export type Bookmark_Entity = {
     is_pinned?: boolean
     pin_order?: number
     pin_title?: string
+    via_wayback?: boolean
   }[]
 }
