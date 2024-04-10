@@ -191,6 +191,18 @@
           opacity: 1;
         }
       }
+      &__skeleton {
+        display: flex;
+        flex-direction: column;
+        padding-top: var(--distance-4px);
+        > span {
+          margin-bottom: var(--distance-6px);
+        }
+        > span > span {
+          height: var(--distance-28px);
+          border-radius: var(--border-radius-4px);
+        }
+      }
     }
   }
 }

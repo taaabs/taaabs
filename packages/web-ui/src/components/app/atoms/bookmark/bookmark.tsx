@@ -826,11 +826,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                 'bookmark__links__item__link__url--dim-visited'
                               ]]: props.should_dim_visited_links,
                             },
-                            {
-                              [styles[
-                                'bookmark__links__item__link__url--via-wayback'
-                              ]]: link.via_wayback,
-                            },
                           )}
                           href={url}
                           onClick={async (e) => {

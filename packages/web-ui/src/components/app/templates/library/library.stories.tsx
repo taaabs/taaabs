@@ -16,7 +16,7 @@ export const Primary = () => (
     is_fetching_more_bookmarks={false}
     slot_bookmarks={<>[BOOKMARKS]</>}
     slot_search={<>[SEARCH]</>}
-    show_bookmarks_skeleton={false}
+    show_skeletons={false}
     slot_pinned={<>pinned</>}
   />
 )
@@ -37,7 +37,7 @@ export const Scrolling = () => (
       </>
     }
     slot_search={<>[SEARCH]</>}
-    show_bookmarks_skeleton={false}
+    show_skeletons={false}
     slot_pinned={<>pinned</>}
   />
 )
@@ -54,7 +54,7 @@ export const Loading = () => (
     is_fetching_more_bookmarks={false}
     slot_bookmarks={<>slot bookmarks</>}
     slot_search={<>[SEARCH]</>}
-    show_bookmarks_skeleton={true}
+    show_skeletons={true}
     slot_pinned={<>pinned</>}
   />
 )

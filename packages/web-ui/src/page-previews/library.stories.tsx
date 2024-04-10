@@ -105,7 +105,7 @@ export const Primary = () => {
             {bookmark}
           </>
         }
-        show_bookmarks_skeleton={false}
+        show_skeletons={false}
         slot_search={<>search</>}
         translations={{
           collapse_alt: '',

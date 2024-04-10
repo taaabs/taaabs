@@ -373,7 +373,6 @@
         display: flex;
         align-items: center;
         gap: var(--distance-8px);
-        overflow: hidden;
         &__site {
           display: flex;
           flex-shrink: 0;
@@ -399,16 +398,15 @@
         &__url {
           display: flex;
           flex-direction: column;
-          overflow: hidden;
           @include hover {
             > span {
               @include text-decoration-underlinie-thin;
-              text-decoration-color: var(--text-color-variant);
             }
-          }
-          &--via-wayback {
-            > span:first-child::before {
-              content: 'archive.org › ';
+            > span:first-child {
+              text-decoration-color: var(--text-color-normal);
+            }
+            > span:last-child {
+              text-decoration-color: var(--text-color-variant);
             }
           }
           &--dim-visited {
@@ -419,13 +417,13 @@
             }
           }
           > span {
-            color: var(--text-color-normal);
             text-overflow: ellipsis;
             overflow: hidden;
             -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
           }
           > span:first-child {
+            color: var(--text-color-normal);
             display: -webkit-box;
           }
           > span:last-child {
@@ -439,7 +437,6 @@
           }
           &--dim-visited:visited > span {
             color: var(--text-color-dimmed);
-            text-decoration-color: rgba(115, 115, 115, 0.3);
           }
         }
       }

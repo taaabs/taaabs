@@ -16,7 +16,7 @@ export namespace Library {
     slot_tag_hierarchies: React.ReactNode
     slot_aside: React.ReactNode
     slot_toolbar: React.ReactNode
-    mobile_title_bar?: string
+    mobile_title_bar: string
     slot_search: React.ReactNode
     slot_pinned: React.ReactNode
     slot_bookmarks: React.ReactNode
@@ -26,9 +26,9 @@ export namespace Library {
     on_page_bottom_reached: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
-    show_bookmarks_skeleton: boolean
-    info_text?: React.ReactNode
-    close_aside_count?: number
+    show_skeletons: boolean
+    info_text: React.ReactNode
+    close_aside_count: number
     welcome_text?: string
     on_follow_click?: () => void
     is_following?: boolean
@@ -338,7 +338,19 @@ export const Library: React.FC<Library.Props> = (props) => {
                 set_are_tag_hieararchies_hovered(false)
               }}
             >
-              {props.slot_tag_hierarchies}
+              {!props.show_skeletons ? (
+                props.slot_tag_hierarchies
+              ) : (
+                <div
+                  className={
+                    styles['sidebar__inner__tag-hierarchies__skeleton']
+                  }
+                >
+                  {[200, 180, 140, 160, 120].map((width, i) => (
+                    <Skeleton width={width} key={i} />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </aside>
@@ -391,7 +403,7 @@ export const Library: React.FC<Library.Props> = (props) => {
               </div>
             </div>
 
-            {props.show_bookmarks_skeleton && (
+            {props.show_skeletons && (
               <div className={styles['main__inner__skeleton']}>
                 {[...Array(10)].map((_, i) => (
                   <Skeleton key={i} />

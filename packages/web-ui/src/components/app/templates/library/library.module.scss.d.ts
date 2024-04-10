@@ -13,6 +13,7 @@ declare const styles: {
   readonly 'sidebar__inner__tag-hierarchies': string
   readonly 'sidebar__inner__tag-hierarchies--collapsed': string
   readonly 'sidebar__inner__tag-hierarchies--collapsed-hovered': string
+  readonly 'sidebar__inner__tag-hierarchies__skeleton': string
   readonly main: string
   readonly main__inner: string
   readonly 'main__inner--collapsed-sidebar-hovered': string
