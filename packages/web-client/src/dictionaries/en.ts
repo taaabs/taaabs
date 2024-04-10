@@ -19,7 +19,7 @@ const dictionary: Dictionary = {
     pin_has_been_removed: 'Pin has been removed',
     pinned: 'Pinned',
     pinned_links_has_beed_updated: 'Pinned links has been updated',
-    via_archive_org: 'Via Internet Archive',
+    via_archive_org: 'Snapshot by default',
     redirect_set: 'Redirect has been set',
     redirect_unset: 'Redirect has been unset',
     sort_by: 'Sort by',
