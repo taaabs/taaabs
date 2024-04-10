@@ -1548,29 +1548,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                   })
                                 },
                               },
-                          link.via_wayback
-                            ? {
-                                label: '...in new tab',
-                                other_icon: (
-                                  <UiCommonParticles_Icon variant="LINK" />
-                                ),
-                                on_click: async () => {
-                                  window.open(link.url, '_blank')
-                                },
-                              }
-                            : {
-                                label: '...in a new tab',
-                                other_icon: (
-                                  <UiCommonParticles_Icon variant="LINK" />
-                                ),
-                                on_click: async () => {
-                                  const url = url_to_wayback({
-                                    date: new Date(bookmark.created_at),
-                                    url: link.url,
-                                  })
-                                  window.open(url, '_blank')
-                                },
-                              },
                           {
                             label: params.dictionary.library.via_archive_org,
                             is_checked: link.via_wayback || false,
@@ -1669,29 +1646,6 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
                                     date: new Date(bookmark.created_at),
                                     url: link.url,
                                   })
-                                },
-                              },
-                          link.via_wayback
-                            ? {
-                                label: '...in new tab',
-                                other_icon: (
-                                  <UiCommonParticles_Icon variant="LINK" />
-                                ),
-                                on_click: async () => {
-                                  window.open(link.url, '_blank')
-                                },
-                              }
-                            : {
-                                label: '...in a new tab',
-                                other_icon: (
-                                  <UiCommonParticles_Icon variant="LINK" />
-                                ),
-                                on_click: async () => {
-                                  const url = url_to_wayback({
-                                    date: new Date(bookmark.created_at),
-                                    url: link.url,
-                                  })
-                                  window.open(url, '_blank')
                                 },
                               },
                         ]}
