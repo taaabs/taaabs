@@ -10,8 +10,6 @@ import {
 } from '@orama/orama'
 import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { use_library_dispatch, use_library_selector } from '@/stores/library'
-import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { LibrarySearch_DataSourceImpl } from '@repositories/modules/library-search/infrastructure/data-sources/library-search.data-source-impl'
 import { LibrarySearch_RepositoryImpl } from '@repositories/modules/library-search/infrastructure/repositories/library-search.repository-impl'
 import { GetSearchableBookmarksOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-searchable-bookmarks-on-authorized-user.user-case'
@@ -79,7 +77,7 @@ const schema = {
   points: 'number',
 } as const
 
-type Result = TypedDocument<Orama<typeof schema>>
+export type Result = TypedDocument<Orama<typeof schema>>
 
 type BookmarkTags = { id: number; tags: string[] }
 
@@ -97,8 +95,8 @@ export const use_search = () => {
   const [ids_to_search_amongst, set_ids_to_search_amongst] = useState<
     string[] | undefined
   >()
-  const dispatch = use_library_dispatch()
-  const { bookmarks } = use_library_selector((state) => state.bookmarks)
+  // const dispatch = use_library_dispatch()
+  // const { bookmarks } = use_library_selector((state) => state.bookmarks)
   const [is_initializing, set_is_initializing] = useState(false)
   const [search_string, set_search_string] = useState('')
   const [hints, set_hints] = useState<Hint[]>()
@@ -666,9 +664,6 @@ export const use_search = () => {
       set_count(result.count)
       if (result.count) {
         set_result(result)
-        await get_bookmarks({
-          result,
-        })
         set_search_fragment({
           search_string: params.search_string,
         })
@@ -1133,62 +1128,6 @@ export const use_search = () => {
     set_highlights_sites_variants(undefined)
   }
 
-  const get_bookmarks = async (params: {
-    result: Results<Result>
-    should_get_next_page?: boolean
-  }) => {
-    const ky_instance = ky.create({
-      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-        'Content-Type': 'application/json',
-      },
-    })
-
-    clear_hints()
-
-    let ids: number[] = []
-    if (params.should_get_next_page) {
-      // Bookmark could be filtered out.
-      const last_id = bookmarks![bookmarks!.length - 1].id.toString()
-      const idx_of_hit =
-        params.result.hits.findIndex((hit) => hit.document.id == last_id) + 1
-      ids = params.result.hits
-        .slice(
-          idx_of_hit,
-          idx_of_hit + system_values.library.bookmarks.per_page,
-        )
-        .map((hit) => parseInt(hit.id))
-    } else {
-      ids = params.result.hits
-        .slice(0, system_values.library.bookmarks.per_page)
-        .map((hit) => parseInt(hit.id))
-    }
-
-    if (!username) {
-      await dispatch(
-        bookmarks_actions.get_authorized_bookmarks_by_ids({
-          ky: ky_instance,
-          is_next_page: params.should_get_next_page || false!,
-          request_params: {
-            ids,
-          },
-        }),
-      )
-    } else {
-      await dispatch(
-        bookmarks_actions.get_public_bookmarks_by_ids({
-          ky: ky_instance,
-          is_next_page: params.should_get_next_page || false,
-          request_params: {
-            ids,
-            username,
-          },
-        }),
-      )
-    }
-  }
-
   const delete_searchable_bookmark = async (params: {
     bookmark_id: number
   }) => {
@@ -1499,7 +1438,6 @@ export const use_search = () => {
     is_initializing,
     db,
     archived_db,
-    get_bookmarks,
     delete_searchable_bookmark,
     update_searchable_bookmark,
     set_current_filter,

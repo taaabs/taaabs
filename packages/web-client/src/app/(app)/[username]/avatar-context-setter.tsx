@@ -1,7 +1,7 @@
 'use client'
 
 import { useContext, useEffect } from 'react'
-import { PublicUserAvatarContext } from '../public-user-avatar-provider'
+import { PublicUserAvatarContext } from '../../../providers/public-user-avatar-provider'
 
 type Props = {
   avatar?: {

@@ -1,9 +1,9 @@
 import { get_dictionary } from '@/app/dictonaries'
-import BookmarksPage from '../../bookmarks-page'
+import { LibraryWrapper } from './library-wrapper'
 
 const Page: React.FC = async () => {
   const dictionary = await get_dictionary('en')
-  return <BookmarksPage dictionary={dictionary} />
+  return <LibraryWrapper dictionary={dictionary} />
 }
 
 export default Page

@@ -6,9 +6,9 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-import { PublicUserAvatarContext } from './public-user-avatar-provider'
+import { PublicUserAvatarContext } from '../../providers/public-user-avatar-provider'
 import { useContext } from 'react'
-import { ModalContext } from './modal-provider'
+import { ModalContext } from '../../providers/modal-provider'
 import { use_is_hydrated } from '@shared/hooks'
 import { UserForHeader as UiAppMolecule_UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
 import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'

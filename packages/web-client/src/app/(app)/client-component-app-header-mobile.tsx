@@ -5,7 +5,7 @@ import {
   // usePathname
 } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
-import { PublicUserAvatarContext } from './public-user-avatar-provider'
+import { PublicUserAvatarContext } from '../../providers/public-user-avatar-provider'
 import { UserForHeader as UiAppMolecule_UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
 import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'

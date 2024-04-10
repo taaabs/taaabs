@@ -14,6 +14,9 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { browser_storage } from '@/constants/browser-storage'
 import { Filter } from '@/types/library/filter'
 import ky from 'ky'
+import { Results } from '@orama/orama'
+import { Result } from './use-search'
+import { system_values } from '@shared/constants/system-values'
 
 export const use_bookmarks = () => {
   const search_params = useSearchParams()
@@ -180,6 +183,60 @@ export const use_bookmarks = () => {
     }
   }
 
+  const get_bookmarks_by_ids = async (params: {
+    result: Results<Result>
+    should_get_next_page?: boolean
+  }) => {
+    const ky_instance = ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    let ids: number[] = []
+    if (params.should_get_next_page) {
+      // Bookmark could be filtered out.
+      const last_id = bookmarks![bookmarks!.length - 1].id.toString()
+      const idx_of_hit =
+        params.result.hits.findIndex((hit) => hit.document.id == last_id) + 1
+      ids = params.result.hits
+        .slice(
+          idx_of_hit,
+          idx_of_hit + system_values.library.bookmarks.per_page,
+        )
+        .map((hit) => parseInt(hit.id))
+    } else {
+      ids = params.result.hits
+        .slice(0, system_values.library.bookmarks.per_page)
+        .map((hit) => parseInt(hit.id))
+    }
+
+    if (!username) {
+      await dispatch(
+        bookmarks_actions.get_authorized_bookmarks_by_ids({
+          ky: ky_instance,
+          is_next_page: params.should_get_next_page || false!,
+          request_params: {
+            ids,
+          },
+        }),
+      )
+    } else {
+      await dispatch(
+        bookmarks_actions.get_public_bookmarks_by_ids({
+          ky: ky_instance,
+          is_next_page: params.should_get_next_page || false,
+          request_params: {
+            ids,
+            username,
+          },
+        }),
+      )
+    }
+  }
+
   useEffect(() => {
     const bookmarks = sessionStorage.getItem(
       browser_storage.session_storage.library.bookmarks({
@@ -278,6 +335,7 @@ export const use_bookmarks = () => {
   return {
     bookmarks,
     get_bookmarks,
+    get_bookmarks_by_ids,
     incoming_bookmarks,
     is_fetching,
     is_fetching_more_bookmarks,

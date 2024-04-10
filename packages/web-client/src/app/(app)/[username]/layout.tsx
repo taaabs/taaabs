@@ -4,15 +4,17 @@ import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastru
 import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
 import { GetPublicMetadata } from '@repositories/modules/metadata/domain/usecases/get-public-metadata'
 import ky from 'ky'
+import { PublicUserLibrarySearchProvider } from './public-user-library-search-provider'
+import { ReactNode } from 'react'
 
 const Layout: React.FC<{
-  children: React.ReactNode
+  children: ReactNode
   params: { username: string }
 }> = async (props) => {
   const metadata = await _get_metadata({ username: props.params.username })
 
   return (
-    <>
+    <PublicUserLibrarySearchProvider>
       <AvatarContextSetter
         avatar={
           metadata.avatar
@@ -24,7 +26,7 @@ const Layout: React.FC<{
         }
       />
       {props.children}
-    </>
+    </PublicUserLibrarySearchProvider>
   )
 }
 

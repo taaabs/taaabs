@@ -1,5 +1,3 @@
-'use client'
-
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_library_dispatch } from '@/stores/library'
 import OutsideClickHandler from 'react-outside-click-handler'
@@ -21,7 +19,7 @@ import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/ty
 import { browser_storage } from '@/constants/browser-storage'
 import { use_is_hydrated } from '@shared/hooks'
 import { use_search } from '@/hooks/library/use-search'
-import { ModalContext } from './modal-provider'
+import { ModalContext } from '../../providers/modal-provider'
 import { useParams, useSearchParams } from 'next/navigation'
 import { upsert_bookmark_modal } from '@/modals/upsert-bookmark-modal'
 import { toast } from 'react-toastify'
@@ -68,14 +66,9 @@ const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   loading: () => <UiAppAtom_CustomRangeSkeleton />,
 })
 
-export namespace BookmarksPage {
-  export type Props = {
-    dictionary: Dictionary
-  }
-}
-
-const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
+const Library = (params: {
   dictionary: Dictionary
+  search_hook: ReturnType<typeof use_search>
 }) => {
   use_scroll_restore()
   const is_hydrated = use_is_hydrated()
@@ -85,7 +78,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   const { username }: { username?: string } = useParams()
   const modal_context = useContext(ModalContext)
   const [show_skeletons, set_show_skeletons] = useState(true)
-  const search_hook = use_search()
+  const search_hook = params.search_hook
   const bookmarks_hook = use_bookmarks()
   const counts_hook = use_counts()
   const points_hook = use_points()
@@ -192,6 +185,12 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
       )
     }
   }, [search_hook.db, search_hook.archived_db])
+
+  useUpdateEffect(() => {
+    if (search_hook.result) {
+      bookmarks_hook.get_bookmarks_by_ids({ result: search_hook.result })
+    }
+  }, [search_hook.result])
 
   useEffect(() => {
     tag_hierarchies_hook.get_tag_hierarchies({
@@ -2437,7 +2436,7 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
             bookmarks_hook.bookmarks.length &&
             bookmarks_hook.bookmarks.length < search_hook.count
           ) {
-            search_hook.get_bookmarks({
+            bookmarks_hook.get_bookmarks_by_ids({
               result: search_hook.result!,
               should_get_next_page: true,
             })
@@ -2482,4 +2481,4 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   )
 }
 
-export default BookmarksPage
+export default Library
