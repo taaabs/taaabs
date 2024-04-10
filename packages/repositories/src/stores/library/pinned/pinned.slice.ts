@@ -6,6 +6,7 @@ type PinnedState = {
   is_fetching?: boolean
   fetched_at_timestamp?: number
   is_updating?: boolean
+  should_refetch?: boolean
   items?: PinnedLink_Entity[]
 }
 
@@ -26,6 +27,12 @@ export const pinned_slice = createSlice({
     },
     set_is_updating(state, action: PayloadAction<PinnedState['is_updating']>) {
       state.is_updating = action.payload
+    },
+    set_should_refetch(
+      state,
+      action: PayloadAction<PinnedState['should_refetch']>,
+    ) {
+      state.should_refetch = action.payload
     },
     set_items(state, action: PayloadAction<PinnedState['items']>) {
       state.items = action.payload

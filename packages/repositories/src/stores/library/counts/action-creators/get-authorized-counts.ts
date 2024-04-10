@@ -29,7 +29,7 @@ export const get_authorized_counts = (params: {
     if (
       (!state.bookmarks.is_fetching &&
         state.bookmarks.is_fetching_first_bookmarks) ||
-      state.bookmarks.should_refetch_counts
+      state.counts.should_refetch
     ) {
       dispatch(counts_actions.process_tags())
       dispatch(
@@ -40,7 +40,7 @@ export const get_authorized_counts = (params: {
         bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
       )
       dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
-      dispatch(bookmarks_actions.set_should_refetch_counts(false))
+      dispatch(counts_actions.set_should_refetch(false))
     }
   }
 }

@@ -133,10 +133,16 @@ const BookmarksPage: React.FC<BookmarksPage.Props> = (params: {
   ])
 
   useUpdateEffect(() => {
-    if (bookmarks_hook.should_refetch_counts) {
+    if (counts_hook.should_refetch) {
       counts_hook.get_counts()
     }
-  }, [bookmarks_hook.should_refetch_counts])
+  }, [counts_hook.should_refetch])
+
+  useUpdateEffect(() => {
+    if (pinned_hook.should_refetch) {
+      pinned_hook.get_pinned()
+    }
+  }, [pinned_hook.should_refetch])
 
   useUpdateEffect(() => {
     search_hook.set_current_filter(filter_view_options_hook.current_filter)

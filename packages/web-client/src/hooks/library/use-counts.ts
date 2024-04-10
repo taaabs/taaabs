@@ -15,9 +15,8 @@ export const use_counts = () => {
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
-  const { counts_data, months, tags, is_fetching } = use_library_selector(
-    (state) => state.counts,
-  )
+  const { counts_data, months, tags, is_fetching, should_refetch } =
+    use_library_selector((state) => state.counts)
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
   const [last_query_tags, set_last_query_tags] = useState<string>()
   const [last_query_filter, set_last_query_filter] = useState<string>()
@@ -224,5 +223,6 @@ export const use_counts = () => {
     is_fetching,
     tags,
     selected_tags,
+    should_refetch,
   }
 }

@@ -9,8 +9,13 @@ import { useEffect } from 'react'
 export const use_pinned = () => {
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
-  const { is_fetching, is_updating, items, fetched_at_timestamp } =
-    use_library_selector((state) => state.pinned)
+  const {
+    is_fetching,
+    is_updating,
+    items,
+    fetched_at_timestamp,
+    should_refetch,
+  } = use_library_selector((state) => state.pinned)
 
   const get_pinned = async () => {
     const ky_instance = ky.create({
@@ -65,5 +70,6 @@ export const use_pinned = () => {
     is_fetching,
     is_updating,
     items,
+    should_refetch,
   }
 }

@@ -21,7 +21,6 @@ export const use_bookmarks = () => {
   const dispatch = use_library_dispatch()
   const {
     bookmarks,
-    should_refetch_counts,
     incoming_bookmarks,
     is_fetching_more_bookmarks,
     has_more_bookmarks,
@@ -279,7 +278,6 @@ export const use_bookmarks = () => {
   return {
     bookmarks,
     get_bookmarks,
-    should_refetch_counts,
     incoming_bookmarks,
     is_fetching,
     is_fetching_more_bookmarks,

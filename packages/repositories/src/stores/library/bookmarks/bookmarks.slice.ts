@@ -16,7 +16,6 @@ type BookmarksState = {
   has_more_bookmarks?: boolean | null
   processing_progress?: number // Filling tag combinations and generating counts.
   import_progress?: number
-  should_refetch_counts?: boolean
   density: 'default' | 'compact'
 }
 
@@ -87,12 +86,6 @@ export const bookmarks_slice = createSlice({
       if (!state.bookmarks || !state.bookmarks[action.payload.index]) return
       state.bookmarks[action.payload.index].render_height =
         action.payload.height
-    },
-    set_should_refetch_counts(
-      state,
-      action: PayloadAction<BookmarksState['should_refetch_counts']>,
-    ) {
-      state.should_refetch_counts = action.payload
     },
     set_processing_progress(
       state,

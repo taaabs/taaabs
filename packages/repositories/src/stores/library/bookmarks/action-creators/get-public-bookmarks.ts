@@ -10,6 +10,7 @@ import { backOff } from 'exponential-backoff'
 import { backoff_options } from '@repositories/core/backoff-options'
 import { KyInstance } from 'ky'
 import { tag_hierarchies_actions } from '../../tag-hierarchies/tag-hierarchies.slice'
+import { pinned_actions } from '../../pinned/pinned.slice'
 
 export const get_public_bookmarks = (params: {
   request_params: GetBookmarks_Params.Public
@@ -28,6 +29,9 @@ export const get_public_bookmarks = (params: {
       dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(true))
       dispatch(bookmarks_actions.set_has_more_bookmarks(null))
     }
+
+    let should_refetch_counts = false
+    let should_refetch_pinned = false
 
     const get_result = async () => {
       const result = await get_bookmarks.invoke(params.request_params)
@@ -57,24 +61,23 @@ export const get_public_bookmarks = (params: {
         result.processing_progress !== undefined ||
         result.import_progress !== undefined
       ) {
+        if (result.import_progress !== undefined) {
+          should_refetch_pinned = true
+        }
+        should_refetch_counts = true
         throw new Error()
       } else {
         return result
       }
     }
 
-    let should_refetch_counts = false
-
-    const result = await backOff(get_result, {
-      ...backoff_options,
-      retry: () => {
-        should_refetch_counts = true
-        return true
-      },
-    })
+    const result = await backOff(get_result, backoff_options)
 
     if (should_refetch_counts) {
-      dispatch(bookmarks_actions.set_should_refetch_counts(true))
+      dispatch(counts_actions.set_should_refetch(true))
+    }
+    if (should_refetch_pinned) {
+      dispatch(pinned_actions.set_should_refetch(true))
     }
 
     let bookmarks_with_density: Bookmark_Entity[] = []
@@ -103,7 +106,7 @@ export const get_public_bookmarks = (params: {
     } else {
       dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks_with_density))
       const state = get_state()
-      if (!state.counts.is_fetching && !state.bookmarks.should_refetch_counts) {
+      if (!state.counts.is_fetching && !state.counts.should_refetch) {
         dispatch(counts_actions.process_tags())
         dispatch(bookmarks_actions.set_bookmarks(bookmarks_with_density))
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
