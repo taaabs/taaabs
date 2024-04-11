@@ -1157,7 +1157,7 @@ export const use_search = () => {
     set_highlights_sites_variants(undefined)
   }
 
-  const delete_searchable_bookmark = async (params: {
+  const delete_bookmark = async (params: {
     db: Orama<typeof schema>
     bookmarks_just_tags: BookmarkTags[]
     is_archived: boolean
@@ -1201,24 +1201,24 @@ export const use_search = () => {
     }
   }
 
-  const update_searchable_bookmark = async (params: {
+  const update_bookmark = async (params: {
     db: Orama<typeof schema>
     bookmarks_just_tags: BookmarkTags[]
     is_archived: boolean
     bookmark: BookmarkOfSearch
   }) => {
     await remove(params.db, params.bookmark.id.toString())
-    const sites = params.bookmark.links.map(
-      (link) =>
-        `${get_domain_from_url(link.url)}${
-          link.site_path ? `/${link.site_path}` : ''
-        }`,
-    )
 
     if (
       (params.is_archived && params.bookmark.is_archived) ||
       (!params.is_archived && !params.bookmark.is_archived)
     ) {
+      const sites = params.bookmark.links.map(
+        (link) =>
+          `${get_domain_from_url(link.url)}${
+            link.site_path ? `/${link.site_path}` : ''
+          }`,
+      )
       await insert(params.db, {
         id: params.bookmark.id.toString(),
         text:
@@ -1465,8 +1465,8 @@ export const use_search = () => {
     is_initializing,
     db,
     archived_db,
-    delete_searchable_bookmark,
-    update_searchable_bookmark,
+    delete_bookmark,
+    update_bookmark,
     set_current_filter,
     set_selected_tags,
     indexed_bookmarks_percentage,

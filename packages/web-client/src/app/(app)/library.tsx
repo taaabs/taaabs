@@ -1091,7 +1091,7 @@ const Library = (params: {
           }),
         )
         toast.success(params.dictionary.library.bookmark_updated)
-        search_hook.update_searchable_bookmark({
+        search_hook.update_bookmark({
           db,
           bookmarks_just_tags,
           is_archived: is_archived_filter,
@@ -1163,7 +1163,7 @@ const Library = (params: {
                 }),
               )
               toast.success(params.dictionary.library.bookmark_updated)
-              search_hook.update_searchable_bookmark({
+              search_hook.update_bookmark({
                 db,
                 bookmarks_just_tags,
                 is_archived: is_archived_filter,
@@ -1251,7 +1251,7 @@ const Library = (params: {
                 )
                 tag_view_options_hook.remove_tags_from_search_params([tag_id])
               }
-              search_hook.update_searchable_bookmark({
+              search_hook.update_bookmark({
                 db,
                 bookmarks_just_tags,
                 is_archived: is_archived_filter,
@@ -1341,7 +1341,7 @@ const Library = (params: {
                       ? params.dictionary.library.link_is_now_pinned
                       : params.dictionary.library.pin_has_been_removed,
                   )
-                  search_hook.update_searchable_bookmark({
+                  search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1456,7 +1456,7 @@ const Library = (params: {
                       ? params.dictionary.library.use_snapshot
                       : params.dictionary.library.use_original,
                   )
-                  search_hook.update_searchable_bookmark({
+                  search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1593,7 +1593,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_searchable_bookmark({
+                  search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1704,7 +1704,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_searchable_bookmark({
+                  search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1814,7 +1814,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_searchable_bookmark({
+                  search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1923,7 +1923,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_searchable_bookmark({
+                  search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2032,7 +2032,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_searchable_bookmark({
+                  search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2141,7 +2141,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_searchable_bookmark({
+                  search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2252,9 +2252,9 @@ const Library = (params: {
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
-                  // It's critically important to run [search.update_searchable_bookmark] before [counts_actions.refresh_authorized_counts]
+                  // It's critically important to run [search.update_bookmark] before [counts_actions.refresh_authorized_counts]
                   // otherwise updating bookmark from search will mess highlights. Bookmark is refreshed because of counts_refreshed_at_timestamp prop change.
-                  search_hook.update_searchable_bookmark({
+                  search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2294,8 +2294,11 @@ const Library = (params: {
                 other_icon: <UiCommonParticles_Icon variant="ARCHIVE" />,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const init_data = await search_hook.init({
                     is_archived: is_archived_filter,
+                  })
+                  const archived_init_data = await search_hook.init({
+                    is_archived: !is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
@@ -2340,10 +2343,33 @@ const Library = (params: {
                       is_archived_filter ? 'restored' : 'archived'
                     }`,
                   )
-                  search_hook.update_searchable_bookmark({
-                    db,
-                    bookmarks_just_tags,
-                    is_archived: is_archived_filter,
+                  search_hook.update_bookmark({
+                    db: init_data.db,
+                    bookmarks_just_tags: init_data.bookmarks_just_tags,
+                    is_archived: false,
+                    bookmark: {
+                      id: bookmark.id,
+                      created_at: bookmark.created_at,
+                      visited_at: bookmark.visited_at,
+                      updated_at: new Date().toISOString(),
+                      title: bookmark.title,
+                      note: bookmark.note,
+                      is_archived: !is_archived_filter,
+                      is_unread: bookmark.is_unread,
+                      stars: bookmark.stars,
+                      links: bookmark.links.map((link) => ({
+                        url: link.url,
+                        site_path: link.site_path,
+                        is_public: link.is_public,
+                      })),
+                      tags: bookmark.tags.map((tag) => tag.name),
+                      tag_ids: bookmark.tags.map((tag) => tag.id),
+                    },
+                  })
+                  search_hook.update_bookmark({
+                    db: archived_init_data.db,
+                    bookmarks_just_tags: archived_init_data.bookmarks_just_tags,
+                    is_archived: true,
                     bookmark: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
@@ -2401,7 +2427,7 @@ const Library = (params: {
                     search_hook.set_count(search_hook.count - 1)
                   }
                   toast.success('Bookmark has been deleted')
-                  search_hook.delete_searchable_bookmark({
+                  search_hook.delete_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
