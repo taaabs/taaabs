@@ -183,7 +183,7 @@ export const use_bookmarks = () => {
 
   const get_bookmarks_by_ids = async (params: {
     // All ids of a search result.
-    ids: number[]
+    all_not_paginated_ids: number[]
     should_get_next_page?: boolean
   }) => {
     const ky_instance = ky.create({
@@ -198,13 +198,17 @@ export const use_bookmarks = () => {
     if (params.should_get_next_page) {
       // Bookmark could be filtered out.
       const last_id = bookmarks![bookmarks!.length - 1].id
-      const idx_of_hit = params.ids.findIndex((id) => id == last_id) + 1
-      ids = params.ids.slice(
+      const idx_of_hit =
+        params.all_not_paginated_ids.findIndex((id) => id == last_id) + 1
+      ids = params.all_not_paginated_ids.slice(
         idx_of_hit,
         idx_of_hit + system_values.library.bookmarks.per_page,
       )
     } else {
-      ids = params.ids.slice(0, system_values.library.bookmarks.per_page)
+      ids = params.all_not_paginated_ids.slice(
+        0,
+        system_values.library.bookmarks.per_page,
+      )
     }
 
     if (!username) {

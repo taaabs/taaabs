@@ -19,8 +19,8 @@ export const dictionary: Dictionary = {
     pinned: 'Przypięte',
     pinned_links_has_beed_updated: 'Przypięte linki zostały zaktualizowana',
     via_archive_org: 'Przez Archive.org',
-    redirect_set: 'Przekierowanie włączone',
-    redirect_unset: 'Przekierowanie wyłączone',
+    use_snapshot: 'Odnośnik używa teraz kopii',
+    use_original: 'Oryginalny link został przywrócony',
     sort_by: 'Sortowanie',
     sort_by_options: {
       created_at: 'Data utworzenia',

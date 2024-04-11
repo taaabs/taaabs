@@ -94,8 +94,8 @@ export const Primary = () => {
         mobile_title_bar="Bookmarks"
         on_page_bottom_reached={() => {}}
         slot_pinned={<>pinned</>}
-        is_fetching_first_bookmarks={false}
-        is_fetching_more_bookmarks={false}
+        are_bookmarks_dimmed={false}
+        is_interactive={false}
         slot_bookmarks={
           <>
             {bookmark}

@@ -12,8 +12,8 @@ export const Primary = () => (
     slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached={() => {}}
-    is_fetching_first_bookmarks={false}
-    is_fetching_more_bookmarks={false}
+    are_bookmarks_dimmed={false}
+    is_interactive={false}
     slot_bookmarks={<>[BOOKMARKS]</>}
     slot_search={<>[SEARCH]</>}
     show_skeletons={false}
@@ -29,8 +29,8 @@ export const Scrolling = () => (
     slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached={() => {}}
-    is_fetching_first_bookmarks={false}
-    is_fetching_more_bookmarks={false}
+    are_bookmarks_dimmed={false}
+    is_interactive={false}
     slot_bookmarks={
       <>
         {lorem} {lorem} {lorem} {lorem}
@@ -50,8 +50,8 @@ export const Loading = () => (
     slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached={() => {}}
-    is_fetching_first_bookmarks={false}
-    is_fetching_more_bookmarks={false}
+    are_bookmarks_dimmed={false}
+    is_interactive={false}
     slot_bookmarks={<>slot bookmarks</>}
     slot_search={<>[SEARCH]</>}
     show_skeletons={true}

@@ -20,9 +20,8 @@ export namespace Library {
     slot_search: React.ReactNode
     slot_pinned: React.ReactNode
     slot_bookmarks: React.ReactNode
-    is_upserting?: boolean
-    is_fetching_first_bookmarks: boolean
-    is_fetching_more_bookmarks: boolean
+    are_bookmarks_dimmed: boolean
+    is_interactive: boolean
     on_page_bottom_reached: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
@@ -220,12 +219,6 @@ export const Library: React.FC<Library.Props> = (props) => {
   }, [is_end_of_bookmarks_visible])
 
   useUpdateEffect(() => {
-    if (!props.is_fetching_first_bookmarks) {
-      window.scrollTo(0, 0)
-    }
-  }, [props.is_fetching_first_bookmarks])
-
-  useUpdateEffect(() => {
     if (is_left_side_open) {
       toggle_left_side()
     } else if (is_right_side_open) {
@@ -252,10 +245,7 @@ export const Library: React.FC<Library.Props> = (props) => {
       className={styles.container}
       {...swipeable_handlers}
       style={{
-        pointerEvents:
-          props.is_fetching_first_bookmarks || props.is_fetching_more_bookmarks
-            ? 'none'
-            : 'all',
+        pointerEvents: !props.is_interactive ? 'none' : undefined,
       }}
     >
       <div className={styles.toolbar}>
@@ -413,8 +403,7 @@ export const Library: React.FC<Library.Props> = (props) => {
 
             <div
               className={cn({
-                [styles.dimmed]:
-                  props.is_fetching_first_bookmarks || props.is_upserting,
+                [styles.dimmed]: props.are_bookmarks_dimmed,
               })}
             >
               <div className={styles.main__inner__pinned}>

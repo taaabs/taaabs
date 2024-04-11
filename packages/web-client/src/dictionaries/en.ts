@@ -20,8 +20,8 @@ const dictionary: Dictionary = {
     pinned: 'Pinned',
     pinned_links_has_beed_updated: 'Pinned links has been updated',
     via_archive_org: 'Use snapshot',
-    redirect_set: 'Redirect has been set',
-    redirect_unset: 'Redirect has been unset',
+    use_snapshot: 'Link is now using snapshot',
+    use_original: 'Link is back to its original URL',
     sort_by: 'Sort by',
     sort_by_options: {
       created_at: 'Created at',

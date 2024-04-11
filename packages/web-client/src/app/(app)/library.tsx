@@ -93,8 +93,6 @@ const Library = (params: {
   const [is_sort_by_dropdown_visible, toggle_sort_by_dropdown] =
     useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
-  const [are_bookmark_menu_items_locked, set_are_bookmarks_menu_items_locked] =
-    useState(false)
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
     useState<number>()
 
@@ -111,6 +109,7 @@ const Library = (params: {
   useUpdateEffect(() => {
     if (
       !bookmarks_hook.is_fetching &&
+      !bookmarks_hook.is_upserting &&
       !counts_hook.is_fetching &&
       !tag_hierarchies_hook.is_fetching &&
       !pinned_hook.is_fetching
@@ -123,6 +122,9 @@ const Library = (params: {
     counts_hook.is_fetching,
     tag_hierarchies_hook.is_fetching,
     pinned_hook.is_fetching,
+    // Bookmark menu items must see new db instances.
+    search_hook.db_updated_at_timestamp,
+    search_hook.archived_db_updated_at_timestamp,
   ])
 
   useUpdateEffect(() => {
@@ -187,9 +189,13 @@ const Library = (params: {
   }, [search_hook.db, search_hook.archived_db])
 
   useUpdateEffect(() => {
-    bookmarks_hook.get_bookmarks_by_ids({
-      ids: search_hook.result!.hits.map((hit) => parseInt(hit.document.id)),
-    })
+    if (search_hook.result) {
+      bookmarks_hook.get_bookmarks_by_ids({
+        all_not_paginated_ids: search_hook.result.hits.map((hit) =>
+          parseInt(hit.document.id),
+        ),
+      })
+    }
   }, [search_hook.queried_at_timestamp])
 
   useEffect(() => {
@@ -203,6 +209,12 @@ const Library = (params: {
     date_view_options_hook.current_lte,
     filter_view_options_hook.current_filter,
   ])
+
+  useUpdateEffect(() => {
+    if (!bookmarks_hook.is_fetching_first_bookmarks) {
+      window.scrollTo(0, 0)
+    }
+  }, [bookmarks_hook.is_fetching_first_bookmarks])
 
   const is_archived_filter =
     filter_view_options_hook.current_filter == Filter.ARCHIVED ||
@@ -284,21 +296,9 @@ const Library = (params: {
             set_search_cache_to_be_cleared(false)
           }
 
-          const is_cache_stale = await search_hook.check_is_cache_stale({
-            ky: ky_instance,
+          await search_hook.init({
             is_archived: is_archived_filter,
           })
-
-          if (
-            (!is_archived_filter
-              ? search_hook.db === undefined
-              : search_hook.archived_db === undefined) ||
-            is_cache_stale
-          ) {
-            await search_hook.init({
-              is_archived: is_archived_filter,
-            })
-          }
         }
       }}
       on_change={(value) => {
@@ -785,9 +785,11 @@ const Library = (params: {
       slot_tags={
         <div
           style={{
-            opacity: bookmarks_hook.is_fetching_first_bookmarks
-              ? 'var(--dimmed-opacity)'
-              : undefined,
+            opacity:
+              bookmarks_hook.is_fetching_first_bookmarks &&
+              !search_hook.search_string
+                ? 'var(--dimmed-opacity)'
+                : undefined,
           }}
         >
           {!show_skeletons ? (
@@ -1021,29 +1023,6 @@ const Library = (params: {
           : undefined
       }
       favicon_host={favicon_host}
-      on_menu_click={async () => {
-        if (username) return
-        set_are_bookmarks_menu_items_locked(true)
-        const is_cache_stale = await search_hook.check_is_cache_stale({
-          ky: ky_instance,
-          is_archived: is_archived_filter,
-        })
-        if (
-          !is_cache_stale &&
-          (filter_view_options_hook.current_filter != Filter.ARCHIVED
-            ? !search_hook.db
-            : !search_hook.archived_db)
-        ) {
-          await search_hook.init({
-            is_archived: is_archived_filter,
-          })
-        } else if (is_cache_stale) {
-          await search_hook.clear_cached_data({
-            is_archived: is_archived_filter,
-          })
-        }
-        set_are_bookmarks_menu_items_locked(false)
-      }}
       // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed).
       dragged_tag={tag_view_options_hook.dragged_tag}
       on_mouse_up={async () => {
@@ -1065,6 +1044,10 @@ const Library = (params: {
         ) {
           return
         }
+        dispatch(bookmarks_actions.set_is_upserting(true))
+        const { db, bookmarks_just_tags } = await search_hook.init({
+          is_archived: is_archived_filter,
+        })
         const modified_bookmark: UpsertBookmark_Params = {
           bookmark_id: bookmark.id,
           is_public: bookmark.is_public,
@@ -1109,6 +1092,9 @@ const Library = (params: {
         )
         toast.success(params.dictionary.library.bookmark_updated)
         search_hook.update_searchable_bookmark({
+          db,
+          bookmarks_just_tags,
+          is_archived: is_archived_filter,
           bookmark: {
             id: bookmark.id,
             created_at: bookmark.created_at,
@@ -1136,6 +1122,10 @@ const Library = (params: {
       on_tags_order_change={
         !username
           ? async (tags) => {
+              dispatch(bookmarks_actions.set_is_upserting(true))
+              const { db, bookmarks_just_tags } = await search_hook.init({
+                is_archived: is_archived_filter,
+              })
               const modified_bookmark: UpsertBookmark_Params = {
                 bookmark_id: bookmark.id,
                 is_public: bookmark.is_public,
@@ -1174,6 +1164,9 @@ const Library = (params: {
               )
               toast.success(params.dictionary.library.bookmark_updated)
               search_hook.update_searchable_bookmark({
+                db,
+                bookmarks_just_tags,
+                is_archived: is_archived_filter,
                 bookmark: {
                   id: bookmark.id,
                   created_at: bookmark.created_at,
@@ -1205,6 +1198,10 @@ const Library = (params: {
                   }),
                 )
               }
+              dispatch(bookmarks_actions.set_is_upserting(true))
+              const { db, bookmarks_just_tags } = await search_hook.init({
+                is_archived: is_archived_filter,
+              })
               const modified_bookmark: UpsertBookmark_Params = {
                 bookmark_id: bookmark.id,
                 is_public: bookmark.is_public,
@@ -1255,6 +1252,9 @@ const Library = (params: {
                 tag_view_options_hook.remove_tags_from_search_params([tag_id])
               }
               search_hook.update_searchable_bookmark({
+                db,
+                bookmarks_just_tags,
+                is_archived: is_archived_filter,
                 bookmark: {
                   id: bookmark.id,
                   created_at: bookmark.created_at,
@@ -1296,6 +1296,10 @@ const Library = (params: {
                   : params.dictionary.library.pin_on_top,
                 on_click: async () => {
                   const is_pinned = !link.is_pinned
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
                     is_public: bookmark.is_public,
@@ -1338,6 +1342,9 @@ const Library = (params: {
                       : params.dictionary.library.pin_has_been_removed,
                   )
                   search_hook.update_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
@@ -1403,6 +1410,10 @@ const Library = (params: {
                 is_checked: link.via_wayback || false,
                 on_click: async () => {
                   const via_wayback = !link.via_wayback
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
                     is_public: bookmark.is_public,
@@ -1442,10 +1453,13 @@ const Library = (params: {
                   )
                   toast.success(
                     via_wayback
-                      ? params.dictionary.library.redirect_set
-                      : params.dictionary.library.redirect_unset,
+                      ? params.dictionary.library.use_snapshot
+                      : params.dictionary.library.use_original,
                   )
                   search_hook.update_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
@@ -1503,8 +1517,11 @@ const Library = (params: {
               {
                 label: 'Mark as unread',
                 is_checked: bookmark.is_unread,
-                is_disabled: are_bookmark_menu_items_locked,
                 on_click: async () => {
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   const is_unread = !bookmark.is_unread
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
@@ -1577,6 +1594,9 @@ const Library = (params: {
                     }
                   }
                   search_hook.update_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
@@ -1606,8 +1626,11 @@ const Library = (params: {
               {
                 label: <UiAppAtom_StarsForDropdown stars={1} />,
                 is_checked: bookmark.stars == 1,
-                is_disabled: are_bookmark_menu_items_locked,
                 on_click: async () => {
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
                     is_public: bookmark.is_public,
@@ -1682,6 +1705,9 @@ const Library = (params: {
                     }
                   }
                   search_hook.update_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
@@ -1711,8 +1737,11 @@ const Library = (params: {
               {
                 label: <UiAppAtom_StarsForDropdown stars={2} />,
                 is_checked: bookmark.stars == 2,
-                is_disabled: are_bookmark_menu_items_locked,
                 on_click: async () => {
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
                     is_public: bookmark.is_public,
@@ -1786,6 +1815,9 @@ const Library = (params: {
                     }
                   }
                   search_hook.update_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
@@ -1814,8 +1846,11 @@ const Library = (params: {
               {
                 label: <UiAppAtom_StarsForDropdown stars={3} />,
                 is_checked: bookmark.stars == 3,
-                is_disabled: are_bookmark_menu_items_locked,
                 on_click: async () => {
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
                     is_public: bookmark.is_public,
@@ -1889,6 +1924,9 @@ const Library = (params: {
                     }
                   }
                   search_hook.update_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
@@ -1917,8 +1955,11 @@ const Library = (params: {
               {
                 label: <UiAppAtom_StarsForDropdown stars={4} />,
                 is_checked: bookmark.stars == 4,
-                is_disabled: are_bookmark_menu_items_locked,
                 on_click: async () => {
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
                     is_public: bookmark.is_public,
@@ -1992,6 +2033,9 @@ const Library = (params: {
                     }
                   }
                   search_hook.update_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
@@ -2020,8 +2064,11 @@ const Library = (params: {
               {
                 label: <UiAppAtom_StarsForDropdown stars={5} />,
                 is_checked: bookmark.stars == 5,
-                is_disabled: are_bookmark_menu_items_locked,
                 on_click: async () => {
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
                     is_public: bookmark.is_public,
@@ -2095,6 +2142,9 @@ const Library = (params: {
                     }
                   }
                   search_hook.update_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
@@ -2122,8 +2172,11 @@ const Library = (params: {
               },
               {
                 label: 'Edit',
-                is_disabled: are_bookmark_menu_items_locked,
                 on_click: async () => {
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   const updated_bookmark = await upsert_bookmark_modal({
                     modal_context,
                     bookmark,
@@ -2202,6 +2255,9 @@ const Library = (params: {
                   // It's critically important to run [search.update_searchable_bookmark] before [counts_actions.refresh_authorized_counts]
                   // otherwise updating bookmark from search will mess highlights. Bookmark is refreshed because of counts_refreshed_at_timestamp prop change.
                   search_hook.update_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark: {
                       id: bookmark.id,
                       is_archived: is_archived_filter,
@@ -2236,8 +2292,11 @@ const Library = (params: {
                   ? 'Archive'
                   : 'Restore',
                 other_icon: <UiCommonParticles_Icon variant="ARCHIVE" />,
-                is_disabled: are_bookmark_menu_items_locked,
                 on_click: async () => {
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
                     is_public: bookmark.is_public,
@@ -2282,6 +2341,9 @@ const Library = (params: {
                     }`,
                   )
                   search_hook.update_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
@@ -2317,8 +2379,11 @@ const Library = (params: {
               },
               {
                 label: 'Delete',
-                is_disabled: are_bookmark_menu_items_locked,
                 on_click: async () => {
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
                   await dispatch(
                     bookmarks_actions.delete_bookmark({
                       last_authorized_counts_params:
@@ -2337,6 +2402,9 @@ const Library = (params: {
                   }
                   toast.success('Bookmark has been deleted')
                   search_hook.delete_searchable_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
                     bookmark_id: bookmark.id,
                   })
                   tag_hierarchies_hook.get_tag_hierarchies({
@@ -2399,13 +2467,17 @@ const Library = (params: {
         slot_toolbar={slot_toolbar}
         slot_tag_hierarchies={slot_tag_hierarchies}
         slot_aside={slot_aside}
-        is_upserting={bookmarks_hook.is_upserting}
-        is_fetching_first_bookmarks={
-          bookmarks_hook.is_fetching_first_bookmarks || false
+        are_bookmarks_dimmed={
+          bookmarks_hook.is_fetching_first_bookmarks ||
+          bookmarks_hook.is_upserting ||
+          false
         }
-        is_fetching_more_bookmarks={
-          bookmarks_hook.is_fetching_more_bookmarks ||
-          search_hook.is_initializing
+        is_interactive={
+          !(
+            bookmarks_hook.is_fetching_first_bookmarks ||
+            bookmarks_hook.is_fetching_more_bookmarks ||
+            search_hook.is_initializing
+          )
         }
         slot_pinned={
           pinned_hook.items &&
@@ -2437,7 +2509,7 @@ const Library = (params: {
             bookmarks_hook.bookmarks.length < search_hook.count
           ) {
             bookmarks_hook.get_bookmarks_by_ids({
-              ids: search_hook.result!.hits.map((hit) =>
+              all_not_paginated_ids: search_hook.result!.hits.map((hit) =>
                 parseInt(hit.document.id),
               ),
               should_get_next_page: true,

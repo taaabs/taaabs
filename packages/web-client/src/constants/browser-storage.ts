@@ -4,10 +4,11 @@ export const browser_storage = {
       search: {
         bookmarks: 'authorized-library.search.bookmarks',
         index: 'authorized-library.search.index',
-        cached_at: 'authorized-library.search.cached-at',
+        cached_at_timestamp: 'authorized-library.search.cached-at-timestamp',
         archived_bookmarks: 'authorized-library.search.archived-bookmarks',
         archived_index: 'authorized-library.search.archived-index',
-        archived_cached_at: 'authorized-library.search.archived-cached-at',
+        archived_cached_at_timestamp:
+          'authorized-library.search.archived-cached-at-timestamp',
       },
     },
     public_library: {
@@ -16,14 +17,14 @@ export const browser_storage = {
           `public-library.search.bookmarks.${params.username}`,
         index: (params: { username: string }) =>
           `public-library.index.${params.username}`,
-        cached_at: (params: { username: string }) =>
-          `public-library.cached_at.${params.username}`,
+        cached_at_timestamp: (params: { username: string }) =>
+          `public-library.cached-at-timestamp.${params.username}`,
         archived_bookmarks: (params: { username: string }) =>
-          `public-library.archived_bookmarks.${params.username}`,
+          `public-library.archived-bookmarks.${params.username}`,
         archived_index: (params: { username: string }) =>
-          `public-library.archived_index.${params.username}`,
-        archived_cached_at: (params: { username: string }) =>
-          `public-library.archived_cached_at.${params.username}`,
+          `public-library.archived-index.${params.username}`,
+        archived_cached_at_timestamp: (params: { username: string }) =>
+          `public-library.archived-cached-at-timestamp.${params.username}`,
       },
     },
   },

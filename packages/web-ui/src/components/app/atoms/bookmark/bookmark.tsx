@@ -90,7 +90,6 @@ export namespace Bookmark {
     set_render_height: (height: number) => void
     on_link_click?: () => void
     favicon_host: string
-    on_menu_click: () => Promise<void>
     menu_slot: React.ReactNode
     highlights?: Highlights
     highlights_site_variants?: string[]
@@ -612,9 +611,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         )}
                         onClick={(e) => {
                           e.stopPropagation()
-                          if (!is_menu_open) {
-                            props.on_menu_click()
-                          }
                           toggle_is_menu_open()
                         }}
                       >
