@@ -14,8 +14,6 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { browser_storage } from '@/constants/browser-storage'
 import { Filter } from '@/types/library/filter'
 import ky from 'ky'
-import { Results } from '@orama/orama'
-import { Result } from './use-search'
 import { system_values } from '@shared/constants/system-values'
 
 export const use_bookmarks = () => {
@@ -184,7 +182,8 @@ export const use_bookmarks = () => {
   }
 
   const get_bookmarks_by_ids = async (params: {
-    result: Results<Result>
+    // All ids of a search result.
+    ids: number[]
     should_get_next_page?: boolean
   }) => {
     const ky_instance = ky.create({
@@ -198,19 +197,14 @@ export const use_bookmarks = () => {
     let ids: number[] = []
     if (params.should_get_next_page) {
       // Bookmark could be filtered out.
-      const last_id = bookmarks![bookmarks!.length - 1].id.toString()
-      const idx_of_hit =
-        params.result.hits.findIndex((hit) => hit.document.id == last_id) + 1
-      ids = params.result.hits
-        .slice(
-          idx_of_hit,
-          idx_of_hit + system_values.library.bookmarks.per_page,
-        )
-        .map((hit) => parseInt(hit.id))
+      const last_id = bookmarks![bookmarks!.length - 1].id
+      const idx_of_hit = params.ids.findIndex((id) => id == last_id) + 1
+      ids = params.ids.slice(
+        idx_of_hit,
+        idx_of_hit + system_values.library.bookmarks.per_page,
+      )
     } else {
-      ids = params.result.hits
-        .slice(0, system_values.library.bookmarks.per_page)
-        .map((hit) => parseInt(hit.id))
+      ids = params.ids.slice(0, system_values.library.bookmarks.per_page)
     }
 
     if (!username) {

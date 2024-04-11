@@ -187,10 +187,10 @@ const Library = (params: {
   }, [search_hook.db, search_hook.archived_db])
 
   useUpdateEffect(() => {
-    if (search_hook.result) {
-      bookmarks_hook.get_bookmarks_by_ids({ result: search_hook.result })
-    }
-  }, [search_hook.result])
+    bookmarks_hook.get_bookmarks_by_ids({
+      ids: search_hook.result!.hits.map((hit) => parseInt(hit.document.id)),
+    })
+  }, [search_hook.queried_at_timestamp])
 
   useEffect(() => {
     tag_hierarchies_hook.get_tag_hierarchies({
@@ -2437,7 +2437,9 @@ const Library = (params: {
             bookmarks_hook.bookmarks.length < search_hook.count
           ) {
             bookmarks_hook.get_bookmarks_by_ids({
-              result: search_hook.result!,
+              ids: search_hook.result!.hits.map((hit) =>
+                parseInt(hit.document.id),
+              ),
               should_get_next_page: true,
             })
           }
