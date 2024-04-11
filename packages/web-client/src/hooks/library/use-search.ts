@@ -401,8 +401,8 @@ export const use_search = () => {
         tags: bookmark.tags,
       }))
       !params.is_archived
-        ? set_bookmarks_just_tags(bookmarks_just_tags)
-        : set_archived_bookmarks_just_tags(bookmarks_just_tags)
+        ? set_bookmarks_just_tags(new_bookmarks_just_tags)
+        : set_archived_bookmarks_just_tags(new_bookmarks_just_tags)
       await cache_data({
         db: new_db,
         bookmarks_just_tags: new_bookmarks_just_tags,
