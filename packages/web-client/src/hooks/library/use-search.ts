@@ -158,9 +158,9 @@ export const use_search = () => {
     }
   }, [selected_tags, bookmarks_just_tags, archived_bookmarks_just_tags])
 
-  useUpdateEffect(() => {
-    get_hints()
-  }, [ids_to_search_amongst])
+  // useUpdateEffect(() => {
+  //   get_hints()
+  // }, [ids_to_search_amongst])
 
   const get_is_cache_stale = async (params: {
     is_archived: boolean

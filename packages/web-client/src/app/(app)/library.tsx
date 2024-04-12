@@ -199,6 +199,7 @@ const Library = (params: {
             return name
           }),
       )
+      search_hook.get_hints()
     }
   }, [search_hook.db, search_hook.archived_db])
 
@@ -313,6 +314,8 @@ const Library = (params: {
           await search_hook.init({
             is_archived: is_archived_filter,
           })
+
+          search_hook.get_hints()
         }
       }}
       on_change={(value) => {
@@ -1268,8 +1271,21 @@ const Library = (params: {
                 gte: date_view_options_hook.current_gte,
                 lte: date_view_options_hook.current_lte,
               })
-              if (search_hook.count) {
-                search_hook.set_count(search_hook.count - 1)
+              const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
+              if (
+                !tag_view_options_hook.selected_tags.every((t) =>
+                  updated_tag_ids.includes(t),
+                )
+              ) {
+                // We filter out bookmark when there are other bookmarks still matching with selected tags.
+                dispatch(
+                  bookmarks_actions.filter_out_bookmark({
+                    bookmark_id: updated_bookmark.id,
+                  }),
+                )
+                if (search_hook.count) {
+                  search_hook.set_count(search_hook.count - 1)
+                }
               }
               if (counts_hook.tags![tag_id].yields == 1) {
                 dispatch(
@@ -1671,20 +1687,6 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-                  if (
-                    search_hook.count &&
-                    (filter_view_options_hook.current_filter ==
-                      Filter.STARRED ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.STARRED_UNREAD ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.ARCHIVED_STARRED ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                    bookmark.stars == 1
-                  ) {
-                    search_hook.set_count(search_hook.count - 1)
-                  }
                   // Delete bookmarks from session storage from filtered results.
                   if (bookmark.stars == 1) {
                     for (const key in sessionStorage) {
@@ -1735,6 +1737,20 @@ const Library = (params: {
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  if (
+                    search_hook.count &&
+                    (filter_view_options_hook.current_filter ==
+                      Filter.STARRED ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.STARRED_UNREAD ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.ARCHIVED_STARRED ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.ARCHIVED_STARRED_UNREAD) &&
+                    bookmark.stars == 1
+                  ) {
+                    search_hook.set_count(search_hook.count - 1)
+                  }
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(params.dictionary.library.bookmark_updated)
                 },
@@ -2243,14 +2259,11 @@ const Library = (params: {
                       tags_to_remove_from_search_params,
                     )
                   }
-
                   await tag_hierarchies_hook.get_tag_hierarchies({
                     filter: filter_view_options_hook.current_filter,
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
-                  // It's critically important to run [search.update_bookmark] before [counts_actions.refresh_authorized_counts]
-                  // otherwise updating bookmark from search will mess highlights. Bookmark is refreshed because of counts_refreshed_at_timestamp prop change.
                   await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
@@ -2335,9 +2348,6 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-                  if (search_hook.count) {
-                    search_hook.set_count(search_hook.count - 1)
-                  }
                   await search_hook.update_bookmark({
                     db: init_data.db,
                     bookmarks_just_tags: init_data.bookmarks_just_tags,
@@ -2389,6 +2399,9 @@ const Library = (params: {
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  if (search_hook.count) {
+                    search_hook.set_count(search_hook.count - 1)
+                  }
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(
                     `Bookmark has been ${
@@ -2424,9 +2437,6 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-                  if (search_hook.count) {
-                    search_hook.set_count(search_hook.count - 1)
-                  }
                   await search_hook.delete_bookmark({
                     db,
                     bookmarks_just_tags,
@@ -2438,6 +2448,9 @@ const Library = (params: {
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  if (search_hook.count) {
+                    search_hook.set_count(search_hook.count - 1)
+                  }
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success('Bookmark has been deleted')
                 },

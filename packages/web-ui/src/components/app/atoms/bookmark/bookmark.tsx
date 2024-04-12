@@ -119,6 +119,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     // Detecing swiping is mitigates interference between tag reordering and toggling density.
     const [is_mouse_over, set_is_mouse_over] = useState(false)
     const [is_swiping, set_is_swiping] = useState(false)
+    // We hold highlights copy here to clear it upon tag order change which breaks highlighting.
+    const [highlights, set_highlights] = useState<
+      Bookmark.Highlights | undefined
+    >(props.highlights)
     const { onSwipeStart, onSwipeEnd } = useSwipeEvents(ref, {
       preventDefault: false,
     })
@@ -153,6 +157,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         />
       </>,
     )
+
+    useUpdateEffect(() => {
+      set_highlights(props.highlights)
+    }, [props.highlights])
 
     useUpdateEffect(() => {
       if (render_height === undefined) {
@@ -269,10 +277,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 },
               ])}
             >
-              {props.highlights
+              {highlights
                 ? tag.name.split('').map((char, i) => {
                     const real_i = tag_first_char_index_in_search_title + i
-                    const is_highlighted = props.highlights!.find(
+                    const is_highlighted = highlights!.find(
                       ([index, length]) =>
                         real_i >= index && real_i < index + length,
                     )
@@ -660,9 +668,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           },
                         )}
                       >
-                        {props.highlights
+                        {highlights
                           ? props.title.split('').map((char, i) => {
-                              const is_highlighted = props.highlights!.find(
+                              const is_highlighted = highlights!.find(
                                 ([index, length]) =>
                                   i >= index && i < index + length,
                               )
@@ -692,12 +700,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   </div>
                   {props.note && (
                     <div className={styles.bookmark__main__content__note}>
-                      {props.highlights
+                      {highlights
                         ? props.note.split('').map((char, i) => {
                             const real_i =
                               (props.title ? `${props.title} ` : '').length + i
 
-                            const is_highlighted = props.highlights!.find(
+                            const is_highlighted = highlights!.find(
                               ([index, length]) =>
                                 real_i >= index && real_i < index + length,
                             )
@@ -722,6 +730,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         return
                       set_tags(new_tags)
                       props.on_tags_order_change?.(new_tags)
+                      set_highlights(undefined)
                     }}
                     animation={system_values.sortablejs_animation_duration}
                     forceFallback={true}
@@ -837,7 +846,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           }}
                         >
                           <span>
-                            {props.highlights
+                            {highlights
                               ? `${get_domain_from_url(link.url)} ${
                                   link.site_path ? `› ${link.site_path} ` : ''
                                 }`
@@ -847,12 +856,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                       link_first_char_index_in_search_title +
                                       i +
                                       (link_idx > 0 ? 1 : 0)
-                                    const is_highlighted =
-                                      props.highlights!.find(
-                                        ([index, length]) =>
-                                          real_i >= index &&
-                                          real_i < index + length,
-                                      )
+                                    const is_highlighted = highlights!.find(
+                                      ([index, length]) =>
+                                        real_i >= index &&
+                                        real_i < index + length,
+                                    )
                                     return is_highlighted ? (
                                       <span
                                         className={styles.highlight}
