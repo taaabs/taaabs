@@ -858,10 +858,7 @@ const Library = (params: {
   )
   const slot_pinned = (
     <UiAppAtom_Pinned
-      key={pinned_hook.fetched_at_timestamp} // State for sortable must be rebuilt.
-      first_bookmarks_fetched_at_timestamp={
-        bookmarks_hook.first_bookmarks_fetched_at_timestamp
-      }
+      library_updated_at_timestamp={library_updated_at_timestamp}
       favicon_host={favicon_host}
       header_title={params.dictionary.library.pinned}
       items={

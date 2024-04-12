@@ -20,7 +20,7 @@ export namespace Pinned {
     via_wayback?: boolean
   }
   export type Props = {
-    first_bookmarks_fetched_at_timestamp?: number // Hiding not relevant pins.
+    library_updated_at_timestamp?: number
     items: Item[]
     on_change: (items: Item[]) => void
     favicon_host: string
@@ -65,8 +65,20 @@ export const Pinned: React.FC<Pinned.Props> = memo(
     )
 
     useUpdateEffect(() => {
-      props.on_change(items)
-    }, [items])
+      set_items(
+        props.items.map((item, i) => ({
+          id: i,
+          bookmark_id: item.bookmark_id,
+          created_at: item.created_at,
+          url: item.url,
+          title: item.title,
+          stars: item.stars,
+          is_unread: item.is_unread,
+          tags: item.tags,
+          via_wayback: item.via_wayback,
+        })),
+      )
+    }, [props.library_updated_at_timestamp])
 
     const items_dom = items.map((item) => {
       const created_at_timestamp = Math.round(item.created_at.getTime() / 1000)
@@ -166,6 +178,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         setList={(new_items) => {
           if (JSON.stringify(new_items) == JSON.stringify(items)) return
           set_items(new_items)
+          props.on_change(new_items)
         }}
         animation={system_values.sortablejs_animation_duration}
         forceFallback={true}
@@ -180,7 +193,5 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       <div className={styles.items}>{items_dom}</div>
     )
   },
-  (o, n) =>
-    o.first_bookmarks_fetched_at_timestamp ==
-    n.first_bookmarks_fetched_at_timestamp,
+  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
 )
