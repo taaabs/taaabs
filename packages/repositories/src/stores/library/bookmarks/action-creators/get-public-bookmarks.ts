@@ -27,7 +27,7 @@ export const get_public_bookmarks = (params: {
       dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(true))
     } else {
       dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(true))
-      dispatch(bookmarks_actions.set_has_more_bookmarks(null))
+      dispatch(bookmarks_actions.set_has_more_bookmarks(false))
     }
 
     let should_refetch_counts = false
