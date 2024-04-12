@@ -3,7 +3,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import Library from '../library'
 import { useContext } from 'react'
-import { GlobalLibarySearchContext } from '../global-library-search-provider'
+import { GlobalLibarySearchContext } from '../../global-library-search-provider'
 
 namespace LibraryWrapper {
   export type Props = {

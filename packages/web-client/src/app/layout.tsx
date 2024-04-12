@@ -8,6 +8,9 @@ import 'react-nestable/dist/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
 import 'use-context-menu/styles.css'
 import '@web-ui/styles/style.scss'
+import { GlobalLibrarySearchProvider } from './global-library-search-provider'
+import { ReactNode } from 'react'
+import { ModalProvider } from '@/providers/modal-provider'
 
 export const revalidate = 0
 
@@ -29,7 +32,7 @@ const plus_jakarta_sans = Plus_Jakarta_Sans({
   display: 'swap',
 })
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <html
       lang="en"
@@ -54,7 +57,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           icon={false}
           draggablePercent={20}
         />
-        {children}
+        <GlobalLibrarySearchProvider>
+          <ModalProvider>{children}</ModalProvider>
+        </GlobalLibrarySearchProvider>
       </body>
     </html>
   )
