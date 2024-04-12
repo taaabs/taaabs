@@ -693,6 +693,7 @@ export const use_search = () => {
       set_count(result.count)
       if (result.count) {
         set_result(result)
+        set_queried_at_timestamp(Date.now())
         set_search_fragment({
           search_string: params.search_string,
         })
@@ -734,7 +735,6 @@ export const use_search = () => {
         )
       }
     }
-    set_queried_at_timestamp(Date.now())
   }
 
   const get_hints = async () => {
@@ -1170,31 +1170,27 @@ export const use_search = () => {
         (bookmark) => bookmark.id != params.bookmark_id,
       )
       set_bookmarks_just_tags(new_bookmarks_just_tags)
-      setTimeout(async () => {
-        await cache_data({
-          db: params.db,
-          bookmarks_just_tags: new_bookmarks_just_tags,
-          is_archived: false,
-        })
-        set_db_updated_at_timestamp(Date.now())
-      }, 0)
+      await cache_data({
+        db: params.db,
+        bookmarks_just_tags: new_bookmarks_just_tags,
+        is_archived: false,
+      })
+      set_db_updated_at_timestamp(Date.now())
     } else {
       const new_archived_bookmarks_just_tags =
         params.bookmarks_just_tags.filter(
           (bookmark) => bookmark.id != params.bookmark_id,
         )
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      setTimeout(async () => {
-        await cache_data({
-          db: params.db,
-          bookmarks_just_tags: new_archived_bookmarks_just_tags,
-          is_archived: true,
-        })
-        set_archived_db_updated_at_timestamp(Date.now())
-      }, 0)
+      await cache_data({
+        db: params.db,
+        bookmarks_just_tags: new_archived_bookmarks_just_tags,
+        is_archived: true,
+      })
+      set_archived_db_updated_at_timestamp(Date.now())
     }
     if (result?.hits.length) {
-      await query_db({
+      query_db({
         search_string,
         refresh_highlights_only: true,
       })
@@ -1258,14 +1254,12 @@ export const use_search = () => {
         })
       }
       set_bookmarks_just_tags(new_bookmarks_just_tags)
-      setTimeout(async () => {
-        await cache_data({
-          db: params.db,
-          bookmarks_just_tags: new_bookmarks_just_tags,
-          is_archived: false,
-        })
-        set_db_updated_at_timestamp(Date.now())
-      }, 0)
+      await cache_data({
+        db: params.db,
+        bookmarks_just_tags: new_bookmarks_just_tags,
+        is_archived: false,
+      })
+      set_db_updated_at_timestamp(Date.now())
     } else {
       const new_archived_bookmarks_just_tags =
         params.bookmarks_just_tags.filter(
@@ -1278,14 +1272,12 @@ export const use_search = () => {
         })
       }
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      setTimeout(async () => {
-        await cache_data({
-          db: params.db,
-          bookmarks_just_tags: new_archived_bookmarks_just_tags,
-          is_archived: true,
-        })
-        set_archived_db_updated_at_timestamp(Date.now())
-      }, 0)
+      await cache_data({
+        db: params.db,
+        bookmarks_just_tags: new_archived_bookmarks_just_tags,
+        is_archived: true,
+      })
+      set_archived_db_updated_at_timestamp(Date.now())
     }
     if (result?.hits.length) {
       await query_db({

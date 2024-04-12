@@ -8,9 +8,9 @@ export const upsert_bookmark_modal = (params: {
   is_archived?: boolean
   ky: KyInstance
 }) =>
-  new Promise<Bookmark_Entity>((resolve) => {
+  new Promise<Bookmark_Entity | null>((resolve) => {
     const on_submit_handler = (bookmark: Bookmark_Entity) => resolve(bookmark)
-    const on_close_handler = () => params.modal_context.set_modal()
+    const on_close_handler = () => resolve(null)
     params.modal_context.set_modal(
       <Form_UpsertBookmark
         action="update"

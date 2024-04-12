@@ -119,6 +119,7 @@ const Library = (params: {
     }
   }, [
     bookmarks_hook.is_fetching,
+    bookmarks_hook.is_upserting,
     counts_hook.is_fetching,
     tag_hierarchies_hook.is_fetching,
     pinned_hook.is_fetching,
@@ -126,6 +127,14 @@ const Library = (params: {
     search_hook.db_updated_at_timestamp,
     search_hook.archived_db_updated_at_timestamp,
   ])
+
+  useUpdateEffect(() => {
+    if (!bookmarks_hook.is_upserting) {
+      dispatch(
+        bookmarks_actions.set_bookmarks(bookmarks_hook.incoming_bookmarks),
+      )
+    }
+  }, [bookmarks_hook.is_upserting])
 
   useUpdateEffect(() => {
     if (counts_hook.should_refetch) {
@@ -252,7 +261,7 @@ const Library = (params: {
       placeholder={params.dictionary.library.search_placeholder}
       hints={!search_hook.is_initializing ? search_hook.hints : undefined}
       hints_set_at_timestamp={search_hook.hints_set_at_timestamp}
-      queried_at_timestamp={library_updated_at_timestamp}
+      queried_at_timestamp={search_hook.queried_at_timestamp}
       on_click_hint={(i) => {
         const search_string =
           search_hook.search_string + search_hook.hints![i].completion
@@ -1090,8 +1099,7 @@ const Library = (params: {
             ky: ky_instance,
           }),
         )
-        toast.success(params.dictionary.library.bookmark_updated)
-        search_hook.update_bookmark({
+        await search_hook.update_bookmark({
           db,
           bookmarks_just_tags,
           is_archived: is_archived_filter,
@@ -1113,11 +1121,13 @@ const Library = (params: {
             tag_ids: bookmark.tags.map((tag) => tag.id),
           },
         })
-        tag_hierarchies_hook.get_tag_hierarchies({
+        await tag_hierarchies_hook.get_tag_hierarchies({
           filter: filter_view_options_hook.current_filter,
           gte: date_view_options_hook.current_gte,
           lte: date_view_options_hook.current_lte,
         })
+        dispatch(bookmarks_actions.set_is_upserting(false))
+        toast.success(params.dictionary.library.bookmark_updated)
       }}
       on_tags_order_change={
         !username
@@ -1162,8 +1172,7 @@ const Library = (params: {
                   ky: ky_instance,
                 }),
               )
-              toast.success(params.dictionary.library.bookmark_updated)
-              search_hook.update_bookmark({
+              await search_hook.update_bookmark({
                 db,
                 bookmarks_just_tags,
                 is_archived: is_archived_filter,
@@ -1185,6 +1194,8 @@ const Library = (params: {
                   tag_ids: bookmark.tags.map((tag) => tag.id),
                 },
               })
+              dispatch(bookmarks_actions.set_is_upserting(false))
+              toast.success(params.dictionary.library.bookmark_updated)
             }
           : undefined
       }
@@ -1243,7 +1254,6 @@ const Library = (params: {
               if (search_hook.count) {
                 search_hook.set_count(search_hook.count - 1)
               }
-              toast.success(params.dictionary.library.bookmark_updated)
               if (counts_hook.tags![tag_id].yields == 1) {
                 dispatch(bookmarks_actions.set_bookmarks([]))
                 dispatch(
@@ -1251,7 +1261,7 @@ const Library = (params: {
                 )
                 tag_view_options_hook.remove_tags_from_search_params([tag_id])
               }
-              search_hook.update_bookmark({
+              await search_hook.update_bookmark({
                 db,
                 bookmarks_just_tags,
                 is_archived: is_archived_filter,
@@ -1273,11 +1283,13 @@ const Library = (params: {
                   tag_ids: updated_bookmark.tags.map((tag) => tag.id),
                 },
               })
-              tag_hierarchies_hook.get_tag_hierarchies({
+              await tag_hierarchies_hook.get_tag_hierarchies({
                 filter: filter_view_options_hook.current_filter,
                 gte: date_view_options_hook.current_gte,
                 lte: date_view_options_hook.current_lte,
               })
+              dispatch(bookmarks_actions.set_is_upserting(false))
+              toast.success(params.dictionary.library.bookmark_updated)
             }
           : undefined
       }
@@ -1336,12 +1348,7 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-                  toast.success(
-                    is_pinned
-                      ? params.dictionary.library.link_is_now_pinned
-                      : params.dictionary.library.pin_has_been_removed,
-                  )
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1364,6 +1371,12 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  toast.success(
+                    is_pinned
+                      ? params.dictionary.library.link_is_now_pinned
+                      : params.dictionary.library.pin_has_been_removed,
+                  )
                 },
                 other_icon: <UiCommonParticles_Icon variant="PIN" />,
               },
@@ -1451,12 +1464,7 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-                  toast.success(
-                    via_wayback
-                      ? params.dictionary.library.use_snapshot
-                      : params.dictionary.library.use_original,
-                  )
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1479,6 +1487,12 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  toast.success(
+                    via_wayback
+                      ? params.dictionary.library.use_snapshot
+                      : params.dictionary.library.use_original,
+                  )
                 },
               },
             ]}
@@ -1570,7 +1584,6 @@ const Library = (params: {
                   ) {
                     search_hook.set_count(search_hook.count! - 1)
                   }
-                  toast.success(params.dictionary.library.bookmark_updated)
                   // Delete bookmarks from session storage from filtered results.
                   if (bookmark.is_unread) {
                     for (const key in sessionStorage) {
@@ -1593,7 +1606,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1616,11 +1629,13 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  tag_hierarchies_hook.get_tag_hierarchies({
+                  await tag_hierarchies_hook.get_tag_hierarchies({
                     filter: filter_view_options_hook.current_filter,
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  toast.success(params.dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -1681,7 +1696,6 @@ const Library = (params: {
                   ) {
                     search_hook.set_count(search_hook.count - 1)
                   }
-                  toast.success(params.dictionary.library.bookmark_updated)
                   // Delete bookmarks from session storage from filtered results.
                   if (bookmark.stars == 1) {
                     for (const key in sessionStorage) {
@@ -1704,7 +1718,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1727,11 +1741,13 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  tag_hierarchies_hook.get_tag_hierarchies({
+                  await tag_hierarchies_hook.get_tag_hierarchies({
                     filter: filter_view_options_hook.current_filter,
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  toast.success(params.dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -1792,7 +1808,6 @@ const Library = (params: {
                   ) {
                     search_hook.set_count(search_hook.count - 1)
                   }
-                  toast.success(params.dictionary.library.bookmark_updated)
                   if (bookmark.stars == 2) {
                     for (const key in sessionStorage) {
                       if (
@@ -1814,7 +1829,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1836,11 +1851,13 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  tag_hierarchies_hook.get_tag_hierarchies({
+                  await tag_hierarchies_hook.get_tag_hierarchies({
                     filter: filter_view_options_hook.current_filter,
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  toast.success(params.dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -1901,7 +1918,6 @@ const Library = (params: {
                   ) {
                     search_hook.set_count(search_hook.count - 1)
                   }
-                  toast.success(params.dictionary.library.bookmark_updated)
                   if (bookmark.stars == 3) {
                     for (const key in sessionStorage) {
                       if (
@@ -1923,7 +1939,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1945,11 +1961,13 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  tag_hierarchies_hook.get_tag_hierarchies({
+                  await tag_hierarchies_hook.get_tag_hierarchies({
                     filter: filter_view_options_hook.current_filter,
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  toast.success(params.dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -2010,7 +2028,6 @@ const Library = (params: {
                   ) {
                     search_hook.set_count(search_hook.count - 1)
                   }
-                  toast.success(params.dictionary.library.bookmark_updated)
                   if (bookmark.stars == 4) {
                     for (const key in sessionStorage) {
                       if (
@@ -2032,7 +2049,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2054,11 +2071,13 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  tag_hierarchies_hook.get_tag_hierarchies({
+                  await tag_hierarchies_hook.get_tag_hierarchies({
                     filter: filter_view_options_hook.current_filter,
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  toast.success(params.dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -2119,7 +2138,6 @@ const Library = (params: {
                   ) {
                     search_hook.set_count(search_hook.count - 1)
                   }
-                  toast.success(params.dictionary.library.bookmark_updated)
                   if (bookmark.stars == 5) {
                     for (const key in sessionStorage) {
                       if (
@@ -2141,7 +2159,7 @@ const Library = (params: {
                       }
                     }
                   }
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2163,11 +2181,13 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  tag_hierarchies_hook.get_tag_hierarchies({
+                  await tag_hierarchies_hook.get_tag_hierarchies({
                     filter: filter_view_options_hook.current_filter,
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  toast.success(params.dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -2183,6 +2203,11 @@ const Library = (params: {
                     is_archived: is_archived_filter,
                     ky: ky_instance,
                   })
+                  if (!updated_bookmark) {
+                    dispatch(bookmarks_actions.set_is_upserting(false))
+                    modal_context?.set_modal()
+                    return
+                  }
                   const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
                   if (
                     tag_view_options_hook.selected_tags.every((t) =>
@@ -2244,17 +2269,14 @@ const Library = (params: {
                     )
                   }
 
-                  modal_context?.set_modal()
-                  toast.success(params.dictionary.library.bookmark_updated)
-
-                  tag_hierarchies_hook.get_tag_hierarchies({
+                  await tag_hierarchies_hook.get_tag_hierarchies({
                     filter: filter_view_options_hook.current_filter,
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
                   // It's critically important to run [search.update_bookmark] before [counts_actions.refresh_authorized_counts]
                   // otherwise updating bookmark from search will mess highlights. Bookmark is refreshed because of counts_refreshed_at_timestamp prop change.
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2276,6 +2298,9 @@ const Library = (params: {
                       tag_ids: updated_bookmark.tags.map((tag) => tag.id),
                     },
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  modal_context?.set_modal()
+                  toast.success(params.dictionary.library.bookmark_updated)
                 },
                 other_icon: <UiCommonParticles_Icon variant="EDIT" />,
               },
@@ -2338,12 +2363,7 @@ const Library = (params: {
                   if (search_hook.count) {
                     search_hook.set_count(search_hook.count - 1)
                   }
-                  toast.success(
-                    `Bookmark has been ${
-                      is_archived_filter ? 'restored' : 'archived'
-                    }`,
-                  )
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db: init_data.db,
                     bookmarks_just_tags: init_data.bookmarks_just_tags,
                     is_archived: false,
@@ -2366,7 +2386,7 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  search_hook.update_bookmark({
+                  await search_hook.update_bookmark({
                     db: archived_init_data.db,
                     bookmarks_just_tags: archived_init_data.bookmarks_just_tags,
                     is_archived: true,
@@ -2389,11 +2409,17 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  tag_hierarchies_hook.get_tag_hierarchies({
+                  await tag_hierarchies_hook.get_tag_hierarchies({
                     filter: filter_view_options_hook.current_filter,
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  toast.success(
+                    `Bookmark has been ${
+                      is_archived_filter ? 'restored' : 'archived'
+                    }`,
+                  )
                   if (
                     bookmarks_hook.bookmarks &&
                     bookmarks_hook.bookmarks.length == 1 &&
@@ -2426,18 +2452,19 @@ const Library = (params: {
                   if (search_hook.count) {
                     search_hook.set_count(search_hook.count - 1)
                   }
-                  toast.success('Bookmark has been deleted')
-                  search_hook.delete_bookmark({
+                  await search_hook.delete_bookmark({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
                     bookmark_id: bookmark.id,
                   })
-                  tag_hierarchies_hook.get_tag_hierarchies({
+                  await tag_hierarchies_hook.get_tag_hierarchies({
                     filter: filter_view_options_hook.current_filter,
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  toast.success('Bookmark has been deleted')
                 },
                 other_icon: <UiCommonParticles_Icon variant="DELETE" />,
               },

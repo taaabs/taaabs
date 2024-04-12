@@ -16,8 +16,6 @@ export const upsert_bookmark = (params: {
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
     new Promise<Bookmark_Entity>(async (resolve) => {
-      dispatch(bookmarks_actions.set_is_upserting(true))
-
       const data_source = new Bookmarks_DataSourceImpl(params.ky)
       const repository = new Bookmarks_RepositoryImpl(data_source)
       const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)

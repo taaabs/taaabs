@@ -1,6 +1,5 @@
-import { LibraryDispatch, LibraryState } from '../../library.store'
+import { LibraryDispatch } from '../../library.store'
 import { counts_actions } from '../counts.slice'
-import { bookmarks_actions } from '../../bookmarks/bookmarks.slice'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 import { Counts_DataSourceImpl } from '@repositories/modules/counts/infrastructure/data-sources/counts.data-source-impl'
 import { Counts_RepositoryImpl } from '@repositories/modules/counts/infrastructure/repositories/counts.repository-impl'
@@ -15,7 +14,7 @@ export const refresh_authorized_counts = (params: {
   last_authorized_counts_params: Counts_Params.Authorized
   ky: KyInstance
 }) => {
-  return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
+  return async (dispatch: LibraryDispatch) => {
     const data_source = new Counts_DataSourceImpl(params.ky)
     const repository = new Counts_RepositoryImpl(data_source)
     const get_counts_use_case = new GetCountsOnAuthorizedUser_UseCase(
@@ -42,13 +41,8 @@ export const refresh_authorized_counts = (params: {
     dispatch(pinned_actions.set_items(pinned_result))
     dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
 
-    const state = get_state()
     dispatch(counts_actions.set_data(result))
     dispatch(counts_actions.set_is_fetching(false))
     dispatch(counts_actions.process_tags())
-    dispatch(
-      bookmarks_actions.set_bookmarks(state.bookmarks.incoming_bookmarks),
-    )
-    dispatch(bookmarks_actions.set_is_upserting(false))
   }
 }

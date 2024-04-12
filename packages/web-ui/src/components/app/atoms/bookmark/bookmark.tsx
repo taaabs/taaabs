@@ -555,15 +555,17 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               ) {
                 document.body.classList.remove('adding-tag')
                 props.on_mouse_up()
-                set_tags([
-                  ...tags,
-                  {
-                    id: 0,
-                    is_public: true,
-                    name: props.dragged_tag.name,
-                    yields: props.dragged_tag.yields + 1,
-                  },
-                ])
+                if (props.tags.length < system_values.bookmark.tags.limit) {
+                  set_tags([
+                    ...tags,
+                    {
+                      id: 0,
+                      is_public: true,
+                      name: props.dragged_tag.name,
+                      yields: props.dragged_tag.yields + 1,
+                    },
+                  ])
+                }
               }
             }}
             onMouseEnter={() => {
