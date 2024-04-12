@@ -24,7 +24,7 @@ export const Toolbar: React.FC<Toolbar.Props> = (props) => {
           onClick={button.on_click}
           key={i}
         >
-          {button.label}
+          <span>{button.label}</span>
         </button>
       ))}
       <div className={styles.toolbar__separator} />

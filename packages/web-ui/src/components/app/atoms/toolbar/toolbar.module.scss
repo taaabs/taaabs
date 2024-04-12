@@ -40,6 +40,9 @@
         background-color: var(--white);
       }
     }
+    > span {
+      padding-bottom: var(--distance-1px);
+    }
   }
   &__separator {
     height: var(--distance-20px);

@@ -41,14 +41,14 @@
     gap: var(--distance-2px);
     > span {
       line-height: 1;
+      font-weight: var(--font-weight-inter-medium);
     }
     > span:first-child {
       font-size: var(--font-size-10px);
-      color: var(--text-color-dimmed);
     }
     > span:last-child {
       font-size: var(--font-size-13px);
-      font-weight: var(--font-weight-inter-medium);
+      
     }
   }
 }

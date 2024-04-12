@@ -112,6 +112,8 @@ export const Primary = () => {
           follow: '',
           unfollow: '',
         }}
+        close_aside_count={0}
+        info_text=""
       />
     </UiAppTemplate_App>
   )
@@ -129,7 +131,6 @@ const bookmark = (
     ]}
     on_tag_click={() => {}}
     on_click={() => {}}
-    on_menu_click={async () => {}}
     on_selected_tag_click={() => {}}
     set_render_height={() => {}}
     favicon_host=""
@@ -139,11 +140,11 @@ const bookmark = (
     updated_at=""
     bookmark_id={1}
     density="default"
-    on_mouse_up_on_tag={() => {}}
     on_tag_delete_click={() => {}}
     index={0}
     is_public={true}
     on_give_point_click={() => {}}
-    pinned_links_count={0}
+    created_at={new Date()}
+    library_url=""
   />
 )
