@@ -14,7 +14,9 @@
   @include hover {
     background: var(--blue800);
   }
-  padding-bottom: 0.1em !important;
+  > span {
+    padding-bottom: 0.06em;
+  }
   &--outlined {
     background-color: var(--white);
     border: var(--border-secondary);

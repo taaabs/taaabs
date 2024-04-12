@@ -30,25 +30,25 @@ export const Button: React.FC<Button.Props> = (props) => {
   if (props.type == 'submit') {
     return (
       <button className={class_names} type="submit">
-        {props.children}
+        <span>{props.children}</span>
       </button>
     )
   } else if (props.href !== undefined) {
     return (
       <Link className={class_names} href={props.href} onClick={props.on_click}>
-        {props.children}
+        <span>{props.children}</span>
       </Link>
     )
   } else if (props.on_click !== undefined) {
     return (
       <button className={class_names} onClick={props.on_click} type="button">
-        {props.children}
+        <span>{props.children}</span>
       </button>
     )
   } else {
     return (
       <button className={class_names} disabled>
-        {props.children}
+        <span>{props.children}</span>
       </button>
     )
   }
