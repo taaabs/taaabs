@@ -27,9 +27,8 @@ export const get_authorized_counts = (params: {
 
     const state = get_state()
     if (
-      (!state.bookmarks.is_fetching &&
-        state.bookmarks.is_fetching_first_bookmarks) ||
-      state.counts.should_refetch
+      !state.bookmarks.is_fetching &&
+      state.bookmarks.is_fetching_first_bookmarks
     ) {
       dispatch(counts_actions.process_tags())
       dispatch(
