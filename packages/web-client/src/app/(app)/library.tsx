@@ -2124,7 +2124,6 @@ const Library = (params: {
                       )![1].yields
                       return !updated_tag_ids.includes(t) && yields == 1
                     })
-
                   if (tags_to_remove_from_search_params.length) {
                     dispatch(bookmarks_actions.set_bookmarks([]))
                     dispatch(
