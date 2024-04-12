@@ -142,7 +142,7 @@ const Library = (params: {
         bookmarks_actions.set_bookmarks(bookmarks_hook.incoming_bookmarks),
       )
     }
-  }, [bookmarks_hook.is_upserting, bookmarks_hook.is_fetching_first_bookmarks])
+  }, [bookmarks_hook.is_upserting])
 
   useUpdateEffect(() => {
     if (counts_hook.should_refetch) {
