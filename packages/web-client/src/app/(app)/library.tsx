@@ -54,7 +54,6 @@ import { use_scroll_restore } from '@/hooks/misc/use-scroll-restore'
 import ky from 'ky'
 import { use_pinned } from '@/hooks/library/use-pinned'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
-import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types/record-visit.params'
 import dictionary from '@/dictionaries/en'
@@ -111,8 +110,10 @@ const Library = (params: {
       !bookmarks_hook.is_fetching_first_bookmarks &&
       !bookmarks_hook.is_upserting &&
       !counts_hook.is_fetching &&
+      !counts_hook.should_refetch &&
       !tag_hierarchies_hook.is_fetching &&
-      !pinned_hook.is_fetching
+      !pinned_hook.is_fetching &&
+      !pinned_hook.should_refetch
     ) {
       set_show_skeletons(false)
       set_library_updated_at_timestamp(Date.now())
@@ -122,8 +123,10 @@ const Library = (params: {
     bookmarks_hook.is_fetching_first_bookmarks,
     bookmarks_hook.is_upserting,
     counts_hook.is_fetching,
+    counts_hook.should_refetch,
     tag_hierarchies_hook.is_fetching,
     pinned_hook.is_fetching,
+    pinned_hook.should_refetch,
     // Bookmark menu items must see new db instances.
     search_hook.db_updated_at_timestamp,
     search_hook.archived_db_updated_at_timestamp,
@@ -1589,28 +1592,6 @@ const Library = (params: {
                   ) {
                     search_hook.set_count(search_hook.count! - 1)
                   }
-                  // Delete bookmarks from session storage from filtered results.
-                  if (bookmark.is_unread) {
-                    for (const key in sessionStorage) {
-                      if (
-                        key.startsWith('library.bookmarks.?') &&
-                        (key.includes('f=2') ||
-                          key.includes('f=3') ||
-                          key.includes('f=6') ||
-                          key.includes('f=7'))
-                      ) {
-                        const bookmarks: Bookmark_Entity[] = JSON.parse(
-                          sessionStorage.getItem(key)!,
-                        )
-                        sessionStorage.setItem(
-                          key,
-                          JSON.stringify(
-                            bookmarks.filter((b) => b.id != bookmark.id),
-                          ),
-                        )
-                      }
-                    }
-                  }
                   await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
@@ -1687,28 +1668,6 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-                  // Delete bookmarks from session storage from filtered results.
-                  if (bookmark.stars == 1) {
-                    for (const key in sessionStorage) {
-                      if (
-                        key.startsWith('library.bookmarks.?') &&
-                        (key.includes('f=1') ||
-                          key.includes('f=3') ||
-                          key.includes('f=5') ||
-                          key.includes('f=7'))
-                      ) {
-                        const bookmarks: Bookmark_Entity[] = JSON.parse(
-                          sessionStorage.getItem(key)!,
-                        )
-                        sessionStorage.setItem(
-                          key,
-                          JSON.stringify(
-                            bookmarks.filter((b) => b.id != bookmark.id),
-                          ),
-                        )
-                      }
-                    }
-                  }
                   await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
@@ -1799,41 +1758,6 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-                  if (
-                    search_hook.count &&
-                    (filter_view_options_hook.current_filter ==
-                      Filter.STARRED ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.STARRED_UNREAD ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.ARCHIVED_STARRED ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                    bookmark.stars == 2
-                  ) {
-                    search_hook.set_count(search_hook.count - 1)
-                  }
-                  if (bookmark.stars == 2) {
-                    for (const key in sessionStorage) {
-                      if (
-                        key.startsWith('library.bookmarks.?') &&
-                        (key.includes('f=1') ||
-                          key.includes('f=3') ||
-                          key.includes('f=5') ||
-                          key.includes('f=7'))
-                      ) {
-                        const bookmarks: Bookmark_Entity[] = JSON.parse(
-                          sessionStorage.getItem(key)!,
-                        )
-                        sessionStorage.setItem(
-                          key,
-                          JSON.stringify(
-                            bookmarks.filter((b) => b.id != bookmark.id),
-                          ),
-                        )
-                      }
-                    }
-                  }
                   await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
@@ -1861,6 +1785,20 @@ const Library = (params: {
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  if (
+                    search_hook.count &&
+                    (filter_view_options_hook.current_filter ==
+                      Filter.STARRED ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.STARRED_UNREAD ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.ARCHIVED_STARRED ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.ARCHIVED_STARRED_UNREAD) &&
+                    bookmark.stars == 2
+                  ) {
+                    search_hook.set_count(search_hook.count - 1)
+                  }
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(params.dictionary.library.bookmark_updated)
                 },
@@ -1909,41 +1847,6 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-                  if (
-                    search_hook.count &&
-                    (filter_view_options_hook.current_filter ==
-                      Filter.STARRED ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.STARRED_UNREAD ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.ARCHIVED_STARRED ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                    bookmark.stars == 3
-                  ) {
-                    search_hook.set_count(search_hook.count - 1)
-                  }
-                  if (bookmark.stars == 3) {
-                    for (const key in sessionStorage) {
-                      if (
-                        key.startsWith('library.bookmarks.?') &&
-                        (key.includes('f=1') ||
-                          key.includes('f=3') ||
-                          key.includes('f=5') ||
-                          key.includes('f=7'))
-                      ) {
-                        const bookmarks: Bookmark_Entity[] = JSON.parse(
-                          sessionStorage.getItem(key)!,
-                        )
-                        sessionStorage.setItem(
-                          key,
-                          JSON.stringify(
-                            bookmarks.filter((b) => b.id != bookmark.id),
-                          ),
-                        )
-                      }
-                    }
-                  }
                   await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
@@ -1971,6 +1874,20 @@ const Library = (params: {
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  if (
+                    search_hook.count &&
+                    (filter_view_options_hook.current_filter ==
+                      Filter.STARRED ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.STARRED_UNREAD ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.ARCHIVED_STARRED ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.ARCHIVED_STARRED_UNREAD) &&
+                    bookmark.stars == 3
+                  ) {
+                    search_hook.set_count(search_hook.count - 1)
+                  }
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(params.dictionary.library.bookmark_updated)
                 },
@@ -2019,41 +1936,6 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-                  if (
-                    search_hook.count &&
-                    (filter_view_options_hook.current_filter ==
-                      Filter.STARRED ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.STARRED_UNREAD ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.ARCHIVED_STARRED ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                    bookmark.stars == 4
-                  ) {
-                    search_hook.set_count(search_hook.count - 1)
-                  }
-                  if (bookmark.stars == 4) {
-                    for (const key in sessionStorage) {
-                      if (
-                        key.startsWith('library.bookmarks.?') &&
-                        (key.includes('f=1') ||
-                          key.includes('f=3') ||
-                          key.includes('f=5') ||
-                          key.includes('f=7'))
-                      ) {
-                        const bookmarks: Bookmark_Entity[] = JSON.parse(
-                          sessionStorage.getItem(key)!,
-                        )
-                        sessionStorage.setItem(
-                          key,
-                          JSON.stringify(
-                            bookmarks.filter((b) => b.id != bookmark.id),
-                          ),
-                        )
-                      }
-                    }
-                  }
                   await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
@@ -2081,6 +1963,20 @@ const Library = (params: {
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  if (
+                    search_hook.count &&
+                    (filter_view_options_hook.current_filter ==
+                      Filter.STARRED ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.STARRED_UNREAD ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.ARCHIVED_STARRED ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.ARCHIVED_STARRED_UNREAD) &&
+                    bookmark.stars == 4
+                  ) {
+                    search_hook.set_count(search_hook.count - 1)
+                  }
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(params.dictionary.library.bookmark_updated)
                 },
@@ -2129,41 +2025,6 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-                  if (
-                    search_hook.count &&
-                    (filter_view_options_hook.current_filter ==
-                      Filter.STARRED ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.STARRED_UNREAD ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.ARCHIVED_STARRED ||
-                      filter_view_options_hook.current_filter ==
-                        Filter.ARCHIVED_STARRED_UNREAD) &&
-                    bookmark.stars == 5
-                  ) {
-                    search_hook.set_count(search_hook.count - 1)
-                  }
-                  if (bookmark.stars == 5) {
-                    for (const key in sessionStorage) {
-                      if (
-                        key.startsWith('library.bookmarks.?') &&
-                        (key.includes('f=1') ||
-                          key.includes('f=3') ||
-                          key.includes('f=5') ||
-                          key.includes('f=7'))
-                      ) {
-                        const bookmarks: Bookmark_Entity[] = JSON.parse(
-                          sessionStorage.getItem(key)!,
-                        )
-                        sessionStorage.setItem(
-                          key,
-                          JSON.stringify(
-                            bookmarks.filter((b) => b.id != bookmark.id),
-                          ),
-                        )
-                      }
-                    }
-                  }
                   await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
@@ -2191,6 +2052,20 @@ const Library = (params: {
                     gte: date_view_options_hook.current_gte,
                     lte: date_view_options_hook.current_lte,
                   })
+                  if (
+                    search_hook.count &&
+                    (filter_view_options_hook.current_filter ==
+                      Filter.STARRED ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.STARRED_UNREAD ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.ARCHIVED_STARRED ||
+                      filter_view_options_hook.current_filter ==
+                        Filter.ARCHIVED_STARRED_UNREAD) &&
+                    bookmark.stars == 5
+                  ) {
+                    search_hook.set_count(search_hook.count - 1)
+                  }
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(params.dictionary.library.bookmark_updated)
                 },
