@@ -1,7 +1,4 @@
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
-import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/upsert-bookmark.use-case'
-import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
-import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { system_values } from '@shared/constants/system-values'
 import { useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -15,7 +12,7 @@ import { Box as UiAppAtom_Box } from '../../../web-ui/src/components/app/atoms/b
 import { Input as UiCommonAtom_Input } from '../../../web-ui/src/components/common/atoms/input'
 import { DraggableFormInputs as UiAppAtom_DraggableFormInputs } from '../../../web-ui/src/components/app/atoms/draggable-form-inputs'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
-import { KyInstance } from 'ky'
+import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 
 type FormValues = {
   title: string
@@ -39,9 +36,8 @@ export namespace UpsertBookmark {
     bookmark?: Bookmark_Entity
     bookmark_autofill?: BookmarkAutofill
     is_archived?: boolean
-    on_submit: (bookmark: Bookmark_Entity) => void
+    on_submit: (bookmark: UpsertBookmark_Params) => void
     on_close: () => void
-    ky: KyInstance
     action: 'create' | 'update'
   }
 }
@@ -81,10 +77,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   )
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
-    const data_source = new Bookmarks_DataSourceImpl(props.ky)
-    const repository = new Bookmarks_RepositoryImpl(data_source)
-    const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
-    const bookmark = await upsert_bookmark_use_case.invoke({
+    const bookmark: UpsertBookmark_Params = {
       bookmark_id: props.bookmark?.id,
       is_public:
         (form_data.is_public === undefined && props.bookmark?.is_public) ||
@@ -109,13 +102,14 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           is_pinned: current_link?.is_pinned,
           pin_order: current_link?.pin_order,
           pin_title: current_link?.pin_title,
+          via_wayback: current_link?.via_wayback,
         }
       }),
       tags: tags.map((tag) => ({
         name: tag.name,
         is_public: form_data.is_public ? tag.is_public : false,
       })),
-    })
+    }
     props.on_submit(bookmark)
   }
 

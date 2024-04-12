@@ -48,7 +48,6 @@ import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierar
 import { system_values } from '@shared/constants/system-values'
 import { Filter } from '@/types/library/filter'
 import { UpdateTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/update-tag-hierarchies.params'
-import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { use_points } from '@/hooks/library/use-points'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { use_scroll_restore } from '@/hooks/misc/use-scroll-restore'
@@ -109,6 +108,7 @@ const Library = (params: {
   useUpdateEffect(() => {
     if (
       !bookmarks_hook.is_fetching &&
+      !bookmarks_hook.is_fetching_first_bookmarks &&
       !bookmarks_hook.is_upserting &&
       !counts_hook.is_fetching &&
       !tag_hierarchies_hook.is_fetching &&
@@ -119,6 +119,7 @@ const Library = (params: {
     }
   }, [
     bookmarks_hook.is_fetching,
+    bookmarks_hook.is_fetching_first_bookmarks,
     bookmarks_hook.is_upserting,
     counts_hook.is_fetching,
     tag_hierarchies_hook.is_fetching,
@@ -128,13 +129,17 @@ const Library = (params: {
     search_hook.archived_db_updated_at_timestamp,
   ])
 
+  // Check for first bookmarks needed by deleting tags of last bookmark in results.
   useUpdateEffect(() => {
-    if (!bookmarks_hook.is_upserting) {
+    if (
+      !bookmarks_hook.is_upserting &&
+      !bookmarks_hook.is_fetching_first_bookmarks
+    ) {
       dispatch(
         bookmarks_actions.set_bookmarks(bookmarks_hook.incoming_bookmarks),
       )
     }
-  }, [bookmarks_hook.is_upserting])
+  }, [bookmarks_hook.is_upserting, bookmarks_hook.is_fetching_first_bookmarks])
 
   useUpdateEffect(() => {
     if (counts_hook.should_refetch) {
@@ -804,10 +809,8 @@ const Library = (params: {
           {!show_skeletons ? (
             <>
               <UiAppAtom_SelectedTags
-                selected_tags={(bookmarks_hook.is_fetching_first_bookmarks
-                  ? counts_hook.selected_tags
-                  : tag_view_options_hook.selected_tags
-                )
+                library_updated_at_timestamp={library_updated_at_timestamp}
+                selected_tags={tag_view_options_hook.selected_tags
                   .filter((id) =>
                     !counts_hook.tags ? false : counts_hook.tags[id],
                   )
@@ -827,14 +830,11 @@ const Library = (params: {
                 tags={
                   counts_hook.tags
                     ? Object.entries(counts_hook.tags)
-                        .filter((tag) =>
-                          bookmarks_hook.is_fetching_first_bookmarks
-                            ? !counts_hook.selected_tags.includes(
-                                parseInt(tag[0]),
-                              )
-                            : !tag_view_options_hook.selected_tags.includes(
-                                parseInt(tag[0]),
-                              ),
+                        .filter(
+                          (tag) =>
+                            !tag_view_options_hook.selected_tags.includes(
+                              parseInt(tag[0]),
+                            ),
                         )
                         .map((tag) => ({
                           id: parseInt(tag[0]),
@@ -1199,13 +1199,6 @@ const Library = (params: {
       on_tag_delete_click={
         !username
           ? async (tag_id) => {
-              if (tag_view_options_hook.selected_tags.includes(tag_id)) {
-                dispatch(
-                  bookmarks_actions.filter_out_bookmark({
-                    bookmark_id: bookmark.id,
-                  }),
-                )
-              }
               dispatch(bookmarks_actions.set_is_upserting(true))
               const { db, bookmarks_just_tags } = await search_hook.init({
                 is_archived: is_archived_filter,
@@ -1248,16 +1241,6 @@ const Library = (params: {
                   ky: ky_instance,
                 }),
               )
-              if (search_hook.count) {
-                search_hook.set_count(search_hook.count - 1)
-              }
-              if (counts_hook.tags![tag_id].yields == 1) {
-                dispatch(bookmarks_actions.set_bookmarks([]))
-                dispatch(
-                  bookmarks_actions.set_is_fetching_first_bookmarks(true),
-                )
-                tag_view_options_hook.remove_tags_from_search_params([tag_id])
-              }
               await search_hook.update_bookmark({
                 db,
                 bookmarks_just_tags,
@@ -1285,6 +1268,15 @@ const Library = (params: {
                 gte: date_view_options_hook.current_gte,
                 lte: date_view_options_hook.current_lte,
               })
+              if (search_hook.count) {
+                search_hook.set_count(search_hook.count - 1)
+              }
+              if (counts_hook.tags![tag_id].yields == 1) {
+                dispatch(
+                  bookmarks_actions.set_is_fetching_first_bookmarks(true),
+                )
+                tag_view_options_hook.remove_tags_from_search_params([tag_id])
+              }
               dispatch(bookmarks_actions.set_is_upserting(false))
               toast.success(params.dictionary.library.bookmark_updated)
             }
@@ -2190,52 +2182,23 @@ const Library = (params: {
               {
                 label: 'Edit',
                 on_click: async () => {
-                  dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
-                    is_archived: is_archived_filter,
-                  })
-                  const updated_bookmark = await upsert_bookmark_modal({
+                  const modified_bookmark = await upsert_bookmark_modal({
                     modal_context,
                     bookmark,
                     is_archived: is_archived_filter,
-                    ky: ky_instance,
                   })
-                  if (!updated_bookmark) {
+                  if (!modified_bookmark) {
                     dispatch(bookmarks_actions.set_is_upserting(false))
                     modal_context?.set_modal()
                     return
                   }
-                  const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
-                  if (
-                    tag_view_options_hook.selected_tags.every((t) =>
-                      updated_tag_ids.includes(t),
-                    )
-                  ) {
-                    dispatch(
-                      bookmarks_actions.set_incoming_bookmarks(
-                        bookmarks_hook.bookmarks!.map((b) => {
-                          if (b.id == updated_bookmark.id) {
-                            return updated_bookmark
-                          } else {
-                            return b
-                          }
-                        }),
-                      ),
-                    )
-                  } else {
-                    // We filter out bookmark when there are other bookmarks still matching with selected tags.
-                    dispatch(
-                      bookmarks_actions.filter_out_bookmark({
-                        bookmark_id: updated_bookmark.id,
-                      }),
-                    )
-                    if (search_hook.count) {
-                      search_hook.set_count(search_hook.count - 1)
-                    }
-                  }
-
-                  await dispatch(
-                    counts_actions.refresh_authorized_counts({
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
+                  const updated_bookmark = await dispatch(
+                    bookmarks_actions.upsert_bookmark({
+                      bookmark: modified_bookmark,
                       last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
@@ -2246,7 +2209,22 @@ const Library = (params: {
                       ky: ky_instance,
                     }),
                   )
-
+                  const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
+                  if (
+                    !tag_view_options_hook.selected_tags.every((t) =>
+                      updated_tag_ids.includes(t),
+                    )
+                  ) {
+                    // We filter out bookmark when there are other bookmarks still matching with selected tags.
+                    dispatch(
+                      bookmarks_actions.filter_out_bookmark({
+                        bookmark_id: updated_bookmark.id,
+                      }),
+                    )
+                    if (search_hook.count) {
+                      search_hook.set_count(search_hook.count - 1)
+                    }
+                  }
                   // Unselect removed tags when there is no more bookmarks with them.
                   const tags_to_remove_from_search_params =
                     tag_view_options_hook.selected_tags.filter((t) => {
