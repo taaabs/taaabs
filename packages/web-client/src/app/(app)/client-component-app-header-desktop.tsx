@@ -169,6 +169,8 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
           if (pathname == '/bookmarks') {
             const updated_search_params = update_search_params(
               search_params,
+              // We use updated at instead of ID beacuse user could delete last bookmark,
+              // create new and modal would not close (url would stay unchanged).
               search_params_keys.newly_created_bookmark_updated_at_timestamp,
               new Date(created_bookmark.updated_at).getTime().toString(),
             )
