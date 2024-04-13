@@ -5,7 +5,6 @@ import { system_values } from '@shared/constants/system-values'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import cn from 'classnames'
 import { Icon } from '@web-ui/components/common/particles/icon'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 
 export namespace Pinned {
@@ -63,22 +62,6 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         via_wayback: item.via_wayback,
       })),
     )
-
-    useUpdateEffect(() => {
-      set_items(
-        props.items.map((item, i) => ({
-          id: i,
-          bookmark_id: item.bookmark_id,
-          created_at: item.created_at,
-          url: item.url,
-          title: item.title,
-          stars: item.stars,
-          is_unread: item.is_unread,
-          tags: item.tags,
-          via_wayback: item.via_wayback,
-        })),
-      )
-    }, [props.library_updated_at_timestamp])
 
     const items_dom = items.map((item) => {
       const created_at_timestamp = Math.round(item.created_at.getTime() / 1000)
