@@ -149,12 +149,13 @@ const Library = (params: {
   // Close "Create bookmark" modal, refresh counts and tag hierarchies.
   useUpdateEffect(() => {
     const created_bookmark_id = search_params.get(
-      search_params_keys.newly_created_bookmark_id,
+      search_params_keys.newly_created_bookmark_updated_at_timestamp,
     )
     if (
       !bookmarks_hook.is_fetching_first_bookmarks &&
       created_bookmark_id &&
-      bookmarks_hook.bookmarks![0].id == parseInt(created_bookmark_id)
+      new Date(bookmarks_hook.bookmarks![0].updated_at).getTime() ==
+        parseInt(created_bookmark_id)
     ) {
       Promise.all([
         tag_hierarchies_hook.get_tag_hierarchies({

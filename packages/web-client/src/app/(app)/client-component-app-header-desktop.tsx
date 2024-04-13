@@ -169,8 +169,8 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
           if (pathname == '/bookmarks') {
             const updated_search_params = update_search_params(
               search_params,
-              search_params_keys.newly_created_bookmark_id,
-              created_bookmark.id.toString(),
+              search_params_keys.newly_created_bookmark_updated_at_timestamp,
+              new Date(created_bookmark.updated_at).getTime().toString(),
             )
             window.history.pushState(
               {},
