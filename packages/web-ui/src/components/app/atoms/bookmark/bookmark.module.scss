@@ -127,7 +127,7 @@
         &__unread {
           display: inline-flex;
           align-items: center;
-          transform: translateX(-9px) translateY(-0.4rem) rotate(45deg);
+          transform: translateX(-10px) translateY(-0.4rem) rotate(45deg);
           left: 0;
           transform-origin: left;
           position: absolute;
@@ -503,7 +503,7 @@
         left: var(--distance-3-5px);
         > svg {
           width: var(--distance-9px);
-          fill: var(--neutral300);
+          fill: var(--neutral200);
         }
       }
     }

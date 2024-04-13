@@ -16,7 +16,6 @@ type Counts = {
 
 export namespace CustomRange {
   export type Props = {
-    library_updated_at_timestamp?: number
     counts?: Counts
     current_gte?: number
     current_lte?: number
@@ -557,7 +556,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       </div>
     )
   },
-  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
+  () => true,
 )
 
 function yyyymm_to_display(yyyymm: number) {

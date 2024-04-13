@@ -824,7 +824,7 @@ const Library = (params: {
       slot_custom_range={
         !show_skeletons ? (
           <CustomRange
-            library_updated_at_timestamp={library_updated_at_timestamp}
+            key={library_updated_at_timestamp}
             counts={counts_hook.months || undefined}
             on_yyyymm_change={date_view_options_hook.set_gte_lte_search_params}
             clear_date_range={
@@ -866,7 +866,7 @@ const Library = (params: {
           {!show_skeletons ? (
             <>
               <UiAppAtom_SelectedTags
-                library_updated_at_timestamp={library_updated_at_timestamp}
+                key={`selected-tags-${library_updated_at_timestamp}`}
                 selected_tags={tag_view_options_hook.selected_tags
                   .filter((id) =>
                     !counts_hook.tags ? false : counts_hook.tags[id],
@@ -882,7 +882,7 @@ const Library = (params: {
                 }
               />
               <UiAppAtom_Tags
-                library_updated_at_timestamp={library_updated_at_timestamp}
+                key={`tags-${library_updated_at_timestamp}`}
                 library_url={username ? `/${username}` : '/bookmarks'}
                 tags={
                   counts_hook.tags
@@ -915,8 +915,7 @@ const Library = (params: {
   )
   const slot_pinned = (
     <UiAppAtom_Pinned
-      key={pinned_hook.fetched_at_timestamp}
-      library_updated_at_timestamp={library_updated_at_timestamp}
+      key={library_updated_at_timestamp}
       favicon_host={favicon_host}
       header_title={params.dictionary.library.pinned}
       items={

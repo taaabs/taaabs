@@ -207,6 +207,7 @@
   }
 }
 .main {
+  transition: transform 50ms linear;
   @include to992 {
     background: var(--background);
     min-height: 100vh;
@@ -218,7 +219,7 @@
       height: 100%;
       top: 0;
       left: 0;
-      box-shadow: -1px 0 0 0 var(--border-color-secondary);
+      box-shadow: -1px 0 0 0 var(--border-color-primary);
       position: absolute;
     }
     &::after {
@@ -227,7 +228,7 @@
       height: 100%;
       top: 0;
       right: 0;
-      box-shadow: 1px 0 0 0 var(--border-color-secondary);
+      box-shadow: 1px 0 0 0 var(--border-color-primary);
       position: absolute;
     }
   }

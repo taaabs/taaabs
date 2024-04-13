@@ -5,14 +5,13 @@ import { memo } from 'react'
 
 export namespace SelectedTags {
   export type Props = {
-    library_updated_at_timestamp?: number
     selected_tags: { name: string; id: number }[]
     on_selected_tag_click: (tagId: number) => void
   }
 }
 
 export const SelectedTags: React.FC<SelectedTags.Props> = memo(
-  (props) => {
+  function SelectedTags(props) {
     return props.selected_tags.length ? (
       <div className={styles.container}>
         {props.selected_tags.length >=
@@ -40,5 +39,5 @@ export const SelectedTags: React.FC<SelectedTags.Props> = memo(
       <></>
     )
   },
-  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
+  () => true,
 )
