@@ -148,14 +148,14 @@ const Library = (params: {
 
   // Close "Create bookmark" modal, refresh counts and tag hierarchies.
   useUpdateEffect(() => {
-    const created_bookmark_id = search_params.get(
+    if (bookmarks_hook.is_fetching_first_bookmarks) return
+    const newly_created_bookmark_updated_at_timestamp = search_params.get(
       search_params_keys.newly_created_bookmark_updated_at_timestamp,
     )
     if (
-      !bookmarks_hook.is_fetching_first_bookmarks &&
-      created_bookmark_id &&
+      newly_created_bookmark_updated_at_timestamp &&
       new Date(bookmarks_hook.bookmarks![0].updated_at).getTime() ==
-        parseInt(created_bookmark_id)
+        parseInt(newly_created_bookmark_updated_at_timestamp)
     ) {
       Promise.all([
         tag_hierarchies_hook.get_tag_hierarchies({
@@ -163,7 +163,7 @@ const Library = (params: {
           gte: date_view_options_hook.current_gte,
           lte: date_view_options_hook.current_lte,
         }),
-        // Normally counts are refreshed along upsert action, but creating bookmark can't use store.
+
         dispatch(
           counts_actions.refresh_authorized_counts({
             last_authorized_counts_params:
@@ -179,6 +179,9 @@ const Library = (params: {
       ]).then(() => {
         modal_context?.set_modal()
       })
+    } else {
+      // User is on results not relevant to newly added bookmark (e.g. some other tags).
+      modal_context?.set_modal()
     }
   }, [bookmarks_hook.is_fetching_first_bookmarks])
 
