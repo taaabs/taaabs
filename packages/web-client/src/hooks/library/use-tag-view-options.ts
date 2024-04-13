@@ -1,3 +1,4 @@
+import { search_params_keys } from '@/constants/search-params-keys'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { update_search_params } from '@/utils/update-query-params'
 import { system_values } from '@shared/constants/system-values'
@@ -10,9 +11,9 @@ export const use_tag_view_options = () => {
   const search_params = useSearchParams()
   const path_params = useParams()
   const [selected_tags, set_selected_tags] = useState<number[]>(
-    search_params.get('t')
+    search_params.get(search_params_keys.tags)
       ? search_params
-          .get('t')!
+          .get(search_params_keys.tags)!
           .split(',')
           .map((t) => parseInt(t))
       : [],
@@ -36,7 +37,7 @@ export const use_tag_view_options = () => {
   }, [])
 
   useUpdateEffect(() => {
-    const search_params_tags = search_params.get('t')
+    const search_params_tags = search_params.get(search_params_keys.tags)
     if (search_params_tags) {
       set_selected_tags(search_params_tags.split(',').map((t) => parseInt(t)))
     } else if (!search_params_tags) {
@@ -52,16 +53,16 @@ export const use_tag_view_options = () => {
       return
     }
 
-    const current_tags = search_params.get('t')
+    const current_tags = search_params.get(search_params_keys.tags)
       ? search_params
-          .get('t')!
+          .get(search_params_keys.tags)!
           .split(',')
           .map((t) => parseInt(t))
       : []
 
     const updated_search_params = update_search_params(
       search_params,
-      't',
+      search_params_keys.tags,
       [...current_tags, tag_id].join(','),
     )
 
@@ -83,16 +84,16 @@ export const use_tag_view_options = () => {
   }
 
   const remove_tags_from_search_params = (tag_ids: number[]) => {
-    const selected_tags = search_params.get('t')
+    const selected_tags = search_params.get(search_params_keys.tags)
       ? search_params
-          .get('t')!
+          .get(search_params_keys.tags)!
           .split(',')
           .map((t) => parseInt(t))
       : []
 
     const updated_search_params = update_search_params(
       search_params,
-      't',
+      search_params_keys.tags,
       selected_tags.filter((t) => tag_ids.every((tag) => tag != t)).join(','),
     )
 
@@ -113,7 +114,7 @@ export const use_tag_view_options = () => {
 
     const updated_search_params = update_search_params(
       search_params,
-      't',
+      search_params_keys.tags,
       params.tag_ids.join(','),
     )
 
@@ -130,7 +131,10 @@ export const use_tag_view_options = () => {
   }
 
   const clear_selected_tags = () => {
-    const updated_search_params = update_search_params(search_params, 't')
+    const updated_search_params = update_search_params(
+      search_params,
+      search_params_keys.tags,
+    )
 
     clear_library_session_storage({
       username: path_params.username as string,

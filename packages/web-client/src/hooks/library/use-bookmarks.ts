@@ -15,6 +15,7 @@ import { browser_storage } from '@/constants/browser-storage'
 import { Filter } from '@/types/library/filter'
 import ky from 'ky'
 import { system_values } from '@shared/constants/system-values'
+import { search_params_keys } from '@/constants/search-params-keys'
 
 export const use_bookmarks = () => {
   const search_params = useSearchParams()
@@ -45,12 +46,12 @@ export const use_bookmarks = () => {
     if (!username) {
       const request_params: GetBookmarks_Params.Authorized = {}
 
-      const query_tags = search_params.get('t')
+      const query_tags = search_params.get(search_params_keys.tags)
       if (query_tags) {
         request_params.tags = query_tags.split(',')
       }
 
-      const query_filter = search_params.get('f')
+      const query_filter = search_params.get(search_params_keys.filter)
       if (query_filter) {
         request_params.starred_only =
           Object.values(Filter)[parseInt(query_filter)] == Filter.STARRED ||
@@ -83,22 +84,26 @@ export const use_bookmarks = () => {
           undefined
       }
 
-      const query_sortby = search_params.get('s')
+      const query_sortby = search_params.get(search_params_keys.sort_by)
       if (query_sortby) {
         request_params.sort_by = Object.values(SortBy)[parseInt(query_sortby)]
       }
 
-      const query_order = search_params.get('o')
+      const query_order = search_params.get(search_params_keys.order)
       if (query_order) {
         request_params.order = Object.values(Order)[parseInt(query_order)]
       }
 
-      const query_yyyymm_gte = search_params.get('gte')
+      const query_yyyymm_gte = search_params.get(
+        search_params_keys.greater_than_equal,
+      )
       if (query_yyyymm_gte) {
         request_params.yyyymm_gte = parseInt(query_yyyymm_gte)
       }
 
-      const query_yyyymm_lte = search_params.get('lte')
+      const query_yyyymm_lte = search_params.get(
+        search_params_keys.less_than_equal,
+      )
       if (query_yyyymm_lte) {
         request_params.yyyymm_lte = parseInt(query_yyyymm_lte)
       }
@@ -119,12 +124,12 @@ export const use_bookmarks = () => {
         username,
       }
 
-      const query_tags = search_params.get('t')
+      const query_tags = search_params.get(search_params_keys.tags)
       if (query_tags) {
         request_params.tags = query_tags.split(',')
       }
 
-      const query_filter = search_params.get('f')
+      const query_filter = search_params.get(search_params_keys.filter)
       if (query_filter) {
         request_params.starred_only =
           Object.values(Filter)[parseInt(query_filter)] == Filter.STARRED ||
@@ -147,22 +152,26 @@ export const use_bookmarks = () => {
           undefined
       }
 
-      const query_sortby = search_params.get('s')
+      const query_sortby = search_params.get(search_params_keys.sort_by)
       if (query_sortby) {
         request_params.sort_by = Object.values(SortBy)[parseInt(query_sortby)]
       }
 
-      const query_order = search_params.get('o')
+      const query_order = search_params.get(search_params_keys.order)
       if (query_order) {
         request_params.order = Object.values(Order)[parseInt(query_order)]
       }
 
-      const query_yyyymm_gte = search_params.get('gte')
+      const query_yyyymm_gte = search_params.get(
+        search_params_keys.greater_than_equal,
+      )
       if (query_yyyymm_gte) {
         request_params.yyyymm_gte = parseInt(query_yyyymm_gte)
       }
 
-      const query_yyyymm_lte = search_params.get('lte')
+      const query_yyyymm_lte = search_params.get(
+        search_params_keys.less_than_equal,
+      )
       if (query_yyyymm_lte) {
         request_params.yyyymm_lte = parseInt(query_yyyymm_lte)
       }

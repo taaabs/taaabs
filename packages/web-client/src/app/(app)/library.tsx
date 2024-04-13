@@ -58,6 +58,8 @@ import { clear_library_session_storage } from '@/utils/clear_library_session_sto
 import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types/record-visit.params'
 import dictionary from '@/dictionaries/en'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
+import { search_params_keys } from '@/constants/search-params-keys'
+import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -143,6 +145,41 @@ const Library = (params: {
       )
     }
   }, [bookmarks_hook.is_upserting])
+
+  // Close "Create bookmark" modal, refresh counts and tag hierarchies.
+  useUpdateEffect(() => {
+    const created_bookmark_id = search_params.get(
+      search_params_keys.newly_created_bookmark_id,
+    )
+    if (
+      !bookmarks_hook.is_fetching_first_bookmarks &&
+      created_bookmark_id &&
+      bookmarks_hook.bookmarks![0].id == parseInt(created_bookmark_id)
+    ) {
+      Promise.all([
+        tag_hierarchies_hook.get_tag_hierarchies({
+          filter: filter_view_options_hook.current_filter,
+          gte: date_view_options_hook.current_gte,
+          lte: date_view_options_hook.current_lte,
+        }),
+        // Normally counts are refreshed along upsert action, but creating bookmark can't use store.
+        dispatch(
+          counts_actions.refresh_authorized_counts({
+            last_authorized_counts_params:
+              JSON.parse(
+                sessionStorage.getItem(
+                  browser_storage.session_storage.library
+                    .last_authorized_counts_params,
+                ) || 'null',
+              ) || undefined,
+            ky: ky_instance,
+          }),
+        ),
+      ]).then(() => {
+        modal_context?.set_modal()
+      })
+    }
+  }, [bookmarks_hook.is_fetching_first_bookmarks])
 
   useUpdateEffect(() => {
     if (counts_hook.should_refetch) {
@@ -789,9 +826,19 @@ const Library = (params: {
             clear_date_range={
               date_view_options_hook.clear_gte_lte_search_params
             }
-            current_gte={parseInt(search_params.get('gte') || '0') || undefined}
-            current_lte={parseInt(search_params.get('lte') || '0') || undefined}
-            selected_tags={search_params.get('t') || undefined}
+            current_gte={
+              parseInt(
+                search_params.get(search_params_keys.greater_than_equal) || '0',
+              ) || undefined
+            }
+            current_lte={
+              parseInt(
+                search_params.get(search_params_keys.less_than_equal) || '0',
+              ) || undefined
+            }
+            selected_tags={
+              search_params.get(search_params_keys.tags) || undefined
+            }
             is_range_selector_disabled={
               sort_by_view_options_hook.current_sort_by == SortBy.UPDATED_AT ||
               sort_by_view_options_hook.current_sort_by == SortBy.VISITED_AT ||
@@ -928,7 +975,6 @@ const Library = (params: {
       current_lte={date_view_options_hook.current_lte}
     />
   )
-
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
     <UiAppAtom_Bookmark
       key={`${i}-${bookmarks_hook.first_bookmarks_fetched_at_timestamp}`}
@@ -1375,7 +1421,6 @@ const Library = (params: {
                       links: bookmark.links.map((link) => ({
                         url: link.url,
                         site_path: link.site_path,
-                        is_public: link.is_public,
                       })),
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
@@ -1491,7 +1536,6 @@ const Library = (params: {
                       links: bookmark.links.map((link) => ({
                         url: link.url,
                         site_path: link.site_path,
-                        is_public: link.is_public,
                       })),
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
@@ -1611,7 +1655,6 @@ const Library = (params: {
                       links: bookmark.links.map((link) => ({
                         url: link.url,
                         site_path: link.site_path,
-                        is_public: link.is_public,
                       })),
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
@@ -1687,7 +1730,6 @@ const Library = (params: {
                       links: bookmark.links.map((link) => ({
                         url: link.url,
                         site_path: link.site_path,
-                        is_public: link.is_public,
                       })),
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
@@ -2211,7 +2253,7 @@ const Library = (params: {
                       is_public: tag.is_public,
                     })),
                   }
-                  await dispatch(
+                  const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
                       bookmark: modified_bookmark,
                       last_authorized_counts_params:
@@ -2232,7 +2274,7 @@ const Library = (params: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
                       visited_at: bookmark.visited_at,
-                      updated_at: new Date().toISOString(),
+                      updated_at: updated_bookmark.updated_at,
                       title: bookmark.title,
                       note: bookmark.note,
                       is_archived: !is_archived_filter,
@@ -2241,7 +2283,6 @@ const Library = (params: {
                       links: bookmark.links.map((link) => ({
                         url: link.url,
                         site_path: link.site_path,
-                        is_public: link.is_public,
                       })),
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
@@ -2255,7 +2296,7 @@ const Library = (params: {
                       id: bookmark.id,
                       created_at: bookmark.created_at,
                       visited_at: bookmark.visited_at,
-                      updated_at: new Date().toISOString(),
+                      updated_at: updated_bookmark.updated_at,
                       title: bookmark.title,
                       note: bookmark.note,
                       is_archived: !is_archived_filter,
@@ -2264,7 +2305,6 @@ const Library = (params: {
                       links: bookmark.links.map((link) => ({
                         url: link.url,
                         site_path: link.site_path,
-                        is_public: link.is_public,
                       })),
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),

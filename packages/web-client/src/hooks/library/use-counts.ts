@@ -10,6 +10,7 @@ import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.
 import { browser_storage } from '@/constants/browser-storage'
 import { Filter } from '@/types/library/filter'
 import ky from 'ky'
+import { search_params_keys } from '@/constants/search-params-keys'
 
 export const use_counts = () => {
   const search_params = useSearchParams()
@@ -38,16 +39,20 @@ export const use_counts = () => {
     if (!username) {
       const request_params: Counts_Params.Authorized = {}
 
-      const query_refresh_trigger = search_params.get('r')
-      set_last_query_refresh_trigger(query_refresh_trigger || undefined)
+      const query_newly_created_bookmark_id = search_params.get(
+        search_params_keys.newly_created_bookmark_id,
+      )
+      set_last_query_refresh_trigger(
+        query_newly_created_bookmark_id || undefined,
+      )
 
-      const query_tags = search_params.get('t')
+      const query_tags = search_params.get(search_params_keys.tags)
       set_last_query_tags(query_tags || undefined)
       if (query_tags) {
         request_params.tags = query_tags.split(',')
       }
 
-      const query_filter = search_params.get('f')
+      const query_filter = search_params.get(search_params_keys.filter)
       set_last_query_filter(query_filter || undefined)
       if (query_filter) {
         request_params.starred_only =
@@ -96,13 +101,13 @@ export const use_counts = () => {
         username,
       }
 
-      const query_tags = search_params.get('t')
+      const query_tags = search_params.get(search_params_keys.tags)
       set_last_query_tags(query_tags || undefined)
       if (query_tags) {
         request_params.tags = query_tags.split(',')
       }
 
-      const query_filter = search_params.get('f')
+      const query_filter = search_params.get(search_params_keys.filter)
       set_last_query_filter(query_filter || undefined)
       if (query_filter) {
         request_params.starred_only =
@@ -147,8 +152,8 @@ export const use_counts = () => {
       dispatch(counts_actions.set_tags(JSON.parse(tags)))
     }
 
-    const query_tags = search_params.get('t')
-    const query_filter = search_params.get('f')
+    const query_tags = search_params.get(search_params_keys.tags)
+    const query_filter = search_params.get(search_params_keys.filter)
     const query_refresh_trigger = search_params.get('r') // Set after bookmark creation.
     if (
       query_tags != last_query_tags ||
@@ -158,8 +163,12 @@ export const use_counts = () => {
       get_counts()
     }
 
-    const query_yyyymm_gte = search_params.get('gte')
-    const query_yyyymm_lte = search_params.get('lte')
+    const query_yyyymm_gte = search_params.get(
+      search_params_keys.greater_than_equal,
+    )
+    const query_yyyymm_lte = search_params.get(
+      search_params_keys.less_than_equal,
+    )
 
     if (
       query_yyyymm_gte != last_query_yyyymm_gte ||
@@ -181,7 +190,7 @@ export const use_counts = () => {
   }, [search_params])
 
   useEffect(() => {
-    const query_tags = search_params.get('t')
+    const query_tags = search_params.get(search_params_keys.tags)
     if (!query_tags && selected_tags.length > 0) {
       set_selected_tags([])
     } else if (query_tags && query_tags != selected_tags.join(',')) {

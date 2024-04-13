@@ -35,6 +35,7 @@ import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import ky, { KyInstance } from 'ky'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
+import { search_params_keys } from '@/constants/search-params-keys'
 
 export type BookmarkOfSearch = {
   id: number
@@ -558,11 +559,11 @@ export const use_search = () => {
     if ((!is_archived_filter && !db) || (is_archived_filter && !archived_db))
       throw new Error('DB should be there.')
 
-    const tags = search_params.get('t')
-    const gte = search_params.get('gte')
-    const lte = search_params.get('lte')
-    const order = search_params.get('o')
-    const sortby = search_params.get('s')
+    const tags = search_params.get(search_params_keys.tags)
+    const gte = search_params.get(search_params_keys.greater_than_equal)
+    const lte = search_params.get(search_params_keys.less_than_equal)
+    const order = search_params.get(search_params_keys.order)
+    const sortby = search_params.get(search_params_keys.sort_by)
 
     // 'lorem site:abc.com site:abc.com ipsum site:abc.com'
     // ["abccom", "abccom", "abccom"]
@@ -741,11 +742,11 @@ export const use_search = () => {
     if ((!is_archived_filter && !db) || (is_archived_filter && !archived_db))
       return
 
-    const tags = search_params.get('t')
-    const gte = search_params.get('gte')
-    const lte = search_params.get('lte')
-    const order = search_params.get('o')
-    const sortby = search_params.get('s')
+    const tags = search_params.get(search_params_keys.tags)
+    const gte = search_params.get(search_params_keys.greater_than_equal)
+    const lte = search_params.get(search_params_keys.less_than_equal)
+    const order = search_params.get(search_params_keys.order)
+    const sortby = search_params.get(search_params_keys.sort_by)
 
     const search_string_lower_case = search_string.toLowerCase()
 

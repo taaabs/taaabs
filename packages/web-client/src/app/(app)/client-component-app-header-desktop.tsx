@@ -21,6 +21,11 @@ import { BookmarkHash } from '@/utils/bookmark-hash'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import ky from 'ky'
+import { GlobalLibarySearchContext } from '../global-library-search-provider'
+import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
+import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
+import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/upsert-bookmark.use-case'
+import { search_params_keys } from '@/constants/search-params-keys'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const search_params = useSearchParams()
@@ -29,6 +34,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const router = useRouter()
   const public_user_avatar = useContext(PublicUserAvatarContext)
   const modal = useContext(ModalContext)
+  const global_library_search = useContext(GlobalLibarySearchContext)
   const is_hydrated = use_is_hydrated()
 
   const ky_instance = ky.create({
@@ -124,21 +130,55 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
               }
             : undefined
         }
-        ky={ky_instance}
-        on_close={modal?.set_modal}
-        on_submit={(bookmark) => {
-          modal?.set_modal()
+        on_close={modal.set_modal}
+        on_submit={async (bookmark) => {
+          const { db, bookmarks_just_tags } =
+            await global_library_search!.search_hook.init({
+              is_archived: false,
+            })
+
+          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          const upsert_bookmark_use_case = new UpsertBookmark_UseCase(
+            repository,
+          )
+          const created_bookmark =
+            await upsert_bookmark_use_case.invoke(bookmark)
+          await global_library_search!.search_hook.update_bookmark({
+            db,
+            bookmarks_just_tags,
+            is_archived: false,
+            bookmark: {
+              id: created_bookmark.id,
+              created_at: created_bookmark.created_at,
+              visited_at: created_bookmark.visited_at,
+              updated_at: created_bookmark.updated_at,
+              title: created_bookmark.title,
+              note: created_bookmark.note,
+              is_archived: false,
+              is_unread: created_bookmark.is_unread,
+              stars: created_bookmark.stars,
+              links: created_bookmark.links.map((link) => ({
+                url: link.url,
+                site_path: link.site_path,
+              })),
+              tags: created_bookmark.tags.map((tag) => tag.name),
+              tag_ids: created_bookmark.tags.map((tag) => tag.id),
+            },
+          })
           if (pathname == '/bookmarks') {
             const updated_search_params = update_search_params(
               search_params,
-              'r', // Bookmarks (r)efetch trigger.
-              bookmark.id.toString(),
+              search_params_keys.newly_created_bookmark_id,
+              created_bookmark.id.toString(),
             )
             window.history.pushState(
               {},
               '',
               window.location.pathname + '?' + updated_search_params,
             )
+          } else {
+            modal.set_modal()
           }
         }}
       />,

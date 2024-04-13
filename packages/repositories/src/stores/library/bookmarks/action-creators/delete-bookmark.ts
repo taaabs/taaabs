@@ -6,6 +6,10 @@ import { bookmarks_actions } from '../bookmarks.slice'
 import { counts_actions } from '../../counts/counts.slice'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 import { KyInstance } from 'ky'
+import { Pinned_DataSourceImpl } from '@repositories/modules/pinned/infrastructure/data-sources/pinned.data-source-impl'
+import { Pinned_RepositoryImpl } from '@repositories/modules/pinned/infrastructure/repositories/pinned.repository-impl'
+import { GetPinnedAuthorized_UseCase } from '@repositories/modules/pinned/domain/usecases/get-pinned-authorized.use-case'
+import { pinned_actions } from '../../pinned/pinned.slice'
 
 export const delete_bookmark = (params: {
   bookmark_id: number
@@ -31,6 +35,19 @@ export const delete_bookmark = (params: {
           ),
         ),
       )
+
+      // Updating pinned here prevents layout shift.
+      const pinned_data_source = new Pinned_DataSourceImpl(params.ky)
+      const pinned_repository = new Pinned_RepositoryImpl(pinned_data_source)
+      const get_pinned_use_case = new GetPinnedAuthorized_UseCase(
+        pinned_repository,
+      )
+      dispatch(pinned_actions.set_is_fetching(true))
+      const pinned_result = await get_pinned_use_case.invoke()
+      dispatch(pinned_actions.set_is_fetching(false))
+      dispatch(pinned_actions.set_items(pinned_result))
+      dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
+
       dispatch(
         counts_actions.refresh_authorized_counts({
           last_authorized_counts_params: params.last_authorized_counts_params,

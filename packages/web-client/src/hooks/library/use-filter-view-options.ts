@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { Filter } from '@/types/library/filter'
+import { search_params_keys } from '@/constants/search-params-keys'
 
 export const use_filter_view_options = () => {
   const search_params = useSearchParams()
@@ -11,14 +12,14 @@ export const use_filter_view_options = () => {
   const [current_filter, set_current_filter] = useState<Filter>(
     Object.values(Filter)[
       parseInt(
-        search_params.get('f') ||
+        search_params.get(search_params_keys.filter) ||
           Object.values(Filter).indexOf(Filter.NONE).toString(),
       )
     ],
   )
 
   useUpdateEffect(() => {
-    const query_filter = search_params.get('f')
+    const query_filter = search_params.get(search_params_keys.filter)
 
     if (
       query_filter != Object.values(Filter).indexOf(current_filter).toString()
@@ -37,7 +38,7 @@ export const use_filter_view_options = () => {
   const set_filter_query_param = (filter: Filter) => {
     const updated_search_params = update_search_params(
       search_params,
-      'f',
+      search_params_keys.filter,
       filter == Filter.NONE
         ? undefined
         : Object.values(Filter).indexOf(filter).toString(),
@@ -60,11 +61,14 @@ export const use_filter_view_options = () => {
     if (current_filter == Filter.STARRED_UNREAD) {
       updated_search_params = update_search_params(
         search_params,
-        'f',
+        search_params_keys.filter,
         Object.values(Filter).indexOf(Filter.UNREAD).toString(),
       )
     } else {
-      updated_search_params = update_search_params(search_params, 'f')
+      updated_search_params = update_search_params(
+        search_params,
+        search_params_keys.filter,
+      )
     }
 
     clear_library_session_storage({
@@ -84,11 +88,14 @@ export const use_filter_view_options = () => {
     if (current_filter == Filter.STARRED_UNREAD) {
       updated_search_params = update_search_params(
         search_params,
-        'f',
+        search_params_keys.filter,
         Object.values(Filter).indexOf(Filter.STARRED).toString(),
       )
     } else {
-      updated_search_params = update_search_params(search_params, 'f')
+      updated_search_params = update_search_params(
+        search_params,
+        search_params_keys.filter,
+      )
     }
 
     clear_library_session_storage({
