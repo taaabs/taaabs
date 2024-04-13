@@ -26,6 +26,7 @@ import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infras
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/upsert-bookmark.use-case'
 import { search_params_keys } from '@/constants/search-params-keys'
+import { toast } from 'react-toastify'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const search_params = useSearchParams()
@@ -115,7 +116,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   }
 
   const open_new_bookmark_modal = (params: { with_autofill?: boolean }) => {
-    const bookmark = BookmarkHash.from({ hash: window.location.hash.slice(1) })
+    const bookmark = BookmarkHash.parse({ hash: window.location.hash.slice(1) })
 
     modal?.set_modal(
       <Form_UpsertBookmarkForm
@@ -182,6 +183,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
           } else {
             modal.set_modal()
           }
+          toast.success('Bookmark has been created')
         }}
       />,
     )
@@ -189,7 +191,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
 
   useUpdateEffect(() => {
     if (window.location.hash.slice(1).length) {
-      // open_new_bookmark_modal({ with_autofill: true })
+      open_new_bookmark_modal({ with_autofill: true })
     }
   }, [is_hydrated])
 

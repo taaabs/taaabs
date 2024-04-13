@@ -8,7 +8,7 @@ export namespace BookmarkHash {
     }[]
     tags?: string[]
   }
-  export const to = (bookmark: Bookmark): string => {
+  export const stringify = (bookmark: Bookmark): string => {
     const hash = new URLSearchParams()
     if (bookmark.title) {
       hash.set('title', bookmark.title)
@@ -28,7 +28,7 @@ export namespace BookmarkHash {
     }
     return hash.toString()
   }
-  export const from = (params: { hash: string }): Bookmark => {
+  export const parse = (params: { hash: string }): Bookmark => {
     const bookmark: Bookmark = {}
     const hash = new URLSearchParams(params.hash)
     const title = hash.get('title')
