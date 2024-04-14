@@ -95,6 +95,8 @@ const Library = (params: {
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
     useState<number>()
+  const [is_pinned_stale, set_is_pinned_stale] = useState<boolean>()
+  const [pinned_updated_at, set_pinned_updated_at] = useState<number>()
 
   const ky_instance = ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -119,6 +121,10 @@ const Library = (params: {
     ) {
       set_show_skeletons(false)
       set_library_updated_at_timestamp(Date.now())
+      if (is_pinned_stale) {
+        set_pinned_updated_at(pinned_hook.fetched_at_timestamp)
+        set_is_pinned_stale(false)
+      }
     }
   }, [
     bookmarks_hook.is_fetching,
@@ -133,6 +139,13 @@ const Library = (params: {
     search_hook.db_updated_at_timestamp,
     search_hook.archived_db_updated_at_timestamp,
   ])
+
+  // This prevents layout shift in loading state during setting pinned status on a link.
+  useUpdateEffect(() => {
+    if (!pinned_hook.is_fetching) {
+      set_is_pinned_stale(true)
+    }
+  }, [pinned_hook.is_fetching])
 
   // Check for first bookmarks needed by deleting tags of last bookmark in results.
   useUpdateEffect(() => {
@@ -915,7 +928,7 @@ const Library = (params: {
   )
   const slot_pinned = (
     <UiAppAtom_Pinned
-      key={pinned_hook.fetched_at_timestamp}
+      key={pinned_updated_at}
       library_updated_at_timestamp={library_updated_at_timestamp}
       favicon_host={favicon_host}
       header_title={params.dictionary.library.pinned}
