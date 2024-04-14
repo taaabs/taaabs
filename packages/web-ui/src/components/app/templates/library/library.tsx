@@ -241,13 +241,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   }
 
   return (
-    <div
-      className={styles.container}
-      {...swipeable_handlers}
-      style={{
-        pointerEvents: !props.is_interactive ? 'none' : undefined,
-      }}
-    >
+    <div className={styles.container} {...swipeable_handlers}>
       <div className={styles.toolbar}>
         <div>{props.slot_toolbar}</div>
       </div>

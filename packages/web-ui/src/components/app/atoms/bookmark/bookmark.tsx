@@ -399,12 +399,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               }
             }}
           >
+            {/* Empty space needed by inline element to render correctly. */}⠀
             <div
               className={
                 styles.bookmark__main__tags__huggs__emoji__hugging__eyes
               }
             >
-              {/* Empty space needed by inline element to render correctly. */}⠀
               <svg viewBox="0 0 433 129" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M387.268 123.804C373.746 120.929 365.143 107.651 368.013 94.1522C370.877 80.6783 362.255 67.3699 348.757 64.5008C335.258 61.6316 321.969 70.2827 319.105 83.7567C316.236 97.2551 302.977 105.887 289.454 103.013C275.931 100.138 267.329 86.8595 270.198 73.3611C278.795 32.9147 318.706 6.99623 359.152 15.5934C399.599 24.1905 425.517 64.1014 416.92 104.548C414.046 118.071 400.791 126.678 387.268 123.804Z"

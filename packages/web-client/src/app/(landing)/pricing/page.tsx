@@ -7,38 +7,27 @@ const Page: React.FC = () => {
     <>
       <UiLandingAtom_PageHero
         heading="Pricing"
-        subheading={
-          <>
-            Supercharge your personal library with Premium Features.
-            <br />
-            Start free, upgrade anytime. No credit card required.
-          </>
-        }
+        subheading={<>Start free, upgrade anytime. No credit card required.</>}
       />
       <UiLandingTemplate_PricingTiers
         slot_left_side={
           <UiLandingAtom_PricingTier
             name="Free"
-            description="Organize your bookmarks right away"
+            description="The start of your social bookmarking journey"
             price="Literally $0"
             price_info="Free forever"
-            bullets={[
-              'Unlimited bookmarks',
-              'Unlimited tags',
-              'End-to-end encryption',
-            ]}
+            bullets={['Unlimited bookmarks & tags', 'End-to-end encryption']}
           />
         }
         slot_right_side={
           <UiLandingAtom_PricingTier
-            name="Premium"
-            description="Get the most out of Taaabs"
+            name="Pro"
+            description="Unlock a new level of your Taaabs experience"
             price="$29.99"
             price_duration="Year"
             price_info="12 months at $2.49/mo. Save 50%"
             bullets={[
-              'Personal Library Premium™',
-              'Dark mode',
+              'Unlimited usage of all features',
               'Claim shorter username',
             ]}
           />
