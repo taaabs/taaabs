@@ -416,7 +416,12 @@
               }
             }
           }
+          &--via-wayback {
+            font-style: italic;
+          }
           > span {
+            // Overflow hidden cuts italic text.
+            padding-right: var(--distance-1px);
             text-overflow: ellipsis;
             overflow: hidden;
             -webkit-line-clamp: 1;

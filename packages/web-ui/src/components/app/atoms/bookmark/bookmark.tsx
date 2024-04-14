@@ -55,6 +55,7 @@ export namespace Bookmark {
     updated_at: string
     is_public: boolean
     points?: number
+    points_given?: number
     title?: string
     note?: string
     date: Date
@@ -66,7 +67,8 @@ export namespace Bookmark {
     on_tag_delete_click?: (tag_id: number) => void
     on_tags_order_change?: (tags: Bookmark.Props['tags']) => void
     on_selected_tag_click: (tag_id: number) => void
-    on_give_point_click: () => void
+    on_give_point_click: (points: number) => void
+    on_get_points_given_click: () => void
     tags: {
       id: number
       is_public?: boolean
@@ -134,6 +136,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     })
     const DOMRect = useResizeObserver(ref)
     const is_visible = useViewportSpy(ref)
+    const [is_points_given_requested, set_is_points_given_requested] =
+      useState<boolean>()
+    const [points_given, set_points_given] = useState<number>()
     const [is_menu_open, toggle_is_menu_open] = useToggle(false)
     const [link_url_menu_opened, set_link_url_menu_opened] = useState<string>()
     const [render_height, set_render_height] = useState<number | undefined>(
@@ -157,6 +162,17 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         />
       </>,
     )
+
+    useUpdateEffect(() => {
+      if (props.points_given !== undefined && points_given === undefined) {
+        if (props.points_given < system_values.bookmark.points.limit_per_user) {
+          props.on_give_point_click(props.points_given + 1)
+          set_points_given(props.points_given + 1)
+        } else {
+          set_points_given(props.points_given)
+        }
+      }
+    }, [props.points_given])
 
     useUpdateEffect(() => {
       set_highlights(props.highlights)
@@ -343,28 +359,46 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             className={styles.bookmark__main__tags__huggs__emoji}
             onClick={(e) => {
               e.stopPropagation()
-              props.on_give_point_click()
-              const is_mobile =
-                window.innerWidth < shared_values.media_query_992
-              confetti({
-                particleCount: 20,
-                startVelocity: 11,
-                spread: 100,
-                gravity: 0.3,
-                ticks: 30,
-                decay: 0.91,
-                scalar: 0.8,
-                angle: is_mobile ? 120 : undefined,
-                shapes: ['square'],
-                colors: ['#FFD21E', '#1d4ed8'],
-                origin: {
-                  x: e.clientX / window.innerWidth,
-                  y: e.clientY / window.innerHeight,
-                },
-              })
+              if (
+                (points_given !== undefined &&
+                  points_given <
+                    system_values.bookmark.points.limit_per_user) ||
+                !is_points_given_requested
+              ) {
+                confetti({
+                  particleCount: 20,
+                  startVelocity: 11,
+                  spread: 100,
+                  gravity: 0.3,
+                  ticks: 30,
+                  decay: 0.91,
+                  scalar: 0.8,
+                  angle:
+                    window.innerWidth < shared_values.media_query_992
+                      ? 120
+                      : undefined,
+                  shapes: ['square'],
+                  colors: ['#FFD21E', '#1d4ed8'],
+                  origin: {
+                    x: e.clientX / window.innerWidth,
+                    y: e.clientY / window.innerHeight,
+                  },
+                })
+              }
+              if (points_given === undefined) {
+                if (!is_points_given_requested) {
+                  props.on_get_points_given_click()
+                  set_is_points_given_requested(true)
+                }
+                return
+              } else if (
+                points_given < system_values.bookmark.points.limit_per_user
+              ) {
+                props.on_give_point_click(points_given + 1)
+                set_points_given(points_given + 1)
+              }
             }}
           >
-            {/* Empty space needed by inline element to render correctly. */}⠀
             <div
               className={
                 styles.bookmark__main__tags__huggs__emoji__hugging__eyes
@@ -833,6 +867,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                 'bookmark__links__item__link__url--dim-visited'
                               ]]: props.should_dim_visited_links,
                             },
+                            {
+                              [styles[
+                                'bookmark__links__item__link__url--via-wayback'
+                              ]]: link.via_wayback,
+                            },
                           )}
                           href={url}
                           onClick={async (e) => {
@@ -975,6 +1014,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.search_queried_at_timestamp == n.search_queried_at_timestamp &&
     o.is_search_result == n.is_search_result &&
     o.points == n.points &&
+    o.points_given == n.points_given &&
     o.is_compact == n.is_compact &&
     o.density == n.density &&
     o.render_height == n.render_height &&

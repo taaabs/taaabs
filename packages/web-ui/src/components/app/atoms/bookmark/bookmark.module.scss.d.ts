@@ -47,6 +47,7 @@ declare const styles: {
   readonly 'bookmark__links__item__link__site--highlighted': string
   readonly bookmark__links__item__link__url: string
   readonly 'bookmark__links__item__link__url--dim-visited': string
+  readonly 'bookmark__links__item__link__url--via-wayback': string
   readonly bookmark__links__item__actions: string
   readonly bookmark__links__item__actions__open: string
   readonly bookmark__links__item__actions__menu: string

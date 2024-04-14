@@ -19,6 +19,7 @@ export namespace Pinned {
     via_wayback?: boolean
   }
   export type Props = {
+    library_updated_at_timestamp?: number
     items: Item[]
     on_change: (items: Item[]) => void
     favicon_host: string
@@ -175,5 +176,5 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       <div className={styles.items}>{items_dom}</div>
     )
   },
-  () => true,
+  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
 )

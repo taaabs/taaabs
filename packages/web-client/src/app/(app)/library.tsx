@@ -915,7 +915,8 @@ const Library = (params: {
   )
   const slot_pinned = (
     <UiAppAtom_Pinned
-      key={library_updated_at_timestamp}
+      key={pinned_hook.fetched_at_timestamp}
+      library_updated_at_timestamp={library_updated_at_timestamp}
       favicon_host={favicon_host}
       header_title={params.dictionary.library.pinned}
       items={
@@ -994,11 +995,13 @@ const Library = (params: {
       is_compact={bookmark.is_compact}
       updated_at={bookmark.updated_at}
       is_public={bookmark.is_public}
+      points_given={points_hook.points_given[bookmark.id]}
       points={bookmark.points}
-      on_give_point_click={() => {
-        points_hook.give_point({
-          bookmark_id: bookmark.id,
-        })
+      on_get_points_given_click={() => {
+        points_hook.get_points_given_on_bookmark({ bookmark_id: bookmark.id })
+      }}
+      on_give_point_click={(points: number) => {
+        points_hook.give_points({ bookmark_id: bookmark.id, points })
       }}
       title={bookmark.title}
       note={bookmark.note}

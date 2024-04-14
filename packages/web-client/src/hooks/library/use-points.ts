@@ -6,7 +6,6 @@ import { toast } from 'react-toastify'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import { useSearchParams } from 'next/navigation'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { system_values } from '@shared/constants/system-values'
 import { use_library_dispatch } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { CheckTotalGivenPoints_UseCase } from '@repositories/modules/points/domain/usecases/check-total-given-points.use-case'
@@ -20,8 +19,6 @@ export const use_points = () => {
   const [points_given, set_points_given] = useState<{
     [bookmark_id: string]: number
   }>({})
-  const [is_fetching_given_amount, set_is_fetching_given_amount] =
-    useState(false)
 
   const ky_instance = ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -54,48 +51,38 @@ export const use_points = () => {
     250,
   )
 
-  const give_point = async (params: { bookmark_id: number }) => {
-    if (is_fetching_given_amount) return
-
-    let given_overall = 0
-
-    if (points_given[params.bookmark_id]) {
-      given_overall = points_given[params.bookmark_id]
-    } else {
-      set_is_fetching_given_amount(true)
-      const data_source = new Points_DataSourceImpl(ky_instance)
-      const repository = new Points_RepositoryImpl(data_source)
-      const check_given_points_amount = new CheckTotalGivenPoints_UseCase(
-        repository,
-      )
-      try {
-        given_overall = await check_given_points_amount.invoke({
-          receiver_username: username,
-          bookmark_id: params.bookmark_id,
-        })
-      } catch {
-        toast.error('Something went wrong, try again later')
-      }
+  const get_points_given_on_bookmark = async (params: {
+    bookmark_id: number
+  }) => {
+    const data_source = new Points_DataSourceImpl(ky_instance)
+    const repository = new Points_RepositoryImpl(data_source)
+    const check_given_points_amount = new CheckTotalGivenPoints_UseCase(
+      repository,
+    )
+    try {
+      const given_till_now = await check_given_points_amount.invoke({
+        receiver_username: username,
+        bookmark_id: params.bookmark_id,
+      })
+      set_points_given({
+        ...points_given,
+        [params.bookmark_id]: given_till_now,
+      })
+    } catch {
+      toast.error('Something went wrong, try again later')
     }
+  }
 
-    if (given_overall == system_values.bookmark.points.limit_per_user) {
-      toast.info(
-        `You can add up to ${system_values.bookmark.points.limit_per_user} points`,
-      )
-      return
-    }
-
-    set_points_given({
-      [params.bookmark_id]: given_overall + 1,
-    })
-
-    set_is_fetching_given_amount(false)
+  const give_points = async (params: {
+    bookmark_id: number
+    points: number
+  }) => {
     submit_points_debounced({
       bookmark_id: params.bookmark_id,
-      points: given_overall + 1,
+      points: params.points,
     })
     dispatch(bookmarks_actions.add_point({ bookmark_id: params.bookmark_id }))
   }
 
-  return { give_point, points_given }
+  return { give_points, points_given, get_points_given_on_bookmark }
 }
