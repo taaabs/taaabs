@@ -3,12 +3,10 @@
 
 .container {
   min-height: 100vh;
-  position: relative;
 }
 .header {
-  position: absolute;
-  z-index: 1;
   width: 100%;
+  background-color: var(--white);
   &__inner {
     display: flex;
     justify-content: space-between;
@@ -17,13 +15,15 @@
     height: 90px;
     @include at768 {
       padding: 0 var(--distance-40px);
-      height: 110px;
     }
     @include at992 {
       height: 120px;
     }
-    @include at1380 {
+    @include at1200 {
       height: 130px;
+    }
+    @include at1380 {
+      height: 140px;
       max-width: 1380px;
       margin: 0 auto;
     }
@@ -31,10 +31,10 @@
       max-width: 100%;
       padding: 0 140px;
     }
-    &__desktopNavAndUser {
+    &__desktop-nav-and-user {
       display: flex;
-      gap: var(--distance-24px);
-      @include at1200 {
+      gap: var(--distance-30px);
+      @include at1380 {
         gap: var(--distance-40px);
       }
       @include to992 {

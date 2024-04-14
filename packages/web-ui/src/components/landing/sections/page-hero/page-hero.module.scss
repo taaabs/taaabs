@@ -4,20 +4,42 @@
 .container {
   background: var(--header-background);
   border-bottom: var(--border-primary);
+  @include at768 {
+    border-width: var(--border-width-1-5px);
+  }
 }
 .inner {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--distance-30px);
-  padding: var(--distance-210px) 0 var(--distance-120px) 0;
   text-align: center;
+  gap: 10px;
+  padding: 20px 0 50px 0;
+  @include at768 {
+    gap: 15px;
+    padding: 30px 0 80px 0;
+  }
+  @include at992 {
+    gap: 20px;
+    padding: 40px 0 90px 0;
+  }
+  @include at1200 {
+    gap: 20px;
+    padding: 30px 0 90px 0;
+  }
+  @include at1380 {
+    gap: 30px;
+    padding: 70px 0 140px 0;
+  }
   > h1 {
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-    font-size: var(--font-size-32px);
+    font-size: 36px;
     @include at768 {
       font-size: var(--font-size-40px);
+    }
+    @include at992 {
+      font-size: 55px;
     }
     @include at1200 {
       font-size: var(--font-size-64px);
@@ -30,11 +52,17 @@
     white-space: pre-wrap;
     margin: 0 auto;
     max-width: var(--distance-900px);
-    font-size: var(--font-size-18px);
+    font-size: var(--font-size-16px);
     @include at768 {
-      font-size: var(--font-size-20px);
+      font-size: var(--font-size-19px);
     }
     @include at992 {
+      font-size: var(--font-size-20px);
+    }
+    @include at1200 {
+      font-size: var(--font-size-21px);
+    }
+    @include at1200 {
       font-size: var(--font-size-23px);
     }
   }

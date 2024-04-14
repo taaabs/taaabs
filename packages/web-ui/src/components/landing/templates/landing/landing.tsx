@@ -17,7 +17,7 @@ export const Landing: React.FC<Landing.Props> = (props) => {
       <header className={styles.header}>
         <div className={styles.header__inner}>
           {props.slot_logo}
-          <div className={styles.header__inner__desktopNavAndUser}>
+          <div className={styles['header__inner__desktop-nav-and-user']}>
             {props.slot_desktop_navigation}
             {props.slot_desktop_user}
           </div>

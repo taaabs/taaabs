@@ -4,35 +4,71 @@
 .container {
   background: var(--header-background);
   border-bottom: var(--border-primary);
+  @include at768 {
+    border-width: var(--border-width-1-5px);
+  }
 }
 .content {
-  padding: 150px 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--distance-50px);
+  gap: 30px;
+  padding: 20px 0 30px 0;
+  @include at768 {
+    gap: 40px;
+    padding: 30px 0 40px 0;
+  }
+  @include at992 {
+    gap: 45px;
+    align-items: center;
+    padding: 30px 0 80px 0;
+  }
+  @include at1200 {
+    gap: 55px;
+    padding: 30px 0 90px 0;
+  }
+  @include at1380 {
+    gap: 60px;
+    padding: 30px 0 120px 0;
+  }
 }
 .top {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--distance-10px);
-  text-align: center;
+  @include at992 {
+    text-align: center;
+    align-items: center;
+  }
   &__logo {
+    @include to992 {
+      display: none;
+    }
     > svg {
-      width: 85px;
       fill: var(--brand-color);
+      width: 70px;
+      @include at1200 {
+        width: 75px;
+      }
+      @include at1380 {
+        width: 85px;
+      }
     }
   }
   &__heading {
     display: flex;
     flex-direction: column;
-    align-items: center;
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-    font-size: 30px;
+    font-size: 32px;
+    @include to992 {
+      align-items: flex-start;
+    }
     @include at768 {
       font-size: 44px;
+    }
+    @include at992 {
+      align-items: center;
+      font-size: 55px;
     }
     @include at1200 {
       font-size: var(--font-size-64px);
@@ -109,9 +145,9 @@
   &__subheading {
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
-    font-size: var(--font-size-16px);
+    font-size: var(--font-size-18px);
     @include at768 {
-      font-size: var(--font-size-18px);
+      font-size: var(--font-size-22px);
     }
     @include at1200 {
       font-size: var(--font-size-24px);
@@ -123,26 +159,48 @@
 }
 .claim-username {
   display: flex;
-  gap: var(--distance-16px);
+  gap: var(--distance-8px);
+  @include to768 {
+    flex-direction: column;
+  }
+  @include at768 {
+    gap: var(--distance-16px);
+  }
   &__input {
     position: relative;
     &::before {
       content: 'taaabs.com/';
       position: absolute;
-      font-size: var(--font-size-19px);
       top: 50%;
-      transform: translateX(var(--distance-18px)) translateY(-50%);
       pointer-events: none;
+      transform: translateX(var(--distance-13px)) translateY(-50%);
+      font-size: var(--font-size-16px);
+      @include at768 {
+        transform: translateX(var(--distance-16px)) translateY(-50%);
+        font-size: var(--font-size-17px);
+      }
+      @include at992 {
+        transform: translateX(var(--distance-18px)) translateY(-50%);
+        font-size: var(--font-size-19px);
+      }
     }
     > input {
       border: var(--border-secondary);
-      border-width: 2px;
       border-radius: var(--border-radius-12px);
-      font-size: var(--font-size-19px);
-      padding: 0 var(--distance-18px) 0 128px;
-      width: 280px;
-      height: 100%;
+      padding: 0 var(--distance-18px) 0 107px;
       @include transition-150ms(border-color);
+      height: 40px;
+      width: 100%;
+      @include at768 {
+        padding: 0 var(--distance-18px) 0 116px;
+        border-width: var(--border-width-1-5px);
+        font-size: var(--font-size-19px);
+        width: 280px;
+        height: 100%;
+      }
+      @include at992 {
+        padding: 0 var(--distance-18px) 0 128px;
+      }
       &::before {
         content: 'taaabs.com';
       }
@@ -157,17 +215,41 @@
 }
 .checks {
   display: flex;
+  gap: var(--distance-15px);
   justify-content: center;
-  gap: var(--distance-40px);
+  @include to992 {
+    flex-direction: column;
+  }
+  @include at768 {
+    gap: var(--distance-20px);
+  }
+  @include at992 {
+    gap: var(--distance-40px);
+  }
+  @include at992 {
+  }
   &__item {
     display: flex;
+    align-items: flex-start;
     gap: var(--distance-12px);
+    font-size: var(--font-size-16px);
+      @include at768 {
+        font-size: var(--font-size-18px);
+      }
+      @include at1380 {
+        font-size: var(--font-size-20px);
+      }
     > svg {
-      width: var(--icon-dimension-20px);
+      flex-shrink: 0;
+      width: var(--icon-dimension-18px);
       fill: var(--brand-color);
-    }
-    > span {
-      font-size: var(--font-size-20px);
+      margin-top: 0.25em;
+      @include at768 {
+        width: var(--icon-dimension-20px);
+      }
+      @include at1380 {
+        width: var(--icon-dimension-22px);
+      }
     }
   }
 }

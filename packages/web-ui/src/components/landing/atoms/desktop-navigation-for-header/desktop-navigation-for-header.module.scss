@@ -3,8 +3,8 @@
 
 .navigation {
   display: flex;
-  gap: var(--distance-24px);
-  @include at1200 {
+  gap: var(--distance-30px);
+  @include at1380 {
     gap: var(--distance-40px);
   }
   &__item {
@@ -16,7 +16,7 @@
       height: var(--button-dimension-48px);
       font-size: var(--font-size-20px);
     }
-    @include at1200 {
+    @include at1380 {
       height: var(--button-dimension-52px);
       font-size: var(--font-size-22px);
     }

@@ -1,11 +1,11 @@
-import { PageHero as UiLandingAtom_PageHero } from '@web-ui/components/landing/atoms/page-hero'
+import { PageHero as UiLandingSection_PageHero } from '@web-ui/components/landing/sections/page-hero'
 import { PricingTier as UiLandingAtom_PricingTier } from '@web-ui/components/landing/atoms/pricing-tier'
 import { PricingTiers as UiLandingTemplate_PricingTiers } from '@web-ui/components/landing/templates/pricing-tiers'
 
 const Page: React.FC = () => {
   return (
     <>
-      <UiLandingAtom_PageHero
+      <UiLandingSection_PageHero
         heading="Pricing"
         subheading={<>Start free, upgrade anytime. No credit card required.</>}
       />

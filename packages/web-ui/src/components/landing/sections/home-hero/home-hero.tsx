@@ -1,7 +1,7 @@
 import { Icon } from '@web-ui/components/common/particles/icon'
-import { Wrapper } from '../../particles/wrapper'
 import styles from './home-hero.module.scss'
 import { Button } from '@web-ui/components/common/particles/button'
+import { Wrapper as UiLandingTemplate_Wrapper } from '../../templates/wrapper/wrapper'
 
 export namespace HomeHero {
   export type Props = {
@@ -22,7 +22,7 @@ export namespace HomeHero {
 export const HomeHero: React.FC<HomeHero.Props> = (props) => {
   return (
     <div className={styles.container}>
-      <Wrapper>
+      <UiLandingTemplate_Wrapper>
         <div className={styles.content}>
           <div className={styles.top}>
             <div className={styles.top__logo}>
@@ -70,7 +70,7 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
             ))}
           </div>
         </div>
-      </Wrapper>
+      </UiLandingTemplate_Wrapper>
     </div>
   )
 }

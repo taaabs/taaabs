@@ -4,12 +4,13 @@
 .container {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   color: var(--white);
   background: var(--brand-color);
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
-  @include transition-150ms;
+  @include transition-150ms(background-color);
   border-radius: var(--border-radius-999px);
   @include hover {
     background: var(--blue800);
@@ -48,20 +49,27 @@
     height: var(--button-dimension-42px);
     font-size: var(--font-size-16px);
     padding: 0 var(--distance-18px);
-    @include at1200 {
+    @include at1380 {
       height: var(--button-dimension-44px);
       font-size: var(--font-size-17px);
       padding: 0 var(--distance-20px);
     }
   }
   &--large {
-    height: var(--button-dimension-48px);
-    font-size: var(--font-size-20px);
-    padding: 0 var(--distance-20px);
+    font-size: var(--font-size-15px);
+    height: 2.7em;
+    padding: 0 1em;
+    @include at768 {
+      font-size: var(--font-size-17px);
+    }
+    @include at992 {
+      font-size: var(--font-size-19px);
+    }
     @include at1200 {
-      height: var(--button-dimension-52px);
+      font-size: var(--font-size-20px);
+    }
+    @include at1380 {
       font-size: var(--font-size-22px);
-      padding: 0 var(--distance-22px);
     }
   }
 }
