@@ -16,15 +16,15 @@ export const browser_storage = {
         bookmarks: (params: { username: string }) =>
           `public-library.search.bookmarks.${params.username}`,
         index: (params: { username: string }) =>
-          `public-library.index.${params.username}`,
+          `public-library.search.index.${params.username}`,
         cached_at_timestamp: (params: { username: string }) =>
-          `public-library.cached-at-timestamp.${params.username}`,
+          `public-library.search.cached-at-timestamp.${params.username}`,
         archived_bookmarks: (params: { username: string }) =>
-          `public-library.archived-bookmarks.${params.username}`,
+          `public-library.search.archived-bookmarks.${params.username}`,
         archived_index: (params: { username: string }) =>
-          `public-library.archived-index.${params.username}`,
+          `public-library.search.archived-index.${params.username}`,
         archived_cached_at_timestamp: (params: { username: string }) =>
-          `public-library.archived-cached-at-timestamp.${params.username}`,
+          `public-library.search.archived-cached-at-timestamp.${params.username}`,
       },
     },
   },
@@ -114,9 +114,10 @@ export const browser_storage = {
     },
   },
   local_storage: {
+    recent_library_searches: 'recent-library-searches', // This is global - applies to public libraries as well.
+    recently_visited_users: 'recently-visited-users',
     authorized_library: {
-      recent_searches: 'authorized-library-search.recent-searches',
-      record_visit_params: 'authorized-library.recent-visit',
+      record_visit_params: 'authorized-library.record-visit-params',
     },
   },
 }

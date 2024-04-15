@@ -9,7 +9,7 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import ky from 'ky'
 import { useEffect } from 'react'
 
-export const RecentVisitSubmitter: React.FC = () => {
+export const VisitRecorder: React.FC = () => {
   const has_focus = use_has_focus()
 
   useEffect(() => {

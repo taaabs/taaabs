@@ -12,22 +12,27 @@ const Page: React.FC = () => {
       <UiLandingTemplate_PricingTiers
         slot_left_side={
           <UiLandingAtom_PricingTier
-            name="Free"
+            name="Beginner"
             description="The start of your social bookmarking journey"
             price="Literally $0"
             price_info="Free forever"
-            bullets={['Unlimited bookmarks & tags', 'End-to-end encryption']}
+            bullets={[
+              'Unlimited bookmarks',
+              'Unlimited tags',
+              'End-to-end encryption',
+            ]}
           />
         }
         slot_right_side={
           <UiLandingAtom_PricingTier
             name="Pro"
-            description="Unlock a new level of your Taaabs experience"
+            description="Get the most out of your personal library"
             price="$29.99"
             price_duration="Year"
             price_info="12 months at $2.49/mo. Save 50%"
             bullets={[
-              'Unlimited usage of all features',
+              'Non-essential library features',
+              'Dark mode',
               'Claim shorter username',
             ]}
           />

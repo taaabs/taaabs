@@ -36,6 +36,7 @@ import { Order } from '@shared/types/modules/bookmarks/order'
 import ky, { KyInstance } from 'ky'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { search_params_keys } from '@/constants/search-params-keys'
+import { use_has_focus } from '../misc/use-has-focus'
 
 export type BookmarkOfSearch = {
   id: number
@@ -118,6 +119,13 @@ export const use_search = () => {
   const [queried_at_timestamp, set_queried_at_timestamp] = useState<number>()
   const [hints_set_at_timestamp, set_hints_set_at_timestamp] =
     useState<number>()
+  const has_focus = use_has_focus()
+  const [search_data_awaits_caching, set_search_data_awaits_caching] =
+    useState<boolean>()
+  const [
+    archived_search_data_awaits_caching,
+    set_archived_search_data_awaits_caching,
+  ] = useState<boolean>()
 
   const is_archived_filter =
     current_filter == Filter.ARCHIVED ||
@@ -163,30 +171,35 @@ export const use_search = () => {
   //   get_hints()
   // }, [ids_to_search_amongst])
 
-  const get_is_cache_stale = async (params: {
+  const get_is_db_stale = async (params: {
     is_archived: boolean
     ky: KyInstance
   }): Promise<boolean> => {
-    const cached_at = await localforage.getItem<number>(
-      !username
-        ? !params.is_archived
-          ? browser_storage.local_forage.authorized_library.search
-              .cached_at_timestamp
-          : browser_storage.local_forage.authorized_library.search
-              .archived_cached_at_timestamp
-        : !params.is_archived
-        ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
-            {
-              username: username as string,
-            },
-          )
-        : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-            { username: username as string },
-          ),
-    )
-
-    if (cached_at) {
-      let updated_at: Date | undefined
+    let updated_at_locally: number | undefined = !params.is_archived
+      ? db_updated_at_timestamp
+      : archived_db_updated_at_timestamp
+    if (!updated_at_locally) {
+      updated_at_locally =
+        (await localforage.getItem<number>(
+          !username
+            ? !params.is_archived
+              ? browser_storage.local_forage.authorized_library.search
+                  .cached_at_timestamp
+              : browser_storage.local_forage.authorized_library.search
+                  .archived_cached_at_timestamp
+            : !params.is_archived
+            ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
+                {
+                  username: username as string,
+                },
+              )
+            : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
+                { username: username as string },
+              ),
+        )) || undefined
+    }
+    if (updated_at_locally) {
+      let updated_at_remotely: Date | undefined
 
       const data_source = new LibrarySearch_DataSourceImpl(params.ky)
       const repository = new LibrarySearch_RepositoryImpl(data_source)
@@ -205,10 +218,13 @@ export const use_search = () => {
       }
 
       !params.is_archived
-        ? (updated_at = result.updated_at)
-        : (updated_at = result.archived_updated_at)
+        ? (updated_at_remotely = result.updated_at)
+        : (updated_at_remotely = result.archived_updated_at)
 
-      if (updated_at && updated_at.getTime() > cached_at) {
+      if (
+        updated_at_remotely &&
+        updated_at_remotely.getTime() > updated_at_locally
+      ) {
         return true
       } else {
         return false
@@ -231,7 +247,7 @@ export const use_search = () => {
       },
     })
 
-    const is_cache_stale = await get_is_cache_stale({
+    const is_cache_stale = await get_is_db_stale({
       is_archived: params.is_archived,
       ky: ky_instance,
     })
@@ -715,21 +731,21 @@ export const use_search = () => {
           result.count.toString(),
         )
 
-        let recent_searches: string[] = []
+        let recent_library_searches: string[] = []
 
-        recent_searches = JSON.parse(
+        recent_library_searches = JSON.parse(
           localStorage.getItem(
-            browser_storage.local_storage.authorized_library.recent_searches,
+            browser_storage.local_storage.recent_library_searches,
           ) || '[]',
         )
 
         localStorage.setItem(
-          browser_storage.local_storage.authorized_library.recent_searches,
+          browser_storage.local_storage.recent_library_searches,
           JSON.stringify([
             ...new Set(
               [
                 params.search_string.toLowerCase().trim(),
-                ...recent_searches,
+                ...recent_library_searches,
               ].slice(0, 1000),
             ),
           ]),
@@ -760,14 +776,14 @@ export const use_search = () => {
       .trim()
 
     if (!search_string) {
-      const recent_searches = JSON.parse(
+      const recent_library_searches = JSON.parse(
         localStorage.getItem(
-          browser_storage.local_storage.authorized_library.recent_searches,
+          browser_storage.local_storage.recent_library_searches,
         ) || '[]',
       ) as string[]
 
       set_hints(
-        recent_searches
+        recent_library_searches
           .slice(0, system_values.max_library_search_hints)
           .map((recent_search_string) => ({
             type: 'recent',
@@ -779,7 +795,7 @@ export const use_search = () => {
       const recent_hints: Hint[] = (
         JSON.parse(
           localStorage.getItem(
-            browser_storage.local_storage.authorized_library.recent_searches,
+            browser_storage.local_storage.recent_library_searches,
           ) || '[]',
         ) as string[]
       )
@@ -1131,11 +1147,11 @@ export const use_search = () => {
 
   const remove_recent_hint = (params: { search_string: string }) => {
     localStorage.setItem(
-      browser_storage.local_storage.authorized_library.recent_searches,
+      browser_storage.local_storage.recent_library_searches,
       JSON.stringify(
         JSON.parse(
           localStorage.getItem(
-            browser_storage.local_storage.authorized_library.recent_searches,
+            browser_storage.local_storage.recent_library_searches,
           ) || '[]',
         ).filter(
           (recent_serach_string: string) =>
@@ -1171,11 +1187,7 @@ export const use_search = () => {
         (bookmark) => bookmark.id != params.bookmark_id,
       )
       set_bookmarks_just_tags(new_bookmarks_just_tags)
-      await cache_data({
-        db: params.db,
-        bookmarks_just_tags: new_bookmarks_just_tags,
-        is_archived: false,
-      })
+      set_search_data_awaits_caching(true)
       set_db_updated_at_timestamp(Date.now())
     } else {
       const new_archived_bookmarks_just_tags =
@@ -1183,11 +1195,7 @@ export const use_search = () => {
           (bookmark) => bookmark.id != params.bookmark_id,
         )
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      await cache_data({
-        db: params.db,
-        bookmarks_just_tags: new_archived_bookmarks_just_tags,
-        is_archived: true,
-      })
+      set_archived_search_data_awaits_caching(true)
       set_archived_db_updated_at_timestamp(Date.now())
     }
     if (result?.hits.length) {
@@ -1255,11 +1263,7 @@ export const use_search = () => {
         })
       }
       set_bookmarks_just_tags(new_bookmarks_just_tags)
-      await cache_data({
-        db: params.db,
-        bookmarks_just_tags: new_bookmarks_just_tags,
-        is_archived: false,
-      })
+      set_search_data_awaits_caching(true)
       set_db_updated_at_timestamp(Date.now())
     } else {
       const new_archived_bookmarks_just_tags =
@@ -1273,11 +1277,7 @@ export const use_search = () => {
         })
       }
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
-      await cache_data({
-        db: params.db,
-        bookmarks_just_tags: new_archived_bookmarks_just_tags,
-        is_archived: true,
-      })
+      set_archived_search_data_awaits_caching(true)
       set_archived_db_updated_at_timestamp(Date.now())
     }
     if (result?.hits.length) {
@@ -1441,6 +1441,25 @@ export const use_search = () => {
 
     // Query for resutls if hash is present and cache is not.
   }, [])
+
+  useUpdateEffect(() => {
+    if (!has_focus) {
+      if (search_data_awaits_caching) {
+        cache_data({
+          db: db!,
+          bookmarks_just_tags: bookmarks_just_tags!,
+          is_archived: false,
+        })
+      }
+      if (archived_search_data_awaits_caching) {
+        cache_data({
+          db: archived_db!,
+          bookmarks_just_tags: archived_bookmarks_just_tags!,
+          is_archived: true,
+        })
+      }
+    }
+  }, [has_focus])
 
   return {
     is_search_focused,

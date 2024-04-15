@@ -22,6 +22,7 @@ export namespace LibrarySearchBookmarks_Dto {
       public updated_at: number
       public stars?: number
       public points?: number
+      public is_deleted?: boolean
     }
 
     class AuthorizedBookmark extends Bookmark {
@@ -40,9 +41,11 @@ export namespace LibrarySearchBookmarks_Dto {
 
     export class Authorized {
       public bookmarks: AuthorizedBookmark[]
+      public version: number
     }
     export class Public {
       public bookmarks: PublicBookmark[]
+      public version: number
     }
   }
 }
