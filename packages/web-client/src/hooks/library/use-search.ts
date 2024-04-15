@@ -1369,74 +1369,15 @@ export const use_search = () => {
     )
   }, [result])
 
-  useUpdateEffect(() => {
-    if (window.location.hash == encodeURIComponent(search_string)) return
-
-    const sp = search_params.toString()
+  useEffect(() => {
+    const search_params_stringified = search_params.toString()
 
     if (!window.location.hash) reset()
-
-    const stored_search_string = sessionStorage.getItem(
-      browser_storage.session_storage.library.search_string({
-        username,
-        search_params: sp,
-        hash: window.location.hash,
-      }),
-    )
-    if (stored_search_string) {
-      set_search_string(stored_search_string)
-    }
-    const stored_highlights = sessionStorage.getItem(
-      browser_storage.session_storage.library.highlights({
-        username,
-        search_params: sp,
-        hash: window.location.hash,
-      }),
-    )
-    if (stored_highlights) {
-      set_highlights(JSON.parse(stored_highlights))
-    }
-    const stored_highlights_sites_variants = sessionStorage.getItem(
-      browser_storage.session_storage.library.highlights_sites_variants({
-        username,
-        search_params: sp,
-        hash: window.location.hash,
-      }),
-    )
-    if (stored_highlights_sites_variants) {
-      set_highlights_sites_variants(
-        JSON.parse(stored_highlights_sites_variants),
-      )
-    }
-    const stored_results_count = sessionStorage.getItem(
-      browser_storage.session_storage.library.search_results_count({
-        username,
-        search_params: sp,
-        hash: window.location.hash,
-      }),
-    )
-    if (stored_results_count) {
-      set_count(parseInt(stored_results_count))
-    }
-    const stored_search_result = sessionStorage.getItem(
-      browser_storage.session_storage.library.search_result({
-        username,
-        search_params: sp,
-        hash: window.location.hash,
-      }),
-    )
-    if (stored_search_result) {
-      set_result(JSON.parse(stored_search_result))
-    }
-  }, [search_params])
-
-  useEffect(() => {
-    const sp = search_params.toString()
 
     const search_string = sessionStorage.getItem(
       browser_storage.session_storage.library.search_string({
         username,
-        search_params: sp,
+        search_params: search_params_stringified,
         hash: window.location.hash,
       }),
     )
@@ -1446,7 +1387,7 @@ export const use_search = () => {
     const highlights = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights({
         username,
-        search_params: sp,
+        search_params: search_params_stringified,
         hash: window.location.hash,
       }),
     )
@@ -1456,7 +1397,7 @@ export const use_search = () => {
     const highlights_sites_variants = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
-        search_params: sp,
+        search_params: search_params_stringified,
         hash: window.location.hash,
       }),
     )
@@ -1466,7 +1407,7 @@ export const use_search = () => {
     const count = sessionStorage.getItem(
       browser_storage.session_storage.library.search_results_count({
         username,
-        search_params: sp,
+        search_params: search_params_stringified,
         hash: window.location.hash,
       }),
     )
@@ -1476,7 +1417,7 @@ export const use_search = () => {
     const result = sessionStorage.getItem(
       browser_storage.session_storage.library.search_result({
         username,
-        search_params: sp,
+        search_params: search_params_stringified,
         hash: window.location.hash,
       }),
     )
@@ -1484,8 +1425,12 @@ export const use_search = () => {
       set_result(JSON.parse(result))
     }
 
-    // TODO: Query for resutls if hash is present and cache is not.
-  }, [])
+    // Temporary handling of search string on fresh page load.
+    if (window.location.hash && !result) {
+      const search_string = window.location.hash.slice(1)
+      set_search_string(search_string)
+    }
+  }, [search_params])
 
   useUpdateEffect(() => {
     if (!has_focus) {
