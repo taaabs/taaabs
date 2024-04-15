@@ -118,75 +118,77 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const open_new_bookmark_modal = (params: { with_autofill?: boolean }) => {
     const bookmark = BookmarkHash.parse({ hash: window.location.hash.slice(1) })
 
-    modal?.set_modal(
-      <Form_UpsertBookmarkForm
-        action="create"
-        bookmark_autofill={
-          params.with_autofill
-            ? {
-                title: bookmark.title,
-                links: bookmark.links,
-                tags: bookmark.tags,
-                note: bookmark.note,
-              }
-            : undefined
-        }
-        on_close={modal.set_modal}
-        on_submit={async (bookmark) => {
-          const { db, bookmarks_just_tags } =
-            await global_library_search!.search_hook.init({
-              is_archived: false,
-            })
-
-          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          const upsert_bookmark_use_case = new UpsertBookmark_UseCase(
-            repository,
-          )
-          const created_bookmark =
-            await upsert_bookmark_use_case.invoke(bookmark)
-          await global_library_search!.search_hook.update_bookmark({
-            db,
-            bookmarks_just_tags,
-            is_archived: false,
-            bookmark: {
-              id: created_bookmark.id,
-              created_at: created_bookmark.created_at,
-              visited_at: created_bookmark.visited_at,
-              updated_at: created_bookmark.updated_at,
-              title: created_bookmark.title,
-              note: created_bookmark.note,
-              is_archived: false,
-              is_unread: created_bookmark.is_unread,
-              stars: created_bookmark.stars,
-              links: created_bookmark.links.map((link) => ({
-                url: link.url,
-                site_path: link.site_path,
-              })),
-              tags: created_bookmark.tags.map((tag) => tag.name),
-              tag_ids: created_bookmark.tags.map((tag) => tag.id),
-            },
-          })
-          if (pathname == '/bookmarks') {
-            const updated_search_params = update_search_params(
-              search_params,
-              // We use updated at instead of ID beacuse user could delete last bookmark,
-              // create new and modal would not close (url would stay unchanged).
-              search_params_keys.newly_created_bookmark_updated_at_timestamp,
-              new Date(created_bookmark.updated_at).getTime().toString(),
-            )
-            window.history.pushState(
-              {},
-              '',
-              window.location.pathname + '?' + updated_search_params,
-            )
-          } else {
-            modal.set_modal()
+    bookmark.links &&
+      bookmark.links.length > 0 &&
+      modal?.set_modal(
+        <Form_UpsertBookmarkForm
+          action="create"
+          bookmark_autofill={
+            params.with_autofill
+              ? {
+                  title: bookmark.title,
+                  links: bookmark.links,
+                  tags: bookmark.tags,
+                  note: bookmark.note,
+                }
+              : undefined
           }
-          toast.success('Bookmark has been created')
-        }}
-      />,
-    )
+          on_close={modal.set_modal}
+          on_submit={async (bookmark) => {
+            const { db, bookmarks_just_tags } =
+              await global_library_search!.search_hook.init({
+                is_archived: false,
+              })
+
+            const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+            const repository = new Bookmarks_RepositoryImpl(data_source)
+            const upsert_bookmark_use_case = new UpsertBookmark_UseCase(
+              repository,
+            )
+            const created_bookmark =
+              await upsert_bookmark_use_case.invoke(bookmark)
+            await global_library_search!.search_hook.update_bookmark({
+              db,
+              bookmarks_just_tags,
+              is_archived: false,
+              bookmark: {
+                id: created_bookmark.id,
+                created_at: created_bookmark.created_at,
+                visited_at: created_bookmark.visited_at,
+                updated_at: created_bookmark.updated_at,
+                title: created_bookmark.title,
+                note: created_bookmark.note,
+                is_archived: false,
+                is_unread: created_bookmark.is_unread,
+                stars: created_bookmark.stars,
+                links: created_bookmark.links.map((link) => ({
+                  url: link.url,
+                  site_path: link.site_path,
+                })),
+                tags: created_bookmark.tags.map((tag) => tag.name),
+                tag_ids: created_bookmark.tags.map((tag) => tag.id),
+              },
+            })
+            if (pathname == '/bookmarks') {
+              const updated_search_params = update_search_params(
+                search_params,
+                // We use updated at instead of ID beacuse user could delete last bookmark,
+                // create new and modal would not close (url would stay unchanged).
+                search_params_keys.newly_created_bookmark_updated_at_timestamp,
+                new Date(created_bookmark.updated_at).getTime().toString(),
+              )
+              window.history.pushState(
+                {},
+                '',
+                window.location.pathname + '?' + updated_search_params,
+              )
+            } else {
+              modal.set_modal()
+            }
+            toast.success('Bookmark has been created')
+          }}
+        />,
+      )
   }
 
   useUpdateEffect(() => {
