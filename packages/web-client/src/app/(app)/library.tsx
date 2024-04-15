@@ -1085,21 +1085,20 @@ const Library = (params: {
           }),
         )
       }}
-      on_link_click={
-        !username
-          ? () => {
-              const record_visit_params: RecordVisit_Params = {
-                bookmark_id: bookmark.id,
-                visited_at: new Date().toISOString(),
-              }
-              localStorage.setItem(
-                browser_storage.local_storage.authorized_library
-                  .record_visit_params,
-                JSON.stringify(record_visit_params),
-              )
-            }
-          : undefined
-      }
+      on_link_click={async () => {
+        if (!username) {
+          const record_visit_params: RecordVisit_Params = {
+            bookmark_id: bookmark.id,
+            visited_at: new Date().toISOString(),
+          }
+          localStorage.setItem(
+            browser_storage.local_storage.authorized_library
+              .record_visit_params,
+            JSON.stringify(record_visit_params),
+          )
+        }
+        await search_hook.cache_data()
+      }}
       favicon_host={favicon_host}
       // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed).
       dragged_tag={tag_view_options_hook.dragged_tag}
