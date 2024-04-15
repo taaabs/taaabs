@@ -167,10 +167,6 @@ export const use_search = () => {
     }
   }, [selected_tags, bookmarks_just_tags, archived_bookmarks_just_tags])
 
-  // useUpdateEffect(() => {
-  //   get_hints()
-  // }, [ids_to_search_amongst])
-
   const get_is_db_stale = async (params: {
     is_archived: boolean
     ky: KyInstance
@@ -1450,6 +1446,7 @@ export const use_search = () => {
           bookmarks_just_tags: bookmarks_just_tags!,
           is_archived: false,
         })
+        set_search_data_awaits_caching(false)
       }
       if (archived_search_data_awaits_caching) {
         cache_data({
@@ -1457,6 +1454,7 @@ export const use_search = () => {
           bookmarks_just_tags: archived_bookmarks_just_tags!,
           is_archived: true,
         })
+        set_archived_search_data_awaits_caching(false)
       }
     }
   }, [has_focus])
