@@ -87,7 +87,6 @@ export const use_search = () => {
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const [is_search_focused, set_is_search_focused] = useState(false)
-  const [is_caching_ongoing, set_is_caching_ongoing] = useState(false)
   const [bookmarks_just_tags, set_bookmarks_just_tags] =
     useState<BookmarkTags[]>()
   const [archived_bookmarks_just_tags, set_archived_bookmarks_just_tags] =
@@ -251,7 +250,7 @@ export const use_search = () => {
     // Bypass initialization if current instance is up to date.
     // Current instance could be out of date if user updated cached db in another tab.
     if (!is_cache_stale) {
-      const db_set_at = !params.is_archived
+      const updated_at = !params.is_archived
         ? db_updated_at_timestamp!
         : archived_db_updated_at_timestamp!
       const cached_at = await localforage.getItem<number>(
@@ -271,7 +270,7 @@ export const use_search = () => {
               { username: username as string },
             ),
       )
-      if (db_set_at && cached_at && db_set_at > cached_at) {
+      if (updated_at && cached_at && updated_at >= cached_at) {
         if (!params.is_archived) {
           return {
             db: db!,
@@ -444,8 +443,30 @@ export const use_search = () => {
     bookmarks_just_tags: BookmarkTags[]
     is_archived: boolean
   }) => {
-    set_is_caching_ongoing(true)
     const index = await saveWithHighlight(params.db)
+    const updated_at = params.is_archived
+      ? archived_db_updated_at_timestamp
+      : db_updated_at_timestamp
+    const cached_at =
+      (await localforage.getItem<number>(
+        !username
+          ? !params.is_archived
+            ? browser_storage.local_forage.authorized_library.search
+                .cached_at_timestamp
+            : browser_storage.local_forage.authorized_library.search
+                .archived_cached_at_timestamp
+          : !params.is_archived
+          ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
+              {
+                username: username as string,
+              },
+            )
+          : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
+              { username: username as string },
+            ),
+      )) || undefined
+    // Cache was updated in another tab.
+    if (updated_at && cached_at && updated_at < cached_at) return
     if (!username) {
       await localforage.setItem(
         !params.is_archived
@@ -453,7 +474,7 @@ export const use_search = () => {
               .cached_at_timestamp
           : browser_storage.local_forage.authorized_library.search
               .archived_cached_at_timestamp,
-        Date.now(),
+        updated_at,
       )
       await localforage.setItem(
         !params.is_archived
@@ -480,7 +501,7 @@ export const use_search = () => {
           : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
               { username: username as string },
             ),
-        Date.now(),
+        updated_at,
       )
       await localforage.setItem(
         !params.is_archived
@@ -503,7 +524,6 @@ export const use_search = () => {
         JSON.stringify(params.bookmarks_just_tags),
       )
     }
-    set_is_caching_ongoing(false)
   }
 
   const clear_cached_data = async (params: { is_archived: boolean }) => {
@@ -1470,7 +1490,6 @@ export const use_search = () => {
     get_hints,
     init,
     query_db,
-    is_caching_ongoing,
     result,
     is_initializing,
     db,
