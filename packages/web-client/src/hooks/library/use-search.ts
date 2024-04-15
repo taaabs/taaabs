@@ -270,7 +270,10 @@ export const use_search = () => {
               { username: username as string },
             ),
       )
-      if (updated_at && cached_at && updated_at >= cached_at) {
+      if (
+        (updated_at && !cached_at) ||
+        (updated_at && cached_at && updated_at >= cached_at)
+      ) {
         if (!params.is_archived) {
           return {
             db: db!,
@@ -415,19 +418,16 @@ export const use_search = () => {
       !params.is_archived
         ? set_bookmarks_just_tags(new_bookmarks_just_tags)
         : set_archived_bookmarks_just_tags(new_bookmarks_just_tags)
-      await cache_data({
-        db: new_db,
-        bookmarks_just_tags: new_bookmarks_just_tags,
-        is_archived: params.is_archived,
-      })
       set_indexed_bookmarks_percentage(undefined)
     }
 
     if (!params.is_archived) {
       set_db(new_db)
       set_db_updated_at_timestamp(Date.now())
+      set_search_data_awaits_caching(true)
     } else {
       set_archived_db(new_db)
+      set_archived_search_data_awaits_caching(true)
       set_archived_db_updated_at_timestamp(Date.now())
     }
 
