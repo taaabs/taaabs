@@ -33,7 +33,7 @@
     border-color: var(--border-color-hover);
   }
   > img {
-    height: var(--distance-20px);
+    width: var(--distance-11px);
   }
   &__text {
     display: flex;
@@ -48,7 +48,6 @@
     }
     > span:last-child {
       font-size: var(--font-size-13px);
-      
     }
   }
 }

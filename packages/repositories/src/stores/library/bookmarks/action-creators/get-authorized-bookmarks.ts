@@ -109,7 +109,6 @@ export const get_authorized_bookmarks = (params: {
       const state = get_state()
       if (!state.counts.is_fetching && !state.counts.should_refetch) {
         dispatch(counts_actions.process_tags())
-        dispatch(bookmarks_actions.set_bookmarks(bookmarks_with_density))
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
         dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
         dispatch(

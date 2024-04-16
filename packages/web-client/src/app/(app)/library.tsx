@@ -35,7 +35,6 @@ import { Tags as UiAppAtom_Tags } from '@web-ui/components/app/atoms/tags'
 import { TagsSkeleton as UiAppAtom_TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
 import { StarsForDropdown as UiAppAtom_StarsForDropdown } from '@web-ui/components/app/atoms/stars-for-dropdown'
 import { Pinned as UiAppAtom_Pinned } from '@web-ui/components/app/atoms/pinned'
-import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { Icon as UiCommonParticles_Icon } from '@web-ui/components/common/particles/icon'
 import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolbar'
 import {
@@ -60,6 +59,7 @@ import dictionary from '@/dictionaries/en'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { search_params_keys } from '@/constants/search-params-keys'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
+import { BookmarkWrapper } from '@/components/bookmark-wrapper'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -97,6 +97,10 @@ const Library = (params: {
     useState<number>()
   const [is_pinned_stale, set_is_pinned_stale] = useState<boolean>()
   const [pinned_updated_at, set_pinned_updated_at] = useState<number>()
+  const [
+    first_bookmarks_fetched_at_timestamp,
+    set_first_bookmarks_fetched_at_timestamp,
+  ] = useState<number>()
 
   const ky_instance = ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -110,7 +114,6 @@ const Library = (params: {
 
   useUpdateEffect(() => {
     if (
-      !bookmarks_hook.is_fetching &&
       !bookmarks_hook.is_fetching_first_bookmarks &&
       !bookmarks_hook.is_upserting &&
       !counts_hook.is_fetching &&
@@ -119,8 +122,16 @@ const Library = (params: {
       !pinned_hook.is_fetching &&
       !pinned_hook.should_refetch
     ) {
+      dispatch(
+        bookmarks_actions.set_bookmarks(bookmarks_hook.incoming_bookmarks),
+      )
+      set_first_bookmarks_fetched_at_timestamp(
+        bookmarks_hook.first_bookmarks_fetched_at_timestamp,
+      )
       set_show_skeletons(false)
-      set_library_updated_at_timestamp(Date.now())
+      if (!show_skeletons) {
+        set_library_updated_at_timestamp(Date.now())
+      }
       if (search_hook.result) {
         search_hook.set_highlights(search_hook.incoming_highlights)
         search_hook.set_highlights_sites_variants(
@@ -136,7 +147,6 @@ const Library = (params: {
       }
     }
   }, [
-    bookmarks_hook.is_fetching,
     bookmarks_hook.is_fetching_first_bookmarks,
     bookmarks_hook.is_upserting,
     counts_hook.is_fetching,
@@ -155,18 +165,6 @@ const Library = (params: {
       set_is_pinned_stale(true)
     }
   }, [pinned_hook.is_fetching])
-
-  // Check for first bookmarks needed by deleting tags of last bookmark in results.
-  useUpdateEffect(() => {
-    if (
-      !bookmarks_hook.is_upserting &&
-      !bookmarks_hook.is_fetching_first_bookmarks
-    ) {
-      dispatch(
-        bookmarks_actions.set_bookmarks(bookmarks_hook.incoming_bookmarks),
-      )
-    }
-  }, [bookmarks_hook.is_upserting])
 
   // Close "Create bookmark" modal, refresh counts and tag hierarchies.
   useUpdateEffect(() => {
@@ -1004,11 +1002,10 @@ const Library = (params: {
     />
   )
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
-    <UiAppAtom_Bookmark
-      key={`${i}-${bookmarks_hook.first_bookmarks_fetched_at_timestamp}`}
+    <BookmarkWrapper
+      key={`${i}-${first_bookmarks_fetched_at_timestamp}`}
       index={i}
       created_at={new Date(bookmark.created_at)}
-      library_updated_at_timestamp={library_updated_at_timestamp}
       search_queried_at_timestamp={search_hook.queried_at_timestamp}
       bookmark_id={bookmark.id}
       library_url={username ? `/${username}` : '/bookmarks'}

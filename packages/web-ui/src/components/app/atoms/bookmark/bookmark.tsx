@@ -1,8 +1,6 @@
 import cn from 'classnames'
 import styles from './bookmark.module.scss'
-import useResizeObserver from 'beautiful-react-hooks/useResizeObserver'
-import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useState } from 'react'
 import dayjs from 'dayjs'
 import { ReactSortable } from 'react-sortablejs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -15,7 +13,6 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import { useContextMenu } from 'use-context-menu'
 import { DropdownMenu } from '../dropdown-menu'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import useSwipeEvents from 'beautiful-react-hooks/useSwipeEvents'
 import confetti from 'canvas-confetti'
 import { shared_values } from '@web-ui/constants'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
@@ -47,7 +44,6 @@ export namespace Bookmark {
   export type Highlights = [number, number][]
 
   export type Props = {
-    library_updated_at_timestamp?: number
     search_queried_at_timestamp?: number
     is_search_result?: boolean
     index: number
@@ -117,34 +113,13 @@ export namespace Bookmark {
 
 export const Bookmark: React.FC<Bookmark.Props> = memo(
   function Bookmark(props) {
-    const ref = useRef<HTMLDivElement>(null)
     const [tags, set_tags] = useState<Bookmark.Props['tags']>(props.tags)
-    // Detecing swiping is mitigates interference between tag reordering and toggling density.
-    const [is_mouse_over, set_is_mouse_over] = useState(false)
-    const [is_swiping, set_is_swiping] = useState(false)
-    // We hold highlights copy here to clear it upon tag order change which breaks highlighting.
-    const [highlights, set_highlights] = useState<
-      Bookmark.Highlights | undefined
-    >(props.highlights)
-    const { onSwipeStart, onSwipeEnd } = useSwipeEvents(ref, {
-      preventDefault: false,
-    })
-    onSwipeStart(() => {
-      set_is_swiping(false)
-    })
-    onSwipeEnd(() => {
-      set_is_swiping(true)
-    })
-    const DOMRect = useResizeObserver(ref)
-    const is_visible = useViewportSpy(ref)
     const [is_points_given_requested, set_is_points_given_requested] =
       useState<boolean>()
     const [points_given, set_points_given] = useState<number>()
     const [is_menu_open, toggle_is_menu_open] = useToggle(false)
     const [link_url_menu_opened, set_link_url_menu_opened] = useState<string>()
-    const [render_height, set_render_height] = useState<number | undefined>(
-      props.render_height,
-    )
+
     const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
@@ -176,37 +151,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     }, [props.points_given])
 
     useUpdateEffect(() => {
-      set_highlights(props.highlights)
-    }, [props.highlights])
-
-    useUpdateEffect(() => {
-      if (render_height === undefined) {
-        if (!ref.current) return
-        const height = ref.current.getBoundingClientRect().height
-        set_render_height(height)
-        props.set_render_height(height)
-      }
-    }, [render_height])
-
-    useUpdateEffect(() => {
-      if (!DOMRect) return
-      set_render_height(undefined)
-    }, [DOMRect])
-
-    useEffect(() => {
-      if (!render_height) {
-        if (!ref.current) {
-          throw new Error('Ref should be there.')
-        }
-        const height = ref.current.getBoundingClientRect().height
-        set_render_height(height)
-        props.set_render_height(height)
-      }
-    }, [])
-
-    useUpdateEffect(() => {
       set_tags(props.tags)
-    }, [props.updated_at, props.library_updated_at_timestamp])
+    }, [props.updated_at])
 
     const tags_dom = [
       ...tags.map((tag, i) => {
@@ -294,10 +240,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 },
               ])}
             >
-              {highlights
+              {props.highlights
                 ? tag.name.split('').map((char, i) => {
                     const real_i = tag_first_char_index_in_search_title + i
-                    const is_highlighted = highlights!.find(
+                    const is_highlighted = props.highlights!.find(
                       ([index, length]) =>
                         real_i >= index && real_i < index + length,
                     )
@@ -324,8 +270,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           </a>
         )
       }),
-      ...(is_mouse_over &&
-      props.dragged_tag &&
+      ...(props.dragged_tag &&
       props.tags.length < system_values.bookmark.tags.limit &&
       props.tags.findIndex((tag) => tag.id == props.dragged_tag!.id) == -1
         ? [
@@ -571,180 +516,119 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
     return (
       <div
-        ref={ref}
-        style={{
-          height: !is_visible && render_height ? render_height : undefined,
-        }}
         className={cn(styles.wrapper, {
           [styles['wrapper--compact']]: props.density == 'compact',
           [styles['wrapper--margin-override']]: !props.is_compact,
         })}
       >
-        {is_visible == undefined || is_visible || !render_height ? (
-          <div
-            className={cn(styles.container, {
-              [styles['container--clickable']]: props.density == 'compact',
-              [styles['container--search-result']]: props.is_search_result,
-            })}
-            role="button"
-            onClick={() => {
-              if (!is_swiping && !is_menu_open && !link_url_menu_opened)
-                props.on_click()
-            }}
-            onMouseUp={() => {
-              if (
-                props.on_mouse_up &&
-                props.dragged_tag &&
-                !props.tags.find((tag) => tag.name == props.dragged_tag!.name)
-              ) {
-                document.body.classList.remove('adding-tag')
-                props.on_mouse_up()
-                if (props.tags.length < system_values.bookmark.tags.limit) {
-                  set_tags([
-                    ...tags,
-                    {
-                      id: 0,
-                      is_public: true,
-                      name: props.dragged_tag.name,
-                      yields: props.dragged_tag.yields + 1,
-                    },
-                  ])
-                }
+        <div
+          className={cn(styles.container, {
+            [styles['container--clickable']]: props.density == 'compact',
+            [styles['container--search-result']]: props.is_search_result,
+          })}
+          role="button"
+          onClick={() => {
+            if (!is_menu_open && !link_url_menu_opened) props.on_click()
+          }}
+          onMouseUp={() => {
+            if (
+              props.on_mouse_up &&
+              props.dragged_tag &&
+              !props.tags.find((tag) => tag.name == props.dragged_tag!.name)
+            ) {
+              document.body.classList.remove('adding-tag')
+              props.on_mouse_up()
+              if (props.tags.length < system_values.bookmark.tags.limit) {
+                set_tags([
+                  ...tags,
+                  {
+                    id: 0,
+                    is_public: true,
+                    name: props.dragged_tag.name,
+                    yields: props.dragged_tag.yields + 1,
+                  },
+                ])
               }
-            }}
-            onMouseEnter={() => {
-              if (
-                props.dragged_tag &&
-                props.tags.length < system_values.bookmark.tags.limit &&
-                !props.tags.find((tag) => tag.name == props.dragged_tag!.name)
-              ) {
-                document.body.classList.add('adding-tag')
-                set_is_mouse_over(true)
-              }
-            }}
-            onMouseLeave={() => {
-              set_is_mouse_over(false)
-              if (props.dragged_tag) {
-                document.body.classList.remove('adding-tag')
-              }
-            }}
-          >
-            <div className={styles.bookmark}>
-              {contextMenu}
-              <div className={styles.bookmark__main}>
-                <div
-                  className={cn(styles.bookmark__main__top, {
-                    [styles['bookmark__main__top--compact']]: props.is_compact,
-                  })}
-                >
-                  <div className={styles.bookmark__main__top__info}>
-                    {props.index + 1} · {bookmark_date}
-                  </div>
-                  <div className={styles.bookmark__main__top__menu}>
-                    <OutsideClickHandler
-                      disabled={!is_menu_open}
-                      onOutsideClick={() => {
+            }
+          }}
+        >
+          <div className={styles.bookmark}>
+            {contextMenu}
+            <div className={styles.bookmark__main}>
+              <div
+                className={cn(styles.bookmark__main__top, {
+                  [styles['bookmark__main__top--compact']]: props.is_compact,
+                })}
+              >
+                <div className={styles.bookmark__main__top__info}>
+                  {props.index + 1} · {bookmark_date}
+                </div>
+                <div className={styles.bookmark__main__top__menu}>
+                  <OutsideClickHandler
+                    disabled={!is_menu_open}
+                    onOutsideClick={() => {
+                      toggle_is_menu_open()
+                    }}
+                  >
+                    <button
+                      className={cn(styles.bookmark__main__top__menu__button, {
+                        [styles['bookmark__main__top__menu--toggled']]:
+                          is_menu_open,
+                      })}
+                      onClick={(e) => {
+                        e.stopPropagation()
                         toggle_is_menu_open()
                       }}
                     >
-                      <button
-                        className={cn(
-                          styles.bookmark__main__top__menu__button,
-                          {
-                            [styles['bookmark__main__top__menu--toggled']]:
-                              is_menu_open,
-                          },
-                        )}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          toggle_is_menu_open()
-                        }}
-                      >
-                        <Icon variant="THREE_DOTS" />
-                      </button>
-                      <div
-                        className={cn(styles.slot, {
-                          [styles['slot--hidden']]: !is_menu_open,
-                        })}
-                        onClick={() => {
-                          toggle_is_menu_open()
-                        }}
-                      >
-                        {props.menu_slot}
-                      </div>
-                    </OutsideClickHandler>
-                  </div>
+                      <Icon variant="THREE_DOTS" />
+                    </button>
+                    <div
+                      className={cn(styles.slot, {
+                        [styles['slot--hidden']]: !is_menu_open,
+                      })}
+                      onClick={() => {
+                        toggle_is_menu_open()
+                      }}
+                    >
+                      {props.menu_slot}
+                    </div>
+                  </OutsideClickHandler>
                 </div>
-                <div className={styles.bookmark__main__content}>
-                  <div className={styles.bookmark__main__content__title}>
-                    {props.is_unread && (
-                      <div
-                        className={
-                          styles.bookmark__main__content__title__unread
-                        }
-                      />
-                    )}
-                    {props.stars >= 1 && (
-                      <div
-                        className={styles.bookmark__main__content__title__stars}
-                      >
-                        {[...new Array(props.stars)].map((_, i) => (
-                          <Icon variant="STAR_FILLED" key={i} />
-                        ))}
-                      </div>
-                    )}
-                    {props.title ? (
-                      <div
-                        className={cn(
-                          styles.bookmark__main__content__title__text,
-                          {
-                            [styles[
-                              'bookmark__main__content__title__text--unread'
-                            ]]: props.is_unread,
-                          },
-                        )}
-                      >
-                        {highlights
-                          ? props.title.split('').map((char, i) => {
-                              const is_highlighted = highlights!.find(
-                                ([index, length]) =>
-                                  i >= index && i < index + length,
-                              )
-
-                              return is_highlighted ? (
-                                <span className={styles.highlight} key={i}>
-                                  {char}
-                                </span>
-                              ) : (
-                                <span key={i}>{char}</span>
-                              )
-                            })
-                          : props.title}
-                      </div>
-                    ) : (
-                      <div
-                        className={cn(
-                          styles.bookmark__main__content__title__text,
-                          styles[
-                            'bookmark__main__content__title__text--untitled'
-                          ],
-                        )}
-                      >
-                        (Untitled)
-                      </div>
-                    )}
-                  </div>
-                  {props.note && (
-                    <div className={styles.bookmark__main__content__note}>
-                      {highlights
-                        ? props.note.split('').map((char, i) => {
-                            const real_i =
-                              (props.title ? `${props.title} ` : '').length + i
-
-                            const is_highlighted = highlights!.find(
+              </div>
+              <div className={styles.bookmark__main__content}>
+                <div className={styles.bookmark__main__content__title}>
+                  {props.is_unread && (
+                    <div
+                      className={styles.bookmark__main__content__title__unread}
+                    />
+                  )}
+                  {props.stars >= 1 && (
+                    <div
+                      className={styles.bookmark__main__content__title__stars}
+                    >
+                      {[...new Array(props.stars)].map((_, i) => (
+                        <Icon variant="STAR_FILLED" key={i} />
+                      ))}
+                    </div>
+                  )}
+                  {props.title ? (
+                    <div
+                      className={cn(
+                        styles.bookmark__main__content__title__text,
+                        {
+                          [styles[
+                            'bookmark__main__content__title__text--unread'
+                          ]]: props.is_unread,
+                        },
+                      )}
+                    >
+                      {props.highlights
+                        ? props.title.split('').map((char, i) => {
+                            const is_highlighted = props.highlights!.find(
                               ([index, length]) =>
-                                real_i >= index && real_i < index + length,
+                                i >= index && i < index + length,
                             )
+
                             return is_highlighted ? (
                               <span className={styles.highlight} key={i}>
                                 {char}
@@ -753,267 +637,283 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               <span key={i}>{char}</span>
                             )
                           })
-                        : props.note}
+                        : props.title}
+                    </div>
+                  ) : (
+                    <div
+                      className={cn(
+                        styles.bookmark__main__content__title__text,
+                        styles[
+                          'bookmark__main__content__title__text--untitled'
+                        ],
+                      )}
+                    >
+                      (Untitled)
                     </div>
                   )}
                 </div>
+                {props.note && (
+                  <div className={styles.bookmark__main__content__note}>
+                    {props.highlights
+                      ? props.note.split('').map((char, i) => {
+                          const real_i =
+                            (props.title ? `${props.title} ` : '').length + i
 
-                {props.on_tags_order_change ? (
-                  <ReactSortable
-                    list={tags}
-                    setList={(new_tags) => {
-                      if (JSON.stringify(new_tags) == JSON.stringify(tags))
-                        return
-                      set_tags(new_tags)
-                      props.on_tags_order_change?.(new_tags)
-                      set_highlights(undefined)
-                    }}
-                    animation={system_values.sortablejs_animation_duration}
-                    forceFallback={true}
-                    dropBubble={true} // Needed for clearing dragged tag UI.
-                    delay={system_values.sortablejs_delay}
-                    delayOnTouchOnly={true}
-                    className={styles.bookmark__main__tags}
-                    filter={`.${styles.bookmark__main__tags__huggs}`}
-                    fallbackClass={
-                      !('ontouchstart' in window)
-                        ? styles['sortable-fallback']
-                        : undefined
-                    }
-                  >
-                    {tags_dom}
-                    {huggs_dom}
-                  </ReactSortable>
-                ) : (
-                  <div className={styles.bookmark__main__tags}>
-                    {tags_dom}
-                    {huggs_dom}
+                          const is_highlighted = props.highlights!.find(
+                            ([index, length]) =>
+                              real_i >= index && real_i < index + length,
+                          )
+                          return is_highlighted ? (
+                            <span className={styles.highlight} key={i}>
+                              {char}
+                            </span>
+                          ) : (
+                            <span key={i}>{char}</span>
+                          )
+                        })
+                      : props.note}
                   </div>
                 )}
               </div>
-              <div
-                className={cn(styles.bookmark__links, {
-                  [styles['bookmark__links--compact']]: props.is_compact,
-                })}
-              >
-                {props.links.map((link, link_idx) => {
-                  const url = link.via_wayback
-                    ? url_to_wayback({ date: props.created_at, url: link.url })
-                    : link.url
 
-                  let is_site_highlighted = false
-                  if (
-                    props.highlights_site_variants !== undefined &&
-                    props.highlights_site_variants.length
-                  ) {
-                    const site =
-                      get_domain_from_url(link.url) +
-                      (link.site_path ? `/${link.site_path}` : '')
-                    const link_site_variants =
-                      get_site_variants_for_search(site)
-                    if (
-                      link_site_variants.some((site_variant) =>
-                        props.highlights_site_variants!.includes(site_variant),
-                      )
-                    ) {
-                      is_site_highlighted = true
-                    }
+              {props.on_tags_order_change ? (
+                <ReactSortable
+                  list={tags}
+                  setList={(new_tags) => {
+                    if (JSON.stringify(new_tags) == JSON.stringify(tags)) return
+                    set_tags(new_tags)
+                    props.on_tags_order_change?.(new_tags)
+                  }}
+                  animation={system_values.sortablejs_animation_duration}
+                  forceFallback={true}
+                  dropBubble={true} // Needed for clearing dragged tag UI.
+                  delay={system_values.sortablejs_delay}
+                  delayOnTouchOnly={true}
+                  className={styles.bookmark__main__tags}
+                  filter={`.${styles.bookmark__main__tags__huggs}`}
+                  fallbackClass={
+                    !('ontouchstart' in window)
+                      ? styles['sortable-fallback']
+                      : undefined
                   }
+                >
+                  {tags_dom}
+                  {huggs_dom}
+                </ReactSortable>
+              ) : (
+                <div className={styles.bookmark__main__tags}>
+                  {tags_dom}
+                  {huggs_dom}
+                </div>
+              )}
+            </div>
+            <div
+              className={cn(styles.bookmark__links, {
+                [styles['bookmark__links--compact']]: props.is_compact,
+              })}
+            >
+              {props.links.map((link, link_idx) => {
+                const url = link.via_wayback
+                  ? url_to_wayback({ date: props.created_at, url: link.url })
+                  : link.url
 
-                  const link_first_char_index_in_search_title = (
-                    (props.title ? `${props.title} ` : '') +
-                    (props.note ? `${props.note} ` : '') +
-                    props.tags.map((tag) => tag.name).join(' ') +
-                    (props.tags.length ? ' ' : '') +
-                    props.links
-                      .map(
-                        (link, i) =>
-                          `${get_domain_from_url(link.url)}${
-                            link.site_path ? ` › ${link.site_path}` : ''
-                          }${i > 0 ? ' ' : ''}`,
-                      )
-                      .slice(0, link_idx)
-                      .join('')
-                  ).length
+                let is_site_highlighted = false
+                if (
+                  props.highlights_site_variants !== undefined &&
+                  props.highlights_site_variants.length
+                ) {
+                  const site =
+                    get_domain_from_url(link.url) +
+                    (link.site_path ? `/${link.site_path}` : '')
+                  const link_site_variants = get_site_variants_for_search(site)
+                  if (
+                    link_site_variants.some((site_variant) =>
+                      props.highlights_site_variants!.includes(site_variant),
+                    )
+                  ) {
+                    is_site_highlighted = true
+                  }
+                }
 
-                  return (
-                    <div
-                      className={styles.bookmark__links__item}
-                      key={link.url}
-                    >
-                      <div className={styles.bookmark__links__item__link}>
+                const link_first_char_index_in_search_title = (
+                  (props.title ? `${props.title} ` : '') +
+                  (props.note ? `${props.note} ` : '') +
+                  props.tags.map((tag) => tag.name).join(' ') +
+                  (props.tags.length ? ' ' : '') +
+                  props.links
+                    .map(
+                      (link, i) =>
+                        `${get_domain_from_url(link.url)}${
+                          link.site_path ? ` › ${link.site_path}` : ''
+                        }${i > 0 ? ' ' : ''}`,
+                    )
+                    .slice(0, link_idx)
+                    .join('')
+                ).length
+
+                return (
+                  <div className={styles.bookmark__links__item} key={link.url}>
+                    <div className={styles.bookmark__links__item__link}>
+                      <button
+                        className={cn(
+                          styles.bookmark__links__item__link__site,
+                          {
+                            [styles[
+                              'bookmark__links__item__link__site--highlighted'
+                            ]]: is_site_highlighted,
+                          },
+                        )}
+                      >
+                        <LazyLoadImage
+                          alt={'Favicon'}
+                          width={16}
+                          height={16}
+                          src={`${props.favicon_host}/${get_domain_from_url(
+                            link.url,
+                          )}`}
+                        />
+                      </button>
+                      <a
+                        className={cn(
+                          styles.bookmark__links__item__link__url,
+                          {
+                            [styles[
+                              'bookmark__links__item__link__url--dim-visited'
+                            ]]: props.should_dim_visited_links,
+                          },
+                          {
+                            [styles[
+                              'bookmark__links__item__link__url--via-wayback'
+                            ]]: link.via_wayback,
+                          },
+                        )}
+                        href={url}
+                        onClick={async (e) => {
+                          e.stopPropagation()
+                          e.preventDefault()
+                          props.on_link_click(url)
+                        }}
+                      >
+                        <span>
+                          {props.highlights
+                            ? `${get_domain_from_url(link.url)} ${
+                                link.site_path ? `› ${link.site_path} ` : ''
+                              }`
+                                .split('')
+                                .map((char, i) => {
+                                  const real_i =
+                                    link_first_char_index_in_search_title +
+                                    i +
+                                    (link_idx > 0 ? 1 : 0)
+                                  const is_highlighted = props.highlights!.find(
+                                    ([index, length]) =>
+                                      real_i >= index &&
+                                      real_i < index + length,
+                                  )
+                                  return is_highlighted ? (
+                                    <span className={styles.highlight} key={i}>
+                                      {char}
+                                    </span>
+                                  ) : (
+                                    <span key={i}>{char}</span>
+                                  )
+                                })
+                            : `${get_domain_from_url(link.url)
+                                .split('.')
+                                .map((segment) =>
+                                  segment.replace(/(.{5})/g, '$1​'),
+                                )
+                                .join('.')} ${
+                                link.site_path ? `› ${link.site_path}` : ''
+                              }`}
+                        </span>
+                        <span>
+                          {url_path_for_display({
+                            url: link.url,
+                            site_path: link.site_path,
+                          })}
+                        </span>
+                      </a>
+                    </div>
+                    <div className={styles.bookmark__links__item__actions}>
+                      {link.saves !== undefined && link.saves > 0 && (
                         <button
-                          className={cn(
-                            styles.bookmark__links__item__link__site,
-                            {
-                              [styles[
-                                'bookmark__links__item__link__site--highlighted'
-                              ]]: is_site_highlighted,
-                            },
-                          )}
+                          className={
+                            styles[
+                              'bookmark__links__item__actions__public-saves'
+                            ]
+                          }
                         >
-                          <LazyLoadImage
-                            alt={'Favicon'}
-                            width={16}
-                            height={16}
-                            src={`${props.favicon_host}/${get_domain_from_url(
-                              link.url,
-                            )}`}
-                          />
+                          {link.saves}
                         </button>
-                        <a
-                          className={cn(
-                            styles.bookmark__links__item__link__url,
-                            {
-                              [styles[
-                                'bookmark__links__item__link__url--dim-visited'
-                              ]]: props.should_dim_visited_links,
-                            },
-                            {
-                              [styles[
-                                'bookmark__links__item__link__url--via-wayback'
-                              ]]: link.via_wayback,
-                            },
-                          )}
-                          href={url}
-                          onClick={async (e) => {
-                            e.stopPropagation()
-                            e.preventDefault()
-                            props.on_link_click(url)
+                      )}
+                      <button
+                        className={styles.bookmark__links__item__actions__open}
+                        onClick={async (e) => {
+                          e.stopPropagation()
+                          props.on_new_tab_link_click(url)
+                        }}
+                      >
+                        <Icon variant="NEW_TAB" />
+                      </button>
+                      <div
+                        className={styles.bookmark__links__item__actions__menu}
+                      >
+                        <OutsideClickHandler
+                          disabled={link_url_menu_opened != link.url}
+                          onOutsideClick={() => {
+                            set_link_url_menu_opened(undefined)
                           }}
                         >
-                          <span>
-                            {highlights
-                              ? `${get_domain_from_url(link.url)} ${
-                                  link.site_path ? `› ${link.site_path} ` : ''
-                                }`
-                                  .split('')
-                                  .map((char, i) => {
-                                    const real_i =
-                                      link_first_char_index_in_search_title +
-                                      i +
-                                      (link_idx > 0 ? 1 : 0)
-                                    const is_highlighted = highlights!.find(
-                                      ([index, length]) =>
-                                        real_i >= index &&
-                                        real_i < index + length,
-                                    )
-                                    return is_highlighted ? (
-                                      <span
-                                        className={styles.highlight}
-                                        key={i}
-                                      >
-                                        {char}
-                                      </span>
-                                    ) : (
-                                      <span key={i}>{char}</span>
-                                    )
-                                  })
-                              : `${get_domain_from_url(link.url)
-                                  .split('.')
-                                  .map((segment) =>
-                                    segment.replace(/(.{5})/g, '$1​'),
-                                  )
-                                  .join('.')} ${
-                                  link.site_path ? `› ${link.site_path}` : ''
-                                }`}
-                          </span>
-                          <span>
-                            {url_path_for_display({
-                              url: link.url,
-                              site_path: link.site_path,
-                            })}
-                          </span>
-                        </a>
-                      </div>
-                      <div className={styles.bookmark__links__item__actions}>
-                        {link.saves !== undefined && link.saves > 0 && (
                           <button
                             className={
-                              styles[
-                                'bookmark__links__item__actions__public-saves'
-                              ]
+                              styles.bookmark__links__item__actions__menu__button
                             }
+                            onClick={async (e) => {
+                              e.stopPropagation()
+                              link_url_menu_opened != link.url
+                                ? set_link_url_menu_opened(link.url)
+                                : set_link_url_menu_opened(undefined)
+                            }}
                           >
-                            {link.saves}
+                            <Icon variant="THREE_DOTS" />
                           </button>
-                        )}
-                        <button
-                          className={
-                            styles.bookmark__links__item__actions__open
-                          }
-                          onClick={async (e) => {
-                            e.stopPropagation()
-                            props.on_new_tab_link_click(url)
-                          }}
-                        >
-                          <Icon variant="NEW_TAB" />
-                        </button>
-                        <div
-                          className={
-                            styles.bookmark__links__item__actions__menu
-                          }
-                        >
-                          <OutsideClickHandler
-                            disabled={link_url_menu_opened != link.url}
-                            onOutsideClick={() => {
+                          <div
+                            className={cn(styles.slot, {
+                              [styles['slot--hidden']]:
+                                link_url_menu_opened != link.url,
+                            })}
+                            onClick={() => {
                               set_link_url_menu_opened(undefined)
                             }}
                           >
-                            <button
-                              className={
-                                styles.bookmark__links__item__actions__menu__button
-                              }
-                              onClick={async (e) => {
-                                e.stopPropagation()
-                                link_url_menu_opened != link.url
-                                  ? set_link_url_menu_opened(link.url)
-                                  : set_link_url_menu_opened(undefined)
-                              }}
-                            >
-                              <Icon variant="THREE_DOTS" />
-                            </button>
-                            <div
-                              className={cn(styles.slot, {
-                                [styles['slot--hidden']]:
-                                  link_url_menu_opened != link.url,
-                              })}
-                              onClick={() => {
-                                set_link_url_menu_opened(undefined)
-                              }}
-                            >
-                              {link.menu_slot}
-                            </div>
-                          </OutsideClickHandler>
-                        </div>
+                            {link.menu_slot}
+                          </div>
+                        </OutsideClickHandler>
                       </div>
-                      {link.is_pinned && (
-                        <div className={styles.bookmark__links__item__pinned}>
-                          <Icon variant="PIN" />
-                        </div>
-                      )}
                     </div>
-                  )
-                })}
-              </div>
+                    {link.is_pinned && (
+                      <div className={styles.bookmark__links__item__pinned}>
+                        <Icon variant="PIN" />
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
-        ) : (
-          <></>
-        )}
+        </div>
       </div>
     )
   },
   (o, n) =>
-    o.library_updated_at_timestamp == n.library_updated_at_timestamp &&
+    o.updated_at == n.updated_at &&
     o.search_queried_at_timestamp == n.search_queried_at_timestamp &&
     o.is_search_result == n.is_search_result &&
     o.points == n.points &&
     o.points_given == n.points_given &&
     o.is_compact == n.is_compact &&
     o.density == n.density &&
-    o.render_height == n.render_height &&
-    o.updated_at == n.updated_at &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&
     o.dragged_tag?.id == n.dragged_tag?.id &&
