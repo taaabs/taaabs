@@ -5,6 +5,8 @@ import { clear_library_session_storage } from '@/utils/clear_library_session_sto
 import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 
+// The requirement is to load fresh results on page refresh.
+// We detach handler execution on link clicks by setting null to "window.onbeforeunload".
 export const ClearLibraryDataOnRefresh: React.FC = () => {
   const has_focus = use_has_focus()
   const search_params = useSearchParams()

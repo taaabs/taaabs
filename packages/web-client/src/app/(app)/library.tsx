@@ -121,6 +121,15 @@ const Library = (params: {
     ) {
       set_show_skeletons(false)
       set_library_updated_at_timestamp(Date.now())
+      if (search_hook.result) {
+        search_hook.set_highlights(search_hook.incoming_highlights)
+        search_hook.set_highlights_sites_variants(
+          search_hook.incoming_highlights_sites_variants,
+        )
+      } else if (search_hook.highlights && !search_hook.result) {
+        search_hook.set_highlights(undefined)
+        search_hook.set_highlights_sites_variants(undefined)
+      }
       if (is_pinned_stale) {
         set_pinned_updated_at(pinned_hook.fetched_at_timestamp)
         set_is_pinned_stale(false)
@@ -956,21 +965,24 @@ const Library = (params: {
         )
         toast.success(params.dictionary.library.pinned_links_has_beed_updated)
       }}
-      on_link_click={
-        !username
-          ? (bookmark_id) => {
-              const record_visit_params: RecordVisit_Params = {
-                bookmark_id,
-                visited_at: new Date().toISOString(),
-              }
-              localStorage.setItem(
-                browser_storage.local_storage.authorized_library
-                  .record_visit_params,
-                JSON.stringify(record_visit_params),
-              )
-            }
-          : undefined
-      }
+      on_link_click={async (item) => {
+        if (!username) {
+          const record_visit_params: RecordVisit_Params = {
+            bookmark_id: item.bookmark_id,
+            visited_at: new Date().toISOString(),
+          }
+          localStorage.setItem(
+            browser_storage.local_storage.authorized_library
+              .record_visit_params,
+            JSON.stringify(record_visit_params),
+          )
+        }
+        await search_hook.cache_data()
+        window.onbeforeunload = null
+        setTimeout(() => {
+          location.href = item.url
+        }, 0)
+      }}
       selected_tags={tag_view_options_hook.selected_tags}
       selected_starred={
         filter_view_options_hook.current_filter == Filter.STARRED ||
@@ -1085,7 +1097,7 @@ const Library = (params: {
           }),
         )
       }}
-      on_link_click={async () => {
+      on_link_click={async (url) => {
         if (!username) {
           const record_visit_params: RecordVisit_Params = {
             bookmark_id: bookmark.id,
@@ -1098,6 +1110,26 @@ const Library = (params: {
           )
         }
         await search_hook.cache_data()
+        window.onbeforeunload = null
+        // Timeout is there so updated by cache_data values of search_data_awaits_caching,
+        // archived_search_data_awaits_caching can be seen by "beforeunload" event handler.
+        setTimeout(() => {
+          location.href = url
+        }, 0)
+      }}
+      on_new_tab_link_click={(url) => {
+        if (!username) {
+          const record_visit_params: RecordVisit_Params = {
+            bookmark_id: bookmark.id,
+            visited_at: new Date().toISOString(),
+          }
+          localStorage.setItem(
+            browser_storage.local_storage.authorized_library
+              .record_visit_params,
+            JSON.stringify(record_visit_params),
+          )
+        }
+        window.open(url, '_blank')
       }}
       favicon_host={favicon_host}
       // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed).

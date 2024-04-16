@@ -110,7 +110,12 @@ export const use_search = () => {
   const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =
     useState<number | undefined>()
   const [result, set_result] = useState<Results<Result>>()
+  const [incoming_highlights, set_incoming_highlights] = useState<Highlights>()
   const [highlights, set_highlights] = useState<Highlights>()
+  const [
+    incoming_highlights_sites_variants,
+    set_incoming_highlights_sites_variants,
+  ] = useState<string[]>()
   const [highlights_sites_variants, set_highlights_sites_variants] =
     useState<string[]>()
   const [count, set_count] = useState<number>()
@@ -716,7 +721,7 @@ export const use_search = () => {
   }) => {
     const result = await get_result({ search_string: params.search_string })
 
-    set_highlights(
+    set_incoming_highlights(
       result.hits.reduce((a, v) => {
         const positions = Object.values((v as any).positions.text)
           .flat()
@@ -742,7 +747,7 @@ export const use_search = () => {
       }, {}),
     )
 
-    set_highlights_sites_variants(
+    set_incoming_highlights_sites_variants(
       get_sites_variants_from_search_string(params.search_string),
     )
 
@@ -1215,8 +1220,8 @@ export const use_search = () => {
     set_count(undefined)
     set_result(undefined)
     set_hints(undefined)
-    set_highlights(undefined)
-    set_highlights_sites_variants(undefined)
+    set_incoming_highlights(undefined)
+    set_incoming_highlights_sites_variants(undefined)
   }
 
   const delete_bookmark = async (params: {
@@ -1427,20 +1432,26 @@ export const use_search = () => {
 
     // Temporary handling of search string on fresh page load.
     if (window.location.hash && !result) {
-      const search_string = window.location.hash.slice(1)
+      const search_string = decodeURIComponent(window.location.hash).slice(1)
       set_search_string(search_string)
     }
-  }, [search_params])
 
-  useUpdateEffect(() => {
-    if (!has_focus) {
-      cache_data()
-    }
-  }, [has_focus])
-
-  useUpdateEffect(() => {
     cache_data()
   }, [search_params])
+
+  useUpdateEffect(() => {
+    if (!has_focus) cache_data()
+  }, [has_focus])
+  // Canceling dialog will trigger caching because has_focus will be shortly falsy, triggering effect above.
+  useEffect(() => {
+    const handle_beforeunload = (e: any) => {
+      if (search_data_awaits_caching || archived_search_data_awaits_caching) {
+        e.preventDefault()
+      }
+    }
+    addEventListener('beforeunload', handle_beforeunload)
+    return () => removeEventListener('beforeunload', handle_beforeunload)
+  }, [search_data_awaits_caching, archived_search_data_awaits_caching])
 
   return {
     is_search_focused,
@@ -1465,10 +1476,14 @@ export const use_search = () => {
     reset,
     count,
     set_count,
+    incoming_highlights,
     highlights,
+    set_highlights,
     remove_recent_hint,
     current_filter,
+    incoming_highlights_sites_variants,
     highlights_sites_variants,
+    set_highlights_sites_variants,
     clear_cached_data,
     hints_set_at_timestamp,
     queried_at_timestamp,

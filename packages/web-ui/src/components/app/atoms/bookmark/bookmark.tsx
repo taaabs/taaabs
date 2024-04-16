@@ -90,7 +90,8 @@ export namespace Bookmark {
     }[]
     render_height?: number
     set_render_height: (height: number) => void
-    on_link_click?: () => void
+    on_link_click: (url: string) => Promise<void>
+    on_new_tab_link_click: (url: string) => void
     favicon_host: string
     menu_slot: React.ReactNode
     highlights?: Highlights
@@ -878,11 +879,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           onClick={async (e) => {
                             e.stopPropagation()
                             e.preventDefault()
-                            if (props.on_link_click) {
-                              props.on_link_click()
-                            }
-                            window.onbeforeunload = null
-                            location.href = url
+                            props.on_link_click(url)
                           }}
                         >
                           <span>
@@ -947,10 +944,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           }
                           onClick={async (e) => {
                             e.stopPropagation()
-                            window.open(url, '_blank')
-                            if (props.on_link_click) {
-                              props.on_link_click()
-                            }
+                            props.on_new_tab_link_click(url)
                           }}
                         >
                           <Icon variant="NEW_TAB" />
@@ -1022,7 +1016,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     o.updated_at == n.updated_at &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&
-    o.dragged_tag?.id == n.dragged_tag?.id,
+    o.dragged_tag?.id == n.dragged_tag?.id &&
+    o.highlights == n.highlights,
 )
 
 function url_path_for_display(params: {
