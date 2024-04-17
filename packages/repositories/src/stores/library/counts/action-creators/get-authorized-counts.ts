@@ -13,17 +13,17 @@ export const get_authorized_counts = (params: {
   return async (dispatch: LibraryDispatch) => {
     const data_source = new Counts_DataSourceImpl(params.ky)
     const repository = new Counts_RepositoryImpl(data_source)
-    const get_months_use_case = new GetCountsOnAuthorizedUser_UseCase(
-      repository,
-    )
+    const get_counts_on_authorized_user_use_case =
+      new GetCountsOnAuthorizedUser_UseCase(repository)
 
     dispatch(counts_actions.set_is_fetching(true))
 
-    const result = await get_months_use_case.invoke(params.request_params)
+    const result = await get_counts_on_authorized_user_use_case.invoke(
+      params.request_params,
+    )
 
     dispatch(counts_actions.set_data(result))
 
-    dispatch(counts_actions.process_tags())
     dispatch(counts_actions.set_is_fetching(false))
     dispatch(counts_actions.set_should_refetch(false))
   }

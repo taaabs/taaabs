@@ -174,6 +174,15 @@ const Library = (params: {
     }
   }, [pinned_hook.is_fetching])
 
+  useUpdateEffect(() => {
+    if (
+      !bookmarks_hook.is_fetching_first_bookmarks &&
+      !counts_hook.is_fetching
+    ) {
+      dispatch(counts_actions.process_tags())
+    }
+  }, [bookmarks_hook.is_fetching_first_bookmarks, counts_hook.is_fetching])
+
   // Close "Create bookmark" modal, refresh counts and tag hierarchies.
   useUpdateEffect(() => {
     if (bookmarks_hook.is_fetching_first_bookmarks) {
@@ -1007,7 +1016,7 @@ const Library = (params: {
   )
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
     <BookmarkWrapper
-      key={`${i}-${first_bookmarks_fetched_at_timestamp}`}
+      key={`${bookmark.id}-${i}-${first_bookmarks_fetched_at_timestamp}`}
       index={i}
       created_at={new Date(bookmark.created_at)}
       search_queried_at_timestamp={search_hook.queried_at_timestamp}
