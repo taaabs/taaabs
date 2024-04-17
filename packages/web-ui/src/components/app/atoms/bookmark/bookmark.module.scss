@@ -37,13 +37,6 @@
       }
     }
   }
-  &--search-result {
-    background: linear-gradient(
-      172deg,
-      rgba(239, 246, 255, 1) 0%,
-      rgba(255, 255, 255, 1) 30%
-    );
-  }
 }
 .bookmark {
   display: flex;
@@ -52,6 +45,14 @@
     display: flex;
     flex-direction: column;
     padding: var(--distance-10px) 0;
+    &--search-result {
+      background: radial-gradient(
+          circle at 10%,
+          var(--blue50) 0%,
+          transparent 10%
+        ),
+        radial-gradient(circle at 25% 80%, var(--blue50) 0%, transparent 8%);
+    }
     &__top {
       width: 100%;
       display: flex;

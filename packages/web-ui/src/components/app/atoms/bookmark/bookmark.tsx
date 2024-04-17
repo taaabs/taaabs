@@ -523,7 +523,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         <div
           className={cn(styles.container, {
             [styles['container--clickable']]: props.density == 'compact',
-            [styles['container--search-result']]: props.is_search_result,
           })}
           role="button"
           onClick={() => {
@@ -553,7 +552,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         >
           <div className={styles.bookmark}>
             {contextMenu}
-            <div className={styles.bookmark__main}>
+            <div
+              className={cn(styles.bookmark__main, {
+                [styles['bookmark__main--search-result']]:
+                  props.is_search_result,
+              })}
+            >
               <div
                 className={cn(styles.bookmark__main__top, {
                   [styles['bookmark__main__top--compact']]: props.is_compact,

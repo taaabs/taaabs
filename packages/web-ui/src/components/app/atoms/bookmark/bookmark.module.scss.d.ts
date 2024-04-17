@@ -4,9 +4,9 @@ declare const styles: {
   readonly 'wrapper--padding-override': string
   readonly container: string
   readonly 'container--clickable': string
-  readonly 'container--search-result': string
   readonly bookmark: string
   readonly bookmark__main: string
+  readonly 'bookmark__main--search-result': string
   readonly bookmark__main__top: string
   readonly 'bookmark__main__top--compact': string
   readonly bookmark__main__top__info: string

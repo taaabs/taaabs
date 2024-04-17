@@ -30,7 +30,6 @@ export const Primary = () => (
         tags={[]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -52,7 +51,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -60,9 +58,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -81,7 +82,6 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -92,9 +92,9 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
+        is_search_result={true}
         highlights={[
           [1, 2],
           [12, 2],
@@ -106,9 +106,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -122,7 +125,6 @@ export const Primary = () => (
         tags={[]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -133,7 +135,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -141,9 +142,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <Bookmark
         bookmark_id={1}
@@ -155,7 +159,6 @@ export const Primary = () => (
         tags={[]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -166,7 +169,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -174,9 +176,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -194,7 +199,6 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -205,7 +209,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -213,9 +216,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
       Compact:
@@ -237,7 +243,6 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -248,7 +253,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -256,9 +260,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -275,7 +282,6 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -286,7 +292,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -294,9 +299,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -320,7 +328,6 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -331,7 +338,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -339,9 +345,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -358,7 +367,6 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -369,7 +377,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -377,9 +384,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -396,7 +406,6 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -407,7 +416,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -415,9 +423,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -434,7 +445,6 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -445,7 +455,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -453,9 +462,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
       <Bookmark
@@ -471,7 +483,6 @@ export const Primary = () => (
         ]}
         date={new Date('2022-02-20')}
         on_click={() => {}}
-        on_menu_click={async () => {}}
         on_selected_tag_click={() => {}}
         on_tag_click={() => {}}
         links={[
@@ -482,7 +493,6 @@ export const Primary = () => (
             menu_slot: <>menu</>,
           },
         ]}
-        set_render_height={() => {}}
         favicon_host="http://localhost:4000/v1/favicons"
         menu_slot={<>menu</>}
         should_dim_visited_links={false}
@@ -490,9 +500,12 @@ export const Primary = () => (
         on_tag_drag_start={() => {}}
         on_tag_delete_click={() => {}}
         on_give_point_click={() => {}}
-        pinned_links_count={0}
         index={0}
         library_url=""
+        created_at={new Date()}
+        on_get_points_given_click={() => {}}
+        on_link_click={async () => {}}
+        on_new_tab_link_click={() => {}}
       />
       <StorybookSpacer />
     </div>
