@@ -4,8 +4,25 @@
 .container {
   background: var(--header-background);
   border-bottom: var(--border-primary);
+  background: radial-gradient(
+    circle at 40% 70%,
+    var(--blue50) 0%,
+    var(--white) 50%
+  );
   @include at768 {
     border-width: var(--border-width-1-5px);
+    background: radial-gradient(
+    circle at 30% 70%,
+    var(--blue50) 0%,
+    var(--white) 50%
+  );
+  }
+  @include at992 {
+    background: radial-gradient(
+      circle at 50% 70%,
+      var(--blue50) 0%,
+      var(--white) 50%
+    );
   }
 }
 .content {
@@ -59,7 +76,7 @@
     flex-direction: column;
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-    font-size: 32px;
+    font-size: 30px;
     @include to992 {
       align-items: flex-start;
     }
@@ -145,7 +162,7 @@
   &__subheading {
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
-    font-size: var(--font-size-18px);
+    font-size: var(--font-size-17px);
     @include at768 {
       font-size: var(--font-size-22px);
     }
@@ -174,7 +191,6 @@
       top: 50%;
       pointer-events: none;
       transform: translateX(var(--distance-13px)) translateY(-50%);
-      font-size: var(--font-size-16px);
       @include at768 {
         transform: translateX(var(--distance-16px)) translateY(-50%);
         font-size: var(--font-size-17px);
@@ -185,9 +201,10 @@
       }
     }
     > input {
+      background-color: var(--white);
       border: var(--border-secondary);
       border-radius: var(--border-radius-12px);
-      padding: 0 var(--distance-18px) 0 107px;
+      padding: 0 var(--distance-18px) 0 102px;
       @include transition-150ms(border-color);
       height: 40px;
       width: 100%;
@@ -232,13 +249,12 @@
     display: flex;
     align-items: flex-start;
     gap: var(--distance-12px);
-    font-size: var(--font-size-16px);
-      @include at768 {
-        font-size: var(--font-size-18px);
-      }
-      @include at1380 {
-        font-size: var(--font-size-20px);
-      }
+    @include at768 {
+      font-size: var(--font-size-18px);
+    }
+    @include at1380 {
+      font-size: var(--font-size-20px);
+    }
     > svg {
       flex-shrink: 0;
       width: var(--icon-dimension-18px);

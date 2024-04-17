@@ -3,9 +3,10 @@ declare const styles: {
   readonly 'wrapper--compact': string
   readonly container: string
   readonly 'container--clickable': string
+  readonly 'container--search-result': string
+  readonly 'container--search-result-clickable': string
   readonly bookmark: string
   readonly bookmark__main: string
-  readonly 'bookmark__main--search-result': string
   readonly bookmark__main__top: string
   readonly 'bookmark__main__top--compact': string
   readonly bookmark__main__top__info: string

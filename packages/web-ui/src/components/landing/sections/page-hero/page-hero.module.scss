@@ -15,6 +15,11 @@
   text-align: center;
   gap: 10px;
   padding: 20px 0 50px 0;
+  background: radial-gradient(
+    circle at 50% 80%,
+    var(--blue50) 0%,
+    transparent 50%
+  );
   @include at768 {
     gap: 15px;
     padding: 30px 0 80px 0;

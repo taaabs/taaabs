@@ -519,9 +519,19 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         })}
       >
         <div
-          className={cn(styles.container, {
-            [styles['container--clickable']]: props.density == 'compact',
-          })}
+          className={cn(
+            styles.container,
+            {
+              [styles['container--clickable']]: props.density == 'compact',
+            },
+            {
+              [styles['container--search-result']]: props.is_search_result,
+            },
+            {
+              [styles['container--search-result-clickable']]:
+                props.is_search_result && props.density == 'compact',
+            },
+          )}
           role="button"
           onClick={() => {
             if (!is_menu_open && !link_url_menu_opened) props.on_click()
@@ -550,12 +560,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         >
           <div className={styles.bookmark}>
             {contextMenu}
-            <div
-              className={cn(styles.bookmark__main, {
-                [styles['bookmark__main--search-result']]:
-                  props.is_search_result,
-              })}
-            >
+            <div className={styles.bookmark__main}>
               <div
                 className={cn(styles.bookmark__main__top, {
                   [styles['bookmark__main__top--compact']]: props.is_compact,

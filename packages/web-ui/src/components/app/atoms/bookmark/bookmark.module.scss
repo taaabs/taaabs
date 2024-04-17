@@ -30,10 +30,17 @@
     }
   }
   &--clickable {
-    @include at992 {
-      @include hover {
-        border-color: var(--border-color-hover);
-      }
+    @include hover {
+      border-color: var(--border-color-hover);
+    }
+  }
+  &--search-result {
+    border-style: dashed;
+    border-color: var(--border-color-primary);
+  }
+  &--search-result-clickable {
+    @include hover {
+      border-color: var(--neutral300);
     }
   }
 }
@@ -44,14 +51,6 @@
     display: flex;
     flex-direction: column;
     padding: var(--distance-10px) 0;
-    &--search-result {
-      background: radial-gradient(
-          circle at 10%,
-          var(--blue50) 0%,
-          transparent 10%
-        ),
-        radial-gradient(circle at 25% 80%, var(--blue50) 0%, transparent 8%);
-    }
     &__top {
       width: 100%;
       display: flex;

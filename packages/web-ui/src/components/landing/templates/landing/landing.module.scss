@@ -6,7 +6,11 @@
 }
 .header {
   width: 100%;
-  background-color: var(--white);
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--header-transparent-background);
+  backdrop-filter: var(--backdrop-filter);
   &__inner {
     display: flex;
     justify-content: space-between;
