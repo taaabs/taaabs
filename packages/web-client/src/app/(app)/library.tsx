@@ -60,7 +60,7 @@ import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { search_params_keys } from '@/constants/search-params-keys'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { BookmarkWrapper } from '@/components/bookmark-wrapper'
-import { use_popstate_count } from '@shared/hooks/pop-state-count'
+import { use_popstate_count } from '@/hooks/misc/pop-state-count'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -1023,7 +1023,7 @@ const Library = (params: {
   )
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
     <BookmarkWrapper
-      key={`${bookmark.id}-${i}-${first_bookmarks_fetched_at_timestamp}`}
+      key={`${bookmark.id}-${i}-${library_updated_at_timestamp}`}
       index={i}
       created_at={new Date(bookmark.created_at)}
       search_queried_at_timestamp={search_hook.queried_at_timestamp}

@@ -109,6 +109,13 @@ export const bookmarks_slice = createSlice({
       state.density = action.payload
 
       if (state.bookmarks) {
+        if (
+          state.has_more_bookmarks == false &&
+          state.bookmarks.length > system_values.library.bookmarks.per_page
+        ) {
+          state.has_more_bookmarks = true
+        }
+
         const bookmarks = state.bookmarks
           .slice(0, system_values.library.bookmarks.per_page)
           .map((bookmark) => ({
