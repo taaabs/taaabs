@@ -7,12 +7,11 @@
     padding-bottom: var(--distance-16px);
   }
   &--compact {
-    padding-bottom: var(--distance-8px);
-  }
-  &--padding-override {
-    padding: var(--distance-4px) 0;
+    @include to992 {
+      padding-bottom: var(--distance-4px);
+    }
     @include at992 {
-      padding: var(--distance-8px) 0 var(--distance-16px) 0;
+      padding-bottom: var(--distance-8px);
     }
   }
 }

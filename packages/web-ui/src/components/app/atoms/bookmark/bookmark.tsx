@@ -516,8 +516,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       <div
         className={cn(styles.wrapper, {
           [styles['wrapper--compact']]: props.density == 'compact',
-          [styles['wrapper--padding-override']]:
-            props.density == 'compact' && !props.is_compact,
         })}
       >
         <div
