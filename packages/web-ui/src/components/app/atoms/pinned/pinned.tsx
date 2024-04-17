@@ -131,9 +131,10 @@ export const Pinned: React.FC<Pinned.Props> = memo(
               <div
                 className={cn(styles.item__title, {
                   [styles['item__title--unread']]: item.is_unread,
+                  [styles['item__title--via-wayback']]: item.via_wayback,
                 })}
               >
-                <span>{item.title}</span>
+                {item.title}
               </div>
               {item.stars && item.title && (
                 <div className={styles['item__stars']}>

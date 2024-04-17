@@ -40,14 +40,15 @@
     display: flex;
     align-items: flex-start;
     padding: var(--distance-4px) var(--distance-2px) var(--distance-4px) 0;
-    & > span {
-      font-family: var(--font-family-inter-tight);
-      @include hover {
-        @include text-decoration-underlinie-thin;
-      }
+    @include hover {
+      @include text-decoration-underlinie-thin;
     }
-    &--unread > span {
+    font-family: var(--font-family-inter-tight);
+    &--unread {
       font-weight: var(--font-weight-inter-tight-medium);
+    }
+    &--via-wayback {
+      font-style: italic;
     }
     &__unread {
       width: var(--distance-6px);

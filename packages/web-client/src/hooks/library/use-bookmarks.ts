@@ -261,9 +261,9 @@ export const use_bookmarks = () => {
       }
       dispatch(bookmarks_actions.set_incoming_bookmarks(JSON.parse(bookmarks)))
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
-      dispatch(
-        bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
-      )
+      // dispatch(
+      //   bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
+      // )
       const has_more_bookmarks = sessionStorage.getItem(
         browser_storage.session_storage.library.has_more_bookmarks({
           username: username as string,

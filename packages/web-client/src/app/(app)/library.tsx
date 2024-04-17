@@ -60,6 +60,7 @@ import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { search_params_keys } from '@/constants/search-params-keys'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { BookmarkWrapper } from '@/components/bookmark-wrapper'
+import { use_popstate_count } from '@shared/hooks/pop-state-count'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -71,6 +72,7 @@ const Library = (params: {
   search_hook: ReturnType<typeof use_search>
 }) => {
   use_scroll_restore()
+  const popstate_count = use_popstate_count()
   const is_hydrated = use_is_hydrated()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
@@ -858,7 +860,7 @@ const Library = (params: {
       slot_custom_range={
         !show_skeletons ? (
           <CustomRange
-            key={library_updated_at_timestamp}
+            library_updated_at_timestamp={library_updated_at_timestamp}
             counts={counts_hook.months || undefined}
             on_yyyymm_change={date_view_options_hook.set_gte_lte_search_params}
             clear_date_range={
@@ -899,7 +901,7 @@ const Library = (params: {
           {!show_skeletons ? (
             <>
               <UiAppAtom_SelectedTags
-                key={`selected-tags-${library_updated_at_timestamp}`}
+                key={`selected-tags-${library_updated_at_timestamp}-${popstate_count}`}
                 selected_tags={tag_view_options_hook.selected_tags
                   .filter((id) =>
                     !counts_hook.tags ? false : counts_hook.tags[id],
@@ -915,7 +917,7 @@ const Library = (params: {
                 }
               />
               <UiAppAtom_Tags
-                key={`tags-${library_updated_at_timestamp}`}
+                key={`tags-${library_updated_at_timestamp}-${popstate_count}`}
                 library_url={username ? `/${username}` : '/bookmarks'}
                 tags={
                   counts_hook.tags
@@ -949,7 +951,9 @@ const Library = (params: {
   const slot_pinned = (
     <UiAppAtom_Pinned
       key={pinned_updated_at}
-      library_updated_at_timestamp={library_updated_at_timestamp}
+      library_updated_at_timestamp={
+        (library_updated_at_timestamp || 0) + popstate_count
+      }
       favicon_host={favicon_host}
       header_title={params.dictionary.library.pinned}
       items={
@@ -990,8 +994,11 @@ const Library = (params: {
         }
         await search_hook.cache_data()
         window.onbeforeunload = null
+        const url = item.via_wayback
+          ? url_to_wayback({ date: item.created_at, url: item.url })
+          : item.url
         setTimeout(() => {
-          location.href = item.url
+          location.href = url
         }, 0)
       }}
       selected_tags={tag_view_options_hook.selected_tags}

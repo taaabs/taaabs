@@ -16,6 +16,7 @@ type Counts = {
 
 export namespace CustomRange {
   export type Props = {
+    library_updated_at_timestamp?: number
     counts?: Counts
     current_gte?: number
     current_lte?: number
@@ -248,24 +249,43 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     }, [random_number])
 
     useEffect(() => {
-      if (!props.counts) {
+      if (!props.counts || !props.current_gte || !props.current_lte) {
+        set_start_index(undefined)
+        set_end_index(undefined)
+        set_random_number(Math.random())
+
         return
       }
 
-      if (props.current_gte && props.current_lte) {
-        set_start_and_end_index({
-          counts: props.counts,
-          current_gte: props.current_gte,
-          current_lte: props.current_lte,
-        })
-      }
+      set_start_and_end_index({
+        counts: props.counts,
+        current_gte: props.current_gte,
+        current_lte: props.current_lte,
+      })
+    }, [
+      props.current_gte,
+      props.current_lte,
+      props.counts,
+      props.selected_tags,
+    ])
+
+    useEffect(() => {
+      if (
+        !props.counts ||
+        bookmark_count != null ||
+        props.current_gte ||
+        props.current_lte ||
+        dragged_start_index !== undefined ||
+        dragged_end_index !== undefined
+      )
+        return
 
       calculate_counts({
         counts: props.counts,
         start_index: 0,
         end_index: props.counts.length - 1,
       })
-    }, [])
+    }, [props.counts])
 
     return (
       <div className={styles['custom-range']} ref={custom_range}>
@@ -437,7 +457,11 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
           bookmark_count &&
           bookmark_count > 0 && (
             <div className={styles['custom-range__recharts']}>
-              <ResponsiveContainer width={'100%'} height={135}>
+              <ResponsiveContainer
+                width={'100%'}
+                height={135}
+                key={`${props.current_gte}${props.current_lte}`}
+              >
                 <AreaChart margin={{ left: 0, top: 5 }} data={counts_to_render}>
                   <defs>
                     <linearGradient
@@ -533,7 +557,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       </div>
     )
   },
-  () => true,
+  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
 )
 
 function yyyymm_to_display(yyyymm: number) {
