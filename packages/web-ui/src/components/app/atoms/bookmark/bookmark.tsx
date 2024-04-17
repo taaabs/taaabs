@@ -514,9 +514,16 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
     return (
       <div
-        className={cn(styles.wrapper, {
-          [styles['wrapper--compact']]: props.density == 'compact',
-        })}
+        className={cn(
+          styles.wrapper,
+          {
+            [styles['wrapper--compact']]: props.density == 'compact',
+          },
+          {
+            [styles['wrapper--compact-open']]:
+              props.density == 'compact' && !props.is_compact,
+          },
+        )}
       >
         <div
           className={cn(
@@ -524,6 +531,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             {
               [styles['container--clickable']]: props.density == 'compact',
             },
+            {
+              [styles['container--compact']]: props.density == 'compact',
+            },
+
             {
               [styles['container--search-result']]: props.is_search_result,
             },

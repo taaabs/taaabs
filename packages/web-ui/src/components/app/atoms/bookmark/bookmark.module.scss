@@ -8,9 +8,14 @@
   }
   &--compact {
     @include to992 {
-      padding-bottom: var(--distance-4px);
+      padding-bottom: 0;
     }
     @include at992 {
+      padding-bottom: var(--distance-8px);
+    }
+  }
+  &--compact-open {
+    @include to992 {
       padding-bottom: var(--distance-8px);
     }
   }
@@ -18,15 +23,23 @@
 .container {
   background: var(--white);
   border: var(--border-secondary);
-  @include transition-150ms(border-color);
   @include to992 {
     border-left: 0;
     border-right: 0;
+    border-top-color: var(--border-color-primary);
   }
   @include at992 {
     border-radius: var(--border-radius-12px);
+    border: var(--border-secondary);
+    @include transition-150ms(border-color);
     @include dark {
       background: blue;
+    }
+  }
+  &--compact {
+    @include to992 {
+      box-shadow: 0 1px 0 0 var(--border-color-secondary);
+      border-bottom: 0;
     }
   }
   &--clickable {
