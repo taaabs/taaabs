@@ -9,6 +9,9 @@
   border-bottom: var(--border-primary);
   background: var(--header-transparent-background);
   backdrop-filter: var(--backdrop-filter);
+  &--scrolled {
+    transform: translateY(calc(var(--app-bar-height) * -1));
+  }
 }
 .icon {
   display: flex;

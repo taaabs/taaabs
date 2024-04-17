@@ -93,6 +93,7 @@ const Library = (params: {
   const [is_sort_by_dropdown_visible, toggle_sort_by_dropdown] =
     useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
+  // START - UI synchronization.
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
     useState<number>()
   const [is_pinned_stale, set_is_pinned_stale] = useState<boolean>()
@@ -101,6 +102,9 @@ const Library = (params: {
     first_bookmarks_fetched_at_timestamp,
     set_first_bookmarks_fetched_at_timestamp,
   ] = useState<number>()
+  const [is_fetching_first_bookmarks, set_is_fetching_first_bookmarks] =
+    useState<boolean>()
+  // END - UI synchronization.
 
   const ky_instance = ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -128,6 +132,10 @@ const Library = (params: {
       set_first_bookmarks_fetched_at_timestamp(
         bookmarks_hook.first_bookmarks_fetched_at_timestamp,
       )
+      if (is_fetching_first_bookmarks) {
+        window.scrollTo(0, 0)
+      }
+      set_is_fetching_first_bookmarks(false)
       set_show_skeletons(false)
       if (!show_skeletons) {
         set_library_updated_at_timestamp(Date.now())
@@ -168,7 +176,10 @@ const Library = (params: {
 
   // Close "Create bookmark" modal, refresh counts and tag hierarchies.
   useUpdateEffect(() => {
-    if (bookmarks_hook.is_fetching_first_bookmarks) return
+    if (bookmarks_hook.is_fetching_first_bookmarks) {
+      set_is_fetching_first_bookmarks(true)
+      return
+    }
     const newly_created_bookmark_updated_at_timestamp = search_params.get(
       search_params_keys.newly_created_bookmark_updated_at_timestamp,
     )
@@ -288,12 +299,6 @@ const Library = (params: {
     date_view_options_hook.current_lte,
     filter_view_options_hook.current_filter,
   ])
-
-  useUpdateEffect(() => {
-    if (!bookmarks_hook.is_fetching_first_bookmarks) {
-      window.scrollTo(0, 0)
-    }
-  }, [bookmarks_hook.is_fetching_first_bookmarks])
 
   const is_archived_filter =
     filter_view_options_hook.current_filter == Filter.ARCHIVED ||
@@ -877,8 +882,7 @@ const Library = (params: {
         <div
           style={{
             opacity:
-              bookmarks_hook.is_fetching_first_bookmarks &&
-              !search_hook.search_string
+              is_fetching_first_bookmarks && !search_hook.search_string
                 ? 'var(--dimmed-opacity)'
                 : undefined,
           }}
@@ -2471,13 +2475,11 @@ const Library = (params: {
         slot_tag_hierarchies={slot_tag_hierarchies}
         slot_aside={slot_aside}
         are_bookmarks_dimmed={
-          bookmarks_hook.is_fetching_first_bookmarks ||
-          bookmarks_hook.is_upserting ||
-          false
+          is_fetching_first_bookmarks || bookmarks_hook.is_upserting || false
         }
         is_interactive={
           !(
-            bookmarks_hook.is_fetching_first_bookmarks ||
+            is_fetching_first_bookmarks ||
             bookmarks_hook.is_fetching_more_bookmarks ||
             search_hook.is_initializing
           )
@@ -2488,7 +2490,7 @@ const Library = (params: {
             <div
               style={{
                 display:
-                  !bookmarks_hook.first_bookmarks_fetched_at_timestamp ||
+                  !first_bookmarks_fetched_at_timestamp ||
                   bookmarks_hook.showing_bookmarks_fetched_by_ids
                     ? 'none'
                     : undefined,

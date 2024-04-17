@@ -100,12 +100,14 @@
   }
   &__recharts {
     width: 100%;
+    pointer-events: none; // Enables swiping over chart.
     svg {
       transform: translateY(54px);
     }
     &__brush {
       transform: translateY(-47px) scale(0.9);
       transform-origin: center;
+      pointer-events: all;
       @include hover {
         > g > rect {
           stroke: var(--neutral400);

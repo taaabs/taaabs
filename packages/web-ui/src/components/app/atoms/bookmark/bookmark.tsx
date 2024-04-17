@@ -84,8 +84,6 @@ export namespace Bookmark {
       is_pinned?: boolean
       via_wayback?: boolean
     }[]
-    render_height?: number
-    set_render_height: (height: number) => void
     on_link_click: (url: string) => Promise<void>
     on_new_tab_link_click: (url: string) => void
     favicon_host: string
@@ -518,7 +516,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       <div
         className={cn(styles.wrapper, {
           [styles['wrapper--compact']]: props.density == 'compact',
-          [styles['wrapper--margin-override']]: !props.is_compact,
+          [styles['wrapper--padding-override']]:
+            props.density == 'compact' && !props.is_compact,
         })}
       >
         <div

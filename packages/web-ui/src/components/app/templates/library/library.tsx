@@ -1,5 +1,4 @@
 import useWindowResize from 'beautiful-react-hooks/useWindowResize'
-import useSwipe from 'beautiful-react-hooks/useSwipe'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import cn from 'classnames'
@@ -67,10 +66,6 @@ export const Library: React.FC<Library.Props> = (props) => {
   useEffect(() => {
     set_slidable_width(get_slidable_width())
   }, [])
-
-  const swipe_state_main = useSwipe(main, {
-    preventDefault: false,
-  })
 
   const swipeable_handlers = useSwipeable({
     onSwipeStart: ({ dir, event }) => {
@@ -161,21 +156,6 @@ export const Library: React.FC<Library.Props> = (props) => {
   const [is_right_side_moving, set_is_right_side_moving] = useState(false)
   const [is_left_side_open, set_is_left_side_open] = useState(false)
   const [is_right_side_open, set_is_right_side_open] = useState(false)
-
-  useUpdateEffect(() => {
-    if (is_left_side_moving || is_right_side_moving) return
-
-    if (
-      swipe_state_main.direction == 'down' ||
-      swipe_state_main.direction == 'up'
-    ) {
-      if (is_left_side_open) {
-        toggle_left_side()
-      } else if (is_right_side_open) {
-        toggle_right_side()
-      }
-    }
-  }, [swipe_state_main])
 
   const toggle_right_side = () => {
     document.body.style.overflow = 'hidden'

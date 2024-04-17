@@ -1,12 +1,11 @@
 import useWindowScroll from 'beautiful-react-hooks/useWindowScroll'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 export const use_is_scrolled = () => {
   const on_window_scroll = useWindowScroll()
   const [is_scrolled, set_is_scrolled] = useState(false)
-  const [first_scroll_y_down_direction, set_first_scroll_y_down_direction] =
-    useState(0)
-  const [previous_scroll_y, set_previous_scroll_y] = useState(0)
+  const first_scroll_y_down_direction = useRef(0)
+  const previous_scroll_y = useRef(0)
 
   on_window_scroll(() => {
     const scroll_y = window.scrollY
@@ -16,15 +15,19 @@ export const use_is_scrolled = () => {
       return
     }
 
-    set_previous_scroll_y(scroll_y)
-    if (scroll_y > previous_scroll_y) {
-      if (scroll_y - first_scroll_y_down_direction > window.innerHeight / 2) {
+    if (scroll_y > previous_scroll_y.current) {
+      if (
+        scroll_y - first_scroll_y_down_direction.current >
+        window.innerHeight / 2
+      ) {
         set_is_scrolled(true)
       }
     } else {
-      set_first_scroll_y_down_direction(scroll_y)
+      first_scroll_y_down_direction.current = scroll_y
       set_is_scrolled(false)
     }
+
+    previous_scroll_y.current = scroll_y
   })
 
   return is_scrolled

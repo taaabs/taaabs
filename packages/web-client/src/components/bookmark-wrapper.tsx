@@ -4,23 +4,25 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import { useRef, useState } from 'react'
 
-export const BookmarkWrapper: React.FC<Bookmark.Props> = (props) => {
+namespace BookmarkWrapper {
+  export type Props = Bookmark.Props & {
+    render_height?: number
+    set_render_height: (height: number) => void
+  }
+}
+
+export const BookmarkWrapper: React.FC<BookmarkWrapper.Props> = (props) => {
   const ref = useRef<HTMLDivElement>(null)
   const is_visible = useViewportSpy(ref)
-  const [was_seen, set_was_seen] = useState<boolean>()
   const [dragged_tag, set_dragged_tag] =
     useState<Bookmark.Props['dragged_tag']>()
 
   useUpdateEffect(() => {
-    if (is_visible) {
-      set_was_seen(true)
+    if (!props.render_height) {
+      const height = ref.current!.getBoundingClientRect().height
+      props.set_render_height(height)
     }
   }, [is_visible])
-
-  useUpdateEffect(() => {
-    const height = ref.current!.getBoundingClientRect().height
-    props.set_render_height(height)
-  }, [was_seen])
 
   return (
     <div
@@ -48,7 +50,7 @@ export const BookmarkWrapper: React.FC<Bookmark.Props> = (props) => {
         set_dragged_tag(undefined)
       }}
     >
-      {is_visible || !props.render_height ? (
+      {is_visible === undefined || is_visible || !props.render_height ? (
         <Bookmark {...props} dragged_tag={dragged_tag} />
       ) : (
         <></>
