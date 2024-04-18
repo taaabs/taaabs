@@ -63,6 +63,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                 if (!context_menu_of_item_id) return
                 clear_mouseover_ids()
                 delete_item({ item_id: context_menu_of_item_id })
+                set_selected_tag_ids([])
               },
               other_icon: <Icon variant="DELETE" />,
             },
@@ -352,7 +353,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           // deeper in the tree if there is a problem higher up.
           // confirmChange={}
         />
-        {props.is_draggable && (
+        {props.is_draggable && props.dragged_tag && (
           <div
             className={cn(
               styles['drop-zone'],

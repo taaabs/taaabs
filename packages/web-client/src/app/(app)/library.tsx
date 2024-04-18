@@ -3,7 +3,7 @@ import { use_library_dispatch } from '@/stores/library'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_filter_view_options } from '@/hooks/library/use-filter-view-options'
@@ -246,16 +246,15 @@ const Library = (params: {
   // Clear cache when user selects visited at sort_by option or popularity order.
   // Filter is in deps because we want to clear cache when setting to archive.
   // NOTE: Could be reworked to avoid unnecesary invalidations.
-  const [search_cache_to_be_cleared, set_search_cache_to_be_cleared] =
-    useState(false)
+  const search_cache_to_be_cleared = useRef(false)
   useUpdateEffect(() => {
     if (
       sort_by_view_options_hook.current_sort_by == SortBy.VISITED_AT ||
       sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
     ) {
-      set_search_cache_to_be_cleared(true)
+      search_cache_to_be_cleared.current = true
     } else {
-      set_search_cache_to_be_cleared(false)
+      search_cache_to_be_cleared.current = false
     }
   }, [
     filter_view_options_hook.current_filter,
@@ -384,16 +383,17 @@ const Library = (params: {
               }),
           )
 
-          if (search_cache_to_be_cleared) {
-            await search_hook.clear_cached_data({
+          if (search_cache_to_be_cleared.current) {
+            await search_hook.init({
+              is_archived: is_archived_filter,
+              force_reinitialization: true,
+            })
+            search_cache_to_be_cleared.current = false
+          } else {
+            await search_hook.init({
               is_archived: is_archived_filter,
             })
-            set_search_cache_to_be_cleared(false)
           }
-
-          await search_hook.init({
-            is_archived: is_archived_filter,
-          })
 
           search_hook.get_hints()
         }

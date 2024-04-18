@@ -235,6 +235,7 @@ export const use_search = () => {
 
   const init = async (params: {
     is_archived: boolean
+    force_reinitialization?: boolean
   }): Promise<{
     db: Orama<typeof schema>
     bookmarks_just_tags: BookmarkTags[]
@@ -247,52 +248,56 @@ export const use_search = () => {
       },
     })
 
-    const is_cache_stale = await get_is_db_stale({
-      is_archived: params.is_archived,
-      ky: ky_instance,
-    })
+    if (params.force_reinitialization) {
+      await clear_cached_data({ is_archived: params.is_archived })
+    } else {
+      const is_cache_stale = await get_is_db_stale({
+        is_archived: params.is_archived,
+        ky: ky_instance,
+      })
 
-    // Bypass initialization if current instance is up to date.
-    // Current instance could be out of date if user updated cached db in another tab.
-    if (!is_cache_stale) {
-      const updated_at = !params.is_archived
-        ? db_updated_at_timestamp!
-        : archived_db_updated_at_timestamp!
-      const cached_at = await localforage.getItem<number>(
-        !username
-          ? !params.is_archived
-            ? browser_storage.local_forage.authorized_library.search
-                .cached_at_timestamp
-            : browser_storage.local_forage.authorized_library.search
-                .archived_cached_at_timestamp
-          : !params.is_archived
-          ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
-              {
-                username: username as string,
-              },
-            )
-          : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-              { username: username as string },
-            ),
-      )
-      if (
-        (updated_at && !cached_at) ||
-        (updated_at && cached_at && updated_at >= cached_at)
-      ) {
-        if (!params.is_archived) {
-          return {
-            db: db!,
-            bookmarks_just_tags: bookmarks_just_tags!,
-          }
-        } else {
-          return {
-            db: archived_db!,
-            bookmarks_just_tags: archived_bookmarks_just_tags!,
+      // Bypass initialization if current instance is up to date.
+      // Current instance could be out of date if user updated cached db in another tab.
+      if (!is_cache_stale) {
+        const updated_at = !params.is_archived
+          ? db_updated_at_timestamp!
+          : archived_db_updated_at_timestamp!
+        const cached_at = await localforage.getItem<number>(
+          !username
+            ? !params.is_archived
+              ? browser_storage.local_forage.authorized_library.search
+                  .cached_at_timestamp
+              : browser_storage.local_forage.authorized_library.search
+                  .archived_cached_at_timestamp
+            : !params.is_archived
+            ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
+                {
+                  username: username as string,
+                },
+              )
+            : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
+                { username: username as string },
+              ),
+        )
+        if (
+          (updated_at && !cached_at) ||
+          (updated_at && cached_at && updated_at >= cached_at)
+        ) {
+          if (!params.is_archived) {
+            return {
+              db: db!,
+              bookmarks_just_tags: bookmarks_just_tags!,
+            }
+          } else {
+            return {
+              db: archived_db!,
+              bookmarks_just_tags: archived_bookmarks_just_tags!,
+            }
           }
         }
+      } else {
+        await clear_cached_data({ is_archived: params.is_archived })
       }
-    } else {
-      clear_cached_data({ is_archived: params.is_archived })
     }
 
     set_is_initializing(true)

@@ -10,12 +10,11 @@
     var(--white) 50%
   );
   @include at768 {
-    border-width: var(--border-width-1-5px);
     background: radial-gradient(
-    circle at 30% 70%,
-    var(--blue50) 0%,
-    var(--white) 50%
-  );
+      circle at 30% 70%,
+      var(--blue50) 0%,
+      var(--white) 50%
+    );
   }
   @include at992 {
     background: radial-gradient(
@@ -187,6 +186,7 @@
     position: relative;
     &::before {
       content: 'taaabs.com/';
+      font-weight: var(--font-weight-inter-medium);
       position: absolute;
       top: 50%;
       pointer-events: none;
@@ -202,27 +202,23 @@
     }
     > input {
       background-color: var(--white);
-      border: var(--border-secondary);
+      border: var(--border-primary);
       border-radius: var(--border-radius-12px);
       padding: 0 var(--distance-18px) 0 102px;
       @include transition-150ms(border-color);
       height: 40px;
       width: 100%;
       @include at768 {
-        padding: 0 var(--distance-18px) 0 116px;
-        border-width: var(--border-width-1-5px);
+        padding: 0 var(--distance-18px) 0 118px;
         font-size: var(--font-size-19px);
         width: 280px;
         height: 100%;
       }
       @include at992 {
-        padding: 0 var(--distance-18px) 0 128px;
-      }
-      &::before {
-        content: 'taaabs.com';
+        padding: 0 var(--distance-18px) 0 131px;
       }
       &:hover {
-        border-color: var(--border-color-hover);
+        border-color: var(--neutral300);
       }
       &:focus {
         border-color: var(--brand-color);

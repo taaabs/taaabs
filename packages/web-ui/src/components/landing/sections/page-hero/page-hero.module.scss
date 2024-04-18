@@ -4,9 +4,6 @@
 .container {
   background: var(--header-background);
   border-bottom: var(--border-primary);
-  @include at768 {
-    border-width: var(--border-width-1-5px);
-  }
 }
 .inner {
   display: flex;
