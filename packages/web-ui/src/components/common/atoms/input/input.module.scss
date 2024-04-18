@@ -8,17 +8,14 @@
 }
 .field {
   width: 100%;
-  border: 1px solid var(--blue200);
-  background-color: var(--blue100);
+  border: 1px solid var(--input-border-color);
   border-radius: var(--border-radius-10px);
-  transition: background-color var(--transition-duration-150ms) linear,
-    border-color var(--transition-duration-150ms) linear;
+  @include transition-150ms(border-color);
   @include hover {
-    border-color: var(--blue300);
+    border-color: var(--input-border-color-hover);
   }
   &:focus {
-    border-color: var(--blue400);
-    outline: none;
+    border-color: var(--input-border-color-active);
   }
   &--error {
     background: var(--red100);
@@ -28,6 +25,8 @@
     }
   }
   &--disabled {
+    background-color: var(--neutral100);
+    border: none;
     opacity: var(--dimmed-opacity);
     pointer-events: none;
   }

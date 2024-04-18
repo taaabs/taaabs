@@ -61,6 +61,9 @@ import { search_params_keys } from '@/constants/search-params-keys'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { BookmarkWrapper } from '@/components/bookmark-wrapper'
 import { use_popstate_count } from '@/hooks/misc/pop-state-count'
+import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
+import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
+import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -139,9 +142,7 @@ const Library = (params: {
       }
       set_is_fetching_first_bookmarks(false)
       set_show_skeletons(false)
-      if (!show_skeletons) {
-        set_library_updated_at_timestamp(Date.now())
-      }
+      set_library_updated_at_timestamp(Date.now())
       if (search_hook.result) {
         search_hook.set_highlights(search_hook.incoming_highlights)
         search_hook.set_highlights_sites_variants(
@@ -1134,17 +1135,26 @@ const Library = (params: {
           location.href = url
         }, 0)
       }}
-      on_new_tab_link_click={(url) => {
+      on_link_middle_click={() => {
         if (!username) {
-          const record_visit_params: RecordVisit_Params = {
+          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          const record_visit = new RecordVisit_UseCase(repository)
+          record_visit.invoke({
             bookmark_id: bookmark.id,
             visited_at: new Date().toISOString(),
-          }
-          localStorage.setItem(
-            browser_storage.local_storage.authorized_library
-              .record_visit_params,
-            JSON.stringify(record_visit_params),
-          )
+          })
+        }
+      }}
+      on_new_tab_link_click={(url) => {
+        if (!username) {
+          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          const record_visit = new RecordVisit_UseCase(repository)
+          record_visit.invoke({
+            bookmark_id: bookmark.id,
+            visited_at: new Date().toISOString(),
+          })
         }
         window.open(url, '_blank')
       }}

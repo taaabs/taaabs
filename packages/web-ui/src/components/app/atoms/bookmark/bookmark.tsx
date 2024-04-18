@@ -85,6 +85,7 @@ export namespace Bookmark {
       via_wayback?: boolean
     }[]
     on_link_click: (url: string) => Promise<void>
+    on_link_middle_click: () => void
     on_new_tab_link_click: (url: string) => void
     favicon_host: string
     menu_slot: React.ReactNode
@@ -809,6 +810,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           e.stopPropagation()
                           e.preventDefault()
                           props.on_link_click(url)
+                        }}
+                        onAuxClick={() => {
+                          props.on_link_middle_click()
                         }}
                       >
                         <span>

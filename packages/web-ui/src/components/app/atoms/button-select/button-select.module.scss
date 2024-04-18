@@ -13,10 +13,10 @@
   background-color: var(--outlined-button-background);
   @include transition-150ms(border-color);
   @include hover {
-    border-color: var(--border-color-hover);
+    border-color: var(--input-border-color-hover);
   }
   &--toggled {
-    border-color: var(--border-color-hover);
+    border-color: var(--input-border-color-hover);
     pointer-events: none;
   }
   &--disabled {

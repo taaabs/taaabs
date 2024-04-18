@@ -75,7 +75,8 @@
     flex-direction: column;
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-    font-size: 30px;
+    font-size: 32px;
+    line-height: 1.2;
     @include to992 {
       align-items: flex-start;
     }
@@ -100,6 +101,9 @@
       @include at768 {
         --emoji-width: 55px;
       }
+      @include at992 {
+        --emoji-width: 65px;
+      }
       @include at1200 {
         --emoji-width: 75px;
       }
@@ -122,6 +126,10 @@
           transform: rotate(15deg) translateX(calc(100% - 0.28em))
             translateY(-0.28em);
         }
+        @include at992 {
+          transform: rotate(15deg) translateX(calc(100% - 0.26em))
+            translateY(-0.32em);
+        }
         @include at1200 {
           transform: rotate(15deg) translateX(calc(100% - 0.28em))
             translateY(-0.28em);
@@ -143,6 +151,10 @@
         @include at768 {
           transform: rotate(15deg) translateX(calc(100% - 11px))
             translateY(-5px);
+        }
+        @include at992 {
+          transform: rotate(15deg) translateX(calc(100% - 13px))
+            translateY(-9px);
         }
         @include at1200 {
           transform: rotate(15deg) translateX(calc(100% - 16px))
@@ -202,7 +214,7 @@
     }
     > input {
       background-color: var(--white);
-      border: var(--border-primary);
+      border: 1px solid var(--input-border-color);
       border-radius: var(--border-radius-12px);
       padding: 0 var(--distance-18px) 0 102px;
       @include transition-150ms(border-color);
@@ -218,10 +230,10 @@
         padding: 0 var(--distance-18px) 0 131px;
       }
       &:hover {
-        border-color: var(--neutral300);
+        border-color: var(--input-border-color-hover);
       }
       &:focus {
-        border-color: var(--brand-color);
+        border-color: var(--input-border-color-active);
       }
     }
   }

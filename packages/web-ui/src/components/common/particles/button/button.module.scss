@@ -16,7 +16,7 @@
     background: var(--blue800);
   }
   > span {
-    padding-bottom: 0.06em;
+    padding-bottom: 0.08em;
   }
   &--outlined {
     background-color: var(--white);
@@ -24,7 +24,7 @@
     color: var(--text-color-normal);
     @include hover {
       background-color: var(--white);
-      border-color: var(--border-color-hover);
+      border-color: var(--input-border-color-hover);
     }
   }
   &--loading {

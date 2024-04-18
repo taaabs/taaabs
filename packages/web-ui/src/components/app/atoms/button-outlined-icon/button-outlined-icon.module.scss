@@ -15,7 +15,7 @@
   height: var(--button-dimension-40px);
   background: var(--white);
   @include hover {
-    border-color: var(--border-color-hover);
+    border-color: var(--input-border-color-hover);
   }
   svg {
     width: var(--icon-dimension-20px);

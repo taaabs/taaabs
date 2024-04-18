@@ -11,25 +11,25 @@ export const process_tags = () => {
     }
 
     const calculate_tags = (months: Record<string, Month_Entity>) => {
-      const monthsFiltered: typeof counts_data.months = Object.keys(
+      const months_filtered: typeof counts_data.months = Object.keys(
         months,
       ).reduce((acc, val) => {
         const yyyymm = parseInt(val)
-        let shouldReturnVal = false
+        let should_return_val = false
 
         if (yyyymm_gte && yyyymm_lte) {
           if (yyyymm >= yyyymm_gte && yyyymm <= yyyymm_lte) {
-            shouldReturnVal = true
+            should_return_val = true
           }
         } else if (yyyymm_gte && yyyymm >= yyyymm_gte) {
-          shouldReturnVal = true
+          should_return_val = true
         } else if (yyyymm_lte && yyyymm <= yyyymm_lte) {
-          shouldReturnVal = true
+          should_return_val = true
         } else {
-          shouldReturnVal = true
+          should_return_val = true
         }
 
-        if (shouldReturnVal) {
+        if (should_return_val) {
           return {
             ...acc,
             [val]: months[val],
@@ -43,8 +43,8 @@ export const process_tags = () => {
 
       const tags: Tags = {}
 
-      Object.values(monthsFiltered).forEach((month) => {
-        Object.entries(month.tags).forEach(([name, { id, yields }]) => {
+      Object.values(months_filtered).forEach((month) => {
+        Object.entries(month.tags).forEach(([id, { name, yields }]) => {
           if (tags[id]) {
             tags[id].yields += yields
           } else {
@@ -53,13 +53,13 @@ export const process_tags = () => {
         })
       })
 
-      const sortedTags = Object.fromEntries(
+      const sorted_tags = Object.fromEntries(
         Object.keys(tags)
           .sort()
           .map((key) => [key, tags[key]]),
       )
 
-      return sortedTags
+      return sorted_tags
     }
 
     const tags = calculate_tags(counts_data.months)

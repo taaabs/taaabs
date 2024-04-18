@@ -23,7 +23,6 @@ export const get_public_counts = (params: {
     )
 
     dispatch(counts_actions.set_data(result))
-
     dispatch(counts_actions.set_is_fetching(false))
     dispatch(counts_actions.set_should_refetch(false))
   }

@@ -44,12 +44,16 @@
   }
   &--clickable {
     @include hover {
-      border-color: var(--border-color-hover);
+      border-color: var(--input-border-color-hover);
     }
   }
   &--search-result {
-    border-style: dashed;
+    border-top-style: dashed;
+    border-top-color: var(--border-color-primary);
+    @include at992 {
+      border-style: dashed;
     border-color: var(--border-color-primary);
+    }
   }
   &--search-result-clickable {
     @include hover {
@@ -391,7 +395,7 @@
           border: var(--border-secondary);
           @include transition-150ms(border-color);
           @include hover {
-            border-color: var(--border-color-hover);
+            border-color: var(--input-border-color-hover);
           }
           > img {
             width: var(--distance-16px);

@@ -37,7 +37,7 @@ export class Counts_RepositoryImpl implements Counts_Repository {
                 ).reduce(
                   (acc, el) => ({
                     ...acc,
-                    [el.name]: { id: el.id, yields: el.yields },
+                    [el.id]: { name: el.name, yields: el.yields },
                   }),
                   {},
                 ),
@@ -63,13 +63,12 @@ export class Counts_RepositoryImpl implements Counts_Repository {
               [k]: {
                 bookmark_count: v.bookmark_count,
                 starred_count: v.starred_count,
-                tags: v.tags.reduce(
-                  (acc, el) => ({
+                tags: v.tags.reduce((acc, el) => {
+                  return {
                     ...acc,
-                    [el.name]: { id: el.id, yields: el.yields },
-                  }),
-                  {},
-                ),
+                    [el.id]: { name: el.name, yields: el.yields },
+                  }
+                }, {}),
               },
             }),
             {},
