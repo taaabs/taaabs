@@ -11,9 +11,9 @@ type BookmarksState = {
   first_bookmarks_fetched_at_timestamp?: number // Used for synchronization of pinned links re-render.
   is_fetching_more_bookmarks?: boolean
   showing_bookmarks_fetched_by_ids?: boolean
-  incoming_bookmarks?: Bookmark_Entity[] | null
-  bookmarks?: Bookmark_Entity[] | null
-  has_more_bookmarks?: boolean | null
+  incoming_bookmarks?: Bookmark_Entity[]
+  bookmarks?: Bookmark_Entity[]
+  has_more_bookmarks?: boolean
   processing_progress?: number // Filling tag combinations and generating counts.
   import_progress?: number
   density: 'default' | 'compact'

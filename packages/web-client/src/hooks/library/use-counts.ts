@@ -178,12 +178,12 @@ export const use_counts = () => {
       set_last_query_yyyymm_lte(query_yyyymm_lte || undefined)
       dispatch(
         counts_actions.set_yyyymm_gte(
-          parseInt(query_yyyymm_gte || '0') || null,
+          parseInt(query_yyyymm_gte || '0') || undefined,
         ),
       )
       dispatch(
         counts_actions.set_yyyymm_lte(
-          parseInt(query_yyyymm_lte || '0') || null,
+          parseInt(query_yyyymm_lte || '0') || undefined,
         ),
       )
     }

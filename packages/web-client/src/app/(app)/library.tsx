@@ -1404,7 +1404,10 @@ const Library = (params: {
                   search_hook.set_count(search_hook.count - 1)
                 }
               }
-              if (counts_hook.tags![tag_id].yields == 1) {
+              if (
+                tag_view_options_hook.selected_tags.includes(tag_id) &&
+                counts_hook.tags![tag_id].yields == 1
+              ) {
                 dispatch(
                   bookmarks_actions.set_is_fetching_first_bookmarks(true),
                 )
@@ -2235,7 +2238,6 @@ const Library = (params: {
                       return !updated_tag_ids.includes(t) && yields == 1
                     })
                   if (tags_to_remove_from_search_params.length) {
-                    dispatch(bookmarks_actions.set_bookmarks([]))
                     dispatch(
                       bookmarks_actions.set_is_fetching_first_bookmarks(true),
                     )

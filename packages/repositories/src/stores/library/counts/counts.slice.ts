@@ -11,22 +11,16 @@ export type Months = {
 export type Tags = Record<string, { name: string; yields: number }>
 
 export type CountsState = {
-  is_fetching: boolean
+  is_fetching?: boolean
   should_refetch?: boolean
-  counts_data: Counts_Ro | null
-  months: Months | null
+  counts_data?: Counts_Ro
+  months?: Months
   tags?: Tags
-  yyyymm_gte: number | null
-  yyyymm_lte: number | null
+  yyyymm_gte?: number
+  yyyymm_lte?: number
 }
 
-const initial_state: CountsState = {
-  is_fetching: false,
-  counts_data: null,
-  months: null,
-  yyyymm_gte: null,
-  yyyymm_lte: null,
-}
+const initial_state: CountsState = {}
 
 export const counts_slice = createSlice({
   name: 'counts',

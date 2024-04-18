@@ -212,6 +212,7 @@
     min-height: 100vh;
     position: relative;
     z-index: 1;
+    @include transition-250ms(transform);
     &::before {
       content: '';
       width: 1px;
@@ -364,9 +365,6 @@
       background: var(--Library-background);
     }
   }
-}
-.free-fall {
-  @include transition-250ms(transform);
 }
 .dimmed {
   pointer-events: none;

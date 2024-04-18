@@ -28,7 +28,6 @@ declare const styles: {
   readonly aside: string
   readonly 'aside--hidden': string
   readonly aside__inner: string
-  readonly 'free-fall': string
   readonly dimmed: string
 }
 export = styles

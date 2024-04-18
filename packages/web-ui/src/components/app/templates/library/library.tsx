@@ -46,14 +46,18 @@ export const Library: React.FC<Library.Props> = (props) => {
   const aside = useRef<HTMLDivElement>(null)
   const end_of_bookmarks = useRef<HTMLDivElement>(null)
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
-  const [drag_distance, set_drag_distance] = useState(0)
-  const [initial_swipe_direction, set_initial_swipe_direction] = useState<
-    'Left' | 'Right' | undefined
-  >(undefined)
+  const initial_swipe_direction = useRef<'Left' | 'Right' | undefined>(
+    undefined,
+  )
   const is_scrolled = use_is_scrolled()
   const [is_sidebar_collapsed, set_is_sidebar_collapsed] = useState(false)
   const [are_tag_hierarchies_hovered, set_are_tag_hieararchies_hovered] =
     useState(false)
+  const [is_dragging, set_is_dragging] = useState<boolean>()
+  const [is_left_side_moving, set_is_left_side_moving] = useState(false)
+  const [is_right_side_moving, set_is_right_side_moving] = useState(false)
+  const [is_left_side_open, set_is_left_side_open] = useState(false)
+  const [is_right_side_open, set_is_right_side_open] = useState(false)
 
   const get_slidable_width = () => {
     return window.innerWidth < 370 ? window.innerWidth * 0.82 : 300
@@ -69,18 +73,20 @@ export const Library: React.FC<Library.Props> = (props) => {
 
   const swipeable_handlers = useSwipeable({
     onSwipeStart: ({ dir, event }) => {
-      // Check if user is not dragging over "custom range" handlers or draggable pinned.
+      // Check if user is not dragging over "custom range" handlers or pinned in a draggable state.
       if (
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
         (event.target as any)?.nodeName == 'line' ||
-        (event as any).target.className.includes('sortable-ghost')
+        (event.target instanceof HTMLElement &&
+          (event as any).target.className.includes('sortable-ghost'))
       )
         return
 
       if (dir == 'Left' || dir == 'Right') {
+        set_is_dragging(true)
         document.body.style.overflow = 'hidden'
-        set_initial_swipe_direction(dir)
+        initial_swipe_direction.current = dir
       }
       if (dir == 'Right' && is_right_side_open) {
         set_is_right_side_moving(true)
@@ -91,39 +97,53 @@ export const Library: React.FC<Library.Props> = (props) => {
       } else if (dir == 'Left' && !is_right_side_open) {
         set_is_right_side_moving(true)
       }
+
+      document.getElementById('main')!.style.transition = `none`
     },
     onSwiping: ({ deltaX, dir, event }) => {
       if (
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
-        (event.target as any)?.nodeName == 'line' ||
-        (event as any).target.className.includes('sortable-ghost')
+        (event.target as any)?.nodeName == 'line'
       )
         return
 
       if (
-        (initial_swipe_direction == 'Left' &&
+        (initial_swipe_direction.current == 'Left' &&
           dir == 'Left' &&
           deltaX < 0 &&
           deltaX >= -slidable_width &&
           !is_right_side_open) ||
-        (initial_swipe_direction == 'Right' &&
+        (initial_swipe_direction.current == 'Right' &&
           dir == 'Right' &&
           deltaX > 0 &&
           deltaX <= slidable_width &&
           !is_left_side_open)
       ) {
-        set_drag_distance(deltaX)
+        if (!is_left_side_open && !is_right_side_open) {
+          document.getElementById(
+            'main',
+          )!.style.transform = `translateX(${deltaX}px)`
+        } else if (is_left_side_open) {
+          document.getElementById('main')!.style.transform = `translateX(${
+            slidable_width + deltaX
+          }px)`
+        } else if (is_right_side_open) {
+          document.getElementById('main')!.style.transform = `translateX(${
+            -slidable_width + deltaX
+          }px)`
+        }
       }
     },
     onSwiped: ({ dir, velocity, event }) => {
       if (
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
-        (event.target as any)?.nodeName == 'line' ||
-        (event as any).target.className.includes('sortable-ghost')
+        (event.target as any)?.nodeName == 'line'
       )
         return
+
+      set_is_dragging(false)
 
       if (velocity > 0.2) {
         if (dir == 'Right') {
@@ -140,22 +160,27 @@ export const Library: React.FC<Library.Props> = (props) => {
             toggle_left_side()
           }
         }
+      } else if (is_right_side_open) {
+        document.getElementById(
+          'main',
+        )!.style.transform = `translateX(${-slidable_width}px)`
+      } else if (is_left_side_open) {
+        document.getElementById(
+          'main',
+        )!.style.transform = `translateX(${slidable_width}px)`
       } else if (!is_left_side_open && !is_right_side_open) {
         document.body.style.overflow = ''
+        document.getElementById('main')!.style.transform = ''
       }
+
+      document.getElementById('main')!.style.transition = ''
 
       setTimeout(() => {
         set_is_right_side_moving(false)
         set_is_left_side_moving(false)
       }, 250)
-      set_drag_distance(0)
     },
   })
-
-  const [is_left_side_moving, set_is_left_side_moving] = useState(false)
-  const [is_right_side_moving, set_is_right_side_moving] = useState(false)
-  const [is_left_side_open, set_is_left_side_open] = useState(false)
-  const [is_right_side_open, set_is_right_side_open] = useState(false)
 
   const toggle_right_side = () => {
     document.body.style.overflow = 'hidden'
@@ -163,11 +188,15 @@ export const Library: React.FC<Library.Props> = (props) => {
 
     if (!is_right_side_open) {
       set_is_right_side_open(true)
+      document.getElementById(
+        'main',
+      )!.style.transform = `translateX(${-slidable_width}px)`
     } else {
       set_is_right_side_open(false)
       setTimeout(() => {
         document.body.style.overflow = ''
       }, 250)
+      document.getElementById('main')!.style.transform = ''
     }
 
     setTimeout(() => {
@@ -181,11 +210,15 @@ export const Library: React.FC<Library.Props> = (props) => {
 
     if (!is_left_side_open) {
       set_is_left_side_open(true)
+      document.getElementById(
+        'main',
+      )!.style.transform = `translateX(${slidable_width}px)`
     } else {
       set_is_left_side_open(false)
       setTimeout(() => {
         document.body.style.overflow = ''
       }, 250)
+      document.getElementById('main')!.style.transform = ''
     }
 
     setTimeout(() => {
@@ -205,20 +238,6 @@ export const Library: React.FC<Library.Props> = (props) => {
       toggle_right_side()
     }
   }, [props.close_aside_count])
-
-  let translate_x = 0
-
-  if (is_left_side_open && !drag_distance) {
-    translate_x = slidable_width
-  } else if (is_right_side_open && !drag_distance) {
-    translate_x = -slidable_width
-  } else if (!is_left_side_open && !is_right_side_open && drag_distance) {
-    translate_x = drag_distance
-  } else if (is_left_side_open && drag_distance) {
-    translate_x = slidable_width + drag_distance
-  } else if (is_right_side_open && drag_distance) {
-    translate_x = -slidable_width + drag_distance
-  }
 
   return (
     <div className={styles.container} {...swipeable_handlers}>
@@ -320,22 +339,18 @@ export const Library: React.FC<Library.Props> = (props) => {
         </aside>
 
         <main
-          className={cn(styles.main, {
-            [styles['free-fall']]: !drag_distance,
-          })}
+          id="main"
+          className={styles.main}
           ref={main}
           onClick={() => {
             is_left_side_open && toggle_left_side()
             is_right_side_open && toggle_right_side()
           }}
-          style={{
-            transform: `translateX(${translate_x}px)`,
-          }}
         >
           <div
             className={cn(styles.main__inner, {
               [styles['main__inner--dimmed']]:
-                (is_right_side_open || is_left_side_open) && !drag_distance,
+                (is_right_side_open || is_left_side_open) && !is_dragging,
               [styles['main__inner--collapsed-sidebar-hovered']]:
                 is_sidebar_collapsed && are_tag_hierarchies_hovered,
             })}
