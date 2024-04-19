@@ -150,7 +150,6 @@ export const use_tag_view_options = () => {
 
   return {
     selected_tags,
-    set_selected_tags,
     add_tag_to_search_params,
     remove_tags_from_search_params,
     clear_selected_tags,

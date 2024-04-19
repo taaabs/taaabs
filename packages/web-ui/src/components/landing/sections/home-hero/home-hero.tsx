@@ -32,11 +32,10 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
             <h1 className={styles.top__heading}>
               <div className={styles['top__heading__first-line']}>
                 <span>{props.heading.first_line}</span>
-                <div className={styles['top__heading__first-line__head']}>
-                  <Icon variant="HUGGING_FACE_NO_HANDS" />
-                </div>
-                <div className={styles['top__heading__first-line__hands']}>
-                  <Icon variant="HUGGING_FACE_HANDS" />
+                <div
+                  className={styles['top__heading__first-line__hugging-face']}
+                >
+                  <Icon variant="HUGGING_FACE" />
                 </div>
               </div>
               <span>{props.heading.second_line}</span>

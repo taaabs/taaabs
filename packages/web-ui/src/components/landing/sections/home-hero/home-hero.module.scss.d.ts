@@ -5,8 +5,7 @@ declare const styles: {
   readonly top__logo: string
   readonly top__heading: string
   readonly 'top__heading__first-line': string
-  readonly 'top__heading__first-line__head': string
-  readonly 'top__heading__first-line__hands': string
+  readonly 'top__heading__first-line__hugging-face': string
   readonly top__subheading: string
   readonly 'claim-username': string
   readonly 'claim-username__input': string

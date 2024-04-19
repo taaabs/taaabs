@@ -75,113 +75,41 @@
     flex-direction: column;
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-    font-size: 32px;
-    line-height: 1.2;
+    font-size: clamp(32px, 9vw, 44px);
     @include to992 {
       align-items: flex-start;
     }
-    @include at768 {
-      font-size: 44px;
-    }
     @include at992 {
       align-items: center;
-      font-size: 55px;
-    }
-    @include at1200 {
-      font-size: var(--font-size-64px);
-    }
-    @include at1380 {
-      font-size: var(--font-size-72px);
+      font-size: clamp(var(--font-size-55px), 5.5vw, var(--font-size-72px));
     }
     &__first-line {
-      --emoji-width: 34px;
-      white-space: nowrap;
+      --emoji-width: clamp(40px, 11vw, 52px);
+      @include at992 {
+        --emoji-width: clamp(60px, 6.5vw, 85px);
+      }
       position: relative;
       margin-right: var(--emoji-width);
-      @include at768 {
-        --emoji-width: 55px;
-      }
-      @include at992 {
-        --emoji-width: 65px;
-      }
-      @include at1200 {
-        --emoji-width: 75px;
-      }
-      @include at1380 {
-        --emoji-width: 85px;
-      }
-      > span {
-        z-index: 1;
-        position: relative;
-        display: inline-block;
-      }
-      &__head {
+      &__hugging-face {
         position: absolute;
         right: 0;
         top: 0;
-        z-index: 0;
-        transform: rotate(15deg) translateX(calc(100% - 0.28em))
-          translateY(-0.28em);
-        @include at768 {
-          transform: rotate(15deg) translateX(calc(100% - 0.28em))
-            translateY(-0.28em);
-        }
-        @include at992 {
-          transform: rotate(15deg) translateX(calc(100% - 0.26em))
-            translateY(-0.32em);
-        }
-        @include at1200 {
-          transform: rotate(15deg) translateX(calc(100% - 0.28em))
-            translateY(-0.28em);
-        }
-        @include at1380 {
-          transform: rotate(15deg) translateX(calc(100% - 20px))
-            translateY(-22px);
-        }
+        transform: translateX(120%) translateY(14%);
         > svg {
           width: var(--emoji-width);
-        }
-      }
-      &__hands {
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: 2;
-        transform: rotate(15deg) translateX(calc(100% - 8px)) translateY(-4px);
-        @include at768 {
-          transform: rotate(15deg) translateX(calc(100% - 11px))
-            translateY(-5px);
-        }
-        @include at992 {
-          transform: rotate(15deg) translateX(calc(100% - 13px))
-            translateY(-9px);
-        }
-        @include at1200 {
-          transform: rotate(15deg) translateX(calc(100% - 16px))
-            translateY(-9px);
-        }
-        @include at1380 {
-          transform: rotate(15deg) translateX(calc(100% - 18px))
-            translateY(-10px);
-        }
-        > svg {
-          width: calc(var(--emoji-width) * 0.95);
+          transform: rotate(15deg);
         }
       }
     }
   }
   &__subheading {
-    font-family: var(--font-family-plus-jakarta-sans);
-    font-weight: var(--font-weight-plus-jakarta-sans-bold);
-    font-size: var(--font-size-17px);
-    @include at768 {
-      font-size: var(--font-size-22px);
+    font-weight: var(--font-weight-inter-medium);
+    font-size: clamp(17px, 4.5vw, 22px);
+    @include to992 {
+      max-width: 90%;
     }
-    @include at1200 {
-      font-size: var(--font-size-24px);
-    }
-    @include at1380 {
-      font-size: var(--font-size-28px);
+    @include at992 {
+      font-size: clamp(22px, 2.1vw, 28px);
     }
   }
 }

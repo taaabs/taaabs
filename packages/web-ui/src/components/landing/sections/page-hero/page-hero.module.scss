@@ -11,7 +11,7 @@
   justify-content: center;
   text-align: center;
   gap: 10px;
-  padding: 20px 0 50px 0;
+  padding: 30px 0 70px 0;
   background: radial-gradient(
     circle at 50% 80%,
     var(--blue50) 0%,
@@ -19,7 +19,7 @@
   );
   @include at768 {
     gap: 15px;
-    padding: 30px 0 80px 0;
+    padding: 50px 0 100px 0;
   }
   @include at992 {
     gap: 20px;
@@ -27,45 +27,31 @@
   }
   @include at1200 {
     gap: 20px;
-    padding: 30px 0 90px 0;
+    padding: 60px 0 120px 0;
   }
   @include at1380 {
-    gap: 30px;
+    gap: 20px;
     padding: 70px 0 140px 0;
   }
   > h1 {
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-    font-size: 36px;
-    @include at768 {
-      font-size: var(--font-size-40px);
-    }
+    font-size: clamp(32px, 9vw, 44px);
     @include at992 {
-      font-size: 55px;
-    }
-    @include at1200 {
-      font-size: var(--font-size-64px);
-    }
-    @include at1380 {
-      font-size: var(--font-size-72px);
+      font-size: clamp(var(--font-size-55px), 5.5vw, 64px);
     }
   }
   > p {
+    font-weight: var(--font-weight-inter-medium);
     white-space: pre-wrap;
     margin: 0 auto;
-    max-width: var(--distance-900px);
-    font-size: var(--font-size-16px);
-    @include at768 {
-      font-size: var(--font-size-19px);
-    }
+    font-size: clamp(17px, 4vw, 20px);
+    max-width: 90%;
     @include at992 {
-      font-size: var(--font-size-20px);
+      font-size: clamp(22px, 2.1vw, 24px);
     }
     @include at1200 {
-      font-size: var(--font-size-21px);
-    }
-    @include at1200 {
-      font-size: var(--font-size-23px);
+      max-width: var(--distance-900px);
     }
   }
 }

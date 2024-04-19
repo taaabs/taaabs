@@ -951,10 +951,8 @@ const Library = (params: {
   )
   const slot_pinned = (
     <UiAppAtom_Pinned
-      key={pinned_updated_at}
-      library_updated_at_timestamp={
-        (library_updated_at_timestamp || 0) + popstate_count
-      }
+      key={`${pinned_updated_at}-${popstate_count}`}
+      library_updated_at_timestamp={library_updated_at_timestamp}
       favicon_host={favicon_host}
       header_title={params.dictionary.library.pinned}
       items={
@@ -1024,7 +1022,7 @@ const Library = (params: {
   )
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
     <BookmarkWrapper
-      key={`${bookmark.id}-${i}-${library_updated_at_timestamp}`}
+      key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
       index={i}
       created_at={new Date(bookmark.created_at)}
       search_queried_at_timestamp={search_hook.queried_at_timestamp}

@@ -18,6 +18,7 @@ import HomeFilled from '../../../../assets/icons/home-filled.svg'
 import Home from '../../../../assets/icons/home.svg'
 import HuggingFaceHands from '../../../../assets/icons/hugging-face-hands.svg'
 import HuggingFaceNoHands from '../../../../assets/icons/hugging-face-no-hands.svg'
+import HuggingFace from '../../../../assets/icons/hugging-face.svg'
 import Info from '../../../../assets/icons/info.svg'
 import LessThan from '../../../../assets/icons/less-than.svg'
 import Link from '../../../../assets/icons/link.svg'
@@ -66,6 +67,7 @@ export namespace Icon {
     | 'HOME'
     | 'HUGGING_FACE_HANDS'
     | 'HUGGING_FACE_NO_HANDS'
+    | 'HUGGING_FACE'
     | 'INFO'
     | 'LESS_THAN'
     | 'LINK'
@@ -160,6 +162,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'HUGGING_FACE_NO_HANDS':
       icon = <HuggingFaceNoHands />
+      break
+    case 'HUGGING_FACE':
+      icon = <HuggingFace />
       break
     case 'INFO':
       icon = <Info />
