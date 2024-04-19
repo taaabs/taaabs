@@ -2298,6 +2298,9 @@ const Library = (params: {
                       tag_ids: updated_bookmark.tags.map((tag) => tag.id),
                     },
                   })
+                  set_rerender_all_bookmarks_count(
+                    (rerender_all_bookmarks_count || 0) + 1,
+                  )
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   modal_context?.set_modal()
                   toast.success(params.dictionary.library.bookmark_updated)
@@ -2412,6 +2415,9 @@ const Library = (params: {
                   if (search_hook.count) {
                     search_hook.set_count(search_hook.count - 1)
                   }
+                  set_rerender_all_bookmarks_count(
+                    (rerender_all_bookmarks_count || 0) + 1,
+                  )
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(
                     `Bookmark has been ${
@@ -2461,6 +2467,9 @@ const Library = (params: {
                   if (search_hook.count) {
                     search_hook.set_count(search_hook.count - 1)
                   }
+                  set_rerender_all_bookmarks_count(
+                    (rerender_all_bookmarks_count || 0) + 1,
+                  )
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success('Bookmark has been deleted')
                 },
