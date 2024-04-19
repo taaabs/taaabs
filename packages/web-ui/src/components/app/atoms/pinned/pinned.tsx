@@ -24,7 +24,8 @@ export namespace Pinned {
     on_change: (items: Item[]) => void
     favicon_host: string
     header_title: string
-    on_link_click: (item: Item) => void
+    on_click: (item: Item) => void
+    on_middle_click: (item: Item) => void
     is_draggable: boolean
     selected_tags: number[]
     selected_starred: boolean
@@ -108,7 +109,10 @@ export const Pinned: React.FC<Pinned.Props> = memo(
           className={styles.item}
           onClick={(e) => {
             e.preventDefault()
-            props.on_link_click(item)
+            props.on_click(item)
+          }}
+          onAuxClick={() => {
+            props.on_middle_click(item)
           }}
           onContextMenu={(e) => {
             e.preventDefault()

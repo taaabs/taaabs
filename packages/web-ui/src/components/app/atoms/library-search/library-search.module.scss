@@ -185,6 +185,7 @@
         }
       }
       input {
+        caret-color: var(--brand-color);
         color: transparent;
         width: 100vw; // TODO: Rework workaround.
         font-weight: var(--font-weight-inter-medium);

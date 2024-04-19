@@ -59,11 +59,11 @@ import dictionary from '@/dictionaries/en'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { search_params_keys } from '@/constants/search-params-keys'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
-import { BookmarkWrapper } from '@/components/bookmark-wrapper'
 import { use_popstate_count } from '@/hooks/misc/pop-state-count'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
+import { BookmarkWrapper as UiAppAtom_BookmarkWrapper } from '@web-ui/components/app/atoms/bookmark-wrapper'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -141,7 +141,8 @@ const Library = (params: {
         bookmarks_actions.set_bookmarks(bookmarks_hook.incoming_bookmarks),
       )
       set_first_bookmarks_fetched_at_timestamp(
-        bookmarks_hook.first_bookmarks_fetched_at_timestamp,
+        // When using history back from external website, timestamp on hook will be undefined as results are loaded from session storage.
+        bookmarks_hook.first_bookmarks_fetched_at_timestamp || Date.now(),
       )
       if (is_fetching_first_bookmarks) {
         window.scrollTo(0, 0)
@@ -991,7 +992,7 @@ const Library = (params: {
         )
         toast.success(params.dictionary.library.pinned_links_has_beed_updated)
       }}
-      on_link_click={async (item) => {
+      on_click={async (item) => {
         if (!username) {
           const record_visit_params: RecordVisit_Params = {
             bookmark_id: item.bookmark_id,
@@ -1011,6 +1012,17 @@ const Library = (params: {
         setTimeout(() => {
           location.href = url
         }, 0)
+      }}
+      on_middle_click={(item) => {
+        if (!username) {
+          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          const record_visit = new RecordVisit_UseCase(repository)
+          record_visit.invoke({
+            bookmark_id: item.bookmark_id,
+            visited_at: new Date().toISOString(),
+          })
+        }
       }}
       selected_tags={tag_view_options_hook.selected_tags}
       selected_starred={
@@ -1033,7 +1045,7 @@ const Library = (params: {
     />
   )
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
-    <BookmarkWrapper
+    <UiAppAtom_BookmarkWrapper
       key={`${bookmark.id}-${i}-${first_bookmarks_fetched_at_timestamp}-${popstate_count}-${rerender_all_bookmarks_count_commited}`}
       index={i}
       created_at={new Date(bookmark.created_at)}
@@ -1172,11 +1184,7 @@ const Library = (params: {
       // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed).
       dragged_tag={tag_view_options_hook.dragged_tag}
       on_mouse_up={async () => {
-        if (
-          !tag_view_options_hook.dragged_tag ||
-          tag_view_options_hook.dragged_tag.source_bookmark_id == bookmark.id
-        )
-          return
+        if (!tag_view_options_hook.dragged_tag) return
         if (bookmark.tags.length == system_values.bookmark.tags.limit) {
           toast.error(
             `Bookmark can have at most ${system_values.bookmark.tags.limit} tags`,
@@ -2542,11 +2550,12 @@ const Library = (params: {
           pinned_hook.items.length > 0 && (
             <div
               style={{
-                display:
-                  !first_bookmarks_fetched_at_timestamp ||
-                  bookmarks_hook.showing_bookmarks_fetched_by_ids
-                    ? 'none'
-                    : undefined,
+                display: bookmarks_hook.showing_bookmarks_fetched_by_ids
+                  ? 'none'
+                  : undefined,
+                visibility: !first_bookmarks_fetched_at_timestamp
+                  ? 'hidden'
+                  : undefined,
               }}
             >
               {slot_pinned}

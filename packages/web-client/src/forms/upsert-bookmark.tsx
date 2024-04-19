@@ -147,7 +147,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         slot_footer={
           <UiAppAtom_ModalFooter
             on_click_cancel={props.on_close}
-            button_label={props.action == 'update' ? 'Save' : 'Submit'}
+            button_label={props.action == 'update' ? 'Save' : 'Create'}
             is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
           />
         }

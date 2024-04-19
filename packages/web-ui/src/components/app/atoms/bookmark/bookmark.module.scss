@@ -1,25 +1,6 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
-.wrapper {
-  padding-bottom: var(--distance-8px);
-  @include at992 {
-    padding-bottom: var(--distance-16px);
-  }
-  &--compact {
-    @include to992 {
-      padding-bottom: 0;
-    }
-    @include at992 {
-      padding-bottom: var(--distance-8px);
-    }
-  }
-  &--compact-open {
-    @include to992 {
-      padding-bottom: var(--distance-8px);
-    }
-  }
-}
 .container {
   background: var(--white);
   border: var(--border-secondary);

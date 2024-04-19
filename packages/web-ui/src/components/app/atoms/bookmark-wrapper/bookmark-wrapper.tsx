@@ -3,6 +3,8 @@ import { Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import { useRef, useState } from 'react'
+import styles from './bookmark-wrapper.module.scss'
+import cn from 'classnames'
 
 namespace BookmarkWrapper {
   export type Props = Bookmark.Props & {
@@ -24,12 +26,27 @@ export const BookmarkWrapper: React.FC<BookmarkWrapper.Props> = (props) => {
     }
   }, [is_visible])
 
+  useUpdateEffect(() => {
+    const height = ref.current!.getBoundingClientRect().height
+    props.set_render_height(height)
+  }, [props.is_compact])
+
   return (
     <div
       ref={ref}
       style={{
         height: !is_visible ? props.render_height : undefined,
       }}
+      className={cn(
+        styles.wrapper,
+        {
+          [styles['wrapper--compact']]: props.density == 'compact',
+        },
+        {
+          [styles['wrapper--compact-open']]:
+            props.density == 'compact' && !props.is_compact,
+        },
+      )}
       onMouseEnter={() => {
         set_dragged_tag(props.dragged_tag)
         if (

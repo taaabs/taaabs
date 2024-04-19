@@ -44,6 +44,13 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     const [bookmark_count, set_bookmark_count] = useState<number>()
     const [starred_count, set_starred_count] = useState<number>()
     const [unread_count, set_unread_count] = useState<number>()
+    const calculated_counts_cache = useRef<{
+      [start_end_index: string]: {
+        bookmark_count: number
+        starred_count: number
+        unread_count: number
+      }
+    }>({})
 
     useUpdateEffect(() => {
       if (props.is_range_selector_disabled) return
@@ -76,28 +83,56 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
         return
       }
 
-      let counts_sliced: Counts = []
-      if (start_index !== undefined && end_index !== undefined) {
-        counts_sliced = params.counts.slice(start_index, end_index + 1)
+      if (
+        calculated_counts_cache.current[
+          `${params.start_index}-${params.end_index}`
+        ]
+      ) {
+        set_bookmark_count(
+          calculated_counts_cache.current[
+            `${params.start_index}-${params.end_index}`
+          ].bookmark_count,
+        )
+        set_starred_count(
+          calculated_counts_cache.current[
+            `${params.start_index}-${params.end_index}`
+          ].starred_count,
+        )
+        set_unread_count(
+          calculated_counts_cache.current[
+            `${params.start_index}-${params.end_index}`
+          ].unread_count,
+        )
       } else {
-        counts_sliced = params.counts
+        let counts_sliced: Counts = []
+        if (start_index !== undefined && end_index !== undefined) {
+          counts_sliced = params.counts.slice(start_index, end_index + 1)
+        } else {
+          counts_sliced = params.counts
+        }
+
+        let bookmark_count = 0
+        let starred_count = 0
+        let unread_count = 0
+
+        counts_sliced.forEach((el) => {
+          bookmark_count += el.bookmark_count
+          starred_count += el.starred_count
+          unread_count += el.unread_count
+        })
+
+        calculated_counts_cache.current[
+          `${params.start_index}-${params.end_index}`
+        ] = {
+          bookmark_count,
+          starred_count,
+          unread_count,
+        }
+
+        set_bookmark_count(bookmark_count)
+        set_starred_count(starred_count)
+        set_unread_count(unread_count)
       }
-
-      let bookmark_count = 0
-      let starred_count = 0
-      let unread_count = 0
-
-      counts_sliced.forEach((el) => {
-        bookmark_count += el.bookmark_count
-        starred_count += el.starred_count
-        unread_count += el.unread_count
-      })
-
-      set_bookmark_count(bookmark_count)
-      set_starred_count(starred_count)
-      set_unread_count(unread_count)
-
-      set_counts_to_render(props.counts)
 
       set_date(
         params.counts.length > 0
@@ -285,6 +320,11 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
         start_index: 0,
         end_index: props.counts.length - 1,
       })
+    }, [props.counts])
+
+    useEffect(() => {
+      calculated_counts_cache.current = {}
+      set_counts_to_render(props.counts)
     }, [props.counts])
 
     return (

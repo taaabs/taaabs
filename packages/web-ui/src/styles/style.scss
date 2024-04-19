@@ -20,7 +20,7 @@
   --border-color-secondary: var(--neutral100);
   --input-border-color: var(--neutral200);
   --input-border-color-hover: var(--neutral300);
-  --input-border-color-active: var(--brand-color);
+  --input-border-color-active: var(--neutral400);
   --logo-background: var(--brand-color);
   --outlined-button-background: var(--white);
   --border-primary: var(--border-width-1px) solid var(--border-color-primary);
@@ -55,15 +55,12 @@
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   text-size-adjust: none;
-  // @include desktop {
-  //   scrollbar-color: var(--neutral200) transparent;
-  // }
 }
 
 html {
   font-size: 62.5%;
   accent-color: var(--brand-color);
-  caret-color: var(--brand-color);
+  caret-color: var(--black);
   -webkit-tap-highlight-color: transparent;
 }
 
