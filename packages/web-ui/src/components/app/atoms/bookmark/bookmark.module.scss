@@ -26,7 +26,7 @@
   @include to992 {
     border-left: 0;
     border-right: 0;
-    border-top-color: var(--border-color-primary);
+    border-top-color: var(--neutral150);
   }
   @include at992 {
     border-radius: var(--border-radius-12px);
@@ -44,7 +44,7 @@
   }
   &--clickable {
     @include hover {
-      border-color: var(--input-border-color-hover);
+      border-color: var(--neutral250);
     }
   }
   &--search-result {
