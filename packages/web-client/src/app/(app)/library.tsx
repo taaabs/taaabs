@@ -109,6 +109,12 @@ const Library = (params: {
   ] = useState<number>()
   const [is_fetching_first_bookmarks, set_is_fetching_first_bookmarks] =
     useState<boolean>()
+  const [rerender_all_bookmarks_count, set_rerender_all_bookmarks_count] =
+    useState<number>() // Used by bookmark edit and tag adding by dragging.
+  const [
+    rerender_all_bookmarks_count_commited,
+    set_rerender_all_bookmarks_count_commited,
+  ] = useState<number>()
   // END - UI synchronization.
 
   const ky_instance = ky.create({
@@ -147,6 +153,7 @@ const Library = (params: {
         set_pinned_updated_at(pinned_hook.fetched_at_timestamp)
         set_is_pinned_stale(false)
       }
+      set_rerender_all_bookmarks_count_commited(rerender_all_bookmarks_count)
     }
   }, [
     bookmarks_hook.is_fetching_first_bookmarks,
@@ -1027,7 +1034,7 @@ const Library = (params: {
   )
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
     <BookmarkWrapper
-      key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
+      key={`${bookmark.id}-${i}-${first_bookmarks_fetched_at_timestamp}-${popstate_count}-${rerender_all_bookmarks_count_commited}`}
       index={i}
       created_at={new Date(bookmark.created_at)}
       search_queried_at_timestamp={search_hook.queried_at_timestamp}
@@ -1256,6 +1263,9 @@ const Library = (params: {
           gte: date_view_options_hook.current_gte,
           lte: date_view_options_hook.current_lte,
         })
+        set_rerender_all_bookmarks_count(
+          (rerender_all_bookmarks_count || 0) + 1,
+        )
         dispatch(bookmarks_actions.set_is_upserting(false))
         toast.success(params.dictionary.library.bookmark_updated)
       }}
@@ -1426,6 +1436,9 @@ const Library = (params: {
                 )
                 tag_view_options_hook.remove_tags_from_search_params([tag_id])
               }
+              set_rerender_all_bookmarks_count(
+                (rerender_all_bookmarks_count || 0) + 1,
+              )
               dispatch(bookmarks_actions.set_is_upserting(false))
               toast.success(params.dictionary.library.bookmark_updated)
             }
