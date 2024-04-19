@@ -143,15 +143,15 @@ const Library = (params: {
       set_is_fetching_first_bookmarks(false)
       set_show_skeletons(false)
       set_library_updated_at_timestamp(Date.now())
-      if (search_hook.result) {
-        search_hook.set_highlights(search_hook.incoming_highlights)
-        search_hook.set_highlights_sites_variants(
-          search_hook.incoming_highlights_sites_variants,
-        )
-      } else if (search_hook.highlights && !search_hook.result) {
-        search_hook.set_highlights(undefined)
-        search_hook.set_highlights_sites_variants(undefined)
-      }
+      // if (search_hook.result) {
+      //   search_hook.set_highlights(search_hook.incoming_highlights)
+      //   search_hook.set_highlights_sites_variants(
+      //     search_hook.incoming_highlights_sites_variants,
+      //   )
+      // } else if (search_hook.highlights && !search_hook.result) {
+      //   search_hook.set_highlights(undefined)
+      //   search_hook.set_highlights_sites_variants(undefined)
+      // }
       if (is_pinned_stale) {
         set_pinned_updated_at(pinned_hook.fetched_at_timestamp)
         set_is_pinned_stale(false)
@@ -169,6 +169,20 @@ const Library = (params: {
     search_hook.db_updated_at_timestamp,
     search_hook.archived_db_updated_at_timestamp,
   ])
+
+  useUpdateEffect(() => {
+    if (!bookmarks_hook.is_fetching) {
+      if (search_hook.result) {
+        search_hook.set_highlights(search_hook.incoming_highlights)
+        search_hook.set_highlights_sites_variants(
+          search_hook.incoming_highlights_sites_variants,
+        )
+      } else if (search_hook.highlights && !search_hook.result) {
+        search_hook.set_highlights(undefined)
+        search_hook.set_highlights_sites_variants(undefined)
+      }
+    }
+  }, [bookmarks_hook.is_fetching])
 
   // This prevents layout shift in loading state during setting pinned status on a link.
   useUpdateEffect(() => {
