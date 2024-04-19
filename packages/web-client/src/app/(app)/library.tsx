@@ -143,15 +143,6 @@ const Library = (params: {
       set_is_fetching_first_bookmarks(false)
       set_show_skeletons(false)
       set_library_updated_at_timestamp(Date.now())
-      // if (search_hook.result) {
-      //   search_hook.set_highlights(search_hook.incoming_highlights)
-      //   search_hook.set_highlights_sites_variants(
-      //     search_hook.incoming_highlights_sites_variants,
-      //   )
-      // } else if (search_hook.highlights && !search_hook.result) {
-      //   search_hook.set_highlights(undefined)
-      //   search_hook.set_highlights_sites_variants(undefined)
-      // }
       if (is_pinned_stale) {
         set_pinned_updated_at(pinned_hook.fetched_at_timestamp)
         set_is_pinned_stale(false)
