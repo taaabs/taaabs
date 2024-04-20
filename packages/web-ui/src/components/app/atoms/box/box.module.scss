@@ -2,15 +2,20 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  background: var(--white);
-  padding: var(--distance-14px) var(--distance-16px) var(--distance-16px)
-    var(--distance-16px);
-  border-radius: var(--border-radius-20px);
+  background-color: var(--white);
+  padding: var(--distance-16px);
   border: var(--border-secondary);
+  @include to768 {
+    border-left: 0;
+    border-right: 0;
+  }
   @include at768 {
-    padding: var(--distance-26px) var(--distance-40px) var(--distance-34px)
-      var(--distance-40px);
     border-radius: var(--border-radius-20px);
+    padding: var(--distance-24px);
+    border-radius: var(--border-radius-20px);
+  }
+  @include at1200 {
+    padding: var(--distance-40px);
   }
   > * {
     margin-top: 0.8em;

@@ -71,3 +71,7 @@
     flex-direction: column;
   }
 }
+.disabled_interactivity {
+  // Custom range has its own pointer events styles specified on slider for it to work correctly with mobile swiping.
+  pointer-events: none !important;
+}

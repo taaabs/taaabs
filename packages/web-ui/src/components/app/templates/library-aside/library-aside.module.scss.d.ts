@@ -7,5 +7,6 @@ declare const styles: {
   readonly slots__button__dropdown: string
   readonly 'slots__button__dropdown--hidden': string
   readonly tags: string
+  readonly disabled_interactivity: string
 }
 export = styles

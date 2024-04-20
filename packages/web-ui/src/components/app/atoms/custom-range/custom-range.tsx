@@ -22,7 +22,7 @@ export namespace CustomRange {
     current_lte?: number
     on_yyyymm_change: ({ gte, lte }: { gte: number; lte: number }) => void
     clear_date_range: () => void
-    selected_tags?: string
+    selected_tags?: number[]
     is_range_selector_disabled?: boolean
   }
 }
@@ -510,6 +510,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                       y1="0"
                       x2="0"
                       y2="1"
+                      style={{ pointerEvents: 'none' }}
                     >
                       <stop offset="0%" stopColor="#2563eb" stopOpacity={1} />
                       <stop offset="100%" stopColor="#2563eb" stopOpacity={0} />
@@ -521,6 +522,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     strokeWidth={0}
                     fill="url(#bookmark-count)"
                     isAnimationActive={false}
+                    style={{ pointerEvents: 'none' }}
                   />
                   <Area
                     type="basis"
@@ -529,6 +531,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     fill="var(--yellow)"
                     fillOpacity={starred_count == 0 ? 0 : 1}
                     isAnimationActive={false}
+                    style={{ pointerEvents: 'none' }}
                   />
                   <Area
                     type="basis"
@@ -538,6 +541,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     isAnimationActive={false}
                     fill="transparent"
                     strokeOpacity={bookmark_count == 0 ? 0 : 1}
+                    style={{ pointerEvents: 'none' }}
                   />
                   <Area
                     type="basis"
@@ -547,6 +551,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     fill="transparent"
                     isAnimationActive={false}
                     strokeOpacity={unread_count == 0 ? 0 : 1}
+                    style={{ pointerEvents: 'none' }}
                   />
                   <YAxis tickCount={1} width={0} />
                   <Brush

@@ -21,7 +21,7 @@ export namespace Button {
 export const Button: React.FC<Button.Props> = (props) => {
   const class_names = cn([
     styles.container,
-    styles[`container--${props.size ? props.size : 'default'}`],
+    props.size && props.size != 'default' && styles[`container--${props.size}`],
     { [styles['container--outlined']]: props.is_outlined },
     { [styles['container--loading']]: props.is_loading },
     { [styles['container--disabled']]: props.is_disabled },

@@ -15,6 +15,9 @@
   @include hover {
     background: var(--blue800);
   }
+  height: var(--button-dimension-40px);
+  font-size: var(--font-size-15px);
+  padding: 0 var(--distance-16px);
   > span {
     padding-bottom: 0.08em;
   }
@@ -40,27 +43,28 @@
     font-size: var(--font-size-13px);
     padding: 0 var(--distance-14px);
   }
-  &--default {
-    height: var(--button-dimension-40px);
-    font-size: var(--font-size-15px);
-    padding: 0 var(--distance-16px);
-  }
   &--medium {
-    height: var(--button-dimension-42px);
-    font-size: var(--font-size-16px);
-    padding: 0 var(--distance-18px);
-    @include at1380 {
-      height: var(--button-dimension-44px);
+    @include at768 {
+      font-size: var(--font-size-16px);
+      height: 2.5em;
+      padding: 0 1em;
+    }
+    @include at992 {
       font-size: var(--font-size-17px);
-      padding: 0 var(--distance-20px);
+    }
+    @include at1200 {
+      font-size: var(--font-size-19px);
+    }
+    @include at1380 {
+      font-size: var(--font-size-19px);
     }
   }
   &--large {
-    font-size: var(--font-size-15px);
-    height: 2.7em;
-    padding: 0 1em;
+    height: var(--button-dimension-40px);
     @include at768 {
       font-size: var(--font-size-17px);
+      height: 2.7em;
+      padding: 0 1em;
     }
     @include at992 {
       font-size: var(--font-size-19px);

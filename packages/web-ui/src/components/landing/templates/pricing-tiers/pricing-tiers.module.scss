@@ -7,7 +7,7 @@
 .inner {
   display: flex;
   justify-content: center;
-  gap: var(--distance-60px);
+  gap: var(--distance-40px);
   @include to768 {
     flex-direction: column;
   }

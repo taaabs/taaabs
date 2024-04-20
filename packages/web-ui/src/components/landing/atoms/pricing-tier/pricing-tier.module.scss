@@ -6,13 +6,18 @@
   flex-direction: column;
   gap: var(--distance-20px);
   border-radius: var(--border-radius-30px);
-  background: var(--white);
   border: var(--border-secondary);
-  padding: var(--distance-32px) var(--distance-40px);
+  padding: 0 var(--distance-40px);
+  background-color: var(--white);
+  &--featured {
+    border-color: var(--brand-color);
+    border-width: 2px;
+  }
 }
 .top {
   display: flex;
   flex-direction: column;
+  padding-top: var(--distance-32px);
   &__name {
     color: var(--brand-color);
     font-size: var(--font-size-34px);
@@ -26,49 +31,60 @@
 }
 .price {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: var(--distance-10px);
   &__cost {
-    display: flex;
-    align-items: center;
-    gap: var(--distance-6px);
-    > div:first-child {
-      font-size: var(--font-size-40px);
-      font-family: var(--font-family-plus-jakarta-sans);
-      font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-      color: var(--brand-color);
-    }
-    > div:last-child {
-      color: var(--text-color-dimmed);
-      font-size: var(--font-size-19px);
-    }
+    font-size: var(--font-size-40px);
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
   }
   &__info {
-    font-size: var(--font-size-19px);
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color-dimmed);
+    font-size: var(--font-size-14px);
   }
 }
 .bullets {
   display: flex;
   flex-direction: column;
   gap: var(--distance-14px);
-  margin-top: var(--distance-10px);
-  &__item {
-    display: flex;
-    align-items: center;
-    gap: var(--distance-10px);
+  &__heading {
+    color: var(--text-color-variant);
     font-size: var(--font-size-19px);
-    font-weight: var(--font-weight-inter-medium);
-    &__check {
+    font-weight: var(--font-weight-inter-regular);
+  }
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--distance-14px);
+    &__item {
       display: flex;
       align-items: center;
-      justify-content: center;
-      width: var(--distance-30px);
-      height: var(--distance-30px);
-      background: var(--brand-color);
-      border-radius: var(--border-radius-999px);
-      > svg {
-        fill: var(--white);
-        width: var(--icon-dimension-16px);
+      gap: var(--distance-10px);
+      > span {
+        font-size: var(--font-size-19px);
+        font-weight: var(--font-weight-inter-medium);
+      }
+      &__check {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--distance-30px);
+        height: var(--distance-30px);
+        background: var(--brand-color);
+        border-radius: var(--border-radius-999px);
+        > svg {
+          fill: var(--white);
+          width: var(--icon-dimension-16px);
+        }
       }
     }
   }
+}
+.button {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--distance-24px);
+  padding-bottom: var(--distance-50px);
 }

@@ -873,32 +873,32 @@ const Library = (params: {
       }}
       slot_custom_range={
         !show_skeletons ? (
-          <CustomRange
-            library_updated_at_timestamp={library_updated_at_timestamp}
-            counts={counts_hook.months || undefined}
-            on_yyyymm_change={date_view_options_hook.set_gte_lte_search_params}
-            clear_date_range={
-              date_view_options_hook.clear_gte_lte_search_params
-            }
-            current_gte={
-              parseInt(
-                search_params.get(search_params_keys.greater_than_equal) || '0',
-              ) || undefined
-            }
-            current_lte={
-              parseInt(
-                search_params.get(search_params_keys.less_than_equal) || '0',
-              ) || undefined
-            }
-            selected_tags={
-              search_params.get(search_params_keys.tags) || undefined
-            }
-            is_range_selector_disabled={
-              sort_by_view_options_hook.current_sort_by == SortBy.UPDATED_AT ||
-              sort_by_view_options_hook.current_sort_by == SortBy.VISITED_AT ||
-              sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
-            }
-          />
+          <div
+            style={{
+              pointerEvents: is_fetching_first_bookmarks ? 'none' : undefined,
+            }}
+          >
+            <CustomRange
+              library_updated_at_timestamp={library_updated_at_timestamp}
+              counts={counts_hook.months || undefined}
+              on_yyyymm_change={
+                date_view_options_hook.set_gte_lte_search_params
+              }
+              clear_date_range={
+                date_view_options_hook.clear_gte_lte_search_params
+              }
+              current_gte={date_view_options_hook.current_gte}
+              current_lte={date_view_options_hook.current_lte}
+              selected_tags={tag_view_options_hook.selected_tags}
+              is_range_selector_disabled={
+                sort_by_view_options_hook.current_sort_by ==
+                  SortBy.UPDATED_AT ||
+                sort_by_view_options_hook.current_sort_by ==
+                  SortBy.VISITED_AT ||
+                sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+              }
+            />
+          </div>
         ) : (
           <UiAppAtom_CustomRangeSkeleton />
         )
