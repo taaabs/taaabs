@@ -17,7 +17,7 @@
   align-items: center;
   background-color: var(--blue50-transparent);
   backdrop-filter: var(--backdrop-filter);
-  border: 1px solid var(--blue100);
+  border: 1.5px solid var(--blue100);
   box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.4);
   z-index: 2;
   border-radius: var(--border-radius-999px);
@@ -39,7 +39,7 @@
     width: calc(100% + (var(--distance-16px) * 2));
   }
   @include hover {
-    border-color: var(--blue300);
+    border-color: var(--blue200);
   }
   &--yields-no-results {
     border-color: var(--red100) !important;
@@ -50,7 +50,7 @@
     }
   }
   &--focus {
-    border: 1px solid var(--blue400) !important;
+    border-color: var(--blue400) !important;
     box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.7);
   }
   &--focus-yields-no-results {

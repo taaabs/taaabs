@@ -4,16 +4,29 @@
 .items {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--distance-8px);
+  gap: var(--distance-4px);
 }
-.item {
-  background-color: var(--white);
-  border: var(--border-secondary);
+.not-relevant {
   display: flex;
   align-items: center;
+  margin: 0 -4px;
+  padding: 0 4px;
+  height: var(--distance-32px);
+  > div {
+    width: var(--distance-3px);
+    height: var(--distance-3px);
+    border-radius: 50%;
+    background-color: var(--neutral300);
+  }
+}
+.item {
+  display: flex;
+  align-items: center;
+  background-color: var(--white);
+  border: var(--border-secondary);
   gap: var(--distance-6px);
   padding: 0 var(--distance-7px);
-  min-height: var(--distance-32px);
+  height: var(--distance-32px);
   border-radius: var(--distance-16px);
   position: relative;
   // Needed by swipable and sortable - element touch hold detection.

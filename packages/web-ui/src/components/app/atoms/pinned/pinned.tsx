@@ -101,7 +101,11 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         ? url_to_wayback({ date: item.created_at, url: item.url })
         : item.url
 
-      return (
+      return is_not_relevant ? (
+        <div className={styles['not-relevant']} key={url}>
+          <div />
+        </div>
+      ) : (
         <a
           key={url}
           href={url}
@@ -118,11 +122,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
             e.preventDefault()
           }}
         >
-          <div
-            className={cn(styles.item__favicon, {
-              [styles['item__favicon--not-relevant']]: is_not_relevant,
-            })}
-          >
+          <div className={styles.item__favicon}>
             <img
               alt={'Favicon'}
               width={16}
@@ -130,26 +130,24 @@ export const Pinned: React.FC<Pinned.Props> = memo(
               src={`${props.favicon_host}/${get_domain_from_url(item.url)}`}
             />
           </div>
-          {!is_not_relevant && (
-            <div>
-              <div
-                className={cn(styles.item__title, {
-                  [styles['item__title--unread']]: item.is_unread,
-                  [styles['item__title--via-wayback']]: item.via_wayback,
-                })}
-              >
-                {item.title}
-              </div>
-              {item.stars && item.title && (
-                <div className={styles['item__stars']}>
-                  {[...Array(item.stars)].map((_, i) => (
-                    <Icon variant="STAR_FILLED" key={i} />
-                  ))}
-                </div>
-              )}
-              {item.is_unread && <div className={styles['item__unread']} />}
+          <div>
+            <div
+              className={cn(styles.item__title, {
+                [styles['item__title--unread']]: item.is_unread,
+                [styles['item__title--via-wayback']]: item.via_wayback,
+              })}
+            >
+              {item.title}
             </div>
-          )}
+            {item.stars && item.title && (
+              <div className={styles['item__stars']}>
+                {[...Array(item.stars)].map((_, i) => (
+                  <Icon variant="STAR_FILLED" key={i} />
+                ))}
+              </div>
+            )}
+            {item.is_unread && <div className={styles['item__unread']} />}
+          </div>
         </a>
       )
     })
@@ -172,6 +170,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         fallbackClass={styles['item--dragging']}
         delay={system_values.sortablejs_delay}
         delayOnTouchOnly={true}
+        filter={`.${styles['not-relevant']}`}
       >
         {items_dom}
       </ReactSortable>

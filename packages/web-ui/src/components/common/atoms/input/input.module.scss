@@ -7,18 +7,17 @@
   flex-direction: column;
 }
 .field {
-  background-color: var(--neutral100);
   width: 100%;
-  border: 1px solid transparent;
+  border: 1.5px solid var(--neutral200);
   border-radius: var(--border-radius-10px);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
   @include transition-150ms();
   @include hover {
-    border-color: var(--neutral200);
+    border-color: var(--neutral250);
   }
   &:focus {
-    border-color: var(--neutral200);
-    background-color: var(--neutral50);
-    box-shadow: inset 0 1px 3px var(--neutral100);
+    border-color: var(--blue400);
+    box-shadow: inset 0 1px 3px var(--blue100);
   }
   &--error {
     background: var(--red100);

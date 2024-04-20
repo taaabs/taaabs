@@ -2,6 +2,7 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import styles from './home-hero.module.scss'
 import { Button } from '@web-ui/components/common/particles/button'
 import { Wrapper as UiLandingTemplate_Wrapper } from '../../templates/wrapper/wrapper'
+import confetti from 'canvas-confetti'
 
 export namespace HomeHero {
   export type Props = {
@@ -34,6 +35,23 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
                 <span>{props.heading.first_line}</span>
                 <div
                   className={styles['top__heading__first-line__hugging-face']}
+                  onClick={(e) => {
+                    confetti({
+                      particleCount: 60,
+                      startVelocity: 20,
+                      spread: 200,
+                      gravity: 0.3,
+                      ticks: 30,
+                      decay: 0.91,
+                      scalar: 1.4,
+                      shapes: ['square'],
+                      colors: ['#FFD21E', '#1d4ed8'],
+                      origin: {
+                        x: e.clientX / window.innerWidth,
+                        y: e.clientY / window.innerHeight,
+                      },
+                    })
+                  }}
                 >
                   <Icon variant="HUGGING_FACE" />
                 </div>

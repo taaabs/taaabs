@@ -1,5 +1,6 @@
 declare const styles: {
   readonly items: string
+  readonly 'not-relevant': string
   readonly item: string
   readonly 'item--dragging': string
   readonly item__favicon: string

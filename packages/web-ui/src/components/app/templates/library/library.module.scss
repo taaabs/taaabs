@@ -144,9 +144,7 @@
     &__tag-hierarchies {
       @include at992 {
         position: relative;
-        border-top: var(--border-secondary);
         overflow: auto;
-        padding-top: var(--distance-8px);
         padding-bottom: var(--distance-16px);
         height: calc(
           100vh - var(--header-desktop-height) - var(--distance-16px) -
@@ -307,11 +305,7 @@
     }
     &__pinned {
       @include to992 {
-        margin-bottom: var(--distance-8px);
         padding: 0 var(--distance-8px);
-      }
-      @include at992 {
-        margin-bottom: var(--distance-16px);
       }
     }
     &__info {
