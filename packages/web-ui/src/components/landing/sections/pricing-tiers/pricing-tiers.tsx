@@ -1,10 +1,11 @@
 import styles from './pricing-tiers.module.scss'
-import { Wrapper } from '@web-ui/components/common/templates/wrapper'
+import { Wrapper as UiCommonTemplateWrapper } from '@web-ui/components/common/templates/wrapper'
 import { Icon } from '@web-ui/components/common/particles/icon'
 import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import { use_is_hydrated } from '@shared/hooks'
 import confetti from 'canvas-confetti'
+import { Section as UiLandingTemplate_Section } from '../../templates/section/section'
 
 export namespace PricingTiers {
   export type Props = {
@@ -21,13 +22,14 @@ export namespace PricingTiers {
       name: string
       description: string
       price: string
+      previous_price?: string
       price_info?: {
         first_line: string
         second_line: string
       }
       bullets_heading: string
       bullets: string[]
-      has_best_value?: boolean
+      featured_text?: string
       slot_button: React.ReactNode
     }[]
   }
@@ -47,8 +49,8 @@ export const PricingTiers: React.FC<PricingTiers.Props> = (props) => {
   }, [])
 
   return (
-    <section className={styles.container}>
-      <Wrapper>
+    <UiLandingTemplate_Section>
+      <UiCommonTemplateWrapper>
         <div className={styles['billing-cycle']}>
           <button
             className={styles['billing-cycle__box']}
@@ -117,12 +119,14 @@ export const PricingTiers: React.FC<PricingTiers.Props> = (props) => {
           </button>
         </div>
         <div className={styles.tiers}>
-          {props.pricing_tiers.map((pricing_tier) => (
+          {props.pricing_tiers.map((pricing_tier, i) => (
             <div
               className={cn(styles.pricing_tier, {
                 [styles['pricing_tier--best-value']]:
-                  pricing_tier.has_best_value,
+                  pricing_tier.featured_text,
               })}
+              featured-text={pricing_tier.featured_text}
+              key={i}
             >
               <div className={styles.pricing_tier__top}>
                 <div className={styles.pricing_tier__top__name}>
@@ -133,6 +137,16 @@ export const PricingTiers: React.FC<PricingTiers.Props> = (props) => {
                 </div>
               </div>
               <div className={styles.pricing_tier__price}>
+                {pricing_tier.previous_price && (
+                  <div
+                    className={cn(
+                      styles.pricing_tier__price__cost,
+                      styles['pricing_tier__price__cost--previous'],
+                    )}
+                  >
+                    {pricing_tier.previous_price}
+                  </div>
+                )}
                 <div className={styles.pricing_tier__price__cost}>
                   {pricing_tier.price}
                 </div>
@@ -171,7 +185,7 @@ export const PricingTiers: React.FC<PricingTiers.Props> = (props) => {
             </div>
           ))}
         </div>
-      </Wrapper>
-    </section>
+      </UiCommonTemplateWrapper>
+    </UiLandingTemplate_Section>
   )
 }

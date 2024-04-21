@@ -1,5 +1,5 @@
 import { Box } from '@web-ui/components/app/atoms/box'
-import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
+import { HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
 import { DesktopMenuItem } from '@web-ui/components/app/atoms/desktop-menu-item'
 import { SimpleBackArrowHeader } from '@web-ui/components/app/atoms/simple-back-arrow-header'
 import { Settings } from '@web-ui/components/app/templates/settings'
@@ -31,35 +31,35 @@ export const Primary = () => {
       slot_main={
         <>
           <Box>
-            <BoxHeading heading="Lorem" subheading="Ipsum" />
+            <HeadingWithSubheading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
             <div>
               <Button size="default">Lorem</Button>
             </div>
           </Box>
           <Box>
-            <BoxHeading heading="Lorem" subheading="Ipsum" />
+            <HeadingWithSubheading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
             <div>
               <Button size="default">Lorem</Button>
             </div>
           </Box>
           <Box>
-            <BoxHeading heading="Lorem" subheading="Ipsum" />
+            <HeadingWithSubheading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
             <div>
               <Button size="default">Lorem</Button>
             </div>
           </Box>
           <Box>
-            <BoxHeading heading="Lorem" subheading="Ipsum" />
+            <HeadingWithSubheading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
             <div>
               <Button size="default">Lorem</Button>
             </div>
           </Box>
           <Box>
-            <BoxHeading heading="Lorem" subheading="Ipsum" />
+            <HeadingWithSubheading heading="Lorem" subheading="Ipsum" />
             <Input value="Lorem ipsum" on_change={() => {}} />
             <div>
               <Button size="default">Lorem</Button>

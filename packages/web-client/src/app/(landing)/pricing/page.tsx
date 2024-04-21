@@ -10,28 +10,39 @@ enum BillingCycle {
   YEARLY,
 }
 
+const price = {
+  monthly: {
+    lite: 5,
+    pro: 10,
+  },
+  yearly: {
+    lite: 4,
+    pro: 8,
+  },
+}
+
 const Page: React.FC = () => {
   const [billing_cycle, set_billing_cycle] = useState<BillingCycle>(
     BillingCycle.YEARLY,
   )
 
-  let basic_price: number
+  let lite_price: number
   switch (billing_cycle) {
     case BillingCycle.YEARLY:
-      basic_price = 4
+      lite_price = price.yearly.lite
       break
     case BillingCycle.MONTHLY:
-      basic_price = 5
+      lite_price = price.monthly.lite
       break
   }
 
   let pro_price: number
   switch (billing_cycle) {
     case BillingCycle.YEARLY:
-      pro_price = 6
+      pro_price = price.yearly.pro
       break
     case BillingCycle.MONTHLY:
-      pro_price = 8
+      pro_price = price.monthly.pro
       break
   }
 
@@ -55,18 +66,18 @@ const Page: React.FC = () => {
             }
           },
           is_monthly_selected: billing_cycle == BillingCycle.MONTHLY,
-          yearly_savings: 'Up to -25%',
+          yearly_savings: '-20%',
         }}
         pricing_tiers={[
           {
             name: 'Free',
-            description: 'The start of your journey',
+            description: 'Start building your personal library',
             price: '$0',
             bullets_heading: "What's included:",
             bullets: [
-              'Unlimited bookmarks',
-              'Unlimited tags',
-              'End-to-end encryption',
+              'Unlimited bookmarks & tags',
+              'All essential features',
+              'Community support',
             ],
             slot_button: (
               <UiCommonParticle_Button on_click={() => {}} size="medium">
@@ -77,7 +88,11 @@ const Page: React.FC = () => {
           {
             name: 'Lite',
             description: 'Affordable plan with our must haves',
-            price: `$${basic_price}`,
+            previous_price:
+              billing_cycle == BillingCycle.YEARLY
+                ? `$${price.monthly.lite}`
+                : undefined,
+            price: `$${lite_price}`,
             price_info: {
               first_line: 'per month',
               second_line:
@@ -86,7 +101,11 @@ const Page: React.FC = () => {
                   : 'billed monthly',
             },
             bullets_heading: 'Everyting in Free, plus:',
-            bullets: ['Multi-link bookmarks', 'Mark as unread', 'Dark mode'],
+            bullets: [
+              'Add-on: Multi-link bookmarks',
+              'Add-on: Mark as unread',
+              'Add-on: Dark mode',
+            ],
             slot_button: (
               <UiCommonParticle_Button on_click={() => {}} size="medium">
                 Subscribe to Lite
@@ -96,6 +115,10 @@ const Page: React.FC = () => {
           {
             name: 'Pro',
             description: 'Get the most out of Taaabs',
+            previous_price:
+              billing_cycle == BillingCycle.YEARLY
+                ? `$${price.monthly.pro}`
+                : undefined,
             price: `$${pro_price}`,
             price_info: {
               first_line: 'per month',
@@ -106,11 +129,11 @@ const Page: React.FC = () => {
             },
             bullets_heading: 'Everyting in Lite, plus:',
             bullets: [
-              'Power user superpowers',
+              'All addons',
               'Priority support',
               'Claim shorter username',
             ],
-            has_best_value: true,
+            featured_text: 'recommended',
             slot_button: (
               <UiCommonParticle_Button on_click={() => {}} size="medium">
                 Subscribe to Pro

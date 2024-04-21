@@ -4,13 +4,14 @@
 .items {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--distance-4px);
+  justify-content: center;
+  gap: var(--distance-8px);
 }
 .not-relevant {
   display: flex;
   align-items: center;
-  margin: 0 -4px;
-  padding: 0 4px;
+  margin: 0 -8px;
+  padding: 0 8px;
   height: var(--distance-32px);
   > div {
     width: var(--distance-3px);
@@ -26,7 +27,7 @@
   border: var(--border-secondary);
   gap: var(--distance-6px);
   padding: 0 var(--distance-7px);
-  height: var(--distance-32px);
+  min-height: var(--distance-32px);
   border-radius: var(--distance-16px);
   position: relative;
   // Needed by swipable and sortable - element touch hold detection.

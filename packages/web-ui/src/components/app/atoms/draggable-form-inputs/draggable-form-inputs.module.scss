@@ -21,7 +21,7 @@
       cursor: grab;
       margin-left: calc(var(--distance-16px) * -1);
       > svg {
-        fill: var(--brand-color);
+        fill: var(--black);
         height: var(--icon-dimension-16px);
       }
     }
@@ -42,11 +42,11 @@
       height: var(--button-dimension-34px);
       @include transition-150ms(background-color);
       @include hover {
-        background-color: var(--blue100);
+        background-color: var(--neutral100);
       }
       > svg {
         height: var(--icon-dimension-20px);
-        fill: var(--brand-color);
+        fill: var(--black);
         @include transition-150ms(fill);
       }
       &--remove {
@@ -56,7 +56,7 @@
         }
       }
       &--disabled > svg {
-        fill: var(--blue300);
+        fill: var(--neutral300);
       }
     }
   }

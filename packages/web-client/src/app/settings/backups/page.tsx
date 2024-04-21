@@ -7,7 +7,7 @@ import {
 } from './_hooks/store'
 import { backups_actions } from '@repositories/stores/settings-backups/backups/backups.slice'
 import { Box as UiAppAtom_Box } from '@web-ui/components/app/atoms/box'
-import { BoxHeading as UiAppAtom_BoxHeading } from '@web-ui/components/app/atoms/box-heading'
+import { HeadingWithSubheading as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
@@ -35,7 +35,7 @@ const Page: React.FC = () => {
 
   return (
     <UiAppAtom_Box>
-      <UiAppAtom_BoxHeading
+      <UiAppAtom_HeadingWithSubheading
         heading={'Manage backups'}
         subheading={
           'This section helps you request the creation of snapshots of all your bookmarks and tag hierarchies.'

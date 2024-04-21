@@ -4,8 +4,7 @@ import { Settings_DataSourceImpl } from '@repositories/modules/settings/infrastr
 import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastructure/repositories/settings.repository-impl'
 import { CheckUsernameAvailability_UseCase } from '@repositories/modules/settings/domain/use-cases/check-username-availability.use-case'
 import { UpdateUsername_UseCase } from '@repositories/modules/settings/domain/use-cases/update-username.use-case'
-import { Box as UiAppAtom_Box } from '@web-ui/components/app/atoms/box'
-import { BoxHeading as UiAppAtom_BoxHeading } from '@web-ui/components/app/atoms/box-heading'
+import { HeadingWithSubheading as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
 import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
 import { useState } from 'react'
@@ -77,71 +76,68 @@ export const Username: React.FC<Username.Props> = (props) => {
 
   return (
     <form onSubmit={handleSubmit(on_submit)} key={username}>
-      <UiAppAtom_Box>
-        <UiAppAtom_BoxHeading
-          heading="Username"
-          subheading="Accessing your account and sharing your public profile requires using unique username."
-        />
+      <UiAppAtom_HeadingWithSubheading
+        heading="Username"
+        subheading="Accessing your account and sharing your public profile requires using unique username."
+      />
 
-        <Controller
-          name="username"
-          control={control}
-          defaultValue={username}
-          rules={{
-            required: true,
-            minLength: system_values.username_min_length,
-            maxLength: system_values.username_max_length,
-            pattern: /^[a-z0-9\-\_]+$/,
-            validate: awesomeDebouncePromise(async (value) => {
-              if (value == username) return true
-              return await get_is_username_available(value)
-            }, 500),
-          }}
-          render={({ field }) => {
-            let error_message: string | undefined
+      <Controller
+        name="username"
+        control={control}
+        defaultValue={username}
+        rules={{
+          required: true,
+          minLength: system_values.username_min_length,
+          maxLength: system_values.username_max_length,
+          pattern: /^[a-z0-9\-\_]+$/,
+          validate: awesomeDebouncePromise(async (value) => {
+            if (value == username) return true
+            return await get_is_username_available(value)
+          }, 500),
+        }}
+        render={({ field }) => {
+          let error_message: string | undefined
 
-            const info_message = (
-              <>
-                taaabs.com/<strong>{field.value}</strong>
-              </>
-            )
+          const info_message = (
+            <>
+              taaabs.com/<strong>{field.value}</strong>
+            </>
+          )
 
-            if (errors.username?.type == 'minLength') {
-              error_message = `Username must have at least ${system_values.username_min_length} characters.`
-            } else if (errors.username?.type == 'maxLength') {
-              error_message = `Maximum length of a username is ${system_values.username_max_length} characters.`
-            } else if (errors.username?.type == 'pattern') {
-              error_message =
-                'Only lowercase letters, numbers, periods, and underscores are allowed.'
-            } else if (errors.username?.type == 'validate') {
-              error_message = 'This username is already in use.'
-            }
+          if (errors.username?.type == 'minLength') {
+            error_message = `Username must have at least ${system_values.username_min_length} characters.`
+          } else if (errors.username?.type == 'maxLength') {
+            error_message = `Maximum length of a username is ${system_values.username_max_length} characters.`
+          } else if (errors.username?.type == 'pattern') {
+            error_message =
+              'Only lowercase letters, numbers, periods, and underscores are allowed.'
+          } else if (errors.username?.type == 'validate') {
+            error_message = 'This username is already in use.'
+          }
 
-            return (
-              <UiCommonAtom_Input
-                is_disabled={!username}
-                value={field.value}
-                on_change={(value) => {
-                  if (isSubmitting) return
+          return (
+            <UiCommonAtom_Input
+              is_disabled={!username}
+              value={field.value}
+              on_change={(value) => {
+                if (isSubmitting) return
 
-                  field.onChange(value)
-                }}
-                message_type={error_message ? 'error' : undefined}
-                message={error_message || info_message}
-              />
-            )
-          }}
-        />
-        <div>
-          <UiCommonParticle_Button
-            type="submit"
-            is_loading={isSubmitting}
-            is_disabled={!username}
-          >
-            Save
-          </UiCommonParticle_Button>
-        </div>
-      </UiAppAtom_Box>
+                field.onChange(value)
+              }}
+              message_type={error_message ? 'error' : undefined}
+              message={error_message || info_message}
+            />
+          )
+        }}
+      />
+      <br />
+      <UiCommonParticle_Button
+        type="submit"
+        is_loading={isSubmitting}
+        is_disabled={!username}
+      >
+        Save
+      </UiCommonParticle_Button>
     </form>
   )
 }

@@ -45,17 +45,11 @@
   }
   &--medium {
     @include at768 {
-      font-size: var(--font-size-16px);
+      font-size: var(--font-size-17px);
       height: 2.5em;
       padding: 0 1em;
     }
-    @include at992 {
-      font-size: var(--font-size-17px);
-    }
     @include at1200 {
-      font-size: var(--font-size-19px);
-    }
-    @include at1380 {
       font-size: var(--font-size-19px);
     }
   }

@@ -306,6 +306,7 @@
     &__pinned {
       @include to992 {
         padding: 0 var(--distance-8px);
+        margin-bottom: var(--distance-8px); // Needed when compact mode is set on mobile.
       }
     }
     &__info {

@@ -132,7 +132,6 @@ const bookmark = (
     on_tag_click={() => {}}
     on_click={() => {}}
     on_selected_tag_click={() => {}}
-    set_render_height={() => {}}
     favicon_host=""
     menu_slot={<></>}
     should_dim_visited_links={false}
@@ -146,5 +145,9 @@ const bookmark = (
     on_give_point_click={() => {}}
     created_at={new Date()}
     library_url=""
+    on_get_points_given_click={() => {}}
+    on_link_click={() => {}}
+    on_link_middle_click={() => {}}
+    on_new_tab_link_click={() => {}}
   />
 )

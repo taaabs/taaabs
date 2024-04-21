@@ -84,7 +84,7 @@ export namespace Bookmark {
       is_pinned?: boolean
       via_wayback?: boolean
     }[]
-    on_link_click: (url: string) => Promise<void>
+    on_link_click: (url: string) => void
     on_link_middle_click: () => void
     on_new_tab_link_click: (url: string) => void
     favicon_host: string

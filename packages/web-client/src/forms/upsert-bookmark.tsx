@@ -5,7 +5,6 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { FormModal as UiAppTemplate_FormModal } from '../../../web-ui/src/components/app/templates/form-modal'
 import { ModalHeader as UiAppAtom_ModalHeader } from '../../../web-ui/src/components/app/atoms/modal-header'
 import { ModalFooter as UiAppAtom_ModalFooter } from '../../../web-ui/src/components/app/atoms/modal-footer'
-import { BoxHeading as UiAppAtom_BoxHeading } from '../../../web-ui/src/components/app/atoms/box-heading'
 import { FormRadio as UiAppTemplate_FormRadio } from '../../../web-ui/src/components/app/templates/form-radio'
 import { RadioSetting as UiAppAtom_RadioSetting } from '../../../web-ui/src/components/app/atoms/radio-setting'
 import { Box as UiAppAtom_Box } from '../../../web-ui/src/components/app/atoms/box'
@@ -153,75 +152,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         }
       >
         <UiAppAtom_Box>
-          <UiAppAtom_BoxHeading heading="Visibility" />
-          <Controller
-            name="is_public"
-            control={control}
-            defaultValue={props.bookmark?.is_public}
-            render={({ field }) => {
-              return (
-                <UiAppTemplate_FormRadio>
-                  <UiAppAtom_RadioSetting
-                    top_line="Private"
-                    bottom_line="All data is encrypted end-to-end"
-                    on_click={() => {
-                      field.onChange(false)
-                    }}
-                    is_checked={!field.value}
-                  />
-                  <UiAppAtom_RadioSetting
-                    top_line="Public"
-                    bottom_line="Selected links and tags can remain private"
-                    on_click={() => {
-                      field.onChange(true)
-                    }}
-                    is_checked={field.value}
-                  />
-                </UiAppTemplate_FormRadio>
-              )
-            }}
-          />
-        </UiAppAtom_Box>
-
-        <UiAppAtom_Box>
-          <UiAppAtom_BoxHeading heading="Links" />
-          <Controller
-            name="is_public"
-            control={control}
-            defaultValue={props.bookmark?.is_public}
-            render={({ field }) => {
-              return (
-                <UiAppAtom_DraggableFormInputs
-                  items={links.map((link) => ({
-                    value: link.url,
-                    is_public:
-                      props.bookmark?.is_public == false
-                        ? true
-                        : link.is_public,
-                  }))}
-                  on_change={(links) => {
-                    set_links(
-                      links.map((el) => ({
-                        url: el.value,
-                        is_public: el.is_public,
-                      })),
-                    )
-                  }}
-                  button_text="Add related link"
-                  show_visibility_toggler={
-                    (field.value === undefined && props.bookmark?.is_public) ||
-                    field.value ||
-                    false
-                  }
-                  max_items={system_values.bookmark.links.limit}
-                />
-              )
-            }}
-          />
-        </UiAppAtom_Box>
-
-        <UiAppAtom_Box>
-          <UiAppAtom_BoxHeading heading="Title" />
+          <h2>Title</h2>
           <UiCommonTemplate_FormControllerFix>
             <Controller
               name="title"
@@ -259,45 +190,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               }}
             />
           </UiCommonTemplate_FormControllerFix>
-        </UiAppAtom_Box>
 
-        <UiAppAtom_Box>
-          <UiAppAtom_BoxHeading heading="Tags" />
-          <Controller
-            name="is_public"
-            control={control}
-            defaultValue={props.bookmark?.is_public}
-            render={({ field }) => {
-              return (
-                <UiAppAtom_DraggableFormInputs
-                  items={tags.map((tag) => ({
-                    value: tag.name,
-                    is_public:
-                      props.bookmark?.is_public == false ? true : tag.is_public,
-                  }))}
-                  on_change={(tags) => {
-                    set_tags(
-                      tags.map((el) => ({
-                        name: el.value,
-                        is_public: el.is_public,
-                      })),
-                    )
-                  }}
-                  button_text="Add tag"
-                  show_visibility_toggler={
-                    (field.value === undefined && props.bookmark?.is_public) ||
-                    field.value ||
-                    false
-                  }
-                  max_items={system_values.bookmark.tags.limit}
-                />
-              )
-            }}
-          />
-        </UiAppAtom_Box>
-
-        <UiAppAtom_Box>
-          <UiAppAtom_BoxHeading heading="Note" />
+          <h2>Note</h2>
           <UiCommonTemplate_FormControllerFix>
             <Controller
               name="note"
@@ -335,6 +229,106 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               }}
             />
           </UiCommonTemplate_FormControllerFix>
+
+          <h2>Links</h2>
+          <Controller
+            name="is_public"
+            control={control}
+            defaultValue={props.bookmark?.is_public}
+            render={({ field }) => {
+              return (
+                <UiAppAtom_DraggableFormInputs
+                  items={links.map((link) => ({
+                    value: link.url,
+                    is_public:
+                      props.bookmark?.is_public == false
+                        ? true
+                        : link.is_public,
+                  }))}
+                  on_change={(links) => {
+                    set_links(
+                      links.map((el) => ({
+                        url: el.value,
+                        is_public: el.is_public,
+                      })),
+                    )
+                  }}
+                  button_text="Add link"
+                  show_visibility_toggler={
+                    (field.value === undefined && props.bookmark?.is_public) ||
+                    field.value ||
+                    false
+                  }
+                  max_items={system_values.bookmark.links.limit}
+                />
+              )
+            }}
+          />
+
+          <h2>Tags</h2>
+
+          <Controller
+            name="is_public"
+            control={control}
+            defaultValue={props.bookmark?.is_public}
+            render={({ field }) => {
+              return (
+                <UiAppAtom_DraggableFormInputs
+                  items={tags.map((tag) => ({
+                    value: tag.name,
+                    is_public:
+                      props.bookmark?.is_public == false ? true : tag.is_public,
+                  }))}
+                  on_change={(tags) => {
+                    set_tags(
+                      tags.map((el) => ({
+                        name: el.value,
+                        is_public: el.is_public,
+                      })),
+                    )
+                  }}
+                  button_text="Add tag"
+                  show_visibility_toggler={
+                    (field.value === undefined && props.bookmark?.is_public) ||
+                    field.value ||
+                    false
+                  }
+                  max_items={system_values.bookmark.tags.limit}
+                />
+              )
+            }}
+          />
+        </UiAppAtom_Box>
+
+        <UiAppAtom_Box>
+          <h2>Visibility</h2>
+          <Controller
+            name="is_public"
+            control={control}
+            defaultValue={props.bookmark?.is_public}
+            render={({ field }) => {
+              return (
+                <UiAppTemplate_FormRadio>
+                  <UiAppAtom_RadioSetting
+                    top_line="Private"
+                    bottom_line="All data is encrypted end-to-end"
+                    on_click={() => {
+                      field.onChange(false)
+                    }}
+                    is_checked={!field.value}
+                  />
+                  <UiAppAtom_RadioSetting
+                    top_line="Public"
+                    bottom_line="Selected links and tags can remain private"
+                    on_click={() => {
+                      field.onChange(true)
+                    }}
+                    is_checked={field.value}
+                  />
+                </UiAppTemplate_FormRadio>
+              )
+            }}
+          />
         </UiAppAtom_Box>
       </UiAppTemplate_FormModal>
     </form>

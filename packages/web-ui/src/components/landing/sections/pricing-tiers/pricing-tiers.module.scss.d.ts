@@ -1,5 +1,4 @@
 declare const styles: {
-  readonly container: string
   readonly 'billing-cycle': string
   readonly 'billing-cycle__box': string
   readonly 'billing-cycle__box__selection': string
@@ -14,7 +13,9 @@ declare const styles: {
   readonly pricing_tier__top__name: string
   readonly pricing_tier__top__description: string
   readonly pricing_tier__price: string
+  readonly 'pricing_tier__price__old-cost': string
   readonly pricing_tier__price__cost: string
+  readonly 'pricing_tier__price__cost--previous': string
   readonly pricing_tier__price__info: string
   readonly pricing_tier__bullets: string
   readonly pricing_tier__bullets__heading: string

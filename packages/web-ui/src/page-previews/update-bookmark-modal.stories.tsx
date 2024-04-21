@@ -1,5 +1,5 @@
 import { Box } from '@web-ui/components/app/atoms/box'
-import { BoxHeading } from '@web-ui/components/app/atoms/box-heading'
+import { HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
 import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
 import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
 import { FormModal } from '@web-ui/components/app/templates/form-modal'
@@ -26,13 +26,13 @@ export const Primary = () => {
           }
         >
           <Box>
-            <BoxHeading heading="Links" />
+            <HeadingWithSubheading heading="Links" />
           </Box>
           <Box>
-            <BoxHeading heading="Title" />
+            <HeadingWithSubheading heading="Title" />
           </Box>
           <Box>
-            <BoxHeading heading="Tags" />
+            <HeadingWithSubheading heading="Tags" />
           </Box>
         </FormModal>
       }

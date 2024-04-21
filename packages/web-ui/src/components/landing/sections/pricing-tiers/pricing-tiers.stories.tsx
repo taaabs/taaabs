@@ -52,7 +52,8 @@ export const Primary = () => {
           {
             name: 'Lorem',
             description: 'Lorem ipsum',
-            price: '$0',
+            previous_price: '$0',
+            price: '$1',
             price_info: { first_line: 'Lorem', second_line: 'Ipsum' },
             slot_button: <>button</>,
             bullets_heading: 'Lorem ipsum',
@@ -63,7 +64,7 @@ export const Primary = () => {
               'Lorem ipsum',
               'Lorem ipsum',
             ],
-            has_best_value: true,
+            featured_text: 'lorem ipsum',
           },
         ]}
       />
