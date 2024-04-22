@@ -99,7 +99,6 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           is_public: form_data.is_public ? link.is_public : false,
           site_path: current_link?.site_path,
           is_pinned: current_link?.is_pinned,
-          pin_order: current_link?.pin_order,
           pin_title: current_link?.pin_title,
           via_wayback: current_link?.via_wayback,
         }

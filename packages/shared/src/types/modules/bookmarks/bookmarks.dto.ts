@@ -40,7 +40,6 @@ export namespace Bookmarks_Dto {
     class Link {
       public site_path?: string
       public is_pinned?: boolean
-      public pin_order?: number
       public pin_title?: string
       public via_wayback?: boolean
     }

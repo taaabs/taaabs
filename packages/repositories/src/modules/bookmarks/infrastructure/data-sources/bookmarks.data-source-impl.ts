@@ -191,7 +191,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                 site: link.is_public ? link.site_path : undefined,
                 is_pinned: link.is_pinned,
                 pin_title: link.pin_title,
-                pin_order: link.pin_order,
                 via_wayback: link.via_wayback,
               }
             } else {
@@ -207,7 +206,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                 pin_title_aes: link.pin_title
                   ? await Crypto.AES.encrypt(link.pin_title, key)
                   : undefined,
-                pin_order: link.pin_order,
                 via_wayback: link.via_wayback,
               }
             }

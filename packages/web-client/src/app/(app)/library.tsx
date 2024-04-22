@@ -1261,7 +1261,6 @@ const Library = (params: {
             is_public: link.is_public,
             is_pinned: link.is_pinned,
             pin_title: link.pin_title,
-            pin_order: link.pin_order,
             via_wayback: link.via_wayback,
           })),
           tags: [
@@ -1340,7 +1339,6 @@ const Library = (params: {
                   is_public: link.is_public,
                   is_pinned: link.is_pinned,
                   pin_title: link.pin_title,
-                  pin_order: link.pin_order,
                   via_wayback: link.via_wayback,
                 })),
                 tags: tags.map((tag) => ({
@@ -1410,7 +1408,6 @@ const Library = (params: {
                   is_public: link.is_public,
                   is_pinned: link.is_pinned,
                   pin_title: link.pin_title,
-                  pin_order: link.pin_order,
                   via_wayback: link.via_wayback,
                 })),
                 tags: bookmark.tags
@@ -1524,7 +1521,6 @@ const Library = (params: {
                       is_public: l.is_public,
                       is_pinned: link.url == l.url ? is_pinned : l.is_pinned,
                       pin_title: l.pin_title,
-                      pin_order: l.pin_order,
                       via_wayback: l.via_wayback,
                     })),
                     tags: bookmark.tags.map((tag) => ({
@@ -1638,7 +1634,6 @@ const Library = (params: {
                       is_public: l.is_public,
                       is_pinned: l.is_pinned,
                       pin_title: l.pin_title,
-                      pin_order: l.pin_order,
                       via_wayback:
                         link.url == l.url ? via_wayback : l.via_wayback,
                     })),
@@ -1747,7 +1742,6 @@ const Library = (params: {
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      pin_order: link.pin_order,
                       via_wayback: link.via_wayback,
                     })),
                     tags: bookmark.tags.map((tag) => ({
@@ -1833,7 +1827,6 @@ const Library = (params: {
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      pin_order: link.pin_order,
                       via_wayback: link.via_wayback,
                     })),
                     tags: bookmark.tags.map((tag) => ({
@@ -1922,7 +1915,6 @@ const Library = (params: {
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      pin_order: link.pin_order,
                       via_wayback: link.via_wayback,
                     })),
                     tags: bookmark.tags.map((tag) => ({
@@ -2011,7 +2003,6 @@ const Library = (params: {
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      pin_order: link.pin_order,
                       via_wayback: link.via_wayback,
                     })),
                     tags: bookmark.tags.map((tag) => ({
@@ -2100,7 +2091,6 @@ const Library = (params: {
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      pin_order: link.pin_order,
                       via_wayback: link.via_wayback,
                     })),
                     tags: bookmark.tags.map((tag) => ({
@@ -2189,7 +2179,6 @@ const Library = (params: {
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      pin_order: link.pin_order,
                       via_wayback: link.via_wayback,
                     })),
                     tags: bookmark.tags.map((tag) => ({
@@ -2385,7 +2374,6 @@ const Library = (params: {
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      pin_order: link.pin_order,
                       via_wayback: link.via_wayback,
                     })),
                     tags: bookmark.tags.map((tag) => ({
