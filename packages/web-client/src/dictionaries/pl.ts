@@ -16,7 +16,7 @@ export const dictionary: Dictionary = {
     unpin: 'Odepnij',
     link_is_now_pinned: 'Link został dodany do przypiętych',
     pin_has_been_removed: 'Link został usunięty z przypiętych',
-    pinned: 'Przypięte',
+    nothing_pinned: 'Przypięte',
     pinned_links_has_beed_updated: 'Przypięte linki zostały zaktualizowana',
     via_archive_org: 'Przez Archive.org',
     use_snapshot: 'Odnośnik używa teraz kopii',

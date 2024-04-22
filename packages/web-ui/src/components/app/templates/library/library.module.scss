@@ -5,7 +5,7 @@
   --_aside-width: 26vw;
   --_collapsed_aside_width: 58px;
   --_collapsed_hovered_aside_width: calc(
-    var(--_collapsed_aside_width) + var(--distance-4px)
+    var(--_collapsed_aside_width) + 4px
   );
   @include at1200 {
     --_aside-width: 300px;
@@ -21,12 +21,12 @@
   bottom: var(--bottom-navigation-bar-height);
   pointer-events: none;
   @include at992 {
-    bottom: var(--distance-24px);
+    bottom: 24px;
   }
   > div {
     pointer-events: all;
     @include to992 {
-      padding: var(--distance-16px) 0 var(--distance-8px) 0;
+      padding: 16px 0 8px 0;
     }
   }
 }
@@ -37,9 +37,9 @@
     min-height: 100vh;
     max-width: var(--site-max-width);
     margin: 0 auto;
-    padding: 0 var(--distance-16px);
+    padding: 0 16px;
     @include at1200 {
-      padding: 0 var(--distance-40px);
+      padding: 0 40px;
     }
     &::before {
       top: 0;
@@ -76,13 +76,14 @@
     width: var(--_collapsed_aside_width);
   }
   &__inner {
+    --_pane-selector-height: 22px;
     width: 100%;
     @include to992 {
       height: 100%;
       overflow: auto;
       background: var(--background);
-      padding: var(--distance-8px) var(--distance-17px)
-        calc(var(--distance-16px) + 36px + 8px) var(--distance-16px);
+      padding: 8px 17px
+        calc(16px + 36px + 8px) 16px;
     }
     @include at992 {
       position: relative;
@@ -90,34 +91,34 @@
       height: calc(100vh - var(--header-desktop-height));
       top: var(--header-desktop-height);
       position: fixed;
-      padding-top: var(--distance-16px);
-      padding-right: var(--distance-16px);
+      padding-top: 16px;
+      padding-right: 16px;
     }
     @include at1200 {
-      padding-top: var(--distance-16px);
-      padding-right: var(--distance-32px);
+      padding-top: 16px;
+      padding-right: 32px;
     }
     &__desktop-actions {
       @include to992 {
         display: none;
       }
-      height: var(--distance-52px);
+      height: 52px;
       display: flex;
       align-items: center;
-      margin-bottom: var(--distance-16px);
+      margin-bottom: 16px;
       &__collapse-button {
         display: flex;
         align-items: center;
-        width: var(--distance-42px);
+        width: 42px;
         height: var(--button-dimension-40px);
         > svg {
           fill: var(--brand-color);
         }
         > svg:first-child {
-          height: var(--distance-20px);
+          height: 20px;
         }
         > svg:last-child {
-          height: var(--distance-12px);
+          height: 12px;
           margin-left: 4px;
           @include transition-250ms(transform);
         }
@@ -138,17 +139,36 @@
         }
       }
       &__welcome-text {
-        padding-left: var(--distance-8px);
+        padding-left: 8px;
+      }
+    }
+    &__pane-selector {
+      display: flex;
+      gap: 10px;
+      height: var(--_pane-selector-height);
+      align-items: center;
+      &__button {
+        font-size: var(--font-size-13px);
+        color: var(--text-color-variant);
+        @include hover {
+          color: var(--text-color-normal);
+        }
+        &--active {
+          pointer-events: none;
+          font-weight: var(--font-weight-inter-medium);
+          color: var(--text-color-normal);
+        }
       }
     }
     &__content {
       @include at992 {
         position: relative;
         overflow: auto;
-        padding-bottom: var(--distance-16px);
+        padding-bottom: 16px;
         height: calc(
-          100vh - var(--header-desktop-height) - var(--distance-16px) -
-            var(--search-desktop-height) - var(--distance-16px)
+          100vh - var(--header-desktop-height) - 16px -
+            var(--search-desktop-height) - 16px -
+            var(--_pane-selector-height)
         );
       }
       @include at992 {
@@ -192,12 +212,12 @@
       &__skeleton {
         display: flex;
         flex-direction: column;
-        padding-top: var(--distance-4px);
+        padding-top: 4px;
         > span {
-          margin-bottom: var(--distance-6px);
+          margin-bottom: 6px;
         }
         > span > span {
-          height: var(--distance-28px);
+          height: 28px;
           border-radius: var(--border-radius-4px);
         }
       }
@@ -264,7 +284,7 @@
       z-index: 2;
       top: var(--header-mobile-height);
       @include at992 {
-        top: calc(var(--header-desktop-height) + var(--distance-16px));
+        top: calc(var(--header-desktop-height) + 16px);
       }
       @include transition-150ms(transform);
       @include at992 {
@@ -290,10 +310,10 @@
       width: 100%;
       background: var(--background);
       @include to992 {
-        gap: var(--distance-8px);
+        gap: 8px;
       }
       @include at992 {
-        gap: var(--distance-16px);
+        gap: 16px;
       }
       > span > span {
         height: 160px;
@@ -306,14 +326,14 @@
     &__info {
       display: flex;
       flex-direction: column;
-      gap: var(--distance-8px);
+      gap: 8px;
       justify-content: center;
       align-items: center;
       text-align: center;
       color: var(--text-color-dimmed);
       width: 100%;
       font-size: var(--font-size-13px);
-      padding: 0 var(--distance-16px);
+      padding: 0 16px;
       margin-bottom: 44px;
       height: 200px;
       @include at992 {

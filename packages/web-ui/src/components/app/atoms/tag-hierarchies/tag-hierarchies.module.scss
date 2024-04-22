@@ -13,7 +13,7 @@
   padding-right: 10px;
   svg {
     transform: rotate(-90deg);
-    height: var(--distance-12px);
+    height: 12px;
     fill: var(--brand-color);
   }
   &--collapsed svg {
@@ -33,7 +33,7 @@
     margin-left: 14px;
     border-radius: 50%;
     background-color: var(--brand-color);
-    transform: translateX(calc(var(--distance-7px) * -1));
+    transform: translateX(calc(7px * -1));
   }
   &__button {
     position: relative;
@@ -41,6 +41,12 @@
     display: flex;
     align-items: center;
     width: 100%;
+    &--all {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background-color: var(--neutral50);
+    }
     > div {
       display: flex;
       justify-content: space-between;
@@ -74,7 +80,7 @@
   }
 }
 .drop-zone {
-  padding: var(--distance-60px) var(--distance-16px);
+  padding: 60px 16px;
   display: flex;
   justify-content: center;
   border-radius: var(--border-radius-12px);
@@ -87,11 +93,11 @@
       var(--transition-timing-function),
     background-color var(--transition-duration-150ms)
       var(--transition-timing-function);
-  margin-top: var(--distance-6px);
+  margin-top: 6px;
   font-size: var(--font-size-13px);
   text-align: center;
   &--slim {
-    padding: 0 var(--distance-16px);
+    padding: 0 16px;
     height: var(--button-dimension-34px);
   }
   &--active {

@@ -4,12 +4,12 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--distance-4px);
+  gap: 4px;
   width: 100%;
   position: relative;
-  margin: var(--distance-8px) 0;
+  margin: 8px 0;
   @include at992 {
-    margin: var(--distance-16px) 0;
+    margin: 16px 0;
   }
 }
 .box {
@@ -21,22 +21,22 @@
   box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.4);
   z-index: 2;
   border-radius: var(--border-radius-999px);
-  gap: var(--distance-8px);
+  gap: 8px;
   height: var(--search-mobile-height);
   @include transition-150ms;
   @include to992 {
-    margin: 0 var(--distance-8px);
+    margin: 0 8px;
   }
   @include at992 {
-    transform: translateX(calc(var(--distance-8px) * -1));
-    width: calc(100% + (var(--distance-8px) * 2));
-    gap: var(--distance-6px);
+    transform: translateX(calc(8px * -1));
+    width: calc(100% + (8px * 2));
+    gap: 6px;
     height: var(--search-desktop-height);
   }
   @include at1200 {
-    transform: translateX(calc(var(--distance-16px) * -1));
-    gap: var(--distance-13px);
-    width: calc(100% + (var(--distance-16px) * 2));
+    transform: translateX(calc(16px * -1));
+    gap: 13px;
+    width: calc(100% + (16px * 2));
   }
   @include hover {
     border-color: var(--blue200);
@@ -58,7 +58,7 @@
     box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.7);
   }
   &__left-side {
-    margin-left: var(--distance-6px);
+    margin-left: 6px;
     width: var(--button-dimension-28px);
     height: var(--button-dimension-28px);
     display: flex;
@@ -72,7 +72,7 @@
     @include at992 {
       width: var(--button-dimension-34px);
       height: var(--button-dimension-34px);
-      margin-left: var(--distance-8px);
+      margin-left: 8px;
     }
     > svg {
       width: var(--icon-dimension-16px);
@@ -117,7 +117,7 @@
       color: var(--blue500);
       font-size: var(--font-size-12px);
       font-weight: var(--font-weight-inter-medium);
-      padding: 0 var(--distance-4px);
+      padding: 0 4px;
       box-shadow: var(--box-shadow-blue);
       @include touch-screen {
         display: none;
@@ -160,7 +160,7 @@
         }
         &__completion {
           opacity: 0.5;
-          margin-right: var(--distance-6px);
+          margin-right: 6px;
           font-weight: var(--font-weight-inter-regular);
           @include to1200 {
             font-family: var(--font-family-inter-tight);
@@ -210,18 +210,18 @@
   &__right-side {
     display: flex;
     align-items: center;
-    gap: var(--distance-4px);
-    margin-right: var(--distance-6px);
+    gap: 4px;
+    margin-right: 6px;
     @include at992 {
-      gap: var(--distance-8px);
-      margin-right: var(--distance-11px);
+      gap: 8px;
+      margin-right: 11px;
     }
     &__press_key {
       pointer-events: none;
       color: var(--blue500);
       display: flex;
       white-space: pre;
-      margin-right: var(--distance-11px);
+      margin-right: 11px;
       @include touch-screen {
         display: none;
       }
@@ -272,7 +272,7 @@
   position: absolute;
   z-index: 1;
   width: 100%;
-  top: calc(var(--button-dimension-40px) + var(--distance-4px));
+  top: calc(var(--button-dimension-40px) + 4px);
   overflow: hidden;
   border-radius: var(--border-radius-12px);
   border: var(--border-primary);
@@ -282,33 +282,33 @@
   @include transition-150ms;
   transform: translateY(0);
   @include to992 {
-    width: calc(100% - (var(--distance-20px)));
+    width: calc(100% - (20px));
     margin-left: 50%;
     transform: translateY(0) translateX(-50%);
   }
   @include at992 {
-    top: calc(var(--button-dimension-52px) + var(--distance-4px));
+    top: calc(var(--button-dimension-52px) + 4px);
   }
   &--hidden {
     opacity: 0;
     pointer-events: none;
     transition: none;
     @include to992 {
-      transform: translateY(calc(var(--distance-4px) * -1)) translateX(-50%);
+      transform: translateY(calc(4px * -1)) translateX(-50%);
     }
     @include at992 {
-      transform: translateY(calc(var(--distance-4px) * -1));
+      transform: translateY(calc(4px * -1));
     }
   }
   &__list {
-    margin: var(--distance-8px) 0;
+    margin: 8px 0;
     &__item {
       display: flex;
       align-items: center;
       width: 100%;
-      gap: var(--distance-10px);
-      height: var(--distance-32px);
-      padding: 0 var(--distance-14px);
+      gap: 10px;
+      height: 32px;
+      padding: 0 14px;
       @include hover {
         background-color: var(--neutral100);
       }
@@ -318,7 +318,7 @@
       &__icon {
         display: flex;
         > svg {
-          width: var(--distance-15px);
+          width: 15px;
         }
       }
       &__content {
@@ -353,9 +353,9 @@
           color: var(--text-color-dimmed);
           font-size: var(--font-size-12px);
           font-weight: var(--font-weight-inter-medium);
-          padding: 0 var(--distance-4px);
+          padding: 0 4px;
           box-shadow: var(--box-shadow);
-          margin-left: var(--distance-6px);
+          margin-left: 6px;
           @include touch-screen {
             display: none;
           }
@@ -374,7 +374,7 @@
   &__footer {
     display: flex;
     font-size: var(--font-size-13px);
-    margin: var(--distance-8px) var(--distance-14px);
+    margin: 8px 14px;
     @include to768 {
       flex-direction: column;
       align-items: flex-start;
@@ -395,20 +395,20 @@
 }
 .skeleton {
   width: 100%;
-  margin: var(--distance-8px) 0;
+  margin: 8px 0;
   @include to992 {
-    padding: 0 var(--distance-8px);
+    padding: 0 8px;
   }
   @include at992 {
-    margin: var(--distance-16px) 0;
-    transform: translateX(calc(var(--distance-16px) * -1));
+    margin: 16px 0;
+    transform: translateX(calc(16px * -1));
   }
   > span > span {
     height: var(--button-dimension-40px);
     border-radius: var(--border-radius-999px);
     @include at992 {
       height: var(--button-dimension-52px);
-      width: calc(100% + (var(--distance-16px) * 2));
+      width: calc(100% + (16px * 2));
     }
   }
 }

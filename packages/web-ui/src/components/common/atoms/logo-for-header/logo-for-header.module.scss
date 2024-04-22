@@ -10,12 +10,12 @@
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     letter-spacing: var(--letter-spacing-logo);
     font-size: var(--font-size-23px);
-    padding-left: var(--distance-7px);
-    margin-bottom: var(--distance-2px);
+    padding-left: 7px;
+    margin-bottom: 2px;
     @include at992 {
       font-size: var(--font-size-28px);
-      padding-left: var(--distance-9px);
-      margin-bottom: var(--distance-4px);
+      padding-left: 9px;
+      margin-bottom: 4px;
     }
   }
   svg {
@@ -27,18 +27,18 @@
   }
   &--large {
     span {
-      padding-left: var(--distance-10px);
+      padding-left: 10px;
       font-size: 30px;
-      margin-bottom: var(--distance-4px);
+      margin-bottom: 4px;
       @include at992 {
-        padding-left: var(--distance-12px);
+        padding-left: 12px;
         font-size: 38px;
-        margin-bottom: var(--distance-5px);
+        margin-bottom: 5px;
       }
       @include at1200 {
-        padding-left: var(--distance-14px);
+        padding-left: 14px;
         font-size: 42px;
-        margin-bottom: var(--distance-6px);
+        margin-bottom: 6px;
       }
     }
     svg {

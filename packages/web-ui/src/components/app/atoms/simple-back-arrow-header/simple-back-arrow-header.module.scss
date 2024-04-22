@@ -24,12 +24,12 @@
   &__back-arrow {
     display: flex;
     align-items: center;
-    padding-right: var(--distance-16px);
-    padding-left: var(--distance-16px);
-    margin-left: calc(var(--distance-16px) * -1);
+    padding-right: 16px;
+    padding-left: 16px;
+    margin-left: calc(16px * -1);
     height: var(--button-dimension-34px);
     @include at768 {
-      padding-right: var(--distance-24px);
+      padding-right: 24px;
       height: var(--button-dimension-40px);
     }
     @include hover {
@@ -54,10 +54,10 @@
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     letter-spacing: var(--letter-spacing-logo);
     font-size: var(--font-size-23px);
-    padding-left: var(--distance-7px);
+    padding-left: 7px;
     @include at768 {
       font-size: var(--font-size-28px);
-      padding-left: var(--distance-9px);
+      padding-left: 9px;
     }
   }
 }

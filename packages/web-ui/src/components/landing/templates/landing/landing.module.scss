@@ -15,10 +15,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 var(--distance-16px);
+    padding: 0 16px;
     height: 90px;
     @include at768 {
-      padding: 0 var(--distance-40px);
+      padding: 0 40px;
     }
     @include at992 {
       height: 120px;
@@ -37,9 +37,9 @@
     }
     &__desktop-nav-and-user {
       display: flex;
-      gap: var(--distance-30px);
+      gap: 30px;
       @include at1380 {
-        gap: var(--distance-40px);
+        gap: 40px;
       }
       @include to992 {
         display: none;

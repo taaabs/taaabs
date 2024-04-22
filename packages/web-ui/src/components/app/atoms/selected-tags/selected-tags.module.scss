@@ -4,8 +4,8 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--distance-6px);
-  margin-bottom: var(--distance-16px);
+  gap: 6px;
+  margin-bottom: 16px;
   position: relative;
 }
 .count {
@@ -35,6 +35,6 @@
   }
   span:last-child {
     color: var(--text-color-dimmed);
-    margin-left: var(--distance-3px);
+    margin-left: 3px;
   }
 }

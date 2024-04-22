@@ -19,16 +19,16 @@
   width: var(--app-bar-height);
   align-self: stretch;
   &--left {
-    padding-left: var(--distance-16px);
+    padding-left: 16px;
     svg {
-      height: var(--distance-17px);
+      height: 17px;
     }
   }
   &--right {
-    padding-right: var(--distance-16px);
+    padding-right: 16px;
     justify-content: flex-end;
     svg {
-      height: var(--distance-24px);
+      height: 24px;
     }
   }
 }

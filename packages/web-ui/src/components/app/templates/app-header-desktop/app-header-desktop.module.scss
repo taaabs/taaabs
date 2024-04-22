@@ -12,33 +12,33 @@
   justify-content: space-between;
   justify-content: center;
   height: 100%;
-  gap: var(--distance-40px);
+  gap: 40px;
   position: relative;
 }
 .left {
   display: flex;
   align-items: center;
-  gap: var(--distance-12px);
+  gap: 12px;
 }
 .cockroachdb {
   display: flex;
   align-items: center;
-  gap: var(--distance-8px);
+  gap: 8px;
   border: var(--border-secondary);
   border-radius: var(--border-radius-10px);
-  padding: var(--distance-4px) var(--distance-8px);
+  padding: 4px 8px;
   background-color: var(--white);
   @include transition-150ms();
   @include hover {
     border-color: var(--input-border-color-hover);
   }
   > img {
-    width: var(--distance-11px);
+    width: 11px;
   }
   &__text {
     display: flex;
     flex-direction: column;
-    gap: var(--distance-2px);
+    gap: 2px;
     > span {
       line-height: 1;
       font-weight: var(--font-weight-inter-medium);

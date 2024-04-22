@@ -13,7 +13,7 @@
   background-color: var(--blue700);
   font-weight: var(--font-weight-inter-medium);
   border-radius: var(--border-radius-8px);
-  padding: var(--distance-4px) var(--distance-8px);
+  padding: 4px 8px;
   box-shadow: var(--box-shadow-blue-strong);
   opacity: 0;
   @include transition-150ms(opacity);

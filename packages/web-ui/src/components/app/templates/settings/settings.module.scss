@@ -13,7 +13,7 @@
   max-width: var(--site-max-width);
   margin: 0 auto;
   @include at1200 {
-    padding: 0 var(--distance-40px);
+    padding: 0 40px;
   }
 }
 .content {
@@ -52,7 +52,7 @@
       }
     }
     &__inner {
-      padding-top: var(--distance-90px);
+      padding-top: 90px;
       width: 100%;
     }
   }
@@ -60,24 +60,24 @@
     display: flex;
     flex-direction: column;
     @include to768 {
-      gap: var(--distance-16px);
+      gap: 16px;
     }
     @include at768 {
       flex: 1.9;
-      gap: var(--distance-40px);
-      padding: var(--distance-68px) var(--distance-24px);
+      gap: 40px;
+      padding: 68px 24px;
     }
     @include at992 {
       flex: 2.2;
-      gap: var(--distance-40px);
-      padding: var(--distance-68px) var(--distance-24px);
+      gap: 40px;
+      padding: 68px 24px;
     }
     @include at1200 {
       flex: 1.9;
-      padding: var(--distance-68px) var(--distance-40px);
+      padding: 68px 40px;
     }
     @include at1380 {
-      padding: var(--distance-68px) var(--distance-60px);
+      padding: 68px 60px;
     }
   }
   &__aside {

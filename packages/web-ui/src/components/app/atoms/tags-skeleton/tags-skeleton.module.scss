@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: var(--distance-8px);
+  gap: 8px;
   > span > span {
     height: 20px;
     border-radius: var(--border-radius-4px);

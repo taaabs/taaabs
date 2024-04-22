@@ -5,19 +5,19 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: var(--distance-24px);
+  gap: 24px;
   border-top: var(--border-primary);
   background: var(--white);
-  padding: var(--distance-16px);
+  padding: 16px;
   @include at992 {
-    padding: var(--distance-16px) var(--distance-40px) var(--distance-16px) 0;
+    padding: 16px 40px 16px 0;
   }
   &__right-side {
     display: flex;
     align-items: center;
-    gap: var(--distance-16px);
+    gap: 16px;
     @include at992 {
-      gap: var(--distance-24px);
+      gap: 24px;
     }
     &__cancel {
       color: var(--text-color-dimmed);

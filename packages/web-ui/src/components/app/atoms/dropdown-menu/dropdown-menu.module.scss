@@ -12,12 +12,12 @@
   overflow: hidden;
 }
 .toggler {
-  height: calc(var(--button-dimension-46px) + var(--distance-4px));
+  height: calc(var(--button-dimension-46px) + 4px);
   cursor: pointer;
 }
 .item {
-  padding: var(--distance-8px) var(--distance-18px) var(--distance-8px)
-    var(--distance-13px);
+  padding: 8px 18px 8px
+    13px;
   border-top: var(--border-secondary);
   border-width: 1px;
   display: flex;
@@ -37,7 +37,7 @@
     white-space: nowrap;
   }
   &__icon {
-    margin-right: var(--distance-11px);
+    margin-right: 11px;
     display: flex;
     align-items: center;
     width: var(--icon-dimension-13px);
@@ -46,8 +46,8 @@
     }
   }
   &--with-checkbox {
-    padding: var(--distance-8px) var(--distance-16px) var(--distance-8px)
-      var(--distance-8px);
+    padding: 8px 16px 8px
+      8px;
   }
   &--disabled {
     pointer-events: none;
@@ -56,12 +56,12 @@
     }
   }
   &__checkbox {
-    margin-right: var(--distance-6px);
+    margin-right: 6px;
     display: flex;
     align-items: center;
     border-radius: var(--border-radius-4px);
     background-color: var(--blue100);
-    padding: var(--distance-4px);
+    padding: 4px;
     border: 1px solid var(--blue300);
     svg {
       fill: var(--blue800);

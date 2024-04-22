@@ -17,7 +17,7 @@
   }
   height: var(--button-dimension-40px);
   font-size: var(--font-size-15px);
-  padding: 0 var(--distance-16px);
+  padding: 0 16px;
   > span {
     padding-bottom: 0.08em;
   }
@@ -41,7 +41,7 @@
   &--small {
     height: var(--button-dimension-34px);
     font-size: var(--font-size-13px);
-    padding: 0 var(--distance-14px);
+    padding: 0 14px;
   }
   &--medium {
     @include at768 {

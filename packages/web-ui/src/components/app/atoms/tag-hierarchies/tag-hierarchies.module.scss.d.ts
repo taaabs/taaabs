@@ -5,6 +5,7 @@ declare const styles: {
   readonly tag: string
   readonly tag__spacer: string
   readonly tag__button: string
+  readonly 'tag__button--all': string
   readonly 'tag__button--active': string
   readonly 'tag__button--highlighted': string
   readonly 'drop-zone': string

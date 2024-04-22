@@ -6,20 +6,20 @@
   align-items: center;
   background-color: var(--blue700);
   border-radius: var(--border-radius-999px);
-  padding: var(--distance-4px);
-  gap: var(--distance-3px);
+  padding: 4px;
+  gap: 3px;
   box-shadow: var(--box-shadow-blue-strong);
   @include transition-250ms;
   @include at992 {
-    padding: var(--distance-6px);
-    gap: var(--distance-4px);
+    padding: 6px;
+    gap: 4px;
   }
   &__toggleable_button {
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     border-radius: var(--border-radius-999px);
     height: var(--button-dimension-28px);
-    padding: 0 var(--distance-10px);
+    padding: 0 10px;
     display: flex;
     align-items: center;
     color: var(--white);
@@ -31,7 +31,7 @@
     }
     @include at992 {
       height: var(--button-dimension-40px);
-      padding: 0 var(--distance-16px);
+      padding: 0 16px;
     }
     &--toggled {
       background-color: var(--white);
@@ -45,13 +45,13 @@
     }
   }
   &__separator {
-    height: var(--distance-20px);
-    width: var(--distance-1px);
+    height: 20px;
+    width: 1px;
     background-color: var(--blue600);
-    margin: 0 var(--distance-2px) 0;
+    margin: 0 2px 0;
     @include at992 {
-      height: var(--distance-28px);
-      margin: 0 var(--distance-4px) 0;
+      height: 28px;
+      margin: 0 4px 0;
     }
   }
   &__icon_button {

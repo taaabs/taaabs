@@ -2,17 +2,17 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  padding: var(--distance-60px) 0;
+  padding: 60px 0;
   @include at768 {
-    padding: var(--distance-80px) 0;
+    padding: 80px 0;
   }
   @include at992 {
-    padding: var(--distance-100px) 0;
+    padding: 100px 0;
   }
   @include at1200 {
-    padding: var(--distance-120px) 0;
+    padding: 120px 0;
   }
   @include at1380 {
-    padding: var(--distance-140px) 0;
+    padding: 140px 0;
   }
 }

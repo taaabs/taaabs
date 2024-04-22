@@ -4,15 +4,19 @@
 .items {
   display: flex;
   flex-direction: column;
-  margin-top: var(--distance-4px); // Room for stars in first item.
+  &::after {
+    content: attr(nothing-pinned);
+    font-size: var(--font-size-13px);
+    color: var(--text-color-dimmed);
+  }
 }
 .item {
   position: relative;
-  height: var(--distance-32px);
+  height: 32px;
   border-radius: var(--border-radius-8px);
   border: var(--border-secondary);
-  background-color: var(--white);
-  margin: var(--distance-2px) 0;
+  margin: 4px 0;
+  background: linear-gradient(to right, white, transparent);
   &--dragging {
     background-color: var(--border-color-secondary);
     cursor: grabbing;
@@ -20,23 +24,23 @@
   &__stars {
     position: absolute;
     top: 0;
-    right: var(--distance-2px);
-    transform: translateY(-4px);
+    right: 2px;
+    transform: translateY(-5px);
     display: inline-flex;
-    margin-right: var(--distance-4px);
-    gap: var(--distance-1px);
+    margin-right: 4px;
+    gap: 1px;
     > svg {
       fill: var(--yellow);
-      width: var(--distance-10px);
+      width: 10px;
     }
   }
   &__inner {
     display: flex;
     height: 100%;
     align-items: center;
-    gap: var(--distance-8px);
+    gap: 7px;
     overflow: hidden;
-    padding: 0 8px;
+    padding: 0 7px;
     position: relative;
     &__favicon {
       flex-shrink: 0;
@@ -65,12 +69,17 @@
       top: calc(50% - 1px);
       left: -13.5px;
       display: inline-block;
-      width: var(--distance-12px);
-      height: var(--distance-12px);
+      width: 12px;
+      height: 12px;
       background-color: var(--red);
       border-radius: 3.2px;
       transform: rotate(45deg) translateY(-50%);
       transform-origin: center;
     }
   }
+}
+.nothing-pinned {
+  color: var(--text-color-dimmed);
+  font-size: var(--font-size-13px);
+  padding-top: 8px;
 }

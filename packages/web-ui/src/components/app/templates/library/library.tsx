@@ -12,7 +12,8 @@ import { Button } from '@web-ui/components/common/particles/button'
 
 export namespace Library {
   export type Props = {
-    slot_sidebar: React.ReactNode
+    slot_pinned: React.ReactNode
+    slot_tag_hierarchies: React.ReactNode
     slot_aside: React.ReactNode
     slot_toolbar: React.ReactNode
     mobile_title_bar: string
@@ -28,10 +29,13 @@ export namespace Library {
     welcome_text?: string
     on_follow_click?: () => void
     is_following?: boolean
+    pinned_count?: number
     translations: {
       collapse_alt: string
       follow: string
       unfollow: string
+      folders: string
+      pinned: string
     }
   }
 }
@@ -48,13 +52,15 @@ export const Library: React.FC<Library.Props> = (props) => {
     undefined,
   )
   const is_scrolled = use_is_scrolled()
-  const [is_sidebar_collapsed, set_is_sidebar_collapsed] = useState(false)
-  const [are_tag_hierarchies_hovered, set_is_sidebar_hovered] = useState(false)
+  const [is_sidebar_collapsed, set_is_sidebar_collapsed] = useState<boolean>()
+  const [are_tag_hierarchies_hovered, set_is_sidebar_hovered] =
+    useState<boolean>()
   const [is_dragging, set_is_dragging] = useState<boolean>()
-  const [is_left_side_moving, set_is_left_side_moving] = useState(false)
-  const [is_right_side_moving, set_is_right_side_moving] = useState(false)
-  const [is_left_side_open, set_is_left_side_open] = useState(false)
-  const [is_right_side_open, set_is_right_side_open] = useState(false)
+  const [is_left_side_moving, set_is_left_side_moving] = useState<boolean>()
+  const [is_right_side_moving, set_is_right_side_moving] = useState<boolean>()
+  const [is_left_side_open, set_is_left_side_open] = useState<boolean>()
+  const [is_right_side_open, set_is_right_side_open] = useState<boolean>()
+  const [is_pinned_active, set_is_pinned_active] = useState<boolean>()
 
   const get_slidable_width = () => {
     return window.innerWidth < 370 ? window.innerWidth * 0.82 : 300
@@ -296,6 +302,31 @@ export const Library: React.FC<Library.Props> = (props) => {
                 </Button>
               )}
             </div>
+            <div className={styles['sidebar__inner__pane-selector']}>
+              <button
+                className={cn(styles['sidebar__inner__pane-selector__button'], {
+                  [styles['sidebar__inner__pane-selector__button--active']]:
+                    !is_pinned_active,
+                })}
+                onClick={() => {
+                  set_is_pinned_active(false)
+                }}
+              >
+                {props.translations.folders}
+              </button>
+              <button
+                className={cn(styles['sidebar__inner__pane-selector__button'], {
+                  [styles['sidebar__inner__pane-selector__button--active']]:
+                    is_pinned_active,
+                })}
+                onClick={() => {
+                  set_is_pinned_active(true)
+                }}
+              >
+                {props.translations.pinned}{' '}
+                {props.pinned_count ? `(${props.pinned_count})` : ''}
+              </button>
+            </div>
             <div
               className={cn(styles['sidebar__inner__content'], {
                 [styles['sidebar__inner__content--collapsed']]:
@@ -311,7 +342,18 @@ export const Library: React.FC<Library.Props> = (props) => {
               }}
             >
               {!props.show_skeletons ? (
-                props.slot_sidebar
+                <>
+                  <div
+                    style={{ display: is_pinned_active ? 'none' : undefined }}
+                  >
+                    {props.slot_tag_hierarchies}
+                  </div>
+                  <div
+                    style={{ display: !is_pinned_active ? 'none' : undefined }}
+                  >
+                    {props.slot_pinned}
+                  </div>
+                </>
               ) : (
                 <div className={styles['sidebar__inner__content__skeleton']}>
                   {[200, 180, 140, 160, 120].map((width, i) => (

@@ -3,7 +3,7 @@
 
 .container {
   background-color: var(--white);
-  padding: var(--distance-16px);
+  padding: 16px;
   border: var(--border-secondary);
   @include to768 {
     border-left: 0;
@@ -11,11 +11,11 @@
   }
   @include at768 {
     border-radius: var(--border-radius-20px);
-    padding: var(--distance-24px);
+    padding: 24px;
     border-radius: var(--border-radius-20px);
   }
   @include at1200 {
-    padding: var(--distance-40px);
+    padding: 40px;
   }
   > * {
     margin-top: 0.8em;

@@ -5,19 +5,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: var(--distance-16px);
+  padding-left: 16px;
   border-bottom: var(--border-primary);
   height: var(--header-mobile-height);
   background: var(--header-background);
   position: relative;
   > div:last-child {
     position: absolute;
-    right: var(--distance-10px);
+    right: 10px;
     background-color: var(--header-background);
     &::after {
       content: '';
       position: absolute;
-      width: var(--distance-40px);
+      width: 40px;
       left: 0;
       top: 0;
       transform: translateX(-100%);

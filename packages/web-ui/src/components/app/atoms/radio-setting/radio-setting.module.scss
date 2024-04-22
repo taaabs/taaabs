@@ -4,14 +4,14 @@
 .container {
   display: flex;
   align-items: center;
-  gap: var(--distance-12px);
+  gap: 12px;
   cursor: pointer;
 }
 .radio {
   border: 1px solid var(--blue200);
   background: var(--blue100);
-  width: var(--distance-20px);
-  height: var(--distance-20px);
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,8 +27,8 @@
   &__check {
     background-color: var(--brand-color);
     border-radius: var(--border-radius-999px);
-    width: var(--distance-11px);
-    height: var(--distance-11px);
+    width: 11px;
+    height: 11px;
   }
 }
 .text {

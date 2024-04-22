@@ -23,7 +23,6 @@ export namespace Pinned {
     items: Item[]
     on_change: (items: Item[]) => void
     favicon_host: string
-    header_title: string
     on_click: (item: Item) => void
     on_middle_click: (item: Item) => void
     is_draggable: boolean
@@ -33,6 +32,9 @@ export namespace Pinned {
     selected_archived: boolean
     current_gte?: number
     current_lte?: number
+    translations: {
+      nothing_pinned: string
+    }
   }
 }
 
@@ -63,6 +65,8 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         via_wayback: item.via_wayback,
       })),
     )
+
+    let relevant_items = 0
 
     const items_dom = items.map((item) => {
       const created_at_timestamp = Math.round(item.created_at.getTime() / 1000)
@@ -95,6 +99,8 @@ export const Pinned: React.FC<Pinned.Props> = memo(
               1)
       ) {
         is_not_relevant = true
+      } else {
+        relevant_items++
       }
 
       const url = item.via_wayback
@@ -156,25 +162,34 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       return <></>
     }
 
-    return props.is_draggable ? (
-      <ReactSortable
-        list={items}
-        setList={(new_items) => {
-          if (JSON.stringify(new_items) == JSON.stringify(items)) return
-          set_items(new_items)
-          props.on_change(new_items)
-        }}
-        animation={system_values.sortablejs_animation_duration}
-        forceFallback={true}
-        className={styles.items}
-        fallbackClass={styles['item--dragging']}
-        delay={system_values.sortablejs_delay}
-        delayOnTouchOnly={true}
-      >
-        {items_dom}
-      </ReactSortable>
-    ) : (
-      <div className={styles.items}>{items_dom}</div>
+    return (
+      <>
+        {props.is_draggable ? (
+          <ReactSortable
+            list={items}
+            setList={(new_items) => {
+              if (JSON.stringify(new_items) == JSON.stringify(items)) return
+              set_items(new_items)
+              props.on_change(new_items)
+            }}
+            animation={system_values.sortablejs_animation_duration}
+            forceFallback={true}
+            className={styles.items}
+            fallbackClass={styles['item--dragging']}
+            delay={system_values.sortablejs_delay}
+            delayOnTouchOnly={true}
+          >
+            {items_dom}
+          </ReactSortable>
+        ) : (
+          <div className={styles.items}>{items_dom}</div>
+        )}
+        {relevant_items == 0 && (
+          <div className={styles['nothing-pinned']}>
+            {props.translations.nothing_pinned}
+          </div>
+        )}
+      </>
     )
   },
   (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,

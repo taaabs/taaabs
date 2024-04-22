@@ -3,9 +3,9 @@
 
 .navigation {
   display: flex;
-  gap: var(--distance-30px);
+  gap: 30px;
   @include at1380 {
-    gap: var(--distance-40px);
+    gap: 40px;
   }
   &__item {
     position: relative;

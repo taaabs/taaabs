@@ -17,7 +17,7 @@ const dictionary: Dictionary = {
     unpin: 'Unpin',
     link_is_now_pinned: 'Link is now pinned',
     pin_has_been_removed: 'Pin has been removed',
-    pinned: 'Pinned',
+    nothing_pinned: 'Nothing is pinned here',
     pinned_links_has_beed_updated: 'Pinned links has been updated',
     via_archive_org: 'Use snapshot',
     use_snapshot: 'Link is now using snapshot',

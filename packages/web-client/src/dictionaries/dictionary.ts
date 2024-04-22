@@ -15,7 +15,7 @@ export type Dictionary = {
     sort_by: string
     pin: string
     unpin: string
-    pinned: string
+    nothing_pinned: string
     pinned_links_has_beed_updated: string
     via_archive_org: string
     use_snapshot: string

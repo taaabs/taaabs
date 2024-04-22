@@ -6,8 +6,8 @@
   width: 100%;
   max-width: var(--site-max-width);
   margin: 0 auto;
-  padding: 0 var(--distance-16px);
+  padding: 0 16px;
   @include at768 {
-    padding: 0 var(--distance-40px);
+    padding: 0 40px;
   }
 }

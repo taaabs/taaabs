@@ -7,17 +7,17 @@
   }
   > div {
     @include to992 {
-      padding: 0 var(--distance-16px) calc(var(--distance-16px) + 36px + 12px)
-        var(--distance-17px);
+      padding: 0 16px calc(16px + 36px + 12px)
+        17px;
       // Overrides inline values coming from stickybox.
       position: relative !important;
       top: 0 !important;
     }
     @include at992 {
-      padding: var(--distance-16px) 0 var(--distance-16px) var(--distance-16px);
+      padding: 16px 0 16px 16px;
     }
     @include at1200 {
-      padding: var(--distance-16px) 0 var(--distance-16px) var(--distance-32px);
+      padding: 16px 0 16px 32px;
     }
   }
 }
@@ -31,7 +31,7 @@
   justify-content: center;
   align-items: center;
   @include at992 {
-    margin-bottom: var(--distance-16px);
+    margin-bottom: 16px;
     height: var(--button-dimension-52px);
   }
   > button {
@@ -45,13 +45,13 @@
 .slots {
   display: flex;
   flex-direction: column;
-  gap: var(--distance-8px);
+  gap: 8px;
   &__button {
     position: relative;
     &__dropdown {
       position: absolute;
       height: 0;
-      bottom: calc(var(--distance-4px) * -1);
+      bottom: calc(4px * -1);
       width: 100%;
       z-index: 2;
       opacity: 1;
@@ -59,14 +59,14 @@
       transform: translateY(0);
       &--hidden {
         opacity: 0;
-        transform: translateY(calc(var(--distance-4px) * -1));
+        transform: translateY(calc(4px * -1));
         pointer-events: none;
         transition: none;
       }
     }
   }
   .tags {
-    margin-top: var(--distance-8px);
+    margin-top: 8px;
     display: flex;
     flex-direction: column;
   }

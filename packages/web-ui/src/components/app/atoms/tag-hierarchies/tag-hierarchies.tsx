@@ -326,10 +326,38 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         style={{ pointerEvents: props.is_updating ? 'none' : undefined }}
       >
         <button
-          className={cn(styles.tag__button, {
+          className={cn(styles.tag__button, styles['tag__button--all'], {
             [styles['tag__button--active']]: props.is_all_bookmarks_selected,
           })}
           onClick={props.on_click_all_bookmarks}
+          onMouseEnter={() => {
+            if (props.dragged_tag) {
+              document.body.classList.add('adding-tag')
+            }
+          }}
+          onMouseLeave={() => {
+            if (props.dragged_tag) {
+              document.body.classList.remove('adding-tag')
+            }
+          }}
+          onMouseUp={() => {
+            if (!props.tree || !props.dragged_tag) return
+            document.body.classList.remove('adding-tag')
+            update_items({
+              items: [
+                tag_to_item({
+                  node: {
+                    id: props.dragged_tag.id,
+                    name: props.dragged_tag.name,
+                    children: [],
+                  },
+                  hierarchy_ids: [],
+                  hierarchy_tag_ids: [],
+                }),
+                ...items,
+              ],
+            })
+          }}
         >
           <div>
             <span>{props.translations.all_bookmarks}</span>

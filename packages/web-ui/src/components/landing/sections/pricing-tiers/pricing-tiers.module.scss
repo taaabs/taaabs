@@ -4,14 +4,14 @@
 .billing-cycle {
   display: flex;
   justify-content: center;
-  margin-bottom: var(--distance-40px);
+  margin-bottom: 40px;
   @include at768 {
-    margin-bottom: var(--distance-60px);
+    margin-bottom: 60px;
   }
   &__box {
     border-radius: var(--border-radius-12px);
-    outline: var(--distance-1px) solid var(--neutral150);
-    outline-offset: var(--distance-3px);
+    outline: 1px solid var(--neutral150);
+    outline-offset: 3px;
     display: flex;
     position: relative;
     @include transition-150ms(outline-color);
@@ -37,16 +37,16 @@
     &__option {
       display: flex;
       align-items: center;
-      gap: var(--distance-12px);
+      gap: 12px;
       color: var(--text-color-variant);
-      padding: 0 var(--distance-10px) 0 var(--distance-12px);
-      height: var(--distance-46px);
+      padding: 0 10px 0 12px;
+      height: 46px;
       @include transition-250ms;
       font-weight: var(--font-weight-inter-medium);
       @include at768 {
-        height: var(--distance-60px);
+        height: 60px;
         font-size: var(--font-size-17px);
-        padding: 0 var(--distance-20px);
+        padding: 0 20px;
       }
       &--selected {
         color: var(--text-color-normal);
@@ -57,8 +57,8 @@
         font-size: var(--font-size-15px);
         background-color: var(--neutral100);
         color: var(--text-color-dimmed);
-        padding: var(--distance-4px) var(--distance-8px) var(--distance-5px)
-          var(--distance-8px);
+        padding: 4px 8px 5px
+          8px;
         border-radius: var(--border-radius-10px);
         @include transition-250ms;
         &--selected {
@@ -71,26 +71,26 @@
 }
 .tiers {
   display: flex;
-  gap: var(--distance-16px);
+  gap: 16px;
   @include to992 {
     flex-direction: column;
   }
   @include at1200 {
-    gap: var(--distance-40px);
+    gap: 40px;
   }
 }
 .pricing_tier {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--distance-20px);
+  gap: 20px;
   border-radius: var(--border-radius-30px);
   border: var(--border-secondary);
-  padding: 0 var(--distance-16px);
+  padding: 0 16px;
   background-color: var(--white);
   position: relative;
   @include at1200 {
-    padding: 0 var(--distance-40px);
+    padding: 0 40px;
   }
   &--best-value {
     border-color: var(--brand-color);
@@ -107,11 +107,11 @@
       text-transform: uppercase;
       font-family: var(--font-family-plus-jakarta-sans);
       font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-      letter-spacing: var(--distance-1px);
+      letter-spacing: 1px;
       background-color: var(--brand-color);
       color: var(--white);
       position: absolute;
-      padding: var(--distance-4px) var(--distance-10px);
+      padding: 4px 10px;
       border-radius: var(--border-radius-8px);
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
@@ -123,9 +123,9 @@
   &__top {
     display: flex;
     flex-direction: column;
-    padding-top: var(--distance-24px);
+    padding-top: 24px;
     @include at1200 {
-      padding-top: var(--distance-32px);
+      padding-top: 32px;
     }
     &__name {
       color: var(--brand-color);
@@ -147,9 +147,9 @@
   &__price {
     display: flex;
     align-items: center;
-    gap: var(--distance-8px);
+    gap: 8px;
     @include at768 {
-      gap: var(--distance-10px);
+      gap: 10px;
     }
     &__old-cost {
       color: var(--text-color-dimmed);
@@ -179,9 +179,9 @@
   &__bullets {
     display: flex;
     flex-direction: column;
-    gap: var(--distance-10px);
+    gap: 10px;
     @include at768 {
-      gap: var(--distance-14px);
+      gap: 14px;
     }
     &__heading {
       color: var(--text-color-variant);
@@ -193,14 +193,14 @@
     &__inner {
       display: flex;
       flex-direction: column;
-      gap: var(--distance-10px);
+      gap: 10px;
       @include at768 {
-        gap: var(--distance-14px);
+        gap: 14px;
       }
       &__item {
         display: flex;
         align-items: center;
-        gap: var(--distance-10px);
+        gap: 10px;
         > span {
           font-weight: var(--font-weight-inter-medium);
           @include at768 {
@@ -213,13 +213,13 @@
           justify-content: center;
           align-self: flex-start;
           flex-shrink: 0;
-          width: var(--distance-24px);
-          height: var(--distance-24px);
+          width: 24px;
+          height: 24px;
           background: var(--brand-color);
           border-radius: var(--border-radius-999px);
           @include at768 {
-            width: var(--distance-30px);
-            height: var(--distance-30px);
+            width: 30px;
+            height: 30px;
           }
           > svg {
             fill: var(--white);
@@ -237,14 +237,14 @@
     flex: 1;
     justify-content: center;
     align-items: flex-end;
-    padding-bottom: var(--distance-24px);
+    padding-bottom: 24px;
     @include at768 {
-      padding-top: var(--distance-16px);
-      padding-bottom: var(--distance-40px);
+      padding-top: 16px;
+      padding-bottom: 40px;
     }
     @include at992 {
-      padding-top: var(--distance-24px);
-      padding-bottom: var(--distance-50px);
+      padding-top: 24px;
+      padding-bottom: 50px;
     }
   }
 }

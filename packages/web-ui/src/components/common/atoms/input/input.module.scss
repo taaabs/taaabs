@@ -3,7 +3,7 @@
 
 .contaner {
   display: flex;
-  gap: var(--distance-8px);
+  gap: 8px;
   flex-direction: column;
 }
 .field {
@@ -36,15 +36,15 @@
 }
 .input {
   height: var(--input-height-46px);
-  padding: 0 var(--distance-12px);
+  padding: 0 12px;
 }
 .textarea {
   position: relative;
-  padding: var(--distance-9px) var(--distance-12px);
+  padding: 9px 12px;
   resize: none;
 }
 .message {
-  margin-top: var(--distance-8px);
+  margin-top: 8px;
   font-size: var(--font-size-13px);
   strong {
     font-weight: var(--font-weight-inter-medium);

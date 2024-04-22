@@ -8,12 +8,12 @@
 .back-arrow {
   display: flex;
   align-items: center;
-  padding-right: var(--distance-16px);
-  padding-left: var(--distance-16px);
-  margin-left: calc(var(--distance-16px) * -1);
+  padding-right: 16px;
+  padding-left: 16px;
+  margin-left: calc(16px * -1);
   height: var(--button-dimension-34px);
   @include at992 {
-    padding-right: var(--distance-30px);
+    padding-right: 30px;
     height: var(--button-dimension-40px);
   }
   @include hover {
@@ -36,11 +36,11 @@
   display: flex;
   align-items: center;
   &__skeleton {
-    width: var(--distance-32px);
-    height: var(--distance-32px);
+    width: 32px;
+    height: 32px;
     @include at992 {
-      width: var(--distance-40px);
-      height: var(--distance-40px);
+      width: 40px;
+      height: 40px;
     }
     > span {
       display: flex;
@@ -55,11 +55,11 @@
     border-radius: 50%;
     overflow: hidden;
     position: relative;
-    width: var(--distance-32px);
-    height: var(--distance-32px);
+    width: 32px;
+    height: 32px;
     @include at992 {
-      width: var(--distance-40px);
-      height: var(--distance-40px);
+      width: 40px;
+      height: 40px;
     }
     img {
       width: 100%;
@@ -70,11 +70,11 @@
       z-index: -1;
       top: 0;
       > div {
-        width: var(--distance-32px) !important;
-        height: var(--distance-32px) !important;
+        width: 32px !important;
+        height: 32px !important;
         @include at992 {
-          width: var(--distance-40px) !important;
-          height: var(--distance-40px) !important;
+          width: 40px !important;
+          height: 40px !important;
         }
       }
     }
@@ -88,11 +88,11 @@
     overflow: hidden;
     position: relative;
     background: var(--neutral100);
-    width: var(--distance-32px);
-    height: var(--distance-32px);
+    width: 32px;
+    height: 32px;
     @include at992 {
-      width: var(--distance-40px);
-      height: var(--distance-40px);
+      width: 40px;
+      height: 40px;
     }
     svg {
       width: var(--icon-dimension-16px);
@@ -107,14 +107,14 @@
     color: var(--text-color-normal);
     font-family: var(--font-family-plus-jakarta-sans);
     letter-spacing: var(--letter-spacing-logo);
-    padding-left: var(--distance-10px);
+    padding-left: 10px;
     font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
     font-size: var(--font-size-21px);
-    margin-bottom: var(--distance-2px);
+    margin-bottom: 2px;
     @include at992 {
-      padding-left: var(--distance-12px);
+      padding-left: 12px;
       font-size: var(--font-size-24px);
-      margin-bottom: var(--distance-3px);
+      margin-bottom: 3px;
     }
   }
 }

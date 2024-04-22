@@ -50,7 +50,7 @@
 .top {
   display: flex;
   flex-direction: column;
-  gap: var(--distance-10px);
+  gap: 10px;
   @include at992 {
     text-align: center;
     align-items: center;
@@ -115,12 +115,12 @@
 }
 .claim-username {
   display: flex;
-  gap: var(--distance-8px);
+  gap: 8px;
   @include to768 {
     flex-direction: column;
   }
   @include at768 {
-    gap: var(--distance-16px);
+    gap: 16px;
   }
   &__input {
     position: relative;
@@ -130,13 +130,13 @@
       position: absolute;
       top: 50%;
       pointer-events: none;
-      transform: translateX(var(--distance-13px)) translateY(-50%);
+      transform: translateX(13px) translateY(-50%);
       @include at768 {
-        transform: translateX(var(--distance-16px)) translateY(-50%);
+        transform: translateX(16px) translateY(-50%);
         font-size: var(--font-size-17px);
       }
       @include at992 {
-        transform: translateX(var(--distance-18px)) translateY(-50%);
+        transform: translateX(18px) translateY(-50%);
         font-size: var(--font-size-19px);
       }
     }
@@ -144,19 +144,19 @@
       background-color: var(--white);
       border: 1.5px solid var(--neutral200);
       border-radius: var(--border-radius-12px);
-      padding: 0 var(--distance-18px) 0 102px;
+      padding: 0 18px 0 102px;
       @include transition-150ms();
       height: 40px;
       width: 100%;
       box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
       @include at768 {
-        padding: 0 var(--distance-18px) 0 118px;
+        padding: 0 18px 0 118px;
         font-size: var(--font-size-19px);
         width: 280px;
         height: 100%;
       }
       @include at992 {
-        padding: 0 var(--distance-18px) 0 131px;
+        padding: 0 18px 0 131px;
       }
       &:hover {
         border-color: var(--neutral250);
@@ -170,23 +170,23 @@
 }
 .checks {
   display: flex;
-  gap: var(--distance-15px);
+  gap: 15px;
   justify-content: center;
   @include to992 {
     flex-direction: column;
   }
   @include at768 {
-    gap: var(--distance-20px);
+    gap: 20px;
   }
   @include at992 {
-    gap: var(--distance-40px);
+    gap: 40px;
   }
   @include at992 {
   }
   &__item {
     display: flex;
     align-items: flex-start;
-    gap: var(--distance-12px);
+    gap: 12px;
     @include at768 {
       font-size: var(--font-size-18px);
     }

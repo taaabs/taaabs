@@ -7,9 +7,9 @@
   align-items: center;
   border-bottom: var(--border-primary);
   background: var(--header-background);
-  height: var(--distance-46px);
+  height: 46px;
   @include at992 {
-    height: var(--distance-52px);
+    height: 52px;
   }
 }
 .title {

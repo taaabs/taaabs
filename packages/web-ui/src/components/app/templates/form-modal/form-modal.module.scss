@@ -8,8 +8,8 @@
   max-height: calc(80svh);
   width: 100vw;
   @include at768 {
-    width: calc(100vw - var(--distance-80px));
-    max-height: calc(100svh - var(--distance-80px));
+    width: calc(100vw - 80px);
+    max-height: calc(100svh - 80px);
   }
   @include at992 {
     width: 900px;
@@ -28,16 +28,16 @@
     &__inner {
       display: flex;
       flex-direction: column;
-      gap: var(--distance-8px);
-      padding: var(--distance-8px);
+      gap: 8px;
+      padding: 8px;
       @include at768 {
-        padding: var(--distance-16px);
-        gap: var(--distance-16px);
+        padding: 16px;
+        gap: 16px;
       }
       @include at992 {
         margin: 0 auto;
-        gap: var(--distance-16px);
-        padding: var(--distance-24px) 0;
+        gap: 16px;
+        padding: 24px 0;
       }
     }
   }

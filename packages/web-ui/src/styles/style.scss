@@ -258,7 +258,7 @@ small {
 
 // !important below set because of a bug: https://github.com/vercel/next.js/issues/13092
 .Toastify__progress-bar {
-  height: var(--distance-4px) !important;
+  height: 4px !important;
 }
 .Toastify__toast-container {
   top: 0 !important;
@@ -268,11 +268,11 @@ small {
   border-radius: var(--border-radius-12px) !important;
   box-shadow: var(--box-shadow) !important;
   @include to992 {
-    margin: var(--distance-12px) var(--distance-24px) var(--distance-8px)
-      var(--distance-24px) !important;
+    margin: 12px 24px 8px
+      24px !important;
   }
   @include at992 {
-    margin-top: var(--distance-18px) !important;
+    margin-top: 18px !important;
   }
 }
 .Toastify__toast-body {
@@ -285,7 +285,7 @@ small {
 }
 .nestable .nestable-list {
   padding-left: 0 !important;
-  margin-left: var(--distance-8px) !important;
+  margin-left: 8px !important;
   border-left: var(--border-primary) !important;
 }
 .nestable > .nestable-list {
@@ -301,7 +301,7 @@ small {
   margin: 0 !important;
 }
 .nestable-item {
-  margin-left: var(--distance-7px) !important;
+  margin-left: 7px !important;
 }
 .nestable-item.is-dragging::before {
   background: var(--neutral200) !important;

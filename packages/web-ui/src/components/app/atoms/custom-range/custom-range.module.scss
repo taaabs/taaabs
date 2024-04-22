@@ -15,8 +15,8 @@
   &__details {
     position: absolute;
     z-index: 1;
-    top: var(--distance-5px);
-    left: var(--distance-13px);
+    top: 5px;
+    left: 13px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -29,18 +29,18 @@
     }
     &__counts {
       display: flex;
-      margin-top: var(--distance-4px);
-      padding: var(--distance-1px) var(--distance-6px) var(--distance-1px)
-        var(--distance-6px);
+      margin-top: 4px;
+      padding: 1px 6px 1px
+        6px;
       border-radius: var(--border-radius-4px);
       font-size: var(--font-size-14px);
-      transform: translateX(calc(var(--distance-5px) * -1));
+      transform: translateX(calc(5px * -1));
       font-weight: var(--font-weight-inter-medium);
       > div {
         position: relative;
-        padding-left: var(--distance-12px);
+        padding-left: 12px;
         > span {
-          margin-right: var(--distance-6px);
+          margin-right: 6px;
         }
       }
       > div::before {
@@ -72,9 +72,9 @@
     color: var(--text-color-dimmed);
     text-align: center;
     font-size: var(--font-size-13px);
-    padding: 0 var(--distance-16px);
+    padding: 0 16px;
     align-items: flex-end;
-    padding-bottom: var(--distance-24px);
+    padding-bottom: 24px;
   }
   &__clear {
     position: absolute;
@@ -82,8 +82,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    top: var(--distance-10px);
-    right: var(--distance-6px);
+    top: 10px;
+    right: 6px;
     height: var(--button-dimension-28px);
     width: var(--button-dimension-28px);
     @include transition-150ms(background-color);

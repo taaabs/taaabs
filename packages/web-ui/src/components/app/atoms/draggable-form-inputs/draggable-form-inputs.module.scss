@@ -4,8 +4,8 @@
 .sortable {
   display: flex;
   flex-direction: column;
-  gap: var(--distance-16px);
-  margin-bottom: var(--distance-16px);
+  gap: 16px;
+  margin-bottom: 16px;
 }
 .item {
   display: flex;
@@ -17,9 +17,9 @@
     &__handle {
       display: flex;
       align-items: center;
-      padding: 0 var(--distance-16px);
+      padding: 0 16px;
       cursor: grab;
-      margin-left: calc(var(--distance-16px) * -1);
+      margin-left: calc(16px * -1);
       > svg {
         fill: var(--black);
         height: var(--icon-dimension-16px);
@@ -31,8 +31,8 @@
   }
   &__actions {
     display: flex;
-    gap: var(--distance-4px);
-    margin-left: var(--distance-8px);
+    gap: 4px;
+    margin-left: 8px;
     &__button {
       display: flex;
       align-items: center;
@@ -50,7 +50,7 @@
         @include transition-150ms(fill);
       }
       &--remove {
-        margin-right: calc(var(--distance-2px) * -1);
+        margin-right: calc(2px * -1);
         > svg {
           transform: rotate(45deg);
         }
