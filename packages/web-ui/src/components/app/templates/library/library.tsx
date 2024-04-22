@@ -12,12 +12,11 @@ import { Button } from '@web-ui/components/common/particles/button'
 
 export namespace Library {
   export type Props = {
-    slot_tag_hierarchies: React.ReactNode
+    slot_sidebar: React.ReactNode
     slot_aside: React.ReactNode
     slot_toolbar: React.ReactNode
     mobile_title_bar: string
     slot_search: React.ReactNode
-    slot_pinned: React.ReactNode
     slot_bookmarks: React.ReactNode
     are_bookmarks_dimmed: boolean
     is_interactive: boolean
@@ -26,7 +25,6 @@ export namespace Library {
     clear_date_range?: () => void
     show_skeletons: boolean
     info_text: React.ReactNode
-    close_aside_count: number
     welcome_text?: string
     on_follow_click?: () => void
     is_following?: boolean
@@ -51,8 +49,7 @@ export const Library: React.FC<Library.Props> = (props) => {
   )
   const is_scrolled = use_is_scrolled()
   const [is_sidebar_collapsed, set_is_sidebar_collapsed] = useState(false)
-  const [are_tag_hierarchies_hovered, set_are_tag_hieararchies_hovered] =
-    useState(false)
+  const [are_tag_hierarchies_hovered, set_is_sidebar_hovered] = useState(false)
   const [is_dragging, set_is_dragging] = useState<boolean>()
   const [is_left_side_moving, set_is_left_side_moving] = useState(false)
   const [is_right_side_moving, set_is_right_side_moving] = useState(false)
@@ -231,14 +228,6 @@ export const Library: React.FC<Library.Props> = (props) => {
     props.on_page_bottom_reached()
   }, [is_end_of_bookmarks_visible])
 
-  useUpdateEffect(() => {
-    if (is_left_side_open) {
-      toggle_left_side()
-    } else if (is_right_side_open) {
-      toggle_right_side()
-    }
-  }, [props.close_aside_count])
-
   return (
     <div className={styles.container} {...swipeable_handlers}>
       <div className={styles.toolbar}>
@@ -308,27 +297,23 @@ export const Library: React.FC<Library.Props> = (props) => {
               )}
             </div>
             <div
-              className={cn(styles['sidebar__inner__tag-hierarchies'], {
-                [styles['sidebar__inner__tag-hierarchies--collapsed']]:
+              className={cn(styles['sidebar__inner__content'], {
+                [styles['sidebar__inner__content--collapsed']]:
                   is_sidebar_collapsed,
-                [styles['sidebar__inner__tag-hierarchies--collapsed-hovered']]:
+                [styles['sidebar__inner__content--collapsed-hovered']]:
                   is_sidebar_collapsed && are_tag_hierarchies_hovered,
               })}
               onMouseEnter={() => {
-                set_are_tag_hieararchies_hovered(true)
+                set_is_sidebar_hovered(true)
               }}
               onMouseLeave={() => {
-                set_are_tag_hieararchies_hovered(false)
+                set_is_sidebar_hovered(false)
               }}
             >
               {!props.show_skeletons ? (
-                props.slot_tag_hierarchies
+                props.slot_sidebar
               ) : (
-                <div
-                  className={
-                    styles['sidebar__inner__tag-hierarchies__skeleton']
-                  }
-                >
+                <div className={styles['sidebar__inner__content__skeleton']}>
                   {[200, 180, 140, 160, 120].map((width, i) => (
                     <Skeleton width={width} key={i} />
                   ))}
@@ -395,9 +380,6 @@ export const Library: React.FC<Library.Props> = (props) => {
                 [styles.dimmed]: props.are_bookmarks_dimmed,
               })}
             >
-              <div className={styles.main__inner__pinned}>
-                {props.slot_pinned}
-              </div>
               {props.slot_bookmarks}
             </div>
 

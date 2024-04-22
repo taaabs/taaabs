@@ -13,8 +13,8 @@ export type Dictionary = {
     tag_hierarchies_upated: string
     collapse_sidebar: string
     sort_by: string
-    pin_on_top: string
-    unpin_from_top: string
+    pin: string
+    unpin: string
     pinned: string
     pinned_links_has_beed_updated: string
     via_archive_org: string

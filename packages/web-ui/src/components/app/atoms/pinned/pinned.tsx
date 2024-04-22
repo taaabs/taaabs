@@ -4,8 +4,8 @@ import styles from './pinned.module.scss'
 import { system_values } from '@shared/constants/system-values'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import cn from 'classnames'
-import { Icon } from '@web-ui/components/common/particles/icon'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
+import { Icon } from '@web-ui/components/common/particles/icon'
 
 export namespace Pinned {
   type Item = {
@@ -102,9 +102,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         : item.url
 
       return is_not_relevant ? (
-        <div className={styles['not-relevant']} key={url}>
-          <div />
-        </div>
+        <div key={url} />
       ) : (
         <a
           key={url}
@@ -122,32 +120,34 @@ export const Pinned: React.FC<Pinned.Props> = memo(
             e.preventDefault()
           }}
         >
-          <div className={styles.item__favicon}>
-            <img
-              alt={'Favicon'}
-              width={16}
-              height={16}
-              src={`${props.favicon_host}/${get_domain_from_url(item.url)}`}
-            />
-          </div>
-          <div>
+          <div className={styles.item__inner}>
+            <div className={styles.item__inner__favicon}>
+              <img
+                alt={'Favicon'}
+                width={16}
+                height={16}
+                src={`${props.favicon_host}/${get_domain_from_url(item.url)}`}
+              />
+            </div>
             <div
-              className={cn(styles.item__title, {
-                [styles['item__title--unread']]: item.is_unread,
-                [styles['item__title--via-wayback']]: item.via_wayback,
+              className={cn(styles.item__inner__title, {
+                [styles['item__inner__title--unread']]: item.is_unread,
+                [styles['item__inner__title--via-wayback']]: item.via_wayback,
               })}
             >
               {item.title}
             </div>
-            {item.stars && item.title && (
-              <div className={styles['item__stars']}>
-                {[...Array(item.stars)].map((_, i) => (
-                  <Icon variant="STAR_FILLED" key={i} />
-                ))}
-              </div>
+            {item.is_unread && (
+              <div className={styles['item__inner__unread']} />
             )}
-            {item.is_unread && <div className={styles['item__unread']} />}
           </div>
+          {item.stars && item.title && (
+            <div className={styles['item__stars']}>
+              {[...Array(item.stars)].map((_, i) => (
+                <Icon variant="STAR_FILLED" key={i} />
+              ))}
+            </div>
+          )}
         </a>
       )
     })
@@ -170,7 +170,6 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         fallbackClass={styles['item--dragging']}
         delay={system_values.sortablejs_delay}
         delayOnTouchOnly={true}
-        filter={`.${styles['not-relevant']}`}
       >
         {items_dom}
       </ReactSortable>

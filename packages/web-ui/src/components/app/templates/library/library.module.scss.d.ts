@@ -10,10 +10,10 @@ declare const styles: {
   readonly 'sidebar__inner__desktop-actions__collapse-button': string
   readonly 'sidebar__inner__desktop-actions__collapse-button--collapsed': string
   readonly 'sidebar__inner__desktop-actions__welcome-text': string
-  readonly 'sidebar__inner__tag-hierarchies': string
-  readonly 'sidebar__inner__tag-hierarchies--collapsed': string
-  readonly 'sidebar__inner__tag-hierarchies--collapsed-hovered': string
-  readonly 'sidebar__inner__tag-hierarchies__skeleton': string
+  readonly sidebar__inner__content: string
+  readonly 'sidebar__inner__content--collapsed': string
+  readonly 'sidebar__inner__content--collapsed-hovered': string
+  readonly sidebar__inner__content__skeleton: string
   readonly main: string
   readonly main__inner: string
   readonly 'main__inner--collapsed-sidebar-hovered': string
@@ -23,7 +23,6 @@ declare const styles: {
   readonly 'main__inner__sticky__mobile-title-bar': string
   readonly main__inner__sticky__search: string
   readonly main__inner__skeleton: string
-  readonly main__inner__pinned: string
   readonly main__inner__info: string
   readonly aside: string
   readonly 'aside--hidden': string

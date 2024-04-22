@@ -2,7 +2,7 @@ export const system_values = {
   username_max_length: 15,
   username_min_length: 6,
   password_length: 64,
-  max_library_search_results: 1000,
+  max_library_search_results: 500,
   max_library_search_hints: 10,
   sortablejs_animation_duration: 150,
   sortablejs_delay: 300,

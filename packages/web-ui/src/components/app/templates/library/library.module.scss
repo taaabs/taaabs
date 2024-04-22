@@ -141,7 +141,7 @@
         padding-left: var(--distance-8px);
       }
     }
-    &__tag-hierarchies {
+    &__content {
       @include at992 {
         position: relative;
         overflow: auto;
@@ -301,12 +301,6 @@
           height: 145px;
           border-radius: var(--border-radius-12px);
         }
-      }
-    }
-    &__pinned {
-      @include to992 {
-        padding: 0 var(--distance-8px);
-        margin-bottom: var(--distance-8px); // Needed when compact mode is set on mobile.
       }
     }
     &__info {

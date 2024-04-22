@@ -94,7 +94,6 @@ const Library = (params: {
   const order_view_options_hook = use_order_view_options()
   const tag_view_options_hook = use_tag_view_options()
   const date_view_options_hook = use_date_view_options()
-  const [close_aside_count, set_close_aside_count] = useState(0)
   const [is_sort_by_dropdown_visible, toggle_sort_by_dropdown] =
     useToggle(false)
   const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
@@ -103,10 +102,6 @@ const Library = (params: {
     useState<number>()
   const [is_pinned_stale, set_is_pinned_stale] = useState<boolean>()
   const [pinned_updated_at, set_pinned_updated_at] = useState<number>()
-  const [
-    first_bookmarks_fetched_at_timestamp,
-    set_first_bookmarks_fetched_at_timestamp,
-  ] = useState<number>()
   const [is_fetching_first_bookmarks, set_is_fetching_first_bookmarks] =
     useState<boolean>()
   // END - UI synchronization.
@@ -133,10 +128,6 @@ const Library = (params: {
     ) {
       dispatch(
         bookmarks_actions.set_bookmarks(bookmarks_hook.incoming_bookmarks),
-      )
-      set_first_bookmarks_fetched_at_timestamp(
-        // When using history back from external website, timestamp on hook will be undefined as results are loaded from session storage.
-        bookmarks_hook.first_bookmarks_fetched_at_timestamp || Date.now(),
       )
       if (is_fetching_first_bookmarks) {
         window.scrollTo(0, 0)
@@ -630,7 +621,6 @@ const Library = (params: {
               : 'DENSITY_COMPACT',
           on_click: () => {
             if (bookmarks_hook.is_fetching) return
-            set_close_aside_count(close_aside_count + 1)
             dispatch(
               bookmarks_actions.set_density_of_current_bookmarks(
                 bookmarks_hook.density == 'default' ? 'compact' : 'default',
@@ -643,72 +633,152 @@ const Library = (params: {
       ]}
     />
   )
-  const slot_tag_hierarchies = (
-    <UiAppAtom_TagHierarchies
-      library_updated_at_timestamp={library_updated_at_timestamp}
-      is_draggable={!username}
-      tree={tag_hierarchies_hook.tag_hierarchies}
-      on_update={async (tag_hierarchies: TagHierarchies.Node[]) => {
-        const filter = filter_view_options_hook.current_filter
-
-        const update_tag_hierarchies_params: UpdateTagHierarchies_Params = {
-          tag_hierarchies,
-          gte: date_view_options_hook.current_gte,
-          lte: date_view_options_hook.current_lte,
-          starred_only:
-            filter == Filter.STARRED ||
-            filter == Filter.STARRED_UNREAD ||
-            filter == Filter.ARCHIVED_STARRED ||
-            filter == Filter.ARCHIVED_STARRED_UNREAD ||
-            undefined,
-          unread_only:
-            filter == Filter.UNREAD ||
-            filter == Filter.STARRED_UNREAD ||
-            filter == Filter.ARCHIVED_UNREAD ||
-            filter == Filter.ARCHIVED_STARRED_UNREAD ||
-            undefined,
-          is_archived:
-            filter == Filter.ARCHIVED ||
-            filter == Filter.ARCHIVED_STARRED ||
-            filter == Filter.ARCHIVED_UNREAD ||
-            filter == Filter.ARCHIVED_STARRED_UNREAD ||
-            undefined,
+  const slot_sidebar = (
+    <>
+      <UiAppAtom_Pinned
+        key={`${pinned_updated_at}-${popstate_count}`}
+        library_updated_at_timestamp={library_updated_at_timestamp}
+        favicon_host={favicon_host}
+        header_title={params.dictionary.library.pinned}
+        items={
+          pinned_hook.items?.map((item) => ({
+            bookmark_id: item.bookmark_id,
+            url: item.url,
+            created_at: new Date(item.created_at),
+            title: item.title,
+            is_unread: item.is_unread,
+            stars: item.stars,
+            tags: item.tags,
+            via_wayback: item.via_wayback,
+          })) || []
         }
-
-        await dispatch(
-          tag_hierarchies_actions.update_tag_hierarchies({
-            update_tag_hierarchies_params,
-            ky: ky_instance,
-          }),
-        )
-        toast.success(params.dictionary.library.tag_hierarchies_upated)
-      }}
-      selected_tag_ids={tag_view_options_hook.selected_tags}
-      is_updating={tag_hierarchies_hook.is_updating}
-      on_item_click={(tag_ids: number[]) => {
-        tag_view_options_hook.set_many_tags_to_search_params({
-          tag_ids,
-        })
-        set_close_aside_count(close_aside_count + 1)
-      }}
-      dragged_tag={tag_view_options_hook.dragged_tag}
-      all_bookmarks_yields={tag_hierarchies_hook.total}
-      is_all_bookmarks_selected={!tag_view_options_hook.selected_tags.length}
-      on_click_all_bookmarks={() => {
-        tag_view_options_hook.clear_selected_tags()
-        if (bookmarks_hook.showing_bookmarks_fetched_by_ids) {
-          search_hook.reset()
-          if (filter_view_options_hook.current_filter == Filter.NONE) {
-            bookmarks_hook.get_bookmarks({})
+        is_draggable={!username && !pinned_hook.is_updating}
+        on_change={async (updated_pinned) => {
+          await dispatch(
+            pinned_actions.update_pinned({
+              update_pinned_params: updated_pinned.map((pin) => ({
+                url: pin.url,
+              })),
+              ky: ky_instance,
+            }),
+          )
+          toast.success(params.dictionary.library.pinned_links_has_beed_updated)
+        }}
+        on_click={async (item) => {
+          if (!username) {
+            const record_visit_params: RecordVisit_Params = {
+              bookmark_id: item.bookmark_id,
+              visited_at: new Date().toISOString(),
+            }
+            localStorage.setItem(
+              browser_storage.local_storage.authorized_library
+                .record_visit_params,
+              JSON.stringify(record_visit_params),
+            )
           }
+          await search_hook.cache_data()
+          window.onbeforeunload = null
+          const url = item.via_wayback
+            ? url_to_wayback({ date: item.created_at, url: item.url })
+            : item.url
+          setTimeout(() => {
+            location.href = url
+          }, 0)
+        }}
+        on_middle_click={(item) => {
+          if (!username) {
+            const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+            const repository = new Bookmarks_RepositoryImpl(data_source)
+            const record_visit = new RecordVisit_UseCase(repository)
+            record_visit.invoke({
+              bookmark_id: item.bookmark_id,
+              visited_at: new Date().toISOString(),
+            })
+          }
+        }}
+        selected_tags={tag_view_options_hook.selected_tags}
+        selected_starred={
+          filter_view_options_hook.current_filter == Filter.STARRED ||
+          filter_view_options_hook.current_filter == Filter.STARRED_UNREAD
         }
-        set_close_aside_count(close_aside_count + 1)
-      }}
-      translations={{
-        all_bookmarks: params.dictionary.library.all_bookmarks,
-        drag_here: params.dictionary.library.drag_tag_here,
-      }}
-    />
+        selected_unread={
+          filter_view_options_hook.current_filter == Filter.UNREAD ||
+          filter_view_options_hook.current_filter == Filter.STARRED_UNREAD
+        }
+        selected_archived={
+          filter_view_options_hook.current_filter == Filter.ARCHIVED ||
+          filter_view_options_hook.current_filter == Filter.ARCHIVED_STARRED ||
+          filter_view_options_hook.current_filter ==
+            Filter.ARCHIVED_STARRED_UNREAD ||
+          filter_view_options_hook.current_filter == Filter.ARCHIVED_UNREAD
+        }
+        current_gte={date_view_options_hook.current_gte}
+        current_lte={date_view_options_hook.current_lte}
+      />
+      <UiAppAtom_TagHierarchies
+        library_updated_at_timestamp={library_updated_at_timestamp}
+        is_draggable={!username}
+        tree={tag_hierarchies_hook.tag_hierarchies}
+        on_update={async (tag_hierarchies: TagHierarchies.Node[]) => {
+          const filter = filter_view_options_hook.current_filter
+
+          const update_tag_hierarchies_params: UpdateTagHierarchies_Params = {
+            tag_hierarchies,
+            gte: date_view_options_hook.current_gte,
+            lte: date_view_options_hook.current_lte,
+            starred_only:
+              filter == Filter.STARRED ||
+              filter == Filter.STARRED_UNREAD ||
+              filter == Filter.ARCHIVED_STARRED ||
+              filter == Filter.ARCHIVED_STARRED_UNREAD ||
+              undefined,
+            unread_only:
+              filter == Filter.UNREAD ||
+              filter == Filter.STARRED_UNREAD ||
+              filter == Filter.ARCHIVED_UNREAD ||
+              filter == Filter.ARCHIVED_STARRED_UNREAD ||
+              undefined,
+            is_archived:
+              filter == Filter.ARCHIVED ||
+              filter == Filter.ARCHIVED_STARRED ||
+              filter == Filter.ARCHIVED_UNREAD ||
+              filter == Filter.ARCHIVED_STARRED_UNREAD ||
+              undefined,
+          }
+
+          await dispatch(
+            tag_hierarchies_actions.update_tag_hierarchies({
+              update_tag_hierarchies_params,
+              ky: ky_instance,
+            }),
+          )
+          toast.success(params.dictionary.library.tag_hierarchies_upated)
+        }}
+        selected_tag_ids={tag_view_options_hook.selected_tags}
+        is_updating={tag_hierarchies_hook.is_updating}
+        on_item_click={(tag_ids: number[]) => {
+          tag_view_options_hook.set_many_tags_to_search_params({
+            tag_ids,
+          })
+        }}
+        dragged_tag={tag_view_options_hook.dragged_tag}
+        all_bookmarks_yields={tag_hierarchies_hook.total}
+        is_all_bookmarks_selected={!tag_view_options_hook.selected_tags.length}
+        on_click_all_bookmarks={() => {
+          tag_view_options_hook.clear_selected_tags()
+          if (bookmarks_hook.showing_bookmarks_fetched_by_ids) {
+            search_hook.reset()
+            if (filter_view_options_hook.current_filter == Filter.NONE) {
+              bookmarks_hook.get_bookmarks({})
+            }
+          }
+        }}
+        translations={{
+          all_bookmarks: params.dictionary.library.all_bookmarks,
+          drag_here: params.dictionary.library.drag_tag_here,
+        }}
+      />
+    </>
   )
   const slot_aside = (
     <UiAppTemplate_LibraryAside
@@ -953,88 +1023,6 @@ const Library = (params: {
           )}
         </div>
       }
-    />
-  )
-  const slot_pinned = (
-    <UiAppAtom_Pinned
-      key={`${pinned_updated_at}-${popstate_count}`}
-      library_updated_at_timestamp={library_updated_at_timestamp}
-      favicon_host={favicon_host}
-      header_title={params.dictionary.library.pinned}
-      items={
-        pinned_hook.items?.map((item) => ({
-          bookmark_id: item.bookmark_id,
-          url: item.url,
-          created_at: new Date(item.created_at),
-          title: item.title,
-          is_unread: item.is_unread,
-          stars: item.stars,
-          tags: item.tags,
-          via_wayback: item.via_wayback,
-        })) || []
-      }
-      is_draggable={!username && !pinned_hook.is_updating}
-      on_change={async (updated_pinned) => {
-        await dispatch(
-          pinned_actions.update_pinned({
-            update_pinned_params: updated_pinned.map((pin) => ({
-              url: pin.url,
-            })),
-            ky: ky_instance,
-          }),
-        )
-        toast.success(params.dictionary.library.pinned_links_has_beed_updated)
-      }}
-      on_click={async (item) => {
-        if (!username) {
-          const record_visit_params: RecordVisit_Params = {
-            bookmark_id: item.bookmark_id,
-            visited_at: new Date().toISOString(),
-          }
-          localStorage.setItem(
-            browser_storage.local_storage.authorized_library
-              .record_visit_params,
-            JSON.stringify(record_visit_params),
-          )
-        }
-        await search_hook.cache_data()
-        window.onbeforeunload = null
-        const url = item.via_wayback
-          ? url_to_wayback({ date: item.created_at, url: item.url })
-          : item.url
-        setTimeout(() => {
-          location.href = url
-        }, 0)
-      }}
-      on_middle_click={(item) => {
-        if (!username) {
-          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          const record_visit = new RecordVisit_UseCase(repository)
-          record_visit.invoke({
-            bookmark_id: item.bookmark_id,
-            visited_at: new Date().toISOString(),
-          })
-        }
-      }}
-      selected_tags={tag_view_options_hook.selected_tags}
-      selected_starred={
-        filter_view_options_hook.current_filter == Filter.STARRED ||
-        filter_view_options_hook.current_filter == Filter.STARRED_UNREAD
-      }
-      selected_unread={
-        filter_view_options_hook.current_filter == Filter.UNREAD ||
-        filter_view_options_hook.current_filter == Filter.STARRED_UNREAD
-      }
-      selected_archived={
-        filter_view_options_hook.current_filter == Filter.ARCHIVED ||
-        filter_view_options_hook.current_filter == Filter.ARCHIVED_STARRED ||
-        filter_view_options_hook.current_filter ==
-          Filter.ARCHIVED_STARRED_UNREAD ||
-        filter_view_options_hook.current_filter == Filter.ARCHIVED_UNREAD
-      }
-      current_gte={date_view_options_hook.current_gte}
-      current_lte={date_view_options_hook.current_lte}
     />
   )
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
@@ -1450,8 +1438,8 @@ const Library = (params: {
             items={[
               {
                 label: link.is_pinned
-                  ? params.dictionary.library.unpin_from_top
-                  : params.dictionary.library.pin_on_top,
+                  ? params.dictionary.library.unpin
+                  : params.dictionary.library.pin,
                 on_click: async () => {
                   const is_pinned = !link.is_pinned
                   dispatch(bookmarks_actions.set_is_upserting(true))
@@ -2507,11 +2495,10 @@ const Library = (params: {
         }
         on_follow_click={username ? () => {} : undefined}
         show_skeletons={show_skeletons}
-        close_aside_count={close_aside_count}
         mobile_title_bar={'Bookmarks'}
         slot_search={slot_search}
         slot_toolbar={slot_toolbar}
-        slot_tag_hierarchies={slot_tag_hierarchies}
+        slot_sidebar={slot_sidebar}
         slot_aside={slot_aside}
         are_bookmarks_dimmed={
           is_fetching_first_bookmarks || bookmarks_hook.is_upserting || false
@@ -2521,23 +2508,6 @@ const Library = (params: {
             is_fetching_first_bookmarks ||
             bookmarks_hook.is_fetching_more_bookmarks ||
             search_hook.is_initializing
-          )
-        }
-        slot_pinned={
-          pinned_hook.items &&
-          pinned_hook.items.length > 0 && (
-            <div
-              style={{
-                display: bookmarks_hook.showing_bookmarks_fetched_by_ids
-                  ? 'none'
-                  : undefined,
-                visibility: !first_bookmarks_fetched_at_timestamp
-                  ? 'hidden'
-                  : undefined,
-              }}
-            >
-              {slot_pinned}
-            </div>
           )
         }
         slot_bookmarks={slot_bookmarks}

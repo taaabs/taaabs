@@ -3,100 +3,74 @@
 
 .items {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--distance-8px);
-}
-.not-relevant {
-  display: flex;
-  align-items: center;
-  margin: 0 -8px;
-  padding: 0 8px;
-  height: var(--distance-32px);
-  > div {
-    width: var(--distance-3px);
-    height: var(--distance-3px);
-    border-radius: 50%;
-    background-color: var(--neutral300);
-  }
+  flex-direction: column;
+  margin-top: var(--distance-4px); // Room for stars in first item.
 }
 .item {
-  display: flex;
-  align-items: center;
-  background-color: var(--white);
-  border: var(--border-secondary);
-  gap: var(--distance-6px);
-  padding: 0 var(--distance-7px);
-  min-height: var(--distance-32px);
-  border-radius: var(--distance-16px);
   position: relative;
-  // Needed by swipable and sortable - element touch hold detection.
-  @include touch-screen {
-    & > * {
-      pointer-events: none;
-    }
-  }
+  height: var(--distance-32px);
+  border-radius: var(--border-radius-8px);
+  border: var(--border-secondary);
+  background-color: var(--white);
+  margin: var(--distance-2px) 0;
   &--dragging {
     background-color: var(--border-color-secondary);
     cursor: grabbing;
   }
-  &__favicon {
-    align-self: self-start;
-    height: var(--distance-30px);
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    &--not-relevant {
-      opacity: var(--dimmed-opacity);
-    }
-  }
-  &__title {
-    display: flex;
-    align-items: flex-start;
-    padding: var(--distance-4px) var(--distance-2px) var(--distance-4px) 0;
-    @include hover {
-      @include text-decoration-underlinie-thin;
-    }
-    font-family: var(--font-family-inter-tight);
-    &--unread {
-      font-weight: var(--font-weight-inter-tight-medium);
-    }
-    &--via-wayback {
-      font-style: italic;
-    }
-    &__unread {
-      width: var(--distance-6px);
-      height: var(--distance-6px);
-      background-color: var(--red);
-      border-radius: 50%;
-      margin-top: 1.5px;
-      margin-left: var(--distance-2px);
-    }
-  }
   &__stars {
     position: absolute;
     top: 0;
-    right: 0;
-    transform: translate(-7px, -5px);
-    display: flex;
-    align-items: center;
-    display: flex;
-    gap: var(--distance-2px);
+    right: var(--distance-2px);
+    transform: translateY(-4px);
+    display: inline-flex;
+    margin-right: var(--distance-4px);
+    gap: var(--distance-1px);
     > svg {
       fill: var(--yellow);
       width: var(--distance-10px);
     }
   }
-  &__unread {
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: translate(1px, 3px);
+  &__inner {
     display: flex;
+    height: 100%;
     align-items: center;
-    width: var(--distance-7px);
-    height: var(--distance-7px);
-    border-radius: 50%;
-    background-color: var(--red);
+    gap: var(--distance-8px);
+    overflow: hidden;
+    padding: 0 8px;
+    position: relative;
+    &__favicon {
+      flex-shrink: 0;
+    }
+    &__title {
+      font-family: var(--font-family-inter-tight);
+      font-size: var(--font-size-14px);
+      display: -webkit-box;
+      word-wrap: break-word;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      @include hover {
+        @include text-decoration-underlinie-thin;
+      }
+      &--unread {
+        font-weight: var(--font-weight-inter-tight-medium);
+      }
+      &--via-wayback {
+        font-style: italic;
+      }
+    }
+    &__unread {
+      position: absolute;
+      top: calc(50% - 1px);
+      left: -13.5px;
+      display: inline-block;
+      width: var(--distance-12px);
+      height: var(--distance-12px);
+      background-color: var(--red);
+      border-radius: 3.2px;
+      transform: rotate(45deg) translateY(-50%);
+      transform-origin: center;
+    }
   }
 }
