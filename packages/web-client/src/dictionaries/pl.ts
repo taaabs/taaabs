@@ -10,7 +10,7 @@ export const dictionary: Dictionary = {
     bookmark_updated: 'Zakładka została zaktualizowana',
     all_bookmarks: 'All bookmarks',
     drag_tag_here: 'Upuść tag tutaj i zbuduj ich wizualną hierarchię!',
-    tag_hierarchies_upated: 'Hierarchie tagów zostały zaktualizowane',
+    tag_hierarchies_upated: 'Foldery zostały zaktualizowane',
     collapse_sidebar: 'Zwiń panel',
     pin: 'Przypnij',
     unpin: 'Odepnij',

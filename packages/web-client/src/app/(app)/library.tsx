@@ -767,11 +767,17 @@ const Library = (params: {
       selected_tags={tag_view_options_hook.selected_tags}
       selected_starred={
         filter_view_options_hook.current_filter == Filter.STARRED ||
-        filter_view_options_hook.current_filter == Filter.STARRED_UNREAD
+        filter_view_options_hook.current_filter == Filter.STARRED_UNREAD ||
+        filter_view_options_hook.current_filter == Filter.ARCHIVED_STARRED ||
+        filter_view_options_hook.current_filter ==
+          Filter.ARCHIVED_STARRED_UNREAD
       }
       selected_unread={
         filter_view_options_hook.current_filter == Filter.UNREAD ||
-        filter_view_options_hook.current_filter == Filter.STARRED_UNREAD
+        filter_view_options_hook.current_filter == Filter.STARRED_UNREAD ||
+        filter_view_options_hook.current_filter == Filter.ARCHIVED_UNREAD ||
+        filter_view_options_hook.current_filter ==
+          Filter.ARCHIVED_STARRED_UNREAD
       }
       selected_archived={is_archived_filter}
       current_gte={date_view_options_hook.current_gte}

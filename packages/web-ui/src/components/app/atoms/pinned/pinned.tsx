@@ -74,7 +74,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
     const items_dom = items.map((item) => {
       const created_at_timestamp = Math.round(item.created_at.getTime() / 1000)
       let is_not_relevant = false
-      // check if item includes every selected tags
+
       if (
         (props.selected_archived && !item.is_archived) ||
         (!props.selected_archived && item.is_archived)

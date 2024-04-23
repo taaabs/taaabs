@@ -14,18 +14,20 @@ const private_tag_schema = z.object({
 const public_link_schema = z.object({
   is_public: z.literal(true),
   hash: z.string().length(64),
-  is_pinned: z.boolean().optional(),
   url: z.string().max(500).url(),
   site_path: z.string().trim().max(150).optional(),
   via_wayback: z.boolean().optional(),
+  is_pinned: z.boolean().optional(),
+  pin_order: z.number().int().optional(),
 })
 const private_link_schema = z.object({
   is_public: z.literal(false),
   hash: z.string().length(64),
-  is_pinned: z.boolean().optional(),
   url_aes: z.string().max(1000),
   site_aes: z.string().max(100),
   via_wayback: z.boolean().optional(),
+  is_pinned: z.boolean().optional(),
+  pin_order: z.number().int().optional(),
 })
 export const bookmark_schema = z.object({
   id: z.string().uuid().optional(),

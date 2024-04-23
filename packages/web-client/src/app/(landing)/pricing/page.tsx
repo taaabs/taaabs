@@ -129,7 +129,7 @@ const Page: React.FC = () => {
             },
             bullets_heading: 'Everyting in Lite, plus:',
             bullets: [
-              'All addons',
+              'All addons ✨',
               'Priority support',
               'Claim shorter username',
             ],

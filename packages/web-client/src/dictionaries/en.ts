@@ -11,7 +11,7 @@ const dictionary: Dictionary = {
     all_bookmarks: 'All bookmarks',
     drag_tag_here:
       'Organize your tags by dragging & dropping - build a visual hierarchy!',
-    tag_hierarchies_upated: 'Tag hierarchies has been updated',
+    tag_hierarchies_upated: 'Folders has been updated',
     collapse_sidebar: 'Collapse sidebar',
     pin: 'Pin',
     unpin: 'Unpin',

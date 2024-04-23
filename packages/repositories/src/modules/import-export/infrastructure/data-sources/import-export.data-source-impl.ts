@@ -84,17 +84,17 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                       if (link.is_public) {
                         return {
                           is_public: true,
-                          is_pinned: link.is_pinned,
                           url: link.url.trim(),
                           hash: await Crypto.SHA256(link.url.trim(), key),
                           site_path: link.site_path,
                           via_wayback: link.via_wayback,
+                          is_pinned: link.is_pinned,
+                          pin_order: link.pin_order,
                         }
                       } else {
                         const domain = get_domain_from_url(link.url)
                         return {
                           is_public: false,
-                          is_pinned: link.is_pinned,
                           hash: await Crypto.SHA256(link.url.trim(), key),
                           url_aes: await Crypto.AES.encrypt(
                             link.url.trim(),
@@ -107,6 +107,8 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                             key,
                           ),
                           via_wayback: link.via_wayback,
+                          is_pinned: link.is_pinned,
+                          pin_order: link.pin_order,
                         }
                       }
                     }),

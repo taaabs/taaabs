@@ -103,6 +103,7 @@
     }
     &::before {
       content: attr(featured-text);
+      white-space: nowrap;
       left: 0;
       text-transform: uppercase;
       font-family: var(--font-family-plus-jakarta-sans);
@@ -111,7 +112,7 @@
       background-color: var(--brand-color);
       color: var(--white);
       position: absolute;
-      padding: 4px 10px;
+      padding: 4px 10px 5px 10px;
       border-radius: var(--border-radius-8px);
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
