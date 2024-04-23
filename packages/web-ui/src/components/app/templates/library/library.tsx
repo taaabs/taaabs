@@ -251,9 +251,19 @@ export const Library: React.FC<Library.Props> = (props) => {
           style={{
             zIndex: !is_right_side_open ? undefined : 1,
           }}
+          onMouseEnter={() => {
+            set_is_sidebar_hovered(true)
+          }}
+          onMouseLeave={() => {
+            set_is_sidebar_hovered(false)
+          }}
         >
           <div
-            className={cn(styles.sidebar__inner)}
+            className={cn(styles.sidebar__inner, {
+              [styles['sidebar__inner--collapsed']]: is_sidebar_collapsed,
+              [styles['sidebar__inner--collapsed-hovered']]:
+                is_sidebar_collapsed && are_tag_hierarchies_hovered,
+            })}
             style={{ width: `${slidable_width}px` }}
             onClick={() => {
               is_sidebar_collapsed && set_is_sidebar_collapsed(false)
@@ -327,20 +337,7 @@ export const Library: React.FC<Library.Props> = (props) => {
                 {props.pinned_count ? `(${props.pinned_count})` : ''}
               </button>
             </div>
-            <div
-              className={cn(styles['sidebar__inner__content'], {
-                [styles['sidebar__inner__content--collapsed']]:
-                  is_sidebar_collapsed,
-                [styles['sidebar__inner__content--collapsed-hovered']]:
-                  is_sidebar_collapsed && are_tag_hierarchies_hovered,
-              })}
-              onMouseEnter={() => {
-                set_is_sidebar_hovered(true)
-              }}
-              onMouseLeave={() => {
-                set_is_sidebar_hovered(false)
-              }}
-            >
+            <div className={styles['sidebar__inner__content']}>
               {!props.show_skeletons ? (
                 <>
                   <div

@@ -6,6 +6,8 @@ declare const styles: {
   readonly 'sidebar--hidden': string
   readonly 'sidebar--collapsed': string
   readonly sidebar__inner: string
+  readonly 'sidebar__inner--collapsed': string
+  readonly 'sidebar__inner--collapsed-hovered': string
   readonly 'sidebar__inner__desktop-actions': string
   readonly 'sidebar__inner__desktop-actions__collapse-button': string
   readonly 'sidebar__inner__desktop-actions__collapse-button--collapsed': string
@@ -14,8 +16,6 @@ declare const styles: {
   readonly 'sidebar__inner__pane-selector__button': string
   readonly 'sidebar__inner__pane-selector__button--active': string
   readonly sidebar__inner__content: string
-  readonly 'sidebar__inner__content--collapsed': string
-  readonly 'sidebar__inner__content--collapsed-hovered': string
   readonly sidebar__inner__content__skeleton: string
   readonly main: string
   readonly main__inner: string

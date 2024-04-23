@@ -381,7 +381,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           // deeper in the tree if there is a problem higher up.
           // confirmChange={}
         />
-        {props.is_draggable && props.dragged_tag && (
+        {props.is_draggable && (
           <div
             className={cn(
               styles['drop-zone'],
