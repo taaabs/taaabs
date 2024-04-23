@@ -164,6 +164,11 @@ const Library = (params: {
       let is_relevant = true
       // check if item includes every selected tags
       if (
+        (is_archived_filter && !item.is_archived) ||
+        (!is_archived_filter && item.is_archived)
+      ) {
+        is_relevant = false
+      } else if (
         (filter_view_options_hook.current_filter == Filter.STARRED ||
           filter_view_options_hook.current_filter == Filter.STARRED_UNREAD) &&
         !item.stars
@@ -709,6 +714,7 @@ const Library = (params: {
           created_at: new Date(item.created_at),
           title: item.title,
           is_unread: item.is_unread,
+          is_archived: item.is_archived,
           stars: item.stars,
           tags: item.tags,
           via_wayback: item.via_wayback,
@@ -767,13 +773,7 @@ const Library = (params: {
         filter_view_options_hook.current_filter == Filter.UNREAD ||
         filter_view_options_hook.current_filter == Filter.STARRED_UNREAD
       }
-      selected_archived={
-        filter_view_options_hook.current_filter == Filter.ARCHIVED ||
-        filter_view_options_hook.current_filter == Filter.ARCHIVED_STARRED ||
-        filter_view_options_hook.current_filter ==
-          Filter.ARCHIVED_STARRED_UNREAD ||
-        filter_view_options_hook.current_filter == Filter.ARCHIVED_UNREAD
-      }
+      selected_archived={is_archived_filter}
       current_gte={date_view_options_hook.current_gte}
       current_lte={date_view_options_hook.current_lte}
     />

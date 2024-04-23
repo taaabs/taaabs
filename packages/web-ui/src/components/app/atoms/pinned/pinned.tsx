@@ -15,6 +15,7 @@ export namespace Pinned {
     title?: string
     stars?: number
     is_unread?: boolean
+    is_archived?: boolean
     tags?: number[]
     via_wayback?: boolean
   }
@@ -46,6 +47,7 @@ type SortableItem = {
   title?: string
   stars?: number
   is_unread?: boolean
+  is_archived?: boolean
   tags?: number[]
   via_wayback?: boolean
 }
@@ -61,6 +63,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         title: item.title,
         stars: item.stars,
         is_unread: item.is_unread,
+        is_archived: item.is_archived,
         tags: item.tags,
         via_wayback: item.via_wayback,
       })),
@@ -72,7 +75,12 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       const created_at_timestamp = Math.round(item.created_at.getTime() / 1000)
       let is_not_relevant = false
       // check if item includes every selected tags
-      if (props.selected_starred && !item.stars) {
+      if (
+        (props.selected_archived && !item.is_archived) ||
+        (!props.selected_archived && item.is_archived)
+      ) {
+        is_not_relevant = true
+      } else if (props.selected_starred && !item.stars) {
         is_not_relevant = true
       } else if (props.selected_unread && !item.is_unread) {
         is_not_relevant = true
@@ -157,10 +165,6 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         </a>
       )
     })
-
-    if (props.selected_archived) {
-      return <></>
-    }
 
     return (
       <>

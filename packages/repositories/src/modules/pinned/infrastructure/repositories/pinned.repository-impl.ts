@@ -26,6 +26,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
           : undefined,
         stars: el.stars,
         is_unread: el.is_unread,
+        is_archived: el.is_archived,
         tags: el.tags,
         via_wayback: el.via_wayback,
       })),
@@ -46,6 +47,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
       title: el.title,
       stars: el.stars,
       is_unread: el.is_unread,
+      is_archived: el.is_archived,
       tags: el.tags,
       via_wayback: el.via_wayback,
     }))

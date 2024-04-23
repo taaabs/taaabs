@@ -9,6 +9,7 @@ export namespace Pinned_Dto {
     title_aes?: string
     stars?: number
     is_unread?: boolean
+    is_archived?: boolean
     tags?: number[]
     via_wayback?: boolean
   }

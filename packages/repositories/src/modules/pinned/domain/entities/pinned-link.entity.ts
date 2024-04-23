@@ -6,6 +6,7 @@ export type PinnedLink_Entity = {
   title?: string
   stars?: number
   is_unread?: boolean
+  is_archived?: boolean
   tags?: number[]
   via_wayback?: boolean
 }
