@@ -23,7 +23,7 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
             </button>
           </div>
           <div className={styles.slots}>
-            {props.slot_segmented_buttons}
+            <div>{props.slot_segmented_buttons}</div>
             {props.slot_custom_range}
             <div className={styles.tags}>{props.slot_tags}</div>
           </div>
