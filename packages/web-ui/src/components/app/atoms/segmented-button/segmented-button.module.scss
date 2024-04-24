@@ -25,6 +25,7 @@
   font-weight: var(--font-weight-inter-medium);
   position: relative;
   color: transparent;
+  font-size: var(--font-size-14px);
   &::after {
     position: absolute;
     z-index: -1;

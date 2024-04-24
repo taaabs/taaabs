@@ -3,6 +3,7 @@ import styles from './segmented-button.module.scss'
 import cn from 'classnames'
 import useWindowResize from 'beautiful-react-hooks/useWindowResize'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { use_is_hydrated } from '@shared/hooks'
 
 namespace SegmentedButton {
   export type Props = {
@@ -16,6 +17,7 @@ namespace SegmentedButton {
 // Component can handle 2 or 3 items.
 export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
   (props) => {
+    const is_hydrated = use_is_hydrated()
     const on_window_resize = useWindowResize()
     const [selected_idx, set_selected_idx] = useState(
       props.items.findIndex((option) => option.is_selected),
@@ -46,7 +48,7 @@ export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
 
     useEffect(() => {
       get_and_set_item_widths()
-    }, [])
+    }, [is_hydrated])
 
     return (
       <div

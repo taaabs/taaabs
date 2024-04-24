@@ -974,6 +974,7 @@ const Library = (params: {
               is_fetching_first_bookmarks && !search_hook.search_string
                 ? 'var(--dimmed-opacity)'
                 : undefined,
+            pointerEvents: is_not_interactive ? 'none' : undefined,
           }}
         >
           {!show_skeletons ? (
