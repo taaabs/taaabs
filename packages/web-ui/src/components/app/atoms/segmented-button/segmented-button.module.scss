@@ -25,6 +25,22 @@
   font-weight: var(--font-weight-inter-medium);
   position: relative;
   color: transparent;
+  &::after {
+    position: absolute;
+    z-index: -1;
+    content: '';
+    height: 20px;
+    width: 1px;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--neutral150);
+    @include transition-250ms(opacity);
+    opacity: 0;
+  }
+  &--show-separator-after::after {
+    opacity: 1;
+  }
   &::before {
     content: attr(title);
     white-space: nowrap;
@@ -48,6 +64,5 @@
   position: absolute;
   height: var(--button-dimension-34px);
   left: 0;
-  z-index: -1;
-  @include transition-150ms;
+  @include transition-250ms;
 }

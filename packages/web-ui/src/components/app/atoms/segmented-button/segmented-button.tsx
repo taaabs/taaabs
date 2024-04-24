@@ -78,6 +78,7 @@ export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
           className={cn(styles.button, {
             [styles['button--selected']]:
               selected_idx == 0 && !props.is_disabled,
+            [styles['button--show-separator-after']]: selected_idx == 2,
           })}
           title={props.options[0].label}
         >
@@ -93,6 +94,8 @@ export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
           className={cn(styles.button, {
             [styles['button--selected']]:
               selected_idx == 1 && !props.is_disabled,
+            [styles['button--show-separator-after']]:
+              props.options.length == 3 && selected_idx == 0,
           })}
           title={props.options[1].label}
         >
