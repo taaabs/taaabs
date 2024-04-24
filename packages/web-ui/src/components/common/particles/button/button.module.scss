@@ -16,10 +16,10 @@
     background: var(--blue800);
   }
   height: var(--button-dimension-40px);
-  font-size: var(--font-size-15px);
+  font-size: var(--font-size-16px);
   padding: 0 16px;
   > span {
-    padding-bottom: 0.08em;
+    padding-bottom: 0.07em;
   }
   &--outlined {
     background-color: var(--white);

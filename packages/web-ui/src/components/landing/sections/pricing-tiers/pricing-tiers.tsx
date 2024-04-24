@@ -3,9 +3,9 @@ import { Wrapper as UiCommonTemplateWrapper } from '@web-ui/components/common/te
 import { Icon } from '@web-ui/components/common/particles/icon'
 import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
-import { use_is_hydrated } from '@shared/hooks'
 import confetti from 'canvas-confetti'
 import { Section as UiLandingTemplate_Section } from '../../templates/section/section'
+import useWindowResize from 'beautiful-react-hooks/useWindowResize'
 
 export namespace PricingTiers {
   export type Props = {
@@ -36,12 +36,17 @@ export namespace PricingTiers {
 }
 
 export const PricingTiers: React.FC<PricingTiers.Props> = (props) => {
+  const on_window_resize = useWindowResize()
   const monthly = useRef<HTMLDivElement>(null)
   const yearly = useRef<HTMLDivElement>(null)
-  const is_hydrated = use_is_hydrated()
 
   const [monthly_width, set_monthly_width] = useState<number>()
   const [yearly_width, set_yearly_width] = useState<number>()
+
+  on_window_resize(() => {
+    set_monthly_width(monthly.current!.getBoundingClientRect().width)
+    set_yearly_width(yearly.current!.getBoundingClientRect().width)
+  })
 
   useEffect(() => {
     set_monthly_width(monthly.current!.getBoundingClientRect().width)
@@ -75,34 +80,40 @@ export const PricingTiers: React.FC<PricingTiers.Props> = (props) => {
               }
             }}
           >
-            <div
-              className={styles['billing-cycle__box__selection']}
-              style={{
-                width: props.billing_cycle.is_monthly_selected
-                  ? monthly_width
-                  : yearly_width,
-                transform: props.billing_cycle.is_monthly_selected
-                  ? `translateX(-${yearly_width}px)`
-                  : undefined,
-              }}
-            />
+            {yearly_width && (
+              <div
+                className={styles['billing-cycle__box__selection']}
+                style={{
+                  width: props.billing_cycle.is_monthly_selected
+                    ? monthly_width
+                    : yearly_width,
+                  transform: props.billing_cycle.is_monthly_selected
+                    ? `translateX(-${yearly_width}px)`
+                    : undefined,
+                }}
+              />
+            )}
             <div
               ref={monthly}
               className={cn(styles['billing-cycle__box__option'], {
                 [styles['billing-cycle__box__option--selected']]:
-                  is_hydrated && props.billing_cycle.is_monthly_selected,
+                  props.billing_cycle.is_monthly_selected,
               })}
             >
-              {props.billing_cycle.labels.monthly}
+              <span title={props.billing_cycle.labels.monthly}>
+                {props.billing_cycle.labels.monthly}
+              </span>
             </div>
             <div
               ref={yearly}
               className={cn(styles['billing-cycle__box__option'], {
                 [styles['billing-cycle__box__option--selected']]:
-                  is_hydrated && !props.billing_cycle.is_monthly_selected,
+                  !props.billing_cycle.is_monthly_selected,
               })}
             >
-              <span>{props.billing_cycle.labels.yearly}</span>
+              <span title={props.billing_cycle.labels.yearly}>
+                {props.billing_cycle.labels.yearly}
+              </span>
               <div
                 className={cn(
                   styles['billing-cycle__box__option__yearly-savings'],

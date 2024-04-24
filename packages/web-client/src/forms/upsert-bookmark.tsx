@@ -7,11 +7,11 @@ import { ModalHeader as UiAppAtom_ModalHeader } from '../../../web-ui/src/compon
 import { ModalFooter as UiAppAtom_ModalFooter } from '../../../web-ui/src/components/app/atoms/modal-footer'
 import { FormRadio as UiAppTemplate_FormRadio } from '../../../web-ui/src/components/app/templates/form-radio'
 import { RadioSetting as UiAppAtom_RadioSetting } from '../../../web-ui/src/components/app/atoms/radio-setting'
-import { Box as UiAppAtom_Box } from '../../../web-ui/src/components/app/atoms/box'
 import { Input as UiCommonAtom_Input } from '../../../web-ui/src/components/common/atoms/input'
 import { DraggableFormInputs as UiAppAtom_DraggableFormInputs } from '../../../web-ui/src/components/app/atoms/draggable-form-inputs'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
+import { StandardSplit as UiAppModalSections_StandardSplit } from '@web-ui/components/app/modal-sections/standard-split'
 
 type FormValues = {
   title: string
@@ -150,8 +150,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           />
         }
       >
-        <UiAppAtom_Box>
-          <h2>Title</h2>
+        <UiAppModalSections_StandardSplit label="Title">
           <UiCommonTemplate_FormControllerFix>
             <Controller
               name="title"
@@ -189,8 +188,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               }}
             />
           </UiCommonTemplate_FormControllerFix>
+        </UiAppModalSections_StandardSplit>
 
-          <h2>Note</h2>
+        <UiAppModalSections_StandardSplit label="Note">
           <UiCommonTemplate_FormControllerFix>
             <Controller
               name="note"
@@ -228,8 +228,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               }}
             />
           </UiCommonTemplate_FormControllerFix>
+        </UiAppModalSections_StandardSplit>
 
-          <h2>Links</h2>
+        <UiAppModalSections_StandardSplit label="Links">
           <Controller
             name="is_public"
             control={control}
@@ -263,9 +264,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               )
             }}
           />
+        </UiAppModalSections_StandardSplit>
 
-          <h2>Tags</h2>
-
+        <UiAppModalSections_StandardSplit label="Tags">
           <Controller
             name="is_public"
             control={control}
@@ -297,10 +298,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               )
             }}
           />
-        </UiAppAtom_Box>
+        </UiAppModalSections_StandardSplit>
 
-        <UiAppAtom_Box>
-          <h2>Visibility</h2>
+        <UiAppModalSections_StandardSplit label="Visibility">
           <Controller
             name="is_public"
             control={control}
@@ -328,7 +328,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               )
             }}
           />
-        </UiAppAtom_Box>
+        </UiAppModalSections_StandardSplit>
       </UiAppTemplate_FormModal>
     </form>
   )

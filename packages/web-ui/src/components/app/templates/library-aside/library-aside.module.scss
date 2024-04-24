@@ -46,25 +46,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  &__button {
-    position: relative;
-    &__dropdown {
-      position: absolute;
-      height: 0;
-      bottom: calc(4px * -1);
-      width: 100%;
-      z-index: 2;
-      opacity: 1;
-      @include transition-150ms;
-      transform: translateY(0);
-      &--hidden {
-        opacity: 0;
-        transform: translateY(calc(4px * -1));
-        pointer-events: none;
-        transition: none;
-      }
-    }
-  }
   .tags {
     margin-top: 8px;
     display: flex;

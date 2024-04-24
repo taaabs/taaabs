@@ -7,9 +7,9 @@
   align-items: center;
   border-bottom: var(--border-primary);
   background: var(--header-background);
-  height: 46px;
-  @include at992 {
-    height: 52px;
+  padding: var(--padding-8px) var(--padding-16px);
+  @include at768 {
+    padding: var(--padding-10px) var(--padding-40px);
   }
 }
 .title {
@@ -17,8 +17,8 @@
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   letter-spacing: var(--letter-spacing-logo);
-  font-size: var(--font-size-22px);
-  @include at992 {
-    font-size: var(--font-size-24px);
+  font-size: var(--font-size-20px);
+  @include at768 {
+    font-size: var(--font-size-22px);
   }
 }

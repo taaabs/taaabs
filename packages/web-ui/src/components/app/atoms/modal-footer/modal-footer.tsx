@@ -21,7 +21,7 @@ export const ModalFooter: React.FC<ModalFooter.Props> = (props) => {
         >
           Cancel
         </button>
-        <Button size="medium" type="submit" is_loading={props.is_disabled}>
+        <Button type="submit" is_loading={props.is_disabled}>
           {props.button_label}
         </Button>
       </div>

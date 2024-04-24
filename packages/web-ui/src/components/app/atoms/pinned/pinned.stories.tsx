@@ -64,7 +64,9 @@ export const Primary = () => (
       on_change={() => {}}
       on_click={() => {}}
       favicon_host="http://localhost:4000/v1/favicons"
-      header_title="Pinned"
+      translations={{
+        nothing_pinned: 'lorem ipsum',
+      }}
     />
   </StorybookMargin>
 )

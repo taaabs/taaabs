@@ -24,8 +24,8 @@ export const FormModal: React.FC<FormModal.Props> = (props) => {
       }
 
       if (
-        Math.round(
-          content.current!.scrollTop + content.current!.clientHeight - 1,
+        Math.floor(
+          content.current!.scrollTop + content.current!.clientHeight,
         ) == content.current!.scrollHeight
       ) {
         set_is_scrolled_to_bottom(true)
@@ -51,7 +51,7 @@ export const FormModal: React.FC<FormModal.Props> = (props) => {
         {props.slot_header}
       </div>
       <div className={styles.container__content} ref={content}>
-        <div className={styles.container__content__inner}>{props.children}</div>
+        {props.children}
       </div>
       <div
         className={cn(styles.container__footer, {

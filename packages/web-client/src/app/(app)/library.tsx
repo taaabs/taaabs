@@ -1,6 +1,4 @@
-import useToggle from 'beautiful-react-hooks/useToggle'
 import { use_library_dispatch } from '@/stores/library'
-import OutsideClickHandler from 'react-outside-click-handler'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { useContext, useEffect, useRef, useState } from 'react'
@@ -17,7 +15,6 @@ import { use_counts } from '@/hooks/library/use-counts'
 import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage-cleanup'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { browser_storage } from '@/constants/browser-storage'
-import { use_is_hydrated } from '@shared/hooks'
 import { use_search } from '@/hooks/library/use-search'
 import { ModalContext } from '../../providers/modal-provider'
 import { useParams, useSearchParams } from 'next/navigation'
@@ -27,8 +24,6 @@ import { CustomRangeSkeleton as UiAppAtom_CustomRangeSkeleton } from '@web-ui/co
 import { Library as UiAppTemplate_Library } from '@web-ui/components/app/templates/library'
 import { LibrarySearch as UiAppAtom_LibrarySearch } from '@web-ui/components/app/atoms/library-search'
 import { LibraryAside as UiAppTemplate_LibraryAside } from '@web-ui/components/app/templates/library-aside'
-import { ButtonSelect as UiAppAtom_ButtonSelect } from '@web-ui/components/app/atoms/button-select'
-import { ButtonSelectSkeleton as UiAppAtom_ButtonSelectSkeleton } from '@web-ui/components/app/atoms/button-select-skeleton'
 import { DropdownMenu as UiAppAtom_DropdownMenu } from '@web-ui/components/app/atoms/dropdown-menu'
 import { SelectedTags as UiAppAtom_SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
 import { Tags as UiAppAtom_Tags } from '@web-ui/components/app/atoms/tags'
@@ -64,6 +59,7 @@ import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infras
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 import { BookmarkWrapper as UiAppAtom_BookmarkWrapper } from '@web-ui/components/app/atoms/bookmark-wrapper'
+import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -76,7 +72,6 @@ const Library = (params: {
 }) => {
   use_scroll_restore()
   const popstate_count = use_popstate_count()
-  const is_hydrated = use_is_hydrated()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
@@ -94,9 +89,6 @@ const Library = (params: {
   const order_view_options_hook = use_order_view_options()
   const tag_view_options_hook = use_tag_view_options()
   const date_view_options_hook = use_date_view_options()
-  const [is_sort_by_dropdown_visible, toggle_sort_by_dropdown] =
-    useToggle(false)
-  const [is_order_dropdown_visible, toggle_order_dropdown] = useToggle(false)
   // START - UI synchronization.
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
     useState<number>()
@@ -380,27 +372,10 @@ const Library = (params: {
     filter_view_options_hook.current_filter == Filter.ARCHIVED_STARRED_UNREAD ||
     filter_view_options_hook.current_filter == Filter.ARCHIVED_UNREAD
 
-  function sort_by_option_to_label(sort_by_option: SortBy): string {
-    switch (sort_by_option) {
-      case SortBy.CREATED_AT:
-        return params.dictionary.library.sort_by_options.created_at
-      case SortBy.UPDATED_AT:
-        return params.dictionary.library.sort_by_options.updated_at
-      case SortBy.VISITED_AT:
-        return params.dictionary.library.sort_by_options.visited_at
-      case SortBy.POPULARITY:
-        return params.dictionary.library.sort_by_options.popularity
-    }
-  }
-
-  function order_option_to_label(order_option: Order): string {
-    switch (order_option) {
-      case Order.DESC:
-        return params.dictionary.library.order_options.newest_first
-      case Order.ASC:
-        return params.dictionary.library.order_options.oldest_first
-    }
-  }
+  const is_not_interactive =
+    is_fetching_first_bookmarks ||
+    bookmarks_hook.is_fetching_more_bookmarks ||
+    search_hook.is_initializing
 
   const slot_search = (
     <UiAppAtom_LibrarySearch
@@ -520,7 +495,7 @@ const Library = (params: {
               Filter.ARCHIVED_STARRED_UNREAD,
           on_click: () => {
             if (
-              bookmarks_hook.is_fetching_first_bookmarks ||
+              is_fetching_first_bookmarks ||
               bookmarks_hook.is_fetching_more_bookmarks ||
               counts_hook.is_fetching
             )
@@ -576,7 +551,7 @@ const Library = (params: {
                     Filter.ARCHIVED_STARRED_UNREAD,
                 on_click: () => {
                   if (
-                    bookmarks_hook.is_fetching_first_bookmarks ||
+                    is_fetching_first_bookmarks ||
                     bookmarks_hook.is_fetching_more_bookmarks ||
                     counts_hook.is_fetching
                   )
@@ -634,7 +609,7 @@ const Library = (params: {
               Filter.ARCHIVED_STARRED_UNREAD,
           on_click: () => {
             if (
-              bookmarks_hook.is_fetching_first_bookmarks ||
+              is_fetching_first_bookmarks ||
               bookmarks_hook.is_fetching_more_bookmarks ||
               counts_hook.is_fetching
             )
@@ -853,156 +828,113 @@ const Library = (params: {
     <UiAppTemplate_LibraryAside
       feedback_label={params.dictionary.library.send_feedback}
       on_feedback_click={() => {}}
-      slot_sort_by={{
-        button: is_hydrated ? (
-          <UiAppAtom_ButtonSelect
-            label={params.dictionary.library.sort_by}
-            current_value={sort_by_option_to_label(
-              sort_by_view_options_hook.current_sort_by,
-            )}
-            is_active={is_sort_by_dropdown_visible}
-            on_click={toggle_sort_by_dropdown}
+      slot_segmented_buttons={
+        <>
+          <SegmentedButton
+            key={`1-${popstate_count}`}
+            is_not_interactive={is_not_interactive}
+            options={[
+              {
+                label: params.dictionary.library.sort_by_options.date,
+                is_selected:
+                  sort_by_view_options_hook.current_sort_by ==
+                    SortBy.CREATED_AT ||
+                  sort_by_view_options_hook.current_sort_by ==
+                    SortBy.UPDATED_AT ||
+                  sort_by_view_options_hook.current_sort_by ==
+                    SortBy.VISITED_AT,
+              },
+              {
+                label: params.dictionary.library.sort_by_options.the_huggiest,
+                is_selected:
+                  sort_by_view_options_hook.current_sort_by ==
+                  SortBy.POPULARITY,
+              },
+            ]}
+            on_option_click={(option_idx) => {
+              if (
+                option_idx == 0 &&
+                sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+              ) {
+                sort_by_view_options_hook.set_sort_by_query_param(
+                  SortBy.CREATED_AT,
+                )
+              } else if (option_idx == 1) {
+                sort_by_view_options_hook.set_sort_by_query_param(
+                  SortBy.POPULARITY,
+                )
+              }
+            }}
           />
-        ) : (
-          <UiAppAtom_ButtonSelectSkeleton />
-        ),
-        is_dropdown_visible: is_sort_by_dropdown_visible,
-        dropdown: is_hydrated && (
-          <OutsideClickHandler
-            onOutsideClick={toggle_sort_by_dropdown}
-            disabled={!is_sort_by_dropdown_visible}
-          >
-            <UiAppAtom_DropdownMenu
-              items={[
-                {
-                  label: sort_by_option_to_label(SortBy.CREATED_AT),
-                  on_click: () => {
-                    toggle_sort_by_dropdown()
-                    if (
-                      sort_by_view_options_hook.current_sort_by ==
-                      SortBy.CREATED_AT
-                    )
-                      return
-                    sort_by_view_options_hook.set_sort_by_query_param(
-                      SortBy.CREATED_AT,
-                    )
-                  },
-                  is_selected:
-                    sort_by_view_options_hook.current_sort_by ==
-                    SortBy.CREATED_AT,
-                },
-                {
-                  label: sort_by_option_to_label(SortBy.UPDATED_AT),
-                  on_click: () => {
-                    toggle_sort_by_dropdown()
-                    if (
-                      sort_by_view_options_hook.current_sort_by ==
-                      SortBy.UPDATED_AT
-                    )
-                      return
-                    sort_by_view_options_hook.set_sort_by_query_param(
-                      SortBy.UPDATED_AT,
-                    )
-                  },
-                  is_selected:
-                    sort_by_view_options_hook.current_sort_by ==
-                    SortBy.UPDATED_AT,
-                },
-                ...(!username
-                  ? [
-                      {
-                        label: sort_by_option_to_label(SortBy.VISITED_AT),
-                        on_click: () => {
-                          toggle_sort_by_dropdown()
-                          if (
-                            sort_by_view_options_hook.current_sort_by ==
-                            SortBy.VISITED_AT
-                          )
-                            return
-                          sort_by_view_options_hook.set_sort_by_query_param(
-                            SortBy.VISITED_AT,
-                          )
-                        },
-                        is_selected:
-                          sort_by_view_options_hook.current_sort_by ==
-                          SortBy.VISITED_AT,
-                      },
-                    ]
-                  : []),
-                {
-                  label: sort_by_option_to_label(SortBy.POPULARITY),
-                  on_click: () => {
-                    toggle_sort_by_dropdown()
-                    if (
-                      sort_by_view_options_hook.current_sort_by ==
-                      SortBy.POPULARITY
-                    )
-                      return
-                    sort_by_view_options_hook.set_sort_by_query_param(
-                      SortBy.POPULARITY,
-                    )
-                  },
-                  is_selected:
-                    sort_by_view_options_hook.current_sort_by ==
-                    SortBy.POPULARITY,
-                },
-              ]}
-            />
-          </OutsideClickHandler>
-        ),
-      }}
-      slot_order={{
-        button: is_hydrated ? (
-          <UiAppAtom_ButtonSelect
-            label={params.dictionary.library.order}
-            current_value={order_option_to_label(
-              order_view_options_hook.current_order,
-            )}
-            is_active={is_order_dropdown_visible}
-            on_click={toggle_order_dropdown}
+          <SegmentedButton
+            key={`2-${popstate_count}`}
+            is_not_interactive={is_not_interactive}
             is_disabled={
               sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
             }
+            options={[
+              {
+                label: params.dictionary.library.sort_by_options.created,
+                is_selected:
+                  sort_by_view_options_hook.current_sort_by ==
+                  SortBy.CREATED_AT,
+              },
+              {
+                label: params.dictionary.library.sort_by_options.visited,
+                is_selected:
+                  sort_by_view_options_hook.current_sort_by ==
+                  SortBy.VISITED_AT,
+              },
+              {
+                label: params.dictionary.library.sort_by_options.updated,
+                is_selected:
+                  sort_by_view_options_hook.current_sort_by ==
+                  SortBy.UPDATED_AT,
+              },
+            ]}
+            on_option_click={(option_idx) => {
+              if (option_idx == 0) {
+                sort_by_view_options_hook.set_sort_by_query_param(
+                  SortBy.CREATED_AT,
+                )
+              } else if (option_idx == 1) {
+                sort_by_view_options_hook.set_sort_by_query_param(
+                  SortBy.VISITED_AT,
+                )
+              } else if (option_idx == 2) {
+                sort_by_view_options_hook.set_sort_by_query_param(
+                  SortBy.UPDATED_AT,
+                )
+              }
+            }}
           />
-        ) : (
-          <UiAppAtom_ButtonSelectSkeleton />
-        ),
-        is_dropdown_visible: is_order_dropdown_visible,
-        dropdown: is_hydrated && (
-          <OutsideClickHandler
-            onOutsideClick={toggle_order_dropdown}
-            disabled={!is_order_dropdown_visible}
-          >
-            <UiAppAtom_DropdownMenu
-              items={[
-                {
-                  label: order_option_to_label(Order.DESC),
-                  on_click: () => {
-                    toggle_order_dropdown()
-                    if (order_view_options_hook.current_order == Order.DESC)
-                      return
-                    order_view_options_hook.set_order_query_param(Order.DESC)
-                  },
-
-                  is_selected:
-                    order_view_options_hook.current_order == Order.DESC,
-                },
-                {
-                  label: order_option_to_label(Order.ASC),
-                  on_click: () => {
-                    toggle_order_dropdown()
-                    if (order_view_options_hook.current_order == Order.ASC)
-                      return
-                    order_view_options_hook.set_order_query_param(Order.ASC)
-                  },
-                  is_selected:
-                    order_view_options_hook.current_order == Order.ASC,
-                },
-              ]}
-            />
-          </OutsideClickHandler>
-        ),
-      }}
+          <SegmentedButton
+            key={`3-${popstate_count}`}
+            is_not_interactive={is_not_interactive}
+            is_disabled={
+              sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+            }
+            options={[
+              {
+                label: 'Newest',
+                is_selected:
+                  order_view_options_hook.current_order == Order.DESC,
+              },
+              {
+                label: 'Oldest',
+                is_selected: order_view_options_hook.current_order == Order.ASC,
+              },
+            ]}
+            on_option_click={(option_idx) => {
+              if (option_idx == 0) {
+                order_view_options_hook.set_order_query_param(Order.DESC)
+              } else if (option_idx == 1) {
+                order_view_options_hook.set_order_query_param(Order.ASC)
+              }
+            }}
+          />
+        </>
+      }
       slot_custom_range={
         !show_skeletons ? (
           <div
@@ -1152,7 +1084,7 @@ const Library = (params: {
       tags={
         bookmark.tags
           ? bookmark.tags.map((tag) => {
-              const is_selected = bookmarks_hook.is_fetching_first_bookmarks
+              const is_selected = is_fetching_first_bookmarks
                 ? counts_hook.selected_tags.find((t) => t == tag.id) !=
                   undefined
                 : tag_view_options_hook.selected_tags.find(
@@ -2564,13 +2496,6 @@ const Library = (params: {
         are_bookmarks_dimmed={
           is_fetching_first_bookmarks || bookmarks_hook.is_upserting || false
         }
-        is_interactive={
-          !(
-            is_fetching_first_bookmarks ||
-            bookmarks_hook.is_fetching_more_bookmarks ||
-            search_hook.is_initializing
-          )
-        }
         slot_bookmarks={slot_bookmarks}
         on_page_bottom_reached={() => {
           if (bookmarks_hook.is_fetching || !bookmarks_hook.bookmarks?.length)
@@ -2593,7 +2518,7 @@ const Library = (params: {
           }
         }}
         clear_selected_tags={
-          !bookmarks_hook.is_fetching_first_bookmarks &&
+          !is_fetching_first_bookmarks &&
           !search_hook.result &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
           tag_view_options_hook.selected_tags.length
@@ -2601,7 +2526,7 @@ const Library = (params: {
             : undefined
         }
         clear_date_range={
-          !bookmarks_hook.is_fetching_first_bookmarks &&
+          !is_fetching_first_bookmarks &&
           !search_hook.result &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
           (date_view_options_hook.current_gte ||
@@ -2610,11 +2535,11 @@ const Library = (params: {
             : undefined
         }
         info_text={
-          bookmarks_hook.is_fetching_first_bookmarks ||
+          is_fetching_first_bookmarks ||
           bookmarks_hook.is_fetching_more_bookmarks
             ? 'Loading...'
             : (!search_hook.search_string.length &&
-                !bookmarks_hook.is_fetching_first_bookmarks &&
+                !is_fetching_first_bookmarks &&
                 (!bookmarks_hook.bookmarks ||
                   bookmarks_hook.bookmarks.length == 0)) ||
               (search_hook.search_string.length &&

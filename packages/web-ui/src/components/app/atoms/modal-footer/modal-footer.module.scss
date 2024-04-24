@@ -5,21 +5,22 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 24px;
+  gap: var(--padding-24px);
   border-top: var(--border-primary);
   background: var(--white);
-  padding: 16px;
-  @include at992 {
-    padding: 16px 40px 16px 0;
+  padding: var(--padding-16px);
+  @include at768 {
+    padding: var(--padding-16px) var(--padding-40px);
   }
   &__right-side {
     display: flex;
     align-items: center;
-    gap: 16px;
-    @include at992 {
-      gap: 24px;
+    gap: var(--padding-16px);
+    @include at768 {
+      gap: var(--padding-24px);
     }
     &__cancel {
+      font-size: var(--font-size-14px);
       color: var(--text-color-dimmed);
       @include transition-150ms(color);
       @include hover {

@@ -21,15 +21,16 @@ export type Dictionary = {
     use_snapshot: string
     use_original: string
     sort_by_options: {
-      created_at: string
-      updated_at: string
-      visited_at: string
-      popularity: string
+      date: string
+      the_huggiest: string
+      created: string
+      updated: string
+      visited: string
     }
     order: string
     order_options: {
-      newest_first: string
-      oldest_first: string
+      newest: string
+      oldest: string
     }
   }
 }

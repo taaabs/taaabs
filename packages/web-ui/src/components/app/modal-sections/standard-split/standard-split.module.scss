@@ -1,0 +1,23 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  gap: var(--padding-8px);
+  @include to768 {
+    flex-direction: column;
+  }
+  @include at768 {
+    gap: var(--padding-40px);
+  }
+}
+.label {
+  color: var(--text-color-variant);
+  font-weight: var(--font-weight-inter-medium);
+  @include at768 {
+    width: 170px;
+  }
+}
+.content {
+  flex: 1;
+}

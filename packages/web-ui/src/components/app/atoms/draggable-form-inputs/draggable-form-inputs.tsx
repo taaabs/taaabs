@@ -125,6 +125,7 @@ export const DraggableFormInputs: React.FC<DraggableFormInputs.Props> = (
         is_disabled={
           props.max_items ? items.length == props.max_items : undefined
         }
+        size="small"
       >
         {props.button_text}
       </Button>

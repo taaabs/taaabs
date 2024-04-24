@@ -38,18 +38,31 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      color: var(--text-color-variant);
       padding: 0 10px 0 12px;
       height: 46px;
-      @include transition-250ms;
       font-weight: var(--font-weight-inter-medium);
       @include at768 {
         height: 60px;
         font-size: var(--font-size-17px);
         padding: 0 20px;
       }
-      &--selected {
+      > span {
+        color: transparent;
+        position: relative;
+        &::before {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          content: attr(title);
+          color: var(--text-color-dimmed);
+          font-weight: var(--font-weight-inter-regular);
+        }
+      }
+      &--selected > span {
         color: var(--text-color-normal);
+        &::before {
+          color: transparent;
+        }
       }
       &__yearly-savings {
         font-family: var(--font-family-plus-jakarta-sans);
@@ -57,8 +70,7 @@
         font-size: var(--font-size-15px);
         background-color: var(--neutral100);
         color: var(--text-color-dimmed);
-        padding: 4px 8px 5px
-          8px;
+        padding: 4px 8px 5px 8px;
         border-radius: var(--border-radius-10px);
         @include transition-250ms;
         &--selected {

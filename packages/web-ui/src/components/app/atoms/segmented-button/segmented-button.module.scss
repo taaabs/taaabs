@@ -1,0 +1,53 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  border-radius: var(--border-radius-10px);
+  outline: 1px solid var(--neutral150);
+  outline-offset: 3px;
+  margin: 4px;
+  display: flex;
+  justify-content: space-evenly;
+  position: relative;
+  @include transition-150ms(outline-color);
+  @include hover {
+    outline-color: var(--neutral250);
+  }
+  &--disabled {
+    opacity: var(--dimmed-opacity);
+    pointer-events: none;
+  }
+}
+.button {
+  flex: auto;
+  height: var(--button-dimension-34px);
+  color: transparent;
+  font-weight: var(--font-weight-inter-medium);
+  position: relative;
+  color: transparent;
+  &::before {
+    content: attr(title);
+    white-space: nowrap;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: var(--font-weight-inter-regular);
+    color: var(--text-color-dimmed);
+  }
+  &--selected {
+    color: var(--text-color-normal);
+    &::before {
+      color: transparent;
+    }
+  }
+}
+.selection {
+  background-color: var(--white);
+  border-radius: var(--border-radius-10px);
+  box-shadow: var(--box-shadow-strong);
+  position: absolute;
+  height: var(--button-dimension-34px);
+  left: 0;
+  z-index: -1;
+  @include transition-150ms;
+}

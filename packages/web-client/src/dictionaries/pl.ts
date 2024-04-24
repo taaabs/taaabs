@@ -23,15 +23,15 @@ export const dictionary: Dictionary = {
     use_original: 'Oryginalny link został przywrócony',
     sort_by: 'Sortowanie',
     sort_by_options: {
-      created_at: 'Data utworzenia',
-      updated_at: 'Data zaktualizowania',
-      visited_at: 'Data ostatniej wizyty',
+      created: 'Data utworzenia',
+      updated: 'Data zaktualizowania',
+      visited: 'Data ostatniej wizyty',
       popularity: 'Najbardziej uznane',
     },
     order: 'Kolejność',
     order_options: {
-      newest_first: 'Od najnowszych',
-      oldest_first: 'Od najstarszych',
+      newest: 'Od najnowszych',
+      oldest: 'Od najstarszych',
     },
   },
 }

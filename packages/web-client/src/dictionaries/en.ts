@@ -24,15 +24,16 @@ const dictionary: Dictionary = {
     use_original: 'Link is back to its original URL',
     sort_by: 'Sort by',
     sort_by_options: {
-      created_at: 'Created at',
-      updated_at: 'Updated at',
-      visited_at: 'Visited at',
-      popularity: 'The huggiest!',
+      date: 'Date',
+      the_huggiest: 'The huggiest!',
+      created: 'Created',
+      visited: 'Visited',
+      updated: 'Updated',
     },
     order: 'Order',
     order_options: {
-      newest_first: 'Newest first',
-      oldest_first: 'Oldest first',
+      newest: 'Newest',
+      oldest: 'Oldest',
     },
   },
 }

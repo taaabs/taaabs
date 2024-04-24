@@ -20,7 +20,6 @@ export namespace Library {
     slot_search: React.ReactNode
     slot_bookmarks: React.ReactNode
     are_bookmarks_dimmed: boolean
-    is_interactive: boolean
     on_page_bottom_reached: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
