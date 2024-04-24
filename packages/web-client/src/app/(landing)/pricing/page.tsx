@@ -75,9 +75,9 @@ const Page: React.FC = () => {
             price: '$0',
             bullets_heading: "What's included:",
             bullets: [
-              'Unlimited bookmarks & tags',
-              'All essential features',
-              'Community support',
+              'Unlimited bookmarks',
+              'Unlimited tags',
+              'End-to-end encryption',
             ],
             slot_button: (
               <UiCommonParticle_Button on_click={() => {}} size="medium">
