@@ -74,7 +74,7 @@
     width: var(--_collapsed_aside_width);
   }
   &__inner {
-    --_pane-selector-height: 22px;
+    --_pane-selector-height: 32px;
     width: 100%;
     @include to992 {
       height: 100%;
@@ -182,6 +182,9 @@
       gap: 10px;
       height: var(--_pane-selector-height);
       align-items: center;
+      @include at992 {
+        border-top: var(--border-secondary);
+      }
       &__button {
         font-size: var(--font-size-13px);
         color: var(--text-color-variant);

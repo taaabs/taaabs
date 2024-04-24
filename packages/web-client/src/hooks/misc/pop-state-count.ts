@@ -4,7 +4,10 @@ export const use_popstate_count = (): number => {
   const [pop_state_count, set_pop_state_count] = useState(0)
 
   const handle_pop_state = () => {
-    set_pop_state_count((count) => count + 1)
+    setTimeout(() => {
+      // After all hooks have run, we commit the pop event in the next frame.
+      set_pop_state_count((count) => count + 1)
+    }, 0)
   }
 
   useEffect(() => {

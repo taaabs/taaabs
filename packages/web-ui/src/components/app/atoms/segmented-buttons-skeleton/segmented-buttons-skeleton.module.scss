@@ -1,0 +1,15 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  > span {
+    width: 100%;
+  }
+  > span > span {
+    height: 42px;
+    border-radius: var(--border-radius-12px);
+  }
+}
