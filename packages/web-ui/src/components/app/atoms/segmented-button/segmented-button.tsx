@@ -13,7 +13,7 @@ namespace SegmentedButton {
   }
 }
 
-// Components can handle 2 or 3 options.
+// Component can handle 2 or 3 items.
 export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
   (props) => {
     const on_window_resize = useWindowResize()
