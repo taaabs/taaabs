@@ -46,6 +46,7 @@ export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
       get_and_set_item_widths()
     })
 
+    // Important to not run it in useUpdateEffect as it delays setting widths when navigating to library from other page.
     useEffect(() => {
       get_and_set_item_widths()
     }, [is_hydrated])
