@@ -1,5 +1,4 @@
 declare const styles: {
-  readonly contaner: string
   readonly field: string
   readonly 'field--error': string
   readonly 'field--disabled': string

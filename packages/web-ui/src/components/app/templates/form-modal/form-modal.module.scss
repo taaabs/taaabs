@@ -20,12 +20,12 @@
   }
   &__content {
     overflow: auto;
-    padding: var(--padding-16px);
+    padding: var(--padding-24px) var(--padding-16px);
     display: flex;
     flex-direction: column;
     gap: var(--padding-24px);
     @include at768 {
-      padding: var(--padding-40px);
+      padding: var(--padding-24px) var(--padding-40px);
     }
   }
   &__footer {

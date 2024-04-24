@@ -1,11 +1,6 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
-.contaner {
-  display: flex;
-  gap: 8px;
-  flex-direction: column;
-}
 .field {
   width: 100%;
   background-color: var(--white);
@@ -35,16 +30,16 @@
   }
 }
 .input {
-  height: var(--input-height-46px);
-  padding: 0 12px;
+  height: 46px;
+  padding: 0 var(--padding-12px);
 }
 .textarea {
   position: relative;
-  padding: 9px 12px;
+  padding: 9px var(--padding-12px);
   resize: none;
 }
 .message {
-  margin-top: 8px;
+  margin-top: var(--padding-8px);
   font-size: var(--font-size-13px);
   strong {
     font-weight: var(--font-weight-inter-medium);

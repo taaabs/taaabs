@@ -1,9 +1,8 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import styles from './segmented-button.module.scss'
 import cn from 'classnames'
-import useWindowResize from 'beautiful-react-hooks/useWindowResize'
+import useResizeObserver from 'beautiful-react-hooks/useResizeObserver'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { use_is_hydrated } from '@shared/hooks'
 
 namespace SegmentedButton {
   export type Props = {
@@ -17,8 +16,8 @@ namespace SegmentedButton {
 // Component can handle 2 or 3 items.
 export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
   (props) => {
-    const is_hydrated = use_is_hydrated()
-    const on_window_resize = useWindowResize()
+    const container = useRef<HTMLDivElement>(null)
+    const DOMRect = useResizeObserver(container)
     const [selected_idx, set_selected_idx] = useState(
       props.items.findIndex((option) => option.is_selected),
     )
@@ -42,20 +41,16 @@ export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
       set_selected_idx(props.items.findIndex((option) => option.is_selected))
     }, [props.is_disabled])
 
-    on_window_resize(() => {
-      get_and_set_item_widths()
-    })
-
-    // Important to not run it in useUpdateEffect as it delays setting widths when navigating to library from other page.
     useEffect(() => {
       get_and_set_item_widths()
-    }, [is_hydrated])
+    }, [DOMRect])
 
     return (
       <div
         className={cn(styles.container, {
           [styles['container--disabled']]: props.is_disabled,
         })}
+        ref={container}
       >
         {item_widths && !props.is_disabled && (
           <div
@@ -73,7 +68,8 @@ export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
         )}
         <button
           ref={item_1}
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault()
             if (props.is_not_interactive) return
             props.on_item_click(0)
             set_selected_idx(0)
@@ -89,7 +85,8 @@ export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
         </button>
         <button
           ref={item_2}
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault()
             if (props.is_not_interactive) return
             props.on_item_click(1)
             set_selected_idx(1)
@@ -107,7 +104,8 @@ export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
         {props.items.length == 3 && (
           <button
             ref={item_3}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault()
               if (props.is_not_interactive) return
               props.on_item_click(2)
               set_selected_idx(2)

@@ -34,9 +34,6 @@
     border-radius: var(--border-radius-14px);
     transform: translateY(20px);
     box-shadow: var(--box-shadow-long);
-    @include at768 {
-      transform: scale(0.98);
-    }
     @include to992 {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
@@ -46,12 +43,7 @@
     }
     &--visible {
       @include transition-150ms(transform);
-      @include to768 {
-        transform: translateY(0);
-      }
-      @include at768 {
-        transform: scale(1);
-      }
+      transform: translateY(0);
     }
   }
 }

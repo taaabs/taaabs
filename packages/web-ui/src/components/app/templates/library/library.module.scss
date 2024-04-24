@@ -264,7 +264,6 @@
       @include transition-150ms(opacity);
     }
     @include at992 {
-      background: var(--background);
       @include transition-250ms(transform);
       transform-origin: right;
     }

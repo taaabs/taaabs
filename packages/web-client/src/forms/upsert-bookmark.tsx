@@ -5,13 +5,15 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { FormModal as UiAppTemplate_FormModal } from '../../../web-ui/src/components/app/templates/form-modal'
 import { ModalHeader as UiAppAtom_ModalHeader } from '../../../web-ui/src/components/app/atoms/modal-header'
 import { ModalFooter as UiAppAtom_ModalFooter } from '../../../web-ui/src/components/app/atoms/modal-footer'
-import { FormRadio as UiAppTemplate_FormRadio } from '../../../web-ui/src/components/app/templates/form-radio'
-import { RadioSetting as UiAppAtom_RadioSetting } from '../../../web-ui/src/components/app/atoms/radio-setting'
 import { Input as UiCommonAtom_Input } from '../../../web-ui/src/components/common/atoms/input'
-import { DraggableFormInputs as UiAppAtom_DraggableFormInputs } from '../../../web-ui/src/components/app/atoms/draggable-form-inputs'
+import { DraggableUpsertFormLinks as UiAppAtom_DraggableUpsertFormLinks } from '../../../web-ui/src/components/app/atoms/draggable-upsert-form-links'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { StandardSplit as UiAppModalSections_StandardSplit } from '@web-ui/components/app/modal-sections/standard-split'
+import { Standard as UiAppModalSections_Standard } from '@web-ui/components/app/modal-sections/standard'
+import { Centered as UiAppModalSections_Centered } from '@web-ui/components/app/modal-sections/centered'
+import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
+import { is_valid_url } from '@/utils/is-valid-url'
 
 type FormValues = {
   title: string
@@ -47,12 +49,16 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'all' })
+  const [clipboard_url, set_clipboard_url] = useState<string>()
 
-  const [links, set_links] = useState<{ url: string; is_public: boolean }[]>(
+  const [links, set_links] = useState<
+    { url: string; is_public?: boolean; via_wayback?: boolean }[]
+  >(
     props.bookmark
       ? props.bookmark?.links.map((link) => ({
           url: link.url,
           is_public: link.is_public,
+          via_wayback: link.via_wayback,
         }))
       : props.bookmark_autofill && props.bookmark_autofill.links
       ? props.bookmark_autofill.links.map(({ url }) => ({
@@ -96,11 +102,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         )
         return {
           url: link.url,
-          is_public: form_data.is_public ? link.is_public : false,
+          is_public: (form_data.is_public ? link.is_public : false) || false,
           site_path: current_link?.site_path,
           is_pinned: current_link?.is_pinned,
           pin_title: current_link?.pin_title,
-          via_wayback: current_link?.via_wayback,
+          via_wayback: link.via_wayback,
         }
       }),
       tags: tags.map((tag) => ({
@@ -119,6 +125,12 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
   useEffect(() => {
     window.addEventListener('keydown', handle_keyboard)
+
+    navigator.clipboard.readText().then((text) => {
+      if (is_valid_url(text)) {
+        set_clipboard_url(text)
+      }
+    })
 
     return () => {
       window.removeEventListener('keydown', handle_keyboard)
@@ -145,11 +157,79 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         slot_footer={
           <UiAppAtom_ModalFooter
             on_click_cancel={props.on_close}
-            button_label={props.action == 'update' ? 'Save' : 'Create'}
+            button_label={props.action == 'update' ? 'Update' : 'Create'}
             is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
           />
         }
       >
+        <UiAppModalSections_Centered label="Visibility">
+          <Controller
+            name="is_public"
+            control={control}
+            defaultValue={props.bookmark?.is_public}
+            render={({ field }) => {
+              return (
+                <div style={{ width: '200px' }}>
+                  <SegmentedButton
+                    items={[
+                      { label: 'Private', is_selected: !field.value },
+                      { label: 'Public', is_selected: field.value || false },
+                    ]}
+                    on_item_click={(selected_idx) => {
+                      if (selected_idx == 0) {
+                        field.onChange(false)
+                      } else {
+                        field.onChange(true)
+                      }
+                    }}
+                  />
+                </div>
+              )
+            }}
+          />
+        </UiAppModalSections_Centered>
+
+        <UiAppModalSections_Standard label="Links">
+          <Controller
+            name="is_public"
+            control={control}
+            defaultValue={props.bookmark?.is_public}
+            render={({ field }) => {
+              return (
+                <UiAppAtom_DraggableUpsertFormLinks
+                  links={links.map((link) => ({
+                    url: link.url,
+                    is_public:
+                      props.bookmark?.is_public == false
+                        ? true
+                        : link.is_public,
+                    via_wayback: link.via_wayback,
+                  }))}
+                  on_change={(links) => {
+                    set_links(
+                      links.map((el) => ({
+                        url: el.url,
+                        is_public: el.is_public,
+                        via_wayback: el.via_wayback,
+                      })),
+                    )
+                  }}
+                  show_visibility_toggler={
+                    (field.value === undefined && props.bookmark?.is_public) ||
+                    field.value ||
+                    false
+                  }
+                  max_items={system_values.bookmark.links.limit}
+                  clipboard_url={clipboard_url}
+                  translations={{
+                    add_url: 'Add URL',
+                  }}
+                />
+              )
+            }}
+          />
+        </UiAppModalSections_Standard>
+
         <UiAppModalSections_StandardSplit label="Title">
           <UiCommonTemplate_FormControllerFix>
             <Controller
@@ -230,43 +310,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           </UiCommonTemplate_FormControllerFix>
         </UiAppModalSections_StandardSplit>
 
-        <UiAppModalSections_StandardSplit label="Links">
-          <Controller
-            name="is_public"
-            control={control}
-            defaultValue={props.bookmark?.is_public}
-            render={({ field }) => {
-              return (
-                <UiAppAtom_DraggableFormInputs
-                  items={links.map((link) => ({
-                    value: link.url,
-                    is_public:
-                      props.bookmark?.is_public == false
-                        ? true
-                        : link.is_public,
-                  }))}
-                  on_change={(links) => {
-                    set_links(
-                      links.map((el) => ({
-                        url: el.value,
-                        is_public: el.is_public,
-                      })),
-                    )
-                  }}
-                  button_text="Add link"
-                  show_visibility_toggler={
-                    (field.value === undefined && props.bookmark?.is_public) ||
-                    field.value ||
-                    false
-                  }
-                  max_items={system_values.bookmark.links.limit}
-                />
-              )
-            }}
-          />
-        </UiAppModalSections_StandardSplit>
-
-        <UiAppModalSections_StandardSplit label="Tags">
+        {/* <UiAppModalSections_StandardSplit label="Tags">
           <Controller
             name="is_public"
             control={control}
@@ -298,37 +342,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               )
             }}
           />
-        </UiAppModalSections_StandardSplit>
-
-        <UiAppModalSections_StandardSplit label="Visibility">
-          <Controller
-            name="is_public"
-            control={control}
-            defaultValue={props.bookmark?.is_public}
-            render={({ field }) => {
-              return (
-                <UiAppTemplate_FormRadio>
-                  <UiAppAtom_RadioSetting
-                    top_line="Private"
-                    bottom_line="All data is encrypted end-to-end"
-                    on_click={() => {
-                      field.onChange(false)
-                    }}
-                    is_checked={!field.value}
-                  />
-                  <UiAppAtom_RadioSetting
-                    top_line="Public"
-                    bottom_line="Selected links and tags can remain private"
-                    on_click={() => {
-                      field.onChange(true)
-                    }}
-                    is_checked={field.value}
-                  />
-                </UiAppTemplate_FormRadio>
-              )
-            }}
-          />
-        </UiAppModalSections_StandardSplit>
+        </UiAppModalSections_StandardSplit> */}
       </UiAppTemplate_FormModal>
     </form>
   )

@@ -1,13 +1,13 @@
 import cn from 'classnames'
 import styles from './input.module.scss'
 
-type MessageType = 'error' | 'warning' | 'info'
+type State = 'error' | 'warning' | 'info'
 
 export namespace Input {
   export type Props = {
     value: string
     on_change: (value: string) => void
-    message_type?: MessageType
+    message_type?: State
     message?: React.ReactNode
     is_disabled?: boolean
     autofocus?: boolean

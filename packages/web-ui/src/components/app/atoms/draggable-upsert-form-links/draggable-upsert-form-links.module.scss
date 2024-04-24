@@ -1,0 +1,98 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.sortable {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-8px);
+  margin-bottom: var(--padding-12px);
+  margin-right: -20px;
+  
+}
+.item {
+  display: flex;
+  border: var(--border-secondary);
+  border-radius: var(--border-radius-12px);
+  overflow: hidden;
+  margin-right: 20px;
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    &__top {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--white);
+      padding: var(--padding-12px) var(--padding-16px);
+      gap: var(--padding-8px);
+      &__heading {
+        display: flex;
+        justify-content: space-between;
+        &__index {
+          font-size: var(--font-size-14px);
+          font-family: var(--font-family-plus-jakarta-sans);
+          font-weight: var(--font-weight-plus-jakarta-sans-bold);
+          color: var(--brand-color);
+        }
+        &__remove {
+          font-size: var(--font-size-13px);
+          color: var(--red);
+          @include hover {
+            @include text-decoration-underlinie-thin;
+          }
+        }
+      }
+      &__url {
+        font-weight: var(--font-weight-inter-medium);
+        overflow-wrap: anywhere;
+        background-color: var(--white);
+      }
+    }
+    &__options {
+      display: flex;
+      flex-direction: column;
+      &__row {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--padding-8px) var(--padding-16px);
+        border-top: var(--border-secondary);
+        &__label {
+          color: var(--text-color-variant);
+        }
+        &__content {
+          height: 0;
+          > select {
+            color: var(--text-color-variant);
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid var(--neutral200);
+          }
+        }
+      }
+    }
+  }
+  &__handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    padding: 0 var(--padding-8px);
+    width: var(--button-dimension-28px);
+    border-left: var(--border-secondary);
+    background-color: var(--neutral50);
+    > svg {
+      fill: var(--neutral500);
+      width: 9px;
+    }
+  }
+}
+.new-link {
+  display: flex;
+  gap: var(--padding-8px);
+  > div:first-child {
+    flex-grow: 1;
+    > input {
+      height: var(--button-dimension-40px);
+    }
+  }
+}

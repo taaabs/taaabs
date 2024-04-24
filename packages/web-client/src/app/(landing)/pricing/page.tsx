@@ -77,7 +77,7 @@ const Page: React.FC = () => {
             bullets: [
               'Unlimited bookmarks',
               'Unlimited tags',
-              'End-to-end encryption',
+              'Zero-knowledge encryption™',
             ],
             slot_button: (
               <UiCommonParticle_Button on_click={() => {}} size="medium">
@@ -130,7 +130,7 @@ const Page: React.FC = () => {
             bullets_heading: 'Everyting in Lite, plus:',
             bullets: [
               'Unlock all addons ✨',
-              'Priority support',
+              'Get priority support',
               'Claim shorter username',
             ],
             featured_text: 'recommended',

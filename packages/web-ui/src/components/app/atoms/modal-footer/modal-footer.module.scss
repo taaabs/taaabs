@@ -20,7 +20,6 @@
       gap: var(--padding-24px);
     }
     &__cancel {
-      font-size: var(--font-size-14px);
       color: var(--text-color-dimmed);
       @include transition-150ms(color);
       @include hover {
