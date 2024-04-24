@@ -8,12 +8,12 @@ export default {
 export const Primary = () => (
   <StorybookMargin>
     <SegmentedButton
-      options={[
+      items={[
         { label: 'aa', is_selected: false },
         { label: 'aaaaaaa', is_selected: true },
         { label: 'aaaaa', is_selected: false },
       ]}
-      on_option_click={() => {}}
+      on_item_click={() => {}}
     />
   </StorybookMargin>
 )

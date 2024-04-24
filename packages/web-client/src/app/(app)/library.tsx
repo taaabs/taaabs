@@ -59,7 +59,7 @@ import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infras
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 import { BookmarkWrapper as UiAppAtom_BookmarkWrapper } from '@web-ui/components/app/atoms/bookmark-wrapper'
-import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
+import { SegmentedButton as UiAppAtom_SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -830,10 +830,10 @@ const Library = (params: {
       on_feedback_click={() => {}}
       slot_segmented_buttons={
         <>
-          <SegmentedButton
+          <UiAppAtom_SegmentedButton
             key={`1-${popstate_count}`}
             is_not_interactive={is_not_interactive}
-            options={[
+            items={[
               {
                 label: params.dictionary.library.sort_by_options.date,
                 is_selected:
@@ -851,7 +851,7 @@ const Library = (params: {
                   SortBy.POPULARITY,
               },
             ]}
-            on_option_click={(option_idx) => {
+            on_item_click={(option_idx) => {
               if (
                 option_idx == 0 &&
                 sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
@@ -866,13 +866,13 @@ const Library = (params: {
               }
             }}
           />
-          <SegmentedButton
+          <UiAppAtom_SegmentedButton
             key={`2-${popstate_count}`}
             is_not_interactive={is_not_interactive}
             is_disabled={
               sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
             }
-            options={[
+            items={[
               {
                 label: params.dictionary.library.sort_by_options.created,
                 is_selected:
@@ -892,7 +892,7 @@ const Library = (params: {
                   SortBy.UPDATED_AT,
               },
             ]}
-            on_option_click={(option_idx) => {
+            on_item_click={(option_idx) => {
               if (option_idx == 0) {
                 sort_by_view_options_hook.set_sort_by_query_param(
                   SortBy.CREATED_AT,
@@ -908,13 +908,13 @@ const Library = (params: {
               }
             }}
           />
-          <SegmentedButton
+          <UiAppAtom_SegmentedButton
             key={`3-${popstate_count}`}
             is_not_interactive={is_not_interactive}
             is_disabled={
               sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
             }
-            options={[
+            items={[
               {
                 label: 'Newest',
                 is_selected:
@@ -925,7 +925,7 @@ const Library = (params: {
                 is_selected: order_view_options_hook.current_order == Order.ASC,
               },
             ]}
-            on_option_click={(option_idx) => {
+            on_item_click={(option_idx) => {
               if (option_idx == 0) {
                 order_view_options_hook.set_order_query_param(Order.DESC)
               } else if (option_idx == 1) {
