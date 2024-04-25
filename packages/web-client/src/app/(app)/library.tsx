@@ -1552,7 +1552,7 @@ const Library = (params: {
               },
               link.via_wayback
                 ? {
-                    label: 'Open original',
+                    label: 'Open original URL',
                     other_icon: <UiCommonParticles_Icon variant="LINK" />,
                     on_click: async () => {
                       const record_visit_params: RecordVisit_Params = {
@@ -1670,7 +1670,7 @@ const Library = (params: {
             items={[
               link.via_wayback
                 ? {
-                    label: 'Open original',
+                    label: 'Open original URL',
                     other_icon: <UiCommonParticles_Icon variant="LINK" />,
                     on_click: async () => {
                       window.onbeforeunload = null

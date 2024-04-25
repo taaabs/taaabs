@@ -15,10 +15,9 @@
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   color: var(--brand-color);
-  font-size: var(--font-size-18px);
+  font-size: var(--font-size-19px);
   @include at768 {
     width: 150px;
-    font-size: var(--font-size-19px);
   }
 }
 .content {

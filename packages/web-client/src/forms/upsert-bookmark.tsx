@@ -223,6 +223,12 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                   clipboard_url={clipboard_url}
                   translations={{
                     add_url: 'Add URL',
+                    open: 'Open...',
+                    original_url: 'Original URL',
+                    snapshot: 'Snapshot via Archive.org',
+                    visibility: 'Visibility',
+                    private: 'Private',
+                    public: 'Public',
                   }}
                 />
               )

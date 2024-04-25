@@ -1,28 +1,40 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
+.new-link {
+  display: flex;
+  gap: var(--padding-8px);
+  margin-top: var(--padding-12px);
+  > div:first-child {
+    flex-grow: 1;
+    > input {
+      height: var(--button-dimension-40px);
+    }
+  }
+}
 .sortable {
   display: flex;
   flex-direction: column;
-  gap: var(--padding-8px);
-  margin-bottom: var(--padding-12px);
-  margin-right: -20px;
-  
+  gap: var(--padding-12px);
+}
+.item.sortable-drag {
+  opacity: 0 !important;
 }
 .item {
   display: flex;
-  border: var(--border-secondary);
-  border-radius: var(--border-radius-12px);
-  overflow: hidden;
-  margin-right: 20px;
   &__content {
     flex: 1;
     display: flex;
     flex-direction: column;
+    background-color: var(--white);
+    border-top-left-radius: var(--border-radius-12px);
+    border-bottom-left-radius: var(--border-radius-12px);
+    box-shadow: var(--box-shadow);
+    position: relative;
+    z-index: 1;
     &__top {
       display: flex;
       flex-direction: column;
-      background-color: var(--white);
       padding: var(--padding-12px) var(--padding-16px);
       gap: var(--padding-8px);
       &__heading {
@@ -45,7 +57,6 @@
       &__url {
         font-weight: var(--font-weight-inter-medium);
         overflow-wrap: anywhere;
-        background-color: var(--white);
       }
     }
     &__options {
@@ -62,10 +73,9 @@
         &__content {
           height: 0;
           > select {
-            color: var(--text-color-variant);
             background-color: transparent;
             border: none;
-            border-bottom: 1px solid var(--neutral200);
+            text-align: right;
           }
         }
       }
@@ -78,21 +88,13 @@
     cursor: grab;
     padding: 0 var(--padding-8px);
     width: var(--button-dimension-28px);
-    border-left: var(--border-secondary);
-    background-color: var(--neutral50);
+    background-color: var(--brand-color);
+    border-top-right-radius: var(--border-radius-12px);
+    border-bottom-right-radius: var(--border-radius-12px);
+    box-shadow: var(--box-shadow-blue-strong);
     > svg {
-      fill: var(--neutral500);
+      fill: var(--white);
       width: 9px;
-    }
-  }
-}
-.new-link {
-  display: flex;
-  gap: var(--padding-8px);
-  > div:first-child {
-    flex-grow: 1;
-    > input {
-      height: var(--button-dimension-40px);
     }
   }
 }

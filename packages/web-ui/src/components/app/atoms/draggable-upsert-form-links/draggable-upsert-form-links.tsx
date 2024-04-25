@@ -22,6 +22,12 @@ namespace DraggableUpsertFormLinks {
     max_items?: number
     translations: {
       add_url: string
+      open: string
+      original_url: string
+      snapshot: string
+      visibility: string
+      public: string
+      private: string
     }
   }
 }
@@ -121,8 +127,12 @@ export const DraggableUpsertFormLinks: React.FC<
                           }}
                           value={item.is_public ? 'public' : 'private'}
                         >
-                          <option value="private">Private</option>
-                          <option value="public">Public</option>
+                          <option value="private">
+                            {props.translations.private}
+                          </option>
+                          <option value="public">
+                            {props.translations.public}
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -160,8 +170,12 @@ export const DraggableUpsertFormLinks: React.FC<
                         }}
                         value={item.via_wayback ? 'snapshot' : 'direct'}
                       >
-                        <option value="direct">Direct</option>
-                        <option value="snapshot">Snapshot</option>
+                        <option value="direct">
+                          {props.translations.original_url}
+                        </option>
+                        <option value="snapshot">
+                          {props.translations.snapshot}
+                        </option>
                       </select>
                     </div>
                   </div>
