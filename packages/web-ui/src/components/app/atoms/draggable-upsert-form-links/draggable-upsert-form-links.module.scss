@@ -25,6 +25,10 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    @include transition-150ms(background-color);
+    @include hover {
+      background-color: var(--red700);
+    }
     > svg {
       fill: var(--white);
       width: 15px;

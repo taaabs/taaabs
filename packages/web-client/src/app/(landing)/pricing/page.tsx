@@ -86,7 +86,7 @@ const Page: React.FC = () => {
             ),
           },
           {
-            name: 'Lite',
+            name: 'Basic',
             description: 'Affordable plan with our must haves',
             previous_price:
               billing_cycle == BillingCycle.YEARLY
@@ -100,20 +100,20 @@ const Page: React.FC = () => {
                   ? 'billed yearly'
                   : 'billed monthly',
             },
-            bullets_heading: 'Everyting in Free, plus:',
+            bullets_heading: 'Everything in Free, plus:',
             bullets: [
-              'Add-on: Multi-link bookmarks',
               'Add-on: Mark as unread',
-              'Add-on: Dark mode',
+              'Add-on: Sort by date visited',
+              'Add-on: Multi-link bookmarks',
             ],
             slot_button: (
               <UiCommonParticle_Button on_click={() => {}} size="medium">
-                Subscribe to Lite
+                Subscribe to Basic
               </UiCommonParticle_Button>
             ),
           },
           {
-            name: 'Pro',
+            name: 'Premium',
             description: 'Get the most out of Taaabs',
             previous_price:
               billing_cycle == BillingCycle.YEARLY
@@ -127,7 +127,7 @@ const Page: React.FC = () => {
                   ? 'billed yearly'
                   : 'billed monthly',
             },
-            bullets_heading: 'Everyting in Lite, plus:',
+            bullets_heading: 'Everything in Basic, plus:',
             bullets: [
               'Unlock all addons ✨',
               'Get priority support',
@@ -136,7 +136,7 @@ const Page: React.FC = () => {
             featured_text: 'recommended',
             slot_button: (
               <UiCommonParticle_Button on_click={() => {}} size="medium">
-                Subscribe to Pro
+                Subscribe to Premium
               </UiCommonParticle_Button>
             ),
           },

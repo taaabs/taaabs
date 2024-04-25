@@ -188,7 +188,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                 is_public: true,
                 url: link.url.trim(),
                 hash: await Crypto.SHA256(link.url.trim(), key),
-                site: link.is_public ? link.site_path : undefined,
+                site_path: link.is_public ? link.site_path : undefined,
                 is_pinned: link.is_pinned,
                 pin_title: link.pin_title,
                 via_wayback: link.via_wayback,

@@ -7,10 +7,12 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { Icon } from '@web-ui/components/common/particles/icon'
 import { Button } from '@web-ui/components/common/particles/button'
 import { Input } from '@web-ui/components/common/atoms/input'
+import { get_site_paths_from_url } from '@shared/utils/get-site-paths-from-url'
 
 namespace DraggableUpsertFormLinks {
   type Link = {
     url: string
+    site_path?: string
     is_public?: boolean
     via_wayback?: boolean
   }
@@ -39,11 +41,20 @@ export const DraggableUpsertFormLinks: React.FC<
   const [new_url, set_new_url] = useState('')
   const [count, set_count] = useState(props.links.length)
   const [items, set_items] = useState<
-    { id: number; url: string; is_public?: boolean; via_wayback?: boolean }[]
+    {
+      id: number
+      url: string
+      site_path?: string
+      site_paths?: string[]
+      is_public?: boolean
+      via_wayback?: boolean
+    }[]
   >(
     props.links.map((item, i) => ({
       id: i,
       url: item.url,
+      site_path: item.site_path,
+      site_paths: get_site_paths_from_url(item.url),
       is_public: item.is_public,
       via_wayback: item.via_wayback,
     })),
@@ -88,7 +99,7 @@ export const DraggableUpsertFormLinks: React.FC<
                       <div
                         className={styles.item__content__options__row__label}
                       >
-                        Visibility
+                        {props.translations.visibility}
                       </div>
                       <div
                         className={styles.item__content__options__row__content}
@@ -132,7 +143,35 @@ export const DraggableUpsertFormLinks: React.FC<
                   )}
                   <div className={styles.item__content__options__row}>
                     <div className={styles.item__content__options__row__label}>
-                      Open...
+                      Site
+                    </div>
+                    <div
+                      className={styles.item__content__options__row__content}
+                    >
+                      <select
+                        onChange={(e) => {
+                          set_items(
+                            items.map((el) => {
+                              if (el.id == item.id) {
+                                return { ...el, site_path: e.target.value }
+                              } else {
+                                return el
+                              }
+                            }),
+                          )
+                        }}
+                        value={item.site_path}
+                      >
+                        <option value="" />
+                        {item.site_paths?.map((site_path) => (
+                          <option value={site_path}>{site_path}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className={styles.item__content__options__row}>
+                    <div className={styles.item__content__options__row__label}>
+                      {props.translations.open}
                     </div>
                     <div
                       className={styles.item__content__options__row__content}

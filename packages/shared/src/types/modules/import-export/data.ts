@@ -1,4 +1,5 @@
 import { system_values } from '@shared/constants/system-values'
+import { validate_date_newer_than_epoch } from '@shared/utils/validate-date-newer-than-epoch'
 import { z } from 'zod'
 
 const public_tag_schema = z.object({
@@ -41,7 +42,9 @@ export const bookmark_schema = z.object({
     .string()
     .max(system_values.bookmark.note.max_length * 2)
     .optional(),
-  created_at: z.string().datetime(), // TODO make optional
+  created_at: z.string().datetime().refine(validate_date_newer_than_epoch, {
+    message: 'Date must be newer than the epoch (1970-01-01T00:00:00Z).',
+  }), // TODO make optional
   is_public: z.boolean().optional(),
   is_archived: z.boolean().optional(),
   stars: z.number().int().min(0).max(5).optional(),

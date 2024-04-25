@@ -53,11 +53,17 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   const [clipboard_url, set_clipboard_url] = useState<string>()
 
   const [links, set_links] = useState<
-    { url: string; is_public?: boolean; via_wayback?: boolean }[]
+    {
+      url: string
+      site_path?: string
+      is_public?: boolean
+      via_wayback?: boolean
+    }[]
   >(
     props.bookmark
       ? props.bookmark?.links.map((link) => ({
           url: link.url,
+          site_path: link.site_path,
           is_public: link.is_public,
           via_wayback: link.via_wayback,
         }))
@@ -104,7 +110,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         return {
           url: link.url,
           is_public: (form_data.is_public ? link.is_public : false) || false, // TODO: make is public optional.
-          site_path: current_link?.site_path,
+          site_path: link.site_path,
           is_pinned: current_link?.is_pinned,
           pin_title: current_link?.pin_title,
           via_wayback: link.via_wayback,
@@ -203,6 +209,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                 <UiAppAtom_DraggableUpsertFormLinks
                   links={links.map((link) => ({
                     url: link.url,
+                    site_path: link.site_path,
                     is_public:
                       props.bookmark?.is_public == false
                         ? true
@@ -211,10 +218,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                   }))}
                   on_change={(links) => {
                     set_links(
-                      links.map((el) => ({
-                        url: el.url,
-                        is_public: el.is_public,
-                        via_wayback: el.via_wayback,
+                      links.map((link) => ({
+                        url: link.url,
+                        site_path: link.site_path,
+                        is_public: link.is_public,
+                        via_wayback: link.via_wayback,
                       })),
                     )
                   }}

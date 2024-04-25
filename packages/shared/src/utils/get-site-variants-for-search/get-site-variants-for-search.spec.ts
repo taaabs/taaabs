@@ -10,13 +10,13 @@ describe('[get_site_variants_for_search]', () => {
   })
 
   it('yields expected output', () => {
-    const input = 'example.com/lorem'
+    const input = 'example.com/lorem/ipsum'
     const expected_output = [
-      'examplecomlorem',
+      'examplecomloremipsum',
       'examplecom',
       'example',
-      'examplelorem',
-      'lorem',
+      'exampleloremipsum',
+      'loremipsum',
     ]
     expect(get_site_variants_for_search(input).sort()).toEqual(
       expected_output.sort(),

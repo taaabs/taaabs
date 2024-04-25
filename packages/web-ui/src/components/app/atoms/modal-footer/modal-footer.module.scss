@@ -22,7 +22,6 @@
     &__cancel {
       color: var(--text-color-dimmed);
       @include transition-150ms(color);
-      font-size: var(--font-size-14px);
       @include hover {
         color: var(--text-color-normal);
       }

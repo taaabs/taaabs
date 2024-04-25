@@ -25,7 +25,7 @@
     flex-direction: column;
     gap: var(--padding-24px);
     @include at768 {
-      padding: var(--padding-40px) var(--padding-40px)var(--padding-24px) var(--padding-40px);
+      padding: 32px var(--padding-40px)var(--padding-24px) var(--padding-40px);
     }
   }
   &__footer {
