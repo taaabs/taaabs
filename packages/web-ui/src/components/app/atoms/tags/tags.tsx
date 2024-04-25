@@ -24,6 +24,7 @@ export namespace Tags {
 export const Tags: React.FC<Tags.Props> = memo(
   function Tags(props) {
     const first_chars_processed: string[] = []
+
     const new_tags_grouped: Tags.Tag[][] = []
     props.tags.map((tag) => {
       const current_tag_first_char = tag.name.substring(0, 1)
@@ -49,7 +50,9 @@ export const Tags: React.FC<Tags.Props> = memo(
           .map((group) => (
             <div className={styles.group} key={group[0].name.substring(0, 1)}>
               <div className={styles['first-char']}>
-                <span>{group[0].name.substring(0, 1)}</span>
+                <span>
+                  {String.fromCodePoint(group[0].name.codePointAt(0)!)}
+                </span>
               </div>
               {group
                 .sort((a, b) => b.yields - a.yields)
