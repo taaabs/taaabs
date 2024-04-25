@@ -141,34 +141,40 @@ export const DraggableUpsertFormLinks: React.FC<
                       </div>
                     </div>
                   )}
-                  <div className={styles.item__content__options__row}>
-                    <div className={styles.item__content__options__row__label}>
-                      Site
-                    </div>
-                    <div
-                      className={styles.item__content__options__row__content}
-                    >
-                      <select
-                        onChange={(e) => {
-                          set_items(
-                            items.map((el) => {
-                              if (el.id == item.id) {
-                                return { ...el, site_path: e.target.value }
-                              } else {
-                                return el
-                              }
-                            }),
-                          )
-                        }}
-                        value={item.site_path}
+                  {item.site_paths && item.site_paths.length > 0 && (
+                    <div className={styles.item__content__options__row}>
+                      <div
+                        className={styles.item__content__options__row__label}
                       >
-                        <option value="" />
-                        {item.site_paths?.map((site_path) => (
-                          <option value={site_path}>{site_path}</option>
-                        ))}
-                      </select>
+                        Site
+                      </div>
+                      <div
+                        className={styles.item__content__options__row__content}
+                      >
+                        <select
+                          onChange={(e) => {
+                            set_items(
+                              items.map((el) => {
+                                if (el.id == item.id) {
+                                  return { ...el, site_path: e.target.value }
+                                } else {
+                                  return el
+                                }
+                              }),
+                            )
+                          }}
+                          value={item.site_path}
+                        >
+                          <option value=""></option>
+                          {item.site_paths?.map((site_path) => (
+                            <option value={site_path} key={site_path}>
+                              {site_path}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className={styles.item__content__options__row}>
                     <div className={styles.item__content__options__row__label}>
                       {props.translations.open}

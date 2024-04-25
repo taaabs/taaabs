@@ -10,11 +10,12 @@ export const get_site_paths_from_url = (url: string): string[] => {
         segments
           .slice(0, i + 1)
           .filter(Boolean)
-          .join('/'),
+          .join('/')
+          .substring(0, 20), // There is something off with the website if a site path is unreasonably long.
       )
     }
   } else {
     return []
   }
-  return [...site_paths]
+  return [...site_paths].slice(0, site_paths.size - 1)
 }
