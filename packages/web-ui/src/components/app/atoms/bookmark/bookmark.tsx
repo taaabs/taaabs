@@ -528,7 +528,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       >
         <div className={styles.bookmark}>
           {contextMenu}
-          <div className={styles.bookmark__main}>
+          <div
+            className={cn(styles.bookmark__main, {
+              [styles['bookmark__main--no-links']]: !props.links.length,
+            })}
+          >
             <div
               className={cn(styles.bookmark__main__top, {
                 [styles['bookmark__main__top--compact']]: props.is_compact,
@@ -774,7 +778,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                     real_i >= index && real_i < index + length,
                                 )
                                 return is_highlighted ? (
-                                  <span className={styles.highlight} key={i}>
+                                  <span
+                                    className={styles['highlight-link']}
+                                    key={i}
+                                  >
                                     {char}
                                   </span>
                                 ) : (

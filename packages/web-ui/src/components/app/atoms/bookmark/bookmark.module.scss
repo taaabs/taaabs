@@ -53,13 +53,19 @@
       border-top-left-radius: var(--border-radius-12px);
       border-top-right-radius: var(--border-radius-12px);
     }
+    &--no-links {
+      @include at992 {
+        border-bottom-left-radius: var(--border-radius-12px);
+        border-bottom-right-radius: var(--border-radius-12px);
+      }
+    }
     &__top {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
       position: relative;
-      
+
       margin-bottom: calc(3px * -1); // Needed by "compact" density.
       &--compact {
         display: none;
@@ -508,6 +514,10 @@
   }
 }
 .highlight {
+  background-color: var(--highlight);
+}
+.highlight-link {
+  // Fixes italic text of proxied via a snapshot links.
   position: relative;
   &::before {
     content: '';
