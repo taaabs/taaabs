@@ -7,9 +7,6 @@
   gap: var(--padding-12px);
   margin-bottom: var(--padding-12px);
 }
-.item.sortable-drag {
-  opacity: 0 !important;
-}
 .item {
   display: flex;
   position: relative;
@@ -41,7 +38,8 @@
     box-shadow: var(--box-shadow);
     position: relative;
     z-index: 1;
-    &__url {
+    &__tag {
+      color: var(--green800);
       font-weight: var(--font-weight-inter-medium);
       overflow-wrap: anywhere;
       padding: var(--padding-12px) var(--padding-16px);

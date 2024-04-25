@@ -268,8 +268,7 @@ small {
   border-radius: var(--border-radius-12px) !important;
   box-shadow: var(--box-shadow) !important;
   @include to992 {
-    margin: 12px 24px 8px
-      24px !important;
+    margin: 12px 24px 8px 24px !important;
   }
   @include at992 {
     margin-top: 18px !important;

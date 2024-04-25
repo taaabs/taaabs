@@ -15,7 +15,13 @@ export const Primary = () => (
       on_change={() => {}}
       show_visibility_toggler={true}
       translations={{
-        add_url: 'Lorem ipsum',
+        add_url: 'Add URL',
+        open: 'Open...',
+        original_url: 'Original URL',
+        snapshot: 'Snapshot via Archive.org',
+        visibility: 'Visibility',
+        private: 'Private',
+        public: 'Public',
       }}
     />
   </StorybookMargin>

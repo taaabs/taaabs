@@ -1,5 +1,5 @@
 import { ReactSortable } from 'react-sortablejs'
-import styles from './draggable-upsert-form-links.module.scss'
+import styles from './draggable-upsert-form-tags.module.scss'
 import { useState } from 'react'
 import cn from 'classnames'
 import { system_values } from '@shared/constants/system-values'
@@ -8,24 +8,19 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import { Button } from '@web-ui/components/common/particles/button'
 import { Input } from '@web-ui/components/common/atoms/input'
 
-namespace DraggableUpsertFormLinks {
-  type Link = {
-    url: string
+namespace DraggableUpsertFormTags {
+  type Tag = {
+    name: string
     is_public?: boolean
-    via_wayback?: boolean
   }
   export type Props = {
-    links: Link[]
-    on_change: (items: Link[]) => void
-    clipboard_url?: string
+    tags: Tag[]
+    on_change: (items: Tag[]) => void
     show_visibility_toggler: boolean
     max_items?: number
     translations: {
-      enter_url: string
+      enter_tag_name: string
       add: string
-      open: string
-      original_url: string
-      snapshot: string
       visibility: string
       public: string
       private: string
@@ -33,27 +28,20 @@ namespace DraggableUpsertFormLinks {
   }
 }
 
-export const DraggableUpsertFormLinks: React.FC<
-  DraggableUpsertFormLinks.Props
+export const DraggableUpsertFormTags: React.FC<
+  DraggableUpsertFormTags.Props
 > = (props) => {
-  const [new_url, set_new_url] = useState('')
-  const [count, set_count] = useState(props.links.length)
+  const [new_tag, set_new_tag] = useState('')
+  const [count, set_count] = useState(props.tags.length)
   const [items, set_items] = useState<
-    { id: number; url: string; is_public?: boolean; via_wayback?: boolean }[]
+    { id: number; name: string; is_public?: boolean }[]
   >(
-    props.links.map((item, i) => ({
+    props.tags.map((item, i) => ({
       id: i,
-      url: item.url,
+      name: item.name,
       is_public: item.is_public,
-      via_wayback: item.via_wayback,
     })),
   )
-
-  useUpdateEffect(() => {
-    if (props.clipboard_url) {
-      set_new_url(props.clipboard_url)
-    }
-  }, [props.clipboard_url])
 
   useUpdateEffect(() => {
     props.on_change(items)
@@ -81,7 +69,7 @@ export const DraggableUpsertFormLinks: React.FC<
                 <Icon variant="ADD" />
               </button>
               <div className={styles.item__content}>
-                <div className={styles.item__content__url}>{item.url}</div>
+                <div className={styles.item__content__tag}>{item.name}</div>
                 <div className={styles.item__content__options}>
                   {props.show_visibility_toggler && (
                     <div className={styles.item__content__options__row}>
@@ -130,49 +118,6 @@ export const DraggableUpsertFormLinks: React.FC<
                       </div>
                     </div>
                   )}
-                  <div className={styles.item__content__options__row}>
-                    <div className={styles.item__content__options__row__label}>
-                      Open...
-                    </div>
-                    <div
-                      className={styles.item__content__options__row__content}
-                    >
-                      <select
-                        onChange={(e) => {
-                          if (e.target.value == 'direct') {
-                            set_items(
-                              items.map((el) => {
-                                if (el.id == item.id) {
-                                  return { ...el, via_wayback: false }
-                                } else {
-                                  return el
-                                }
-                              }),
-                            )
-                          } else if (e.target.value == 'snapshot') {
-                            set_items(
-                              items.map((el) => {
-                                if (el.id == item.id) {
-                                  return { ...el, via_wayback: true }
-                                } else {
-                                  return el
-                                }
-                              }),
-                            )
-                          }
-                        }}
-                        value={item.via_wayback ? 'snapshot' : 'direct'}
-                      >
-                        <option value="" />
-                        <option value="direct">
-                          {props.translations.original_url}
-                        </option>
-                        <option value="snapshot">
-                          {props.translations.snapshot}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
                 </div>
               </div>
               <div className={cn(styles.item__handle, 'handle')}>
@@ -184,24 +129,23 @@ export const DraggableUpsertFormLinks: React.FC<
       )}
       <div className={styles['new-link']}>
         <Input
-          value={new_url}
+          value={new_tag}
           on_change={(value) => {
-            set_new_url(value)
+            set_new_tag(value)
           }}
-          autofocus={props.links.length == 0}
-          placeholder={props.translations.enter_url}
+          placeholder={props.translations.enter_tag_name}
         />
         <Button
           on_click={() => {
             set_items([
               ...items,
-              { id: count + 1, is_public: true, url: new_url },
+              { id: count + 1, is_public: true, name: new_tag },
             ])
             set_count(items.length + 1)
-            set_new_url('')
+            set_new_tag('')
           }}
           is_disabled={
-            !new_url ||
+            !new_tag ||
             (props.max_items ? items.length == props.max_items : undefined)
           }
         >

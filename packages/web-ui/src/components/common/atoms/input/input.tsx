@@ -6,6 +6,7 @@ type State = 'error' | 'warning' | 'info'
 export namespace Input {
   export type Props = {
     value: string
+    placeholder?: string
     on_change: (value: string) => void
     message_type?: State
     message?: React.ReactNode
@@ -33,6 +34,7 @@ export const Input: React.FC<Input.Props> = ({
           value={props.value}
           autoFocus={props.autofocus}
           rows={props.lines}
+          placeholder={props.placeholder}
         />
       ) : (
         <input
@@ -45,6 +47,7 @@ export const Input: React.FC<Input.Props> = ({
           onChange={(e) => props.on_change(e.target.value)}
           value={props.value}
           autoFocus={props.autofocus}
+          placeholder={props.placeholder}
         />
       )}
       {props.message && (
