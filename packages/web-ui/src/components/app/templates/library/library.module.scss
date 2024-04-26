@@ -202,19 +202,22 @@
       @include at992 {
         position: relative;
         overflow: auto;
-
         height: calc(
           100vh - var(--header-desktop-height) - 16px -
             var(--search-desktop-height) - 16px - var(--_pane-selector-height)
         );
         &__tag-hierarchies--scrolled {
-          padding-bottom: 16px;
+          @include at992 {
+            padding-bottom: 16px;
+          }
           > div > button {
             box-shadow: var(--box-shadow);
           }
         }
         &__pinned--scrolled {
-          padding-bottom: 16px;
+          @include at992 {
+            padding-bottom: 16px;
+          }
           > div:first-child {
             box-shadow: var(--box-shadow-strong);
           }
