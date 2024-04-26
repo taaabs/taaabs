@@ -20,7 +20,7 @@ export const FormModal: React.FC<FormModal.Props> = (props) => {
     const handle_scroll = (e: any) => {
       const { scrollHeight, scrollTop, clientHeight } = e.target
 
-      if (Math.floor(scrollHeight - scrollTop) == clientHeight) {
+      if (Math.round(scrollHeight - scrollTop) == clientHeight) {
         set_is_scrolled_to_bottom(true)
       } else if (scrollTop == 0) {
         set_is_scrolled_to_top(true)

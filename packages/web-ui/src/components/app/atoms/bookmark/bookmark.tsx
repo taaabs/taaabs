@@ -164,7 +164,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
         const search_params = new URLSearchParams(window.location.search)
         const tags = search_params.get('t')?.split(',') || []
-        search_params.set('t', [...tags, tag.id].join(','))
+        if (tags.find((t) => t == tag.id.toString())) {
+          search_params.set(
+            't',
+            tags.filter((t) => t != tag.id.toString()).join(','),
+          )
+        } else {
+          search_params.set('t', [...tags, tag.id].join(','))
+        }
 
         return (
           <a

@@ -1447,6 +1447,7 @@ export const use_search = () => {
   useUpdateEffect(() => {
     if (!has_focus) cache_data()
   }, [has_focus])
+
   // Canceling dialog will trigger caching because has_focus will be shortly falsy, triggering effect above.
   useEffect(() => {
     const handle_beforeunload = (e: any) => {
