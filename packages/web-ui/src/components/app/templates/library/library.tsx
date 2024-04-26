@@ -9,6 +9,7 @@ import styles from './library.module.scss'
 import { useSwipeable } from 'react-swipeable'
 import { use_is_scrolled } from '@web-ui/hooks/use-is-scrolled'
 import { Button } from '@web-ui/components/common/particles/button'
+import SimpleBar from 'simplebar-react'
 
 export namespace Library {
   export type Props = {
@@ -60,6 +61,24 @@ export const Library: React.FC<Library.Props> = (props) => {
   const [is_left_side_open, set_is_left_side_open] = useState<boolean>()
   const [is_right_side_open, set_is_right_side_open] = useState<boolean>()
   const [is_pinned_active, set_is_pinned_active] = useState<boolean>()
+  const simplebar = useRef<any>(null)
+  const [is_simplebar_scrolled_to_top, set_is_simplebar_scrolled_to_top] =
+    useState(true)
+
+  useEffect(() => {
+    const handle_scroll = (e: any) => {
+      if (e.target.scrollTop == 0) {
+        set_is_simplebar_scrolled_to_top(true)
+      } else {
+        set_is_simplebar_scrolled_to_top(false)
+      }
+    }
+    const element = simplebar.current.getScrollElement()
+    element!.addEventListener('scroll', handle_scroll, { passive: true })
+    return () => {
+      element!.removeEventListener('scroll', handle_scroll)
+    }
+  }, [])
 
   const get_slidable_width = () => {
     return window.innerWidth < 370 ? window.innerWidth * 0.82 : 300
@@ -235,7 +254,8 @@ export const Library: React.FC<Library.Props> = (props) => {
 
   return (
     <div className={styles.container} {...swipeable_handlers}>
-      <div className={styles.toolbar}>
+      {/* id on toolbar used by modal scrollbar padding setting */}
+      <div className={styles.toolbar} id="toolbar">
         <div>{props.slot_toolbar}</div>
       </div>
       <div className={styles.content}>
@@ -336,28 +356,40 @@ export const Library: React.FC<Library.Props> = (props) => {
                 {props.pinned_count ? `(${props.pinned_count})` : ''}
               </button>
             </div>
-            <div className={styles['sidebar__inner__content']}>
+            <SimpleBar
+              className={cn(styles['sidebar__inner__simplebar'])}
+              ref={simplebar}
+            >
               {!props.show_skeletons ? (
                 <>
                   <div
+                    className={cn({
+                      [styles[
+                        'sidebar__inner__simplebar__tag-hierarchies--scrolled'
+                      ]]: !is_simplebar_scrolled_to_top,
+                    })}
                     style={{ display: is_pinned_active ? 'none' : undefined }}
                   >
                     {props.slot_tag_hierarchies}
                   </div>
                   <div
+                    className={cn({
+                      [styles['sidebar__inner__simplebar__pinned--scrolled']]:
+                        !is_simplebar_scrolled_to_top,
+                    })}
                     style={{ display: !is_pinned_active ? 'none' : undefined }}
                   >
                     {props.slot_pinned}
                   </div>
                 </>
               ) : (
-                <div className={styles['sidebar__inner__content__skeleton']}>
+                <div className={styles['sidebar__inner__simplebar__skeleton']}>
                   {[200, 180, 140, 160, 120].map((width, i) => (
                     <Skeleton width={width} key={i} />
                   ))}
                 </div>
               )}
-            </div>
+            </SimpleBar>
           </div>
         </aside>
 

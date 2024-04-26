@@ -316,3 +316,7 @@ small {
   animation: fade-in var(--transition-duration-150ms)
     var(--transition-timing-function) forwards !important;
 }
+
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+  background-color: 'orange'
+}

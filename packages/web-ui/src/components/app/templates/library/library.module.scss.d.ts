@@ -15,8 +15,10 @@ declare const styles: {
   readonly 'sidebar__inner__pane-selector': string
   readonly 'sidebar__inner__pane-selector__button': string
   readonly 'sidebar__inner__pane-selector__button--active': string
-  readonly sidebar__inner__content: string
-  readonly sidebar__inner__content__skeleton: string
+  readonly sidebar__inner__simplebar: string
+  readonly 'sidebar__inner__simplebar__tag-hierarchies--scrolled': string
+  readonly 'sidebar__inner__simplebar__pinned--scrolled': string
+  readonly sidebar__inner__simplebar__skeleton: string
   readonly main: string
   readonly main__inner: string
   readonly 'main__inner--collapsed-sidebar-hovered': string

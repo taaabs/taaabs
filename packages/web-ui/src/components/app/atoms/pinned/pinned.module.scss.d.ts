@@ -1,4 +1,5 @@
 declare const styles: {
+  readonly 'shadow-fix': string
   readonly items: string
   readonly item: string
   readonly 'item--dragging': string

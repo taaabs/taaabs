@@ -34,6 +34,7 @@
     "react-swipeable": "^7.0.1",
     "react-toastify": "^9.1.3",
     "recharts": "^2.8.0",
+    "simplebar-react": "^3.2.4",
     "sortablejs": "^1.15.0",
     "use-context-menu": "^0.4.13",
     "vite-plugin-svgr": "^3.2.0"

@@ -198,7 +198,7 @@
         }
       }
     }
-    &__content {
+    &__simplebar {
       @include at992 {
         position: relative;
         overflow: auto;
@@ -207,6 +207,16 @@
           100vh - var(--header-desktop-height) - 16px -
             var(--search-desktop-height) - 16px - var(--_pane-selector-height)
         );
+        &__tag-hierarchies--scrolled {
+          > div > button {
+            box-shadow: var(--box-shadow);
+          }
+        }
+        &__pinned--scrolled {
+          > div:first-child {
+            box-shadow: var(--box-shadow-strong);
+          }
+        }
       }
       &__skeleton {
         display: flex;

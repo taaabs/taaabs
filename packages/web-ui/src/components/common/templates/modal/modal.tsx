@@ -13,6 +13,7 @@ export const Modal: React.FC<Modal.Props> = (props) => {
   useEffect(() => {
     const header = document.querySelector<HTMLElement>('body > header')
     const top_divs = document.querySelectorAll<HTMLElement>('body > div')
+    const toolbar = document.getElementById('toolbar')
     if (props.slot_modal) {
       const scrollbar_width = window.innerWidth - document.body.clientWidth
 
@@ -21,10 +22,12 @@ export const Modal: React.FC<Modal.Props> = (props) => {
       top_divs.forEach(
         (el: any) => (el.style.paddingRight = `${scrollbar_width}px`),
       )
+      if (toolbar) toolbar.style.paddingRight = `${scrollbar_width}px`
     } else {
       document.body.style.overflow = ''
       if (header) header.style.paddingRight = ''
       top_divs.forEach((el: any) => (el.style.paddingRight = ''))
+      if (toolbar) toolbar.style.paddingRight = ''
     }
   }, [props.slot_modal])
 

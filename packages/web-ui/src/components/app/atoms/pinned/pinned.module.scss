@@ -1,6 +1,13 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
+.shadow-fix {
+  position: sticky;
+  top: 0;
+  height: 0;
+  width: 100%;
+  z-index: 1;
+}
 .items {
   display: flex;
   flex-direction: column;

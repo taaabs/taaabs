@@ -168,6 +168,8 @@ export const Pinned: React.FC<Pinned.Props> = memo(
 
     return (
       <>
+        {/* Shadow set from library */}
+        <div className={styles['shadow-fix']} />
         {props.is_draggable ? (
           <ReactSortable
             list={items}
