@@ -530,7 +530,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           {contextMenu}
           <div
             className={cn(styles.bookmark__main, {
-              [styles['bookmark__main--no-links']]: !props.links.length,
+              [styles['bookmark__main--corners-fix']]:
+                !props.links.length || props.is_compact,
             })}
           >
             <div

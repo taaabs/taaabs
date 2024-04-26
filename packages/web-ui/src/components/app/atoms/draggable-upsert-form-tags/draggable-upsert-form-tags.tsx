@@ -137,6 +137,7 @@ export const DraggableUpsertFormTags: React.FC<
         />
         <Button
           on_click={() => {
+            if (!new_tag) return
             set_items([
               ...items,
               { id: count + 1, is_public: true, name: new_tag },
@@ -144,10 +145,6 @@ export const DraggableUpsertFormTags: React.FC<
             set_count(items.length + 1)
             set_new_tag('')
           }}
-          is_disabled={
-            !new_tag ||
-            (props.max_items ? items.length == props.max_items : undefined)
-          }
         >
           {props.translations.add}
         </Button>

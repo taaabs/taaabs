@@ -238,6 +238,7 @@ export const DraggableUpsertFormLinks: React.FC<
         />
         <Button
           on_click={() => {
+            if (!new_url) return
             set_items([
               ...items,
               { id: count + 1, is_public: true, url: new_url },
@@ -245,10 +246,6 @@ export const DraggableUpsertFormLinks: React.FC<
             set_count(items.length + 1)
             set_new_url('')
           }}
-          is_disabled={
-            !new_url ||
-            (props.max_items ? items.length == props.max_items : undefined)
-          }
         >
           {props.translations.add}
         </Button>

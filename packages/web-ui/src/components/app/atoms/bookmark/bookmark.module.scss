@@ -53,12 +53,13 @@
       border-top-left-radius: var(--border-radius-12px);
       border-top-right-radius: var(--border-radius-12px);
     }
-    &--no-links {
+    &--corners-fix { // Ugly but necessary for highlihgts on italic links to work.
       @include at992 {
-        border-bottom-left-radius: var(--border-radius-12px);
-        border-bottom-right-radius: var(--border-radius-12px);
+        border-bottom-left-radius: 11px;
+        border-bottom-right-radius: 11px;
       }
     }
+    
     &__top {
       width: 100%;
       display: flex;

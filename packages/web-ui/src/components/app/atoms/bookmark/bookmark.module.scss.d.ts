@@ -6,7 +6,7 @@ declare const styles: {
   readonly 'container--search-result-clickable': string
   readonly bookmark: string
   readonly bookmark__main: string
-  readonly 'bookmark__main--no-links': string
+  readonly 'bookmark__main--corners-fix': string
   readonly bookmark__main__top: string
   readonly 'bookmark__main__top--compact': string
   readonly bookmark__main__top__info: string
