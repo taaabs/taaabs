@@ -3,7 +3,7 @@
 
 .container {
   display: flex;
-  gap: var(--padding-8px);
+  gap: var(--padding-12px);
   @include to768 {
     flex-direction: column;
   }
@@ -15,7 +15,8 @@
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   color: var(--brand-color);
-  font-size: var(--font-size-19px);
+  font-size: var(--font-size-20px);
+  line-height: 1;
   @include at768 {
     width: 150px;
   }

@@ -7,12 +7,13 @@
   gap: var(--padding-12px);
   margin-bottom: var(--padding-12px);
 }
-.item.sortable-drag {
-  opacity: 0 !important;
-}
 .item {
   display: flex;
   position: relative;
+  background-color: var(--brand-color);
+  border-radius: var(--border-radius-12px);
+  box-shadow: var(--box-shadow-blue-strong);
+  color: var(--white);
   &__remove {
     position: absolute;
     top: 0;
@@ -39,10 +40,6 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: var(--white);
-    border-top-left-radius: var(--border-radius-12px);
-    border-bottom-left-radius: var(--border-radius-12px);
-    box-shadow: var(--box-shadow);
     position: relative;
     z-index: 1;
     &__url {
@@ -56,17 +53,22 @@
       &__row {
         display: flex;
         justify-content: space-between;
-        padding: var(--padding-8px) var(--padding-16px);
-        border-top: var(--border-secondary);
+        padding: var(--padding-10px) var(--padding-16px);
+        border-top: 1px solid var(--blue600);
         &__label {
-          color: var(--text-color-variant);
+          color: var(--blue200);
         }
         &__content {
           height: 0;
           > select {
+            color: var(--blue200);
+            min-width: 100px;
             background-color: transparent;
             border: none;
             text-align: right;
+            > option {
+              color: var(--text-color-normal);
+            }
           }
         }
       }
@@ -78,20 +80,18 @@
     justify-content: center;
     cursor: grab;
     padding: 0 var(--padding-8px);
-    width: var(--button-dimension-28px);
-    background-color: var(--brand-color);
-    border-top-right-radius: var(--border-radius-12px);
+    width: var(--button-dimension-34px);
+    background-color: var(--blue800);
     border-bottom-right-radius: var(--border-radius-12px);
-    box-shadow: var(--box-shadow-blue-strong);
     > svg {
       fill: var(--white);
       width: 9px;
     }
   }
 }
-.new-link {
+.new-url {
   display: flex;
-  gap: var(--padding-8px);
+  gap: var(--padding-12px);
   > div:first-child {
     flex-grow: 1;
     > input {

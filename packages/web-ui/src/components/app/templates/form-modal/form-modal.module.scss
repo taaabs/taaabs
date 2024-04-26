@@ -20,11 +20,9 @@
 }
 .simplebar {
   max-height: calc(70svh);
-  @include at992 {
-    max-height: calc(60svh);
-  }
   &__inner {
-    padding: var(--padding-24px) var(--padding-16px);
+    padding: var(--padding-24px) var(--padding-16px) var(--padding-16px)
+      var(--padding-16px);
     display: flex;
     flex-direction: column;
     gap: var(--padding-24px);

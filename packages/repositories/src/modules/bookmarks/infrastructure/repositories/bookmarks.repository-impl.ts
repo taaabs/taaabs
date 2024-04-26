@@ -50,7 +50,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                   name: tag.name
                     ? tag.name
                     : await Crypto.AES.decrypt(tag.name_aes!, key),
-                  is_public: tag.is_public || false,
+                  is_public: tag.is_public || undefined,
                 })),
               ),
               links: await Promise.all(
@@ -115,7 +115,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             tags: bookmark.tags.map((tag) => ({
               id: tag.id,
               name: tag.name,
-              is_public: true,
             })),
             links: bookmark.links.map((link) => ({
               url: link.url,

@@ -13,6 +13,8 @@ export namespace Input {
     is_disabled?: boolean
     autofocus?: boolean
     lines?: number
+    on_focus?: () => void
+    on_blur?: () => void
   }
 }
 
@@ -48,6 +50,8 @@ export const Input: React.FC<Input.Props> = ({
           value={props.value}
           autoFocus={props.autofocus}
           placeholder={props.placeholder}
+          onFocus={props.on_focus}
+          onBlur={props.on_blur}
         />
       )}
       {props.message && (

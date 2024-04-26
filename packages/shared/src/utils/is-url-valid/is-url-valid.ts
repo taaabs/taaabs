@@ -1,4 +1,4 @@
-export const is_valid_url = (text: string) => {
+export const is_url_valid = (text: string) => {
   try {
     new URL(text)
     return true

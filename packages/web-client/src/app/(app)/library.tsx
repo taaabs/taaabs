@@ -62,6 +62,7 @@ import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usec
 import { BookmarkWrapper as UiAppAtom_BookmarkWrapper } from '@web-ui/components/app/atoms/bookmark-wrapper'
 import { SegmentedButton as UiAppAtom_SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 import { use_is_hydrated } from '@shared/hooks'
+import { find_tag_modal } from '@/modals/find-tag-modal'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -2223,6 +2224,93 @@ const Library = (params: {
                 },
               },
               {
+                label: 'Add tag',
+                on_click: async () => {
+                  const tag = await find_tag_modal({
+                    modal_context,
+                    button_label: 'Add',
+                    title: 'Add tag',
+                  })
+                  if (!tag || bookmark.tags.find((t) => t.name == tag.name)) {
+                    modal_context?.set_modal()
+                    return
+                  }
+                  dispatch(bookmarks_actions.set_is_upserting(true))
+                  const { db, bookmarks_just_tags } = await search_hook.init({
+                    is_archived: is_archived_filter,
+                  })
+                  const modified_bookmark: UpsertBookmark_Params = {
+                    bookmark_id: bookmark.id,
+                    is_public: bookmark.is_public,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    note: bookmark.note,
+                    is_archived: is_archived_filter,
+                    is_unread: bookmark.is_unread,
+                    stars: bookmark.stars,
+                    links: bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                      is_public: link.is_public,
+                      is_pinned: link.is_pinned,
+                      pin_title: link.pin_title,
+                      via_wayback: link.via_wayback,
+                    })),
+                    tags: [
+                      ...bookmark.tags.map((tag) => ({
+                        name: tag.name,
+                        is_public: tag.is_public,
+                      })),
+                      tag,
+                    ],
+                  }
+                  const updated_bookmark = await dispatch(
+                    bookmarks_actions.upsert_bookmark({
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
+                        JSON.parse(
+                          sessionStorage.getItem(
+                            browser_storage.session_storage.library
+                              .last_authorized_counts_params,
+                          ) || 'null',
+                        ) || undefined,
+                      ky: ky_instance,
+                    }),
+                  )
+                  await tag_hierarchies_hook.get_tag_hierarchies({
+                    filter: filter_view_options_hook.current_filter,
+                    gte: date_view_options_hook.current_gte,
+                    lte: date_view_options_hook.current_lte,
+                  })
+                  await search_hook.update_bookmark({
+                    db,
+                    bookmarks_just_tags,
+                    is_archived: is_archived_filter,
+                    bookmark: {
+                      id: bookmark.id,
+                      is_archived: is_archived_filter,
+                      is_unread: updated_bookmark.is_unread,
+                      title: updated_bookmark.title,
+                      note: updated_bookmark.note,
+                      tags: updated_bookmark.tags.map((tag) => tag.name),
+                      links: updated_bookmark.links.map((link) => ({
+                        url: link.url,
+                        site_path: link.site_path,
+                      })),
+                      created_at: updated_bookmark.created_at,
+                      visited_at: bookmark.visited_at,
+                      updated_at: updated_bookmark.updated_at,
+                      stars: updated_bookmark.stars,
+                      tag_ids: updated_bookmark.tags.map((tag) => tag.id),
+                    },
+                  })
+                  dispatch(bookmarks_actions.set_is_upserting(false))
+                  modal_context?.set_modal()
+                  toast.success(params.dictionary.library.bookmark_updated)
+                },
+                other_icon: <UiCommonParticles_Icon variant="EDIT" />,
+              },
+              {
                 label: 'Edit',
                 on_click: async () => {
                   const modified_bookmark = await upsert_bookmark_modal({
@@ -2231,7 +2319,6 @@ const Library = (params: {
                     is_archived: is_archived_filter,
                   })
                   if (!modified_bookmark) {
-                    dispatch(bookmarks_actions.set_is_upserting(false))
                     modal_context?.set_modal()
                     return
                   }

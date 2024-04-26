@@ -1,6 +1,6 @@
 import { ReactSortable } from 'react-sortablejs'
 import styles from './draggable-upsert-form-links.module.scss'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { system_values } from '@shared/constants/system-values'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -8,6 +8,8 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import { Button } from '@web-ui/components/common/particles/button'
 import { Input } from '@web-ui/components/common/atoms/input'
 import { get_site_paths_from_url } from '@shared/utils/get-site-paths-from-url'
+import { toast } from 'react-toastify'
+import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 
 namespace DraggableUpsertFormLinks {
   type Link = {
@@ -38,6 +40,7 @@ namespace DraggableUpsertFormLinks {
 export const DraggableUpsertFormLinks: React.FC<
   DraggableUpsertFormLinks.Props
 > = (props) => {
+  const is_input_focused = useRef<boolean>()
   const [new_url, set_new_url] = useState('')
   const [count, set_count] = useState(props.links.length)
   const [items, set_items] = useState<
@@ -69,6 +72,37 @@ export const DraggableUpsertFormLinks: React.FC<
   useUpdateEffect(() => {
     props.on_change(items)
   }, [items])
+
+  const add_url = () => {
+    if (!new_url) return
+    if (!is_url_valid(new_url)) {
+      toast.error('Given URL is invalid')
+      return
+    }
+    if (items.find((item) => item.url == new_url)) {
+      set_new_url('')
+      toast.error('Given URL is already there')
+      return
+    }
+    set_items([...items, { id: count + 1, is_public: true, url: new_url }])
+    set_count(items.length + 1)
+    set_new_url('')
+  }
+
+  const handle_keyboard = (event: any) => {
+    if (!is_input_focused) return
+    if (event.code == 'Enter') {
+      add_url()
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handle_keyboard)
+
+    return () => {
+      window.removeEventListener('keydown', handle_keyboard)
+    }
+  }, [new_url])
 
   return (
     <div>
@@ -227,7 +261,7 @@ export const DraggableUpsertFormLinks: React.FC<
           ))}
         </ReactSortable>
       )}
-      <div className={styles['new-link']}>
+      <div className={styles['new-url']}>
         <Input
           value={new_url}
           on_change={(value) => {
@@ -235,17 +269,18 @@ export const DraggableUpsertFormLinks: React.FC<
           }}
           autofocus={props.links.length == 0}
           placeholder={props.translations.enter_url}
+          on_focus={() => {
+            is_input_focused.current = true
+          }}
+          on_blur={() => {
+            is_input_focused.current = false
+          }}
         />
         <Button
           on_click={() => {
-            if (!new_url) return
-            set_items([
-              ...items,
-              { id: count + 1, is_public: true, url: new_url },
-            ])
-            set_count(items.length + 1)
-            set_new_url('')
+            add_url()
           }}
+          is_disabled={items.length == props.max_items}
         >
           {props.translations.add}
         </Button>

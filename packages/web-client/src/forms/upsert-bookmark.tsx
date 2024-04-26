@@ -13,8 +13,9 @@ import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/ty
 import { StandardSplit as UiAppModalSections_StandardSplit } from '@web-ui/components/app/modal-sections/standard-split'
 import { Standard as UiAppModalSections_Standard } from '@web-ui/components/app/modal-sections/standard'
 import { Centered as UiAppModalSections_Centered } from '@web-ui/components/app/modal-sections/centered'
+import { Divider as UiAppModalSections_Divider } from '@web-ui/components/app/modal-sections/divider'
 import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
-import { is_valid_url } from '@/utils/is-valid-url'
+import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 
 type FormValues = {
   title: string
@@ -136,7 +137,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     navigator.clipboard
       .readText()
       .then((text) => {
-        if (is_valid_url(text)) {
+        if (is_url_valid(text)) {
           set_clipboard_url(text)
         }
       })
@@ -235,7 +236,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                   clipboard_url={clipboard_url}
                   translations={{
                     enter_url: 'Enter URL',
-                    add: 'Add',
+                    add: 'Add link',
                     open: 'Open...',
                     original_url: 'Original URL',
                     snapshot: 'Snapshot via Archive.org',
@@ -248,6 +249,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             }}
           />
         </UiAppModalSections_Standard>
+
+        <UiAppModalSections_Divider />
 
         <UiAppModalSections_StandardSplit label="Title">
           <UiCommonTemplate_FormControllerFix>
@@ -290,6 +293,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           </UiCommonTemplate_FormControllerFix>
         </UiAppModalSections_StandardSplit>
 
+        <UiAppModalSections_Divider />
+
         <UiAppModalSections_StandardSplit label="Note">
           <UiCommonTemplate_FormControllerFix>
             <Controller
@@ -323,13 +328,14 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                     message_type={error_message ? 'error' : undefined}
                     message={error_message}
                     lines={5}
-                    placeholder="Type something"
                   />
                 )
               }}
             />
           </UiCommonTemplate_FormControllerFix>
         </UiAppModalSections_StandardSplit>
+
+        <UiAppModalSections_Divider />
 
         <UiAppModalSections_StandardSplit label="Tags">
           <Controller
@@ -360,7 +366,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                   max_items={system_values.bookmark.tags.limit}
                   translations={{
                     enter_tag_name: 'Enter tag name',
-                    add: 'Add',
+                    add: 'Add tag',
                     private: 'Private',
                     public: 'Public',
                     visibility: 'Visibility',

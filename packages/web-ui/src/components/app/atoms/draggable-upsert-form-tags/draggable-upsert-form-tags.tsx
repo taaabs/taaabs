@@ -1,12 +1,13 @@
 import { ReactSortable } from 'react-sortablejs'
 import styles from './draggable-upsert-form-tags.module.scss'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { system_values } from '@shared/constants/system-values'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { Icon } from '@web-ui/components/common/particles/icon'
 import { Button } from '@web-ui/components/common/particles/button'
 import { Input } from '@web-ui/components/common/atoms/input'
+import { toast } from 'react-toastify'
 
 namespace DraggableUpsertFormTags {
   type Tag = {
@@ -31,6 +32,7 @@ namespace DraggableUpsertFormTags {
 export const DraggableUpsertFormTags: React.FC<
   DraggableUpsertFormTags.Props
 > = (props) => {
+  const is_input_focused = useRef<boolean>()
   const [new_tag, set_new_tag] = useState('')
   const [count, set_count] = useState(props.tags.length)
   const [items, set_items] = useState<
@@ -46,6 +48,36 @@ export const DraggableUpsertFormTags: React.FC<
   useUpdateEffect(() => {
     props.on_change(items)
   }, [items])
+
+  const add_tag = () => {
+    if (!new_tag) return
+    if (items.find((item) => item.name == new_tag)) {
+      set_new_tag('')
+      toast.error('Given tag is already there')
+      return
+    }
+    set_items([...items, { id: count + 1, is_public: true, name: new_tag }])
+    set_count(items.length + 1)
+    set_new_tag('')
+    setTimeout(() => {
+      document.querySelector(`.${styles['new-tag']}`)?.scrollIntoView()
+    }, 0)
+  }
+
+  const handle_keyboard = (event: any) => {
+    if (!is_input_focused) return
+    if (event.code == 'Enter') {
+      add_tag()
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handle_keyboard)
+
+    return () => {
+      window.removeEventListener('keydown', handle_keyboard)
+    }
+  }, [new_tag])
 
   return (
     <div>
@@ -127,24 +159,25 @@ export const DraggableUpsertFormTags: React.FC<
           ))}
         </ReactSortable>
       )}
-      <div className={styles['new-link']}>
+      <div className={styles['new-tag']}>
         <Input
           value={new_tag}
           on_change={(value) => {
             set_new_tag(value)
           }}
           placeholder={props.translations.enter_tag_name}
+          on_focus={() => {
+            is_input_focused.current = true
+          }}
+          on_blur={() => {
+            is_input_focused.current = false
+          }}
         />
         <Button
           on_click={() => {
-            if (!new_tag) return
-            set_items([
-              ...items,
-              { id: count + 1, is_public: true, name: new_tag },
-            ])
-            set_count(items.length + 1)
-            set_new_tag('')
+            add_tag()
           }}
+          is_disabled={items.length == props.max_items}
         >
           {props.translations.add}
         </Button>

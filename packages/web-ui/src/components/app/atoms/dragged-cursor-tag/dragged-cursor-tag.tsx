@@ -16,9 +16,7 @@ export const DraggedCursorTag: React.FC<DraggedCursorTag.Props> = (props) => {
         tag.current!.style.transform = `translateY(${event.clientY + 8}px)`
         tag.current!.style.transform += `translateX(${event.clientX + 12}px)`
         tag.current!.style.opacity = '1'
-        if (!document.body.classList.contains('grabbing')) {
-          document.body.classList.add('grabbing')
-        }
+        document.body.classList.add('grabbing')
       }
       addEventListener('mousemove', on_mouse_move)
       return () => {

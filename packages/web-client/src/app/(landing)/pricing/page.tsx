@@ -113,7 +113,7 @@ const Page: React.FC = () => {
             ),
           },
           {
-            name: 'Premium',
+            name: 'Pro',
             description: 'Get the most out of Taaabs',
             previous_price:
               billing_cycle == BillingCycle.YEARLY
@@ -130,13 +130,13 @@ const Page: React.FC = () => {
             bullets_heading: 'Everything in Basic, plus:',
             bullets: [
               'Unlock all addons ✨',
-              'Get priority support',
+              'Get a PRO badge',
               'Claim shorter username',
             ],
             featured_text: 'recommended',
             slot_button: (
               <UiCommonParticle_Button on_click={() => {}} size="medium">
-                Subscribe to Premium
+                Subscribe to Pro
               </UiCommonParticle_Button>
             ),
           },

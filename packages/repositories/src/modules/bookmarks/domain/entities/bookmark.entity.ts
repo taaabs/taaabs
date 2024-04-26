@@ -6,7 +6,7 @@ export type Bookmark_Entity = {
   created_at: string
   updated_at: string
   visited_at: string
-  tags: { name: string; id: number; is_public: boolean }[]
+  tags: { name: string; id: number; is_public?: boolean }[]
   links: {
     url: string
     saves?: number

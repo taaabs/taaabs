@@ -3,16 +3,14 @@
 
 .container {
   display: flex;
-  gap: var(--padding-8px);
   flex-direction: column;
   align-items: center;
-  @include at768 {
-    gap: var(--padding-12px);
-  }
+  gap: var(--padding-12px);
 }
 .label {
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   color: var(--brand-color);
-  font-size: var(--font-size-19px);
+  font-size: var(--font-size-20px);
+  line-height: 1;
 }

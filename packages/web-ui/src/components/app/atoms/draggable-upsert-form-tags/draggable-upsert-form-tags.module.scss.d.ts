@@ -9,6 +9,6 @@ declare const styles: {
   readonly item__content__options__row__label: string
   readonly item__content__options__row__content: string
   readonly item__handle: string
-  readonly 'new-link': string
+  readonly 'new-tag': string
 }
 export = styles
