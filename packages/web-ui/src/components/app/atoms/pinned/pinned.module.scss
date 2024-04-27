@@ -11,6 +11,9 @@
 .items {
   display: flex;
   flex-direction: column;
+  @include to992 {
+    padding: 0 var(--padding-16px) 54px var(--padding-16px);
+  }
   &::after {
     content: attr(nothing-pinned);
     font-size: var(--font-size-13px);

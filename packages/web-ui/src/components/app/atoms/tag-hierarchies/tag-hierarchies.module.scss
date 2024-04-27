@@ -3,6 +3,18 @@
 
 .container {
   width: 100%;
+  // Hacky, but needed this way to have sticky elements above in sidebar play nicely on mobile.
+  @include to992 {
+    > button {
+      padding: 0 16px;
+    }
+    > div {
+      margin: 0 var(--padding-16px) 0 var(--padding-8px);
+    }
+    > div:last-child {
+      margin: 0 var(--padding-16px) 60px var(--padding-16px);
+    }
+  }
 }
 .collapse {
   display: flex;
