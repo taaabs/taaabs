@@ -488,28 +488,29 @@ export const use_search = () => {
           browser_storage.local_forage.authorized_library.search.bookmarks,
           JSON.stringify(bookmarks_just_tags),
         )
-      } else {
-        await localforage.setItem(
-          browser_storage.local_forage.public_library.search.cached_at_timestamp(
-            {
-              username: username as string,
-            },
-          ),
-          db_updated_at_timestamp,
-        )
-        await localforage.setItem(
-          browser_storage.local_forage.public_library.search.index({
-            username: username as string,
-          }),
-          JSON.stringify(index),
-        )
-        await localforage.setItem(
-          browser_storage.local_forage.public_library.search.bookmarks({
-            username: username as string,
-          }),
-          JSON.stringify(bookmarks_just_tags),
-        )
       }
+      // else {
+      //   await localforage.setItem(
+      //     browser_storage.local_forage.public_library.search.cached_at_timestamp(
+      //       {
+      //         username: username as string,
+      //       },
+      //     ),
+      //     db_updated_at_timestamp,
+      //   )
+      //   await localforage.setItem(
+      //     browser_storage.local_forage.public_library.search.index({
+      //       username: username as string,
+      //     }),
+      //     JSON.stringify(index),
+      //   )
+      //   await localforage.setItem(
+      //     browser_storage.local_forage.public_library.search.bookmarks({
+      //       username: username as string,
+      //     }),
+      //     JSON.stringify(bookmarks_just_tags),
+      //   )
+      // }
       set_search_data_awaits_caching(false)
     }
     if (archived_search_data_awaits_caching) {
@@ -545,26 +546,27 @@ export const use_search = () => {
             .archived_bookmarks,
           JSON.stringify(bookmarks_just_tags),
         )
-      } else {
-        await localforage.setItem(
-          browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-            { username: username as string },
-          ),
-          archived_db_updated_at_timestamp,
-        )
-        await localforage.setItem(
-          browser_storage.local_forage.public_library.search.archived_index({
-            username: username as string,
-          }),
-          JSON.stringify(index),
-        )
-        await localforage.setItem(
-          browser_storage.local_forage.public_library.search.archived_bookmarks(
-            { username: username as string },
-          ),
-          JSON.stringify(bookmarks_just_tags),
-        )
       }
+      // else {
+      //   await localforage.setItem(
+      //     browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
+      //       { username: username as string },
+      //     ),
+      //     archived_db_updated_at_timestamp,
+      //   )
+      //   await localforage.setItem(
+      //     browser_storage.local_forage.public_library.search.archived_index({
+      //       username: username as string,
+      //     }),
+      //     JSON.stringify(index),
+      //   )
+      //   await localforage.setItem(
+      //     browser_storage.local_forage.public_library.search.archived_bookmarks(
+      //       { username: username as string },
+      //     ),
+      //     JSON.stringify(bookmarks_just_tags),
+      //   )
+      // }
       set_archived_search_data_awaits_caching(false)
     }
   }
