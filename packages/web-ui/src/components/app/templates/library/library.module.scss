@@ -51,10 +51,18 @@
   }
 }
 .sidebar {
-  position: relative;
+  @include to992 {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    padding-top: var(--header-mobile-height);
+    padding-bottom: var(--bottom-navigation-bar-height);
+  }
   @include at992 {
     width: var(--_aside-width);
     @include transition-250ms(width);
+    
   }
   &--hidden {
     @include to992 {
@@ -68,17 +76,18 @@
   &__inner {
     --_pane-selector-height: 32px;
     width: 100%;
-    position: fixed;
-    top: var(--header-mobile-height);
     @include to992 {
-      z-index: 1;
+      height: 100%;
+      overflow: auto;
       background: var(--background);
-      padding-top: 8px;
+      padding: 8px 17px calc(16px + 36px + 8px) 16px;
     }
     @include at992 {
+      position: relative;
       width: var(--_aside-width) !important;
       height: calc(100vh - var(--header-desktop-height));
       top: var(--header-desktop-height);
+      position: fixed;
       padding-top: 16px;
       padding-right: 16px;
       @include transition-250ms(opacity);
@@ -173,9 +182,6 @@
       gap: 10px;
       height: var(--_pane-selector-height);
       align-items: center;
-      @include to992 {
-        padding: 0 var(--padding-16px);
-      }
       @include at992 {
         border-top: var(--border-secondary);
       }
@@ -193,20 +199,14 @@
       }
     }
     &__simplebar {
-      position: relative;
-      overflow: auto;
-      height: calc(
-        100vh - var(--header-mobile-height) - var(--_pane-selector-height) -
-          var(--bottom-navigation-bar-height) - 8px
-      );
       @include at992 {
+        position: relative;
+        overflow: auto;
         height: calc(
           100vh - var(--header-desktop-height) - 16px -
             var(--search-desktop-height) - 16px - var(--_pane-selector-height)
         );
-      }
-      &__tag-hierarchies {
-        &--scrolled {
+        &__tag-hierarchies--scrolled {
           @include at992 {
             padding-bottom: 16px;
           }
@@ -214,13 +214,13 @@
             box-shadow: var(--box-shadow);
           }
         }
-      }
-      &__pinned--scrolled {
-        @include at992 {
-          padding-bottom: 16px;
-        }
-        > div:first-child {
-          box-shadow: var(--box-shadow-strong);
+        &__pinned--scrolled {
+          @include at992 {
+            padding-bottom: 16px;
+          }
+          > div:first-child {
+            box-shadow: var(--box-shadow-strong);
+          }
         }
       }
       &__skeleton {
