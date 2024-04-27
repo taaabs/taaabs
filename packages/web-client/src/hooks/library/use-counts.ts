@@ -40,7 +40,7 @@ export const use_counts = () => {
       const request_params: Counts_Params.Authorized = {}
 
       const query_newly_created_bookmark_id = search_params.get(
-        search_params_keys.newly_created_bookmark_updated_at_timestamp,
+        search_params_keys.new_bookmark_results_refetch_trigger,
       )
       set_last_query_refresh_trigger(
         query_newly_created_bookmark_id || undefined,

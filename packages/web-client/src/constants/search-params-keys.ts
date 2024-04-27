@@ -1,5 +1,5 @@
 export const search_params_keys = {
-  newly_created_bookmark_updated_at_timestamp: 'n',
+  new_bookmark_results_refetch_trigger: 'new_id',
   sort_by: 's',
   order: 'o',
   greater_than_equal: 'gte',

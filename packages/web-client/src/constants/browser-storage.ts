@@ -111,6 +111,8 @@ export const browser_storage = {
         `library.search_result.${params.username || ''}?${
           params.search_params || ''
         }${params.hash}`,
+      counts_reload_requested_by_new_bookmark:
+        'library.counts-reload-requested-by-new-bookmark',
     },
   },
   local_storage: {

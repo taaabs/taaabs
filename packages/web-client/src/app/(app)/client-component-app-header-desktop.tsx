@@ -27,6 +27,7 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/upsert-bookmark.use-case'
 import { search_params_keys } from '@/constants/search-params-keys'
 import { toast } from 'react-toastify'
+import { browser_storage } from '@/constants/browser-storage'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const search_params = useSearchParams()
@@ -168,12 +169,15 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
             },
           })
           if (pathname == '/bookmarks') {
+            sessionStorage.setItem(
+              browser_storage.session_storage.library
+                .counts_reload_requested_by_new_bookmark,
+              'true',
+            )
             const updated_search_params = update_search_params(
               search_params,
-              // We use updated at instead of ID beacuse user could delete last bookmark,
-              // create new and modal would not close (url would stay unchanged).
-              search_params_keys.newly_created_bookmark_updated_at_timestamp,
-              new Date(created_bookmark.updated_at).getTime().toString(),
+              search_params_keys.new_bookmark_results_refetch_trigger,
+              created_bookmark.id.toString(),
             )
             window.history.pushState(
               {},

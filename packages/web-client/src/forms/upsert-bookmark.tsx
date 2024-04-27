@@ -328,6 +328,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                     message_type={error_message ? 'error' : undefined}
                     message={error_message}
                     lines={5}
+                    placeholder="Jot something down"
                   />
                 )
               }}
