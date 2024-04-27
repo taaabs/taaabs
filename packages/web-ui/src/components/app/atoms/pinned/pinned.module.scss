@@ -11,6 +11,12 @@
 .items {
   display: flex;
   flex-direction: column;
+  @include to992 {
+    padding: 0 var(--padding-16px) 55px var(--padding-16px);
+  }
+  @include at992 {
+    margin-right: 10px;
+  }
   &::after {
     content: attr(nothing-pinned);
     font-size: var(--font-size-13px);

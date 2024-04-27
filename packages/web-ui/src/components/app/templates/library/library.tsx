@@ -61,19 +61,41 @@ export const Library: React.FC<Library.Props> = (props) => {
   const [is_left_side_open, set_is_left_side_open] = useState<boolean>()
   const [is_right_side_open, set_is_right_side_open] = useState<boolean>()
   const [is_pinned_active, set_is_pinned_active] = useState<boolean>()
-  const simplebar = useRef<any>(null)
-  const [is_simplebar_scrolled_to_top, set_is_simplebar_scrolled_to_top] =
-    useState(true)
+  const simplebar_tag_hierarchies = useRef<any>(null)
+  const simplebar_pinned = useRef<any>(null)
+  const [
+    is_simplebar_tag_hierarchies_scrolled_to_top,
+    set_is_simplebar_tag_hierarchies_scrolled_to_top,
+  ] = useState(true)
+  const [
+    is_simplebar_pinned_scrolled_to_top,
+    set_is_simplebar_pinned_scrolled_to_top,
+  ] = useState(true)
 
   useEffect(() => {
     const handle_scroll = (e: any) => {
       if (e.target.scrollTop == 0) {
-        set_is_simplebar_scrolled_to_top(true)
+        set_is_simplebar_tag_hierarchies_scrolled_to_top(true)
       } else {
-        set_is_simplebar_scrolled_to_top(false)
+        set_is_simplebar_tag_hierarchies_scrolled_to_top(false)
       }
     }
-    const element = simplebar.current.getScrollElement()
+    const element = simplebar_tag_hierarchies.current.getScrollElement()
+    element!.addEventListener('scroll', handle_scroll, { passive: true })
+    return () => {
+      element!.removeEventListener('scroll', handle_scroll)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handle_scroll = (e: any) => {
+      if (e.target.scrollTop == 0) {
+        set_is_simplebar_pinned_scrolled_to_top(true)
+      } else {
+        set_is_simplebar_pinned_scrolled_to_top(false)
+      }
+    }
+    const element = simplebar_pinned.current.getScrollElement()
     element!.addEventListener('scroll', handle_scroll, { passive: true })
     return () => {
       element!.removeEventListener('scroll', handle_scroll)
@@ -358,30 +380,21 @@ export const Library: React.FC<Library.Props> = (props) => {
             </div>
             <SimpleBar
               className={cn(styles['sidebar__inner__simplebar'])}
-              ref={simplebar}
+              style={{
+                display: is_pinned_active ? 'none' : undefined,
+              }}
+              ref={simplebar_tag_hierarchies}
             >
               {!props.show_skeletons ? (
-                <>
-                  <div
-                    className={cn({
-                      [styles[
-                        'sidebar__inner__simplebar__tag-hierarchies--scrolled'
-                      ]]: !is_simplebar_scrolled_to_top,
-                    })}
-                    style={{ display: is_pinned_active ? 'none' : undefined }}
-                  >
-                    {props.slot_tag_hierarchies}
-                  </div>
-                  <div
-                    className={cn({
-                      [styles['sidebar__inner__simplebar__pinned--scrolled']]:
-                        !is_simplebar_scrolled_to_top,
-                    })}
-                    style={{ display: !is_pinned_active ? 'none' : undefined }}
-                  >
-                    {props.slot_pinned}
-                  </div>
-                </>
+                <div
+                  className={cn({
+                    [styles[
+                      'sidebar__inner__simplebar__tag-hierarchies--scrolled'
+                    ]]: !is_simplebar_tag_hierarchies_scrolled_to_top,
+                  })}
+                >
+                  {props.slot_tag_hierarchies}
+                </div>
               ) : (
                 <div className={styles['sidebar__inner__simplebar__skeleton']}>
                   {[200, 180, 140, 160, 120].map((width, i) => (
@@ -389,6 +402,22 @@ export const Library: React.FC<Library.Props> = (props) => {
                   ))}
                 </div>
               )}
+            </SimpleBar>
+            <SimpleBar
+              className={cn(styles['sidebar__inner__simplebar'])}
+              ref={simplebar_pinned}
+              style={{
+                display: !is_pinned_active ? 'none' : undefined,
+              }}
+            >
+              <div
+                className={cn({
+                  [styles['sidebar__inner__simplebar__pinned--scrolled']]:
+                    !is_simplebar_pinned_scrolled_to_top,
+                })}
+              >
+                {props.slot_pinned}
+              </div>
             </SimpleBar>
           </div>
         </aside>

@@ -24,7 +24,7 @@
   > div {
     pointer-events: all;
     @include to992 {
-      padding: 16px 0 8px 0;
+      padding: 8px 0;
     }
   }
 }
@@ -51,18 +51,10 @@
   }
 }
 .sidebar {
-  @include to992 {
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    bottom: 0;
-    padding-top: var(--header-mobile-height);
-    padding-bottom: var(--bottom-navigation-bar-height);
-  }
+  position: relative;
   @include at992 {
     width: var(--_aside-width);
     @include transition-250ms(width);
-    
   }
   &--hidden {
     @include to992 {
@@ -76,20 +68,19 @@
   &__inner {
     --_pane-selector-height: 32px;
     width: 100%;
+    position: fixed;
+    top: var(--header-mobile-height);
     @include to992 {
-      height: 100%;
-      overflow: auto;
+      z-index: 1;
       background: var(--background);
-      padding: 8px 17px calc(16px + 36px + 8px) 16px;
+      padding-top: 8px;
+      height: 100vh;
     }
     @include at992 {
-      position: relative;
       width: var(--_aside-width) !important;
-      height: calc(100vh - var(--header-desktop-height));
       top: var(--header-desktop-height);
-      position: fixed;
       padding-top: 16px;
-      padding-right: 16px;
+
       @include transition-250ms(opacity);
       &::after {
         pointer-events: none;
@@ -108,9 +99,12 @@
         top: 0;
       }
     }
+    @include at992 {
+      padding-right: 6px;
+    }
     @include at1200 {
       padding-top: 16px;
-      padding-right: 32px;
+      padding-right: 22px;
     }
     &--collapsed {
       > div {
@@ -141,6 +135,9 @@
       display: flex;
       align-items: center;
       margin-bottom: 16px;
+      @include at992 {
+        margin-right: 10px;
+      }
       &__collapse-button {
         display: flex;
         align-items: center;
@@ -182,8 +179,14 @@
       gap: 10px;
       height: var(--_pane-selector-height);
       align-items: center;
+      @include to992 {
+        padding: 0 var(--padding-16px);
+      }
       @include at992 {
         border-top: var(--border-secondary);
+      }
+      @include at992 {
+        margin-right: 10px;
       }
       &__button {
         font-size: var(--font-size-13px);
@@ -199,27 +202,59 @@
       }
     }
     &__simplebar {
+      position: relative;
+      overflow: auto;
+      height: calc(
+        100svh - var(--header-mobile-height) - var(--_pane-selector-height) -
+          var(--bottom-navigation-bar-height) - 8px
+      );
       @include at992 {
-        position: relative;
-        overflow: auto;
         height: calc(
-          100vh - var(--header-desktop-height) - 16px -
+          100svh - var(--header-desktop-height) - 16px -
             var(--search-desktop-height) - 16px - var(--_pane-selector-height)
         );
-        &__tag-hierarchies--scrolled {
+      }
+      &__tag-hierarchies {
+        &--scrolled {
           @include at992 {
             padding-bottom: 16px;
           }
           > div > button {
-            box-shadow: var(--box-shadow);
+            box-shadow: var(--box-shadow-strong);
+            @include at992 {
+              // Our shadow must be shorter so we cover it a little bit.
+              &::after {
+                position: absolute;
+                content: '';
+                background-color: var(--background);
+                right: 0;
+                bottom: 0;
+                transform: translateY(100%);
+                height: 10px;
+                width: 10px;
+              }
+            }
           }
         }
-        &__pinned--scrolled {
+      }
+      &__pinned--scrolled {
+        @include at992 {
+          padding-bottom: 16px;
+        }
+        > div:first-child {
+          box-shadow: var(--box-shadow-strong);
+          // Our shadow must be shorter so we cover it a little bit.
           @include at992 {
-            padding-bottom: 16px;
-          }
-          > div:first-child {
-            box-shadow: var(--box-shadow-strong);
+            &::after {
+              position: absolute;
+              content: '';
+              background-color: var(--background);
+              right: 0;
+              bottom: 0;
+              transform: translateY(100%);
+              height: 10px;
+              width: 10px;
+            }
           }
         }
       }
