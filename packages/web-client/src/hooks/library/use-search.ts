@@ -171,66 +171,68 @@ export const use_search = () => {
     }
   }, [selected_tags, bookmarks_just_tags, archived_bookmarks_just_tags])
 
+  enum DbStalenessState {
+    FRESH,
+    INSTANCE_STALE_CACHED_STALE,
+  }
+
   const get_is_db_stale = async (params: {
     is_archived: boolean
     ky: KyInstance
-  }): Promise<boolean> => {
-    let updated_at_locally: number | undefined = !params.is_archived
+  }): Promise<DbStalenessState> => {
+    const instance_updated_at: number | undefined = !params.is_archived
       ? db_updated_at_timestamp
       : archived_db_updated_at_timestamp
-    if (!updated_at_locally) {
-      updated_at_locally =
-        (await localforage.getItem<number>(
-          !username
-            ? !params.is_archived
-              ? browser_storage.local_forage.authorized_library.search
-                  .cached_at_timestamp
-              : browser_storage.local_forage.authorized_library.search
-                  .archived_cached_at_timestamp
-            : !params.is_archived
-            ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
-                {
-                  username: username as string,
-                },
-              )
-            : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-                { username: username as string },
-              ),
-        )) || undefined
+
+    const cached_updated_at =
+      (await localforage.getItem<number>(
+        !username
+          ? !params.is_archived
+            ? browser_storage.local_forage.authorized_library.search
+                .cached_at_timestamp
+            : browser_storage.local_forage.authorized_library.search
+                .archived_cached_at_timestamp
+          : !params.is_archived
+          ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
+              {
+                username: username as string,
+              },
+            )
+          : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
+              { username: username as string },
+            ),
+      )) || undefined
+
+    let remote_updated_at: number
+
+    const data_source = new LibrarySearch_DataSourceImpl(params.ky)
+    const repository = new LibrarySearch_RepositoryImpl(data_source)
+
+    let result: GetLastUpdated_Ro
+    if (!username) {
+      const get_last_updated_at_on_authorized_user_use_case =
+        new GetLastUpdatedAtOnAuthorizedUser_UseCase(repository)
+      result = await get_last_updated_at_on_authorized_user_use_case.invoke()
+    } else {
+      const get_last_updated_at_on_public_user_use_case =
+        new GetLastUpdatedAtOnPublicUser_UseCase(repository)
+      result = await get_last_updated_at_on_public_user_use_case.invoke({
+        username: username as string,
+      })
     }
-    if (updated_at_locally) {
-      let updated_at_remotely: Date | undefined
 
-      const data_source = new LibrarySearch_DataSourceImpl(params.ky)
-      const repository = new LibrarySearch_RepositoryImpl(data_source)
+    !params.is_archived
+      ? (remote_updated_at = result.updated_at!.getTime())
+      : (remote_updated_at = result.archived_updated_at!.getTime())
 
-      let result: GetLastUpdated_Ro
-      if (!username) {
-        const get_last_updated_at_on_authorized_user_use_case =
-          new GetLastUpdatedAtOnAuthorizedUser_UseCase(repository)
-        result = await get_last_updated_at_on_authorized_user_use_case.invoke()
-      } else {
-        const get_last_updated_at_on_public_user_use_case =
-          new GetLastUpdatedAtOnPublicUser_UseCase(repository)
-        result = await get_last_updated_at_on_public_user_use_case.invoke({
-          username: username as string,
-        })
-      }
-
-      !params.is_archived
-        ? (updated_at_remotely = result.updated_at)
-        : (updated_at_remotely = result.archived_updated_at)
-
-      if (
-        updated_at_remotely &&
-        updated_at_remotely.getTime() > updated_at_locally
-      ) {
-        return true
-      } else {
-        return false
-      }
+    if (
+      (instance_updated_at && instance_updated_at > remote_updated_at) ||
+      (cached_updated_at && cached_updated_at > remote_updated_at)
+    ) {
+      return DbStalenessState.FRESH
+    } else {
+      return DbStalenessState.INSTANCE_STALE_CACHED_STALE
     }
-    return true
   }
 
   const init = async (params: {
@@ -251,14 +253,14 @@ export const use_search = () => {
     if (params.force_reinitialization) {
       await clear_cached_data({ is_archived: params.is_archived })
     } else {
-      const is_cache_stale = await get_is_db_stale({
+      const staleness_state = await get_is_db_stale({
         is_archived: params.is_archived,
         ky: ky_instance,
       })
 
       // Bypass initialization if current instance is up to date.
       // Current instance could be out of date if user updated cached db in another tab.
-      if (!is_cache_stale) {
+      if (staleness_state == DbStalenessState.FRESH) {
         const updated_at = !params.is_archived
           ? db_updated_at_timestamp!
           : archived_db_updated_at_timestamp!
@@ -295,7 +297,9 @@ export const use_search = () => {
             }
           }
         }
-      } else {
+      } else if (
+        staleness_state == DbStalenessState.INSTANCE_STALE_CACHED_STALE
+      ) {
         await clear_cached_data({ is_archived: params.is_archived })
       }
     }
