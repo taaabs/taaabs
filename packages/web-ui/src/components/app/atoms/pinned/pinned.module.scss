@@ -11,7 +11,12 @@
 .nothing-pinned {
   color: var(--text-color-dimmed);
   font-size: var(--font-size-13px);
-  padding: var(--padding-8px) var(--padding-16px) 0 var(--padding-16px);
+  @include to992 {
+    padding: var(--padding-8px) var(--padding-16px) 0 var(--padding-16px);
+  }
+  @include at992 {
+    padding-top: var(--padding-10px);
+  }
 }
 .items {
   display: flex;

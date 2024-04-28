@@ -7,7 +7,7 @@ export const system_values = {
   sortablejs_animation_duration: 150,
   sortablejs_delay: 300,
   concurrent_importing_users_limit: 10,
-  import_bookmarks_batch_size: 100,
+  import_bookmarks_batch_size: 50,
   library: {
     max_selected_tags: 5,
     bookmarks: {
