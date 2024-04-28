@@ -8,6 +8,11 @@
   width: 100%;
   z-index: 1;
 }
+.nothing-pinned {
+  color: var(--text-color-dimmed);
+  font-size: var(--font-size-13px);
+  padding: var(--padding-8px) var(--padding-16px) 0 var(--padding-16px);
+}
 .items {
   display: flex;
   flex-direction: column;
@@ -89,9 +94,4 @@
       transform-origin: center;
     }
   }
-}
-.nothing-pinned {
-  color: var(--text-color-dimmed);
-  font-size: var(--font-size-13px);
-  padding-top: 8px;
 }

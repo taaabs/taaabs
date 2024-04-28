@@ -1,5 +1,6 @@
 declare const styles: {
   readonly 'shadow-fix': string
+  readonly 'nothing-pinned': string
   readonly items: string
   readonly item: string
   readonly 'item--dragging': string
@@ -10,6 +11,5 @@ declare const styles: {
   readonly 'item__inner__title--unread': string
   readonly 'item__inner__title--via-wayback': string
   readonly item__inner__unread: string
-  readonly 'nothing-pinned': string
 }
 export = styles

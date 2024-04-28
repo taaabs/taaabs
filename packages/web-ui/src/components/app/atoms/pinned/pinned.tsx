@@ -170,6 +170,11 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       <>
         {/* Shadow set from library */}
         <div className={styles['shadow-fix']} />
+        {relevant_items == 0 && (
+          <div className={styles['nothing-pinned']}>
+            {props.translations.nothing_pinned}
+          </div>
+        )}
         {props.is_draggable ? (
           <ReactSortable
             list={items}
@@ -189,11 +194,6 @@ export const Pinned: React.FC<Pinned.Props> = memo(
           </ReactSortable>
         ) : (
           <div className={styles.items}>{items_dom}</div>
-        )}
-        {relevant_items == 0 && (
-          <div className={styles['nothing-pinned']}>
-            {props.translations.nothing_pinned}
-          </div>
         )}
       </>
     )

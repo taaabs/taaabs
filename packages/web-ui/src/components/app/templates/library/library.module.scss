@@ -73,8 +73,9 @@
     @include to992 {
       z-index: 1;
       background: var(--background);
-      padding-top: 8px;
       height: 100vh;
+      margin-top: 8px;
+      margin-right: 1px; // Main sheet's border is made of shadow so we need to account for that.
     }
     @include at992 {
       width: var(--_aside-width) !important;

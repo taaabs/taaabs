@@ -141,7 +141,7 @@ export const Library: React.FC<Library.Props> = (props) => {
         set_is_right_side_moving(true)
       }
 
-      document.getElementById('main')!.style.transition = `none`
+      main.current!.style.transition = 'none'
     },
     onSwiping: ({ deltaX, dir, event }) => {
       if (
@@ -150,6 +150,10 @@ export const Library: React.FC<Library.Props> = (props) => {
         (event.target as any)?.nodeName == 'line'
       )
         return
+
+      if (Math.abs(deltaX) > 30) {
+        main.current!.style.transition = `transform 20ms linear`
+      }
 
       if (
         (initial_swipe_direction.current == 'Left' &&
@@ -164,15 +168,13 @@ export const Library: React.FC<Library.Props> = (props) => {
           !is_left_side_open)
       ) {
         if (!is_left_side_open && !is_right_side_open) {
-          document.getElementById(
-            'main',
-          )!.style.transform = `translateX(${deltaX}px)`
+          main.current!.style.transform = `translateX(${deltaX}px)`
         } else if (is_left_side_open) {
-          document.getElementById('main')!.style.transform = `translateX(${
+          main.current!.style.transform = `translateX(${
             slidable_width + deltaX
           }px)`
         } else if (is_right_side_open) {
-          document.getElementById('main')!.style.transform = `translateX(${
+          main.current!.style.transform = `translateX(${
             -slidable_width + deltaX
           }px)`
         }
@@ -204,19 +206,15 @@ export const Library: React.FC<Library.Props> = (props) => {
           }
         }
       } else if (is_right_side_open) {
-        document.getElementById(
-          'main',
-        )!.style.transform = `translateX(${-slidable_width}px)`
+        main.current!.style.transform = `translateX(${-slidable_width}px)`
       } else if (is_left_side_open) {
-        document.getElementById(
-          'main',
-        )!.style.transform = `translateX(${slidable_width}px)`
+        main.current!.style.transform = `translateX(${slidable_width}px)`
       } else if (!is_left_side_open && !is_right_side_open) {
         document.body.style.overflow = ''
-        document.getElementById('main')!.style.transform = ''
+        main.current!.style.transform = ''
       }
 
-      document.getElementById('main')!.style.transition = ''
+      main.current!.style.transition = ''
 
       setTimeout(() => {
         set_is_right_side_moving(false)
@@ -231,15 +229,13 @@ export const Library: React.FC<Library.Props> = (props) => {
 
     if (!is_right_side_open) {
       set_is_right_side_open(true)
-      document.getElementById(
-        'main',
-      )!.style.transform = `translateX(${-slidable_width}px)`
+      main.current!.style.transform = `translateX(${-slidable_width}px)`
     } else {
       set_is_right_side_open(false)
       setTimeout(() => {
         document.body.style.overflow = ''
       }, 250)
-      document.getElementById('main')!.style.transform = ''
+      main.current!.style.transform = ''
     }
 
     setTimeout(() => {
@@ -253,15 +249,13 @@ export const Library: React.FC<Library.Props> = (props) => {
 
     if (!is_left_side_open) {
       set_is_left_side_open(true)
-      document.getElementById(
-        'main',
-      )!.style.transform = `translateX(${slidable_width}px)`
+      main.current!.style.transform = `translateX(${slidable_width}px)`
     } else {
       set_is_left_side_open(false)
       setTimeout(() => {
         document.body.style.overflow = ''
       }, 250)
-      document.getElementById('main')!.style.transform = ''
+      main.current!.style.transform = ''
     }
 
     setTimeout(() => {
@@ -423,7 +417,6 @@ export const Library: React.FC<Library.Props> = (props) => {
         </aside>
 
         <main
-          id="main"
           className={styles.main}
           ref={main}
           onClick={() => {
