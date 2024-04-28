@@ -21,7 +21,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { upsert_bookmark_modal } from '@/modals/upsert-bookmark-modal'
 import { toast } from 'react-toastify'
 import { CustomRangeSkeleton as UiAppAtom_CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
-import { Library as UiAppTemplate_Library } from '@web-ui/components/app/templates/library'
+import { SwipableColumns as UiAppTemplate_SwipableColumns } from '@web-ui/components/app/templates/swipable-columns'
 import { LibrarySearch as UiAppAtom_LibrarySearch } from '@web-ui/components/app/atoms/library-search'
 import { LibraryAside as UiAppTemplate_LibraryAside } from '@web-ui/components/app/templates/library-aside'
 import { DropdownMenu as UiAppAtom_DropdownMenu } from '@web-ui/components/app/atoms/dropdown-menu'
@@ -2607,7 +2607,7 @@ const Library = (params: {
       <UiAppAtom_DraggedCursorTag
         tag_name={tag_view_options_hook.dragged_tag?.name}
       />
-      <UiAppTemplate_Library
+      <UiAppTemplate_SwipableColumns
         translations={{
           collapse_alt: dictionary.library.collapse_sidebar,
           follow: dictionary.library.follow,

@@ -5,13 +5,13 @@ import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { MobileTitleBar as Subcomponent_MobileTitleBar } from './components/mobile-title-bar'
-import styles from './library.module.scss'
+import styles from './swipable-columns.module.scss'
 import { useSwipeable } from 'react-swipeable'
 import { use_is_scrolled } from '@web-ui/hooks/use-is-scrolled'
 import { Button } from '@web-ui/components/common/particles/button'
 import SimpleBar from 'simplebar-react'
 
-export namespace Library {
+export namespace SwipableColumns {
   export type Props = {
     slot_pinned: React.ReactNode
     slot_tag_hierarchies: React.ReactNode
@@ -40,7 +40,7 @@ export namespace Library {
   }
 }
 
-export const Library: React.FC<Library.Props> = (props) => {
+export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
   const [slidable_width, set_slidable_width] = useState(0)
   const on_window_resize = useWindowResize()
   const sidebar = useRef<HTMLDivElement>(null)

@@ -5,7 +5,7 @@ import { DesktopUserAreaForAppHeader as UiAppOrganism_DesktopUserAreaForAppHeade
 import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
 import { AppHeaderDesktop as UiAppTemplate_AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
 import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
-import { Library as UiAppTemplate_Library } from '@web-ui/components/app/templates/library'
+import { SwipableColumns as UiAppTemplate_Library } from '@web-ui/components/app/templates/swipable-columns'
 import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 
 export default {

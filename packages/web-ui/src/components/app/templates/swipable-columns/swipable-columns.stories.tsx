@@ -1,36 +1,47 @@
-import { Library } from './library'
+import { SwipableColumns } from './swipable-columns'
 
 export default {
-  component: Library,
+  component: SwipableColumns,
 }
 
 export const Primary = () => (
-  <Library
+  <SwipableColumns
     slot_tag_hierarchies={<>[TAG HIERARCHIES]</>}
-    translations={{ collapse_alt: '', follow: '', unfollow: '' }}
+    translations={{
+      collapse_alt: '',
+      follow: '',
+      unfollow: '',
+      folders: 'Folders',
+      pinned: 'Pinned',
+    }}
     slot_aside={<>[ASIDE]</>}
     slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached={() => {}}
     are_bookmarks_dimmed={false}
-    is_not_interactive={false}
     slot_bookmarks={<>[BOOKMARKS]</>}
     slot_search={<>[SEARCH]</>}
     show_skeletons={false}
     slot_pinned={<>pinned</>}
+    info_text={''}
   />
 )
 
 export const Scrolling = () => (
-  <Library
+  <SwipableColumns
     slot_tag_hierarchies={<>[TAG HIERARCHIES]</>}
-    translations={{ collapse_alt: '', follow: '', unfollow: '' }}
+    translations={{
+      collapse_alt: '',
+      follow: '',
+      unfollow: '',
+      folders: 'Folders',
+      pinned: 'Pinned',
+    }}
     slot_aside={<div>{lorem}</div>}
     slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached={() => {}}
     are_bookmarks_dimmed={false}
-    is_not_interactive={false}
     slot_bookmarks={
       <>
         {lorem} {lorem} {lorem} {lorem}
@@ -39,23 +50,30 @@ export const Scrolling = () => (
     slot_search={<>[SEARCH]</>}
     show_skeletons={false}
     slot_pinned={<>pinned</>}
+    info_text={''}
   />
 )
 
 export const Loading = () => (
-  <Library
+  <SwipableColumns
     slot_tag_hierarchies={<>[TAG HIERARCHIES]</>}
-    translations={{ collapse_alt: '', follow: '', unfollow: '' }}
+    translations={{
+      collapse_alt: '',
+      follow: '',
+      unfollow: '',
+      folders: 'Folders',
+      pinned: 'Pinned',
+    }}
     slot_aside={<>slot aside</>}
     slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached={() => {}}
     are_bookmarks_dimmed={false}
-    is_not_interactive={false}
     slot_bookmarks={<>slot bookmarks</>}
     slot_search={<>[SEARCH]</>}
     show_skeletons={true}
     slot_pinned={<>pinned</>}
+    info_text={''}
   />
 )
 
