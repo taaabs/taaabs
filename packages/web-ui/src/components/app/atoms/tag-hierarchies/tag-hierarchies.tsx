@@ -28,6 +28,7 @@ export namespace TagHierarchies {
     all_bookmarks_yields?: number
     is_all_bookmarks_selected: boolean
     on_click_all_bookmarks: () => void
+    library_url: string
     translations: {
       drag_here: string
       all_bookmarks: string
@@ -104,10 +105,12 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
       item: Item
       collapseIcon: any
     }) => {
+      const search_params = new URLSearchParams(window.location.search)
+      search_params.set('t', (item as Item).hierarchy_tag_ids.join(','))
       return (
         <div className={styles.tag}>
           {collapseIcon ? collapseIcon : <div className={styles.tag__spacer} />}
-          <button
+          <a
             className={cn(styles.tag__button, {
               [styles['tag__button--active']]:
                 JSON.stringify(item.hierarchy_tag_ids) ==
@@ -118,7 +121,8 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                 (item as Item).id,
               ),
             })}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault()
               props.on_item_click((item as Item).hierarchy_tag_ids)
               // Calling before timeout fixes issue when selecting tag after changing filter.
               // TODO: Investigate root cause.
@@ -128,6 +132,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               }, 0)
               clear_mouseover_ids()
             }}
+            href={`${props.library_url}?${search_params.toString()}`}
             onMouseEnter={() => {
               if (props.dragged_tag) {
                 document.body.classList.add('adding-tag')
@@ -213,7 +218,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                 </span>
               )}
             </div>
-          </button>
+          </a>
         </div>
       )
     }

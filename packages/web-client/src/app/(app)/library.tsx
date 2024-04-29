@@ -774,69 +774,72 @@ const Library = (params: {
     />
   )
   const slot_tag_hierarchies = (
-    <UiAppAtom_TagHierarchies
-      library_updated_at_timestamp={library_updated_at_timestamp}
-      is_draggable={!username}
-      tree={tag_hierarchies_hook.tag_hierarchies}
-      on_update={async (tag_hierarchies: TagHierarchies.Node[]) => {
-        const filter = filter_view_options_hook.current_filter
+    <div style={{ pointerEvents: is_not_interactive ? 'none' : undefined }}>
+      <UiAppAtom_TagHierarchies
+        library_updated_at_timestamp={library_updated_at_timestamp}
+        is_draggable={!username}
+        tree={tag_hierarchies_hook.tag_hierarchies}
+        on_update={async (tag_hierarchies: TagHierarchies.Node[]) => {
+          const filter = filter_view_options_hook.current_filter
 
-        const update_tag_hierarchies_params: UpdateTagHierarchies_Params = {
-          tag_hierarchies,
-          gte: date_view_options_hook.current_gte,
-          lte: date_view_options_hook.current_lte,
-          starred_only:
-            filter == Filter.STARRED ||
-            filter == Filter.STARRED_UNREAD ||
-            filter == Filter.ARCHIVED_STARRED ||
-            filter == Filter.ARCHIVED_STARRED_UNREAD ||
-            undefined,
-          unread_only:
-            filter == Filter.UNREAD ||
-            filter == Filter.STARRED_UNREAD ||
-            filter == Filter.ARCHIVED_UNREAD ||
-            filter == Filter.ARCHIVED_STARRED_UNREAD ||
-            undefined,
-          is_archived:
-            filter == Filter.ARCHIVED ||
-            filter == Filter.ARCHIVED_STARRED ||
-            filter == Filter.ARCHIVED_UNREAD ||
-            filter == Filter.ARCHIVED_STARRED_UNREAD ||
-            undefined,
-        }
-
-        await dispatch(
-          tag_hierarchies_actions.update_tag_hierarchies({
-            update_tag_hierarchies_params,
-            ky: ky_instance,
-          }),
-        )
-        toast.success(params.dictionary.library.tag_hierarchies_upated)
-      }}
-      selected_tag_ids={tag_view_options_hook.selected_tags}
-      is_updating={tag_hierarchies_hook.is_updating}
-      on_item_click={(tag_ids: number[]) => {
-        tag_view_options_hook.set_many_tags_to_search_params({
-          tag_ids,
-        })
-      }}
-      dragged_tag={tag_view_options_hook.dragged_tag}
-      all_bookmarks_yields={tag_hierarchies_hook.total}
-      is_all_bookmarks_selected={!tag_view_options_hook.selected_tags.length}
-      on_click_all_bookmarks={() => {
-        tag_view_options_hook.clear_selected_tags()
-        if (bookmarks_hook.showing_bookmarks_fetched_by_ids) {
-          search_hook.reset()
-          if (filter_view_options_hook.current_filter == Filter.NONE) {
-            bookmarks_hook.get_bookmarks({})
+          const update_tag_hierarchies_params: UpdateTagHierarchies_Params = {
+            tag_hierarchies,
+            gte: date_view_options_hook.current_gte,
+            lte: date_view_options_hook.current_lte,
+            starred_only:
+              filter == Filter.STARRED ||
+              filter == Filter.STARRED_UNREAD ||
+              filter == Filter.ARCHIVED_STARRED ||
+              filter == Filter.ARCHIVED_STARRED_UNREAD ||
+              undefined,
+            unread_only:
+              filter == Filter.UNREAD ||
+              filter == Filter.STARRED_UNREAD ||
+              filter == Filter.ARCHIVED_UNREAD ||
+              filter == Filter.ARCHIVED_STARRED_UNREAD ||
+              undefined,
+            is_archived:
+              filter == Filter.ARCHIVED ||
+              filter == Filter.ARCHIVED_STARRED ||
+              filter == Filter.ARCHIVED_UNREAD ||
+              filter == Filter.ARCHIVED_STARRED_UNREAD ||
+              undefined,
           }
-        }
-      }}
-      translations={{
-        all_bookmarks: params.dictionary.library.all_bookmarks,
-        drag_here: params.dictionary.library.drag_tag_here,
-      }}
-    />
+
+          await dispatch(
+            tag_hierarchies_actions.update_tag_hierarchies({
+              update_tag_hierarchies_params,
+              ky: ky_instance,
+            }),
+          )
+          toast.success(params.dictionary.library.tag_hierarchies_upated)
+        }}
+        selected_tag_ids={tag_view_options_hook.selected_tags}
+        is_updating={tag_hierarchies_hook.is_updating}
+        on_item_click={(tag_ids: number[]) => {
+          tag_view_options_hook.set_many_tags_to_search_params({
+            tag_ids,
+          })
+        }}
+        library_url={username ? `/${username}` : '/bookmarks'}
+        dragged_tag={tag_view_options_hook.dragged_tag}
+        all_bookmarks_yields={tag_hierarchies_hook.total}
+        is_all_bookmarks_selected={!tag_view_options_hook.selected_tags.length}
+        on_click_all_bookmarks={() => {
+          tag_view_options_hook.clear_selected_tags()
+          if (bookmarks_hook.showing_bookmarks_fetched_by_ids) {
+            search_hook.reset()
+            if (filter_view_options_hook.current_filter == Filter.NONE) {
+              bookmarks_hook.get_bookmarks({})
+            }
+          }
+        }}
+        translations={{
+          all_bookmarks: params.dictionary.library.all_bookmarks,
+          drag_here: params.dictionary.library.drag_tag_here,
+        }}
+      />
+    </div>
   )
   const slot_aside = (
     <UiAppTemplate_LibraryAside
