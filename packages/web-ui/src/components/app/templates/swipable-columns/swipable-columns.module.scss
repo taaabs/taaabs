@@ -405,6 +405,7 @@
     right: 0;
     padding-top: var(--header-mobile-height);
     padding-bottom: var(--bottom-navigation-bar-height);
+    padding-left: 1px;
   }
   @include at992 {
     margin-top: var(--header-desktop-height);

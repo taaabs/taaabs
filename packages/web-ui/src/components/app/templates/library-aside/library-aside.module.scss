@@ -7,17 +7,17 @@
   }
   > div {
     @include to992 {
-      padding: 0 16px calc(16px + 36px + 12px)
-        17px;
+      padding: 0 var(--padding-16px) calc(16px + 36px + 12px)
+        var(--padding-16px);
       // Overrides inline values coming from stickybox.
       position: relative !important;
       top: 0 !important;
     }
     @include at992 {
-      padding: 16px 0 16px 16px;
+      padding: var(--padding-16px) 0 var(--padding-16px) var(--padding-16px);
     }
     @include at1200 {
-      padding: 16px 0 16px 32px;
+      padding: var(--padding-16px) 0 var(--padding-16px) 32px;
     }
   }
 }
