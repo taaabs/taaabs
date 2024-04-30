@@ -32,7 +32,6 @@
     @include at992 {
       height: var(--button-dimension-40px);
       padding: 0 16px;
-      font-size: var(--font-size-16px);
     }
     &--toggled {
       background-color: var(--white);

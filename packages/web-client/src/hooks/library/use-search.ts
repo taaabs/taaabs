@@ -779,7 +779,7 @@ export const use_search = () => {
           browser_storage.session_storage.library.search_string({
             username,
             search_params: search_params.toString(),
-            hash: '#' + encodeURIComponent(params.search_string),
+            hash: '#' + params.search_string,
           }),
           params.search_string,
         )
@@ -787,7 +787,7 @@ export const use_search = () => {
           browser_storage.session_storage.library.search_results_count({
             username,
             search_params: search_params.toString(),
-            hash: '#' + encodeURIComponent(params.search_string),
+            hash: '#' + params.search_string,
           }),
           result.count.toString(),
         )
@@ -1355,7 +1355,7 @@ export const use_search = () => {
       browser_storage.session_storage.library.highlights({
         username,
         search_params: search_params.toString(),
-        hash: '#' + encodeURIComponent(search_string),
+        hash: '#' + search_string,
       }),
       JSON.stringify(highlights),
     )
@@ -1367,7 +1367,7 @@ export const use_search = () => {
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
         search_params: search_params.toString(),
-        hash: '#' + encodeURIComponent(search_string),
+        hash: '#' + search_string,
       }),
       JSON.stringify(highlights_sites_variants),
     )
@@ -1379,7 +1379,7 @@ export const use_search = () => {
       browser_storage.session_storage.library.search_result({
         username,
         search_params: search_params.toString(),
-        hash: '#' + encodeURIComponent(search_string),
+        hash: '#' + search_string,
       }),
       JSON.stringify(result),
     )
@@ -1394,7 +1394,7 @@ export const use_search = () => {
       browser_storage.session_storage.library.search_string({
         username,
         search_params: search_params_stringified,
-        hash: window.location.hash,
+        hash: decodeURIComponent(window.location.hash),
       }),
     )
     if (search_string) {
@@ -1404,27 +1404,29 @@ export const use_search = () => {
       browser_storage.session_storage.library.highlights({
         username,
         search_params: search_params_stringified,
-        hash: window.location.hash,
+        hash: decodeURIComponent(window.location.hash),
       }),
     )
     if (highlights) {
-      set_highlights(JSON.parse(highlights))
+      set_incoming_highlights(JSON.parse(highlights))
     }
     const highlights_sites_variants = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
         search_params: search_params_stringified,
-        hash: window.location.hash,
+        hash: decodeURIComponent(window.location.hash),
       }),
     )
     if (highlights_sites_variants) {
-      set_highlights_sites_variants(JSON.parse(highlights_sites_variants))
+      set_incoming_highlights_sites_variants(
+        JSON.parse(highlights_sites_variants),
+      )
     }
     const count = sessionStorage.getItem(
       browser_storage.session_storage.library.search_results_count({
         username,
         search_params: search_params_stringified,
-        hash: window.location.hash,
+        hash: decodeURIComponent(window.location.hash),
       }),
     )
     if (count) {
@@ -1434,7 +1436,7 @@ export const use_search = () => {
       browser_storage.session_storage.library.search_result({
         username,
         search_params: search_params_stringified,
-        hash: window.location.hash,
+        hash: decodeURIComponent(window.location.hash),
       }),
     )
     if (result) {
