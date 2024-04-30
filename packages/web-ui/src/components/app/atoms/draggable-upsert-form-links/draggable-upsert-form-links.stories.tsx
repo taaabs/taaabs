@@ -15,10 +15,11 @@ export const Primary = () => (
       on_change={() => {}}
       show_visibility_toggler={true}
       translations={{
-        add_url: 'Add URL',
+        add: 'Add',
+        enter_url: 'Enter URL',
         open: 'Open...',
         original_url: 'Original URL',
-        snapshot: 'Snapshot via Archive.org',
+        snapshot: 'Snapshot',
         visibility: 'Visibility',
         private: 'Private',
         public: 'Public',

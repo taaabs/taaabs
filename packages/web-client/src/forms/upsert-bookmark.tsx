@@ -239,7 +239,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                     add: 'Add link',
                     open: 'Open...',
                     original_url: 'Original URL',
-                    snapshot: 'Snapshot via Archive.org',
+                    snapshot: 'Snapshot',
                     visibility: 'Visibility',
                     private: 'Private',
                     public: 'Public',

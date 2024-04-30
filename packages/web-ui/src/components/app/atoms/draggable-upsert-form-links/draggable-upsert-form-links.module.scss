@@ -26,6 +26,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    box-shadow: var(--box-shadow-red);
     @include transition-150ms(background-color);
     @include hover {
       background-color: var(--red700);
