@@ -29,10 +29,10 @@
   }
   &--search-result {
     border-top-style: dashed;
-    border-top-color: var(--border-color-primary);
+    border-top-color: var(--neutral250);
     @include at992 {
       border-style: dashed;
-      border-color: var(--border-color-primary);
+      border-color: var(--neutral250);
     }
   }
   &--search-result-clickable {
