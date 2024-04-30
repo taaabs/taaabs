@@ -1,4 +1,10 @@
 export type Dictionary = {
+  auth: {
+    heading: { text: string; subtext: string }
+  }
+  join: {
+    heading: { text: string; subtext: string }
+  }
   library: {
     follow: string
     unfollow: string

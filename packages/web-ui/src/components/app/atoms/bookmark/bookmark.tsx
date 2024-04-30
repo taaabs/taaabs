@@ -717,7 +717,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 (props.title ? `${props.title} ` : '') +
                 (props.note ? `${props.note} ` : '') +
                 props.tags.map((tag) => tag.name).join(' ') +
-                (props.tags.length ? ' ' : '') +
+                ' ' +
                 props.links
                   .map(
                     (link, i) =>

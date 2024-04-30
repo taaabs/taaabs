@@ -32,6 +32,7 @@
     @include at992 {
       height: var(--button-dimension-40px);
       padding: 0 16px;
+      font-size: var(--font-size-16px);
     }
     &--toggled {
       background-color: var(--white);
@@ -41,7 +42,7 @@
       }
     }
     > span {
-      padding-bottom: 0.06em;
+      padding-bottom: 0.05em;
     }
   }
   &__separator {

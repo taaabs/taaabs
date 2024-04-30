@@ -137,6 +137,15 @@ const Library = (params: {
         set_is_pinned_stale(false)
       }
       set_pinned_count()
+      if (search_hook.result) {
+        search_hook.set_highlights(search_hook.incoming_highlights)
+        search_hook.set_highlights_sites_variants(
+          search_hook.incoming_highlights_sites_variants,
+        )
+      } else if (search_hook.highlights && !search_hook.result) {
+        search_hook.set_highlights(undefined)
+        search_hook.set_highlights_sites_variants(undefined)
+      }
     }
   }, [
     bookmarks_hook.is_fetching_first_bookmarks,
@@ -214,20 +223,6 @@ const Library = (params: {
     })
     pinned_count.current = count
   }
-
-  useUpdateEffect(() => {
-    if (!bookmarks_hook.is_fetching) {
-      if (search_hook.result) {
-        search_hook.set_highlights(search_hook.incoming_highlights)
-        search_hook.set_highlights_sites_variants(
-          search_hook.incoming_highlights_sites_variants,
-        )
-      } else if (search_hook.highlights && !search_hook.result) {
-        search_hook.set_highlights(undefined)
-        search_hook.set_highlights_sites_variants(undefined)
-      }
-    }
-  }, [bookmarks_hook.is_fetching])
 
   // This prevents layout shift in loading state during setting pinned status on a link.
   useUpdateEffect(() => {

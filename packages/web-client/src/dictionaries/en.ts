@@ -1,6 +1,18 @@
 import { Dictionary } from './dictionary'
 
 const dictionary: Dictionary = {
+  auth: {
+    heading: {
+      text: 'Log in',
+      subtext: 'to continue to Taaabs',
+    },
+  },
+  join: {
+    heading: {
+      text: '1',
+      subtext: '2',
+    },
+  },
   library: {
     follow: 'Follow',
     unfollow: 'Unfollow',

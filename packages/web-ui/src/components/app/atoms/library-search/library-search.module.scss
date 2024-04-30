@@ -337,7 +337,7 @@
         }
         > span {
           color: var(--text-color-variant);
-          white-space: nowrap;
+          white-space: pre;
           @include to1200 {
             font-family: var(--font-family-inter-tight);
           }

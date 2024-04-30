@@ -1,6 +1,18 @@
 import { Dictionary } from './dictionary'
 
 export const dictionary: Dictionary = {
+  auth: {
+    heading: {
+      text: 'Zaloguj się',
+      subtext: 'aby kontynuuować do Taaabs',
+    },
+  },
+  join: {
+    heading: {
+      text: '1',
+      subtext: '2',
+    },
+  },
   library: {
     follow: 'Obserwuj',
     unfollow: 'Przestań obserwować',
@@ -23,10 +35,11 @@ export const dictionary: Dictionary = {
     use_original: 'Oryginalny link został przywrócony',
     sort_by: 'Sortowanie',
     sort_by_options: {
-      created: 'Data utworzenia',
-      updated: 'Data zaktualizowania',
-      visited: 'Data ostatniej wizyty',
-      popularity: 'Najbardziej uznane',
+      created: 'Utworzenia',
+      updated: 'Aktualizacji',
+      visited: 'Wizyty',
+      date: 'Data',
+      the_huggiest: 'Punktowane',
     },
     order: 'Kolejność',
     order_options: {
