@@ -221,7 +221,7 @@
             padding-bottom: 16px;
           }
           > div > div > button {
-            box-shadow: var(--box-shadow);
+            box-shadow: var(--box-shadow-strong);
             @include at992 {
               // Our shadow must be shorter so we cover it a little bit.
               &::after {

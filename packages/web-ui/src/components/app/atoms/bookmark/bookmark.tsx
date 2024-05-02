@@ -823,7 +823,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           styles['bookmark__links__item__actions__public-saves']
                         }
                       >
-                        {link.saves}
+                        {link.saves} {link.saves == 1 ? 'save' : 'saves'}
                       </button>
                     )}
                     <button
