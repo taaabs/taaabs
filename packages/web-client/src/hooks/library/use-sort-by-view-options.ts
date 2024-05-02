@@ -10,7 +10,7 @@ import { search_params_keys } from '@/constants/search-params-keys'
 export const use_sort_by_view_options = () => {
   const search_params = useSearchParams()
   const params = useParams()
-  const [current_sort_by, set_current_sort_by] = useState<SortBy>(
+  const [current_sort_by_, set_current_sort_by_] = useState<SortBy>(
     Object.values(SortBy)[
       parseInt(
         search_params.get(search_params_keys.sort_by) ||
@@ -25,9 +25,9 @@ export const use_sort_by_view_options = () => {
     const query_sort_by = search_params.get(search_params_keys.sort_by)
 
     if (
-      query_sort_by != Object.values(SortBy).indexOf(current_sort_by).toString()
+      query_sort_by != Object.values(SortBy).indexOf(current_sort_by_).toString()
     ) {
-      set_current_sort_by(
+      set_current_sort_by_(
         Object.values(SortBy)[
           parseInt(
             query_sort_by ||
@@ -72,7 +72,7 @@ export const use_sort_by_view_options = () => {
   }
 
   return {
-    current_sort_by,
+    current_sort_by_,
     set_sort_by_query_param,
   }
 }

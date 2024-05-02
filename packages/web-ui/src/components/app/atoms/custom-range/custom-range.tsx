@@ -16,14 +16,14 @@ type Counts = {
 
 export namespace CustomRange {
   export type Props = {
-    library_updated_at_timestamp?: number
-    counts?: Counts
-    current_gte?: number
-    current_lte?: number
-    on_yyyymm_change: ({ gte, lte }: { gte: number; lte: number }) => void
-    clear_date_range: () => void
-    selected_tags?: number[]
-    is_range_selector_disabled?: boolean
+    library_updated_at_timestamp_?: number
+    counts_?: Counts
+    current_gte_?: number
+    current_lte_?: number
+    on_yyyymm_change_: ({ gte, lte }: { gte: number; lte: number }) => void
+    clear_date_range_: () => void
+    selected_tags_?: number[]
+    is_range_selector_disabled_?: boolean
   }
 }
 
@@ -53,7 +53,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     }>({})
 
     useUpdateEffect(() => {
-      if (props.is_range_selector_disabled) return
+      if (props.is_range_selector_disabled_) return
 
       if (
         !is_swiping &&
@@ -63,7 +63,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
         counts_to_render[dragged_start_index] &&
         counts_to_render[dragged_end_index]
       ) {
-        props.on_yyyymm_change({
+        props.on_yyyymm_change_({
           gte: counts_to_render[dragged_start_index].yyyymm,
           lte: counts_to_render[dragged_end_index].yyyymm,
         })
@@ -181,7 +181,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                         )
                   : el.yyyymm ==
                       props
-                        .counts!.map((m) => m.yyyymm)
+                        .counts_!.map((m) => m.yyyymm)
                         .reduce((prev, curr) =>
                           Math.abs(curr - current_gte!) <
                           Math.abs(prev - current_gte!)
@@ -221,7 +221,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                         )
                   : el.yyyymm ==
                       props
-                        .counts!.map((m) => m.yyyymm)
+                        .counts_!.map((m) => m.yyyymm)
                         .reduce((prev, curr) =>
                           Math.abs(curr - current_lte!) <
                           Math.abs(prev - current_lte!)
@@ -262,29 +262,29 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
 
     useUpdateEffect(() => {
       if (
-        !props.counts ||
+        !props.counts_ ||
         dragged_start_index == undefined ||
         dragged_end_index == undefined
       )
         return
 
       set_start_and_end_index_throttled({
-        counts: props.counts,
-        current_gte: props.counts[dragged_start_index].yyyymm,
-        current_lte: props.counts[dragged_end_index].yyyymm,
+        counts: props.counts_,
+        current_gte: props.counts_[dragged_start_index].yyyymm,
+        current_lte: props.counts_[dragged_end_index].yyyymm,
       })
     }, [dragged_start_index, dragged_end_index])
 
     useEffect(() => {
       calculate_counts({
-        counts: props.counts,
+        counts: props.counts_,
         start_index: start_index != null ? start_index : undefined,
         end_index: end_index != null ? end_index : undefined,
       })
     }, [random_number])
 
     useEffect(() => {
-      if (!props.counts || !props.current_gte || !props.current_lte) {
+      if (!props.counts_ || !props.current_gte_ || !props.current_lte_) {
         set_start_index(undefined)
         set_end_index(undefined)
         set_random_number(Math.random())
@@ -293,39 +293,39 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       }
 
       set_start_and_end_index({
-        counts: props.counts,
-        current_gte: props.current_gte,
-        current_lte: props.current_lte,
+        counts: props.counts_,
+        current_gte: props.current_gte_,
+        current_lte: props.current_lte_,
       })
     }, [
-      props.current_gte,
-      props.current_lte,
-      props.counts,
-      props.selected_tags,
+      props.current_gte_,
+      props.current_lte_,
+      props.counts_,
+      props.selected_tags_,
     ])
 
     useEffect(() => {
       if (
-        !props.counts ||
+        !props.counts_ ||
         bookmark_count != null ||
-        props.current_gte ||
-        props.current_lte ||
+        props.current_gte_ ||
+        props.current_lte_ ||
         dragged_start_index !== undefined ||
         dragged_end_index !== undefined
       )
         return
 
       calculate_counts({
-        counts: props.counts,
+        counts: props.counts_,
         start_index: 0,
-        end_index: props.counts.length - 1,
+        end_index: props.counts_.length - 1,
       })
-    }, [props.counts])
+    }, [props.counts_])
 
     useEffect(() => {
       calculated_counts_cache.current = {}
-      set_counts_to_render(props.counts)
-    }, [props.counts])
+      set_counts_to_render(props.counts_)
+    }, [props.counts_])
 
     return (
       <div className={styles['custom-range']} ref={custom_range}>
@@ -335,21 +335,21 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
           </div>
           <div className={styles['custom-range__details__current-range']}>
             {!bookmark_count ? (
-              props.current_gte && props.current_lte ? (
-                yyyymm_to_display(props.current_gte) +
-                (props.current_gte != props.current_lte
-                  ? ` - ${yyyymm_to_display(props.current_lte)}`
+              props.current_gte_ && props.current_lte_ ? (
+                yyyymm_to_display(props.current_gte_) +
+                (props.current_gte_ != props.current_lte_
+                  ? ` - ${yyyymm_to_display(props.current_lte_)}`
                   : '')
               ) : (
                 ''
               )
-            ) : !props.is_range_selector_disabled ? (
+            ) : !props.is_range_selector_disabled_ ? (
               date ? (
                 date
-              ) : props.current_gte && props.current_lte ? (
-                yyyymm_to_display(props.current_gte) +
-                (props.current_gte != props.current_lte
-                  ? ` - ${yyyymm_to_display(props.current_lte)}`
+              ) : props.current_gte_ && props.current_lte_ ? (
+                yyyymm_to_display(props.current_gte_) +
+                (props.current_gte_ != props.current_lte_
+                  ? ` - ${yyyymm_to_display(props.current_lte_)}`
                   : '')
               ) : (
                 <></>
@@ -480,18 +480,18 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
           )}
         </div>
 
-        {props.current_gte && props.current_lte && (
+        {props.current_gte_ && props.current_lte_ && (
           <button
             className={styles['custom-range__clear']}
             onClick={() => {
-              props.clear_date_range()
+              props.clear_date_range_()
             }}
           >
             <Icon variant="ADD" />
           </button>
         )}
 
-        {!props.is_range_selector_disabled &&
+        {!props.is_range_selector_disabled_ &&
           counts_to_render &&
           counts_to_render.length >= 2 &&
           bookmark_count &&
@@ -500,7 +500,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
               <ResponsiveContainer
                 width={'100%'}
                 height={135}
-                key={`${props.current_gte}${props.current_lte}`}
+                key={`${props.current_gte_}${props.current_lte_}`}
               >
                 <AreaChart margin={{ left: 0, top: 5 }} data={counts_to_render}>
                   <defs>
@@ -582,19 +582,19 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
           bookmark_count > 0 &&
           counts_to_render &&
           counts_to_render.length <= 1 &&
-          !props.is_range_selector_disabled && (
+          !props.is_range_selector_disabled_ && (
             <div className={styles['custom-range__info']}>
               All results fit in one month
             </div>
           )}
 
-        {!props.is_range_selector_disabled && !bookmark_count && (
+        {!props.is_range_selector_disabled_ && !bookmark_count && (
           <div className={styles['custom-range__info']}>
             There is nothing to plot
           </div>
         )}
 
-        {props.is_range_selector_disabled && (
+        {props.is_range_selector_disabled_ && (
           <div className={styles['custom-range__info']}>
             Range selection is unavailable for current sort option
           </div>
@@ -602,7 +602,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       </div>
     )
   },
-  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
+  (o, n) => o.library_updated_at_timestamp_ == n.library_updated_at_timestamp_,
 )
 
 function yyyymm_to_display(yyyymm: number) {

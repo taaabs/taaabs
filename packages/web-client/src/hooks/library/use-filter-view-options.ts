@@ -9,7 +9,7 @@ import { search_params_keys } from '@/constants/search-params-keys'
 export const use_filter_view_options = () => {
   const search_params = useSearchParams()
   const params = useParams()
-  const [current_filter, set_current_filter] = useState<Filter>(
+  const [current_filter_, set_current_filter_] = useState<Filter>(
     Object.values(Filter)[
       parseInt(
         search_params.get(search_params_keys.filter) ||
@@ -22,9 +22,9 @@ export const use_filter_view_options = () => {
     const query_filter = search_params.get(search_params_keys.filter)
 
     if (
-      query_filter != Object.values(Filter).indexOf(current_filter).toString()
+      query_filter != Object.values(Filter).indexOf(current_filter_).toString()
     ) {
-      set_current_filter(
+      set_current_filter_(
         Object.values(Filter)[
           parseInt(
             query_filter ||
@@ -58,7 +58,7 @@ export const use_filter_view_options = () => {
 
   const clear_selected_stars = () => {
     let updated_search_params: URLSearchParams
-    if (current_filter == Filter.STARRED_UNREAD) {
+    if (current_filter_ == Filter.STARRED_UNREAD) {
       updated_search_params = update_search_params(
         search_params,
         search_params_keys.filter,
@@ -85,7 +85,7 @@ export const use_filter_view_options = () => {
 
   const clear_unread = () => {
     let updated_search_params: URLSearchParams
-    if (current_filter == Filter.STARRED_UNREAD) {
+    if (current_filter_ == Filter.STARRED_UNREAD) {
       updated_search_params = update_search_params(
         search_params,
         search_params_keys.filter,
@@ -111,7 +111,7 @@ export const use_filter_view_options = () => {
   }
 
   return {
-    current_filter,
+    current_filter_,
     set_filter_query_param,
     clear_selected_stars,
     clear_unread,

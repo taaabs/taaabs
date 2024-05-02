@@ -121,33 +121,33 @@ export const Primary = () => {
 
 const bookmark = (
   <UiAppAtom_Bookmark
-    date={new Date()}
-    links={[]}
-    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-    is_unread={true}
-    tags={[
-      { id: 1, name: 'foo', yields: 100 },
-      { id: 2, name: 'bar', is_selected: true },
+    date_={new Date()}
+    links_={[]}
+    title_="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+    is_unread_={true}
+    tags_={[
+      { id: 1, name_: 'foo', yields_: 100 },
+      { id: 2, name_: 'bar', is_selected_: true },
     ]}
-    on_tag_click={() => {}}
-    on_click={() => {}}
-    on_selected_tag_click={() => {}}
-    favicon_host=""
-    menu_slot={<></>}
-    should_dim_visited_links={false}
-    stars={0}
-    updated_at=""
-    bookmark_id={1}
-    density="default"
-    on_tag_delete_click={() => {}}
-    index={0}
-    is_public={true}
-    on_give_point_click={() => {}}
-    created_at={new Date()}
-    library_url=""
-    on_get_points_given_click={() => {}}
-    on_link_click={() => {}}
-    on_link_middle_click={() => {}}
-    on_new_tab_link_click={() => {}}
+    on_tag_click_={() => {}}
+    on_click_={() => {}}
+    on_selected_tag_click_={() => {}}
+    favicon_host_=""
+    menu_slot_={<></>}
+    should_dim_visited_links_={false}
+    stars_={0}
+    updated_at_=""
+    bookmark_id_={1}
+    density_="default"
+    on_tag_delete_click_={() => {}}
+    index_={0}
+    is_public_={true}
+    on_give_point_click_={() => {}}
+    created_at_={new Date()}
+    library_url_=""
+    on_get_points_given_click_={() => {}}
+    on_link_click_={() => {}}
+    on_link_middle_click_={() => {}}
+    on_new_tab_link_click_={() => {}}
   />
 )

@@ -10,160 +10,160 @@ export const Primary = () => (
   <div style={{ display: 'flex', justifyContent: 'center' }}>
     <div style={{ width: 500 }}>
       <LibrarySearch
-        placeholder={'Search in all bookmarks'}
-        search_string={''}
-        hints={undefined}
-        on_click_hint={() => {}}
-        on_click_recent_hint_remove={() => {}}
-        is_loading={false}
-        on_change={() => {}}
-        on_focus={() => {}}
-        on_submit={() => {}}
-        on_blur={() => {}}
-        on_clear_click={() => {}}
-        is_focused={false}
-        is_slash_shortcut_disabled={false}
-        on_click_get_help={() => {}}
-        translations={{
-          footer_tip: 'Lorem ipsum',
-          get_help_link: 'Lorem',
+        placeholder_={'Search in all bookmarks'}
+        search_string_={''}
+        hints_={undefined}
+        on_click_hint_={() => {}}
+        on_click_recent_hint_remove_={() => {}}
+        is_loading_={false}
+        on_change_={() => {}}
+        on_focus_={() => {}}
+        on_submit_={() => {}}
+        on_blur_={() => {}}
+        on_clear_click_={() => {}}
+        is_focused_={false}
+        is_slash_shortcut_disabled_={false}
+        on_click_get_help_={() => {}}
+        translations_={{
+          footer_tip_: 'Lorem ipsum',
+          get_help_link_: 'Lorem',
         }}
       />
       <StorybookSpacer />
       <LibrarySearch
-        placeholder={'Search in all bookmarks'}
-        search_string={'lorem ipsum'}
-        hints={undefined}
-        on_click_hint={() => {}}
-        on_click_recent_hint_remove={() => {}}
-        is_loading={false}
-        on_change={() => {}}
-        on_focus={() => {}}
-        on_submit={() => {}}
-        on_blur={() => {}}
-        on_clear_click={() => {}}
-        results_count={2137}
-        is_focused={false}
-        is_slash_shortcut_disabled={false}
-        on_click_get_help={() => {}}
-        translations={{
-          footer_tip: 'Lorem ipsum',
-          get_help_link: 'Lorem',
+        placeholder_={'Search in all bookmarks'}
+        search_string_={'lorem ipsum'}
+        hints_={undefined}
+        on_click_hint_={() => {}}
+        on_click_recent_hint_remove_={() => {}}
+        is_loading_={false}
+        on_change_={() => {}}
+        on_focus_={() => {}}
+        on_submit_={() => {}}
+        on_blur_={() => {}}
+        on_clear_click_={() => {}}
+        results_count_={2137}
+        is_focused_={false}
+        is_slash_shortcut_disabled_={false}
+        on_click_get_help_={() => {}}
+        translations_={{
+          footer_tip_: 'Lorem ipsum',
+          get_help_link_: 'Lorem',
         }}
       />
       <StorybookSpacer />
       <LibrarySearch
-        placeholder={'Search in all bookmarks'}
-        search_string={'lorem site:lorem.com ipsum site:ipsum.com'}
-        hints={undefined}
-        on_click_hint={() => {}}
-        on_click_recent_hint_remove={() => {}}
-        is_loading={false}
-        on_change={() => {}}
-        on_focus={() => {}}
-        on_submit={() => {}}
-        on_blur={() => {}}
-        on_clear_click={() => {}}
-        results_count={2137}
-        is_focused={false}
-        is_slash_shortcut_disabled={false}
-        on_click_get_help={() => {}}
-        translations={{
-          footer_tip: 'Lorem ipsum',
-          get_help_link: 'Lorem',
+        placeholder_={'Search in all bookmarks'}
+        search_string_={'lorem site:lorem.com ipsum site:ipsum.com'}
+        hints_={undefined}
+        on_click_hint_={() => {}}
+        on_click_recent_hint_remove_={() => {}}
+        is_loading_={false}
+        on_change_={() => {}}
+        on_focus_={() => {}}
+        on_submit_={() => {}}
+        on_blur_={() => {}}
+        on_clear_click_={() => {}}
+        results_count_={2137}
+        is_focused_={false}
+        is_slash_shortcut_disabled_={false}
+        on_click_get_help_={() => {}}
+        translations_={{
+          footer_tip_: 'Lorem ipsum',
+          get_help_link_: 'Lorem',
         }}
       />
       <StorybookSpacer />
       <LibrarySearch
-        placeholder={'Search in all bookmarks'}
-        search_string={'lorem ipsum'}
-        hints={undefined}
-        on_click_hint={() => {}}
-        on_click_recent_hint_remove={() => {}}
-        is_loading={false}
-        on_change={() => {}}
-        on_focus={() => {}}
-        on_submit={() => {}}
-        on_blur={() => {}}
-        on_clear_click={() => {}}
-        results_count={0}
-        is_focused={false}
-        is_slash_shortcut_disabled={false}
-        on_click_get_help={() => {}}
-        translations={{
-          footer_tip: 'Lorem ipsum',
-          get_help_link: 'Lorem',
+        placeholder_={'Search in all bookmarks'}
+        search_string_={'lorem ipsum'}
+        hints_={undefined}
+        on_click_hint_={() => {}}
+        on_click_recent_hint_remove_={() => {}}
+        is_loading_={false}
+        on_change_={() => {}}
+        on_focus_={() => {}}
+        on_submit_={() => {}}
+        on_blur_={() => {}}
+        on_clear_click_={() => {}}
+        results_count_={0}
+        is_focused_={false}
+        is_slash_shortcut_disabled_={false}
+        on_click_get_help_={() => {}}
+        translations_={{
+          footer_tip_: 'Lorem ipsum',
+          get_help_link_: 'Lorem',
         }}
       />
       <StorybookSpacer />
       <LibrarySearch
-        placeholder={'Search in all bookmarks'}
-        search_string={'lorem site:lorem.com ipsum site:ipsum.com'}
-        hints={undefined}
-        on_click_hint={() => {}}
-        on_click_recent_hint_remove={() => {}}
-        is_loading={false}
-        on_change={() => {}}
-        on_focus={() => {}}
-        on_submit={() => {}}
-        on_blur={() => {}}
-        on_clear_click={() => {}}
-        results_count={0}
-        is_focused={false}
-        is_slash_shortcut_disabled={false}
-        on_click_get_help={() => {}}
-        translations={{
-          footer_tip: 'Lorem ipsum',
-          get_help_link: 'Lorem',
+        placeholder_={'Search in all bookmarks'}
+        search_string_={'lorem site:lorem.com ipsum site:ipsum.com'}
+        hints_={undefined}
+        on_click_hint_={() => {}}
+        on_click_recent_hint_remove_={() => {}}
+        is_loading_={false}
+        on_change_={() => {}}
+        on_focus_={() => {}}
+        on_submit_={() => {}}
+        on_blur_={() => {}}
+        on_clear_click_={() => {}}
+        results_count_={0}
+        is_focused_={false}
+        is_slash_shortcut_disabled_={false}
+        on_click_get_help_={() => {}}
+        translations_={{
+          footer_tip_: 'Lorem ipsum',
+          get_help_link_: 'Lorem',
         }}
       />
       <StorybookSpacer />
       <LibrarySearch
-        placeholder={'Search in all bookmarks'}
-        search_string={'xyz'}
-        hints={undefined}
-        on_click_hint={() => {}}
-        on_click_recent_hint_remove={() => {}}
-        is_loading={false}
-        on_change={() => {}}
-        on_focus={() => {}}
-        on_submit={() => {}}
-        on_blur={() => {}}
-        on_clear_click={() => {}}
-        is_focused={false}
-        is_slash_shortcut_disabled={false}
-        on_click_get_help={() => {}}
-        translations={{
-          footer_tip: 'Lorem ipsum',
-          get_help_link: 'Lorem',
+        placeholder_={'Search in all bookmarks'}
+        search_string_={'xyz'}
+        hints_={undefined}
+        on_click_hint_={() => {}}
+        on_click_recent_hint_remove_={() => {}}
+        is_loading_={false}
+        on_change_={() => {}}
+        on_focus_={() => {}}
+        on_submit_={() => {}}
+        on_blur_={() => {}}
+        on_clear_click_={() => {}}
+        is_focused_={false}
+        is_slash_shortcut_disabled_={false}
+        on_click_get_help_={() => {}}
+        translations_={{
+          footer_tip_: 'Lorem ipsum',
+          get_help_link_: 'Lorem',
         }}
       />
       <StorybookSpacer />
       <LibrarySearch
-        placeholder={'Search in all bookmarks'}
-        search_string={''}
-        hints={undefined}
-        on_click_hint={() => {}}
-        on_click_recent_hint_remove={() => {}}
-        is_loading={true}
-        on_change={() => {}}
-        on_focus={() => {}}
-        on_submit={() => {}}
-        on_blur={() => {}}
-        on_clear_click={() => {}}
-        is_focused={false}
-        is_slash_shortcut_disabled={false}
-        on_click_get_help={() => {}}
-        translations={{
-          footer_tip: 'Lorem ipsum',
-          get_help_link: 'Lorem',
+        placeholder_={'Search in all bookmarks'}
+        search_string_={''}
+        hints_={undefined}
+        on_click_hint_={() => {}}
+        on_click_recent_hint_remove_={() => {}}
+        is_loading_={true}
+        on_change_={() => {}}
+        on_focus_={() => {}}
+        on_submit_={() => {}}
+        on_blur_={() => {}}
+        on_clear_click_={() => {}}
+        is_focused_={false}
+        is_slash_shortcut_disabled_={false}
+        on_click_get_help_={() => {}}
+        translations_={{
+          footer_tip_: 'Lorem ipsum',
+          get_help_link_: 'Lorem',
         }}
       />
       <StorybookSpacer />
       <LibrarySearch
-        placeholder={'Search in all bookmarks'}
-        search_string={'mid'}
-        hints={[
+        placeholder_={'Search in all bookmarks'}
+        search_string_={'mid'}
+        hints_={[
           {
             search_string: 'mid',
             completion: 'dle',
@@ -175,43 +175,43 @@ export const Primary = () => (
             type: 'new',
           },
         ]}
-        on_click_hint={() => {}}
-        on_click_recent_hint_remove={() => {}}
-        is_loading={false}
-        on_change={() => {}}
-        on_focus={() => {}}
-        on_submit={() => {}}
-        on_blur={() => {}}
-        on_clear_click={() => {}}
-        is_focused={true}
-        is_slash_shortcut_disabled={false}
-        on_click_get_help={() => {}}
-        translations={{
-          footer_tip: 'Lorem ipsum',
-          get_help_link: 'Lorem',
+        on_click_hint_={() => {}}
+        on_click_recent_hint_remove_={() => {}}
+        is_loading_={false}
+        on_change_={() => {}}
+        on_focus_={() => {}}
+        on_submit_={() => {}}
+        on_blur_={() => {}}
+        on_clear_click_={() => {}}
+        is_focused_={true}
+        is_slash_shortcut_disabled_={false}
+        on_click_get_help_={() => {}}
+        translations_={{
+          footer_tip_: 'Lorem ipsum',
+          get_help_link_: 'Lorem',
         }}
       />
       <StorybookSpacer />
       <StorybookSpacer />
       <StorybookSpacer />
       <LibrarySearch
-        placeholder={'Search in all bookmarks'}
-        search_string={'mid'}
-        hints={[]}
-        on_click_hint={() => {}}
-        on_click_recent_hint_remove={() => {}}
-        is_loading={false}
-        on_change={() => {}}
-        on_focus={() => {}}
-        on_submit={() => {}}
-        on_blur={() => {}}
-        on_clear_click={() => {}}
-        is_focused={true}
-        is_slash_shortcut_disabled={false}
-        on_click_get_help={() => {}}
-        translations={{
-          footer_tip: 'Lorem ipsum',
-          get_help_link: 'Lorem',
+        placeholder_={'Search in all bookmarks'}
+        search_string_={'mid'}
+        hints_={[]}
+        on_click_hint_={() => {}}
+        on_click_recent_hint_remove_={() => {}}
+        is_loading_={false}
+        on_change_={() => {}}
+        on_focus_={() => {}}
+        on_submit_={() => {}}
+        on_blur_={() => {}}
+        on_clear_click_={() => {}}
+        is_focused_={true}
+        is_slash_shortcut_disabled_={false}
+        on_click_get_help_={() => {}}
+        translations_={{
+          footer_tip_: 'Lorem ipsum',
+          get_help_link_: 'Lorem',
         }}
       />
     </div>

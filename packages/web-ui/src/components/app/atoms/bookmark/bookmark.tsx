@@ -44,73 +44,73 @@ export namespace Bookmark {
   export type Highlights = [number, number][]
 
   export type Props = {
-    search_queried_at_timestamp?: number
-    is_search_result?: boolean
-    index: number
-    bookmark_id: number
-    updated_at: string
-    is_public: boolean
-    points?: number
-    points_given?: number
-    title?: string
-    note?: string
-    date: Date
-    created_at: Date
-    density: 'default' | 'compact'
-    is_compact?: boolean
-    library_url: string
-    on_tag_click: (tag_id: number) => void
-    on_tag_delete_click?: (tag_id: number) => void
-    on_tags_order_change?: (tags: Bookmark.Props['tags']) => void
-    on_selected_tag_click: (tag_id: number) => void
-    on_give_point_click: (points: number) => void
-    on_get_points_given_click: () => void
-    tags: {
-      id: number
-      is_public?: boolean
-      name: string
-      yields?: number
-      is_selected?: boolean
+    search_queried_at_timestamp_?: number
+    is_search_result_?: boolean
+    index_: number
+    bookmark_id_: number
+    updated_at_: string
+    is_public_: boolean
+    points_?: number
+    points_given_?: number
+    title_?: string
+    note_?: string
+    date_: Date
+    created_at_: Date
+    density_: 'default' | 'compact'
+    is_compact_?: boolean
+    library_url_: string
+    on_tag_click_: (tag_id: number) => void
+    on_tag_delete_click_?: (tag_id: number) => void
+    on_tags_order_change_?: (tags: Bookmark.Props['tags_']) => void
+    on_selected_tag_click_: (tag_id: number) => void
+    on_give_point_click_: (points: number) => void
+    on_get_points_given_click_: () => void
+    tags_: {
+      id: number // Sortable requires "id", so no mangling here.
+      is_public_?: boolean
+      name_: string
+      yields_?: number
+      is_selected_?: boolean
     }[]
-    search_params?: string
-    on_click: () => void
-    is_unread?: boolean
-    stars: number
-    links: {
-      url: string
-      site_path?: string
-      saves?: number
-      menu_slot: React.ReactNode
-      is_pinned?: boolean
-      via_wayback?: boolean
+    search_params_?: string
+    on_click_: () => void
+    is_unread_?: boolean
+    stars_: number
+    links_: {
+      url_: string
+      site_path_?: string
+      saves_?: number
+      menu_slot_: React.ReactNode
+      is_pinned_?: boolean
+      via_wayback_?: boolean
     }[]
-    on_link_click: (url: string) => void
-    on_link_middle_click: () => void
-    on_new_tab_link_click: (url: string) => void
-    favicon_host: string
-    menu_slot: React.ReactNode
-    highlights?: Highlights
-    highlights_site_variants?: string[]
-    orama_db_id?: string
-    should_dim_visited_links: boolean
-    current_filter?: string // Needs by [use_search/update_searchable_bookmarks].
-    on_tag_drag_start?: (params: {
-      id: number
-      name: string
-      yields: number
+    on_link_click_: (url: string) => void
+    on_link_middle_click_: () => void
+    on_new_tab_link_click_: (url: string) => void
+    favicon_host_: string
+    menu_slot_: React.ReactNode
+    highlights_?: Highlights
+    highlights_site_variants_?: string[]
+    orama_db_id_?: string
+    should_dim_visited_links_: boolean
+    current_filter_?: string // Needs by [use_search/update_searchable_bookmarks].
+    on_tag_drag_start_?: (params: {
+      id_: number
+      name_: string
+      yields_: number
     }) => void
-    dragged_tag?: {
-      id: number
-      name: string
-      yields: number
+    dragged_tag_?: {
+      id_: number
+      name_: string
+      yields_: number
     }
-    on_mouse_up?: () => void
+    on_mouse_up_?: () => void
   }
 }
 
 export const Bookmark: React.FC<Bookmark.Props> = memo(
   function Bookmark(props) {
-    const [tags, set_tags] = useState<Bookmark.Props['tags']>(props.tags)
+    const [tags, set_tags] = useState<Bookmark.Props['tags_']>(props.tags_)
     const [is_points_given_requested, set_is_points_given_requested] =
       useState<boolean>()
     const [points_given, set_points_given] = useState<number>()
@@ -127,7 +127,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               label: 'Delete',
               on_click: () => {
                 if (!context_menu_of_tag_id) return
-                props.on_tag_delete_click!(context_menu_of_tag_id)
+                props.on_tag_delete_click_!(context_menu_of_tag_id)
               },
               other_icon: <Icon variant="DELETE" />,
             },
@@ -137,27 +137,29 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
 
     useUpdateEffect(() => {
-      if (props.points_given !== undefined && points_given === undefined) {
-        if (props.points_given < system_values.bookmark.points.limit_per_user) {
-          props.on_give_point_click(props.points_given + 1)
-          set_points_given(props.points_given + 1)
+      if (props.points_given_ !== undefined && points_given === undefined) {
+        if (
+          props.points_given_ < system_values.bookmark.points.limit_per_user
+        ) {
+          props.on_give_point_click_(props.points_given_ + 1)
+          set_points_given(props.points_given_ + 1)
         } else {
-          set_points_given(props.points_given)
+          set_points_given(props.points_given_)
         }
       }
-    }, [props.points_given])
+    }, [props.points_given_])
 
     useUpdateEffect(() => {
-      set_tags(props.tags)
-    }, [props.updated_at])
+      set_tags(props.tags_)
+    }, [props.updated_at_])
 
     const tags_dom = [
       ...tags.map((tag, i) => {
         const tag_first_char_index_in_search_title = (
-          (props.title ? `${props.title} ` : '') +
-          (props.note ? `${props.note} ` : '') +
-          props.tags
-            .map((tag) => ` ${tag.name}`)
+          (props.title_ ? `${props.title_} ` : '') +
+          (props.note_ ? `${props.note_} ` : '') +
+          props.tags_
+            .map((tag) => ` ${tag.name_}`)
             .slice(0, i)
             .join('')
         ).length
@@ -180,26 +182,26 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
-              if (tag.is_selected) {
-                props.on_selected_tag_click(tag.id)
+              if (tag.is_selected_) {
+                props.on_selected_tag_click_(tag.id)
               } else {
-                props.on_tag_click(tag.id)
+                props.on_tag_click_(tag.id)
               }
             }}
-            href={`${props.library_url}?${search_params.toString()}`}
+            href={`${props.library_url_}?${search_params.toString()}`}
             onMouseDown={(e) => {
               e.stopPropagation()
-              if (!props.on_tag_drag_start) return
-              props.on_tag_drag_start({
-                id: tag.id,
-                name: tag.name,
-                yields: tag.yields || 0,
+              if (!props.on_tag_drag_start_) return
+              props.on_tag_drag_start_({
+                id_: tag.id,
+                name_: tag.name_,
+                yields_: tag.yields_ || 0,
               })
             }}
             onContextMenu={(e) => {
               if ('ontouchstart' in window) {
                 e.preventDefault()
-              } else if (props.on_tag_delete_click) {
+              } else if (props.on_tag_delete_click_) {
                 set_context_menu_of_tag_id(tag.id)
                 onContextMenu(e)
               }
@@ -210,14 +212,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 styles.bookmark__main__tags__tag__name,
                 {
                   [styles['bookmark__main__tags__tag__name--selected']]:
-                    tag.is_selected,
+                    tag.is_selected_,
                 },
               ])}
             >
-              {props.highlights
-                ? tag.name.split('').map((char, i) => {
+              {props.highlights_
+                ? tag.name_.split('').map((char, i) => {
                     const real_i = tag_first_char_index_in_search_title + i
-                    const is_highlighted = props.highlights!.find(
+                    const is_highlighted = props.highlights_!.find(
                       ([index, length]) =>
                         real_i >= index && real_i < index + length,
                     )
@@ -229,14 +231,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                       <span key={i}>{char}</span>
                     )
                   })
-                : tag.name}
+                : tag.name_}
             </span>
-            {!tag.is_selected && tag.yields && (
+            {!tag.is_selected_ && tag.yields_ && (
               <span className={styles.bookmark__main__tags__tag__yields}>
-                {tag.yields}
+                {tag.yields_}
               </span>
             )}
-            {tag.is_selected && (
+            {tag.is_selected_ && (
               <span className={styles.bookmark__main__tags__tag__yields}>
                 ×
               </span>
@@ -244,9 +246,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           </a>
         )
       }),
-      ...(props.dragged_tag &&
-      props.tags.length < system_values.bookmark.tags.limit &&
-      props.tags.findIndex((tag) => tag.id == props.dragged_tag!.id) == -1
+      ...(props.dragged_tag_ &&
+      props.tags_.length < system_values.bookmark.tags.limit &&
+      props.tags_.findIndex((tag) => tag.id == props.dragged_tag_!.id_) == -1
         ? [
             <button
               className={styles.bookmark__main__tags__tag}
@@ -254,10 +256,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               key="candidate"
             >
               <span className={styles.bookmark__main__tags__tag__name}>
-                {props.dragged_tag.name}
+                {props.dragged_tag_.name_}
               </span>
               <span className={styles.bookmark__main__tags__tag__yields}>
-                {props.dragged_tag.yields + 1}
+                {props.dragged_tag_.yields_ + 1}
               </span>
             </button>,
           ]
@@ -266,15 +268,15 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
     const huggs_dom = (
       <div className={styles.bookmark__main__tags__huggs}>
-        {props.is_public && props.points !== undefined && (
+        {props.is_public_ && props.points_ !== undefined && (
           <button
             className={styles.bookmark__main__tags__huggs__amount}
             onClick={() => {}}
           >
-            {props.points}
+            {props.points_}
           </button>
         )}
-        {props.is_public ? (
+        {props.is_public_ ? (
           <button
             className={styles.bookmark__main__tags__huggs__emoji}
             onClick={(e) => {
@@ -307,14 +309,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               }
               if (points_given === undefined) {
                 if (!is_points_given_requested) {
-                  props.on_get_points_given_click()
+                  props.on_get_points_given_click_()
                   set_is_points_given_requested(true)
                 }
                 return
               } else if (
                 points_given < system_values.bookmark.points.limit_per_user
               ) {
-                props.on_give_point_click(points_given + 1)
+                props.on_give_point_click_(points_given + 1)
                 set_points_given(points_given + 1)
               }
             }}
@@ -481,52 +483,52 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       </div>
     )
 
-    const relative_time = dayjs(props.date).fromNow()
+    const relative_time = dayjs(props.date_).fromNow()
 
     const bookmark_date =
       relative_time != ''
         ? relative_time
-        : dayjs(props.date).format('MMM DD, YYYY')
+        : dayjs(props.date_).format('MMM DD, YYYY')
 
     return (
       <div
         className={cn(
           styles.container,
           {
-            [styles['container--clickable']]: props.density == 'compact',
+            [styles['container--clickable']]: props.density_ == 'compact',
           },
           {
-            [styles['container--compact']]: props.density == 'compact',
+            [styles['container--compact']]: props.density_ == 'compact',
           },
 
           {
-            [styles['container--search-result']]: props.is_search_result,
+            [styles['container--search-result']]: props.is_search_result_,
           },
           {
             [styles['container--search-result-clickable']]:
-              props.is_search_result && props.density == 'compact',
+              props.is_search_result_ && props.density_ == 'compact',
           },
         )}
         role="button"
         onClick={() => {
-          if (!is_menu_open && !link_url_menu_opened) props.on_click()
+          if (!is_menu_open && !link_url_menu_opened) props.on_click_()
         }}
         onMouseUp={() => {
           if (
-            props.on_mouse_up &&
-            props.dragged_tag &&
-            !props.tags.find((tag) => tag.name == props.dragged_tag!.name)
+            props.on_mouse_up_ &&
+            props.dragged_tag_ &&
+            !props.tags_.find((tag) => tag.name_ == props.dragged_tag_!.name_)
           ) {
             document.body.classList.remove('adding-tag')
-            props.on_mouse_up()
-            if (props.tags.length < system_values.bookmark.tags.limit) {
+            props.on_mouse_up_()
+            if (props.tags_.length < system_values.bookmark.tags.limit) {
               set_tags([
                 ...tags,
                 {
                   id: 0,
-                  is_public: true,
-                  name: props.dragged_tag.name,
-                  yields: props.dragged_tag.yields + 1,
+                  is_public_: true,
+                  name_: props.dragged_tag_.name_,
+                  yields_: props.dragged_tag_.yields_ + 1,
                 },
               ])
             }
@@ -538,16 +540,16 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           <div
             className={cn(styles.bookmark__main, {
               [styles['bookmark__main--corners-fix']]:
-                !props.links.length || props.is_compact,
+                !props.links_.length || props.is_compact_,
             })}
           >
             <div
               className={cn(styles.bookmark__main__top, {
-                [styles['bookmark__main__top--compact']]: props.is_compact,
+                [styles['bookmark__main__top--compact']]: props.is_compact_,
               })}
             >
               <div className={styles.bookmark__main__top__info}>
-                {props.index + 1} · {bookmark_date}
+                {props.index_ + 1} · {bookmark_date}
               </div>
               <div className={styles.bookmark__main__top__menu}>
                 <OutsideClickHandler
@@ -576,35 +578,35 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                       toggle_is_menu_open()
                     }}
                   >
-                    {props.menu_slot}
+                    {props.menu_slot_}
                   </div>
                 </OutsideClickHandler>
               </div>
             </div>
             <div className={styles.bookmark__main__content}>
               <div className={styles.bookmark__main__content__title}>
-                {props.is_unread && (
+                {props.is_unread_ && (
                   <div
                     className={styles.bookmark__main__content__title__unread}
                   />
                 )}
-                {props.stars >= 1 && (
+                {props.stars_ >= 1 && (
                   <div className={styles.bookmark__main__content__title__stars}>
-                    {[...new Array(props.stars)].map((_, i) => (
+                    {[...new Array(props.stars_)].map((_, i) => (
                       <Icon variant="STAR_FILLED" key={i} />
                     ))}
                   </div>
                 )}
-                {props.title ? (
+                {props.title_ ? (
                   <div
                     className={cn(styles.bookmark__main__content__title__text, {
                       [styles['bookmark__main__content__title__text--unread']]:
-                        props.is_unread,
+                        props.is_unread_,
                     })}
                   >
-                    {props.highlights
-                      ? props.title.split('').map((char, i) => {
-                          const is_highlighted = props.highlights!.find(
+                    {props.highlights_
+                      ? props.title_.split('').map((char, i) => {
+                          const is_highlighted = props.highlights_!.find(
                             ([index, length]) =>
                               i >= index && i < index + length,
                           )
@@ -617,7 +619,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             <span key={i}>{char}</span>
                           )
                         })
-                      : props.title}
+                      : props.title_}
                   </div>
                 ) : (
                   <div
@@ -630,14 +632,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   </div>
                 )}
               </div>
-              {props.note && (
+              {props.note_ && (
                 <div className={styles.bookmark__main__content__note}>
-                  {props.highlights
-                    ? props.note.split('').map((char, i) => {
+                  {props.highlights_
+                    ? props.note_.split('').map((char, i) => {
                         const real_i =
-                          (props.title ? `${props.title} ` : '').length + i
+                          (props.title_ ? `${props.title_} ` : '').length + i
 
-                        const is_highlighted = props.highlights!.find(
+                        const is_highlighted = props.highlights_!.find(
                           ([index, length]) =>
                             real_i >= index && real_i < index + length,
                         )
@@ -649,18 +651,18 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           <span key={i}>{char}</span>
                         )
                       })
-                    : props.note}
+                    : props.note_}
                 </div>
               )}
             </div>
 
-            {props.on_tags_order_change ? (
+            {props.on_tags_order_change_ ? (
               <ReactSortable
                 list={tags}
                 setList={(new_tags) => {
                   if (JSON.stringify(new_tags) == JSON.stringify(tags)) return
                   set_tags(new_tags)
-                  props.on_tags_order_change?.(new_tags)
+                  props.on_tags_order_change_?.(new_tags)
                 }}
                 animation={system_values.sortablejs_animation_duration}
                 forceFallback={true}
@@ -687,26 +689,26 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           </div>
           <div
             className={cn(styles.bookmark__links, {
-              [styles['bookmark__links--compact']]: props.is_compact,
+              [styles['bookmark__links--compact']]: props.is_compact_,
             })}
           >
-            {props.links.map((link, link_idx) => {
-              const url = link.via_wayback
-                ? url_to_wayback({ date: props.created_at, url: link.url })
-                : link.url
+            {props.links_.map((link, link_idx) => {
+              const url = link.via_wayback_
+                ? url_to_wayback({ date: props.created_at_, url: link.url_ })
+                : link.url_
 
               let is_site_highlighted = false
               if (
-                props.highlights_site_variants !== undefined &&
-                props.highlights_site_variants.length
+                props.highlights_site_variants_ !== undefined &&
+                props.highlights_site_variants_.length
               ) {
                 const site =
-                  get_domain_from_url(link.url) +
-                  (link.site_path ? `/${link.site_path}` : '')
+                  get_domain_from_url(link.url_) +
+                  (link.site_path_ ? `/${link.site_path_}` : '')
                 const link_site_variants = get_site_variants_for_search(site)
                 if (
                   link_site_variants.some((site_variant) =>
-                    props.highlights_site_variants!.includes(site_variant),
+                    props.highlights_site_variants_!.includes(site_variant),
                   )
                 ) {
                   is_site_highlighted = true
@@ -714,15 +716,15 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               }
 
               const link_first_char_index_in_search_title = (
-                (props.title ? `${props.title} ` : '') +
-                (props.note ? `${props.note} ` : '') +
-                props.tags.map((tag) => tag.name).join(' ') +
+                (props.title_ ? `${props.title_} ` : '') +
+                (props.note_ ? `${props.note_} ` : '') +
+                props.tags_.map((tag) => tag.name_).join(' ') +
                 ' ' +
-                props.links
+                props.links_
                   .map(
                     (link, i) =>
-                      `${get_domain_from_url(link.url)}${
-                        link.site_path ? ` ${link.site_path}` : ''
+                      `${get_domain_from_url(link.url_)}${
+                        link.site_path_ ? ` ${link.site_path_}` : ''
                       }${i > 0 ? ' ' : ''}`,
                   )
                   .slice(0, link_idx)
@@ -730,7 +732,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               ).length
 
               return (
-                <div className={styles.bookmark__links__item} key={link.url}>
+                <div className={styles.bookmark__links__item} key={link.url_}>
                   <div className={styles.bookmark__links__item__link}>
                     <button
                       className={cn(styles.bookmark__links__item__link__site, {
@@ -743,8 +745,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         alt={'Favicon'}
                         width={16}
                         height={16}
-                        src={`${props.favicon_host}/${get_domain_from_url(
-                          link.url,
+                        src={`${props.favicon_host_}/${get_domain_from_url(
+                          link.url_,
                         )}`}
                       />
                     </button>
@@ -754,37 +756,37 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         {
                           [styles[
                             'bookmark__links__item__link__url--dim-visited'
-                          ]]: props.should_dim_visited_links,
+                          ]]: props.should_dim_visited_links_,
                         },
                         {
                           [styles[
                             'bookmark__links__item__link__url--via-wayback'
-                          ]]: link.via_wayback,
+                          ]]: link.via_wayback_,
                         },
                       )}
                       href={url}
                       onClick={async (e) => {
                         e.stopPropagation()
                         e.preventDefault()
-                        props.on_link_click(url)
+                        props.on_link_click_(url)
                       }}
-                      onAuxClick={props.on_link_middle_click}
+                      onAuxClick={props.on_link_middle_click_}
                     >
                       <span>
-                        {props.highlights
-                          ? `${get_domain_from_url(link.url)} ${
-                              link.site_path ? `› ${link.site_path} ` : ''
+                        {props.highlights_
+                          ? `${get_domain_from_url(link.url_)} ${
+                              link.site_path_ ? `› ${link.site_path_} ` : ''
                             }`
                               .split('')
                               .map((char, i) => {
                                 const real_i =
                                   link_first_char_index_in_search_title +
                                   i -
-                                  (i > get_domain_from_url(link.url).length
+                                  (i > get_domain_from_url(link.url_).length
                                     ? 2
                                     : 0) +
                                   (link_idx > 0 ? 1 : 0)
-                                const is_highlighted = props.highlights!.find(
+                                const is_highlighted = props.highlights_!.find(
                                   ([index, length]) =>
                                     real_i >= index && real_i < index + length,
                                 )
@@ -799,38 +801,38 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                   <span key={i}>{char}</span>
                                 )
                               })
-                          : `${get_domain_from_url(link.url)
+                          : `${get_domain_from_url(link.url_)
                               .split('.')
                               .map((segment) =>
                                 segment.replace(/(.{5})/g, '$1​'),
                               )
                               .join('.')} ${
-                              link.site_path ? `› ${link.site_path}` : ''
+                              link.site_path_ ? `› ${link.site_path_}` : ''
                             }`}
                       </span>
                       <span>
                         {url_path_for_display({
-                          url: link.url,
-                          site_path: link.site_path,
+                          url: link.url_,
+                          site_path: link.site_path_,
                         })}
                       </span>
                     </a>
                   </div>
                   <div className={styles.bookmark__links__item__actions}>
-                    {link.saves !== undefined && link.saves > 0 && (
+                    {link.saves_ !== undefined && link.saves_ > 0 && (
                       <button
                         className={
                           styles['bookmark__links__item__actions__public-saves']
                         }
                       >
-                        {link.saves} {link.saves == 1 ? 'save' : 'saves'}
+                        {link.saves_} {link.saves_ == 1 ? 'save' : 'saves'}
                       </button>
                     )}
                     <button
                       className={styles.bookmark__links__item__actions__open}
                       onClick={async (e) => {
                         e.stopPropagation()
-                        props.on_new_tab_link_click(url)
+                        props.on_new_tab_link_click_(url)
                       }}
                     >
                       <Icon variant="NEW_TAB" />
@@ -839,7 +841,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                       className={styles.bookmark__links__item__actions__menu}
                     >
                       <OutsideClickHandler
-                        disabled={link_url_menu_opened != link.url}
+                        disabled={link_url_menu_opened != link.url_}
                         onOutsideClick={() => {
                           set_link_url_menu_opened(undefined)
                         }}
@@ -850,8 +852,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           }
                           onClick={async (e) => {
                             e.stopPropagation()
-                            link_url_menu_opened != link.url
-                              ? set_link_url_menu_opened(link.url)
+                            link_url_menu_opened != link.url_
+                              ? set_link_url_menu_opened(link.url_)
                               : set_link_url_menu_opened(undefined)
                           }}
                         >
@@ -860,18 +862,18 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         <div
                           className={cn(styles.slot, {
                             [styles['slot--hidden']]:
-                              link_url_menu_opened != link.url,
+                              link_url_menu_opened != link.url_,
                           })}
                           onClick={() => {
                             set_link_url_menu_opened(undefined)
                           }}
                         >
-                          {link.menu_slot}
+                          {link.menu_slot_}
                         </div>
                       </OutsideClickHandler>
                     </div>
                   </div>
-                  {link.is_pinned && (
+                  {link.is_pinned_ && (
                     <div className={styles.bookmark__links__item__pinned}>
                       <Icon variant="PIN" />
                     </div>
@@ -885,17 +887,17 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
   },
   (o, n) =>
-    o.updated_at == n.updated_at &&
-    o.search_queried_at_timestamp == n.search_queried_at_timestamp &&
-    o.is_search_result == n.is_search_result &&
-    o.points == n.points &&
-    o.points_given == n.points_given &&
-    o.is_compact == n.is_compact &&
-    o.density == n.density &&
-    o.orama_db_id == n.orama_db_id &&
-    o.current_filter == n.current_filter &&
-    o.dragged_tag?.id == n.dragged_tag?.id &&
-    o.highlights == n.highlights,
+    o.updated_at_ == n.updated_at_ &&
+    o.search_queried_at_timestamp_ == n.search_queried_at_timestamp_ &&
+    o.is_search_result_ == n.is_search_result_ &&
+    o.points_ == n.points_ &&
+    o.points_given_ == n.points_given_ &&
+    o.is_compact_ == n.is_compact_ &&
+    o.density_ == n.density_ &&
+    o.orama_db_id_ == n.orama_db_id_ &&
+    o.current_filter_ == n.current_filter_ &&
+    o.dragged_tag_?.id_ == n.dragged_tag_?.id_ &&
+    o.highlights_ == n.highlights_,
 )
 
 function url_path_for_display(params: {

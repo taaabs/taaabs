@@ -1,19 +1,19 @@
 export type UpsertBookmark_Params = {
-  bookmark_id?: number
-  is_public: boolean
-  created_at?: Date
-  title?: string
-  note?: string
-  is_archived: boolean
-  is_unread: boolean
-  stars?: number
-  tags: { name: string; is_public?: boolean }[]
-  links: {
-    url: string
-    site_path?: string
-    is_public: boolean
-    is_pinned?: boolean
-    pin_title?: string
-    via_wayback?: boolean
+  bookmark_id_?: number
+  is_public_: boolean
+  created_at_?: Date
+  title_?: string
+  note_?: string
+  is_archived_: boolean
+  is_unread_: boolean
+  stars_?: number
+  tags_: { name_: string; is_public_?: boolean }[]
+  links_: {
+    url_: string
+    site_path_?: string
+    is_public_: boolean
+    is_pinned_?: boolean
+    pin_title_?: string
+    via_wayback_?: boolean
   }[]
 }

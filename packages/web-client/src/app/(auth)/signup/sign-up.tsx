@@ -88,7 +88,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
               control={control}
               defaultValue=""
               rules={{
-                required: { value: true, message: "Field can't be empty" },
+                required: { value: true, message: "Field can't be empty." },
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                   message: 'Entered email is invalid',
@@ -111,7 +111,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                     message={
                       error_message
                         ? error_message
-                        : "You'll use your email address to log in"
+                        : "You'll use your email address to log in."
                     }
                     additional_properties={{
                       type: 'email',
@@ -127,14 +127,14 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
               control={control}
               defaultValue=""
               rules={{
-                required: { value: true, message: "Field can't be empty" },
+                required: { value: true, message: "Field can't be empty." },
                 maxLength: {
                   value: system_values.username_max_length,
-                  message: `Username exceeds ${system_values.username_max_length}-character limit`,
+                  message: `Username exceeds ${system_values.username_max_length}-character limit.`,
                 },
                 minLength: {
                   value: system_values.username_min_length,
-                  message: `Username must have at least ${system_values.username_min_length} characters`,
+                  message: `Username must have at least ${system_values.username_min_length} characters.`,
                 },
               }}
               render={({ field }) => {
@@ -160,7 +160,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                           <strong>{field.value}</strong>
                         </span>
                       ) : (
-                        'Username determines your public profile URL'
+                        'Username determines your public profile URL.'
                       )
                     }
                   />
@@ -180,7 +180,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                 },
                 minLength: {
                   value: system_values.password_min_length,
-                  message: `Password must be at least ${system_values.password_min_length}-character long`,
+                  message: `Password must be at least ${system_values.password_min_length}-character long.`,
                 },
               }}
               render={({ field }) => {
@@ -228,7 +228,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                 },
                 validate: (value, { password }) =>
                   value != password
-                    ? 'Password confirmation does not match'
+                    ? 'Password confirmation does not match.'
                     : undefined,
               }}
               render={({ field }) => {
@@ -262,7 +262,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
               rules={{
                 max: {
                   value: system_values.password_hint_max_length,
-                  message: `Given hint exceeds ${system_values.password_hint_max_length}-character limit`,
+                  message: `Given hint exceeds ${system_values.password_hint_max_length}-character limit.`,
                 },
               }}
               render={({ field }) => {
@@ -282,7 +282,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                     message={
                       error_message
                         ? error_message
-                        : 'A password hint can help you remember your password if you forget it'
+                        : 'A password hint can help you remember your password if you forget it.'
                     }
                     additional_properties={{
                       type: 'password',

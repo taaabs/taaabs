@@ -9,14 +9,14 @@ export namespace Tags {
   }
 
   export type Props = {
-    library_updated_at_timestamp?: number
-    tags: Tag[]
-    on_click: (tag: number) => void
-    library_url: string
-    on_tag_drag_start?: (params: {
-      id: number
-      name: string
-      yields: number
+    library_updated_at_timestamp_?: number
+    tags_: Tag[]
+    on_click_: (tag: number) => void
+    library_url_: string
+    on_tag_drag_start_?: (params: {
+      id_: number
+      name_: string
+      yields_: number
     }) => void
   }
 }
@@ -26,7 +26,7 @@ export const Tags: React.FC<Tags.Props> = memo(
     const first_chars_processed: string[] = []
 
     const new_tags_grouped: Tags.Tag[][] = []
-    props.tags.map((tag) => {
+    props.tags_.map((tag) => {
       const current_tag_first_char = tag.name.substring(0, 1)
       const idx = first_chars_processed.findIndex(
         (first_char) => first_char == current_tag_first_char,
@@ -68,15 +68,15 @@ export const Tags: React.FC<Tags.Props> = memo(
                       className={styles.tag}
                       onClick={(e) => {
                         e.preventDefault()
-                        props.on_click(tag.id)
+                        props.on_click_(tag.id)
                       }}
-                      href={`${props.library_url}?${search_params.toString()}`}
+                      href={`${props.library_url_}?${search_params.toString()}`}
                       onMouseDown={() => {
-                        if (!props.on_tag_drag_start) return
-                        props.on_tag_drag_start({
-                          id: tag.id,
-                          name: tag.name,
-                          yields: tag.yields,
+                        if (!props.on_tag_drag_start_) return
+                        props.on_tag_drag_start_({
+                          id_: tag.id,
+                          name_: tag.name,
+                          yields_: tag.yields,
                         })
                       }}
                       draggable={false}

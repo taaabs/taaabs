@@ -17,21 +17,21 @@ export namespace TagHierarchies {
     children: Node[]
   }
   export type Props = {
-    library_updated_at_timestamp?: number
-    tree?: Node[]
-    on_update: (tags: Node[]) => void
-    on_item_click: (hierarchy_ids: number[]) => void
-    selected_tag_ids: number[]
-    is_updating?: boolean
-    dragged_tag?: { id: number; name: string }
-    is_draggable?: boolean
-    all_bookmarks_yields?: number
-    is_all_bookmarks_selected: boolean
-    on_click_all_bookmarks: () => void
-    library_url: string
-    translations: {
-      drag_here: string
-      all_bookmarks: string
+    library_updated_at_timestamp_?: number
+    tree_?: Node[]
+    on_update_: (tags: Node[]) => void
+    on_item_click_: (hierarchy_ids: number[]) => void
+    selected_tag_ids_: number[]
+    is_updating_?: boolean
+    dragged_tag_?: { id_: number; name_: string }
+    is_draggable_?: boolean
+    all_bookmarks_yields_?: number
+    is_all_bookmarks_selected_: boolean
+    on_click_all_bookmarks_: () => void
+    library_url_: string
+    translations_: {
+      drag_here_: string
+      all_bookmarks_: string
     }
   }
 }
@@ -82,21 +82,21 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
 
     useUpdateEffect(() => {
       if (
-        JSON.stringify(props.selected_tag_ids) !=
+        JSON.stringify(props.selected_tag_ids_) !=
         JSON.stringify(selected_tag_ids)
       ) {
         clear_selected_tag_ids()
       }
-    }, [props.selected_tag_ids])
+    }, [props.selected_tag_ids_])
 
     useEffect(() => {
-      if (!props.tree) return
+      if (!props.tree_) return
       set_items(
-        props.tree.map((node) =>
+        props.tree_.map((node) =>
           tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
         ),
       )
-    }, [props.tree])
+    }, [props.tree_])
 
     const render_tag = ({
       item,
@@ -123,7 +123,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             })}
             onClick={(e) => {
               e.preventDefault()
-              props.on_item_click((item as Item).hierarchy_tag_ids)
+              props.on_item_click_((item as Item).hierarchy_tag_ids)
               // Calling before timeout fixes issue when selecting tag after changing filter.
               // TODO: Investigate root cause.
               set_selected_tag_ids((item as Item).hierarchy_tag_ids)
@@ -132,9 +132,9 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               }, 0)
               clear_mouseover_ids()
             }}
-            href={`${props.library_url}?${search_params.toString()}`}
+            href={`${props.library_url_}?${search_params.toString()}`}
             onMouseEnter={() => {
-              if (props.dragged_tag) {
+              if (props.dragged_tag_) {
                 document.body.classList.add('adding-tag')
               }
               if (!is_dragging) set_mouseover_ids((item as Item).hierarchy_ids)
@@ -143,13 +143,13 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               set_is_dragging(true)
             }}
             onMouseUp={() => {
-              if (props.dragged_tag) {
+              if (props.dragged_tag_) {
                 document.body.classList.remove('adding-tag')
               }
               setTimeout(() => {
                 set_is_dragging(false)
               }, 0)
-              if (props.dragged_tag) {
+              if (props.dragged_tag_) {
                 if (
                   (item as Item).hierarchy_ids.length >=
                   system_values.library.max_selected_tags
@@ -166,13 +166,13 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                       children: [
                         {
                           id,
-                          text: props.dragged_tag!.name,
-                          tag_id: props.dragged_tag!.id,
+                          text: props.dragged_tag_!.name_,
+                          tag_id: props.dragged_tag_!.id_,
                           children: [],
                           hierarchy_ids: [...(item as Item).hierarchy_ids, id],
                           hierarchy_tag_ids: [
                             ...(item as Item).hierarchy_tag_ids,
-                            props.dragged_tag!.id,
+                            props.dragged_tag_!.id_,
                           ],
                         },
                         ...item.children,
@@ -196,7 +196,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               }
             }}
             onMouseLeave={() => {
-              if (props.dragged_tag) {
+              if (props.dragged_tag_) {
                 document.body.classList.remove('adding-tag')
               }
               if (!is_dragging) {
@@ -210,7 +210,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           >
             <div>
               <span>{(item as Item).text}</span>
-              {!props.is_updating && (
+              {!props.is_updating_ && (
                 <span>
                   {(item as Item).yields !== undefined
                     ? (item as Item).yields
@@ -309,7 +309,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
         ),
       )
-      props.on_update(new_tree)
+      props.on_update_(new_tree)
     }
 
     const delete_item = (params: { item_id: number }) => {
@@ -322,38 +322,38 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
 
       const new_tree = filter_items(items, params.item_id)
       set_items(new_tree)
-      props.on_update(new_tree.map((item) => item_to_tag(item)))
+      props.on_update_(new_tree.map((item) => item_to_tag(item)))
     }
 
     return (
       <div
         className={styles.container}
-        style={{ pointerEvents: props.is_updating ? 'none' : undefined }}
+        style={{ pointerEvents: props.is_updating_ ? 'none' : undefined }}
       >
         <button
           className={cn(styles.tag__button, styles['tag__button--all'], {
-            [styles['tag__button--active']]: props.is_all_bookmarks_selected,
+            [styles['tag__button--active']]: props.is_all_bookmarks_selected_,
           })}
-          onClick={props.on_click_all_bookmarks}
+          onClick={props.on_click_all_bookmarks_}
           onMouseEnter={() => {
-            if (props.dragged_tag) {
+            if (props.dragged_tag_) {
               document.body.classList.add('adding-tag')
             }
           }}
           onMouseLeave={() => {
-            if (props.dragged_tag) {
+            if (props.dragged_tag_) {
               document.body.classList.remove('adding-tag')
             }
           }}
           onMouseUp={() => {
-            if (!props.tree || !props.dragged_tag) return
+            if (!props.tree_ || !props.dragged_tag_) return
             document.body.classList.remove('adding-tag')
             update_items({
               items: [
                 tag_to_item({
                   node: {
-                    id: props.dragged_tag.id,
-                    name: props.dragged_tag.name,
+                    id: props.dragged_tag_.id_,
+                    name: props.dragged_tag_.name_,
                     children: [],
                   },
                   hierarchy_ids: [],
@@ -365,8 +365,8 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           }}
         >
           <div>
-            <span>{props.translations.all_bookmarks}</span>
-            <span>{props.all_bookmarks_yields}</span>
+            <span>{props.translations_.all_bookmarks_}</span>
+            <span>{props.all_bookmarks_yields_}</span>
           </div>
         </button>
         <Nestable
@@ -378,7 +378,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             set_is_dragging(false)
           }}
           maxDepth={5}
-          disableDrag={!props.is_draggable}
+          disableDrag={!props.is_draggable_}
           renderCollapseIcon={({ isCollapsed }) =>
             render_collapse_icon({ is_collapsed: isCollapsed })
           }
@@ -386,27 +386,27 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           // deeper in the tree if there is a problem higher up.
           // confirmChange={}
         />
-        {props.is_draggable && (
+        {props.is_draggable_ && (
           <div
             className={cn(
               styles['drop-zone'],
               {
-                [styles['drop-zone--active']]: props.dragged_tag,
+                [styles['drop-zone--active']]: props.dragged_tag_,
               },
               {
                 [styles['drop-zone--slim']]: items.length,
               },
             )}
             onMouseUp={() => {
-              if (!props.tree || !props.dragged_tag) return
+              if (!props.tree_ || !props.dragged_tag_) return
               document.body.classList.remove('adding-tag')
               update_items({
                 items: [
                   ...items,
                   tag_to_item({
                     node: {
-                      id: props.dragged_tag.id,
-                      name: props.dragged_tag.name,
+                      id: props.dragged_tag_.id_,
+                      name: props.dragged_tag_.name_,
                       children: [],
                     },
                     hierarchy_ids: [],
@@ -416,17 +416,17 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               })
             }}
             onMouseEnter={() => {
-              if (props.dragged_tag) {
+              if (props.dragged_tag_) {
                 document.body.classList.add('adding-tag')
               }
             }}
             onMouseLeave={() => {
-              if (props.dragged_tag) {
+              if (props.dragged_tag_) {
                 document.body.classList.remove('adding-tag')
               }
             }}
           >
-            {!items.length && props.translations.drag_here}
+            {!items.length && props.translations_.drag_here_}
           </div>
         )}
         {contextMenu}
@@ -434,10 +434,10 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     )
   },
   (o, n) =>
-    o.library_updated_at_timestamp == n.library_updated_at_timestamp &&
-    o.is_all_bookmarks_selected == n.is_all_bookmarks_selected &&
-    o.is_updating == n.is_updating &&
-    o.dragged_tag == n.dragged_tag,
+    o.library_updated_at_timestamp_ == n.library_updated_at_timestamp_ &&
+    o.is_all_bookmarks_selected_ == n.is_all_bookmarks_selected_ &&
+    o.is_updating_ == n.is_updating_ &&
+    o.dragged_tag_ == n.dragged_tag_,
 )
 
 const tag_to_item = (params: {

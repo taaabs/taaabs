@@ -15,27 +15,27 @@ export namespace LibrarySearch {
     search_string: string
   }
   export type Props = {
-    placeholder: string
-    search_string: string
-    is_loading: boolean
-    is_focused: boolean
-    loading_progress_percentage?: number
-    on_focus: () => void
-    on_blur: () => void
-    on_change: (value: string) => void
-    on_submit: () => void
-    on_click_hint: (index: number) => void
-    on_click_recent_hint_remove: (index: number) => void
-    on_clear_click: () => void
-    hints?: Hint[]
-    hints_set_at_timestamp?: number
-    queried_at_timestamp?: number
-    results_count?: number
-    is_slash_shortcut_disabled: boolean
-    on_click_get_help: () => void
-    translations: {
-      footer_tip: string
-      get_help_link: string
+    placeholder_: string
+    search_string_: string
+    is_loading_: boolean
+    is_focused_: boolean
+    loading_progress_percentage_?: number
+    on_focus_: () => void
+    on_blur_: () => void
+    on_change_: (value: string) => void
+    on_submit_: () => void
+    on_click_hint_: (index: number) => void
+    on_click_recent_hint_remove_: (index: number) => void
+    on_clear_click_: () => void
+    hints_?: Hint[]
+    hints_set_at_timestamp_?: number
+    queried_at_timestamp_?: number
+    results_count_?: number
+    is_slash_shortcut_disabled_: boolean
+    on_click_get_help_: () => void
+    translations_: {
+      footer_tip_: string
+      get_help_link_: string
     }
   }
 }
@@ -51,65 +51,65 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
 
     useUpdateEffect(() => {
       set_sizer_width(sizer.current?.getBoundingClientRect().width || 0)
-    }, [props.search_string])
+    }, [props.search_string_])
 
     useEffect(() => {
-      set_is_focused_fix(props.is_focused)
-      if (props.is_focused) {
+      set_is_focused_fix(props.is_focused_)
+      if (props.is_focused_) {
         input.current?.focus()
       }
-    }, [props.is_focused])
+    }, [props.is_focused_])
 
     const handle_keyboard = (event: any) => {
-      if (props.is_loading) return
+      if (props.is_loading_) return
 
-      if (event.code == 'Escape' && props.is_focused) {
+      if (event.code == 'Escape' && props.is_focused_) {
         input.current?.blur()
       } else if (
         event.code == 'Slash' &&
-        !props.is_focused &&
-        !props.is_slash_shortcut_disabled
+        !props.is_focused_ &&
+        !props.is_slash_shortcut_disabled_
       ) {
         event.preventDefault()
         input.current?.focus()
       } else if (event.code == 'Tab') {
-        if (props.hints) {
+        if (props.hints_) {
           event.preventDefault()
           if (
-            props.hints[selected_hint_index == -1 ? 0 : selected_hint_index]
+            props.hints_[selected_hint_index == -1 ? 0 : selected_hint_index]
           ) {
-            props.on_change(
-              props.search_string +
-                props.hints[selected_hint_index == -1 ? 0 : selected_hint_index]
+            props.on_change_(
+              props.search_string_ +
+                props.hints_[selected_hint_index == -1 ? 0 : selected_hint_index]
                   .completion +
                 ' ',
             )
           } else {
-            props.on_change(props.search_string + ' ')
+            props.on_change_(props.search_string_ + ' ')
           }
         }
       } else if (event.code == 'ArrowDown') {
-        if (props.hints) {
+        if (props.hints_) {
           event.preventDefault()
           set_selected_hint_index(
-            props.hints.length == selected_hint_index + 1
+            props.hints_.length == selected_hint_index + 1
               ? 0
               : selected_hint_index + 1,
           )
         }
       } else if (event.code == 'ArrowUp') {
-        if (props.hints) {
+        if (props.hints_) {
           event.preventDefault()
           set_selected_hint_index(
             selected_hint_index == 0 || selected_hint_index == -1
-              ? props.hints.length - 1
+              ? props.hints_.length - 1
               : selected_hint_index - 1,
           )
         }
       } else if (event.code == 'Enter') {
-        if (props.hints && selected_hint_index != -1) {
-          props.on_change(
-            props.search_string + props.hints[selected_hint_index].completion,
+        if (props.hints_ && selected_hint_index != -1) {
+          props.on_change_(
+            props.search_string_ + props.hints_[selected_hint_index].completion,
           )
         }
       }
@@ -122,45 +122,45 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
         window.removeEventListener('keydown', handle_keyboard)
       }
     }, [
-      props.hints,
+      props.hints_,
       selected_hint_index,
-      props.is_focused,
-      props.is_slash_shortcut_disabled,
-      props.is_loading,
+      props.is_focused_,
+      props.is_slash_shortcut_disabled_,
+      props.is_loading_,
     ])
 
     useUpdateEffect(() => {
       set_selected_hint_index(-1)
-    }, [props.hints])
+    }, [props.hints_])
 
     return is_hydrated ? (
       <div
         className={styles.container}
-        style={{ pointerEvents: props.is_loading ? 'none' : undefined }}
+        style={{ pointerEvents: props.is_loading_ ? 'none' : undefined }}
       >
-        <OutsideClickHandler onOutsideClick={props.on_blur}>
+        <OutsideClickHandler onOutsideClick={props.on_blur_}>
           <div
             className={cn(
               styles.box,
-              { [styles['box--yields-no-results']]: props.results_count == 0 },
-              { [styles['box--focus']]: props.is_focused },
+              { [styles['box--yields-no-results']]: props.results_count_ == 0 },
+              { [styles['box--focus']]: props.is_focused_ },
               {
                 [styles['box--focus-yields-no-results']]:
-                  props.is_focused && props.results_count == 0,
+                  props.is_focused_ && props.results_count_ == 0,
               },
             )}
           >
             <button
               className={styles['box__left-side']}
               onClick={() => {
-                if (!props.is_focused) {
+                if (!props.is_focused_) {
                   input.current?.focus()
                   input.current!.value = ''
-                  input.current!.value = props.search_string
+                  input.current!.value = props.search_string_
                 }
               }}
             >
-              {props.is_loading ? (
+              {props.is_loading_ ? (
                 <div className={styles.box__loader} />
               ) : (
                 <Icon variant="SEARCH" />
@@ -170,17 +170,17 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
               className={styles.box__form}
               onSubmit={(e) => {
                 e.preventDefault()
-                props.on_submit()
+                props.on_submit_()
                 input.current?.blur()
-                props.on_blur()
+                props.on_blur_()
                 set_is_focused_fix(false)
               }}
               onClick={() => {
-                if (!props.is_focused) {
+                if (!props.is_focused_) {
                   input.current?.focus()
                   input.current?.focus()
                   input.current!.value = ''
-                  input.current!.value = props.search_string
+                  input.current!.value = props.search_string_
                 }
               }}
             >
@@ -189,13 +189,13 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                   className={cn(styles['box__form__content__styled-value'], {
                     [styles[
                       'box__form__content__styled-value--yields-no-results'
-                    ]]: props.results_count == 0,
+                    ]]: props.results_count_ == 0,
                   })}
                 >
                   {/* /(?=site:)(.*?)($|\s)/ */}
                   {/* 'lorem site:abc.com site:abc.com ipsum' */}
                   {/* ["lorem ", "site:abc.com", " ", "site:abc.com", " ipsum"] */}
-                  {props.search_string
+                  {props.search_string_
                     .split(/(?=site:)(.*?)($|\s)/)
                     .map((str, i) => {
                       if (str.substring(0, 5) == 'site:') {
@@ -218,7 +218,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                                 {
                                   [styles[
                                     'box__form__content__styled-value__highlight--no-results'
-                                  ]]: props.results_count == 0,
+                                  ]]: props.results_count_ == 0,
                                 },
                               )}
                             >
@@ -230,8 +230,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                         return <span key={i}>{str}</span>
                       }
                     })}
-                  {(props.search_string || selected_hint_index != -1) &&
-                    props.hints &&
+                  {(props.search_string_ || selected_hint_index != -1) &&
+                    props.hints_ &&
                     is_focused_fix && (
                       <>
                         <span
@@ -242,14 +242,14 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                           }
                         >
                           {
-                            props.hints[
+                            props.hints_[
                               selected_hint_index == -1
                                 ? 0
                                 : selected_hint_index
                             ]?.completion
                           }
                         </span>
-                        {props.hints.length > 0 && (
+                        {props.hints_.length > 0 && (
                           <span className={styles['box__form__keycap']}>
                             tab
                           </span>
@@ -259,41 +259,41 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                 </div>
                 <div>
                   <div className={styles.box__form__content__sizer} ref={sizer}>
-                    {props.search_string}
+                    {props.search_string_}
                   </div>
                   <input
                     ref={input}
-                    value={props.search_string}
+                    value={props.search_string_}
                     style={{
-                      pointerEvents: !props.is_focused ? 'none' : undefined,
+                      pointerEvents: !props.is_focused_ ? 'none' : undefined,
                       width: sizer_width > 250 ? `${sizer_width}px` : undefined,
                     }}
                     placeholder={
-                      props.is_loading
+                      props.is_loading_
                         ? `One moment please... ${
-                            props.loading_progress_percentage
-                              ? props.loading_progress_percentage + '%'
+                            props.loading_progress_percentage_
+                              ? props.loading_progress_percentage_ + '%'
                               : ''
                           }`
                         : selected_hint_index != -1
                         ? undefined
-                        : props.placeholder
+                        : props.placeholder_
                     }
                     onBlur={(e) => {
                       if (
                         e.relatedTarget?.className != styles.hints__list__item
                       ) {
-                        props.on_blur()
+                        props.on_blur_()
                       }
                     }}
                     onFocus={() => {
-                      if (!props.is_focused) {
-                        props.on_focus()
+                      if (!props.is_focused_) {
+                        props.on_focus_()
                       }
                     }}
                     onChange={(e) => {
                       if (!e.target.value.endsWith('  ')) {
-                        props.on_change(e.target.value)
+                        props.on_change_(e.target.value)
                       }
                     }}
                   />
@@ -301,40 +301,40 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
               </div>
             </form>
             <div className={styles['box__right-side']}>
-              {props.search_string ? (
+              {props.search_string_ ? (
                 <>
-                  {props.results_count !== undefined && (
+                  {props.results_count_ !== undefined && (
                     <div
                       className={cn(styles['box__right-side__results-count'], {
                         [styles[
                           'box__right-side__results-count--yields-no-results'
-                        ]]: props.results_count == 0,
+                        ]]: props.results_count_ == 0,
                       })}
                     >
-                      {props.results_count == 0
+                      {props.results_count_ == 0
                         ? 'No'
-                        : props.results_count ==
+                        : props.results_count_ ==
                           system_values.max_library_search_results
                         ? `${system_values.max_library_search_results}+`
-                        : props.results_count}{' '}
-                      {props.results_count == 1 ? 'result' : 'results'}
+                        : props.results_count_}{' '}
+                      {props.results_count_ == 1 ? 'result' : 'results'}
                     </div>
                   )}
                   <button
                     className={cn(styles['box__right-side__clear'], {
                       [styles['box__right-side__clear--yields-no-results']]:
-                        props.results_count == 0,
+                        props.results_count_ == 0,
                     })}
                     onClick={() => {
                       set_is_focused_fix(false)
-                      props.on_clear_click()
+                      props.on_clear_click_()
                     }}
                   >
                     <Icon variant="ADD" />
                   </button>
                 </>
               ) : (
-                !props.is_focused && (
+                !props.is_focused_ && (
                   <div className={styles['box__right-side__press_key']}>
                     Type <div className={styles.box__form__keycap}>/</div> to
                     search
@@ -345,15 +345,15 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
           </div>
           <div
             className={cn(styles.hints, {
-              [styles['hints--hidden']]: !(props.hints && is_focused_fix),
+              [styles['hints--hidden']]: !(props.hints_ && is_focused_fix),
             })}
           >
-            {props.hints && props.hints.length > 0 && is_focused_fix && (
+            {props.hints_ && props.hints_.length > 0 && is_focused_fix && (
               <div className={styles.hints__list}>
-                {props.hints.map((hint, i) => (
+                {props.hints_.map((hint, i) => (
                   <button
                     key={
-                      props.search_string +
+                      props.search_string_ +
                       (hint.completion ? hint.completion : '') +
                       hint.type
                     }
@@ -362,9 +362,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                         selected_hint_index == i,
                     })}
                     onClick={() => {
-                      props.on_click_hint(i)
+                      props.on_click_hint_(i)
                       set_is_focused_fix(false)
-                      props.on_blur()
+                      props.on_blur_()
                     }}
                   >
                     <div className={styles.hints__list__item__icon}>
@@ -394,7 +394,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                         className={styles.hints__list__item__remove}
                         onClick={(e) => {
                           e.stopPropagation()
-                          props.on_click_recent_hint_remove(i)
+                          props.on_click_recent_hint_remove_(i)
                         }}
                         role="button"
                       >
@@ -406,9 +406,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
               </div>
             )}
             <div className={styles.hints__footer}>
-              <span>{props.translations.footer_tip}</span>
-              <button onClick={props.on_click_get_help}>
-                {props.translations.get_help_link}
+              <span>{props.translations_.footer_tip_}</span>
+              <button onClick={props.on_click_get_help_}>
+                {props.translations_.get_help_link_}
               </button>
             </div>
           </div>
@@ -421,18 +421,18 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
     )
   },
   (o, n) =>
-    o.is_loading == n.is_loading &&
-    o.is_focused == n.is_focused &&
-    o.search_string == n.search_string &&
-    o.loading_progress_percentage == n.loading_progress_percentage &&
-    o.placeholder == n.placeholder &&
-    o.results_count == n.results_count &&
-    o.on_focus == n.on_focus &&
-    o.on_blur == n.on_blur &&
-    o.on_change == n.on_change &&
-    o.on_clear_click == n.on_clear_click &&
-    o.on_click_hint == n.on_click_hint &&
-    o.on_click_recent_hint_remove == n.on_click_recent_hint_remove &&
-    o.hints_set_at_timestamp == n.hints_set_at_timestamp &&
-    o.queried_at_timestamp == n.queried_at_timestamp,
+    o.is_loading_ == n.is_loading_ &&
+    o.is_focused_ == n.is_focused_ &&
+    o.search_string_ == n.search_string_ &&
+    o.loading_progress_percentage_ == n.loading_progress_percentage_ &&
+    o.placeholder_ == n.placeholder_ &&
+    o.results_count_ == n.results_count_ &&
+    o.on_focus_ == n.on_focus_ &&
+    o.on_blur_ == n.on_blur_ &&
+    o.on_change_ == n.on_change_ &&
+    o.on_clear_click_ == n.on_clear_click_ &&
+    o.on_click_hint_ == n.on_click_hint_ &&
+    o.on_click_recent_hint_remove_ == n.on_click_recent_hint_remove_ &&
+    o.hints_set_at_timestamp_ == n.hints_set_at_timestamp_ &&
+    o.queried_at_timestamp_ == n.queried_at_timestamp_,
 )
