@@ -184,7 +184,7 @@ export const use_search = () => {
       ? db_updated_at_timestamp
       : archived_db_updated_at_timestamp
 
-    const cached_updated_at =
+    const cached_at =
       (await localforage.getItem<number>(
         !username
           ? !params.is_archived
@@ -226,8 +226,8 @@ export const use_search = () => {
       : (remote_updated_at = result.archived_updated_at!.getTime())
 
     if (
-      (instance_updated_at && instance_updated_at > remote_updated_at) ||
-      (cached_updated_at && cached_updated_at > remote_updated_at)
+      (instance_updated_at && instance_updated_at >= remote_updated_at) ||
+      (cached_at && cached_at >= remote_updated_at)
     ) {
       return DbStalenessState.FRESH
     } else {
@@ -1325,7 +1325,9 @@ export const use_search = () => {
       }
       set_bookmarks_just_tags(new_bookmarks_just_tags)
       set_search_data_awaits_caching(true)
-      set_db_updated_at_timestamp(Date.now())
+      set_db_updated_at_timestamp(
+        new Date(params.bookmark.updated_at).getTime(),
+      )
     } else {
       const new_archived_bookmarks_just_tags =
         params.bookmarks_just_tags.filter(
@@ -1339,7 +1341,9 @@ export const use_search = () => {
       }
       set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
       set_archived_search_data_awaits_caching(true)
-      set_archived_db_updated_at_timestamp(Date.now())
+      set_archived_db_updated_at_timestamp(
+        new Date(params.bookmark.updated_at).getTime(),
+      )
     }
     if (result?.hits.length) {
       await query_db({
