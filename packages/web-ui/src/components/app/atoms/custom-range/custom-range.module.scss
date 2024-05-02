@@ -89,7 +89,7 @@
     @include transition-150ms(background-color);
     border-radius: var(--border-radius-999px);
     @include hover {
-      background: var(--neutral100);
+      background: var(--neutral200);
     }
     svg {
       width: var(--icon-dimension-16px);

@@ -13,8 +13,10 @@ export namespace Input {
     is_disabled?: boolean
     autofocus?: boolean
     lines?: number
+    is_note?: boolean
     on_focus?: () => void
     on_blur?: () => void
+    additional_properties?: any
   }
 }
 
@@ -31,6 +33,7 @@ export const Input: React.FC<Input.Props> = ({
             styles.textarea,
             { [styles['field--error']]: message_type == 'error' },
             { [styles['field--disabled']]: props.is_disabled },
+            { [styles['field--note']]: props.is_note },
           ])}
           onChange={(e) => props.on_change(e.target.value)}
           value={props.value}
@@ -45,6 +48,7 @@ export const Input: React.FC<Input.Props> = ({
             styles.input,
             { [styles['field--error']]: message_type == 'error' },
             { [styles['field--disabled']]: props.is_disabled },
+            { [styles['field--note']]: props.is_note },
           ])}
           onChange={(e) => props.on_change(e.target.value)}
           value={props.value}
@@ -52,6 +56,7 @@ export const Input: React.FC<Input.Props> = ({
           placeholder={props.placeholder}
           onFocus={props.on_focus}
           onBlur={props.on_blur}
+          {...props.additional_properties}
         />
       )}
       {props.message && (

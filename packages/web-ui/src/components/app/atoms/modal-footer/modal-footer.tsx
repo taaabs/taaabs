@@ -14,15 +14,6 @@ export const ModalFooter: React.FC<ModalFooter.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles['container__right-side']}>
-        <button
-          className={styles['container__right-side__cancel']}
-          onClick={(e) => {
-            e.preventDefault() // As this component is likely placed inside <form>, we need to prevent the default form submission.
-            if (!props.is_disabled) props.on_click_cancel()
-          }}
-        >
-          Cancel
-        </button>
         {props.button_on_click ? (
           <Button
             on_click={props.button_on_click}
@@ -35,6 +26,15 @@ export const ModalFooter: React.FC<ModalFooter.Props> = (props) => {
             {props.button_label}
           </Button>
         )}
+        <button
+          className={styles['container__right-side__cancel']}
+          onClick={(e) => {
+            e.preventDefault() // As this component is likely placed inside <form>, we need to prevent the default form submission.
+            if (!props.is_disabled) props.on_click_cancel()
+          }}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   )

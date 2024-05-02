@@ -10,10 +10,13 @@ import { Pinned_DataSourceImpl } from '@repositories/modules/pinned/infrastructu
 import { Pinned_RepositoryImpl } from '@repositories/modules/pinned/infrastructure/repositories/pinned.repository-impl'
 import { GetPinnedAuthorized_UseCase } from '@repositories/modules/pinned/domain/usecases/get-pinned-authorized.use-case'
 import { pinned_actions } from '../../pinned/pinned.slice'
+import { GetTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/get-tag-hierarchies.params'
+import { tag_hierarchies_actions } from '../../tag-hierarchies/tag-hierarchies.slice'
 
 export const delete_bookmark = (params: {
   bookmark_id: number
   last_authorized_counts_params: Counts_Params.Authorized
+  get_tag_hierarchies_request_params?: GetTagHierarchies_Params.Authorized
   ky: KyInstance
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
@@ -43,17 +46,29 @@ export const delete_bookmark = (params: {
         pinned_repository,
       )
       dispatch(pinned_actions.set_is_fetching(true))
-      const pinned_result = await get_pinned_use_case.invoke()
+      const pinned_result = (
+        await Promise.all([
+          get_pinned_use_case.invoke(),
+          dispatch(
+            counts_actions.refresh_authorized_counts({
+              last_authorized_counts_params:
+                params.last_authorized_counts_params,
+              ky: params.ky,
+            }),
+          ),
+          params.get_tag_hierarchies_request_params &&
+            dispatch(
+              tag_hierarchies_actions.get_tag_hierarchies_authorized({
+                request_params: params.get_tag_hierarchies_request_params,
+                ky: params.ky,
+              }),
+            ),
+        ])
+      )[0]
       dispatch(pinned_actions.set_is_fetching(false))
       dispatch(pinned_actions.set_items(pinned_result))
       dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
 
-      dispatch(
-        counts_actions.refresh_authorized_counts({
-          last_authorized_counts_params: params.last_authorized_counts_params,
-          ky: params.ky,
-        }),
-      )
       resolve(null)
     })
 }

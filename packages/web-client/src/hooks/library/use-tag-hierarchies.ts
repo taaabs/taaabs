@@ -16,6 +16,41 @@ export const use_tag_hierarchies = () => {
     fetched_at_timestamp,
   } = use_library_selector((state) => state.tag_hierarchies)
 
+  const get_authorized_request_params = (params: {
+    filter?: Filter
+    gte?: number
+    lte?: number
+  }) => {
+    const request_params: GetTagHierarchies_Params.Authorized = {
+      gte: params.gte,
+      lte: params.lte,
+    }
+
+    if (params.filter) {
+      request_params.starred_only =
+        params.filter == Filter.STARRED ||
+        params.filter == Filter.STARRED_UNREAD ||
+        params.filter == Filter.ARCHIVED_STARRED ||
+        params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
+        undefined
+
+      request_params.unread_only =
+        params.filter == Filter.UNREAD ||
+        params.filter == Filter.STARRED_UNREAD ||
+        params.filter == Filter.ARCHIVED_UNREAD ||
+        params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
+        undefined
+
+      request_params.is_archived =
+        params.filter == Filter.ARCHIVED ||
+        params.filter == Filter.ARCHIVED_STARRED ||
+        params.filter == Filter.ARCHIVED_UNREAD ||
+        params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
+        undefined
+    }
+    return request_params
+  }
+
   const get_tag_hierarchies = async (params: {
     filter?: Filter
     gte?: number
@@ -29,33 +64,7 @@ export const use_tag_hierarchies = () => {
       },
     })
     if (!username) {
-      const request_params: GetTagHierarchies_Params.Authorized = {
-        gte: params.gte,
-        lte: params.lte,
-      }
-
-      if (params.filter) {
-        request_params.starred_only =
-          params.filter == Filter.STARRED ||
-          params.filter == Filter.STARRED_UNREAD ||
-          params.filter == Filter.ARCHIVED_STARRED ||
-          params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
-          undefined
-
-        request_params.unread_only =
-          params.filter == Filter.UNREAD ||
-          params.filter == Filter.STARRED_UNREAD ||
-          params.filter == Filter.ARCHIVED_UNREAD ||
-          params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
-          undefined
-
-        request_params.is_archived =
-          params.filter == Filter.ARCHIVED ||
-          params.filter == Filter.ARCHIVED_STARRED ||
-          params.filter == Filter.ARCHIVED_UNREAD ||
-          params.filter == Filter.ARCHIVED_STARRED_UNREAD ||
-          undefined
-      }
+      const request_params = get_authorized_request_params(params)
 
       await dispatch(
         tag_hierarchies_actions.get_tag_hierarchies_authorized({
@@ -97,6 +106,7 @@ export const use_tag_hierarchies = () => {
   return {
     is_fetching,
     get_tag_hierarchies,
+    get_authorized_request_params,
     fetched_at_timestamp,
     tag_hierarchies,
     total,

@@ -18,7 +18,7 @@
   height: var(--button-dimension-40px);
   padding: 0 16px;
   &:focus-visible {
-    outline: 2px solid var(--blue300);
+    outline: 1.5px solid var(--blue400);
     outline-offset: 2px;
   }
   > span {
@@ -37,7 +37,8 @@
     opacity: 0.7;
     pointer-events: none;
   }
-  &--disabled {
+  &--disabled,
+  &:disabled {
     opacity: 0.7;
     pointer-events: none;
   }

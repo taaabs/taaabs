@@ -1,9 +1,9 @@
 import { get_dictionary } from '@/app/dictonaries'
-import { Auth } from './auth'
+import { LogIn } from './log-in'
 
 const Page: React.FC = async () => {
   const dictionary = await get_dictionary('en')
-  return <Auth dictionary={dictionary} />
+  return <LogIn dictionary={dictionary} />
 }
 
 export default Page

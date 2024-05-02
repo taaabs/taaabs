@@ -1,9 +1,11 @@
 export type Dictionary = {
   auth: {
-    heading: { text: string; subtext: string }
-  }
-  join: {
-    heading: { text: string; subtext: string }
+    log_in: {
+      heading: { text: string; subtext: string }
+    }
+    sign_up: {
+      heading: { text: string; subtext: string }
+    }
   }
   library: {
     follow: string

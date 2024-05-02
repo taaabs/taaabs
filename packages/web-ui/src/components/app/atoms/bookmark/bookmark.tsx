@@ -722,7 +722,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   .map(
                     (link, i) =>
                       `${get_domain_from_url(link.url)}${
-                        link.site_path ? ` › ${link.site_path}` : ''
+                        link.site_path ? ` ${link.site_path}` : ''
                       }${i > 0 ? ' ' : ''}`,
                   )
                   .slice(0, link_idx)
@@ -779,7 +779,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                               .map((char, i) => {
                                 const real_i =
                                   link_first_char_index_in_search_title +
-                                  i +
+                                  i -
+                                  (i > get_domain_from_url(link.url).length
+                                    ? 2
+                                    : 0) +
                                   (link_idx > 0 ? 1 : 0)
                                 const is_highlighted = props.highlights!.find(
                                   ([index, length]) =>

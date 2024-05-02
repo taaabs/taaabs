@@ -12,6 +12,7 @@ import '@web-ui/styles/style.scss'
 import { GlobalLibrarySearchProvider } from './global-library-search-provider'
 import { ReactNode } from 'react'
 import { ModalProvider } from '@/providers/modal-provider'
+import { AuthProvider } from './auth-provider'
 
 export const revalidate = 0
 
@@ -41,9 +42,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
       // color-scheme="dark"
     >
       <body>
-        {/* <GlobalStoreProvider> */}
         {/* <GlobalStoreInitializer></GlobalStoreInitializer> */}
-        {/* </GlobalStoreProvider> */}
         <ToastContainer
           position="top-center"
           autoClose={1500}
@@ -58,9 +57,11 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
           icon={false}
           draggablePercent={20}
         />
-        <GlobalLibrarySearchProvider>
-          <ModalProvider>{children}</ModalProvider>
-        </GlobalLibrarySearchProvider>
+        <AuthProvider>
+          <GlobalLibrarySearchProvider>
+            <ModalProvider>{children}</ModalProvider>
+          </GlobalLibrarySearchProvider>
+        </AuthProvider>
       </body>
     </html>
   )

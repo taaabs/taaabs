@@ -95,3 +95,10 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 0.13em;
 }
+@mixin focus-visible {
+  &:focus-visible {
+    outline: 1.5px solid var(--neutral300);
+    outline-offset: 3px;
+    border-radius: var(--border-radius-4px);
+  }
+}

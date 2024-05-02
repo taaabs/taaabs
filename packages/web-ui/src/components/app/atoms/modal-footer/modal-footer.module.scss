@@ -20,16 +20,13 @@
       gap: var(--padding-24px);
     }
     &__cancel {
+      order: -1; // Needed to have proper tab focus order.
       color: var(--text-color-dimmed);
       @include transition-150ms(color);
       @include hover {
         color: var(--text-color-normal);
       }
-      &:focus-visible {
-        outline: 2px solid var(--neutral300);
-        outline-offset: 3px;
-        border-radius: var(--border-radius-4px);
-      }
+      @include focus-visible;
     }
   }
 }

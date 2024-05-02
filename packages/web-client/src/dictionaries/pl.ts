@@ -2,15 +2,17 @@ import { Dictionary } from './dictionary'
 
 export const dictionary: Dictionary = {
   auth: {
-    heading: {
-      text: 'Zaloguj się',
-      subtext: 'aby kontynuuować do Taaabs',
+    log_in: {
+      heading: {
+        text: 'Zaloguj się',
+        subtext: 'aby kontynuuować do Taaabs',
+      },
     },
-  },
-  join: {
-    heading: {
-      text: '1',
-      subtext: '2',
+    sign_up: {
+      heading: {
+        text: 'Utwórz konto',
+        subtext: 'Też nie lubimy papierkowej roboty...',
+      },
     },
   },
   library: {

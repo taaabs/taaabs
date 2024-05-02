@@ -33,7 +33,7 @@ export namespace TagHierarchies_Dto {
   }
   export namespace Response {
     class Base {
-      public total?: number
+      public total: number
     }
     export class Authorized extends Base {
       public tag_hierarchies: AuthorizedNode[]

@@ -1,7 +1,9 @@
 export const system_values = {
   username_max_length: 15,
   username_min_length: 6,
-  password_length: 64,
+  password_min_length: 8,
+  password_hash_length: 64,
+  password_hint_max_length: 100,
   max_library_search_results: 500,
   max_library_search_hints: 10,
   sortablejs_animation_duration: 150,

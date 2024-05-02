@@ -270,7 +270,6 @@ const Library = (params: {
           gte: date_view_options_hook.current_gte,
           lte: date_view_options_hook.current_lte,
         }),
-
         dispatch(
           counts_actions.refresh_authorized_counts({
             last_authorized_counts_params:
@@ -1271,6 +1270,12 @@ const Library = (params: {
                     .last_authorized_counts_params,
                 ) || 'null',
               ) || undefined,
+            get_tag_hierarchies_request_params:
+              tag_hierarchies_hook.get_authorized_request_params({
+                filter: filter_view_options_hook.current_filter,
+                gte: date_view_options_hook.current_gte,
+                lte: date_view_options_hook.current_lte,
+              }),
             ky: ky_instance,
           }),
         )
@@ -1295,11 +1300,6 @@ const Library = (params: {
             tags: updated_bookmark.tags.map((tag) => tag.name),
             tag_ids: bookmark.tags.map((tag) => tag.id),
           },
-        })
-        await tag_hierarchies_hook.get_tag_hierarchies({
-          filter: filter_view_options_hook.current_filter,
-          gte: date_view_options_hook.current_gte,
-          lte: date_view_options_hook.current_lte,
         })
         dispatch(bookmarks_actions.set_is_upserting(false))
         toast.success(params.dictionary.library.bookmark_updated)
@@ -1414,6 +1414,12 @@ const Library = (params: {
                           .last_authorized_counts_params,
                       ) || 'null',
                     ) || undefined,
+                  get_tag_hierarchies_request_params:
+                    tag_hierarchies_hook.get_authorized_request_params({
+                      filter: filter_view_options_hook.current_filter,
+                      gte: date_view_options_hook.current_gte,
+                      lte: date_view_options_hook.current_lte,
+                    }),
                   ky: ky_instance,
                 }),
               )
@@ -1438,11 +1444,6 @@ const Library = (params: {
                   tags: updated_bookmark.tags.map((tag) => tag.name),
                   tag_ids: updated_bookmark.tags.map((tag) => tag.id),
                 },
-              })
-              await tag_hierarchies_hook.get_tag_hierarchies({
-                filter: filter_view_options_hook.current_filter,
-                gte: date_view_options_hook.current_gte,
-                lte: date_view_options_hook.current_lte,
               })
               const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
               if (
@@ -1746,6 +1747,12 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
+                      get_tag_hierarchies_request_params:
+                        tag_hierarchies_hook.get_authorized_request_params({
+                          filter: filter_view_options_hook.current_filter,
+                          gte: date_view_options_hook.current_gte,
+                          lte: date_view_options_hook.current_lte,
+                        }),
                       ky: ky_instance,
                     }),
                   )
@@ -1781,11 +1788,6 @@ const Library = (params: {
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
-                  })
-                  await tag_hierarchies_hook.get_tag_hierarchies({
-                    filter: filter_view_options_hook.current_filter,
-                    gte: date_view_options_hook.current_gte,
-                    lte: date_view_options_hook.current_lte,
                   })
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(params.dictionary.library.bookmark_updated)
@@ -1831,6 +1833,12 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
+                      get_tag_hierarchies_request_params:
+                        tag_hierarchies_hook.get_authorized_request_params({
+                          filter: filter_view_options_hook.current_filter,
+                          gte: date_view_options_hook.current_gte,
+                          lte: date_view_options_hook.current_lte,
+                        }),
                       ky: ky_instance,
                     }),
                   )
@@ -1855,11 +1863,6 @@ const Library = (params: {
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
-                  })
-                  await tag_hierarchies_hook.get_tag_hierarchies({
-                    filter: filter_view_options_hook.current_filter,
-                    gte: date_view_options_hook.current_gte,
-                    lte: date_view_options_hook.current_lte,
                   })
                   if (
                     search_hook.count &&
@@ -1919,6 +1922,12 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
+                      get_tag_hierarchies_request_params:
+                        tag_hierarchies_hook.get_authorized_request_params({
+                          filter: filter_view_options_hook.current_filter,
+                          gte: date_view_options_hook.current_gte,
+                          lte: date_view_options_hook.current_lte,
+                        }),
                       ky: ky_instance,
                     }),
                   )
@@ -1943,11 +1952,6 @@ const Library = (params: {
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
-                  })
-                  await tag_hierarchies_hook.get_tag_hierarchies({
-                    filter: filter_view_options_hook.current_filter,
-                    gte: date_view_options_hook.current_gte,
-                    lte: date_view_options_hook.current_lte,
                   })
                   if (
                     search_hook.count &&
@@ -2007,6 +2011,12 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
+                      get_tag_hierarchies_request_params:
+                        tag_hierarchies_hook.get_authorized_request_params({
+                          filter: filter_view_options_hook.current_filter,
+                          gte: date_view_options_hook.current_gte,
+                          lte: date_view_options_hook.current_lte,
+                        }),
                       ky: ky_instance,
                     }),
                   )
@@ -2031,11 +2041,6 @@ const Library = (params: {
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
-                  })
-                  await tag_hierarchies_hook.get_tag_hierarchies({
-                    filter: filter_view_options_hook.current_filter,
-                    gte: date_view_options_hook.current_gte,
-                    lte: date_view_options_hook.current_lte,
                   })
                   if (
                     search_hook.count &&
@@ -2095,6 +2100,12 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
+                      get_tag_hierarchies_request_params:
+                        tag_hierarchies_hook.get_authorized_request_params({
+                          filter: filter_view_options_hook.current_filter,
+                          gte: date_view_options_hook.current_gte,
+                          lte: date_view_options_hook.current_lte,
+                        }),
                       ky: ky_instance,
                     }),
                   )
@@ -2119,11 +2130,6 @@ const Library = (params: {
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
-                  })
-                  await tag_hierarchies_hook.get_tag_hierarchies({
-                    filter: filter_view_options_hook.current_filter,
-                    gte: date_view_options_hook.current_gte,
-                    lte: date_view_options_hook.current_lte,
                   })
                   if (
                     search_hook.count &&
@@ -2183,6 +2189,12 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
+                      get_tag_hierarchies_request_params:
+                        tag_hierarchies_hook.get_authorized_request_params({
+                          filter: filter_view_options_hook.current_filter,
+                          gte: date_view_options_hook.current_gte,
+                          lte: date_view_options_hook.current_lte,
+                        }),
                       ky: ky_instance,
                     }),
                   )
@@ -2207,11 +2219,6 @@ const Library = (params: {
                       tags: bookmark.tags.map((tag) => tag.name),
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
-                  })
-                  await tag_hierarchies_hook.get_tag_hierarchies({
-                    filter: filter_view_options_hook.current_filter,
-                    gte: date_view_options_hook.current_gte,
-                    lte: date_view_options_hook.current_lte,
                   })
                   if (
                     search_hook.count &&
@@ -2344,6 +2351,12 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
+                      get_tag_hierarchies_request_params:
+                        tag_hierarchies_hook.get_authorized_request_params({
+                          filter: filter_view_options_hook.current_filter,
+                          gte: date_view_options_hook.current_gte,
+                          lte: date_view_options_hook.current_lte,
+                        }),
                       ky: ky_instance,
                     }),
                   )
@@ -2379,11 +2392,6 @@ const Library = (params: {
                       tags_to_remove_from_search_params,
                     )
                   }
-                  await tag_hierarchies_hook.get_tag_hierarchies({
-                    filter: filter_view_options_hook.current_filter,
-                    gte: date_view_options_hook.current_gte,
-                    lte: date_view_options_hook.current_lte,
-                  })
                   await search_hook.update_bookmark({
                     db,
                     bookmarks_just_tags,
@@ -2464,6 +2472,12 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
+                      get_tag_hierarchies_request_params:
+                        tag_hierarchies_hook.get_authorized_request_params({
+                          filter: filter_view_options_hook.current_filter,
+                          gte: date_view_options_hook.current_gte,
+                          lte: date_view_options_hook.current_lte,
+                        }),
                       ky: ky_instance,
                     }),
                   )
@@ -2511,11 +2525,6 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  await tag_hierarchies_hook.get_tag_hierarchies({
-                    filter: filter_view_options_hook.current_filter,
-                    gte: date_view_options_hook.current_gte,
-                    lte: date_view_options_hook.current_lte,
-                  })
                   if (search_hook.count) {
                     search_hook.set_count(search_hook.count - 1)
                   }
@@ -2550,6 +2559,12 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
+                      get_tag_hierarchies_request_params:
+                        tag_hierarchies_hook.get_authorized_request_params({
+                          filter: filter_view_options_hook.current_filter,
+                          gte: date_view_options_hook.current_gte,
+                          lte: date_view_options_hook.current_lte,
+                        }),
                       bookmark_id: bookmark.id,
                       ky: ky_instance,
                     }),
@@ -2559,11 +2574,6 @@ const Library = (params: {
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
                     bookmark_id: bookmark.id,
-                  })
-                  await tag_hierarchies_hook.get_tag_hierarchies({
-                    filter: filter_view_options_hook.current_filter,
-                    gte: date_view_options_hook.current_gte,
-                    lte: date_view_options_hook.current_lte,
                   })
                   if (search_hook.count) {
                     search_hook.set_count(search_hook.count - 1)

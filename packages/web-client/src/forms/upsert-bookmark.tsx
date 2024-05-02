@@ -329,6 +329,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                     message={error_message}
                     lines={5}
                     placeholder="Jot something down"
+                    is_note={true}
                   />
                 )
               }}

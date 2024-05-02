@@ -12,10 +12,13 @@ import { Pinned_DataSourceImpl } from '@repositories/modules/pinned/infrastructu
 import { Pinned_RepositoryImpl } from '@repositories/modules/pinned/infrastructure/repositories/pinned.repository-impl'
 import { GetPinnedAuthorized_UseCase } from '@repositories/modules/pinned/domain/usecases/get-pinned-authorized.use-case'
 import { pinned_actions } from '../../pinned/pinned.slice'
+import { tag_hierarchies_actions } from '../../tag-hierarchies/tag-hierarchies.slice'
+import { GetTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/get-tag-hierarchies.params'
 
 export const upsert_bookmark = (params: {
   bookmark: UpsertBookmark_Params
   last_authorized_counts_params?: Counts_Params.Authorized
+  get_tag_hierarchies_request_params?: GetTagHierarchies_Params.Authorized
   ky: KyInstance
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
@@ -84,24 +87,35 @@ export const upsert_bookmark = (params: {
           )
         }
 
-        // Updating pinned here prevents layout shift.
+        // Refetch pinned
         const pinned_data_source = new Pinned_DataSourceImpl(params.ky)
         const pinned_repository = new Pinned_RepositoryImpl(pinned_data_source)
         const get_pinned_use_case = new GetPinnedAuthorized_UseCase(
           pinned_repository,
         )
         dispatch(pinned_actions.set_is_fetching(true))
-        const pinned_result = await get_pinned_use_case.invoke()
+        const pinned_result = (
+          await Promise.all([
+            get_pinned_use_case.invoke(),
+            dispatch(
+              counts_actions.refresh_authorized_counts({
+                last_authorized_counts_params:
+                  params.last_authorized_counts_params,
+                ky: params.ky,
+              }),
+            ),
+            params.get_tag_hierarchies_request_params &&
+              dispatch(
+                tag_hierarchies_actions.get_tag_hierarchies_authorized({
+                  request_params: params.get_tag_hierarchies_request_params,
+                  ky: params.ky,
+                }),
+              ),
+          ])
+        )[0]
         dispatch(pinned_actions.set_is_fetching(false))
         dispatch(pinned_actions.set_items(pinned_result))
         dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
-
-        await dispatch(
-          counts_actions.refresh_authorized_counts({
-            last_authorized_counts_params: params.last_authorized_counts_params,
-            ky: params.ky,
-          }),
-        )
       }
 
       resolve(result)

@@ -2,15 +2,17 @@ import { Dictionary } from './dictionary'
 
 const dictionary: Dictionary = {
   auth: {
-    heading: {
-      text: 'Log in',
-      subtext: 'to continue to Taaabs',
+    log_in: {
+      heading: {
+        text: 'Log in',
+        subtext: 'to continue to Taaabs',
+      },
     },
-  },
-  join: {
-    heading: {
-      text: '1',
-      subtext: '2',
+    sign_up: {
+      heading: {
+        text: 'Sign up',
+        subtext: 'We hate paperwork, too.',
+      },
     },
   },
   library: {
@@ -22,7 +24,7 @@ const dictionary: Dictionary = {
     bookmark_updated: 'Bookmark has been updated',
     all_bookmarks: 'All bookmarks',
     drag_tag_here:
-      'Organize your tags by dragging & dropping - build a visual hierarchy!',
+      'In Taaabs, folders are built by stacking tags on one another. Begin by dragging a tag over.',
     tag_hierarchies_upated: 'Folders has been updated',
     collapse_sidebar: 'Collapse sidebar',
     pin: 'Pin',

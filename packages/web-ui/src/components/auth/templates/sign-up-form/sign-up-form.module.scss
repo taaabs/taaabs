@@ -1,0 +1,18 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-16px);
+}
+.button {
+  @include to992 {
+    > button {
+      width: 100%;
+    }
+  }
+  @include at992 {
+    align-self: flex-end;
+  }
+}

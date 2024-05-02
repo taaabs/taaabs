@@ -30,7 +30,10 @@ export const FormModal: React.FC<FormModal.Props> = (props) => {
       }
     }
     const element = simplebar.current.getScrollElement()
-    element.scrollTo(0, 0) // Autofocus on field when adding new scrolls a little bit.
+    if (element.scrollHeight != element.clientHeight) {
+      set_is_scrolled_to_bottom(false)
+    }
+    element.scrollTo(0, 0) // Autofocus on field (when adding new) scrolls a little bit.
     element!.addEventListener('scroll', handle_scroll, { passive: true })
     return () => {
       element!.removeEventListener('scroll', handle_scroll)
