@@ -16,7 +16,7 @@ export const use_tag_hierarchies = () => {
     fetched_at_timestamp,
   } = use_library_selector((state) => state.tag_hierarchies)
 
-  const get_authorized_request_params = (params: {
+  const get_authorized_request_params_ = (params: {
     filter?: Filter
     gte?: number
     lte?: number
@@ -51,7 +51,7 @@ export const use_tag_hierarchies = () => {
     return request_params
   }
 
-  const get_tag_hierarchies = async (params: {
+  const get_tag_hierarchies_ = async (params: {
     filter?: Filter
     gte?: number
     lte?: number
@@ -64,7 +64,7 @@ export const use_tag_hierarchies = () => {
       },
     })
     if (!username) {
-      const request_params = get_authorized_request_params(params)
+      const request_params = get_authorized_request_params_(params)
 
       await dispatch(
         tag_hierarchies_actions.get_tag_hierarchies_authorized({
@@ -105,8 +105,8 @@ export const use_tag_hierarchies = () => {
 
   return {
     is_fetching,
-    get_tag_hierarchies,
-    get_authorized_request_params,
+    get_tag_hierarchies_,
+    get_authorized_request_params_,
     fetched_at_timestamp,
     tag_hierarchies,
     total,

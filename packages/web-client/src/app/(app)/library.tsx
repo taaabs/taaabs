@@ -265,7 +265,7 @@ const Library = (params: {
           .counts_reload_requested_by_new_bookmark,
       )
       Promise.all([
-        tag_hierarchies_hook.get_tag_hierarchies({
+        tag_hierarchies_hook.get_tag_hierarchies_({
           filter: filter_view_options_hook.current_filter_,
           gte: date_view_options_hook.current_gte_,
           lte: date_view_options_hook.current_lte_,
@@ -299,7 +299,7 @@ const Library = (params: {
 
   useUpdateEffect(() => {
     if (pinned_hook.should_refetch) {
-      pinned_hook.get_pinned()
+      pinned_hook.get_pinned_()
     }
   }, [pinned_hook.should_refetch])
 
@@ -363,7 +363,7 @@ const Library = (params: {
   }, [search_hook.queried_at_timestamp])
 
   useEffect(() => {
-    tag_hierarchies_hook.get_tag_hierarchies({
+    tag_hierarchies_hook.get_tag_hierarchies_({
       filter: filter_view_options_hook.current_filter_,
       gte: date_view_options_hook.current_gte_,
       lte: date_view_options_hook.current_lte_,
@@ -879,11 +879,11 @@ const Library = (params: {
                   sort_by_view_options_hook.current_sort_by_ ==
                     SortBy.POPULARITY
                 ) {
-                  sort_by_view_options_hook.set_sort_by_query_param(
+                  sort_by_view_options_hook.set_sort_by_query_param_(
                     SortBy.CREATED_AT,
                   )
                 } else if (option_idx == 1) {
-                  sort_by_view_options_hook.set_sort_by_query_param(
+                  sort_by_view_options_hook.set_sort_by_query_param_(
                     SortBy.POPULARITY,
                   )
                 }
@@ -919,15 +919,15 @@ const Library = (params: {
                 ]}
                 on_item_click={(option_idx) => {
                   if (option_idx == 0) {
-                    sort_by_view_options_hook.set_sort_by_query_param(
+                    sort_by_view_options_hook.set_sort_by_query_param_(
                       SortBy.CREATED_AT,
                     )
                   } else if (option_idx == 1) {
-                    sort_by_view_options_hook.set_sort_by_query_param(
+                    sort_by_view_options_hook.set_sort_by_query_param_(
                       SortBy.VISITED_AT,
                     )
                   } else if (option_idx == 2) {
-                    sort_by_view_options_hook.set_sort_by_query_param(
+                    sort_by_view_options_hook.set_sort_by_query_param_(
                       SortBy.UPDATED_AT,
                     )
                   }
@@ -957,11 +957,11 @@ const Library = (params: {
                 ]}
                 on_item_click={(option_idx) => {
                   if (option_idx == 0) {
-                    sort_by_view_options_hook.set_sort_by_query_param(
+                    sort_by_view_options_hook.set_sort_by_query_param_(
                       SortBy.CREATED_AT,
                     )
                   } else if (option_idx == 1) {
-                    sort_by_view_options_hook.set_sort_by_query_param(
+                    sort_by_view_options_hook.set_sort_by_query_param_(
                       SortBy.UPDATED_AT,
                     )
                   }
@@ -1109,13 +1109,13 @@ const Library = (params: {
       is_compact_={bookmark.is_compact}
       updated_at_={bookmark.updated_at}
       is_public_={bookmark.is_public}
-      points_given_={points_hook.points_given[bookmark.id]}
+      points_given_={points_hook.points_given_[bookmark.id]}
       points_={bookmark.points}
       on_get_points_given_click_={() => {
-        points_hook.get_points_given_on_bookmark({ bookmark_id: bookmark.id })
+        points_hook.get_points_given_on_bookmark_({ bookmark_id: bookmark.id })
       }}
       on_give_point_click_={(points: number) => {
-        points_hook.give_points({ bookmark_id: bookmark.id, points })
+        points_hook.give_points_({ bookmark_id: bookmark.id, points })
       }}
       title_={bookmark.title}
       note_={bookmark.note}
@@ -1290,7 +1290,7 @@ const Library = (params: {
                 ) || 'null',
               ) || undefined,
             get_tag_hierarchies_request_params:
-              tag_hierarchies_hook.get_authorized_request_params({
+              tag_hierarchies_hook.get_authorized_request_params_({
                 filter: filter_view_options_hook.current_filter_,
                 gte: date_view_options_hook.current_gte_,
                 lte: date_view_options_hook.current_lte_,
@@ -1434,7 +1434,7 @@ const Library = (params: {
                       ) || 'null',
                     ) || undefined,
                   get_tag_hierarchies_request_params:
-                    tag_hierarchies_hook.get_authorized_request_params({
+                    tag_hierarchies_hook.get_authorized_request_params_({
                       filter: filter_view_options_hook.current_filter_,
                       gte: date_view_options_hook.current_gte_,
                       lte: date_view_options_hook.current_lte_,
@@ -1767,7 +1767,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       get_tag_hierarchies_request_params:
-                        tag_hierarchies_hook.get_authorized_request_params({
+                        tag_hierarchies_hook.get_authorized_request_params_({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
@@ -1854,7 +1854,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       get_tag_hierarchies_request_params:
-                        tag_hierarchies_hook.get_authorized_request_params({
+                        tag_hierarchies_hook.get_authorized_request_params_({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
@@ -1943,7 +1943,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       get_tag_hierarchies_request_params:
-                        tag_hierarchies_hook.get_authorized_request_params({
+                        tag_hierarchies_hook.get_authorized_request_params_({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
@@ -2032,7 +2032,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       get_tag_hierarchies_request_params:
-                        tag_hierarchies_hook.get_authorized_request_params({
+                        tag_hierarchies_hook.get_authorized_request_params_({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
@@ -2121,7 +2121,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       get_tag_hierarchies_request_params:
-                        tag_hierarchies_hook.get_authorized_request_params({
+                        tag_hierarchies_hook.get_authorized_request_params_({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
@@ -2210,7 +2210,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       get_tag_hierarchies_request_params:
-                        tag_hierarchies_hook.get_authorized_request_params({
+                        tag_hierarchies_hook.get_authorized_request_params_({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
@@ -2372,7 +2372,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       get_tag_hierarchies_request_params:
-                        tag_hierarchies_hook.get_authorized_request_params({
+                        tag_hierarchies_hook.get_authorized_request_params_({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
@@ -2493,7 +2493,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       get_tag_hierarchies_request_params:
-                        tag_hierarchies_hook.get_authorized_request_params({
+                        tag_hierarchies_hook.get_authorized_request_params_({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
@@ -2580,7 +2580,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       get_tag_hierarchies_request_params:
-                        tag_hierarchies_hook.get_authorized_request_params({
+                        tag_hierarchies_hook.get_authorized_request_params_({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,

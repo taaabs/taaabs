@@ -16,7 +16,7 @@ export const use_points = () => {
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
   const username = 'test_user'
-  const [points_given, set_points_given] = useState<{
+  const [points_given_, set_points_given] = useState<{
     [bookmark_id: string]: number
   }>({})
 
@@ -51,7 +51,7 @@ export const use_points = () => {
     250,
   )
 
-  const get_points_given_on_bookmark = async (params: {
+  const get_points_given_on_bookmark_ = async (params: {
     bookmark_id: number
   }) => {
     const data_source = new Points_DataSourceImpl(ky_instance)
@@ -65,7 +65,7 @@ export const use_points = () => {
         bookmark_id: params.bookmark_id,
       })
       set_points_given({
-        ...points_given,
+        ...points_given_,
         [params.bookmark_id]: given_till_now,
       })
     } catch {
@@ -73,7 +73,7 @@ export const use_points = () => {
     }
   }
 
-  const give_points = async (params: {
+  const give_points_ = async (params: {
     bookmark_id: number
     points: number
   }) => {
@@ -84,5 +84,5 @@ export const use_points = () => {
     dispatch(bookmarks_actions.add_point({ bookmark_id: params.bookmark_id }))
   }
 
-  return { give_points, points_given, get_points_given_on_bookmark }
+  return { give_points_, points_given_, get_points_given_on_bookmark_ }
 }

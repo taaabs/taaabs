@@ -17,7 +17,7 @@ export const use_pinned = () => {
     should_refetch,
   } = use_library_selector((state) => state.pinned)
 
-  const get_pinned = async () => {
+  const get_pinned_ = async () => {
     const ky_instance = ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
       headers: {
@@ -60,12 +60,12 @@ export const use_pinned = () => {
       dispatch(pinned_actions.set_items(JSON.parse(pinned_items)))
       dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
     } else {
-      get_pinned()
+      get_pinned_()
     }
   }, [])
 
   return {
-    get_pinned,
+    get_pinned_,
     fetched_at_timestamp,
     is_fetching,
     is_updating,
