@@ -10,9 +10,9 @@ import OutsideClickHandler from 'react-outside-click-handler'
 
 export namespace LibrarySearch {
   type Hint = {
-    type: 'new' | 'recent'
-    completion: string
-    search_string: string
+    type_: 'new' | 'recent'
+    completion_: string
+    search_string_: string
   }
   export type Props = {
     placeholder_: string
@@ -81,7 +81,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
             props.on_change_(
               props.search_string_ +
                 props.hints_[selected_hint_index == -1 ? 0 : selected_hint_index]
-                  .completion +
+                  .completion_ +
                 ' ',
             )
           } else {
@@ -109,7 +109,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
       } else if (event.code == 'Enter') {
         if (props.hints_ && selected_hint_index != -1) {
           props.on_change_(
-            props.search_string_ + props.hints_[selected_hint_index].completion,
+            props.search_string_ + props.hints_[selected_hint_index].completion_,
           )
         }
       }
@@ -246,7 +246,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                               selected_hint_index == -1
                                 ? 0
                                 : selected_hint_index
-                            ]?.completion
+                            ]?.completion_
                           }
                         </span>
                         {props.hints_.length > 0 && (
@@ -354,8 +354,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                   <button
                     key={
                       props.search_string_ +
-                      (hint.completion ? hint.completion : '') +
-                      hint.type
+                      (hint.completion_ ? hint.completion_ : '') +
+                      hint.type_
                     }
                     className={cn(styles.hints__list__item, {
                       [styles['hints__list__item--selected']]:
@@ -368,17 +368,17 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                     }}
                   >
                     <div className={styles.hints__list__item__icon}>
-                      {hint.type == 'new' && <Icon variant="SEARCH" />}
-                      {hint.type == 'recent' && <Icon variant="RECENT" />}
+                      {hint.type_ == 'new' && <Icon variant="SEARCH" />}
+                      {hint.type_ == 'recent' && <Icon variant="RECENT" />}
                     </div>
                     <div
                       className={cn(styles.hints__list__item__content, {
                         [styles['hints__list__item__content--recent']]:
-                          hint.type == 'recent',
+                          hint.type_ == 'recent',
                       })}
                     >
-                      <span>{hint.search_string}</span>
-                      <span>{hint.completion}</span>
+                      <span>{hint.search_string_}</span>
+                      <span>{hint.completion_}</span>
                       {selected_hint_index == i && (
                         <div
                           className={
@@ -389,7 +389,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                         </div>
                       )}
                     </div>
-                    {hint.type == 'recent' && (
+                    {hint.type_ == 'recent' && (
                       <div
                         className={styles.hints__list__item__remove}
                         onClick={(e) => {

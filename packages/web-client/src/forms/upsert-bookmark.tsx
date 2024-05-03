@@ -91,20 +91,20 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     const bookmark: UpsertBookmark_Params = {
-      bookmark_id_: props.bookmark?.id,
-      is_public_:
+      bookmark_id: props.bookmark?.id,
+      is_public:
         (form_data.is_public === undefined && props.bookmark?.is_public) ||
         form_data.is_public ||
         false,
-      title_: form_data.title,
-      note_: form_data.note || undefined,
-      created_at_: props.bookmark?.created_at
+      title: form_data.title,
+      note: form_data.note || undefined,
+      created_at: props.bookmark?.created_at
         ? new Date(props.bookmark.created_at)
         : undefined,
-      stars_: props.bookmark?.stars,
-      is_archived_: props.is_archived || false,
-      is_unread_: props.bookmark?.is_unread || false,
-      links_: links.map((link) => {
+      stars: props.bookmark?.stars,
+      is_archived: props.is_archived || false,
+      is_unread: props.bookmark?.is_unread || false,
+      links: links.map((link) => {
         const current_link = props.bookmark?.links.find(
           (l) => l.url == link.url,
         )
@@ -117,7 +117,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           via_wayback: link.via_wayback,
         }
       }),
-      tags_: tags.map((tag) => ({
+      tags: tags.map((tag) => ({
         name: tag.name,
         is_public: (form_data.is_public ? tag.is_public : false) || false, // TODO: make is public optional.
       })),

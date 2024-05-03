@@ -118,7 +118,7 @@ const Library = (params: {
       !bookmarks_hook.is_fetching_first_bookmarks &&
       !bookmarks_hook.is_upserting &&
       !counts_hook.is_fetching &&
-      !counts_hook.should_refetch_ &&
+      !counts_hook.should_refetch &&
       !tag_hierarchies_hook.is_fetching &&
       !pinned_hook.is_fetching &&
       !pinned_hook.should_refetch
@@ -151,7 +151,7 @@ const Library = (params: {
     bookmarks_hook.is_fetching_first_bookmarks,
     bookmarks_hook.is_upserting,
     counts_hook.is_fetching,
-    counts_hook.should_refetch_,
+    counts_hook.should_refetch,
     tag_hierarchies_hook.is_fetching,
     pinned_hook.is_fetching,
     pinned_hook.should_refetch,
@@ -292,10 +292,10 @@ const Library = (params: {
   }, [bookmarks_hook.is_fetching_first_bookmarks])
 
   useUpdateEffect(() => {
-    if (counts_hook.should_refetch_) {
+    if (counts_hook.should_refetch) {
       counts_hook.get_counts()
     }
-  }, [counts_hook.should_refetch_])
+  }, [counts_hook.should_refetch])
 
   useUpdateEffect(() => {
     if (pinned_hook.should_refetch) {
@@ -392,7 +392,15 @@ const Library = (params: {
       is_loading_={search_hook.is_initializing}
       loading_progress_percentage_={search_hook.indexed_bookmarks_percentage}
       placeholder_={params.dictionary.library.search_placeholder}
-      hints_={!search_hook.is_initializing ? search_hook.hints : undefined}
+      hints_={
+        !search_hook.is_initializing
+          ? search_hook.hints?.map((hint) => ({
+              type_: hint.type,
+              completion_: hint.completion,
+              search_string_: hint.search_string,
+            }))
+          : undefined
+      }
       hints_set_at_timestamp_={search_hook.hints_set_at_timestamp}
       queried_at_timestamp_={search_hook.queried_at_timestamp}
       on_click_hint_={(i) => {
@@ -492,17 +500,17 @@ const Library = (params: {
   )
   const slot_toolbar = (
     <UiAppAtom_Toolbar
-      toggleable_buttons={[
+      toggleable_buttons_={[
         {
-          label: 'Starred',
-          is_toggled:
+          label_: 'Starred',
+          is_toggled_:
             filter_view_options_hook.current_filter_ == Filter.STARRED ||
             filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD ||
             filter_view_options_hook.current_filter_ ==
               Filter.ARCHIVED_STARRED ||
             filter_view_options_hook.current_filter_ ==
               Filter.ARCHIVED_STARRED_UNREAD,
-          on_click: () => {
+          on_click_: () => {
             if (
               is_fetching_first_bookmarks ||
               bookmarks_hook.is_fetching_more_bookmarks ||
@@ -550,8 +558,8 @@ const Library = (params: {
         ...(!username
           ? [
               {
-                label: 'Unread',
-                is_toggled:
+                label_: 'Unread',
+                is_toggled_:
                   filter_view_options_hook.current_filter_ == Filter.UNREAD ||
                   filter_view_options_hook.current_filter_ ==
                     Filter.STARRED_UNREAD ||
@@ -559,7 +567,7 @@ const Library = (params: {
                     Filter.ARCHIVED_UNREAD ||
                   filter_view_options_hook.current_filter_ ==
                     Filter.ARCHIVED_STARRED_UNREAD,
-                on_click: () => {
+                on_click_: () => {
                   if (
                     is_fetching_first_bookmarks ||
                     bookmarks_hook.is_fetching_more_bookmarks ||
@@ -609,8 +617,8 @@ const Library = (params: {
             ]
           : []),
         {
-          label: 'Archived',
-          is_toggled:
+          label_: 'Archived',
+          is_toggled_:
             filter_view_options_hook.current_filter_ == Filter.ARCHIVED ||
             filter_view_options_hook.current_filter_ ==
               Filter.ARCHIVED_STARRED ||
@@ -618,7 +626,7 @@ const Library = (params: {
               Filter.ARCHIVED_UNREAD ||
             filter_view_options_hook.current_filter_ ==
               Filter.ARCHIVED_STARRED_UNREAD,
-          on_click: () => {
+          on_click_: () => {
             if (
               is_fetching_first_bookmarks ||
               bookmarks_hook.is_fetching_more_bookmarks ||
@@ -666,9 +674,9 @@ const Library = (params: {
           },
         },
       ]}
-      icon_buttons={[
+      icon_buttons_={[
         {
-          icon_variant:
+          icon_variant_:
             bookmarks_hook.density == 'default'
               ? 'DENSITY_DEFAULT'
               : 'DENSITY_COMPACT',
@@ -682,47 +690,47 @@ const Library = (params: {
             window.scrollTo(0, 0)
           },
         },
-        { icon_variant: 'THREE_DOTS', on_click: () => {} },
+        { icon_variant_: 'THREE_DOTS', on_click: () => {} },
       ]}
     />
   )
   const slot_pinned = (
     <UiAppAtom_Pinned
       key={`${pinned_updated_at}-${popstate_count}`}
-      library_updated_at_timestamp={library_updated_at_timestamp}
-      favicon_host={favicon_host}
-      translations={{
-        nothing_pinned: params.dictionary.library.nothing_pinned,
+      library_updated_at_timestamp_={library_updated_at_timestamp}
+      favicon_host_={favicon_host}
+      translations_={{
+        nothing_pinned_: params.dictionary.library.nothing_pinned,
       }}
-      items={
+      items_={
         pinned_hook.items?.map((item) => ({
-          bookmark_id: item.bookmark_id,
-          url: item.url,
-          created_at: new Date(item.created_at),
-          title: item.title,
-          is_unread: item.is_unread,
-          is_archived: item.is_archived,
-          stars: item.stars,
-          tags: item.tags,
-          via_wayback: item.via_wayback,
+          bookmark_id_: item.bookmark_id,
+          url_: item.url,
+          created_at_: new Date(item.created_at),
+          title_: item.title,
+          is_unread_: item.is_unread,
+          is_archived_: item.is_archived,
+          stars_: item.stars,
+          tags_: item.tags,
+          via_wayback_: item.via_wayback,
         })) || []
       }
-      is_draggable={!username && !pinned_hook.is_updating}
-      on_change={async (updated_pinned) => {
+      is_draggable_={!username && !pinned_hook.is_updating}
+      on_change_={async (updated_pinned) => {
         await dispatch(
           pinned_actions.update_pinned({
             update_pinned_params: updated_pinned.map((pin) => ({
-              url: pin.url,
+              url: pin.url_,
             })),
             ky: ky_instance,
           }),
         )
         toast.success(params.dictionary.library.pinned_links_has_beed_updated)
       }}
-      on_click={async (item) => {
+      on_click_={async (item) => {
         if (!username) {
           const record_visit_params: RecordVisit_Params = {
-            bookmark_id: item.bookmark_id,
+            bookmark_id: item.bookmark_id_,
             visited_at: new Date().toISOString(),
           }
           localStorage.setItem(
@@ -733,42 +741,42 @@ const Library = (params: {
         }
         await search_hook.cache_data()
         window.onbeforeunload = null
-        const url = item.via_wayback
-          ? url_to_wayback({ date: item.created_at, url: item.url })
-          : item.url
+        const url = item.via_wayback_
+          ? url_to_wayback({ date: item.created_at_, url: item.url_ })
+          : item.url_
         setTimeout(() => {
           location.href = url
         }, 0)
       }}
-      on_middle_click={(item) => {
+      on_middle_click_={(item) => {
         if (!username) {
           const data_source = new Bookmarks_DataSourceImpl(ky_instance)
           const repository = new Bookmarks_RepositoryImpl(data_source)
           const record_visit = new RecordVisit_UseCase(repository)
           record_visit.invoke({
-            bookmark_id: item.bookmark_id,
+            bookmark_id: item.bookmark_id_,
             visited_at: new Date().toISOString(),
           })
         }
       }}
-      selected_tags={tag_view_options_hook.selected_tags_}
-      selected_starred={
+      selected_tags_={tag_view_options_hook.selected_tags_}
+      selected_starred_={
         filter_view_options_hook.current_filter_ == Filter.STARRED ||
         filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD ||
         filter_view_options_hook.current_filter_ == Filter.ARCHIVED_STARRED ||
         filter_view_options_hook.current_filter_ ==
           Filter.ARCHIVED_STARRED_UNREAD
       }
-      selected_unread={
+      selected_unread_={
         filter_view_options_hook.current_filter_ == Filter.UNREAD ||
         filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD ||
         filter_view_options_hook.current_filter_ == Filter.ARCHIVED_UNREAD ||
         filter_view_options_hook.current_filter_ ==
           Filter.ARCHIVED_STARRED_UNREAD
       }
-      selected_archived={is_archived_filter}
-      current_gte={date_view_options_hook.current_gte}
-      current_lte={date_view_options_hook.current_lte}
+      selected_archived_={is_archived_filter}
+      current_gte_={date_view_options_hook.current_gte}
+      current_lte_={date_view_options_hook.current_lte}
     />
   )
   const slot_tag_hierarchies = (
@@ -843,9 +851,9 @@ const Library = (params: {
   )
   const slot_aside = (
     <UiAppTemplate_LibraryAside
-      feedback_label={params.dictionary.library.send_feedback}
-      on_feedback_click={() => {}}
-      slot_segmented_buttons={
+      feedback_label_={params.dictionary.library.send_feedback}
+      on_feedback_click_={() => {}}
+      slot_segmented_buttons_={
         is_hydrated ? (
           <>
             <UiAppAtom_SegmentedButton
@@ -868,7 +876,8 @@ const Library = (params: {
               on_item_click={(option_idx) => {
                 if (
                   option_idx == 0 &&
-                  sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY
+                  sort_by_view_options_hook.current_sort_by_ ==
+                    SortBy.POPULARITY
                 ) {
                   sort_by_view_options_hook.set_sort_by_query_param(
                     SortBy.CREATED_AT,
@@ -885,7 +894,8 @@ const Library = (params: {
                 key={`2-${popstate_count}`}
                 is_not_interactive={is_not_interactive}
                 is_disabled={
-                  sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY
+                  sort_by_view_options_hook.current_sort_by_ ==
+                  SortBy.POPULARITY
                 }
                 items={[
                   {
@@ -928,7 +938,8 @@ const Library = (params: {
                 key={`2-${popstate_count}`}
                 is_not_interactive={is_not_interactive}
                 is_disabled={
-                  sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY
+                  sort_by_view_options_hook.current_sort_by_ ==
+                  SortBy.POPULARITY
                 }
                 items={[
                   {
@@ -988,7 +999,7 @@ const Library = (params: {
           <UiAppAtom_SegmentedButtonsSkeleton />
         )
       }
-      slot_custom_range={
+      slot_custom_range_={
         !show_skeletons ? (
           <div
             style={{
@@ -996,18 +1007,18 @@ const Library = (params: {
             }}
           >
             <CustomRange
-              library_updated_at_timestamp_={library_updated_at_timestamp}
-              counts_={counts_hook.months || undefined}
-              on_yyyymm_change_={
+              library_updated_at_timestamp={library_updated_at_timestamp}
+              counts={counts_hook.months || undefined}
+              on_yyyymm_change={
                 date_view_options_hook.set_gte_lte_search_params
               }
-              clear_date_range_={
+              clear_date_range={
                 date_view_options_hook.clear_gte_lte_search_params
               }
-              current_gte_={date_view_options_hook.current_gte}
-              current_lte_={date_view_options_hook.current_lte}
-              selected_tags_={tag_view_options_hook.selected_tags_}
-              is_range_selector_disabled_={
+              current_gte={date_view_options_hook.current_gte}
+              current_lte={date_view_options_hook.current_lte}
+              selected_tags={tag_view_options_hook.selected_tags_}
+              is_range_selector_disabled={
                 sort_by_view_options_hook.current_sort_by_ ==
                   SortBy.UPDATED_AT ||
                 sort_by_view_options_hook.current_sort_by_ ==
@@ -1020,7 +1031,7 @@ const Library = (params: {
           <UiAppAtom_CustomRangeSkeleton />
         )
       }
-      slot_tags={
+      slot_tags_={
         <div
           style={{
             opacity:
@@ -1239,44 +1250,44 @@ const Library = (params: {
           is_archived: is_archived_filter,
         })
         const modified_bookmark: UpsertBookmark_Params = {
-          bookmark_id_: bookmark.id,
-          is_public_: bookmark.is_public,
-          created_at_: new Date(bookmark.created_at),
-          title_: bookmark.title,
-          note_: bookmark.note,
-          is_archived_: is_archived_filter,
-          is_unread_: bookmark.is_unread,
-          stars_: bookmark.stars,
-          links_: bookmark.links.map((link) => ({
-            url_: link.url,
-            site_path_: link.site_path,
-            is_public_: link.is_public,
-            is_pinned_: link.is_pinned,
-            pin_title_: link.pin_title,
-            via_wayback_: link.via_wayback,
+          bookmark_id: bookmark.id,
+          is_public: bookmark.is_public,
+          created_at: new Date(bookmark.created_at),
+          title: bookmark.title,
+          note: bookmark.note,
+          is_archived: is_archived_filter,
+          is_unread: bookmark.is_unread,
+          stars: bookmark.stars,
+          links: bookmark.links.map((link) => ({
+            url: link.url,
+            site_path: link.site_path,
+            is_public: link.is_public,
+            is_pinned: link.is_pinned,
+            pin_title: link.pin_title,
+            via_wayback: link.via_wayback,
           })),
-          tags_: [
+          tags: [
             ...bookmark.tags.map((tag) => ({
-              name_: tag.name,
-              is_public_: tag.is_public,
+              name: tag.name,
+              is_public: tag.is_public,
             })),
             {
-              name_: tag_view_options_hook.dragged_tag.name_,
-              is_public_: bookmark.is_public,
+              name: tag_view_options_hook.dragged_tag.name_,
+              is_public: bookmark.is_public,
             },
           ],
         }
         const updated_bookmark = await dispatch(
           bookmarks_actions.upsert_bookmark({
-            bookmark_: modified_bookmark,
-            last_authorized_counts_params_:
+            bookmark: modified_bookmark,
+            last_authorized_counts_params:
               JSON.parse(
                 sessionStorage.getItem(
                   browser_storage.session_storage.library
                     .last_authorized_counts_params,
                 ) || 'null',
               ) || undefined,
-            get_tag_hierarchies_request_params_:
+            get_tag_hierarchies_request_params:
               tag_hierarchies_hook.get_authorized_request_params({
                 filter: filter_view_options_hook.current_filter_,
                 gte: date_view_options_hook.current_gte,
@@ -1318,31 +1329,31 @@ const Library = (params: {
                 is_archived: is_archived_filter,
               })
               const modified_bookmark: UpsertBookmark_Params = {
-                bookmark_id_: bookmark.id,
-                is_public_: bookmark.is_public,
-                created_at_: new Date(bookmark.created_at),
-                title_: bookmark.title,
-                note_: bookmark.note,
-                is_archived_: is_archived_filter,
-                is_unread_: bookmark.is_unread,
-                stars_: bookmark.stars,
-                links_: bookmark.links.map((link) => ({
-                  url_: link.url,
-                  site_path_: link.site_path,
-                  is_public_: link.is_public,
-                  is_pinned_: link.is_pinned,
-                  pin_title_: link.pin_title,
-                  via_wayback_: link.via_wayback,
+                bookmark_id: bookmark.id,
+                is_public: bookmark.is_public,
+                created_at: new Date(bookmark.created_at),
+                title: bookmark.title,
+                note: bookmark.note,
+                is_archived: is_archived_filter,
+                is_unread: bookmark.is_unread,
+                stars: bookmark.stars,
+                links: bookmark.links.map((link) => ({
+                  url: link.url,
+                  site_path: link.site_path,
+                  is_public: link.is_public,
+                  is_pinned: link.is_pinned,
+                  pin_title: link.pin_title,
+                  via_wayback: link.via_wayback,
                 })),
-                tags_: tags.map((tag) => ({
-                  name_: tag.name_,
-                  is_public_: tag.is_public_ || false,
+                tags: tags.map((tag) => ({
+                  name: tag.name_,
+                  is_public: tag.is_public_ || false,
                 })),
               }
               const updated_bookmark = await dispatch(
                 bookmarks_actions.upsert_bookmark({
-                  bookmark_: modified_bookmark,
-                  last_authorized_counts_params_:
+                  bookmark: modified_bookmark,
+                  last_authorized_counts_params:
                     JSON.parse(
                       sessionStorage.getItem(
                         browser_storage.session_storage.library
@@ -1387,40 +1398,40 @@ const Library = (params: {
                 is_archived: is_archived_filter,
               })
               const modified_bookmark: UpsertBookmark_Params = {
-                bookmark_id_: bookmark.id,
-                is_public_: bookmark.is_public,
-                created_at_: new Date(bookmark.created_at),
-                title_: bookmark.title,
-                note_: bookmark.note,
-                is_archived_: is_archived_filter,
-                is_unread_: bookmark.is_unread,
-                stars_: bookmark.stars,
-                links_: bookmark.links.map((link) => ({
-                  url_: link.url,
-                  site_path_: link.site_path,
-                  is_public_: link.is_public,
-                  is_pinned_: link.is_pinned,
-                  pin_title_: link.pin_title,
-                  via_wayback_: link.via_wayback,
+                bookmark_id: bookmark.id,
+                is_public: bookmark.is_public,
+                created_at: new Date(bookmark.created_at),
+                title: bookmark.title,
+                note: bookmark.note,
+                is_archived: is_archived_filter,
+                is_unread: bookmark.is_unread,
+                stars: bookmark.stars,
+                links: bookmark.links.map((link) => ({
+                  url: link.url,
+                  site_path: link.site_path,
+                  is_public: link.is_public,
+                  is_pinned: link.is_pinned,
+                  pin_title: link.pin_title,
+                  via_wayback: link.via_wayback,
                 })),
-                tags_: bookmark.tags
+                tags: bookmark.tags
                   .filter((tag) => tag.id !== tag_id)
                   .map((tag) => ({
-                    name_: tag.name,
-                    is_public_: tag.is_public,
+                    name: tag.name,
+                    is_public: tag.is_public,
                   })),
               }
               const updated_bookmark = await dispatch(
                 bookmarks_actions.upsert_bookmark({
-                  bookmark_: modified_bookmark,
-                  last_authorized_counts_params_:
+                  bookmark: modified_bookmark,
+                  last_authorized_counts_params:
                     JSON.parse(
                       sessionStorage.getItem(
                         browser_storage.session_storage.library
                           .last_authorized_counts_params,
                       ) || 'null',
                     ) || undefined,
-                  get_tag_hierarchies_request_params_:
+                  get_tag_hierarchies_request_params:
                     tag_hierarchies_hook.get_authorized_request_params({
                       filter: filter_view_options_hook.current_filter_,
                       gte: date_view_options_hook.current_gte,
@@ -1501,31 +1512,31 @@ const Library = (params: {
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
-                    bookmark_id_: bookmark.id,
-                    is_public_: bookmark.is_public,
-                    created_at_: new Date(bookmark.created_at),
-                    title_: bookmark.title,
-                    note_: bookmark.note,
-                    is_archived_: is_archived_filter,
-                    is_unread_: bookmark.is_unread,
-                    stars_: bookmark.stars,
-                    links_: bookmark.links.map((l) => ({
-                      url_: l.url,
-                      site_path_: l.site_path,
-                      is_public_: l.is_public,
-                      is_pinned_: link.url == l.url ? is_pinned : l.is_pinned,
-                      pin_title_: l.pin_title,
-                      via_wayback_: l.via_wayback,
+                    bookmark_id: bookmark.id,
+                    is_public: bookmark.is_public,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    note: bookmark.note,
+                    is_archived: is_archived_filter,
+                    is_unread: bookmark.is_unread,
+                    stars: bookmark.stars,
+                    links: bookmark.links.map((l) => ({
+                      url: l.url,
+                      site_path: l.site_path,
+                      is_public: l.is_public,
+                      is_pinned: link.url == l.url ? is_pinned : l.is_pinned,
+                      pin_title: l.pin_title,
+                      via_wayback: l.via_wayback,
                     })),
-                    tags_: bookmark.tags.map((tag) => ({
-                      name_: tag.name,
-                      is_public_: tag.is_public,
+                    tags: bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      is_public: tag.is_public,
                     })),
                   }
                   const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
-                      bookmark_: modified_bookmark,
-                      last_authorized_counts_params_:
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
                             browser_storage.session_storage.library
@@ -1614,32 +1625,32 @@ const Library = (params: {
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
-                    bookmark_id_: bookmark.id,
-                    is_public_: bookmark.is_public,
-                    created_at_: new Date(bookmark.created_at),
-                    title_: bookmark.title,
-                    note_: bookmark.note,
-                    is_archived_: is_archived_filter,
-                    is_unread_: bookmark.is_unread,
-                    stars_: bookmark.stars,
-                    links_: bookmark.links.map((l) => ({
-                      url_: l.url,
-                      site_path_: l.site_path,
-                      is_public_: l.is_public,
-                      is_pinned_: l.is_pinned,
-                      pin_title_: l.pin_title,
-                      via_wayback_:
+                    bookmark_id: bookmark.id,
+                    is_public: bookmark.is_public,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    note: bookmark.note,
+                    is_archived: is_archived_filter,
+                    is_unread: bookmark.is_unread,
+                    stars: bookmark.stars,
+                    links: bookmark.links.map((l) => ({
+                      url: l.url,
+                      site_path: l.site_path,
+                      is_public: l.is_public,
+                      is_pinned: l.is_pinned,
+                      pin_title: l.pin_title,
+                      via_wayback:
                         link.url == l.url ? via_wayback : l.via_wayback,
                     })),
-                    tags_: bookmark.tags.map((tag) => ({
-                      name_: tag.name,
-                      is_public_: tag.is_public,
+                    tags: bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      is_public: tag.is_public,
                     })),
                   }
                   const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
-                      bookmark_: modified_bookmark,
-                      last_authorized_counts_params_:
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
                             browser_storage.session_storage.library
@@ -1722,38 +1733,38 @@ const Library = (params: {
                   })
                   const is_unread = !bookmark.is_unread
                   const modified_bookmark: UpsertBookmark_Params = {
-                    bookmark_id_: bookmark.id,
-                    is_public_: bookmark.is_public,
-                    created_at_: new Date(bookmark.created_at),
-                    title_: bookmark.title,
-                    note_: bookmark.note,
-                    is_archived_: is_archived_filter,
-                    is_unread_: is_unread,
-                    stars_: bookmark.stars,
-                    links_: bookmark.links.map((link) => ({
-                      url_: link.url,
-                      site_path_: link.site_path,
-                      is_public_: link.is_public,
-                      is_pinned_: link.is_pinned,
-                      pin_title_: link.pin_title,
-                      via_wayback_: link.via_wayback,
+                    bookmark_id: bookmark.id,
+                    is_public: bookmark.is_public,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    note: bookmark.note,
+                    is_archived: is_archived_filter,
+                    is_unread: is_unread,
+                    stars: bookmark.stars,
+                    links: bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                      is_public: link.is_public,
+                      is_pinned: link.is_pinned,
+                      pin_title: link.pin_title,
+                      via_wayback: link.via_wayback,
                     })),
-                    tags_: bookmark.tags.map((tag) => ({
-                      name_: tag.name,
-                      is_public_: tag.is_public,
+                    tags: bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      is_public: tag.is_public,
                     })),
                   }
                   const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
-                      bookmark_: modified_bookmark,
-                      last_authorized_counts_params_:
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
                             browser_storage.session_storage.library
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
-                      get_tag_hierarchies_request_params_:
+                      get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte,
@@ -1809,38 +1820,38 @@ const Library = (params: {
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
-                    bookmark_id_: bookmark.id,
-                    is_public_: bookmark.is_public,
-                    created_at_: new Date(bookmark.created_at),
-                    title_: bookmark.title,
-                    note_: bookmark.note,
-                    is_archived_: is_archived_filter,
-                    is_unread_: bookmark.is_unread,
-                    stars_: bookmark.stars == 1 ? 0 : 1,
-                    links_: bookmark.links.map((link) => ({
-                      url_: link.url,
-                      site_path_: link.site_path,
-                      is_public_: link.is_public,
-                      is_pinned_: link.is_pinned,
-                      pin_title_: link.pin_title,
-                      via_wayback_: link.via_wayback,
+                    bookmark_id: bookmark.id,
+                    is_public: bookmark.is_public,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    note: bookmark.note,
+                    is_archived: is_archived_filter,
+                    is_unread: bookmark.is_unread,
+                    stars: bookmark.stars == 1 ? 0 : 1,
+                    links: bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                      is_public: link.is_public,
+                      is_pinned: link.is_pinned,
+                      pin_title: link.pin_title,
+                      via_wayback: link.via_wayback,
                     })),
-                    tags_: bookmark.tags.map((tag) => ({
-                      name_: tag.name,
-                      is_public_: tag.is_public,
+                    tags: bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      is_public: tag.is_public,
                     })),
                   }
                   const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
-                      bookmark_: modified_bookmark,
-                      last_authorized_counts_params_:
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
                             browser_storage.session_storage.library
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
-                      get_tag_hierarchies_request_params_:
+                      get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte,
@@ -1898,38 +1909,38 @@ const Library = (params: {
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
-                    bookmark_id_: bookmark.id,
-                    is_public_: bookmark.is_public,
-                    created_at_: new Date(bookmark.created_at),
-                    title_: bookmark.title,
-                    note_: bookmark.note,
-                    is_archived_: is_archived_filter,
-                    is_unread_: bookmark.is_unread,
-                    stars_: bookmark.stars == 2 ? 0 : 2,
-                    links_: bookmark.links.map((link) => ({
-                      url_: link.url,
-                      site_path_: link.site_path,
-                      is_public_: link.is_public,
-                      is_pinned_: link.is_pinned,
-                      pin_title_: link.pin_title,
-                      via_wayback_: link.via_wayback,
+                    bookmark_id: bookmark.id,
+                    is_public: bookmark.is_public,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    note: bookmark.note,
+                    is_archived: is_archived_filter,
+                    is_unread: bookmark.is_unread,
+                    stars: bookmark.stars == 2 ? 0 : 2,
+                    links: bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                      is_public: link.is_public,
+                      is_pinned: link.is_pinned,
+                      pin_title: link.pin_title,
+                      via_wayback: link.via_wayback,
                     })),
-                    tags_: bookmark.tags.map((tag) => ({
-                      name_: tag.name,
-                      is_public_: tag.is_public,
+                    tags: bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      is_public: tag.is_public,
                     })),
                   }
                   const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
-                      bookmark_: modified_bookmark,
-                      last_authorized_counts_params_:
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
                             browser_storage.session_storage.library
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
-                      get_tag_hierarchies_request_params_:
+                      get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte,
@@ -1987,38 +1998,38 @@ const Library = (params: {
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
-                    bookmark_id_: bookmark.id,
-                    is_public_: bookmark.is_public,
-                    created_at_: new Date(bookmark.created_at),
-                    title_: bookmark.title,
-                    note_: bookmark.note,
-                    is_archived_: is_archived_filter,
-                    is_unread_: bookmark.is_unread,
-                    stars_: bookmark.stars == 3 ? 0 : 3,
-                    links_: bookmark.links.map((link) => ({
-                      url_: link.url,
-                      site_path_: link.site_path,
-                      is_public_: link.is_public,
-                      is_pinned_: link.is_pinned,
-                      pin_title_: link.pin_title,
-                      via_wayback_: link.via_wayback,
+                    bookmark_id: bookmark.id,
+                    is_public: bookmark.is_public,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    note: bookmark.note,
+                    is_archived: is_archived_filter,
+                    is_unread: bookmark.is_unread,
+                    stars: bookmark.stars == 3 ? 0 : 3,
+                    links: bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                      is_public: link.is_public,
+                      is_pinned: link.is_pinned,
+                      pin_title: link.pin_title,
+                      via_wayback: link.via_wayback,
                     })),
-                    tags_: bookmark.tags.map((tag) => ({
-                      name_: tag.name,
-                      is_public_: tag.is_public,
+                    tags: bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      is_public: tag.is_public,
                     })),
                   }
                   const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
-                      bookmark_: modified_bookmark,
-                      last_authorized_counts_params_:
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
                             browser_storage.session_storage.library
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
-                      get_tag_hierarchies_request_params_:
+                      get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte,
@@ -2076,38 +2087,38 @@ const Library = (params: {
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
-                    bookmark_id_: bookmark.id,
-                    is_public_: bookmark.is_public,
-                    created_at_: new Date(bookmark.created_at),
-                    title_: bookmark.title,
-                    note_: bookmark.note,
-                    is_archived_: is_archived_filter,
-                    is_unread_: bookmark.is_unread,
-                    stars_: bookmark.stars == 4 ? 0 : 4,
-                    links_: bookmark.links.map((link) => ({
-                      url_: link.url,
-                      site_path_: link.site_path,
-                      is_public_: link.is_public,
-                      is_pinned_: link.is_pinned,
-                      pin_title_: link.pin_title,
-                      via_wayback_: link.via_wayback,
+                    bookmark_id: bookmark.id,
+                    is_public: bookmark.is_public,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    note: bookmark.note,
+                    is_archived: is_archived_filter,
+                    is_unread: bookmark.is_unread,
+                    stars: bookmark.stars == 4 ? 0 : 4,
+                    links: bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                      is_public: link.is_public,
+                      is_pinned: link.is_pinned,
+                      pin_title: link.pin_title,
+                      via_wayback: link.via_wayback,
                     })),
-                    tags_: bookmark.tags.map((tag) => ({
-                      name_: tag.name,
-                      is_public_: tag.is_public,
+                    tags: bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      is_public: tag.is_public,
                     })),
                   }
                   const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
-                      bookmark_: modified_bookmark,
-                      last_authorized_counts_params_:
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
                             browser_storage.session_storage.library
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
-                      get_tag_hierarchies_request_params_:
+                      get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte,
@@ -2165,38 +2176,38 @@ const Library = (params: {
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
-                    bookmark_id_: bookmark.id,
-                    is_public_: bookmark.is_public,
-                    created_at_: new Date(bookmark.created_at),
-                    title_: bookmark.title,
-                    note_: bookmark.note,
-                    is_archived_: is_archived_filter,
-                    is_unread_: bookmark.is_unread,
-                    stars_: bookmark.stars == 5 ? 0 : 5,
-                    links_: bookmark.links.map((link) => ({
-                      url_: link.url,
-                      site_path_: link.site_path,
-                      is_public_: link.is_public,
-                      is_pinned_: link.is_pinned,
-                      pin_title_: link.pin_title,
-                      via_wayback_: link.via_wayback,
+                    bookmark_id: bookmark.id,
+                    is_public: bookmark.is_public,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    note: bookmark.note,
+                    is_archived: is_archived_filter,
+                    is_unread: bookmark.is_unread,
+                    stars: bookmark.stars == 5 ? 0 : 5,
+                    links: bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                      is_public: link.is_public,
+                      is_pinned: link.is_pinned,
+                      pin_title: link.pin_title,
+                      via_wayback: link.via_wayback,
                     })),
-                    tags_: bookmark.tags.map((tag) => ({
-                      name_: tag.name,
-                      is_public_: tag.is_public,
+                    tags: bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      is_public: tag.is_public,
                     })),
                   }
                   const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
-                      bookmark_: modified_bookmark,
-                      last_authorized_counts_params_:
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
                             browser_storage.session_storage.library
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
-                      get_tag_hierarchies_request_params_:
+                      get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte,
@@ -2350,15 +2361,15 @@ const Library = (params: {
                   })
                   const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
-                      bookmark_: modified_bookmark,
-                      last_authorized_counts_params_:
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
                             browser_storage.session_storage.library
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
-                      get_tag_hierarchies_request_params_:
+                      get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte,
@@ -2449,37 +2460,37 @@ const Library = (params: {
                     is_archived: !is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
-                    bookmark_id_: bookmark.id,
-                    is_public_: bookmark.is_public,
-                    created_at_: new Date(bookmark.created_at),
-                    title_: bookmark.title,
-                    is_archived_: !is_archived_filter,
-                    is_unread_: bookmark.is_unread,
-                    stars_: bookmark.stars,
-                    links_: bookmark.links.map((link) => ({
-                      url_: link.url,
-                      site_path_: link.site_path,
-                      is_public_: link.is_public,
-                      is_pinned_: link.is_pinned,
-                      pin_title_: link.pin_title,
-                      via_wayback_: link.via_wayback,
+                    bookmark_id: bookmark.id,
+                    is_public: bookmark.is_public,
+                    created_at: new Date(bookmark.created_at),
+                    title: bookmark.title,
+                    is_archived: !is_archived_filter,
+                    is_unread: bookmark.is_unread,
+                    stars: bookmark.stars,
+                    links: bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                      is_public: link.is_public,
+                      is_pinned: link.is_pinned,
+                      pin_title: link.pin_title,
+                      via_wayback: link.via_wayback,
                     })),
-                    tags_: bookmark.tags.map((tag) => ({
-                      name_: tag.name,
-                      is_public_: tag.is_public,
+                    tags: bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      is_public: tag.is_public,
                     })),
                   }
                   const updated_bookmark = await dispatch(
                     bookmarks_actions.upsert_bookmark({
-                      bookmark_: modified_bookmark,
-                      last_authorized_counts_params_:
+                      bookmark: modified_bookmark,
+                      last_authorized_counts_params:
                         JSON.parse(
                           sessionStorage.getItem(
                             browser_storage.session_storage.library
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
-                      get_tag_hierarchies_request_params_:
+                      get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
                           gte: date_view_options_hook.current_gte,

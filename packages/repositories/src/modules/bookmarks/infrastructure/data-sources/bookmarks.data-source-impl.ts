@@ -120,102 +120,102 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     const key = await Crypto.derive_key_from_password('my_secret_key')
 
     const body: CreateBookmark_Dto.Body = {
-      created_at: params.created_at_?.toISOString(),
-      title: params.is_public_ ? params.title_ : undefined,
+      created_at: params.created_at?.toISOString(),
+      title: params.is_public ? params.title : undefined,
       title_aes:
-        !params.is_public_ && params.title_
-          ? await Crypto.AES.encrypt(params.title_, key)
+        !params.is_public && params.title
+          ? await Crypto.AES.encrypt(params.title, key)
           : undefined,
-      note: params.is_public_ ? params.note_ : undefined,
+      note: params.is_public ? params.note : undefined,
       note_aes:
-        !params.is_public_ && params.note_
-          ? await Crypto.AES.encrypt(params.note_, key)
+        !params.is_public && params.note
+          ? await Crypto.AES.encrypt(params.note, key)
           : undefined,
-      is_public: params.is_public_ || undefined,
-      is_archived: params.is_archived_ || undefined,
-      stars: params.stars_ || undefined,
-      is_unread: params.is_unread_ || undefined,
+      is_public: params.is_public || undefined,
+      is_archived: params.is_archived || undefined,
+      stars: params.stars || undefined,
+      is_unread: params.is_unread || undefined,
       tags: await Promise.all(
-        params.tags_
-          .filter((tag) => tag.name_.trim().length > 0)
+        params.tags
+          .filter((tag) => tag.name.trim().length > 0)
           .reduce(
             (acc, tag) => {
               const is_duplicate =
-                acc.findIndex((t) => t.name_ == tag.name_) != -1
+                acc.findIndex((t) => t.name == tag.name) != -1
               if (is_duplicate) {
                 return acc
               } else {
                 return [...acc, tag]
               }
             },
-            [] as UpsertBookmark_Params['tags_'],
+            [] as UpsertBookmark_Params['tags'],
           )
           .map(async (tag) => {
-            if (tag.is_public_) {
+            if (tag.is_public) {
               return {
                 is_public: true,
-                hash: await Crypto.SHA256(tag.name_, key),
-                name: tag.name_.trim(),
+                hash: await Crypto.SHA256(tag.name, key),
+                name: tag.name.trim(),
               }
             } else {
               return {
                 is_public: false,
-                hash: await Crypto.SHA256(tag.name_, key),
-                name_aes: await Crypto.AES.encrypt(tag.name_.trim(), key),
+                hash: await Crypto.SHA256(tag.name, key),
+                name_aes: await Crypto.AES.encrypt(tag.name.trim(), key),
               }
             }
           }),
       ),
       links: await Promise.all(
-        params.links_
-          .filter((link) => link.url_.trim().length > 0)
+        params.links
+          .filter((link) => link.url.trim().length > 0)
           .reduce(
             (acc, link) => {
               const is_duplicate =
-                acc.findIndex((l) => l.url_ == link.url_.trim()) != -1
+                acc.findIndex((l) => l.url == link.url.trim()) != -1
               if (is_duplicate) {
                 return acc
               } else {
                 return [...acc, link]
               }
             },
-            [] as UpsertBookmark_Params['links_'],
+            [] as UpsertBookmark_Params['links'],
           )
           .map(async (link) => {
-            const domain = get_domain_from_url(link.url_)
-            if (link.is_public_) {
+            const domain = get_domain_from_url(link.url)
+            if (link.is_public) {
               return {
                 is_public: true,
-                url: link.url_.trim(),
-                hash: await Crypto.SHA256(link.url_.trim(), key),
-                site_path: link.is_public_ ? link.site_path_ : undefined,
-                is_pinned: link.is_pinned_,
-                pin_title: link.pin_title_,
-                via_wayback: link.via_wayback_,
+                url: link.url.trim(),
+                hash: await Crypto.SHA256(link.url.trim(), key),
+                site_path: link.is_public ? link.site_path : undefined,
+                is_pinned: link.is_pinned,
+                pin_title: link.pin_title,
+                via_wayback: link.via_wayback,
               }
             } else {
               return {
                 is_public: false,
-                url_aes: await Crypto.AES.encrypt(link.url_.trim(), key),
+                url_aes: await Crypto.AES.encrypt(link.url.trim(), key),
                 site_aes: await Crypto.AES.encrypt(
-                  link.site_path_ ? `${domain}/${link.site_path_}` : domain,
+                  link.site_path ? `${domain}/${link.site_path}` : domain,
                   key,
                 ),
-                hash: await Crypto.SHA256(link.url_.trim(), key),
-                is_pinned: link.is_pinned_,
-                pin_title_aes: link.pin_title_
-                  ? await Crypto.AES.encrypt(link.pin_title_, key)
+                hash: await Crypto.SHA256(link.url.trim(), key),
+                is_pinned: link.is_pinned,
+                pin_title_aes: link.pin_title
+                  ? await Crypto.AES.encrypt(link.pin_title, key)
                   : undefined,
-                via_wayback: link.via_wayback_,
+                via_wayback: link.via_wayback,
               }
             }
           }),
       ),
     }
 
-    if (params.bookmark_id_) {
+    if (params.bookmark_id) {
       return this._ky
-        .put(`v1/bookmarks/${params.bookmark_id_}`, {
+        .put(`v1/bookmarks/${params.bookmark_id}`, {
           body: JSON.stringify(body),
         })
         .json()

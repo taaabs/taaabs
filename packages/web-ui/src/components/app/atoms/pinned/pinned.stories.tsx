@@ -8,64 +8,64 @@ export default {
 export const Primary = () => (
   <StorybookMargin>
     <Pinned
-      is_draggable={true}
-      on_middle_click={() => {}}
-      selected_archived={false}
-      selected_starred={false}
-      selected_tags={[]}
-      selected_unread={false}
-      items={[
+      is_draggable_={true}
+      on_middle_click_={() => {}}
+      selected_archived_={false}
+      selected_starred_={false}
+      selected_tags_={[]}
+      selected_unread_={false}
+      items_={[
         {
-          url: 'https://github.com/1',
-          title: 'Example lorem ipsum lorem ipsum 1',
-          bookmark_id: 0,
-          created_at: new Date(),
-          is_unread: false,
-          stars: 0,
-          tags: [],
+          url_: 'https://github.com/1',
+          title_: 'Example lorem ipsum lorem ipsum 1',
+          bookmark_id_: 0,
+          created_at_: new Date(),
+          is_unread_: false,
+          stars_: 0,
+          tags_: [],
         },
         {
-          url: 'https://github.com/2',
-          title: 'Example lorem ipsum 2',
-          bookmark_id: 0,
-          created_at: new Date(),
-          is_unread: false,
-          stars: 0,
-          tags: [],
+          url_: 'https://github.com/2',
+          title_: 'Example lorem ipsum 2',
+          bookmark_id_: 0,
+          created_at_: new Date(),
+          is_unread_: false,
+          stars_: 0,
+          tags_: [],
         },
         {
-          url: 'https://github.com/3',
-          title: 'Example lorem ipsum 3',
-          stars: 2,
-          is_unread: true,
-          bookmark_id: 0,
-          created_at: new Date(),
-          tags: [],
+          url_: 'https://github.com/3',
+          title_: 'Example lorem ipsum 3',
+          stars_: 2,
+          is_unread_: true,
+          bookmark_id_: 0,
+          created_at_: new Date(),
+          tags_: [],
         },
         {
-          url: 'https://github.com/4',
-          title: 'Example lorem ipsum 4',
-          bookmark_id: 0,
-          created_at: new Date(),
-          is_unread: false,
-          stars: 0,
-          tags: [],
+          url_: 'https://github.com/4',
+          title_: 'Example lorem ipsum 4',
+          bookmark_id_: 0,
+          created_at_: new Date(),
+          is_unread_: false,
+          stars_: 0,
+          tags_: [],
         },
         {
-          url: 'https://github.com/5',
-          title: 'Example lorem ipsum 5',
-          stars: 5,
-          bookmark_id: 0,
-          created_at: new Date(),
-          is_unread: false,
-          tags: [],
+          url_: 'https://github.com/5',
+          title_: 'Example lorem ipsum 5',
+          stars_: 5,
+          bookmark_id_: 0,
+          created_at_: new Date(),
+          is_unread_: false,
+          tags_: [],
         },
       ]}
-      on_change={() => {}}
-      on_click={() => {}}
-      favicon_host="http://localhost:4000/v1/favicons"
-      translations={{
-        nothing_pinned: 'lorem ipsum',
+      on_change_={() => {}}
+      on_click_={() => {}}
+      favicon_host_="http://localhost:4000/v1/favicons"
+      translations_={{
+        nothing_pinned_: 'lorem ipsum',
       }}
     />
   </StorybookMargin>

@@ -9,99 +9,99 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 
 export namespace Pinned {
   type Item = {
-    bookmark_id: number
-    url: string
-    created_at: Date
-    title?: string
-    stars?: number
-    is_unread?: boolean
-    is_archived?: boolean
-    tags?: number[]
-    via_wayback?: boolean
+    bookmark_id_: number
+    url_: string
+    created_at_: Date
+    title_?: string
+    stars_?: number
+    is_unread_?: boolean
+    is_archived_?: boolean
+    tags_?: number[]
+    via_wayback_?: boolean
   }
   export type Props = {
-    library_updated_at_timestamp?: number
-    items: Item[]
-    on_change: (items: Item[]) => void
-    favicon_host: string
-    on_click: (item: Item) => void
-    on_middle_click: (item: Item) => void
-    is_draggable: boolean
-    selected_tags: number[]
-    selected_starred: boolean
-    selected_unread: boolean
-    selected_archived: boolean
-    current_gte?: number
-    current_lte?: number
-    translations: {
-      nothing_pinned: string
+    library_updated_at_timestamp_?: number
+    items_: Item[]
+    on_change_: (items: Item[]) => void
+    favicon_host_: string
+    on_click_: (item: Item) => void
+    on_middle_click_: (item: Item) => void
+    is_draggable_: boolean
+    selected_tags_: number[]
+    selected_starred_: boolean
+    selected_unread_: boolean
+    selected_archived_: boolean
+    current_gte_?: number
+    current_lte_?: number
+    translations_: {
+      nothing_pinned_: string
     }
   }
 }
 
 type SortableItem = {
   id: number
-  bookmark_id: number
-  created_at: Date
-  url: string
-  title?: string
-  stars?: number
-  is_unread?: boolean
-  is_archived?: boolean
-  tags?: number[]
-  via_wayback?: boolean
+  bookmark_id_: number
+  created_at_: Date
+  url_: string
+  title_?: string
+  stars_?: number
+  is_unread_?: boolean
+  is_archived_?: boolean
+  tags_?: number[]
+  via_wayback_?: boolean
 }
 
 export const Pinned: React.FC<Pinned.Props> = memo(
   function Pinned(props) {
     const [items, set_items] = useState<SortableItem[]>(
-      props.items.map((item, i) => ({
+      props.items_.map((item, i) => ({
         id: i,
-        bookmark_id: item.bookmark_id,
-        created_at: item.created_at,
-        url: item.url,
-        title: item.title,
-        stars: item.stars,
-        is_unread: item.is_unread,
-        is_archived: item.is_archived,
-        tags: item.tags,
-        via_wayback: item.via_wayback,
+        bookmark_id_: item.bookmark_id_,
+        created_at_: item.created_at_,
+        url_: item.url_,
+        title_: item.title_,
+        stars_: item.stars_,
+        is_unread_: item.is_unread_,
+        is_archived_: item.is_archived_,
+        tags_: item.tags_,
+        via_wayback_: item.via_wayback_,
       })),
     )
 
     let relevant_items = 0
 
     const items_dom = items.map((item) => {
-      const created_at_timestamp = Math.round(item.created_at.getTime() / 1000)
+      const created_at_timestamp = Math.round(item.created_at_.getTime() / 1000)
       let is_not_relevant = false
 
       if (
-        (props.selected_archived && !item.is_archived) ||
-        (!props.selected_archived && item.is_archived)
+        (props.selected_archived_ && !item.is_archived_) ||
+        (!props.selected_archived_ && item.is_archived_)
       ) {
         is_not_relevant = true
-      } else if (props.selected_starred && !item.stars) {
+      } else if (props.selected_starred_ && !item.stars_) {
         is_not_relevant = true
-      } else if (props.selected_unread && !item.is_unread) {
+      } else if (props.selected_unread_ && !item.is_unread_) {
         is_not_relevant = true
       } else if (
-        item.tags &&
-        !props.selected_tags.every((t) => item.tags!.includes(t))
+        item.tags_ &&
+        !props.selected_tags_.every((t) => item.tags_!.includes(t))
       ) {
         is_not_relevant = true
       } else if (
-        props.current_gte &&
-        props.current_lte &&
+        props.current_gte_ &&
+        props.current_lte_ &&
         (created_at_timestamp <
           new Date(
-            parseInt(props.current_gte.toString().substring(0, 4)),
-            parseInt(props.current_gte.toString().substring(4, 6)) - 1,
+            parseInt(props.current_gte_.toString().substring(0, 4)),
+            parseInt(props.current_gte_.toString().substring(4, 6)) - 1,
           ).getTime() /
             1000 ||
           created_at_timestamp >
             new Date(
-              parseInt(props.current_lte.toString().substring(0, 4)),
-              parseInt(props.current_lte.toString().substring(4, 6)),
+              parseInt(props.current_lte_.toString().substring(0, 4)),
+              parseInt(props.current_lte_.toString().substring(4, 6)),
             ).getTime() /
               1000 -
               1)
@@ -111,9 +111,9 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         relevant_items++
       }
 
-      const url = item.via_wayback
-        ? url_to_wayback({ date: item.created_at, url: item.url })
-        : item.url
+      const url = item.via_wayback_
+        ? url_to_wayback({ date: item.created_at_, url: item.url_ })
+        : item.url_
 
       return is_not_relevant ? (
         <div key={url} />
@@ -121,14 +121,14 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         <a
           key={url}
           href={url}
-          title={item.title}
+          title={item.title_}
           className={styles.item}
           onClick={(e) => {
             e.preventDefault()
-            props.on_click(item)
+            props.on_click_(item)
           }}
           onAuxClick={() => {
-            props.on_middle_click(item)
+            props.on_middle_click_(item)
           }}
           onContextMenu={(e) => {
             e.preventDefault()
@@ -140,24 +140,24 @@ export const Pinned: React.FC<Pinned.Props> = memo(
                 alt={'Favicon'}
                 width={16}
                 height={16}
-                src={`${props.favicon_host}/${get_domain_from_url(item.url)}`}
+                src={`${props.favicon_host_}/${get_domain_from_url(item.url_)}`}
               />
             </div>
             <div
               className={cn(styles.item__inner__title, {
-                [styles['item__inner__title--unread']]: item.is_unread,
-                [styles['item__inner__title--via-wayback']]: item.via_wayback,
+                [styles['item__inner__title--unread']]: item.is_unread_,
+                [styles['item__inner__title--via-wayback']]: item.via_wayback_,
               })}
             >
-              {item.title}
+              {item.title_}
             </div>
-            {item.is_unread && (
+            {item.is_unread_ && (
               <div className={styles['item__inner__unread']} />
             )}
           </div>
-          {item.stars && item.title && (
+          {item.stars_ && item.title_ && (
             <div className={styles['item__stars']}>
-              {[...Array(item.stars)].map((_, i) => (
+              {[...Array(item.stars_)].map((_, i) => (
                 <Icon variant="STAR_FILLED" key={i} />
               ))}
             </div>
@@ -172,16 +172,16 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         <div className={styles['shadow-fix']} />
         {relevant_items == 0 && (
           <div className={styles['nothing-pinned']}>
-            {props.translations.nothing_pinned}
+            {props.translations_.nothing_pinned_}
           </div>
         )}
-        {props.is_draggable ? (
+        {props.is_draggable_ ? (
           <ReactSortable
             list={items}
             setList={(new_items) => {
               if (JSON.stringify(new_items) == JSON.stringify(items)) return
               set_items(new_items)
-              props.on_change(new_items)
+              props.on_change_(new_items)
             }}
             animation={system_values.sortablejs_animation_duration}
             forceFallback={true}
@@ -198,5 +198,5 @@ export const Pinned: React.FC<Pinned.Props> = memo(
       </>
     )
   },
-  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
+  (o, n) => o.library_updated_at_timestamp_ == n.library_updated_at_timestamp_,
 )

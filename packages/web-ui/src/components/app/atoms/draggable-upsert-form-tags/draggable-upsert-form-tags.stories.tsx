@@ -8,17 +8,17 @@ export default {
 export const Primary = () => (
   <StorybookMargin>
     <DraggableUpsertFormTags
-      tags={[
-        { name: 'aaa', is_public: true },
-        { name: 'bbb', is_public: false },
+      tags_={[
+        { name_: 'aaa', is_public_: true },
+        { name_: 'bbb', is_public_: false },
       ]}
-      on_change={() => {}}
-      show_visibility_toggler={true}
-      translations={{
-        add: 'Lorem ipsum',
-        private: 'Private',
-        public: 'Public',
-        visibility: 'Visibility',
+      on_change_={() => {}}
+      show_visibility_toggler_={true}
+      translations_={{
+        add_: 'Lorem ipsum',
+        private_: 'Private',
+        public_: 'Public',
+        visibility_: 'Visibility',
       }}
     />
   </StorybookMargin>

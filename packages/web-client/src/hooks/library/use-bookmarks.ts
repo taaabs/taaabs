@@ -330,6 +330,7 @@ export const use_bookmarks = () => {
   )
 
   useUpdateEffect(() => {
+    if (bookmarks === undefined || has_more_bookmarks === undefined) return
     set_bookomarks_to_session_storage({
       bookmarks,
       search_params: search_params.toString(),

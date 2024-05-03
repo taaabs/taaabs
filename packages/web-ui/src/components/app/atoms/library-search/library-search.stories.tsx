@@ -165,14 +165,14 @@ export const Primary = () => (
         search_string_={'mid'}
         hints_={[
           {
-            search_string: 'mid',
-            completion: 'dle',
-            type: 'recent',
+            search_string_: 'mid',
+            completion_: 'dle',
+            type_: 'recent',
           },
           {
-            search_string: 'mid',
-            completion: 'point',
-            type: 'new',
+            search_string_: 'mid',
+            completion_: 'point',
+            type_: 'new',
           },
         ]}
         on_click_hint_={() => {}}

@@ -9,7 +9,7 @@ export const Primary = () => (
   <StorybookMargin>
     <div style={{ width: 260 }}>
       <CustomRange
-        counts_={[
+        counts={[
           {
             yyyymm: 202302,
             bookmark_count: 30,
@@ -65,13 +65,12 @@ export const Primary = () => (
             unread_count: 0,
           },
         ]}
-        on_yyyymm_change_={() => {}}
-        clear_date_range_={() => {}}
-        has_results={true}
+        on_yyyymm_change={() => {}}
+        clear_date_range={() => {}}
       />
       <StorybookSpacer />
       <CustomRange
-        counts_={[
+        counts={[
           {
             yyyymm: 202302,
             bookmark_count: 30,
@@ -127,15 +126,14 @@ export const Primary = () => (
             unread_count: 0,
           },
         ]}
-        on_yyyymm_change_={() => {}}
-        clear_date_range_={() => {}}
-        current_gte_={202303}
-        current_lte_={202305}
-        has_results={true}
+        on_yyyymm_change={() => {}}
+        clear_date_range={() => {}}
+        current_gte={202303}
+        current_lte={202305}
       />
       <StorybookSpacer />
       <CustomRange
-        counts_={[
+        counts={[
           {
             yyyymm: 202302,
             bookmark_count: 30,
@@ -191,11 +189,10 @@ export const Primary = () => (
             unread_count: 0,
           },
         ]}
-        on_yyyymm_change_={() => {}}
-        clear_date_range_={() => {}}
-        current_gte_={202303}
-        current_lte_={202305}
-        has_results={true}
+        on_yyyymm_change={() => {}}
+        clear_date_range={() => {}}
+        current_gte={202303}
+        current_lte={202305}
       />
     </div>
   </StorybookMargin>

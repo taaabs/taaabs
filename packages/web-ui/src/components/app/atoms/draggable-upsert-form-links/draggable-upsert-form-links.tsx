@@ -267,7 +267,6 @@ export const DraggableUpsertFormLinks: React.FC<
           on_change={(value) => {
             set_new_url(value)
           }}
-          autofocus={props.links.length == 0}
           placeholder={props.translations.enter_url}
           on_focus={() => {
             is_input_focused.current = true

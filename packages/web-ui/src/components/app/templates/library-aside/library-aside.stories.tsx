@@ -9,8 +9,8 @@ export const Primary = () => {
   return (
     <>
       <LibraryAside
-        on_feedback_click={() => {}}
-        feedback_label="Give feedback"
+        on_feedback_click_={() => {}}
+        feedback_label_="Give feedback"
         slot_sort_by={{
           button: <>[sortby]</>,
           dropdown: <></>,
@@ -21,13 +21,13 @@ export const Primary = () => {
           dropdown: <></>,
           is_dropdown_visible: false,
         }}
-        slot_custom_range={<>[custom range]</>}
-        slot_tags={<>[tags]</>}
+        slot_custom_range_={<>[custom range]</>}
+        slot_tags_={<>[tags]</>}
       />
       <StorybookSpacer />
       <LibraryAside
-        on_feedback_click={() => {}}
-        feedback_label="Give feedback"
+        on_feedback_click_={() => {}}
+        feedback_label_="Give feedback"
         slot_sort_by={{
           button: <>[sortby]</>,
           dropdown: <>[dropdown]</>,
@@ -38,8 +38,8 @@ export const Primary = () => {
           dropdown: <>[dropdown]</>,
           is_dropdown_visible: true,
         }}
-        slot_custom_range={<>[custom range]</>}
-        slot_tags={<>[tags]</>}
+        slot_custom_range_={<>[custom range]</>}
+        slot_tags_={<>[tags]</>}
       />
     </>
   )

@@ -12,7 +12,7 @@ export type Tags = Record<string, { name: string; yields: number }>
 
 export type CountsState = {
   is_fetching?: boolean
-  should_refetch_?: boolean
+  should_refetch?: boolean
   counts_data?: Counts_Ro
   months?: Months
   tags?: Tags
@@ -31,9 +31,9 @@ export const counts_slice = createSlice({
     },
     set_should_refetch(
       state,
-      action: PayloadAction<CountsState['should_refetch_']>,
+      action: PayloadAction<CountsState['should_refetch']>,
     ) {
-      state.should_refetch_ = action.payload
+      state.should_refetch = action.payload
     },
     set_data(state, action: PayloadAction<Counts_Ro>) {
       state.counts_data = action.payload
