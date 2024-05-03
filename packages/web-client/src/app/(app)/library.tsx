@@ -323,7 +323,7 @@ const Library = (params: {
   }, [
     filter_view_options_hook.current_filter_,
     sort_by_view_options_hook.current_sort_by_,
-    order_view_options_hook.current_order,
+    order_view_options_hook.current_order_,
   ])
 
   useUpdateEffect(() => {
@@ -978,19 +978,19 @@ const Library = (params: {
                 {
                   label: 'Newest',
                   is_selected:
-                    order_view_options_hook.current_order == Order.DESC,
+                    order_view_options_hook.current_order_ == Order.DESC,
                 },
                 {
                   label: 'Oldest',
                   is_selected:
-                    order_view_options_hook.current_order == Order.ASC,
+                    order_view_options_hook.current_order_ == Order.ASC,
                 },
               ]}
               on_item_click={(option_idx) => {
                 if (option_idx == 0) {
-                  order_view_options_hook.set_order_query_param(Order.DESC)
+                  order_view_options_hook.set_order_query_param_(Order.DESC)
                 } else if (option_idx == 1) {
-                  order_view_options_hook.set_order_query_param(Order.ASC)
+                  order_view_options_hook.set_order_query_param_(Order.ASC)
                 }
               }}
             />
