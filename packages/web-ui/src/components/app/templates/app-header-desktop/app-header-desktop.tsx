@@ -28,7 +28,7 @@ export const AppHeaderDesktop = (props: AppHeaderDesktop.Props) => {
               <img src={'/cockroachdb.png'} />
               <div className={styles.cockroachdb__text}>
                 <span>{props.translations.powered_by}</span>
-                <span>CockroachDB Cloud</span>
+                <span>CockroachDB</span>
               </div>
             </a>
           </div>
