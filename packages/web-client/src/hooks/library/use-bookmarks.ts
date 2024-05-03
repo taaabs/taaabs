@@ -34,7 +34,7 @@ export const use_bookmarks = () => {
     is_upserting,
   } = use_library_selector((state) => state.bookmarks)
 
-  const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
+  const get_bookmarks_ = (params: { should_get_next_page?: boolean }) => {
     const ky_instance = ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
       headers: {
@@ -190,7 +190,7 @@ export const use_bookmarks = () => {
     }
   }
 
-  const get_bookmarks_by_ids = async (params: {
+  const get_bookmarks_by_ids_ = async (params: {
     // All ids of a search result.
     all_not_paginated_ids: number[]
     should_get_next_page?: boolean
@@ -289,7 +289,7 @@ export const use_bookmarks = () => {
       }
     } else {
       if (window.location.hash) return
-      get_bookmarks({})
+      get_bookmarks_({})
     }
   }, [search_params])
 
@@ -342,8 +342,8 @@ export const use_bookmarks = () => {
 
   return {
     bookmarks,
-    get_bookmarks,
-    get_bookmarks_by_ids,
+    get_bookmarks_,
+    get_bookmarks_by_ids_,
     incoming_bookmarks,
     is_fetching,
     is_fetching_more_bookmarks,

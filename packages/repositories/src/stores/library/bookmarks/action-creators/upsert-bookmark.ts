@@ -87,7 +87,7 @@ export const upsert_bookmark = (params: {
           )
         }
 
-        // Refetch pinned
+        // We refetch additional required things here to have those requests ruinning in parallel.
         const pinned_data_source = new Pinned_DataSourceImpl(params.ky)
         const pinned_repository = new Pinned_RepositoryImpl(pinned_data_source)
         const get_pinned_use_case = new GetPinnedAuthorized_UseCase(

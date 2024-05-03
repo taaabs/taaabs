@@ -44,7 +44,7 @@ export const use_tag_view_options = () => {
     }
   }, [search_params])
 
-  const add_tag_to_search_params = (tag_id: number) => {
+  const add_tag_to_search_params_ = (tag_id: number) => {
     if (selected_tags_.length == system_values.library.max_selected_tags) {
       toast.error(
         `Up to ${system_values.library.max_selected_tags} tags can be selected at a time`,
@@ -82,7 +82,7 @@ export const use_tag_view_options = () => {
     )
   }
 
-  const remove_tags_from_search_params = (tag_ids: number[]) => {
+  const remove_tags_from_search_params_ = (tag_ids: number[]) => {
     const selected_tags = search_params.get(search_params_keys.tags)
       ? search_params
           .get(search_params_keys.tags)!
@@ -149,8 +149,8 @@ export const use_tag_view_options = () => {
 
   return {
     selected_tags_,
-    add_tag_to_search_params,
-    remove_tags_from_search_params,
+    add_tag_to_search_params_,
+    remove_tags_from_search_params_,
     clear_selected_tags,
     set_many_tags_to_search_params,
     dragged_tag,

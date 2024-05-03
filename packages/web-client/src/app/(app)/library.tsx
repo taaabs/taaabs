@@ -193,25 +193,25 @@ const Library = (params: {
       ) {
         is_relevant = false
       } else if (
-        date_view_options_hook.current_gte &&
-        date_view_options_hook.current_lte &&
+        date_view_options_hook.current_gte_ &&
+        date_view_options_hook.current_lte_ &&
         (created_at_timestamp <
           new Date(
             parseInt(
-              date_view_options_hook.current_gte.toString().substring(0, 4),
+              date_view_options_hook.current_gte_.toString().substring(0, 4),
             ),
             parseInt(
-              date_view_options_hook.current_gte.toString().substring(4, 6),
+              date_view_options_hook.current_gte_.toString().substring(4, 6),
             ) - 1,
           ).getTime() /
             1000 ||
           created_at_timestamp >
             new Date(
               parseInt(
-                date_view_options_hook.current_lte.toString().substring(0, 4),
+                date_view_options_hook.current_lte_.toString().substring(0, 4),
               ),
               parseInt(
-                date_view_options_hook.current_lte.toString().substring(4, 6),
+                date_view_options_hook.current_lte_.toString().substring(4, 6),
               ),
             ).getTime() /
               1000 -
@@ -267,8 +267,8 @@ const Library = (params: {
       Promise.all([
         tag_hierarchies_hook.get_tag_hierarchies({
           filter: filter_view_options_hook.current_filter_,
-          gte: date_view_options_hook.current_gte,
-          lte: date_view_options_hook.current_lte,
+          gte: date_view_options_hook.current_gte_,
+          lte: date_view_options_hook.current_lte_,
         }),
         dispatch(
           counts_actions.refresh_authorized_counts({
@@ -293,7 +293,7 @@ const Library = (params: {
 
   useUpdateEffect(() => {
     if (counts_hook.should_refetch) {
-      counts_hook.get_counts()
+      counts_hook.get_counts_()
     }
   }, [counts_hook.should_refetch])
 
@@ -330,7 +330,7 @@ const Library = (params: {
     if (search_hook.db || search_hook.archived_db) {
       search_hook.set_current_filter(filter_view_options_hook.current_filter_)
       search_hook.set_selected_tags(
-        counts_hook.selected_tags
+        counts_hook.selected_tags_
           .filter((id) => {
             if (!bookmarks_hook.bookmarks || !bookmarks_hook.bookmarks[0])
               return false
@@ -354,7 +354,7 @@ const Library = (params: {
 
   useUpdateEffect(() => {
     if (search_hook.result) {
-      bookmarks_hook.get_bookmarks_by_ids({
+      bookmarks_hook.get_bookmarks_by_ids_({
         all_not_paginated_ids: search_hook.result.hits.map((hit) =>
           parseInt(hit.document.id),
         ),
@@ -365,12 +365,12 @@ const Library = (params: {
   useEffect(() => {
     tag_hierarchies_hook.get_tag_hierarchies({
       filter: filter_view_options_hook.current_filter_,
-      gte: date_view_options_hook.current_gte,
-      lte: date_view_options_hook.current_lte,
+      gte: date_view_options_hook.current_gte_,
+      lte: date_view_options_hook.current_lte_,
     })
   }, [
-    date_view_options_hook.current_gte,
-    date_view_options_hook.current_lte,
+    date_view_options_hook.current_gte_,
+    date_view_options_hook.current_lte_,
     filter_view_options_hook.current_filter_,
   ])
 
@@ -420,7 +420,7 @@ const Library = (params: {
           search_hook.set_is_search_focused(true)
 
           search_hook.set_selected_tags(
-            counts_hook.selected_tags
+            counts_hook.selected_tags_
               .filter((id) => {
                 if (!bookmarks_hook.bookmarks || !bookmarks_hook.bookmarks[0])
                   return false
@@ -552,7 +552,7 @@ const Library = (params: {
             ) {
               filter = Filter.ARCHIVED_STARRED_UNREAD
             }
-            filter_view_options_hook.set_filter_query_param(filter)
+            filter_view_options_hook.set_filter_query_param_(filter)
           },
         },
         ...(!username
@@ -611,7 +611,7 @@ const Library = (params: {
                   ) {
                     filter = Filter.ARCHIVED_STARRED_UNREAD
                   }
-                  filter_view_options_hook.set_filter_query_param(filter)
+                  filter_view_options_hook.set_filter_query_param_(filter)
                 },
               },
             ]
@@ -670,7 +670,7 @@ const Library = (params: {
               filter = Filter.STARRED_UNREAD
             }
 
-            filter_view_options_hook.set_filter_query_param(filter)
+            filter_view_options_hook.set_filter_query_param_(filter)
           },
         },
       ]}
@@ -775,8 +775,8 @@ const Library = (params: {
           Filter.ARCHIVED_STARRED_UNREAD
       }
       selected_archived_={is_archived_filter}
-      current_gte_={date_view_options_hook.current_gte}
-      current_lte_={date_view_options_hook.current_lte}
+      current_gte_={date_view_options_hook.current_gte_}
+      current_lte_={date_view_options_hook.current_lte_}
     />
   )
   const slot_tag_hierarchies = (
@@ -790,8 +790,8 @@ const Library = (params: {
 
           const update_tag_hierarchies_params: UpdateTagHierarchies_Params = {
             tag_hierarchies,
-            gte: date_view_options_hook.current_gte,
-            lte: date_view_options_hook.current_lte,
+            gte: date_view_options_hook.current_gte_,
+            lte: date_view_options_hook.current_lte_,
             starred_only:
               filter == Filter.STARRED ||
               filter == Filter.STARRED_UNREAD ||
@@ -838,7 +838,7 @@ const Library = (params: {
           if (bookmarks_hook.showing_bookmarks_fetched_by_ids) {
             search_hook.reset()
             if (filter_view_options_hook.current_filter_ == Filter.NONE) {
-              bookmarks_hook.get_bookmarks({})
+              bookmarks_hook.get_bookmarks_({})
             }
           }
         }}
@@ -1010,13 +1010,13 @@ const Library = (params: {
               library_updated_at_timestamp={library_updated_at_timestamp}
               counts={counts_hook.months || undefined}
               on_yyyymm_change={
-                date_view_options_hook.set_gte_lte_search_params
+                date_view_options_hook.set_gte_lte_search_params_
               }
               clear_date_range={
-                date_view_options_hook.clear_gte_lte_search_params
+                date_view_options_hook.clear_gte_lte_search_params_
               }
-              current_gte={date_view_options_hook.current_gte}
-              current_lte={date_view_options_hook.current_lte}
+              current_gte={date_view_options_hook.current_gte_}
+              current_lte={date_view_options_hook.current_lte_}
               selected_tags={tag_view_options_hook.selected_tags_}
               is_range_selector_disabled={
                 sort_by_view_options_hook.current_sort_by_ ==
@@ -1056,7 +1056,9 @@ const Library = (params: {
                     }
                   })}
                 on_selected_tag_click={(tag_id) =>
-                  tag_view_options_hook.remove_tags_from_search_params([tag_id])
+                  tag_view_options_hook.remove_tags_from_search_params_([
+                    tag_id,
+                  ])
                 }
               />
               <UiAppAtom_Tags
@@ -1078,7 +1080,7 @@ const Library = (params: {
                         }))
                     : []
                 }
-                on_click_={tag_view_options_hook.add_tag_to_search_params}
+                on_click_={tag_view_options_hook.add_tag_to_search_params_}
                 on_tag_drag_start_={
                   !username ? tag_view_options_hook.set_dragged_tag : undefined
                 }
@@ -1150,7 +1152,7 @@ const Library = (params: {
         bookmark.tags
           ? bookmark.tags.map((tag) => {
               const is_selected = is_fetching_first_bookmarks
-                ? counts_hook.selected_tags.find((t) => t == tag.id) !=
+                ? counts_hook.selected_tags_.find((t) => t == tag.id) !=
                   undefined
                 : tag_view_options_hook.selected_tags_.find(
                     (t) => t == tag.id,
@@ -1171,9 +1173,9 @@ const Library = (params: {
       }
       is_unread_={bookmark.is_unread}
       stars_={bookmark.stars}
-      on_tag_click_={tag_view_options_hook.add_tag_to_search_params}
+      on_tag_click_={tag_view_options_hook.add_tag_to_search_params_}
       on_selected_tag_click_={(tag_id) =>
-        tag_view_options_hook.remove_tags_from_search_params([tag_id])
+        tag_view_options_hook.remove_tags_from_search_params_([tag_id])
       }
       render_height_={bookmark.render_height}
       set_render_height_={(height) => {
@@ -1290,8 +1292,8 @@ const Library = (params: {
             get_tag_hierarchies_request_params:
               tag_hierarchies_hook.get_authorized_request_params({
                 filter: filter_view_options_hook.current_filter_,
-                gte: date_view_options_hook.current_gte,
-                lte: date_view_options_hook.current_lte,
+                gte: date_view_options_hook.current_gte_,
+                lte: date_view_options_hook.current_lte_,
               }),
             ky: ky_instance,
           }),
@@ -1434,8 +1436,8 @@ const Library = (params: {
                   get_tag_hierarchies_request_params:
                     tag_hierarchies_hook.get_authorized_request_params({
                       filter: filter_view_options_hook.current_filter_,
-                      gte: date_view_options_hook.current_gte,
-                      lte: date_view_options_hook.current_lte,
+                      gte: date_view_options_hook.current_gte_,
+                      lte: date_view_options_hook.current_lte_,
                     }),
                   ky: ky_instance,
                 }),
@@ -1485,7 +1487,7 @@ const Library = (params: {
                 dispatch(
                   bookmarks_actions.set_is_fetching_first_bookmarks(true),
                 )
-                tag_view_options_hook.remove_tags_from_search_params([tag_id])
+                tag_view_options_hook.remove_tags_from_search_params_([tag_id])
               }
               dispatch(bookmarks_actions.set_is_upserting(false))
               toast.success(params.dictionary.library.bookmark_updated)
@@ -1767,8 +1769,8 @@ const Library = (params: {
                       get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
-                          gte: date_view_options_hook.current_gte,
-                          lte: date_view_options_hook.current_lte,
+                          gte: date_view_options_hook.current_gte_,
+                          lte: date_view_options_hook.current_lte_,
                         }),
                       ky: ky_instance,
                     }),
@@ -1854,8 +1856,8 @@ const Library = (params: {
                       get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
-                          gte: date_view_options_hook.current_gte,
-                          lte: date_view_options_hook.current_lte,
+                          gte: date_view_options_hook.current_gte_,
+                          lte: date_view_options_hook.current_lte_,
                         }),
                       ky: ky_instance,
                     }),
@@ -1943,8 +1945,8 @@ const Library = (params: {
                       get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
-                          gte: date_view_options_hook.current_gte,
-                          lte: date_view_options_hook.current_lte,
+                          gte: date_view_options_hook.current_gte_,
+                          lte: date_view_options_hook.current_lte_,
                         }),
                       ky: ky_instance,
                     }),
@@ -2032,8 +2034,8 @@ const Library = (params: {
                       get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
-                          gte: date_view_options_hook.current_gte,
-                          lte: date_view_options_hook.current_lte,
+                          gte: date_view_options_hook.current_gte_,
+                          lte: date_view_options_hook.current_lte_,
                         }),
                       ky: ky_instance,
                     }),
@@ -2121,8 +2123,8 @@ const Library = (params: {
                       get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
-                          gte: date_view_options_hook.current_gte,
-                          lte: date_view_options_hook.current_lte,
+                          gte: date_view_options_hook.current_gte_,
+                          lte: date_view_options_hook.current_lte_,
                         }),
                       ky: ky_instance,
                     }),
@@ -2210,8 +2212,8 @@ const Library = (params: {
                       get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
-                          gte: date_view_options_hook.current_gte,
-                          lte: date_view_options_hook.current_lte,
+                          gte: date_view_options_hook.current_gte_,
+                          lte: date_view_options_hook.current_lte_,
                         }),
                       ky: ky_instance,
                     }),
@@ -2298,7 +2300,7 @@ const Library = (params: {
               //       ],
               //     }
               //     const updated_bookmark = await dispatch(
-              //       bookmarks_actions.upsert_bookmark({
+              //       bookmarks_actions.upsert_bookmark_({
               //         bookmark: modified_bookmark,
               //         last_authorized_counts_params:
               //           JSON.parse(
@@ -2312,8 +2314,8 @@ const Library = (params: {
               //     )
               //     await tag_hierarchies_hook.get_tag_hierarchies({
               //       filter: filter_view_options_hook.current_filter_,
-              //       gte: date_view_options_hook.current_gte,
-              //       lte: date_view_options_hook.current_lte,
+              //       gte: date_view_options_hook.current_gte_,
+              //       lte: date_view_options_hook.current_lte_,
               //     })
               //     await search_hook.update_bookmark({
               //       db,
@@ -2372,8 +2374,8 @@ const Library = (params: {
                       get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
-                          gte: date_view_options_hook.current_gte,
-                          lte: date_view_options_hook.current_lte,
+                          gte: date_view_options_hook.current_gte_,
+                          lte: date_view_options_hook.current_lte_,
                         }),
                       ky: ky_instance,
                     }),
@@ -2406,7 +2408,7 @@ const Library = (params: {
                     dispatch(
                       bookmarks_actions.set_is_fetching_first_bookmarks(true),
                     )
-                    tag_view_options_hook.remove_tags_from_search_params(
+                    tag_view_options_hook.remove_tags_from_search_params_(
                       tags_to_remove_from_search_params,
                     )
                   }
@@ -2493,8 +2495,8 @@ const Library = (params: {
                       get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
-                          gte: date_view_options_hook.current_gte,
-                          lte: date_view_options_hook.current_lte,
+                          gte: date_view_options_hook.current_gte_,
+                          lte: date_view_options_hook.current_lte_,
                         }),
                       ky: ky_instance,
                     }),
@@ -2580,8 +2582,8 @@ const Library = (params: {
                       get_tag_hierarchies_request_params:
                         tag_hierarchies_hook.get_authorized_request_params({
                           filter: filter_view_options_hook.current_filter_,
-                          gte: date_view_options_hook.current_gte,
-                          lte: date_view_options_hook.current_lte,
+                          gte: date_view_options_hook.current_gte_,
+                          lte: date_view_options_hook.current_lte_,
                         }),
                       bookmark_id: bookmark.id,
                       ky: ky_instance,
@@ -2664,7 +2666,7 @@ const Library = (params: {
           if (bookmarks_hook.is_fetching || !bookmarks_hook.bookmarks?.length)
             return
           if (!search_hook.search_string && bookmarks_hook.has_more_bookmarks) {
-            bookmarks_hook.get_bookmarks({ should_get_next_page: true })
+            bookmarks_hook.get_bookmarks_({ should_get_next_page: true })
           } else if (
             search_hook.search_string &&
             search_hook.count &&
@@ -2672,7 +2674,7 @@ const Library = (params: {
             bookmarks_hook.bookmarks.length &&
             bookmarks_hook.bookmarks.length < search_hook.count
           ) {
-            bookmarks_hook.get_bookmarks_by_ids({
+            bookmarks_hook.get_bookmarks_by_ids_({
               all_not_paginated_ids: search_hook.result!.hits.map((hit) =>
                 parseInt(hit.document.id),
               ),
@@ -2692,9 +2694,9 @@ const Library = (params: {
           !is_fetching_first_bookmarks &&
           !search_hook.result &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
-          (date_view_options_hook.current_gte ||
-            date_view_options_hook.current_lte)
-            ? date_view_options_hook.clear_gte_lte_search_params
+          (date_view_options_hook.current_gte_ ||
+            date_view_options_hook.current_lte_)
+            ? date_view_options_hook.clear_gte_lte_search_params_
             : undefined
         }
         info_text={
