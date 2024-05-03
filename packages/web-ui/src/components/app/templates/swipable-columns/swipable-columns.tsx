@@ -147,7 +147,9 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
       if (
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
-        (event.target as any)?.nodeName == 'line'
+        (event.target as any)?.nodeName == 'line' ||
+        (event.target instanceof HTMLElement &&
+          (event as any).target.className.includes('sortable-ghost'))
       )
         return
 
@@ -184,7 +186,9 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
       if (
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
-        (event.target as any)?.nodeName == 'line'
+        (event.target as any)?.nodeName == 'line' ||
+        (event.target instanceof HTMLElement &&
+          (event as any).target.className.includes('sortable-ghost'))
       )
         return
 

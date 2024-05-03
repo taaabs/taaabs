@@ -420,9 +420,8 @@
             font-style: italic;
           }
           > span {
-            // Overflow hidden cuts italic text.
+            overflow-wrap: anywhere;
             padding-right: 1px;
-            text-overflow: ellipsis;
             overflow: hidden;
             -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
@@ -494,7 +493,8 @@
           }
         }
         &__public-saves {
-          margin-right: 8px;
+          white-space: nowrap;
+          margin-right: 6px;
           color: var(--text-color-dimmed);
           font-size: var(--font-size-13px);
           @include hover {
