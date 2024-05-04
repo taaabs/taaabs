@@ -87,7 +87,7 @@ const Page: React.FC = () => {
           },
           {
             name: 'Surfer',
-            description: 'Our must haves packed together',
+            description: 'Affordable plan with our must haves',
             previous_price:
               billing_cycle == BillingCycle.YEARLY
                 ? `$${price.monthly.lite}`
@@ -102,11 +102,9 @@ const Page: React.FC = () => {
             },
             bullets_heading: 'Everything in Free, plus:',
             bullets: [
-              'Add-on: Starred filter',
-              'Add-on: Unread filter',
-              'Add-on: Date visited sort',
-              'Add-on: Date updated sort',
-              'Add-on: Multi-link bookmarks',
+              'Starred & unread filter',
+              'Date visited & updated sort',
+              'Multi-link bookmarks',
             ],
             slot_button: (
               <UiCommonParticle_Button on_click={() => {}} size="medium">
@@ -131,7 +129,7 @@ const Page: React.FC = () => {
             },
             bullets_heading: 'Everything in Basic, plus:',
             bullets: [
-              'Unlock all addons ✨',
+              'Unlock all features ✨',
               'Get a PRO badge',
               'Claim shorter username',
             ],
