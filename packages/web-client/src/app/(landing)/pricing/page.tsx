@@ -108,7 +108,7 @@ const Page: React.FC = () => {
             ],
             slot_button: (
               <UiCommonParticle_Button on_click={() => {}} size="medium">
-                Subscribe to Basic
+                Subscribe to Surfer
               </UiCommonParticle_Button>
             ),
           },
@@ -127,7 +127,7 @@ const Page: React.FC = () => {
                   ? 'billed yearly'
                   : 'billed monthly',
             },
-            bullets_heading: 'Everything in Basic, plus:',
+            bullets_heading: 'Everything in Surfer, plus:',
             bullets: [
               'Unlock all features ✨',
               'Get a PRO badge',

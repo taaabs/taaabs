@@ -81,9 +81,9 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         },
       },
       {
-        label: 'Watching',
-        href: '/watching',
-        is_active: pathname == '/watching',
+        label: 'Notifications',
+        href: '/notifications',
+        is_active: pathname == '/notifications',
       },
     ]
   } else {

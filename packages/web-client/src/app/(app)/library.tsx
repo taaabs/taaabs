@@ -2658,7 +2658,7 @@ const Library = (params: {
         }}
         is_following={undefined}
         welcome_text={
-          auth_context.auth_data
+          !username && auth_context.auth_data
             ? `${params.dictionary.library.welcome}, ${auth_context.auth_data.username}`
             : undefined
         }

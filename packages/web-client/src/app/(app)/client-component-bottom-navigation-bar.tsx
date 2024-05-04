@@ -40,12 +40,12 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
           },
         },
         {
-          label: 'Watching',
+          label: 'Notifications',
           icon_variant: 'NOTIFICATIONS',
           icon_variant_active: 'NOTIFICATIONS_FILLED',
-          is_active: pathname == '/watching',
+          is_active: pathname == '/notifications',
           on_click: () => {
-            router.push('/watching')
+            router.push('/notifications')
           },
         },
       ]}
