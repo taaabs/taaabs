@@ -86,8 +86,8 @@ const Page: React.FC = () => {
             ),
           },
           {
-            name: 'Basic',
-            description: 'Affordable plan with our must haves',
+            name: 'Surfer',
+            description: 'Our must haves packed together',
             previous_price:
               billing_cycle == BillingCycle.YEARLY
                 ? `$${price.monthly.lite}`
