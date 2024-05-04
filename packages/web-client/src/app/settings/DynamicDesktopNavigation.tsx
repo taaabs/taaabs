@@ -9,9 +9,9 @@ export const DynamicDesktopNavigation: React.FC = () => {
   return (
     <>
       <UiAppAtom_DesktopMenuItem
-        href="/settings/account"
-        is_active={pathname == '/settings/account'}
-        label="Account"
+        href="/settings"
+        is_active={pathname == '/settings'}
+        label="General"
       />
       <UiAppAtom_DesktopMenuItem
         href="/settings/preferences"

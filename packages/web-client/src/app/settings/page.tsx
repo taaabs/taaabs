@@ -1,5 +1,13 @@
+'use client'
+
+import { SectionUsername } from './section-username'
+
 const Page: React.FC = () => {
-  return <div>x</div>
+  return (
+    <>
+      <SectionUsername />
+    </>
+  )
 }
 
 export default Page

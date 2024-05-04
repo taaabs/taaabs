@@ -1,10 +1,5 @@
 lockfileVersion: '6.0'
 
-patchedDependencies:
-  next@14.0.5-canary.18:
-    hash: fytgwnsp7cyls2nrhdzifp4ilq
-    path: patches/next@14.0.5-canary.18.patch
-
 importers:
 
   .:
@@ -739,7 +734,7 @@ importers:
         version: 1.10.0
       next:
         specifier: 14.0.5-canary.18
-        version: 14.0.5-canary.18(patch_hash=fytgwnsp7cyls2nrhdzifp4ilq)(@babel/core@7.23.0)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.0.5-canary.18(@babel/core@7.23.0)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -11402,7 +11397,7 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /next@14.0.5-canary.18(patch_hash=fytgwnsp7cyls2nrhdzifp4ilq)(@babel/core@7.23.0)(react-dom@18.2.0)(react@18.2.0):
+  /next@14.0.5-canary.18(@babel/core@7.23.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-JaCgGzABOJSm9gyoIs5RtlDil0KfMoWMYCvHbeQBCNrGIYRvhsYrJ/PNYmcFxcemz/P5GFk2kO1HS96RgucGFA==}
     engines: {node: '>=18.17.0'}
     hasBin: true
@@ -11441,7 +11436,6 @@ packages:
       - '@babel/core'
       - babel-plugin-macros
     dev: false
-    patched: true
 
   /nice-napi@1.0.2:
     resolution: {integrity: sha512-px/KnJAJZf5RuBGcfD+Sp2pAKq0ytz8j+1NehvgIGFkvtvFrDM3T8E4x/JJODXK9WZow8RRGrbA9QQ3hs+pDhA==}
