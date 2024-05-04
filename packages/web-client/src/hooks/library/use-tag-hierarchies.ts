@@ -1,11 +1,13 @@
+import { AuthContext } from '@/app/auth-provider'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { Filter } from '@/types/library/filter'
 import { GetTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/get-tag-hierarchies.params'
 import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
-import ky from 'ky'
 import { useParams } from 'next/navigation'
+import { useContext } from 'react'
 
 export const use_tag_hierarchies = () => {
+  const auth_context = useContext(AuthContext)!
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
   const {
@@ -56,20 +58,13 @@ export const use_tag_hierarchies = () => {
     gte?: number
     lte?: number
   }) => {
-    const ky_instance = ky.create({
-      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-        'Content-Type': 'application/json',
-      },
-    })
     if (!username) {
       const request_params = get_authorized_request_params_(params)
 
       await dispatch(
         tag_hierarchies_actions.get_tag_hierarchies_authorized({
           request_params,
-          ky: ky_instance,
+          ky: auth_context.ky_instance,
         }),
       )
     } else {
@@ -97,7 +92,7 @@ export const use_tag_hierarchies = () => {
       await dispatch(
         tag_hierarchies_actions.get_tag_hierarchies_public({
           request_params,
-          ky: ky_instance,
+          ky: auth_context.ky_instance,
         }),
       )
     }

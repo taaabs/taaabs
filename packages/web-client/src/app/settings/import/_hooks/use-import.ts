@@ -1,12 +1,12 @@
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { bookmarksToJSON } from 'bookmarks-to-json'
 import { toast } from 'react-toastify'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
 import { SendImportData_UseCase } from '@repositories/modules/import-export/domain/usecases/send-import-data.use-case'
 import { SendImportData_Params } from '@repositories/modules/import-export/domain/types/send-import-data.params'
-import ky from 'ky'
+import { AuthContext } from '@/app/auth-provider'
 
 type BookmarkNode = {
   type: 'link'
@@ -28,6 +28,7 @@ type ParsedXMLBookmark = {
 }
 
 export const use_import = () => {
+  const auth_context = useContext(AuthContext)!
   const [file_text, set_file_text] = useState<string>()
   // Data coming from official export.
   const [import_data, set_import_data] = useState<SendImportData_Params>()
@@ -121,15 +122,9 @@ export const use_import = () => {
 
     if (!params) return
 
-    const ky_instance = ky.create({
-      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-        'Content-Type': 'application/json',
-      },
-    })
-
-    const data_source = new ImportExport_DataSourceImpl(ky_instance)
+    const data_source = new ImportExport_DataSourceImpl(
+      auth_context.ky_instance,
+    )
     const repository = new ImportExport_RepositoryImpl(data_source)
     const send_import_data_use_case = new SendImportData_UseCase(repository)
     set_is_sending(true)

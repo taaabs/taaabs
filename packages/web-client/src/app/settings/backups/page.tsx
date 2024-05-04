@@ -17,10 +17,10 @@ import { use_is_hydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 const Page: React.FC = () => {
+  const auth_context = useContext(AuthContext)!
   const is_hydrated = use_is_hydrated()
   const dispatch = use_settings_backups_dispatch()
   const state = use_settings_backups_selector((state) => state.backups)
-  const auth_context = useContext(AuthContext)!
 
   useUpdateEffect(() => {
     dispatch(

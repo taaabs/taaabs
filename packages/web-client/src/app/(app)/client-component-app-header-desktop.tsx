@@ -30,6 +30,7 @@ import { browser_storage } from '@/constants/browser-storage'
 import { AuthContext } from '../auth-provider'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
+  const auth_context = useContext(AuthContext)!
   const search_params = useSearchParams()
   const params = useParams()
   const pathname = usePathname()
@@ -38,7 +39,6 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const modal = useContext(ModalContext)
   const global_library_search = useContext(GlobalLibarySearchContext)
   const is_hydrated = use_is_hydrated()
-  const auth_context = useContext(AuthContext)!
 
   let logo: JSX.Element
   // TODO: backHref should be smarter :^)

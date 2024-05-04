@@ -1,7 +1,7 @@
 import { use_library_dispatch } from '@/stores/library'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_filter_view_options } from '@/hooks/library/use-filter-view-options'
@@ -73,6 +73,7 @@ const Library = (params: {
   dictionary: Dictionary
   search_hook: ReturnType<typeof use_search>
 }) => {
+  const auth_context = useContext(AuthContext)!
   use_scroll_restore()
   const is_hydrated = use_is_hydrated()
   const popstate_count = use_popstate_count()
@@ -80,7 +81,6 @@ const Library = (params: {
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
-  const auth_context = useContext(AuthContext)!
   const modal_context = useContext(ModalContext)
   const [show_skeletons, set_show_skeletons] = useState(true)
   const search_hook = params.search_hook
@@ -355,13 +355,14 @@ const Library = (params: {
     }
   }, [search_hook.queried_at_timestamp])
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     tag_hierarchies_hook.get_tag_hierarchies_({
       filter: filter_view_options_hook.current_filter_,
       gte: date_view_options_hook.current_gte_,
       lte: date_view_options_hook.current_lte_,
     })
   }, [
+    is_hydrated,
     date_view_options_hook.current_gte_,
     date_view_options_hook.current_lte_,
     filter_view_options_hook.current_filter_,

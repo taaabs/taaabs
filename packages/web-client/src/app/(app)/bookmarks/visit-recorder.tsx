@@ -7,14 +7,16 @@ import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types
 import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
+import { use_is_hydrated } from '@shared/hooks'
 import { useContext, useEffect } from 'react'
 
 export const VisitRecorder: React.FC = () => {
-  const has_focus = use_has_focus()
   const auth_context = useContext(AuthContext)!
+  const has_focus = use_has_focus()
+  const is_hydrated = use_is_hydrated()
 
   useEffect(() => {
-    if (has_focus) {
+    if (has_focus && is_hydrated) {
       const record_visit_params: RecordVisit_Params | null = JSON.parse(
         localStorage.getItem(
           browser_storage.local_storage.authorized_library.record_visit_params,
@@ -39,7 +41,7 @@ export const VisitRecorder: React.FC = () => {
         }, 0)
       }
     }
-  }, [has_focus])
+  }, [has_focus, is_hydrated])
 
   return <></>
 }

@@ -3,16 +3,19 @@ import {
   use_library_dispatch,
   use_library_selector,
 } from '../../stores/library'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 import { browser_storage } from '@/constants/browser-storage'
 import { Filter } from '@/types/library/filter'
-import ky from 'ky'
 import { search_params_keys } from '@/constants/search-params-keys'
+import { AuthContext } from '@/app/auth-provider'
+import { use_is_hydrated } from '@shared/hooks'
 
 export const use_counts = () => {
+  const auth_context = useContext(AuthContext)!
+  const is_hydrated = use_is_hydrated()
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
@@ -28,14 +31,6 @@ export const use_counts = () => {
   const [last_query_yyyymm_lte, set_last_query_yyyymm_lte] = useState<string>()
 
   const get_counts_ = () => {
-    const ky_instance = ky.create({
-      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-        'Content-Type': 'application/json',
-      },
-    })
-
     if (!username) {
       const request_params: Counts_Params.Authorized = {}
 
@@ -93,7 +88,7 @@ export const use_counts = () => {
       dispatch(
         counts_actions.get_authorized_counts({
           request_params,
-          ky: ky_instance,
+          ky: auth_context.ky_instance,
         }),
       )
     } else {
@@ -134,7 +129,7 @@ export const use_counts = () => {
       dispatch(
         counts_actions.get_public_counts({
           request_params,
-          ky: ky_instance,
+          ky: auth_context.ky_instance,
         }),
       )
     }
@@ -211,7 +206,7 @@ export const use_counts = () => {
     }
   }, [counts_data, tags])
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     const tags = sessionStorage.getItem(
       browser_storage.session_storage.library.tags({
         username,
@@ -224,7 +219,7 @@ export const use_counts = () => {
     }
 
     get_counts_()
-  }, [])
+  }, [is_hydrated])
 
   return {
     get_counts_,

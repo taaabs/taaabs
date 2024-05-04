@@ -1,7 +1,7 @@
 import { GivePoints_UseCase } from '@repositories/modules/points/domain/usecases/give-points.use-case'
 import { Points_DataSourceImpl } from '@repositories/modules/points/infrastructure/data-sources/points.data-source-impl'
 import { Points_RepositoryImpl } from '@repositories/modules/points/infrastructure/repositories/points.repository-impl'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import { useSearchParams } from 'next/navigation'
@@ -9,10 +9,11 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_library_dispatch } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { CheckTotalGivenPoints_UseCase } from '@repositories/modules/points/domain/usecases/check-total-given-points.use-case'
-import ky from 'ky'
+import { AuthContext } from '@/app/auth-provider'
 
 // This logic works only because of referential nature of "points_given" obejct. It works but could be moved to redux.
 export const use_points = () => {
+  const auth_context = useContext(AuthContext)!
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
   const username = 'test_user'
@@ -20,21 +21,13 @@ export const use_points = () => {
     [bookmark_id: string]: number
   }>({})
 
-  const ky_instance = ky.create({
-    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-    headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-      'Content-Type': 'application/json',
-    },
-  })
-
   useUpdateEffect(() => {
     set_points_given({})
   }, [search_params])
 
   const submit_points_debounced = useDebouncedCallback(
     async (params: { bookmark_id: number; points: number }) => {
-      const data_source = new Points_DataSourceImpl(ky_instance)
+      const data_source = new Points_DataSourceImpl(auth_context.ky_instance)
       const repository = new Points_RepositoryImpl(data_source)
       const give_points = new GivePoints_UseCase(repository)
       try {
@@ -54,7 +47,7 @@ export const use_points = () => {
   const get_points_given_on_bookmark_ = async (params: {
     bookmark_id: number
   }) => {
-    const data_source = new Points_DataSourceImpl(ky_instance)
+    const data_source = new Points_DataSourceImpl(auth_context.ky_instance)
     const repository = new Points_RepositoryImpl(data_source)
     const check_given_points_amount = new CheckTotalGivenPoints_UseCase(
       repository,

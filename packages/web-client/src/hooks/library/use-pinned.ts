@@ -1,12 +1,15 @@
+import { AuthContext } from '@/app/auth-provider'
 import { browser_storage } from '@/constants/browser-storage'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
+import { use_is_hydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import ky from 'ky'
 import { useParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useContext } from 'react'
 
 export const use_pinned = () => {
+  const auth_context = useContext(AuthContext)!
+  const is_hydrated = use_is_hydrated()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
   const {
@@ -18,19 +21,14 @@ export const use_pinned = () => {
   } = use_library_selector((state) => state.pinned)
 
   const get_pinned_ = async () => {
-    const ky_instance = ky.create({
-      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-        'Content-Type': 'application/json',
-      },
-    })
     if (!username) {
-      dispatch(pinned_actions.get_pinned_authorized({ ky: ky_instance }))
+      dispatch(
+        pinned_actions.get_pinned_authorized({ ky: auth_context.ky_instance }),
+      )
     } else {
       dispatch(
         pinned_actions.get_pinned_public({
-          ky: ky_instance,
+          ky: auth_context.ky_instance,
           get_pinned_params: {
             username,
           },
@@ -50,7 +48,7 @@ export const use_pinned = () => {
     }
   }, [items])
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     const pinned_items = sessionStorage.getItem(
       browser_storage.session_storage.library.pinned({
         username,
@@ -62,7 +60,7 @@ export const use_pinned = () => {
     } else {
       get_pinned_()
     }
-  }, [])
+  }, [is_hydrated])
 
   return {
     get_pinned_,

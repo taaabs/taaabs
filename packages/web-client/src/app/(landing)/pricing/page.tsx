@@ -102,8 +102,8 @@ const Page: React.FC = () => {
             },
             bullets_heading: 'Everything in Free, plus:',
             bullets: [
-              'Starred & unread filter',
-              'Date visited & updated sort',
+              'Starred, unread filters',
+              'Sort by visit, update dates',
               'Multi-link bookmarks',
             ],
             slot_button: (

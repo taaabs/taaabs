@@ -5,7 +5,7 @@ import {
   use_library_selector,
 } from '../../stores/library'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useEffect } from 'react'
+import { useContext } from 'react'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
@@ -13,11 +13,14 @@ import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/type
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { browser_storage } from '@/constants/browser-storage'
 import { Filter } from '@/types/library/filter'
-import ky from 'ky'
 import { system_values } from '@shared/constants/system-values'
 import { search_params_keys } from '@/constants/search-params-keys'
+import { AuthContext } from '@/app/auth-provider'
+import { use_is_hydrated } from '@shared/hooks'
 
 export const use_bookmarks = () => {
+  const auth_context = useContext(AuthContext)!
+  const is_hydrated = use_is_hydrated()
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
@@ -35,14 +38,6 @@ export const use_bookmarks = () => {
   } = use_library_selector((state) => state.bookmarks)
 
   const get_bookmarks_ = (params: { should_get_next_page?: boolean }) => {
-    const ky_instance = ky.create({
-      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-        'Content-Type': 'application/json',
-      },
-    })
-
     if (!username) {
       const request_params: GetBookmarks_Params.Authorized = {}
 
@@ -116,7 +111,7 @@ export const use_bookmarks = () => {
       dispatch(
         bookmarks_actions.get_authorized_bookmarks({
           request_params,
-          ky: ky_instance,
+          ky: auth_context.ky_instance,
         }),
       )
     } else {
@@ -184,7 +179,7 @@ export const use_bookmarks = () => {
       dispatch(
         bookmarks_actions.get_public_bookmarks({
           request_params,
-          ky: ky_instance,
+          ky: auth_context.ky_instance,
         }),
       )
     }
@@ -195,14 +190,6 @@ export const use_bookmarks = () => {
     all_not_paginated_ids: number[]
     should_get_next_page?: boolean
   }) => {
-    const ky_instance = ky.create({
-      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-        'Content-Type': 'application/json',
-      },
-    })
-
     let ids: number[] = []
     if (params.should_get_next_page) {
       // Bookmark could be filtered out.
@@ -223,7 +210,7 @@ export const use_bookmarks = () => {
     if (!username) {
       await dispatch(
         bookmarks_actions.get_authorized_bookmarks_by_ids({
-          ky: ky_instance,
+          ky: auth_context.ky_instance,
           is_next_page: params.should_get_next_page || false!,
           request_params: {
             ids,
@@ -233,7 +220,7 @@ export const use_bookmarks = () => {
     } else {
       await dispatch(
         bookmarks_actions.get_public_bookmarks_by_ids({
-          ky: ky_instance,
+          ky: auth_context.ky_instance,
           is_next_page: params.should_get_next_page || false,
           request_params: {
             ids,
@@ -244,7 +231,7 @@ export const use_bookmarks = () => {
     }
   }
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     const bookmarks = sessionStorage.getItem(
       browser_storage.session_storage.library.bookmarks({
         username: username as string,
@@ -291,7 +278,7 @@ export const use_bookmarks = () => {
       if (window.location.hash) return
       get_bookmarks_({})
     }
-  }, [search_params])
+  }, [is_hydrated, search_params])
 
   const set_bookomarks_to_session_storage = useDebouncedCallback(
     (params: {

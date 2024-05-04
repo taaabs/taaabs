@@ -8,7 +8,7 @@ import {
   insert,
   search,
 } from '@orama/orama'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { LibrarySearch_DataSourceImpl } from '@repositories/modules/library-search/infrastructure/data-sources/library-search.data-source-impl'
 import { LibrarySearch_RepositoryImpl } from '@repositories/modules/library-search/infrastructure/repositories/library-search.repository-impl'
@@ -33,10 +33,11 @@ import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/libr
 import { Filter } from '@/types/library/filter'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import ky, { KyInstance } from 'ky'
+import { KyInstance } from 'ky'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { search_params_keys } from '@/constants/search-params-keys'
 import { use_has_focus } from '../misc/use-has-focus'
+import { AuthContext } from '@/app/auth-provider'
 
 export type BookmarkOfSearch = {
   id: number
@@ -84,6 +85,7 @@ export type Result = TypedDocument<Orama<typeof schema>>
 type BookmarkTags = { id: number; tags: string[] }
 
 export const use_search = () => {
+  const auth_context = useContext(AuthContext)!
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const [is_search_focused, set_is_search_focused] = useState(false)
@@ -242,20 +244,12 @@ export const use_search = () => {
     db: Orama<typeof schema>
     bookmarks_just_tags: BookmarkTags[]
   }> => {
-    const ky_instance = ky.create({
-      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-        'Content-Type': 'application/json',
-      },
-    })
-
     if (params.force_reinitialization) {
       await clear_cached_data({ is_archived: params.is_archived })
     } else {
       const staleness_state = await get_is_db_stale({
         is_archived: params.is_archived,
-        ky: ky_instance,
+        ky: auth_context.ky_instance,
       })
 
       // Bypass initialization if current instance is up to date.
@@ -364,7 +358,9 @@ export const use_search = () => {
         : set_archived_bookmarks_just_tags(new_bookmarks_just_tags)
       await loadWithHighlight(new_db, JSON.parse(cached_index as any))
     } else {
-      const data_source = new LibrarySearch_DataSourceImpl(ky_instance)
+      const data_source = new LibrarySearch_DataSourceImpl(
+        auth_context.ky_instance,
+      )
       const repository = new LibrarySearch_RepositoryImpl(data_source)
 
       let bookmarks: SearchableBookmark_Entity[]

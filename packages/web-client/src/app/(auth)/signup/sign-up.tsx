@@ -26,6 +26,7 @@ type FormValues = {
 }
 
 export const SignUp = (params: { dictionary: Dictionary }) => {
+  const auth_context = useContext(AuthContext)
   const {
     control,
     handleSubmit,
@@ -33,7 +34,6 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ mode: 'onBlur' })
   const router = useRouter()
-  const auth_context = useContext(AuthContext)
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     const params: SignUp_Params = {
