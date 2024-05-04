@@ -277,7 +277,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                   <UiCommonAtom_Input
                     value={field.value}
                     on_change={(value) => {
-                      resetField('password')
+                      resetField('hint')
                       if (!isSubmitting) {
                         field.onChange(value)
                       }
@@ -290,9 +290,6 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                         ? error_message
                         : 'A password hint can help you remember your password if you forget it.'
                     }
-                    additional_properties={{
-                      type: 'password',
-                    }}
                   />
                 )
               }}
