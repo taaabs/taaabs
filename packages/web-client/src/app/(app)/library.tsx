@@ -46,7 +46,6 @@ import { UpdateTagHierarchies_Params } from '@repositories/modules/tag-hierarchi
 import { use_points } from '@/hooks/library/use-points'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { use_scroll_restore } from '@/hooks/misc/use-scroll-restore'
-import ky from 'ky'
 import { use_pinned } from '@/hooks/library/use-pinned'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
@@ -62,6 +61,7 @@ import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usec
 import { BookmarkWrapper as UiAppAtom_BookmarkWrapper } from '@web-ui/components/app/atoms/bookmark-wrapper'
 import { SegmentedButton as UiAppAtom_SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 import { use_is_hydrated } from '@shared/hooks'
+import { AuthContext } from '../auth-provider'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
@@ -80,6 +80,7 @@ const Library = (params: {
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
+  const auth_context = useContext(AuthContext)!
   const modal_context = useContext(ModalContext)
   const [show_skeletons, set_show_skeletons] = useState(true)
   const search_hook = params.search_hook
@@ -102,14 +103,6 @@ const Library = (params: {
     useState<boolean>()
   // END - UI synchronization.
   const pinned_count = useRef<number>()
-
-  const ky_instance = ky.create({
-    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-    headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-      'Content-Type': 'application/json',
-    },
-  })
 
   const favicon_host = `${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`
 
@@ -279,7 +272,7 @@ const Library = (params: {
                     .last_authorized_counts_params,
                 ) || 'null',
               ) || undefined,
-            ky: ky_instance,
+            ky: auth_context.ky_instance,
           }),
         ),
       ]).then(() => {
@@ -722,7 +715,7 @@ const Library = (params: {
             update_pinned_params: updated_pinned.map((pin) => ({
               url: pin.url_,
             })),
-            ky: ky_instance,
+            ky: auth_context.ky_instance,
           }),
         )
         toast.success(params.dictionary.library.pinned_links_has_beed_updated)
@@ -750,7 +743,9 @@ const Library = (params: {
       }}
       on_middle_click_={(item) => {
         if (!username) {
-          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
           const repository = new Bookmarks_RepositoryImpl(data_source)
           const record_visit = new RecordVisit_UseCase(repository)
           record_visit.invoke({
@@ -815,7 +810,7 @@ const Library = (params: {
           await dispatch(
             tag_hierarchies_actions.update_tag_hierarchies({
               update_tag_hierarchies_params,
-              ky: ky_instance,
+              ky: auth_context.ky_instance,
             }),
           )
           toast.success(params.dictionary.library.tag_hierarchies_upated)
@@ -1208,7 +1203,9 @@ const Library = (params: {
       }}
       on_link_middle_click_={() => {
         if (!username) {
-          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
           const repository = new Bookmarks_RepositoryImpl(data_source)
           const record_visit = new RecordVisit_UseCase(repository)
           record_visit.invoke({
@@ -1219,7 +1216,9 @@ const Library = (params: {
       }}
       on_new_tab_link_click_={(url) => {
         if (!username) {
-          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
           const repository = new Bookmarks_RepositoryImpl(data_source)
           const record_visit = new RecordVisit_UseCase(repository)
           record_visit.invoke({
@@ -1295,7 +1294,7 @@ const Library = (params: {
                 gte: date_view_options_hook.current_gte_,
                 lte: date_view_options_hook.current_lte_,
               }),
-            ky: ky_instance,
+            ky: auth_context.ky_instance,
           }),
         )
         await search_hook.update_bookmark({
@@ -1362,7 +1361,7 @@ const Library = (params: {
                           .last_authorized_counts_params,
                       ) || 'null',
                     ) || undefined,
-                  ky: ky_instance,
+                  ky: auth_context.ky_instance,
                 }),
               )
               await search_hook.update_bookmark({
@@ -1439,7 +1438,7 @@ const Library = (params: {
                       gte: date_view_options_hook.current_gte_,
                       lte: date_view_options_hook.current_lte_,
                     }),
-                  ky: ky_instance,
+                  ky: auth_context.ky_instance,
                 }),
               )
               await search_hook.update_bookmark({
@@ -1545,7 +1544,7 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -1659,7 +1658,7 @@ const Library = (params: {
                               .last_authorized_counts_params,
                           ) || 'null',
                         ) || undefined,
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -1772,7 +1771,7 @@ const Library = (params: {
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
                         }),
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   if (
@@ -1859,7 +1858,7 @@ const Library = (params: {
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
                         }),
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -1948,7 +1947,7 @@ const Library = (params: {
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
                         }),
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -2037,7 +2036,7 @@ const Library = (params: {
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
                         }),
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -2126,7 +2125,7 @@ const Library = (params: {
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
                         }),
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -2215,7 +2214,7 @@ const Library = (params: {
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
                         }),
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -2309,7 +2308,7 @@ const Library = (params: {
               //                 .last_authorized_counts_params,
               //             ) || 'null',
               //           ) || undefined,
-              //         ky: ky_instance,
+              //         ky: auth_context.ky_instance,
               //       }),
               //     )
               //     await tag_hierarchies_hook.get_tag_hierarchies({
@@ -2377,7 +2376,7 @@ const Library = (params: {
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
                         }),
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
@@ -2498,7 +2497,7 @@ const Library = (params: {
                           gte: date_view_options_hook.current_gte_,
                           lte: date_view_options_hook.current_lte_,
                         }),
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -2586,7 +2585,7 @@ const Library = (params: {
                           lte: date_view_options_hook.current_lte_,
                         }),
                       bookmark_id: bookmark.id,
-                      ky: ky_instance,
+                      ky: auth_context.ky_instance,
                     }),
                   )
                   await search_hook.delete_bookmark({
@@ -2645,8 +2644,8 @@ const Library = (params: {
         }}
         is_following={undefined}
         welcome_text={
-          !username
-            ? `${params.dictionary.library.welcome}, username`
+          auth_context.auth_data
+            ? `${params.dictionary.library.welcome}, ${auth_context.auth_data.username}`
             : undefined
         }
         on_follow_click={username ? () => {} : undefined}

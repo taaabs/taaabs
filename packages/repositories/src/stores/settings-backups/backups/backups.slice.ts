@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import * as thunks from './action-creators'
 
 type Backup = {
-  id: string
+  id: number
   created_at: string
   name?: string
 }

@@ -20,7 +20,6 @@ import { update_search_params } from '@/utils/update-query-params'
 import { BookmarkHash } from '@/utils/bookmark-hash'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
-import ky from 'ky'
 import { GlobalLibarySearchContext } from '../global-library-search-provider'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
@@ -28,6 +27,7 @@ import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/u
 import { search_params_keys } from '@/constants/search-params-keys'
 import { toast } from 'react-toastify'
 import { browser_storage } from '@/constants/browser-storage'
+import { AuthContext } from '../auth-provider'
 
 export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const search_params = useSearchParams()
@@ -38,14 +38,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const modal = useContext(ModalContext)
   const global_library_search = useContext(GlobalLibarySearchContext)
   const is_hydrated = use_is_hydrated()
-
-  const ky_instance = ky.create({
-    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-    headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-      'Content-Type': 'application/json',
-    },
-  })
+  const auth_context = useContext(AuthContext)!
 
   let logo: JSX.Element
   // TODO: backHref should be smarter :^)
@@ -89,9 +82,9 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         },
       },
       {
-        label: 'Notifications',
-        href: '/notifications',
-        is_active: pathname == '/notifications',
+        label: 'Watching',
+        href: '/watching',
+        is_active: pathname == '/watching',
       },
     ]
   } else {
@@ -109,9 +102,9 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         },
       },
       {
-        label: 'Overview',
-        href: `/${params.username}/overview`,
-        is_active: pathname == `/${params.username}/overview`,
+        label: 'Activity',
+        href: `/${params.username}/activity`,
+        is_active: pathname == `/${params.username}/activity`,
       },
     ]
   }
@@ -139,7 +132,9 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
               is_archived: false,
             })
 
-          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
           const repository = new Bookmarks_RepositoryImpl(data_source)
           const upsert_bookmark_use_case = new UpsertBookmark_UseCase(
             repository,

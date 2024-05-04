@@ -15,8 +15,9 @@ export namespace SignUp_Dto {
     export type Body = z.infer<typeof body_schema>
   }
 
-  export class Response {
-    public access_token: string
-    public refresh_token: string
+  export type Response = {
+    access_token: string
+    refresh_token: string
+    username: string
   }
 }

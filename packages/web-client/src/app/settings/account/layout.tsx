@@ -1,9 +1,8 @@
 import { ReactNode } from 'react'
 import { Metadata } from 'next'
-import { StoreProvider } from './store-provider'
 
 const Layout: React.FC<{ children?: ReactNode }> = (props) => {
-  return <StoreProvider>{props.children}</StoreProvider>
+  return props.children
 }
 
 export default Layout

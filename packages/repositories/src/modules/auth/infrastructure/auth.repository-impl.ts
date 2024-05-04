@@ -12,6 +12,7 @@ export class Auth_RepositoryImpl implements Auth_Repository {
     return {
       access_token: result.access_token,
       refresh_token: result.refresh_token,
+      username: result.username,
     }
   }
 
@@ -20,6 +21,7 @@ export class Auth_RepositoryImpl implements Auth_Repository {
     return {
       access_token: result.access_token,
       refresh_token: result.refresh_token,
+      username: result.username,
     }
   }
 }

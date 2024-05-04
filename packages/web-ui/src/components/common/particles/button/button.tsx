@@ -12,7 +12,6 @@ export namespace Button {
     children?: React.ReactNode
     aria_label?: string
     aria_labelledby?: string
-    is_loading?: boolean
     is_disabled?: boolean
     is_outlined?: boolean
   }
@@ -23,7 +22,6 @@ export const Button: React.FC<Button.Props> = (props) => {
     styles.container,
     props.size && props.size != 'default' && styles[`container--${props.size}`],
     { [styles['container--outlined']]: props.is_outlined },
-    { [styles['container--loading']]: props.is_loading },
     { [styles['container--disabled']]: props.is_disabled },
   ])
 

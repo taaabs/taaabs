@@ -49,6 +49,7 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
       auth_context!.set_auth_data({
         access_token: result.access_token,
         refresh_token: result.refresh_token,
+        username: result.username,
       })
       router.push('/home')
     } catch {

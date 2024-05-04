@@ -4,14 +4,19 @@ import { browser_storage } from '@/constants/browser-storage'
 import ky, { KyInstance } from 'ky'
 import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
 
+const default_ky_instance = ky.create({
+  prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+})
+
 type AuthData = {
   access_token: string
   refresh_token: string
+  username: string
 }
 
 export const AuthContext = createContext<{
   auth_data?: AuthData
-  ky_instance?: KyInstance
+  ky_instance: KyInstance
   set_auth_data: (auth_data: AuthData) => void
 } | null>(null)
 
@@ -54,7 +59,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     <AuthContext.Provider
       value={{
         auth_data,
-        ky_instance: ky_instance.current,
+        ky_instance: ky_instance.current || default_ky_instance,
         set_auth_data,
       }}
     >

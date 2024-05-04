@@ -7,23 +7,17 @@ import { UpdateUsername_UseCase } from '@repositories/modules/settings/domain/us
 import { HeadingWithSubheading as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
 import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
-import { useState } from 'react'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { useContext } from 'react'
 import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
-import ky from 'ky'
+import { AuthContext } from '@/app/auth-provider'
 
 type FormValues = {
   username: string
 }
 
-export namespace Username {
-  export type Props = {
-    current_username?: string
-  }
-}
-
-export const Username: React.FC<Username.Props> = (props) => {
+export const SectionUsername: React.FC = () => {
+  const auth_context = useContext(AuthContext)!
   const {
     control,
     handleSubmit,
@@ -31,37 +25,25 @@ export const Username: React.FC<Username.Props> = (props) => {
   } = useForm<FormValues>({
     mode: 'all',
   })
-  const [username, set_username] = useState<string>()
-
-  const ky_instance = ky.create({
-    prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-    headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQmNEZSIsImlhdCI6MTcxMDM1MjExNn0.ZtpENZ0tMnJuGiOM-ttrTs5pezRH-JX4_vqWDKYDPWY`,
-      'Content-Type': 'application/json',
-    },
-  })
-
-  useUpdateEffect(() => {
-    if (props.current_username) {
-      set_username(props.current_username)
-    }
-  }, [props.current_username])
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
-    if (form_data.username == username) {
+    if (form_data.username == auth_context.auth_data!.username) {
       toast.success('Your username is left unchanged')
       return
     }
-    const data_source = new Settings_DataSourceImpl(ky_instance)
+    const data_source = new Settings_DataSourceImpl(auth_context.ky_instance)
     const repository = new Settings_RepositoryImpl(data_source)
     const update_username_use_case = new UpdateUsername_UseCase(repository)
     await update_username_use_case.invoke({ username: form_data.username })
-    set_username(form_data.username)
+    auth_context.set_auth_data({
+      ...auth_context.auth_data!,
+      username: form_data.username,
+    })
     toast.success('Username has been changed')
   }
 
   const get_is_username_available = async (username: string) => {
-    const data_source = new Settings_DataSourceImpl(ky_instance)
+    const data_source = new Settings_DataSourceImpl(auth_context.ky_instance)
     const repository = new Settings_RepositoryImpl(data_source)
     const check_username_availability_use_case =
       new CheckUsernameAvailability_UseCase(repository)
@@ -70,12 +52,14 @@ export const Username: React.FC<Username.Props> = (props) => {
         username,
       })
     ).is_available
-
     return is_available
   }
 
   return (
-    <form onSubmit={handleSubmit(on_submit)} key={username}>
+    <form
+      onSubmit={handleSubmit(on_submit)}
+      key={auth_context.auth_data?.username}
+    >
       <UiAppAtom_HeadingWithSubheading
         heading="Username"
         subheading="Accessing your account and sharing your public profile requires using unique username."
@@ -84,14 +68,14 @@ export const Username: React.FC<Username.Props> = (props) => {
       <Controller
         name="username"
         control={control}
-        defaultValue={username}
+        defaultValue={auth_context.auth_data?.username}
         rules={{
           required: true,
           minLength: system_values.username_min_length,
           maxLength: system_values.username_max_length,
           pattern: /^[a-z0-9\-\_]+$/,
           validate: awesomeDebouncePromise(async (value) => {
-            if (value == username) return true
+            if (value == auth_context.auth_data!.username) return true
             return await get_is_username_available(value)
           }, 500),
         }}
@@ -117,7 +101,6 @@ export const Username: React.FC<Username.Props> = (props) => {
 
           return (
             <UiCommonAtom_Input
-              is_disabled={!username}
               value={field.value}
               on_change={(value) => {
                 if (isSubmitting) return
@@ -126,6 +109,7 @@ export const Username: React.FC<Username.Props> = (props) => {
               }}
               message_type={error_message ? 'error' : undefined}
               message={error_message || info_message}
+              is_disabled={!auth_context.auth_data}
             />
           )
         }}
@@ -133,8 +117,7 @@ export const Username: React.FC<Username.Props> = (props) => {
       <br />
       <UiCommonParticle_Button
         type="submit"
-        is_loading={isSubmitting}
-        is_disabled={!username}
+        is_disabled={isSubmitting || !auth_context.auth_data}
       >
         Save
       </UiCommonParticle_Button>
