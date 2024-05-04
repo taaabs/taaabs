@@ -5,6 +5,7 @@ import { UpdateTagHierarchies_Params } from '../types/update-tag-hierarchies.par
 export type TagHierarchies_Repository = {
   get_tag_hierarchies_authorized(
     params: GetTagHierarchies_Params.Authorized,
+    encryption_key: Uint8Array,
   ): Promise<GetTagHierarchies_Ro>
 
   get_tag_hierarchies_public(
@@ -13,5 +14,6 @@ export type TagHierarchies_Repository = {
 
   update_tag_hierarchies(
     params: UpdateTagHierarchies_Params,
+    encryption_key: Uint8Array,
   ): Promise<GetTagHierarchies_Ro>
 }

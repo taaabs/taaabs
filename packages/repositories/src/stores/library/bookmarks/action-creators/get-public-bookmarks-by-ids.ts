@@ -4,7 +4,6 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { bookmarks_actions } from '../bookmarks.slice'
 import { GetBookmarksByIds_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks-by-ids.params'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
-import { GetBookmarksByIdsPublic_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-by-ids-public.use-case'
 import { KyInstance } from 'ky'
 
 export const get_public_bookmarks_by_ids = (params: {
@@ -16,9 +15,6 @@ export const get_public_bookmarks_by_ids = (params: {
     new Promise<void>(async (resolve) => {
       const data_source = new Bookmarks_DataSourceImpl(params.ky)
       const repository = new Bookmarks_RepositoryImpl(data_source)
-      const get_bookomarks_by_ids = new GetBookmarksByIdsPublic_UseCase(
-        repository,
-      )
 
       dispatch(bookmarks_actions.set_is_fetching(true))
       if (params.is_next_page) {
@@ -27,7 +23,7 @@ export const get_public_bookmarks_by_ids = (params: {
         dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(true))
       }
 
-      const { bookmarks } = await get_bookomarks_by_ids.invoke(
+      const { bookmarks } = await repository.get_bookmarks_by_ids_public(
         params.request_params,
       )
 

@@ -2,7 +2,6 @@ import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/ty
 import { LibraryDispatch, LibraryState } from '../../library.store'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
-import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/upsert-bookmark.use-case'
 import { bookmarks_actions } from '../bookmarks.slice'
 import { counts_actions } from '../../counts/counts.slice'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
@@ -10,7 +9,6 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { KyInstance } from 'ky'
 import { Pinned_DataSourceImpl } from '@repositories/modules/pinned/infrastructure/data-sources/pinned.data-source-impl'
 import { Pinned_RepositoryImpl } from '@repositories/modules/pinned/infrastructure/repositories/pinned.repository-impl'
-import { GetPinnedAuthorized_UseCase } from '@repositories/modules/pinned/domain/usecases/get-pinned-authorized.use-case'
 import { pinned_actions } from '../../pinned/pinned.slice'
 import { tag_hierarchies_actions } from '../../tag-hierarchies/tag-hierarchies.slice'
 import { GetTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/get-tag-hierarchies.params'
@@ -20,14 +18,16 @@ export const upsert_bookmark = (params: {
   last_authorized_counts_params?: Counts_Params.Authorized
   get_tag_hierarchies_request_params?: GetTagHierarchies_Params.Authorized
   ky: KyInstance
+  encryption_key: Uint8Array
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) =>
     new Promise<Bookmark_Entity>(async (resolve) => {
       const data_source = new Bookmarks_DataSourceImpl(params.ky)
       const repository = new Bookmarks_RepositoryImpl(data_source)
-      const upsert_bookmark_use_case = new UpsertBookmark_UseCase(repository)
-
-      const result = await upsert_bookmark_use_case.invoke(params.bookmark)
+      const result = await repository.upsert_bookmark(
+        params.bookmark,
+        params.encryption_key,
+      )
 
       const state = get_state()
 
@@ -90,18 +90,16 @@ export const upsert_bookmark = (params: {
         // We refetch additional required things here to have those requests ruinning in parallel.
         const pinned_data_source = new Pinned_DataSourceImpl(params.ky)
         const pinned_repository = new Pinned_RepositoryImpl(pinned_data_source)
-        const get_pinned_use_case = new GetPinnedAuthorized_UseCase(
-          pinned_repository,
-        )
         dispatch(pinned_actions.set_is_fetching(true))
         const pinned_result = (
           await Promise.all([
-            get_pinned_use_case.invoke(),
+            pinned_repository.get_pinned_authorized(params.encryption_key),
             dispatch(
               counts_actions.refresh_authorized_counts({
                 last_authorized_counts_params:
                   params.last_authorized_counts_params,
                 ky: params.ky,
+                encryption_key: params.encryption_key,
               }),
             ),
             params.get_tag_hierarchies_request_params &&
@@ -109,6 +107,7 @@ export const upsert_bookmark = (params: {
                 tag_hierarchies_actions.get_tag_hierarchies_authorized({
                   request_params: params.get_tag_hierarchies_request_params,
                   ky: params.ky,
+                  encryption_key: params.encryption_key,
                 }),
               ),
           ])

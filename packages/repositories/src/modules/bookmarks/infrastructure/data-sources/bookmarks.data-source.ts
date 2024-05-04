@@ -29,5 +29,6 @@ export type Bookmarks_DataSource = {
 
   upsert_bookmark(
     params: UpsertBookmark_Params,
+    encryption_key: Uint8Array,
   ): Promise<Bookmarks_Dto.Response.AuthorizedBookmark>
 }

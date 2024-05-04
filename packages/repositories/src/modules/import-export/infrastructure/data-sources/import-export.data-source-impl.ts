@@ -12,9 +12,10 @@ import { KyInstance } from 'ky'
 export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
   constructor(private readonly _ky: KyInstance) {}
 
-  public async send_import_data(params: SendImportData_Params): Promise<void> {
-    const key = await Crypto.derive_key_from_password('my_secret_key')
-
+  public async send_import_data(
+    params: SendImportData_Params,
+    encryption_key: Uint8Array,
+  ): Promise<void> {
     const created_at_fallback = new Date()
     const body: SendImportData_Dto.Body = {
       bookmarks: await Promise.all(
@@ -38,12 +39,12 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
             title: bookmark.is_public ? title : undefined,
             title_aes:
               !bookmark.is_public && title
-                ? await Crypto.AES.encrypt(title, key)
+                ? await Crypto.AES.encrypt(title, encryption_key)
                 : undefined,
             note: bookmark.is_public ? note : undefined,
             note_aes:
               !bookmark.is_public && note
-                ? await Crypto.AES.encrypt(note, key)
+                ? await Crypto.AES.encrypt(note, encryption_key)
                 : undefined,
             created_at:
               bookmark.created_at || created_at_fallback.toISOString(),
@@ -59,16 +60,22 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                       if (tag.is_public) {
                         return {
                           is_public: true,
-                          hash: await Crypto.SHA256(tag.name.trim(), key),
+                          hash: await Crypto.SHA256(
+                            tag.name.trim(),
+                            encryption_key,
+                          ),
                           name: tag.name,
                         }
                       } else {
                         return {
                           is_public: false,
-                          hash: await Crypto.SHA256(tag.name.trim(), key),
+                          hash: await Crypto.SHA256(
+                            tag.name.trim(),
+                            encryption_key,
+                          ),
                           name_aes: await Crypto.AES.encrypt(
                             tag.name.trim(),
-                            key,
+                            encryption_key,
                           ),
                         }
                       }
@@ -85,7 +92,10 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                         return {
                           is_public: true,
                           url: link.url.trim(),
-                          hash: await Crypto.SHA256(link.url.trim(), key),
+                          hash: await Crypto.SHA256(
+                            link.url.trim(),
+                            encryption_key,
+                          ),
                           site_path: link.site_path,
                           via_wayback: link.via_wayback,
                           is_pinned: link.is_pinned,
@@ -95,16 +105,19 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                         const domain = get_domain_from_url(link.url)
                         return {
                           is_public: false,
-                          hash: await Crypto.SHA256(link.url.trim(), key),
+                          hash: await Crypto.SHA256(
+                            link.url.trim(),
+                            encryption_key,
+                          ),
                           url_aes: await Crypto.AES.encrypt(
                             link.url.trim(),
-                            key,
+                            encryption_key,
                           ),
                           site_aes: await Crypto.AES.encrypt(
                             link.site_path
                               ? `${domain}/${link.site_path}`
                               : domain,
-                            key,
+                            encryption_key,
                           ),
                           via_wayback: link.via_wayback,
                           is_pinned: link.is_pinned,

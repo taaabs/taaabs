@@ -2,7 +2,6 @@ import { Metadata } from 'next'
 import { AvatarContextSetter } from './avatar-context-setter'
 import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
 import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
-import { GetPublicMetadata } from '@repositories/modules/metadata/domain/usecases/get-public-metadata'
 import ky from 'ky'
 import { PublicUserLibrarySearchProvider } from './public-user-library-search-provider'
 import { ReactNode } from 'react'
@@ -54,7 +53,6 @@ async function _get_metadata({ username }: { username: string }) {
   })
   const data_source = new MetadataDataSourceImpl(ky_instance)
   const repository = new MetadataRepositoryImpl(data_source)
-  const get_metadata = new GetPublicMetadata(repository)
-  const metadata = await get_metadata.invoke({ username })
+  const metadata = await repository.get_public({ username })
   return metadata
 }

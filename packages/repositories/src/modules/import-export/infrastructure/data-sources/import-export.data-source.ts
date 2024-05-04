@@ -4,7 +4,10 @@ import { DownloadBackup_Dto } from '@shared/types/modules/import-export/download
 import { DownloadBackup_Params } from '../../domain/types/download-backup.params'
 
 export type ImportExport_DataSource = {
-  send_import_data(params: SendImportData_Params): Promise<void>
+  send_import_data(
+    params: SendImportData_Params,
+    encryption_key: Uint8Array,
+  ): Promise<void>
   list_backups(): Promise<ListBackups_Dto.Response>
   download_backup(
     params: DownloadBackup_Params,

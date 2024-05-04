@@ -4,7 +4,6 @@ import { AuthContext } from '@/app/auth-provider'
 import { browser_storage } from '@/constants/browser-storage'
 import { use_has_focus } from '@/hooks/misc/use-has-focus'
 import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types/record-visit.params'
-import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { use_is_hydrated } from '@shared/hooks'
@@ -33,8 +32,7 @@ export const VisitRecorder: React.FC = () => {
             auth_context.ky_instance,
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
-          const record_visit = new RecordVisit_UseCase(repository)
-          record_visit.invoke({
+          repository.record_visit({
             bookmark_id: record_visit_params.bookmark_id,
             visited_at: record_visit_params.visited_at,
           })

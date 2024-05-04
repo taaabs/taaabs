@@ -1,4 +1,3 @@
-import { GivePoints_UseCase } from '@repositories/modules/points/domain/usecases/give-points.use-case'
 import { Points_DataSourceImpl } from '@repositories/modules/points/infrastructure/data-sources/points.data-source-impl'
 import { Points_RepositoryImpl } from '@repositories/modules/points/infrastructure/repositories/points.repository-impl'
 import { useContext, useState } from 'react'
@@ -8,7 +7,6 @@ import { useSearchParams } from 'next/navigation'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_library_dispatch } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
-import { CheckTotalGivenPoints_UseCase } from '@repositories/modules/points/domain/usecases/check-total-given-points.use-case'
 import { AuthContext } from '@/app/auth-provider'
 
 // This logic works only because of referential nature of "points_given" obejct. It works but could be moved to redux.
@@ -29,9 +27,8 @@ export const use_points = () => {
     async (params: { bookmark_id: number; points: number }) => {
       const data_source = new Points_DataSourceImpl(auth_context.ky_instance)
       const repository = new Points_RepositoryImpl(data_source)
-      const give_points = new GivePoints_UseCase(repository)
       try {
-        await give_points.invoke({
+        await repository.give_points({
           receiver_username: username,
           points: params.points,
           bookmark_id: params.bookmark_id,
@@ -49,11 +46,8 @@ export const use_points = () => {
   }) => {
     const data_source = new Points_DataSourceImpl(auth_context.ky_instance)
     const repository = new Points_RepositoryImpl(data_source)
-    const check_given_points_amount = new CheckTotalGivenPoints_UseCase(
-      repository,
-    )
     try {
-      const given_till_now = await check_given_points_amount.invoke({
+      const given_till_now = await repository.check_total_given_points({
         receiver_username: username,
         bookmark_id: params.bookmark_id,
       })

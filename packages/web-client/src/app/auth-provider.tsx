@@ -11,6 +11,7 @@ const default_ky_instance = ky.create({
 type AuthData = {
   access_token: string
   refresh_token: string
+  encryption_key: Uint8Array
   username: string
 }
 
@@ -35,16 +36,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     })
     localStorage.setItem(
       browser_storage.local_storage.auth_data,
-      JSON.stringify(auth_data),
+      JSON.stringify({
+        ...auth_data,
+        encryption_key: String.fromCharCode(...auth_data.encryption_key),
+      }),
     )
   }
 
   useEffect(() => {
     const auth_data = JSON.parse(
       localStorage.getItem(browser_storage.local_storage.auth_data) || 'null',
-    ) as AuthData | null
+    )
     if (auth_data) {
-      set_auth_data(auth_data)
+      set_auth_data({
+        ...auth_data,
+        encryption_key: new Uint8Array(
+          auth_data.encryption_key.split('').map((c: any) => c.charCodeAt(0)),
+        ),
+      })
       ky_instance.current = ky.create({
         prefixUrl: process.env.NEXT_PUBLIC_API_URL,
         headers: {

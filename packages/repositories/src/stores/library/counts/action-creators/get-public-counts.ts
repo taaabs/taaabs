@@ -2,7 +2,6 @@ import { LibraryDispatch } from '../../library.store'
 import { counts_actions } from '../counts.slice'
 import { Counts_DataSourceImpl } from '@repositories/modules/counts/infrastructure/data-sources/counts.data-source-impl'
 import { Counts_RepositoryImpl } from '@repositories/modules/counts/infrastructure/repositories/counts.repository-impl'
-import { GetCountsOnPublicUser_UseCase } from '@repositories/modules/counts/domain/usecases/get-counts-on-public-user.use-case'
 import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.params'
 import { KyInstance } from 'ky'
 
@@ -13,12 +12,10 @@ export const get_public_counts = (params: {
   return async (dispatch: LibraryDispatch) => {
     const data_source = new Counts_DataSourceImpl(params.ky)
     const repository = new Counts_RepositoryImpl(data_source)
-    const get_counts_on_public_user_use_case =
-      new GetCountsOnPublicUser_UseCase(repository)
 
     dispatch(counts_actions.set_is_fetching(true))
 
-    const result = await get_counts_on_public_user_use_case.invoke(
+    const result = await repository.get_counts_on_public_user(
       params.request_params,
     )
 

@@ -65,6 +65,7 @@ export const use_tag_hierarchies = () => {
         tag_hierarchies_actions.get_tag_hierarchies_authorized({
           request_params,
           ky: auth_context.ky_instance,
+          encryption_key: auth_context.auth_data!.encryption_key,
         }),
       )
     } else {

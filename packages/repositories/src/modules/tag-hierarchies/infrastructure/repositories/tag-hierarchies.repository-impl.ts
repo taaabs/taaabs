@@ -16,20 +16,20 @@ export class TagHierarchies_RepositoryImpl
 
   private async _parse_authorized_tree_node(
     node: TagHierarchies_Dto.AuthorizedNode,
+    encryption_key: Uint8Array,
   ): Promise<TagHierarchy_Entity> {
-    const key = await Crypto.derive_key_from_password('my_secret_key')
-
     return {
       id: node.id,
       name: node.name
         ? node.name
         : node.name_aes
-        ? await Crypto.AES.decrypt(node.name_aes, key)
+        ? await Crypto.AES.decrypt(node.name_aes, encryption_key)
         : '',
       yields: node.yields,
       children: await Promise.all(
         node.children?.map(
-          async (node) => await this._parse_authorized_tree_node(node),
+          async (node) =>
+            await this._parse_authorized_tree_node(node, encryption_key),
         ) || [],
       ),
     }
@@ -37,6 +37,7 @@ export class TagHierarchies_RepositoryImpl
 
   public async get_tag_hierarchies_authorized(
     params: GetTagHierarchies_Params.Authorized,
+    encryption_key: Uint8Array,
   ): Promise<GetTagHierarchies_Ro> {
     const { tag_hierarchies, total } =
       await this._tag_hierarchies_data_source.get_tag_hierarchies_authorized(
@@ -46,7 +47,8 @@ export class TagHierarchies_RepositoryImpl
     return {
       tag_hierarchies: await Promise.all(
         tag_hierarchies.map(
-          async (node) => await this._parse_authorized_tree_node(node),
+          async (node) =>
+            await this._parse_authorized_tree_node(node, encryption_key),
         ),
       ),
       total,
@@ -80,13 +82,19 @@ export class TagHierarchies_RepositoryImpl
 
   public async update_tag_hierarchies(
     params: UpdateTagHierarchies_Params,
+    encryption_key: Uint8Array,
   ): Promise<GetTagHierarchies_Ro> {
     const { tag_hierarchies, total } =
-      await this._tag_hierarchies_data_source.update_tag_hierarchies(params)
+      await this._tag_hierarchies_data_source.update_tag_hierarchies(
+        params,
+        encryption_key,
+      )
 
     return {
       tag_hierarchies: await Promise.all(
-        tag_hierarchies.map((node) => this._parse_authorized_tree_node(node)),
+        tag_hierarchies.map((node) =>
+          this._parse_authorized_tree_node(node, encryption_key),
+        ),
       ),
       total,
     }

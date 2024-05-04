@@ -7,5 +7,8 @@ export type Pinned_DataSource = {
   get_pinned_public(
     params: GetPinned_Params.Public,
   ): Promise<Pinned_Dto.Response>
-  update_pinned(params: UpdatePinned_Params): Promise<void>
+  update_pinned(
+    params: UpdatePinned_Params,
+    encryption_key: Uint8Array,
+  ): Promise<void>
 }

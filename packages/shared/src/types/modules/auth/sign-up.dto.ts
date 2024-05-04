@@ -18,6 +18,7 @@ export namespace SignUp_Dto {
   export type Response = {
     access_token: string
     refresh_token: string
+    id: string
     username: string
   }
 }

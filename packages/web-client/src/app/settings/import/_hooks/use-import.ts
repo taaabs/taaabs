@@ -4,7 +4,6 @@ import { bookmarksToJSON } from 'bookmarks-to-json'
 import { toast } from 'react-toastify'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
-import { SendImportData_UseCase } from '@repositories/modules/import-export/domain/usecases/send-import-data.use-case'
 import { SendImportData_Params } from '@repositories/modules/import-export/domain/types/send-import-data.params'
 import { AuthContext } from '@/app/auth-provider'
 
@@ -126,13 +125,15 @@ export const use_import = () => {
       auth_context.ky_instance,
     )
     const repository = new ImportExport_RepositoryImpl(data_source)
-    const send_import_data_use_case = new SendImportData_UseCase(repository)
     set_is_sending(true)
     try {
-      await send_import_data_use_case.invoke({
-        ...params,
-        erase_library,
-      })
+      await repository.send_import_data(
+        {
+          ...params,
+          erase_library,
+        },
+        auth_context.auth_data!.encryption_key,
+      )
       toast.success('Import file has been sent for processing')
     } catch {
       toast.error('Something went wrong, try again later')

@@ -49,13 +49,13 @@ export class TagHierarchies_DataSourceImpl
 
   public async update_tag_hierarchies(
     params: UpdateTagHierarchies_Params,
+    encryption_key: Uint8Array,
   ): Promise<TagHierarchies_Dto.Response.Authorized> {
-    const key = await Crypto.derive_key_from_password('my_secret_key')
     const parse_node = async (
       node: TagHierarchy_Entity,
     ): Promise<UpdateTagHierarchies_Dto.Node> => {
       return {
-        hash: await Crypto.SHA256(node.name, key),
+        hash: await Crypto.SHA256(node.name, encryption_key),
         children: await Promise.all(
           node.children.map(async (node) => await parse_node(node)),
         ),

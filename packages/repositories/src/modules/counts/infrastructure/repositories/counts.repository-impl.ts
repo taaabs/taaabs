@@ -9,11 +9,10 @@ export class Counts_RepositoryImpl implements Counts_Repository {
 
   public async get_counts_on_authorized_user(
     params: Counts_Params.Authorized,
+    encryption_key: Uint8Array,
   ): Promise<Counts_Ro> {
     const result =
       await this._counts_data_source.get_counts_on_authorized_user(params)
-
-    const key = await Crypto.derive_key_from_password('my_secret_key')
 
     return {
       months: result.months
@@ -31,7 +30,10 @@ export class Counts_RepositoryImpl implements Counts_Repository {
                       ...tag,
                       name: tag.name
                         ? tag.name
-                        : await Crypto.AES.decrypt(tag.name_aes!, key),
+                        : await Crypto.AES.decrypt(
+                            tag.name_aes!,
+                            encryption_key,
+                          ),
                     })),
                   )
                 ).reduce(

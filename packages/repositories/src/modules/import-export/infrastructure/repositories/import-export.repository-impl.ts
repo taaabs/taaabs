@@ -9,8 +9,11 @@ import { Crypto } from '@repositories/utils/crypto'
 export class ImportExport_RepositoryImpl implements ImportExport_Repository {
   constructor(private readonly _import_data_source: ImportExport_DataSource) {}
 
-  public async send_import_data(params: SendImportData_Params): Promise<void> {
-    return this._import_data_source.send_import_data(params)
+  public async send_import_data(
+    params: SendImportData_Params,
+    encryption_key: Uint8Array,
+  ): Promise<void> {
+    return this._import_data_source.send_import_data(params, encryption_key)
   }
 
   public async list_backups(): Promise<ListBackups_Ro> {
@@ -22,10 +25,11 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
     }))
   }
 
-  public async download_backup(params: DownloadBackup_Params): Promise<string> {
+  public async download_backup(
+    params: DownloadBackup_Params,
+    encryption_key: Uint8Array,
+  ): Promise<string> {
     const data = await this._import_data_source.download_backup(params)
-
-    const key = await Crypto.derive_key_from_password('my_secret_key')
 
     // Structure of downloadable data is the same as the input for import.
     const downloadable_json: SendImportData_Params = {
@@ -37,12 +41,12 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
           title: bookmark.title
             ? bookmark.title
             : bookmark.title_aes
-            ? await Crypto.AES.decrypt(bookmark.title_aes, key)
+            ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
             : undefined,
           note: bookmark.note
             ? bookmark.note
             : bookmark.note_aes
-            ? await Crypto.AES.decrypt(bookmark.note_aes, key)
+            ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
             : undefined,
           is_unread: bookmark.is_unread || undefined,
           is_archived: bookmark.is_archived,
@@ -57,7 +61,10 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                     }
                   } else if (tag.name_aes) {
                     return {
-                      name: await Crypto.AES.decrypt(tag.name_aes, key),
+                      name: await Crypto.AES.decrypt(
+                        tag.name_aes,
+                        encryption_key,
+                      ),
                       is_public: false,
                     }
                   } else {
@@ -80,14 +87,23 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                       pin_order: link.pin_order || undefined,
                     }
                   } else if (link.url_aes && link.site_aes) {
-                    const site = await Crypto.AES.decrypt(link.site_aes, key)
+                    const site = await Crypto.AES.decrypt(
+                      link.site_aes,
+                      encryption_key,
+                    )
                     const domain = `${get_domain_from_url(site)}/`
                     const site_path = site.slice(domain.length)
                     return {
-                      url: await Crypto.AES.decrypt(link.url_aes, key),
+                      url: await Crypto.AES.decrypt(
+                        link.url_aes,
+                        encryption_key,
+                      ),
                       site_path: site_path || undefined,
                       pin_title: link.pin_title_aes
-                        ? await Crypto.AES.decrypt(link.pin_title_aes, key)
+                        ? await Crypto.AES.decrypt(
+                            link.pin_title_aes,
+                            encryption_key,
+                          )
                         : undefined,
                       via_wayback: link.via_wayback || undefined,
                       is_pinned: link.is_pinned || undefined,

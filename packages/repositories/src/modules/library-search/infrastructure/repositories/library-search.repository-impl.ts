@@ -41,13 +41,12 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
 
   public async get_bookmarks_on_authorized_user(
     params: GetBookmarks_Params.Authorized,
+    encryption_key: Uint8Array,
   ): Promise<GetBookmarks_Ro> {
     const { bookmarks } =
       await this._library_search_data_source.get_bookmarks_on_authorized_user(
         params,
       )
-
-    const key = await Crypto.derive_key_from_password('my_secret_key')
 
     return {
       bookmarks: await Promise.all(
@@ -60,12 +59,12 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
             title: bookmark.title
               ? bookmark.title
               : bookmark.title_aes
-              ? await Crypto.AES.decrypt(bookmark.title_aes, key)
+              ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
               : undefined,
             note: bookmark.note
               ? bookmark.note
               : bookmark.note_aes
-              ? await Crypto.AES.decrypt(bookmark.note_aes, key)
+              ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
               : undefined,
             is_unread: bookmark.is_unread || false,
             sites: await Promise.all(
@@ -73,7 +72,10 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
                 if (site.site) {
                   return site.site
                 } else {
-                  return await Crypto.AES.decrypt(site.site_aes!, key)
+                  return await Crypto.AES.decrypt(
+                    site.site_aes!,
+                    encryption_key,
+                  )
                 }
               }),
             ),
@@ -82,7 +84,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
                 if (tag.name) {
                   return tag.name
                 } else {
-                  return await Crypto.AES.decrypt(tag.name_aes!, key)
+                  return await Crypto.AES.decrypt(tag.name_aes!, encryption_key)
                 }
               }),
             ),

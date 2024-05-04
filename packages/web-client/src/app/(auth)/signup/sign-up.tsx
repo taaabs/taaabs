@@ -16,6 +16,7 @@ import { AuthContext } from '@/app/auth-provider'
 import { useRouter } from 'next/navigation'
 import { system_values } from '@shared/constants/system-values'
 import { SignUp_Params } from '@repositories/modules/auth/domain/sign-up.params'
+import { Crypto } from '@repositories/utils/crypto'
 
 type FormValues = {
   email: string
@@ -56,6 +57,10 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
         access_token: result.access_token,
         refresh_token: result.refresh_token,
         username: result.username,
+        encryption_key: await Crypto.derive_encrypton_key(
+          form_data.password,
+          result.id,
+        ),
       })
       router.push('/home')
     } catch {

@@ -23,7 +23,10 @@ export const use_pinned = () => {
   const get_pinned_ = async () => {
     if (!username) {
       dispatch(
-        pinned_actions.get_pinned_authorized({ ky: auth_context.ky_instance }),
+        pinned_actions.get_pinned_authorized({
+          ky: auth_context.ky_instance,
+          encryption_key: auth_context.auth_data!.encryption_key,
+        }),
       )
     } else {
       dispatch(

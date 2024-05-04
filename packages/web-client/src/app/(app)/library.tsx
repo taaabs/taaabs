@@ -57,7 +57,6 @@ import { counts_actions } from '@repositories/stores/library/counts/counts.slice
 import { use_popstate_count } from '@/hooks/misc/pop-state-count'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
-import { RecordVisit_UseCase } from '@repositories/modules/bookmarks/domain/usecases/record-visit.use-case'
 import { BookmarkWrapper as UiAppAtom_BookmarkWrapper } from '@web-ui/components/app/atoms/bookmark-wrapper'
 import { SegmentedButton as UiAppAtom_SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 import { use_is_hydrated } from '@shared/hooks'
@@ -273,6 +272,7 @@ const Library = (params: {
                 ) || 'null',
               ) || undefined,
             ky: auth_context.ky_instance,
+            encryption_key: auth_context.auth_data!.encryption_key,
           }),
         ),
       ]).then(() => {
@@ -717,6 +717,7 @@ const Library = (params: {
               url: pin.url_,
             })),
             ky: auth_context.ky_instance,
+            encryption_key: auth_context.auth_data!.encryption_key,
           }),
         )
         toast.success(params.dictionary.library.pinned_links_has_beed_updated)
@@ -748,8 +749,7 @@ const Library = (params: {
             auth_context.ky_instance,
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
-          const record_visit = new RecordVisit_UseCase(repository)
-          record_visit.invoke({
+          repository.record_visit({
             bookmark_id: item.bookmark_id_,
             visited_at: new Date().toISOString(),
           })
@@ -812,6 +812,7 @@ const Library = (params: {
             tag_hierarchies_actions.update_tag_hierarchies({
               update_tag_hierarchies_params,
               ky: auth_context.ky_instance,
+              encryption_key: auth_context.auth_data!.encryption_key,
             }),
           )
           toast.success(params.dictionary.library.tag_hierarchies_upated)
@@ -1208,8 +1209,7 @@ const Library = (params: {
             auth_context.ky_instance,
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
-          const record_visit = new RecordVisit_UseCase(repository)
-          record_visit.invoke({
+          repository.record_visit({
             bookmark_id: bookmark.id,
             visited_at: new Date().toISOString(),
           })
@@ -1221,8 +1221,7 @@ const Library = (params: {
             auth_context.ky_instance,
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
-          const record_visit = new RecordVisit_UseCase(repository)
-          record_visit.invoke({
+          repository.record_visit({
             bookmark_id: bookmark.id,
             visited_at: new Date().toISOString(),
           })
@@ -1296,6 +1295,7 @@ const Library = (params: {
                 lte: date_view_options_hook.current_lte_,
               }),
             ky: auth_context.ky_instance,
+            encryption_key: auth_context.auth_data!.encryption_key,
           }),
         )
         await search_hook.update_bookmark({
@@ -1363,6 +1363,7 @@ const Library = (params: {
                       ) || 'null',
                     ) || undefined,
                   ky: auth_context.ky_instance,
+                  encryption_key: auth_context.auth_data!.encryption_key,
                 }),
               )
               await search_hook.update_bookmark({
@@ -1440,6 +1441,7 @@ const Library = (params: {
                       lte: date_view_options_hook.current_lte_,
                     }),
                   ky: auth_context.ky_instance,
+                  encryption_key: auth_context.auth_data!.encryption_key,
                 }),
               )
               await search_hook.update_bookmark({
@@ -1546,6 +1548,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -1660,6 +1663,7 @@ const Library = (params: {
                           ) || 'null',
                         ) || undefined,
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -1773,6 +1777,7 @@ const Library = (params: {
                           lte: date_view_options_hook.current_lte_,
                         }),
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   if (
@@ -1860,6 +1865,7 @@ const Library = (params: {
                           lte: date_view_options_hook.current_lte_,
                         }),
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -1949,6 +1955,7 @@ const Library = (params: {
                           lte: date_view_options_hook.current_lte_,
                         }),
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -2038,6 +2045,7 @@ const Library = (params: {
                           lte: date_view_options_hook.current_lte_,
                         }),
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -2127,6 +2135,7 @@ const Library = (params: {
                           lte: date_view_options_hook.current_lte_,
                         }),
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -2216,6 +2225,7 @@ const Library = (params: {
                           lte: date_view_options_hook.current_lte_,
                         }),
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -2378,6 +2388,7 @@ const Library = (params: {
                           lte: date_view_options_hook.current_lte_,
                         }),
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
@@ -2499,6 +2510,7 @@ const Library = (params: {
                           lte: date_view_options_hook.current_lte_,
                         }),
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   await search_hook.update_bookmark({
@@ -2587,6 +2599,7 @@ const Library = (params: {
                         }),
                       bookmark_id: bookmark.id,
                       ky: auth_context.ky_instance,
+                      encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
                   await search_hook.delete_bookmark({

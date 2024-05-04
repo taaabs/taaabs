@@ -2,8 +2,6 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import awesomeDebouncePromise from 'awesome-debounce-promise'
 import { Settings_DataSourceImpl } from '@repositories/modules/settings/infrastructure/data-sources/settings.data-source-impl'
 import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastructure/repositories/settings.repository-impl'
-import { CheckUsernameAvailability_UseCase } from '@repositories/modules/settings/domain/use-cases/check-username-availability.use-case'
-import { UpdateUsername_UseCase } from '@repositories/modules/settings/domain/use-cases/update-username.use-case'
 import { HeadingWithSubheading as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
 import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
@@ -33,8 +31,7 @@ export const SectionUsername: React.FC = () => {
     }
     const data_source = new Settings_DataSourceImpl(auth_context.ky_instance)
     const repository = new Settings_RepositoryImpl(data_source)
-    const update_username_use_case = new UpdateUsername_UseCase(repository)
-    await update_username_use_case.invoke({ username: form_data.username })
+    await repository.update_username({ username: form_data.username })
     auth_context.set_auth_data({
       ...auth_context.auth_data!,
       username: form_data.username,
@@ -45,10 +42,8 @@ export const SectionUsername: React.FC = () => {
   const get_is_username_available = async (username: string) => {
     const data_source = new Settings_DataSourceImpl(auth_context.ky_instance)
     const repository = new Settings_RepositoryImpl(data_source)
-    const check_username_availability_use_case =
-      new CheckUsernameAvailability_UseCase(repository)
     const is_available = (
-      await check_username_availability_use_case.invoke({
+      await repository.check_username_availability({
         username,
       })
     ).is_available

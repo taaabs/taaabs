@@ -12,7 +12,6 @@ import { useContext, useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { LibrarySearch_DataSourceImpl } from '@repositories/modules/library-search/infrastructure/data-sources/library-search.data-source-impl'
 import { LibrarySearch_RepositoryImpl } from '@repositories/modules/library-search/infrastructure/repositories/library-search.repository-impl'
-import { GetSearchableBookmarksOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-searchable-bookmarks-on-authorized-user.user-case'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import {
   afterInsert as highlightAfterInsert,
@@ -23,13 +22,10 @@ import {
 import { system_values } from '@shared/constants/system-values'
 import localforage from 'localforage'
 import { browser_storage } from '@/constants/browser-storage'
-import { GetLastUpdatedAtOnAuthorizedUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-authorized-user.use-case'
 import { useParams, useSearchParams } from 'next/navigation'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search'
 import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
-import { GetSearchableBookmarksOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-searchable-bookmarks-on-public-user.user-case'
 import { GetLastUpdated_Ro } from '@repositories/modules/library-search/domain/types/get-last-updated.ro'
-import { GetLastUpdatedAtOnPublicUser_UseCase } from '@repositories/modules/library-search/domain/usecases/get-last-updated-at-on-public-user.use-case'
 import { Filter } from '@/types/library/filter'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
@@ -212,20 +208,16 @@ export const use_search = () => {
 
     let result: GetLastUpdated_Ro
     if (!username) {
-      const get_last_updated_at_on_authorized_user_use_case =
-        new GetLastUpdatedAtOnAuthorizedUser_UseCase(repository)
-      result = await get_last_updated_at_on_authorized_user_use_case.invoke()
+      result = await repository.get_last_updated_at_on_authorized_user()
     } else {
-      const get_last_updated_at_on_public_user_use_case =
-        new GetLastUpdatedAtOnPublicUser_UseCase(repository)
-      result = await get_last_updated_at_on_public_user_use_case.invoke({
+      result = await repository.get_last_updated_at_on_public_user({
         username: username as string,
       })
     }
 
     !params.is_archived
-      ? (remote_updated_at = result.updated_at!.getTime())
-      : (remote_updated_at = result.archived_updated_at!.getTime())
+      ? (remote_updated_at = result.updated_at?.getTime() || 0)
+      : (remote_updated_at = result.archived_updated_at?.getTime() || 0)
 
     if (
       (instance_updated_at && instance_updated_at >= remote_updated_at) ||
@@ -365,18 +357,17 @@ export const use_search = () => {
 
       let bookmarks: SearchableBookmark_Entity[]
       if (!username) {
-        const get_searchable_bookmarks =
-          new GetSearchableBookmarksOnAuthorizedUser_UseCase(repository)
         bookmarks = (
-          await get_searchable_bookmarks.invoke({
-            is_archived: params.is_archived,
-          })
+          await repository.get_bookmarks_on_authorized_user(
+            {
+              is_archived: params.is_archived,
+            },
+            auth_context.auth_data!.encryption_key,
+          )
         ).bookmarks
       } else {
-        const get_searchable_bookmarks =
-          new GetSearchableBookmarksOnPublicUser_UseCase(repository)
         bookmarks = (
-          await get_searchable_bookmarks.invoke({
+          await repository.get_bookmarks_on_public_user({
             is_archived: params.is_archived,
             username: username as string,
           })

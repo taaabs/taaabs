@@ -11,7 +11,6 @@ import { HeadingWithSubheading as UiAppAtom_HeadingWithSubheading } from '@web-u
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
-import { DownloadBackup_UseCase } from '@repositories/modules/import-export/domain/usecases/download-backup.use-case'
 import { AuthContext } from '@/app/auth-provider'
 import { use_is_hydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -48,12 +47,13 @@ const Page: React.FC = () => {
                   auth_context.ky_instance,
                 )
                 const repository = new ImportExport_RepositoryImpl(data_source)
-                const download_backup_use_case = new DownloadBackup_UseCase(
-                  repository,
+
+                const data = await repository.download_backup(
+                  {
+                    id: backup.id,
+                  },
+                  auth_context.auth_data!.encryption_key,
                 )
-                const data = await download_backup_use_case.invoke({
-                  id: backup.id,
-                })
                 download({
                   filename: `${backup.created_at} - taaabs backup.json`,
                   text: data,

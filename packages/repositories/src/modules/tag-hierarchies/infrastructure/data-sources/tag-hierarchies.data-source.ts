@@ -13,5 +13,6 @@ export type TagHierarchies_DataSource = {
 
   update_tag_hierarchies(
     params: UpdateTagHierarchies_Params,
+    encryption_key: Uint8Array,
   ): Promise<TagHierarchies_Dto.Response.Authorized>
 }

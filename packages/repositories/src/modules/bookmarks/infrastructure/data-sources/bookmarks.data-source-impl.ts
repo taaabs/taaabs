@@ -116,20 +116,19 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
 
   public async upsert_bookmark(
     params: UpsertBookmark_Params,
+    encryption_key: Uint8Array,
   ): Promise<Bookmarks_Dto.Response.AuthorizedBookmark> {
-    const key = await Crypto.derive_key_from_password('my_secret_key')
-
     const body: CreateBookmark_Dto.Body = {
       created_at: params.created_at?.toISOString(),
       title: params.is_public ? params.title : undefined,
       title_aes:
         !params.is_public && params.title
-          ? await Crypto.AES.encrypt(params.title, key)
+          ? await Crypto.AES.encrypt(params.title, encryption_key)
           : undefined,
       note: params.is_public ? params.note : undefined,
       note_aes:
         !params.is_public && params.note
-          ? await Crypto.AES.encrypt(params.note, key)
+          ? await Crypto.AES.encrypt(params.note, encryption_key)
           : undefined,
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,
@@ -154,14 +153,17 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
             if (tag.is_public) {
               return {
                 is_public: true,
-                hash: await Crypto.SHA256(tag.name, key),
+                hash: await Crypto.SHA256(tag.name, encryption_key),
                 name: tag.name.trim(),
               }
             } else {
               return {
                 is_public: false,
-                hash: await Crypto.SHA256(tag.name, key),
-                name_aes: await Crypto.AES.encrypt(tag.name.trim(), key),
+                hash: await Crypto.SHA256(tag.name, encryption_key),
+                name_aes: await Crypto.AES.encrypt(
+                  tag.name.trim(),
+                  encryption_key,
+                ),
               }
             }
           }),
@@ -187,7 +189,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
               return {
                 is_public: true,
                 url: link.url.trim(),
-                hash: await Crypto.SHA256(link.url.trim(), key),
+                hash: await Crypto.SHA256(link.url.trim(), encryption_key),
                 site_path: link.is_public ? link.site_path : undefined,
                 is_pinned: link.is_pinned,
                 pin_title: link.pin_title,
@@ -196,15 +198,18 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
             } else {
               return {
                 is_public: false,
-                url_aes: await Crypto.AES.encrypt(link.url.trim(), key),
+                url_aes: await Crypto.AES.encrypt(
+                  link.url.trim(),
+                  encryption_key,
+                ),
                 site_aes: await Crypto.AES.encrypt(
                   link.site_path ? `${domain}/${link.site_path}` : domain,
-                  key,
+                  encryption_key,
                 ),
-                hash: await Crypto.SHA256(link.url.trim(), key),
+                hash: await Crypto.SHA256(link.url.trim(), encryption_key),
                 is_pinned: link.is_pinned,
                 pin_title_aes: link.pin_title
-                  ? await Crypto.AES.encrypt(link.pin_title, key)
+                  ? await Crypto.AES.encrypt(link.pin_title, encryption_key)
                   : undefined,
                 via_wayback: link.via_wayback,
               }

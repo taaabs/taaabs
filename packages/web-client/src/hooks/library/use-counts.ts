@@ -89,6 +89,7 @@ export const use_counts = () => {
         counts_actions.get_authorized_counts({
           request_params,
           ky: auth_context.ky_instance,
+          encryption_key: auth_context.auth_data!.encryption_key,
         }),
       )
     } else {

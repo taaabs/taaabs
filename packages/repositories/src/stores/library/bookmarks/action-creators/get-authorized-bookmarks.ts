@@ -3,7 +3,6 @@ import { LibraryDispatch, LibraryState } from '../../library.store'
 import { counts_actions } from '../../counts/counts.slice'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
-import { GetBookmarksOnAuthorizedUser_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-authorized-user.use-case'
 import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { backOff } from 'exponential-backoff'
@@ -15,11 +14,11 @@ import { pinned_actions } from '../../pinned/pinned.slice'
 export const get_authorized_bookmarks = (params: {
   request_params: GetBookmarks_Params.Authorized
   ky: KyInstance
+  encryption_key: Uint8Array
 }) => {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
     const data_source = new Bookmarks_DataSourceImpl(params.ky)
     const repository = new Bookmarks_RepositoryImpl(data_source)
-    const get_bookmarks = new GetBookmarksOnAuthorizedUser_UseCase(repository)
 
     dispatch(bookmarks_actions.set_is_fetching(true))
 
@@ -33,7 +32,10 @@ export const get_authorized_bookmarks = (params: {
     let should_refetch_pinned = false
 
     const get_result = async () => {
-      const result = await get_bookmarks.invoke(params.request_params)
+      const result = await repository.get_bookmarks_on_authorized_user(
+        params.request_params,
+        params.encryption_key,
+      )
       const state = get_state()
       if (
         state.bookmarks.processing_progress !== undefined &&

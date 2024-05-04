@@ -1,7 +1,6 @@
 import { bookmarks_actions } from '../bookmarks.slice'
 import { LibraryDispatch, LibraryState } from '../../library.store'
 import { counts_actions } from '../../counts/counts.slice'
-import { GetBookmarksOnPublicUser_UseCase } from '@repositories/modules/bookmarks/domain/usecases/get-bookmarks-on-public-user.use-case'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { GetBookmarks_Params } from '@repositories/modules/bookmarks/domain/types/get-bookmarks.params'
@@ -19,7 +18,6 @@ export const get_public_bookmarks = (params: {
   return async (dispatch: LibraryDispatch, get_state: () => LibraryState) => {
     const data_source = new Bookmarks_DataSourceImpl(params.ky)
     const repository = new Bookmarks_RepositoryImpl(data_source)
-    const get_bookmarks = new GetBookmarksOnPublicUser_UseCase(repository)
 
     dispatch(bookmarks_actions.set_is_fetching(true))
 
@@ -33,7 +31,9 @@ export const get_public_bookmarks = (params: {
     let should_refetch_pinned = false
 
     const get_result = async () => {
-      const result = await get_bookmarks.invoke(params.request_params)
+      const result = await repository.get_bookmarks_on_public_user(
+        params.request_params,
+      )
       const state = get_state()
       if (
         state.bookmarks.processing_progress !== undefined &&

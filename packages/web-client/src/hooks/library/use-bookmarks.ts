@@ -112,6 +112,7 @@ export const use_bookmarks = () => {
         bookmarks_actions.get_authorized_bookmarks({
           request_params,
           ky: auth_context.ky_instance,
+          encryption_key: auth_context.auth_data!.encryption_key,
         }),
       )
     } else {

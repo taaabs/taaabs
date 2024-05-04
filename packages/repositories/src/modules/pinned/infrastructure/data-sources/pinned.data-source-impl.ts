@@ -19,15 +19,17 @@ export class Pinned_DataSourceImpl implements Pinned_DataSource {
     return this._ky.get(`v1/pinned/${params.username}`).json()
   }
 
-  public async update_pinned(params: UpdatePinned_Params): Promise<void> {
-    const key = await Crypto.derive_key_from_password('my_secret_key')
+  public async update_pinned(
+    params: UpdatePinned_Params,
+    encryption_key: Uint8Array,
+  ): Promise<void> {
     const body: UpdatePinned_Dto.Body = await Promise.all(
       params.map(async (pinned_item) => ({
-        hash: await Crypto.SHA256(pinned_item.url.trim(), key),
+        hash: await Crypto.SHA256(pinned_item.url.trim(), encryption_key),
         title: pinned_item.is_link_public ? pinned_item.title : undefined,
         title_aes:
           !pinned_item.is_link_public && pinned_item.title
-            ? await Crypto.AES.encrypt(pinned_item.title, key)
+            ? await Crypto.AES.encrypt(pinned_item.title, encryption_key)
             : undefined,
       })),
     )

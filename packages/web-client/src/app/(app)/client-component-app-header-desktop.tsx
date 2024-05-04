@@ -23,7 +23,6 @@ import { clear_library_session_storage } from '@/utils/clear_library_session_sto
 import { GlobalLibarySearchContext } from '../global-library-search-provider'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
-import { UpsertBookmark_UseCase } from '@repositories/modules/bookmarks/domain/usecases/upsert-bookmark.use-case'
 import { search_params_keys } from '@/constants/search-params-keys'
 import { toast } from 'react-toastify'
 import { browser_storage } from '@/constants/browser-storage'
@@ -136,11 +135,10 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
             auth_context.ky_instance,
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
-          const upsert_bookmark_use_case = new UpsertBookmark_UseCase(
-            repository,
+          const created_bookmark = await repository.upsert_bookmark(
+            bookmark,
+            auth_context.auth_data!.encryption_key,
           )
-          const created_bookmark =
-            await upsert_bookmark_use_case.invoke(bookmark)
           await global_library_search!.search_hook.update_bookmark({
             db,
             bookmarks_just_tags,
