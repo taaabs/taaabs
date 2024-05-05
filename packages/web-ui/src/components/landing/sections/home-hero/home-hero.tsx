@@ -11,11 +11,13 @@ export namespace HomeHero {
       second_line: string
     }
     subheading: React.ReactNode
-    username: string
     on_username_change: (username: string) => void
-    claim_username_placeholder: string
-    claim_username_button_label: string
-    on_claim_username_button_click: () => void
+    claim_username?: {
+      username: string
+      placeholder: string
+      button_label: string
+      button_on_click: () => void
+    }
     ticks: React.ReactNode[]
   }
 }
@@ -62,21 +64,23 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
             <p className={styles.top__subheading}>{props.subheading}</p>
           </div>
 
-          <div className={styles['claim-username']}>
-            <div className={styles['claim-username__input']}>
-              <input
-                value={props.username}
-                placeholder={props.claim_username_placeholder}
-                onChange={(e) => props.on_username_change(e.target.value)}
-              />
+          {props.claim_username && (
+            <div className={styles['claim-username']}>
+              <div className={styles['claim-username__input']}>
+                <input
+                  value={props.claim_username.username}
+                  placeholder={props.claim_username.placeholder}
+                  onChange={(e) => props.on_username_change(e.target.value)}
+                />
+              </div>
+              <Button
+                on_click={props.claim_username.button_on_click}
+                size="large"
+              >
+                {props.claim_username.button_label}
+              </Button>
             </div>
-            <Button
-              on_click={props.on_claim_username_button_click}
-              size="large"
-            >
-              {props.claim_username_button_label}
-            </Button>
-          </div>
+          )}
 
           <div className={styles.checks}>
             {props.ticks.map((tick, i) => (

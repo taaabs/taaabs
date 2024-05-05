@@ -1,4 +1,4 @@
-import { HomeHero } from './about-hero'
+import { HomeHero } from './home-hero'
 
 export default {
   component: HomeHero,
@@ -10,10 +10,12 @@ export const Primary = () => (
     subheading={
       'Easy to use, privacy-first way to organize, share and discover web bookmarks'
     }
-    claim_username_button_label="Claim username"
-    claim_username_placeholder="username"
-    on_claim_username_button_click={() => {}}
-    username=""
+    claim_username={{
+      username: '',
+      button_label: 'Claim username',
+      button_on_click: () => {},
+      placeholder: 'username',
+    }}
     on_username_change={() => {}}
     ticks={[
       <>

@@ -2,7 +2,7 @@
 
 import { HomeHero as UiLandingSection_HomeHero } from '@web-ui/components/landing/sections/home-hero'
 
-const About: React.FC = () => {
+const About: React.FC<{ is_authorized: boolean }> = (props) => {
   return (
     <>
       <UiLandingSection_HomeHero
@@ -12,9 +12,16 @@ const About: React.FC = () => {
         }}
         subheading="Easy to use, privacy-first way to organize, share and discover web bookmarks"
         on_username_change={() => {}}
-        claim_username_button_label="Claim username"
-        claim_username_placeholder="username"
-        on_claim_username_button_click={() => {}}
+        claim_username={
+          props.is_authorized
+            ? {
+                button_label: 'Claim username',
+                placeholder: 'username',
+                button_on_click: () => {},
+                username: '',
+              }
+            : undefined
+        }
         ticks={[
           <>
             <strong>End-to-end encryption</strong> of private bookmarks
@@ -23,7 +30,6 @@ const About: React.FC = () => {
             <strong>Free to try</strong> for as long as you'd like
           </>,
         ]}
-        username=""
       />
     </>
   )
