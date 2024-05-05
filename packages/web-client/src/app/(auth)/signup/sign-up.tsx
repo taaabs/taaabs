@@ -13,7 +13,6 @@ import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/a
 import { toast } from 'react-toastify'
 import { useContext } from 'react'
 import { AuthContext } from '@/app/auth-provider'
-import { useRouter } from 'next/navigation'
 import { system_values } from '@shared/constants/system-values'
 import { SignUp_Params } from '@repositories/modules/auth/domain/sign-up.params'
 import { Crypto } from '@repositories/utils/crypto'
@@ -34,7 +33,6 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
     resetField,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ mode: 'onBlur' })
-  const router = useRouter()
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     const params: SignUp_Params = {
@@ -63,7 +61,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
           result.id,
         ),
       })
-      router.push('/')
+      document.location = '/'
     } catch {
       toast.error('Something went wrong... Try again.')
     }

@@ -14,7 +14,6 @@ import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/a
 import { toast } from 'react-toastify'
 import { useContext } from 'react'
 import { AuthContext } from '@/app/auth-provider'
-import { useRouter } from 'next/navigation'
 import { Crypto } from '@repositories/utils/crypto'
 
 type FormValues = {
@@ -30,7 +29,6 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
     resetField,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ mode: 'onBlur' })
-  const router = useRouter()
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     const params: LogIn_Params = {
@@ -57,7 +55,7 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
           result.id,
         ),
       })
-      router.push('/')
+      document.location = '/'
     } catch (e) {
       toast.error('Invalid email or password. Try again.')
     }
