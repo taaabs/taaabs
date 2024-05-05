@@ -22,9 +22,9 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
           label: 'Home',
           icon_variant: 'HOME',
           icon_variant_active: 'HOME_FILLED',
-          is_active: pathname == '/home',
+          is_active: pathname == '/',
           on_click: () => {
-            router.push('/home')
+            router.push('/')
           },
         },
         {

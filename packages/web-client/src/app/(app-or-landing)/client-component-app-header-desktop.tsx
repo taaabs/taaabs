@@ -66,8 +66,8 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
     navigation = [
       {
         label: 'Home',
-        href: '/home',
-        is_active: pathname == '/home',
+        href: '/',
+        is_active: pathname == '/',
       },
       {
         label: 'Bookmarks',
@@ -187,7 +187,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   }
 
   useUpdateEffect(() => {
-    if (window.location.hash.slice(1).length && pathname == '/home') {
+    if (window.location.hash.slice(1).length && pathname == '/about') {
       open_new_bookmark_modal({ with_autofill: true })
     }
   }, [is_hydrated])
@@ -203,7 +203,9 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
           on_click_add={() => {
             open_new_bookmark_modal({})
           }}
-          on_click_search={() => {}}
+          on_click_search={() => {
+            auth_context.logout()
+          }}
         />
       }
       cockroach_url="https://bit.ly/cockroachdb-cloud"

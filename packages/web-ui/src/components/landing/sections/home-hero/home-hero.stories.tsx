@@ -1,4 +1,4 @@
-import { HomeHero } from './home-hero'
+import { HomeHero } from './about-hero'
 
 export default {
   component: HomeHero,

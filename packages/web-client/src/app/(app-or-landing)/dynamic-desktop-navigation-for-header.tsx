@@ -9,7 +9,6 @@ export const DynamicDesktopNavigationForHeader: React.FC = () => {
   return (
     <UiLandingAtom_DesktopNavigationForHeader
       navigation_items={[
-        { label: 'Home', href: '/', is_active: pathname == '/' },
         {
           label: 'Updates',
           href: '/updates',

@@ -2,7 +2,7 @@
 
 import { HomeHero as UiLandingSection_HomeHero } from '@web-ui/components/landing/sections/home-hero'
 
-const Page: React.FC = () => {
+const About: React.FC = () => {
   return (
     <>
       <UiLandingSection_HomeHero
@@ -29,4 +29,4 @@ const Page: React.FC = () => {
   )
 }
 
-export default Page
+export default About

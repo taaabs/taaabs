@@ -16,7 +16,6 @@ import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { browser_storage } from '@/constants/browser-storage'
 import { use_search } from '@/hooks/library/use-search'
-import { ModalContext } from '../../providers/modal-provider'
 import { useParams, useSearchParams } from 'next/navigation'
 import { upsert_bookmark_modal } from '@/modals/upsert-bookmark-modal'
 import { toast } from 'react-toastify'
@@ -60,7 +59,8 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { BookmarkWrapper as UiAppAtom_BookmarkWrapper } from '@web-ui/components/app/atoms/bookmark-wrapper'
 import { SegmentedButton as UiAppAtom_SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 import { use_is_hydrated } from '@shared/hooks'
-import { AuthContext } from '../auth-provider'
+import { ModalContext } from '@/providers/modal-provider'
+import { AuthContext } from '@/app/auth-provider'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {

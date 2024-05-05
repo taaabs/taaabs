@@ -48,6 +48,7 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
     try {
       const result = await repository.log_in(params)
       auth_context!.set_auth_data({
+        id: result.id,
         access_token: result.access_token,
         refresh_token: result.refresh_token,
         username: result.username,
@@ -56,7 +57,7 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
           result.id,
         ),
       })
-      router.push('/home')
+      router.push('/')
     } catch (e) {
       toast.error('Invalid email or password. Try again.')
     }
