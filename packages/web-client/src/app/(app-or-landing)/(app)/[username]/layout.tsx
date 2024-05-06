@@ -3,7 +3,7 @@ import { AvatarContextSetter } from './avatar-context-setter'
 import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
 import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
 import ky from 'ky'
-import { PublicUserLibrarySearchProvider } from './public-user-library-search-provider'
+import { PublicProfileLocalDbProvider } from './public-profile-local-db-provider'
 import { ReactNode } from 'react'
 
 const Layout: React.FC<{
@@ -13,7 +13,7 @@ const Layout: React.FC<{
   const metadata = await _get_metadata({ username: props.params.username })
 
   return (
-    <PublicUserLibrarySearchProvider>
+    <PublicProfileLocalDbProvider>
       <AvatarContextSetter
         avatar={
           metadata.avatar
@@ -25,7 +25,7 @@ const Layout: React.FC<{
         }
       />
       {props.children}
-    </PublicUserLibrarySearchProvider>
+    </PublicProfileLocalDbProvider>
   )
 }
 

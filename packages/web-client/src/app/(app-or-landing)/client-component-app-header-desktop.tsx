@@ -20,7 +20,6 @@ import { update_search_params } from '@/utils/update-query-params'
 import { BookmarkHash } from '@/utils/bookmark-hash'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
-import { GlobalLibarySearchContext } from '../global-library-search-provider'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { search_params_keys } from '@/constants/search-params-keys'
@@ -36,7 +35,6 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   const router = useRouter()
   const public_user_avatar = useContext(PublicUserAvatarContext)
   const modal = useContext(ModalContext)
-  const global_library_search = useContext(GlobalLibarySearchContext)
   const is_hydrated = use_is_hydrated()
 
   let logo: JSX.Element
@@ -126,10 +124,10 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         }
         on_close={modal.set_modal}
         on_submit={async (bookmark) => {
-          const { db, bookmarks_just_tags } =
-            await global_library_search!.search_hook.init({
-              is_archived: false,
-            })
+          // const { db, bookmarks_just_tags } =
+          //   await global_library_search!.search_hook.init({
+          //     is_archived: false,
+          //   })
 
           const data_source = new Bookmarks_DataSourceImpl(
             auth_context.ky_instance,
@@ -139,28 +137,28 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
             bookmark,
             auth_context.auth_data!.encryption_key,
           )
-          await global_library_search!.search_hook.update_bookmark({
-            db,
-            bookmarks_just_tags,
-            is_archived: false,
-            bookmark: {
-              id: created_bookmark.id,
-              created_at: created_bookmark.created_at,
-              visited_at: created_bookmark.visited_at,
-              updated_at: created_bookmark.updated_at,
-              title: created_bookmark.title,
-              note: created_bookmark.note,
-              is_archived: false,
-              is_unread: created_bookmark.is_unread,
-              stars: created_bookmark.stars,
-              links: created_bookmark.links.map((link) => ({
-                url: link.url,
-                site_path: link.site_path,
-              })),
-              tags: created_bookmark.tags.map((tag) => tag.name),
-              tag_ids: created_bookmark.tags.map((tag) => tag.id),
-            },
-          })
+          // await global_library_search!.search_hook.update_bookmark({
+          //   db,
+          //   bookmarks_just_tags,
+          //   is_archived: false,
+          //   bookmark: {
+          //     id: created_bookmark.id,
+          //     created_at: created_bookmark.created_at,
+          //     visited_at: created_bookmark.visited_at,
+          //     updated_at: created_bookmark.updated_at,
+          //     title: created_bookmark.title,
+          //     note: created_bookmark.note,
+          //     is_archived: false,
+          //     is_unread: created_bookmark.is_unread,
+          //     stars: created_bookmark.stars,
+          //     links: created_bookmark.links.map((link) => ({
+          //       url: link.url,
+          //       site_path: link.site_path,
+          //     })),
+          //     tags: created_bookmark.tags.map((tag) => tag.name),
+          //     tag_ids: created_bookmark.tags.map((tag) => tag.id),
+          //   },
+          // })
           if (pathname == '/bookmarks') {
             sessionStorage.setItem(
               browser_storage.session_storage.library

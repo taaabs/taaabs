@@ -216,6 +216,7 @@ export const use_bookmarks = () => {
           request_params: {
             ids,
           },
+          encryption_key: auth_context.auth_data!.encryption_key,
         }),
       )
     } else {

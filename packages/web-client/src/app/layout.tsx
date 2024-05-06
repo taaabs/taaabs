@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import 'use-context-menu/styles.css'
 import 'simplebar-react/dist/simplebar.min.css'
 import '@web-ui/styles/style.scss'
-import { GlobalLibrarySearchProvider } from './global-library-search-provider'
+import { GlobalOramaDbProvider } from './global-local-db-provider'
 import { ReactNode } from 'react'
 import { ModalProvider } from '@/providers/modal-provider'
 import { AuthProvider } from './auth-provider'
@@ -58,9 +58,9 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
           draggablePercent={20}
         />
         <AuthProvider>
-          <GlobalLibrarySearchProvider>
+          <GlobalOramaDbProvider>
             <ModalProvider>{children}</ModalProvider>
-          </GlobalLibrarySearchProvider>
+          </GlobalOramaDbProvider>
         </AuthProvider>
       </body>
     </html>

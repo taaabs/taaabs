@@ -3,7 +3,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { useContext } from 'react'
 import Library from '../../library'
-import { PublicUserLibarySearchContext } from '../public-user-library-search-provider'
+import { PublicProfileLocalDbContext } from '../public-profile-local-db-provider'
 
 namespace LibraryWrapper {
   export type Props = {
@@ -12,11 +12,6 @@ namespace LibraryWrapper {
 }
 
 export const LibraryWrapper: React.FC<LibraryWrapper.Props> = (props) => {
-  const public_user_library_search = useContext(PublicUserLibarySearchContext)
-  return (
-    <Library
-      dictionary={props.dictionary}
-      search_hook={public_user_library_search!.search_hook}
-    />
-  )
+  const local_db = useContext(PublicProfileLocalDbContext)!
+  return <Library dictionary={props.dictionary} local_db={local_db} />
 }

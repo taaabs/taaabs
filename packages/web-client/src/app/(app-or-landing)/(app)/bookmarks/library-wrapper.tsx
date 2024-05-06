@@ -3,7 +3,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import Library from '../library'
 import { useContext } from 'react'
-import { GlobalLibarySearchContext } from '@/app/global-library-search-provider'
+import { GlobalLocalDbContext } from '@/app/global-local-db-provider'
 
 namespace LibraryWrapper {
   export type Props = {
@@ -12,11 +12,6 @@ namespace LibraryWrapper {
 }
 
 export const LibraryWrapper: React.FC<LibraryWrapper.Props> = (props) => {
-  const global_library_search = useContext(GlobalLibarySearchContext)
-  return (
-    <Library
-      dictionary={props.dictionary}
-      search_hook={global_library_search!.search_hook}
-    />
-  )
+  const local_db = useContext(GlobalLocalDbContext)!
+  return <Library dictionary={props.dictionary} local_db={local_db} />
 }

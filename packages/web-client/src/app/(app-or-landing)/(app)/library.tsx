@@ -15,7 +15,6 @@ import { use_counts } from '@/hooks/library/use-counts'
 import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage-cleanup'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { browser_storage } from '@/constants/browser-storage'
-import { use_search } from '@/hooks/library/use-search'
 import { useParams, useSearchParams } from 'next/navigation'
 import { upsert_bookmark_modal } from '@/modals/upsert-bookmark-modal'
 import { toast } from 'react-toastify'
@@ -49,7 +48,6 @@ import { use_pinned } from '@/hooks/library/use-pinned'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types/record-visit.params'
-import dictionary from '@/dictionaries/en'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { search_params_keys } from '@/constants/search-params-keys'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
@@ -61,6 +59,8 @@ import { SegmentedButton as UiAppAtom_SegmentedButton } from '@web-ui/components
 import { use_is_hydrated } from '@shared/hooks'
 import { ModalContext } from '@/providers/modal-provider'
 import { AuthContext } from '@/app/auth-provider'
+import { use_search } from '@/hooks/library/use-search'
+import { LocalDb } from '@/app/global-local-db-provider'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
@@ -68,9 +68,9 @@ const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   loading: () => <UiAppAtom_CustomRangeSkeleton />,
 })
 
-const Library = (params: {
-  dictionary: Dictionary
-  search_hook: ReturnType<typeof use_search>
+const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
+  dictionary,
+  local_db,
 }) => {
   const auth_context = useContext(AuthContext)!
   use_scroll_restore()
@@ -82,7 +82,7 @@ const Library = (params: {
   const { username }: { username?: string } = useParams()
   const modal_context = useContext(ModalContext)
   const [show_skeletons, set_show_skeletons] = useState(true)
-  const search_hook = params.search_hook
+  const search_hook = use_search(local_db)
   const bookmarks_hook = use_bookmarks()
   const counts_hook = use_counts()
   const points_hook = use_points()
@@ -129,14 +129,14 @@ const Library = (params: {
         set_is_pinned_stale(false)
       }
       set_pinned_count()
-      if (search_hook.result) {
-        search_hook.set_highlights(search_hook.incoming_highlights)
-        search_hook.set_highlights_sites_variants(
-          search_hook.incoming_highlights_sites_variants,
+      if (search_hook.result_) {
+        search_hook.set_highlights_(search_hook.incoming_highlights_)
+        search_hook.set_highlights_sites_variants_(
+          search_hook.incoming_highlights_sites_variants_,
         )
-      } else if (search_hook.highlights && !search_hook.result) {
-        search_hook.set_highlights(undefined)
-        search_hook.set_highlights_sites_variants(undefined)
+      } else if (search_hook.highlights_ && !search_hook.result_) {
+        search_hook.set_highlights_(undefined)
+        search_hook.set_highlights_sites_variants_(undefined)
       }
     }
   }, [
@@ -148,8 +148,8 @@ const Library = (params: {
     pinned_hook.is_fetching,
     pinned_hook.should_refetch,
     // Bookmark menu items must see new db instances.
-    search_hook.db_updated_at_timestamp,
-    search_hook.archived_db_updated_at_timestamp,
+    local_db.db_updated_at_timestamp,
+    local_db.archived_db_updated_at_timestamp,
   ])
 
   const set_pinned_count = () => {
@@ -297,7 +297,7 @@ const Library = (params: {
   }, [pinned_hook.should_refetch])
 
   useUpdateEffect(() => {
-    search_hook.set_current_filter(filter_view_options_hook.current_filter_)
+    search_hook.set_current_filter_(filter_view_options_hook.current_filter_)
   }, [filter_view_options_hook.current_filter_])
 
   // Clear cache when user selects visited at sort_by option or popularity order.
@@ -320,9 +320,9 @@ const Library = (params: {
   ])
 
   useUpdateEffect(() => {
-    if (search_hook.db || search_hook.archived_db) {
-      search_hook.set_current_filter(filter_view_options_hook.current_filter_)
-      search_hook.set_selected_tags(
+    if (local_db.db || local_db.archived_db) {
+      search_hook.set_current_filter_(filter_view_options_hook.current_filter_)
+      search_hook.set_selected_tags_(
         counts_hook.selected_tags_
           .filter((id) => {
             if (!bookmarks_hook.bookmarks || !bookmarks_hook.bookmarks[0])
@@ -341,19 +341,19 @@ const Library = (params: {
             return name
           }),
       )
-      search_hook.get_hints()
+      search_hook.get_hints_()
     }
-  }, [search_hook.db, search_hook.archived_db])
+  }, [local_db.db, local_db.archived_db])
 
   useUpdateEffect(() => {
-    if (search_hook.result) {
+    if (search_hook.result_) {
       bookmarks_hook.get_bookmarks_by_ids_({
-        all_not_paginated_ids: search_hook.result.hits.map((hit) =>
+        all_not_paginated_ids: search_hook.result_.hits.map((hit) =>
           parseInt(hit.document.id),
         ),
       })
     }
-  }, [search_hook.queried_at_timestamp])
+  }, [search_hook.queried_at_timestamp_])
 
   useUpdateEffect(() => {
     tag_hierarchies_hook.get_tag_hierarchies_({
@@ -378,42 +378,43 @@ const Library = (params: {
   const is_not_interactive =
     is_fetching_first_bookmarks ||
     bookmarks_hook.is_fetching_more_bookmarks ||
-    search_hook.is_initializing
+    search_hook.is_initializing_
 
   const slot_search = (
     <UiAppAtom_LibrarySearch
-      search_string_={search_hook.search_string}
-      is_loading_={search_hook.is_initializing}
-      loading_progress_percentage_={search_hook.indexed_bookmarks_percentage}
-      placeholder_={params.dictionary.library.search_placeholder}
+      search_string_={search_hook.search_string_}
+      is_loading_={search_hook.is_initializing_}
+      loading_progress_percentage_={search_hook.indexed_bookmarks_percentage_}
+      placeholder_={dictionary.library.search_placeholder}
       hints_={
-        !search_hook.is_initializing
-          ? search_hook.hints?.map((hint) => ({
+        !search_hook.is_initializing_
+          ? search_hook.hints_?.map((hint) => ({
               type_: hint.type,
               completion_: hint.completion,
               search_string_: hint.search_string,
             }))
           : undefined
       }
-      hints_set_at_timestamp_={search_hook.hints_set_at_timestamp}
-      queried_at_timestamp_={search_hook.queried_at_timestamp}
+      hints_set_at_timestamp_={search_hook.hints_set_at_timestamp_}
+      queried_at_timestamp_={search_hook.queried_at_timestamp_}
       on_click_hint_={(i) => {
         const search_string =
-          search_hook.search_string + search_hook.hints![i].completion
-        search_hook.set_search_string(search_string)
-        search_hook.query_db({ search_string })
+          search_hook.search_string_ + search_hook.hints_![i].completion
+        search_hook.set_search_string_(search_string)
+        search_hook.query_db_({ search_string })
       }}
       on_click_recent_hint_remove_={(i) => {
         const search_string =
-          search_hook.hints![i].search_string + search_hook.hints![i].completion
-        search_hook.remove_recent_hint({ search_string })
+          search_hook.hints_![i].search_string +
+          search_hook.hints_![i].completion
+        search_hook.remove_recent_hint_({ search_string })
       }}
-      is_focused_={search_hook.is_search_focused}
+      is_focused_={search_hook.is_search_focused_}
       on_focus_={async () => {
-        if (!search_hook.is_initializing) {
-          search_hook.set_is_search_focused(true)
+        if (!search_hook.is_initializing_) {
+          search_hook.set_is_search_focused_(true)
 
-          search_hook.set_selected_tags(
+          search_hook.set_selected_tags_(
             counts_hook.selected_tags_
               .filter((id) => {
                 if (!bookmarks_hook.bookmarks || !bookmarks_hook.bookmarks[0])
@@ -434,23 +435,23 @@ const Library = (params: {
           )
 
           if (search_cache_to_be_cleared.current) {
-            await search_hook.init({
+            await search_hook.init_({
               is_archived: is_archived_filter,
               force_reinitialization: true,
             })
             search_cache_to_be_cleared.current = false
           } else {
-            await search_hook.init({
+            await search_hook.init_({
               is_archived: is_archived_filter,
             })
           }
 
-          search_hook.get_hints()
+          search_hook.get_hints_()
         }
       }}
       on_change_={(value) => {
-        if (search_hook.is_initializing) return
-        search_hook.set_search_string(value)
+        if (search_hook.is_initializing_) return
+        search_hook.set_search_string_(value)
         if (!value) {
           window.history.pushState(
             {},
@@ -460,20 +461,22 @@ const Library = (params: {
         }
       }}
       on_submit_={async () => {
-        if (search_hook.is_initializing || search_hook.count == 0) return
-        if (search_hook.search_string.trim()) {
-          await search_hook.query_db({
-            search_string: search_hook.search_string,
+        if (search_hook.is_initializing_ || search_hook.count_ == 0) return
+        if (search_hook.search_string_.trim()) {
+          await search_hook.query_db_({
+            search_string: search_hook.search_string_,
           })
         }
       }}
       on_blur_={() => {
-        search_hook.clear_hints()
-        search_hook.set_is_search_focused(false)
+        search_hook.clear_hints_()
+        search_hook.set_is_search_focused_(false)
       }}
-      results_count_={search_hook.search_string ? search_hook.count : undefined}
+      results_count_={
+        search_hook.search_string_ ? search_hook.count_ : undefined
+      }
       on_clear_click_={() => {
-        search_hook.reset()
+        search_hook.reset_()
         clear_library_session_storage({
           username,
           search_params: search_params.toString(),
@@ -694,7 +697,7 @@ const Library = (params: {
       library_updated_at_timestamp_={library_updated_at_timestamp}
       favicon_host_={favicon_host}
       translations_={{
-        nothing_pinned_: params.dictionary.library.nothing_pinned,
+        nothing_pinned_: dictionary.library.nothing_pinned,
       }}
       items_={
         pinned_hook.items?.map((item) => ({
@@ -720,7 +723,7 @@ const Library = (params: {
             encryption_key: auth_context.auth_data!.encryption_key,
           }),
         )
-        toast.success(params.dictionary.library.pinned_links_has_beed_updated)
+        toast.success(dictionary.library.pinned_links_has_beed_updated)
       }}
       on_click_={async (item) => {
         if (!username) {
@@ -734,7 +737,7 @@ const Library = (params: {
             JSON.stringify(record_visit_params),
           )
         }
-        await search_hook.cache_data()
+        await search_hook.cache_data_()
         window.onbeforeunload = null
         const url = item.via_wayback_
           ? url_to_wayback({ date: item.created_at_, url: item.url_ })
@@ -815,7 +818,7 @@ const Library = (params: {
               encryption_key: auth_context.auth_data!.encryption_key,
             }),
           )
-          toast.success(params.dictionary.library.tag_hierarchies_upated)
+          toast.success(dictionary.library.tag_hierarchies_upated)
         }}
         selected_tag_ids_={tag_view_options_hook.selected_tags_}
         is_updating_={tag_hierarchies_hook.is_updating}
@@ -833,22 +836,22 @@ const Library = (params: {
         on_click_all_bookmarks_={() => {
           tag_view_options_hook.clear_selected_tags()
           if (bookmarks_hook.showing_bookmarks_fetched_by_ids) {
-            search_hook.reset()
+            search_hook.reset_()
             if (filter_view_options_hook.current_filter_ == Filter.NONE) {
               bookmarks_hook.get_bookmarks_({})
             }
           }
         }}
         translations_={{
-          all_bookmarks_: params.dictionary.library.all_bookmarks,
-          drag_here_: params.dictionary.library.drag_tag_here,
+          all_bookmarks_: dictionary.library.all_bookmarks,
+          drag_here_: dictionary.library.drag_tag_here,
         }}
       />
     </div>
   )
   const slot_aside = (
     <UiAppTemplate_LibraryAside
-      feedback_label_={params.dictionary.library.send_feedback}
+      feedback_label_={dictionary.library.send_feedback}
       on_feedback_click_={() => {}}
       slot_segmented_buttons_={
         is_hydrated ? (
@@ -858,13 +861,13 @@ const Library = (params: {
               is_not_interactive={is_not_interactive}
               items={[
                 {
-                  label: params.dictionary.library.sort_by_options.date,
+                  label: dictionary.library.sort_by_options.date,
                   is_selected:
                     sort_by_view_options_hook.current_sort_by_ !=
                     SortBy.POPULARITY,
                 },
                 {
-                  label: params.dictionary.library.sort_by_options.the_huggiest,
+                  label: dictionary.library.sort_by_options.the_huggiest,
                   is_selected:
                     sort_by_view_options_hook.current_sort_by_ ==
                     SortBy.POPULARITY,
@@ -896,19 +899,19 @@ const Library = (params: {
                 }
                 items={[
                   {
-                    label: params.dictionary.library.sort_by_options.created,
+                    label: dictionary.library.sort_by_options.created,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.CREATED_AT,
                   },
                   {
-                    label: params.dictionary.library.sort_by_options.visited,
+                    label: dictionary.library.sort_by_options.visited,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.VISITED_AT,
                   },
                   {
-                    label: params.dictionary.library.sort_by_options.updated,
+                    label: dictionary.library.sort_by_options.updated,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.UPDATED_AT,
@@ -940,13 +943,13 @@ const Library = (params: {
                 }
                 items={[
                   {
-                    label: params.dictionary.library.sort_by_options.created,
+                    label: dictionary.library.sort_by_options.created,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.CREATED_AT,
                   },
                   {
-                    label: params.dictionary.library.sort_by_options.updated,
+                    label: dictionary.library.sort_by_options.updated,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.UPDATED_AT,
@@ -1032,7 +1035,7 @@ const Library = (params: {
         <div
           style={{
             opacity:
-              is_fetching_first_bookmarks && !search_hook.search_string
+              is_fetching_first_bookmarks && !search_hook.search_string_
                 ? 'var(--dimmed-opacity)'
                 : undefined,
             pointerEvents: is_not_interactive ? 'none' : undefined,
@@ -1095,7 +1098,7 @@ const Library = (params: {
       key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
       index_={i}
       created_at_={new Date(bookmark.created_at)}
-      search_queried_at_timestamp_={search_hook.queried_at_timestamp}
+      search_queried_at_timestamp_={search_hook.queried_at_timestamp_}
       bookmark_id_={bookmark.id}
       library_url_={username ? `/${username}` : '/bookmarks'}
       on_tag_drag_start_={
@@ -1195,7 +1198,7 @@ const Library = (params: {
             JSON.stringify(record_visit_params),
           )
         }
-        await search_hook.cache_data()
+        await search_hook.cache_data_()
         window.onbeforeunload = null
         // Timeout is there so updated by cache_data values of search_data_awaits_caching,
         // archived_search_data_awaits_caching can be seen by "beforeunload" event handler.
@@ -1247,7 +1250,7 @@ const Library = (params: {
           return
         }
         dispatch(bookmarks_actions.set_is_upserting(true))
-        const { db, bookmarks_just_tags } = await search_hook.init({
+        const { db, bookmarks_just_tags } = await search_hook.init_({
           is_archived: is_archived_filter,
         })
         const modified_bookmark: UpsertBookmark_Params = {
@@ -1298,7 +1301,7 @@ const Library = (params: {
             encryption_key: auth_context.auth_data!.encryption_key,
           }),
         )
-        await search_hook.update_bookmark({
+        await search_hook.update_bookmark_({
           db,
           bookmarks_just_tags,
           is_archived: is_archived_filter,
@@ -1321,13 +1324,13 @@ const Library = (params: {
           },
         })
         dispatch(bookmarks_actions.set_is_upserting(false))
-        toast.success(params.dictionary.library.bookmark_updated)
+        toast.success(dictionary.library.bookmark_updated)
       }}
       on_tags_order_change_={
         !username
           ? async (tags) => {
               dispatch(bookmarks_actions.set_is_upserting(true))
-              const { db, bookmarks_just_tags } = await search_hook.init({
+              const { db, bookmarks_just_tags } = await search_hook.init_({
                 is_archived: is_archived_filter,
               })
               const modified_bookmark: UpsertBookmark_Params = {
@@ -1366,7 +1369,7 @@ const Library = (params: {
                   encryption_key: auth_context.auth_data!.encryption_key,
                 }),
               )
-              await search_hook.update_bookmark({
+              await search_hook.update_bookmark_({
                 db,
                 bookmarks_just_tags,
                 is_archived: is_archived_filter,
@@ -1389,7 +1392,7 @@ const Library = (params: {
                 },
               })
               dispatch(bookmarks_actions.set_is_upserting(false))
-              toast.success(params.dictionary.library.bookmark_updated)
+              toast.success(dictionary.library.bookmark_updated)
             }
           : undefined
       }
@@ -1397,7 +1400,7 @@ const Library = (params: {
         !username
           ? async (tag_id) => {
               dispatch(bookmarks_actions.set_is_upserting(true))
-              const { db, bookmarks_just_tags } = await search_hook.init({
+              const { db, bookmarks_just_tags } = await search_hook.init_({
                 is_archived: is_archived_filter,
               })
               const modified_bookmark: UpsertBookmark_Params = {
@@ -1444,7 +1447,7 @@ const Library = (params: {
                   encryption_key: auth_context.auth_data!.encryption_key,
                 }),
               )
-              await search_hook.update_bookmark({
+              await search_hook.update_bookmark_({
                 db,
                 bookmarks_just_tags,
                 is_archived: is_archived_filter,
@@ -1478,8 +1481,8 @@ const Library = (params: {
                     bookmark_id: updated_bookmark.id,
                   }),
                 )
-                if (search_hook.count) {
-                  search_hook.set_count(search_hook.count - 1)
+                if (search_hook.count_) {
+                  search_hook.set_count_(search_hook.count_ - 1)
                 }
               }
               if (
@@ -1492,7 +1495,7 @@ const Library = (params: {
                 tag_view_options_hook.remove_tags_from_search_params_([tag_id])
               }
               dispatch(bookmarks_actions.set_is_upserting(false))
-              toast.success(params.dictionary.library.bookmark_updated)
+              toast.success(dictionary.library.bookmark_updated)
             }
           : undefined
       }
@@ -1507,12 +1510,12 @@ const Library = (params: {
             items={[
               {
                 label: link.is_pinned
-                  ? params.dictionary.library.unpin
-                  : params.dictionary.library.pin,
+                  ? dictionary.library.unpin
+                  : dictionary.library.pin,
                 on_click: async () => {
                   const is_pinned = !link.is_pinned
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
@@ -1551,7 +1554,7 @@ const Library = (params: {
                       encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1576,8 +1579,8 @@ const Library = (params: {
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(
                     is_pinned
-                      ? params.dictionary.library.link_is_now_pinned
-                      : params.dictionary.library.pin_has_been_removed,
+                      ? dictionary.library.link_is_now_pinned
+                      : dictionary.library.pin_has_been_removed,
                   )
                 },
                 other_icon: <UiCommonParticles_Icon variant="PIN" />,
@@ -1621,12 +1624,12 @@ const Library = (params: {
                     },
                   },
               {
-                label: params.dictionary.library.via_archive_org,
+                label: dictionary.library.via_archive_org,
                 is_checked: link.via_wayback || false,
                 on_click: async () => {
                   const via_wayback = !link.via_wayback
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
@@ -1666,7 +1669,7 @@ const Library = (params: {
                       encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1691,8 +1694,8 @@ const Library = (params: {
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(
                     via_wayback
-                      ? params.dictionary.library.use_snapshot
-                      : params.dictionary.library.use_original,
+                      ? dictionary.library.use_snapshot
+                      : dictionary.library.use_original,
                   )
                 },
               },
@@ -1734,7 +1737,7 @@ const Library = (params: {
                 is_checked: bookmark.is_unread,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
                   const is_unread = !bookmark.is_unread
@@ -1781,7 +1784,7 @@ const Library = (params: {
                     }),
                   )
                   if (
-                    search_hook.count &&
+                    search_hook.count_ &&
                     (filter_view_options_hook.current_filter_ ==
                       Filter.UNREAD ||
                       filter_view_options_hook.current_filter_ ==
@@ -1790,9 +1793,9 @@ const Library = (params: {
                         Filter.ARCHIVED_STARRED_UNREAD) &&
                     bookmark.is_unread
                   ) {
-                    search_hook.set_count(search_hook.count! - 1)
+                    search_hook.set_count_(search_hook.count_! - 1)
                   }
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1815,7 +1818,7 @@ const Library = (params: {
                     },
                   })
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(params.dictionary.library.bookmark_updated)
+                  toast.success(dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -1823,7 +1826,7 @@ const Library = (params: {
                 is_checked: bookmark.stars == 1,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
@@ -1868,7 +1871,7 @@ const Library = (params: {
                       encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1891,7 +1894,7 @@ const Library = (params: {
                     },
                   })
                   if (
-                    search_hook.count &&
+                    search_hook.count_ &&
                     (filter_view_options_hook.current_filter_ ==
                       Filter.STARRED ||
                       filter_view_options_hook.current_filter_ ==
@@ -1902,10 +1905,10 @@ const Library = (params: {
                         Filter.ARCHIVED_STARRED_UNREAD) &&
                     bookmark.stars == 1
                   ) {
-                    search_hook.set_count(search_hook.count - 1)
+                    search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(params.dictionary.library.bookmark_updated)
+                  toast.success(dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -1913,7 +1916,7 @@ const Library = (params: {
                 is_checked: bookmark.stars == 2,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
@@ -1958,7 +1961,7 @@ const Library = (params: {
                       encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -1981,7 +1984,7 @@ const Library = (params: {
                     },
                   })
                   if (
-                    search_hook.count &&
+                    search_hook.count_ &&
                     (filter_view_options_hook.current_filter_ ==
                       Filter.STARRED ||
                       filter_view_options_hook.current_filter_ ==
@@ -1992,10 +1995,10 @@ const Library = (params: {
                         Filter.ARCHIVED_STARRED_UNREAD) &&
                     bookmark.stars == 2
                   ) {
-                    search_hook.set_count(search_hook.count - 1)
+                    search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(params.dictionary.library.bookmark_updated)
+                  toast.success(dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -2003,7 +2006,7 @@ const Library = (params: {
                 is_checked: bookmark.stars == 3,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
@@ -2048,7 +2051,7 @@ const Library = (params: {
                       encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2071,7 +2074,7 @@ const Library = (params: {
                     },
                   })
                   if (
-                    search_hook.count &&
+                    search_hook.count_ &&
                     (filter_view_options_hook.current_filter_ ==
                       Filter.STARRED ||
                       filter_view_options_hook.current_filter_ ==
@@ -2082,10 +2085,10 @@ const Library = (params: {
                         Filter.ARCHIVED_STARRED_UNREAD) &&
                     bookmark.stars == 3
                   ) {
-                    search_hook.set_count(search_hook.count - 1)
+                    search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(params.dictionary.library.bookmark_updated)
+                  toast.success(dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -2093,7 +2096,7 @@ const Library = (params: {
                 is_checked: bookmark.stars == 4,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
@@ -2138,7 +2141,7 @@ const Library = (params: {
                       encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2161,7 +2164,7 @@ const Library = (params: {
                     },
                   })
                   if (
-                    search_hook.count &&
+                    search_hook.count_ &&
                     (filter_view_options_hook.current_filter_ ==
                       Filter.STARRED ||
                       filter_view_options_hook.current_filter_ ==
@@ -2172,10 +2175,10 @@ const Library = (params: {
                         Filter.ARCHIVED_STARRED_UNREAD) &&
                     bookmark.stars == 4
                   ) {
-                    search_hook.set_count(search_hook.count - 1)
+                    search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(params.dictionary.library.bookmark_updated)
+                  toast.success(dictionary.library.bookmark_updated)
                 },
               },
               {
@@ -2183,7 +2186,7 @@ const Library = (params: {
                 is_checked: bookmark.stars == 5,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
@@ -2228,7 +2231,7 @@ const Library = (params: {
                       encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2251,7 +2254,7 @@ const Library = (params: {
                     },
                   })
                   if (
-                    search_hook.count &&
+                    search_hook.count_ &&
                     (filter_view_options_hook.current_filter_ ==
                       Filter.STARRED ||
                       filter_view_options_hook.current_filter_ ==
@@ -2262,10 +2265,10 @@ const Library = (params: {
                         Filter.ARCHIVED_STARRED_UNREAD) &&
                     bookmark.stars == 5
                   ) {
-                    search_hook.set_count(search_hook.count - 1)
+                    search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(params.dictionary.library.bookmark_updated)
+                  toast.success(dictionary.library.bookmark_updated)
                 },
               },
               // {
@@ -2281,7 +2284,7 @@ const Library = (params: {
               //       return
               //     }
               //     dispatch(bookmarks_actions.set_is_upserting(true))
-              //     const { db, bookmarks_just_tags } = await search_hook.init({
+              //     const { db, bookmarks_just_tags } = await search_hook2.init({
               //       is_archived: is_archived_filter,
               //     })
               //     const modified_bookmark: UpsertBookmark_Params = {
@@ -2327,7 +2330,7 @@ const Library = (params: {
               //       gte: date_view_options_hook.current_gte_,
               //       lte: date_view_options_hook.current_lte_,
               //     })
-              //     await search_hook.update_bookmark({
+              //     await search_hook2.update_bookmark({
               //       db,
               //       bookmarks_just_tags,
               //       is_archived: is_archived_filter,
@@ -2351,7 +2354,7 @@ const Library = (params: {
               //     })
               //     dispatch(bookmarks_actions.set_is_upserting(false))
               //     modal_context?.set_modal()
-              //     toast.success(params.dictionary.library.bookmark_updated)
+              //     toast.success(dictionary.library.bookmark_updated)
               //   },
               //   other_icon: <UiCommonParticles_Icon variant="EDIT" />,
               // },
@@ -2368,7 +2371,7 @@ const Library = (params: {
                     return
                   }
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
                   const updated_bookmark = await dispatch(
@@ -2403,8 +2406,8 @@ const Library = (params: {
                         bookmark_id: updated_bookmark.id,
                       }),
                     )
-                    if (search_hook.count) {
-                      search_hook.set_count(search_hook.count - 1)
+                    if (search_hook.count_) {
+                      search_hook.set_count_(search_hook.count_ - 1)
                     }
                   }
                   // Unselect removed tags when there is no more bookmarks with them.
@@ -2423,7 +2426,7 @@ const Library = (params: {
                       tags_to_remove_from_search_params,
                     )
                   }
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
@@ -2447,7 +2450,7 @@ const Library = (params: {
                   })
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   modal_context?.set_modal()
-                  toast.success(params.dictionary.library.bookmark_updated)
+                  toast.success(dictionary.library.bookmark_updated)
                 },
                 other_icon: <UiCommonParticles_Icon variant="EDIT" />,
               },
@@ -2466,10 +2469,10 @@ const Library = (params: {
                 other_icon: <UiCommonParticles_Icon variant="ARCHIVE" />,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const init_data = await search_hook.init({
+                  const init_data = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
-                  const archived_init_data = await search_hook.init({
+                  const archived_init_data = await search_hook.init_({
                     is_archived: !is_archived_filter,
                   })
                   const modified_bookmark: UpsertBookmark_Params = {
@@ -2513,7 +2516,7 @@ const Library = (params: {
                       encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db: init_data.db,
                     bookmarks_just_tags: init_data.bookmarks_just_tags,
                     is_archived: false,
@@ -2535,7 +2538,7 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  await search_hook.update_bookmark({
+                  await search_hook.update_bookmark_({
                     db: archived_init_data.db,
                     bookmarks_just_tags: archived_init_data.bookmarks_just_tags,
                     is_archived: true,
@@ -2557,8 +2560,8 @@ const Library = (params: {
                       tag_ids: bookmark.tags.map((tag) => tag.id),
                     },
                   })
-                  if (search_hook.count) {
-                    search_hook.set_count(search_hook.count - 1)
+                  if (search_hook.count_) {
+                    search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(
@@ -2571,7 +2574,7 @@ const Library = (params: {
                     bookmarks_hook.bookmarks.length == 1 &&
                     bookmarks_hook.showing_bookmarks_fetched_by_ids
                   ) {
-                    search_hook.reset()
+                    search_hook.reset_()
                   }
                 },
               },
@@ -2579,7 +2582,7 @@ const Library = (params: {
                 label: 'Delete',
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
-                  const { db, bookmarks_just_tags } = await search_hook.init({
+                  const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived: is_archived_filter,
                   })
                   await dispatch(
@@ -2602,14 +2605,14 @@ const Library = (params: {
                       encryption_key: auth_context.auth_data!.encryption_key,
                     }),
                   )
-                  await search_hook.delete_bookmark({
+                  await search_hook.delete_bookmark_({
                     db,
                     bookmarks_just_tags,
                     is_archived: is_archived_filter,
                     bookmark_id: bookmark.id,
                   })
-                  if (search_hook.count) {
-                    search_hook.set_count(search_hook.count - 1)
+                  if (search_hook.count_) {
+                    search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success('Bookmark has been deleted')
@@ -2630,16 +2633,16 @@ const Library = (params: {
           />
         )
       }
-      highlights_={search_hook.highlights?.[bookmark.id.toString()]}
-      highlights_site_variants_={search_hook.highlights_sites_variants}
+      highlights_={search_hook.highlights_?.[bookmark.id.toString()]}
+      highlights_site_variants_={search_hook.highlights_sites_variants_}
       orama_db_id_={
         is_archived_filter
-          ? search_hook.archived_db?.id || ''
-          : search_hook.db?.id || ''
+          ? local_db.archived_db?.id || ''
+          : local_db.db?.id || ''
       }
       should_dim_visited_links_={username !== undefined}
       // It's important to wait until filter is set to search hook's state
-      current_filter_={search_hook.current_filter}
+      current_filter_={search_hook.current_filter_}
     />
   ))
 
@@ -2659,7 +2662,7 @@ const Library = (params: {
         is_following={undefined}
         welcome_text={
           !username && auth_context.auth_data
-            ? `${params.dictionary.library.welcome}, ${auth_context.auth_data.username}`
+            ? `${dictionary.library.welcome}, ${auth_context.auth_data.username}`
             : undefined
         }
         on_follow_click={username ? () => {} : undefined}
@@ -2678,17 +2681,20 @@ const Library = (params: {
         on_page_bottom_reached={() => {
           if (bookmarks_hook.is_fetching || !bookmarks_hook.bookmarks?.length)
             return
-          if (!search_hook.search_string && bookmarks_hook.has_more_bookmarks) {
+          if (
+            !search_hook.search_string_ &&
+            bookmarks_hook.has_more_bookmarks
+          ) {
             bookmarks_hook.get_bookmarks_({ should_get_next_page: true })
           } else if (
-            search_hook.search_string &&
-            search_hook.count &&
+            search_hook.search_string_ &&
+            search_hook.count_ &&
             bookmarks_hook.bookmarks &&
             bookmarks_hook.bookmarks.length &&
-            bookmarks_hook.bookmarks.length < search_hook.count
+            bookmarks_hook.bookmarks.length < search_hook.count_
           ) {
             bookmarks_hook.get_bookmarks_by_ids_({
-              all_not_paginated_ids: search_hook.result!.hits.map((hit) =>
+              all_not_paginated_ids: search_hook.result_!.hits.map((hit) =>
                 parseInt(hit.document.id),
               ),
               should_get_next_page: true,
@@ -2697,7 +2703,7 @@ const Library = (params: {
         }}
         clear_selected_tags={
           !is_fetching_first_bookmarks &&
-          !search_hook.result &&
+          !search_hook.result_ &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
           tag_view_options_hook.selected_tags_.length
             ? tag_view_options_hook.clear_selected_tags
@@ -2705,7 +2711,7 @@ const Library = (params: {
         }
         clear_date_range={
           !is_fetching_first_bookmarks &&
-          !search_hook.result &&
+          !search_hook.result_ &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
           (date_view_options_hook.current_gte_ ||
             date_view_options_hook.current_lte_)
@@ -2716,16 +2722,16 @@ const Library = (params: {
           is_fetching_first_bookmarks ||
           bookmarks_hook.is_fetching_more_bookmarks
             ? 'Loading...'
-            : (!search_hook.search_string.length &&
+            : (!search_hook.search_string_.length &&
                 !is_fetching_first_bookmarks &&
                 (!bookmarks_hook.bookmarks ||
                   bookmarks_hook.bookmarks.length == 0)) ||
-              (search_hook.search_string.length &&
+              (search_hook.search_string_.length &&
                 (!bookmarks_hook.bookmarks ||
                   bookmarks_hook.bookmarks.length == 0))
             ? 'No results'
             : !bookmarks_hook.has_more_bookmarks ||
-              bookmarks_hook.bookmarks?.length == search_hook.count
+              bookmarks_hook.bookmarks?.length == search_hook.count_
             ? 'End of results'
             : ''
         }
