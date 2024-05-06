@@ -1,10 +1,81 @@
 export type Dictionary = {
+  landing: {
+    menu_items: {
+      updates: string
+      help_center: string
+      pricing: string
+    }
+    log_in: string
+    open_app: string
+    about: {
+      hero: {
+        heading: {
+          first_line: string
+          second_line: string
+        }
+        subheading: string
+        claim_username: string
+        username: string
+        ticks: React.ReactNode[]
+      }
+    }
+    pricing: {
+      hero: {
+        text: string
+        subtext: React.ReactNode
+      }
+      monthly: string
+      yearly: string
+      per_month: string
+      billed_monthly: string
+      billed_yearly: string
+      tiers: {
+        name: string
+        description: string
+        bullets_heading: string
+        bullets: string[]
+        featured_text?: string
+        button_label: string
+      }[]
+    }
+  }
   auth: {
+    field_is_required: string
+    invalid_email: string
+    recaptcha_privacy_notice: React.ReactNode
     log_in: {
       heading: { text: string; subtext: string }
+      switch_form: {
+        text: string
+        link_label: string
+      }
+      email_address: string
+      password: string
+      forgot_password: string
+      log_in: string
+      invalid_email_or_password: string
     }
     sign_up: {
       heading: { text: string; subtext: string }
+      switch_form: {
+        text: string
+        link_label: string
+      }
+      email_address: string
+      password: string
+      about_email_address: string
+      username: string
+      about_username: string
+      retype_password: string
+      password_does_not_match: string
+      about_password: React.ReactNode
+      password_hint: string
+      about_password_hint: string
+      create_account: string
+      username_too_long: string
+      username_too_short: string
+      password_too_short: string
+      hint_too_long: string
     }
   }
   library: {

@@ -1,5 +1,3 @@
-// import { GlobalStoreInitializer } from './global-store-initializer'
-// import { GlobalStoreProvider } from './global-store-provider'
 import { Metadata, Viewport } from 'next'
 import { Inter, Plus_Jakarta_Sans, Inter_Tight } from 'next/font/google'
 import { ToastContainer } from 'react-toastify'
@@ -34,7 +32,7 @@ const plus_jakarta_sans = Plus_Jakarta_Sans({
   display: 'swap',
 })
 
-const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
+const Layout: React.FC<{ children: ReactNode }> = (props) => {
   return (
     <html
       lang="en"
@@ -59,7 +57,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
         />
         <AuthProvider>
           <LocalDbProvider>
-            <ModalProvider>{children}</ModalProvider>
+            <ModalProvider>{props.children}</ModalProvider>
           </LocalDbProvider>
         </AuthProvider>
       </body>

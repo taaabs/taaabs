@@ -3,8 +3,8 @@ import styles from './page-hero.module.scss'
 
 export namespace PageHero {
   export type Props = {
-    heading: string
-    subheading: React.ReactNode
+    text: string
+    subtext: React.ReactNode
   }
 }
 
@@ -13,8 +13,8 @@ export const PageHero: React.FC<PageHero.Props> = (props) => {
     <div className={styles.container}>
       <UiCommonTemplate_Wrapper>
         <div className={styles.inner}>
-          <h1>{props.heading}</h1>
-          <p>{props.subheading}</p>
+          <h1>{props.text}</h1>
+          <p>{props.subtext}</p>
         </div>
       </UiCommonTemplate_Wrapper>
     </div>

@@ -5,5 +5,5 @@ export default {
 }
 
 export const Primary = () => (
-  <PageHero heading="Lorem ipsum" subheading={<p>Lorem ipsum</p>} />
+  <PageHero text="Lorem ipsum" subtext={<p>Lorem ipsum</p>} />
 )

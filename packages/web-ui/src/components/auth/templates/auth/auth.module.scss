@@ -61,9 +61,12 @@
     @include at992 {
       margin-bottom: 15px;
     }
-    > svg {
-      height: 60px;
-      fill: var(--brand-color);
+    &__icon {
+      display: inline-flex;
+      > svg {
+        height: 60px;
+        fill: var(--brand-color);
+      }
     }
   }
   &__heading {

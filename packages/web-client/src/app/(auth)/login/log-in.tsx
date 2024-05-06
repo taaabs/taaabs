@@ -21,7 +21,7 @@ type FormValues = {
   password: string
 }
 
-export const LogIn = (params: { dictionary: Dictionary }) => {
+export const LogIn = (props: { dictionary: Dictionary }) => {
   const auth_context = useContext(AuthContext)
   const {
     control,
@@ -57,26 +57,22 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
       })
       document.location = '/'
     } catch (e) {
-      toast.error('Invalid email or password. Try again.')
+      toast.error(props.dictionary.auth.log_in.invalid_email_or_password)
     }
   }
 
   return (
     <UiAuthTemplate_Auth
+      logo_href={'/'}
       heading={{
-        text: params.dictionary.auth.log_in.heading.text,
-        subtext: params.dictionary.auth.log_in.heading.subtext,
+        text: props.dictionary.auth.log_in.heading.text,
+        subtext: props.dictionary.auth.log_in.heading.subtext,
       }}
-      recaptcha_privacy_notice={
-        <span>
-          This site is protected by reCAPTCHA and the Google{' '}
-          <a>Privacy Policy</a> and <a>Terms of Service</a> apply.
-        </span>
-      }
+      recaptcha_privacy_notice={props.dictionary.auth.recaptcha_privacy_notice}
       switch_form={{
-        link_label: 'Create account',
+        text: props.dictionary.auth.log_in.switch_form.text,
+        link_label: props.dictionary.auth.log_in.switch_form.link_label,
         link_href: '/signup',
-        text: 'New around here?',
       }}
     >
       <form onSubmit={handleSubmit(on_submit)} noValidate={true}>
@@ -87,10 +83,13 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
               control={control}
               defaultValue=""
               rules={{
-                required: { value: true, message: "Field can't be empty" },
+                required: {
+                  value: true,
+                  message: props.dictionary.auth.field_is_required,
+                },
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Entered email is invalid',
+                  message: props.dictionary.auth.invalid_email,
                 },
               }}
               render={({ field }) => {
@@ -105,7 +104,7 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
                       }
                     }}
                     on_blur={field.onBlur}
-                    placeholder={'Email address'}
+                    placeholder={props.dictionary.auth.log_in.email_address}
                     message_type={error_message ? 'error' : undefined}
                     message={error_message}
                     additional_properties={{
@@ -124,7 +123,7 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
               rules={{
                 required: {
                   value: true,
-                  message: "Field can't be empty",
+                  message: props.dictionary.auth.field_is_required,
                 },
               }}
               render={({ field }) => {
@@ -139,7 +138,7 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
                       }
                     }}
                     on_blur={field.onBlur}
-                    placeholder={'Password'}
+                    placeholder={props.dictionary.auth.log_in.password}
                     message_type={error_message ? 'error' : undefined}
                     message={error_message}
                     additional_properties={{
@@ -155,12 +154,12 @@ export const LogIn = (params: { dictionary: Dictionary }) => {
               type="submit"
               is_disabled={!is_object_empty(errors) || isSubmitting}
             >
-              Log in
+              {props.dictionary.auth.log_in.log_in}
             </UiCommonParticle_Button>
           }
           on_forgot_password_click={() => {}}
           translations={{
-            forgot_password: 'Forgot password?',
+            forgot_password: props.dictionary.auth.log_in.forgot_password,
           }}
         />
       </form>

@@ -10,14 +10,16 @@ import { ClientComponentBottomNavigationBar } from './client-component-bottom-na
 import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
 import { PublicUserAvatarProvider } from '@/providers/public-user-avatar-provider'
 import { usePathname } from 'next/navigation'
-import { useContext } from 'react'
+import { ReactNode, useContext } from 'react'
 import { AuthContext } from '../auth-provider'
+import { Dictionary } from '@/dictionaries/dictionary'
 
 const landing_pathnames = ['/about', '/pricing', '/help', '/updates']
 
-const LayoutAuthorized: React.FC<{ children?: React.ReactNode }> = ({
-  children,
-}) => {
+const LayoutAuthorized: React.FC<{
+  children?: ReactNode
+  dictionary: Dictionary
+}> = (props) => {
   const pathname = usePathname()
   const auth_context = useContext(AuthContext)!
 
@@ -26,14 +28,21 @@ const LayoutAuthorized: React.FC<{ children?: React.ReactNode }> = ({
       slot_logo={
         <LogoForHeader
           is_large={true}
-          href={auth_context.auth_data ? '/about' : '/'}
+          href={auth_context.auth_data ? '/en/about' : '/en'}
         />
       }
-      slot_desktop_user={<DynamicDesktopUserForHeader is_authorized={true} />}
-      slot_desktop_navigation={<DynamicDesktopNavigationForHeader />}
+      slot_desktop_user={
+        <DynamicDesktopUserForHeader
+          is_authorized={true}
+          dictionary={props.dictionary}
+        />
+      }
+      slot_desktop_navigation={
+        <DynamicDesktopNavigationForHeader dictionary={props.dictionary} />
+      }
       slot_mobile_navigation={<div>mobile nav</div>}
     >
-      <>{children}</>
+      {props.children}
     </UiLandingTemplate_Landing>
   ) : (
     <PublicUserAvatarProvider>
@@ -42,7 +51,7 @@ const LayoutAuthorized: React.FC<{ children?: React.ReactNode }> = ({
         slot_header_mobile={<ClientComponentAppHeaderMobile />}
         slot_bottom_navigation_bar={<ClientComponentBottomNavigationBar />}
       >
-        {children}
+        {props.children}
       </UiAppTemplate_App>
     </PublicUserAvatarProvider>
   )

@@ -684,6 +684,9 @@ importers:
 
   packages/web-client:
     dependencies:
+      '@formatjs/intl-localematcher':
+        specifier: ^0.5.4
+        version: 0.5.4
       '@orama/orama':
         specifier: ^2.0.16
         version: 2.0.16
@@ -732,6 +735,9 @@ importers:
       localforage:
         specifier: ^1.10.0
         version: 1.10.0
+      negotiator:
+        specifier: ^0.6.3
+        version: 0.6.3
       next:
         specifier: 14.0.5-canary.18
         version: 14.0.5-canary.18(@babel/core@7.23.0)(react-dom@18.2.0)(react@18.2.0)
@@ -769,6 +775,9 @@ importers:
       '@types/jest':
         specifier: ^29.5.5
         version: 29.5.5
+      '@types/negotiator':
+        specifier: ^0.6.3
+        version: 0.6.3
       '@types/node':
         specifier: ^20.8.2
         version: 20.8.2
@@ -2667,6 +2676,12 @@ packages:
     dependencies:
       fastify-plugin: 4.5.0
       hashlru: 2.3.0
+    dev: false
+
+  /@formatjs/intl-localematcher@0.5.4:
+    resolution: {integrity: sha512-zTwEpWOzZ2CiKcB93BLngUX59hQkuZjT2+SAQEscSm52peDW/getsawMcWF1rGRpMCX6D7nSJA3CzJ8gn13N/g==}
+    dependencies:
+      tslib: 2.6.2
     dev: false
 
   /@humanwhocodes/config-array@0.11.11:
@@ -5180,6 +5195,10 @@ packages:
 
   /@types/minimatch@5.1.2:
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
+    dev: true
+
+  /@types/negotiator@0.6.3:
+    resolution: {integrity: sha512-JkXTOdKs5MF086b/pt8C3+yVp3iDUwG635L7oCH6HvJvvr6lSUU5oe/gLXnPEfYRROHjJIPgCV6cuAg8gGkntQ==}
     dev: true
 
   /@types/node-fetch@2.6.4:

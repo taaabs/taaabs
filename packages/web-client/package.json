@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@formatjs/intl-localematcher": "^0.5.4",
     "@orama/orama": "^2.0.16",
     "@orama/plugin-data-persistence": "^2.0.16",
     "@orama/plugin-match-highlight": "^2.0.16",
@@ -25,6 +26,7 @@
     "eslint-config-next": "^13.5.4",
     "ky": "^1.2.2",
     "localforage": "^1.10.0",
+    "negotiator": "^0.6.3",
     "next": "14.0.5-canary.18",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -39,6 +41,7 @@
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@types/jest": "^29.5.5",
+    "@types/negotiator": "^0.6.3",
     "@types/node": "^20.8.2",
     "@types/react": "18.2.21",
     "@types/react-dom": "^18.2.10",

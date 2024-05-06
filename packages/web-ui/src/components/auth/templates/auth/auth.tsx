@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 export namespace Auth {
   export type Props = {
+    logo_href: string
     heading: {
       text: string
       subtext: string
@@ -24,7 +25,9 @@ export const Auth: React.FC<Auth.Props> = (props) => {
       <div className={styles.content}>
         <div className={styles.box}>
           <div className={styles.box__logo}>
-            <Icon variant="LOGO" />
+            <Link href={props.logo_href} className={styles.box__logo__icon}>
+              <Icon variant="LOGO" />
+            </Link>
           </div>
           <div className={styles.box__heading}>
             <h1>{props.heading.text}</h1>

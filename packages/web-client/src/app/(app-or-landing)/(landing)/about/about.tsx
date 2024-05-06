@@ -1,35 +1,38 @@
 'use client'
 
+import { Dictionary } from '@/dictionaries/dictionary'
 import { HomeHero as UiLandingSection_HomeHero } from '@web-ui/components/landing/sections/home-hero'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-const About: React.FC<{ is_authorized: boolean }> = (props) => {
+const About: React.FC<{ dictionary: Dictionary; is_authorized: boolean }> = (
+  props,
+) => {
+  const [username, set_username] = useState('')
+  const router = useRouter()
   return (
     <>
       <UiLandingSection_HomeHero
         heading={{
-          first_line: 'The huggiest',
-          second_line: 'social bookmarking',
+          first_line: props.dictionary.landing.about.hero.heading.first_line,
+          second_line: props.dictionary.landing.about.hero.heading.second_line,
         }}
-        subheading="Easy to use, privacy-first way to organize, share and discover web bookmarks"
-        on_username_change={() => {}}
+        subheading={props.dictionary.landing.about.hero.subheading}
+        on_username_change={set_username}
         claim_username={
           !props.is_authorized
             ? {
-                button_label: 'Claim username',
-                placeholder: 'username',
-                button_on_click: () => {},
-                username: '',
+                button_label:
+                  props.dictionary.landing.about.hero.claim_username,
+                placeholder: props.dictionary.landing.about.hero.username,
+                button_on_click: () => {
+                  router.push(`/signup?username=${username}`)
+                },
+                username: username,
               }
             : undefined
         }
-        ticks={[
-          <>
-            <strong>End-to-end encryption</strong> of private bookmarks
-          </>,
-          <>
-            <strong>Free to try</strong> for as long as you'd like
-          </>,
-        ]}
+        ticks={props.dictionary.landing.about.hero.ticks}
       />
     </>
   )

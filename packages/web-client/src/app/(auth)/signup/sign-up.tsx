@@ -16,6 +16,7 @@ import { AuthContext } from '@/app/auth-provider'
 import { system_values } from '@shared/constants/system-values'
 import { SignUp_Params } from '@repositories/modules/auth/domain/sign-up.params'
 import { Crypto } from '@repositories/utils/crypto'
+import { useSearchParams } from 'next/navigation'
 
 type FormValues = {
   email: string
@@ -25,7 +26,7 @@ type FormValues = {
   hint: string
 }
 
-export const SignUp = (params: { dictionary: Dictionary }) => {
+export const SignUp = (props: { dictionary: Dictionary }) => {
   const auth_context = useContext(AuthContext)
   const {
     control,
@@ -33,6 +34,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
     resetField,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ mode: 'onBlur' })
+  const search_params = useSearchParams()
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     const params: SignUp_Params = {
@@ -69,20 +71,16 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
 
   return (
     <UiAuthTemplate_Auth
+      logo_href="/"
       heading={{
-        text: params.dictionary.auth.sign_up.heading.text,
-        subtext: params.dictionary.auth.sign_up.heading.subtext,
+        text: props.dictionary.auth.sign_up.heading.text,
+        subtext: props.dictionary.auth.sign_up.heading.subtext,
       }}
-      recaptcha_privacy_notice={
-        <span>
-          This site is protected by reCAPTCHA and the Google{' '}
-          <a>Privacy Policy</a> and <a>Terms of Service</a> apply.
-        </span>
-      }
+      recaptcha_privacy_notice={props.dictionary.auth.recaptcha_privacy_notice}
       switch_form={{
-        link_label: 'Log in',
+        text: props.dictionary.auth.sign_up.switch_form.text,
+        link_label: props.dictionary.auth.sign_up.switch_form.link_label,
         link_href: '/login',
-        text: 'Already have an account?',
       }}
     >
       <form onSubmit={handleSubmit(on_submit)} noValidate={true}>
@@ -93,10 +91,13 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
               control={control}
               defaultValue=""
               rules={{
-                required: { value: true, message: "Field can't be empty." },
+                required: {
+                  value: true,
+                  message: props.dictionary.auth.field_is_required,
+                },
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Entered email is invalid',
+                  message: props.dictionary.auth.invalid_email,
                 },
               }}
               render={({ field }) => {
@@ -111,12 +112,12 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                       }
                     }}
                     on_blur={field.onBlur}
-                    placeholder={'Email address'}
+                    placeholder={props.dictionary.auth.sign_up.email_address}
                     message_type={error_message ? 'error' : undefined}
                     message={
                       error_message
                         ? error_message
-                        : "You'll use your email address to log in."
+                        : props.dictionary.auth.sign_up.about_email_address
                     }
                     additional_properties={{
                       type: 'email',
@@ -130,16 +131,19 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
             <Controller
               name="username"
               control={control}
-              defaultValue=""
+              defaultValue={search_params.get('username') || ''}
               rules={{
-                required: { value: true, message: "Field can't be empty." },
+                required: {
+                  value: true,
+                  message: props.dictionary.auth.field_is_required,
+                },
                 maxLength: {
                   value: system_values.username_max_length,
-                  message: `Username exceeds ${system_values.username_max_length}-character limit.`,
+                  message: props.dictionary.auth.sign_up.username_too_long,
                 },
                 minLength: {
                   value: system_values.username_min_length,
-                  message: `Username must have at least ${system_values.username_min_length} characters.`,
+                  message: props.dictionary.auth.sign_up.username_too_short,
                 },
               }}
               render={({ field }) => {
@@ -154,7 +158,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                       }
                     }}
                     on_blur={field.onBlur}
-                    placeholder={'Username'}
+                    placeholder={props.dictionary.auth.sign_up.username}
                     message_type={error_message ? 'error' : undefined}
                     message={
                       error_message ? (
@@ -165,7 +169,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                           <strong>{field.value}</strong>
                         </span>
                       ) : (
-                        'Username determines your public profile URL.'
+                        props.dictionary.auth.sign_up.about_username
                       )
                     }
                   />
@@ -181,11 +185,11 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
               rules={{
                 required: {
                   value: true,
-                  message: "Field can't be empty",
+                  message: props.dictionary.auth.field_is_required,
                 },
                 minLength: {
                   value: system_values.password_min_length,
-                  message: `Password must be at least ${system_values.password_min_length}-character long.`,
+                  message: props.dictionary.auth.sign_up.password_too_short,
                 },
               }}
               render={({ field }) => {
@@ -200,18 +204,12 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                       }
                     }}
                     on_blur={field.onBlur}
-                    placeholder={'Password'}
+                    placeholder={props.dictionary.auth.sign_up.password}
                     message_type={error_message ? 'error' : undefined}
                     message={
-                      error_message ? (
-                        error_message
-                      ) : (
-                        <span>
-                          <strong>Important: </strong>
-                          Your password encrypts all your private bookmarks and
-                          can't be recovered if you forget it!
-                        </span>
-                      )
+                      error_message
+                        ? error_message
+                        : props.dictionary.auth.sign_up.about_password
                     }
                     additional_properties={{
                       type: 'password',
@@ -229,11 +227,11 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
               rules={{
                 required: {
                   value: true,
-                  message: "Field can't be empty",
+                  message: props.dictionary.auth.field_is_required,
                 },
                 validate: (value, { password }) =>
                   value != password
-                    ? 'Password confirmation does not match.'
+                    ? props.dictionary.auth.sign_up.password_does_not_match
                     : undefined,
               }}
               render={({ field }) => {
@@ -248,7 +246,7 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                       }
                     }}
                     on_blur={field.onBlur}
-                    placeholder={'Retype password'}
+                    placeholder={props.dictionary.auth.sign_up.retype_password}
                     message_type={error_message ? 'error' : undefined}
                     message={error_message}
                     additional_properties={{
@@ -265,9 +263,9 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
               control={control}
               defaultValue=""
               rules={{
-                max: {
+                maxLength: {
                   value: system_values.password_hint_max_length,
-                  message: `Given hint exceeds ${system_values.password_hint_max_length}-character limit.`,
+                  message: props.dictionary.auth.sign_up.hint_too_long,
                 },
               }}
               render={({ field }) => {
@@ -282,25 +280,25 @@ export const SignUp = (params: { dictionary: Dictionary }) => {
                       }
                     }}
                     on_blur={field.onBlur}
-                    placeholder={'Password hint (optional)'}
+                    placeholder={props.dictionary.auth.sign_up.password_hint}
                     message_type={error_message ? 'error' : undefined}
                     message={
                       error_message
                         ? error_message
-                        : 'A password hint can help you remember your password if you forget it.'
+                        : props.dictionary.auth.sign_up.about_password_hint
                     }
                   />
                 )
               }}
             />
           }
-          slot_checkbox={'CHECKBOX'}
+          slot_checkbox={''}
           slot_submit_button={
             <UiCommonParticle_Button
               type="submit"
               is_disabled={!is_object_empty(errors)}
             >
-              Create account
+              {props.dictionary.auth.sign_up.create_account}
             </UiCommonParticle_Button>
           }
         />

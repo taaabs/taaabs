@@ -1,26 +1,19 @@
-'use client'
-
+import { Dictionary } from '@/dictionaries/dictionary'
 import { DesktopUserForHeader as UiLandingMolecule_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
-import { useRouter } from 'next/navigation'
 
 export const DynamicDesktopUserForHeader: React.FC<{
   is_authorized: boolean
+  dictionary: Dictionary
 }> = (props) => {
-  const router = useRouter()
-
   return props.is_authorized ? (
     <UiLandingMolecule_DesktopUserForHeader
-      button_label="Open app"
-      button_on_click={() => {
-        router.push('/')
-      }}
+      button_label={props.dictionary.landing.open_app}
+      button_href={'/'}
     />
   ) : (
     <UiLandingMolecule_DesktopUserForHeader
-      button_label="Log in"
-      button_on_click={() => {
-        router.push('/login')
-      }}
+      button_label={props.dictionary.landing.log_in}
+      button_href={'/login'}
     />
   )
 }

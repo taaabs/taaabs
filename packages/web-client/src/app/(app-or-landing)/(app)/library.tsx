@@ -60,7 +60,7 @@ import { use_is_hydrated } from '@shared/hooks'
 import { ModalContext } from '@/providers/modal-provider'
 import { AuthContext } from '@/app/auth-provider'
 import { use_search } from '@/hooks/library/use-search'
-import { LocalDb } from '../../local-db-provider'
+import { LocalDb } from '@/app/local-db-provider'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {

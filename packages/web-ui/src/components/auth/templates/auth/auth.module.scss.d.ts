@@ -3,6 +3,7 @@ declare const styles: {
   readonly content: string
   readonly box: string
   readonly box__logo: string
+  readonly box__logo__icon: string
   readonly box__heading: string
   readonly box__form: string
   readonly 'box__switch-form': string
