@@ -15,9 +15,9 @@ export type LocalDb = {
   set_archived_db_updated_at_timestamp: (timestamp?: number) => void
 }
 
-export const GlobalLocalDbContext = createContext<LocalDb | null>(null)
+export const LocalDbContext = createContext<LocalDb | null>(null)
 
-export const GlobalOramaDbProvider: React.FC<{
+export const LocalDbProvider: React.FC<{
   children: ReactNode
 }> = (props) => {
   const [db, set_db] = useState<Orama<typeof schema>>()
@@ -30,7 +30,7 @@ export const GlobalOramaDbProvider: React.FC<{
   ] = useState<number>()
 
   return (
-    <GlobalLocalDbContext.Provider
+    <LocalDbContext.Provider
       value={{
         db,
         set_db,
@@ -43,6 +43,6 @@ export const GlobalOramaDbProvider: React.FC<{
       }}
     >
       {props.children}
-    </GlobalLocalDbContext.Provider>
+    </LocalDbContext.Provider>
   )
 }

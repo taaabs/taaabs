@@ -3,7 +3,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import Library from '../library'
 import { useContext } from 'react'
-import { GlobalLocalDbContext } from '@/app/global-local-db-provider'
+import { LocalDbContext } from '../../../local-db-provider'
 
 namespace LibraryWrapper {
   export type Props = {
@@ -12,6 +12,6 @@ namespace LibraryWrapper {
 }
 
 export const LibraryWrapper: React.FC<LibraryWrapper.Props> = (props) => {
-  const local_db = useContext(GlobalLocalDbContext)!
+  const local_db = useContext(LocalDbContext)!
   return <Library dictionary={props.dictionary} local_db={local_db} />
 }

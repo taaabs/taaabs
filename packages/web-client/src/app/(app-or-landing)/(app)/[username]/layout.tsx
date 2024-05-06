@@ -3,8 +3,8 @@ import { AvatarContextSetter } from './avatar-context-setter'
 import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
 import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
 import ky from 'ky'
-import { PublicProfileLocalDbProvider } from './public-profile-local-db-provider'
 import { ReactNode } from 'react'
+import { PublicProfileLocalDbProvider } from './public-profile-local-db-provider'
 
 const Layout: React.FC<{
   children: ReactNode

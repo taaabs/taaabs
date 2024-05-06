@@ -9,10 +9,10 @@ import 'react-toastify/dist/ReactToastify.css'
 import 'use-context-menu/styles.css'
 import 'simplebar-react/dist/simplebar.min.css'
 import '@web-ui/styles/style.scss'
-import { GlobalOramaDbProvider } from './global-local-db-provider'
 import { ReactNode } from 'react'
 import { ModalProvider } from '@/providers/modal-provider'
 import { AuthProvider } from './auth-provider'
+import { LocalDbProvider } from './local-db-provider'
 
 export const revalidate = 0
 
@@ -58,9 +58,9 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
           draggablePercent={20}
         />
         <AuthProvider>
-          <GlobalOramaDbProvider>
+          <LocalDbProvider>
             <ModalProvider>{children}</ModalProvider>
-          </GlobalOramaDbProvider>
+          </LocalDbProvider>
         </AuthProvider>
       </body>
     </html>

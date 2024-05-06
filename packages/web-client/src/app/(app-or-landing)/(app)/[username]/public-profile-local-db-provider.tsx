@@ -1,9 +1,9 @@
 'use client'
 
-import { LocalDb } from '@/app/global-local-db-provider'
 import { schema } from '@/hooks/library/use-search'
 import { Orama } from '@orama/orama'
 import { ReactNode, createContext, useState } from 'react'
+import { LocalDb } from '../../../local-db-provider'
 
 export const PublicProfileLocalDbContext = createContext<LocalDb | null>(null)
 
