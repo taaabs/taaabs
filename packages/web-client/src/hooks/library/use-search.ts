@@ -34,7 +34,7 @@ import { clear_library_session_storage } from '@/utils/clear_library_session_sto
 import { search_params_keys } from '@/constants/search-params-keys'
 import { use_has_focus } from '../misc/use-has-focus'
 import { AuthContext } from '@/app/auth-provider'
-import { LocalDb } from '@/app/global-local-db-provider'
+import { LocalDb } from '@/app/local-db-provider'
 
 export type BookmarkOfSearch = {
   id: number

@@ -13,7 +13,7 @@ const About: React.FC<{ is_authorized: boolean }> = (props) => {
         subheading="Easy to use, privacy-first way to organize, share and discover web bookmarks"
         on_username_change={() => {}}
         claim_username={
-          props.is_authorized
+          !props.is_authorized
             ? {
                 button_label: 'Claim username',
                 placeholder: 'username',

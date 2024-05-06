@@ -2,7 +2,6 @@
 
 import { browser_storage } from '@/constants/browser-storage'
 import ky, { KyInstance } from 'ky'
-import { useRouter } from 'next/navigation'
 import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
 
 const default_ky_instance = ky.create({
@@ -27,7 +26,6 @@ export const AuthContext = createContext<{
 export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
   const [auth_data, _set_auth_data] = useState<AuthData>()
   const ky_instance = useRef<KyInstance>()
-  const router = useRouter()
 
   const set_auth_data = (auth_data: AuthData) => {
     _set_auth_data(auth_data)
@@ -55,7 +53,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     ky_instance.current = default_ky_instance
     localStorage.removeItem(browser_storage.local_storage.auth_data)
     document.cookie = 'user_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
-    router.push('/login')
+    document.location = '/'
   }
 
   useEffect(() => {

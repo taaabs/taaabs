@@ -5,9 +5,7 @@ import { redirect } from 'next/navigation'
 
 const Page: React.FC = () => {
   const user_id = cookies().get('user_id')
-  if (!user_id) {
-    redirect('/')
-  }
+  if (!user_id) redirect('/')
   return <About is_authorized={true} />
 }
 
