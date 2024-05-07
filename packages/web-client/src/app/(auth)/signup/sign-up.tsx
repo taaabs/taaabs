@@ -307,7 +307,9 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
           slot_submit_button={
             <UiCommonParticle_Button
               type="submit"
-              is_disabled={!is_object_empty(errors) || will_redirect}
+              is_disabled={
+                !is_object_empty(errors) || isSubmitting || will_redirect
+              }
             >
               {props.dictionary.auth.sign_up.create_account}
             </UiCommonParticle_Button>

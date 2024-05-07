@@ -12,7 +12,7 @@ import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/a
 import ky from 'ky'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
 import { toast } from 'react-toastify'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { AuthContext } from '@/app/auth-provider'
 import { Crypto } from '@repositories/utils/crypto'
 
@@ -29,6 +29,7 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
     resetField,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ mode: 'onBlur' })
+  const [will_redirect, set_will_redirect] = useState<boolean>()
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     const params: LogIn_Params = {
@@ -55,6 +56,7 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
           result.id,
         ),
       })
+      set_will_redirect(true)
       document.location = '/'
     } catch (e) {
       toast.error(props.dictionary.auth.log_in.invalid_email_or_password)
@@ -151,7 +153,9 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
           slot_submit_button={
             <UiCommonParticle_Button
               type="submit"
-              is_disabled={!is_object_empty(errors) || isSubmitting}
+              is_disabled={
+                !is_object_empty(errors) || isSubmitting || will_redirect
+              }
             >
               {props.dictionary.auth.log_in.log_in}
             </UiCommonParticle_Button>
