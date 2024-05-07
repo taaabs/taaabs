@@ -15,6 +15,7 @@ export const Primary = () => (
       button_label: 'Claim username',
       button_on_click: () => {},
       placeholder: 'username',
+      incentive: 'lorem ipsum',
     }}
     on_username_change={() => {}}
     ticks={[

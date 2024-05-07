@@ -17,6 +17,7 @@ export namespace HomeHero {
       placeholder: string
       button_label: string
       button_on_click: () => void
+      incentive: string
     }
     ticks: React.ReactNode[]
   }
@@ -73,12 +74,17 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
                   onChange={(e) => props.on_username_change(e.target.value)}
                 />
               </div>
-              <Button
-                on_click={props.claim_username.button_on_click}
-                size="large"
-              >
-                {props.claim_username.button_label}
-              </Button>
+              <div className={styles['claim-username__button']}>
+                <Button
+                  on_click={props.claim_username.button_on_click}
+                  size="large"
+                >
+                  {props.claim_username.button_label}
+                </Button>
+                <div className={styles['claim-username__button__incentive']}>
+                  {props.claim_username.incentive}
+                </div>
+              </div>
             </div>
           )}
 

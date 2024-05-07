@@ -29,6 +29,7 @@ const About: React.FC<{ dictionary: Dictionary; is_authorized: boolean }> = (
                   router.push(`/signup?username=${username}`)
                 },
                 username: username,
+                incentive: props.dictionary.landing.about.hero.incentive,
               }
             : undefined
         }

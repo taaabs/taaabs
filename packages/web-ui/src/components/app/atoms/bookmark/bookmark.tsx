@@ -46,12 +46,12 @@ dayjs.updateLocale('pl', {
     future: '%s',
     past: '%s',
     s: 'teraz',
-    m: '1m',
-    mm: '%dm',
-    h: '1g',
-    hh: '%dg',
-    d: '1d',
-    dd: '%dd',
+    m: '1 min.',
+    mm: '%d min.',
+    h: '1 godz.',
+    hh: '%d godz.',
+    d: '1 dzień',
+    dd: '%d dni',
     M: '',
     MM: '',
     y: '',
@@ -503,7 +503,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       </div>
     )
 
-    const relative_time = dayjs(props.date_).fromNow()
+    const relative_time = dayjs(props.date_).locale(props.locale).fromNow()
 
     const bookmark_date =
       relative_time != ''

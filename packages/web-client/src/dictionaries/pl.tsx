@@ -29,6 +29,7 @@ export const dictionary: Dictionary = {
             <strong>Używaj za darmo</strong> tak długo, jak chcesz
           </>,
         ],
+        incentive: '30 sekund lub mniej',
       },
     },
     pricing: {
@@ -143,6 +144,7 @@ export const dictionary: Dictionary = {
     },
   },
   app: {
+    powered_by: 'Na technologii',
     menu_items: {
       home: 'Główna',
       bookmarks: 'Moje zakładki',

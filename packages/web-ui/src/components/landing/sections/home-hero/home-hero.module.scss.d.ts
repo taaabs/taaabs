@@ -9,6 +9,8 @@ declare const styles: {
   readonly top__subheading: string
   readonly 'claim-username': string
   readonly 'claim-username__input': string
+  readonly 'claim-username__button': string
+  readonly 'claim-username__button__incentive': string
   readonly checks: string
   readonly checks__item: string
 }

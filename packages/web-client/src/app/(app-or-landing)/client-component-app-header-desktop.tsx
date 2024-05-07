@@ -211,7 +211,7 @@ export const ClientComponentAppHeaderDesktop: React.FC<{
         />
       }
       cockroach_url="https://bit.ly/cockroachdb-cloud"
-      translations={{ powered_by: 'Powered by' }}
+      translations={{ powered_by: props.dictionary.app.powered_by }}
     />
   )
 }

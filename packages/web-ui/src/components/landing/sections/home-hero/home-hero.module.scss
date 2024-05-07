@@ -167,6 +167,18 @@
       }
     }
   }
+  &__button {
+    position: relative;
+    &__incentive {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      padding-top: var(--padding-8px);
+      color: var(--text-color-dimmed);
+      white-space: nowrap;
+    }
+  }
 }
 .checks {
   display: flex;

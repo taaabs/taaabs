@@ -29,6 +29,7 @@ const dictionary: Dictionary = {
             <strong>Free to try</strong> for as long as you'd like
           </>,
         ],
+        incentive: '30 seconds or less',
       },
     },
     pricing: {
@@ -136,6 +137,7 @@ const dictionary: Dictionary = {
     },
   },
   app: {
+    powered_by: 'Powered by',
     menu_items: {
       home: 'Home',
       bookmarks: 'Bookmarks',

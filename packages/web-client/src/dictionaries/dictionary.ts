@@ -18,6 +18,7 @@ export type Dictionary = {
         claim_username: string
         username: string
         ticks: React.ReactNode[]
+        incentive: string
       }
     }
     pricing: {
@@ -80,6 +81,7 @@ export type Dictionary = {
     }
   }
   app: {
+    powered_by: string
     menu_items: {
       home: string
       bookmarks: string
