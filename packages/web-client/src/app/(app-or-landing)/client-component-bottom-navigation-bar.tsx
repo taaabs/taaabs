@@ -1,5 +1,6 @@
 'use client'
 
+import { Dictionary } from '@/dictionaries/dictionary'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { BottomNavigationBar as UiAppMolecule_BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
 import {
@@ -9,7 +10,9 @@ import {
   useSearchParams,
 } from 'next/navigation'
 
-export const ClientComponentBottomNavigationBar: React.FC = () => {
+export const ClientComponentBottomNavigationBar: React.FC<{
+  dictionary: Dictionary
+}> = (props) => {
   const { username }: { username?: string } = useParams()
   const pathname = usePathname()
   const router = useRouter()
@@ -19,7 +22,7 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
     <UiAppMolecule_BottomNavigationBar
       items={[
         {
-          label: 'Home',
+          label: props.dictionary.app.menu_items.home,
           icon_variant: 'HOME',
           icon_variant_active: 'HOME_FILLED',
           is_active: pathname == '/',
@@ -28,7 +31,7 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
           },
         },
         {
-          label: 'Bookmarks',
+          label: props.dictionary.app.menu_items.bookmarks,
           icon_variant: 'BOOKMARK',
           icon_variant_active: 'BOOKMARK_FILLED',
           is_active: pathname == '/bookmarks',
@@ -40,7 +43,7 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
           },
         },
         {
-          label: 'Notifications',
+          label: props.dictionary.app.menu_items.notifications,
           icon_variant: 'NOTIFICATIONS',
           icon_variant_active: 'NOTIFICATIONS_FILLED',
           is_active: pathname == '/notifications',
@@ -54,7 +57,7 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
     <UiAppMolecule_BottomNavigationBar
       items={[
         {
-          label: 'Bookmarks',
+          label: props.dictionary.app.menu_items.bookmarks,
           icon_variant: 'BOOKMARK',
           icon_variant_active: 'BOOKMARK_FILLED',
           is_active: pathname == `/${username}`,
@@ -67,7 +70,7 @@ export const ClientComponentBottomNavigationBar: React.FC = () => {
           },
         },
         {
-          label: 'Activity',
+          label: props.dictionary.app.menu_items.activity,
           icon_variant: 'OVERVIEW',
           icon_variant_active: 'OVERVIEW_FILLED',
           is_active: pathname == `/${username}/overview`,

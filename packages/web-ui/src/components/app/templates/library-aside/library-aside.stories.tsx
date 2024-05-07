@@ -9,8 +9,8 @@ export const Primary = () => {
   return (
     <>
       <LibraryAside
-        on_feedback_click_={() => {}}
-        feedback_label_="Give feedback"
+        support_href_={() => {}}
+        support_label_="Give feedback"
         slot_sort_by={{
           button: <>[sortby]</>,
           dropdown: <></>,
@@ -26,8 +26,8 @@ export const Primary = () => {
       />
       <StorybookSpacer />
       <LibraryAside
-        on_feedback_click_={() => {}}
-        feedback_label_="Give feedback"
+        support_href_={() => {}}
+        support_label_="Give feedback"
         slot_sort_by={{
           button: <>[sortby]</>,
           dropdown: <>[dropdown]</>,

@@ -151,7 +151,7 @@ const dictionary: Dictionary = {
       follow: 'Follow',
       unfollow: 'Unfollow',
       welcome: 'Howdy',
-      send_feedback: 'Send feedback',
+      send_feedback: 'Send feedback, get help',
       folders: 'Folders',
       pinned: 'Pinned',
       search: {

@@ -64,8 +64,8 @@ export const Primary = () => {
       }
     >
       <UiAppTemplate_Library
-        slot_aside={<>aside</>}
-        slot_tag_hierarchies={
+        slot_aside_={<>aside</>}
+        slot_tag_hierarchies_={
           <>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a dui
             felis. Donec ultrices placerat est. Cras eget pellentesque neque,
@@ -90,13 +90,13 @@ export const Primary = () => {
             velit.
           </>
         }
-        slot_toolbar={<>toolbar</>}
+        slot_toolbar_={<>toolbar</>}
         mobile_title_bar="Bookmarks"
-        on_page_bottom_reached={() => {}}
-        slot_pinned={<>pinned</>}
-        are_bookmarks_dimmed={false}
+        on_page_bottom_reached_={() => {}}
+        slot_pinned_={<>pinned</>}
+        are_bookmarks_dimmed_={false}
         is_not_interactive={false}
-        slot_bookmarks={
+        slot_bookmarks_={
           <>
             {bookmark}
             {bookmark}
@@ -105,15 +105,15 @@ export const Primary = () => {
             {bookmark}
           </>
         }
-        show_skeletons={false}
-        slot_search={<>search</>}
-        translations={{
-          collapse_alt: '',
-          follow: '',
-          unfollow: '',
+        show_skeletons_={false}
+        slot_search_={<>search</>}
+        translations_={{
+          collapse_alt_: '',
+          follow_: '',
+          unfollow_: '',
         }}
         close_aside_count={0}
-        info_text=""
+        info_text_=""
       />
     </UiAppTemplate_App>
   )

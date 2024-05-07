@@ -4,8 +4,8 @@ import StickyBox from 'react-sticky-box'
 
 export namespace LibraryAside {
   export type Props = {
-    on_feedback_click_: () => void
-    feedback_label_: string
+    support_href_: string
+    support_label_: string
     slot_segmented_buttons_: React.ReactNode
     slot_custom_range_?: React.ReactNode
     slot_tags_?: React.ReactNode
@@ -18,9 +18,7 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
       <StickyBox offsetTop={shared_values.app_header_desktop}>
         <div className={styles.container}>
           <div className={styles.feedback}>
-            <button onClick={props.on_feedback_click_}>
-              {props.feedback_label_}
-            </button>
+            <a href={props.support_href_}>{props.support_label_}</a>
           </div>
           <div className={styles.slots}>
             {props.slot_segmented_buttons_}

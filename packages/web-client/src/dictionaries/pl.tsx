@@ -146,8 +146,8 @@ export const dictionary: Dictionary = {
   app: {
     powered_by: 'Na technologii',
     menu_items: {
-      home: 'Główna',
-      bookmarks: 'Moje zakładki',
+      home: 'Strona główna',
+      bookmarks: 'Biblioteka',
       notifications: 'Powiadomienia',
       activity: 'Aktywność',
     },
@@ -158,7 +158,7 @@ export const dictionary: Dictionary = {
       follow: 'Obserwuj',
       unfollow: 'Przestań obserwować',
       welcome: 'Witaj',
-      send_feedback: 'Prześlij opinię',
+      send_feedback: 'Prześlij opinię, uzyskaj pomoc',
       folders: 'Foldery',
       pinned: 'Przypięte',
       search: {

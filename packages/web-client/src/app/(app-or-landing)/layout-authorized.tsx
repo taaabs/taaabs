@@ -44,7 +44,9 @@ const LayoutAuthorized: React.FC<{
           <ClientComponentAppHeaderDesktop dictionary={props.dictionary} />
         }
         slot_header_mobile={<ClientComponentAppHeaderMobile />}
-        slot_bottom_navigation_bar={<ClientComponentBottomNavigationBar />}
+        slot_bottom_navigation_bar={
+          <ClientComponentBottomNavigationBar dictionary={props.dictionary} />
+        }
       >
         {props.children}
       </UiAppTemplate_App>

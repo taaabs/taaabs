@@ -3,9 +3,15 @@
 
 .navigation {
   display: flex;
-  gap: 30px;
+  @include at992 {
+    margin-top: 1px;
+    gap: var(--padding-24px);
+  }
+  @include at1200 {
+    margin-top: 4px;
+  }
   @include at1380 {
-    gap: 40px;
+    gap: var(--padding-40px);
   }
   &__item {
     position: relative;
@@ -14,6 +20,9 @@
     align-items: center;
     @include at992 {
       height: var(--button-dimension-48px);
+      font-size: var(--font-size-18px);
+    }
+    @include at1200 {
       font-size: var(--font-size-20px);
     }
     @include at1380 {

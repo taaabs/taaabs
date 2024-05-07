@@ -856,8 +856,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   )
   const slot_aside = (
     <UiAppTemplate_LibraryAside
-      feedback_label_={props.dictionary.app.library.send_feedback}
-      on_feedback_click_={() => {}}
+      support_label_={props.dictionary.app.library.send_feedback}
+      support_href_="https://github.com/taaabs/community/discussions"
       slot_segmented_buttons_={
         is_hydrated ? (
           <>
@@ -2671,33 +2671,33 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         tag_name={tag_view_options_hook.dragged_tag?.name_}
       />
       <UiAppTemplate_SwipableColumns
-        translations={{
-          collapse_alt: props.dictionary.app.library.collapse_sidebar,
-          follow: props.dictionary.app.library.follow,
-          unfollow: props.dictionary.app.library.unfollow,
-          folders: props.dictionary.app.library.folders,
-          pinned: props.dictionary.app.library.pinned,
+        translations_={{
+          mobile_title_bar_: props.dictionary.app.menu_items.bookmarks,
+          collapse_alt_: props.dictionary.app.library.collapse_sidebar,
+          follow_: props.dictionary.app.library.follow,
+          unfollow_: props.dictionary.app.library.unfollow,
+          folders_: props.dictionary.app.library.folders,
+          pinned_: props.dictionary.app.library.pinned,
         }}
-        is_following={undefined}
-        welcome_text={
+        is_following_={undefined}
+        welcome_text_={
           !username && auth_context.auth_data
             ? `${props.dictionary.app.library.welcome}, ${auth_context.auth_data.username}`
             : undefined
         }
-        on_follow_click={username ? () => {} : undefined}
-        show_skeletons={show_skeletons}
-        mobile_title_bar={'Bookmarks'}
-        slot_search={slot_search}
-        slot_toolbar={slot_toolbar}
-        slot_pinned={slot_pinned}
-        pinned_count={pinned_count.current}
-        slot_tag_hierarchies={slot_tag_hierarchies}
-        slot_aside={slot_aside}
-        are_bookmarks_dimmed={
+        on_follow_click_={username ? () => {} : undefined}
+        show_skeletons_={show_skeletons}
+        slot_search_={slot_search}
+        slot_toolbar_={slot_toolbar}
+        slot_pinned_={slot_pinned}
+        pinned_count_={pinned_count.current}
+        slot_tag_hierarchies_={slot_tag_hierarchies}
+        slot_aside_={slot_aside}
+        are_bookmarks_dimmed_={
           is_fetching_first_bookmarks || bookmarks_hook.is_upserting || false
         }
-        slot_bookmarks={slot_bookmarks}
-        on_page_bottom_reached={() => {
+        slot_bookmarks_={slot_bookmarks}
+        on_page_bottom_reached_={() => {
           if (bookmarks_hook.is_fetching || !bookmarks_hook.bookmarks?.length)
             return
           if (
@@ -2720,7 +2720,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             })
           }
         }}
-        clear_selected_tags={
+        clear_selected_tags_={
           !is_fetching_first_bookmarks &&
           !search_hook.result_ &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
@@ -2728,7 +2728,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             ? tag_view_options_hook.clear_selected_tags
             : undefined
         }
-        clear_date_range={
+        clear_date_range_={
           !is_fetching_first_bookmarks &&
           !search_hook.result_ &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
@@ -2737,7 +2737,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             ? date_view_options_hook.clear_gte_lte_search_params_
             : undefined
         }
-        info_text={
+        info_text_={
           is_fetching_first_bookmarks ||
           bookmarks_hook.is_fetching_more_bookmarks
             ? props.dictionary.app.library.loading
