@@ -9,7 +9,7 @@ export namespace Auth {
       text: string
       subtext: string
     }
-    recaptcha_privacy_notice: React.ReactNode
+    recaptcha_privacy_notice?: React.ReactNode
     switch_form: {
       text: string
       link_label: string
@@ -43,7 +43,9 @@ export const Auth: React.FC<Auth.Props> = (props) => {
             </div>
           </div>
         </div>
-        <div className={styles.footer}>{props.recaptcha_privacy_notice}</div>
+        {props.recaptcha_privacy_notice && (
+          <div className={styles.footer}>{props.recaptcha_privacy_notice}</div>
+        )}
       </div>
     </div>
   )

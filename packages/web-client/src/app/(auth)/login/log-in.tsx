@@ -68,7 +68,6 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
         text: props.dictionary.auth.log_in.heading.text,
         subtext: props.dictionary.auth.log_in.heading.subtext,
       }}
-      recaptcha_privacy_notice={props.dictionary.auth.recaptcha_privacy_notice}
       switch_form={{
         text: props.dictionary.auth.log_in.switch_form.text,
         link_label: props.dictionary.auth.log_in.switch_form.link_label,

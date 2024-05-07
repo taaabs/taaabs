@@ -44,7 +44,7 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
       toast.error('ReCAPTCHA is not available')
       return
     }
-    const captcha_token = await executeRecaptcha('signup')
+    const captcha_token = await executeRecaptcha('sign_up')
 
     const params: SignUp_Params = {
       username: form_data.username,

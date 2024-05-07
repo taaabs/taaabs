@@ -3,21 +3,16 @@ import { SignUp } from './sign-up'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
+import { RecaptchaProvider } from './recaptcha-provider'
 
 const Page: React.FC = async () => {
   const user_id = cookies().get('user_id')
   if (user_id) redirect('/')
   const dictionary = await get_dictionary()
   return (
-    <GoogleReCaptchaProvider
-      reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-      container={{
-        parameters: {},
-      }}
-    >
+    <RecaptchaProvider>
       <SignUp dictionary={dictionary} />
-    </GoogleReCaptchaProvider>
+    </RecaptchaProvider>
   )
 }
 
