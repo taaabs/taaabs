@@ -83,6 +83,7 @@ const dictionary: Dictionary = {
   auth: {
     field_is_required: "Field can't be empty.",
     invalid_email: 'Entered email is invalid.',
+    something_went_wrong: 'Something went wrong... Try again later.',
     recaptcha_privacy_notice: (
       <span>
         This site is protected by reCAPTCHA and the Google <a>Privacy Policy</a>{' '}

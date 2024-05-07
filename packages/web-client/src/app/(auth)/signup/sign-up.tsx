@@ -11,12 +11,13 @@ import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/a
 import ky from 'ky'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
 import { toast } from 'react-toastify'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { AuthContext } from '@/app/auth-provider'
 import { system_values } from '@shared/constants/system-values'
 import { SignUp_Params } from '@repositories/modules/auth/domain/sign-up.params'
 import { Crypto } from '@repositories/utils/crypto'
 import { useSearchParams } from 'next/navigation'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 type FormValues = {
   email: string
@@ -28,6 +29,7 @@ type FormValues = {
 
 export const SignUp = (props: { dictionary: Dictionary }) => {
   const auth_context = useContext(AuthContext)
+  const { executeRecaptcha } = useGoogleReCaptcha()
   const {
     control,
     handleSubmit,
@@ -35,13 +37,21 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ mode: 'onBlur' })
   const search_params = useSearchParams()
+  const [will_redirect, set_will_redirect] = useState<boolean>()
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
+    if (!executeRecaptcha) {
+      toast.error('ReCAPTCHA is not available')
+      return
+    }
+    const captcha_token = await executeRecaptcha('signup')
+
     const params: SignUp_Params = {
       username: form_data.username,
       email: form_data.email,
       password: form_data.password,
       hint: form_data.hint,
+      captcha_token,
     }
     const ky_instance = ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -63,9 +73,10 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
           result.id,
         ),
       })
+      set_will_redirect(true)
       document.location = '/'
     } catch {
-      toast.error('Something went wrong... Try again.')
+      toast.error(props.dictionary.auth.something_went_wrong)
     }
   }
 
@@ -296,7 +307,7 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
           slot_submit_button={
             <UiCommonParticle_Button
               type="submit"
-              is_disabled={!is_object_empty(errors)}
+              is_disabled={!is_object_empty(errors) || will_redirect}
             >
               {props.dictionary.auth.sign_up.create_account}
             </UiCommonParticle_Button>

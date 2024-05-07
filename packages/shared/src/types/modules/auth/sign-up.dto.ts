@@ -11,6 +11,7 @@ export namespace SignUp_Dto {
         .max(system_values.username_max_length),
       password: z.string().length(system_values.password_hash_length),
       hint: z.string().max(system_values.password_hint_max_length).optional(),
+      captcha_token: z.string(),
     })
     export type Body = z.infer<typeof body_schema>
   }

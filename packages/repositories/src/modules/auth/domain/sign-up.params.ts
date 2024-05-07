@@ -3,4 +3,5 @@ export type SignUp_Params = {
   email: string
   password: string
   hint?: string
+  captcha_token: string
 }

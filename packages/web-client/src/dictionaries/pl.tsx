@@ -90,6 +90,7 @@ export const dictionary: Dictionary = {
   auth: {
     field_is_required: 'To pole jest wymagane.',
     invalid_email: 'Powyższy email jest nieprawidłowy.',
+    something_went_wrong: 'Coś poszło nie tak... Spróbuj ponownie później.',
     recaptcha_privacy_notice: (
       <span>
         Ta strona jest chroniona przez reCAPTCHA. Obowiązują{' '}
@@ -214,7 +215,7 @@ export const dictionary: Dictionary = {
         archived: 'Archiwum',
       },
       errors: {
-        tag_limit_reached: `Zakładka może mieć maksymalnie ${system_values.bookmark.tags.limit} tagów.`,
+        tag_limit_reached: `Zakładka może mieć maksymalnie ${system_values.bookmark.tags.limit} słów kluczowych.`,
       },
     },
     upsert_popup: {

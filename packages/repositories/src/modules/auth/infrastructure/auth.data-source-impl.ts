@@ -36,6 +36,7 @@ export class Auth_DataSourceImpl implements Auth_DataSource {
         encoder.encode(params.email),
       ),
       hint: params.hint,
+      captcha_token: params.captcha_token,
     }
 
     return this._ky
