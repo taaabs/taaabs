@@ -41,7 +41,7 @@ export namespace Bookmarks_Dto {
       public site_path?: string
       public is_pinned?: boolean
       public pin_title?: string
-      public via_wayback?: boolean
+      public open_snapshot?: boolean
     }
     class AuthorizedLink extends Link {
       public url?: string

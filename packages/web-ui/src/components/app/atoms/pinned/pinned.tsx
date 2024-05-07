@@ -17,7 +17,7 @@ export namespace Pinned {
     is_unread_?: boolean
     is_archived_?: boolean
     tags_?: number[]
-    via_wayback_?: boolean
+    open_snapshot_?: boolean
   }
   export type Props = {
     library_updated_at_timestamp_?: number
@@ -49,7 +49,7 @@ type SortableItem = {
   is_unread_?: boolean
   is_archived_?: boolean
   tags_?: number[]
-  via_wayback_?: boolean
+  open_snapshot_?: boolean
 }
 
 export const Pinned: React.FC<Pinned.Props> = memo(
@@ -65,7 +65,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         is_unread_: item.is_unread_,
         is_archived_: item.is_archived_,
         tags_: item.tags_,
-        via_wayback_: item.via_wayback_,
+        open_snapshot_: item.open_snapshot_,
       })),
     )
 
@@ -111,7 +111,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         relevant_items++
       }
 
-      const url = item.via_wayback_
+      const url = item.open_snapshot_
         ? url_to_wayback({ date: item.created_at_, url: item.url_ })
         : item.url_
 
@@ -146,7 +146,8 @@ export const Pinned: React.FC<Pinned.Props> = memo(
             <div
               className={cn(styles.item__inner__title, {
                 [styles['item__inner__title--unread']]: item.is_unread_,
-                [styles['item__inner__title--via-wayback']]: item.via_wayback_,
+                [styles['item__inner__title--via-wayback']]:
+                  item.open_snapshot_,
               })}
             >
               {item.title_}

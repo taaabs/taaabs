@@ -97,7 +97,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                             encryption_key,
                           ),
                           site_path: link.site_path,
-                          via_wayback: link.via_wayback,
+                          open_snapshot: link.open_snapshot,
                           is_pinned: link.is_pinned,
                           pin_order: link.pin_order,
                         }
@@ -119,7 +119,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                               : domain,
                             encryption_key,
                           ),
-                          via_wayback: link.via_wayback,
+                          open_snapshot: link.open_snapshot,
                           is_pinned: link.is_pinned,
                           pin_order: link.pin_order,
                         }

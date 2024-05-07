@@ -102,7 +102,7 @@ export namespace Bookmark {
       saves_?: number
       menu_slot_: React.ReactNode
       is_pinned_?: boolean
-      via_wayback_?: boolean
+      open_snapshot_?: boolean
     }[]
     on_link_click_: (url: string) => void
     on_link_middle_click_: () => void
@@ -715,7 +715,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             })}
           >
             {props.links_.map((link, link_idx) => {
-              const url = link.via_wayback_
+              const url = link.open_snapshot_
                 ? url_to_wayback({ date: props.created_at_, url: link.url_ })
                 : link.url_
 
@@ -783,7 +783,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         {
                           [styles[
                             'bookmark__links__item__link__url--via-wayback'
-                          ]]: link.via_wayback_,
+                          ]]: link.open_snapshot_,
                         },
                       )}
                       href={url}

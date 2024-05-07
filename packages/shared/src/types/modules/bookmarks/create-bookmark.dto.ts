@@ -20,7 +20,7 @@ export namespace CreateBookmark_Dto {
     site_path: z.string().trim().max(150).optional(),
     is_pinned: z.boolean().optional(),
     pin_title: z.string().max(100).optional(),
-    via_wayback: z.boolean().optional(),
+    open_snapshot: z.boolean().optional(),
   })
   const private_link_schema = z.object({
     is_public: z.literal(false),
@@ -29,7 +29,7 @@ export namespace CreateBookmark_Dto {
     site_aes: z.string().max(300),
     is_pinned: z.boolean().optional(),
     pin_title_aes: z.string().max(200).optional(),
-    via_wayback: z.boolean().optional(),
+    open_snapshot: z.boolean().optional(),
   })
 
   export const body_schema = z.object({

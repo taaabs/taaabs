@@ -14,7 +14,7 @@ export type Bookmark_Entity = {
     is_public: boolean
     is_pinned?: boolean
     pin_title?: string
-    via_wayback?: boolean
+    open_snapshot?: boolean
   }[]
   is_unread: boolean
   stars: number

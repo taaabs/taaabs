@@ -82,7 +82,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                       url: link.url,
                       site_path: link.site_path || undefined,
                       pin_title: link.pin_title || undefined,
-                      via_wayback: link.via_wayback || undefined,
+                      open_snapshot: link.open_snapshot || undefined,
                       is_pinned: link.is_pinned || undefined,
                       pin_order: link.pin_order || undefined,
                     }
@@ -105,7 +105,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                             encryption_key,
                           )
                         : undefined,
-                      via_wayback: link.via_wayback || undefined,
+                      open_snapshot: link.open_snapshot || undefined,
                       is_pinned: link.is_pinned || undefined,
                       pin_order: link.pin_order || undefined,
                     }

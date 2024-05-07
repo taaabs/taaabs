@@ -709,7 +709,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
           is_archived_: item.is_archived,
           stars_: item.stars,
           tags_: item.tags,
-          via_wayback_: item.via_wayback,
+          open_snapshot_: item.open_snapshot,
         })) || []
       }
       is_draggable_={!username && !pinned_hook.is_updating}
@@ -739,7 +739,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
         }
         await search_hook.cache_data_()
         window.onbeforeunload = null
-        const url = item.via_wayback_
+        const url = item.open_snapshot_
           ? url_to_wayback({ date: item.created_at_, url: item.url_ })
           : item.url_
         setTimeout(() => {
@@ -1277,7 +1277,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
             is_public: link.is_public,
             is_pinned: link.is_pinned,
             pin_title: link.pin_title,
-            via_wayback: link.via_wayback,
+            open_snapshot: link.open_snapshot,
           })),
           tags: [
             ...bookmark.tags.map((tag) => ({
@@ -1357,7 +1357,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                   is_public: link.is_public,
                   is_pinned: link.is_pinned,
                   pin_title: link.pin_title,
-                  via_wayback: link.via_wayback,
+                  open_snapshot: link.open_snapshot,
                 })),
                 tags: tags.map((tag) => ({
                   name: tag.name_,
@@ -1427,7 +1427,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                   is_public: link.is_public,
                   is_pinned: link.is_pinned,
                   pin_title: link.pin_title,
-                  via_wayback: link.via_wayback,
+                  open_snapshot: link.open_snapshot,
                 })),
                 tags: bookmark.tags
                   .filter((tag) => tag.id !== tag_id)
@@ -1513,7 +1513,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
         saves_: link.saves,
         site_path_: link.site_path,
         is_pinned_: link.is_pinned,
-        via_wayback_: link.via_wayback,
+        open_snapshot_: link.open_snapshot,
         menu_slot_: !username ? (
           <UiAppAtom_DropdownMenu
             items={[
@@ -1542,7 +1542,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                       is_public: l.is_public,
                       is_pinned: link.url == l.url ? is_pinned : l.is_pinned,
                       pin_title: l.pin_title,
-                      via_wayback: l.via_wayback,
+                      open_snapshot: l.open_snapshot,
                     })),
                     tags: bookmark.tags.map((tag) => ({
                       name: tag.name,
@@ -1594,7 +1594,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                 },
                 other_icon: <UiCommonParticles_Icon variant="PIN" />,
               },
-              link.via_wayback
+              link.open_snapshot
                 ? {
                     label: dictionary.library.open_original_url,
                     other_icon: <UiCommonParticles_Icon variant="LINK" />,
@@ -1634,9 +1634,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                   },
               {
                 label: dictionary.library.via_archive_org,
-                is_checked: link.via_wayback || false,
+                is_checked: link.open_snapshot || false,
                 on_click: async () => {
-                  const via_wayback = !link.via_wayback
+                  const open_snapshot = !link.open_snapshot
                   dispatch(bookmarks_actions.set_is_upserting(true))
                   const { db, bookmarks_just_tags } = await search_hook.init_({
                     is_archived_: is_archived_filter,
@@ -1656,8 +1656,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                       is_public: l.is_public,
                       is_pinned: l.is_pinned,
                       pin_title: l.pin_title,
-                      via_wayback:
-                        link.url == l.url ? via_wayback : l.via_wayback,
+                      open_snapshot:
+                        link.url == l.url ? open_snapshot : l.open_snapshot,
                     })),
                     tags: bookmark.tags.map((tag) => ({
                       name: tag.name,
@@ -1702,7 +1702,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                   })
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(
-                    via_wayback
+                    open_snapshot
                       ? dictionary.library.use_snapshot
                       : dictionary.library.use_original,
                   )
@@ -1713,7 +1713,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
         ) : (
           <UiAppAtom_DropdownMenu
             items={[
-              link.via_wayback
+              link.open_snapshot
                 ? {
                     label: 'Open original URL',
                     other_icon: <UiCommonParticles_Icon variant="LINK" />,
@@ -1765,7 +1765,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      via_wayback: link.via_wayback,
+                      open_snapshot: link.open_snapshot,
                     })),
                     tags: bookmark.tags.map((tag) => ({
                       name: tag.name,
@@ -1853,7 +1853,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      via_wayback: link.via_wayback,
+                      open_snapshot: link.open_snapshot,
                     })),
                     tags: bookmark.tags.map((tag) => ({
                       name: tag.name,
@@ -1943,7 +1943,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      via_wayback: link.via_wayback,
+                      open_snapshot: link.open_snapshot,
                     })),
                     tags: bookmark.tags.map((tag) => ({
                       name: tag.name,
@@ -2033,7 +2033,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      via_wayback: link.via_wayback,
+                      open_snapshot: link.open_snapshot,
                     })),
                     tags: bookmark.tags.map((tag) => ({
                       name: tag.name,
@@ -2123,7 +2123,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      via_wayback: link.via_wayback,
+                      open_snapshot: link.open_snapshot,
                     })),
                     tags: bookmark.tags.map((tag) => ({
                       name: tag.name,
@@ -2213,7 +2213,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      via_wayback: link.via_wayback,
+                      open_snapshot: link.open_snapshot,
                     })),
                     tags: bookmark.tags.map((tag) => ({
                       name: tag.name,
@@ -2311,7 +2311,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
               //         is_public: link.is_public,
               //         is_pinned: link.is_pinned,
               //         pin_title: link.pin_title,
-              //         via_wayback: link.via_wayback,
+              //         open_snapshot: link.open_snapshot,
               //       })),
               //       tags: [
               //         ...bookmark.tags.map((tag) => ({
@@ -2498,7 +2498,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                       is_public: link.is_public,
                       is_pinned: link.is_pinned,
                       pin_title: link.pin_title,
-                      via_wayback: link.via_wayback,
+                      open_snapshot: link.open_snapshot,
                     })),
                     tags: bookmark.tags.map((tag) => ({
                       name: tag.name,

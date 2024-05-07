@@ -30,7 +30,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
         is_unread: el.is_unread,
         is_archived: el.is_archived,
         tags: el.tags,
-        via_wayback: el.via_wayback,
+        open_snapshot: el.open_snapshot,
       })),
     )
   }
@@ -51,7 +51,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
       is_unread: el.is_unread,
       is_archived: el.is_archived,
       tags: el.tags,
-      via_wayback: el.via_wayback,
+      open_snapshot: el.open_snapshot,
     }))
   }
 

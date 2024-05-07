@@ -16,7 +16,7 @@ namespace DraggableUpsertFormLinks {
     url: string
     site_path?: string
     is_public?: boolean
-    via_wayback?: boolean
+    open_snapshot?: boolean
   }
   export type Props = {
     links: Link[]
@@ -50,7 +50,7 @@ export const DraggableUpsertFormLinks: React.FC<
       site_path?: string
       site_paths?: string[]
       is_public?: boolean
-      via_wayback?: boolean
+      open_snapshot?: boolean
     }[]
   >(
     props.links.map((item, i) => ({
@@ -59,7 +59,7 @@ export const DraggableUpsertFormLinks: React.FC<
       site_path: item.site_path,
       site_paths: get_site_paths_from_url(item.url),
       is_public: item.is_public,
-      via_wayback: item.via_wayback,
+      open_snapshot: item.open_snapshot,
     })),
   )
 
@@ -222,7 +222,7 @@ export const DraggableUpsertFormLinks: React.FC<
                             set_items(
                               items.map((el) => {
                                 if (el.id == item.id) {
-                                  return { ...el, via_wayback: false }
+                                  return { ...el, open_snapshot: false }
                                 } else {
                                   return el
                                 }
@@ -232,7 +232,7 @@ export const DraggableUpsertFormLinks: React.FC<
                             set_items(
                               items.map((el) => {
                                 if (el.id == item.id) {
-                                  return { ...el, via_wayback: true }
+                                  return { ...el, open_snapshot: true }
                                 } else {
                                   return el
                                 }
@@ -240,7 +240,7 @@ export const DraggableUpsertFormLinks: React.FC<
                             )
                           }
                         }}
-                        value={item.via_wayback ? 'snapshot' : 'direct'}
+                        value={item.open_snapshot ? 'snapshot' : 'direct'}
                       >
                         <option value="" />
                         <option value="direct">

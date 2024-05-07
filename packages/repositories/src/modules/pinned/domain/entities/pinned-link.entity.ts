@@ -8,5 +8,5 @@ export type PinnedLink_Entity = {
   is_unread?: boolean
   is_archived?: boolean
   tags?: number[]
-  via_wayback?: boolean
+  open_snapshot?: boolean
 }

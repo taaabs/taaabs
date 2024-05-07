@@ -58,7 +58,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       url: string
       site_path?: string
       is_public?: boolean
-      via_wayback?: boolean
+      open_snapshot?: boolean
     }[]
   >(
     props.bookmark
@@ -66,7 +66,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           url: link.url,
           site_path: link.site_path,
           is_public: link.is_public,
-          via_wayback: link.via_wayback,
+          open_snapshot: link.open_snapshot,
         }))
       : props.bookmark_autofill && props.bookmark_autofill.links
       ? props.bookmark_autofill.links.map(({ url }) => ({
@@ -114,7 +114,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           site_path: link.site_path,
           is_pinned: current_link?.is_pinned,
           pin_title: current_link?.pin_title,
-          via_wayback: link.via_wayback,
+          open_snapshot: link.open_snapshot,
         }
       }),
       tags: tags.map((tag) => ({
@@ -215,7 +215,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                       props.bookmark?.is_public == false
                         ? true
                         : link.is_public,
-                    via_wayback: link.via_wayback,
+                    open_snapshot: link.open_snapshot,
                   }))}
                   on_change={(links) => {
                     set_links(
@@ -223,7 +223,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                         url: link.url,
                         site_path: link.site_path,
                         is_public: link.is_public,
-                        via_wayback: link.via_wayback,
+                        open_snapshot: link.open_snapshot,
                       })),
                     )
                   }}
