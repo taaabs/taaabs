@@ -213,6 +213,9 @@ export const dictionary: Dictionary = {
         unread: 'Nieprzeczy...',
         archived: 'Archiwum',
       },
+      errors: {
+        tag_limit_reached: `Zakładka może mieć maksymalnie ${system_values.bookmark.tags.limit} tagów.`,
+      },
     },
     upsert_popup: {
       create_bookmark: 'Dodaj zakładkę',

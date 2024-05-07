@@ -207,6 +207,9 @@ const dictionary: Dictionary = {
         unread: 'Unread',
         archived: 'Archived',
       },
+      errors: {
+        tag_limit_reached: `Bookmark can have at most ${system_values.bookmark.tags.limit} tags`,
+      },
     },
     upsert_popup: {
       create_bookmark: 'Create bookmark',

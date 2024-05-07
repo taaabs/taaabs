@@ -1253,9 +1253,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       on_mouse_up_={async () => {
         if (!tag_view_options_hook.dragged_tag) return
         if (bookmark.tags.length == system_values.bookmark.tags.limit) {
-          toast.error(
-            `Bookmark can have at most ${system_values.bookmark.tags.limit} tags`,
-          )
+          toast.error(props.dictionary.app.library.errors.tag_limit_reached)
           return
         }
         if (

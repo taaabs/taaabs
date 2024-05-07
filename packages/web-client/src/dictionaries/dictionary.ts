@@ -149,6 +149,9 @@ export type Dictionary = {
         unread: string
         archived: string
       }
+      errors: {
+        tag_limit_reached: string
+      }
     }
     upsert_popup: {
       create_bookmark: string
