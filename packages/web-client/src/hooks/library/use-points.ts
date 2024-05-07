@@ -8,6 +8,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_library_dispatch } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { AuthContext } from '@/app/auth-provider'
+import { KyInstance } from 'ky'
 
 // This logic works only because of referential nature of "points_given" obejct. It works but could be moved to redux.
 export const use_points = () => {
@@ -24,8 +25,8 @@ export const use_points = () => {
   }, [search_params])
 
   const submit_points_debounced = useDebouncedCallback(
-    async (params: { bookmark_id: number; points: number }) => {
-      const data_source = new Points_DataSourceImpl(auth_context.ky_instance)
+    async (params: { bookmark_id: number; points: number; ky: KyInstance }) => {
+      const data_source = new Points_DataSourceImpl(params.ky)
       const repository = new Points_RepositoryImpl(data_source)
       try {
         await repository.give_points({
@@ -37,7 +38,7 @@ export const use_points = () => {
         toast.error('Something went wrong, try again later')
       }
     },
-    [auth_context.auth_data],
+    [],
     250,
   )
 
@@ -67,6 +68,7 @@ export const use_points = () => {
     submit_points_debounced({
       bookmark_id: params.bookmark_id,
       points: params.points,
+      ky: auth_context.ky_instance,
     })
     dispatch(bookmarks_actions.add_point({ bookmark_id: params.bookmark_id }))
   }
