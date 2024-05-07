@@ -2,6 +2,7 @@ import { system_values } from '@shared/constants/system-values'
 import { Dictionary } from './dictionary'
 
 const dictionary: Dictionary = {
+  locale: 'en',
   landing: {
     menu_items: {
       help_center: 'Help center',
@@ -148,6 +149,8 @@ const dictionary: Dictionary = {
     collapse_sidebar: 'Collapse sidebar',
     pin: 'Pin',
     unpin: 'Unpin',
+    open_original_url: 'Open original URL',
+    open_snapshot: 'Open snapshot',
     link_is_now_pinned: 'Link is now pinned',
     pin_has_been_removed: 'Pin has been removed',
     nothing_pinned: 'Nothing is pinned here',
@@ -155,7 +158,6 @@ const dictionary: Dictionary = {
     via_archive_org: 'Use snapshot',
     use_snapshot: 'Link is now using snapshot',
     use_original: 'Link is back to its original URL',
-    sort_by: 'Sort by',
     sort_by_options: {
       date: 'Date',
       the_huggiest: 'The huggiest!',
@@ -163,11 +165,15 @@ const dictionary: Dictionary = {
       visited: 'Visited',
       updated: 'Updated',
     },
-    order: 'Order',
     order_options: {
       newest: 'Newest',
       oldest: 'Oldest',
     },
+    custom_range: 'Custom range',
+    range_not_available:
+      'Range selection is unavailable for current sort option',
+    nothing_to_plot: 'There is nothing to plot',
+    results_fit_in_one_month: 'Results fit in ont month',
   },
 }
 

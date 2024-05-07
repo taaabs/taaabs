@@ -5,6 +5,7 @@ import useSwipe from 'beautiful-react-hooks/useSwipe'
 import { memo, useEffect, useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
+require('dayjs/locale/pl')
 import { Icon } from '@web-ui/components/common/particles/icon'
 
 type Counts = {
@@ -25,6 +26,13 @@ export namespace CustomRange {
     clear_date_range: () => void
     selected_tags?: number[]
     is_range_selector_disabled?: boolean
+    locale: 'en' | 'pl'
+    translations: {
+      custom_range: string
+      range_not_available: string
+      nothing_to_plot: string
+      results_fit_in_one_month: string
+    }
   }
 }
 
@@ -141,14 +149,21 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
             params.counts[start_index] &&
             end_index !== undefined &&
             params.counts[end_index]
-            ? yyyymm_to_display(params.counts[start_index].yyyymm) +
+            ? yyyymm_to_display(
+                params.counts[start_index].yyyymm,
+                props.locale,
+              ) +
               (end_index != start_index
-                ? ` - ${yyyymm_to_display(params.counts[end_index].yyyymm)}`
+                ? ` - ${yyyymm_to_display(
+                    params.counts[end_index].yyyymm,
+                    props.locale,
+                  )}`
                 : '')
-            : yyyymm_to_display(params.counts[0].yyyymm) +
+            : yyyymm_to_display(params.counts[0].yyyymm, props.locale) +
               (params.counts.length > 1
                 ? ` - ${yyyymm_to_display(
                     params.counts[params.counts.length - 1].yyyymm,
+                    props.locale,
                   )}`
                 : '')
           : '',
@@ -332,14 +347,14 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       <div className={styles['custom-range']} ref={custom_range}>
         <div className={styles['custom-range__details']}>
           <div className={styles['custom-range__details__title']}>
-            Custom range
+            {props.translations.custom_range}
           </div>
           <div className={styles['custom-range__details__current-range']}>
             {!bookmark_count ? (
               props.current_gte && props.current_lte ? (
-                yyyymm_to_display(props.current_gte) +
+                yyyymm_to_display(props.current_gte, props.locale) +
                 (props.current_gte != props.current_lte
-                  ? ` - ${yyyymm_to_display(props.current_lte)}`
+                  ? ` - ${yyyymm_to_display(props.current_lte, props.locale)}`
                   : '')
               ) : (
                 ''
@@ -348,9 +363,9 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
               date ? (
                 date
               ) : props.current_gte && props.current_lte ? (
-                yyyymm_to_display(props.current_gte) +
+                yyyymm_to_display(props.current_gte, props.locale) +
                 (props.current_gte != props.current_lte
-                  ? ` - ${yyyymm_to_display(props.current_lte)}`
+                  ? ` - ${yyyymm_to_display(props.current_lte, props.locale)}`
                   : '')
               ) : (
                 <></>
@@ -585,19 +600,19 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
           counts_to_render.length <= 1 &&
           !props.is_range_selector_disabled && (
             <div className={styles['custom-range__info']}>
-              All results fit in one month
+              {props.translations.results_fit_in_one_month}
             </div>
           )}
 
         {!props.is_range_selector_disabled && !bookmark_count && (
           <div className={styles['custom-range__info']}>
-            There is nothing to plot
+            {props.translations.nothing_to_plot}
           </div>
         )}
 
         {props.is_range_selector_disabled && (
           <div className={styles['custom-range__info']}>
-            Range selection is unavailable for current sort option
+            {props.translations.range_not_available}
           </div>
         )}
       </div>
@@ -606,11 +621,13 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
   (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
 )
 
-function yyyymm_to_display(yyyymm: number) {
+function yyyymm_to_display(yyyymm: number, locale: string) {
   return dayjs(
     new Date(
       parseInt(yyyymm.toString().substring(0, 4)),
       parseInt(yyyymm.toString().substring(4, 6)) - 1,
     ),
-  ).format('MMM YYYY')
+  )
+    .locale(locale)
+    .format('MMM YYYY')
 }

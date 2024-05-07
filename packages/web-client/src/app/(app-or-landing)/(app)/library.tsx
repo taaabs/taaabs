@@ -976,12 +976,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
               }
               items={[
                 {
-                  label: 'Newest',
+                  label: dictionary.library.order_options.newest,
                   is_selected:
                     order_view_options_hook.current_order_ == Order.DESC,
                 },
                 {
-                  label: 'Oldest',
+                  label: dictionary.library.order_options.oldest,
                   is_selected:
                     order_view_options_hook.current_order_ == Order.ASC,
                 },
@@ -1007,6 +1007,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
             }}
           >
             <CustomRange
+              locale={dictionary.locale}
               library_updated_at_timestamp={library_updated_at_timestamp}
               counts={counts_hook.months || undefined}
               on_yyyymm_change={
@@ -1025,6 +1026,13 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                   SortBy.VISITED_AT ||
                 sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY
               }
+              translations={{
+                custom_range: dictionary.library.custom_range,
+                range_not_available: dictionary.library.range_not_available,
+                nothing_to_plot: dictionary.library.nothing_to_plot,
+                results_fit_in_one_month:
+                  dictionary.library.results_fit_in_one_month,
+              }}
             />
           </div>
         ) : (
@@ -1098,6 +1106,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
       key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
       index_={i}
       created_at_={new Date(bookmark.created_at)}
+      locale={dictionary.locale}
       search_queried_at_timestamp_={search_hook.queried_at_timestamp_}
       bookmark_id_={bookmark.id}
       library_url_={username ? `/${username}` : '/bookmarks'}
@@ -1587,7 +1596,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
               },
               link.via_wayback
                 ? {
-                    label: 'Open original URL',
+                    label: dictionary.library.open_original_url,
                     other_icon: <UiCommonParticles_Icon variant="LINK" />,
                     on_click: async () => {
                       const record_visit_params: RecordVisit_Params = {
@@ -1604,7 +1613,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                     },
                   }
                 : {
-                    label: 'Open snapshot',
+                    label: dictionary.library.open_snapshot,
                     other_icon: <UiCommonParticles_Icon variant="LINK" />,
                     on_click: async () => {
                       const record_visit_params: RecordVisit_Params = {

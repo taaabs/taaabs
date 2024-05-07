@@ -1,4 +1,5 @@
 export type Dictionary = {
+  locale: 'en' | 'pl'
   landing: {
     menu_items: {
       updates: string
@@ -91,9 +92,10 @@ export type Dictionary = {
     pin_has_been_removed: string
     tag_hierarchies_upated: string
     collapse_sidebar: string
-    sort_by: string
     pin: string
     unpin: string
+    open_original_url: string
+    open_snapshot: string
     nothing_pinned: string
     pinned_links_has_beed_updated: string
     via_archive_org: string
@@ -106,10 +108,13 @@ export type Dictionary = {
       updated: string
       visited: string
     }
-    order: string
     order_options: {
       newest: string
       oldest: string
     }
+    custom_range: string
+    range_not_available: string
+    nothing_to_plot: string
+    results_fit_in_one_month: string
   }
 }

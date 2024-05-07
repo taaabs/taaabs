@@ -2,6 +2,7 @@ import { system_values } from '@shared/constants/system-values'
 import { Dictionary } from './dictionary'
 
 export const dictionary: Dictionary = {
+  locale: 'pl',
   landing: {
     menu_items: {
       help_center: 'Centrum pomocy',
@@ -22,7 +23,7 @@ export const dictionary: Dictionary = {
         username: 'nick',
         ticks: [
           <>
-            <strong>Szyfrowanie end-to-end</strong> zakładek prywatnych
+            <strong>Szyfrowanie end-to-end</strong> prywatnych zakładek
           </>,
           <>
             <strong>Używaj za darmo</strong> tak długo, jak chcesz
@@ -154,14 +155,15 @@ export const dictionary: Dictionary = {
     collapse_sidebar: 'Zwiń panel',
     pin: 'Przypnij',
     unpin: 'Odepnij',
+    open_original_url: 'Oryginalny URL',
+    open_snapshot: 'Otwórz kopię',
     link_is_now_pinned: 'Link został dodany do przypiętych',
     pin_has_been_removed: 'Link został usunięty z przypiętych',
     nothing_pinned: 'Przypięte',
     pinned_links_has_beed_updated: 'Przypięte linki zostały zaktualizowana',
-    via_archive_org: 'Przez Archive.org',
+    via_archive_org: 'Kopia domyślnie',
     use_snapshot: 'Odnośnik używa teraz kopii',
     use_original: 'Oryginalny link został przywrócony',
-    sort_by: 'Sortowanie',
     sort_by_options: {
       created: 'Dodania',
       updated: 'Edycji',
@@ -169,11 +171,15 @@ export const dictionary: Dictionary = {
       date: 'Data',
       the_huggiest: 'Punktowane',
     },
-    order: 'Kolejność',
     order_options: {
-      newest: 'Od najnowszych',
-      oldest: 'Od najstarszych',
+      newest: 'Najnowsze',
+      oldest: 'Najstarsze',
     },
+    custom_range: 'Przedział miesięcy',
+    range_not_available:
+      'Wybór zakresu jest niedostępny dla bieżącej opcji sortowania',
+    nothing_to_plot: 'Brak danych do wykresu',
+    results_fit_in_one_month: 'Rezultaty mieszczą się w jednym miesiącu',
   },
 }
 

@@ -2,6 +2,7 @@ import cn from 'classnames'
 import styles from './bookmark.module.scss'
 import { memo, useState } from 'react'
 import dayjs from 'dayjs'
+require('dayjs/locale/pl')
 import { ReactSortable } from 'react-sortablejs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
@@ -40,11 +41,30 @@ dayjs.updateLocale('en', {
   },
 })
 
+dayjs.updateLocale('pl', {
+  relativeTime: {
+    future: '%s',
+    past: '%s',
+    s: 'teraz',
+    m: '1m',
+    mm: '%dm',
+    h: '1h',
+    hh: '%dh',
+    d: '1d',
+    dd: '%dd',
+    M: '',
+    MM: '',
+    y: '',
+    yy: '',
+  },
+})
+
 export namespace Bookmark {
   export type Highlights = [number, number][]
 
   export type Props = {
     search_queried_at_timestamp_?: number
+    locale: 'pl' | 'en'
     is_search_result_?: boolean
     index_: number
     bookmark_id_: number
@@ -488,7 +508,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const bookmark_date =
       relative_time != ''
         ? relative_time
-        : dayjs(props.date_).format('MMM DD, YYYY')
+        : dayjs(props.date_)
+            .locale(props.locale)
+            .format(props.locale == 'en' ? 'MMMM DD, YYYY' : 'DD MMMM YYYY')
 
     return (
       <div
