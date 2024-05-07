@@ -125,10 +125,6 @@ export namespace Bookmark {
       yields_: number
     }
     on_mouse_up_?: () => void
-    translations_: {
-      save_: string
-      saves_: string
-    }
   }
 }
 
@@ -851,10 +847,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           styles['bookmark__links__item__actions__public-saves']
                         }
                       >
-                        {link.saves_}{' '}
-                        {link.saves_ == 1
-                          ? props.translations_.save_
-                          : props.translations_.saves_}
+                        {link.saves_}
                       </button>
                     )}
                     <button

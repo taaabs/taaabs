@@ -174,8 +174,6 @@ export const dictionary: Dictionary = {
         unpin: 'Odepnij',
         open_original_url: 'Oryginalny URL',
         open_snapshot: 'Otwórz kopię',
-        save: 'raz',
-        saves: 'razy',
       },
       bookmark_updated: 'Zakładka została zaktualizowana',
       all_bookmarks: 'All bookmarks',

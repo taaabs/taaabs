@@ -167,8 +167,6 @@ const dictionary: Dictionary = {
         unpin: 'Unpin',
         open_original_url: 'Open original URL',
         open_snapshot: 'Open snapshot',
-        save: 'save',
-        saves: 'saves',
       },
       bookmark_updated: 'Bookmark has been updated',
       all_bookmarks: 'All bookmarks',

@@ -53,13 +53,14 @@
       border-top-left-radius: var(--border-radius-12px);
       border-top-right-radius: var(--border-radius-12px);
     }
-    &--corners-fix { // Ugly but necessary for highlihgts on italic links to work.
+    &--corners-fix {
+      // Ugly but necessary for highlihgts on italic links to work.
       @include at992 {
         border-bottom-left-radius: 11px;
         border-bottom-right-radius: 11px;
       }
     }
-    
+
     &__top {
       width: 100%;
       display: flex;
@@ -494,9 +495,10 @@
         }
         &__public-saves {
           white-space: nowrap;
-          margin-right: 6px;
+          margin-right: 3px;
           color: var(--text-color-dimmed);
           font-size: var(--font-size-13px);
+          padding: 0 3px;
           @include hover {
             text-decoration: underline;
           }

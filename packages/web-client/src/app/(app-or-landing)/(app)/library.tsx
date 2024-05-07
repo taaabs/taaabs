@@ -2659,12 +2659,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           : props.local_db.db?.id || ''
       }
       should_dim_visited_links_={username !== undefined}
-      // It's important to wait until filter is set to search hook's state
+      // It's important to wait until filter is set to search hook's state.
       current_filter_={search_hook.current_filter_}
-      translations_={{
-        save_: props.dictionary.app.library.bookmark.save,
-        saves_: props.dictionary.app.library.bookmark.saves,
-      }}
     />
   ))
 

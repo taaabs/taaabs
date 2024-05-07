@@ -111,8 +111,6 @@ export type Dictionary = {
         unpin: string
         open_original_url: string
         open_snapshot: string
-        save: string
-        saves: string
       }
       bookmark_updated: string
       all_bookmarks: string
