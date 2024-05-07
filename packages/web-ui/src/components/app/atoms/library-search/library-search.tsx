@@ -34,8 +34,11 @@ export namespace LibrarySearch {
     is_slash_shortcut_disabled_: boolean
     on_click_get_help_: () => void
     translations_: {
+      type_: string
+      to_search_: string
       footer_tip_: string
       get_help_link_: string
+      one_moment_please_: string
     }
   }
 }
@@ -80,8 +83,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
           ) {
             props.on_change_(
               props.search_string_ +
-                props.hints_[selected_hint_index == -1 ? 0 : selected_hint_index]
-                  .completion_ +
+                props.hints_[
+                  selected_hint_index == -1 ? 0 : selected_hint_index
+                ].completion_ +
                 ' ',
             )
           } else {
@@ -109,7 +113,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
       } else if (event.code == 'Enter') {
         if (props.hints_ && selected_hint_index != -1) {
           props.on_change_(
-            props.search_string_ + props.hints_[selected_hint_index].completion_,
+            props.search_string_ +
+              props.hints_[selected_hint_index].completion_,
           )
         }
       }
@@ -270,7 +275,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                     }}
                     placeholder={
                       props.is_loading_
-                        ? `One moment please... ${
+                        ? `${props.translations_.one_moment_please_} ${
                             props.loading_progress_percentage_
                               ? props.loading_progress_percentage_ + '%'
                               : ''
@@ -336,8 +341,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
               ) : (
                 !props.is_focused_ && (
                   <div className={styles['box__right-side__press_key']}>
-                    Type <div className={styles.box__form__keycap}>/</div> to
-                    search
+                    {props.translations_.type_}
+                    <div className={styles.box__form__keycap}>/</div>
+                    {props.translations_.to_search_}
                   </div>
                 )
               )}

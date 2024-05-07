@@ -26,8 +26,11 @@ import { search_params_keys } from '@/constants/search-params-keys'
 import { toast } from 'react-toastify'
 import { browser_storage } from '@/constants/browser-storage'
 import { AuthContext } from '../auth-provider'
+import { Dictionary } from '@/dictionaries/dictionary'
 
-export const ClientComponentAppHeaderDesktop: React.FC = () => {
+export const ClientComponentAppHeaderDesktop: React.FC<{
+  dictionary: Dictionary
+}> = (props) => {
   const auth_context = useContext(AuthContext)!
   const search_params = useSearchParams()
   const params = useParams()
@@ -63,12 +66,12 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   if (!params.username) {
     navigation = [
       {
-        label: 'Home',
+        label: props.dictionary.app.menu_items.home,
         href: '/',
         is_active: pathname == '/',
       },
       {
-        label: 'Bookmarks',
+        label: props.dictionary.app.menu_items.bookmarks,
         href: '/bookmarks',
         is_active: pathname == '/bookmarks',
         on_click: () => {
@@ -79,7 +82,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         },
       },
       {
-        label: 'Notifications',
+        label: props.dictionary.app.menu_items.notifications,
         href: '/notifications',
         is_active: pathname == '/notifications',
       },
@@ -87,7 +90,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
   } else {
     navigation = [
       {
-        label: 'Bookmarks',
+        label: props.dictionary.app.menu_items.bookmarks,
         href: `/${params.username}`,
         is_active: pathname == `/${params.username}`,
         on_click: () => {
@@ -99,7 +102,7 @@ export const ClientComponentAppHeaderDesktop: React.FC = () => {
         },
       },
       {
-        label: 'Activity',
+        label: props.dictionary.app.menu_items.activity,
         href: `/${params.username}/activity`,
         is_active: pathname == `/${params.username}/activity`,
       },

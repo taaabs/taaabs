@@ -48,8 +48,8 @@ dayjs.updateLocale('pl', {
     s: 'teraz',
     m: '1m',
     mm: '%dm',
-    h: '1h',
-    hh: '%dh',
+    h: '1g',
+    hh: '%dg',
     d: '1d',
     dd: '%dd',
     M: '',
@@ -125,6 +125,10 @@ export namespace Bookmark {
       yields_: number
     }
     on_mouse_up_?: () => void
+    translations_: {
+      save_: string
+      saves_: string
+    }
   }
 }
 
@@ -510,7 +514,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         ? relative_time
         : dayjs(props.date_)
             .locale(props.locale)
-            .format(props.locale == 'en' ? 'MMMM DD, YYYY' : 'DD MMMM YYYY')
+            .format(props.locale == 'en' ? 'MMMM DD, YYYY' : 'D MMMM YYYY')
 
     return (
       <div
@@ -847,7 +851,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           styles['bookmark__links__item__actions__public-saves']
                         }
                       >
-                        {link.saves_} {link.saves_ == 1 ? 'save' : 'saves'}
+                        {link.saves_}{' '}
+                        {link.saves_ == 1
+                          ? props.translations_.save_
+                          : props.translations_.saves_}
                       </button>
                     )}
                     <button

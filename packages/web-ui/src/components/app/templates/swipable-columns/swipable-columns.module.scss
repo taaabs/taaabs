@@ -188,6 +188,7 @@
       }
       @include at992 {
         margin-right: 10px;
+        margin-bottom: -4px;
       }
       &__button {
         font-size: var(--font-size-13px);
@@ -243,7 +244,7 @@
           padding-bottom: 16px;
         }
         > div:first-child {
-          box-shadow: var(--box-shadow-strong);
+          box-shadow: 0px 1.5px 5px 2px rgba(0, 0, 0, 0.1);
           // Our shadow must be shorter so we cover it a little bit.
           @include at992 {
             &::after {

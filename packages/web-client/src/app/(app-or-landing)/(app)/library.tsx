@@ -42,7 +42,6 @@ import { system_values } from '@shared/constants/system-values'
 import { Filter } from '@/types/library/filter'
 import { UpdateTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/update-tag-hierarchies.params'
 import { use_points } from '@/hooks/library/use-points'
-import { Dictionary } from '@/dictionaries/dictionary'
 import { use_scroll_restore } from '@/hooks/misc/use-scroll-restore'
 import { use_pinned } from '@/hooks/library/use-pinned'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
@@ -61,6 +60,7 @@ import { ModalContext } from '@/providers/modal-provider'
 import { AuthContext } from '@/app/auth-provider'
 import { use_search } from '@/hooks/library/use-search'
 import { LocalDb } from '@/app/local-db-provider'
+import { Dictionary } from '@/dictionaries/dictionary'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
@@ -68,10 +68,9 @@ const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   loading: () => <UiAppAtom_CustomRangeSkeleton />,
 })
 
-const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
-  dictionary,
-  local_db,
-}) => {
+const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
+  props,
+) => {
   const auth_context = useContext(AuthContext)!
   use_scroll_restore()
   const is_hydrated = use_is_hydrated()
@@ -82,7 +81,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
   const { username }: { username?: string } = useParams()
   const modal_context = useContext(ModalContext)
   const [show_skeletons, set_show_skeletons] = useState(true)
-  const search_hook = use_search(local_db)
+  const search_hook = use_search(props.local_db)
   const bookmarks_hook = use_bookmarks()
   const counts_hook = use_counts()
   const points_hook = use_points()
@@ -148,8 +147,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
     pinned_hook.is_fetching,
     pinned_hook.should_refetch,
     // Bookmark menu items must see new db instances.
-    local_db.db_updated_at_timestamp,
-    local_db.archived_db_updated_at_timestamp,
+    props.local_db.db_updated_at_timestamp,
+    props.local_db.archived_db_updated_at_timestamp,
   ])
 
   const set_pinned_count = () => {
@@ -320,7 +319,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
   ])
 
   useUpdateEffect(() => {
-    if (local_db.db || local_db.archived_db) {
+    if (props.local_db.db || props.local_db.archived_db) {
       search_hook.set_current_filter_(filter_view_options_hook.current_filter_)
       search_hook.set_selected_tags_(
         counts_hook.selected_tags_
@@ -343,7 +342,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
       )
       search_hook.get_hints_()
     }
-  }, [local_db.db, local_db.archived_db])
+  }, [props.local_db.db, props.local_db.archived_db])
 
   useUpdateEffect(() => {
     if (search_hook.result_) {
@@ -385,7 +384,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
       search_string_={search_hook.search_string_}
       is_loading_={search_hook.is_initializing_}
       loading_progress_percentage_={search_hook.indexed_bookmarks_percentage_}
-      placeholder_={dictionary.library.search_placeholder}
+      placeholder_={props.dictionary.app.library.search.placeholder}
       hints_={
         !search_hook.is_initializing_
           ? search_hook.hints_?.map((hint) => ({
@@ -490,8 +489,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
       is_slash_shortcut_disabled_={modal_context?.modal !== undefined}
       on_click_get_help_={() => {}}
       translations_={{
-        footer_tip_: 'Tags, filters and custom range affect results.',
-        get_help_link_: 'Get help',
+        footer_tip_: props.dictionary.app.library.search.footer_tip,
+        get_help_link_: props.dictionary.app.library.search.get_help,
+        type_: props.dictionary.app.library.search.type,
+        to_search_: props.dictionary.app.library.search.to_search,
+        one_moment_please_:
+          props.dictionary.app.library.search.one_moment_please,
       }}
     />
   )
@@ -697,7 +700,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
       library_updated_at_timestamp_={library_updated_at_timestamp}
       favicon_host_={favicon_host}
       translations_={{
-        nothing_pinned_: dictionary.library.nothing_pinned,
+        nothing_pinned_: props.dictionary.app.library.nothing_pinned,
       }}
       items_={
         pinned_hook.items?.map((item) => ({
@@ -723,7 +726,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
             encryption_key: auth_context.auth_data!.encryption_key,
           }),
         )
-        toast.success(dictionary.library.pinned_links_has_beed_updated)
+        toast.success(
+          props.dictionary.app.library.pinned_links_has_beed_updated,
+        )
       }}
       on_click_={async (item) => {
         if (!username) {
@@ -818,7 +823,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
               encryption_key: auth_context.auth_data!.encryption_key,
             }),
           )
-          toast.success(dictionary.library.tag_hierarchies_upated)
+          toast.success(props.dictionary.app.library.tag_hierarchies_upated)
         }}
         selected_tag_ids_={tag_view_options_hook.selected_tags_}
         is_updating_={tag_hierarchies_hook.is_updating}
@@ -843,15 +848,15 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
           }
         }}
         translations_={{
-          all_bookmarks_: dictionary.library.all_bookmarks,
-          drag_here_: dictionary.library.drag_tag_here,
+          all_bookmarks_: props.dictionary.app.library.all_bookmarks,
+          drag_here_: props.dictionary.app.library.drag_tag_here,
         }}
       />
     </div>
   )
   const slot_aside = (
     <UiAppTemplate_LibraryAside
-      feedback_label_={dictionary.library.send_feedback}
+      feedback_label_={props.dictionary.app.library.send_feedback}
       on_feedback_click_={() => {}}
       slot_segmented_buttons_={
         is_hydrated ? (
@@ -861,13 +866,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
               is_not_interactive={is_not_interactive}
               items={[
                 {
-                  label: dictionary.library.sort_by_options.date,
+                  label: props.dictionary.app.library.sort_by_options.date,
                   is_selected:
                     sort_by_view_options_hook.current_sort_by_ !=
                     SortBy.POPULARITY,
                 },
                 {
-                  label: dictionary.library.sort_by_options.the_huggiest,
+                  label:
+                    props.dictionary.app.library.sort_by_options.the_huggiest,
                   is_selected:
                     sort_by_view_options_hook.current_sort_by_ ==
                     SortBy.POPULARITY,
@@ -899,19 +905,19 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                 }
                 items={[
                   {
-                    label: dictionary.library.sort_by_options.created,
+                    label: props.dictionary.app.library.sort_by_options.added,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.CREATED_AT,
                   },
                   {
-                    label: dictionary.library.sort_by_options.visited,
+                    label: props.dictionary.app.library.sort_by_options.visited,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.VISITED_AT,
                   },
                   {
-                    label: dictionary.library.sort_by_options.updated,
+                    label: props.dictionary.app.library.sort_by_options.edited,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.UPDATED_AT,
@@ -943,13 +949,13 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                 }
                 items={[
                   {
-                    label: dictionary.library.sort_by_options.created,
+                    label: props.dictionary.app.library.sort_by_options.added,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.CREATED_AT,
                   },
                   {
-                    label: dictionary.library.sort_by_options.updated,
+                    label: props.dictionary.app.library.sort_by_options.edited,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.UPDATED_AT,
@@ -976,12 +982,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
               }
               items={[
                 {
-                  label: dictionary.library.order_options.newest,
+                  label: props.dictionary.app.library.order_options.newest,
                   is_selected:
                     order_view_options_hook.current_order_ == Order.DESC,
                 },
                 {
-                  label: dictionary.library.order_options.oldest,
+                  label: props.dictionary.app.library.order_options.oldest,
                   is_selected:
                     order_view_options_hook.current_order_ == Order.ASC,
                 },
@@ -1007,7 +1013,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
             }}
           >
             <CustomRange
-              locale={dictionary.locale}
+              locale={props.dictionary.locale}
               library_updated_at_timestamp={library_updated_at_timestamp}
               counts={counts_hook.months || undefined}
               on_yyyymm_change={
@@ -1027,11 +1033,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                 sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY
               }
               translations={{
-                custom_range: dictionary.library.custom_range,
-                range_not_available: dictionary.library.range_not_available,
-                nothing_to_plot: dictionary.library.nothing_to_plot,
+                custom_range: props.dictionary.app.library.range_of_months,
+                range_not_available:
+                  props.dictionary.app.library.range_not_available,
+                nothing_to_plot: props.dictionary.app.library.nothing_to_plot,
                 results_fit_in_one_month:
-                  dictionary.library.results_fit_in_one_month,
+                  props.dictionary.app.library.results_fit_in_one_month,
               }}
             />
           </div>
@@ -1106,7 +1113,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
       key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
       index_={i}
       created_at_={new Date(bookmark.created_at)}
-      locale={dictionary.locale}
+      locale={props.dictionary.locale}
       search_queried_at_timestamp_={search_hook.queried_at_timestamp_}
       bookmark_id_={bookmark.id}
       library_url_={username ? `/${username}` : '/bookmarks'}
@@ -1333,7 +1340,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
           },
         })
         dispatch(bookmarks_actions.set_is_upserting(false))
-        toast.success(dictionary.library.bookmark_updated)
+        toast.success(props.dictionary.app.library.bookmark_updated)
       }}
       on_tags_order_change_={
         !username
@@ -1401,7 +1408,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                 },
               })
               dispatch(bookmarks_actions.set_is_upserting(false))
-              toast.success(dictionary.library.bookmark_updated)
+              toast.success(props.dictionary.app.library.bookmark_updated)
             }
           : undefined
       }
@@ -1504,7 +1511,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                 tag_view_options_hook.remove_tags_from_search_params_([tag_id])
               }
               dispatch(bookmarks_actions.set_is_upserting(false))
-              toast.success(dictionary.library.bookmark_updated)
+              toast.success(props.dictionary.app.library.bookmark_updated)
             }
           : undefined
       }
@@ -1519,8 +1526,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
             items={[
               {
                 label: link.is_pinned
-                  ? dictionary.library.unpin
-                  : dictionary.library.pin,
+                  ? props.dictionary.app.library.bookmark.unpin
+                  : props.dictionary.app.library.bookmark.pin,
                 on_click: async () => {
                   const is_pinned = !link.is_pinned
                   dispatch(bookmarks_actions.set_is_upserting(true))
@@ -1588,15 +1595,16 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(
                     is_pinned
-                      ? dictionary.library.link_is_now_pinned
-                      : dictionary.library.pin_has_been_removed,
+                      ? props.dictionary.app.library.link_is_now_pinned
+                      : props.dictionary.app.library.pin_has_been_removed,
                   )
                 },
                 other_icon: <UiCommonParticles_Icon variant="PIN" />,
               },
               link.open_snapshot
                 ? {
-                    label: dictionary.library.open_original_url,
+                    label:
+                      props.dictionary.app.library.bookmark.open_original_url,
                     other_icon: <UiCommonParticles_Icon variant="LINK" />,
                     on_click: async () => {
                       const record_visit_params: RecordVisit_Params = {
@@ -1613,7 +1621,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                     },
                   }
                 : {
-                    label: dictionary.library.open_snapshot,
+                    label: props.dictionary.app.library.bookmark.open_snapshot,
                     other_icon: <UiCommonParticles_Icon variant="LINK" />,
                     on_click: async () => {
                       const record_visit_params: RecordVisit_Params = {
@@ -1633,7 +1641,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                     },
                   },
               {
-                label: dictionary.library.via_archive_org,
+                label: props.dictionary.app.library.via_archive_org,
                 is_checked: link.open_snapshot || false,
                 on_click: async () => {
                   const open_snapshot = !link.open_snapshot
@@ -1703,8 +1711,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   toast.success(
                     open_snapshot
-                      ? dictionary.library.use_snapshot
-                      : dictionary.library.use_original,
+                      ? props.dictionary.app.library.use_snapshot
+                      : props.dictionary.app.library.use_original,
                   )
                 },
               },
@@ -1742,7 +1750,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
           <UiAppAtom_DropdownMenu
             items={[
               {
-                label: 'Mark as unread',
+                label: props.dictionary.app.library.bookmark.mark_as_unread,
                 is_checked: bookmark.is_unread,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
@@ -1827,7 +1835,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                     },
                   })
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(dictionary.library.bookmark_updated)
+                  toast.success(props.dictionary.app.library.bookmark_updated)
                 },
               },
               {
@@ -1917,7 +1925,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                     search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(dictionary.library.bookmark_updated)
+                  toast.success(props.dictionary.app.library.bookmark_updated)
                 },
               },
               {
@@ -2007,7 +2015,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                     search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(dictionary.library.bookmark_updated)
+                  toast.success(props.dictionary.app.library.bookmark_updated)
                 },
               },
               {
@@ -2097,7 +2105,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                     search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(dictionary.library.bookmark_updated)
+                  toast.success(props.dictionary.app.library.bookmark_updated)
                 },
               },
               {
@@ -2187,7 +2195,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                     search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(dictionary.library.bookmark_updated)
+                  toast.success(props.dictionary.app.library.bookmark_updated)
                 },
               },
               {
@@ -2277,7 +2285,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                     search_hook.set_count_(search_hook.count_ - 1)
                   }
                   dispatch(bookmarks_actions.set_is_upserting(false))
-                  toast.success(dictionary.library.bookmark_updated)
+                  toast.success(props.dictionary.app.library.bookmark_updated)
                 },
               },
               // {
@@ -2363,12 +2371,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
               //     })
               //     dispatch(bookmarks_actions.set_is_upserting(false))
               //     modal_context?.set_modal()
-              //     toast.success(dictionary.library.bookmark_updated)
+              //     toast.success(props.dictionary.app.library.bookmark_updated)
               //   },
               //   other_icon: <UiCommonParticles_Icon variant="EDIT" />,
               // },
               {
-                label: 'Edit',
+                label: props.dictionary.app.library.bookmark.edit,
                 on_click: async () => {
                   const modified_bookmark = await upsert_bookmark_modal({
                     modal_context,
@@ -2459,7 +2467,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                   })
                   dispatch(bookmarks_actions.set_is_upserting(false))
                   modal_context?.set_modal()
-                  toast.success(dictionary.library.bookmark_updated)
+                  toast.success(props.dictionary.app.library.bookmark_updated)
                 },
                 other_icon: <UiCommonParticles_Icon variant="EDIT" />,
               },
@@ -2473,8 +2481,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                   filter_view_options_hook.current_filter_ ==
                     Filter.ARCHIVED_STARRED_UNREAD
                 )
-                  ? 'Archive'
-                  : 'Restore',
+                  ? props.dictionary.app.library.bookmark.archive
+                  : props.dictionary.app.library.bookmark.restore,
                 other_icon: <UiCommonParticles_Icon variant="ARCHIVE" />,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
@@ -2589,7 +2597,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
                 },
               },
               {
-                label: 'Delete',
+                label: props.dictionary.app.library.bookmark.delete,
                 on_click: async () => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
                   const { db, bookmarks_just_tags } = await search_hook.init_({
@@ -2647,12 +2655,16 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
       highlights_site_variants_={search_hook.highlights_sites_variants_}
       orama_db_id_={
         is_archived_filter
-          ? local_db.archived_db?.id || ''
-          : local_db.db?.id || ''
+          ? props.local_db.archived_db?.id || ''
+          : props.local_db.db?.id || ''
       }
       should_dim_visited_links_={username !== undefined}
       // It's important to wait until filter is set to search hook's state
       current_filter_={search_hook.current_filter_}
+      translations_={{
+        save_: props.dictionary.app.library.bookmark.save,
+        saves_: props.dictionary.app.library.bookmark.saves,
+      }}
     />
   ))
 
@@ -2663,16 +2675,16 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = ({
       />
       <UiAppTemplate_SwipableColumns
         translations={{
-          collapse_alt: dictionary.library.collapse_sidebar,
-          follow: dictionary.library.follow,
-          unfollow: dictionary.library.unfollow,
-          folders: 'Folders',
-          pinned: 'Pinned',
+          collapse_alt: props.dictionary.app.library.collapse_sidebar,
+          follow: props.dictionary.app.library.follow,
+          unfollow: props.dictionary.app.library.unfollow,
+          folders: props.dictionary.app.library.folders,
+          pinned: props.dictionary.app.library.pinned,
         }}
         is_following={undefined}
         welcome_text={
           !username && auth_context.auth_data
-            ? `${dictionary.library.welcome}, ${auth_context.auth_data.username}`
+            ? `${props.dictionary.app.library.welcome}, ${auth_context.auth_data.username}`
             : undefined
         }
         on_follow_click={username ? () => {} : undefined}

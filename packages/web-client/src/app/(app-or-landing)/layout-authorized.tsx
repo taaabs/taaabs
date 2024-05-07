@@ -4,15 +4,14 @@ import { Landing as UiLandingTemplate_Landing } from '@web-ui/components/landing
 import { DynamicDesktopNavigationForHeader } from './dynamic-desktop-navigation-for-header'
 import { DynamicDesktopUserForHeader } from './dynamic-desktop-user-for-header'
 import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { usePathname } from 'next/navigation'
+import { ReactNode } from 'react'
+import { Dictionary } from '@/dictionaries/dictionary'
+import { PublicUserAvatarProvider } from '@/providers/public-user-avatar-provider'
 import { ClientComponentAppHeaderDesktop } from './client-component-app-header-desktop'
 import { ClientComponentAppHeaderMobile } from './client-component-app-header-mobile'
 import { ClientComponentBottomNavigationBar } from './client-component-bottom-navigation-bar'
 import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
-import { PublicUserAvatarProvider } from '@/providers/public-user-avatar-provider'
-import { usePathname } from 'next/navigation'
-import { ReactNode, useContext } from 'react'
-import { AuthContext } from '../auth-provider'
-import { Dictionary } from '@/dictionaries/dictionary'
 
 const landing_pathnames = ['/about', '/pricing', '/help', '/updates']
 
@@ -21,16 +20,10 @@ const LayoutAuthorized: React.FC<{
   dictionary: Dictionary
 }> = (props) => {
   const pathname = usePathname()
-  const auth_context = useContext(AuthContext)!
 
   return landing_pathnames.includes(pathname) ? (
     <UiLandingTemplate_Landing
-      slot_logo={
-        <LogoForHeader
-          is_large={true}
-          href={auth_context.auth_data ? '/en/about' : '/en'}
-        />
-      }
+      slot_logo={<LogoForHeader is_large={true} href="/about" />}
       slot_desktop_user={
         <DynamicDesktopUserForHeader
           is_authorized={true}
@@ -47,7 +40,9 @@ const LayoutAuthorized: React.FC<{
   ) : (
     <PublicUserAvatarProvider>
       <UiAppTemplate_App
-        slot_header_desktop={<ClientComponentAppHeaderDesktop />}
+        slot_header_desktop={
+          <ClientComponentAppHeaderDesktop dictionary={props.dictionary} />
+        }
         slot_header_mobile={<ClientComponentAppHeaderMobile />}
         slot_bottom_navigation_bar={<ClientComponentBottomNavigationBar />}
       >

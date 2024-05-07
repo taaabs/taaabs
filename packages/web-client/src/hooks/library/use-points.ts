@@ -37,7 +37,7 @@ export const use_points = () => {
         toast.error('Something went wrong, try again later')
       }
     },
-    [],
+    [auth_context.ky_instance],
     250,
   )
 

@@ -118,6 +118,7 @@
       font-size: var(--font-size-12px);
       font-weight: var(--font-weight-inter-medium);
       padding: 0 4px;
+      margin: 0 5px;
       box-shadow: var(--box-shadow-blue);
       @include touch-screen {
         display: none;
