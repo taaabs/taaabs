@@ -47,7 +47,7 @@
     ".next/types/**/*.ts",
     "../web-ui/src/**/*.ts",
     "../repositories/src/**/*.ts",
-    "../shared/src/**/*.ts", "src/app/(auth)/login/1",
+    "../shared/src/**/*.ts",
   ],
   "exclude": [
     "node_modules",

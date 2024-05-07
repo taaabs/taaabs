@@ -1,6 +1,6 @@
 'use client'
 
-import { schema } from '@/hooks/library/use-search'
+import { BookmarkTags, schema } from '@/hooks/library/use-search'
 import { Orama } from '@orama/orama'
 import { ReactNode, createContext, useState } from 'react'
 
@@ -13,6 +13,12 @@ export type LocalDb = {
   set_db_updated_at_timestamp: (timestamp?: number) => void
   archived_db_updated_at_timestamp?: number
   set_archived_db_updated_at_timestamp: (timestamp?: number) => void
+  bookmarks_just_tags?: BookmarkTags[]
+  set_bookmarks_just_tags: (bookmarks_just_tags: BookmarkTags[]) => void
+  archived_bookmarks_just_tags?: BookmarkTags[]
+  set_archived_bookmarks_just_tags: (
+    archived_bookmarks_just_tags: BookmarkTags[],
+  ) => void
 }
 
 export const LocalDbContext = createContext<LocalDb | null>(null)
@@ -28,6 +34,10 @@ export const LocalDbProvider: React.FC<{
     archived_db_updated_at_timestamp,
     set_archived_db_updated_at_timestamp,
   ] = useState<number>()
+  const [bookmarks_just_tags, set_bookmarks_just_tags] =
+    useState<BookmarkTags[]>()
+  const [archived_bookmarks_just_tags, set_archived_bookmarks_just_tags] =
+    useState<BookmarkTags[]>()
 
   return (
     <LocalDbContext.Provider
@@ -40,6 +50,10 @@ export const LocalDbProvider: React.FC<{
         set_db_updated_at_timestamp,
         archived_db_updated_at_timestamp,
         set_archived_db_updated_at_timestamp,
+        bookmarks_just_tags,
+        set_bookmarks_just_tags,
+        archived_bookmarks_just_tags,
+        set_archived_bookmarks_just_tags,
       }}
     >
       {props.children}

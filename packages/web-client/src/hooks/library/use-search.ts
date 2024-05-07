@@ -79,17 +79,13 @@ export const schema = {
 
 export type Result = TypedDocument<Orama<typeof schema>>
 
-type BookmarkTags = { id: number; tags: string[] }
+export type BookmarkTags = { id: number; tags: string[] }
 
 export const use_search = (local_db: LocalDb) => {
   const auth_context = useContext(AuthContext)!
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const [is_search_focused_, set_is_search_focused_] = useState(false)
-  const [bookmarks_just_tags, set_bookmarks_just_tags] =
-    useState<BookmarkTags[]>()
-  const [archived_bookmarks_just_tags, set_archived_bookmarks_just_tags] =
-    useState<BookmarkTags[]>()
   const [current_filter_, set_current_filter_] = useState<Filter>()
   const [selected_tags, set_selected_tags_] = useState<string[]>([])
   const [ids_to_search_amongst, set_ids_to_search_amongst] = useState<
@@ -141,16 +137,16 @@ export const use_search = (local_db: LocalDb) => {
 
   useUpdateEffect(() => {
     if (
-      (!is_archived_filter && !bookmarks_just_tags) ||
-      (is_archived_filter && !archived_bookmarks_just_tags)
+      (!is_archived_filter && !local_db.bookmarks_just_tags) ||
+      (is_archived_filter && !local_db.archived_bookmarks_just_tags)
     )
       return
 
     if (selected_tags.length) {
       set_ids_to_search_amongst(
         (!is_archived_filter
-          ? bookmarks_just_tags!
-          : archived_bookmarks_just_tags!
+          ? local_db.bookmarks_just_tags!
+          : local_db.archived_bookmarks_just_tags!
         )
           .filter((bookmark) =>
             selected_tags.every((tag) => bookmark.tags.includes(tag)),
@@ -160,7 +156,11 @@ export const use_search = (local_db: LocalDb) => {
     } else if (is_search_focused_) {
       get_hints_()
     }
-  }, [selected_tags, bookmarks_just_tags, archived_bookmarks_just_tags])
+  }, [
+    selected_tags,
+    local_db.bookmarks_just_tags,
+    local_db.archived_bookmarks_just_tags,
+  ])
 
   enum DbStalenessState {
     FRESH,
@@ -267,12 +267,12 @@ export const use_search = (local_db: LocalDb) => {
           if (!params.is_archived_) {
             return {
               db: local_db.db!,
-              bookmarks_just_tags: bookmarks_just_tags!,
+              bookmarks_just_tags: local_db.bookmarks_just_tags!,
             }
           } else {
             return {
               db: local_db.archived_db!,
-              bookmarks_just_tags: archived_bookmarks_just_tags!,
+              bookmarks_just_tags: local_db.archived_bookmarks_just_tags!,
             }
           }
         }
@@ -339,8 +339,8 @@ export const use_search = (local_db: LocalDb) => {
     if (cached_bookmarks && cached_index) {
       new_bookmarks_just_tags = JSON.parse(cached_bookmarks)
       !params.is_archived_
-        ? set_bookmarks_just_tags(new_bookmarks_just_tags)
-        : set_archived_bookmarks_just_tags(new_bookmarks_just_tags)
+        ? local_db.set_bookmarks_just_tags(new_bookmarks_just_tags)
+        : local_db.set_archived_bookmarks_just_tags(new_bookmarks_just_tags)
       await loadWithHighlight(new_db, JSON.parse(cached_index as any))
     } else {
       const data_source = new LibrarySearch_DataSourceImpl(
@@ -410,8 +410,8 @@ export const use_search = (local_db: LocalDb) => {
         tags: bookmark.tags,
       }))
       !params.is_archived_
-        ? set_bookmarks_just_tags(new_bookmarks_just_tags)
-        : set_archived_bookmarks_just_tags(new_bookmarks_just_tags)
+        ? local_db.set_bookmarks_just_tags(new_bookmarks_just_tags)
+        : local_db.set_archived_bookmarks_just_tags(new_bookmarks_just_tags)
       set_indexed_bookmarks_percentage(undefined)
     }
 
@@ -466,7 +466,7 @@ export const use_search = (local_db: LocalDb) => {
         )
         await localforage.setItem(
           browser_storage.local_forage.authorized_library.search.bookmarks,
-          JSON.stringify(bookmarks_just_tags),
+          JSON.stringify(local_db.bookmarks_just_tags),
         )
       }
       // else {
@@ -488,7 +488,7 @@ export const use_search = (local_db: LocalDb) => {
       //     browser_storage.local_forage.public_library.search.bookmarks({
       //       username: username as string,
       //     }),
-      //     JSON.stringify(bookmarks_just_tags),
+      //     JSON.stringify(local_db.bookmarks_just_tags),
       //   )
       // }
       set_search_data_awaits_caching(false)
@@ -524,7 +524,7 @@ export const use_search = (local_db: LocalDb) => {
         await localforage.setItem(
           browser_storage.local_forage.authorized_library.search
             .archived_bookmarks,
-          JSON.stringify(bookmarks_just_tags),
+          JSON.stringify(local_db.bookmarks_just_tags),
         )
       }
       // else {
@@ -544,7 +544,7 @@ export const use_search = (local_db: LocalDb) => {
       //     browser_storage.local_forage.public_library.search.archived_bookmarks(
       //       { username: username as string },
       //     ),
-      //     JSON.stringify(bookmarks_just_tags),
+      //     JSON.stringify(local_db.bookmarks_just_tags),
       //   )
       // }
       set_archived_search_data_awaits_caching(false)
@@ -1233,7 +1233,7 @@ export const use_search = (local_db: LocalDb) => {
       const new_bookmarks_just_tags = params.bookmarks_just_tags_.filter(
         (bookmark) => bookmark.id != params.bookmark_id_,
       )
-      set_bookmarks_just_tags(new_bookmarks_just_tags)
+      local_db.set_bookmarks_just_tags(new_bookmarks_just_tags)
       set_search_data_awaits_caching(true)
       local_db.set_db_updated_at_timestamp(Date.now())
     } else {
@@ -1241,7 +1241,9 @@ export const use_search = (local_db: LocalDb) => {
         params.bookmarks_just_tags_.filter(
           (bookmark) => bookmark.id != params.bookmark_id_,
         )
-      set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
+      local_db.set_archived_bookmarks_just_tags(
+        new_archived_bookmarks_just_tags,
+      )
       set_archived_search_data_awaits_caching(true)
       local_db.set_archived_db_updated_at_timestamp(Date.now())
     }
@@ -1309,7 +1311,7 @@ export const use_search = (local_db: LocalDb) => {
           tags: params.bookmark_.tags,
         })
       }
-      set_bookmarks_just_tags(new_bookmarks_just_tags)
+      local_db.set_bookmarks_just_tags(new_bookmarks_just_tags)
       set_search_data_awaits_caching(true)
       local_db.set_db_updated_at_timestamp(
         new Date(params.bookmark_.updated_at).getTime(),
@@ -1325,7 +1327,9 @@ export const use_search = (local_db: LocalDb) => {
           tags: params.bookmark_.tags,
         })
       }
-      set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
+      local_db.set_archived_bookmarks_just_tags(
+        new_archived_bookmarks_just_tags,
+      )
       set_archived_search_data_awaits_caching(true)
       local_db.set_archived_db_updated_at_timestamp(
         new Date(params.bookmark_.updated_at).getTime(),
