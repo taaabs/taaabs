@@ -23,8 +23,7 @@ export const use_points = () => {
     set_points_given({})
   }, [search_params])
 
-  const submit_points_debounced =
-  //  useDebouncedCallback(
+  const submit_points_debounced = useDebouncedCallback(
     async (params: { bookmark_id: number; points: number }) => {
       const data_source = new Points_DataSourceImpl(auth_context.ky_instance)
       const repository = new Points_RepositoryImpl(data_source)
@@ -37,11 +36,10 @@ export const use_points = () => {
       } catch {
         toast.error('Something went wrong, try again later')
       }
-    }
-  //   ,
-  //   [],
-  //   250,
-  // )
+    },
+    [auth_context.auth_data],
+    250,
+  )
 
   const get_points_given_on_bookmark_ = async (params: {
     bookmark_id: number
