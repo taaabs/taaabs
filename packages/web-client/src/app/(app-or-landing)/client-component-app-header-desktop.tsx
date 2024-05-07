@@ -183,6 +183,7 @@ export const ClientComponentAppHeaderDesktop: React.FC<{
           }
           toast.success('Bookmark has been created')
         }}
+        dictionary={props.dictionary}
       />,
     )
   }

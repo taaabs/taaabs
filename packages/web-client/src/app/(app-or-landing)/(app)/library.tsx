@@ -502,7 +502,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     <UiAppAtom_Toolbar
       toggleable_buttons_={[
         {
-          label_: 'Starred',
+          label_: props.dictionary.app.library.toolbar.starred,
           is_toggled_:
             filter_view_options_hook.current_filter_ == Filter.STARRED ||
             filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD ||
@@ -558,7 +558,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         ...(!username
           ? [
               {
-                label_: 'Unread',
+                label_: props.dictionary.app.library.toolbar.unread,
                 is_toggled_:
                   filter_view_options_hook.current_filter_ == Filter.UNREAD ||
                   filter_view_options_hook.current_filter_ ==
@@ -617,7 +617,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             ]
           : []),
         {
-          label_: 'Archived',
+          label_: props.dictionary.app.library.toolbar.archived,
           is_toggled_:
             filter_view_options_hook.current_filter_ == Filter.ARCHIVED ||
             filter_view_options_hook.current_filter_ ==
@@ -2382,6 +2382,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     modal_context,
                     bookmark,
                     is_archived: is_archived_filter,
+                    dictionary: props.dictionary,
                   })
                   if (!modified_bookmark) {
                     modal_context?.set_modal()
@@ -2739,7 +2740,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         info_text={
           is_fetching_first_bookmarks ||
           bookmarks_hook.is_fetching_more_bookmarks
-            ? 'Loading...'
+            ? props.dictionary.app.library.loading
             : (!search_hook.search_string_.length &&
                 !is_fetching_first_bookmarks &&
                 (!bookmarks_hook.bookmarks ||
@@ -2747,11 +2748,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               (search_hook.search_string_.length &&
                 (!bookmarks_hook.bookmarks ||
                   bookmarks_hook.bookmarks.length == 0))
-            ? 'No results'
+            ? props.dictionary.app.library.no_results
             : !bookmarks_hook.has_more_bookmarks ||
               bookmarks_hook.bookmarks?.length == search_hook.count_
-            ? 'End of results'
-            : ''
+            ? props.dictionary.app.library.end_of_resutls
+            : undefined
         }
       />
     </>

@@ -1,3 +1,4 @@
+import { Dictionary } from '@/dictionaries/dictionary'
 import { UpsertBookmark as Form_UpsertBookmark } from '@/forms/upsert-bookmark'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
@@ -6,6 +7,7 @@ export const upsert_bookmark_modal = (params: {
   modal_context: any
   bookmark?: Bookmark_Entity
   is_archived?: boolean
+  dictionary: Dictionary
 }) =>
   new Promise<UpsertBookmark_Params | null>((resolve) => {
     const on_submit_handler = (bookmark: UpsertBookmark_Params) =>
@@ -18,6 +20,7 @@ export const upsert_bookmark_modal = (params: {
         is_archived={params.is_archived}
         on_submit={on_submit_handler}
         on_close={on_close_handler}
+        dictionary={params.dictionary}
       />,
     )
   })

@@ -25,7 +25,7 @@ namespace DraggableUpsertFormLinks {
     show_visibility_toggler: boolean
     max_items?: number
     translations: {
-      enter_url: string
+      paste_url: string
       add: string
       open: string
       original_url: string
@@ -33,6 +33,7 @@ namespace DraggableUpsertFormLinks {
       visibility: string
       public: string
       private: string
+      site: string
     }
   }
 }
@@ -180,7 +181,7 @@ export const DraggableUpsertFormLinks: React.FC<
                       <div
                         className={styles.item__content__options__row__label}
                       >
-                        Site
+                        {props.translations.site}
                       </div>
                       <div
                         className={styles.item__content__options__row__content}
@@ -267,7 +268,7 @@ export const DraggableUpsertFormLinks: React.FC<
           on_change={(value) => {
             set_new_url(value)
           }}
-          placeholder={props.translations.enter_url}
+          placeholder={props.translations.paste_url}
           on_focus={() => {
             is_input_focused.current = true
           }}

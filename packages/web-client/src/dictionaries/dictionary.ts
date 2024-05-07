@@ -87,6 +87,9 @@ export type Dictionary = {
       activity: string
     }
     library: {
+      loading: string
+      no_results: string
+      end_of_resutls: string
       follow: string
       unfollow: string
       welcome: string
@@ -139,6 +142,45 @@ export type Dictionary = {
       range_not_available: string
       nothing_to_plot: string
       results_fit_in_one_month: string
+      toolbar: {
+        starred: string
+        unread: string
+        archived: string
+      }
+    }
+    upsert_popup: {
+      create_bookmark: string
+      edit_boomkark: string
+      visibility: string
+      private: string
+      public: string
+      links: string
+      link: {
+        visibility: string
+        public: string
+        private: string
+        site: string
+        open: string
+        snapshot: string
+        original_url: string
+      }
+      paste_url: string
+      add_link: string
+      title: string
+      enter_title: string
+      note: string
+      jot_something_down: string
+      tags: string
+      tag: {
+        visibility: string
+        public: string
+        private: string
+      }
+      enter_tag_name: string
+      add_tag: string
+      cancel: string
+      save_changes: string
+      create: string
     }
   }
 }

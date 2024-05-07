@@ -16,6 +16,7 @@ import { Centered as UiAppModalSections_Centered } from '@web-ui/components/app/
 import { Divider as UiAppModalSections_Divider } from '@web-ui/components/app/modal-sections/divider'
 import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
+import { Dictionary } from '@/dictionaries/dictionary'
 
 type FormValues = {
   title: string
@@ -42,6 +43,7 @@ export namespace UpsertBookmark {
     on_submit: (bookmark: UpsertBookmark_Params) => void
     on_close: () => void
     action: 'create' | 'update'
+    dictionary: Dictionary
   }
 }
 
@@ -161,19 +163,30 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         slot_header={
           <UiAppAtom_ModalHeader
             title={
-              props.action == 'update' ? 'Edit bookmark' : 'Create bookmark'
+              props.action == 'update'
+                ? props.dictionary.app.upsert_popup.edit_boomkark
+                : props.dictionary.app.upsert_popup.create_bookmark
             }
           />
         }
         slot_footer={
           <UiAppAtom_ModalFooter
             on_click_cancel={props.on_close}
-            button_label={props.action == 'update' ? 'Save changes' : 'Create'}
+            button_label={
+              props.action == 'update'
+                ? props.dictionary.app.upsert_popup.save_changes
+                : props.dictionary.app.upsert_popup.create
+            }
             is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
+            translations_={{
+              cancel_: props.dictionary.app.upsert_popup.cancel,
+            }}
           />
         }
       >
-        <UiAppModalSections_Centered label="Visibility">
+        <UiAppModalSections_Centered
+          label={props.dictionary.app.upsert_popup.visibility}
+        >
           <Controller
             name="is_public"
             control={control}
@@ -183,8 +196,14 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                 <div style={{ width: '200px' }}>
                   <SegmentedButton
                     items={[
-                      { label: 'Private', is_selected: !field.value },
-                      { label: 'Public', is_selected: field.value || false },
+                      {
+                        label: props.dictionary.app.upsert_popup.private,
+                        is_selected: !field.value,
+                      },
+                      {
+                        label: props.dictionary.app.upsert_popup.public,
+                        is_selected: field.value || false,
+                      },
                     ]}
                     on_item_click={(selected_idx) => {
                       if (selected_idx == 0) {
@@ -200,7 +219,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           />
         </UiAppModalSections_Centered>
 
-        <UiAppModalSections_Standard label="Links">
+        <UiAppModalSections_Standard
+          label={props.dictionary.app.upsert_popup.links}
+        >
           <Controller
             name="is_public"
             control={control}
@@ -235,14 +256,17 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                   max_items={system_values.bookmark.links.limit}
                   clipboard_url={clipboard_url}
                   translations={{
-                    enter_url: 'Enter URL',
-                    add: 'Add link',
-                    open: 'Open...',
-                    original_url: 'Original URL',
-                    snapshot: 'Snapshot',
-                    visibility: 'Visibility',
-                    private: 'Private',
-                    public: 'Public',
+                    paste_url: props.dictionary.app.upsert_popup.paste_url,
+                    add: props.dictionary.app.upsert_popup.add_link,
+                    open: props.dictionary.app.upsert_popup.link.open,
+                    original_url:
+                      props.dictionary.app.upsert_popup.link.original_url,
+                    snapshot: props.dictionary.app.upsert_popup.link.snapshot,
+                    visibility:
+                      props.dictionary.app.upsert_popup.link.visibility,
+                    private: props.dictionary.app.upsert_popup.link.private,
+                    public: props.dictionary.app.upsert_popup.link.public,
+                    site: props.dictionary.app.upsert_popup.link.site,
                   }}
                 />
               )
@@ -252,7 +276,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
         <UiAppModalSections_Divider />
 
-        <UiAppModalSections_StandardSplit label="Title">
+        <UiAppModalSections_StandardSplit
+          label={props.dictionary.app.upsert_popup.title}
+        >
           <UiCommonTemplate_FormControllerFix>
             <Controller
               name="title"
@@ -285,7 +311,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                     message_type={error_message ? 'error' : undefined}
                     message={error_message}
                     lines={2}
-                    placeholder="Enter title"
+                    placeholder={props.dictionary.app.upsert_popup.enter_title}
                   />
                 )
               }}
@@ -295,7 +321,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
         <UiAppModalSections_Divider />
 
-        <UiAppModalSections_StandardSplit label="Note">
+        <UiAppModalSections_StandardSplit
+          label={props.dictionary.app.upsert_popup.note}
+        >
           <UiCommonTemplate_FormControllerFix>
             <Controller
               name="note"
@@ -328,7 +356,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                     message_type={error_message ? 'error' : undefined}
                     message={error_message}
                     lines={5}
-                    placeholder="Jot something down"
+                    placeholder={
+                      props.dictionary.app.upsert_popup.jot_something_down
+                    }
                     is_note={true}
                   />
                 )
@@ -339,7 +369,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
         <UiAppModalSections_Divider />
 
-        <UiAppModalSections_StandardSplit label="Tags">
+        <UiAppModalSections_StandardSplit
+          label={props.dictionary.app.upsert_popup.tags}
+        >
           <Controller
             name="is_public"
             control={control}
@@ -367,11 +399,13 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                   }
                   max_items={system_values.bookmark.tags.limit}
                   translations={{
-                    enter_tag_name: 'Enter tag name',
-                    add: 'Add tag',
-                    private: 'Private',
-                    public: 'Public',
-                    visibility: 'Visibility',
+                    enter_tag_name:
+                      props.dictionary.app.upsert_popup.enter_tag_name,
+                    add: props.dictionary.app.upsert_popup.add_tag,
+                    private: props.dictionary.app.upsert_popup.tag.private,
+                    public: props.dictionary.app.upsert_popup.tag.public,
+                    visibility:
+                      props.dictionary.app.upsert_popup.tag.visibility,
                   }}
                 />
               )

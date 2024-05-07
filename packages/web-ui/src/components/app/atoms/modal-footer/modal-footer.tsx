@@ -7,6 +7,9 @@ export namespace ModalFooter {
     button_on_click?: () => void
     on_click_cancel: () => void
     is_disabled: boolean
+    translations_: {
+      cancel_: string
+    }
   }
 }
 
@@ -17,12 +20,12 @@ export const ModalFooter: React.FC<ModalFooter.Props> = (props) => {
         {props.button_on_click ? (
           <Button
             on_click={props.button_on_click}
-            is_loading={props.is_disabled}
+            is_disabled={props.is_disabled}
           >
             {props.button_label}
           </Button>
         ) : (
-          <Button type="submit" is_loading={props.is_disabled}>
+          <Button type="submit" is_disabled={props.is_disabled}>
             {props.button_label}
           </Button>
         )}
@@ -33,7 +36,7 @@ export const ModalFooter: React.FC<ModalFooter.Props> = (props) => {
             if (!props.is_disabled) props.on_click_cancel()
           }}
         >
-          Cancel
+          {props.translations_.cancel_}
         </button>
       </div>
     </div>
