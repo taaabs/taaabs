@@ -247,6 +247,8 @@ export const dictionary: Dictionary = {
       cancel: 'Anuluj',
       save_changes: 'Zapisz zmiany',
       create: 'Dodaj zakładkę',
+      error_title_too_long: `Tytuł nie może mieć więcej jak ${system_values.bookmark.title.max_length} znaków.`,
+      error_note_too_long: `Notka nie może mieć więcej jak ${system_values.bookmark.note.max_length} znaków.`,
     },
   },
 }

@@ -241,6 +241,8 @@ const dictionary: Dictionary = {
       cancel: 'Cancel',
       save_changes: 'Save changes',
       create: 'Create',
+      error_title_too_long: `Title should be no longer than ${system_values.bookmark.title.max_length} characters.`,
+      error_note_too_long: `Note should be no longer than ${system_values.bookmark.note.max_length} characters.`,
     },
   },
 }

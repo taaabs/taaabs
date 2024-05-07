@@ -183,6 +183,8 @@ export type Dictionary = {
       cancel: string
       save_changes: string
       create: string
+      error_title_too_long: string
+      error_note_too_long: string
     }
   }
 }

@@ -297,7 +297,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                 let error_message: string | undefined
 
                 if (errors.title?.type == 'maxLength') {
-                  error_message = `Title should be no longer than ${system_values.bookmark.title.max_length} characters.`
+                  error_message =
+                    props.dictionary.app.upsert_popup.error_title_too_long
                 }
 
                 return (
@@ -342,7 +343,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                 let error_message: string | undefined
 
                 if (errors.note?.type == 'maxLength') {
-                  error_message = `Note should be no longer than ${system_values.bookmark.note.max_length} characters.`
+                  error_message =
+                    props.dictionary.app.upsert_popup.error_note_too_long
                 }
 
                 return (
