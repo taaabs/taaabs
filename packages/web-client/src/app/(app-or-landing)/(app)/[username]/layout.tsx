@@ -48,6 +48,10 @@ export async function generateMetadata({
 }
 
 async function _get_metadata({ username }: { username: string }) {
+  return {
+    display_name: 'x',
+    username: 'y',
+  }
   const ky_instance = ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
   })
