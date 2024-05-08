@@ -85,7 +85,7 @@ export type Dictionary = {
     powered_by: string
     menu_items: {
       home: string
-      bookmarks: string
+      library: string
       notifications: string
       activity: string
     }

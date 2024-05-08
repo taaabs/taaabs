@@ -6,6 +6,7 @@ import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
 import { SendImportData_Params } from '@repositories/modules/import-export/domain/types/send-import-data.params'
 import { AuthContext } from '@/app/auth-provider'
+import { system_values } from '@shared/constants/system-values'
 
 type BookmarkNode = {
   type: 'link'
@@ -69,7 +70,10 @@ export const use_import = () => {
           )
         } else if (params.node.type == 'link') {
           parsed_bookmarks.push({
-            title: params.node.title,
+            title: params.node.title.substring(
+              0,
+              system_values.bookmark.title.max_length,
+            ),
             url: params.node.url,
             created_at: new Date(params.node.addDate * 1000),
             path: params.path,

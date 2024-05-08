@@ -15,7 +15,7 @@ const private_tag_schema = z.object({
 const public_link_schema = z.object({
   is_public: z.literal(true),
   hash: z.string().length(64),
-  url: z.string().max(500).url(),
+  url: z.string().max(2000).url(),
   site_path: z.string().trim().max(150).optional(),
   open_snapshot: z.boolean().optional(),
   is_pinned: z.boolean().optional(),
@@ -24,8 +24,8 @@ const public_link_schema = z.object({
 const private_link_schema = z.object({
   is_public: z.literal(false),
   hash: z.string().length(64),
-  url_aes: z.string().max(1000),
-  site_aes: z.string().max(100),
+  url_aes: z.string().max(3000),
+  site_aes: z.string().max(300),
   open_snapshot: z.boolean().optional(),
   is_pinned: z.boolean().optional(),
   pin_order: z.number().int().optional(),

@@ -31,15 +31,15 @@ export const ClientComponentBottomNavigationBar: React.FC<{
           },
         },
         {
-          label: props.dictionary.app.menu_items.bookmarks,
+          label: props.dictionary.app.menu_items.library,
           icon_variant: 'BOOKMARK',
           icon_variant_active: 'BOOKMARK_FILLED',
-          is_active: pathname == '/bookmarks',
+          is_active: pathname == '/library',
           on_click: () => {
             clear_library_session_storage({
               search_params: search_params.toString(),
             })
-            router.push('/bookmarks')
+            router.push('/library')
           },
         },
         {
@@ -57,7 +57,7 @@ export const ClientComponentBottomNavigationBar: React.FC<{
     <UiAppMolecule_BottomNavigationBar
       items={[
         {
-          label: props.dictionary.app.menu_items.bookmarks,
+          label: props.dictionary.app.menu_items.library,
           icon_variant: 'BOOKMARK',
           icon_variant_active: 'BOOKMARK_FILLED',
           is_active: pathname == `/${username}`,

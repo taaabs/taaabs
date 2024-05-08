@@ -148,7 +148,7 @@ export const dictionary: Dictionary = {
     powered_by: 'Na technologii',
     menu_items: {
       home: 'Strona główna',
-      bookmarks: 'Biblioteka',
+      library: 'Biblioteka',
       notifications: 'Powiadomienia',
       activity: 'Aktywność',
     },
@@ -159,7 +159,7 @@ export const dictionary: Dictionary = {
       follow: 'Obserwuj',
       unfollow: 'Przestań obserwować',
       welcome: 'Witaj',
-      send_feedback: 'Prześlij opinię, uzyskaj pomoc',
+      send_feedback: 'Prześlij opinię, uzyskaj wsparcie',
       folders: 'Foldery',
       pinned: 'Przypięte',
       search: {
@@ -168,7 +168,7 @@ export const dictionary: Dictionary = {
         get_help: 'Uzyskaj wsparcie',
         type: 'Użyj',
         to_search: 'aby wyszukać',
-        one_moment_please: 'Proszę czekać...',
+        one_moment_please: 'Inicjalizacja...',
       },
       bookmark: {
         mark_as_unread: 'Nieprzeczytane',

@@ -1,7 +1,7 @@
 'use client'
 
 import { LocalDb } from '@/app/local-db-provider'
-import { schema } from '@/hooks/library/use-search'
+import { BookmarkTags, schema } from '@/hooks/library/use-search'
 import { Orama } from '@orama/orama'
 import { ReactNode, createContext, useState } from 'react'
 
@@ -18,6 +18,10 @@ export const PublicProfileLocalDbProvider: React.FC<{
     archived_db_updated_at_timestamp,
     set_archived_db_updated_at_timestamp,
   ] = useState<number>()
+  const [bookmarks_just_tags, set_bookmarks_just_tags] =
+    useState<BookmarkTags[]>()
+  const [archived_bookmarks_just_tags, set_archived_bookmarks_just_tags] =
+    useState<BookmarkTags[]>()
 
   return (
     <PublicProfileLocalDbContext.Provider
@@ -30,6 +34,10 @@ export const PublicProfileLocalDbProvider: React.FC<{
         set_db_updated_at_timestamp,
         archived_db_updated_at_timestamp,
         set_archived_db_updated_at_timestamp,
+        bookmarks_just_tags,
+        set_bookmarks_just_tags,
+        archived_bookmarks_just_tags,
+        set_archived_bookmarks_just_tags,
       }}
     >
       {props.children}

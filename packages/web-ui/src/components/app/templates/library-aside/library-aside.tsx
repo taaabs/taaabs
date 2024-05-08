@@ -18,7 +18,9 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
       <StickyBox offsetTop={shared_values.app_header_desktop}>
         <div className={styles.container}>
           <div className={styles.feedback}>
-            <a href={props.support_href_}>{props.support_label_}</a>
+            <a href={props.support_href_} target="_blank">
+              {props.support_label_}
+            </a>
           </div>
           <div className={styles.slots}>
             {props.slot_segmented_buttons_}

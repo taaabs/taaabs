@@ -71,14 +71,14 @@ export const ClientComponentAppHeaderDesktop: React.FC<{
         is_active: pathname == '/',
       },
       {
-        label: props.dictionary.app.menu_items.bookmarks,
-        href: '/bookmarks',
-        is_active: pathname == '/bookmarks',
+        label: props.dictionary.app.menu_items.library,
+        href: '/library',
+        is_active: pathname == '/library',
         on_click: () => {
           clear_library_session_storage({
             search_params: search_params.toString(),
           })
-          router.push('/bookmarks')
+          router.push('/library')
         },
       },
       {
@@ -90,7 +90,7 @@ export const ClientComponentAppHeaderDesktop: React.FC<{
   } else {
     navigation = [
       {
-        label: props.dictionary.app.menu_items.bookmarks,
+        label: props.dictionary.app.menu_items.library,
         href: `/${params.username}`,
         is_active: pathname == `/${params.username}`,
         on_click: () => {

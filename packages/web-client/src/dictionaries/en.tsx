@@ -141,7 +141,7 @@ const dictionary: Dictionary = {
     powered_by: 'Powered by',
     menu_items: {
       home: 'Home',
-      bookmarks: 'Bookmarks',
+      library: 'My library',
       notifications: 'Notifications',
       activity: 'Activity',
     },

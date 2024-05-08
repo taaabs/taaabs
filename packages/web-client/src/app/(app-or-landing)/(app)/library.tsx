@@ -2670,7 +2670,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       />
       <UiAppTemplate_SwipableColumns
         translations_={{
-          mobile_title_bar_: props.dictionary.app.menu_items.bookmarks,
+          mobile_title_bar_: props.dictionary.app.menu_items.library,
           collapse_alt_: props.dictionary.app.library.collapse_sidebar,
           follow_: props.dictionary.app.library.follow,
           unfollow_: props.dictionary.app.library.unfollow,
