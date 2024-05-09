@@ -41,12 +41,13 @@ export const get_public_bookmarks = (params: {
       ) {
         // Refresh tag hierarchies so they can have newly generated counts.
         dispatch(
-          tag_hierarchies_actions.get_tag_hierarchies_authorized({
+          tag_hierarchies_actions.get_tag_hierarchies_public({
             request_params: {
               gte: params.request_params.yyyymm_gte,
               lte: params.request_params.yyyymm_lte,
               is_archived: params.request_params.is_archived,
               starred_only: params.request_params.starred_only,
+              username: params.request_params.username,
             },
             ky: params.ky,
           }),
