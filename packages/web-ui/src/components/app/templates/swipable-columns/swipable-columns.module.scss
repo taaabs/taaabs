@@ -66,7 +66,7 @@
     width: var(--_collapsed_aside_width);
   }
   &__inner {
-    --_pane-selector-height: 32px;
+    --_pane-selector-height: 40px;
     width: 100%;
     position: fixed;
     top: var(--header-mobile-height);
@@ -74,7 +74,6 @@
       z-index: 1;
       background: var(--background);
       height: 100vh;
-      padding-top: 8px;
       padding-right: 1px; // Main sheet's border is made of shadow so we need to account for that.
     }
     @include at992 {
@@ -178,17 +177,13 @@
     &__pane-selector {
       display: flex;
       gap: 10px;
-      height: var(--_pane-selector-height);
-      align-items: center;
       @include to992 {
-        padding: 0 var(--padding-16px);
-      }
-      @include at992 {
-        border-top: var(--border-secondary);
+        align-items: center;
+        padding: 16px var(--padding-16px) 8px var(--padding-16px);
       }
       @include at992 {
         margin-right: 10px;
-        margin-bottom: -4px;
+        margin-bottom: 4px;
       }
       &__button {
         font-size: var(--font-size-13px);

@@ -95,8 +95,5 @@
   gap: var(--padding-12px);
   > div:first-child {
     flex-grow: 1;
-    > input {
-      height: var(--button-dimension-40px);
-    }
   }
 }

@@ -787,7 +787,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     <div style={{ pointerEvents: is_not_interactive ? 'none' : undefined }}>
       <UiAppAtom_TagHierarchies
         library_updated_at_timestamp_={library_updated_at_timestamp}
-        is_draggable_={!username}
+        is_interactive_={!username}
         tree_={tag_hierarchies_hook.tag_hierarchies}
         on_update_={async (tag_hierarchies: TagHierarchies.Node[]) => {
           const filter = filter_view_options_hook.current_filter_
