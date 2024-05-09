@@ -313,6 +313,7 @@
   }
 
   &__inner {
+    height: 100%;
     @include to992 {
       padding-top: var(--header-mobile-height);
       padding-bottom: var(--bottom-navigation-bar-height);

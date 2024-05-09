@@ -27,6 +27,9 @@ export const Primary = () => (
         translations_={{
           footer_tip_: 'Lorem ipsum',
           get_help_link_: 'Lorem',
+          one_moment_please_: 'One moment, please...',
+          to_search_: 'to search',
+          type_: 'Type',
         }}
       />
       <StorybookSpacer />
@@ -49,6 +52,9 @@ export const Primary = () => (
         translations_={{
           footer_tip_: 'Lorem ipsum',
           get_help_link_: 'Lorem',
+          one_moment_please_: 'One moment, please...',
+          to_search_: 'to search',
+          type_: 'Type',
         }}
       />
       <StorybookSpacer />
@@ -71,6 +77,9 @@ export const Primary = () => (
         translations_={{
           footer_tip_: 'Lorem ipsum',
           get_help_link_: 'Lorem',
+          one_moment_please_: 'One moment, please...',
+          to_search_: 'to search',
+          type_: 'Type',
         }}
       />
       <StorybookSpacer />
@@ -93,6 +102,9 @@ export const Primary = () => (
         translations_={{
           footer_tip_: 'Lorem ipsum',
           get_help_link_: 'Lorem',
+          one_moment_please_: 'One moment, please...',
+          to_search_: 'to search',
+          type_: 'Type',
         }}
       />
       <StorybookSpacer />
@@ -115,6 +127,9 @@ export const Primary = () => (
         translations_={{
           footer_tip_: 'Lorem ipsum',
           get_help_link_: 'Lorem',
+          one_moment_please_: 'One moment, please...',
+          to_search_: 'to search',
+          type_: 'Type',
         }}
       />
       <StorybookSpacer />
@@ -136,6 +151,9 @@ export const Primary = () => (
         translations_={{
           footer_tip_: 'Lorem ipsum',
           get_help_link_: 'Lorem',
+          one_moment_please_: 'One moment, please...',
+          to_search_: 'to search',
+          type_: 'Type',
         }}
       />
       <StorybookSpacer />
@@ -157,6 +175,9 @@ export const Primary = () => (
         translations_={{
           footer_tip_: 'Lorem ipsum',
           get_help_link_: 'Lorem',
+          one_moment_please_: 'One moment, please...',
+          to_search_: 'to search',
+          type_: 'Type',
         }}
       />
       <StorybookSpacer />
@@ -189,6 +210,9 @@ export const Primary = () => (
         translations_={{
           footer_tip_: 'Lorem ipsum',
           get_help_link_: 'Lorem',
+          one_moment_please_: 'One moment, please...',
+          to_search_: 'to search',
+          type_: 'Type',
         }}
       />
       <StorybookSpacer />
@@ -212,6 +236,9 @@ export const Primary = () => (
         translations_={{
           footer_tip_: 'Lorem ipsum',
           get_help_link_: 'Lorem',
+          one_moment_please_: 'One moment, please...',
+          to_search_: 'to search',
+          type_: 'Type',
         }}
       />
     </div>

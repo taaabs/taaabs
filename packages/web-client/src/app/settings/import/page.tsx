@@ -81,7 +81,7 @@ const Page: React.FC = () => {
           <br />
           <div>
             <UiCommonParticle_Button
-              is_loading={import_hook.is_sending}
+              is_disabled={import_hook.is_sending}
               on_click={import_hook.submit}
             >
               Proceeed
@@ -113,7 +113,7 @@ const Page: React.FC = () => {
           <br />
           <div>
             <UiCommonParticle_Button
-              is_loading={import_hook.is_sending}
+              is_disabled={import_hook.is_sending}
               on_click={import_hook.submit}
             >
               Proceeed

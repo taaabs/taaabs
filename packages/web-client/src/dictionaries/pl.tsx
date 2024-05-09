@@ -182,8 +182,9 @@ export const dictionary: Dictionary = {
         open_snapshot: 'Otwórz kopię',
       },
       bookmark_updated: 'Zakładka została zaktualizowana',
-      all_bookmarks: 'All bookmarks',
-      drag_tag_here: 'Upuść tag tutaj i zbuduj ich wizualną hierarchię!',
+      all_bookmarks: 'Wszystkie zakładki',
+      drag_tag_here:
+        'W Taaabs, foldery tworzy się przez układanie tagów jeden pod drugim. Przeciągnij i upuść by rozpocząć.',
       tag_hierarchies_upated: 'Foldery zostały zaktualizowane',
       collapse_sidebar: 'Zwiń panel',
       link_is_now_pinned: 'Link został dodany do przypiętych',
@@ -211,7 +212,7 @@ export const dictionary: Dictionary = {
       results_fit_in_one_month: 'Rezultaty mieszczą się w jednym miesiącu',
       toolbar: {
         starred: 'Ulubione',
-        unread: 'Nieprzeczy...',
+        unread: 'Nieprze...',
         archived: 'Archiwum',
       },
       errors: {
