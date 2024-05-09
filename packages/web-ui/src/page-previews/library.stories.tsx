@@ -91,11 +91,9 @@ export const Primary = () => {
           </>
         }
         slot_toolbar_={<>toolbar</>}
-        mobile_title_bar="Bookmarks"
         on_page_bottom_reached_={() => {}}
         slot_pinned_={<>pinned</>}
         are_bookmarks_dimmed_={false}
-        is_not_interactive={false}
         slot_bookmarks_={
           <>
             {bookmark}
@@ -111,8 +109,10 @@ export const Primary = () => {
           collapse_alt_: '',
           follow_: '',
           unfollow_: '',
+          folders_: '',
+          mobile_title_bar_: '',
+          pinned_: '',
         }}
-        close_aside_count={0}
         info_text_=""
       />
     </UiAppTemplate_App>
@@ -149,5 +149,6 @@ const bookmark = (
     on_link_click_={() => {}}
     on_link_middle_click_={() => {}}
     on_new_tab_link_click_={() => {}}
+    locale="en"
   />
 )
