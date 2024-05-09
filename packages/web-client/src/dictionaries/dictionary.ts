@@ -93,6 +93,7 @@ export type Dictionary = {
       loading: string
       no_results: string
       end_of_resutls: string
+      clear_selected_tags: string
       follow: string
       unfollow: string
       welcome: string

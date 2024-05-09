@@ -125,7 +125,7 @@ export const dictionary: Dictionary = {
       password: 'Hasło',
       about_email_address: 'Będziesz go używał(/a) do logownia.',
       username: 'Nick',
-      about_username: 'Nick zawarty będzie w adresie URL Twojego profilu.',
+      about_username: 'Nick tworzy unikalny adres URL Twojego profilu.',
       about_password: (
         <span>
           <strong>Ważne:</strong> Twoje hasło szyfruje wszystkie prywatne
@@ -156,6 +156,7 @@ export const dictionary: Dictionary = {
       loading: 'Wczytywanie...',
       no_results: 'Brak wyników',
       end_of_resutls: 'Koniec wyników',
+      clear_selected_tags: 'Wyczyść zaznaczone tagi',
       follow: 'Obserwuj',
       unfollow: 'Przestań obserwować',
       welcome: 'Witaj',
@@ -184,7 +185,7 @@ export const dictionary: Dictionary = {
       bookmark_updated: 'Zakładka została zaktualizowana',
       all_bookmarks: 'Wszystkie zakładki',
       drag_tag_here:
-        'W Taaabs, foldery tworzy się przez układanie tagów jeden pod drugim. Przeciągnij i upuść by rozpocząć.',
+        'W Taaabs, foldery tworzy się przez układanie tagów jeden pod drugim. Przeciągnij i upuść aby rozpocząć.',
       tag_hierarchies_upated: 'Foldery zostały zaktualizowane',
       collapse_sidebar: 'Zwiń panel',
       link_is_now_pinned: 'Link został dodany do przypiętych',

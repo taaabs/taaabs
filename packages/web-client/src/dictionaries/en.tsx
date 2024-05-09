@@ -149,6 +149,7 @@ const dictionary: Dictionary = {
       loading: 'Loading...',
       no_results: 'No results',
       end_of_resutls: 'End of results',
+      clear_selected_tags: 'Clear selected tags',
       follow: 'Follow',
       unfollow: 'Unfollow',
       welcome: 'Howdy',

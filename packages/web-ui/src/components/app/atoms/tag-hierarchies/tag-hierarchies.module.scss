@@ -109,7 +109,7 @@
   padding: 60px var(--padding-16px);
   font-size: var(--font-size-13px);
   text-align: center;
-  margin-top: 4px;
+  margin-top: var(--padding-8px);
   margin-right: 10px;
   @include to992 {
     display: none;

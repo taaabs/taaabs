@@ -832,7 +832,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             tag_ids,
           })
         }}
-        library_url_={username ? `/${username}` : '/bookmarks'}
+        library_url_={username ? `/${username}` : '/library'}
         dragged_tag_={tag_view_options_hook.dragged_tag}
         all_bookmarks_yields_={tag_hierarchies_hook.total}
         is_all_bookmarks_selected_={
@@ -1078,7 +1078,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               />
               <UiAppAtom_Tags
                 key={`tags-${library_updated_at_timestamp}-${popstate_count}`}
-                library_url_={username ? `/${username}` : '/bookmarks'}
+                library_url_={username ? `/${username}` : '/library'}
                 tags_={
                   counts_hook.tags
                     ? Object.entries(counts_hook.tags)
@@ -1116,7 +1116,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       locale={props.dictionary.locale}
       search_queried_at_timestamp_={search_hook.queried_at_timestamp_}
       bookmark_id_={bookmark.id}
-      library_url_={username ? `/${username}` : '/bookmarks'}
+      library_url_={username ? `/${username}` : '/library'}
       on_tag_drag_start_={
         !username ? tag_view_options_hook.set_dragged_tag : undefined
       }
@@ -2676,6 +2676,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           unfollow_: props.dictionary.app.library.unfollow,
           folders_: props.dictionary.app.library.folders,
           pinned_: props.dictionary.app.library.pinned,
+          clear_selected_tags_:
+            props.dictionary.app.library.clear_selected_tags,
         }}
         is_following_={undefined}
         welcome_text_={

@@ -36,6 +36,7 @@ export namespace SwipableColumns {
       unfollow_: string
       folders_: string
       pinned_: string
+      clear_selected_tags_: string
     }
   }
 }
@@ -490,7 +491,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
               )}
               {props.clear_selected_tags_ && (
                 <button onClick={props.clear_selected_tags_}>
-                  Clear selected tags
+                  {props.translations_.clear_selected_tags_}
                 </button>
               )}
             </div>
