@@ -145,7 +145,7 @@ export const dictionary: Dictionary = {
     },
   },
   app: {
-    powered_by: 'Na technologii',
+    powered_by: 'W oparciu o',
     menu_items: {
       home: 'Strona główna',
       library: 'Biblioteka',
