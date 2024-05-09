@@ -9,7 +9,7 @@ export const Primary = () => {
   return (
     <>
       <TagHierarchies
-        is_interactive_={true}
+        is_updatable_={true}
         all_bookmarks_yields_={2137}
         is_all_bookmarks_selected_={false}
         on_click_all_bookmarks_={() => {}}
@@ -75,7 +75,7 @@ export const Primary = () => {
       <StorybookSpacer />
       <StorybookMargin>
         <TagHierarchies
-          is_interactive_={true}
+          is_updatable_={true}
           all_bookmarks_yields_={2137}
           is_all_bookmarks_selected_={false}
           on_click_all_bookmarks_={() => {}}

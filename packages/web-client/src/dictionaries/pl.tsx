@@ -210,7 +210,8 @@ export const dictionary: Dictionary = {
       range_not_available:
         'Wybór zakresu jest niedostępny dla bieżącej opcji sortowania',
       nothing_to_plot: 'Brak danych do wykresu',
-      results_fit_in_one_month: 'Rezultaty mieszczą się w jednym miesiącu',
+      results_fit_in_one_month:
+        'Wszystkie zakładki mieszczą się w jednym miesiącu',
       toolbar: {
         starred: 'Ulubione',
         unread: 'Nieprze...',

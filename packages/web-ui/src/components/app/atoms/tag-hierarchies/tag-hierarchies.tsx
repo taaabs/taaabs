@@ -24,7 +24,7 @@ export namespace TagHierarchies {
     selected_tag_ids_: number[]
     is_updating_?: boolean
     dragged_tag_?: { id_: number; name_: string }
-    is_interactive_?: boolean
+    is_updatable_?: boolean
     all_bookmarks_yields_?: number
     is_all_bookmarks_selected_: boolean
     on_click_all_bookmarks_: () => void
@@ -204,7 +204,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               }
             }}
             onContextMenu={(e) => {
-              if (!props.is_interactive_) return
+              if (!props.is_updatable_) return
               set_context_menu_of_item_id((item as Item).id)
               onContextMenu(e)
             }}
@@ -379,7 +379,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             set_is_dragging(false)
           }}
           maxDepth={5}
-          disableDrag={!props.is_interactive_}
+          disableDrag={!props.is_updatable_}
           renderCollapseIcon={({ isCollapsed }) =>
             render_collapse_icon({ is_collapsed: isCollapsed })
           }
@@ -387,7 +387,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           // deeper in the tree if there is a problem higher up.
           // confirmChange={}
         />
-        {props.is_interactive_ && (
+        {props.is_updatable_ && (
           <div
             className={cn(
               styles['drop-zone'],

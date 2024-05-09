@@ -134,12 +134,10 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
       erase_library: params.erase_library || undefined,
     }
 
-    await this._ky
-      .post(`v1/import-export/send-import-data`, {
-        body: JSON.stringify(body),
-        timeout: 0,
-      })
-      .json()
+    await this._ky.post(`v1/import-export/send-import-data`, {
+      body: JSON.stringify(body),
+      timeout: false,
+    })
   }
 
   public async list_backups(): Promise<ListBackups_Dto.Response> {
