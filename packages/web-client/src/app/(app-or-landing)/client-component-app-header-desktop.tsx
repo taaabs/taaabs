@@ -162,7 +162,7 @@ export const ClientComponentAppHeaderDesktop: React.FC<{
           //     tag_ids: created_bookmark.tags.map((tag) => tag.id),
           //   },
           // })
-          if (pathname == '/bookmarks') {
+          if (pathname == '/library') {
             sessionStorage.setItem(
               browser_storage.session_storage.library
                 .counts_reload_requested_by_new_bookmark,
