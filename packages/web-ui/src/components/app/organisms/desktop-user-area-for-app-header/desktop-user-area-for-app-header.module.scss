@@ -9,3 +9,11 @@
   gap: 8px;
   height: 100%;
 }
+.user {
+  position: relative;
+  &__dropdown {
+    right: 0;
+    bottom: 0;
+    position: absolute;
+  }
+}

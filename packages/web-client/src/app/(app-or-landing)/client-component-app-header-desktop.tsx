@@ -208,6 +208,8 @@ export const ClientComponentAppHeaderDesktop: React.FC<{
           on_click_search={() => {
             auth_context.logout()
           }}
+          name={auth_context.auth_data?.username}
+          slot_user_dropdown={<></>}
         />
       }
       cockroach_url="https://bit.ly/cockroachdb-cloud"
