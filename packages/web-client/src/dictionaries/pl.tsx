@@ -148,7 +148,7 @@ export const dictionary: Dictionary = {
     powered_by: 'Korzystamy z',
     header_desktop: {
       user_dropdown: {
-        bookmark_this_tab: 'Utwórz zakładkę',
+        save_to_taaabs: 'Zapisz do Taaabs',
         theme: 'Motyw',
         settings: 'Ustawienia',
         log_out: 'Wyloguj się',

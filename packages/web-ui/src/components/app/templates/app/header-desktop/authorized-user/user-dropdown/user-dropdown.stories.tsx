@@ -15,7 +15,7 @@ export const Primary = () => {
         footer_links_={[{ href_: '', label_: 'Lorem' }]}
         settings_href_="/"
         translations_={{
-          bookmarklet_: 'Save to taaabs',
+          save_to_taaabs_: 'Save to taaabs',
           theme_: 'Theme',
           log_out_: 'Log out',
           settings_: 'Settings',

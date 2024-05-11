@@ -155,6 +155,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         />
       </>,
     )
+    const [is_outline_visible, set_is_outline_visible] = useState<boolean>()
 
     useUpdateEffect(() => {
       if (props.points_given_ !== undefined && points_given === undefined) {
@@ -522,13 +523,15 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           {
             [styles['container--compact']]: props.density_ == 'compact',
           },
-
           {
             [styles['container--search-result']]: props.is_search_result_,
           },
           {
             [styles['container--search-result-clickable']]:
               props.is_search_result_ && props.density_ == 'compact',
+          },
+          {
+            [styles['container--outline']]: is_outline_visible,
           },
         )}
         role="button"
@@ -709,201 +712,216 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               </div>
             )}
           </div>
-          <div
-            className={cn(styles.bookmark__links, {
-              [styles['bookmark__links--compact']]: props.is_compact_,
-            })}
+          <OutsideClickHandler
+            onOutsideClick={() => {
+              set_is_outline_visible(false)
+            }}
           >
-            {props.links_.map((link, link_idx) => {
-              const url = link.open_snapshot_
-                ? url_to_wayback({ date: props.created_at_, url: link.url_ })
-                : link.url_
+            <div
+              className={cn(styles.bookmark__links, {
+                [styles['bookmark__links--compact']]: props.is_compact_,
+              })}
+            >
+              {props.links_.map((link, link_idx) => {
+                const url = link.open_snapshot_
+                  ? url_to_wayback({ date: props.created_at_, url: link.url_ })
+                  : link.url_
 
-              let is_site_highlighted = false
-              if (
-                props.highlights_site_variants_ !== undefined &&
-                props.highlights_site_variants_.length
-              ) {
-                const site =
-                  get_domain_from_url(link.url_) +
-                  (link.site_path_ ? `/${link.site_path_}` : '')
-                const link_site_variants = get_site_variants_for_search(site)
+                let is_site_highlighted = false
                 if (
-                  link_site_variants.some((site_variant) =>
-                    props.highlights_site_variants_!.includes(site_variant),
-                  )
+                  props.highlights_site_variants_ !== undefined &&
+                  props.highlights_site_variants_.length
                 ) {
-                  is_site_highlighted = true
+                  const site =
+                    get_domain_from_url(link.url_) +
+                    (link.site_path_ ? `/${link.site_path_}` : '')
+                  const link_site_variants = get_site_variants_for_search(site)
+                  if (
+                    link_site_variants.some((site_variant) =>
+                      props.highlights_site_variants_!.includes(site_variant),
+                    )
+                  ) {
+                    is_site_highlighted = true
+                  }
                 }
-              }
 
-              const link_first_char_index_in_search_title = (
-                (props.title_ ? `${props.title_} ` : '') +
-                (props.note_ ? `${props.note_} ` : '') +
-                props.tags_.map((tag) => tag.name_).join(' ') +
-                ' ' +
-                props.links_
-                  .map(
-                    (link, i) =>
-                      `${get_domain_from_url(link.url_)}${
-                        link.site_path_ ? ` ${link.site_path_}` : ''
-                      }${i > 0 ? ' ' : ''}`,
-                  )
-                  .slice(0, link_idx)
-                  .join('')
-              ).length
+                const link_first_char_index_in_search_title = (
+                  (props.title_ ? `${props.title_} ` : '') +
+                  (props.note_ ? `${props.note_} ` : '') +
+                  props.tags_.map((tag) => tag.name_).join(' ') +
+                  ' ' +
+                  props.links_
+                    .map(
+                      (link, i) =>
+                        `${get_domain_from_url(link.url_)}${
+                          link.site_path_ ? ` ${link.site_path_}` : ''
+                        }${i > 0 ? ' ' : ''}`,
+                    )
+                    .slice(0, link_idx)
+                    .join('')
+                ).length
 
-              return (
-                <div className={styles.bookmark__links__item} key={link.url_}>
-                  <div className={styles.bookmark__links__item__link}>
-                    <button
-                      className={cn(styles.bookmark__links__item__link__site, {
-                        [styles[
-                          'bookmark__links__item__link__site--highlighted'
-                        ]]: is_site_highlighted,
-                      })}
-                    >
-                      <LazyLoadImage
-                        alt={'Favicon'}
-                        width={16}
-                        height={16}
-                        src={`${props.favicon_host_}/${get_domain_from_url(
-                          link.url_,
-                        )}`}
-                      />
-                    </button>
-                    <a
-                      className={cn(
-                        styles.bookmark__links__item__link__url,
-                        {
-                          [styles[
-                            'bookmark__links__item__link__url--dim-visited'
-                          ]]: props.should_dim_visited_links_,
-                        },
-                        {
-                          [styles[
-                            'bookmark__links__item__link__url--via-wayback'
-                          ]]: link.open_snapshot_,
-                        },
-                      )}
-                      href={url}
-                      onClick={async (e) => {
-                        e.stopPropagation()
-                        e.preventDefault()
-                        props.on_link_click_(url)
-                      }}
-                      onAuxClick={props.on_link_middle_click_}
-                    >
-                      <span>
-                        {props.highlights_
-                          ? `${get_domain_from_url(link.url_)} ${
-                              link.site_path_ ? `› ${link.site_path_} ` : ''
-                            }`
-                              .split('')
-                              .map((char, i) => {
-                                const real_i =
-                                  link_first_char_index_in_search_title +
-                                  i -
-                                  (i > get_domain_from_url(link.url_).length
-                                    ? 2
-                                    : 0) +
-                                  (link_idx > 0 ? 1 : 0)
-                                const is_highlighted = props.highlights_!.find(
-                                  ([index, length]) =>
-                                    real_i >= index && real_i < index + length,
-                                )
-                                return is_highlighted ? (
-                                  <span
-                                    className={styles['highlight-link']}
-                                    key={i}
-                                  >
-                                    {char}
-                                  </span>
-                                ) : (
-                                  <span key={i}>{char}</span>
-                                )
-                              })
-                          : `${get_domain_from_url(link.url_)
-                              .split('.')
-                              .map((segment) =>
-                                segment.replace(/(.{5})/g, '$1​'),
-                              )
-                              .join('.')} ${
-                              link.site_path_ ? `› ${link.site_path_}` : ''
-                            }`}
-                      </span>
-                      <span>
-                        {url_path_for_display({
-                          url: link.url_,
-                          site_path: link.site_path_,
-                        })}
-                      </span>
-                    </a>
-                  </div>
-                  <div className={styles.bookmark__links__item__actions}>
-                    {link.saves_ !== undefined && link.saves_ > 0 && (
+                return (
+                  <div className={styles.bookmark__links__item} key={link.url_}>
+                    <div className={styles.bookmark__links__item__link}>
                       <button
-                        className={
-                          styles['bookmark__links__item__actions__public-saves']
-                        }
+                        className={cn(
+                          styles.bookmark__links__item__link__site,
+                          {
+                            [styles[
+                              'bookmark__links__item__link__site--highlighted'
+                            ]]: is_site_highlighted,
+                          },
+                        )}
                       >
-                        {link.saves_}
+                        <LazyLoadImage
+                          alt={'Favicon'}
+                          width={16}
+                          height={16}
+                          src={`${props.favicon_host_}/${get_domain_from_url(
+                            link.url_,
+                          )}`}
+                        />
                       </button>
-                    )}
-                    <button
-                      className={styles.bookmark__links__item__actions__open}
-                      onClick={async (e) => {
-                        e.stopPropagation()
-                        props.on_new_tab_link_click_(url)
-                      }}
-                    >
-                      <Icon variant="NEW_TAB" />
-                    </button>
-                    <div
-                      className={styles.bookmark__links__item__actions__menu}
-                    >
-                      <OutsideClickHandler
-                        disabled={link_url_menu_opened != link.url_}
-                        onOutsideClick={() => {
-                          set_link_url_menu_opened(undefined)
+                      <a
+                        className={cn(
+                          styles.bookmark__links__item__link__url,
+                          {
+                            [styles[
+                              'bookmark__links__item__link__url--dim-visited'
+                            ]]: props.should_dim_visited_links_,
+                          },
+                          {
+                            [styles[
+                              'bookmark__links__item__link__url--via-wayback'
+                            ]]: link.open_snapshot_,
+                          },
+                        )}
+                        href={url}
+                        onClick={async (e) => {
+                          e.stopPropagation()
+                          e.preventDefault()
+                          set_is_outline_visible(true)
+                          props.on_link_click_(url)
                         }}
+                        onAuxClick={props.on_link_middle_click_}
                       >
+                        <span>
+                          {props.highlights_
+                            ? `${get_domain_from_url(link.url_)} ${
+                                link.site_path_ ? `› ${link.site_path_} ` : ''
+                              }`
+                                .split('')
+                                .map((char, i) => {
+                                  const real_i =
+                                    link_first_char_index_in_search_title +
+                                    i -
+                                    (i > get_domain_from_url(link.url_).length
+                                      ? 2
+                                      : 0) +
+                                    (link_idx > 0 ? 1 : 0)
+                                  const is_highlighted =
+                                    props.highlights_!.find(
+                                      ([index, length]) =>
+                                        real_i >= index &&
+                                        real_i < index + length,
+                                    )
+                                  return is_highlighted ? (
+                                    <span
+                                      className={styles['highlight-link']}
+                                      key={i}
+                                    >
+                                      {char}
+                                    </span>
+                                  ) : (
+                                    <span key={i}>{char}</span>
+                                  )
+                                })
+                            : `${get_domain_from_url(link.url_)
+                                .split('.')
+                                .map((segment) =>
+                                  segment.replace(/(.{5})/g, '$1​'),
+                                )
+                                .join('.')} ${
+                                link.site_path_ ? `› ${link.site_path_}` : ''
+                              }`}
+                        </span>
+                        <span>
+                          {url_path_for_display({
+                            url: link.url_,
+                            site_path: link.site_path_,
+                          })}
+                        </span>
+                      </a>
+                    </div>
+                    <div className={styles.bookmark__links__item__actions}>
+                      {link.saves_ !== undefined && link.saves_ > 0 && (
                         <button
                           className={
-                            styles.bookmark__links__item__actions__menu__button
+                            styles[
+                              'bookmark__links__item__actions__public-saves'
+                            ]
                           }
-                          onClick={async (e) => {
-                            e.stopPropagation()
-                            link_url_menu_opened != link.url_
-                              ? set_link_url_menu_opened(link.url_)
-                              : set_link_url_menu_opened(undefined)
-                          }}
                         >
-                          <Icon variant="THREE_DOTS" />
+                          {link.saves_}
                         </button>
-                        <div
-                          className={cn(styles.slot, {
-                            [styles['slot--visible']]:
-                              link_url_menu_opened == link.url_,
-                          })}
-                          onClick={() => {
+                      )}
+                      <button
+                        className={styles.bookmark__links__item__actions__open}
+                        onClick={async (e) => {
+                          e.stopPropagation()
+                          set_is_outline_visible(true)
+                          props.on_new_tab_link_click_(url)
+                        }}
+                      >
+                        <Icon variant="NEW_TAB" />
+                      </button>
+                      <div
+                        className={styles.bookmark__links__item__actions__menu}
+                      >
+                        <OutsideClickHandler
+                          disabled={link_url_menu_opened != link.url_}
+                          onOutsideClick={() => {
                             set_link_url_menu_opened(undefined)
                           }}
                         >
-                          {link.menu_slot_}
-                        </div>
-                      </OutsideClickHandler>
+                          <button
+                            className={
+                              styles.bookmark__links__item__actions__menu__button
+                            }
+                            onClick={async (e) => {
+                              e.stopPropagation()
+                              link_url_menu_opened != link.url_
+                                ? set_link_url_menu_opened(link.url_)
+                                : set_link_url_menu_opened(undefined)
+                            }}
+                          >
+                            <Icon variant="THREE_DOTS" />
+                          </button>
+                          <div
+                            className={cn(styles.slot, {
+                              [styles['slot--visible']]:
+                                link_url_menu_opened == link.url_,
+                            })}
+                            onClick={() => {
+                              set_link_url_menu_opened(undefined)
+                            }}
+                          >
+                            {link.menu_slot_}
+                          </div>
+                        </OutsideClickHandler>
+                      </div>
                     </div>
+                    {link.is_pinned_ && (
+                      <div className={styles.bookmark__links__item__pinned}>
+                        <Icon variant="PIN" />
+                      </div>
+                    )}
                   </div>
-                  {link.is_pinned_ && (
-                    <div className={styles.bookmark__links__item__pinned}>
-                      <Icon variant="PIN" />
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
+                )
+              })}
+            </div>
+          </OutsideClickHandler>
         </div>
       </div>
     )

@@ -4,6 +4,7 @@ declare const styles: {
   readonly 'container--clickable': string
   readonly 'container--search-result': string
   readonly 'container--search-result-clickable': string
+  readonly 'container--outline': string
   readonly bookmark: string
   readonly bookmark__main: string
   readonly 'bookmark__main--corners-fix': string

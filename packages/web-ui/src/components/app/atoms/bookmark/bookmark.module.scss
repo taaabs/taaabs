@@ -40,6 +40,10 @@
       border-color: var(--neutral300);
     }
   }
+  &--outline {
+    outline: 1.5px solid var(--blue300);
+    outline-offset: 3px;
+  }
 }
 .bookmark {
   display: flex;

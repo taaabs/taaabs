@@ -12,7 +12,7 @@ export namespace UserDropdown {
       href_: string
     }[]
     translations_: {
-      bookmarklet_: string
+      save_to_taaabs_: string
       theme_: string
       settings_: string
       log_out_: string
@@ -31,7 +31,7 @@ export const UserDropdown: React.FC<UserDropdown.Props> = (props) => {
           onClick={(e) => e.preventDefault()}
           href='javascript:b=document,window.open("https://taaabs.com/#link="+encodeURIComponent(document.location)+"&title="+encodeURIComponent(document.title)+"&note="+(document.querySelector(%27meta[name="description"]%27)!=null?document.querySelector(%27meta[name="description"]%27).content:""))'
         >
-          {props.translations_.bookmarklet_}
+          {props.translations_.save_to_taaabs_}
         </a>
       </div>
       {/* <div className={styles.theme}>{props.translations_.theme_}</div> */}

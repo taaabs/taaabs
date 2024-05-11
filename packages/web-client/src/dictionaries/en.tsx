@@ -141,7 +141,7 @@ const dictionary: Dictionary = {
     powered_by: 'Powered by',
     header_desktop: {
       user_dropdown: {
-        bookmark_this_tab: 'Bookmark this tab',
+        save_to_taaabs: 'Save to Taaabs',
         theme: 'Theme',
         settings: 'Settings',
         log_out: 'Log out',

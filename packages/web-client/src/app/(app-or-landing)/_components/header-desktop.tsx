@@ -240,9 +240,9 @@ export const HeaderDesktop: React.FC<{
                   },
                 ]}
                 translations_={{
-                  bookmarklet_:
+                  save_to_taaabs_:
                     props.dictionary.app.header_desktop.user_dropdown
-                      .bookmark_this_tab,
+                      .save_to_taaabs,
                   theme_:
                     props.dictionary.app.header_desktop.user_dropdown.theme,
                   settings_:
