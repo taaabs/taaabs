@@ -4,7 +4,7 @@ import styles from './user-dropdown.module.scss'
 export namespace UserDropdown {
   export type Props = {
     on_click_log_out_: () => void
-    username: string
+    username_: string
     profile_url_: string
     settings_href_: string
     footer_links_: {
@@ -12,6 +12,7 @@ export namespace UserDropdown {
       href_: string
     }[]
     translations_: {
+      bookmarklet_: string
       theme_: string
       settings_: string
       log_out_: string
@@ -23,7 +24,15 @@ export const UserDropdown: React.FC<UserDropdown.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.profile}>
-        <Link href={props.profile_url_}>{`/${props.username}`}</Link>
+        <Link href={props.profile_url_}>{`/${props.username_}`}</Link>
+      </div>
+      <div className={styles.bookmarklet}>
+        <a
+          onClick={(e) => e.preventDefault()}
+          href='javascript:b=document,window.open("https://taaabs.com/#link="+encodeURIComponent(document.location)+"&title="+encodeURIComponent(document.title)+"&note="+(document.querySelector(%27meta[name="description"]%27)!=null?document.querySelector(%27meta[name="description"]%27).content:""))'
+        >
+          {props.translations_.bookmarklet_}
+        </a>
       </div>
       {/* <div className={styles.theme}>{props.translations_.theme_}</div> */}
       <div className={styles.menu}>

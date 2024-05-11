@@ -85,6 +85,7 @@ export type Dictionary = {
     powered_by: string
     header_desktop: {
       user_dropdown: {
+        bookmark_this_tab: string
         theme: string
         settings: string
         log_out: string

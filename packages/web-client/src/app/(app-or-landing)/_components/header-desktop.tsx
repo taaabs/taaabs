@@ -191,7 +191,7 @@ export const HeaderDesktop: React.FC<{
   }
 
   useUpdateEffect(() => {
-    if (window.location.hash.slice(1).length && pathname == '/about') {
+    if (window.location.hash.slice(1).length && pathname == '/') {
       open_new_bookmark_modal({ with_autofill: true })
     }
   }, [is_hydrated])
@@ -216,7 +216,7 @@ export const HeaderDesktop: React.FC<{
                 profile_url_={`/${
                   auth_context.auth_data.username
                 }?back=${pathname}?${search_params.toString()}`}
-                username={auth_context.auth_data.username}
+                username_={auth_context.auth_data.username}
                 settings_href_={`/settings?back=${pathname}?${search_params.toString()}`}
                 on_click_log_out_={auth_context.logout}
                 footer_links_={[
@@ -239,6 +239,9 @@ export const HeaderDesktop: React.FC<{
                   },
                 ]}
                 translations_={{
+                  bookmarklet_:
+                    props.dictionary.app.header_desktop.user_dropdown
+                      .bookmark_this_tab,
                   theme_:
                     props.dictionary.app.header_desktop.user_dropdown.theme,
                   settings_:

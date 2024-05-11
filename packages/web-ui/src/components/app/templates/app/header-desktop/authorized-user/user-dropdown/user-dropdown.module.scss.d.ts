@@ -1,5 +1,6 @@
 declare const styles: {
   readonly container: string
+  readonly bookmarklet: string
   readonly profile: string
   readonly theme: string
   readonly menu: string

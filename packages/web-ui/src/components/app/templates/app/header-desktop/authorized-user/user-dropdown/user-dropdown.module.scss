@@ -8,8 +8,21 @@
   background-color: var(--white);
   box-shadow: var(--box-shadow);
 }
+.bookmarklet {
+  display: flex;
+  justify-content: center;
+  padding: var(--padding-16px);
+  > a {
+    padding: 4px 8px;
+    background-color: var(--blue200);
+    color: var(--blue700);
+    border-radius: 2px;
+  }
+}
 .profile {
-  padding: var(--padding-24px);
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
 }
 .theme {
   border-top: var(--border-secondary);
