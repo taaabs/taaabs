@@ -145,7 +145,7 @@ export const dictionary: Dictionary = {
     },
   },
   app: {
-    powered_by: 'W oparciu o',
+    powered_by: 'Korzystamy z',
     header_desktop: {
       user_dropdown: {
         theme: 'Motyw',
