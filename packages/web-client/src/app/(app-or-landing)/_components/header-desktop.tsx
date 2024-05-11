@@ -206,6 +206,7 @@ export const HeaderDesktop: React.FC<{
         is_hydrated &&
         (auth_context.auth_data ? (
           <UiAppOrganism_App_HeaderDesktop_AuthorizedUser
+            pathname={pathname}
             on_click_add={() => {
               open_new_bookmark_modal({})
             }}

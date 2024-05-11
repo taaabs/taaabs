@@ -9,6 +9,7 @@ export const Primary = () => {
   return (
     <StorybookMargin>
       <AuthorizedUser
+        pathname=""
         on_click_add={() => {}}
         on_click_search={() => {}}
         name="Lorem"
@@ -16,6 +17,7 @@ export const Primary = () => {
       />
       <StorybookSpacer />
       <AuthorizedUser
+        pathname=""
         on_click_add={() => {}}
         on_click_search={() => {}}
         name="Lorem"
@@ -26,6 +28,7 @@ export const Primary = () => {
         }}
       />
       <AuthorizedUser
+        pathname=""
         on_click_add={() => {}}
         on_click_search={() => {}}
         slot_user_dropdown={<>dropdown</>}

@@ -4,6 +4,7 @@ import styles from './authorized-user.module.scss'
 import { ButtonUserDesktop } from '../../../../atoms/button-user-desktop'
 import cn from 'classnames'
 import OutsideClickHandler from 'react-outside-click-handler'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace AuthorizedUser {
   export type Props = {
@@ -12,6 +13,7 @@ export namespace AuthorizedUser {
       url: string
       blurhash: string
     }
+    pathname: string
     on_click_search: () => void
     on_click_add: () => void
     slot_user_dropdown: React.ReactNode
@@ -21,6 +23,10 @@ export namespace AuthorizedUser {
 export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
   const [is_user_dropdown_visible, set_is_user_dropdown_visible] =
     useState<boolean>()
+
+  useUpdateEffect(() => {
+    set_is_user_dropdown_visible(false)
+  }, [props.pathname])
 
   return (
     <div className={styles.container}>
