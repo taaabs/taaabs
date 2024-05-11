@@ -132,7 +132,7 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
                     }
                     additional_properties={{
                       type: 'email',
-                      autocomplete: 'email',
+                      name: 'username',
                     }}
                   />
                 )
@@ -184,6 +184,9 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
                         props.dictionary.auth.sign_up.about_username
                       )
                     }
+                    additional_properties={{
+                      name: 'profile-url',
+                    }}
                   />
                 )
               }}
@@ -225,7 +228,6 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
                     }
                     additional_properties={{
                       type: 'password',
-                      autocomplete: 'password',
                     }}
                   />
                 )

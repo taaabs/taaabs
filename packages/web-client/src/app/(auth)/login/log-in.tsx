@@ -110,7 +110,7 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
                     message={error_message}
                     additional_properties={{
                       type: 'email',
-                      autocomplete: 'email',
+                      name: 'username',
                     }}
                   />
                 )
@@ -145,7 +145,6 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
                     message={error_message}
                     additional_properties={{
                       type: 'password',
-                      autocomplete: 'password',
                     }}
                   />
                 )
