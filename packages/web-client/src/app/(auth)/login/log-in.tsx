@@ -57,7 +57,7 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
         ),
       })
       set_will_redirect(true)
-      document.location = '/'
+      document.location = '/library'
     } catch (e) {
       toast.error(props.dictionary.auth.log_in.invalid_email_or_password)
     }

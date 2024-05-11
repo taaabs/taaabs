@@ -1,5 +1,5 @@
 // @type
-@use '../../../../styles/foundation' as *;
+@use '../../../../../styles/foundation' as *;
 
 .container {
   border-bottom: var(--border-primary);
@@ -10,7 +10,6 @@
 .inner {
   display: flex;
   justify-content: space-between;
-  justify-content: center;
   height: 100%;
   gap: 40px;
   position: relative;
@@ -54,6 +53,8 @@
 .navigation {
   position: absolute;
   height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
   align-items: center;

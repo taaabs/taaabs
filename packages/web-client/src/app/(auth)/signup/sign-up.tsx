@@ -74,7 +74,7 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
         ),
       })
       set_will_redirect(true)
-      document.location = '/'
+      document.location = '/library'
     } catch {
       toast.error(props.dictionary.auth.something_went_wrong)
     }

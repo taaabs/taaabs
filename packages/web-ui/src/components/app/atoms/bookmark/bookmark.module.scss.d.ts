@@ -57,7 +57,7 @@ declare const styles: {
   readonly highlight: string
   readonly 'highlight-link': string
   readonly slot: string
-  readonly 'slot--hidden': string
+  readonly 'slot--visible': string
   readonly 'sortable-fallback': string
 }
 export = styles

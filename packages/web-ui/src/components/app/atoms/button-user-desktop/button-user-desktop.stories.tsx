@@ -1,21 +1,29 @@
 import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
-import { ButtonDesktopUser } from './button-user-desktop'
+import { ButtonUserDesktop } from './button-user-desktop'
 
 export default {
-  component: ButtonDesktopUser,
+  component: ButtonUserDesktop,
 }
 
 export const Primary = () => (
   <StorybookMargin>
-    <ButtonDesktopUser
+    <ButtonUserDesktop
       name="Lorem ipsum"
       avatar={{
-        src: 'https://picsum.photos/300',
+        url: 'https://picsum.photos/300',
         blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',
       }}
       on_click={() => {}}
     />
     <StorybookSpacer />
-    <ButtonDesktopUser name="Lorem ipsum" on_click={() => {}} />
+    <ButtonUserDesktop
+      avatar={{
+        url: 'https://picsum.photos/300',
+        blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',
+      }}
+      on_click={() => {}}
+    />
+    <StorybookSpacer />
+    <ButtonUserDesktop name="Lorem ipsum" on_click={() => {}} />
   </StorybookMargin>
 )

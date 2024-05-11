@@ -139,6 +139,16 @@ const dictionary: Dictionary = {
   },
   app: {
     powered_by: 'Powered by',
+    header_desktop: {
+      user_dropdown: {
+        theme: 'Theme',
+        settings: 'Settings',
+        log_out: 'Log out',
+        about: 'About',
+        privacy_policy: 'Privacy policy',
+        terms_of_service: 'Terms of service',
+      },
+    },
     menu_items: {
       home: 'Home',
       library: 'My library',

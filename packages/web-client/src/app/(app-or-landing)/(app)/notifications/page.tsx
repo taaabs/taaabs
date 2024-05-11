@@ -6,13 +6,13 @@ const Page: React.FC = () => {
   if (!user_id) redirect('/login')
 
   return (
-    <div>
+    <div style={{ textAlign: 'center' }}>
       <br />
       <br />
       <br />
       <br />
       <br />
-      UNDER CONSTRUCTION
+      Arriving in summer 2024
     </div>
   )
 }

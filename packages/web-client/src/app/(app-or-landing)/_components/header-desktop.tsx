@@ -6,15 +6,16 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-import { PublicUserAvatarContext } from '../../providers/public-user-avatar-provider'
+import { PublicUserAvatarContext } from '../../../providers/public-user-avatar-provider'
 import { useContext } from 'react'
-import { ModalContext } from '../../providers/modal-provider'
+import { ModalContext } from '../../../providers/modal-provider'
 import { use_is_hydrated } from '@shared/hooks'
 import { UserForHeader as UiAppMolecule_UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
 import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { AppHeaderDesktop as UiAppTemplate_AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
-import { DesktopUserAreaForAppHeader as UiAppOrganism_DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
+import { HeaderDesktop as UiAppTemplate_App_HeaderDesktop } from '@web-ui/components/app/templates/app/header-desktop'
+import { AuthorizedUser as UiAppOrganism_App_HeaderDesktop_AuthorizedUser } from '@web-ui/components/app/templates/app/header-desktop/authorized-user'
+import { UserDropdown as UiAppOrganism_App_HeaderDesktop_AuthorizedUser_UserDropdown } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown'
 import { UpsertBookmark as Form_UpsertBookmarkForm } from '@/forms/upsert-bookmark'
 import { update_search_params } from '@/utils/update-query-params'
 import { BookmarkHash } from '@/utils/bookmark-hash'
@@ -25,10 +26,10 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { search_params_keys } from '@/constants/search-params-keys'
 import { toast } from 'react-toastify'
 import { browser_storage } from '@/constants/browser-storage'
-import { AuthContext } from '../auth-provider'
+import { AuthContext } from '../../auth-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
 
-export const ClientComponentAppHeaderDesktop: React.FC<{
+export const HeaderDesktop: React.FC<{
   dictionary: Dictionary
 }> = (props) => {
   const auth_context = useContext(AuthContext)!
@@ -195,22 +196,58 @@ export const ClientComponentAppHeaderDesktop: React.FC<{
   }, [is_hydrated])
 
   return (
-    <UiAppTemplate_AppHeaderDesktop
+    <UiAppTemplate_App_HeaderDesktop
       slot_logo={logo}
       slot_navigation={
         <UiAppMolecule_NavigationForHeader navigation={navigation} />
       }
       slot_right_side={
-        <UiAppOrganism_DesktopUserAreaForAppHeader
-          on_click_add={() => {
-            open_new_bookmark_modal({})
-          }}
-          on_click_search={() => {
-            auth_context.logout()
-          }}
-          name={auth_context.auth_data?.username}
-          slot_user_dropdown={<></>}
-        />
+        is_hydrated &&
+        (auth_context.auth_data ? (
+          <UiAppOrganism_App_HeaderDesktop_AuthorizedUser
+            on_click_add={() => {
+              open_new_bookmark_modal({})
+            }}
+            on_click_search={() => {}}
+            name={auth_context.auth_data.username}
+            slot_user_dropdown={
+              <UiAppOrganism_App_HeaderDesktop_AuthorizedUser_UserDropdown
+                username={auth_context.auth_data.username}
+                settings_href_={`/settings?back=${pathname}?${search_params.toString()}`}
+                on_click_log_out_={auth_context.logout}
+                footer_links_={[
+                  {
+                    label_:
+                      props.dictionary.app.header_desktop.user_dropdown.about,
+                    href_: '/about',
+                  },
+                  {
+                    label_:
+                      props.dictionary.app.header_desktop.user_dropdown
+                        .terms_of_service,
+                    href_: '/terms-of-service',
+                  },
+                  {
+                    label_:
+                      props.dictionary.app.header_desktop.user_dropdown
+                        .privacy_policy,
+                    href_: '/privacy-policy',
+                  },
+                ]}
+                translations_={{
+                  theme_:
+                    props.dictionary.app.header_desktop.user_dropdown.theme,
+                  settings_:
+                    props.dictionary.app.header_desktop.user_dropdown.settings,
+                  log_out_:
+                    props.dictionary.app.header_desktop.user_dropdown.log_out,
+                }}
+              />
+            }
+          />
+        ) : (
+          <div>x</div>
+        ))
       }
       cockroach_url="https://bit.ly/cockroachdb-cloud"
       translations={{ powered_by: props.dictionary.app.powered_by }}

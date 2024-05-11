@@ -10,7 +10,7 @@ import {
   useSearchParams,
 } from 'next/navigation'
 
-export const ClientComponentBottomNavigationBar: React.FC<{
+export const BottomNavigationBar: React.FC<{
   dictionary: Dictionary
 }> = (props) => {
   const { username }: { username?: string } = useParams()

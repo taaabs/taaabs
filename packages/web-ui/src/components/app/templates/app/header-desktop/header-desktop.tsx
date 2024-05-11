@@ -1,11 +1,11 @@
 import { Wrapper } from '@web-ui/components/common/templates/wrapper'
-import styles from './app-header-desktop.module.scss'
+import styles from './header-desktop.module.scss'
 
-export namespace AppHeaderDesktop {
+export namespace HeaderDesktop {
   export type Props = {
     slot_logo: React.ReactNode
     slot_navigation: React.ReactNode
-    slot_right_side: React.ReactNode
+    slot_right_side?: React.ReactNode
     cockroach_url: string
     translations: {
       powered_by: string
@@ -13,7 +13,7 @@ export namespace AppHeaderDesktop {
   }
 }
 
-export const AppHeaderDesktop = (props: AppHeaderDesktop.Props) => {
+export const HeaderDesktop = (props: HeaderDesktop.Props) => {
   return (
     <div className={styles.container}>
       <Wrapper>

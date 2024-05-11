@@ -4,7 +4,8 @@
 .logo {
   display: flex;
   align-items: center;
-  span {
+  > span {
+    position: relative;
     color: var(--color-text--normal);
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
@@ -17,8 +18,18 @@
       padding-left: 9px;
       margin-bottom: 4px;
     }
+    &::after {
+      font-family: var(--font-family-inter);
+      font-weight: initial;
+      letter-spacing: initial;
+      position: absolute;
+      content: 'beta';
+      right: 0;
+      bottom: -8px;
+      font-size: 10px;
+    }
   }
-  svg {
+  > svg {
     fill: var(--logo-background);
     height: 34px;
     @include at992 {
@@ -26,7 +37,7 @@
     }
   }
   &--large {
-    span {
+    > span {
       padding-left: 10px;
       font-size: 30px;
       margin-bottom: 4px;
@@ -41,7 +52,7 @@
         margin-bottom: 6px;
       }
     }
-    svg {
+    > svg {
       height: 48px;
       @include at992 {
         height: 55px;

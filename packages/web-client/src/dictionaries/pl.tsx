@@ -146,6 +146,16 @@ export const dictionary: Dictionary = {
   },
   app: {
     powered_by: 'W oparciu o',
+    header_desktop: {
+      user_dropdown: {
+        theme: 'Motyw',
+        settings: 'Ustawienia',
+        log_out: 'Wyloguj się',
+        about: 'O nas',
+        privacy_policy: 'Polityka prywatności',
+        terms_of_service: 'Warunki korzystania',
+      },
+    },
     menu_items: {
       home: 'Strona główna',
       library: 'Biblioteka',
@@ -192,7 +202,7 @@ export const dictionary: Dictionary = {
       pin_has_been_removed: 'Link został usunięty z przypiętych',
       nothing_pinned: 'Nic nie jest tutaj przypięte',
       pinned_links_has_beed_updated: 'Przypięte linki zostały zaktualizowana',
-      via_archive_org: 'Zawsze z kopii',
+      via_archive_org: 'Użyj URL kopii',
       use_snapshot: 'Odnośnik używa teraz kopii',
       use_original: 'Oryginalny link został przywrócony',
       sort_by_options: {
@@ -234,7 +244,7 @@ export const dictionary: Dictionary = {
         private: 'Prywatne',
         site: 'Ścieżka strony',
         open: 'Otwórz...',
-        snapshot: 'Kopię',
+        snapshot: 'URL kopii',
         original_url: 'Oryginalny URL',
       },
       paste_url: 'Wklej URL',

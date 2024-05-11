@@ -1,9 +1,9 @@
 import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { BottomNavigationBar as UiAppMolecule_BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
 import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { DesktopUserAreaForAppHeader as UiAppOrganism_DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/desktop-user-area-for-app-header'
+import { AuthorizedUser as UiAppOrganism_DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/logged-in-user'
 import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
-import { AppHeaderDesktop as UiAppTemplate_AppHeaderDesktop } from '@web-ui/components/app/templates/app-header-desktop'
+import { HeaderDesktop as UiAppTemplate_App_HeaderDesktop } from '@web-ui/components/app/templates/app/header-desktop'
 import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
 import { SwipableColumns as UiAppTemplate_Library } from '@web-ui/components/app/templates/swipable-columns'
 import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
@@ -16,7 +16,7 @@ export const Primary = () => {
   return (
     <UiAppTemplate_App
       slot_header_desktop={
-        <UiAppTemplate_AppHeaderDesktop
+        <UiAppTemplate_App_HeaderDesktop
           slot_logo={<UiCommonAtom_LogoForHeader href="" />}
           slot_navigation={
             <UiAppMolecule_NavigationForHeader
@@ -30,6 +30,7 @@ export const Primary = () => {
             <UiAppOrganism_DesktopUserAreaForAppHeader
               on_click_add={() => {}}
               on_click_search={() => {}}
+              slot_user_dropdown={<></>}
             />
           }
           translations={{ powered_by: 'Powered by' }}
@@ -112,6 +113,7 @@ export const Primary = () => {
           folders_: '',
           mobile_title_bar_: '',
           pinned_: '',
+          clear_selected_tags_: '',
         }}
         info_text_=""
       />

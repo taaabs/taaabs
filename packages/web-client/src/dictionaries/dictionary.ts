@@ -83,6 +83,16 @@ export type Dictionary = {
   }
   app: {
     powered_by: string
+    header_desktop: {
+      user_dropdown: {
+        theme: string
+        settings: string
+        log_out: string
+        about: string
+        privacy_policy: string
+        terms_of_service: string
+      }
+    }
     menu_items: {
       home: string
       library: string

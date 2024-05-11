@@ -1,16 +1,16 @@
 'use client'
 
 import { Landing as UiLandingTemplate_Landing } from '@web-ui/components/landing/templates/landing'
-import { DynamicDesktopNavigationForHeader } from './dynamic-desktop-navigation-for-header'
-import { DynamicDesktopUserForHeader } from './dynamic-desktop-user-for-header'
+import { DesktopNavigation } from './_components/desktop-navigation'
+import { DesktopUserForHeader as UiLandingMolecule_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
 import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { usePathname } from 'next/navigation'
 import { ReactNode } from 'react'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { PublicUserAvatarProvider } from '@/providers/public-user-avatar-provider'
-import { ClientComponentAppHeaderDesktop } from './client-component-app-header-desktop'
-import { ClientComponentAppHeaderMobile } from './client-component-app-header-mobile'
-import { ClientComponentBottomNavigationBar } from './client-component-bottom-navigation-bar'
+import { HeaderDesktop } from './_components/header-desktop'
+import { HeaderMobile } from './_components/header-mobile'
+import { BottomNavigationBar } from './_components/bottom-navigation-bar'
 import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
 
 const landing_pathnames = ['/about', '/pricing', '/help', '/updates']
@@ -25,13 +25,13 @@ const LayoutAuthorized: React.FC<{
     <UiLandingTemplate_Landing
       slot_logo={<LogoForHeader is_large={true} href="/about" />}
       slot_desktop_user={
-        <DynamicDesktopUserForHeader
-          is_authorized={true}
-          dictionary={props.dictionary}
+        <UiLandingMolecule_DesktopUserForHeader
+          button_label={props.dictionary.landing.open_app}
+          button_href={'/library'}
         />
       }
       slot_desktop_navigation={
-        <DynamicDesktopNavigationForHeader dictionary={props.dictionary} />
+        <DesktopNavigation dictionary={props.dictionary} />
       }
       slot_mobile_navigation={<div>mobile nav</div>}
     >
@@ -40,12 +40,10 @@ const LayoutAuthorized: React.FC<{
   ) : (
     <PublicUserAvatarProvider>
       <UiAppTemplate_App
-        slot_header_desktop={
-          <ClientComponentAppHeaderDesktop dictionary={props.dictionary} />
-        }
-        slot_header_mobile={<ClientComponentAppHeaderMobile />}
+        slot_header_desktop={<HeaderDesktop dictionary={props.dictionary} />}
+        slot_header_mobile={<HeaderMobile />}
         slot_bottom_navigation_bar={
-          <ClientComponentBottomNavigationBar dictionary={props.dictionary} />
+          <BottomNavigationBar dictionary={props.dictionary} />
         }
       >
         {props.children}

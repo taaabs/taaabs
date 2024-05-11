@@ -594,7 +594,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   </button>
                   <div
                     className={cn(styles.slot, {
-                      [styles['slot--hidden']]: !is_menu_open,
+                      [styles['slot--visible']]: is_menu_open,
                     })}
                     onClick={() => {
                       toggle_is_menu_open()
@@ -883,8 +883,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         </button>
                         <div
                           className={cn(styles.slot, {
-                            [styles['slot--hidden']]:
-                              link_url_menu_opened != link.url_,
+                            [styles['slot--visible']]:
+                              link_url_menu_opened == link.url_,
                           })}
                           onClick={() => {
                             set_link_url_menu_opened(undefined)

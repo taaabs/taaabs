@@ -1,10 +1,8 @@
-'use client'
-
 import { Dictionary } from '@/dictionaries/dictionary'
 import { DesktopNavigationForHeader as UiLandingAtom_DesktopNavigationForHeader } from '@web-ui/components/landing/atoms/desktop-navigation-for-header'
 import { usePathname } from 'next/navigation'
 
-export const DynamicDesktopNavigationForHeader: React.FC<{
+export const DesktopNavigation: React.FC<{
   dictionary: Dictionary
 }> = (props) => {
   const pathname = usePathname()

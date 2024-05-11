@@ -60,7 +60,6 @@
         border-bottom-right-radius: 11px;
       }
     }
-
     &__top {
       width: 100%;
       display: flex;
@@ -538,15 +537,14 @@
   z-index: 1;
   top: calc(var(--button-dimension-28px) + 4px);
   right: 0;
-  bottom: calc(4px * -1);
-  opacity: 1;
-  @include transition-150ms;
-  transform: translateY(0);
-  &--hidden {
-    opacity: 0;
-    transform: translateY(calc(4px * -1));
-    pointer-events: none;
-    transition: none;
+  bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  &--visible {
+    pointer-events: all;
+    transform: translateY(4px);
+    @include transition-150ms;
+    opacity: 1;
   }
 }
 

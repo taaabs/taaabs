@@ -16,8 +16,8 @@
   cursor: pointer;
 }
 .item {
-  padding: 8px 18px 8px
-    13px;
+  padding: 0 18px 0 13px;
+  height: var(--button-dimension-40px);
   border-top: var(--border-secondary);
   border-width: 1px;
   display: flex;
@@ -46,8 +46,7 @@
     }
   }
   &--with-checkbox {
-    padding: 8px 16px 8px
-      8px;
+    padding: 8px 16px 8px 8px;
   }
   &--disabled {
     pointer-events: none;

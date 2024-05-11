@@ -2,7 +2,7 @@ import { Blurhash } from 'react-blurhash'
 import styles from './button-user-desktop.module.scss'
 import { Icon } from '@web-ui/components/common/particles/icon'
 
-export namespace ButtonDesktopUser {
+export namespace ButtonUserDesktop {
   export type Props = {
     name?: string
     avatar?: {
@@ -13,7 +13,7 @@ export namespace ButtonDesktopUser {
   }
 }
 
-export const ButtonDesktopUser: React.FC<ButtonDesktopUser.Props> = (props) => {
+export const ButtonUserDesktop: React.FC<ButtonUserDesktop.Props> = (props) => {
   return (
     <button className={styles.button} onClick={props.on_click}>
       {props.name && <span>{props.name}</span>}
