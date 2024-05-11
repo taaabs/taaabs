@@ -10,6 +10,7 @@ export const Primary = () => {
     <StorybookMargin>
       <UserDropdown
         username="Lorem"
+        profile_url_=""
         on_click_log_out_={() => {}}
         footer_links_={[{ href_: '', label_: 'Lorem' }]}
         settings_href_="/"

@@ -5,6 +5,7 @@ export namespace UserDropdown {
   export type Props = {
     on_click_log_out_: () => void
     username: string
+    profile_url_: string
     settings_href_: string
     footer_links_: {
       label_: string
@@ -22,7 +23,7 @@ export const UserDropdown: React.FC<UserDropdown.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.profile}>
-        <Link href={`/${props.username}`}>{`/${props.username}`}</Link>
+        <Link href={props.profile_url_}>{`/${props.username}`}</Link>
       </div>
       {/* <div className={styles.theme}>{props.translations_.theme_}</div> */}
       <div className={styles.menu}>

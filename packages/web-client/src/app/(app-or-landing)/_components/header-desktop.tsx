@@ -48,7 +48,7 @@ export const HeaderDesktop: React.FC<{
       <UiAppMolecule_UserForHeader
         user={{
           username: params.username as string,
-          back_href: '/',
+          back_href: search_params.get('back') || '/',
           avatar: public_user_avatar?.avatar
             ? {
                 url: public_user_avatar.avatar.url,
@@ -89,6 +89,7 @@ export const HeaderDesktop: React.FC<{
       },
     ]
   } else {
+    const back = search_params.get('back')
     navigation = [
       {
         label: props.dictionary.app.menu_items.library,
@@ -99,12 +100,12 @@ export const HeaderDesktop: React.FC<{
             username: params.username as string,
             search_params: search_params.toString(),
           })
-          router.push(`/${params.username}`)
+          router.push(`/${params.username}${back ? `?back=${back}` : ''}`)
         },
       },
       {
         label: props.dictionary.app.menu_items.activity,
-        href: `/${params.username}/activity`,
+        href: `/${params.username}/activity${back ? `?back=${back}` : ''}`,
         is_active: pathname == `/${params.username}/activity`,
       },
     ]
@@ -212,6 +213,9 @@ export const HeaderDesktop: React.FC<{
             name={auth_context.auth_data.username}
             slot_user_dropdown={
               <UiAppOrganism_App_HeaderDesktop_AuthorizedUser_UserDropdown
+                profile_url_={`/${
+                  auth_context.auth_data.username
+                }?back=${pathname}?${search_params.toString()}`}
                 username={auth_context.auth_data.username}
                 settings_href_={`/settings?back=${pathname}?${search_params.toString()}`}
                 on_click_log_out_={auth_context.logout}
