@@ -202,7 +202,7 @@ export const dictionary: Dictionary = {
       pin_has_been_removed: 'Link został usunięty z przypiętych',
       nothing_pinned: 'Nic nie jest tutaj przypięte',
       pinned_links_has_beed_updated: 'Przypięte linki zostały zaktualizowana',
-      via_archive_org: 'Użyj URL kopii',
+      via_snapshot: 'Ustaw przekierowanie',
       use_snapshot: 'Odnośnik używa teraz kopii',
       use_original: 'Oryginalny link został przywrócony',
       sort_by_options: {

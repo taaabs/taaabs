@@ -138,7 +138,7 @@ export type Dictionary = {
       collapse_sidebar: string
       nothing_pinned: string
       pinned_links_has_beed_updated: string
-      via_archive_org: string
+      via_snapshot: string
       use_snapshot: string
       use_original: string
       sort_by_options: {

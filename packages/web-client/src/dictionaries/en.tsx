@@ -195,7 +195,7 @@ const dictionary: Dictionary = {
       pin_has_been_removed: 'Pin has been removed',
       nothing_pinned: 'Nothing is pinned here',
       pinned_links_has_beed_updated: 'Pinned links has been updated',
-      via_archive_org: 'Use snapshot',
+      via_snapshot: 'Set redirect',
       use_snapshot: 'Link is now using snapshot',
       use_original: 'Link is back to its original URL',
       sort_by_options: {

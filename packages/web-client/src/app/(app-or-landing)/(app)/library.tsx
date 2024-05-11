@@ -1639,7 +1639,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     },
                   },
               {
-                label: props.dictionary.app.library.via_archive_org,
+                label: props.dictionary.app.library.via_snapshot,
                 is_checked: link.open_snapshot || false,
                 on_click: async () => {
                   const open_snapshot = !link.open_snapshot
