@@ -47,10 +47,10 @@ export namespace Counts_Dto {
     }
 
     export class Authorized {
-      public months?: Record<string, AuthorizedMonth>
+      public months: Record<string, AuthorizedMonth>
     }
     export class Public {
-      public months?: Record<string, PublicMonth>
+      public months: Record<string, PublicMonth>
     }
   }
 }
