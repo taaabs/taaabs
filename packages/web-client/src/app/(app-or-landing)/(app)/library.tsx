@@ -1836,7 +1836,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             />
             <UiCommon_Dropdown_CheckboxItem
               is_checked={bookmark.is_unread}
-              label={props.dictionary.app.library.bookmark.mark_as_unread}
+              label={props.dictionary.app.library.bookmark.unread}
               on_click={async () => {
                 dispatch(bookmarks_actions.set_is_upserting(true))
                 const { db, bookmarks_just_tags } = await search_hook.init_({

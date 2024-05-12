@@ -176,7 +176,7 @@ const dictionary: Dictionary = {
         one_moment_please: 'One moment please...',
       },
       bookmark: {
-        mark_as_unread: 'Mark as unread',
+        unread: 'Unread',
         edit: 'Edit',
         archive: 'Archive',
         restore: 'Restore',

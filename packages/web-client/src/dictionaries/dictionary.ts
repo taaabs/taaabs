@@ -120,7 +120,7 @@ export type Dictionary = {
         one_moment_please: string
       }
       bookmark: {
-        mark_as_unread: string
+        unread: string
         edit: string
         archive: string
         restore: string

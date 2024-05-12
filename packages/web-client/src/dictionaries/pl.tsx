@@ -183,7 +183,7 @@ export const dictionary: Dictionary = {
         one_moment_please: 'Inicjalizacja...',
       },
       bookmark: {
-        mark_as_unread: 'Nieprzeczytane',
+        unread: 'Nieprzeczytane',
         edit: 'Edytuj',
         archive: 'Archiwizuj',
         restore: 'Przywróć',

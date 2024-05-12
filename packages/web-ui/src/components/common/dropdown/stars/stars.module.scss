@@ -8,13 +8,15 @@
   height: 32px;
   border-radius: var(--border-radius-5px);
   margin: 0 var(--padding-8px);
+  padding: 0 8px;
+  margin-top: 2px;
   @include transition-150ms(background-color);
 }
 .star {
   padding: 0 2px;
   > svg {
     fill: var(--neutral200);
-    width: 20px;
+    width: 21px;
   }
   &--checked > svg {
     fill: var(--yellow);
