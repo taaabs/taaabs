@@ -183,6 +183,8 @@ export const dictionary: Dictionary = {
         one_moment_please: 'Inicjalizacja...',
       },
       bookmark: {
+        pinned_to_sidebar: 'Przypięte',
+        use_snapshot: 'Używa kopii',
         unread: 'Nieprzeczytane',
         edit: 'Edytuj',
         archive: 'Archiwizuj',
@@ -194,6 +196,8 @@ export const dictionary: Dictionary = {
         open_snapshot: 'Otwórz kopię',
       },
       bookmark_updated: 'Zakładka została zaktualizowana',
+      bookmark_archived: 'Zakładka została zarchiwizowana',
+      bookmark_restored: 'Zakładka została przywrócona',
       all_bookmarks: 'Wszystkie zakładki',
       drag_tag_here:
         'W Taaabs, foldery tworzy się przez układanie tagów jeden pod drugim. Przeciągnij i upuść aby rozpocząć.',

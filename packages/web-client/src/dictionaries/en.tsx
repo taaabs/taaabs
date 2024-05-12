@@ -176,6 +176,8 @@ const dictionary: Dictionary = {
         one_moment_please: 'One moment please...',
       },
       bookmark: {
+        pinned_to_sidebar: 'Pinned to sidebar',
+        use_snapshot: 'Use snapshot',
         unread: 'Unread',
         edit: 'Edit',
         archive: 'Archive',
@@ -187,6 +189,8 @@ const dictionary: Dictionary = {
         open_snapshot: 'Open snapshot',
       },
       bookmark_updated: 'Bookmark has been updated',
+      bookmark_archived: 'Bookmark has been archived',
+      bookmark_restored: 'Bookmark has been restored',
       all_bookmarks: 'All bookmarks',
       drag_tag_here:
         'In Taaabs, folders are built by stacking tags on one another. Begin by dragging a tag over.',

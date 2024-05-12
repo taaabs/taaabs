@@ -1566,7 +1566,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             <UiCommon_Dropdown_Separator />
             <UiCommon_Dropdown_CheckboxItem
               is_checked={link.is_pinned || false}
-              label="Pinned to sidebar"
+              label={props.dictionary.app.library.bookmark.pinned_to_sidebar}
               on_click={async () => {
                 const is_pinned = !link.is_pinned
                 dispatch(bookmarks_actions.set_is_upserting(true))
@@ -1641,7 +1641,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             />
             <UiCommon_Dropdown_CheckboxItem
               is_checked={link.open_snapshot || false}
-              label="Use snapshot"
+              label={props.dictionary.app.library.bookmark.use_snapshot}
               on_click={async () => {
                 const open_snapshot = !link.open_snapshot
                 dispatch(bookmarks_actions.set_is_upserting(true))
@@ -2125,9 +2125,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
                 toast.success(
-                  `Bookmark has been ${
-                    is_archived_filter ? 'restored' : 'archived'
-                  }`,
+                  is_archived_filter
+                    ? props.dictionary.app.library.bookmark_restored
+                    : props.dictionary.app.library.bookmark_archived,
                 )
                 if (
                   bookmarks_hook.bookmarks &&

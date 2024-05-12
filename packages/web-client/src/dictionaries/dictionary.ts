@@ -120,6 +120,8 @@ export type Dictionary = {
         one_moment_please: string
       }
       bookmark: {
+        pinned_to_sidebar: string
+        use_snapshot: string
         unread: string
         edit: string
         archive: string
@@ -131,6 +133,8 @@ export type Dictionary = {
         open_snapshot: string
       }
       bookmark_updated: string
+      bookmark_archived: string
+      bookmark_restored: string
       all_bookmarks: string
       drag_tag_here: string
       link_is_now_pinned: string
