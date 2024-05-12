@@ -184,9 +184,6 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
                         props.dictionary.auth.sign_up.about_username
                       )
                     }
-                    additional_properties={{
-                      name: 'profile-url',
-                    }}
                   />
                 )
               }}
