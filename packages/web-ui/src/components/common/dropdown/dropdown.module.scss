@@ -1,0 +1,13 @@
+// @type
+@use '../../../styles/foundation' as *;
+
+.container {
+  width: 100%;
+  border-radius: var(--border-radius-12px);
+  background-color: var(--white);
+  display: flex;
+  flex-direction: column;
+  border: var(--border-primary);
+  box-shadow: var(--box-shadow);
+  padding: var(--padding-8px) 0;
+}

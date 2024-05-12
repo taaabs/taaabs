@@ -145,10 +145,10 @@ export const dictionary: Dictionary = {
     },
   },
   app: {
-    powered_by: 'Korzystamy z',
+    powered_by: 'Bazujemy na',
     header_desktop: {
       user_dropdown: {
-        save_to_taaabs: 'Zapisz do Taaabs',
+        save_to_taaabs: 'Zapisz do taaabs',
         theme: 'Motyw',
         settings: 'Ustawienia',
         log_out: 'Wyloguj się',

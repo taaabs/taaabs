@@ -141,7 +141,7 @@ const dictionary: Dictionary = {
     powered_by: 'Powered by',
     header_desktop: {
       user_dropdown: {
-        save_to_taaabs: 'Save to Taaabs',
+        save_to_taaabs: 'Save to taaabs',
         theme: 'Theme',
         settings: 'Settings',
         log_out: 'Log out',

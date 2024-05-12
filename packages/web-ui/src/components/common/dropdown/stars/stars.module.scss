@@ -1,0 +1,25 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  border-radius: var(--border-radius-5px);
+  margin: 0 var(--padding-8px);
+  @include transition-150ms(background-color);
+}
+.star {
+  padding: 0 2px;
+  > svg {
+    fill: var(--neutral200);
+    width: 20px;
+  }
+  &--checked > svg {
+    fill: var(--yellow);
+  }
+  &--hovered > svg {
+    fill: var(--yellow);
+  }
+}
