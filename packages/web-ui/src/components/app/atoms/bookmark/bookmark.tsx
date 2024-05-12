@@ -12,13 +12,14 @@ import useToggle from 'beautiful-react-hooks/useToggle'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search/get-site-variants-for-search'
 import { Icon } from '@web-ui/components/common/particles/icon'
 import { useContextMenu } from 'use-context-menu'
-import { DropdownMenu } from '../dropdown-menu'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import confetti from 'canvas-confetti'
 import { shared_values } from '@web-ui/constants'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { system_values } from '@shared/constants/system-values'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
+import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/dropdown'
+import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/dropdown/standard-item'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -140,20 +141,16 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
-      <>
-        <DropdownMenu
-          items={[
-            {
-              label: 'Delete',
-              on_click: () => {
-                if (!context_menu_of_tag_id) return
-                props.on_tag_delete_click_!(context_menu_of_tag_id)
-              },
-              other_icon: <Icon variant="DELETE" />,
-            },
-          ]}
+      <UiCommon_Dropdown>
+        <UiCommon_Dropdown_StandardItem
+          label="Delete"
+          icon_variant="DELETE"
+          on_click={() => {
+            if (!context_menu_of_tag_id) return
+            props.on_tag_delete_click_!(context_menu_of_tag_id)
+          }}
         />
-      </>,
+      </UiCommon_Dropdown>,
     )
     const [is_outline_visible, set_is_outline_visible] = useState<boolean>()
 

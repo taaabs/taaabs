@@ -6,7 +6,8 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
 import { useContextMenu } from 'use-context-menu'
-import { DropdownMenu } from '../dropdown-menu'
+import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/dropdown'
+import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/dropdown/standard-item'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace TagHierarchies {
@@ -55,22 +56,18 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const [context_menu_of_item_id, set_context_menu_of_item_id] =
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
-      <>
-        <DropdownMenu
-          items={[
-            {
-              label: 'Delete',
-              on_click: () => {
-                if (!context_menu_of_item_id) return
-                clear_mouseover_ids()
-                delete_item({ item_id: context_menu_of_item_id })
-                set_selected_tag_ids([])
-              },
-              other_icon: <Icon variant="DELETE" />,
-            },
-          ]}
+      <UiCommon_Dropdown>
+        <UiCommon_Dropdown_StandardItem
+          label="Delete"
+          icon_variant="DELETE"
+          on_click={() => {
+            if (!context_menu_of_item_id) return
+            clear_mouseover_ids()
+            delete_item({ item_id: context_menu_of_item_id })
+            set_selected_tag_ids([])
+          }}
         />
-      </>,
+      </UiCommon_Dropdown>,
     )
 
     const clear_mouseover_ids = () => {
