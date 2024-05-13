@@ -1,10 +1,15 @@
 // @type
-@use '../../../../styles/foundation' as *;
+@use '../../../../../../../styles/foundation' as *;
 
 .container {
   display: flex;
   gap: var(--padding-12px);
-  flex-direction: column;
+  @include to768 {
+    flex-direction: column;
+  }
+  @include at768 {
+    gap: var(--padding-24px);
+  }
 }
 .label {
   font-family: var(--font-family-plus-jakarta-sans);
@@ -12,4 +17,10 @@
   color: var(--brand-color);
   font-size: var(--font-size-20px);
   line-height: 1;
+  @include at768 {
+    width: 150px;
+  }
+}
+.content {
+  flex: 1;
 }

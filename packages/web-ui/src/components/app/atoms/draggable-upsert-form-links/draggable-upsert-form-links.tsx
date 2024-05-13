@@ -85,7 +85,15 @@ export const DraggableUpsertFormLinks: React.FC<
       toast.error('Given URL is already there')
       return
     }
-    set_items([...items, { id: count + 1, is_public: true, url: new_url }])
+    set_items([
+      ...items,
+      {
+        id: count + 1,
+        is_public: true,
+        url: new_url,
+        site_paths: get_site_paths_from_url(new_url),
+      },
+    ])
     set_count(items.length + 1)
     set_new_url('')
   }

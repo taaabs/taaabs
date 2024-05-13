@@ -41,8 +41,14 @@
     }
   }
   &--outline {
-    outline: 1.5px solid var(--purple400);
-    outline-offset: 3px;
+    @include to992 {
+      box-shadow: 0px -1.5px 0px 0px var(--purple400),
+        0px 1.5px 0px 0px var(--purple400);
+    }
+    @include at992 {
+      outline: 1.5px solid var(--purple400);
+      outline-offset: 3px;
+    }
   }
 }
 .bookmark {

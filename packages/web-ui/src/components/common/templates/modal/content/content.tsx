@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
-import styles from './form-modal.module.scss'
+import styles from './content.module.scss'
 import cn from 'classnames'
 import SimpleBar from 'simplebar-react'
 
-export namespace FormModal {
+export namespace Content {
   export type Props = {
     slot_header: React.ReactNode
+    width: number
     children?: React.ReactNode
     slot_footer: React.ReactNode
   }
 }
 
-export const FormModal: React.FC<FormModal.Props> = (props) => {
+export const Content: React.FC<Content.Props> = (props) => {
   const simplebar = useRef<any>(null)
   const [is_scrolled_to_top, set_is_scrolled_to_top] = useState(true)
   const [is_scrolled_to_bottom, set_is_scrolled_to_bottom] = useState(true)
@@ -20,7 +21,10 @@ export const FormModal: React.FC<FormModal.Props> = (props) => {
     const handle_scroll = (e: any) => {
       const { scrollHeight, scrollTop, clientHeight } = e.target
 
-      if (Math.floor(scrollHeight - scrollTop) == clientHeight) {
+      if (
+        Math.floor(scrollHeight - scrollTop) == clientHeight ||
+        Math.round(scrollHeight - scrollTop) == clientHeight
+      ) {
         set_is_scrolled_to_bottom(true)
       } else if (scrollTop == 0) {
         set_is_scrolled_to_top(true)
@@ -41,7 +45,7 @@ export const FormModal: React.FC<FormModal.Props> = (props) => {
   }, [])
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={{ maxWidth: props.width }}>
       <div
         className={cn(styles.header, {
           [styles['header--shadow']]: !is_scrolled_to_top,

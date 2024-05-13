@@ -1,8 +1,8 @@
 import { Box } from '@web-ui/components/app/atoms/box'
 import { HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
-import { ModalFooter } from '@web-ui/components/app/atoms/modal-footer'
-import { ModalHeader } from '@web-ui/components/app/atoms/modal-header'
-import { FormModal } from '@web-ui/components/app/templates/form-modal'
+import { ModalFooter } from '@web-ui/components/app/templates/content/modal-footer'
+import { ModalHeader } from '@web-ui/components/app/templates/content/modal-header'
+import { FormModal } from '@web-ui/components/app/templates/content'
 import { Modal } from '@web-ui/components/common/templates/modal'
 import { lorem_ipsum } from '@web-ui/helpers'
 
@@ -16,12 +16,12 @@ export const Primary = () => {
       children={<>{lorem_ipsum.long}</>}
       slot_modal={
         <FormModal
-          slot_header={<ModalHeader title="Update bookmark" />}
+          slot_header={<ModalHeader title_="Update bookmark" />}
           slot_footer={
             <ModalFooter
-              button_label="Update"
-              is_disabled={false}
-              on_click_cancel={() => {}}
+              button_label_="Update"
+              is_disabled_={false}
+              on_click_cancel_={() => {}}
             />
           }
         >

@@ -1,11 +1,10 @@
 // @type
-@use '../../../../styles/foundation' as *;
+@use '../../../../../../../styles/foundation' as *;
 
 .container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   gap: var(--padding-12px);
+  flex-direction: column;
 }
 .label {
   font-family: var(--font-family-plus-jakarta-sans);

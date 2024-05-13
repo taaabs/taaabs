@@ -193,9 +193,11 @@ export const dictionary: Dictionary = {
         open_original_url: 'Oryginalny URL',
         open_snapshot: 'Otwórz kopię',
       },
+      bookmark_created: 'Zakładka została utworzona',
       bookmark_updated: 'Zakładka została zaktualizowana',
       bookmark_archived: 'Zakładka została zarchiwizowana',
       bookmark_restored: 'Zakładka została przywrócona',
+      bookmark_deleted: 'Zakładka została usunięta',
       all_bookmarks: 'Wszystkie zakładki',
       drag_tag_here:
         'W Taaabs, foldery tworzy się przez układanie tagów jeden pod drugim. Przeciągnij i upuść aby rozpocząć.',
@@ -234,7 +236,7 @@ export const dictionary: Dictionary = {
         tag_limit_reached: `Zakładka może mieć maksymalnie ${system_values.bookmark.tags.limit} słów kluczowych.`,
       },
     },
-    upsert_popup: {
+    upsert_modal: {
       create_bookmark: 'Dodaj zakładkę',
       edit_boomkark: 'Edytuj zakładkę',
       visibility: 'Widoczność',
@@ -269,6 +271,13 @@ export const dictionary: Dictionary = {
       create: 'Dodaj zakładkę',
       error_title_too_long: `Tytuł nie może mieć więcej jak ${system_values.bookmark.title.max_length} znaków.`,
       error_note_too_long: `Notka nie może mieć więcej jak ${system_values.bookmark.note.max_length} znaków.`,
+    },
+    delete_modal: {
+      cancel: 'Anuluj',
+      delete: 'Usuń',
+      delete_bookmark: 'Usuń zakładkę',
+      are_you_sure:
+        'Czy jesteś pewien, że chcesz trwale usunąć wybraną zakładkę?',
     },
   },
 }

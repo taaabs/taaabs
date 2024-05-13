@@ -63,6 +63,8 @@ import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/componen
 import { CheckboxItem as UiCommon_Dropdown_CheckboxItem } from '@web-ui/components/common/dropdown/checkbox-item'
 import { Separator as UiCommon_Dropdown_Separator } from '@web-ui/components/common/dropdown/separator'
 import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/dropdown/stars'
+import { delete_bookmark_modal } from '@/modals/delete-bookmark-modal'
+import dictionary from '@/dictionaries/en'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
@@ -277,11 +279,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           }),
         ),
       ]).then(() => {
-        modal_context?.set_modal()
+        modal_context?.set_modal({})
       })
     } else {
       // User is on results not relevant to newly added bookmark (e.g. some other tags).
-      modal_context?.set_modal()
+      modal_context?.set_modal({})
     }
   }, [bookmarks_hook.is_fetching_first_bookmarks])
 
@@ -1934,7 +1936,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   dictionary: props.dictionary,
                 })
                 if (!modified_bookmark) {
-                  modal_context?.set_modal()
+                  modal_context?.set_modal({})
                   return
                 }
                 dispatch(bookmarks_actions.set_is_upserting(true))
@@ -2016,7 +2018,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   },
                 })
                 dispatch(bookmarks_actions.set_is_upserting(false))
-                modal_context?.set_modal()
+                modal_context?.set_modal({})
                 toast.success(props.dictionary.app.library.bookmark_updated)
               }}
             />
@@ -2142,6 +2144,15 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               icon_variant="DELETE"
               label={props.dictionary.app.library.bookmark.delete}
               on_click={async () => {
+                const is_deletion_confirmed = await delete_bookmark_modal({
+                  dictionary: props.dictionary,
+                  modal_context,
+                  title: bookmark.title,
+                })
+                if (!is_deletion_confirmed) {
+                  modal_context!.set_modal({})
+                  return
+                }
                 dispatch(bookmarks_actions.set_is_upserting(true))
                 const { db, bookmarks_just_tags } = await search_hook.init_({
                   is_archived_: is_archived_filter,
@@ -2176,7 +2187,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   search_hook.set_count_(search_hook.count_ - 1)
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
-                toast.success('Bookmark has been deleted')
+                modal_context?.set_modal({})
+                toast.success(dictionary.app.library.bookmark_deleted)
               }}
             />
           </UiCommon_Dropdown>

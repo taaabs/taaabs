@@ -186,9 +186,11 @@ const dictionary: Dictionary = {
         open_original_url: 'Open original URL',
         open_snapshot: 'Open snapshot',
       },
+      bookmark_created: 'Bookmark has been created',
       bookmark_updated: 'Bookmark has been updated',
       bookmark_archived: 'Bookmark has been archived',
       bookmark_restored: 'Bookmark has been restored',
+      bookmark_deleted: 'Bookmark has been deleted',
       all_bookmarks: 'All bookmarks',
       drag_tag_here:
         'In Taaabs, folders are built by stacking tags on one another. Begin by dragging a tag over.',
@@ -226,7 +228,7 @@ const dictionary: Dictionary = {
         tag_limit_reached: `Bookmark can have at most ${system_values.bookmark.tags.limit} tags`,
       },
     },
-    upsert_popup: {
+    upsert_modal: {
       create_bookmark: 'Create bookmark',
       edit_boomkark: 'Edit bookmark',
       visibility: 'Visibility',
@@ -261,6 +263,13 @@ const dictionary: Dictionary = {
       create: 'Create',
       error_title_too_long: `Title should be no longer than ${system_values.bookmark.title.max_length} characters.`,
       error_note_too_long: `Note should be no longer than ${system_values.bookmark.note.max_length} characters.`,
+    },
+    delete_modal: {
+      delete_bookmark: 'Delete bookmark',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      are_you_sure:
+        'Are you sure you want to permanently delete the selected bookmark?',
     },
   },
 }

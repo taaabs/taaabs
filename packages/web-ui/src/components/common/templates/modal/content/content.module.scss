@@ -1,14 +1,11 @@
 // @type
-@use '../../../../styles/foundation' as *;
+@use '../../../../../styles/foundation' as *;
 
 .container {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  @include at768 {
-    width: 600px;
-  }
+  width: 100%;
 }
 .header {
   position: relative;

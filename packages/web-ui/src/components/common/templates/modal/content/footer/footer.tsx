@@ -1,39 +1,39 @@
 import { Button } from '@web-ui/components/common/particles/button'
-import styles from './modal-footer.module.scss'
+import styles from './footer.module.scss'
 
-export namespace ModalFooter {
+export namespace Footer {
   export type Props = {
-    button_label: string
-    button_on_click?: () => void
-    on_click_cancel: () => void
-    is_disabled: boolean
+    button_label_: string
+    button_on_click_?: () => void
+    on_click_cancel_: () => void
+    is_disabled_: boolean
     translations_: {
       cancel_: string
     }
   }
 }
 
-export const ModalFooter: React.FC<ModalFooter.Props> = (props) => {
+export const Footer: React.FC<Footer.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles['container__right-side']}>
-        {props.button_on_click ? (
+        {props.button_on_click_ ? (
           <Button
-            on_click={props.button_on_click}
-            is_disabled={props.is_disabled}
+            on_click={props.button_on_click_}
+            is_disabled={props.is_disabled_}
           >
-            {props.button_label}
+            {props.button_label_}
           </Button>
         ) : (
-          <Button type="submit" is_disabled={props.is_disabled}>
-            {props.button_label}
+          <Button type="submit" is_disabled={props.is_disabled_}>
+            {props.button_label_}
           </Button>
         )}
         <button
           className={styles['container__right-side__cancel']}
           onClick={(e) => {
             e.preventDefault() // As this component is likely placed inside <form>, we need to prevent the default form submission.
-            if (!props.is_disabled) props.on_click_cancel()
+            if (!props.is_disabled_) props.on_click_cancel_()
           }}
         >
           {props.translations_.cancel_}

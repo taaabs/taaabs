@@ -130,9 +130,11 @@ export type Dictionary = {
         open_original_url: string
         open_snapshot: string
       }
+      bookmark_created: string
       bookmark_updated: string
       bookmark_archived: string
       bookmark_restored: string
+      bookmark_deleted: string
       all_bookmarks: string
       drag_tag_here: string
       link_is_now_pinned: string
@@ -168,7 +170,7 @@ export type Dictionary = {
         tag_limit_reached: string
       }
     }
-    upsert_popup: {
+    upsert_modal: {
       create_bookmark: string
       edit_boomkark: string
       visibility: string
@@ -203,6 +205,12 @@ export type Dictionary = {
       create: string
       error_title_too_long: string
       error_note_too_long: string
+    }
+    delete_modal: {
+      delete_bookmark: string
+      cancel: string
+      delete: string
+      are_you_sure: string
     }
   }
 }

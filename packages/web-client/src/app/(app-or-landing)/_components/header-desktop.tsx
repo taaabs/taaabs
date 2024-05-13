@@ -16,7 +16,7 @@ import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-u
 import { HeaderDesktop as UiAppTemplate_App_HeaderDesktop } from '@web-ui/components/app/templates/app/header-desktop'
 import { AuthorizedUser as UiAppOrganism_App_HeaderDesktop_AuthorizedUser } from '@web-ui/components/app/templates/app/header-desktop/authorized-user'
 import { UserDropdown as UiAppOrganism_App_HeaderDesktop_AuthorizedUser_UserDropdown } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown'
-import { UpsertBookmark as Form_UpsertBookmarkForm } from '@/forms/upsert-bookmark'
+import { UpsertBookmark as Form_UpsertBookmark } from '@/forms/upsert-bookmark'
 import { update_search_params } from '@/utils/update-query-params'
 import { BookmarkHash } from '@/utils/bookmark-hash'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -76,6 +76,7 @@ export const HeaderDesktop: React.FC<{
         href: '/library',
         is_active: pathname == '/library',
         on_click: () => {
+          if (pathname == '/library') return
           clear_library_session_storage({
             search_params: search_params.toString(),
           })
@@ -96,6 +97,7 @@ export const HeaderDesktop: React.FC<{
         href: `/${params.username}`,
         is_active: pathname == `/${params.username}`,
         on_click: () => {
+          if (pathname == `/${params.username}`) return
           clear_library_session_storage({
             username: params.username as string,
             search_params: search_params.toString(),
@@ -114,80 +116,84 @@ export const HeaderDesktop: React.FC<{
   const open_new_bookmark_modal = (params: { with_autofill?: boolean }) => {
     const bookmark = BookmarkHash.parse({ hash: window.location.hash.slice(1) })
 
-    modal?.set_modal(
-      <Form_UpsertBookmarkForm
-        action="create"
-        bookmark_autofill={
-          params.with_autofill
-            ? {
-                title: bookmark.title,
-                links: bookmark.links,
-                tags: bookmark.tags,
-                note: bookmark.note,
-              }
-            : undefined
-        }
-        on_close={modal.set_modal}
-        on_submit={async (bookmark) => {
-          // const { db, bookmarks_just_tags } =
-          //   await global_library_search!.search_hook.init({
-          //     is_archived: false,
-          //   })
-
-          const data_source = new Bookmarks_DataSourceImpl(
-            auth_context.ky_instance,
-          )
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          const created_bookmark = await repository.upsert_bookmark(
-            bookmark,
-            auth_context.auth_data!.encryption_key,
-          )
-          // await global_library_search!.search_hook.update_bookmark({
-          //   db,
-          //   bookmarks_just_tags,
-          //   is_archived: false,
-          //   bookmark: {
-          //     id: created_bookmark.id,
-          //     created_at: created_bookmark.created_at,
-          //     visited_at: created_bookmark.visited_at,
-          //     updated_at: created_bookmark.updated_at,
-          //     title: created_bookmark.title,
-          //     note: created_bookmark.note,
-          //     is_archived: false,
-          //     is_unread: created_bookmark.is_unread,
-          //     stars: created_bookmark.stars,
-          //     links: created_bookmark.links.map((link) => ({
-          //       url: link.url,
-          //       site_path: link.site_path,
-          //     })),
-          //     tags: created_bookmark.tags.map((tag) => tag.name),
-          //     tag_ids: created_bookmark.tags.map((tag) => tag.id),
-          //   },
-          // })
-          if (pathname == '/library') {
-            sessionStorage.setItem(
-              browser_storage.session_storage.library
-                .counts_reload_requested_by_new_bookmark,
-              'true',
-            )
-            const updated_search_params = update_search_params(
-              search_params,
-              search_params_keys.new_bookmark_results_refetch_trigger,
-              created_bookmark.id.toString(),
-            )
-            window.history.pushState(
-              {},
-              '',
-              window.location.pathname + '?' + updated_search_params,
-            )
-          } else {
-            modal.set_modal()
+    modal?.set_modal({
+      modal: (
+        <Form_UpsertBookmark
+          action="create"
+          bookmark_autofill={
+            params.with_autofill
+              ? {
+                  title: bookmark.title,
+                  links: bookmark.links,
+                  tags: bookmark.tags,
+                  note: bookmark.note,
+                }
+              : undefined
           }
-          toast.success('Bookmark has been created')
-        }}
-        dictionary={props.dictionary}
-      />,
-    )
+          on_close={() => {
+            modal.set_modal({})
+          }}
+          on_submit={async (bookmark) => {
+            // const { db, bookmarks_just_tags } =
+            //   await global_library_search!.search_hook.init({
+            //     is_archived: false,
+            //   })
+
+            const data_source = new Bookmarks_DataSourceImpl(
+              auth_context.ky_instance,
+            )
+            const repository = new Bookmarks_RepositoryImpl(data_source)
+            const created_bookmark = await repository.upsert_bookmark(
+              bookmark,
+              auth_context.auth_data!.encryption_key,
+            )
+            // await global_library_search!.search_hook.update_bookmark({
+            //   db,
+            //   bookmarks_just_tags,
+            //   is_archived: false,
+            //   bookmark: {
+            //     id: created_bookmark.id,
+            //     created_at: created_bookmark.created_at,
+            //     visited_at: created_bookmark.visited_at,
+            //     updated_at: created_bookmark.updated_at,
+            //     title: created_bookmark.title,
+            //     note: created_bookmark.note,
+            //     is_archived: false,
+            //     is_unread: created_bookmark.is_unread,
+            //     stars: created_bookmark.stars,
+            //     links: created_bookmark.links.map((link) => ({
+            //       url: link.url,
+            //       site_path: link.site_path,
+            //     })),
+            //     tags: created_bookmark.tags.map((tag) => tag.name),
+            //     tag_ids: created_bookmark.tags.map((tag) => tag.id),
+            //   },
+            // })
+            if (pathname == '/library') {
+              sessionStorage.setItem(
+                browser_storage.session_storage.library
+                  .counts_reload_requested_by_new_bookmark,
+                'true',
+              )
+              const updated_search_params = update_search_params(
+                search_params,
+                search_params_keys.new_bookmark_results_refetch_trigger,
+                created_bookmark.id.toString(),
+              )
+              window.history.pushState(
+                {},
+                '',
+                window.location.pathname + '?' + updated_search_params,
+              )
+            } else {
+              modal.set_modal({})
+            }
+            toast.success(props.dictionary.app.library.bookmark_created)
+          }}
+          dictionary={props.dictionary}
+        />
+      ),
+    })
   }
 
   useUpdateEffect(() => {

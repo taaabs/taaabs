@@ -6,6 +6,7 @@ export namespace Modal {
   export type Props = {
     children?: React.ReactNode
     slot_modal?: React.ReactNode
+    pin_to_bottom_on_mobile?: boolean
   }
 }
 
@@ -37,11 +38,15 @@ export const Modal: React.FC<Modal.Props> = (props) => {
       <div
         className={cn(styles.modal, {
           [styles['modal--visible']]: props.slot_modal,
+          [styles['modal--pin-to-bottom-on-mobile']]:
+            props.pin_to_bottom_on_mobile,
         })}
       >
         <div
           className={cn(styles.modal__inner, {
             [styles['modal__inner--visible']]: props.slot_modal,
+            [styles['modal__inner--pin-to-bottom-on-mobile']]:
+              props.pin_to_bottom_on_mobile,
           })}
         >
           {props.slot_modal}
