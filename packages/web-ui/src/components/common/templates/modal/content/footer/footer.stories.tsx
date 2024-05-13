@@ -10,11 +10,11 @@ export const Primary = () => {
     <div>
       <StorybookSpacer />
       <Footer
-        button_label_="Lorem"
-        on_click_cancel_={() => {}}
-        is_disabled_={false}
-        translations_={{
-          cancel_: 'Cancel',
+        button_label="Lorem"
+        on_click_cancel={() => {}}
+        is_disabled={false}
+        translations={{
+          cancel: 'Cancel',
         }}
       />
     </div>

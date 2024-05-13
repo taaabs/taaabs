@@ -18,17 +18,17 @@ export const delete_bookmark_modal = (params: {
           width={400}
           slot_header={
             <UiCommonTemplate_Modal_Content_Header
-              title_={params.dictionary.app.delete_modal.delete_bookmark}
+              title={params.dictionary.app.delete_modal.delete_bookmark}
             />
           }
           slot_footer={
             <UiCommonTemplate_Modal_Content_Footer
-              button_label_={params.dictionary.app.delete_modal.delete}
-              is_disabled_={false}
-              button_on_click_={on_submit_handler}
-              on_click_cancel_={on_close_handler}
-              translations_={{
-                cancel_: params.dictionary.app.delete_modal.cancel,
+              button_label={params.dictionary.app.delete_modal.delete}
+              is_disabled={false}
+              button_on_click={on_submit_handler}
+              on_click_cancel={on_close_handler}
+              translations={{
+                cancel: params.dictionary.app.delete_modal.cancel,
               }}
             />
           }

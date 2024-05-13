@@ -5,5 +5,5 @@ export default {
 }
 
 export const Primary = () => {
-  return <Header title_="Lorem ipsum" />
+  return <Header title="Lorem ipsum" />
 }

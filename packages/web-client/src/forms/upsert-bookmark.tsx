@@ -155,7 +155,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       width={600}
       slot_header={
         <UiCommonTemplate_Modal_Content_Header
-          title_={
+          title={
             props.action == 'update'
               ? props.dictionary.app.upsert_modal.edit_boomkark
               : props.dictionary.app.upsert_modal.create_bookmark
@@ -164,16 +164,16 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       }
       slot_footer={
         <UiCommonTemplate_Modal_Content_Footer
-          on_click_cancel_={props.on_close}
-          button_label_={
+          on_click_cancel={props.on_close}
+          button_label={
             props.action == 'update'
               ? props.dictionary.app.upsert_modal.save_changes
               : props.dictionary.app.upsert_modal.create
           }
-          is_disabled_={isSubmitting || (isSubmitted && isSubmitSuccessful)}
-          button_on_click_={handleSubmit(on_submit)}
-          translations_={{
-            cancel_: props.dictionary.app.upsert_modal.cancel,
+          is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
+          button_on_click={handleSubmit(on_submit)}
+          translations={{
+            cancel: props.dictionary.app.upsert_modal.cancel,
           }}
         />
       }
