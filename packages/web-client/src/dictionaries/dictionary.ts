@@ -127,8 +127,6 @@ export type Dictionary = {
         archive: string
         restore: string
         delete: string
-        pin: string
-        unpin: string
         open_original_url: string
         open_snapshot: string
       }

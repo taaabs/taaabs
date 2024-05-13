@@ -183,8 +183,6 @@ const dictionary: Dictionary = {
         archive: 'Archive',
         restore: 'Restore',
         delete: 'Delete',
-        pin: 'Pin',
-        unpin: 'Unpin',
         open_original_url: 'Open original URL',
         open_snapshot: 'Open snapshot',
       },

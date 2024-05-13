@@ -15,6 +15,7 @@
 .star {
   padding: 0 2px;
   > svg {
+    @include transition-150ms(fill);
     fill: var(--neutral200);
     width: 21px;
   }

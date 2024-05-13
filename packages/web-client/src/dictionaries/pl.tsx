@@ -190,8 +190,6 @@ export const dictionary: Dictionary = {
         archive: 'Archiwizuj',
         restore: 'Przywróć',
         delete: 'Usuń',
-        pin: 'Przypnij',
-        unpin: 'Odepnij',
         open_original_url: 'Oryginalny URL',
         open_snapshot: 'Otwórz kopię',
       },
