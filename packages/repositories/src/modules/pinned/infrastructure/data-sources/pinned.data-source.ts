@@ -10,5 +10,5 @@ export type Pinned_DataSource = {
   update_pinned(
     params: UpdatePinned_Params,
     encryption_key: Uint8Array,
-  ): Promise<void>
+  ): Promise<Pinned_Dto.Response>
 }

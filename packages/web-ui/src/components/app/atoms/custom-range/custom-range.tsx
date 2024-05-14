@@ -5,7 +5,7 @@ import useSwipe from 'beautiful-react-hooks/useSwipe'
 import { memo, useEffect, useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
-require('dayjs/locale/pl')
+import 'dayjs/locale/pl'
 import { Icon } from '@web-ui/components/common/particles/icon'
 
 type Counts = {
@@ -627,7 +627,6 @@ function yyyymm_to_display(yyyymm: number, locale: string) {
       parseInt(yyyymm.toString().substring(0, 4)),
       parseInt(yyyymm.toString().substring(4, 6)) - 1,
     ),
-  )
-    .locale(locale)
-    .format('MMM YYYY')
+    { locale },
+  ).format('MMMM YYYY')
 }

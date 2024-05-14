@@ -41,14 +41,12 @@ export const use_pinned = () => {
   }
 
   useUpdateEffect(() => {
-    if (items) {
-      sessionStorage.setItem(
-        browser_storage.session_storage.library.pinned({
-          username,
-        }),
-        JSON.stringify(items),
-      )
-    }
+    sessionStorage.setItem(
+      browser_storage.session_storage.library.pinned({
+        username,
+      }),
+      JSON.stringify(items),
+    )
   }, [items])
 
   useUpdateEffect(() => {

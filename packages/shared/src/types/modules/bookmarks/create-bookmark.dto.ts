@@ -11,7 +11,7 @@ export namespace CreateBookmark_Dto {
   const private_tag_schema = z.object({
     is_public: z.literal(false),
     hash: z.string().length(64),
-    name_aes: z.string().max(system_values.bookmark.tags.max_length * 10),
+    name_aes: z.string().max(system_values.bookmark.tags.max_length * 2),
   })
   const public_link_schema = z.object({
     is_public: z.literal(true),

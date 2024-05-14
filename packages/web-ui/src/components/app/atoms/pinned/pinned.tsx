@@ -156,7 +156,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
               <div className={styles['item__inner__unread']} />
             )}
           </div>
-          {item.stars_ && item.title_ && (
+          {item.stars_ !== undefined && item.title_ && (
             <div className={styles['item__stars']}>
               {[...Array(item.stars_)].map((_, i) => (
                 <Icon variant="STAR_FILLED" key={i} />

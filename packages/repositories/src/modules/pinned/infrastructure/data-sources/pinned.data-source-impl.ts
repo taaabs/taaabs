@@ -22,7 +22,7 @@ export class Pinned_DataSourceImpl implements Pinned_DataSource {
   public async update_pinned(
     params: UpdatePinned_Params,
     encryption_key: Uint8Array,
-  ): Promise<void> {
+  ): Promise<Pinned_Dto.Response> {
     const body: UpdatePinned_Dto.Body = await Promise.all(
       params.map(async (pinned_item) => ({
         hash: await Crypto.SHA256(pinned_item.url.trim(), encryption_key),

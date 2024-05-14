@@ -57,12 +57,12 @@
         padding: var(--padding-10px) var(--padding-16px);
         border-top: 1px solid var(--blue600);
         &__label {
-          color: var(--blue200);
+          color: var(--blue150);
         }
         &__content {
           height: 0;
           > select {
-            color: var(--blue200);
+            color: var(--white);
             min-width: 100px;
             background-color: transparent;
             border: none;

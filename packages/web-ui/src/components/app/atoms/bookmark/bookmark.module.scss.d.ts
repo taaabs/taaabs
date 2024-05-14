@@ -4,7 +4,6 @@ declare const styles: {
   readonly 'container--clickable': string
   readonly 'container--search-result': string
   readonly 'container--search-result-clickable': string
-  readonly 'container--outline': string
   readonly bookmark: string
   readonly bookmark__main: string
   readonly 'bookmark__main--corners-fix': string
@@ -43,6 +42,7 @@ declare const styles: {
   readonly bookmark__links: string
   readonly 'bookmark__links--compact': string
   readonly bookmark__links__item: string
+  readonly 'bookmark__links__item--recently-visited': string
   readonly bookmark__links__item__link: string
   readonly bookmark__links__item__link__site: string
   readonly 'bookmark__links__item__link__site--highlighted': string

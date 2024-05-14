@@ -215,7 +215,7 @@ export const dictionary: Dictionary = {
         edited: 'edycji',
         visited: 'wizyty',
         date: 'Data...',
-        the_huggiest: 'Punktowane',
+        the_huggiest: 'Ilość reakcji',
       },
       order_options: {
         newest: 'Najnowsze',

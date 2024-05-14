@@ -58,7 +58,22 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
   public async update_pinned(
     params: UpdatePinned_Params,
     encryption_key: Uint8Array,
-  ): Promise<void> {
-    return this._pinned_data_source.update_pinned(params, encryption_key)
+  ): Promise<GetPinned_Ro> {
+    const result = await this._pinned_data_source.update_pinned(
+      params,
+      encryption_key,
+    )
+
+    return result.map((el) => ({
+      bookmark_id: el.bookmark_id,
+      created_at: el.created_at,
+      url: el.url!,
+      title: el.title,
+      stars: el.stars,
+      is_unread: el.is_unread,
+      is_archived: el.is_archived,
+      tags: el.tags,
+      open_snapshot: el.open_snapshot,
+    }))
   }
 }

@@ -30,6 +30,7 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
     return this._ky
       .get(`v1/library-search/bookmarks`, {
         searchParams: JSON.parse(JSON.stringify(search_params)),
+        timeout: false,
       })
       .json()
   }
@@ -44,6 +45,7 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
     return this._ky
       .get(`v1/library-search/bookmarks/${params.username}`, {
         searchParams: JSON.parse(JSON.stringify(search_params)),
+        timeout: false,
       })
       .json()
   }

@@ -22,9 +22,8 @@
     &__cancel {
       order: -1; // Needed to have proper tab focus order.
       color: var(--text-color-dimmed);
-      @include transition-150ms(color);
       @include hover {
-        color: var(--text-color-normal);
+        @include text-decoration-underlinie-thin;
       }
       @include focus-visible;
     }

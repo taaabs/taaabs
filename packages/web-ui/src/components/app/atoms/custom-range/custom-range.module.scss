@@ -25,7 +25,8 @@
       color: var(--text-color-dimmed);
     }
     &__current-range {
-      font-weight: var(--font-weight-inter-medium);
+      font-family: var(--font-family-inter-tight);
+      font-weight: var(--font-weight-inter-tight-medium);
     }
     &__counts {
       display: flex;

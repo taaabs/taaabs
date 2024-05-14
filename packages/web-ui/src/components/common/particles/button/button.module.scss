@@ -35,8 +35,17 @@
   }
   &--disabled,
   &:disabled {
-    opacity: 0.7;
+    opacity: var(--dimmed-opacity);
     pointer-events: none;
+  }
+  &--danger {
+    background-color: var(--red);
+    @include hover {
+      background: var(--red700);
+    }
+    &:focus-visible {
+      outline-color: var(--red300);
+    }
   }
   &--small {
     height: var(--button-dimension-34px);

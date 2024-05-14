@@ -10,12 +10,10 @@
   margin: 0 var(--padding-8px);
   padding: 0 8px;
   margin-top: 2px;
-  @include transition-150ms(background-color);
 }
 .star {
   padding: 0 2px;
   > svg {
-    @include transition-150ms(fill);
     fill: var(--neutral200);
     width: 21px;
   }

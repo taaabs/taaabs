@@ -16,11 +16,12 @@ export const update_pinned = (params: {
 
     dispatch(pinned_actions.set_is_updating(true))
 
-    await repository.update_pinned(
+    const result = await repository.update_pinned(
       params.update_pinned_params,
       params.encryption_key,
     )
 
+    dispatch(pinned_actions.set_items(result))
     dispatch(pinned_actions.set_is_updating(false))
   }
 }

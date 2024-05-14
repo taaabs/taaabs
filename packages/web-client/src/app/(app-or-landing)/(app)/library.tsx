@@ -1,7 +1,7 @@
 import { use_library_dispatch } from '@/stores/library'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_filter_view_options } from '@/hooks/library/use-filter-view-options'
@@ -64,7 +64,6 @@ import { CheckboxItem as UiCommon_Dropdown_CheckboxItem } from '@web-ui/componen
 import { Separator as UiCommon_Dropdown_Separator } from '@web-ui/components/common/dropdown/separator'
 import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/dropdown/stars'
 import { delete_bookmark_modal } from '@/modals/delete-bookmark-modal'
-import dictionary from '@/dictionaries/en'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
@@ -83,7 +82,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
-  const modal_context = useContext(ModalContext)
+  const modal_context = useContext(ModalContext)!
   const [show_skeletons, set_show_skeletons] = useState(true)
   const search_hook = use_search(props.local_db)
   const bookmarks_hook = use_bookmarks()
@@ -219,8 +218,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     pinned_count.current = count
   }
 
-  // This prevents layout shift in loading state during setting pinned status on a link.
-  useUpdateEffect(() => {
+  // UpdateEffect breaks rendering items fetched from session storage.
+  useEffect(() => {
     if (!pinned_hook.is_fetching) {
       set_is_pinned_stale(true)
     }
@@ -279,11 +278,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           }),
         ),
       ]).then(() => {
-        modal_context?.set_modal({})
+        modal_context.set_modal({})
       })
     } else {
       // User is on results not relevant to newly added bookmark (e.g. some other tags).
-      modal_context?.set_modal({})
+      modal_context.set_modal({})
     }
   }, [bookmarks_hook.is_fetching_first_bookmarks])
 
@@ -490,7 +489,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           window.location.pathname + `?${search_params.toString()}`,
         )
       }}
-      is_slash_shortcut_disabled_={modal_context?.modal !== undefined}
+      is_slash_shortcut_disabled_={modal_context.modal !== undefined}
       on_click_get_help_={() => {}}
       translations_={{
         footer_tip_: props.dictionary.app.library.search.footer_tip,
@@ -1936,7 +1935,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   dictionary: props.dictionary,
                 })
                 if (!modified_bookmark) {
-                  modal_context?.set_modal({})
+                  modal_context.set_modal({})
                   return
                 }
                 dispatch(bookmarks_actions.set_is_upserting(true))
@@ -2018,7 +2017,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   },
                 })
                 dispatch(bookmarks_actions.set_is_upserting(false))
-                modal_context?.set_modal({})
+                modal_context.set_modal({})
                 toast.success(props.dictionary.app.library.bookmark_updated)
               }}
             />
@@ -2150,7 +2149,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   title: bookmark.title,
                 })
                 if (!is_deletion_confirmed) {
-                  modal_context!.set_modal({})
+                  modal_context.set_modal({})
                   return
                 }
                 dispatch(bookmarks_actions.set_is_upserting(true))
@@ -2187,8 +2186,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   search_hook.set_count_(search_hook.count_ - 1)
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
-                modal_context?.set_modal({})
-                toast.success(dictionary.app.library.bookmark_deleted)
+                modal_context.set_modal({})
+                toast.success(props.dictionary.app.library.bookmark_deleted)
               }}
             />
           </UiCommon_Dropdown>

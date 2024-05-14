@@ -2,7 +2,7 @@ import cn from 'classnames'
 import styles from './bookmark.module.scss'
 import { memo, useState } from 'react'
 import dayjs from 'dayjs'
-require('dayjs/locale/pl')
+import 'dayjs/locale/pl'
 import { ReactSortable } from 'react-sortablejs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
@@ -126,6 +126,7 @@ export namespace Bookmark {
       yields_: number
     }
     on_mouse_up_?: () => void
+    screenshot?: string
   }
 }
 
@@ -152,7 +153,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         />
       </UiCommon_Dropdown>,
     )
-    const [is_outline_visible, set_is_outline_visible] = useState<boolean>()
+    const [recently_visited_link_idx, set_recently_visited_link_idx] =
+      useState<number>()
 
     useUpdateEffect(() => {
       if (props.points_given_ !== undefined && points_given === undefined) {
@@ -501,14 +503,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       </div>
     )
 
-    const relative_time = dayjs(props.date_).locale(props.locale).fromNow()
+    const relative_time = dayjs(props.date_, { locale: props.locale }).fromNow()
 
     const bookmark_date =
       relative_time != ''
         ? relative_time
-        : dayjs(props.date_)
-            .locale(props.locale)
-            .format(props.locale == 'en' ? 'MMMM DD, YYYY' : 'D MMMM YYYY')
+        : dayjs(props.date_, { locale: props.locale }).format(
+            props.locale == 'en' ? 'MMMM DD, YYYY' : 'D MMMM YYYY',
+          )
 
     return (
       <div
@@ -526,9 +528,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           {
             [styles['container--search-result-clickable']]:
               props.is_search_result_ && props.density_ == 'compact',
-          },
-          {
-            [styles['container--outline']]: is_outline_visible,
           },
         )}
         role="button"
@@ -711,7 +710,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           </div>
           <OutsideClickHandler
             onOutsideClick={() => {
-              set_is_outline_visible(false)
+              set_recently_visited_link_idx(undefined)
             }}
           >
             <div
@@ -759,7 +758,13 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 ).length
 
                 return (
-                  <div className={styles.bookmark__links__item} key={link.url_}>
+                  <div
+                    className={cn(styles.bookmark__links__item, {
+                      [styles['bookmark__links__item--recently-visited']]:
+                        recently_visited_link_idx == link_idx,
+                    })}
+                    key={link.url_}
+                  >
                     <div className={styles.bookmark__links__item__link}>
                       <button
                         className={cn(
@@ -798,7 +803,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         onClick={async (e) => {
                           e.stopPropagation()
                           e.preventDefault()
-                          set_is_outline_visible(true)
+                          set_recently_visited_link_idx(link_idx)
                           props.on_link_click_(url)
                         }}
                         onAuxClick={props.on_link_middle_click_}
@@ -867,7 +872,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         className={styles.bookmark__links__item__actions__open}
                         onClick={async (e) => {
                           e.stopPropagation()
-                          set_is_outline_visible(true)
+                          set_recently_visited_link_idx(link_idx)
                           props.on_new_tab_link_click_(url)
                         }}
                       >

@@ -8,5 +8,5 @@ export type Pinned_Repository = {
   update_pinned(
     params: UpdatePinned_Params,
     encryption_key: Uint8Array,
-  ): Promise<void>
+  ): Promise<GetPinned_Ro>
 }

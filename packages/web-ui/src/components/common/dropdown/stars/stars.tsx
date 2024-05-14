@@ -21,7 +21,8 @@ export const Stars: React.FC<Stars.Props> = (props) => {
             styles.star,
             {
               [styles['star--checked']]: props.no_selected - 1 >= i,
-              [styles['star--hovered']]: hovered_index && hovered_index >= i,
+              [styles['star--hovered']]:
+                hovered_index !== undefined && hovered_index >= i,
             },
           ])}
           key={i}

@@ -1,3 +1,5 @@
+import { Pinned_Dto } from './pinned.dto'
+
 export namespace UpdatePinned_Dto {
   type Item = {
     hash: string
@@ -5,4 +7,5 @@ export namespace UpdatePinned_Dto {
     title_aes?: string
   }
   export type Body = Item[]
+  export type Response = Pinned_Dto.Response
 }
