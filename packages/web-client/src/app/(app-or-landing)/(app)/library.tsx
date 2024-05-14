@@ -167,17 +167,15 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       old_tag_name: params.old_tag_name,
     })
     if (new_tag_name) {
-      dispatch(
-        bookmarks_actions.set_bookmarks(
-          bookmarks_hook.bookmarks?.map((b) => ({
-            ...b,
-            tags: b.tags.map((t) => ({
-              ...t,
-              name: t.name == params.old_tag_name ? new_tag_name : t.name,
-            })),
-          })),
-        ),
-      )
+      const bookmarks = bookmarks_hook.bookmarks?.map((b) => ({
+        ...b,
+        tags: b.tags.map((t) => ({
+          ...t,
+          name: t.name == params.old_tag_name ? new_tag_name : t.name,
+        })),
+      }))
+      dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks))
+      dispatch(bookmarks_actions.set_bookmarks(bookmarks))
       dispatch(
         counts_actions.set_tags({
           ...counts_hook.tags!,

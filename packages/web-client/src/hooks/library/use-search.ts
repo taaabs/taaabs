@@ -230,7 +230,7 @@ export const use_search = (local_db: LocalDb) => {
     bookmarks_just_tags: BookmarkTags[]
   }> => {
     if (params.force_reinitialization_) {
-      await clear_cached_data_({ is_archived_: params.is_archived_ })
+      await clear_cached_data({ is_archived_: params.is_archived_ })
     } else {
       const staleness_state = await get_is_db_stale({
         is_archived_: params.is_archived_,
@@ -279,7 +279,7 @@ export const use_search = (local_db: LocalDb) => {
       } else if (
         staleness_state == DbStalenessState.INSTANCE_STALE_CACHED_STALE
       ) {
-        await clear_cached_data_({ is_archived_: params.is_archived_ })
+        await clear_cached_data({ is_archived_: params.is_archived_ })
       }
     }
 
@@ -551,7 +551,7 @@ export const use_search = (local_db: LocalDb) => {
     }
   }
 
-  const clear_cached_data_ = async (params: { is_archived_: boolean }) => {
+  const clear_cached_data = async (params: { is_archived_: boolean }) => {
     if (!username) {
       await localforage.removeItem(
         !params.is_archived_
@@ -1489,7 +1489,6 @@ export const use_search = (local_db: LocalDb) => {
     incoming_highlights_sites_variants_,
     highlights_sites_variants_,
     set_highlights_sites_variants_,
-    clear_cached_data_,
     hints_set_at_timestamp_,
     queried_at_timestamp_,
     cache_data_,
