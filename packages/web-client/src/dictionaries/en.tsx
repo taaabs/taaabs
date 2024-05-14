@@ -271,6 +271,12 @@ const dictionary: Dictionary = {
       are_you_sure:
         'Are you sure you want to permanently delete the selected bookmark?',
     },
+    rename_tag_modal: {
+      rename_tag: 'Rename keyword',
+      rename: 'Rename',
+      cancel: 'Cancel',
+      tag_is_too_long: 'Entered tag is too long',
+    },
   },
 }
 

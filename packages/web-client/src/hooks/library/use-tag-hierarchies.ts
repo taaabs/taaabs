@@ -1,6 +1,7 @@
 import { AuthContext } from '@/app/auth-provider'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { Filter } from '@/types/library/filter'
+import { TagHierarchy_Entity } from '@repositories/modules/tag-hierarchies/domain/entities/tag-hierarchy.entity'
 import { GetTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/get-tag-hierarchies.params'
 import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
 import { useParams } from 'next/navigation'
@@ -99,6 +100,24 @@ export const use_tag_hierarchies = () => {
     }
   }
 
+  const rename_ = (params: { old_tag_name: string; new_tag_name: string }) => {
+    const rename = (entity: TagHierarchy_Entity): TagHierarchy_Entity => {
+      return {
+        ...entity,
+        name:
+          entity.name === params.old_tag_name
+            ? params.new_tag_name
+            : entity.name,
+        children: entity.children.map(rename),
+      }
+    }
+    dispatch(
+      tag_hierarchies_actions.set_tag_hierarchies(
+        tag_hierarchies?.map((th) => rename(th)),
+      ),
+    )
+  }
+
   return {
     is_fetching,
     get_tag_hierarchies_,
@@ -107,5 +126,6 @@ export const use_tag_hierarchies = () => {
     tag_hierarchies,
     total,
     is_updating,
+    rename_,
   }
 }

@@ -18,14 +18,13 @@
 .simplebar {
   max-height: calc(70svh);
   &__inner {
-    padding: var(--padding-24px) var(--padding-16px) var(--padding-16px)
-      var(--padding-16px);
     display: flex;
     flex-direction: column;
     gap: var(--padding-16px);
+    padding: var(--padding-24px) var(--padding-16px);
     @include at768 {
       gap: var(--padding-24px);
-      padding: 32px var(--padding-40px) var(--padding-24px) var(--padding-40px);
+      padding: var(--padding-32px) var(--padding-40px);
     }
   }
 }

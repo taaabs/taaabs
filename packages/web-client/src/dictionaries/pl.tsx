@@ -279,6 +279,12 @@ export const dictionary: Dictionary = {
       are_you_sure:
         'Czy jesteś pewien, że chcesz trwale usunąć wybraną zakładkę?',
     },
+    rename_tag_modal: {
+      rename_tag: 'Edytuj słowo kluczowe',
+      rename: 'Zmień nazwę',
+      cancel: 'Anuluj',
+      tag_is_too_long: 'Tag jest za długi',
+    },
   },
 }
 

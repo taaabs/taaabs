@@ -52,7 +52,7 @@ dayjs.updateLocale('pl', {
     h: '1 godz.',
     hh: '%d godz.',
     d: 'wczoraj',
-    dd: '%d dni',
+    dd: '%d dni temu',
     M: '',
     MM: '',
     y: '',
@@ -82,6 +82,7 @@ export namespace Bookmark {
     library_url_: string
     on_tag_click_: (tag_id: number) => void
     on_tag_delete_click_?: (tag_id: number) => void
+    on_tag_rename_click_?: (tag_id: number) => void
     on_tags_order_change_?: (tags: Bookmark.Props['tags_']) => void
     on_selected_tag_click_: (tag_id: number) => void
     on_give_point_click_: (points: number) => void
@@ -143,6 +144,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
       <UiCommon_Dropdown>
+        <UiCommon_Dropdown_StandardItem
+          label="Rename"
+          icon_variant="EDIT"
+          on_click={() => {
+            if (!context_menu_of_tag_id) return
+            props.on_tag_rename_click_!(context_menu_of_tag_id)
+          }}
+        />
         <UiCommon_Dropdown_StandardItem
           label="Delete"
           icon_variant="DELETE"

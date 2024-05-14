@@ -53,7 +53,7 @@ export const counts_slice = createSlice({
 
       state.months = months
     },
-    set_tags(state, action: PayloadAction<Tags>) {
+    set_tags(state, action: PayloadAction<CountsState['tags']>) {
       state.tags = action.payload
     },
     set_yyyymm_gte(state, action: PayloadAction<CountsState['yyyymm_gte']>) {

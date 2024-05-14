@@ -212,5 +212,11 @@ export type Dictionary = {
       delete: string
       are_you_sure: string
     }
+    rename_tag_modal: {
+      rename_tag: string
+      cancel: string
+      rename: string
+      tag_is_too_long: string
+    }
   }
 }

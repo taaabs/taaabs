@@ -193,6 +193,7 @@ export const HeaderDesktop: React.FC<{
           dictionary={props.dictionary}
         />
       ),
+      pin_to_bottom_on_mobile: true,
     })
   }
 

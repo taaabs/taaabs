@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export namespace CheckIsPublic_Dto {
+export namespace CheckVisibility_Dto {
   export namespace Request {
     export const body_schema = z.object({
       hash: z.string().length(64),
