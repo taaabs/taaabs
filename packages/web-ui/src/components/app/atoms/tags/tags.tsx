@@ -1,5 +1,8 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import styles from './tags.module.scss'
+import { useContextMenu } from 'use-context-menu'
+import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/dropdown'
+import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/dropdown/standard-item'
 
 export namespace Tags {
   export type Tag = {
@@ -18,11 +21,27 @@ export namespace Tags {
       name_: string
       yields_: number
     }) => void
+    on_tag_rename_click_?: (tag_id: number) => void
   }
 }
 
 export const Tags: React.FC<Tags.Props> = memo(
   function Tags(props) {
+    const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
+      useState<number>()
+    const { contextMenu, onContextMenu } = useContextMenu(
+      <UiCommon_Dropdown>
+        <UiCommon_Dropdown_StandardItem
+          label="Rename"
+          icon_variant="EDIT"
+          on_click={() => {
+            if (!context_menu_of_tag_id) return
+            props.on_tag_rename_click_!(context_menu_of_tag_id)
+          }}
+        />
+      </UiCommon_Dropdown>,
+    )
+
     const first_chars_processed: string[] = []
 
     const new_tags_grouped: Tags.Tag[][] = []
@@ -39,6 +58,7 @@ export const Tags: React.FC<Tags.Props> = memo(
 
     return (
       <div className={styles.container}>
+        {contextMenu}
         {new_tags_grouped
           .sort((a, b) => {
             if (a[0].name.substring(0, 1) < b[0].name.substring(0, 1)) {
@@ -80,6 +100,14 @@ export const Tags: React.FC<Tags.Props> = memo(
                         })
                       }}
                       draggable={false}
+                      onContextMenu={(e) => {
+                        if ('ontouchstart' in window) {
+                          e.preventDefault()
+                        } else if (props.on_tag_rename_click_) {
+                          set_context_menu_of_tag_id(tag.id)
+                          onContextMenu(e)
+                        }
+                      }}
                     >
                       <span>{tag.name}</span>
                       <span> {tag.yields}</span>

@@ -1119,6 +1119,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     tag_id,
                   ])
                 }
+                on_tag_rename_click_={(old_tag_id: number) => {
+                  const old_tag_name = counts_hook.tags![old_tag_id].name
+                  on_tag_rename_click({ old_tag_name, old_tag_id })
+                }}
               />
               <UiAppAtom_Tags
                 key={`tags-${library_updated_at_timestamp}-${popstate_count}`}
@@ -1143,6 +1147,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 on_tag_drag_start_={
                   !username ? tag_view_options_hook.set_dragged_tag : undefined
                 }
+                on_tag_rename_click_={(old_tag_id: number) => {
+                  const old_tag_name = counts_hook.tags![old_tag_id].name
+                  on_tag_rename_click({ old_tag_name, old_tag_id })
+                }}
               />
             </>
           ) : (
@@ -1455,7 +1463,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           : undefined
       }
       on_tag_rename_click_={(old_tag_id: number) => {
-        const old_tag_name = bookmark.tags.find((t) => t.id == old_tag_id)!.name
+        const old_tag_name = counts_hook.tags![old_tag_id].name
         on_tag_rename_click({ old_tag_name, old_tag_id })
       }}
       on_tag_delete_click_={async (tag_id) => {
