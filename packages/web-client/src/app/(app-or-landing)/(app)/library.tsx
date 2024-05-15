@@ -891,6 +891,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             }
           }
         }}
+        on_tag_rename_click_={(old_tag_id: number) => {
+          const old_tag_name = counts_hook.tags![old_tag_id].name
+          on_tag_rename_click({ old_tag_name, old_tag_id })
+        }}
         translations_={{
           all_bookmarks_: props.dictionary.app.library.all_bookmarks,
           drag_here_: props.dictionary.app.library.drag_tag_here,

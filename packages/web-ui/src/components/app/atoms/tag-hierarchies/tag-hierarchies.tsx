@@ -29,6 +29,7 @@ export namespace TagHierarchies {
     all_bookmarks_yields_?: number
     is_all_bookmarks_selected_: boolean
     on_click_all_bookmarks_: () => void
+    on_tag_rename_click_?: (tag_id: number) => void
     library_url_: string
     translations_: {
       drag_here_: string
@@ -57,6 +58,15 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
       <UiCommon_Dropdown>
+        <UiCommon_Dropdown_StandardItem
+          label="Rename"
+          icon_variant="EDIT"
+          on_click={() => {
+            props.on_tag_rename_click_!(
+              items.find((i) => i.id == context_menu_of_item_id)!.tag_id,
+            )
+          }}
+        />
         <UiCommon_Dropdown_StandardItem
           label="Delete"
           icon_variant="DELETE"
