@@ -180,6 +180,8 @@ export const dictionary: Dictionary = {
       send_feedback: 'Forum społeczności Taaabs ↗',
       folders: 'Foldery',
       pinned: 'Przypięte',
+      rename: 'Zmień nazwę',
+      delete: 'Usuń',
       search: {
         placeholder: 'Szukaj w tytułach, notkach, tagach i linkach...',
         footer_tip: 'Tagi, filtry i zakres miesięcy wpływają na wyniki.',

@@ -116,6 +116,8 @@ export type Dictionary = {
       send_feedback: string
       folders: string
       pinned: string
+      rename: string
+      delete: string
       search: {
         placeholder: string
         footer_tip: string

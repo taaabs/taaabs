@@ -898,6 +898,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         translations_={{
           all_bookmarks_: props.dictionary.app.library.all_bookmarks,
           drag_here_: props.dictionary.app.library.drag_tag_here,
+          delete_: props.dictionary.app.library.delete,
+          rename_: props.dictionary.app.library.rename,
         }}
       />
     </div>
@@ -1127,6 +1129,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   const old_tag_name = counts_hook.tags![old_tag_id].name
                   on_tag_rename_click({ old_tag_name, old_tag_id })
                 }}
+                translations_={{
+                  rename_: props.dictionary.app.library.rename,
+                }}
               />
               <UiAppAtom_Tags
                 key={`tags-${library_updated_at_timestamp}-${popstate_count}`}
@@ -1154,6 +1159,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 on_tag_rename_click_={(old_tag_id: number) => {
                   const old_tag_name = counts_hook.tags![old_tag_id].name
                   on_tag_rename_click({ old_tag_name, old_tag_id })
+                }}
+                translations_={{
+                  rename_: props.dictionary.app.library.rename,
                 }}
               />
             </>
@@ -2262,6 +2270,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       should_dim_visited_links_={username !== undefined}
       // It's important to wait until filter is set to search hook's state.
       current_filter_={search_hook.current_filter_}
+      translations_={{
+        delete_: props.dictionary.app.library.delete,
+        rename_: props.dictionary.app.library.rename,
+      }}
     />
   ))
 

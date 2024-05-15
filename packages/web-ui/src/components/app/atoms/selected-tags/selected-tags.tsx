@@ -11,6 +11,9 @@ export namespace SelectedTags {
     selected_tags: { name: string; id: number }[]
     on_selected_tag_click: (tagId: number) => void
     on_tag_rename_click_?: (tag_id: number) => void
+    translations_: {
+      rename_: string
+    }
   }
 }
 
@@ -21,7 +24,7 @@ export const SelectedTags: React.FC<SelectedTags.Props> = memo(
     const { contextMenu, onContextMenu } = useContextMenu(
       <UiCommon_Dropdown>
         <UiCommon_Dropdown_StandardItem
-          label="Rename"
+          label={props.translations_.rename_}
           icon_variant="EDIT"
           on_click={() => {
             if (!context_menu_of_tag_id) return

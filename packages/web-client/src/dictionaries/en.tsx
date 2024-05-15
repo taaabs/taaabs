@@ -173,6 +173,8 @@ const dictionary: Dictionary = {
       send_feedback: 'Taaabs community ↗',
       folders: 'Folders',
       pinned: 'Pinned',
+      delete: 'Delete',
+      rename: 'Rename',
       search: {
         placeholder: 'Search in titles, notes, tags and links...',
         footer_tip: 'Tags, filters and custom range affect results.',

@@ -22,6 +22,9 @@ export namespace Tags {
       yields_: number
     }) => void
     on_tag_rename_click_?: (tag_id: number) => void
+    translations_: {
+      rename_: string
+    }
   }
 }
 
@@ -32,7 +35,7 @@ export const Tags: React.FC<Tags.Props> = memo(
     const { contextMenu, onContextMenu } = useContextMenu(
       <UiCommon_Dropdown>
         <UiCommon_Dropdown_StandardItem
-          label="Rename"
+          label={props.translations_.rename_}
           icon_variant="EDIT"
           on_click={() => {
             if (!context_menu_of_tag_id) return

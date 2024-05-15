@@ -127,7 +127,11 @@ export namespace Bookmark {
       yields_: number
     }
     on_mouse_up_?: () => void
-    screenshot?: string
+    screenshot_?: string
+    translations_: {
+      rename_: string
+      delete_: string
+    }
   }
 }
 
@@ -139,13 +143,20 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const [points_given, set_points_given] = useState<number>()
     const [is_menu_open, toggle_is_menu_open] = useToggle(false)
     const [link_url_menu_opened, set_link_url_menu_opened] = useState<string>()
-
+    const [recently_visited_link_idx, set_recently_visited_link_idx] =
+      useState<number>()
+    const main_context_menu = useContextMenu(props.menu_slot_)
+    const [context_menu_of_link_idx, set_context_menu_of_link_idx] =
+      useState<number>()
+    const link_context_menu = useContextMenu(
+      props.links_[context_menu_of_link_idx || 0].menu_slot_,
+    )
     const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
       useState<number>()
-    const { contextMenu, onContextMenu } = useContextMenu(
+    const tag_context_menu = useContextMenu(
       <UiCommon_Dropdown>
         <UiCommon_Dropdown_StandardItem
-          label="Rename"
+          label={props.translations_.rename_}
           icon_variant="EDIT"
           on_click={() => {
             if (!context_menu_of_tag_id) return
@@ -153,7 +164,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           }}
         />
         <UiCommon_Dropdown_StandardItem
-          label="Delete"
+          label={props.translations_.delete_}
           icon_variant="DELETE"
           on_click={() => {
             if (!context_menu_of_tag_id) return
@@ -162,8 +173,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         />
       </UiCommon_Dropdown>,
     )
-    const [recently_visited_link_idx, set_recently_visited_link_idx] =
-      useState<number>()
 
     useUpdateEffect(() => {
       if (props.points_given_ !== undefined && points_given === undefined) {
@@ -235,7 +244,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 props.on_tag_rename_click_
               ) {
                 set_context_menu_of_tag_id(tag.id)
-                onContextMenu(e)
+                tag_context_menu.onContextMenu(e)
               }
             }}
           >
@@ -569,12 +578,21 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         }}
       >
         <div className={styles.bookmark}>
-          {contextMenu}
+          {tag_context_menu.contextMenu}
+          {main_context_menu.contextMenu}
+          {link_context_menu.contextMenu}
           <div
             className={cn(styles.bookmark__main, {
               [styles['bookmark__main--corners-fix']]:
                 !props.links_.length || props.is_compact_,
             })}
+            onContextMenu={(e) => {
+              if ('ontouchstart' in window) {
+                e.preventDefault()
+              } else {
+                main_context_menu.onContextMenu(e)
+              }
+            }}
           >
             <div
               className={cn(styles.bookmark__main__top, {
@@ -730,7 +748,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 [styles['bookmark__links--compact']]: props.is_compact_,
               })}
             >
-              {props.links_.map((link, link_idx) => {
+              {props.links_.map((link, i) => {
                 const url = link.open_snapshot_
                   ? url_to_wayback({ date: props.created_at_, url: link.url_ })
                   : link.url_
@@ -765,7 +783,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           link.site_path_ ? ` ${link.site_path_}` : ''
                         }${i > 0 ? ' ' : ''}`,
                     )
-                    .slice(0, link_idx)
+                    .slice(0, i)
                     .join('')
                 ).length
 
@@ -773,12 +791,20 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   <div
                     className={cn(styles.bookmark__links__item, {
                       [styles['bookmark__links__item--recently-visited']]:
-                        recently_visited_link_idx == link_idx,
+                        recently_visited_link_idx == i,
                     })}
                     onClick={() => {
                       set_recently_visited_link_idx(undefined)
                     }}
                     key={link.url_}
+                    onContextMenu={(e) => {
+                      if ('ontouchstart' in window) {
+                        e.preventDefault()
+                      } else {
+                        set_context_menu_of_link_idx(i)
+                        link_context_menu.onContextMenu(e)
+                      }
+                    }}
                   >
                     <div className={styles.bookmark__links__item__link}>
                       <button
@@ -818,7 +844,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         onClick={async (e) => {
                           e.stopPropagation()
                           e.preventDefault()
-                          set_recently_visited_link_idx(link_idx)
+                          set_recently_visited_link_idx(i)
                           props.on_link_click_(url)
                         }}
                         onAuxClick={props.on_link_middle_click_}
@@ -836,7 +862,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                     (i > get_domain_from_url(link.url_).length
                                       ? 2
                                       : 0) +
-                                    (link_idx > 0 ? 1 : 0)
+                                    (i > 0 ? 1 : 0)
                                   const is_highlighted =
                                     props.highlights_!.find(
                                       ([index, length]) =>
@@ -887,7 +913,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         className={styles.bookmark__links__item__actions__open}
                         onClick={async (e) => {
                           e.stopPropagation()
-                          set_recently_visited_link_idx(link_idx)
+                          set_recently_visited_link_idx(i)
                           props.on_new_tab_link_click_(url)
                         }}
                       >

@@ -34,6 +34,8 @@ export namespace TagHierarchies {
     translations_: {
       drag_here_: string
       all_bookmarks_: string
+      rename_: string
+      delete_: string
     }
   }
 }
@@ -59,7 +61,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const { contextMenu, onContextMenu } = useContextMenu(
       <UiCommon_Dropdown>
         <UiCommon_Dropdown_StandardItem
-          label="Rename"
+          label={props.translations_.rename_}
           icon_variant="EDIT"
           on_click={() => {
             props.on_tag_rename_click_!(
@@ -68,7 +70,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           }}
         />
         <UiCommon_Dropdown_StandardItem
-          label="Delete"
+          label={props.translations_.delete_}
           icon_variant="DELETE"
           on_click={() => {
             if (!context_menu_of_item_id) return
