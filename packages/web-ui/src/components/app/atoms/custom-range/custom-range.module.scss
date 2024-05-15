@@ -25,6 +25,7 @@
       color: var(--text-color-dimmed);
     }
     &__current-range {
+      text-transform: capitalize;
       font-weight: var(--font-weight-inter-medium);
     }
     &__counts {

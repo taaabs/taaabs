@@ -775,6 +775,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                       [styles['bookmark__links__item--recently-visited']]:
                         recently_visited_link_idx == link_idx,
                     })}
+                    onClick={() => {
+                      set_recently_visited_link_idx(undefined)
+                    }}
                     key={link.url_}
                   >
                     <div className={styles.bookmark__links__item__link}>
