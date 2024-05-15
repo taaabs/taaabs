@@ -3,7 +3,7 @@ import { Points_RepositoryImpl } from '@repositories/modules/points/infrastructu
 import { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_library_dispatch } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
@@ -15,7 +15,7 @@ export const use_points = () => {
   const auth_context = useContext(AuthContext)!
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
-  const username = 'test_user'
+  const { username }: { username?: string } = useParams()
   const [points_given_, set_points_given] = useState<{
     [bookmark_id: string]: number
   }>({})
@@ -24,13 +24,17 @@ export const use_points = () => {
     set_points_given({})
   }, [search_params])
 
+  const receiver_username = username
+    ? username
+    : auth_context.auth_data!.username
+
   const submit_points_debounced = useDebouncedCallback(
     async (params: { bookmark_id: number; points: number; ky: KyInstance }) => {
       const data_source = new Points_DataSourceImpl(params.ky)
       const repository = new Points_RepositoryImpl(data_source)
       try {
         await repository.give_points({
-          receiver_username: username,
+          receiver_username,
           points: params.points,
           bookmark_id: params.bookmark_id,
         })
@@ -49,7 +53,7 @@ export const use_points = () => {
     const repository = new Points_RepositoryImpl(data_source)
     try {
       const given_till_now = await repository.check_total_given_points({
-        receiver_username: username,
+        receiver_username,
         bookmark_id: params.bookmark_id,
       })
       set_points_given({
