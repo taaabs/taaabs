@@ -1,5 +1,6 @@
 import cn from 'classnames'
 import styles from './input.module.scss'
+import TextareaAutosize from 'react-textarea-autosize'
 
 type State = 'error' | 'warning' | 'info'
 
@@ -27,7 +28,7 @@ export const Input: React.FC<Input.Props> = ({
   return (
     <div>
       {props.lines && props.lines > 1 ? (
-        <textarea
+        <TextareaAutosize
           className={cn([
             styles.field,
             styles.textarea,
@@ -38,7 +39,6 @@ export const Input: React.FC<Input.Props> = ({
           onChange={(e) => props.on_change(e.target.value)}
           value={props.value}
           autoFocus={props.autofocus}
-          rows={props.lines}
           placeholder={props.placeholder}
         />
       ) : (

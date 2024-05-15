@@ -10,6 +10,7 @@ import { Input } from '@web-ui/components/common/atoms/input'
 import { get_site_paths_from_url } from '@shared/utils/get-site-paths-from-url'
 import { toast } from 'react-toastify'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
+import TextareaAutosize from 'react-textarea-autosize'
 
 namespace DraggableUpsertFormLinks {
   type Link = {
@@ -135,7 +136,26 @@ export const DraggableUpsertFormLinks: React.FC<
                 <Icon variant="ADD" />
               </button>
               <div className={styles.item__content}>
-                <div className={styles.item__content__url}>{item.url}</div>
+                <TextareaAutosize
+                  className={styles.item__content__url}
+                  value={item.url}
+                  onChange={(e) => {
+                    set_items(
+                      items.map((i) =>
+                        i.id == item.id
+                          ? {
+                              ...i,
+                              url: e.target.value,
+                              site_path: undefined,
+                              site_paths: get_site_paths_from_url(
+                                e.target.value,
+                              ),
+                            }
+                          : i,
+                      ),
+                    )
+                  }}
+                />
                 <div className={styles.item__content__options}>
                   {props.show_visibility_toggler && (
                     <div className={styles.item__content__options__row}>

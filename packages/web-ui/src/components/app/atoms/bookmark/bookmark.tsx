@@ -149,7 +149,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const [context_menu_of_link_idx, set_context_menu_of_link_idx] =
       useState<number>()
     const link_context_menu = useContextMenu(
-      props.links_[context_menu_of_link_idx || 0].menu_slot_,
+      props.links_.length > 0
+        ? props.links_[context_menu_of_link_idx || 0].menu_slot_
+        : null,
     )
     const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
       useState<number>()

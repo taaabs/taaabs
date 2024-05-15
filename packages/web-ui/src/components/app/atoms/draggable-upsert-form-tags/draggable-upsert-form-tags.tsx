@@ -101,14 +101,29 @@ export const DraggableUpsertFormTags: React.FC<
                 <Icon variant="ADD" />
               </button>
               <div className={styles.item__content}>
-                <div className={styles.item__content__tag}>{item.name}</div>
+                <input
+                  className={styles.item__content__tag}
+                  value={item.name}
+                  onChange={(e) => {
+                    set_items(
+                      items.map((i) =>
+                        i.id == item.id
+                          ? {
+                              ...i,
+                              name: e.target.value,
+                            }
+                          : i,
+                      ),
+                    )
+                  }}
+                />
                 <div className={styles.item__content__options}>
                   {props.show_visibility_toggler && (
                     <div className={styles.item__content__options__row}>
                       <div
                         className={styles.item__content__options__row__label}
                       >
-                        Visibility
+                        {props.translations.visibility}
                       </div>
                       <div
                         className={styles.item__content__options__row__content}

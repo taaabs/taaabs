@@ -43,10 +43,14 @@
     position: relative;
     z-index: 1;
     &__tag {
+      background-color: transparent;
       color: var(--white);
       font-weight: var(--font-weight-inter-medium);
-      overflow-wrap: anywhere;
       padding: var(--padding-12px) var(--padding-16px);
+      caret-color: var(--white);
+      &::selection {
+        background-color: var(--green400);
+      }
     }
     &__options {
       display: flex;

@@ -10,7 +10,7 @@
 .item {
   display: flex;
   position: relative;
-  background-color: var(--brand-color);
+  background-color: var(--blue600);
   border-radius: var(--border-radius-12px);
   box-shadow: var(--box-shadow-blue-strong);
   color: var(--white);
@@ -44,9 +44,16 @@
     position: relative;
     z-index: 1;
     &__url {
+      background-color: transparent;
+      border: none;
+      color: var(--white);
       font-weight: var(--font-weight-inter-medium);
-      overflow-wrap: anywhere;
       padding: var(--padding-12px) var(--padding-16px);
+      caret-color: var(--white);
+      resize: none;
+      &::selection {
+        background-color: var(--blue400);
+      }
     }
     &__options {
       display: flex;
@@ -55,7 +62,7 @@
         display: flex;
         justify-content: space-between;
         padding: var(--padding-10px) var(--padding-16px);
-        border-top: 1px solid var(--blue600);
+        border-top: 1px solid var(--blue500);
         &__label {
           color: var(--blue150);
         }
@@ -82,7 +89,7 @@
     cursor: grab;
     padding: 0 var(--padding-8px);
     width: var(--button-dimension-34px);
-    background-color: var(--blue800);
+    background-color: var(--blue700);
     border-bottom-right-radius: var(--border-radius-12px);
     > svg {
       fill: var(--white);

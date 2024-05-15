@@ -135,7 +135,10 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
   useEffect(() => {
     window.addEventListener('keydown', handle_keyboard)
+    return () => window.removeEventListener('keydown', handle_keyboard)
+  }, [])
 
+  useEffect(() => {
     navigator.clipboard
       .readText()
       .then((text) => {
@@ -144,10 +147,6 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         }
       })
       .catch(() => {})
-
-    return () => {
-      window.removeEventListener('keydown', handle_keyboard)
-    }
   }, [])
 
   return (
