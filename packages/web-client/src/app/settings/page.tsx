@@ -1,13 +1,9 @@
-'use client'
+import { get_dictionary } from '../get_dictionary'
+import { Settings } from './settings'
 
-import { SectionUsername } from './section-username'
-
-const Page: React.FC = () => {
-  return (
-    <>
-      <SectionUsername />
-    </>
-  )
+const Page: React.FC = async () => {
+  const dictionary = await get_dictionary()
+  return <Settings dictionary={dictionary} />
 }
 
 export default Page

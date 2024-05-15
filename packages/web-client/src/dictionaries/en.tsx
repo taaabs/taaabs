@@ -286,6 +286,25 @@ const dictionary: Dictionary = {
       tag_is_too_long: 'Entered tag is too long',
     },
   },
+  settings: {
+    settings: 'Settings',
+    menu: {
+      general: 'General',
+      preferences: 'Preferences',
+      subscription: 'Subscription',
+      import: 'Import',
+      backups: 'Backups',
+    },
+    general: {
+      username: {
+        heading: {
+          text: 'Username',
+          subtext: 'Username determines your public profile URL.',
+        },
+        change_username: 'Change username',
+      },
+    },
+  },
 }
 
 export default dictionary

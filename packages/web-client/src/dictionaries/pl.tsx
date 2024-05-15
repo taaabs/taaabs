@@ -294,6 +294,25 @@ export const dictionary: Dictionary = {
       tag_is_too_long: 'Tag jest za długi',
     },
   },
+  settings: {
+    settings: 'Ustawienia',
+    menu: {
+      general: 'Ogólne',
+      preferences: 'Preferencje',
+      subscription: 'Subskrypcja',
+      import: 'Import',
+      backups: 'Kopie zapasowe',
+    },
+    general: {
+      username: {
+        heading: {
+          text: 'Nick',
+          subtext: 'Nick tworzy unikalny adres URL Twojego profilu.',
+        },
+        change_username: 'Zmień nick',
+      },
+    },
+  },
 }
 
 export default dictionary

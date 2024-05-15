@@ -9,12 +9,15 @@ import { useContext } from 'react'
 import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
 import { AuthContext } from '@/app/auth-provider'
+import { Dictionary } from '@/dictionaries/dictionary'
 
 type FormValues = {
   username: string
 }
 
-export const SectionUsername: React.FC = () => {
+export const SectionUsername: React.FC<{ dictionary: Dictionary }> = (
+  props,
+) => {
   const auth_context = useContext(AuthContext)!
   const {
     control,
@@ -56,8 +59,8 @@ export const SectionUsername: React.FC = () => {
       key={auth_context.auth_data?.username}
     >
       <UiAppAtom_HeadingWithSubheading
-        heading="Username"
-        subheading="Accessing your account and sharing your public profile requires using unique username."
+        heading={props.dictionary.settings.general.username.heading.text}
+        subheading={props.dictionary.settings.general.username.heading.subtext}
       />
 
       <Controller
@@ -114,7 +117,7 @@ export const SectionUsername: React.FC = () => {
         type="submit"
         is_disabled={isSubmitting || !auth_context.auth_data}
       >
-        Save
+        {props.dictionary.settings.general.username.change_username}
       </UiCommonParticle_Button>
     </form>
   )

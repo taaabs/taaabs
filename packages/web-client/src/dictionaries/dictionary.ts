@@ -226,4 +226,23 @@ export type Dictionary = {
       tag_is_too_long: string
     }
   }
+  settings: {
+    settings: string
+    menu: {
+      general: string
+      preferences: string
+      subscription: string
+      import: string
+      backups: string
+    }
+    general: {
+      username: {
+        heading: {
+          text: string
+          subtext: string
+        }
+        change_username: string
+      }
+    }
+  }
 }
