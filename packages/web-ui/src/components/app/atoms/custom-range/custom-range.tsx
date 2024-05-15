@@ -628,5 +628,5 @@ function yyyymm_to_display(yyyymm: number, locale: string) {
       parseInt(yyyymm.toString().substring(4, 6)) - 1,
     ),
     { locale },
-  ).format('MMMM YYYY')
+  ).format("MMMM 'YY")
 }

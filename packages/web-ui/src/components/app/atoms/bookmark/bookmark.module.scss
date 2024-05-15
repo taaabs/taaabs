@@ -50,8 +50,8 @@
     padding: 10px 0;
     background: var(--white);
     @include at992 {
-      border-top-left-radius: var(--border-radius-12px);
-      border-top-right-radius: var(--border-radius-12px);
+      border-top-left-radius: 11px;
+      border-top-right-radius: 11px;
     }
     &--corners-fix {
       // Ugly but necessary for highlihgts on italic links to work.

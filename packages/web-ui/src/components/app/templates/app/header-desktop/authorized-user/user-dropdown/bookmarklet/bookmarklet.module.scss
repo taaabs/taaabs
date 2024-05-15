@@ -1,0 +1,43 @@
+// @type
+@use '../../../../../../../../styles/foundation' as *;
+
+.container {
+  padding: var(--padding-8px) var(--padding-24px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  &__text {
+    font-weight: var(--font-weight-inter-medium);
+  }
+  &__subtext {
+    font-size: var(--font-size-14px);
+    color: var(--text-color-dimmed);
+  }
+}
+.button {
+  position: relative;
+  svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10px;
+    width: 24px;
+    fill: var(--brand-color);
+  }
+  a {
+    display: inline-block;
+    border: 1.5px dashed var(--black);
+    font-family: var(--font-family-plus-jakarta-sans);
+    font-weight: var(--font-weight-plus-jakarta-sans-bold);
+    border-radius: var(--border-radius-10px);
+    padding: 8px 12px 8px 42px;
+    align-self: flex-start;
+    cursor: grab;
+    font-size: 16px;
+  }
+}

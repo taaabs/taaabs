@@ -22,14 +22,17 @@ import HuggingFace from '../../../../assets/icons/hugging-face.svg'
 import Info from '../../../../assets/icons/info.svg'
 import LessThan from '../../../../assets/icons/less-than.svg'
 import Link from '../../../../assets/icons/link.svg'
+import LogOut from '../../../../assets/icons/log-out.svg'
 import OverviewFilled from '../../../../assets/icons/overview-filled.svg'
 import Overview from '../../../../assets/icons/overview.svg'
 import Pin from '../../../../assets/icons/pin.svg'
+import PublicProfile from '../../../../assets/icons/public-profile.svg'
 import Recent from '../../../../assets/icons/recent.svg'
 import Remove from '../../../../assets/icons/remove.svg'
 import Search from '../../../../assets/icons/search.svg'
 import SelectedBold from '../../../../assets/icons/selected-bold.svg'
 import Selected from '../../../../assets/icons/selected.svg'
+import Settings from '../../../../assets/icons/settings.svg'
 import Sidebar from '../../../../assets/icons/sidebar.svg'
 import StarFilled from '../../../../assets/icons/star-filled.svg'
 import Star from '../../../../assets/icons/star.svg'
@@ -71,14 +74,17 @@ export namespace Icon {
     | 'INFO'
     | 'LESS_THAN'
     | 'LINK'
+    | 'LOG_OUT'
     | 'OVERVIEW_FILLED'
     | 'OVERVIEW'
     | 'PIN'
+    | 'PUBLIC_PROFILE'
     | 'RECENT'
     | 'REMOVE'
     | 'SEARCH'
     | 'SELECTED_BOLD'
     | 'SELECTED'
+    | 'SETTINGS'
     | 'SIDEBAR'
     | 'STAR_FILLED'
     | 'STAR'
@@ -175,6 +181,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'LINK':
       icon = <Link />
       break
+    case 'LOG_OUT':
+      icon = <LogOut />
+      break
     case 'LOGO':
       icon = <Logo />
       break
@@ -205,6 +214,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'PIN':
       icon = <Pin />
       break
+    case 'PUBLIC_PROFILE':
+      icon = <PublicProfile />
+      break
     case 'RECENT':
       icon = <Recent />
       break
@@ -219,6 +231,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'SELECTED':
       icon = <Selected />
+      break
+    case 'SETTINGS':
+      icon = <Settings />
       break
     case 'SIDEBAR':
       icon = <Sidebar />

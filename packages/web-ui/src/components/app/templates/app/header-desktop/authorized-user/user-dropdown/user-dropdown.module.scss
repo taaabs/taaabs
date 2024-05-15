@@ -2,69 +2,12 @@
 @use '../../../../../../../styles/foundation' as *;
 
 .container {
-  width: 268px;
+  width: 330px;
   border-radius: var(--border-radius-20px);
-  border: var(--border-primary);
   background-color: var(--white);
-  box-shadow: var(--box-shadow);
-}
-.bookmarklet {
-  display: flex;
-  justify-content: center;
-  padding: var(--padding-16px);
-  > a {
-    padding: 4px 8px;
-    background-color: var(--blue200);
-    color: var(--blue700);
-    border-radius: 2px;
-  }
-}
-.profile {
-  display: flex;
-  justify-content: center;
-  padding-top: 20px;
-}
-.theme {
-  border-top: var(--border-secondary);
-  font-size: 16px;
-  padding: 12px var(--padding-24px);
-}
-.menu {
   display: flex;
   flex-direction: column;
-  &__item {
-    font-size: 16px;
-    padding: 14px var(--padding-24px);
-    border-top: var(--border-secondary);
-    display: flex;
-    align-items: center;
-    @include transition-150ms;
-    &:last-child {
-      border-bottom: var(--border-secondary);
-    }
-    @include hover {
-      background-color: var(--neutral50);
-      border-color: var(--border-color-primary);
-      & + .menu__item {
-        border-top: var(--border-primary);
-      }
-    }
-  }
-}
-.footer {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  column-gap: 10px;
-  row-gap: 4px;
-  padding: var(--padding-24px);
-  &__link {
-    display: flex;
-    color: var(--text-color-variant);
-    font-size: var(--font-size-14px);
-    position: relative;
-    @include hover {
-      @include text-decoration-underlinie-thin;
-    }
-  }
+  border: var(--border-primary);
+  box-shadow: var(--box-shadow);
+  padding: var(--padding-12px) 0;
 }

@@ -141,13 +141,19 @@ const dictionary: Dictionary = {
     powered_by: 'Powered by',
     header_desktop: {
       user_dropdown: {
-        save_to_taaabs: 'Save to taaabs',
+        my_public_profile: 'My profile',
         theme: 'Theme',
         settings: 'Settings',
         log_out: 'Log out',
         about: 'About',
         privacy_policy: 'Privacy policy',
         terms_of_service: 'Terms of service',
+        bookmarklet: {
+          text: 'Bookmarklet',
+          subtext:
+            'Drag this button to your Bookmarks Bar for easy way of saving.',
+          button_label: 'Save to taaabs',
+        },
       },
     },
     menu_items: {

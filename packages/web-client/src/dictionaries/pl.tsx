@@ -148,13 +148,19 @@ export const dictionary: Dictionary = {
     powered_by: 'Bazujemy na',
     header_desktop: {
       user_dropdown: {
-        save_to_taaabs: 'Zapisz do taaabs',
+        my_public_profile: 'Mój profil',
         theme: 'Motyw',
         settings: 'Ustawienia',
         log_out: 'Wyloguj się',
         about: 'O nas',
         privacy_policy: 'Polityka prywatności',
         terms_of_service: 'Warunki korzystania',
+        bookmarklet: {
+          text: 'Przycisk w pasku zakładek',
+          subtext:
+            'Przeciągnij ten przycisk do paska zakładek, dla łatwego zapisywania.',
+          button_label: 'Zapisz w taaabs',
+        },
       },
     },
     menu_items: {

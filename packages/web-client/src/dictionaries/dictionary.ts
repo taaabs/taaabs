@@ -85,13 +85,18 @@ export type Dictionary = {
     powered_by: string
     header_desktop: {
       user_dropdown: {
-        save_to_taaabs: string
+        my_public_profile: string
         theme: string
         settings: string
         log_out: string
         about: string
         privacy_policy: string
         terms_of_service: string
+        bookmarklet: {
+          text: string
+          subtext: string
+          button_label: string
+        }
       }
     }
     menu_items: {

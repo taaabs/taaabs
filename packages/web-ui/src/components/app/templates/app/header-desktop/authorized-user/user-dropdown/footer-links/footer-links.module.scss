@@ -1,0 +1,20 @@
+// @type
+@use '../../../../../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 4px;
+  padding: var(--padding-8px) var(--padding-24px);
+}
+.link {
+  display: flex;
+  color: var(--text-color-variant);
+  font-size: var(--font-size-14px);
+  position: relative;
+  @include hover {
+    @include text-decoration-underlinie-thin;
+  }
+}

@@ -14,8 +14,12 @@ import { UserForHeader as UiAppMolecule_UserForHeader } from '@web-ui/components
 import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
 import { HeaderDesktop as UiAppTemplate_App_HeaderDesktop } from '@web-ui/components/app/templates/app/header-desktop'
-import { AuthorizedUser as UiAppOrganism_App_HeaderDesktop_AuthorizedUser } from '@web-ui/components/app/templates/app/header-desktop/authorized-user'
-import { UserDropdown as UiAppOrganism_App_HeaderDesktop_AuthorizedUser_UserDropdown } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown'
+import { AuthorizedUser as UiAppTemplate_App_HeaderDesktop_AuthorizedUser } from '@web-ui/components/app/templates/app/header-desktop/authorized-user'
+import { UserDropdown as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown'
+import { StandardItem as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/standard-item'
+import { Separator as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/separator'
+import { Bookmarklet as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/bookmarklet'
+import { FooterLinks as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/footer-links'
 import { UpsertBookmark as Form_UpsertBookmark } from '@/forms/upsert-bookmark'
 import { update_search_params } from '@/utils/update-query-params'
 import { BookmarkHash } from '@/utils/bookmark-hash'
@@ -212,7 +216,7 @@ export const HeaderDesktop: React.FC<{
       slot_right_side={
         is_hydrated &&
         (auth_context.auth_data ? (
-          <UiAppOrganism_App_HeaderDesktop_AuthorizedUser
+          <UiAppTemplate_App_HeaderDesktop_AuthorizedUser
             pathname={pathname}
             on_click_add={() => {
               open_new_bookmark_modal({})
@@ -220,44 +224,117 @@ export const HeaderDesktop: React.FC<{
             on_click_search={() => {}}
             name={auth_context.auth_data.username}
             slot_user_dropdown={
-              <UiAppOrganism_App_HeaderDesktop_AuthorizedUser_UserDropdown
-                profile_url_={`/${
-                  auth_context.auth_data.username
-                }?back=${pathname}?${search_params.toString()}`}
-                username_={auth_context.auth_data.username}
-                settings_href_={`/settings?back=${pathname}?${search_params.toString()}`}
-                on_click_log_out_={auth_context.logout}
-                footer_links_={[
-                  {
-                    label_:
-                      props.dictionary.app.header_desktop.user_dropdown.about,
-                    href_: '/about',
-                  },
-                  {
-                    label_:
-                      props.dictionary.app.header_desktop.user_dropdown
-                        .terms_of_service,
-                    href_: '/terms-of-service',
-                  },
-                  {
-                    label_:
-                      props.dictionary.app.header_desktop.user_dropdown
-                        .privacy_policy,
-                    href_: '/privacy-policy',
-                  },
-                ]}
-                translations_={{
-                  save_to_taaabs_:
+              <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown>
+                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet
+                  text={
                     props.dictionary.app.header_desktop.user_dropdown
-                      .save_to_taaabs,
-                  theme_:
-                    props.dictionary.app.header_desktop.user_dropdown.theme,
-                  settings_:
-                    props.dictionary.app.header_desktop.user_dropdown.settings,
-                  log_out_:
-                    props.dictionary.app.header_desktop.user_dropdown.log_out,
-                }}
-              />
+                      .bookmarklet.text
+                  }
+                  subtext={
+                    props.dictionary.app.header_desktop.user_dropdown
+                      .bookmarklet.subtext
+                  }
+                  button_label={
+                    props.dictionary.app.header_desktop.user_dropdown
+                      .bookmarklet.button_label
+                  }
+                />
+                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
+                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
+                  label={
+                    props.dictionary.app.header_desktop.user_dropdown
+                      .my_public_profile
+                  }
+                  icon_variant={'PUBLIC_PROFILE'}
+                  on_click={() => {
+                    router.push(
+                      `/${
+                        auth_context.auth_data!.username
+                      }?back=${pathname}?${search_params.toString()}`,
+                    )
+                  }}
+                />
+                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
+                  label={
+                    props.dictionary.app.header_desktop.user_dropdown.settings
+                  }
+                  icon_variant={'SETTINGS'}
+                  on_click={() => {
+                    router.push(
+                      `/settings?back=${pathname}?${search_params.toString()}`,
+                    )
+                  }}
+                />
+                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
+                  label={
+                    props.dictionary.app.header_desktop.user_dropdown.log_out
+                  }
+                  icon_variant={'LOG_OUT'}
+                  on_click={auth_context.logout}
+                />
+                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
+                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks
+                  links_={[
+                    {
+                      label_:
+                        props.dictionary.app.header_desktop.user_dropdown.about,
+                      href_: '/about',
+                    },
+                    {
+                      label_:
+                        props.dictionary.app.header_desktop.user_dropdown
+                          .terms_of_service,
+                      href_: '/terms-of-service',
+                    },
+                    {
+                      label_:
+                        props.dictionary.app.header_desktop.user_dropdown
+                          .privacy_policy,
+                      href_: '/privacy-policy',
+                    },
+                  ]}
+                />
+              </UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown>
+              //     <UiAppOrganism_App_HeaderDesktop_AuthorizedUser_UserDropdown
+              //       profile_url_={`/${
+              //         auth_context.auth_data.username
+              //       }?back=${pathname}?${search_params.toString()}`}
+              //       username_={auth_context.auth_data.username}
+              //       settings_href_={`/settings?back=${pathname}?${search_params.toString()}`}
+              //       on_click_log_out_={auth_context.logout}
+              //       footer_links_={[
+              //         {
+              //           label_:
+              //             props.dictionary.app.header_desktop.user_dropdown.about,
+              //           href_: '/about',
+              //         },
+              //         {
+              //           label_:
+              //             props.dictionary.app.header_desktop.user_dropdown
+              //               .terms_of_service,
+              //           href_: '/terms-of-service',
+              //         },
+              //         {
+              //           label_:
+              //             props.dictionary.app.header_desktop.user_dropdown
+              //               .privacy_policy,
+              //           href_: '/privacy-policy',
+              //         },
+              //       ]}
+              //       translations_={{
+              //         save_to_taaabs_:
+              //           props.dictionary.app.header_desktop.user_dropdown
+              //             .save_to_taaabs,
+              //         theme_:
+              //           props.dictionary.app.header_desktop.user_dropdown.theme,
+              //         settings_:
+              //           props.dictionary.app.header_desktop.user_dropdown.settings,
+              //         log_out_:
+              //           props.dictionary.app.header_desktop.user_dropdown.log_out,
+              //       }}
+              //     />
+              //   }
+              // />
             }
           />
         ) : (
