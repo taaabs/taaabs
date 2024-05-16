@@ -85,8 +85,8 @@ export namespace Bookmark {
     on_tag_rename_click_?: (tag_id: number) => void
     on_tags_order_change_?: (tags: Bookmark.Props['tags_']) => void
     on_selected_tag_click_: (tag_id: number) => void
-    on_give_point_click_: (points: number) => void
-    on_get_points_given_click_: () => void
+    on_get_points_given_click_?: () => void
+    on_give_point_click_?: (points: number) => void
     tags_: {
       id: number // Sortable requires "id", so no mangling here.
       is_public_?: boolean
@@ -177,6 +177,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     )
 
     useUpdateEffect(() => {
+      if (!props.on_give_point_click_) return
       if (props.points_given_ !== undefined && points_given === undefined) {
         if (
           props.points_given_ < system_values.bookmark.points.limit_per_user
@@ -322,47 +323,58 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         {props.is_public_ ? (
           <button
             className={styles.bookmark__main__tags__huggs__emoji}
-            onClick={(e) => {
-              e.stopPropagation()
-              if (
-                (points_given !== undefined &&
-                  points_given <
-                    system_values.bookmark.points.limit_per_user) ||
-                !is_points_given_requested
-              ) {
-                confetti({
-                  particleCount: 20,
-                  startVelocity: 11,
-                  spread: 100,
-                  gravity: 0.3,
-                  ticks: 30,
-                  decay: 0.91,
-                  scalar: 0.8,
-                  angle:
-                    window.innerWidth < shared_values.media_query_992
-                      ? 120
-                      : undefined,
-                  shapes: ['square'],
-                  colors: ['#FFD21E', '#1d4ed8'],
-                  origin: {
-                    x: e.clientX / window.innerWidth,
-                    y: e.clientY / window.innerHeight,
-                  },
-                })
-              }
-              if (points_given === undefined) {
-                if (!is_points_given_requested) {
-                  props.on_get_points_given_click_()
-                  set_is_points_given_requested(true)
-                }
-                return
-              } else if (
-                points_given < system_values.bookmark.points.limit_per_user
-              ) {
-                props.on_give_point_click_(points_given + 1)
-                set_points_given(points_given + 1)
-              }
+            style={{
+              pointerEvents:
+                !props.on_give_point_click_ || !props.on_get_points_given_click_
+                  ? 'none'
+                  : undefined,
             }}
+            onClick={
+              props.on_give_point_click_ && props.on_get_points_given_click_
+                ? (e) => {
+                    e.stopPropagation()
+                    if (
+                      (points_given !== undefined &&
+                        points_given <
+                          system_values.bookmark.points.limit_per_user) ||
+                      !is_points_given_requested
+                    ) {
+                      confetti({
+                        particleCount: 20,
+                        startVelocity: 11,
+                        spread: 100,
+                        gravity: 0.3,
+                        ticks: 30,
+                        decay: 0.91,
+                        scalar: 0.8,
+                        angle:
+                          window.innerWidth < shared_values.media_query_992
+                            ? 120
+                            : undefined,
+                        shapes: ['square'],
+                        colors: ['#FFD21E', '#1d4ed8'],
+                        origin: {
+                          x: e.clientX / window.innerWidth,
+                          y: e.clientY / window.innerHeight,
+                        },
+                      })
+                    }
+                    if (points_given === undefined) {
+                      if (!is_points_given_requested) {
+                        props.on_get_points_given_click_!()
+                        set_is_points_given_requested(true)
+                      }
+                      return
+                    } else if (
+                      points_given <
+                      system_values.bookmark.points.limit_per_user
+                    ) {
+                      props.on_give_point_click_!(points_given + 1)
+                      set_points_given(points_given + 1)
+                    }
+                  }
+                : undefined
+            }
           >
             {/* Empty space needed by inline element to render correctly. */}⠀
             <div

@@ -1191,12 +1191,22 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       is_public_={bookmark.is_public}
       points_given_={points_hook.points_given_[bookmark.id]}
       points_={bookmark.points}
-      on_get_points_given_click_={() => {
-        points_hook.get_points_given_on_bookmark_({ bookmark_id: bookmark.id })
-      }}
-      on_give_point_click_={(points: number) => {
-        points_hook.give_points_({ bookmark_id: bookmark.id, points })
-      }}
+      on_get_points_given_click_={
+        auth_context.auth_data
+          ? () => {
+              points_hook.get_points_given_on_bookmark_({
+                bookmark_id: bookmark.id,
+              })
+            }
+          : undefined
+      }
+      on_give_point_click_={
+        auth_context.auth_data
+          ? (points: number) => {
+              points_hook.give_points_({ bookmark_id: bookmark.id, points })
+            }
+          : undefined
+      }
       title_={bookmark.title}
       note_={bookmark.note}
       on_click_={() => {
