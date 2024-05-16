@@ -149,7 +149,7 @@ const dictionary: Dictionary = {
         privacy_policy: 'Privacy policy',
         terms_of_service: 'Terms of service',
         bookmarklet: {
-          text: 'Bookmarklet',
+          text: '<strong>Bookmarklet</strong> is the easiest way to integrate your browser with Taaabs',
           subtext:
             'Drag this button to your Bookmarks Bar for easy way of saving.',
           button_label: 'Save to taaabs',
