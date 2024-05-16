@@ -25,14 +25,17 @@ export const use_points = () => {
   }, [search_params])
 
   const submit_points_debounced = useDebouncedCallback(
-    async (params: { bookmark_id: number; points: number; ky: KyInstance }) => {
+    async (params: {
+      receiver_usernamae: string
+      bookmark_id: number
+      points: number
+      ky: KyInstance
+    }) => {
       const data_source = new Points_DataSourceImpl(params.ky)
       const repository = new Points_RepositoryImpl(data_source)
       try {
         await repository.give_points({
-          receiver_username: username
-            ? username
-            : auth_context.auth_data!.username,
+          receiver_username: params.receiver_usernamae,
           points: params.points,
           bookmark_id: params.bookmark_id,
         })
@@ -70,6 +73,9 @@ export const use_points = () => {
     points: number
   }) => {
     submit_points_debounced({
+      receiver_usernamae: username
+        ? username
+        : auth_context.auth_data!.username,
       bookmark_id: params.bookmark_id,
       points: params.points,
       ky: auth_context.ky_instance,
