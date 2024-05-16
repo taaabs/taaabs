@@ -13,7 +13,10 @@ export const Bookmarklet: React.FC<Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.heading}>
-        <div className={styles.heading__text}>{props.text}</div>
+        <div
+          className={styles.heading__text}
+          dangerouslySetInnerHTML={{ __html: props.text }}
+        />
         <div className={styles.heading__subtext}>{props.subtext}</div>
       </div>
       <div className={styles.button}>
