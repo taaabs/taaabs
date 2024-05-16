@@ -135,7 +135,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
     }
 
     await this._ky.post(`v1/import-export/send-import-data`, {
-      body: JSON.stringify(body),
+      json: body,
       timeout: false,
     })
   }

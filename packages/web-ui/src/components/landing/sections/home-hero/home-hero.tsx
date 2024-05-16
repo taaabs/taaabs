@@ -3,6 +3,7 @@ import styles from './home-hero.module.scss'
 import { Button } from '@web-ui/components/common/particles/button'
 import { Wrapper as UiLandingTemplate_Wrapper } from '../../templates/wrapper/wrapper'
 import confetti from 'canvas-confetti'
+import { useEffect } from 'react'
 
 export namespace HomeHero {
   export type Props = {
@@ -66,7 +67,13 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
           </div>
 
           {props.claim_username && (
-            <div className={styles['claim-username']}>
+            <form
+              className={styles['claim-username']}
+              onSubmit={(e) => {
+                e.preventDefault()
+                props.claim_username?.button_on_click()
+              }}
+            >
               <div className={styles['claim-username__input']}>
                 <input
                   value={props.claim_username.username}
@@ -75,17 +82,14 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
                 />
               </div>
               <div className={styles['claim-username__button']}>
-                <Button
-                  on_click={props.claim_username.button_on_click}
-                  size="large"
-                >
+                <Button type="submit" size="large">
                   {props.claim_username.button_label}
                 </Button>
                 <div className={styles['claim-username__button__incentive']}>
                   {props.claim_username.incentive}
                 </div>
               </div>
-            </div>
+            </form>
           )}
 
           <div className={styles.checks}>

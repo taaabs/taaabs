@@ -49,7 +49,7 @@ describe('Bookmarks_DataSourceImpl', () => {
             ['Content-Type']: 'application/json',
           },
           method: 'POST',
-          body: JSON.stringify(body),
+          json: body,
         },
       )
     })

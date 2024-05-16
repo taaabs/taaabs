@@ -127,7 +127,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     props.on_submit(bookmark)
   }
 
-  const handle_keyboard = (event: any) => {
+  const handle_keyboard = (event: KeyboardEvent) => {
     if (event.code == 'Escape') {
       props.on_close()
     }

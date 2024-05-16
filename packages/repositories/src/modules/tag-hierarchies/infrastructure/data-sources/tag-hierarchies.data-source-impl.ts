@@ -79,7 +79,7 @@ export class TagHierarchies_DataSourceImpl
     return this._ky
       .put('v1/tag-hierarchies', {
         searchParams: JSON.parse(JSON.stringify(search_params)),
-        body: JSON.stringify(body),
+        json: body,
       })
       .json()
   }

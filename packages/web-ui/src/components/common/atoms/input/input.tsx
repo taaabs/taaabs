@@ -1,6 +1,7 @@
 import cn from 'classnames'
 import styles from './input.module.scss'
 import TextareaAutosize from 'react-textarea-autosize'
+import { Icon } from '../../particles/icon'
 
 type State = 'error' | 'warning' | 'info'
 
@@ -18,6 +19,7 @@ export namespace Input {
     on_focus?: () => void
     on_blur?: () => void
     additional_properties?: any
+    suffix_action?: { icon_variant: Icon.Variant; on_click?: () => void }
   }
 }
 

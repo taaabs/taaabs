@@ -16,7 +16,7 @@ export class Points_DataSourceImpl implements Points_DataSource {
     }
 
     await this._ky.post(`v1/points`, {
-      body: JSON.stringify(body),
+      json: body,
     })
   }
 
@@ -29,7 +29,7 @@ export class Points_DataSourceImpl implements Points_DataSource {
     }
     return this._ky
       .post(`v1/points/check-total-given`, {
-        body: JSON.stringify(body),
+        json: body,
       })
       .json()
   }

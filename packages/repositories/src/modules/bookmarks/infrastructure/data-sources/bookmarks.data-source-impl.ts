@@ -84,7 +84,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     const body: BookmarksByIds_Dto.Body = params.ids
     return this._ky
       .post('v1/bookmarks/by-ids', {
-        body: JSON.stringify(body),
+        json: body,
       })
       .json()
   }
@@ -95,7 +95,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     const body: BookmarksByIds_Dto.Body = params.ids
     return this._ky
       .post(`v1/bookmarks/by-ids/${params.username}`, {
-        body: JSON.stringify(body),
+        json: body,
       })
       .json()
   }
@@ -106,7 +106,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       visited_at: params.visited_at,
     }
     await this._ky.post(`v1/bookmarks/record-visit`, {
-      body: JSON.stringify(body),
+      json: body,
     })
   }
 
@@ -221,13 +221,13 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     if (params.bookmark_id) {
       return this._ky
         .put(`v1/bookmarks/${params.bookmark_id}`, {
-          body: JSON.stringify(body),
+          json: body,
         })
         .json()
     } else {
       return this._ky
         .post('v1/bookmarks', {
-          body: JSON.stringify(body),
+          json: body,
         })
         .json()
     }

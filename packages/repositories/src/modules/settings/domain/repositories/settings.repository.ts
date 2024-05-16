@@ -1,10 +1,5 @@
 import { UpdateUsername_Params } from '../types/update-username.params'
-import { UsernameAvailability } from '../types/username-availability'
 
 export type Settings_Repository = {
-  check_username_availability(
-    params: UsernameAvailability.Params,
-  ): Promise<UsernameAvailability.Response>
-
   update_username(params: UpdateUsername_Params): Promise<void>
 }

@@ -35,7 +35,7 @@ export class Pinned_DataSourceImpl implements Pinned_DataSource {
     )
     return this._ky
       .put('v1/pinned', {
-        body: JSON.stringify(body),
+        json: body,
       })
       .json()
   }

@@ -77,6 +77,8 @@ export type Dictionary = {
       create_account: string
       username_too_long: string
       username_too_short: string
+      username_contains_incorrect_characters: string
+      username_not_available: string
       password_too_short: string
       hint_too_long: string
     }
@@ -242,6 +244,9 @@ export type Dictionary = {
           subtext: string
         }
         change_username: string
+        username_not_available: string
+        username_left_unchanged: string
+        username_changed: string
       }
     }
   }

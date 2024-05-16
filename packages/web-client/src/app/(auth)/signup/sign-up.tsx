@@ -11,13 +11,16 @@ import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/a
 import ky from 'ky'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
 import { toast } from 'react-toastify'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@/app/auth-provider'
 import { system_values } from '@shared/constants/system-values'
 import { SignUp_Params } from '@repositories/modules/auth/domain/sign-up.params'
 import { Crypto } from '@repositories/utils/crypto'
 import { useSearchParams } from 'next/navigation'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
+import { Miscellaneous_DataSourceImpl } from '@repositories/modules/miscellaneous/infrastructure/miscellaneous.data-source-impl'
+import { Miscellaneous_RepositoryImpl } from '@repositories/modules/miscellaneous/infrastructure/miscellaneous.repository-impl'
+import awesomeDebouncePromise from 'awesome-debounce-promise'
 
 type FormValues = {
   email: string
@@ -28,16 +31,30 @@ type FormValues = {
 }
 
 export const SignUp = (props: { dictionary: Dictionary }) => {
-  const auth_context = useContext(AuthContext)
+  const auth_context = useContext(AuthContext)!
   const { executeRecaptcha } = useGoogleReCaptcha()
   const {
     control,
     handleSubmit,
     resetField,
     formState: { errors, isSubmitting },
+    trigger,
   } = useForm<FormValues>({ mode: 'onBlur' })
   const search_params = useSearchParams()
   const [will_redirect, set_will_redirect] = useState<boolean>()
+
+  const get_is_username_available = async (username: string) => {
+    const data_source = new Miscellaneous_DataSourceImpl(
+      auth_context.ky_instance,
+    )
+    const repository = new Miscellaneous_RepositoryImpl(data_source)
+    const result = await repository.check_username_availability({ username })
+    if (result.is_available) {
+      return true
+    } else {
+      return props.dictionary.auth.sign_up.username_not_available
+    }
+  }
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     if (!executeRecaptcha) {
@@ -79,6 +96,12 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
       toast.error(props.dictionary.auth.something_went_wrong)
     }
   }
+
+  useEffect(() => {
+    if (search_params.get('username')) {
+      trigger('username')
+    }
+  }, [])
 
   return (
     <UiAuthTemplate_Auth
@@ -157,6 +180,15 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
                   value: system_values.username_min_length,
                   message: props.dictionary.auth.sign_up.username_too_short,
                 },
+                pattern: {
+                  value: system_values.username_regex,
+                  message:
+                    props.dictionary.auth.sign_up
+                      .username_contains_incorrect_characters,
+                },
+                validate: awesomeDebouncePromise(async (value) => {
+                  return await get_is_username_available(value)
+                }, 500),
               }}
               render={({ field }) => {
                 const error_message = errors.username?.message
@@ -164,10 +196,9 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
                   <UiCommonAtom_Input
                     value={field.value}
                     on_change={(value) => {
-                      resetField('username')
-                      if (!isSubmitting) {
-                        field.onChange(value)
-                      }
+                      if (isSubmitting) return
+                      field.onChange(value)
+                      if (value.length) trigger('username')
                     }}
                     on_blur={field.onBlur}
                     placeholder={props.dictionary.auth.sign_up.username}

@@ -22,7 +22,7 @@ export class Auth_DataSourceImpl implements Auth_DataSource {
 
     return this._ky
       .post('v1/auth/login', {
-        body: JSON.stringify(body),
+        json: body,
       })
       .json()
   }
@@ -41,7 +41,7 @@ export class Auth_DataSourceImpl implements Auth_DataSource {
 
     return this._ky
       .post('v1/auth/signup', {
-        body: JSON.stringify(body),
+        json: body,
       })
       .json()
   }

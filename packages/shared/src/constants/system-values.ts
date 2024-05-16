@@ -1,4 +1,5 @@
 export const system_values = {
+  username_regex: /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{5,15}$/,
   username_max_length: 15,
   username_min_length: 6,
   password_min_length: 8,
