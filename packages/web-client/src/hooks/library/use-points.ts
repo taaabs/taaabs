@@ -24,17 +24,15 @@ export const use_points = () => {
     set_points_given({})
   }, [search_params])
 
-  const receiver_username = username
-    ? username
-    : auth_context.auth_data!.username
-
   const submit_points_debounced = useDebouncedCallback(
     async (params: { bookmark_id: number; points: number; ky: KyInstance }) => {
       const data_source = new Points_DataSourceImpl(params.ky)
       const repository = new Points_RepositoryImpl(data_source)
       try {
         await repository.give_points({
-          receiver_username,
+          receiver_username: username
+            ? username
+            : auth_context.auth_data!.username,
           points: params.points,
           bookmark_id: params.bookmark_id,
         })
@@ -53,7 +51,9 @@ export const use_points = () => {
     const repository = new Points_RepositoryImpl(data_source)
     try {
       const given_till_now = await repository.check_total_given_points({
-        receiver_username,
+        receiver_username: username
+          ? username
+          : auth_context.auth_data!.username,
         bookmark_id: params.bookmark_id,
       })
       set_points_given({
