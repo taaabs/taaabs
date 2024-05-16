@@ -149,9 +149,9 @@ const dictionary: Dictionary = {
         privacy_policy: 'Privacy policy',
         terms_of_service: 'Terms of service',
         bookmarklet: {
-          text: '<strong>Bookmarklet</strong> is the easiest way to integrate your browser with Taaabs',
+          text: 'Bookmarklet',
           subtext:
-            'Drag this button to your Bookmarks Bar for easy way of saving.',
+            'The easiest way of integrating your browser with Taaabs, simply drag this button to your Bookmarks Bar and click from any website.',
           button_label: 'Save to taaabs',
         },
       },

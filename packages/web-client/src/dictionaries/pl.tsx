@@ -156,9 +156,9 @@ export const dictionary: Dictionary = {
         privacy_policy: 'Polityka prywatności',
         terms_of_service: 'Warunki korzystania',
         bookmarklet: {
-          text: '<strong>Bookmarklet</strong> to najprostrza metoda integracji z Twoją przeglądarką',
+          text: 'Bookmarklet',
           subtext:
-            'Przeciągnij ten przycisk do paska zakładek, dla łatwego zapisywania.',
+            'Najłatwiejszy sposób na integrację przeglądarki z Taaabs to po prostu przeciągnięcie tego przycisku na pasek zakładek i kliknięcie z dowolnej strony internetowej.',
           button_label: 'Zapisz w taaabs',
         },
       },
