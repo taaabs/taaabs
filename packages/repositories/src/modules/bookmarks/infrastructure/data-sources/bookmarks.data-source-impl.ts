@@ -216,6 +216,11 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
             }
           }),
       ),
+      cover: params.is_public ? params.cover : undefined,
+      cover_aes:
+        !params.is_public && params.cover
+          ? await Crypto.AES.encrypt(params.cover, encryption_key)
+          : undefined,
     }
 
     if (params.bookmark_id) {

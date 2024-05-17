@@ -85,6 +85,11 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                   }
                 }),
               ),
+              cover: bookmark.cover
+                ? bookmark.cover
+                : bookmark.cover_aes
+                ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
+                : undefined,
             })),
           )
         : undefined,
@@ -129,6 +134,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               is_pinned: link.is_pinned,
               open_snapshot: link.open_snapshot,
             })),
+            cover: bookmark.cover ? bookmark.cover : undefined,
           }))
         : undefined,
       pagination: result.pagination
@@ -211,6 +217,11 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                   }
                 }),
               ),
+              cover: bookmark.cover
+                ? bookmark.cover
+                : bookmark.cover_aes
+                ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
+                : undefined,
             })),
           )
         : undefined,
@@ -248,6 +259,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               is_public: true,
               open_snapshot: link.open_snapshot,
             })),
+            cover: bookmark.cover ? bookmark.cover : undefined,
           }))
         : undefined,
     }
@@ -328,6 +340,11 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           }
         }),
       ),
+      cover: bookmark.cover
+        ? bookmark.cover
+        : bookmark.cover_aes
+        ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
+        : undefined,
     }
   }
 }

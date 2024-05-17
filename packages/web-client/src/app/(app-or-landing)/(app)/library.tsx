@@ -1191,6 +1191,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       is_public_={bookmark.is_public}
       points_given_={points_hook.points_given_[bookmark.id]}
       points_={bookmark.points}
+      cover_={bookmark.cover}
       on_get_points_given_click_={
         auth_context.auth_data
           ? () => {

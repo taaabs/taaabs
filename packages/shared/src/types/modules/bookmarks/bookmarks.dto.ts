@@ -79,6 +79,7 @@ export namespace Bookmarks_Dto {
       public stars?: number
       public is_unread?: boolean
       public points?: number
+      public cover?: string
     }
 
     export class AuthorizedBookmark extends Bookmark {
@@ -87,6 +88,7 @@ export namespace Bookmarks_Dto {
       public links: AuthorizedLink[]
       public tags: AuthorizedTag[]
       public note_aes?: string
+      public cover_aes?: string
     }
     export class PublicBookmark extends Bookmark {
       public links: PublicLink[]

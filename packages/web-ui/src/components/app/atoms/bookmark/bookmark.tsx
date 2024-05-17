@@ -127,7 +127,7 @@ export namespace Bookmark {
       yields_: number
     }
     on_mouse_up_?: () => void
-    screenshot_?: string
+    cover_?: string
     translations_: {
       rename_: string
       delete_: string
@@ -751,6 +751,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 {huggs_dom}
               </div>
             )}
+
+            <div>
+              {props.cover_ && (
+                <img src={`data:image/webp;base64,${props.cover_}`} />
+              )}
+            </div>
           </div>
           <OutsideClickHandler
             onOutsideClick={() => {

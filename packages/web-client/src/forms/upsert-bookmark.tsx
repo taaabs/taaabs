@@ -1,6 +1,6 @@
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { system_values } from '@shared/constants/system-values'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Content as UiCommonTemplate_Modal_Content } from '../../../web-ui/src/components/common/templates/modal/content'
 import { Header as UiCommonTemplate_Modal_Content_Header } from '../../../web-ui/src/components/common/templates/modal/content/header'
@@ -54,6 +54,58 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
   const [clipboard_url, set_clipboard_url] = useState<string>()
+  const file_input = useRef<HTMLInputElement>(null)
+  const cover_base64_encoded_webp = useRef<string>()
+
+  const handle_file_select = (event: Event) => {
+    const input = event.target as HTMLInputElement
+    if (!input.files) {
+      return
+    }
+    const file = input.files[0]
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = function () {
+      const img = new Image()
+      img.src = reader.result as string
+      img.onload = function () {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+        // Calculate crop dimensions based on the larger side.
+        const originalWidth = img.width
+        const originalHeight = img.height
+        const cropWidth = Math.min(originalWidth, originalHeight)
+        const cropHeight = cropWidth
+
+        // Calculate the offset for centering the crop.
+        const cropX = (originalWidth - cropWidth) / 2
+        const cropY = (originalHeight - cropHeight) / 2
+        canvas.width = 140
+        canvas.height = 140
+
+        // Draw the cropped image onto the canvas
+        ctx.drawImage(
+          img,
+          cropX,
+          cropY,
+          cropWidth,
+          cropHeight,
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+        )
+
+        cover_base64_encoded_webp.current = canvas.toDataURL('image/webp')
+      }
+    }
+  }
+
+  useEffect(() => {
+    file_input.current?.addEventListener('change', handle_file_select)
+    return () =>
+      file_input.current?.removeEventListener('change', handle_file_select)
+  }, [])
 
   const [links, set_links] = useState<
     {
@@ -123,6 +175,10 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         name: tag.name,
         is_public: (form_data.is_public ? tag.is_public : false) || false, // TODO: make is public optional.
       })),
+      cover:
+        cover_base64_encoded_webp.current?.split(
+          'data:image/webp;base64,',
+        )[1] || props.bookmark?.cover,
     }
     props.on_submit(bookmark)
   }
@@ -402,6 +458,12 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             )
           }}
         />
+      </UiCommonTemplate_Modal_Content_Sections_StandardSplit>
+
+      <UiCommonTemplate_Modal_Content_Sections_Divider />
+
+      <UiCommonTemplate_Modal_Content_Sections_StandardSplit label="Cover">
+        <input type="file" ref={file_input} />
       </UiCommonTemplate_Modal_Content_Sections_StandardSplit>
     </UiCommonTemplate_Modal_Content>
   )

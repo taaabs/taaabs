@@ -72,6 +72,8 @@ export namespace CreateBookmark_Dto {
       )
       .max(system_values.bookmark.links.limit)
       .optional(),
+    cover: z.string().optional(),
+    cover_aes: z.string().optional(),
   })
 
   export type Body = z.infer<typeof body_schema>

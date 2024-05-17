@@ -21,4 +21,5 @@ export type Bookmark_Entity = {
   render_height?: number
   is_compact?: boolean
   points?: number
+  cover?: string
 }
