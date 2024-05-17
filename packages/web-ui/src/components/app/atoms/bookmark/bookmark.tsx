@@ -67,7 +67,6 @@ export namespace Bookmark {
     search_queried_at_timestamp_?: number
     locale: 'pl' | 'en'
     is_search_result_?: boolean
-    index_: number
     bookmark_id_: number
     updated_at_: string
     is_public_: boolean
@@ -623,14 +622,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             </div>
 
             <div className={styles.bookmark__main__right}>
-              <div
-                className={cn(styles.bookmark__main__right__top, {
-                  [styles['bookmark__main__right__top--compact']]:
-                    props.is_compact_,
-                })}
-              >
+              <div className={styles.bookmark__main__right__top}>
                 <div className={styles.bookmark__main__right__top__info}>
-                  {props.index_ + 1} · {bookmark_date}
+                  {bookmark_date}
                 </div>
                 <div className={styles.bookmark__main__right__top__menu}>
                   <OutsideClickHandler

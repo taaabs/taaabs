@@ -11,7 +11,6 @@ declare const styles: {
   readonly bookmark__main__cover__image: string
   readonly bookmark__main__right: string
   readonly bookmark__main__right__top: string
-  readonly 'bookmark__main__right__top--compact': string
   readonly bookmark__main__right__top__info: string
   readonly bookmark__main__right__top__menu: string
   readonly bookmark__main__right__top__menu__button: string

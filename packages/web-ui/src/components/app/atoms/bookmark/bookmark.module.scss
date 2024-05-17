@@ -71,22 +71,15 @@
         margin-left: var(--padding-10px);
         overflow: hidden;
         width: 75px;
-        height: 100%;
-        max-height: 75px;
-        height: 100%;
-        position: relative;
-        > img {
-          position: absolute;
-          height: 100%;
-          width: 100%;
-          object-fit: cover;
-        }
+        height: 75px;
       }
     }
     &__right {
       display: flex;
       flex-direction: column;
       flex: 1;
+      min-height: 75px;
+      justify-content: space-between;
       &__top {
         width: 100%;
         display: flex;
@@ -94,9 +87,6 @@
         align-items: flex-end;
         position: relative;
         margin-bottom: calc(3px * -1); // Needed by "compact" density.
-        &--compact {
-          display: none;
-        }
         &__info {
           color: var(--text-color-dimmed);
           display: flex;
@@ -146,6 +136,7 @@
         gap: 2px;
         overflow: hidden;
         position: relative;
+        margin-top: -1px;
         &__title {
           display: inline;
           color: var(--text-color-normal);
