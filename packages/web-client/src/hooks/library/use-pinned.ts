@@ -45,7 +45,7 @@ export const use_pinned = () => {
       browser_storage.session_storage.library.pinned({
         username,
       }),
-      JSON.stringify(items),
+      JSON.stringify(items || []),
     )
   }, [items])
 
