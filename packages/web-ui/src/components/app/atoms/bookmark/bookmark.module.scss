@@ -2,15 +2,13 @@
 @use '../../../../styles/foundation' as *;
 
 .container {
-  border: var(--border-secondary);
   @include to992 {
-    border-left: 0;
-    border-right: 0;
-    border-top-color: var(--neutral150);
+    border-top: var(--border-primary);
+    border-bottom: var(--border-secondary);
   }
   @include at992 {
+    border: var(--border-primary);
     border-radius: var(--border-radius-12px);
-    border: var(--border-secondary);
     @include transition-150ms(border-color);
     @include dark {
       background: blue;
@@ -18,13 +16,13 @@
   }
   &--compact {
     @include to992 {
-      box-shadow: 0 1px 0 0 var(--border-color-secondary);
+      box-shadow: 0 1px 0 0 var(--border-color-primary);
       border-bottom: 0;
     }
   }
   &--clickable {
     @include hover {
-      border-color: var(--neutral250);
+      border-color: var(--neutral300);
     }
   }
   &--search-result {
@@ -37,7 +35,7 @@
   }
   &--search-result-clickable {
     @include hover {
-      border-color: var(--neutral300);
+      border-color: var(--neutral400);
     }
   }
 }
@@ -61,16 +59,27 @@
     }
     &__cover {
       display: flex;
+      margin-right: 14px;
+      &:has(div) {
+        margin-right: 11px;
+      }
       &__image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border-radius: var(--border-radius-8px);
         margin-left: var(--padding-10px);
         overflow: hidden;
         width: 75px;
-        height: 75px;
-        &--compact {
-          height: 48px;
-          display: flex;
-          align-items: center;
+        height: 100%;
+        max-height: 122px;
+        position: relative;
+        > img {
+          position: absolute;
+          z-index: 1;
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
         }
       }
     }
@@ -91,12 +100,8 @@
         &__info {
           color: var(--text-color-dimmed);
           display: flex;
-          padding-left: 16px;
           padding-bottom: 6px;
           white-space: pre-wrap;
-          @include at992 {
-            padding-left: 14px;
-          }
         }
         &__menu {
           position: relative;
@@ -135,15 +140,12 @@
         }
       }
       &__content {
-        padding: 0 16px 0 16px;
+        padding-right: 14px;
         display: flex;
         flex-direction: column;
         gap: 2px;
         overflow: hidden;
         position: relative;
-        @include at992 {
-          padding: 0 14px 0 14px;
-        }
         &__title {
           display: inline;
           color: var(--text-color-normal);
@@ -151,24 +153,13 @@
           &__unread {
             display: inline-flex;
             align-items: center;
-            transform: translateX(-10px) translateY(-0.4rem) rotate(45deg);
+            transform: translateY(0.05em);
             left: 0;
-            transform-origin: left;
-            position: absolute;
-            border-top-right-radius: var(--border-radius-5px);
-            height: 18px;
-            width: 18px;
+            border-radius: 50%;
+            height: 16px;
+            width: 16px;
             background: var(--red);
-          }
-          &__search-result {
-            display: inline-flex;
-            height: 0;
             margin-right: 5px;
-            transform: translateY(0.2rem);
-            > svg {
-              height: 18px;
-              fill: var(--brand-color);
-            }
           }
           &__stars {
             display: inline-flex;
@@ -206,13 +197,9 @@
         position: relative;
         font-family: var(--font-family-inter-tight);
         margin-top: 4px;
-        margin-left: 16px;
         margin-right: 8px;
         font-size: var(--font-size-15px);
         margin-bottom: calc(5px * -1);
-        @include at992 {
-          margin-left: 14px;
-        }
         > * {
           margin-right: 8px;
           margin-bottom: 5px;

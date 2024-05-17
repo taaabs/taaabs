@@ -614,12 +614,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           >
             <div className={styles.bookmark__main__cover}>
               {props.cover_ && (
-                <div
-                  className={cn(styles.bookmark__main__cover__image, {
-                    [styles['bookmark__main__cover__image--compact']]:
-                      props.is_compact_,
-                  })}
-                >
+                <div className={styles.bookmark__main__cover__image}>
                   <img src={`data:image/webp;base64,${props.cover_}`} />
                 </div>
               )}
