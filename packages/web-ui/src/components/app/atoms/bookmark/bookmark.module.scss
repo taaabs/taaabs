@@ -95,7 +95,7 @@
           padding-bottom: 6px;
           white-space: pre-wrap;
           @include at992 {
-            padding-left: 12px;
+            padding-left: 14px;
           }
         }
         &__menu {
@@ -142,7 +142,7 @@
         overflow: hidden;
         position: relative;
         @include at992 {
-          padding: 0 12px 0 12px;
+          padding: 0 14px 0 14px;
         }
         &__title {
           display: inline;
@@ -211,7 +211,7 @@
         font-size: var(--font-size-15px);
         margin-bottom: calc(5px * -1);
         @include at992 {
-          margin-left: 12px;
+          margin-left: 14px;
         }
         > * {
           margin-right: 8px;
