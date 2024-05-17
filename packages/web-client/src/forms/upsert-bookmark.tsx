@@ -54,6 +54,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
   const [clipboard_url, set_clipboard_url] = useState<string>()
+  const cover_paste_area = useRef<HTMLDivElement>(null)
   const file_input = useRef<HTMLInputElement>(null)
   const cover_base64_encoded_webp = useRef<string>()
 
@@ -80,8 +81,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         // Calculate the offset for centering the crop.
         const cropX = (originalWidth - cropWidth) / 2
         const cropY = (originalHeight - cropHeight) / 2
-        canvas.width = 140
-        canvas.height = 140
+        canvas.width = 150
+        canvas.height = 150
 
         // Draw the cropped image onto the canvas
         ctx.drawImage(
@@ -101,10 +102,56 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     }
   }
 
+  const handle_paste_area_focus = () => {
+    cover_paste_area.current?.focus()
+  }
+
+  const handle_paste_area_paste = (event: ClipboardEvent) => {
+    const items = event.clipboardData?.items
+    let blob: File | null = null
+
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') === 0) {
+          blob = items[i].getAsFile()
+        }
+      }
+    }
+
+    if (blob) {
+      const reader = new FileReader()
+      reader.onload = function (event: ProgressEvent<FileReader>) {
+        // if (event.target && event.target.result) {
+        //   preview.src = event.target.result as string;
+        // }
+      }
+      reader.readAsDataURL(blob)
+
+      // Create a new File object to set the file input value
+      const file = new File([blob], 'pasted-image.png', { type: blob.type })
+      const dataTransfer = new DataTransfer()
+      dataTransfer.items.add(file)
+      file_input.current!.files = dataTransfer.files
+      const change_event = new Event('change', { bubbles: true })
+      file_input.current!.dispatchEvent(change_event)
+    }
+  }
+
   useEffect(() => {
     file_input.current?.addEventListener('change', handle_file_select)
-    return () =>
+    cover_paste_area.current?.addEventListener('click', handle_paste_area_focus)
+    cover_paste_area.current?.addEventListener('paste', handle_paste_area_paste)
+    return () => {
       file_input.current?.removeEventListener('change', handle_file_select)
+      cover_paste_area.current?.removeEventListener(
+        'click',
+        handle_paste_area_focus,
+      )
+      cover_paste_area.current?.removeEventListener(
+        'paste',
+        handle_paste_area_paste,
+      )
+    }
   }, [])
 
   const [links, set_links] = useState<
@@ -462,8 +509,14 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
       <UiCommonTemplate_Modal_Content_Sections_Divider />
 
-      <UiCommonTemplate_Modal_Content_Sections_StandardSplit label="Cover">
+      <UiCommonTemplate_Modal_Content_Sections_StandardSplit
+        label={props.dictionary.app.upsert_modal.cover}
+      >
         <input type="file" ref={file_input} />
+        <br />
+        <div ref={cover_paste_area}>
+          Click here and press Ctrl+V to paste an image
+        </div>
       </UiCommonTemplate_Modal_Content_Sections_StandardSplit>
     </UiCommonTemplate_Modal_Content>
   )

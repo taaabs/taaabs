@@ -1369,6 +1369,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               is_public: bookmark.is_public,
             },
           ],
+          cover: bookmark.cover,
         }
         const updated_bookmark = await dispatch(
           bookmarks_actions.upsert_bookmark({
@@ -1443,6 +1444,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   name: tag.name_,
                   is_public: tag.is_public_ || false,
                 })),
+                cover: bookmark.cover,
               }
               const updated_bookmark = await dispatch(
                 bookmarks_actions.upsert_bookmark({
@@ -1517,6 +1519,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               name: tag.name,
               is_public: tag.is_public,
             })),
+          cover: bookmark.cover,
         }
         const updated_bookmark = await dispatch(
           bookmarks_actions.upsert_bookmark({
@@ -1665,6 +1668,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     name: tag.name,
                     is_public: tag.is_public,
                   })),
+                  cover: bookmark.cover,
                 }
                 const updated_bookmark = await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -1741,6 +1745,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     name: tag.name,
                     is_public: tag.is_public,
                   })),
+                  cover: bookmark.cover,
                 }
                 const updated_bookmark = await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -1845,6 +1850,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     name: tag.name,
                     is_public: tag.is_public,
                   })),
+                  cover: bookmark.cover,
                 }
                 const updated_bookmark = await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -1935,6 +1941,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     name: tag.name,
                     is_public: tag.is_public,
                   })),
+                  cover: bookmark.cover,
                 }
                 const updated_bookmark = await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -2126,6 +2133,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     name: tag.name,
                     is_public: tag.is_public,
                   })),
+                  cover: bookmark.cover,
                 }
                 const updated_bookmark = await dispatch(
                   bookmarks_actions.upsert_bookmark({

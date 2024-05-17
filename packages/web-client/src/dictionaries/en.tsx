@@ -274,6 +274,7 @@ const dictionary: Dictionary = {
       create: 'Create',
       error_title_too_long: `Title should be no longer than ${system_values.bookmark.title.max_length} characters.`,
       error_note_too_long: `Note should be no longer than ${system_values.bookmark.note.max_length} characters.`,
+      cover: 'Cover',
     },
     delete_modal: {
       delete_bookmark: 'Delete bookmark',

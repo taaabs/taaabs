@@ -7,38 +7,46 @@ declare const styles: {
   readonly bookmark: string
   readonly bookmark__main: string
   readonly 'bookmark__main--corners-fix': string
-  readonly bookmark__main__top: string
-  readonly 'bookmark__main__top--compact': string
-  readonly bookmark__main__top__info: string
-  readonly bookmark__main__top__menu: string
-  readonly bookmark__main__top__menu__button: string
-  readonly 'bookmark__main__top__menu--toggled': string
-  readonly bookmark__main__content: string
-  readonly bookmark__main__content__title: string
-  readonly bookmark__main__content__title__unread: string
-  readonly 'bookmark__main__content__title__search-result': string
-  readonly bookmark__main__content__title__stars: string
-  readonly bookmark__main__content__title__text: string
-  readonly 'bookmark__main__content__title__text--unread': string
-  readonly 'bookmark__main__content__title__text--untitled': string
-  readonly bookmark__main__content__note: string
-  readonly bookmark__main__tags: string
-  readonly bookmark__main__tags__tag: string
-  readonly bookmark__main__tags__tag__name: string
-  readonly 'bookmark__main__tags__tag__name--selected': string
-  readonly bookmark__main__tags__tag__yields: string
-  readonly bookmark__main__tags__huggs: string
-  readonly bookmark__main__tags__huggs__emoji: string
+  readonly bookmark__main__cover: string
+  readonly bookmark__main__cover__image: string
+  readonly bookmark__main__right: string
+  readonly bookmark__main__right__top: string
+  readonly 'bookmark__main__right__top--compact': string
+  readonly bookmark__main__right__top__info: string
+  readonly bookmark__main__right__top__menu: string
+  readonly bookmark__main__right__top__menu__button: string
+  readonly 'bookmark__main__right__top__menu--toggled': string
+  readonly bookmark__main__right__content: string
+  readonly bookmark__main__right__content__title: string
+  readonly bookmark__main__right__content__title__unread: string
+  readonly 'bookmark__main__right__content__title__search-result': string
+  readonly bookmark__main__right__content__title__stars: string
+  readonly bookmark__main__right__content__title__text: string
+  readonly 'bookmark__main__right__content__title__text--unread': string
+  readonly 'bookmark__main__right__content__title__text--untitled': string
+  readonly bookmark__main__right__content__note: string
+  readonly bookmark__main__right__tags: string
+  readonly bookmark__main__right__tags__tag: string
+  readonly bookmark__main__right__tags__tag__name: string
+  readonly 'bookmark__main__right__tags__tag__name--selected': string
+  readonly bookmark__main__right__tags__tag__yields: string
+  readonly bookmark__main__right__tags__huggs: string
+  readonly bookmark__main__right__tags__huggs__emoji: string
   readonly bookmark__main__tags__huggs__emoji__hugging__eyes: string
   readonly bookmark__main__tags__huggs__emoji__hugging__mouth: string
   readonly 'bookmark__main__tags__huggs__emoji__hugging__left-hand': string
   readonly 'bookmark__main__tags__huggs__emoji__hugging__right-hand': string
   readonly bookmark__main__tags__huggs__emoji__silent__handle: string
   readonly bookmark_shake: string
-  readonly bookmark__main__tags__huggs__emoji__hugging__blush: string
-  readonly bookmark__main__tags__huggs__emoji__silent__eyes: string
-  readonly bookmark__main__tags__huggs__emoji__silent__zip: string
-  readonly bookmark__main__tags__huggs__amount: string
+  readonly bookmark__main__right__tags__huggs__emoji__hugging__eyes: string
+  readonly bookmark__main__right__tags__huggs__emoji__hugging__mouth: string
+  readonly bookmark__main__right__tags__huggs__emoji__hugging__blush: string
+  readonly 'bookmark__main__right__tags__huggs__emoji__hugging__left-hand': string
+  readonly 'bookmark__main__right__tags__huggs__emoji__hugging__right-hand': string
+  readonly bookmark__main__right__tags__huggs__emoji__silent__eyes: string
+  readonly bookmark__main__right__tags__huggs__emoji__silent__zip: string
+  readonly bookmark__main__right__tags__huggs__emoji__silent__handle: string
+  readonly bookmark__main__right__tags__huggs__amount: string
   readonly bookmark__links: string
   readonly 'bookmark__links--compact': string
   readonly bookmark__links__item: string

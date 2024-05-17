@@ -46,8 +46,7 @@
   flex-direction: column;
   &__main {
     display: flex;
-    flex-direction: column;
-    padding: 10px 0;
+    padding: var(--padding-10px) 0;
     background: var(--white);
     @include at992 {
       border-top-left-radius: 11px;
@@ -60,285 +59,300 @@
         border-bottom-right-radius: 11px;
       }
     }
-    &__top {
-      width: 100%;
+    &__cover {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      position: relative;
-      margin-bottom: calc(3px * -1); // Needed by "compact" density.
-      &--compact {
-        display: none;
+      &__image {
+        border-radius: var(--border-radius-8px);
+        margin-left: var(--padding-10px);
+        overflow: hidden;
+        width: 75px;
+        height: 75px;
       }
-      &__info {
-        color: var(--text-color-dimmed);
+    }
+    &__right {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      &__top {
+        width: 100%;
         display: flex;
-        padding-left: 16px;
-        padding-bottom: 6px;
-        white-space: pre-wrap;
-      }
-      &__menu {
+        justify-content: space-between;
+        align-items: flex-end;
         position: relative;
-        display: flex;
-        flex-direction: column;
-        margin-right: 16px;
-        @include at992 {
-          margin-right: 10px;
+        margin-bottom: calc(3px * -1); // Needed by "compact" density.
+        &--compact {
+          display: none;
         }
-        &__button {
+        &__info {
+          color: var(--text-color-dimmed);
           display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: var(--border-radius-999px);
-          @include transition-150ms(background-color);
-          width: var(--button-dimension-28px);
-          height: var(--button-dimension-28px);
-          svg {
-            fill: var(--neutral350);
-            @include transition-150ms(fill);
-            height: var(--icon-dimension-16px);
+          padding-left: 16px;
+          padding-bottom: 6px;
+          white-space: pre-wrap;
+        }
+        &__menu {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          margin-right: 16px;
+          @include at992 {
+            margin-right: 10px;
           }
-          @include hover {
+          &__button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius-999px);
+            @include transition-150ms(background-color);
+            width: var(--button-dimension-28px);
+            height: var(--button-dimension-28px);
+            svg {
+              fill: var(--neutral350);
+              @include transition-150ms(fill);
+              height: var(--icon-dimension-16px);
+            }
+            @include hover {
+              background-color: var(--neutral100);
+              svg {
+                fill: var(--neutral600);
+              }
+            }
+          }
+          &--toggled {
             background-color: var(--neutral100);
             svg {
               fill: var(--neutral600);
             }
           }
         }
-        &--toggled {
-          background-color: var(--neutral100);
-          svg {
-            fill: var(--neutral600);
-          }
-        }
       }
-    }
-    &__content {
-      padding: 0 16px 0 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      overflow: hidden;
-      position: relative;
-      &__title {
-        display: inline;
-        color: var(--text-color-normal);
-        overflow: hidden;
-        &__unread {
-          display: inline-flex;
-          align-items: center;
-          transform: translateX(-10px) translateY(-0.4rem) rotate(45deg);
-          left: 0;
-          transform-origin: left;
-          position: absolute;
-          border-top-right-radius: var(--border-radius-5px);
-          height: 18px;
-          width: 18px;
-          background: var(--red);
-        }
-        &__search-result {
-          display: inline-flex;
-          height: 0;
-          margin-right: 5px;
-          transform: translateY(0.2rem);
-          > svg {
-            height: 18px;
-            fill: var(--brand-color);
-          }
-        }
-        &__stars {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.4rem;
-          transform: translateY(0.1rem);
-          height: 0;
-          margin-right: 5px;
-          > svg {
-            height: 18px;
-            fill: var(--yellow);
-          }
-        }
-        &__text {
-          position: relative;
-          display: inline;
-          font-weight: var(--font-weight-inter-medium);
-          font-size: var(--font-size-1-9rem);
-          margin-bottom: 0.8rem;
-          overflow-wrap: anywhere;
-          &--unread {
-            font-weight: var(--font-weight-inter-semi-bold);
-          }
-          &--untitled {
-            font-style: italic;
-            font-weight: var(--font-weight-inter-regular);
-          }
-        }
-      }
-      &__note {
-        color: var(--text-color-variant);
-      }
-    }
-    &__tags {
-      position: relative;
-      font-family: var(--font-family-inter-tight);
-      margin-top: 4px;
-      margin-left: 16px;
-      margin-right: 8px;
-      font-size: var(--font-size-15px);
-      margin-bottom: calc(5px * -1);
-      > * {
-        margin-right: 8px;
-        margin-bottom: 5px;
-      }
-      > span {
-        color: var(--text-color-dimmed);
-      }
-      &__tag {
-        display: inline-block;
-        // Needed by swipable and sortable - element touch hold detection.
-        @include touch-screen {
-          > * {
-            pointer-events: none;
-          }
-        }
-        &__name {
-          color: var(--green800);
-          font-weight: var(--font-weight-inter-medium);
-          @include hover {
-            @include text-decoration-underline;
-          }
-          &--selected {
-            color: var(--yellow800);
-          }
-        }
-        &__yields {
-          color: var(--text-color-dimmed);
-          margin-left: 0.4rem;
-        }
-      }
-      &__huggs {
-        float: right;
+      &__content {
+        padding: 0 16px 0 16px;
         display: flex;
-        gap: 10px;
-        &__emoji {
-          position: relative;
-          width: 23px;
-          margin-right: 2px;
-          @include at992 {
-            margin-right: calc(4px * -1);
-          }
-          > div {
-            @include transition-150ms(transform);
-          }
-          &::before {
-            content: '';
-            background-color: var(--yellow);
-            border-radius: var(--border-radius-5px) var(--border-radius-5px)
-              var(--border-radius-10px) var(--border-radius-10px);
-            position: absolute;
-            width: 100%;
-            height: 22px;
-            top: -3px;
+        flex-direction: column;
+        gap: 2px;
+        overflow: hidden;
+        position: relative;
+        &__title {
+          display: inline;
+          color: var(--text-color-normal);
+          overflow: hidden;
+          &__unread {
+            display: inline-flex;
+            align-items: center;
+            transform: translateX(-10px) translateY(-0.4rem) rotate(45deg);
             left: 0;
+            transform-origin: left;
+            position: absolute;
+            border-top-right-radius: var(--border-radius-5px);
+            height: 18px;
+            width: 18px;
+            background: var(--red);
           }
-          @include hover {
-            .bookmark__main__tags__huggs__emoji__hugging__eyes {
-              transform: translateY(-0.3px);
-            }
-            .bookmark__main__tags__huggs__emoji__hugging__mouth {
-              transform: translateY(-0.3px) scaleY(1.15);
-            }
-            .bookmark__main__tags__huggs__emoji__hugging__left-hand {
-              transform: rotate(5deg) translateX(1px);
-            }
-            .bookmark__main__tags__huggs__emoji__hugging__right-hand {
-              transform: scaleX(-1) rotate(5deg) translateX(1px);
-            }
-            .bookmark__main__tags__huggs__emoji__silent__handle {
-              animation: bookmark_shake 0.8s ease-in-out both;
-              transform-origin: left;
+          &__search-result {
+            display: inline-flex;
+            height: 0;
+            margin-right: 5px;
+            transform: translateY(0.2rem);
+            > svg {
+              height: 18px;
+              fill: var(--brand-color);
             }
           }
-          &__hugging {
-            &__eyes {
-              position: absolute;
-              bottom: 0;
-              top: -9px;
-              left: 4px;
-              > svg {
-                width: 15px;
-              }
-            }
-            &__mouth {
-              position: absolute;
-              bottom: 0;
-              top: -0.5px;
-              left: 6px;
-              > svg {
-                width: 11px;
-              }
-            }
-            &__blush {
-              position: absolute;
-              bottom: 0;
-              top: -5.5px;
-              left: 2px;
-              > svg {
-                width: 19px;
-              }
-            }
-            &__left-hand {
-              position: absolute;
-              top: 8px;
-              left: -1.5px;
-              > svg {
-                width: 12px;
-              }
-            }
-            &__right-hand {
-              transform: scaleX(-1);
-              position: absolute;
-              top: 8px;
-              left: 12.5px;
-              > svg {
-                width: 12px;
-              }
+          &__stars {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transform: translateY(0.1rem);
+            height: 0;
+            margin-right: 5px;
+            > svg {
+              height: 18px;
+              fill: var(--yellow);
             }
           }
-          &__silent {
-            &__eyes {
-              position: absolute;
-              bottom: 0;
-              top: -8.4px;
-              left: 4px;
-              > svg {
-                width: 15px;
-              }
+          &__text {
+            position: relative;
+            display: inline;
+            font-weight: var(--font-weight-inter-medium);
+            font-size: var(--font-size-1-9rem);
+            margin-bottom: 0.8rem;
+            overflow-wrap: anywhere;
+            &--unread {
+              font-weight: var(--font-weight-inter-semi-bold);
             }
-            &__zip {
-              position: absolute;
-              bottom: 0;
-              top: -1.5px;
-              left: 6.5px;
-              > svg {
-                width: 9px;
-              }
-            }
-            &__handle {
-              position: absolute;
-              bottom: 0;
-              top: 5px;
-              left: 15px;
-              > svg {
-                width: 12px;
-              }
+            &--untitled {
+              font-style: italic;
+              font-weight: var(--font-weight-inter-regular);
             }
           }
         }
-        &__amount {
-          font-weight: var(--font-weight-inter-medium);
-          @include hover {
-            @include text-decoration-underline;
+        &__note {
+          color: var(--text-color-variant);
+        }
+      }
+      &__tags {
+        position: relative;
+        font-family: var(--font-family-inter-tight);
+        margin-top: 4px;
+        margin-left: 16px;
+        margin-right: 8px;
+        font-size: var(--font-size-15px);
+        margin-bottom: calc(5px * -1);
+        > * {
+          margin-right: 8px;
+          margin-bottom: 5px;
+        }
+        > span {
+          color: var(--text-color-dimmed);
+        }
+        &__tag {
+          display: inline-block;
+          // Needed by swipable and sortable - element touch hold detection.
+          @include touch-screen {
+            > * {
+              pointer-events: none;
+            }
+          }
+          &__name {
+            color: var(--green800);
+            font-weight: var(--font-weight-inter-medium);
+            @include hover {
+              @include text-decoration-underline;
+            }
+            &--selected {
+              color: var(--yellow800);
+            }
+          }
+          &__yields {
+            color: var(--text-color-dimmed);
+            margin-left: 0.4rem;
+          }
+        }
+        &__huggs {
+          float: right;
+          display: flex;
+          gap: 10px;
+          &__emoji {
+            position: relative;
+            width: 23px;
+            margin-right: 2px;
+            @include at992 {
+              margin-right: calc(4px * -1);
+            }
+            > div {
+              @include transition-150ms(transform);
+            }
+            &::before {
+              content: '';
+              background-color: var(--yellow);
+              border-radius: var(--border-radius-5px) var(--border-radius-5px)
+                var(--border-radius-10px) var(--border-radius-10px);
+              position: absolute;
+              width: 100%;
+              height: 22px;
+              top: -3px;
+              left: 0;
+            }
+            @include hover {
+              .bookmark__main__tags__huggs__emoji__hugging__eyes {
+                transform: translateY(-0.3px);
+              }
+              .bookmark__main__tags__huggs__emoji__hugging__mouth {
+                transform: translateY(-0.3px) scaleY(1.15);
+              }
+              .bookmark__main__tags__huggs__emoji__hugging__left-hand {
+                transform: rotate(5deg) translateX(1px);
+              }
+              .bookmark__main__tags__huggs__emoji__hugging__right-hand {
+                transform: scaleX(-1) rotate(5deg) translateX(1px);
+              }
+              .bookmark__main__tags__huggs__emoji__silent__handle {
+                animation: bookmark_shake 0.8s ease-in-out both;
+                transform-origin: left;
+              }
+            }
+            &__hugging {
+              &__eyes {
+                position: absolute;
+                bottom: 0;
+                top: -9px;
+                left: 4px;
+                > svg {
+                  width: 15px;
+                }
+              }
+              &__mouth {
+                position: absolute;
+                bottom: 0;
+                top: -0.5px;
+                left: 6px;
+                > svg {
+                  width: 11px;
+                }
+              }
+              &__blush {
+                position: absolute;
+                bottom: 0;
+                top: -5.5px;
+                left: 2px;
+                > svg {
+                  width: 19px;
+                }
+              }
+              &__left-hand {
+                position: absolute;
+                top: 8px;
+                left: -1.5px;
+                > svg {
+                  width: 12px;
+                }
+              }
+              &__right-hand {
+                transform: scaleX(-1);
+                position: absolute;
+                top: 8px;
+                left: 12.5px;
+                > svg {
+                  width: 12px;
+                }
+              }
+            }
+            &__silent {
+              &__eyes {
+                position: absolute;
+                bottom: 0;
+                top: -8.4px;
+                left: 4px;
+                > svg {
+                  width: 15px;
+                }
+              }
+              &__zip {
+                position: absolute;
+                bottom: 0;
+                top: -1.5px;
+                left: 6.5px;
+                > svg {
+                  width: 9px;
+                }
+              }
+              &__handle {
+                position: absolute;
+                bottom: 0;
+                top: 5px;
+                left: 15px;
+                > svg {
+                  width: 12px;
+                }
+              }
+            }
+          }
+          &__amount {
+            font-weight: var(--font-weight-inter-medium);
+            @include hover {
+              @include text-decoration-underline;
+            }
           }
         }
       }

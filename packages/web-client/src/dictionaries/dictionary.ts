@@ -214,6 +214,7 @@ export type Dictionary = {
       create: string
       error_title_too_long: string
       error_note_too_long: string
+      cover: string
     }
     delete_modal: {
       delete_bookmark: string

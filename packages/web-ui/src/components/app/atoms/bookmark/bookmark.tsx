@@ -219,7 +219,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         return (
           <a
             key={tag.id}
-            className={styles.bookmark__main__tags__tag}
+            className={styles.bookmark__main__right__tags__tag}
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
@@ -253,9 +253,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
           >
             <span
               className={cn([
-                styles.bookmark__main__tags__tag__name,
+                styles.bookmark__main__right__tags__tag__name,
                 {
-                  [styles['bookmark__main__tags__tag__name--selected']]:
+                  [styles['bookmark__main__right__tags__tag__name--selected']]:
                     tag.is_selected_,
                 },
               ])}
@@ -278,12 +278,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 : tag.name_}
             </span>
             {!tag.is_selected_ && tag.yields_ && (
-              <span className={styles.bookmark__main__tags__tag__yields}>
+              <span className={styles.bookmark__main__right__tags__tag__yields}>
                 {tag.yields_}
               </span>
             )}
             {tag.is_selected_ && (
-              <span className={styles.bookmark__main__tags__tag__yields}>
+              <span className={styles.bookmark__main__right__tags__tag__yields}>
                 ×
               </span>
             )}
@@ -295,14 +295,14 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
       props.tags_.findIndex((tag) => tag.id == props.dragged_tag_!.id_) == -1
         ? [
             <button
-              className={styles.bookmark__main__tags__tag}
+              className={styles.bookmark__main__right__tags__tag}
               style={{ opacity: 'var(--dimmed-opacity)' }}
               key="candidate"
             >
-              <span className={styles.bookmark__main__tags__tag__name}>
+              <span className={styles.bookmark__main__right__tags__tag__name}>
                 {props.dragged_tag_.name_}
               </span>
-              <span className={styles.bookmark__main__tags__tag__yields}>
+              <span className={styles.bookmark__main__right__tags__tag__yields}>
                 {props.dragged_tag_.yields_ + 1}
               </span>
             </button>,
@@ -311,10 +311,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     ]
 
     const huggs_dom = (
-      <div className={styles.bookmark__main__tags__huggs}>
+      <div className={styles.bookmark__main__right__tags__huggs}>
         {props.is_public_ && props.points_ !== undefined && (
           <button
-            className={styles.bookmark__main__tags__huggs__amount}
+            className={styles.bookmark__main__right__tags__huggs__amount}
             onClick={() => {}}
           >
             {props.points_}
@@ -322,7 +322,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         )}
         {props.is_public_ ? (
           <button
-            className={styles.bookmark__main__tags__huggs__emoji}
+            className={styles.bookmark__main__right__tags__huggs__emoji}
             style={{
               pointerEvents:
                 !props.on_give_point_click_ || !props.on_get_points_given_click_
@@ -379,7 +379,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             {/* Empty space needed by inline element to render correctly. */}⠀
             <div
               className={
-                styles.bookmark__main__tags__huggs__emoji__hugging__eyes
+                styles.bookmark__main__right__tags__huggs__emoji__hugging__eyes
               }
             >
               <svg viewBox="0 0 433 129" xmlns="http://www.w3.org/2000/svg">
@@ -395,7 +395,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             </div>
             <div
               className={
-                styles.bookmark__main__tags__huggs__emoji__hugging__mouth
+                styles.bookmark__main__right__tags__huggs__emoji__hugging__mouth
               }
             >
               <svg viewBox="0 0 12 7" xmlns="http://www.w3.org/2000/svg">
@@ -413,7 +413,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             </div>
             <div
               className={
-                styles.bookmark__main__tags__huggs__emoji__hugging__blush
+                styles.bookmark__main__right__tags__huggs__emoji__hugging__blush
               }
             >
               <svg viewBox="0 0 550 75" xmlns="http://www.w3.org/2000/svg">
@@ -429,7 +429,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             </div>
             <div
               className={
-                styles['bookmark__main__tags__huggs__emoji__hugging__left-hand']
+                styles[
+                  'bookmark__main__right__tags__huggs__emoji__hugging__left-hand'
+                ]
               }
             >
               <svg
@@ -454,7 +456,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             <div
               className={
                 styles[
-                  'bookmark__main__tags__huggs__emoji__hugging__right-hand'
+                  'bookmark__main__right__tags__huggs__emoji__hugging__right-hand'
                 ]
               }
             >
@@ -479,11 +481,11 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             </div>
           </button>
         ) : (
-          <div className={styles.bookmark__main__tags__huggs__emoji}>
+          <div className={styles.bookmark__main__right__tags__huggs__emoji}>
             ⠀
             <div
               className={
-                styles.bookmark__main__tags__huggs__emoji__silent__eyes
+                styles.bookmark__main__right__tags__huggs__emoji__silent__eyes
               }
             >
               <svg viewBox="0 0 433 129" xmlns="http://www.w3.org/2000/svg">
@@ -498,7 +500,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               </svg>
             </div>
             <div
-              className={styles.bookmark__main__tags__huggs__emoji__silent__zip}
+              className={
+                styles.bookmark__main__right__tags__huggs__emoji__silent__zip
+              }
             >
               <svg viewBox="0 0 9 3" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -517,7 +521,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             </div>
             <div
               className={
-                styles.bookmark__main__tags__huggs__emoji__silent__handle
+                styles.bookmark__main__right__tags__huggs__emoji__silent__handle
               }
             >
               <svg
@@ -608,74 +612,132 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               }
             }}
           >
-            <div
-              className={cn(styles.bookmark__main__top, {
-                [styles['bookmark__main__top--compact']]: props.is_compact_,
-              })}
-            >
-              <div className={styles.bookmark__main__top__info}>
-                {props.index_ + 1} · {bookmark_date}
-              </div>
-              <div className={styles.bookmark__main__top__menu}>
-                <OutsideClickHandler
-                  disabled={!is_menu_open}
-                  onOutsideClick={() => {
-                    toggle_is_menu_open()
-                  }}
-                >
-                  <button
-                    className={cn(styles.bookmark__main__top__menu__button, {
-                      [styles['bookmark__main__top__menu--toggled']]:
-                        is_menu_open,
-                    })}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggle_is_menu_open()
-                    }}
-                  >
-                    <Icon variant="THREE_DOTS" />
-                  </button>
-                  <div
-                    className={cn(styles.slot, {
-                      [styles['slot--visible']]: is_menu_open,
-                    })}
-                    onClick={() => {
-                      toggle_is_menu_open()
-                    }}
-                  >
-                    {props.menu_slot_}
-                  </div>
-                </OutsideClickHandler>
-              </div>
+            <div className={styles.bookmark__main__cover}>
+              {props.cover_ && (
+                <div className={styles.bookmark__main__cover__image}>
+                  <img src={`data:image/webp;base64,${props.cover_}`} />
+                </div>
+              )}
             </div>
-            <div className={styles.bookmark__main__content}>
-              <div className={styles.bookmark__main__content__title}>
-                {props.is_unread_ && (
-                  <div
-                    className={styles.bookmark__main__content__title__unread}
-                  />
-                )}
-                {props.stars_ >= 1 && (
-                  <div className={styles.bookmark__main__content__title__stars}>
-                    {[...new Array(props.stars_)].map((_, i) => (
-                      <Icon variant="STAR_FILLED" key={i} />
-                    ))}
-                  </div>
-                )}
-                {props.title_ ? (
-                  <div
-                    className={cn(styles.bookmark__main__content__title__text, {
-                      [styles['bookmark__main__content__title__text--unread']]:
-                        props.is_unread_,
-                    })}
+
+            <div className={styles.bookmark__main__right}>
+              <div
+                className={cn(styles.bookmark__main__right__top, {
+                  [styles['bookmark__main__right__top--compact']]:
+                    props.is_compact_,
+                })}
+              >
+                <div className={styles.bookmark__main__right__top__info}>
+                  {props.index_ + 1} · {bookmark_date}
+                </div>
+                <div className={styles.bookmark__main__right__top__menu}>
+                  <OutsideClickHandler
+                    disabled={!is_menu_open}
+                    onOutsideClick={() => {
+                      toggle_is_menu_open()
+                    }}
                   >
+                    <button
+                      className={cn(
+                        styles.bookmark__main__right__top__menu__button,
+                        {
+                          [styles['bookmark__main__right__top__menu--toggled']]:
+                            is_menu_open,
+                        },
+                      )}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggle_is_menu_open()
+                      }}
+                    >
+                      <Icon variant="THREE_DOTS" />
+                    </button>
+                    <div
+                      className={cn(styles.slot, {
+                        [styles['slot--visible']]: is_menu_open,
+                      })}
+                      onClick={() => {
+                        toggle_is_menu_open()
+                      }}
+                    >
+                      {props.menu_slot_}
+                    </div>
+                  </OutsideClickHandler>
+                </div>
+              </div>
+
+              <div className={styles.bookmark__main__right__content}>
+                <div className={styles.bookmark__main__right__content__title}>
+                  {props.is_unread_ && (
+                    <div
+                      className={
+                        styles.bookmark__main__right__content__title__unread
+                      }
+                    />
+                  )}
+                  {props.stars_ >= 1 && (
+                    <div
+                      className={
+                        styles.bookmark__main__right__content__title__stars
+                      }
+                    >
+                      {[...new Array(props.stars_)].map((_, i) => (
+                        <Icon variant="STAR_FILLED" key={i} />
+                      ))}
+                    </div>
+                  )}
+                  {props.title_ ? (
+                    <div
+                      className={cn(
+                        styles.bookmark__main__right__content__title__text,
+                        {
+                          [styles[
+                            'bookmark__main__right__content__title__text--unread'
+                          ]]: props.is_unread_,
+                        },
+                      )}
+                    >
+                      {props.highlights_
+                        ? props.title_.split('').map((char, i) => {
+                            const is_highlighted = props.highlights_!.find(
+                              ([index, length]) =>
+                                i >= index && i < index + length,
+                            )
+
+                            return is_highlighted ? (
+                              <span className={styles.highlight} key={i}>
+                                {char}
+                              </span>
+                            ) : (
+                              <span key={i}>{char}</span>
+                            )
+                          })
+                        : props.title_}
+                    </div>
+                  ) : (
+                    <div
+                      className={cn(
+                        styles.bookmark__main__right__content__title__text,
+                        styles[
+                          'bookmark__main__right__content__title__text--untitled'
+                        ],
+                      )}
+                    >
+                      (Untitled)
+                    </div>
+                  )}
+                </div>
+                {props.note_ && (
+                  <div className={styles.bookmark__main__right__content__note}>
                     {props.highlights_
-                      ? props.title_.split('').map((char, i) => {
+                      ? props.note_.split('').map((char, i) => {
+                          const real_i =
+                            (props.title_ ? `${props.title_} ` : '').length + i
+
                           const is_highlighted = props.highlights_!.find(
                             ([index, length]) =>
-                              i >= index && i < index + length,
+                              real_i >= index && real_i < index + length,
                           )
-
                           return is_highlighted ? (
                             <span className={styles.highlight} key={i}>
                               {char}
@@ -684,77 +746,40 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             <span key={i}>{char}</span>
                           )
                         })
-                      : props.title_}
-                  </div>
-                ) : (
-                  <div
-                    className={cn(
-                      styles.bookmark__main__content__title__text,
-                      styles['bookmark__main__content__title__text--untitled'],
-                    )}
-                  >
-                    (Untitled)
+                      : props.note_}
                   </div>
                 )}
               </div>
-              {props.note_ && (
-                <div className={styles.bookmark__main__content__note}>
-                  {props.highlights_
-                    ? props.note_.split('').map((char, i) => {
-                        const real_i =
-                          (props.title_ ? `${props.title_} ` : '').length + i
 
-                        const is_highlighted = props.highlights_!.find(
-                          ([index, length]) =>
-                            real_i >= index && real_i < index + length,
-                        )
-                        return is_highlighted ? (
-                          <span className={styles.highlight} key={i}>
-                            {char}
-                          </span>
-                        ) : (
-                          <span key={i}>{char}</span>
-                        )
-                      })
-                    : props.note_}
+              {props.on_tags_order_change_ ? (
+                <ReactSortable
+                  list={tags}
+                  setList={(new_tags) => {
+                    if (JSON.stringify(new_tags) == JSON.stringify(tags)) return
+                    set_tags(new_tags)
+                    props.on_tags_order_change_?.(new_tags)
+                  }}
+                  animation={system_values.sortablejs_animation_duration}
+                  forceFallback={true}
+                  dropBubble={true} // Needed for clearing dragged tag UI.
+                  delay={system_values.sortablejs_delay}
+                  delayOnTouchOnly={true}
+                  className={styles.bookmark__main__right__tags}
+                  filter={`.${styles.bookmark__main__right__tags__huggs}`}
+                  fallbackClass={
+                    !('ontouchstart' in window)
+                      ? styles['sortable-fallback']
+                      : undefined
+                  }
+                >
+                  {tags_dom}
+                  {huggs_dom}
+                </ReactSortable>
+              ) : (
+                <div className={styles.bookmark__main__right__tags}>
+                  {tags_dom}
+                  {huggs_dom}
                 </div>
-              )}
-            </div>
-
-            {props.on_tags_order_change_ ? (
-              <ReactSortable
-                list={tags}
-                setList={(new_tags) => {
-                  if (JSON.stringify(new_tags) == JSON.stringify(tags)) return
-                  set_tags(new_tags)
-                  props.on_tags_order_change_?.(new_tags)
-                }}
-                animation={system_values.sortablejs_animation_duration}
-                forceFallback={true}
-                dropBubble={true} // Needed for clearing dragged tag UI.
-                delay={system_values.sortablejs_delay}
-                delayOnTouchOnly={true}
-                className={styles.bookmark__main__tags}
-                filter={`.${styles.bookmark__main__tags__huggs}`}
-                fallbackClass={
-                  !('ontouchstart' in window)
-                    ? styles['sortable-fallback']
-                    : undefined
-                }
-              >
-                {tags_dom}
-                {huggs_dom}
-              </ReactSortable>
-            ) : (
-              <div className={styles.bookmark__main__tags}>
-                {tags_dom}
-                {huggs_dom}
-              </div>
-            )}
-
-            <div>
-              {props.cover_ && (
-                <img src={`data:image/webp;base64,${props.cover_}`} />
               )}
             </div>
           </div>
