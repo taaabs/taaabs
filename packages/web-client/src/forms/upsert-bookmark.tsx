@@ -132,8 +132,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       const dataTransfer = new DataTransfer()
       dataTransfer.items.add(file)
       file_input.current!.files = dataTransfer.files
-      const change_event = new Event('change', { bubbles: true })
-      file_input.current!.dispatchEvent(change_event)
+      file_input.current!.dispatchEvent(new Event('change'))
     }
   }
 

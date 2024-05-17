@@ -67,6 +67,11 @@
         overflow: hidden;
         width: 75px;
         height: 75px;
+        &--compact {
+          height: 48px;
+          display: flex;
+          align-items: center;
+        }
       }
     }
     &__right {
@@ -89,6 +94,9 @@
           padding-left: 16px;
           padding-bottom: 6px;
           white-space: pre-wrap;
+          @include at992 {
+            padding-left: 12px;
+          }
         }
         &__menu {
           position: relative;
@@ -133,6 +141,9 @@
         gap: 2px;
         overflow: hidden;
         position: relative;
+        @include at992 {
+          padding: 0 12px 0 12px;
+        }
         &__title {
           display: inline;
           color: var(--text-color-normal);
@@ -199,6 +210,9 @@
         margin-right: 8px;
         font-size: var(--font-size-15px);
         margin-bottom: calc(5px * -1);
+        @include at992 {
+          margin-left: 12px;
+        }
         > * {
           margin-right: 8px;
           margin-bottom: 5px;

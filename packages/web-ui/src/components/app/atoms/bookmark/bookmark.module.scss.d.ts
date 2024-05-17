@@ -9,6 +9,7 @@ declare const styles: {
   readonly 'bookmark__main--corners-fix': string
   readonly bookmark__main__cover: string
   readonly bookmark__main__cover__image: string
+  readonly 'bookmark__main__cover__image--compact': string
   readonly bookmark__main__right: string
   readonly bookmark__main__right__top: string
   readonly 'bookmark__main__right__top--compact': string
