@@ -29,6 +29,7 @@ const private_link_schema = z.object({
   open_snapshot: z.boolean().optional(),
   is_pinned: z.boolean().optional(),
   pin_order: z.number().int().optional(),
+  favicon_aes: z.string().optional(),
 })
 export const bookmark_schema = z.object({
   id: z.string().uuid().optional(),
@@ -67,6 +68,8 @@ export const bookmark_schema = z.object({
     )
     .max(system_values.bookmark.links.limit)
     .optional(),
+  cover: z.string().optional(),
+  cover_aes: z.string().optional(),
 })
 export namespace TagHierarchy {
   const base_tag_hierarchy_schema = z.object({

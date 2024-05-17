@@ -147,6 +147,10 @@ export const use_import = () => {
     set_import_as_public(false)
     set_parsed_xml(undefined)
     set_import_data(undefined)
+    // Clear any cached library data.
+    for (const key in sessionStorage) {
+      sessionStorage.removeItem(key)
+    }
   }
 
   return {

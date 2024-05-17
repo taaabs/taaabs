@@ -14,6 +14,7 @@ type Link = {
   pin_title?: string
   pin_title_aes?: string
   open_snapshot?: boolean
+  favicon_aes?: string
 }
 
 export type Bookmark = {
@@ -29,6 +30,8 @@ export type Bookmark = {
   is_unread?: boolean
   tags: Tag[]
   links: Link[]
+  cover?: string
+  cover_aes?: string
 }
 
 export type TagHierarchy = {

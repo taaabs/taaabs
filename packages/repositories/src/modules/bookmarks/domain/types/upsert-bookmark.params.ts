@@ -15,6 +15,7 @@ export type UpsertBookmark_Params = {
     is_pinned?: boolean
     pin_title?: string
     open_snapshot?: boolean
+    favicon?: string
   }[]
   cover?: string
 }

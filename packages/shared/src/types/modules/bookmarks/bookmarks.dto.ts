@@ -50,6 +50,7 @@ export namespace Bookmarks_Dto {
       public is_public?: boolean
       public saves?: number
       public pin_title_aes?: string
+      public favicon_aes?: string
     }
     class PublicLink extends Link {
       public url: string

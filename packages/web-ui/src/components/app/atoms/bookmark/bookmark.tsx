@@ -105,6 +105,8 @@ export namespace Bookmark {
       menu_slot_: React.ReactNode
       is_pinned_?: boolean
       open_snapshot_?: boolean
+      is_public_?: boolean
+      favicon_?: string
     }[]
     on_link_click_: (url: string) => void
     on_link_middle_click_: () => void
@@ -862,14 +864,25 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           },
                         )}
                       >
-                        <LazyLoadImage
-                          alt={'Favicon'}
-                          width={16}
-                          height={16}
-                          src={`${props.favicon_host_}/${get_domain_from_url(
-                            link.url_,
-                          )}`}
-                        />
+                        {link.is_public_ ? (
+                          <LazyLoadImage
+                            alt={'Favicon'}
+                            width={16}
+                            height={16}
+                            src={`${props.favicon_host_}/${get_domain_from_url(
+                              link.url_,
+                            )}`}
+                          />
+                        ) : link.favicon_ ? (
+                          <img
+                            alt={'Favicon'}
+                            width={16}
+                            height={16}
+                            src={`data:image/webp;base64,${link.favicon_}`}
+                          />
+                        ) : (
+                          <Icon variant="GLOBE" />
+                        )}
                       </button>
                       <a
                         className={cn(

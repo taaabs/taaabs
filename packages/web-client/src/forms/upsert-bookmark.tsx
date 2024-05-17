@@ -17,6 +17,7 @@ import { Divider as UiCommonTemplate_Modal_Content_Sections_Divider } from '../.
 import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
+import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 
 type FormValues = {
   title: string
@@ -190,12 +191,13 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   )
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
+    const is_bookmark_public =
+      (form_data.is_public === undefined && props.bookmark?.is_public) ||
+      form_data.is_public ||
+      false
     const bookmark: UpsertBookmark_Params = {
       bookmark_id: props.bookmark?.id,
-      is_public:
-        (form_data.is_public === undefined && props.bookmark?.is_public) ||
-        form_data.is_public ||
-        false,
+      is_public: is_bookmark_public,
       title: form_data.title,
       note: form_data.note || undefined,
       created_at: props.bookmark?.created_at
@@ -204,27 +206,37 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       stars: props.bookmark?.stars,
       is_archived: props.is_archived || false,
       is_unread: props.bookmark?.is_unread || false,
-      links: links.map((link) => {
-        const current_link = props.bookmark?.links.find(
-          (l) => l.url == link.url,
-        )
-        return {
-          url: link.url,
-          is_public: (form_data.is_public ? link.is_public : false) || false, // TODO: make is public optional.
-          site_path: link.site_path,
-          is_pinned: current_link?.is_pinned,
-          pin_title: current_link?.pin_title,
-          open_snapshot: link.open_snapshot,
-        }
-      }),
+      links: await Promise.all(
+        links.map(async (link) => {
+          const current_link = props.bookmark?.links.find(
+            (l) => l.url == link.url,
+          )
+          const favicon =
+            (!is_bookmark_public || !link.is_public
+              ? current_link?.favicon
+                ? current_link.favicon
+                : await get_favicon_as_base64(link.url)
+              : undefined) || undefined
+          return {
+            url: link.url,
+            is_public: (form_data.is_public ? link.is_public : false) || false, // TODO: make is public optional.
+            site_path: link.site_path,
+            is_pinned: current_link?.is_pinned,
+            pin_title: current_link?.pin_title,
+            open_snapshot: link.open_snapshot,
+            favicon,
+          }
+        }),
+      ),
       tags: tags.map((tag) => ({
         name: tag.name,
         is_public: (form_data.is_public ? tag.is_public : false) || false, // TODO: make is public optional.
       })),
       cover:
-        cover_base64_encoded_webp.current?.split(
+        cover_base64_encoded_webp.current?.replace(
           'data:image/webp;base64,',
-        )[1] || props.bookmark?.cover,
+          '',
+        ) || props.bookmark?.cover,
     }
     props.on_submit(bookmark)
   }
@@ -519,4 +531,25 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       </UiCommonTemplate_Modal_Content_Sections_StandardSplit>
     </UiCommonTemplate_Modal_Content>
   )
+}
+
+async function get_favicon_as_base64(url: string): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `https://${get_domain_from_url(url)}/favicon.ico`,
+    )
+    const blob = await response.blob()
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    const img = new Image()
+    img.src = URL.createObjectURL(blob)
+    await img.decode()
+    canvas.width = 32
+    canvas.height = 32
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+
+    return canvas.toDataURL('image/webp').replace('data:image/webp;base64,', '')
+  } catch {
+    return null
+  }
 }

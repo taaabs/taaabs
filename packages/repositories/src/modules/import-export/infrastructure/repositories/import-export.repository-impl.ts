@@ -108,6 +108,12 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                       open_snapshot: link.open_snapshot || undefined,
                       is_pinned: link.is_pinned || undefined,
                       pin_order: link.pin_order || undefined,
+                      favicon: link.favicon_aes
+                        ? await Crypto.AES.decrypt(
+                            link.favicon_aes,
+                            encryption_key,
+                          )
+                        : undefined,
                     }
                   } else {
                     throw new Error('Url aes and site aes should be there')
@@ -117,7 +123,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
             : undefined,
         })),
       ),
-      tag_hierarchies: JSON.parse(data.tag_hierarchies as any),
+      tag_hierarchies: data.tag_hierarchies,
     }
 
     return JSON.stringify(downloadable_json)

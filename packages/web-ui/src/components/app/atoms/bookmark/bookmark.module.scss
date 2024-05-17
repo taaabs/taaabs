@@ -428,6 +428,10 @@
             width: 16px;
             height: 16px;
           }
+          > svg {
+            width: 16px;
+            fill: #737373;
+          }
           &--highlighted {
             background-color: var(--highlight);
           }

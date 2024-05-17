@@ -30,6 +30,7 @@ export namespace CreateBookmark_Dto {
     is_pinned: z.boolean().optional(),
     pin_title_aes: z.string().max(200).optional(),
     open_snapshot: z.boolean().optional(),
+    favicon_aes: z.string().optional(),
   })
 
   export const body_schema = z.object({

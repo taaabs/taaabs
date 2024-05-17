@@ -82,6 +82,12 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                         )
                       : undefined,
                     open_snapshot: link.open_snapshot,
+                    favicon: link.favicon_aes
+                      ? await Crypto.AES.decrypt(
+                          link.favicon_aes,
+                          encryption_key,
+                        )
+                      : undefined,
                   }
                 }),
               ),
@@ -214,6 +220,12 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                         )
                       : undefined,
                     open_snapshot: link.open_snapshot,
+                    favicon: link.favicon_aes
+                      ? await Crypto.AES.decrypt(
+                          link.favicon_aes,
+                          encryption_key,
+                        )
+                      : undefined,
                   }
                 }),
               ),
@@ -337,6 +349,9 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               ? await Crypto.AES.decrypt(link.pin_title_aes, encryption_key)
               : undefined,
             open_snapshot: link.open_snapshot,
+            favicon: link.favicon_aes
+              ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
+              : undefined,
           }
         }),
       ),

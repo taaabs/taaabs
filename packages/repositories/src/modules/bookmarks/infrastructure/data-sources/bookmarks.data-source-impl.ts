@@ -212,6 +212,9 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                   ? await Crypto.AES.encrypt(link.pin_title, encryption_key)
                   : undefined,
                 open_snapshot: link.open_snapshot,
+                favicon_aes: link.favicon
+                  ? await Crypto.AES.encrypt(link.favicon, encryption_key)
+                  : undefined,
               }
             }
           }),

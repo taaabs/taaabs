@@ -1358,6 +1358,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             is_pinned: link.is_pinned,
             pin_title: link.pin_title,
             open_snapshot: link.open_snapshot,
+            favicon: link.favicon,
           })),
           tags: [
             ...bookmark.tags.map((tag) => ({
@@ -1439,6 +1440,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   is_pinned: link.is_pinned,
                   pin_title: link.pin_title,
                   open_snapshot: link.open_snapshot,
+                  favicon: link.favicon,
                 })),
                 tags: tags.map((tag) => ({
                   name: tag.name_,
@@ -1512,6 +1514,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             is_pinned: link.is_pinned,
             pin_title: link.pin_title,
             open_snapshot: link.open_snapshot,
+            favicon: link.favicon,
           })),
           tags: bookmark.tags
             .filter((tag) => tag.id !== tag_id)
@@ -1594,6 +1597,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         saves_: link.saves,
         site_path_: link.site_path,
         is_pinned_: link.is_pinned,
+        is_public_: link.is_public,
+        favicon_: link.favicon,
         open_snapshot_: link.open_snapshot,
         menu_slot_: !username ? (
           <UiCommon_Dropdown>
@@ -1663,6 +1668,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     is_pinned: link.url == l.url ? is_pinned : l.is_pinned,
                     pin_title: l.pin_title,
                     open_snapshot: l.open_snapshot,
+                    favicon: link.favicon,
                   })),
                   tags: bookmark.tags.map((tag) => ({
                     name: tag.name,
@@ -1740,6 +1746,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     pin_title: l.pin_title,
                     open_snapshot:
                       link.url == l.url ? open_snapshot : l.open_snapshot,
+                    favicon: link.favicon,
                   })),
                   tags: bookmark.tags.map((tag) => ({
                     name: tag.name,
@@ -1845,6 +1852,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     is_pinned: link.is_pinned,
                     pin_title: link.pin_title,
                     open_snapshot: link.open_snapshot,
+                    favicon: link.favicon,
                   })),
                   tags: bookmark.tags.map((tag) => ({
                     name: tag.name,
@@ -1936,6 +1944,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     is_pinned: link.is_pinned,
                     pin_title: link.pin_title,
                     open_snapshot: link.open_snapshot,
+                    favicon: link.favicon,
                   })),
                   tags: bookmark.tags.map((tag) => ({
                     name: tag.name,
@@ -2128,6 +2137,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     is_pinned: link.is_pinned,
                     pin_title: link.pin_title,
                     open_snapshot: link.open_snapshot,
+                    favicon: link.favicon,
                   })),
                   tags: bookmark.tags.map((tag) => ({
                     name: tag.name,
