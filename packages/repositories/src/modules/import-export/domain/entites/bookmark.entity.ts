@@ -7,6 +7,7 @@ export type Bookmark_Entity = {
   is_archived?: boolean
   is_unread?: boolean
   stars?: number
+  cover?: string
   tags?: { name: string; is_public?: boolean }[]
   links?: {
     url: string

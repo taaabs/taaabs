@@ -82,8 +82,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         // Calculate the offset for centering the crop.
         const cropX = (originalWidth - cropWidth) / 2
         const cropY = (originalHeight - cropHeight) / 2
-        canvas.width = 200
-        canvas.height = 200
+        canvas.width = 150
+        canvas.height = 150
 
         // Draw the cropped image onto the canvas
         ctx.drawImage(

@@ -729,28 +729,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     </div>
                   )}
                 </div>
-                {props.note_ && (
-                  <div className={styles.bookmark__main__right__content__note}>
-                    {props.highlights_
-                      ? props.note_.split('').map((char, i) => {
-                          const real_i =
-                            (props.title_ ? `${props.title_} ` : '').length + i
-
-                          const is_highlighted = props.highlights_!.find(
-                            ([index, length]) =>
-                              real_i >= index && real_i < index + length,
-                          )
-                          return is_highlighted ? (
-                            <span className={styles.highlight} key={i}>
-                              {char}
-                            </span>
-                          ) : (
-                            <span key={i}>{char}</span>
-                          )
-                        })
-                      : props.note_}
-                  </div>
-                )}
               </div>
 
               {props.on_tags_order_change_ ? (
@@ -785,6 +763,28 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               )}
             </div>
           </div>
+          {props.note_ && !props.is_compact_ && (
+            <div className={styles.bookmark__note}>
+              {props.highlights_
+                ? props.note_.split('').map((char, i) => {
+                    const real_i =
+                      (props.title_ ? `${props.title_} ` : '').length + i
+
+                    const is_highlighted = props.highlights_!.find(
+                      ([index, length]) =>
+                        real_i >= index && real_i < index + length,
+                    )
+                    return is_highlighted ? (
+                      <span className={styles.highlight} key={i}>
+                        {char}
+                      </span>
+                    ) : (
+                      <span key={i}>{char}</span>
+                    )
+                  })
+                : props.note_}
+            </div>
+          )}
           <OutsideClickHandler
             onOutsideClick={() => {
               set_recently_visited_link_idx(undefined)

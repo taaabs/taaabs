@@ -52,6 +52,12 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
             is_archived: bookmark.is_archived || undefined,
             is_unread: bookmark.is_unread || undefined,
             stars: bookmark.stars || undefined,
+            cover:
+              bookmark.cover && bookmark.is_public ? bookmark.cover : undefined,
+            cover_aes:
+              bookmark.cover && !bookmark.is_public
+                ? await Crypto.AES.encrypt(bookmark.cover, encryption_key)
+                : undefined,
             tags: bookmark.tags
               ? await Promise.all(
                   bookmark.tags
