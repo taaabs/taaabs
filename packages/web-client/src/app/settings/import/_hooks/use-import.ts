@@ -1,22 +1,28 @@
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useContext, useState } from 'react'
-import { bookmarksToJSON } from 'bookmarks-to-json'
+// import { bookmarksToJSON } from 'bookmarks-to-json'
 import { toast } from 'react-toastify'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
 import { SendImportData_Params } from '@repositories/modules/import-export/domain/types/send-import-data.params'
 import { AuthContext } from '@/app/auth-provider'
 import { system_values } from '@shared/constants/system-values'
+import { parse_netscape_xml } from '@/utils/parse-netscape-xml'
+import { construct_tag_hierarchies_from_paths } from '@/utils/construct-tag-hierarchies-from-paths'
+import { TagHierarchy } from '@shared/types/modules/import-export/data'
+import { Crypto } from '@repositories/utils/crypto'
 
 type BookmarkNode = {
   type: 'link'
   title: string
-  addDate: number
+  created_at_timestamp: number
   url: string
+  tags?: string[]
+  is_starred?: boolean
 }
 type FolderNode = {
   type: 'folder'
-  title: string
+  name: string
   children?: Array<FolderNode | BookmarkNode>
 }
 type BookmarksTree = Array<BookmarkNode | FolderNode>
@@ -24,7 +30,9 @@ type ParsedXMLBookmark = {
   title: string
   created_at: Date
   url: string
+  tags?: string[]
   path: string
+  is_starred?: boolean
 }
 
 export const use_import = () => {
@@ -54,7 +62,7 @@ export const use_import = () => {
     }
 
     try {
-      const json = JSON.parse(bookmarksToJSON(file_text)) as BookmarksTree
+      const json = parse_netscape_xml(file_text) as BookmarksTree
       const parsed_bookmarks: ParsedXMLBookmark[] = []
       const flatten_tree = (params: {
         node: BookmarkNode | FolderNode
@@ -62,12 +70,15 @@ export const use_import = () => {
       }) => {
         if (params.node.type == 'folder') {
           if (!params.node.children) return
-          params.node.children.forEach((child) =>
-            flatten_tree({
+          params.node.children.forEach((child) => {
+            if (params.node.type != 'folder') throw new Error()
+            return flatten_tree({
               node: child,
-              path: `${params.path}/${params.node.title}`,
-            }),
-          )
+              path: `${params.path}${params.path ? '/' : ''}${
+                params.node.name
+              }`,
+            })
+          })
         } else if (params.node.type == 'link') {
           parsed_bookmarks.push({
             title: params.node.title.substring(
@@ -75,7 +86,9 @@ export const use_import = () => {
               system_values.bookmark.title.max_length,
             ),
             url: params.node.url,
-            created_at: new Date(params.node.addDate * 1000),
+            created_at: new Date(params.node.created_at_timestamp * 1000),
+            is_starred: params.node.is_starred,
+            tags: params.node.tags,
             path: params.path,
           })
         }
@@ -96,30 +109,62 @@ export const use_import = () => {
     let params: SendImportData_Params | undefined = import_data
 
     if (!params && parsed_xml) {
+      const tag_hierarchies = construct_tag_hierarchies_from_paths(
+        parsed_xml.map((bookmark) => bookmark.path),
+      )
+      type TagHierarchy_Entity = {
+        name: string
+        children: TagHierarchy_Entity[]
+      }
+      const parse_tag_hierarchy_node = async (
+        node: TagHierarchy_Entity,
+      ): Promise<TagHierarchy.TagHierarchyNode> => {
+        return {
+          hash: await Crypto.SHA256(
+            node.name,
+            auth_context.auth_data!.encryption_key,
+          ),
+          children: await Promise.all(
+            node.children.map(
+              async (node) => await parse_tag_hierarchy_node(node),
+            ),
+          ),
+        }
+      }
       params = {
         bookmarks: parsed_xml.map((bookmark) => ({
           title: bookmark.title,
           note: '',
           is_archived: false,
           is_unread: false,
-          stars: 0,
+          stars: bookmark.is_starred ? 1 : undefined,
           created_at: bookmark.created_at.toISOString(),
-          is_public: import_as_public,
+          is_public: import_as_public || undefined,
           links: [
-            { url: bookmark.url, site_path: '', is_public: import_as_public },
+            {
+              url: bookmark.url,
+              site_path: '',
+              is_public: import_as_public || undefined,
+            },
           ],
-          tags: bookmark.path
-            .split('/')
-            .filter((tag) => {
-              // Remove empty strings.
-              return tag
-            })
-            .map((tag) => ({
-              name: tag,
-              is_public: import_as_public,
+          tags: [
+            ...bookmark.path.split('/').map((name) => ({
+              name,
+              is_public: import_as_public || undefined,
             })),
+            ...(bookmark.tags
+              ? bookmark.tags.map((name) => ({
+                  name,
+                  is_public: import_as_public || undefined,
+                }))
+              : []),
+          ],
         })),
-        tag_hierarchies: [],
+        tag_hierarchies: await Promise.all(
+          tag_hierarchies.map(
+            async (node) => await parse_tag_hierarchy_node(node),
+          ),
+        ),
       }
     }
 

@@ -56,7 +56,7 @@ const Page: React.FC = () => {
                 )
                 download({
                   filename: `${backup.created_at} - taaabs backup.json`,
-                  text: data,
+                  text: JSON.stringify(data),
                 })
               }}
             >

@@ -5,6 +5,7 @@ import { ListBackups_Ro } from '../../domain/types/list-backups.ro'
 import { SendImportData_Params } from '../../domain/types/send-import-data.params'
 import { ImportExport_DataSource } from '../data-sources/import-export.data-source'
 import { Crypto } from '@repositories/utils/crypto'
+import { Backup_Ro } from '../../domain/types/backup.ro'
 
 export class ImportExport_RepositoryImpl implements ImportExport_Repository {
   constructor(private readonly _import_data_source: ImportExport_DataSource) {}
@@ -28,11 +29,10 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
   public async download_backup(
     params: DownloadBackup_Params,
     encryption_key: Uint8Array,
-  ): Promise<string> {
+  ): Promise<Backup_Ro> {
     const data = await this._import_data_source.download_backup(params)
 
-    // Structure of downloadable data is the same as the input for import.
-    const downloadable_json: SendImportData_Params = {
+    return {
       bookmarks: await Promise.all(
         data.bookmarks.map(async (bookmark) => ({
           id: bookmark.id,
@@ -130,7 +130,5 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
       ),
       tag_hierarchies: data.tag_hierarchies,
     }
-
-    return JSON.stringify(downloadable_json)
   }
 }

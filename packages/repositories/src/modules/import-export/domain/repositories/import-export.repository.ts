@@ -1,3 +1,4 @@
+import { Backup_Ro } from '../types/backup.ro'
 import { DownloadBackup_Params } from '../types/download-backup.params'
 import { ListBackups_Ro } from '../types/list-backups.ro'
 import { SendImportData_Params } from '../types/send-import-data.params'
@@ -11,6 +12,6 @@ export type ImportExport_Repository = {
   download_backup(
     params: DownloadBackup_Params,
     encryption_key: Uint8Array,
-  ): Promise<string>
+  ): Promise<Backup_Ro>
   // request_new_backup(): Promise<void>
 }

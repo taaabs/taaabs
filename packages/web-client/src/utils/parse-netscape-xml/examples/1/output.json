@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Unsorted",
+    "type": "folder",
+    "children": [
+      {
+        "type": "link",
+        "created_at_timestamp": 1715894977,
+        "title": "Example",
+        "url": "https://example.com"
+      },
+      {
+        "type": "link",
+        "created_at_timestamp": 1715818306,
+        "title": "Example 2",
+        "url": "https://example2.com"
+      }
+    ]
+  },
+  {
+    "name": "Folder 1",
+    "type": "folder",
+    "children": [
+      {
+        "type": "link",
+        "title": "Example 3",
+        "created_at_timestamp": 1716031601,
+        "tags": ["tag1", "tag2", "tag3"],
+        "url": "https://example3.com"
+      },
+      {
+        "name": "Folder 1.1",
+        "type": "folder",
+        "children": [
+          {
+            "type": "link",
+            "created_at_timestamp": 1716031593,
+            "title": "Example 4",
+            "tags": ["tag2"],
+            "is_starred": true,
+            "url": "https://example4.com"
+          }
+        ]
+      }
+    ]
+  }
+]

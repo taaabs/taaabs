@@ -17,6 +17,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
     encryption_key: Uint8Array,
   ): Promise<void> {
     const created_at_fallback = new Date()
+
     const body: SendImportData_Dto.Body = {
       bookmarks: await Promise.all(
         params.bookmarks.map(async (bookmark) => {
