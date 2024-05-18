@@ -66,7 +66,7 @@ const _Modal: React.FC<{
 
   return (
     <UiCommonTemplate_Modal_Content
-      width={400}
+      width={350}
       slot_header={
         <UiCommonTemplate_Modal_Content_Header
           title={props.dictionary.app.rename_tag_modal.rename_tag}
