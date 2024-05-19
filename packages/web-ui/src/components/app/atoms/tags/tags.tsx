@@ -49,7 +49,7 @@ export const Tags: React.FC<Tags.Props> = memo(
 
     const new_tags_grouped: Tags.Tag[][] = []
     props.tags_.map((tag) => {
-      const current_tag_first_char = tag.name.substring(0, 1)
+      const current_tag_first_char = tag.name.toLowerCase().substring(0, 1)
       const idx = first_chars_processed.findIndex(
         (first_char) => first_char == current_tag_first_char,
       )
