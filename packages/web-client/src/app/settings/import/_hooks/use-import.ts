@@ -147,7 +147,7 @@ export const use_import = () => {
           tags: [
             ...bookmark.path
               .split('/')
-              .filter((segment) => !!segment.length)
+              .filter((segment) => !!segment.length) // Root bookmarks have '/' path.
               .map((name) => ({
                 name,
                 is_public: import_as_public || undefined,
