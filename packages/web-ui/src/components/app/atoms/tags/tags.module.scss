@@ -4,7 +4,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  row-gap: var(--padding-24px);
+  row-gap: 20px;
 }
 .group {
   display: flex;
@@ -17,6 +17,7 @@
   position: relative;
   display: flex;
   justify-content: center;
+  font-size: 14px;
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
   color: var(--brand-color);
