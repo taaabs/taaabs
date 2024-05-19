@@ -2,6 +2,7 @@
 
 import { browser_storage } from '@/constants/browser-storage'
 import ky, { KyInstance } from 'ky'
+import localforage from 'localforage'
 import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
 
 const default_ky_instance = ky.create({
@@ -48,10 +49,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     ).toUTCString()}; path=/`
   }
 
-  const logout = () => {
+  const logout = async () => {
     _set_auth_data(undefined)
     ky_instance.current = default_ky_instance
     localStorage.removeItem(browser_storage.local_storage.auth_data)
+    await localforage.removeItem(
+      browser_storage.local_forage.authorized_library.search.index,
+    )
+    await localforage.removeItem(
+      browser_storage.local_forage.authorized_library.search.bookmarks,
+    )
+    await localforage.removeItem(
+      browser_storage.local_forage.authorized_library.search
+        .cached_at_timestamp,
+    )
+    await localforage.removeItem(
+      browser_storage.local_forage.authorized_library.search.archived_index,
+    )
+    await localforage.removeItem(
+      browser_storage.local_forage.authorized_library.search.archived_bookmarks,
+    )
+    await localforage.removeItem(
+      browser_storage.local_forage.authorized_library.search
+        .archived_cached_at_timestamp,
+    )
     document.cookie = 'user_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
     document.location = '/'
   }

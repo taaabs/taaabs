@@ -573,35 +573,35 @@ export const use_search = (local_db: LocalDb) => {
               .archived_cached_at_timestamp,
       )
     } else {
-      await localforage.removeItem(
-        !params.is_archived_
-          ? browser_storage.local_forage.public_library.search.index({
-              username: username as string,
-            })
-          : browser_storage.local_forage.public_library.search.archived_index({
-              username: username as string,
-            }),
-      )
-      await localforage.removeItem(
-        !params.is_archived_
-          ? browser_storage.local_forage.public_library.search.bookmarks({
-              username: username as string,
-            })
-          : browser_storage.local_forage.public_library.search.archived_bookmarks(
-              { username: username as string },
-            ),
-      )
-      await localforage.removeItem(
-        !params.is_archived_
-          ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
-              {
-                username: username as string,
-              },
-            )
-          : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-              { username: username as string },
-            ),
-      )
+      // await localforage.removeItem(
+      //   !params.is_archived_
+      //     ? browser_storage.local_forage.public_library.search.index({
+      //         username: username as string,
+      //       })
+      //     : browser_storage.local_forage.public_library.search.archived_index({
+      //         username: username as string,
+      //       }),
+      // )
+      // await localforage.removeItem(
+      //   !params.is_archived_
+      //     ? browser_storage.local_forage.public_library.search.bookmarks({
+      //         username: username as string,
+      //       })
+      //     : browser_storage.local_forage.public_library.search.archived_bookmarks(
+      //         { username: username as string },
+      //       ),
+      // )
+      // await localforage.removeItem(
+      //   !params.is_archived_
+      //     ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
+      //         {
+      //           username: username as string,
+      //         },
+      //       )
+      //     : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
+      //         { username: username as string },
+      //       ),
+      // )
     }
     if (!params.is_archived_) {
       local_db.set_db(undefined)
