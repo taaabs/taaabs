@@ -64,7 +64,10 @@ export const Tags: React.FC<Tags.Props> = memo(
         {contextMenu}
         {new_tags_grouped
           .sort((a, b) => {
-            if (a[0].name.substring(0, 1) < b[0].name.substring(0, 1)) {
+            if (
+              a[0].name.substring(0, 1).toLowerCase() <
+              b[0].name.substring(0, 1).toLowerCase()
+            ) {
               return -1
             } else {
               return 1
@@ -74,7 +77,9 @@ export const Tags: React.FC<Tags.Props> = memo(
             <div className={styles.group} key={group[0].name.substring(0, 1)}>
               <div className={styles['first-char']}>
                 <span>
-                  {String.fromCodePoint(group[0].name.codePointAt(0)!)}
+                  {String.fromCodePoint(
+                    group[0].name.codePointAt(0)!,
+                  ).toUpperCase()}
                 </span>
               </div>
               {group

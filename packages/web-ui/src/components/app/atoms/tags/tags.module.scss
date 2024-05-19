@@ -4,20 +4,19 @@
 .container {
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: var(--padding-24px);
 }
 .group {
   display: flex;
   flex-wrap: wrap;
-  column-gap: 6px;
-  row-gap: 8px;
+  column-gap: var(--padding-6px);
+  row-gap: var(--padding-8px);
   align-items: center;
 }
 .first-char {
   position: relative;
   display: flex;
   justify-content: center;
-  font-size: var(--font-size-14px);
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
   color: var(--brand-color);
@@ -25,7 +24,7 @@
   margin-right: 2px;
   &::before {
     content: '';
-    background: var(--blue50);
+    background: var(--blue100);
     position: absolute;
     width: 24px;
     height: 24px;
