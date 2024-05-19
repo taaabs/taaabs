@@ -2,7 +2,6 @@
 
 import { HeadingWithSubheading as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
 import { RadioSetting as UiAppAtom_RadioSetting } from '@web-ui/components/app/atoms/radio-setting'
-import { FormRadio as UiAppTemplate_FormRadio } from '@web-ui/components/app/templates/form-radio'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
 import { BoxDivider as UiAppAtom_BoxDivider } from '@web-ui/components/app/atoms/box-divider'
 import { use_import } from './_hooks/use-import'
@@ -44,25 +43,6 @@ const Page: React.FC = () => {
           <UiAppAtom_BoxDivider />
           <h3>File contents</h3>
           <p>Found {import_hook.parsed_xml.length} bookmarks.</p>
-          <h3>Visibility</h3>
-          <UiAppTemplate_FormRadio>
-            <UiAppAtom_RadioSetting
-              top_line="Private"
-              bottom_line="All bookmarks will be encrypted end-to-end"
-              on_click={() => {
-                import_hook.set_import_as_public(false)
-              }}
-              is_checked={!import_hook.import_as_public}
-            />
-            <UiAppAtom_RadioSetting
-              top_line="Public"
-              bottom_line="All bookmarks will be published to your public profile"
-              on_click={() => {
-                import_hook.set_import_as_public(true)
-              }}
-              is_checked={import_hook.import_as_public}
-            />
-          </UiAppTemplate_FormRadio>
           <p>
             <small>
               <strong>Important:</strong> Individual bookmark visibility can be
@@ -73,9 +53,6 @@ const Page: React.FC = () => {
           <p>
             You're about to import {import_hook.parsed_xml.length} bookmarks to
             your personal library.{' '}
-            {import_hook.import_as_public
-              ? 'All of them will show up on your public profile. '
-              : 'All of them will be kept secret to anyone, even us. '}
           </p>
           <p>Would you like to proceed?</p>
           <br />

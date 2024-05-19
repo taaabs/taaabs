@@ -352,10 +352,7 @@
   }
   &__note {
     border-top: var(--border-secondary);
-    padding: var(--padding-16px);
-    @include at992 {
-      padding: var(--padding-14px);
-    }
+    padding: var(--padding-14px);
   }
   &__links {
     display: block;

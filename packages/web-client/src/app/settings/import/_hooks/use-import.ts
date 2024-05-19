@@ -41,7 +41,6 @@ export const use_import = () => {
   const [import_data, set_import_data] = useState<SendImportData_Params>()
   // Processed third party file.
   const [parsed_xml, set_parsed_xml] = useState<ParsedXMLBookmark[]>()
-  const [import_as_public, set_import_as_public] = useState<boolean>()
   const [is_sending, set_is_sending] = useState<boolean>()
   const [erase_library, set_erase_library] = useState<boolean>()
 
@@ -50,7 +49,6 @@ export const use_import = () => {
 
     set_file_text(undefined)
     set_parsed_xml(undefined)
-    set_import_as_public(false)
     set_import_data(undefined)
 
     try {
@@ -136,12 +134,10 @@ export const use_import = () => {
           is_unread: false,
           stars: bookmark.is_starred ? 1 : undefined,
           created_at: bookmark.created_at.toISOString(),
-          is_public: import_as_public || undefined,
           links: [
             {
               url: bookmark.url,
               site_path: '',
-              is_public: import_as_public || undefined,
             },
           ],
           tags: [
@@ -150,12 +146,10 @@ export const use_import = () => {
               .filter((segment) => !!segment.length) // Root bookmarks have '/' path.
               .map((name) => ({
                 name,
-                is_public: import_as_public || undefined,
               })),
             ...(bookmark.tags
               ? bookmark.tags.map((name) => ({
                   name,
-                  is_public: import_as_public || undefined,
                 }))
               : []),
           ],
@@ -189,7 +183,6 @@ export const use_import = () => {
     }
     set_is_sending(false)
     set_file_text(undefined)
-    set_import_as_public(false)
     set_parsed_xml(undefined)
     set_import_data(undefined)
     // Clear any cached library data.
@@ -204,8 +197,6 @@ export const use_import = () => {
     set_file_text,
     parsed_xml,
     submit,
-    import_as_public,
-    set_import_as_public,
     is_sending,
     erase_library,
     set_erase_library,

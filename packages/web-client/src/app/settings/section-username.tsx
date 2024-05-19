@@ -5,7 +5,7 @@ import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastr
 import { HeadingWithSubheading as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
 import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
 import { AuthContext } from '@/app/auth-provider'
@@ -27,6 +27,7 @@ export const SectionUsername: React.FC<{ dictionary: Dictionary }> = (
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
+    resetField,
   } = useForm<FormValues>({
     mode: 'all',
   })
@@ -109,6 +110,7 @@ export const SectionUsername: React.FC<{ dictionary: Dictionary }> = (
               value={field.value}
               on_change={(value) => {
                 if (isSubmitting) return
+                resetField('username')
                 field.onChange(value)
               }}
               message_type={error_message ? 'error' : undefined}
