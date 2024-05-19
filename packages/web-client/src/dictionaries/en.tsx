@@ -287,6 +287,7 @@ const dictionary: Dictionary = {
       rename_tag: 'Rename keyword',
       rename: 'Rename',
       cancel: 'Cancel',
+      tag_is_too_short: 'Tag must have at least 1 character',
       tag_is_too_long: 'Entered tag is too long',
     },
   },

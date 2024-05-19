@@ -226,6 +226,7 @@ export type Dictionary = {
       rename_tag: string
       cancel: string
       rename: string
+      tag_is_too_short: string
       tag_is_too_long: string
     }
   }

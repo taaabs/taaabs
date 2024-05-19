@@ -6,7 +6,11 @@ export namespace Rename_Dto {
     export const body_schema = z.object({
       old_hash: z.string().length(64),
       new_hash: z.string().length(64),
-      name: z.string().max(system_values.bookmark.tags.max_length).optional(),
+      name: z
+        .string()
+        .min(1)
+        .max(system_values.bookmark.tags.max_length)
+        .optional(),
       name_aes: z
         .string()
         .max(system_values.bookmark.tags.max_length * 10)

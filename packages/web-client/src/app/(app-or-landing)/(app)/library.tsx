@@ -829,7 +829,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const slot_tag_hierarchies = (
     <div style={{ pointerEvents: is_not_interactive ? 'none' : undefined }}>
       <UiAppAtom_TagHierarchies
-        key={tag_hierarchies_hook.fetched_at_timestamp}
+        // key={tag_hierarchies_hook.fetched_at_timestamp}
         library_updated_at_timestamp_={library_updated_at_timestamp}
         is_updatable_={!username}
         tree_={tag_hierarchies_hook.tag_hierarchies}
@@ -1175,7 +1175,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
     <UiAppAtom_BookmarkWrapper
       key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
-      index_={i}
       created_at_={new Date(bookmark.created_at)}
       locale={props.dictionary.locale}
       search_queried_at_timestamp_={search_hook.queried_at_timestamp_}

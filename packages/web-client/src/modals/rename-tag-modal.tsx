@@ -89,16 +89,17 @@ const _Modal: React.FC<{
         control={control}
         defaultValue={props.old_tag_name}
         rules={{
-          maxLength: system_values.bookmark.tags.max_length,
+          minLength: {
+            value: 1,
+            message: props.dictionary.app.rename_tag_modal.tag_is_too_short,
+          },
+          maxLength: {
+            value: system_values.bookmark.tags.max_length,
+            message: props.dictionary.app.rename_tag_modal.tag_is_too_long,
+          },
         }}
         render={({ field }) => {
-          let error_message: string | undefined
-
-          if (errors.name?.type == 'maxLength') {
-            error_message =
-              props.dictionary.app.rename_tag_modal.tag_is_too_long
-          }
-
+          const error_message = errors.name?.message
           return (
             <UiCommonAtom_Input
               value={field.value}

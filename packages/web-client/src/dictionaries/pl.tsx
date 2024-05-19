@@ -294,6 +294,7 @@ export const dictionary: Dictionary = {
       rename_tag: 'Edytuj słowo kluczowe',
       rename: 'Zmień nazwę',
       cancel: 'Anuluj',
+      tag_is_too_short: 'Tag musi mieć przynajmniej jeden znak',
       tag_is_too_long: 'Tag jest za długi',
     },
   },

@@ -208,7 +208,7 @@
       @include at992 {
         height: calc(
           100svh - var(--header-desktop-height) - 16px -
-            var(--search-desktop-height) - 16px - var(--_pane-selector-height)
+            var(--search-desktop-height) - var(--_pane-selector-height)
         );
       }
       &__tag-hierarchies {

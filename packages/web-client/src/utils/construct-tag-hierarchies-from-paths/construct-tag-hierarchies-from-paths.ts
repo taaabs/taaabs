@@ -9,7 +9,7 @@ export const construct_tag_hierarchies_from_paths = (
   const tree: any[] = []
 
   for (const path of paths) {
-    const segments = path.split('/')
+    const segments = path.split('/').slice(1)
     let current = tree
 
     for (let i = 0; i < segments.length; i++) {

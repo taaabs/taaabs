@@ -1,6 +1,5 @@
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useContext, useState } from 'react'
-// import { bookmarksToJSON } from 'bookmarks-to-json'
 import { toast } from 'react-toastify'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
@@ -74,9 +73,7 @@ export const use_import = () => {
             if (params.node.type != 'folder') throw new Error()
             return flatten_tree({
               node: child,
-              path: `${params.path}${params.path ? '/' : ''}${
-                params.node.name
-              }`,
+              path: `${params.path}/${params.node.name}`,
             })
           })
         } else if (params.node.type == 'link') {
@@ -148,10 +145,13 @@ export const use_import = () => {
             },
           ],
           tags: [
-            ...bookmark.path.split('/').map((name) => ({
-              name,
-              is_public: import_as_public || undefined,
-            })),
+            ...bookmark.path
+              .split('/')
+              .filter((segment) => !!segment.length)
+              .map((name) => ({
+                name,
+                is_public: import_as_public || undefined,
+              })),
             ...(bookmark.tags
               ? bookmark.tags.map((name) => ({
                   name,
