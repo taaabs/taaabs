@@ -3,7 +3,7 @@ module.exports = {
     production: {
       user: 'ubuntu',
       host: ['57.128.195.88'],
-      path: '~/apps/taaabs',
+      path: '/home/ubuntu/apps/taaabs',
       ref: 'origin/master',
       repo: 'git@github.com:interbe/taaabs.git',
       'post-deploy':
