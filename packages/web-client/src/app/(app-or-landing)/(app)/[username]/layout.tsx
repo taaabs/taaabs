@@ -4,7 +4,7 @@ import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastru
 import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
 import ky from 'ky'
 import { ReactNode } from 'react'
-import { PublicProfileLocalDbProvider } from './public-profile-local-db-provider'
+import { LocalDbProvider } from '@/app/local-db-provider'
 
 const Layout: React.FC<{
   children: ReactNode
@@ -13,7 +13,7 @@ const Layout: React.FC<{
   const metadata = await _get_metadata({ username: props.params.username })
 
   return (
-    <PublicProfileLocalDbProvider>
+    <LocalDbProvider>
       <AvatarContextSetter
         avatar={
           metadata.avatar
@@ -25,7 +25,7 @@ const Layout: React.FC<{
         }
       />
       {props.children}
-    </PublicProfileLocalDbProvider>
+    </LocalDbProvider>
   )
 }
 

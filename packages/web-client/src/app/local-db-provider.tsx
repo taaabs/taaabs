@@ -2,7 +2,8 @@
 
 import { BookmarkTags, schema } from '@/hooks/library/use-search'
 import { Orama } from '@orama/orama'
-import { ReactNode, createContext, useState } from 'react'
+import { ReactNode, createContext, useContext, useState } from 'react'
+import { AuthContext } from './auth-provider'
 
 export type LocalDb = {
   db?: Orama<typeof schema>
@@ -26,6 +27,8 @@ export const LocalDbContext = createContext<LocalDb | null>(null)
 export const LocalDbProvider: React.FC<{
   children: ReactNode
 }> = (props) => {
+  const auth_context = useContext(AuthContext)
+
   const [db, set_db] = useState<Orama<typeof schema>>()
   const [archived_db, set_archived_db] = useState<Orama<typeof schema>>()
   const [db_updated_at_timestamp, set_db_updated_at_timestamp] =
@@ -38,6 +41,9 @@ export const LocalDbProvider: React.FC<{
     useState<BookmarkTags[]>()
   const [archived_bookmarks_just_tags, set_archived_bookmarks_just_tags] =
     useState<BookmarkTags[]>()
+
+  // it requires initializing db
+  const add_bookmark = () => {}
 
   return (
     <LocalDbContext.Provider
