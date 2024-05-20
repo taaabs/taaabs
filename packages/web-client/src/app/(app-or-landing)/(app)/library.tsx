@@ -420,16 +420,16 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const is_not_interactive =
     is_fetching_first_bookmarks ||
     bookmarks_hook.is_fetching_more_bookmarks ||
-    search_hook.is_initializing_
+    props.local_db.is_initializing
 
   const slot_search = (
     <UiAppAtom_LibrarySearch
       search_string_={search_hook.search_string_}
-      is_loading_={search_hook.is_initializing_}
-      loading_progress_percentage_={search_hook.indexed_bookmarks_percentage_}
+      is_loading_={props.local_db.is_initializing || false}
+      loading_progress_percentage_={props.local_db.indexed_bookmarks_percentage}
       placeholder_={props.dictionary.app.library.search.placeholder}
       hints_={
-        !search_hook.is_initializing_
+        !props.local_db.is_initializing
           ? search_hook.hints_?.map((hint) => ({
               type_: hint.type,
               completion_: hint.completion,
@@ -453,7 +453,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       }}
       is_focused_={search_hook.is_search_focused_}
       on_focus_={async () => {
-        if (!search_hook.is_initializing_) {
+        if (!props.local_db.is_initializing) {
           search_hook.set_is_search_focused_(true)
 
           search_hook.set_selected_tags_(
@@ -477,14 +477,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           )
 
           if (search_cache_to_be_cleared.current) {
-            await search_hook.init_({
-              is_archived_: is_archived_filter,
-              force_reinitialization_: true,
+            await props.local_db.init({
+              is_archived: is_archived_filter,
+              force_reinitialization: true,
             })
             search_cache_to_be_cleared.current = false
           } else {
-            await search_hook.init_({
-              is_archived_: is_archived_filter,
+            await props.local_db.init({
+              is_archived: is_archived_filter,
             })
           }
 
@@ -492,7 +492,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
       }}
       on_change_={(value) => {
-        if (search_hook.is_initializing_) return
+        if (props.local_db.is_initializing) return
         search_hook.set_search_string_(value)
         if (!value) {
           window.history.pushState(
@@ -503,7 +503,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
       }}
       on_submit_={async () => {
-        if (search_hook.is_initializing_ || search_hook.count_ == 0) return
+        if (props.local_db.is_initializing || search_hook.count_ == 0) return
         if (search_hook.search_string_.trim()) {
           await search_hook.query_db_({
             search_string_: search_hook.search_string_,
@@ -1338,8 +1338,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           return
         }
         dispatch(bookmarks_actions.set_is_upserting(true))
-        const { db, bookmarks_just_tags } = await search_hook.init_({
-          is_archived_: is_archived_filter,
+        const { db, bookmarks_just_tags } = await props.local_db.init({
+          is_archived: is_archived_filter,
         })
         const modified_bookmark: UpsertBookmark_Params = {
           bookmark_id: bookmark.id,
@@ -1391,11 +1391,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             encryption_key: auth_context.auth_data!.encryption_key,
           }),
         )
-        await search_hook.update_bookmark_({
-          db_: db,
-          bookmarks_just_tags_: bookmarks_just_tags,
-          is_archived_: is_archived_filter,
-          bookmark_: {
+        await props.local_db.upsert_bookmark({
+          db,
+          bookmarks_just_tags,
+          is_archived: is_archived_filter,
+          bookmark: {
             id: bookmark.id,
             created_at: bookmark.created_at,
             visited_at: bookmark.visited_at,
@@ -1413,6 +1413,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             tag_ids: bookmark.tags.map((tag) => tag.id),
           },
         })
+        if (search_hook.result_?.hits.length) {
+          await search_hook.query_db_({
+            search_string_: search_hook.search_string_,
+            refresh_highlights_only_: true,
+          })
+        }
         dispatch(bookmarks_actions.set_is_upserting(false))
         toast.success(props.dictionary.app.library.bookmark_updated)
       }}
@@ -1420,8 +1426,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         !username
           ? async (tags) => {
               dispatch(bookmarks_actions.set_is_upserting(true))
-              const { db, bookmarks_just_tags } = await search_hook.init_({
-                is_archived_: is_archived_filter,
+              const { db, bookmarks_just_tags } = await props.local_db.init({
+                is_archived: is_archived_filter,
               })
               const modified_bookmark: UpsertBookmark_Params = {
                 bookmark_id: bookmark.id,
@@ -1461,11 +1467,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   encryption_key: auth_context.auth_data!.encryption_key,
                 }),
               )
-              await search_hook.update_bookmark_({
-                db_: db,
-                bookmarks_just_tags_: bookmarks_just_tags,
-                is_archived_: is_archived_filter,
-                bookmark_: {
+              await props.local_db.upsert_bookmark({
+                db,
+                bookmarks_just_tags,
+                is_archived: is_archived_filter,
+                bookmark: {
                   id: bookmark.id,
                   created_at: bookmark.created_at,
                   visited_at: bookmark.visited_at,
@@ -1483,6 +1489,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   tag_ids: bookmark.tags.map((tag) => tag.id),
                 },
               })
+              if (search_hook.result_?.hits.length) {
+                await search_hook.query_db_({
+                  search_string_: search_hook.search_string_,
+                  refresh_highlights_only_: true,
+                })
+              }
               dispatch(bookmarks_actions.set_is_upserting(false))
               toast.success(props.dictionary.app.library.bookmark_updated)
             }
@@ -1494,8 +1506,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       }}
       on_tag_delete_click_={async (tag_id) => {
         dispatch(bookmarks_actions.set_is_upserting(true))
-        const { db, bookmarks_just_tags } = await search_hook.init_({
-          is_archived_: is_archived_filter,
+        const { db, bookmarks_just_tags } = await props.local_db.init({
+          is_archived: is_archived_filter,
         })
         const modified_bookmark: UpsertBookmark_Params = {
           bookmark_id: bookmark.id,
@@ -1543,11 +1555,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             encryption_key: auth_context.auth_data!.encryption_key,
           }),
         )
-        await search_hook.update_bookmark_({
-          db_: db,
-          bookmarks_just_tags_: bookmarks_just_tags,
-          is_archived_: is_archived_filter,
-          bookmark_: {
+        await props.local_db.upsert_bookmark({
+          db,
+          bookmarks_just_tags,
+          is_archived: is_archived_filter,
+          bookmark: {
             id: bookmark.id,
             created_at: bookmark.created_at,
             visited_at: bookmark.visited_at,
@@ -1565,6 +1577,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             tag_ids: updated_bookmark.tags.map((tag) => tag.id),
           },
         })
+        if (search_hook.result_?.hits.length) {
+          await search_hook.query_db_({
+            search_string_: search_hook.search_string_,
+            refresh_highlights_only_: true,
+          })
+        }
         const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
         if (
           !tag_view_options_hook.selected_tags_.every((t) =>
@@ -1648,8 +1666,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               on_click={async () => {
                 const is_pinned = !link.is_pinned
                 dispatch(bookmarks_actions.set_is_upserting(true))
-                const { db, bookmarks_just_tags } = await search_hook.init_({
-                  is_archived_: is_archived_filter,
+                const { db, bookmarks_just_tags } = await props.local_db.init({
+                  is_archived: is_archived_filter,
                 })
                 const modified_bookmark: UpsertBookmark_Params = {
                   bookmark_id: bookmark.id,
@@ -1689,11 +1707,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     encryption_key: auth_context.auth_data!.encryption_key,
                   }),
                 )
-                await search_hook.update_bookmark_({
-                  db_: db,
-                  bookmarks_just_tags_: bookmarks_just_tags,
-                  is_archived_: is_archived_filter,
-                  bookmark_: {
+                await props.local_db.upsert_bookmark({
+                  db,
+                  bookmarks_just_tags,
+                  is_archived: is_archived_filter,
+                  bookmark: {
                     id: bookmark.id,
                     created_at: bookmark.created_at,
                     visited_at: bookmark.visited_at,
@@ -1725,8 +1743,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               on_click={async () => {
                 const open_snapshot = !link.open_snapshot
                 dispatch(bookmarks_actions.set_is_upserting(true))
-                const { db, bookmarks_just_tags } = await search_hook.init_({
-                  is_archived_: is_archived_filter,
+                const { db, bookmarks_just_tags } = await props.local_db.init({
+                  is_archived: is_archived_filter,
                 })
                 const modified_bookmark: UpsertBookmark_Params = {
                   bookmark_id: bookmark.id,
@@ -1767,11 +1785,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     encryption_key: auth_context.auth_data!.encryption_key,
                   }),
                 )
-                await search_hook.update_bookmark_({
-                  db_: db,
-                  bookmarks_just_tags_: bookmarks_just_tags,
-                  is_archived_: is_archived_filter,
-                  bookmark_: {
+                await props.local_db.upsert_bookmark({
+                  db,
+                  bookmarks_just_tags,
+                  is_archived: is_archived_filter,
+                  bookmark: {
                     id: bookmark.id,
                     created_at: bookmark.created_at,
                     visited_at: bookmark.visited_at,
@@ -1832,8 +1850,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               no_selected={bookmark.stars}
               on_click={async (no_stars) => {
                 dispatch(bookmarks_actions.set_is_upserting(true))
-                const { db, bookmarks_just_tags } = await search_hook.init_({
-                  is_archived_: is_archived_filter,
+                const { db, bookmarks_just_tags } = await props.local_db.init({
+                  is_archived: is_archived_filter,
                 })
                 const modified_bookmark: UpsertBookmark_Params = {
                   bookmark_id: bookmark.id,
@@ -1879,11 +1897,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     encryption_key: auth_context.auth_data!.encryption_key,
                   }),
                 )
-                await search_hook.update_bookmark_({
-                  db_: db,
-                  bookmarks_just_tags_: bookmarks_just_tags,
-                  is_archived_: is_archived_filter,
-                  bookmark_: {
+                await props.local_db.upsert_bookmark({
+                  db,
+                  bookmarks_just_tags,
+                  is_archived: is_archived_filter,
+                  bookmark: {
                     id: bookmark.id,
                     created_at: bookmark.created_at,
                     visited_at: bookmark.visited_at,
@@ -1923,8 +1941,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               label={props.dictionary.app.library.bookmark.unread}
               on_click={async () => {
                 dispatch(bookmarks_actions.set_is_upserting(true))
-                const { db, bookmarks_just_tags } = await search_hook.init_({
-                  is_archived_: is_archived_filter,
+                const { db, bookmarks_just_tags } = await props.local_db.init({
+                  is_archived: is_archived_filter,
                 })
                 const is_unread = !bookmark.is_unread
                 const modified_bookmark: UpsertBookmark_Params = {
@@ -1982,11 +2000,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 ) {
                   search_hook.set_count_(search_hook.count_! - 1)
                 }
-                await search_hook.update_bookmark_({
-                  db_: db,
-                  bookmarks_just_tags_: bookmarks_just_tags,
-                  is_archived_: is_archived_filter,
-                  bookmark_: {
+                await props.local_db.upsert_bookmark({
+                  db,
+                  bookmarks_just_tags,
+                  is_archived: is_archived_filter,
+                  bookmark: {
                     id: bookmark.id,
                     created_at: bookmark.created_at,
                     visited_at: bookmark.visited_at,
@@ -2024,8 +2042,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   return
                 }
                 dispatch(bookmarks_actions.set_is_upserting(true))
-                const { db, bookmarks_just_tags } = await search_hook.init_({
-                  is_archived_: is_archived_filter,
+                const { db, bookmarks_just_tags } = await props.local_db.init({
+                  is_archived: is_archived_filter,
                 })
                 const updated_bookmark = await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -2079,11 +2097,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     tags_to_remove_from_search_params,
                   )
                 }
-                await search_hook.update_bookmark_({
-                  db_: db,
-                  bookmarks_just_tags_: bookmarks_just_tags,
-                  is_archived_: is_archived_filter,
-                  bookmark_: {
+                await props.local_db.upsert_bookmark({
+                  db,
+                  bookmarks_just_tags,
+                  is_archived: is_archived_filter,
+                  bookmark: {
                     id: bookmark.id,
                     is_archived: is_archived_filter,
                     is_unread: updated_bookmark.is_unread,
@@ -2101,6 +2119,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     tag_ids: updated_bookmark.tags.map((tag) => tag.id),
                   },
                 })
+                if (search_hook.result_?.hits.length) {
+                  await search_hook.query_db_({
+                    search_string_: search_hook.search_string_,
+                    refresh_highlights_only_: true,
+                  })
+                }
                 dispatch(bookmarks_actions.set_is_upserting(false))
                 modal_context.set_modal({})
                 toast.success(props.dictionary.app.library.bookmark_updated)
@@ -2115,11 +2139,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               }
               on_click={async () => {
                 dispatch(bookmarks_actions.set_is_upserting(true))
-                const init_data = await search_hook.init_({
-                  is_archived_: is_archived_filter,
+                const init_data = await props.local_db.init({
+                  is_archived: is_archived_filter,
                 })
-                const archived_init_data = await search_hook.init_({
-                  is_archived_: !is_archived_filter,
+                const archived_init_data = await props.local_db.init({
+                  is_archived: !is_archived_filter,
                 })
                 const modified_bookmark: UpsertBookmark_Params = {
                   bookmark_id: bookmark.id,
@@ -2164,11 +2188,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     encryption_key: auth_context.auth_data!.encryption_key,
                   }),
                 )
-                await search_hook.update_bookmark_({
-                  db_: init_data.db,
-                  bookmarks_just_tags_: init_data.bookmarks_just_tags,
-                  is_archived_: false,
-                  bookmark_: {
+                await props.local_db.upsert_bookmark({
+                  db: init_data.db,
+                  bookmarks_just_tags: init_data.bookmarks_just_tags,
+                  is_archived: false,
+                  bookmark: {
                     id: bookmark.id,
                     created_at: bookmark.created_at,
                     visited_at: bookmark.visited_at,
@@ -2186,11 +2210,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     tag_ids: bookmark.tags.map((tag) => tag.id),
                   },
                 })
-                await search_hook.update_bookmark_({
-                  db_: archived_init_data.db,
-                  bookmarks_just_tags_: archived_init_data.bookmarks_just_tags,
-                  is_archived_: true,
-                  bookmark_: {
+                await props.local_db.upsert_bookmark({
+                  db: archived_init_data.db,
+                  bookmarks_just_tags: archived_init_data.bookmarks_just_tags,
+                  is_archived: true,
+                  bookmark: {
                     id: bookmark.id,
                     created_at: bookmark.created_at,
                     visited_at: bookmark.visited_at,
@@ -2240,8 +2264,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   return
                 }
                 dispatch(bookmarks_actions.set_is_upserting(true))
-                const { db, bookmarks_just_tags } = await search_hook.init_({
-                  is_archived_: is_archived_filter,
+                const { db, bookmarks_just_tags } = await props.local_db.init({
+                  is_archived: is_archived_filter,
                 })
                 await dispatch(
                   bookmarks_actions.delete_bookmark({
@@ -2263,11 +2287,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     encryption_key: auth_context.auth_data!.encryption_key,
                   }),
                 )
-                await search_hook.delete_bookmark_({
-                  db_: db,
-                  bookmarks_just_tags_: bookmarks_just_tags,
-                  is_archived_: is_archived_filter,
-                  bookmark_id_: bookmark.id,
+                await props.local_db.delete_bookmark({
+                  db,
+                  bookmarks_just_tags,
+                  is_archived: is_archived_filter,
+                  bookmark_id: bookmark.id,
                 })
                 if (search_hook.count_) {
                   search_hook.set_count_(search_hook.count_ - 1)
