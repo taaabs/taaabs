@@ -133,14 +133,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         set_is_pinned_stale(false)
       }
       set_pinned_count()
-      if (search_hook.result_) {
-        search_hook.set_highlights_(search_hook.incoming_highlights_)
-        search_hook.set_highlights_sites_variants_(
-          search_hook.incoming_highlights_sites_variants_,
+      if (search_hook.result) {
+        search_hook.set_highlights(search_hook.incoming_highlights)
+        search_hook.set_highlights_sites_variants(
+          search_hook.incoming_highlights_sites_variants,
         )
-      } else if (search_hook.highlights_ && !search_hook.result_) {
-        search_hook.set_highlights_(undefined)
-        search_hook.set_highlights_sites_variants_(undefined)
+      } else if (search_hook.highlights && !search_hook.result) {
+        search_hook.set_highlights(undefined)
+        search_hook.set_highlights_sites_variants(undefined)
       }
     }
   }, [
@@ -339,7 +339,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   }, [pinned_hook.should_refetch])
 
   useUpdateEffect(() => {
-    search_hook.set_current_filter_(filter_view_options_hook.current_filter_)
+    search_hook.set_current_filter(filter_view_options_hook.current_filter_)
   }, [filter_view_options_hook.current_filter_])
 
   // Clear cache when user selects visited at sort_by option or popularity order.
@@ -363,8 +363,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
 
   useUpdateEffect(() => {
     if (props.local_db.db || props.local_db.archived_db) {
-      search_hook.set_current_filter_(filter_view_options_hook.current_filter_)
-      search_hook.set_selected_tags_(
+      search_hook.set_current_filter(filter_view_options_hook.current_filter_)
+      search_hook.set_selected_tags(
         counts_hook.selected_tags_
           .filter((id) => {
             if (!bookmarks_hook.bookmarks || !bookmarks_hook.bookmarks[0])
@@ -383,19 +383,19 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             return name
           }),
       )
-      search_hook.get_hints_()
+      search_hook.get_hints()
     }
   }, [props.local_db.db, props.local_db.archived_db])
 
   useUpdateEffect(() => {
-    if (search_hook.result_) {
+    if (search_hook.result) {
       bookmarks_hook.get_bookmarks_by_ids_({
-        all_not_paginated_ids: search_hook.result_.hits.map((hit) =>
+        all_not_paginated_ids: search_hook.result.hits.map((hit) =>
           parseInt(hit.document.id),
         ),
       })
     }
-  }, [search_hook.queried_at_timestamp_])
+  }, [search_hook.queried_at_timestamp])
 
   useUpdateEffect(() => {
     tag_hierarchies_hook.get_tag_hierarchies_({
@@ -424,39 +424,38 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
 
   const slot_search = (
     <UiAppAtom_LibrarySearch
-      search_string_={search_hook.search_string_}
+      search_string_={search_hook.search_string}
       is_loading_={props.local_db.is_initializing || false}
       loading_progress_percentage_={props.local_db.indexed_bookmarks_percentage}
       placeholder_={props.dictionary.app.library.search.placeholder}
       hints_={
         !props.local_db.is_initializing
-          ? search_hook.hints_?.map((hint) => ({
+          ? search_hook.hints?.map((hint) => ({
               type_: hint.type,
               completion_: hint.completion,
               search_string_: hint.search_string,
             }))
           : undefined
       }
-      hints_set_at_timestamp_={search_hook.hints_set_at_timestamp_}
-      queried_at_timestamp_={search_hook.queried_at_timestamp_}
+      hints_set_at_timestamp_={search_hook.hints_set_at_timestamp}
+      queried_at_timestamp_={search_hook.queried_at_timestamp}
       on_click_hint_={(i) => {
         const search_string =
-          search_hook.search_string_ + search_hook.hints_![i].completion
-        search_hook.set_search_string_(search_string)
-        search_hook.query_db_({ search_string_: search_string })
+          search_hook.search_string + search_hook.hints![i].completion
+        search_hook.set_search_string(search_string)
+        search_hook.query_db({ search_string: search_string })
       }}
       on_click_recent_hint_remove_={(i) => {
         const search_string =
-          search_hook.hints_![i].search_string +
-          search_hook.hints_![i].completion
-        search_hook.remove_recent_hint_({ search_string_: search_string })
+          search_hook.hints![i].search_string + search_hook.hints![i].completion
+        search_hook.remove_recent_hint({ search_string_: search_string })
       }}
-      is_focused_={search_hook.is_search_focused_}
+      is_focused_={search_hook.is_search_focused}
       on_focus_={async () => {
         if (!props.local_db.is_initializing) {
-          search_hook.set_is_search_focused_(true)
+          search_hook.set_is_search_focused(true)
 
-          search_hook.set_selected_tags_(
+          search_hook.set_selected_tags(
             counts_hook.selected_tags_
               .filter((id) => {
                 if (!bookmarks_hook.bookmarks || !bookmarks_hook.bookmarks[0])
@@ -488,12 +487,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             })
           }
 
-          search_hook.get_hints_()
+          search_hook.get_hints()
         }
       }}
       on_change_={(value) => {
         if (props.local_db.is_initializing) return
-        search_hook.set_search_string_(value)
+        search_hook.set_search_string(value)
         if (!value) {
           window.history.pushState(
             {},
@@ -503,22 +502,20 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
       }}
       on_submit_={async () => {
-        if (props.local_db.is_initializing || search_hook.count_ == 0) return
-        if (search_hook.search_string_.trim()) {
-          await search_hook.query_db_({
-            search_string_: search_hook.search_string_,
+        if (props.local_db.is_initializing || search_hook.count == 0) return
+        if (search_hook.search_string.trim()) {
+          await search_hook.query_db({
+            search_string: search_hook.search_string,
           })
         }
       }}
       on_blur_={() => {
-        search_hook.clear_hints_()
-        search_hook.set_is_search_focused_(false)
+        search_hook.clear_hints()
+        search_hook.set_is_search_focused(false)
       }}
-      results_count_={
-        search_hook.search_string_ ? search_hook.count_ : undefined
-      }
+      results_count_={search_hook.search_string ? search_hook.count : undefined}
       on_clear_click_={() => {
-        search_hook.reset_()
+        search_hook.reset()
         clear_library_session_storage({
           username,
           search_params: search_params.toString(),
@@ -785,7 +782,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             JSON.stringify(record_visit_params),
           )
         }
-        await search_hook.cache_data_()
+        await search_hook.cache_data()
         window.onbeforeunload = null
         const url = item.open_snapshot_
           ? url_to_wayback({ date: item.created_at_, url: item.url_ })
@@ -885,7 +882,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         on_click_all_bookmarks_={() => {
           tag_view_options_hook.clear_selected_tags()
           if (bookmarks_hook.showing_bookmarks_fetched_by_ids) {
-            search_hook.reset_()
+            search_hook.reset()
             if (filter_view_options_hook.current_filter_ == Filter.NONE) {
               bookmarks_hook.get_bookmarks_({})
             }
@@ -1100,7 +1097,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         <div
           style={{
             opacity:
-              is_fetching_first_bookmarks && !search_hook.search_string_
+              is_fetching_first_bookmarks && !search_hook.search_string
                 ? 'var(--dimmed-opacity)'
                 : undefined,
             pointerEvents: is_not_interactive ? 'none' : undefined,
@@ -1177,7 +1174,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
       created_at_={new Date(bookmark.created_at)}
       locale={props.dictionary.locale}
-      search_queried_at_timestamp_={search_hook.queried_at_timestamp_}
+      search_queried_at_timestamp_={search_hook.queried_at_timestamp}
       bookmark_id_={bookmark.id}
       library_url_={username ? `/${username}` : '/library'}
       on_tag_drag_start_={
@@ -1288,7 +1285,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             JSON.stringify(record_visit_params),
           )
         }
-        await search_hook.cache_data_()
+        await search_hook.cache_data()
         window.onbeforeunload = null
         // Timeout is there so updated by cache_data values of search_data_awaits_caching,
         // archived_search_data_awaits_caching can be seen by "beforeunload" event handler.
@@ -1413,10 +1410,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             tag_ids: bookmark.tags.map((tag) => tag.id),
           },
         })
-        if (search_hook.result_?.hits.length) {
-          await search_hook.query_db_({
-            search_string_: search_hook.search_string_,
-            refresh_highlights_only_: true,
+        if (search_hook.result?.hits.length) {
+          await search_hook.query_db({
+            search_string: search_hook.search_string,
+            refresh_highlights_only: true,
           })
         }
         dispatch(bookmarks_actions.set_is_upserting(false))
@@ -1489,10 +1486,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   tag_ids: bookmark.tags.map((tag) => tag.id),
                 },
               })
-              if (search_hook.result_?.hits.length) {
-                await search_hook.query_db_({
-                  search_string_: search_hook.search_string_,
-                  refresh_highlights_only_: true,
+              if (search_hook.result?.hits.length) {
+                await search_hook.query_db({
+                  search_string: search_hook.search_string,
+                  refresh_highlights_only: true,
                 })
               }
               dispatch(bookmarks_actions.set_is_upserting(false))
@@ -1577,10 +1574,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             tag_ids: updated_bookmark.tags.map((tag) => tag.id),
           },
         })
-        if (search_hook.result_?.hits.length) {
-          await search_hook.query_db_({
-            search_string_: search_hook.search_string_,
-            refresh_highlights_only_: true,
+        if (search_hook.result?.hits.length) {
+          await search_hook.query_db({
+            search_string: search_hook.search_string,
+            refresh_highlights_only: true,
           })
         }
         const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
@@ -1595,8 +1592,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               bookmark_id: updated_bookmark.id,
             }),
           )
-          if (search_hook.count_) {
-            search_hook.set_count_(search_hook.count_ - 1)
+          if (search_hook.count) {
+            search_hook.set_count(search_hook.count - 1)
           }
         }
         if (
@@ -1920,7 +1917,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   },
                 })
                 if (
-                  search_hook.count_ &&
+                  search_hook.count &&
                   (filter_view_options_hook.current_filter_ == Filter.STARRED ||
                     filter_view_options_hook.current_filter_ ==
                       Filter.STARRED_UNREAD ||
@@ -1930,7 +1927,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                       Filter.ARCHIVED_STARRED_UNREAD) &&
                   bookmark.stars == 1
                 ) {
-                  search_hook.set_count_(search_hook.count_ - 1)
+                  search_hook.set_count(search_hook.count - 1)
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
                 toast.success(props.dictionary.app.library.bookmark_updated)
@@ -1990,7 +1987,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   }),
                 )
                 if (
-                  search_hook.count_ &&
+                  search_hook.count &&
                   (filter_view_options_hook.current_filter_ == Filter.UNREAD ||
                     filter_view_options_hook.current_filter_ ==
                       Filter.STARRED_UNREAD ||
@@ -1998,7 +1995,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                       Filter.ARCHIVED_STARRED_UNREAD) &&
                   bookmark.is_unread
                 ) {
-                  search_hook.set_count_(search_hook.count_! - 1)
+                  search_hook.set_count(search_hook.count! - 1)
                 }
                 await props.local_db.upsert_bookmark({
                   db,
@@ -2077,8 +2074,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                       bookmark_id: updated_bookmark.id,
                     }),
                   )
-                  if (search_hook.count_) {
-                    search_hook.set_count_(search_hook.count_ - 1)
+                  if (search_hook.count) {
+                    search_hook.set_count(search_hook.count - 1)
                   }
                 }
                 // Unselect removed tags when there is no more bookmarks with them.
@@ -2119,10 +2116,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     tag_ids: updated_bookmark.tags.map((tag) => tag.id),
                   },
                 })
-                if (search_hook.result_?.hits.length) {
-                  await search_hook.query_db_({
-                    search_string_: search_hook.search_string_,
-                    refresh_highlights_only_: true,
+                if (search_hook.result?.hits.length) {
+                  await search_hook.query_db({
+                    search_string: search_hook.search_string,
+                    refresh_highlights_only: true,
                   })
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
@@ -2232,8 +2229,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     tag_ids: bookmark.tags.map((tag) => tag.id),
                   },
                 })
-                if (search_hook.count_) {
-                  search_hook.set_count_(search_hook.count_ - 1)
+                if (search_hook.count) {
+                  search_hook.set_count(search_hook.count - 1)
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
                 toast.success(
@@ -2246,7 +2243,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   bookmarks_hook.bookmarks.length == 1 &&
                   bookmarks_hook.showing_bookmarks_fetched_by_ids
                 ) {
-                  search_hook.reset_()
+                  search_hook.reset()
                 }
               }}
             />
@@ -2293,8 +2290,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   is_archived: is_archived_filter,
                   bookmark_id: bookmark.id,
                 })
-                if (search_hook.count_) {
-                  search_hook.set_count_(search_hook.count_ - 1)
+                if (search_hook.count) {
+                  search_hook.set_count(search_hook.count - 1)
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
                 modal_context.set_modal({})
@@ -2312,8 +2309,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           </UiCommon_Dropdown>
         ) : undefined
       }
-      highlights_={search_hook.highlights_?.[bookmark.id.toString()]}
-      highlights_site_variants_={search_hook.highlights_sites_variants_}
+      highlights_={search_hook.highlights?.[bookmark.id.toString()]}
+      highlights_site_variants_={search_hook.highlights_sites_variants}
       orama_db_id_={
         is_archived_filter
           ? props.local_db.archived_db?.id || ''
@@ -2321,7 +2318,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       }
       should_dim_visited_links_={username !== undefined}
       // It's important to wait until filter is set to search hook's state.
-      current_filter_={search_hook.current_filter_}
+      current_filter_={search_hook.current_filter}
       translations_={{
         delete_: props.dictionary.app.library.delete,
         rename_: props.dictionary.app.library.rename,
@@ -2366,20 +2363,17 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         on_page_bottom_reached_={() => {
           if (bookmarks_hook.is_fetching || !bookmarks_hook.bookmarks?.length)
             return
-          if (
-            !search_hook.search_string_ &&
-            bookmarks_hook.has_more_bookmarks
-          ) {
+          if (!search_hook.search_string && bookmarks_hook.has_more_bookmarks) {
             bookmarks_hook.get_bookmarks_({ should_get_next_page: true })
           } else if (
-            search_hook.search_string_ &&
-            search_hook.count_ &&
+            search_hook.search_string &&
+            search_hook.count &&
             bookmarks_hook.bookmarks &&
             bookmarks_hook.bookmarks.length &&
-            bookmarks_hook.bookmarks.length < search_hook.count_
+            bookmarks_hook.bookmarks.length < search_hook.count
           ) {
             bookmarks_hook.get_bookmarks_by_ids_({
-              all_not_paginated_ids: search_hook.result_!.hits.map((hit) =>
+              all_not_paginated_ids: search_hook.result!.hits.map((hit) =>
                 parseInt(hit.document.id),
               ),
               should_get_next_page: true,
@@ -2388,7 +2382,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }}
         clear_selected_tags_={
           !is_fetching_first_bookmarks &&
-          !search_hook.result_ &&
+          !search_hook.result &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
           tag_view_options_hook.selected_tags_.length
             ? tag_view_options_hook.clear_selected_tags
@@ -2396,7 +2390,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         clear_date_range_={
           !is_fetching_first_bookmarks &&
-          !search_hook.result_ &&
+          !search_hook.result &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
           (date_view_options_hook.current_gte_ ||
             date_view_options_hook.current_lte_)
@@ -2407,16 +2401,16 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           is_fetching_first_bookmarks ||
           bookmarks_hook.is_fetching_more_bookmarks
             ? props.dictionary.app.library.loading
-            : (!search_hook.search_string_.length &&
+            : (!search_hook.search_string.length &&
                 !is_fetching_first_bookmarks &&
                 (!bookmarks_hook.bookmarks ||
                   bookmarks_hook.bookmarks.length == 0)) ||
-              (search_hook.search_string_.length &&
+              (search_hook.search_string.length &&
                 (!bookmarks_hook.bookmarks ||
                   bookmarks_hook.bookmarks.length == 0))
             ? props.dictionary.app.library.no_results
             : !bookmarks_hook.has_more_bookmarks ||
-              bookmarks_hook.bookmarks?.length == search_hook.count_
+              bookmarks_hook.bookmarks?.length == search_hook.count
             ? props.dictionary.app.library.end_of_resutls
             : undefined
         }

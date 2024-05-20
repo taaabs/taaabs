@@ -47,40 +47,40 @@ export type Result = TypedDocument<Orama<typeof schema>>
 
 export type BookmarkTags = { id: number; tags: string[] }
 
-export const use_search = (local_db: LocalDb) => {
+export const use_search = (local_db_: LocalDb) => {
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
-  const [is_search_focused_, set_is_search_focused_] = useState(false)
-  const [current_filter_, set_current_filter_] = useState<Filter>()
-  const [selected_tags, set_selected_tags_] = useState<string[]>([])
+  const [is_search_focused, set_is_search_focused] = useState(false)
+  const [current_filter, set_current_filter] = useState<Filter>()
+  const [selected_tags, set_selected_tags] = useState<string[]>([])
   const [ids_to_search_amongst, set_ids_to_search_amongst] = useState<
     string[] | undefined
   >()
-  const [search_string_, set_search_string_] = useState('')
-  const [hints_, set_hints] = useState<Hint[]>()
-  const [result_, set_result] = useState<Results<Result>>()
-  const [incoming_highlights_, set_incoming_highlights] = useState<Highlights>()
-  const [highlights_, set_highlights_] = useState<Highlights>()
+  const [search_string, set_search_string] = useState('')
+  const [hints, set_hints] = useState<Hint[]>()
+  const [result, set_result] = useState<Results<Result>>()
+  const [incoming_highlights, set_incoming_highlights] = useState<Highlights>()
+  const [highlights, set_highlights] = useState<Highlights>()
   const [
-    incoming_highlights_sites_variants_,
+    incoming_highlights_sites_variants,
     set_incoming_highlights_sites_variants,
   ] = useState<string[]>()
-  const [highlights_sites_variants_, set_highlights_sites_variants_] =
+  const [highlights_sites_variants, set_highlights_sites_variants] =
     useState<string[]>()
-  const [count_, set_count_] = useState<number>()
+  const [count, set_count] = useState<number>()
   // Used for refreshing highlights after bookmark update.
-  const [queried_at_timestamp_, set_queried_at_timestamp] = useState<number>()
-  const [hints_set_at_timestamp_, set_hints_set_at_timestamp] =
+  const [queried_at_timestamp, set_queried_at_timestamp] = useState<number>()
+  const [hints_set_at_timestamp, set_hints_set_at_timestamp] =
     useState<number>()
   const has_focus = use_has_focus()
 
   const is_archived_filter =
-    current_filter_ == Filter.ARCHIVED ||
-    current_filter_ == Filter.ARCHIVED_STARRED ||
-    current_filter_ == Filter.ARCHIVED_STARRED_UNREAD ||
-    current_filter_ == Filter.ARCHIVED_UNREAD
+    current_filter == Filter.ARCHIVED ||
+    current_filter == Filter.ARCHIVED_STARRED ||
+    current_filter == Filter.ARCHIVED_STARRED_UNREAD ||
+    current_filter == Filter.ARCHIVED_UNREAD
 
-  const set_search_fragment_ = (params: { search_string: string }) => {
+  const set_search_fragment = (params: { search_string: string }) => {
     window.history.pushState(
       {},
       '',
@@ -93,34 +93,34 @@ export const use_search = (local_db: LocalDb) => {
 
   useUpdateEffect(() => {
     if (
-      (!is_archived_filter && !local_db.bookmarks_just_tags) ||
-      (is_archived_filter && !local_db.archived_bookmarks_just_tags)
+      (!is_archived_filter && !local_db_.bookmarks_just_tags) ||
+      (is_archived_filter && !local_db_.archived_bookmarks_just_tags)
     )
       return
 
     if (selected_tags.length) {
       set_ids_to_search_amongst(
         (!is_archived_filter
-          ? local_db.bookmarks_just_tags!
-          : local_db.archived_bookmarks_just_tags!
+          ? local_db_.bookmarks_just_tags!
+          : local_db_.archived_bookmarks_just_tags!
         )
           .filter((bookmark) =>
             selected_tags.every((tag) => bookmark.tags.includes(tag)),
           )
           .map((bookmark) => bookmark.id.toString()),
       )
-    } else if (is_search_focused_) {
-      get_hints_()
+    } else if (is_search_focused) {
+      get_hints()
     }
   }, [
     selected_tags,
-    local_db.bookmarks_just_tags,
-    local_db.archived_bookmarks_just_tags,
+    local_db_.bookmarks_just_tags,
+    local_db_.archived_bookmarks_just_tags,
   ])
 
   // Data is cached on link click, focus lose and route change.
-  const cache_data_ = async () => {
-    if (local_db.search_data_awaits_caching) {
+  const cache_data = async () => {
+    if (local_db_.search_data_awaits_caching) {
       const cached_at =
         (await localforage.getItem<number>(
           !username
@@ -134,17 +134,17 @@ export const use_search = (local_db: LocalDb) => {
         )) || undefined
       // Cache was updated in another tab.
       if (
-        local_db.db_updated_at_timestamp &&
+        local_db_.db_updated_at_timestamp &&
         cached_at &&
-        local_db.db_updated_at_timestamp < cached_at
+        local_db_.db_updated_at_timestamp < cached_at
       )
         return
-      const index = await saveWithHighlight(local_db.db!)
+      const index = await saveWithHighlight(local_db_.db!)
       if (!username) {
         await localforage.setItem(
           browser_storage.local_forage.authorized_library.search
             .cached_at_timestamp,
-          local_db.db_updated_at_timestamp,
+          local_db_.db_updated_at_timestamp,
         )
         await localforage.setItem(
           browser_storage.local_forage.authorized_library.search.index,
@@ -152,7 +152,7 @@ export const use_search = (local_db: LocalDb) => {
         )
         await localforage.setItem(
           browser_storage.local_forage.authorized_library.search.bookmarks,
-          JSON.stringify(local_db.bookmarks_just_tags),
+          JSON.stringify(local_db_.bookmarks_just_tags),
         )
       }
       // else {
@@ -177,9 +177,9 @@ export const use_search = (local_db: LocalDb) => {
       //     JSON.stringify(local_db.bookmarks_just_tags),
       //   )
       // }
-      local_db.set_search_data_awaits_caching(false)
+      local_db_.set_search_data_awaits_caching(false)
     }
-    if (local_db.archived_search_data_awaits_caching) {
+    if (local_db_.archived_search_data_awaits_caching) {
       const cached_at =
         (await localforage.getItem<number>(
           !username
@@ -191,17 +191,17 @@ export const use_search = (local_db: LocalDb) => {
         )) || undefined
       // Cache was updated in another tab.
       if (
-        local_db.archived_db_updated_at_timestamp &&
+        local_db_.archived_db_updated_at_timestamp &&
         cached_at &&
-        local_db.archived_db_updated_at_timestamp < cached_at
+        local_db_.archived_db_updated_at_timestamp < cached_at
       )
         return
-      const index = await saveWithHighlight(local_db.archived_db!)
+      const index = await saveWithHighlight(local_db_.archived_db!)
       if (!username) {
         await localforage.setItem(
           browser_storage.local_forage.authorized_library.search
             .archived_cached_at_timestamp,
-          local_db.archived_db_updated_at_timestamp,
+          local_db_.archived_db_updated_at_timestamp,
         )
         await localforage.setItem(
           browser_storage.local_forage.authorized_library.search.archived_index,
@@ -210,7 +210,7 @@ export const use_search = (local_db: LocalDb) => {
         await localforage.setItem(
           browser_storage.local_forage.authorized_library.search
             .archived_bookmarks,
-          JSON.stringify(local_db.bookmarks_just_tags),
+          JSON.stringify(local_db_.bookmarks_just_tags),
         )
       }
       // else {
@@ -233,7 +233,7 @@ export const use_search = (local_db: LocalDb) => {
       //     JSON.stringify(local_db.bookmarks_just_tags),
       //   )
       // }
-      local_db.set_archived_search_data_awaits_caching(false)
+      local_db_.set_archived_search_data_awaits_caching(false)
     }
   }
 
@@ -241,8 +241,8 @@ export const use_search = (local_db: LocalDb) => {
     search_string_: string
   }): Promise<Results<Result>> => {
     if (
-      (!is_archived_filter && !local_db.db) ||
-      (is_archived_filter && !local_db.archived_db)
+      (!is_archived_filter && !local_db_.db) ||
+      (is_archived_filter && !local_db_.archived_db)
     )
       throw new Error('DB should be there.')
 
@@ -263,7 +263,7 @@ export const use_search = (local_db: LocalDb) => {
       .trim()
 
     const result: Results<Result> = await searchWithHighlight(
-      !is_archived_filter ? local_db.db! : local_db.archived_db!,
+      !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
       {
         limit: system_values.max_library_search_results,
         term,
@@ -272,20 +272,20 @@ export const use_search = (local_db: LocalDb) => {
           ...(tags && ids_to_search_amongst
             ? { id: ids_to_search_amongst }
             : {}),
-          ...(current_filter_ == Filter.UNREAD ||
-          current_filter_ == Filter.STARRED_UNREAD ||
-          current_filter_ == Filter.ARCHIVED_UNREAD ||
-          current_filter_ == Filter.ARCHIVED_STARRED_UNREAD
+          ...(current_filter == Filter.UNREAD ||
+          current_filter == Filter.STARRED_UNREAD ||
+          current_filter == Filter.ARCHIVED_UNREAD ||
+          current_filter == Filter.ARCHIVED_STARRED_UNREAD
             ? {
                 is_unread: true,
               }
             : {}),
           stars: {
             gte:
-              current_filter_ == Filter.STARRED ||
-              current_filter_ == Filter.STARRED_UNREAD ||
-              current_filter_ == Filter.ARCHIVED_STARRED ||
-              current_filter_ == Filter.ARCHIVED_STARRED_UNREAD
+              current_filter == Filter.STARRED ||
+              current_filter == Filter.STARRED_UNREAD ||
+              current_filter == Filter.ARCHIVED_STARRED ||
+              current_filter == Filter.ARCHIVED_STARRED_UNREAD
                 ? 1
                 : 0,
           },
@@ -336,11 +336,11 @@ export const use_search = (local_db: LocalDb) => {
     return result
   }
 
-  const query_db_ = async (params: {
-    search_string_: string
-    refresh_highlights_only_?: boolean
+  const query_db = async (params: {
+    search_string: string
+    refresh_highlights_only?: boolean
   }) => {
-    const result = await get_result({ search_string_: params.search_string_ })
+    const result = await get_result({ search_string_: params.search_string })
 
     set_incoming_highlights(
       result.hits.reduce((a, v) => {
@@ -369,35 +369,35 @@ export const use_search = (local_db: LocalDb) => {
     )
 
     set_incoming_highlights_sites_variants(
-      get_sites_variants_from_search_string(params.search_string_),
+      get_sites_variants_from_search_string(params.search_string),
     )
 
-    if (!params.refresh_highlights_only_) {
+    if (!params.refresh_highlights_only) {
       clear_library_session_storage({
         username,
         search_params: search_params.toString(),
-        hash: '#' + encodeURIComponent(params.search_string_),
+        hash: '#' + encodeURIComponent(params.search_string),
       })
-      set_count_(result.count)
+      set_count(result.count)
       if (result.count) {
         set_result(result)
         set_queried_at_timestamp(Date.now())
-        set_search_fragment_({
-          search_string: params.search_string_,
+        set_search_fragment({
+          search_string: params.search_string,
         })
         sessionStorage.setItem(
           browser_storage.session_storage.library.search_string({
             username,
             search_params: search_params.toString(),
-            hash: '#' + params.search_string_,
+            hash: '#' + params.search_string,
           }),
-          params.search_string_,
+          params.search_string,
         )
         sessionStorage.setItem(
           browser_storage.session_storage.library.search_results_count({
             username,
             search_params: search_params.toString(),
-            hash: '#' + params.search_string_,
+            hash: '#' + params.search_string,
           }),
           result.count.toString(),
         )
@@ -415,7 +415,7 @@ export const use_search = (local_db: LocalDb) => {
           JSON.stringify([
             ...new Set(
               [
-                params.search_string_.toLowerCase().trim(),
+                params.search_string.toLowerCase().trim(),
                 ...recent_library_searches,
               ].slice(0, 1000),
             ),
@@ -425,10 +425,10 @@ export const use_search = (local_db: LocalDb) => {
     }
   }
 
-  const get_hints_ = async () => {
+  const get_hints = async () => {
     if (
-      (!is_archived_filter && !local_db.db) ||
-      (is_archived_filter && !local_db.archived_db)
+      (!is_archived_filter && !local_db_.db) ||
+      (is_archived_filter && !local_db_.archived_db)
     )
       return
 
@@ -438,7 +438,7 @@ export const use_search = (local_db: LocalDb) => {
     const order = search_params.get(search_params_keys.order)
     const sortby = search_params.get(search_params_keys.sort_by)
 
-    const search_string_lower_case = search_string_.toLowerCase()
+    const search_string_lower_case = search_string.toLowerCase()
 
     const words = search_string_lower_case.split(' ')
     const last_word = words[words.length - 1]
@@ -449,7 +449,7 @@ export const use_search = (local_db: LocalDb) => {
       .replace(/(?=site:)(.*?)($|\s)/g, '')
       .trim()
 
-    if (!search_string_) {
+    if (!search_string) {
       const recent_library_searches = JSON.parse(
         localStorage.getItem(
           browser_storage.local_storage.recent_library_searches,
@@ -461,7 +461,7 @@ export const use_search = (local_db: LocalDb) => {
           .slice(0, system_values.max_library_search_hints)
           .map((recent_search_string) => ({
             type: 'recent',
-            completion: recent_search_string.slice(search_string_.length),
+            completion: recent_search_string.slice(search_string.length),
             search_string: '',
           })),
       )
@@ -481,7 +481,7 @@ export const use_search = (local_db: LocalDb) => {
         .slice(0, 3)
         .map((recent_search_string) => ({
           type: 'recent',
-          completion: recent_search_string.slice(search_string_.length),
+          completion: recent_search_string.slice(search_string.length),
           search_string: search_string_lower_case,
         }))
 
@@ -489,7 +489,7 @@ export const use_search = (local_db: LocalDb) => {
         const site_term = last_word.substring(5)
 
         const result: Results<Result> = await search(
-          !is_archived_filter ? local_db.db! : local_db.archived_db!,
+          !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
           {
             limit: system_values.max_library_search_results,
             term: site_term ? site_term : undefined,
@@ -498,20 +498,20 @@ export const use_search = (local_db: LocalDb) => {
               ...(tags && ids_to_search_amongst
                 ? { id: ids_to_search_amongst }
                 : {}),
-              ...(current_filter_ == Filter.UNREAD ||
-              current_filter_ == Filter.STARRED_UNREAD ||
-              current_filter_ == Filter.ARCHIVED_UNREAD ||
-              current_filter_ == Filter.ARCHIVED_STARRED_UNREAD
+              ...(current_filter == Filter.UNREAD ||
+              current_filter == Filter.STARRED_UNREAD ||
+              current_filter == Filter.ARCHIVED_UNREAD ||
+              current_filter == Filter.ARCHIVED_STARRED_UNREAD
                 ? {
                     is_unread: true,
                   }
                 : {}),
               stars: {
                 gte:
-                  current_filter_ == Filter.STARRED ||
-                  current_filter_ == Filter.STARRED_UNREAD ||
-                  current_filter_ == Filter.ARCHIVED_STARRED ||
-                  current_filter_ == Filter.ARCHIVED_STARRED_UNREAD
+                  current_filter == Filter.STARRED ||
+                  current_filter == Filter.STARRED_UNREAD ||
+                  current_filter == Filter.ARCHIVED_STARRED ||
+                  current_filter == Filter.ARCHIVED_STARRED_UNREAD
                     ? 1
                     : 0,
               },
@@ -591,7 +591,7 @@ export const use_search = (local_db: LocalDb) => {
             ),
           ].slice(0, system_values.max_library_search_hints),
         )
-        set_count_(undefined)
+        set_count(undefined)
       } else {
         const pre_result = await get_result({
           search_string_: search_string_lower_case,
@@ -599,30 +599,30 @@ export const use_search = (local_db: LocalDb) => {
 
         const ids_of_hits = pre_result.hits.map((hit) => hit.id)
 
-        set_count_(pre_result.count)
+        set_count(pre_result.count)
 
         if (last_word.length) {
           const result: Results<Result> = await search(
-            !is_archived_filter ? local_db.db! : local_db.archived_db!,
+            !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
             {
               term,
               properties: ['text'],
               where: {
                 id: ids_of_hits,
-                ...(current_filter_ == Filter.UNREAD ||
-                current_filter_ == Filter.STARRED_UNREAD ||
-                current_filter_ == Filter.ARCHIVED_UNREAD ||
-                current_filter_ == Filter.ARCHIVED_STARRED_UNREAD
+                ...(current_filter == Filter.UNREAD ||
+                current_filter == Filter.STARRED_UNREAD ||
+                current_filter == Filter.ARCHIVED_UNREAD ||
+                current_filter == Filter.ARCHIVED_STARRED_UNREAD
                   ? {
                       is_unread: true,
                     }
                   : {}),
                 stars: {
                   gte:
-                    current_filter_ == Filter.STARRED ||
-                    current_filter_ == Filter.STARRED_UNREAD ||
-                    current_filter_ == Filter.ARCHIVED_STARRED ||
-                    current_filter_ == Filter.ARCHIVED_STARRED_UNREAD
+                    current_filter == Filter.STARRED ||
+                    current_filter == Filter.STARRED_UNREAD ||
+                    current_filter == Filter.ARCHIVED_STARRED ||
+                    current_filter == Filter.ARCHIVED_STARRED_UNREAD
                       ? 1
                       : 0,
                 },
@@ -714,26 +714,26 @@ export const use_search = (local_db: LocalDb) => {
           )
         } else {
           const result: Results<Result> = await search(
-            !is_archived_filter ? local_db.db! : local_db.archived_db!,
+            !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
             {
               term: term ? term : undefined,
               properties: ['text'],
               where: {
                 id: ids_of_hits,
-                ...(current_filter_ == Filter.UNREAD ||
-                current_filter_ == Filter.STARRED_UNREAD ||
-                current_filter_ == Filter.ARCHIVED_UNREAD ||
-                current_filter_ == Filter.ARCHIVED_STARRED_UNREAD
+                ...(current_filter == Filter.UNREAD ||
+                current_filter == Filter.STARRED_UNREAD ||
+                current_filter == Filter.ARCHIVED_UNREAD ||
+                current_filter == Filter.ARCHIVED_STARRED_UNREAD
                   ? {
                       is_unread: true,
                     }
                   : {}),
                 stars: {
                   gte:
-                    current_filter_ == Filter.STARRED ||
-                    current_filter_ == Filter.STARRED_UNREAD ||
-                    current_filter_ == Filter.ARCHIVED_STARRED ||
-                    current_filter_ == Filter.ARCHIVED_STARRED_UNREAD
+                    current_filter == Filter.STARRED ||
+                    current_filter == Filter.STARRED_UNREAD ||
+                    current_filter == Filter.ARCHIVED_STARRED ||
+                    current_filter == Filter.ARCHIVED_STARRED_UNREAD
                       ? 1
                       : 0,
                 },
@@ -809,17 +809,17 @@ export const use_search = (local_db: LocalDb) => {
   }
 
   useUpdateEffect(() => {
-    if (is_search_focused_) {
+    if (is_search_focused) {
       set_result(undefined)
-      get_hints_()
+      get_hints()
     }
-  }, [search_string_])
+  }, [search_string])
 
-  const clear_hints_ = () => {
+  const clear_hints = () => {
     set_hints(undefined)
   }
 
-  const remove_recent_hint_ = (params: { search_string_: string }) => {
+  const remove_recent_hint = (params: { search_string_: string }) => {
     localStorage.setItem(
       browser_storage.local_storage.recent_library_searches,
       JSON.stringify(
@@ -834,14 +834,14 @@ export const use_search = (local_db: LocalDb) => {
       ),
     )
     setTimeout(() => {
-      get_hints_()
-      set_is_search_focused_(true)
+      get_hints()
+      set_is_search_focused(true)
     }, 100)
   }
 
-  const reset_ = () => {
-    set_search_string_('')
-    set_count_(undefined)
+  const reset = () => {
+    set_search_string('')
+    set_count(undefined)
     set_result(undefined)
     set_hints(undefined)
     set_incoming_highlights(undefined)
@@ -849,45 +849,45 @@ export const use_search = (local_db: LocalDb) => {
   }
 
   useUpdateEffect(() => {
-    if (!highlights_) return
+    if (!highlights) return
     sessionStorage.setItem(
       browser_storage.session_storage.library.highlights({
         username,
         search_params: search_params.toString(),
-        hash: '#' + search_string_,
+        hash: '#' + search_string,
       }),
-      JSON.stringify(highlights_),
+      JSON.stringify(highlights),
     )
-  }, [highlights_])
+  }, [highlights])
 
   useUpdateEffect(() => {
-    if (!highlights_sites_variants_) return
+    if (!highlights_sites_variants) return
     sessionStorage.setItem(
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
         search_params: search_params.toString(),
-        hash: '#' + search_string_,
+        hash: '#' + search_string,
       }),
-      JSON.stringify(highlights_sites_variants_),
+      JSON.stringify(highlights_sites_variants),
     )
-  }, [highlights_sites_variants_])
+  }, [highlights_sites_variants])
 
   useUpdateEffect(() => {
-    if (!result_) return
+    if (!result) return
     sessionStorage.setItem(
       browser_storage.session_storage.library.search_result({
         username,
         search_params: search_params.toString(),
-        hash: '#' + search_string_,
+        hash: '#' + search_string,
       }),
-      JSON.stringify(result_),
+      JSON.stringify(result),
     )
-  }, [result_])
+  }, [result])
 
   useEffect(() => {
     const search_params_stringified = search_params.toString()
 
-    if (!window.location.hash) reset_()
+    if (!window.location.hash) reset()
 
     const search_string = sessionStorage.getItem(
       browser_storage.session_storage.library.search_string({
@@ -897,7 +897,7 @@ export const use_search = (local_db: LocalDb) => {
       }),
     )
     if (search_string) {
-      set_search_string_(search_string)
+      set_search_string(search_string)
     }
     const highlights = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights({
@@ -929,7 +929,7 @@ export const use_search = (local_db: LocalDb) => {
       }),
     )
     if (count) {
-      set_count_(parseInt(count))
+      set_count(parseInt(count))
     }
     const result = sessionStorage.getItem(
       browser_storage.session_storage.library.search_result({
@@ -945,22 +945,22 @@ export const use_search = (local_db: LocalDb) => {
     // Temporary handling of search string on fresh page load.
     if (window.location.hash && !result) {
       const search_string = decodeURIComponent(window.location.hash).slice(1)
-      set_search_string_(search_string)
+      set_search_string(search_string)
     }
 
-    cache_data_()
+    cache_data()
   }, [search_params])
 
   useUpdateEffect(() => {
-    if (!has_focus) cache_data_()
+    if (!has_focus) cache_data()
   }, [has_focus])
 
   // Canceling dialog will trigger caching because has_focus will be shortly falsy, triggering effect above.
   useEffect(() => {
     const handle_beforeunload = (e: any) => {
       if (
-        local_db.search_data_awaits_caching ||
-        local_db.archived_search_data_awaits_caching
+        local_db_.search_data_awaits_caching ||
+        local_db_.archived_search_data_awaits_caching
       ) {
         e.preventDefault()
       }
@@ -968,41 +968,41 @@ export const use_search = (local_db: LocalDb) => {
     addEventListener('beforeunload', handle_beforeunload)
     return () => removeEventListener('beforeunload', handle_beforeunload)
   }, [
-    local_db.search_data_awaits_caching,
-    local_db.archived_search_data_awaits_caching,
+    local_db_.search_data_awaits_caching,
+    local_db_.archived_search_data_awaits_caching,
   ])
 
   return {
-    is_search_focused_,
-    set_is_search_focused_,
-    search_string_,
-    set_search_string_,
-    hints_,
-    clear_hints_,
-    get_hints_,
-    query_db_,
-    result_,
-    set_current_filter_,
-    set_selected_tags_,
-    reset_,
-    count_,
-    set_count_,
-    incoming_highlights_,
-    highlights_,
-    set_highlights_,
-    remove_recent_hint_,
-    current_filter_,
-    incoming_highlights_sites_variants_,
-    highlights_sites_variants_,
-    set_highlights_sites_variants_,
-    hints_set_at_timestamp_,
-    queried_at_timestamp_,
-    cache_data_,
+    is_search_focused,
+    set_is_search_focused,
+    search_string,
+    set_search_string,
+    hints,
+    clear_hints,
+    get_hints,
+    query_db,
+    result,
+    set_current_filter,
+    set_selected_tags,
+    reset,
+    count,
+    set_count,
+    incoming_highlights,
+    highlights,
+    set_highlights,
+    remove_recent_hint,
+    current_filter,
+    incoming_highlights_sites_variants,
+    highlights_sites_variants,
+    set_highlights_sites_variants,
+    hints_set_at_timestamp,
+    queried_at_timestamp,
+    cache_data,
   }
 }
 
-const get_sites_variants_from_search_string = (search_string: string) => {
-  return search_string
+const get_sites_variants_from_search_string = (search_string_: string) => {
+  return search_string_
     .match(/(?<=site:)(.*?)($|\s)/g)
     ?.map((site) => site.replaceAll('.', '').replaceAll('/', '').trim())
     .filter((variant) => variant != '')

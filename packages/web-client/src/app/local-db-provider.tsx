@@ -113,22 +113,22 @@ export const LocalDbProvider: React.FC<{
   }
 
   const get_is_db_stale = async (params: {
-    is_archived_: boolean
-    ky_: KyInstance
+    is_archived: boolean
+    ky: KyInstance
   }): Promise<DbStalenessState> => {
-    const instance_updated_at: number | undefined = !params.is_archived_
+    const instance_updated_at: number | undefined = !params.is_archived
       ? db_updated_at_timestamp
       : archived_db_updated_at_timestamp
 
     const cached_at =
       (await localforage.getItem<number>(
         !username
-          ? !params.is_archived_
+          ? !params.is_archived
             ? browser_storage.local_forage.authorized_library.search
                 .cached_at_timestamp
             : browser_storage.local_forage.authorized_library.search
                 .archived_cached_at_timestamp
-          : !params.is_archived_
+          : !params.is_archived
           ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
               {
                 username: username as string,
@@ -141,7 +141,7 @@ export const LocalDbProvider: React.FC<{
 
     let remote_updated_at: number
 
-    const data_source = new LibrarySearch_DataSourceImpl(params.ky_)
+    const data_source = new LibrarySearch_DataSourceImpl(params.ky)
     const repository = new LibrarySearch_RepositoryImpl(data_source)
 
     let result: GetLastUpdated_Ro
@@ -153,7 +153,7 @@ export const LocalDbProvider: React.FC<{
       })
     }
 
-    !params.is_archived_
+    !params.is_archived
       ? (remote_updated_at = result.updated_at?.getTime() || 0)
       : (remote_updated_at = result.archived_updated_at?.getTime() || 0)
 
@@ -167,22 +167,22 @@ export const LocalDbProvider: React.FC<{
     }
   }
 
-  const clear_cached_data = async (params: { is_archived_: boolean }) => {
+  const clear_cached_data = async (params: { is_archived: boolean }) => {
     if (!username) {
       await localforage.removeItem(
-        !params.is_archived_
+        !params.is_archived
           ? browser_storage.local_forage.authorized_library.search.index
           : browser_storage.local_forage.authorized_library.search
               .archived_index,
       )
       await localforage.removeItem(
-        !params.is_archived_
+        !params.is_archived
           ? browser_storage.local_forage.authorized_library.search.bookmarks
           : browser_storage.local_forage.authorized_library.search
               .archived_bookmarks,
       )
       await localforage.removeItem(
-        !params.is_archived_
+        !params.is_archived
           ? browser_storage.local_forage.authorized_library.search
               .cached_at_timestamp
           : browser_storage.local_forage.authorized_library.search
@@ -219,7 +219,7 @@ export const LocalDbProvider: React.FC<{
       //       ),
       // )
     }
-    if (!params.is_archived_) {
+    if (!params.is_archived) {
       set_db(undefined)
     } else {
       set_archived_db(undefined)
@@ -234,11 +234,11 @@ export const LocalDbProvider: React.FC<{
     bookmarks_just_tags: BookmarkTags[]
   }> => {
     if (params.force_reinitialization) {
-      await clear_cached_data({ is_archived_: params.is_archived })
+      await clear_cached_data({ is_archived: params.is_archived })
     } else {
       const staleness_state = await get_is_db_stale({
-        is_archived_: params.is_archived,
-        ky_: auth_context.ky_instance,
+        is_archived: params.is_archived,
+        ky: auth_context.ky_instance,
       })
 
       // Bypass initialization if current instance is up to date.
@@ -283,7 +283,7 @@ export const LocalDbProvider: React.FC<{
       } else if (
         staleness_state == DbStalenessState.INSTANCE_STALE_CACHED_STALE
       ) {
-        await clear_cached_data({ is_archived_: params.is_archived })
+        await clear_cached_data({ is_archived: params.is_archived })
       }
     }
 
