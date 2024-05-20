@@ -11,6 +11,7 @@ export namespace LibrarySearchBookmarks_Dto {
       public site_aes?: string
     }
     class AuthorizedTag {
+      public id: number
       public name?: string
       public name_aes?: string
     }
@@ -34,9 +35,13 @@ export namespace LibrarySearchBookmarks_Dto {
       public tags: AuthorizedTag[]
     }
 
+    class PublicTag {
+      public id: number
+      public name: string
+    }
     class PublicBookmark extends Bookmark {
       public sites: string[]
-      public tags: string[]
+      public tags: PublicTag[]
     }
 
     export class Authorized {

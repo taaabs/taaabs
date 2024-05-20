@@ -1,6 +1,5 @@
 'use client'
 
-import { BookmarkTags, schema } from '@/hooks/library/use-search'
 import { Orama, create, insert, insertMultiple, remove } from '@orama/orama'
 import { ReactNode, createContext, useContext, useState } from 'react'
 import { AuthContext } from './auth-provider'
@@ -34,13 +33,27 @@ type BookmarkOfSearch = {
   tag_ids: number[]
 }
 
+export const schema = {
+  id: 'string',
+  text: 'string',
+  tag_ids: 'enum[]',
+  sites: 'string[]',
+  sites_variants: 'string[]',
+  tags: 'string[]',
+  created_at: 'number',
+  updated_at: 'number',
+  visited_at: 'number',
+  is_unread: 'boolean',
+  stars: 'number',
+  points: 'number',
+} as const
+
 export type LocalDb = {
   init: (params: {
     is_archived: boolean
     force_reinitialization?: boolean
   }) => Promise<{
     db: Orama<typeof schema>
-    bookmarks_just_tags: BookmarkTags[]
   }>
   db?: Orama<typeof schema>
   set_db: (db?: Orama<typeof schema>) => void
@@ -50,12 +63,6 @@ export type LocalDb = {
   set_db_updated_at_timestamp: (timestamp?: number) => void
   archived_db_updated_at_timestamp?: number
   set_archived_db_updated_at_timestamp: (timestamp?: number) => void
-  bookmarks_just_tags?: BookmarkTags[]
-  set_bookmarks_just_tags: (bookmarks_just_tags: BookmarkTags[]) => void
-  archived_bookmarks_just_tags?: BookmarkTags[]
-  set_archived_bookmarks_just_tags: (
-    archived_bookmarks_just_tags: BookmarkTags[],
-  ) => void
 
   is_initializing?: boolean
   indexed_bookmarks_percentage?: number
@@ -65,13 +72,11 @@ export type LocalDb = {
   set_archived_search_data_awaits_caching: (awaits_caching: boolean) => void
   upsert_bookmark: (params: {
     db: Orama<typeof schema>
-    bookmarks_just_tags: BookmarkTags[]
     is_archived: boolean
     bookmark: BookmarkOfSearch
   }) => Promise<void>
   delete_bookmark: (params: {
     db: Orama<typeof schema>
-    bookmarks_just_tags: BookmarkTags[]
     is_archived: boolean
     bookmark_id: number
   }) => Promise<void>
@@ -102,10 +107,6 @@ export const LocalDbProvider: React.FC<{
     archived_db_updated_at_timestamp,
     set_archived_db_updated_at_timestamp,
   ] = useState<number>()
-  const [bookmarks_just_tags, set_bookmarks_just_tags] =
-    useState<BookmarkTags[]>()
-  const [archived_bookmarks_just_tags, set_archived_bookmarks_just_tags] =
-    useState<BookmarkTags[]>()
 
   enum DbStalenessState {
     FRESH,
@@ -177,12 +178,6 @@ export const LocalDbProvider: React.FC<{
       )
       await localforage.removeItem(
         !params.is_archived
-          ? browser_storage.local_forage.authorized_library.search.bookmarks
-          : browser_storage.local_forage.authorized_library.search
-              .archived_bookmarks,
-      )
-      await localforage.removeItem(
-        !params.is_archived
           ? browser_storage.local_forage.authorized_library.search
               .cached_at_timestamp
           : browser_storage.local_forage.authorized_library.search
@@ -231,7 +226,6 @@ export const LocalDbProvider: React.FC<{
     force_reinitialization?: boolean
   }): Promise<{
     db: Orama<typeof schema>
-    bookmarks_just_tags: BookmarkTags[]
   }> => {
     if (params.force_reinitialization) {
       await clear_cached_data({ is_archived: params.is_archived })
@@ -271,12 +265,10 @@ export const LocalDbProvider: React.FC<{
           if (!params.is_archived) {
             return {
               db: db!,
-              bookmarks_just_tags: bookmarks_just_tags!,
             }
           } else {
             return {
               db: archived_db!,
-              bookmarks_just_tags: archived_bookmarks_just_tags!,
             }
           }
         }
@@ -309,20 +301,6 @@ export const LocalDbProvider: React.FC<{
       ],
     })
 
-    const cached_bookmarks = await localforage.getItem<string>(
-      !username
-        ? !params.is_archived
-          ? browser_storage.local_forage.authorized_library.search.bookmarks
-          : browser_storage.local_forage.authorized_library.search
-              .archived_bookmarks
-        : !params.is_archived
-        ? browser_storage.local_forage.public_library.search.bookmarks({
-            username: username as string,
-          })
-        : browser_storage.local_forage.public_library.search.archived_bookmarks(
-            { username: username as string },
-          ),
-    )
     const cached_index = await localforage.getItem<string>(
       !username
         ? !params.is_archived
@@ -338,13 +316,7 @@ export const LocalDbProvider: React.FC<{
           }),
     )
 
-    let new_bookmarks_just_tags: BookmarkTags[]
-
-    if (cached_bookmarks && cached_index) {
-      new_bookmarks_just_tags = JSON.parse(cached_bookmarks)
-      !params.is_archived
-        ? set_bookmarks_just_tags(new_bookmarks_just_tags)
-        : set_archived_bookmarks_just_tags(new_bookmarks_just_tags)
+    if (cached_index) {
       await loadWithHighlight(new_db, JSON.parse(cached_index as any))
     } else {
       const data_source = new LibrarySearch_DataSourceImpl(
@@ -382,14 +354,15 @@ export const LocalDbProvider: React.FC<{
             text:
               (bookmark.title ? `${bookmark.title} ` : '') +
               (bookmark.note ? `${bookmark.note} ` : '') +
-              bookmark.tags.join(' ') +
+              bookmark.tags.map((tag) => tag.name).join(' ') +
               (bookmark.tags.length ? ' ' : '') +
               bookmark.sites.map((site) => site.replace('/', ' › ')).join(' '),
             sites: bookmark.sites,
             sites_variants: bookmark.sites
               .map((site) => get_site_variants_for_search(site))
               .flat(),
-            tags: bookmark.tags,
+            tag_ids: bookmark.tags.map((tag) => tag.id),
+            tags: bookmark.tags.map((tag) => tag.name),
             created_at: bookmark.created_at,
             updated_at: bookmark.updated_at,
             visited_at: bookmark.visited_at,
@@ -409,13 +382,7 @@ export const LocalDbProvider: React.FC<{
           progress_percentage < 100 ? progress_percentage : undefined,
         )
       }
-      new_bookmarks_just_tags = bookmarks.map((bookmark) => ({
-        id: bookmark.id,
-        tags: bookmark.tags,
-      }))
-      !params.is_archived
-        ? set_bookmarks_just_tags(new_bookmarks_just_tags)
-        : set_archived_bookmarks_just_tags(new_bookmarks_just_tags)
+
       set_indexed_bookmarks_percentage(undefined)
     }
 
@@ -432,13 +399,11 @@ export const LocalDbProvider: React.FC<{
     set_is_initializing(false)
     return {
       db: new_db,
-      bookmarks_just_tags: new_bookmarks_just_tags,
     }
   }
 
   const upsert_bookmark = async (params: {
     db: Orama<typeof schema>
-    bookmarks_just_tags: BookmarkTags[]
     is_archived: boolean
     bookmark: BookmarkOfSearch
   }) => {
@@ -478,37 +443,16 @@ export const LocalDbProvider: React.FC<{
           .flat(),
         stars: params.bookmark.stars || 0,
         tags: params.bookmark.tags,
-        tag_ids: params.bookmark.tag_ids.map((tag_id) => tag_id.toString()),
+        tag_ids: params.bookmark.tag_ids,
       })
     }
 
     if (!params.is_archived) {
-      const new_bookmarks_just_tags = params.bookmarks_just_tags!.filter(
-        (bookmark) => bookmark.id != params.bookmark.id,
-      )
-      if (!params.bookmark.is_archived) {
-        new_bookmarks_just_tags.push({
-          id: params.bookmark.id,
-          tags: params.bookmark.tags,
-        })
-      }
-      set_bookmarks_just_tags(new_bookmarks_just_tags)
       set_search_data_awaits_caching(true)
       set_db_updated_at_timestamp(
         new Date(params.bookmark.updated_at).getTime(),
       )
     } else {
-      const new_archived_bookmarks_just_tags =
-        params.bookmarks_just_tags.filter(
-          (bookmark) => bookmark.id != params.bookmark.id,
-        )
-      if (params.bookmark.is_archived) {
-        new_archived_bookmarks_just_tags.push({
-          id: params.bookmark.id,
-          tags: params.bookmark.tags,
-        })
-      }
-      set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
       set_archived_search_data_awaits_caching(true)
       set_archived_db_updated_at_timestamp(
         new Date(params.bookmark.updated_at).getTime(),
@@ -518,25 +462,15 @@ export const LocalDbProvider: React.FC<{
 
   const delete_bookmark = async (params: {
     db: Orama<typeof schema>
-    bookmarks_just_tags: BookmarkTags[]
     is_archived: boolean
     bookmark_id: number
   }) => {
     await remove(params.db, params.bookmark_id.toString())
 
     if (!params.is_archived) {
-      const new_bookmarks_just_tags = params.bookmarks_just_tags.filter(
-        (bookmark) => bookmark.id != params.bookmark_id,
-      )
-      set_bookmarks_just_tags(new_bookmarks_just_tags)
       set_search_data_awaits_caching(true)
       set_db_updated_at_timestamp(Date.now())
     } else {
-      const new_archived_bookmarks_just_tags =
-        params.bookmarks_just_tags.filter(
-          (bookmark) => bookmark.id != params.bookmark_id,
-        )
-      set_archived_bookmarks_just_tags(new_archived_bookmarks_just_tags)
       set_archived_search_data_awaits_caching(true)
       set_archived_db_updated_at_timestamp(Date.now())
     }
@@ -554,11 +488,6 @@ export const LocalDbProvider: React.FC<{
         set_db_updated_at_timestamp,
         archived_db_updated_at_timestamp,
         set_archived_db_updated_at_timestamp,
-        bookmarks_just_tags,
-        set_bookmarks_just_tags,
-        archived_bookmarks_just_tags,
-        set_archived_bookmarks_just_tags,
-
         is_initializing,
         indexed_bookmarks_percentage,
         search_data_awaits_caching,

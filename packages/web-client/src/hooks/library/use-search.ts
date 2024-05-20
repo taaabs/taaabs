@@ -15,7 +15,7 @@ import { Order } from '@shared/types/modules/bookmarks/order'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { search_params_keys } from '@/constants/search-params-keys'
 import { use_has_focus } from '../misc/use-has-focus'
-import { LocalDb } from '@/app/local-db-provider'
+import { LocalDb, schema } from '@/app/local-db-provider'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -28,34 +28,15 @@ type Highlights = {
   [id: string]: [number, number][]
 }
 
-export const schema = {
-  id: 'string',
-  text: 'string',
-  tag_ids: 'string[]',
-  sites: 'string[]',
-  sites_variants: 'string[]',
-  tags: 'string[]',
-  created_at: 'number',
-  updated_at: 'number',
-  visited_at: 'number',
-  is_unread: 'boolean',
-  stars: 'number',
-  points: 'number',
-} as const
-
 export type Result = TypedDocument<Orama<typeof schema>>
-
-export type BookmarkTags = { id: number; tags: string[] }
 
 export const use_search = (local_db_: LocalDb) => {
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const [is_search_focused, set_is_search_focused] = useState(false)
   const [current_filter, set_current_filter] = useState<Filter>()
+  const [selected_tag_ids, set_selected_tag_ids] = useState<number[]>([])
   const [selected_tags, set_selected_tags] = useState<string[]>([])
-  const [ids_to_search_amongst, set_ids_to_search_amongst] = useState<
-    string[] | undefined
-  >()
   const [search_string, set_search_string] = useState('')
   const [hints, set_hints] = useState<Hint[]>()
   const [result, set_result] = useState<Results<Result>>()
@@ -91,33 +72,6 @@ export const use_search = (local_db_: LocalDb) => {
     )
   }
 
-  useUpdateEffect(() => {
-    if (
-      (!is_archived_filter && !local_db_.bookmarks_just_tags) ||
-      (is_archived_filter && !local_db_.archived_bookmarks_just_tags)
-    )
-      return
-
-    if (selected_tags.length) {
-      set_ids_to_search_amongst(
-        (!is_archived_filter
-          ? local_db_.bookmarks_just_tags!
-          : local_db_.archived_bookmarks_just_tags!
-        )
-          .filter((bookmark) =>
-            selected_tags.every((tag) => bookmark.tags.includes(tag)),
-          )
-          .map((bookmark) => bookmark.id.toString()),
-      )
-    } else if (is_search_focused) {
-      get_hints()
-    }
-  }, [
-    selected_tags,
-    local_db_.bookmarks_just_tags,
-    local_db_.archived_bookmarks_just_tags,
-  ])
-
   // Data is cached on link click, focus lose and route change.
   const cache_data = async () => {
     if (local_db_.search_data_awaits_caching) {
@@ -150,10 +104,6 @@ export const use_search = (local_db_: LocalDb) => {
           browser_storage.local_forage.authorized_library.search.index,
           JSON.stringify(index),
         )
-        await localforage.setItem(
-          browser_storage.local_forage.authorized_library.search.bookmarks,
-          JSON.stringify(local_db_.bookmarks_just_tags),
-        )
       }
       // else {
       //   await localforage.setItem(
@@ -169,12 +119,6 @@ export const use_search = (local_db_: LocalDb) => {
       //       username: username as string,
       //     }),
       //     JSON.stringify(index),
-      //   )
-      //   await localforage.setItem(
-      //     browser_storage.local_forage.public_library.search.bookmarks({
-      //       username: username as string,
-      //     }),
-      //     JSON.stringify(local_db.bookmarks_just_tags),
       //   )
       // }
       local_db_.set_search_data_awaits_caching(false)
@@ -207,11 +151,6 @@ export const use_search = (local_db_: LocalDb) => {
           browser_storage.local_forage.authorized_library.search.archived_index,
           JSON.stringify(index),
         )
-        await localforage.setItem(
-          browser_storage.local_forage.authorized_library.search
-            .archived_bookmarks,
-          JSON.stringify(local_db_.bookmarks_just_tags),
-        )
       }
       // else {
       //   await localforage.setItem(
@@ -225,12 +164,6 @@ export const use_search = (local_db_: LocalDb) => {
       //       username: username as string,
       //     }),
       //     JSON.stringify(index),
-      //   )
-      //   await localforage.setItem(
-      //     browser_storage.local_forage.public_library.search.archived_bookmarks(
-      //       { username: username as string },
-      //     ),
-      //     JSON.stringify(local_db.bookmarks_just_tags),
       //   )
       // }
       local_db_.set_archived_search_data_awaits_caching(false)
@@ -246,7 +179,6 @@ export const use_search = (local_db_: LocalDb) => {
     )
       throw new Error('DB should be there.')
 
-    const tags = search_params.get(search_params_keys.tags)
     const gte = search_params.get(search_params_keys.greater_than_equal)
     const lte = search_params.get(search_params_keys.less_than_equal)
     const order = search_params.get(search_params_keys.order)
@@ -269,8 +201,10 @@ export const use_search = (local_db_: LocalDb) => {
         term,
         properties: ['text'],
         where: {
-          ...(tags && ids_to_search_amongst
-            ? { id: ids_to_search_amongst }
+          ...(selected_tag_ids.length
+            ? {
+                tag_ids: { containsAll: selected_tag_ids },
+              }
             : {}),
           ...(current_filter == Filter.UNREAD ||
           current_filter == Filter.STARRED_UNREAD ||
@@ -432,7 +366,6 @@ export const use_search = (local_db_: LocalDb) => {
     )
       return
 
-    const tags = search_params.get(search_params_keys.tags)
     const gte = search_params.get(search_params_keys.greater_than_equal)
     const lte = search_params.get(search_params_keys.less_than_equal)
     const order = search_params.get(search_params_keys.order)
@@ -495,8 +428,10 @@ export const use_search = (local_db_: LocalDb) => {
             term: site_term ? site_term : undefined,
             properties: ['sites'],
             where: {
-              ...(tags && ids_to_search_amongst
-                ? { id: ids_to_search_amongst }
+              ...(selected_tag_ids.length
+                ? {
+                    tag_ids: { containsAll: selected_tag_ids },
+                  }
                 : {}),
               ...(current_filter == Filter.UNREAD ||
               current_filter == Filter.STARRED_UNREAD ||
@@ -984,6 +919,7 @@ export const use_search = (local_db_: LocalDb) => {
     result,
     set_current_filter,
     set_selected_tags,
+    set_selected_tag_ids,
     reset,
     count,
     set_count,

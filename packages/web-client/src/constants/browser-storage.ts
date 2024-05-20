@@ -2,10 +2,8 @@ export const browser_storage = {
   local_forage: {
     authorized_library: {
       search: {
-        bookmarks: 'authorized-library.search.bookmarks',
         index: 'authorized-library.search.index',
         cached_at_timestamp: 'authorized-library.search.cached-at-timestamp',
-        archived_bookmarks: 'authorized-library.search.archived-bookmarks',
         archived_index: 'authorized-library.search.archived-index',
         archived_cached_at_timestamp:
           'authorized-library.search.archived-cached-at-timestamp',
@@ -13,14 +11,10 @@ export const browser_storage = {
     },
     public_library: {
       search: {
-        bookmarks: (params: { username: string }) =>
-          `public-library.search.bookmarks.${params.username}`,
         index: (params: { username: string }) =>
           `public-library.search.index.${params.username}`,
         cached_at_timestamp: (params: { username: string }) =>
           `public-library.search.cached-at-timestamp.${params.username}`,
-        archived_bookmarks: (params: { username: string }) =>
-          `public-library.search.archived-bookmarks.${params.username}`,
         archived_index: (params: { username: string }) =>
           `public-library.search.archived-index.${params.username}`,
         archived_cached_at_timestamp: (params: { username: string }) =>

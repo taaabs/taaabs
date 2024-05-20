@@ -80,13 +80,12 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
               }),
             ),
             tags: await Promise.all(
-              bookmark.tags.map(async (tag) => {
-                if (tag.name) {
-                  return tag.name
-                } else {
-                  return await Crypto.AES.decrypt(tag.name_aes!, encryption_key)
-                }
-              }),
+              bookmark.tags.map(async (tag) => ({
+                id: tag.id,
+                name: tag.name
+                  ? tag.name
+                  : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
+              })),
             ),
             stars: bookmark.stars || 0,
             points: bookmark.points || 0,

@@ -2,7 +2,7 @@ export type SearchableBookmark_Entity = {
   id: number
   title?: string
   note?: string
-  tags: string[]
+  tags: { id: number; name: string }[]
   sites: string[]
   created_at: number
   updated_at: number
