@@ -1,16 +1,18 @@
-interface Bookmark {
-  type: 'link' | 'folder'
-  tags?: string[]
-  addDate?: number
+type BookmarkNode = {
+  type: 'link'
   title?: string
+  created_at_timestamp?: number
   url?: string
+  tags?: string[]
   is_starred?: boolean
-  children?: Bookmark[]
+  favicon?: string
 }
-
-interface CleanupObject {
-  [key: string]: any
+type FolderNode = {
+  type: 'folder'
+  name: string
+  children?: Array<FolderNode | BookmarkNode>
 }
+export type ParsedXmlTreeNode = BookmarkNode | FolderNode
 
 declare global {
   interface String {
@@ -28,21 +30,25 @@ String.prototype.remove = function (toRemove: string | string[]): any {
   return this
 }
 
-const cleanup_object = (obj: CleanupObject): CleanupObject => {
-  Object.keys(obj).forEach((key) => obj[key] === undefined && delete obj[key])
+function cleanup_object<T>(obj: T): T {
+  Object.keys(obj as any).forEach(
+    (key) => (obj as any)[key] === undefined && delete (obj as any)[key],
+  )
   return obj
 }
 
-const isFolder = (item: string): boolean => !!item.match(/<H3.*>.*<\/H3>/)
-const isLink = (item: string): boolean => !!item.match(/<A.*>.*<\/A>/)
+const is_folder = (item: string): boolean => !!item.match(/<H3.*>.*<\/H3>/)
+const is_link = (item: string): boolean => !!item.match(/<A.*>.*<\/A>/)
 const get_title = (item: string): string | undefined =>
   item.match(/<(H3|A).*>(.*)<\/(H3|A)>/)?.[2]
-const getUrl = (item: string): string | undefined =>
+const get_url = (item: string): string | undefined =>
   item.match(/HREF="([^"]*)"/)?.[1]
+const get_icon = (item: string): string | undefined =>
+  item.match(/ICON="([^"]*)"/)?.[1]
 // Specific to Raindrop.
 const get_data_important = (item: string): string | undefined =>
   item.match(/DATA-IMPORTANT="([^"]*)"/)?.[1]
-const getTags = (item: string): string[] | undefined =>
+const get_tags = (item: string): string[] | undefined =>
   item.match(/TAGS="([^"]*)"/)?.[1].split(',')
 
 const get_numeric_property = (
@@ -53,41 +59,42 @@ const get_numeric_property = (
   return match ? parseInt(match[1]) : undefined
 }
 
-const transform_link = (markup: string): Bookmark => {
+const transform_link = (markup: string): ParsedXmlTreeNode => {
   let tags: string[] | undefined
-  tags = getTags(markup)
+  tags = get_tags(markup)
   if (tags && tags.length == 1 && tags[0] == '') {
     tags = undefined
   }
-  return cleanup_object({
+  return cleanup_object<ParsedXmlTreeNode>({
     type: 'link',
     created_at_timestamp: get_numeric_property(markup, 'ADD_DATE'),
     title: get_title(markup),
-    url: getUrl(markup),
+    url: get_url(markup),
     is_starred: get_data_important(markup) == 'true' || undefined,
     tags,
-  }) as Bookmark
+    favicon: get_icon(markup),
+  })
 }
 
-const transform_folder = (markup: string): Bookmark =>
+const transform_folder = (markup: string): ParsedXmlTreeNode =>
   cleanup_object({
     type: 'folder',
     name: get_title(markup),
-  }) as Bookmark
+  }) as ParsedXmlTreeNode
 
 const find_items_at_indent_level = (markup: string, level: number): string[] =>
   markup.match(new RegExp(`^\\s{${level * 4}}<DT>(.*)[\r\n]`, 'gm')) || []
 
 const find_links = (markup: string, level: number): string[] =>
-  find_items_at_indent_level(markup, level).filter(isLink)
+  find_items_at_indent_level(markup, level).filter(is_link)
 
 const find_folders = (markup: string, level: number): string[] | undefined => {
   const folders = find_items_at_indent_level(markup, level)
   return folders.map((folder, index) => {
-    const isLastOne = index === folders.length - 1
+    const is_last_one = index === folders.length - 1
     return markup.substring(
       markup.indexOf(folder),
-      isLastOne ? undefined : markup.indexOf(folders[index + 1]),
+      is_last_one ? undefined : markup.indexOf(folders[index + 1]),
     )
   })
 }
@@ -106,24 +113,24 @@ const find_children = (
 const process_child = (
   child: string,
   level: number = 1,
-): Bookmark | undefined => {
-  if (isFolder(child)) return process_folder(child, level)
-  if (isLink(child)) return transform_link(child)
+): ParsedXmlTreeNode | undefined => {
+  if (is_folder(child)) return process_folder(child, level)
+  if (is_link(child)) return transform_link(child)
 }
 
-const process_folder = (folder: string, level: number): Bookmark => {
+const process_folder = (folder: string, level: number): ParsedXmlTreeNode => {
   const children = find_children(folder, level + 1)
   return cleanup_object({
     ...transform_folder(folder),
     children: children
       ?.map((child) => process_child(child, level + 1))
       .filter(Boolean),
-  }) as Bookmark
+  }) as ParsedXmlTreeNode
 }
 
-export const parse_netscape_xml = (markup: string): any => {
-  const obj = find_children(markup.replace(/\t/g, '    '))?.map((child) =>
+export const parse_netscape_xml = (markup: string): ParsedXmlTreeNode[] => {
+  const result = find_children(markup.replace(/\t/g, '    '))?.map((child) =>
     process_child(child),
   )
-  return obj
+  return result as any
 }

@@ -203,7 +203,7 @@
       overflow: auto;
       height: calc(
         100svh - var(--header-mobile-height) - var(--_pane-selector-height) -
-          var(--bottom-navigation-bar-height) - 8px
+          var(--bottom-navigation-bar-height)
       );
       @include at992 {
         height: calc(
@@ -306,7 +306,6 @@
     transform: translateX(0px) !important;
     margin-top: var(--header-desktop-height);
   }
-
   &__inner {
     height: 100%;
     @include to992 {

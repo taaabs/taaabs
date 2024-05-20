@@ -28,7 +28,7 @@ const Page: React.FC = () => {
         }
       />
       <div>
-        <input type="file" onChange={handle_file_change} />
+        <input type="file" onChange={handle_file_change} accept=".html,.json" />
       </div>
       <p>
         <small>

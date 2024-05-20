@@ -72,7 +72,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       img.src = reader.result as string
       img.onload = function () {
         const canvas = document.createElement('canvas')
-        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+        const ctx = canvas.getContext('2d')!
         // Calculate crop dimensions based on the larger side.
         const originalWidth = img.width
         const originalHeight = img.height

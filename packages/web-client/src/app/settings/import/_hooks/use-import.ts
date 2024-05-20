@@ -6,32 +6,23 @@ import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export
 import { SendImportData_Params } from '@repositories/modules/import-export/domain/types/send-import-data.params'
 import { AuthContext } from '@/app/auth-provider'
 import { system_values } from '@shared/constants/system-values'
-import { parse_netscape_xml } from '@/utils/parse-netscape-xml'
+import {
+  ParsedXmlTreeNode,
+  parse_netscape_xml,
+} from '@/utils/parse-netscape-xml'
 import { construct_tag_hierarchies_from_paths } from '@/utils/construct-tag-hierarchies-from-paths'
 import { TagHierarchy } from '@shared/types/modules/import-export/data'
 import { Crypto } from '@repositories/utils/crypto'
+import { convert_image_to_webp } from '@/utils/convert-png-to-webp'
 
-type BookmarkNode = {
-  type: 'link'
-  title: string
-  created_at_timestamp: number
-  url: string
-  tags?: string[]
-  is_starred?: boolean
-}
-type FolderNode = {
-  type: 'folder'
-  name: string
-  children?: Array<FolderNode | BookmarkNode>
-}
-type BookmarksTree = Array<BookmarkNode | FolderNode>
-type ParsedXMLBookmark = {
-  title: string
-  created_at: Date
-  url: string
+type ParsedXmlBookmark = {
+  title?: string
+  created_at?: Date
+  url?: string
   tags?: string[]
   path: string
   is_starred?: boolean
+  favicon?: string
 }
 
 export const use_import = () => {
@@ -40,7 +31,7 @@ export const use_import = () => {
   // Data coming from official export.
   const [import_data, set_import_data] = useState<SendImportData_Params>()
   // Processed third party file.
-  const [parsed_xml, set_parsed_xml] = useState<ParsedXMLBookmark[]>()
+  const [parsed_xml, set_parsed_xml] = useState<ParsedXmlBookmark[]>()
   const [is_sending, set_is_sending] = useState<boolean>()
   const [erase_library, set_erase_library] = useState<boolean>()
 
@@ -59,10 +50,10 @@ export const use_import = () => {
     }
 
     try {
-      const json = parse_netscape_xml(file_text) as BookmarksTree
-      const parsed_bookmarks: ParsedXMLBookmark[] = []
+      const json = parse_netscape_xml(file_text)
+      const parsed_bookmarks: ParsedXmlBookmark[] = []
       const flatten_tree = (params: {
-        node: BookmarkNode | FolderNode
+        node: ParsedXmlTreeNode
         path: string
       }) => {
         if (params.node.type == 'folder') {
@@ -76,15 +67,18 @@ export const use_import = () => {
           })
         } else if (params.node.type == 'link') {
           parsed_bookmarks.push({
-            title: params.node.title.substring(
+            title: params.node.title?.substring(
               0,
               system_values.bookmark.title.max_length,
             ),
             url: params.node.url,
-            created_at: new Date(params.node.created_at_timestamp * 1000),
+            created_at: params.node.created_at_timestamp
+              ? new Date(params.node.created_at_timestamp * 1000)
+              : undefined,
             is_starred: params.node.is_starred,
             tags: params.node.tags,
             path: params.path,
+            favicon: params.node.favicon,
           })
         }
       }
@@ -126,34 +120,49 @@ export const use_import = () => {
           ),
         }
       }
+
       params = {
-        bookmarks: parsed_xml.map((bookmark) => ({
-          title: bookmark.title,
-          note: '',
-          is_archived: false,
-          is_unread: false,
-          stars: bookmark.is_starred ? 1 : undefined,
-          created_at: bookmark.created_at.toISOString(),
-          links: [
-            {
-              url: bookmark.url,
-              site_path: '',
-            },
-          ],
-          tags: [
-            ...bookmark.path
-              .split('/')
-              .filter((segment) => !!segment.length) // Root bookmarks have '/' path.
-              .map((name) => ({
-                name,
-              })),
-            ...(bookmark.tags
-              ? bookmark.tags.map((name) => ({
+        bookmarks: await Promise.all(
+          parsed_xml.map(async (bookmark) => {
+            const tags = [
+              ...bookmark.path
+                .split('/')
+                .filter((segment) => !!segment.length) // Root bookmarks have '/' path.
+                .map((name) => ({
                   name,
-                }))
-              : []),
-          ],
-        })),
+                })),
+              ...(bookmark.tags
+                ? bookmark.tags.map((name) => ({
+                    name,
+                  }))
+                : []),
+            ]
+            return {
+              title: bookmark.title,
+              note: '',
+              is_archived: false,
+              is_unread: false,
+              stars: bookmark.is_starred ? 1 : undefined,
+              created_at: bookmark.created_at
+                ? bookmark.created_at.toISOString()
+                : undefined,
+              links: bookmark.url
+                ? [
+                    {
+                      url: bookmark.url,
+                      site_path: '',
+                      favicon: bookmark.favicon
+                        ? (
+                            await convert_image_to_webp(bookmark.favicon)
+                          ).replace('data:image/webp;base64,', '')
+                        : undefined,
+                    },
+                  ]
+                : undefined,
+              tags: tags.length ? tags : undefined,
+            }
+          }),
+        ),
         tag_hierarchies: await Promise.all(
           tag_hierarchies.map(
             async (node) => await parse_tag_hierarchy_node(node),
