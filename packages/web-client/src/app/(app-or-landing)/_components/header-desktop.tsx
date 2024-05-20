@@ -32,11 +32,13 @@ import { toast } from 'react-toastify'
 import { browser_storage } from '@/constants/browser-storage'
 import { AuthContext } from '../../auth-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
+import { LocalDbContext } from '@/app/local-db-provider'
 
 export const HeaderDesktop: React.FC<{
   dictionary: Dictionary
 }> = (props) => {
   const auth_context = useContext(AuthContext)!
+  const local_db_context = useContext(LocalDbContext)!
   const search_params = useSearchParams()
   const params = useParams()
   const pathname = usePathname()
@@ -138,11 +140,9 @@ export const HeaderDesktop: React.FC<{
             modal.set_modal({})
           }}
           on_submit={async (bookmark) => {
-            // const { db, bookmarks_just_tags } =
-            //   await global_library_search!.search_hook.init({
-            //     is_archived: false,
-            //   })
-
+            const { db, bookmarks_just_tags } = await local_db_context.init({
+              is_archived: false,
+            })
             const data_source = new Bookmarks_DataSourceImpl(
               auth_context.ky_instance,
             )
@@ -151,28 +151,28 @@ export const HeaderDesktop: React.FC<{
               bookmark,
               auth_context.auth_data!.encryption_key,
             )
-            // await global_library_search!.search_hook.update_bookmark({
-            //   db,
-            //   bookmarks_just_tags,
-            //   is_archived: false,
-            //   bookmark: {
-            //     id: created_bookmark.id,
-            //     created_at: created_bookmark.created_at,
-            //     visited_at: created_bookmark.visited_at,
-            //     updated_at: created_bookmark.updated_at,
-            //     title: created_bookmark.title,
-            //     note: created_bookmark.note,
-            //     is_archived: false,
-            //     is_unread: created_bookmark.is_unread,
-            //     stars: created_bookmark.stars,
-            //     links: created_bookmark.links.map((link) => ({
-            //       url: link.url,
-            //       site_path: link.site_path,
-            //     })),
-            //     tags: created_bookmark.tags.map((tag) => tag.name),
-            //     tag_ids: created_bookmark.tags.map((tag) => tag.id),
-            //   },
-            // })
+            await local_db_context.upsert_bookmark({
+              db,
+              bookmarks_just_tags,
+              is_archived: false,
+              bookmark: {
+                id: created_bookmark.id,
+                created_at: created_bookmark.created_at,
+                visited_at: created_bookmark.visited_at,
+                updated_at: created_bookmark.updated_at,
+                title: created_bookmark.title,
+                note: created_bookmark.note,
+                is_archived: false,
+                is_unread: created_bookmark.is_unread,
+                stars: created_bookmark.stars,
+                links: created_bookmark.links.map((link) => ({
+                  url: link.url,
+                  site_path: link.site_path,
+                })),
+                tags: created_bookmark.tags.map((tag) => tag.name),
+                tag_ids: created_bookmark.tags.map((tag) => tag.id),
+              },
+            })
             if (pathname == '/library') {
               sessionStorage.setItem(
                 browser_storage.session_storage.library
