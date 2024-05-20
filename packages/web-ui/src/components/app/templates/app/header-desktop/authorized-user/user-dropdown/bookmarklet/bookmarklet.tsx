@@ -7,7 +7,7 @@ type Props = {
   button_label: string
 }
 
-const script = `javascript:b=document,window.open("https://taaabs.com/#link="+encodeURIComponent(document.location)+"&title="+encodeURIComponent(document.title)+"&note="+(document.querySelector(%27meta[name="description"]%27)!=null?document.querySelector(%27meta[name="description"]%27).content:""))`
+const script = `javascript:void(function(){var article=document.querySelector('article').innerText;navigator.clipboard.writeText(article);window.open('https://taaabs.com/#link='+encodeURIComponent(document.location)+'&title='+encodeURIComponent(document.title)+'&note='+(document.querySelector("meta[name='description']")!=null?document.querySelector("meta[name='description']").content:''))})()`
 
 export const Bookmarklet: React.FC<Props> = (props) => {
   return (
