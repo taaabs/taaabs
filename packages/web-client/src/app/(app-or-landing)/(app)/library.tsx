@@ -426,9 +426,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const slot_search = (
     <UiAppAtom_LibrarySearch
       search_string_={search_hook.search_string}
+      is_full_text_={search_hook.is_full_text}
+      toggle_full_text_={() =>
+        search_hook.set_is_full_text(!search_hook.is_full_text)
+      }
       is_loading_={props.local_db.is_initializing || false}
       loading_progress_percentage_={props.local_db.indexed_bookmarks_percentage}
-      placeholder_={props.dictionary.app.library.search.placeholder}
       hints_={
         !props.local_db.is_initializing
           ? search_hook.hints?.map((hint) => ({
@@ -444,7 +447,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         const search_string =
           search_hook.search_string + search_hook.hints![i].completion
         search_hook.set_search_string(search_string)
-        search_hook.query_db({ search_string: search_string })
+        search_hook.get_result({ search_string: search_string })
       }}
       on_click_recent_hint_remove_={(i) => {
         const search_string =
@@ -453,43 +456,42 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       }}
       is_focused_={search_hook.is_search_focused}
       on_focus_={async () => {
-        if (!props.local_db.is_initializing) {
-          search_hook.set_is_search_focused(true)
-          search_hook.set_selected_tag_ids(tag_view_options_hook.selected_tags_)
-          search_hook.set_selected_tags(
-            counts_hook.selected_tags_
-              .filter((id) => {
-                if (!bookmarks_hook.bookmarks || !bookmarks_hook.bookmarks[0])
-                  return false
-                return (
-                  bookmarks_hook.bookmarks[0].tags?.findIndex(
-                    (tag) => tag.id == id,
-                  ) != -1
-                )
-              })
-              .map((id) => {
-                const name = bookmarks_hook.bookmarks![0].tags!.find(
+        if (props.local_db.is_initializing) return
+
+        search_hook.set_is_search_focused(true)
+        search_hook.set_selected_tag_ids(tag_view_options_hook.selected_tags_)
+        search_hook.set_selected_tags(
+          counts_hook.selected_tags_
+            .filter((id) => {
+              if (!bookmarks_hook.bookmarks || !bookmarks_hook.bookmarks[0])
+                return false
+              return (
+                bookmarks_hook.bookmarks[0].tags?.findIndex(
                   (tag) => tag.id == id,
-                )!.name
-
-                return name
-              }),
-          )
-
-          if (search_cache_to_be_cleared.current) {
-            await props.local_db.init({
-              is_archived: is_archived_filter,
-              force_reinitialization: true,
+                ) != -1
+              )
             })
-            search_cache_to_be_cleared.current = false
-          } else {
-            await props.local_db.init({
-              is_archived: is_archived_filter,
-            })
-          }
+            .map((id) => {
+              const name = bookmarks_hook.bookmarks![0].tags!.find(
+                (tag) => tag.id == id,
+              )!.name
 
-          search_hook.get_hints()
+              return name
+            }),
+        )
+
+        if (search_cache_to_be_cleared.current) {
+          await props.local_db.init({
+            is_archived: is_archived_filter,
+            force_reinitialization: true,
+          })
+          search_cache_to_be_cleared.current = false
+        } else {
+          await props.local_db.init({
+            is_archived: is_archived_filter,
+          })
         }
+        search_hook.get_hints()
       }}
       on_change_={(value) => {
         if (props.local_db.is_initializing) return
@@ -503,9 +505,13 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
       }}
       on_submit_={async () => {
-        if (props.local_db.is_initializing || search_hook.count == 0) return
-        if (search_hook.search_string.trim()) {
-          await search_hook.query_db({
+        // if (props.local_db.is_initializing || !search_hook.search_string.trim() || search_hook.count == 0) return
+        if (search_hook.is_full_text) {
+          await search_hook.get_result_full_text({
+            search_string_: search_hook.search_string,
+          })
+        } else {
+          await search_hook.get_result({
             search_string: search_hook.search_string,
           })
         }
@@ -530,6 +536,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       is_slash_shortcut_disabled_={modal_context.modal !== undefined}
       on_click_get_help_={() => {}}
       translations_={{
+        placeholder_: {
+          default_: props.dictionary.app.library.search.placeholder.default,
+          full_text_: props.dictionary.app.library.search.placeholder.full_text,
+        },
         footer_tip_: props.dictionary.app.library.search.footer_tip,
         get_help_link_: props.dictionary.app.library.search.get_help,
         type_: props.dictionary.app.library.search.type,
@@ -1411,7 +1421,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           },
         })
         if (search_hook.result?.hits.length) {
-          await search_hook.query_db({
+          await search_hook.get_result({
             search_string: search_hook.search_string,
             refresh_highlights_only: true,
           })
@@ -1486,7 +1496,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 },
               })
               if (search_hook.result?.hits.length) {
-                await search_hook.query_db({
+                await search_hook.get_result({
                   search_string: search_hook.search_string,
                   refresh_highlights_only: true,
                 })
@@ -1573,7 +1583,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           },
         })
         if (search_hook.result?.hits.length) {
-          await search_hook.query_db({
+          await search_hook.get_result({
             search_string: search_hook.search_string,
             refresh_highlights_only: true,
           })
@@ -2110,7 +2120,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   },
                 })
                 if (search_hook.result?.hits.length) {
-                  await search_hook.query_db({
+                  await search_hook.get_result({
                     search_string: search_hook.search_string,
                     refresh_highlights_only: true,
                   })

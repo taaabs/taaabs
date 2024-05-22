@@ -33,6 +33,7 @@ export type Result = TypedDocument<Orama<typeof schema>>
 export const use_search = (local_db_: LocalDb) => {
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
+  const [is_full_text, set_is_full_text] = useState<boolean>()
   const [is_search_focused, set_is_search_focused] = useState(false)
   const [current_filter, set_current_filter] = useState<Filter>()
   const [selected_tag_ids, set_selected_tag_ids] = useState<number[]>([])
@@ -170,7 +171,7 @@ export const use_search = (local_db_: LocalDb) => {
     }
   }
 
-  const get_result = async (params: {
+  const query_db = async (params: {
     search_string_: string
   }): Promise<Results<Result>> => {
     if (
@@ -199,7 +200,7 @@ export const use_search = (local_db_: LocalDb) => {
       {
         limit: system_values.max_library_search_results,
         term,
-        properties: ['text'],
+        properties: ['card'],
         where: {
           ...(selected_tag_ids.length
             ? {
@@ -270,15 +271,15 @@ export const use_search = (local_db_: LocalDb) => {
     return result
   }
 
-  const query_db = async (params: {
+  const get_result = async (params: {
     search_string: string
     refresh_highlights_only?: boolean
   }) => {
-    const result = await get_result({ search_string_: params.search_string })
+    const result = await query_db({ search_string_: params.search_string })
 
     set_incoming_highlights(
       result.hits.reduce((a, v) => {
-        const positions = Object.values((v as any).positions.text)
+        const positions = Object.values((v as any).positions.card)
           .flat()
           .map((highlight: any) => [highlight.start, highlight.length])
 
@@ -359,12 +360,109 @@ export const use_search = (local_db_: LocalDb) => {
     }
   }
 
+  const query_db_full_text = async (params: {
+    search_string_: string
+  }): Promise<Results<Result>> => {
+    if (
+      (!is_archived_filter && !local_db_.db) ||
+      (is_archived_filter && !local_db_.archived_db)
+    )
+      throw new Error('DB should be there.')
+
+    const gte = search_params.get(search_params_keys.greater_than_equal)
+    const lte = search_params.get(search_params_keys.less_than_equal)
+
+    // 'lorem site:abc.com site:abc.com ipsum site:abc.com'
+    // ["abccom", "abccom", "abccom"]
+    const sites_variants = get_sites_variants_from_search_string(
+      params.search_string_,
+    )
+
+    const term = params.search_string_
+      .replace(/(?=site:)(.*?)($|\s)/g, '')
+      .trim()
+
+    const result: Results<Result> = await searchWithHighlight(
+      !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
+      {
+        limit: system_values.max_library_search_results,
+        term,
+        properties: ['article'],
+        where: {
+          ...(selected_tag_ids.length
+            ? {
+                tag_ids: { containsAll: selected_tag_ids },
+              }
+            : {}),
+          ...(current_filter == Filter.UNREAD ||
+          current_filter == Filter.STARRED_UNREAD ||
+          current_filter == Filter.ARCHIVED_UNREAD ||
+          current_filter == Filter.ARCHIVED_STARRED_UNREAD
+            ? {
+                is_unread: true,
+              }
+            : {}),
+          stars: {
+            gte:
+              current_filter == Filter.STARRED ||
+              current_filter == Filter.STARRED_UNREAD ||
+              current_filter == Filter.ARCHIVED_STARRED ||
+              current_filter == Filter.ARCHIVED_STARRED_UNREAD
+                ? 1
+                : 0,
+          },
+          ...(gte && lte
+            ? {
+                created_at: {
+                  between: [
+                    new Date(
+                      parseInt(gte.toString().substring(0, 4)),
+                      parseInt(gte.toString().substring(4, 6)) - 1,
+                    ).getTime() / 1000,
+                    new Date(
+                      parseInt(lte.toString().substring(0, 4)),
+                      parseInt(lte.toString().substring(4, 6)),
+                    ).getTime() /
+                      1000 -
+                      1,
+                  ],
+                },
+              }
+            : {}),
+          ...(sites_variants?.length ? { sites_variants } : {}),
+        },
+        tolerance: 1,
+      },
+    )
+
+    return result
+  }
+
+  const get_result_full_text = async (params: { search_string_: string }) => {
+    const result = await query_db_full_text({
+      search_string_: params.search_string_,
+    })
+
+    set_count(result.count)
+    if (result.count) {
+      set_result(result)
+      set_queried_at_timestamp(Date.now())
+    }
+  }
+
   const get_hints = async () => {
     if (
       (!is_archived_filter && !local_db_.db) ||
       (is_archived_filter && !local_db_.archived_db)
     )
       return
+
+    if (is_full_text) {
+      // TODO: Create special hints for full text.
+      // Calling set_hings triggers hints dropdown.
+      set_hints([])
+      return
+    }
 
     const gte = search_params.get(search_params_keys.greater_than_equal)
     const lte = search_params.get(search_params_keys.less_than_equal)
@@ -528,7 +626,7 @@ export const use_search = (local_db_: LocalDb) => {
         )
         set_count(undefined)
       } else {
-        const pre_result = await get_result({
+        const pre_result = await query_db({
           search_string_: search_string_lower_case,
         })
 
@@ -541,7 +639,7 @@ export const use_search = (local_db_: LocalDb) => {
             !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
             {
               term,
-              properties: ['text'],
+              properties: ['card'],
               where: {
                 id: ids_of_hits,
                 ...(current_filter == Filter.UNREAD ||
@@ -597,7 +695,7 @@ export const use_search = (local_db_: LocalDb) => {
           let words_hashmap: { [word: string]: number } = {}
 
           result.hits.forEach(({ document }) => {
-            const word = document.text
+            const word = document.card
               .toLowerCase()
               .split(last_word)[1]
               ?.replace(/[^a-zA-Z ]/g, ' ')
@@ -652,7 +750,7 @@ export const use_search = (local_db_: LocalDb) => {
             !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
             {
               term: term ? term : undefined,
-              properties: ['text'],
+              properties: ['card'],
               where: {
                 id: ids_of_hits,
                 ...(current_filter == Filter.UNREAD ||
@@ -744,10 +842,9 @@ export const use_search = (local_db_: LocalDb) => {
   }
 
   useUpdateEffect(() => {
-    if (is_search_focused) {
-      set_result(undefined)
-      get_hints()
-    }
+    if (!is_search_focused || is_full_text) return
+    set_result(undefined)
+    get_hints()
   }, [search_string])
 
   const clear_hints = () => {
@@ -915,7 +1012,8 @@ export const use_search = (local_db_: LocalDb) => {
     hints,
     clear_hints,
     get_hints,
-    query_db,
+    get_result,
+    get_result_full_text,
     result,
     set_current_filter,
     set_selected_tags,
@@ -934,6 +1032,8 @@ export const use_search = (local_db_: LocalDb) => {
     hints_set_at_timestamp,
     queried_at_timestamp,
     cache_data,
+    is_full_text,
+    set_is_full_text,
   }
 }
 

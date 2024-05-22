@@ -13,6 +13,7 @@
     "@orama/orama": "^2.0.16",
     "@orama/plugin-data-persistence": "^2.0.16",
     "@orama/plugin-match-highlight": "^2.0.16",
+    "@orama/stopwords": "^2.0.18",
     "@reduxjs/toolkit": "^1.9.7",
     "@svgr/webpack": "^8.1.0",
     "@taaabs/repositories": "workspace:*",

@@ -140,7 +140,7 @@ export const HeaderDesktop: React.FC<{
             modal.set_modal({})
           }}
           on_submit={async (bookmark) => {
-            const { db, bookmarks_just_tags } = await local_db_context.init({
+            const { db } = await local_db_context.init({
               is_archived: false,
             })
             const data_source = new Bookmarks_DataSourceImpl(
@@ -153,7 +153,6 @@ export const HeaderDesktop: React.FC<{
             )
             await local_db_context.upsert_bookmark({
               db,
-              bookmarks_just_tags,
               is_archived: false,
               bookmark: {
                 id: created_bookmark.id,
@@ -168,6 +167,9 @@ export const HeaderDesktop: React.FC<{
                 links: created_bookmark.links.map((link) => ({
                   url: link.url,
                   site_path: link.site_path,
+                  plain_text: bookmark.links.find(
+                    (link) => link.url == link.url,
+                  )?.plain_text,
                 })),
                 tags: created_bookmark.tags.map((tag) => tag.name),
                 tag_ids: created_bookmark.tags.map((tag) => tag.id),

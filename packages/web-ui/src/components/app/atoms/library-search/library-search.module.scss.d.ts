@@ -25,6 +25,7 @@ declare const styles: {
   readonly 'box__right-side__clear--yields-no-results': string
   readonly hints: string
   readonly 'hints--hidden': string
+  readonly hints__mode: string
   readonly hints__list: string
   readonly hints__list__item: string
   readonly 'hints__list__item--selected': string

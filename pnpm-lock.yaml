@@ -509,6 +509,9 @@ importers:
       '@orama/plugin-match-highlight':
         specifier: ^2.0.16
         version: 2.0.16
+      '@orama/stopwords':
+        specifier: ^2.0.18
+        version: 2.0.18
       '@reduxjs/toolkit':
         specifier: ^1.9.7
         version: 1.9.7(react-redux@8.1.3)(react@18.2.0)
@@ -3726,6 +3729,11 @@ packages:
     resolution: {integrity: sha512-JpY+yP5lRIQs1QmcBEA8Z/lyYsaLncksBXNu0Mi6OT9lHBLMSrrao7phE7X2bB63ahy4TpaWhe6fJvnLcorPzg==}
     dependencies:
       '@orama/orama': 2.0.16
+    dev: false
+
+  /@orama/stopwords@2.0.18:
+    resolution: {integrity: sha512-nb2QjQjesK81kH5qH0iCEEUbTbYl9/wnN/pUG47o2c434kcioMz6CX6HlMvX8ayrdpIyhnJUTDcMPYutA++QpA==}
+    engines: {node: '>= 16.0.0'}
     dev: false
 
   /@phc/format@1.0.0:

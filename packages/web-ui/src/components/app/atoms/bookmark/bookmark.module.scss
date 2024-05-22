@@ -88,7 +88,7 @@
         position: relative;
         margin-bottom: calc(3px * -1); // Needed by "compact" density.
         &__info {
-          color: var(--text-color-dimmed);
+          color: var(--text-color-variant);
           display: flex;
           padding-bottom: 6px;
           white-space: pre-wrap;

@@ -7,7 +7,19 @@ type Props = {
   button_label: string
 }
 
-const script = `javascript:void(function(){var article=document.querySelector('article').innerText;navigator.clipboard.writeText(article);window.open('https://taaabs.com/#link='+encodeURIComponent(document.location)+'&title='+encodeURIComponent(document.title)+'&note='+(document.querySelector("meta[name='description']")!=null?document.querySelector("meta[name='description']").content:''))})()`
+const script = `javascript: void (function () {
+  navigator.clipboard.writeText(document.querySelector('body').innerHTML);
+  window.open(
+    'https://taaabs.com/#link=' +
+      encodeURIComponent(document.location) +
+      '&title=' +
+      encodeURIComponent(document.title) +
+      '&note=' +
+      (document.querySelector("meta[name='description']") != null
+        ? document.querySelector("meta[name='description']").content
+        : '')
+  )
+})()`
 
 export const Bookmarklet: React.FC<Props> = (props) => {
   return (
@@ -22,7 +34,12 @@ export const Bookmarklet: React.FC<Props> = (props) => {
       <div className={styles.button}>
         <div
           dangerouslySetInnerHTML={{
-            __html: `<a href='${script}' target='_blank' onclick="event.preventDefault();">${props.button_label}</a>`,
+            __html: `<a href='${script.replaceAll(
+              "'",
+              '%27',
+            )}' target='_blank' onclick="event.preventDefault();">${
+              props.button_label
+            }</a>`,
           }}
         />
         <Icon variant="LOGO" />

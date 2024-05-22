@@ -17,6 +17,7 @@ import { GetLastUpdated_Ro } from '@repositories/modules/library-search/domain/t
 import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
+import { english_stop_words } from '@shared/constants/english-stop-words'
 
 type BookmarkOfSearch = {
   id: number
@@ -29,13 +30,14 @@ type BookmarkOfSearch = {
   is_unread: boolean
   stars?: number
   tags: string[]
-  links: { url: string; site_path?: string }[]
+  links: { url: string; site_path?: string; plain_text?: string }[]
   tag_ids: number[]
 }
 
 export const schema = {
   id: 'string',
-  text: 'string',
+  card: 'string',
+  article: 'string',
   tag_ids: 'enum[]',
   sites: 'string[]',
   sites_variants: 'string[]',
@@ -286,11 +288,16 @@ export const LocalDbProvider: React.FC<{
       sort: {
         unsortableProperties: [
           'id',
-          'title',
+          'card',
+          'article',
           'sites',
           'sites_variants',
           'is_unread',
           'stars',
+          'tags',
+          'tags_ids',
+          'article',
+          'points',
         ],
       },
       plugins: [
@@ -299,6 +306,12 @@ export const LocalDbProvider: React.FC<{
           afterInsert: highlightAfterInsert,
         },
       ],
+      components: {
+        tokenizer: {
+          stemming: true,
+          stopWords: english_stop_words,
+        },
+      },
     })
 
     const cached_index = await localforage.getItem<string>(
@@ -351,15 +364,20 @@ export const LocalDbProvider: React.FC<{
           new_db,
           chunk.map((bookmark) => ({
             id: bookmark.id.toString(),
-            text:
+            card:
               (bookmark.title ? `${bookmark.title} ` : '') +
               (bookmark.note ? `${bookmark.note} ` : '') +
               bookmark.tags.map((tag) => tag.name).join(' ') +
               (bookmark.tags.length ? ' ' : '') +
-              bookmark.sites.map((site) => site.replace('/', ' › ')).join(' '),
-            sites: bookmark.sites,
-            sites_variants: bookmark.sites
-              .map((site) => get_site_variants_for_search(site))
+              bookmark.links
+                .map((link) => link.site.replace('/', ' › '))
+                .join(' '),
+            article: bookmark.links
+              .map((link) => link.plain_text || '')
+              .join(' '),
+            sites: bookmark.links.map((link) => link.site),
+            sites_variants: bookmark.links
+              .map((link) => get_site_variants_for_search(link.site))
               .flat(),
             tag_ids: bookmark.tags.map((tag) => tag.id),
             tags: bookmark.tags.map((tag) => tag.name),
@@ -421,12 +439,15 @@ export const LocalDbProvider: React.FC<{
       )
       await insert(params.db, {
         id: params.bookmark.id.toString(),
-        text:
+        card:
           (params.bookmark.title ? `${params.bookmark.title} ` : '') +
           (params.bookmark.note ? `${params.bookmark.note} ` : '') +
           params.bookmark.tags.join(' ') +
           (sites.length ? ' ' : '') +
           sites.join(' '),
+        article: params.bookmark.links
+          .map((link) => link.plain_text || '')
+          .join(' '),
         created_at: Math.round(
           new Date(params.bookmark.created_at).getTime() / 1000,
         ),

@@ -194,6 +194,8 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                 is_pinned: link.is_pinned,
                 pin_title: link.pin_title,
                 open_snapshot: link.open_snapshot,
+                plain_text: link.plain_text,
+                content: link.content,
               }
             } else {
               return {
@@ -214,6 +216,12 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                 open_snapshot: link.open_snapshot,
                 favicon_aes: link.favicon
                   ? await Crypto.AES.encrypt(link.favicon, encryption_key)
+                  : undefined,
+                plain_text_aes: link.plain_text
+                  ? await Crypto.AES.encrypt(link.plain_text, encryption_key)
+                  : undefined,
+                content_aes: link.content
+                  ? await Crypto.AES.encrypt(link.content, encryption_key)
                   : undefined,
               }
             }

@@ -48,8 +48,9 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            'Unlimited bookmarks',
-            'Unlimited tags',
+            '5 000 bookmarks',
+            'Reading mode',
+            'Full-text search',
             'Zero-knowledge encryption™',
           ],
           button_label: 'Start for free',
@@ -59,9 +60,10 @@ const dictionary: Dictionary = {
           description: 'Affordable plan with our must haves',
           bullets_heading: 'Everything in Free, plus:',
           bullets: [
-            'Starred, unread filters',
-            'Sort by visit, update dates',
+            '100 000 bookmarks',
             'Multi-link bookmarks',
+            'Filters: starred, unread',
+            'Sorts: last visited, updated at',
           ],
           button_label: 'Subscribe to Surfer',
         },
@@ -71,8 +73,9 @@ const dictionary: Dictionary = {
           bullets_heading: 'Everything in Surfer, plus:',
           featured_text: 'Recommended',
           bullets: [
-            'Unlock all features ✨',
-            'Get a PRO badge',
+            'Bulk edits',
+            'Public profile access control',
+            'Claim PRO badge',
             'Claim shorter username',
           ],
           button_label: 'Subscribe to Pro',
@@ -179,7 +182,10 @@ const dictionary: Dictionary = {
       delete: 'Delete',
       rename: 'Rename',
       search: {
-        placeholder: 'Search in titles, notes, tags and links...',
+        placeholder: {
+          default: 'Search in titles, notes, tags and links...',
+          full_text: 'Search in entire websites...',
+        },
         footer_tip: 'Tags, filters and custom range affect results.',
         get_help: 'Search syntax tips',
         type: 'Type',
@@ -229,7 +235,7 @@ const dictionary: Dictionary = {
       range_not_available:
         'Range selection is unavailable for current sort option',
       nothing_to_plot: 'There is nothing to plot',
-      results_fit_in_one_month: 'Results fit in ont month',
+      results_fit_in_one_month: 'Results fit in one month',
       toolbar: {
         starred: 'Starred',
         unread: 'Unread',

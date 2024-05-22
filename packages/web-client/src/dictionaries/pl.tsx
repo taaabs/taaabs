@@ -55,8 +55,9 @@ export const dictionary: Dictionary = {
             'Wszystko czego potrzebujesz by zacząć przygodę z Taaabs',
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
-            'Nielimitowane zakładki',
-            'Nielimitowane tagi',
+            '5 000 zakładek',
+            'Tryb czytania',
+            'Wyszukiwanie pełnotekstowe',
             'Szyfrowanie end-to-end',
           ],
           button_label: 'Rozpocznij za darmo',
@@ -66,9 +67,10 @@ export const dictionary: Dictionary = {
           description: 'Plan w przystępnej cenie dodający przydatne funkcje',
           bullets_heading: 'Wszystko co w darmowym, plus:',
           bullets: [
-            'Filtruj oznaczone gwiazdkami oraz jako nieprzeczytane',
-            'Sortuj według dat odwiedzin oraz edycji',
+            '100 000 zakładek',
             'Wiele linków na zakładce',
+            'Filtruj oznaczone gwiazdkami oraz nieprzeczytane',
+            'Sortuj ostatnio odwiedzone, edytowane',
           ],
           button_label: 'Przejdź na Surfer',
         },
@@ -78,8 +80,9 @@ export const dictionary: Dictionary = {
           bullets_heading: 'Wszystko co w Surfer, plus:',
           featured_text: 'Polecane',
           bullets: [
-            'Odblokuj wszystkie funkcje ✨',
-            'Uzyskaj odznakę PRO',
+            'Zbiorcze edycje',
+            'Kontrola dostępu do profilu publicznego',
+            'Odznaka PRO',
             'Przejmij krótszy nick',
           ],
           button_label: 'Przejdź na Pro',
@@ -185,7 +188,10 @@ export const dictionary: Dictionary = {
       rename: 'Zmień nazwę',
       delete: 'Usuń',
       search: {
-        placeholder: 'Szukaj w tytułach, notkach, tagach i linkach...',
+        placeholder: {
+          default: 'Szukaj w tytułach, notkach, tagach i linkach...',
+          full_text: 'Szukaj w treści witryn...',
+        },
         footer_tip: 'Tagi, filtry i zakres miesięcy wpływają na wyniki.',
         get_help: 'Jak używać wyszukiarki?',
         type: 'Użyj',

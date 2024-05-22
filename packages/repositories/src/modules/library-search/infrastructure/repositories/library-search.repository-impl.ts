@@ -67,16 +67,20 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
               ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
               : undefined,
             is_unread: bookmark.is_unread || false,
-            sites: await Promise.all(
-              bookmark.sites.map(async (site) => {
-                if (site.site) {
-                  return site.site
-                } else {
-                  return await Crypto.AES.decrypt(
-                    site.site_aes!,
-                    encryption_key,
-                  )
-                }
+            links: await Promise.all(
+              bookmark.links.map(async (link) => {
+                const site = link.site
+                  ? link.site
+                  : await Crypto.AES.decrypt(link.site_aes!, encryption_key)
+                const plain_text = link.plain_text
+                  ? link.plain_text
+                  : link.plain_text_aes
+                  ? await Crypto.AES.decrypt(
+                      link.plain_text_aes!,
+                      encryption_key,
+                    )
+                  : undefined
+                return { site, plain_text }
               }),
             ),
             tags: await Promise.all(
@@ -111,7 +115,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           updated_at: bookmark.updated_at,
           title: bookmark.title,
           note: bookmark.note,
-          sites: bookmark.sites,
+          links: bookmark.links,
           tags: bookmark.tags,
           stars: bookmark.stars || 0,
           points: bookmark.points || 0,

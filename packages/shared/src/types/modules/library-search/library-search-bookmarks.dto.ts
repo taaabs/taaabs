@@ -6,9 +6,11 @@ export namespace LibrarySearchBookmarks_Dto {
     public is_archived?: boolean
   }
   export namespace Response {
-    class AuthorizedSite {
+    class AuthorizedLink {
       public site?: string
       public site_aes?: string
+      public plain_text?: string
+      public plain_text_aes?: string
     }
     class AuthorizedTag {
       public id: number
@@ -31,7 +33,7 @@ export namespace LibrarySearchBookmarks_Dto {
       public note_aes?: string
       public visited_at: number
       public is_unread?: boolean
-      public sites: AuthorizedSite[]
+      public links: AuthorizedLink[]
       public tags: AuthorizedTag[]
     }
 
@@ -39,8 +41,12 @@ export namespace LibrarySearchBookmarks_Dto {
       public id: number
       public name: string
     }
+    class PublicLink {
+      public site: string
+      public plain_text?: string
+    }
     class PublicBookmark extends Bookmark {
-      public sites: string[]
+      public links: PublicLink[]
       public tags: PublicTag[]
     }
 

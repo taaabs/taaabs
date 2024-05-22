@@ -25,7 +25,7 @@ type FormValues = {
   is_public?: boolean
 }
 
-// Data from a fragment.
+// Data from fragment.
 type BookmarkAutofill = {
   title?: string
   note?: string
@@ -55,6 +55,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
   const [clipboard_url, set_clipboard_url] = useState<string>()
+  const [clipboard_body, set_clipboard_body] = useState<string>()
   const cover_paste_area = useRef<HTMLDivElement>(null)
   const file_input = useRef<HTMLInputElement>(null)
   const cover_base64_encoded_webp = useRef<string>()
@@ -121,11 +122,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
     if (blob) {
       const reader = new FileReader()
-      reader.onload = function (event: ProgressEvent<FileReader>) {
-        // if (event.target && event.target.result) {
-        //   preview.src = event.target.result as string;
-        // }
-      }
+      // reader.onload = function (event: ProgressEvent<FileReader>) {
+      //   if (event.target && event.target.result) {
+      //     preview.src = event.target.result as string;
+      //   }
+      // }
       reader.readAsDataURL(blob)
 
       // Create a new File object to set the file input value
@@ -191,6 +192,22 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   )
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
+    let plain_text: string
+
+    if (clipboard_body) {
+      const temp_el = document.createElement('div')
+      temp_el.innerHTML = clipboard_body
+
+      if (temp_el.querySelector('article')) {
+        plain_text = temp_el.querySelector('article')!.innerText
+      } else if (temp_el.querySelector('main')) {
+        plain_text = temp_el.querySelector('main')!.innerText
+      } else {
+        plain_text = temp_el.innerText
+      }
+      plain_text = plain_text.replace(/[ \t\r\n]+/gm, ' ').trim()
+    }
+
     const is_bookmark_public =
       (form_data.is_public === undefined && props.bookmark?.is_public) ||
       form_data.is_public ||
@@ -225,6 +242,12 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             pin_title: current_link?.pin_title,
             open_snapshot: link.open_snapshot,
             favicon,
+            plain_text:
+              props.bookmark_autofill?.links &&
+              props.bookmark_autofill.links.length &&
+              props.bookmark_autofill.links[0].url == link.url
+                ? plain_text
+                : undefined,
           }
         }),
       ),
@@ -256,7 +279,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     navigator.clipboard
       .readText()
       .then((text) => {
-        if (is_url_valid(text)) {
+        if (props.bookmark_autofill) {
+          set_clipboard_body(text)
+        } else if (is_url_valid(text)) {
           set_clipboard_url(text)
         }
       })

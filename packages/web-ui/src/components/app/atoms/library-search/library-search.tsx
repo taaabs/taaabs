@@ -14,8 +14,8 @@ export namespace LibrarySearch {
     completion_: string
     search_string_: string
   }
+
   export type Props = {
-    placeholder_: string
     search_string_: string
     is_loading_: boolean
     is_focused_: boolean
@@ -33,7 +33,13 @@ export namespace LibrarySearch {
     results_count_?: number
     is_slash_shortcut_disabled_: boolean
     on_click_get_help_: () => void
+    is_full_text_?: boolean
+    toggle_full_text_: () => void
     translations_: {
+      placeholder_: {
+        default_: string
+        full_text_: string
+      }
       type_: string
       to_search_: string
       footer_tip_: string
@@ -64,7 +70,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
     }, [props.is_focused_])
 
     const handle_keyboard = (event: any) => {
-      if (props.is_loading_) return
+      if (props.is_loading_ || props.is_full_text_) return
 
       if (event.code == 'Escape' && props.is_focused_) {
         input.current?.blur()
@@ -132,6 +138,7 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
       props.is_focused_,
       props.is_slash_shortcut_disabled_,
       props.is_loading_,
+      props.is_full_text_,
     ])
 
     useUpdateEffect(() => {
@@ -235,7 +242,8 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                         return <span key={i}>{str}</span>
                       }
                     })}
-                  {(props.search_string_ || selected_hint_index != -1) &&
+                  {!props.is_full_text_ &&
+                    (props.search_string_ || selected_hint_index != -1) &&
                     props.hints_ &&
                     is_focused_fix && (
                       <>
@@ -282,11 +290,15 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                           }`
                         : selected_hint_index != -1
                         ? undefined
-                        : props.placeholder_
+                        : props.is_full_text_
+                        ? props.translations_.placeholder_.full_text_
+                        : props.translations_.placeholder_.default_
                     }
                     onBlur={(e) => {
                       if (
-                        e.relatedTarget?.className != styles.hints__list__item
+                        e.relatedTarget?.className !=
+                          styles.hints__list__item &&
+                        e.relatedTarget?.className != styles.hints__mode
                       ) {
                         props.on_blur_()
                       }
@@ -354,63 +366,77 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
               [styles['hints--hidden']]: !(props.hints_ && is_focused_fix),
             })}
           >
-            {props.hints_ && props.hints_.length > 0 && is_focused_fix && (
-              <div className={styles.hints__list}>
-                {props.hints_.map((hint, i) => (
-                  <button
-                    key={
-                      props.search_string_ +
-                      (hint.completion_ ? hint.completion_ : '') +
-                      hint.type_
-                    }
-                    className={cn(styles.hints__list__item, {
-                      [styles['hints__list__item--selected']]:
-                        selected_hint_index == i,
-                    })}
-                    onClick={() => {
-                      props.on_click_hint_(i)
-                      set_is_focused_fix(false)
-                      props.on_blur_()
-                    }}
-                  >
-                    <div className={styles.hints__list__item__icon}>
-                      {hint.type_ == 'new' && <Icon variant="SEARCH" />}
-                      {hint.type_ == 'recent' && <Icon variant="RECENT" />}
-                    </div>
-                    <div
-                      className={cn(styles.hints__list__item__content, {
-                        [styles['hints__list__item__content--recent']]:
-                          hint.type_ == 'recent',
+            <button
+              className={styles.hints__mode}
+              onClick={() => {
+                props.toggle_full_text_()
+                input.current?.focus()
+              }}
+            >
+              <span>Full-text search:</span>
+              <span>{props.is_full_text_ ? 'enabled' : 'disabled'}</span>
+            </button>
+
+            {!props.is_full_text_ &&
+              props.hints_ &&
+              props.hints_.length > 0 &&
+              is_focused_fix && (
+                <div className={styles.hints__list}>
+                  {props.hints_.map((hint, i) => (
+                    <button
+                      key={
+                        props.search_string_ +
+                        (hint.completion_ ? hint.completion_ : '') +
+                        hint.type_
+                      }
+                      className={cn(styles.hints__list__item, {
+                        [styles['hints__list__item--selected']]:
+                          selected_hint_index == i,
                       })}
+                      onClick={() => {
+                        props.on_click_hint_(i)
+                        set_is_focused_fix(false)
+                        props.on_blur_()
+                      }}
                     >
-                      <span>{hint.search_string_}</span>
-                      <span>{hint.completion_}</span>
-                      {selected_hint_index == i && (
+                      <div className={styles.hints__list__item__icon}>
+                        {hint.type_ == 'new' && <Icon variant="SEARCH" />}
+                        {hint.type_ == 'recent' && <Icon variant="RECENT" />}
+                      </div>
+                      <div
+                        className={cn(styles.hints__list__item__content, {
+                          [styles['hints__list__item__content--recent']]:
+                            hint.type_ == 'recent',
+                        })}
+                      >
+                        <span>{hint.search_string_}</span>
+                        <span>{hint.completion_}</span>
+                        {selected_hint_index == i && (
+                          <div
+                            className={
+                              styles['hints__list__item__content__keycap']
+                            }
+                          >
+                            enter
+                          </div>
+                        )}
+                      </div>
+                      {hint.type_ == 'recent' && (
                         <div
-                          className={
-                            styles['hints__list__item__content__keycap']
-                          }
+                          className={styles.hints__list__item__remove}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            props.on_click_recent_hint_remove_(i)
+                          }}
+                          role="button"
                         >
-                          enter
+                          Remove
                         </div>
                       )}
-                    </div>
-                    {hint.type_ == 'recent' && (
-                      <div
-                        className={styles.hints__list__item__remove}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          props.on_click_recent_hint_remove_(i)
-                        }}
-                        role="button"
-                      >
-                        Remove
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
+                    </button>
+                  ))}
+                </div>
+              )}
             <div className={styles.hints__footer}>
               <span>{props.translations_.footer_tip_}</span>
               <button onClick={props.on_click_get_help_}>
@@ -429,9 +455,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
   (o, n) =>
     o.is_loading_ == n.is_loading_ &&
     o.is_focused_ == n.is_focused_ &&
+    o.is_full_text_ == n.is_full_text_ &&
     o.search_string_ == n.search_string_ &&
     o.loading_progress_percentage_ == n.loading_progress_percentage_ &&
-    o.placeholder_ == n.placeholder_ &&
     o.results_count_ == n.results_count_ &&
     o.on_focus_ == n.on_focus_ &&
     o.on_blur_ == n.on_blur_ &&
