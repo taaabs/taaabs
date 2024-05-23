@@ -62,14 +62,14 @@ export const use_search = (local_db_: LocalDb) => {
     current_filter == Filter.ARCHIVED_STARRED_UNREAD ||
     current_filter == Filter.ARCHIVED_UNREAD
 
-  const set_search_fragment = (params: { search_string: string }) => {
+  const set_search_fragment = (params: { search_string_: string }) => {
     window.history.pushState(
       {},
       '',
       window.location.pathname +
         (search_params.toString() ? `?${search_params.toString()}` : '') +
         '#' +
-        params.search_string,
+        params.search_string_,
     )
   }
 
@@ -318,7 +318,7 @@ export const use_search = (local_db_: LocalDb) => {
         set_result(result)
         set_queried_at_timestamp(Date.now())
         set_search_fragment({
-          search_string: params.search_string,
+          search_string_: params.search_string,
         })
         sessionStorage.setItem(
           browser_storage.session_storage.library.search_string({
@@ -431,7 +431,6 @@ export const use_search = (local_db_: LocalDb) => {
             : {}),
           ...(sites_variants?.length ? { sites_variants } : {}),
         },
-        tolerance: 1,
       },
     )
 
@@ -447,6 +446,25 @@ export const use_search = (local_db_: LocalDb) => {
     if (result.count) {
       set_result(result)
       set_queried_at_timestamp(Date.now())
+      set_search_fragment({
+        search_string_: params.search_string_,
+      })
+      sessionStorage.setItem(
+        browser_storage.session_storage.library.search_string({
+          username,
+          search_params: search_params.toString(),
+          hash: '#' + params.search_string_,
+        }),
+        params.search_string_,
+      )
+      sessionStorage.setItem(
+        browser_storage.session_storage.library.search_results_count({
+          username,
+          search_params: search_params.toString(),
+          hash: '#' + params.search_string_,
+        }),
+        result.count.toString(),
+      )
     }
   }
 

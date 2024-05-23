@@ -30,7 +30,7 @@
     border-top-color: var(--neutral250);
     @include at992 {
       border-style: dashed;
-      border-color: var(--neutral250);
+      border-color: var(--neutral300);
     }
   }
   &--search-result-clickable {
