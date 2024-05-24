@@ -504,7 +504,17 @@
       &__actions {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 2px;
+        &__public-saves {
+          white-space: nowrap;
+          margin-right: 5px;
+          color: var(--text-color-dimmed);
+          font-size: var(--font-size-13px);
+          padding: 0 3px;
+          @include hover {
+            text-decoration: underline;
+          }
+        }
         &__content {
           display: flex;
           align-items: center;
@@ -536,7 +546,7 @@
           svg {
             fill: var(--neutral500);
             @include transition-150ms(fill);
-            width: 11px;
+            width: 10.5px;
           }
           @include hover {
             background: var(--neutral200);
@@ -566,16 +576,6 @@
                 fill: var(--neutral600);
               }
             }
-          }
-        }
-        &__public-saves {
-          white-space: nowrap;
-          margin-right: 3px;
-          color: var(--text-color-dimmed);
-          font-size: var(--font-size-13px);
-          padding: 0 3px;
-          @include hover {
-            text-decoration: underline;
           }
         }
       }

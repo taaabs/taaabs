@@ -58,11 +58,11 @@ declare const styles: {
   readonly 'bookmark__links__item__link__url--dim-visited': string
   readonly 'bookmark__links__item__link__url--via-wayback': string
   readonly bookmark__links__item__actions: string
+  readonly 'bookmark__links__item__actions__public-saves': string
   readonly bookmark__links__item__actions__content: string
   readonly bookmark__links__item__actions__open: string
   readonly bookmark__links__item__actions__menu: string
   readonly bookmark__links__item__actions__menu__button: string
-  readonly 'bookmark__links__item__actions__public-saves': string
   readonly bookmark__links__item__pinned: string
   readonly highlight: string
   readonly 'highlight-link': string
