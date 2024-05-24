@@ -10,6 +10,7 @@ import Copy from '../../../../assets/icons/copy.svg'
 import Delete from '../../../../assets/icons/delete.svg'
 import DensityDefault from '../../../../assets/icons/density-default.svg'
 import DensityCompact from '../../../../assets/icons/density-compact.svg'
+import Document from '../../../../assets/icons/document.svg'
 import Edit from '../../../../assets/icons/edit.svg'
 import Globe from '../../../../assets/icons/globe.svg'
 import Google from '../../../../assets/icons/google.svg'
@@ -63,6 +64,7 @@ export namespace Icon {
     | 'DELETE'
     | 'DENSITY_DEFAULT'
     | 'DENSITY_COMPACT'
+    | 'DOCUMENT'
     | 'EDIT'
     | 'GLOBE'
     | 'GOOGLE'
@@ -146,6 +148,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'DENSITY_COMPACT':
       icon = <DensityCompact />
+      break
+    case 'DOCUMENT':
+      icon = <Document />
       break
     case 'EDIT':
       icon = <Edit />

@@ -57,7 +57,7 @@ export const dictionary: Dictionary = {
           bullets: [
             '∞ publicznych zakładek',
             '1 tys. zaszyfrowanych',
-            'Tryb czytania',
+            'Kopie w trybie czytania',
             'Wyszukiwanie pełnotekstowe',
           ],
           button_label: 'Rozpocznij za darmo',

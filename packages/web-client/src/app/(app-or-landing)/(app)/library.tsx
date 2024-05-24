@@ -496,13 +496,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       on_change_={(value) => {
         if (props.local_db.is_initializing) return
         search_hook.set_search_string(value)
-        if (!value) {
-          window.history.pushState(
-            {},
-            '',
-            window.location.pathname + `?${search_params.toString()}`,
-          )
-        }
       }}
       on_submit_={async () => {
         // if (props.local_db.is_initializing || !search_hook.search_string.trim() || search_hook.count == 0) return

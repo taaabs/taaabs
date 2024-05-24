@@ -68,8 +68,7 @@ export const use_search = (local_db_: LocalDb) => {
       '',
       window.location.pathname +
         (search_params.toString() ? `?${search_params.toString()}` : '') +
-        '#' +
-        params.search_string_,
+        `#query=${encodeURIComponent(params.search_string_)}`,
     )
   }
 
@@ -311,7 +310,7 @@ export const use_search = (local_db_: LocalDb) => {
       clear_library_session_storage({
         username,
         search_params: search_params.toString(),
-        hash: '#' + encodeURIComponent(params.search_string),
+        hash: `#query=${encodeURIComponent(search_string)}`,
       })
       set_count(result.count)
       if (result.count) {
@@ -324,7 +323,7 @@ export const use_search = (local_db_: LocalDb) => {
           browser_storage.session_storage.library.search_string({
             username,
             search_params: search_params.toString(),
-            hash: '#' + params.search_string,
+            hash: `#query=${encodeURIComponent(search_string)}`,
           }),
           params.search_string,
         )
@@ -332,7 +331,7 @@ export const use_search = (local_db_: LocalDb) => {
           browser_storage.session_storage.library.search_results_count({
             username,
             search_params: search_params.toString(),
-            hash: '#' + params.search_string,
+            hash: `#query=${encodeURIComponent(search_string)}`,
           }),
           result.count.toString(),
         )
@@ -454,7 +453,7 @@ export const use_search = (local_db_: LocalDb) => {
         browser_storage.session_storage.library.search_string({
           username,
           search_params: search_params.toString(),
-          hash: '#' + params.search_string_,
+          hash: `#query=${encodeURIComponent(params.search_string_)}`,
         }),
         params.search_string_,
       )
@@ -462,7 +461,7 @@ export const use_search = (local_db_: LocalDb) => {
         browser_storage.session_storage.library.search_results_count({
           username,
           search_params: search_params.toString(),
-          hash: '#' + params.search_string_,
+          hash: `#query=${encodeURIComponent(params.search_string_)}`,
         }),
         result.count.toString(),
       )
@@ -864,6 +863,13 @@ export const use_search = (local_db_: LocalDb) => {
     if (!is_search_focused || is_full_text) return
     set_result(undefined)
     get_hints()
+    if (!search_string) {
+      window.history.pushState(
+        {},
+        '',
+        window.location.pathname + `?${search_params.toString()}`,
+      )
+    }
   }, [search_string])
 
   const clear_hints = () => {
@@ -905,7 +911,7 @@ export const use_search = (local_db_: LocalDb) => {
       browser_storage.session_storage.library.highlights({
         username,
         search_params: search_params.toString(),
-        hash: '#' + search_string,
+        hash: `#query=${encodeURIComponent(search_string)}`,
       }),
       JSON.stringify(highlights),
     )
@@ -917,7 +923,7 @@ export const use_search = (local_db_: LocalDb) => {
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
         search_params: search_params.toString(),
-        hash: '#' + search_string,
+        hash: `#query=${encodeURIComponent(search_string)}`,
       }),
       JSON.stringify(highlights_sites_variants),
     )
@@ -929,7 +935,7 @@ export const use_search = (local_db_: LocalDb) => {
       browser_storage.session_storage.library.search_result({
         username,
         search_params: search_params.toString(),
-        hash: '#' + search_string,
+        hash: `#query=${encodeURIComponent(search_string)}`,
       }),
       JSON.stringify(result),
     )
@@ -938,15 +944,18 @@ export const use_search = (local_db_: LocalDb) => {
   useEffect(() => {
     const search_params_stringified = search_params.toString()
 
-    if (!window.location.hash) reset()
+    const is_query_in_hash = window.location.hash.startsWith('#query=')
+
+    if (!is_query_in_hash) reset()
 
     const search_string = sessionStorage.getItem(
       browser_storage.session_storage.library.search_string({
         username,
         search_params: search_params_stringified,
-        hash: decodeURIComponent(window.location.hash),
+        hash: window.location.hash,
       }),
     )
+
     if (search_string) {
       set_search_string(search_string)
     }
@@ -956,23 +965,21 @@ export const use_search = (local_db_: LocalDb) => {
         browser_storage.session_storage.library.highlights({
           username,
           search_params: search_params_stringified,
-          hash: decodeURIComponent(window.location.hash),
+          hash: window.location.hash,
         }),
       )
       if (highlights) {
-        set_incoming_highlights(JSON.parse(highlights))
+        set_highlights(JSON.parse(highlights))
       }
       const highlights_sites_variants = sessionStorage.getItem(
         browser_storage.session_storage.library.highlights_sites_variants({
           username,
           search_params: search_params_stringified,
-          hash: decodeURIComponent(window.location.hash),
+          hash: window.location.hash,
         }),
       )
       if (highlights_sites_variants) {
-        set_incoming_highlights_sites_variants(
-          JSON.parse(highlights_sites_variants),
-        )
+        set_highlights_sites_variants(JSON.parse(highlights_sites_variants))
       }
     }
 
@@ -980,7 +987,7 @@ export const use_search = (local_db_: LocalDb) => {
       browser_storage.session_storage.library.search_results_count({
         username,
         search_params: search_params_stringified,
-        hash: decodeURIComponent(window.location.hash),
+        hash: window.location.hash,
       }),
     )
     if (count) {
@@ -990,7 +997,7 @@ export const use_search = (local_db_: LocalDb) => {
       browser_storage.session_storage.library.search_result({
         username,
         search_params: search_params_stringified,
-        hash: decodeURIComponent(window.location.hash),
+        hash: window.location.hash,
       }),
     )
     if (result) {
@@ -998,9 +1005,8 @@ export const use_search = (local_db_: LocalDb) => {
     }
 
     // Temporary handling of search string on fresh page load.
-    if (window.location.hash && !result) {
-      const search_string = decodeURIComponent(window.location.hash).slice(1)
-      set_search_string(search_string)
+    if (is_query_in_hash && !result) {
+      set_search_string(window.location.hash.replace('#query=', ''))
     }
 
     cache_data()

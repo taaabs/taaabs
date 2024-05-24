@@ -162,6 +162,24 @@
               width: 16px;
             }
           }
+          &__text {
+            position: relative;
+            display: inline;
+            font-weight: var(--font-weight-inter-medium);
+            font-size: var(--font-size-1-8rem);
+            margin-bottom: 0.8rem;
+            overflow-wrap: anywhere;
+            @include at992 {
+              font-size: var(--font-size-1-9rem);
+            }
+            &--unread {
+              font-weight: var(--font-weight-inter-semi-bold);
+            }
+            &--untitled {
+              font-style: italic;
+              font-weight: var(--font-weight-inter-regular);
+            }
+          }
           &__stars {
             display: inline-flex;
             align-items: center;
@@ -179,24 +197,6 @@
                 width: 19px;
               }
               fill: var(--yellow);
-            }
-          }
-          &__text {
-            position: relative;
-            display: inline;
-            font-weight: var(--font-weight-inter-medium);
-            font-size: var(--font-size-1-8rem);
-            margin-bottom: 0.8rem;
-            overflow-wrap: anywhere;
-            @include at992 {
-              font-size: var(--font-size-1-9rem);
-            }
-            &--unread {
-              font-weight: var(--font-weight-inter-semi-bold);
-            }
-            &--untitled {
-              font-style: italic;
-              font-weight: var(--font-weight-inter-regular);
             }
           }
         }
@@ -526,7 +526,7 @@
           svg {
             fill: var(--blue600);
             @include transition-150ms(fill);
-            width: 13px;
+            width: 14px;
           }
           @include hover {
             background: var(--blue100);

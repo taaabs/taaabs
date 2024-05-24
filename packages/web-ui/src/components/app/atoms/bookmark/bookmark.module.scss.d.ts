@@ -19,10 +19,10 @@ declare const styles: {
   readonly bookmark__main__right__content: string
   readonly bookmark__main__right__content__title: string
   readonly bookmark__main__right__content__title__unread: string
-  readonly bookmark__main__right__content__title__stars: string
   readonly bookmark__main__right__content__title__text: string
   readonly 'bookmark__main__right__content__title__text--unread': string
   readonly 'bookmark__main__right__content__title__text--untitled': string
+  readonly bookmark__main__right__content__title__stars: string
   readonly bookmark__main__right__content__note: string
   readonly bookmark__main__right__tags: string
   readonly bookmark__main__right__tags__tag: string

@@ -243,7 +243,7 @@ export const use_bookmarks = () => {
     )
 
     if (bookmarks) {
-      if (window.location.hash) {
+      if (window.location.hash.startsWith('#query=')) {
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
       } else {
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
@@ -277,7 +277,7 @@ export const use_bookmarks = () => {
         dispatch(bookmarks_actions.set_density(density as any))
       }
     } else {
-      if (window.location.hash) return
+      if (window.location.hash.startsWith('#query=')) return
       get_bookmarks_({})
     }
   }, [is_hydrated, search_params])

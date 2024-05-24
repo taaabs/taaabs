@@ -204,7 +204,8 @@ export const HeaderDesktop: React.FC<{
   }
 
   useUpdateEffect(() => {
-    if (window.location.hash.slice(1).length && pathname == '/') {
+    const bookmark = BookmarkHash.parse({ hash: window.location.hash.slice(1) })
+    if (Object.keys(bookmark).length) {
       open_new_bookmark_modal({ with_autofill: true })
     }
   }, [is_hydrated])

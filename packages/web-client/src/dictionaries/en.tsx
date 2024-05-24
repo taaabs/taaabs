@@ -50,7 +50,7 @@ const dictionary: Dictionary = {
           bullets: [
             '∞ public bookmarks',
             '1k encrypted bookmarks',
-            'Reading mode',
+            'Copies in reading mode',
             'Full-text search',
           ],
           button_label: 'Start for free',

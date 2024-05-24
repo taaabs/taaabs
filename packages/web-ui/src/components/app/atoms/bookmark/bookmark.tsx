@@ -976,7 +976,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                             props.on_new_tab_link_click_(url)
                           }}
                         >
-                          <Icon variant="BOLT" />
+                          <Icon variant="DOCUMENT" />
                         </button>
                       )}
                       <button

@@ -8,9 +8,9 @@ type Props = {
 }
 
 const script = `javascript: void (function () {
-  navigator.clipboard.writeText(document.querySelector('body').innerHTML);
+  navigator.clipboard.writeText(document.querySelector('html').innerHTML);
   window.open(
-    'https://taaabs.com/#link=' +
+    'https://taaabs.com/library#link=' +
       encodeURIComponent(document.location) +
       '&title=' +
       encodeURIComponent(document.title) +
