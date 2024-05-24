@@ -23,4 +23,7 @@
   &--hovered > svg {
     fill: var(--yellow);
   }
+  &--hovered-checked > svg {
+    fill: var(--neutral200);
+  }
 }

@@ -320,9 +320,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       ]).then(() => {
         modal_context.set_modal({})
       })
-    } else {
-      // User is on results not relevant to newly added bookmark (e.g. some other tags).
-      modal_context.set_modal({})
     }
   }, [bookmarks_hook.is_fetching_first_bookmarks])
 

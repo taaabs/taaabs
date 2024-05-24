@@ -20,9 +20,13 @@ export const Stars: React.FC<Stars.Props> = (props) => {
           className={cn([
             styles.star,
             {
-              [styles['star--checked']]: props.no_selected - 1 >= i,
+              [styles['star--checked']]:
+                props.no_selected - 1 >= i &&
+                (hovered_index === undefined || hovered_index >= i),
               [styles['star--hovered']]:
                 hovered_index !== undefined && hovered_index >= i,
+              [styles['star--hovered-checked']]:
+                hovered_index == props.no_selected - 1,
             },
           ])}
           key={i}
@@ -36,8 +40,8 @@ export const Stars: React.FC<Stars.Props> = (props) => {
             props.on_click(i + 1)
           }}
         >
-          {props.no_selected - 1 >= i &&
-          (hovered_index == undefined || hovered_index >= i) ? (
+          {props.no_selected - 1 >= i ||
+          (hovered_index !== undefined && hovered_index >= i) ? (
             <Icon variant="STAR_FILLED" />
           ) : (
             <Icon variant="STAR" />

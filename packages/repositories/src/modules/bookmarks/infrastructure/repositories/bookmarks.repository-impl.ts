@@ -10,8 +10,8 @@ import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-id
 import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { Crypto } from '@repositories/utils/crypto'
-import { GetLinksDataForVisibilityChange_Params } from '../../domain/types/get-links-data-for-visibility-change.params'
-import { GetLinksDataForVisibilityChange_Ro } from '../../domain/types/get-links-data-for-visibility-change.ro'
+import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
+import { GetLinksData_Ro } from '../../domain/types/get-links-data.ro'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -285,16 +285,14 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     }
   }
 
-  public async get_links_data_for_visibility_change(
-    params: GetLinksDataForVisibilityChange_Params,
+  public async get_links_data_authorized(
+    params: GetLinksData_Params.Authorized,
     encryption_key: Uint8Array,
-  ): Promise<GetLinksDataForVisibilityChange_Ro> {
+  ): Promise<GetLinksData_Ro> {
     const links_data =
-      await this._bookmarks_data_source.get_links_data_for_visibility_change(
-        params,
-      )
+      await this._bookmarks_data_source.get_links_data_authorized(params)
 
-    const results: GetLinksDataForVisibilityChange_Ro = []
+    const results: GetLinksData_Ro = []
 
     for (const link_data of links_data) {
       results.push({
@@ -311,6 +309,25 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           : link_data.content_aes
           ? await Crypto.AES.decrypt(link_data.content_aes, encryption_key)
           : undefined,
+      })
+    }
+
+    return results
+  }
+
+  public async get_links_data_public(
+    params: GetLinksData_Params.Public,
+  ): Promise<GetLinksData_Ro> {
+    const links_data =
+      await this._bookmarks_data_source.get_links_data_public(params)
+
+    const results: GetLinksData_Ro = []
+
+    for (const link_data of links_data) {
+      results.push({
+        url: link_data.url,
+        plain_text: link_data.plain_text,
+        content: link_data.content,
       })
     }
 

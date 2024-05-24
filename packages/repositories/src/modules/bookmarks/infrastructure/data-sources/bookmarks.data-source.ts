@@ -5,8 +5,8 @@ import { DeleteBookmark_Params } from '../../domain/types/delete-bookmark.params
 import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params'
 import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by-ids.dto'
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
-import { LinksDataForVisibilityChange_Dto } from '@shared/types/modules/bookmarks/links-data-for-visibility-change.dto'
-import { GetLinksDataForVisibilityChange_Params } from '../../domain/types/get-links-data-for-visibility-change.params'
+import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
+import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
 
 export type Bookmarks_DataSource = {
   get_bookmarks_on_authorized_user(
@@ -25,9 +25,13 @@ export type Bookmarks_DataSource = {
     params: GetBookmarksByIds_Params.Public,
   ): Promise<BookmarksByIds_Dto.Response.Public>
 
-  get_links_data_for_visibility_change(
-    params: GetLinksDataForVisibilityChange_Params,
-  ): Promise<LinksDataForVisibilityChange_Dto.Response>
+  get_links_data_authorized(
+    params: GetLinksData_Params.Authorized,
+  ): Promise<LinksData_Dto.Response.Authorized>
+
+  get_links_data_public(
+    params: GetLinksData_Params.Public,
+  ): Promise<LinksData_Dto.Response.Public>
 
   upsert_bookmark(
     params: UpsertBookmark_Params,

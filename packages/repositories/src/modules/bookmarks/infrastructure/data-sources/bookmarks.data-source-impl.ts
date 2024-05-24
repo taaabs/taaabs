@@ -11,8 +11,8 @@ import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dt
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { Crypto } from '@repositories/utils/crypto'
 import { KyInstance } from 'ky'
-import { LinksDataForVisibilityChange_Dto } from '@shared/types/modules/bookmarks/links-data-for-visibility-change.dto'
-import { GetLinksDataForVisibilityChange_Params } from '../../domain/types/get-links-data-for-visibility-change.params'
+import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
+import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -102,13 +102,19 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       .json()
   }
 
-  public async get_links_data_for_visibility_change(
-    params: GetLinksDataForVisibilityChange_Params,
-  ): Promise<LinksDataForVisibilityChange_Dto.Response> {
+  public async get_links_data_authorized(
+    params: GetLinksData_Params.Authorized,
+  ): Promise<LinksData_Dto.Response.Authorized> {
     return await this._ky
-      .get(
-        `v1/bookmarks/links-data-for-visibility-change/${params.bookmark_id}`,
-      )
+      .get(`v1/bookmarks/${params.bookmark_id}/links-data`)
+      .json()
+  }
+
+  public async get_links_data_public(
+    params: GetLinksData_Params.Public,
+  ): Promise<LinksData_Dto.Response.Public> {
+    return await this._ky
+      .get(`v1/bookmarks/${params.username}/${params.bookmark_id}/links-data`)
       .json()
   }
 
