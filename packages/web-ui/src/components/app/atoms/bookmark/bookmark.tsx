@@ -564,6 +564,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             [styles['container--compact']]: props.density_ == 'compact',
           },
           {
+            [styles['container--compact--opened']]:
+              props.density_ == 'compact' && props.is_compact_ == false,
+          },
+          {
             [styles['container--search-result']]: props.is_search_result_,
           },
           {

@@ -1,6 +1,7 @@
 declare const styles: {
   readonly container: string
   readonly 'container--compact': string
+  readonly 'container--compact--opened': string
   readonly 'container--clickable': string
   readonly 'container--search-result': string
   readonly 'container--search-result-clickable': string

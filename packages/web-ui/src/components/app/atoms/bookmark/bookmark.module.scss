@@ -20,6 +20,11 @@
       border-bottom: 0;
     }
   }
+  &--compact--opened {
+    @include to992 {
+      box-shadow: 0 1px 0 0 var(--border-color-secondary);
+    }
+  }
   &--clickable {
     @include hover {
       border-color: var(--neutral300);
@@ -531,8 +536,7 @@
           svg {
             fill: var(--neutral500);
             @include transition-150ms(fill);
-            width: var(--icon-dimension-12px);
-            height: var(--icon-dimension-12px);
+            width: 11px;
           }
           @include hover {
             background: var(--neutral200);
