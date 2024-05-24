@@ -11,6 +11,8 @@ import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dt
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { Crypto } from '@repositories/utils/crypto'
 import { KyInstance } from 'ky'
+import { LinksDataForVisibilityChange_Dto } from '@shared/types/modules/bookmarks/links-data-for-visibility-change.dto'
+import { GetLinksDataForVisibilityChange_Params } from '../../domain/types/get-links-data-for-visibility-change.params'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -100,18 +102,14 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       .json()
   }
 
-  public async record_visit(params: RecordVisit_Params): Promise<void> {
-    const body: RecordVisit_Dto.Body = {
-      bookmark_id: params.bookmark_id,
-      visited_at: params.visited_at,
-    }
-    await this._ky.post(`v1/bookmarks/record-visit`, {
-      json: body,
-    })
-  }
-
-  public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
-    await this._ky.delete(`v1/bookmarks/${params.bookmark_id}`)
+  public async get_links_data_for_visibility_change(
+    params: GetLinksDataForVisibilityChange_Params,
+  ): Promise<LinksDataForVisibilityChange_Dto.Response> {
+    return await this._ky
+      .get(
+        `v1/bookmarks/links-data-for-visibility-change/${params.bookmark_id}`,
+      )
+      .json()
   }
 
   public async upsert_bookmark(
@@ -247,5 +245,19 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         })
         .json()
     }
+  }
+
+  public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
+    await this._ky.delete(`v1/bookmarks/${params.bookmark_id}`)
+  }
+
+  public async record_visit(params: RecordVisit_Params): Promise<void> {
+    const body: RecordVisit_Dto.Body = {
+      bookmark_id: params.bookmark_id,
+      visited_at: params.visited_at,
+    }
+    await this._ky.post(`v1/bookmarks/record-visit`, {
+      json: body,
+    })
   }
 }

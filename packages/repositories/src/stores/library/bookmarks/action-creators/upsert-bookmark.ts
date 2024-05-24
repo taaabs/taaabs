@@ -12,9 +12,11 @@ import { Pinned_RepositoryImpl } from '@repositories/modules/pinned/infrastructu
 import { pinned_actions } from '../../pinned/pinned.slice'
 import { tag_hierarchies_actions } from '../../tag-hierarchies/tag-hierarchies.slice'
 import { GetTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/get-tag-hierarchies.params'
+import { GetLinksDataForVisibilityChange_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data-for-visibility-change.ro'
 
 export const upsert_bookmark = (params: {
   bookmark: UpsertBookmark_Params
+  should_refetch_links_data?: boolean
   last_authorized_counts_params?: Counts_Params.Authorized
   get_tag_hierarchies_request_params?: GetTagHierarchies_Params.Authorized
   ky: KyInstance
@@ -24,8 +26,35 @@ export const upsert_bookmark = (params: {
     new Promise<Bookmark_Entity>(async (resolve) => {
       const data_source = new Bookmarks_DataSourceImpl(params.ky)
       const repository = new Bookmarks_RepositoryImpl(data_source)
+      let links_data_for_visibility_change:
+        | GetLinksDataForVisibilityChange_Ro
+        | undefined = undefined
+      if (params.bookmark.bookmark_id && params.should_refetch_links_data) {
+        links_data_for_visibility_change =
+          await repository.get_links_data_for_visibility_change(
+            {
+              bookmark_id: params.bookmark.bookmark_id,
+            },
+            params.encryption_key,
+          )
+      }
       const result = await repository.upsert_bookmark(
-        params.bookmark,
+        {
+          ...params.bookmark,
+          ...(links_data_for_visibility_change
+            ? {
+                links: params.bookmark.links.map((link) => ({
+                  ...link,
+                  plain_text: links_data_for_visibility_change.find(
+                    (link_data) => link_data.url == link.url,
+                  )?.plain_text,
+                  content: links_data_for_visibility_change.find(
+                    (link_data) => link_data.url == link.url,
+                  )?.content,
+                })),
+              }
+            : {}),
+        },
         params.encryption_key,
       )
 

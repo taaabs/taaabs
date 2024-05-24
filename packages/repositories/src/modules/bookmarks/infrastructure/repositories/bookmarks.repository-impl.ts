@@ -10,6 +10,8 @@ import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-id
 import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { Crypto } from '@repositories/utils/crypto'
+import { GetLinksDataForVisibilityChange_Params } from '../../domain/types/get-links-data-for-visibility-change.params'
+import { GetLinksDataForVisibilityChange_Ro } from '../../domain/types/get-links-data-for-visibility-change.ro'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -88,6 +90,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                           encryption_key,
                         )
                       : undefined,
+                    has_plain_text: link.has_plain_text,
+                    has_content: link.has_content,
                   }
                 }),
               ),
@@ -139,6 +143,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               is_public: true,
               is_pinned: link.is_pinned,
               open_snapshot: link.open_snapshot,
+              has_content: link.has_content,
             })),
             cover: bookmark.cover ? bookmark.cover : undefined,
           }))
@@ -226,6 +231,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                           encryption_key,
                         )
                       : undefined,
+                    has_plain_text: link.has_plain_text,
+                    has_content: link.has_content,
                   }
                 }),
               ),
@@ -270,6 +277,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               site_path: link.site_path,
               is_public: true,
               open_snapshot: link.open_snapshot,
+              has_plain_text: link.has_plain_text,
             })),
             cover: bookmark.cover ? bookmark.cover : undefined,
           }))
@@ -277,12 +285,36 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     }
   }
 
-  public async record_visit(params: RecordVisit_Params): Promise<void> {
-    await this._bookmarks_data_source.record_visit(params)
-  }
+  public async get_links_data_for_visibility_change(
+    params: GetLinksDataForVisibilityChange_Params,
+    encryption_key: Uint8Array,
+  ): Promise<GetLinksDataForVisibilityChange_Ro> {
+    const links_data =
+      await this._bookmarks_data_source.get_links_data_for_visibility_change(
+        params,
+      )
 
-  public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
-    await this._bookmarks_data_source.delete_bookmark(params)
+    const results: GetLinksDataForVisibilityChange_Ro = []
+
+    for (const link_data of links_data) {
+      results.push({
+        url: link_data.url
+          ? link_data.url
+          : await Crypto.AES.decrypt(link_data.url_aes!, encryption_key),
+        plain_text: link_data.plain_text
+          ? link_data.plain_text
+          : link_data.plain_text_aes
+          ? await Crypto.AES.decrypt(link_data.plain_text_aes, encryption_key)
+          : undefined,
+        content: link_data.content
+          ? link_data.content
+          : link_data.content_aes
+          ? await Crypto.AES.decrypt(link_data.content_aes, encryption_key)
+          : undefined,
+      })
+    }
+
+    return results
   }
 
   public async upsert_bookmark(
@@ -352,6 +384,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             favicon: link.favicon_aes
               ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
               : undefined,
+            has_plain_text: link.has_plain_text,
+            has_content: link.has_content,
           }
         }),
       ),
@@ -361,5 +395,13 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
         : undefined,
     }
+  }
+
+  public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
+    await this._bookmarks_data_source.delete_bookmark(params)
+  }
+
+  public async record_visit(params: RecordVisit_Params): Promise<void> {
+    await this._bookmarks_data_source.record_visit(params)
   }
 }

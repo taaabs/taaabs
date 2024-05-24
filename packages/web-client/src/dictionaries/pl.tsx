@@ -55,10 +55,10 @@ export const dictionary: Dictionary = {
             'Wszystko czego potrzebujesz by zacząć przygodę z Taaabs',
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
-            '5 000 zakładek',
+            '∞ publicznych zakładek',
+            '1 tys. zaszyfrowanych',
             'Tryb czytania',
             'Wyszukiwanie pełnotekstowe',
-            'Szyfrowanie end-to-end',
           ],
           button_label: 'Rozpocznij za darmo',
         },
@@ -67,7 +67,7 @@ export const dictionary: Dictionary = {
           description: 'Plan w przystępnej cenie dodający przydatne funkcje',
           bullets_heading: 'Wszystko co w darmowym, plus:',
           bullets: [
-            '100 000 zakładek',
+            '∞ zaszyfrowanych',
             'Wiele linków na zakładce',
             'Filtruj oznaczone gwiazdkami oraz nieprzeczytane',
             'Sortuj ostatnio odwiedzone, edytowane',

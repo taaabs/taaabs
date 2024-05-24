@@ -12,7 +12,7 @@
   @include transition-150ms(border-color);
   background: var(--white);
   @include hover {
-    border-color: var(--input-border-color-hover);
+    border-color: var(--border-color-hover);
   }
   > span {
     padding-left: 14px;

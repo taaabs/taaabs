@@ -48,10 +48,10 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            '5 000 bookmarks',
+            '∞ public bookmarks',
+            '1k encrypted bookmarks',
             'Reading mode',
             'Full-text search',
-            'Zero-knowledge encryption™',
           ],
           button_label: 'Start for free',
         },
@@ -60,7 +60,7 @@ const dictionary: Dictionary = {
           description: 'Affordable plan with our must haves',
           bullets_heading: 'Everything in Free, plus:',
           bullets: [
-            '100 000 bookmarks',
+            '∞ encrypted bookmarks',
             'Multi-link bookmarks',
             'Filters: starred, unread',
             'Sorts: last visited, updated at',

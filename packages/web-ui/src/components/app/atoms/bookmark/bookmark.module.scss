@@ -144,23 +144,35 @@
           &__unread {
             display: inline-flex;
             align-items: center;
-            transform: translateY(0.05em);
+            transform: translateY(0.5px);
             left: 0;
             border-radius: 50%;
-            height: 16px;
-            width: 16px;
+            height: 14px;
+            width: 14px;
             background: var(--red);
             margin-right: 5px;
+            @include at992 {
+              margin-right: 6px;
+              height: 16px;
+              width: 16px;
+            }
           }
           &__stars {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            transform: translateY(0.1rem);
+            gap: 3px;
+            transform: translateY(0.7px);
             height: 0;
             margin-right: 5px;
+            @include at992 {
+              gap: 4px;
+              margin-right: 6px;
+            }
             > svg {
-              height: 18px;
+              width: 18px;
+              @include at992 {
+                width: 19px;
+              }
               fill: var(--yellow);
             }
           }
@@ -168,9 +180,12 @@
             position: relative;
             display: inline;
             font-weight: var(--font-weight-inter-medium);
-            font-size: var(--font-size-1-9rem);
+            font-size: var(--font-size-1-8rem);
             margin-bottom: 0.8rem;
             overflow-wrap: anywhere;
+            @include at992 {
+              font-size: var(--font-size-1-9rem);
+            }
             &--unread {
               font-weight: var(--font-weight-inter-semi-bold);
             }
@@ -415,10 +430,10 @@
           height: 32px;
           background-color: var(--outlined-button-background);
           border-radius: var(--border-radius-999px);
-          border: var(--border-secondary);
+          border: var(--border-primary);
           @include transition-150ms(border-color);
           @include hover {
-            border-color: var(--input-border-color-hover);
+            border-color: var(--border-color-hover);
           }
           > img {
             width: 16px;
@@ -485,6 +500,26 @@
         display: flex;
         align-items: center;
         gap: 4px;
+        &__content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: var(--border-radius-999px);
+          @include transition-150ms(background-color);
+          width: var(--button-dimension-28px);
+          height: var(--button-dimension-28px);
+          svg {
+            fill: var(--blue600);
+            @include transition-150ms(fill);
+            width: 13px;
+          }
+          @include hover {
+            background: var(--blue100);
+            svg {
+              fill: var(--blue700);
+            }
+          }
+        }
         &__open {
           display: flex;
           align-items: center;

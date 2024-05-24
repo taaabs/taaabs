@@ -382,12 +382,12 @@ export const use_search = (local_db_: LocalDb) => {
       .replace(/(?=site:)(.*?)($|\s)/g, '')
       .trim()
 
-    const result: Results<Result> = await searchWithHighlight(
+    const result: Results<Result> = await search(
       !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
       {
         limit: system_values.max_library_search_results,
         term,
-        properties: ['article'],
+        properties: ['plain_text'],
         where: {
           ...(selected_tag_ids.length
             ? {
@@ -431,6 +431,7 @@ export const use_search = (local_db_: LocalDb) => {
             : {}),
           ...(sites_variants?.length ? { sites_variants } : {}),
         },
+        threshold: 0,
       },
     )
 
@@ -949,28 +950,32 @@ export const use_search = (local_db_: LocalDb) => {
     if (search_string) {
       set_search_string(search_string)
     }
-    const highlights = sessionStorage.getItem(
-      browser_storage.session_storage.library.highlights({
-        username,
-        search_params: search_params_stringified,
-        hash: decodeURIComponent(window.location.hash),
-      }),
-    )
-    if (highlights) {
-      set_incoming_highlights(JSON.parse(highlights))
-    }
-    const highlights_sites_variants = sessionStorage.getItem(
-      browser_storage.session_storage.library.highlights_sites_variants({
-        username,
-        search_params: search_params_stringified,
-        hash: decodeURIComponent(window.location.hash),
-      }),
-    )
-    if (highlights_sites_variants) {
-      set_incoming_highlights_sites_variants(
-        JSON.parse(highlights_sites_variants),
+
+    if (!is_full_text) {
+      const highlights = sessionStorage.getItem(
+        browser_storage.session_storage.library.highlights({
+          username,
+          search_params: search_params_stringified,
+          hash: decodeURIComponent(window.location.hash),
+        }),
       )
+      if (highlights) {
+        set_incoming_highlights(JSON.parse(highlights))
+      }
+      const highlights_sites_variants = sessionStorage.getItem(
+        browser_storage.session_storage.library.highlights_sites_variants({
+          username,
+          search_params: search_params_stringified,
+          hash: decodeURIComponent(window.location.hash),
+        }),
+      )
+      if (highlights_sites_variants) {
+        set_incoming_highlights_sites_variants(
+          JSON.parse(highlights_sites_variants),
+        )
+      }
     }
+
     const count = sessionStorage.getItem(
       browser_storage.session_storage.library.search_results_count({
         username,

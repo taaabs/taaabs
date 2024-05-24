@@ -29,7 +29,7 @@
   background-color: var(--white);
   @include transition-150ms();
   @include hover {
-    border-color: var(--input-border-color-hover);
+    border-color: var(--border-color-hover);
   }
   > img {
     width: 11px;

@@ -1,6 +1,7 @@
 import Activity from '../../../../assets/icons/activity.svg'
 import Add from '../../../../assets/icons/add.svg'
 import Archive from '../../../../assets/icons/archive.svg'
+import Bolt from '../../../../assets/icons/bolt.svg'
 import BookmarkFilled from '../../../../assets/icons/bookmark-filled.svg'
 import Bookmark from '../../../../assets/icons/bookmark.svg'
 import Check from '../../../../assets/icons/check.svg'
@@ -53,6 +54,7 @@ export namespace Icon {
     | 'ACTIVITY'
     | 'ADD'
     | 'ARCHIVE'
+    | 'BOLT'
     | 'BOOKMARK_FILLED'
     | 'BOOKMARK'
     | 'CHECK'
@@ -117,6 +119,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'ARCHIVE':
       icon = <Archive />
+      break
+    case 'BOLT':
+      icon = <Bolt />
       break
     case 'BOOKMARK_FILLED':
       icon = <BookmarkFilled />

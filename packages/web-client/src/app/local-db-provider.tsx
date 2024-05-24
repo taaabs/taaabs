@@ -37,7 +37,7 @@ type BookmarkOfSearch = {
 export const schema = {
   id: 'string',
   card: 'string',
-  article: 'string',
+  plain_text: 'string',
   tag_ids: 'enum[]',
   sites: 'string[]',
   sites_variants: 'string[]',
@@ -289,14 +289,13 @@ export const LocalDbProvider: React.FC<{
         unsortableProperties: [
           'id',
           'card',
-          'article',
+          'plain_text',
           'sites',
           'sites_variants',
           'is_unread',
           'stars',
           'tags',
           'tags_ids',
-          'article',
           'points',
         ],
       },
@@ -372,7 +371,7 @@ export const LocalDbProvider: React.FC<{
               bookmark.links
                 .map((link) => link.site.replace('/', ' › '))
                 .join(' '),
-            article: bookmark.links
+            plain_text: bookmark.links
               .map((link) => link.plain_text || '')
               .join(' '),
             sites: bookmark.links.map((link) => link.site),
@@ -445,7 +444,7 @@ export const LocalDbProvider: React.FC<{
           params.bookmark.tags.join(' ') +
           (sites.length ? ' ' : '') +
           sites.join(' '),
-        article: params.bookmark.links
+        plain_text: params.bookmark.links
           .map((link) => link.plain_text || '')
           .join(' '),
         created_at: Math.round(

@@ -1622,6 +1622,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         is_public_: link.is_public,
         favicon_: link.favicon,
         open_snapshot_: link.open_snapshot,
+        has_content_: link.has_content,
         menu_slot_: !username ? (
           <UiCommon_Dropdown>
             {link.open_snapshot ? (
@@ -2046,9 +2047,24 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 const { db } = await props.local_db.init({
                   is_archived: is_archived_filter,
                 })
+                let should_refetch_links_data = false
+                if (bookmark.is_public != modified_bookmark.is_public) {
+                  should_refetch_links_data = true
+                }
+                if (!should_refetch_links_data) {
+                  modified_bookmark.links.forEach((link) => {
+                    const old_link = bookmark.links.find(
+                      (l) => l.url == link.url,
+                    )
+                    if (old_link && old_link.is_public != link.is_public) {
+                      should_refetch_links_data = true
+                    }
+                  })
+                }
                 const updated_bookmark = await dispatch(
                   bookmarks_actions.upsert_bookmark({
                     bookmark: modified_bookmark,
+                    should_refetch_links_data,
                     last_authorized_counts_params:
                       JSON.parse(
                         sessionStorage.getItem(

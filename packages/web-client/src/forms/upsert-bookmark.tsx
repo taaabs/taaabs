@@ -18,6 +18,7 @@ import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
+import { HtmlParser } from '@/utils/html-parser'
 
 type FormValues = {
   title: string
@@ -192,21 +193,19 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   )
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
-    let plain_text: string
+    // let plain_text: string | undefined = undefined
 
-    if (clipboard_body) {
-      const temp_el = document.createElement('div')
-      temp_el.innerHTML = clipboard_body
+    // if (clipboard_body) {
+    //   const temp_el = document.createElement('div')
+    //   temp_el.innerHTML = clipboard_body
 
-      if (temp_el.querySelector('article')) {
-        plain_text = temp_el.querySelector('article')!.innerText
-      } else if (temp_el.querySelector('main')) {
-        plain_text = temp_el.querySelector('main')!.innerText
-      } else {
-        plain_text = temp_el.innerText
-      }
-      plain_text = plain_text.replace(/[ \t\r\n]+/gm, ' ').trim()
-    }
+    //   if (temp_el.querySelector('article')) {
+    //     plain_text = temp_el.querySelector('article')!.innerText
+    //   } else if (temp_el.querySelector('main')) {
+    //     plain_text = temp_el.querySelector('main')!.innerText
+    //   }
+    //   plain_text = plain_text?.replace(/[ \t\r\n]+/gm, ' ').trim()
+    // }
 
     const is_bookmark_public =
       (form_data.is_public === undefined && props.bookmark?.is_public) ||
@@ -234,6 +233,28 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                 ? current_link.favicon
                 : await get_favicon_as_base64(link.url)
               : undefined) || undefined
+          const plain_text =
+            props.bookmark_autofill?.links &&
+            props.bookmark_autofill.links.length &&
+            props.bookmark_autofill.links[0].url == link.url
+              ? clipboard_body
+                ? HtmlParser.to_plain_text({
+                    url: link.url,
+                    html: clipboard_body,
+                  })
+                : undefined
+              : undefined
+          const content =
+            props.bookmark_autofill?.links &&
+            props.bookmark_autofill.links.length &&
+            props.bookmark_autofill.links[0].url == link.url
+              ? clipboard_body
+                ? HtmlParser.to_content({
+                    url: link.url,
+                    html: clipboard_body,
+                  })
+                : undefined
+              : undefined
           return {
             url: link.url,
             is_public: (form_data.is_public ? link.is_public : false) || false, // TODO: make is public optional.
@@ -242,12 +263,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             pin_title: current_link?.pin_title,
             open_snapshot: link.open_snapshot,
             favicon,
-            plain_text:
-              props.bookmark_autofill?.links &&
-              props.bookmark_autofill.links.length &&
-              props.bookmark_autofill.links[0].url == link.url
-                ? plain_text
-                : undefined,
+            plain_text,
+            content,
           }
         }),
       ),

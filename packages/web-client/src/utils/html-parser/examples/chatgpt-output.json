@@ -1,0 +1,12 @@
+{
+  "type": "chat",
+  "conversation": [
+    { "author": "user", "text": "write me a single letter" },
+    {
+      "author": "assistant",
+      "markdown": "Sure, here's a single letter:\n\nA"
+    },
+    { "author": "user", "text": "and now, another" },
+    { "author": "assistant", "markdown": "B" }
+  ]
+}
