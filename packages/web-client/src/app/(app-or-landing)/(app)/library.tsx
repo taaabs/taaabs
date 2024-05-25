@@ -1297,24 +1297,27 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }, 0)
       }}
       on_is_visible={() => {
-        const data_source = new Bookmarks_DataSourceImpl(
-          auth_context.ky_instance,
-        )
-        const repository = new Bookmarks_RepositoryImpl(data_source)
-        if (username) {
-          repository.get_links_data_public({
-            bookmark_id: bookmark.id,
-            bookmark_updated_at: new Date(bookmark.updated_at),
-            username,
-          })
-        } else {
-          repository.get_links_data_authorized(
-            {
+        // Prefetch links data.
+        if (bookmark.links.find((link) => link.has_content)) {
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          if (username) {
+            repository.get_links_data_public({
               bookmark_id: bookmark.id,
               bookmark_updated_at: new Date(bookmark.updated_at),
-            },
-            auth_context.auth_data!.encryption_key,
-          )
+              username,
+            })
+          } else {
+            repository.get_links_data_authorized(
+              {
+                bookmark_id: bookmark.id,
+                bookmark_updated_at: new Date(bookmark.updated_at),
+              },
+              auth_context.auth_data!.encryption_key,
+            )
+          }
         }
       }}
       on_reading_mode_click_={async (url) => {

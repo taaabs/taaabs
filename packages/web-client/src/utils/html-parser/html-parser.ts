@@ -13,8 +13,6 @@ export namespace HtmlParser {
     let plain_text: string | undefined = undefined
     if (temp_el.querySelector('article')) {
       plain_text = temp_el.querySelector('article')!.innerText
-    } else if (temp_el.querySelector('main')) {
-      plain_text = temp_el.querySelector('main')!.innerText
     }
     return plain_text?.replace(/[ \t\r\n]+/gm, ' ').trim()
   }
@@ -52,16 +50,15 @@ export namespace HtmlParser {
         })
       }
     } else {
-      let article: HTMLElement | undefined = undefined
-      if (temp_el.querySelector('article')) {
-        article = temp_el.querySelector('article') || undefined
-      } else if (temp_el.querySelector('main')) {
-        article = temp_el.querySelector('main') || undefined
-      }
+      const article = temp_el.querySelector('article') || undefined
       if (article) {
-        const markdown = turndown_service.turndown(article)
+        const cleaned_article = article.innerHTML.replace(
+          /<header\b[^>]*>(.*?)<\/header>/gi,
+          '',
+        )
+        const markdown = turndown_service.turndown(cleaned_article)
         return JSON.stringify({
-          type: ContentType.GENERIC_ARTICLE,
+          type: ContentType.ARTICLE,
           markdown,
         })
       }

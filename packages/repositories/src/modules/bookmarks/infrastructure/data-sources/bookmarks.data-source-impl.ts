@@ -13,6 +13,7 @@ import { Crypto } from '@repositories/utils/crypto'
 import { KyInstance } from 'ky'
 import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
+import pako from 'pako'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -234,10 +235,16 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                   ? await Crypto.AES.encrypt(link.favicon, encryption_key)
                   : undefined,
                 plain_text_aes: link.plain_text
-                  ? await Crypto.AES.encrypt(link.plain_text, encryption_key)
+                  ? await Crypto.AES.encrypt(
+                      btoa(String.fromCharCode(...pako.gzip(link.plain_text))),
+                      encryption_key,
+                    )
                   : undefined,
                 content_aes: link.content
-                  ? await Crypto.AES.encrypt(link.content, encryption_key)
+                  ? await Crypto.AES.encrypt(
+                      btoa(String.fromCharCode(...pako.gzip(link.content))),
+                      encryption_key,
+                    )
                   : undefined,
               }
             }

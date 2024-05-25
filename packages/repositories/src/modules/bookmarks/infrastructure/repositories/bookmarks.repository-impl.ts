@@ -12,6 +12,7 @@ import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { Crypto } from '@repositories/utils/crypto'
 import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { GetLinksData_Ro } from '../../domain/types/get-links-data.ro'
+import pako from 'pako'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -302,12 +303,36 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         plain_text: link_data.plain_text
           ? link_data.plain_text
           : link_data.plain_text_aes
-          ? await Crypto.AES.decrypt(link_data.plain_text_aes, encryption_key)
+          ? String.fromCharCode(
+              ...pako.ungzip(
+                Uint8Array.from(
+                  atob(
+                    await Crypto.AES.decrypt(
+                      link_data.plain_text_aes,
+                      encryption_key,
+                    ),
+                  ),
+                  (c) => c.charCodeAt(0),
+                ),
+              ),
+            )
           : undefined,
         content: link_data.content
           ? link_data.content
           : link_data.content_aes
-          ? await Crypto.AES.decrypt(link_data.content_aes, encryption_key)
+          ? String.fromCharCode(
+              ...pako.ungzip(
+                Uint8Array.from(
+                  atob(
+                    await Crypto.AES.decrypt(
+                      link_data.content_aes,
+                      encryption_key,
+                    ),
+                  ),
+                  (c) => c.charCodeAt(0),
+                ),
+              ),
+            )
           : undefined,
       })
     }

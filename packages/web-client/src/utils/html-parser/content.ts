@@ -3,12 +3,12 @@ type ContentBase = {
 }
 
 export enum ContentType {
-  GENERIC_ARTICLE = 'generic-article',
+  ARTICLE = 'article',
   CHAT = 'chat',
 }
 
 export interface GenericArticle extends ContentBase {
-  type: ContentType.GENERIC_ARTICLE
+  type: ContentType.ARTICLE
   markdown: string
 }
 export interface Chat extends ContentBase {

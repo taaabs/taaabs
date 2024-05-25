@@ -1,7 +1,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { Content as UiCommonTemplate_Modal_Content } from '@web-ui/components/common/templates/modal/content'
 import { Header as UiCommonTemplate_Modal_Content_Header } from '@web-ui/components/common/templates/modal/content/header'
-import { Footer as UiCommonTemplate_Modal_Content_Footer } from '@web-ui/components/common/templates/modal/content/footer'
+import ReactMarkdown from 'react-markdown'
 
 export const reading_mode_modal = (params: {
   modal_context: any
@@ -26,7 +26,7 @@ const _Modal: React.FC<{
   on_close: () => void
   dictionary: Dictionary
 }> = (props) => {
-  console.log(props.content)
+  console.log(JSON.parse(props.content))
   return (
     <UiCommonTemplate_Modal_Content
       width={800}
@@ -34,17 +34,18 @@ const _Modal: React.FC<{
         <UiCommonTemplate_Modal_Content_Header title={'Reading mode'} />
       }
       slot_footer={
-        <UiCommonTemplate_Modal_Content_Footer
-          button_label={'Open original'}
-          button_on_click={() => {}}
-          on_click_cancel={props.on_close}
-          translations={{
-            cancel: 'Close',
-          }}
-        />
+        <></>
+        // <UiCommonTemplate_Modal_Content_Footer
+        //   button_label={'Open original'}
+        //   button_on_click={() => {}}
+        //   on_click_cancel={props.on_close}
+        //   translations={{
+        //     cancel: 'Close',
+        //   }}
+        // />
       }
     >
-      123
+      <ReactMarkdown children={JSON.parse(props.content).markdown} />
     </UiCommonTemplate_Modal_Content>
   )
 }
