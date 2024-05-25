@@ -10,6 +10,7 @@ namespace BookmarkWrapper {
   export type Props = Bookmark.Props & {
     render_height_?: number
     set_render_height_: (height: number) => void
+    on_is_visible: () => void
   }
 }
 
@@ -24,6 +25,7 @@ export const BookmarkWrapper: React.FC<BookmarkWrapper.Props> = (props) => {
       const height = ref.current!.getBoundingClientRect().height
       props.set_render_height_(height)
     }
+    is_visible && props.on_is_visible()
   }, [is_visible])
 
   useUpdateEffect(() => {

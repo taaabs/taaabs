@@ -66,6 +66,7 @@ import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/drop
 import { delete_bookmark_modal } from '@/modals/delete-bookmark-modal'
 import { rename_tag_modal } from '@/modals/rename-tag-modal'
 import { reading_mode_modal } from '@/modals/reading-mode-modal'
+import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
@@ -1295,11 +1296,56 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           location.href = url
         }, 0)
       }}
+      on_is_visible={() => {
+        const data_source = new Bookmarks_DataSourceImpl(
+          auth_context.ky_instance,
+        )
+        const repository = new Bookmarks_RepositoryImpl(data_source)
+        if (username) {
+          repository.get_links_data_public({
+            bookmark_id: bookmark.id,
+            bookmark_updated_at: new Date(bookmark.updated_at),
+            username,
+          })
+        } else {
+          repository.get_links_data_authorized(
+            {
+              bookmark_id: bookmark.id,
+              bookmark_updated_at: new Date(bookmark.updated_at),
+            },
+            auth_context.auth_data!.encryption_key,
+          )
+        }
+      }}
       on_reading_mode_click_={async (url) => {
-        await reading_mode_modal({
-          dictionary: props.dictionary,
-          modal_context: modal_context,
-        })
+        const data_source = new Bookmarks_DataSourceImpl(
+          auth_context.ky_instance,
+        )
+        const repository = new Bookmarks_RepositoryImpl(data_source)
+        let links_data: GetLinksData_Ro | undefined = undefined
+        if (username) {
+          links_data = await repository.get_links_data_public({
+            bookmark_id: bookmark.id,
+            bookmark_updated_at: new Date(bookmark.updated_at),
+            username,
+          })
+        } else {
+          links_data = await repository.get_links_data_authorized(
+            {
+              bookmark_id: bookmark.id,
+              bookmark_updated_at: new Date(bookmark.updated_at),
+            },
+            auth_context.auth_data!.encryption_key,
+          )
+        }
+        const link_data = links_data.find((link) => link.url == url)
+        if (link_data) {
+          await reading_mode_modal({
+            dictionary: props.dictionary,
+            modal_context: modal_context,
+            content: link_data.content,
+          })
+        }
       }}
       on_link_middle_click_={() => {
         if (!username) {

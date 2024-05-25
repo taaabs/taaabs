@@ -6,20 +6,27 @@ import { Footer as UiCommonTemplate_Modal_Content_Footer } from '@web-ui/compone
 export const reading_mode_modal = (params: {
   modal_context: any
   dictionary: Dictionary
+  content: any
 }) =>
   new Promise((resolve) => {
     const on_close_handler = () => resolve(null)
     params.modal_context.set_modal({
       modal: (
-        <_Modal on_close={on_close_handler} dictionary={params.dictionary} />
+        <_Modal
+          content={params.content}
+          on_close={on_close_handler}
+          dictionary={params.dictionary}
+        />
       ),
     })
   })
 
 const _Modal: React.FC<{
+  content: any
   on_close: () => void
   dictionary: Dictionary
 }> = (props) => {
+  console.log(props.content)
   return (
     <UiCommonTemplate_Modal_Content
       width={800}

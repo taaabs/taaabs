@@ -105,16 +105,28 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   public async get_links_data_authorized(
     params: GetLinksData_Params.Authorized,
   ): Promise<LinksData_Dto.Response.Authorized> {
+    const search_params = new URLSearchParams()
+    if (params.bookmark_updated_at) {
+      search_params.set('v', params.bookmark_updated_at.getTime().toString())
+    }
     return await this._ky
-      .get(`v1/bookmarks/${params.bookmark_id}/links-data`)
+      .get(`v1/bookmarks/${params.bookmark_id}/links-data`, {
+        searchParams: search_params,
+      })
       .json()
   }
 
   public async get_links_data_public(
     params: GetLinksData_Params.Public,
   ): Promise<LinksData_Dto.Response.Public> {
+    const search_params = new URLSearchParams()
+    if (params.bookmark_updated_at) {
+      search_params.set('v', params.bookmark_updated_at.getTime().toString())
+    }
     return await this._ky
-      .get(`v1/bookmarks/${params.username}/${params.bookmark_id}/links-data`)
+      .get(`v1/bookmarks/${params.username}/${params.bookmark_id}/links-data`, {
+        searchParams: search_params,
+      })
       .json()
   }
 
