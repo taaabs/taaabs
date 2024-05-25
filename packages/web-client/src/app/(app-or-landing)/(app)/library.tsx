@@ -65,6 +65,7 @@ import { Separator as UiCommon_Dropdown_Separator } from '@web-ui/components/com
 import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/dropdown/stars'
 import { delete_bookmark_modal } from '@/modals/delete-bookmark-modal'
 import { rename_tag_modal } from '@/modals/rename-tag-modal'
+import { reading_mode_modal } from '@/modals/reading-mode-modal'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
@@ -1293,6 +1294,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         setTimeout(() => {
           location.href = url
         }, 0)
+      }}
+      on_reading_mode_click_={async (url) => {
+        await reading_mode_modal({
+          dictionary: props.dictionary,
+          modal_context: modal_context,
+        })
       }}
       on_link_middle_click_={() => {
         if (!username) {

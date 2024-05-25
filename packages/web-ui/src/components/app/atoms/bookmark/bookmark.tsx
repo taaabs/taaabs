@@ -109,6 +109,7 @@ export namespace Bookmark {
       has_content_?: boolean
     }[]
     on_link_click_: (url: string) => void
+    on_reading_mode_click_: (url: string) => void
     on_link_middle_click_: () => void
     on_new_tab_link_click_: (url: string) => void
     favicon_host_: string
@@ -970,10 +971,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           className={
                             styles.bookmark__links__item__actions__content
                           }
-                          onClick={async (e) => {
-                            e.stopPropagation()
-                            set_recently_visited_link_idx(i)
-                            props.on_new_tab_link_click_(url)
+                          onClick={() => {
+                            props.on_reading_mode_click_(link.url_)
                           }}
                         >
                           <Icon variant="DOCUMENT" />

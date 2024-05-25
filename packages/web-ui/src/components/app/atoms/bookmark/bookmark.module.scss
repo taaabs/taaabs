@@ -546,7 +546,7 @@
           svg {
             fill: var(--neutral500);
             @include transition-150ms(fill);
-            width: 10.5px;
+            width: 10px;
           }
           @include hover {
             background: var(--neutral200);
