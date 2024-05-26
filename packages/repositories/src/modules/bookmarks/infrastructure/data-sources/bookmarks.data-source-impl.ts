@@ -236,13 +236,15 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                   : undefined,
                 plain_text_aes: link.plain_text
                   ? await Crypto.AES.encrypt(
-                      btoa(String.fromCharCode(...pako.gzip(link.plain_text))),
+                      btoa(
+                        String.fromCharCode(...pako.deflate(link.plain_text)),
+                      ),
                       encryption_key,
                     )
                   : undefined,
                 content_aes: link.content
                   ? await Crypto.AES.encrypt(
-                      btoa(String.fromCharCode(...pako.gzip(link.content))),
+                      btoa(String.fromCharCode(...pako.deflate(link.content))),
                       encryption_key,
                     )
                   : undefined,

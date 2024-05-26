@@ -304,7 +304,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           ? link_data.plain_text
           : link_data.plain_text_aes
           ? String.fromCharCode(
-              ...pako.ungzip(
+              ...pako.inflate(
                 Uint8Array.from(
                   atob(
                     await Crypto.AES.decrypt(
@@ -321,7 +321,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           ? link_data.content
           : link_data.content_aes
           ? String.fromCharCode(
-              ...pako.ungzip(
+              ...pako.inflate(
                 Uint8Array.from(
                   atob(
                     await Crypto.AES.decrypt(
