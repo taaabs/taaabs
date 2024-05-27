@@ -1,5 +1,5 @@
 export type GetLinksData_Ro = {
   url: string
-  plain_text?: string
-  content?: string
+  parsed_plain_text?: string
+  parsed_reader_data?: string
 }[]

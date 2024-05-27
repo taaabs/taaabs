@@ -21,8 +21,8 @@ export namespace CreateBookmark_Dto {
     is_pinned: z.boolean().optional(),
     pin_title: z.string().max(100).optional(),
     open_snapshot: z.boolean().optional(),
-    plain_text: z.string().max(100000).optional(),
-    content: z.string().max(100000).optional(),
+    parsed_plain_text: z.string().max(1000000).optional(),
+    parsed_reader_data: z.string().max(1000000).optional(),
   })
   const private_link_schema = z.object({
     is_public: z.literal(false),
@@ -33,8 +33,8 @@ export namespace CreateBookmark_Dto {
     pin_title_aes: z.string().max(200).optional(),
     open_snapshot: z.boolean().optional(),
     favicon_aes: z.string().optional(),
-    plain_text_aes: z.string().max(100000).optional(),
-    content_aes: z.string().max(100000).optional(),
+    parsed_plain_text_aes: z.string().max(1000000).optional(),
+    parsed_reader_data_aes: z.string().max(1000000).optional(),
   })
 
   export const body_schema = z.object({

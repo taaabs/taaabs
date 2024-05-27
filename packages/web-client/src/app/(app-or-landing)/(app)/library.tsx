@@ -1298,7 +1298,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       }}
       on_is_visible={() => {
         // Prefetch links data.
-        if (bookmark.links.find((link) => link.has_content)) {
+        if (bookmark.links.find((link) => link.is_parsed)) {
           const data_source = new Bookmarks_DataSourceImpl(
             auth_context.ky_instance,
           )
@@ -1342,11 +1342,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           )
         }
         const link_data = links_data.find((link) => link.url == url)
-        if (link_data) {
+        if (link_data && link_data.parsed_reader_data) {
           await reading_mode_modal({
+            parsed_reader_data: link_data.parsed_reader_data,
             dictionary: props.dictionary,
             modal_context: modal_context,
-            content: link_data.content,
           })
         }
       }}
@@ -1668,7 +1668,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         is_public_: link.is_public,
         favicon_: link.favicon,
         open_snapshot_: link.open_snapshot,
-        has_content_: link.has_content,
+        is_parsed_: link.is_parsed,
         menu_slot_: !username ? (
           <UiCommon_Dropdown>
             {link.open_snapshot ? (

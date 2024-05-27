@@ -211,8 +211,8 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                 is_pinned: link.is_pinned,
                 pin_title: link.pin_title,
                 open_snapshot: link.open_snapshot,
-                plain_text: link.plain_text,
-                content: link.content,
+                parsed_plain_text: link.parsed_plain_text,
+                parsed_reader_data: link.parsed_reader_data,
               }
             } else {
               return {
@@ -234,17 +234,23 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
                 favicon_aes: link.favicon
                   ? await Crypto.AES.encrypt(link.favicon, encryption_key)
                   : undefined,
-                plain_text_aes: link.plain_text
+                parsed_plain_text_aes: link.parsed_plain_text
                   ? await Crypto.AES.encrypt(
                       btoa(
-                        String.fromCharCode(...pako.deflate(link.plain_text)),
+                        String.fromCharCode(
+                          ...pako.deflate(link.parsed_plain_text),
+                        ),
                       ),
                       encryption_key,
                     )
                   : undefined,
-                content_aes: link.content
+                parsed_reader_data_aes: link.parsed_reader_data
                   ? await Crypto.AES.encrypt(
-                      btoa(String.fromCharCode(...pako.deflate(link.content))),
+                      btoa(
+                        String.fromCharCode(
+                          ...pako.deflate(link.parsed_reader_data),
+                        ),
+                      ),
                       encryption_key,
                     )
                   : undefined,

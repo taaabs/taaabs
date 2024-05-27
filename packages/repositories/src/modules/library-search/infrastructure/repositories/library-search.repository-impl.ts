@@ -5,6 +5,7 @@ import { GetLastUpdated_Ro } from '../../domain/types/get-last-updated.ro'
 import { LibrarySearch_DataSource } from '../data-sources/library-search.data-source'
 import { GetLastUpdatedAt_Params } from '../../domain/types/get-last-updated-at.params'
 import { Crypto } from '@repositories/utils/crypto'
+import pako from 'pako'
 
 export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
   constructor(
@@ -72,15 +73,24 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
                 const site = link.site
                   ? link.site
                   : await Crypto.AES.decrypt(link.site_aes!, encryption_key)
-                const plain_text = link.plain_text
-                  ? link.plain_text
-                  : link.plain_text_aes
-                  ? await Crypto.AES.decrypt(
-                      link.plain_text_aes!,
-                      encryption_key,
+                const parsed_plain_text = link.parsed_plain_text
+                  ? link.parsed_plain_text
+                  : link.parsed_plain_text_aes
+                  ? new TextDecoder().decode(
+                      pako.inflate(
+                        Uint8Array.from(
+                          atob(
+                            await Crypto.AES.decrypt(
+                              link.parsed_plain_text_aes,
+                              encryption_key,
+                            ),
+                          ),
+                          (c) => c.charCodeAt(0),
+                        ),
+                      ),
                     )
                   : undefined
-                return { site, plain_text }
+                return { site, parsed_plain_text }
               }),
             ),
             tags: await Promise.all(

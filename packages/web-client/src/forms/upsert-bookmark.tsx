@@ -244,12 +244,12 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                   })
                 : undefined
               : undefined
-          const content =
+          const reader_data =
             props.bookmark_autofill?.links &&
             props.bookmark_autofill.links.length &&
             props.bookmark_autofill.links[0].url == link.url
               ? clipboard_body
-                ? HtmlParser.to_content({
+                ? HtmlParser.to_reader_data({
                     url: link.url,
                     html: clipboard_body,
                   })
@@ -263,8 +263,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             pin_title: current_link?.pin_title,
             open_snapshot: link.open_snapshot,
             favicon,
-            plain_text,
-            content,
+            parsed_plain_text: plain_text,
+            parsed_reader_data: reader_data,
           }
         }),
       ),

@@ -106,7 +106,7 @@ export namespace Bookmark {
       open_snapshot_?: boolean
       is_public_?: boolean
       favicon_?: string
-      has_content_?: boolean
+      is_parsed_?: boolean
     }[]
     on_link_click_: (url: string) => void
     on_reading_mode_click_: (url: string) => void
@@ -966,7 +966,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                           {link.saves_}
                         </button>
                       )}
-                      {link.has_content_ && (
+                      {link.is_parsed_ && (
                         <button
                           className={
                             styles.bookmark__links__item__actions__content

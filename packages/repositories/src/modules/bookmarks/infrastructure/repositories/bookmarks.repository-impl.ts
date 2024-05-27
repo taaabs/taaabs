@@ -91,8 +91,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                           encryption_key,
                         )
                       : undefined,
-                    has_plain_text: link.has_plain_text,
-                    has_content: link.has_content,
+                    is_parsed: link.is_parsed,
                   }
                 }),
               ),
@@ -144,7 +143,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               is_public: true,
               is_pinned: link.is_pinned,
               open_snapshot: link.open_snapshot,
-              has_content: link.has_content,
+              is_parsed: link.is_parsed,
             })),
             cover: bookmark.cover ? bookmark.cover : undefined,
           }))
@@ -232,8 +231,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                           encryption_key,
                         )
                       : undefined,
-                    has_plain_text: link.has_plain_text,
-                    has_content: link.has_content,
+                    is_parsed: link.is_parsed,
                   }
                 }),
               ),
@@ -278,7 +276,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               site_path: link.site_path,
               is_public: true,
               open_snapshot: link.open_snapshot,
-              has_plain_text: link.has_plain_text,
+              is_parsed: link.is_parsed,
             })),
             cover: bookmark.cover ? bookmark.cover : undefined,
           }))
@@ -300,15 +298,15 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         url: link_data.url
           ? link_data.url
           : await Crypto.AES.decrypt(link_data.url_aes!, encryption_key),
-        plain_text: link_data.plain_text
-          ? link_data.plain_text
-          : link_data.plain_text_aes
-          ? String.fromCharCode(
-              ...pako.inflate(
+        parsed_plain_text: link_data.parsed_plain_text
+          ? link_data.parsed_plain_text
+          : link_data.parsed_plain_text_aes
+          ? new TextDecoder().decode(
+              pako.inflate(
                 Uint8Array.from(
                   atob(
                     await Crypto.AES.decrypt(
-                      link_data.plain_text_aes,
+                      link_data.parsed_plain_text_aes,
                       encryption_key,
                     ),
                   ),
@@ -317,15 +315,15 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               ),
             )
           : undefined,
-        content: link_data.content
-          ? link_data.content
-          : link_data.content_aes
-          ? String.fromCharCode(
-              ...pako.inflate(
+        parsed_reader_data: link_data.parsed_reader_data
+          ? link_data.parsed_reader_data
+          : link_data.parsed_reader_data_aes
+          ? new TextDecoder().decode(
+              pako.inflate(
                 Uint8Array.from(
                   atob(
                     await Crypto.AES.decrypt(
-                      link_data.content_aes,
+                      link_data.parsed_reader_data_aes,
                       encryption_key,
                     ),
                   ),
@@ -351,8 +349,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     for (const link_data of links_data) {
       results.push({
         url: link_data.url,
-        plain_text: link_data.plain_text,
-        content: link_data.content,
+        parsed_plain_text: link_data.parsed_plain_text,
+        parsed_reader_data: link_data.parsed_reader_data,
       })
     }
 
@@ -426,8 +424,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             favicon: link.favicon_aes
               ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
               : undefined,
-            has_plain_text: link.has_plain_text,
-            has_content: link.has_content,
+            is_parsed: link.is_parsed,
           }
         }),
       ),

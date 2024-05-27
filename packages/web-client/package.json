@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.5.4",
+    "@mozilla/readability": "^0.5.0",
     "@orama/orama": "^2.0.16",
     "@orama/plugin-data-persistence": "^2.0.16",
     "@orama/plugin-match-highlight": "^2.0.16",

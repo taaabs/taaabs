@@ -10,7 +10,7 @@ describe('HtmlParser', () => {
         require.resolve('./examples/chatgpt-input.html'),
         'utf8',
       )
-      const result = HtmlParser.to_content({
+      const result = HtmlParser.to_reader_data({
         url: 'https://chatgpt.com/share/ef385561-fb5c-4ac6-a8e7-8a5a539f9ff6',
         html,
       })
@@ -22,7 +22,7 @@ describe('HtmlParser', () => {
         require.resolve('./examples/article-input.html'),
         'utf8',
       )
-      const result = HtmlParser.to_content({
+      const result = HtmlParser.to_reader_data({
         url: 'https://example.com/lorem-ipsum',
         html,
       })

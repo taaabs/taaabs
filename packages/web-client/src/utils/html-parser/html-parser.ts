@@ -1,5 +1,6 @@
 import TurndownService from 'turndown'
-import { Chat, ContentType } from './content'
+import { ReaderData } from './reader-data'
+import { Readability, isProbablyReaderable } from '@mozilla/readability'
 
 export namespace HtmlParser {
   export type Params = {
@@ -7,20 +8,19 @@ export namespace HtmlParser {
     html: string
   }
   export const to_plain_text = (params: Params): string | undefined => {
-    const temp_el = document.createElement('div')
-    temp_el.innerHTML = _cleanup_html(params.html)
-
-    let plain_text: string | undefined = undefined
-    if (temp_el.querySelector('article')) {
-      plain_text = temp_el.querySelector('article')!.innerText
-    }
-    return plain_text?.replace(/[ \t\r\n]+/gm, ' ').trim()
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(params.html, 'text/html')
+    if (!isProbablyReaderable(doc)) return
+    const article = new Readability(doc).parse()
+    if (!article) return
+    return `${article.title} ${article.siteName} ${article.byline} ${
+      article.publishedTime
+    } ${article.textContent.replace(/[ \t\r\n]+/gm, ' ').trim()}`
   }
 
-  export const to_content = (params: Params): string | undefined => {
+  export const to_reader_data = (params: Params): string | undefined => {
     const turndown_service = new TurndownService()
     const temp_el = document.createElement('div')
-    temp_el.innerHTML = _cleanup_html(params.html)
 
     /**
      * ChatGPT
@@ -29,7 +29,7 @@ export namespace HtmlParser {
       const message_divs = temp_el.querySelectorAll<HTMLElement>(
         '[data-message-author-role="assistant"], div[data-message-author-role="user"]',
       )
-      const messages: Chat['conversation'] = []
+      const messages: ReaderData.Chat['conversation'] = []
       message_divs.forEach((div) => {
         const author_role = div.getAttribute('data-message-author-role') as
           | 'user'
@@ -37,42 +37,37 @@ export namespace HtmlParser {
         if (author_role == 'user') {
           messages.push({ author: 'user', text: div.textContent?.trim() || '' })
         } else if (author_role == 'assistant') {
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(div.innerHTML, 'text/html')
+          const article = new Readability(doc).parse()
           messages.push({
             author: 'assistant',
-            markdown: turndown_service.turndown(div.innerHTML),
+            content: turndown_service.turndown(article!.content),
           })
         }
       })
       if (messages.length) {
         return JSON.stringify({
-          type: ContentType.CHAT,
+          type: ReaderData.ContentType.CHAT,
           conversation: messages,
-        })
+        } as ReaderData.Chat)
       }
     } else {
-      const article = temp_el.querySelector('article') || undefined
-      if (article) {
-        const cleaned_article = article.innerHTML.replace(
-          /<header\b[^>]*>(.*?)<\/header>/gi,
-          '',
-        )
-        const markdown = turndown_service.turndown(cleaned_article)
-        return JSON.stringify({
-          type: ContentType.ARTICLE,
-          markdown,
-        })
-      }
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(params.html, 'text/html')
+      if (!isProbablyReaderable(doc)) return
+      const article = new Readability(doc).parse()
+      if (!article) return
+      const content = turndown_service.turndown(article.content)
+      return JSON.stringify({
+        type: ReaderData.ContentType.ARTICLE,
+        title: article.title,
+        site_name: article.siteName,
+        published_at: article.publishedTime,
+        author: article.byline,
+        length: article.length,
+        content,
+      } as ReaderData.Article)
     }
   }
-}
-
-const _cleanup_html = (html: string) => {
-  return html
-    .replace(/<button\b[^>]*>(.*?)<\/button>/gi, '')
-    .replace(/<div[^>]*\brole\s*=\s*"button"[^>]*>(.*?)<\/div>/gi, '')
-    .replace(/<script\b[^>]*>(.*?)<\/script>/gi, '')
-    .replace(/<script\b[^>]*>/gi, '')
-    .replace(/<style\b[^>]*>(.*?)<\/style>/gi, '')
-    .replace(/<input\b[^>]*>/gi, '')
-    .replace(/<textarea\b[^>]*>(.*?)<\/textarea>/gi, '')
 }
