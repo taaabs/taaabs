@@ -22,7 +22,6 @@ import { Bookmarklet as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropd
 import { FooterLinks as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/footer-links'
 import { UpsertBookmark as Form_UpsertBookmark } from '@/forms/upsert-bookmark'
 import { update_search_params } from '@/utils/update-query-params'
-import { BookmarkHash } from '@/utils/bookmark-hash'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
@@ -33,6 +32,7 @@ import { browser_storage } from '@/constants/browser-storage'
 import { AuthContext } from '../../auth-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { LocalDbContext } from '@/app/local-db-provider'
+import { BookmarkUrlHashData } from '@/utils/bookmark-url-hash-data'
 
 export const HeaderDesktop: React.FC<{
   dictionary: Dictionary
@@ -120,7 +120,9 @@ export const HeaderDesktop: React.FC<{
   }
 
   const open_new_bookmark_modal = (params: { with_autofill?: boolean }) => {
-    const bookmark = BookmarkHash.parse({ hash: window.location.hash.slice(1) })
+    const bookmark = BookmarkUrlHashData.parse({
+      hash: window.location.hash.slice(1),
+    })
 
     modal?.set_modal({
       modal: (
@@ -132,7 +134,7 @@ export const HeaderDesktop: React.FC<{
                   title: bookmark.title,
                   links: bookmark.links,
                   tags: bookmark.tags,
-                  note: bookmark.note,
+                  note: bookmark.description,
                 }
               : undefined
           }
@@ -169,7 +171,7 @@ export const HeaderDesktop: React.FC<{
                   site_path: link.site_path,
                   plain_text: bookmark.links.find(
                     (link) => link.url == link.url,
-                  )?.plain_text,
+                  )?.parsed_plain_text,
                 })),
                 tags: created_bookmark.tags.map((tag) => tag.name),
                 tag_ids: created_bookmark.tags.map((tag) => tag.id),
@@ -204,7 +206,9 @@ export const HeaderDesktop: React.FC<{
   }
 
   useUpdateEffect(() => {
-    const bookmark = BookmarkHash.parse({ hash: window.location.hash.slice(1) })
+    const bookmark = BookmarkUrlHashData.parse({
+      hash: window.location.hash.slice(1),
+    })
     if (Object.keys(bookmark).length) {
       open_new_bookmark_modal({ with_autofill: true })
     }

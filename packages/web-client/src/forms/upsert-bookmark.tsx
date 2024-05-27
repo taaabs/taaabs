@@ -49,6 +49,12 @@ export namespace UpsertBookmark {
   }
 }
 
+type ClipboardData = {
+  html: string
+  favicon?: string
+  og_image?: string
+}
+
 export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   const {
     control,
@@ -56,10 +62,10 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
   const [clipboard_url, set_clipboard_url] = useState<string>()
-  const [clipboard_body, set_clipboard_body] = useState<string>()
+  const [clipboard_data, set_clipboard_data] = useState<ClipboardData>()
   const cover_paste_area = useRef<HTMLDivElement>(null)
   const file_input = useRef<HTMLInputElement>(null)
-  const cover_base64_encoded_webp = useRef<string>()
+  const cover = useRef<string>() // Base64 encoded webp.
 
   const handle_file_select = (event: Event) => {
     const input = event.target as HTMLInputElement
@@ -87,7 +93,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         canvas.width = 150
         canvas.height = 150
 
-        // Draw the cropped image onto the canvas
+        // Draw the cropped image onto the canvas.
         ctx.drawImage(
           img,
           cropX,
@@ -100,7 +106,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           canvas.height,
         )
 
-        cover_base64_encoded_webp.current = canvas.toDataURL('image/webp')
+        cover.current = canvas.toDataURL('image/webp')
       }
     }
   }
@@ -227,20 +233,17 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           const current_link = props.bookmark?.links.find(
             (l) => l.url == link.url,
           )
-          const favicon =
-            (!is_bookmark_public || !link.is_public
-              ? current_link?.favicon
-                ? current_link.favicon
-                : await get_favicon_as_base64(link.url)
-              : undefined) || undefined
+          const favicon = clipboard_data?.favicon
+            ? clipboard_data.favicon.replace('data:image/webp;base64,', '')
+            : undefined
           const plain_text =
             props.bookmark_autofill?.links &&
             props.bookmark_autofill.links.length &&
             props.bookmark_autofill.links[0].url == link.url
-              ? clipboard_body
+              ? clipboard_data
                 ? HtmlParser.to_plain_text({
                     url: link.url,
-                    html: clipboard_body,
+                    html: clipboard_data.html,
                   })
                 : undefined
               : undefined
@@ -248,10 +251,10 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             props.bookmark_autofill?.links &&
             props.bookmark_autofill.links.length &&
             props.bookmark_autofill.links[0].url == link.url
-              ? clipboard_body
+              ? clipboard_data
                 ? HtmlParser.to_reader_data({
                     url: link.url,
-                    html: clipboard_body,
+                    html: clipboard_data.html,
                   })
                 : undefined
               : undefined
@@ -262,7 +265,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             is_pinned: current_link?.is_pinned,
             pin_title: current_link?.pin_title,
             open_snapshot: link.open_snapshot,
-            favicon,
+            favicon: favicon || current_link?.favicon,
             parsed_plain_text: plain_text,
             parsed_reader_data: reader_data,
           }
@@ -273,10 +276,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         is_public: (form_data.is_public ? tag.is_public : false) || false, // TODO: make is public optional.
       })),
       cover:
-        cover_base64_encoded_webp.current?.replace(
-          'data:image/webp;base64,',
-          '',
-        ) || props.bookmark?.cover,
+        cover.current?.replace('data:image/webp;base64,', '') ||
+        clipboard_data?.og_image?.replace('data:image/webp;base64,', '') ||
+        props.bookmark?.cover,
     }
     props.on_submit(bookmark)
   }
@@ -295,11 +297,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   useEffect(() => {
     navigator.clipboard
       .readText()
-      .then((text) => {
+      .then((value) => {
         if (props.bookmark_autofill) {
-          set_clipboard_body(text)
-        } else if (is_url_valid(text)) {
-          set_clipboard_url(text)
+          set_clipboard_data(JSON.parse(value))
+        } else if (is_url_valid(value)) {
+          set_clipboard_url(value)
         }
       })
       .catch(() => {})

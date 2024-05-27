@@ -48,19 +48,20 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            '∞ public bookmarks',
-            '1k encrypted bookmarks',
-            'Copies in reading mode',
+            '5000 public bookmarks',
+            '500 Zero-knowledge™ bookmarks',
+            "Permanent Reader™ of everything you've saved",
             'Full-text search',
           ],
           button_label: 'Start for free',
         },
         {
           name: 'Surfer',
-          description: 'Affordable plan with our must haves',
+          description: 'Larger library with must-have addons',
           bullets_heading: 'Everything in Free, plus:',
           bullets: [
-            '∞ encrypted bookmarks',
+            '50 000 bookmarks',
+            'Highlights',
             'Multi-link bookmarks',
             'Filters: starred, unread',
             'Sorts: last visited, updated at',
@@ -73,6 +74,7 @@ const dictionary: Dictionary = {
           bullets_heading: 'Everything in Surfer, plus:',
           featured_text: 'Recommended',
           bullets: [
+            'Unlimited bookmarks',
             'Bulk edits',
             'Public profile access control',
             'Claim PRO badge',
@@ -290,7 +292,7 @@ const dictionary: Dictionary = {
         'Are you sure you want to permanently delete the selected bookmark?',
     },
     rename_tag_modal: {
-      rename_tag: 'Rename keyword',
+      rename_tag: 'Rename tag',
       rename: 'Rename',
       cancel: 'Cancel',
       tag_is_too_short: 'Tag must have at least 1 character',

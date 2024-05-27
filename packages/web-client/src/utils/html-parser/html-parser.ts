@@ -39,10 +39,10 @@ export namespace HtmlParser {
         } else if (author_role == 'assistant') {
           const parser = new DOMParser()
           const doc = parser.parseFromString(div.innerHTML, 'text/html')
-          const article = new Readability(doc).parse()
+          const article = new Readability(doc).parse()!
           messages.push({
             author: 'assistant',
-            content: turndown_service.turndown(article!.content),
+            content: turndown_service.turndown(article.content),
           })
         }
       })
@@ -56,8 +56,15 @@ export namespace HtmlParser {
       const parser = new DOMParser()
       const doc = parser.parseFromString(params.html, 'text/html')
       if (!isProbablyReaderable(doc)) return
-      const article = new Readability(doc).parse()
-      if (!article) return
+      const links = doc.querySelectorAll('a')
+      const url = new URL(params.url)
+      links.forEach((link) => {
+        const href = link.getAttribute('href')
+        if (href && href.startsWith('/')) {
+          link.setAttribute('href', url.origin + href)
+        }
+      })
+      const article = new Readability(doc).parse()!
       const content = turndown_service.turndown(article.content)
       return JSON.stringify({
         type: ReaderData.ContentType.ARTICLE,

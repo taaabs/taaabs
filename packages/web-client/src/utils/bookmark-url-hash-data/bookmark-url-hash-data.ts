@@ -1,7 +1,7 @@
-export namespace BookmarkHash {
+export namespace BookmarkUrlHashData {
   export type Bookmark = {
     title?: string
-    note?: string
+    description?: string
     links?: {
       url: string
       site_path?: string
@@ -13,8 +13,8 @@ export namespace BookmarkHash {
     if (bookmark.title) {
       hash.set('title', bookmark.title)
     }
-    if (bookmark.note) {
-      hash.set('note', bookmark.note)
+    if (bookmark.description) {
+      hash.set('note', bookmark.description)
     }
     if (bookmark.links) {
       bookmark.links.forEach((link) => {
@@ -35,11 +35,11 @@ export namespace BookmarkHash {
     if (title) {
       bookmark.title = title
     }
-    const note = hash.get('note')
+    const note = hash.get('description')
     if (note) {
-      bookmark.note = note
+      bookmark.description = note
     }
-    const links = hash.getAll('link')
+    const links = hash.getAll('url')
     if (links) {
       links.forEach((link) => {
         bookmark.links = [

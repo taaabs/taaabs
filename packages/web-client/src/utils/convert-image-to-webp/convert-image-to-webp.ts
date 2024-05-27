@@ -1,8 +1,6 @@
-export const convert_image_to_webp = async (
-  base64_image: string,
-): Promise<string> => {
+export const convert_image_to_webp = async (url: string): Promise<string> => {
   const img = document.createElement('img')
-  img.src = base64_image
+  img.src = url
 
   await new Promise((resolve) => {
     img.onload = resolve

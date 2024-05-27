@@ -56,7 +56,7 @@ export const dictionary: Dictionary = {
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
             '∞ publicznych zakładek',
-            '1 tys. zaszyfrowanych',
+            '500 zaszyfrowanych zakładek',
             'Kopie w trybie czytania',
             'Wyszukiwanie pełnotekstowe',
           ],
@@ -64,10 +64,11 @@ export const dictionary: Dictionary = {
         },
         {
           name: 'Surfer',
-          description: 'Plan w przystępnej cenie dodający przydatne funkcje',
+          description:
+            'Odblokuj nielimitowane prywatne zakładki oraz przydatne funkcje',
           bullets_heading: 'Wszystko co w darmowym, plus:',
           bullets: [
-            '∞ zaszyfrowanych',
+            '∞ zaszyfrowanych zakładek',
             'Wiele linków na zakładce',
             'Filtruj oznaczone gwiazdkami oraz nieprzeczytane',
             'Sortuj ostatnio odwiedzone, edytowane',

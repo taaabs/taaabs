@@ -620,11 +620,13 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             }}
           >
             <div className={styles.bookmark__main__cover}>
-              {props.cover_ && (
-                <div className={styles.bookmark__main__cover__image}>
+              <div className={styles.bookmark__main__cover__image}>
+                {props.cover_ ? (
                   <img src={`data:image/webp;base64,${props.cover_}`} />
-                </div>
-              )}
+                ) : (
+                  <Icon variant="BOOKMARK_FILLED" />
+                )}
+              </div>
             </div>
 
             <div className={styles.bookmark__main__right}>
@@ -670,7 +672,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
 
               <div className={styles.bookmark__main__right__content}>
                 <div className={styles.bookmark__main__right__content__title}>
-                  {props.is_unread_ && (
+                  {/* {props.is_unread_ && (
                     <div
                       className={
                         styles.bookmark__main__right__content__title__unread
@@ -687,7 +689,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         <Icon variant="STAR_FILLED" key={i} />
                       ))}
                     </div>
-                  )}
+                  )} */}
                   {props.title_ ? (
                     <div
                       className={cn(

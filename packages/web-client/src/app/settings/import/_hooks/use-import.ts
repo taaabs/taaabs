@@ -13,7 +13,7 @@ import {
 import { construct_tag_hierarchies_from_paths } from '@/utils/construct-tag-hierarchies-from-paths'
 import { TagHierarchy } from '@shared/types/modules/import-export/data'
 import { Crypto } from '@repositories/utils/crypto'
-import { convert_image_to_webp } from '@/utils/convert-png-to-webp'
+import { convert_image_to_webp } from '@/utils/convert-image-to-webp'
 
 type ParsedXmlBookmark = {
   title?: string
