@@ -57,7 +57,7 @@ const dictionary: Dictionary = {
         },
         {
           name: 'Surfer',
-          description: 'Larger library with must-have addons',
+          description: 'Level up your usage limits and features',
           bullets_heading: 'Everything in Free, plus:',
           bullets: [
             '50 000 bookmarks',
@@ -76,7 +76,7 @@ const dictionary: Dictionary = {
           bullets: [
             'Unlimited bookmarks',
             'Bulk edits',
-            'Analytics',
+            'Scheduled backups',
             'Public profile access control',
             'Claim shorter username',
           ],

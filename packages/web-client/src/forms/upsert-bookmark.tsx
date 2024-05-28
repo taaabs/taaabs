@@ -54,12 +54,16 @@ type ClipboardData = {
   og_image?: string
 }
 
-const cover_size = 150
+const cover_size = {
+  width: 204,
+  height: 152,
+}
 
 export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
   const [clipboard_url, set_clipboard_url] = useState<string>()
@@ -76,44 +80,61 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     const file = input.files[0]
     const reader = new FileReader()
     reader.readAsDataURL(file)
-    reader.onloadend = function () {
+    reader.onloadend = async function () {
       const img = new Image()
       img.src = reader.result as string
-      img.onload = function () {
-        const canvas = document.createElement('canvas')
-        const ctx = canvas.getContext('2d')!
-        // Calculate crop dimensions based on the larger side.
-        const originalWidth = img.width
-        const originalHeight = img.height
-        const cropWidth = Math.min(originalWidth, originalHeight)
-        const cropHeight = cropWidth
 
-        // Calculate the offset for centering the crop.
-        const cropX = (originalWidth - cropWidth) / 2
-        const cropY = (originalHeight - cropHeight) / 2
-        canvas.width = cover_size
-        canvas.height = cover_size
+      await new Promise((resolve) => {
+        img.onload = resolve
+      })
 
-        // Draw the cropped image onto the canvas.
-        ctx.drawImage(
-          img,
-          cropX,
-          cropY,
-          cropWidth,
-          cropHeight,
-          0,
-          0,
-          canvas.width,
-          canvas.height,
-        )
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')!
 
-        set_cover(canvas.toDataURL('image/webp'))
+      // Set the canvas dimensions
+      const canvasWidth = cover_size.width
+      const canvasHeight = cover_size.height
+      canvas.width = canvasWidth
+      canvas.height = canvasHeight
+
+      // Calculate aspect ratio
+      const originalWidth = img.width
+      const originalHeight = img.height
+      const canvasRatio = canvasWidth / canvasHeight
+      const imageRatio = originalWidth / originalHeight
+
+      // Determine the dimensions to draw the image
+      let drawWidth, drawHeight, offsetX, offsetY
+
+      if (canvasRatio > imageRatio) {
+        // Canvas is wider relative to its height than the image
+        drawWidth = canvasWidth
+        drawHeight = canvasWidth / imageRatio
+        offsetX = 0
+        offsetY = (canvasHeight - drawHeight) / 2
+      } else {
+        // Canvas is taller relative to its width than the image
+        drawWidth = canvasHeight * imageRatio
+        drawHeight = canvasHeight
+        offsetX = (canvasWidth - drawWidth) / 2
+        offsetY = 0
       }
-    }
-  }
 
-  const handle_paste_area_focus = () => {
-    cover_paste_area.current?.focus()
+      // Draw the image onto the canvas
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        originalWidth,
+        originalHeight, // Source rectangle
+        offsetX,
+        offsetY,
+        drawWidth,
+        drawHeight, // Destination rectangle
+      )
+
+      set_cover(canvas.toDataURL('image/webp'))
+    }
   }
 
   const handle_paste_area_paste = (event: ClipboardEvent) => {
@@ -195,26 +216,46 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')!
 
+      // Set the canvas dimensions
+      const canvasWidth = cover_size.width
+      const canvasHeight = cover_size.height
+      canvas.width = canvasWidth
+      canvas.height = canvasHeight
+
+      // Calculate aspect ratio
       const originalWidth = img.width
       const originalHeight = img.height
-      const cropWidth = Math.min(originalWidth, originalHeight)
-      const cropHeight = cropWidth
+      const canvasRatio = canvasWidth / canvasHeight
+      const imageRatio = originalWidth / originalHeight
 
-      const cropX = (originalWidth - cropWidth) / 2
-      const cropY = (originalHeight - cropHeight) / 2
-      canvas.width = cover_size
-      canvas.height = cover_size
+      // Determine the dimensions to draw the image
+      let drawWidth, drawHeight, offsetX, offsetY
 
+      if (canvasRatio > imageRatio) {
+        // Canvas is wider relative to its height than the image
+        drawWidth = canvasWidth
+        drawHeight = canvasWidth / imageRatio
+        offsetX = 0
+        offsetY = (canvasHeight - drawHeight) / 2
+      } else {
+        // Canvas is taller relative to its width than the image
+        drawWidth = canvasHeight * imageRatio
+        drawHeight = canvasHeight
+        offsetX = (canvasWidth - drawWidth) / 2
+        offsetY = 0
+      }
+
+      // Draw the image onto the canvas
       ctx.drawImage(
         img,
-        cropX,
-        cropY,
-        cropWidth,
-        cropHeight,
         0,
         0,
-        canvas.width,
-        canvas.height,
+        originalWidth,
+        originalHeight, // Source rectangle
+        offsetX,
+        offsetY,
+        drawWidth,
+        drawHeight, // Destination rectangle
       )
 
       og_image = canvas.toDataURL('image/webp')
@@ -301,12 +342,32 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       .readText()
       .then((value) => {
         if (props.bookmark_autofill) {
-          set_clipboard_data(JSON.parse(value))
+          const clipboard_data: ClipboardData = JSON.parse(value)
+          set_clipboard_data(clipboard_data)
+          // Temporary solution for getting title from chatgpt newly created chats.
+          if (
+            props.bookmark_autofill.links?.[0].url.startsWith(
+              'https://chatgpt.com/',
+            )
+          ) {
+            const temp_el = document.createElement('div')
+            temp_el.innerHTML = clipboard_data.html
+            const title = temp_el.querySelector<HTMLElement>(
+              '.bg-token-sidebar-surface-secondary.active\\:opacity-90.rounded-lg.relative.group > .p-2.gap-2.items-center.flex',
+            )?.innerText
+            if (title) {
+              setValue('title', title)
+            }
+          }
         } else if (is_url_valid(value)) {
           set_clipboard_url(value)
         }
       })
       .catch(() => {})
+
+    const handle_paste_area_focus = () => {
+      cover_paste_area.current?.focus()
+    }
 
     file_input.current?.addEventListener('change', handle_file_select)
     cover_paste_area.current?.addEventListener('click', handle_paste_area_focus)
@@ -597,8 +658,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               (props.bookmark?.cover &&
                 `data:image/webp;base64,${props.bookmark?.cover}`)
             }
-            width={75}
-            height={75}
+            width={102}
+            height={76}
           />
         )}
         <input type="file" ref={file_input} />

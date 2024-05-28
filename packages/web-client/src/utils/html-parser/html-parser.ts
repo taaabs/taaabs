@@ -1,4 +1,5 @@
-import TurndownService from 'turndown'
+import TurndownService from '@joplin/turndown'
+import * as turndownPluginGfm from '@joplin/turndown-plugin-gfm'
 import { ReaderData } from './reader-data'
 import { Readability, isProbablyReaderable } from '@mozilla/readability'
 
@@ -13,7 +14,8 @@ export namespace HtmlParser {
   }
 
   export const parse = (params: Params): ParsedResult | undefined => {
-    const turndown_service = new TurndownService()
+    const turndown_service = new TurndownService({ codeBlockStyle: 'fenced' })
+    turndown_service.use(turndownPluginGfm.gfm)
 
     const titleRegex = /<title>(.*?)<\/title>/
     const match = params.html.match(titleRegex)
@@ -31,6 +33,11 @@ export namespace HtmlParser {
       const message_divs = temp_el.querySelectorAll<HTMLElement>(
         '[data-message-author-role="assistant"], div[data-message-author-role="user"]',
       )
+      const title = temp_el
+        .querySelector<HTMLElement>(
+          '.bg-token-sidebar-surface-secondary.active\\:opacity-90.rounded-lg.relative.group > .p-2.gap-2.items-center.flex',
+        )
+        ?.innerText.replace(/\.$/, '')
       const messages: ReaderData.Chat['conversation'] = []
       message_divs.forEach((div) => {
         const author_role = div.getAttribute('data-message-author-role') as
@@ -137,6 +144,74 @@ export namespace HtmlParser {
             type: ReaderData.ContentType.CHAT,
             conversation: messages,
           } as ReaderData.Chat),
+        }
+      }
+    } else if (params.url.startsWith('https://claude.ai/chat/')) {
+      const temp_el = document.createElement('div')
+      temp_el.innerHTML = params.html
+      const user_selector = '.font-user-message'
+      const assistant_selector = '.font-claude-message'
+      const message_divs = temp_el.querySelectorAll<HTMLElement>(
+        `${user_selector}, ${assistant_selector}`,
+      )
+      const messages: ReaderData.Chat['conversation'] = []
+      message_divs.forEach((el) => {
+        if (el.matches(user_selector)) {
+          messages.push({ author: 'user', text: el.textContent?.trim() || '' })
+        } else if (el.matches(assistant_selector)) {
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(el.innerHTML, 'text/html')
+          const article = new Readability(doc).parse()!
+          messages.push({
+            author: 'assistant',
+            content: turndown_service.turndown(article.content),
+          })
+        }
+      })
+      if (messages.length) {
+        return {
+          plain_text: `${title ? `${title} ` : ''}${messages
+            .map((message) =>
+              message.author == 'user' ? message.text : message.content,
+            )
+            .join(' ')
+            .replace(/[ \t\r\n]+/gm, ' ')
+            .trim()}`,
+          reader_data: JSON.stringify({
+            type: ReaderData.ContentType.CHAT,
+            conversation: messages,
+          } as ReaderData.Chat),
+        }
+      }
+    } else if (params.url.startsWith('https://www.reddit.com/')) {
+      const temp_el = document.createElement('div')
+      temp_el.innerHTML = params.html
+      const post_element = temp_el.querySelector<HTMLElement>(
+        '.xs\\:px-0.px-md.mb-xs.mb-sm',
+      )
+      const author_name = temp_el.querySelector<HTMLElement>(
+        'faceplate-tracker > a.author-name',
+      )?.innerText
+      const subreddit_name = temp_el.querySelector<HTMLElement>(
+        'faceplate-hovercard > a',
+      )?.innerText
+      if (post_element) {
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(post_element.innerHTML, 'text/html')
+        const post = new Readability(doc).parse()!
+        return {
+          plain_text: `${title ? `${title} ` : ''}${
+            author_name ? `${author_name} ` : ''
+          }${
+            subreddit_name ? `${subreddit_name.slice(2)} ` : ''
+          }${post.textContent.replace(/[ \t\r\n]+/gm, ' ').trim()}`,
+          reader_data: JSON.stringify({
+            type: ReaderData.ContentType.ARTICLE,
+            author: author_name,
+            site_name: `Reddit - ${subreddit_name}`,
+            length: post.length,
+            content: turndown_service.turndown(post.content),
+          } as ReaderData.Article),
         }
       }
     } else {

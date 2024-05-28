@@ -55,5 +55,9 @@ try {
   favicon = await get_base64_of_image_url(get_favicon_url(), 32, 32)
 } catch {}
 
-const html = document.querySelector('html').innerHTML
+const html = document
+  .querySelector('html')
+  .innerHTML.replace(/<script\b[^>]*>(.*?)<\/script>/gi, '')
+  .replace(/<style\b[^>]*>(.*?)<\/style>/gi, '')
+  .replace(/<link\b[^>]*>/gi, '')
 navigator.clipboard.writeText(JSON.stringify({ favicon, og_image, html }))

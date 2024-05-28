@@ -3,11 +3,11 @@
 
 .container {
   @include to992 {
-    border-top: var(--border-primary);
+    border-top: var(--border-secondary);
     border-bottom: var(--border-secondary);
   }
   @include at992 {
-    border: var(--border-primary);
+    border: var(--border-secondary);
     border-radius: var(--border-radius-12px);
     @include transition-150ms(border-color);
     @include dark {
@@ -16,11 +16,14 @@
   }
   &--compact {
     @include to992 {
-      box-shadow: 0 1px 0 0 var(--border-color-primary);
+      box-shadow: 0 1px 0 0 var(--border-color-secondary);
       border-bottom: 0;
     }
   }
   &--compact--opened {
+    @include to992 {
+      border-top: var(--border-primary);
+    }
     @include to992 {
       box-shadow: 0 1px 0 0 var(--border-color-secondary);
     }
@@ -75,9 +78,13 @@
         border-radius: var(--border-radius-8px);
         margin-left: var(--padding-10px);
         overflow: hidden;
-        width: 75px;
-        height: 75px;
+        width: 82px;
+        height: 61px;
         background-color: #f3f3f3;
+        @include at992 {
+          width: 102px;
+          height: 76px;
+        }
         > img {
           width: 100%;
           height: 100%;
@@ -93,7 +100,6 @@
       display: flex;
       flex-direction: column;
       flex: 1;
-      min-height: 75px;
       justify-content: space-between;
       &__top {
         width: 100%;
@@ -105,8 +111,14 @@
         &__info {
           color: var(--text-color-variant);
           display: flex;
-          padding-bottom: 6px;
+          padding-bottom: 10px;
           white-space: pre-wrap;
+          @include to992 {
+            font-size: var(--font-size-13px);
+          }
+          @include at992 {
+            padding-bottom: 6px;
+          }
         }
         &__menu {
           position: relative;
@@ -151,7 +163,10 @@
         gap: 2px;
         overflow: hidden;
         position: relative;
-        margin-top: -1px;
+        margin-top: -6px;
+        @include at992 {
+          margin-top: -1px;
+        }
         &__title {
           display: inline;
           color: var(--text-color-normal);
@@ -176,9 +191,12 @@
             position: relative;
             display: inline;
             font-weight: var(--font-weight-inter-medium);
-            font-size: var(--font-size-1-8rem);
+            font-size: var(--font-size-1-7rem);
             margin-bottom: 0.8rem;
             overflow-wrap: anywhere;
+            @include at992 {
+              font-size: var(--font-size-1-9rem);
+            }
             &--unread {
               font-weight: var(--font-weight-inter-semi-bold);
             }
@@ -214,13 +232,18 @@
       &__tags {
         position: relative;
         font-family: var(--font-family-inter-tight);
-        margin-top: 4px;
+        margin-top: 2px;
         margin-right: 8px;
-        font-size: var(--font-size-15px);
         margin-bottom: calc(5px * -1);
+        @include to992 {
+          font-size: var(--font-size-14px);
+        }
+        @include at992 {
+          margin-top: 4px;
+        }
         > * {
           margin-right: 8px;
-          margin-bottom: 5px;
+          margin-bottom: 3px;
         }
         > span {
           color: var(--text-color-dimmed);
@@ -618,7 +641,7 @@
 .slot {
   position: absolute;
   z-index: 1;
-  top: calc(var(--button-dimension-28px) + 4px);
+  top: calc(var(--button-dimension-28px));
   right: 0;
   bottom: 0;
   opacity: 0;

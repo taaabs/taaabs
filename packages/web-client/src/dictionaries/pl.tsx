@@ -63,8 +63,7 @@ export const dictionary: Dictionary = {
         },
         {
           name: 'Surfer',
-          description:
-            'Odblokuj nielimitowane prywatne zakładki oraz przydatne funkcje',
+          description: 'Podnieś limity użytkowania i funkcje na wyższy poziom',
           bullets_heading: 'Wszystko co w darmowym, plus:',
           bullets: [
             '50 000 zaszyfrowanych zakładek',
@@ -83,7 +82,7 @@ export const dictionary: Dictionary = {
           bullets: [
             'Nielimitowane zakładki',
             'Zbiorcze edycje',
-            'Analityka',
+            'Automatyczne kopie zapasowe',
             'Kontrola dostępu do profilu publicznego',
             'Przejmij krótszy nick',
           ],

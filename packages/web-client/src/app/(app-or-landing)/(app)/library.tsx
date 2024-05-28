@@ -65,7 +65,7 @@ import { Separator as UiCommon_Dropdown_Separator } from '@web-ui/components/com
 import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/dropdown/stars'
 import { delete_bookmark_modal } from '@/modals/delete-bookmark-modal'
 import { rename_tag_modal } from '@/modals/rename-tag-modal'
-import { reading_mode_modal } from '@/modals/reading-mode-modal'
+import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
 import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
 
@@ -1343,7 +1343,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         const link_data = links_data.find((link) => link.url == url)
         if (link_data && link_data.parsed_reader_data) {
-          await reading_mode_modal({
+          await reader_modal_setter({
             parsed_reader_data: link_data.parsed_reader_data,
             dictionary: props.dictionary,
             modal_context: modal_context,
