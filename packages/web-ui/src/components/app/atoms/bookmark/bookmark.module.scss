@@ -139,7 +139,7 @@
             svg {
               fill: var(--neutral350);
               @include transition-150ms(fill);
-              height: var(--icon-dimension-16px);
+              width: var(--icon-dimension-16px);
             }
             @include hover {
               background-color: var(--neutral100);
@@ -232,14 +232,13 @@
       &__tags {
         position: relative;
         font-family: var(--font-family-inter-tight);
-        margin-top: 2px;
         margin-right: 8px;
         margin-bottom: calc(5px * -1);
         @include to992 {
           font-size: var(--font-size-14px);
         }
         @include at992 {
-          margin-top: 4px;
+          margin-top: 2px;
         }
         > * {
           margin-right: 8px;
@@ -598,7 +597,7 @@
             svg {
               fill: var(--neutral400);
               @include transition-150ms(fill);
-              height: var(--icon-dimension-16px);
+              width: var(--icon-dimension-16px);
             }
             @include hover {
               background: var(--neutral200);

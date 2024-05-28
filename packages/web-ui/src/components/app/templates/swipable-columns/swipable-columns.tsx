@@ -154,9 +154,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
       )
         return
 
-      if (Math.abs(deltaX) > 30) {
-        main.current!.style.transition = `transform 20ms linear`
-      }
+      main.current!.style.transition = `transform 30ms linear`
 
       if (
         (initial_swipe_direction.current == 'Left' &&
@@ -171,14 +169,16 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
           !is_left_side_open)
       ) {
         if (!is_left_side_open && !is_right_side_open) {
-          main.current!.style.transform = `translateX(${deltaX}px)`
+          main.current!.style.transform = `translateX(${
+            deltaX > 0 ? deltaX - 10 : deltaX + 10
+          }px)`
         } else if (is_left_side_open) {
           main.current!.style.transform = `translateX(${
-            slidable_width + deltaX
+            slidable_width + deltaX + 10
           }px)`
         } else if (is_right_side_open) {
           main.current!.style.transform = `translateX(${
-            -slidable_width + deltaX
+            -slidable_width + deltaX - 10
           }px)`
         }
       }

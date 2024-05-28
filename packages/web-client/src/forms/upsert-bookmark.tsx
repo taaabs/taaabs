@@ -344,7 +344,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         if (props.bookmark_autofill) {
           const clipboard_data: ClipboardData = JSON.parse(value)
           set_clipboard_data(clipboard_data)
-          // Temporary solution for getting title from chatgpt newly created chats.
+          // Temporary solution for getting accurate title from various sources.
+          // ChatGPT provides default title after reload.
+          // Claude never provides default title.
           if (
             props.bookmark_autofill.links?.[0].url.startsWith(
               'https://chatgpt.com/',
@@ -354,6 +356,32 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             temp_el.innerHTML = clipboard_data.html
             const title = temp_el.querySelector<HTMLElement>(
               '.bg-token-sidebar-surface-secondary.active\\:opacity-90.rounded-lg.relative.group > .p-2.gap-2.items-center.flex',
+            )?.innerText
+            if (title) {
+              setValue('title', title)
+            }
+          } else if (
+            props.bookmark_autofill.links?.[0].url.startsWith(
+              'https://claude.ai/chat/',
+            )
+          ) {
+            const temp_el = document.createElement('div')
+            temp_el.innerHTML = clipboard_data.html
+            const title = temp_el.querySelector<HTMLElement>(
+              '.tracking-tight.font-normal.font-tiempos.truncate',
+            )?.innerText
+            if (title) {
+              setValue('title', title)
+            }
+          } else if (
+            props.bookmark_autofill.links?.[0].url.startsWith(
+              'https://gemini.google.com/app/',
+            )
+          ) {
+            const temp_el = document.createElement('div')
+            temp_el.innerHTML = clipboard_data.html
+            const title = temp_el.querySelector<HTMLElement>(
+              '.selected.ng-star-inserted.conversation.mat-mdc-tooltip-trigger > .gmat-body-1.conversation-title',
             )?.innerText
             if (title) {
               setValue('title', title)
@@ -658,8 +686,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               (props.bookmark?.cover &&
                 `data:image/webp;base64,${props.bookmark?.cover}`)
             }
-            width={102}
-            height={76}
+            width={cover_size.width / 2}
+            height={cover_size.height / 2}
           />
         )}
         <input type="file" ref={file_input} />

@@ -654,7 +654,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         toggle_is_menu_open()
                       }}
                     >
-                      <Icon variant="THREE_DOTS" />
+                      <Icon variant="MORE" />
                     </button>
                     <div
                       className={cn(styles.slot, {
@@ -1010,7 +1010,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                                 : set_link_url_menu_opened(undefined)
                             }}
                           >
-                            <Icon variant="THREE_DOTS" />
+                            <Icon variant="MORE" />
                           </button>
                           <div
                             className={cn(styles.slot, {
