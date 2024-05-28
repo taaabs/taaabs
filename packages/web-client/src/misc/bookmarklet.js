@@ -45,7 +45,9 @@ const get_base64_of_image_url = async (url, width, height) => {
 const og_image_url = get_og_image_url()
 let og_image = undefined
 if (og_image_url) {
-  og_image = await get_base64_of_image_url(og_image_url)
+  try {
+    og_image = await get_base64_of_image_url(og_image_url)
+  } catch {}
 }
 
 let favicon = undefined

@@ -54,9 +54,9 @@ export const dictionary: Dictionary = {
           description: 'Rozpocznij przygodę z Taaabs',
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
-            '5000 publicznych zakładek',
+            '5 000 publicznych zakładek',
             '500 zaszyfrowanych zakładek',
-            'Wieczne kopie wszystkich stron',
+            'Wieczne kopie tekstowe wszystkich stron',
             'Wyszukiwanie pełnotekstowe',
           ],
           button_label: 'Rozpocznij za darmo',
@@ -67,7 +67,7 @@ export const dictionary: Dictionary = {
             'Odblokuj nielimitowane prywatne zakładki oraz przydatne funkcje',
           bullets_heading: 'Wszystko co w darmowym, plus:',
           bullets: [
-            '50000 zaszyfrowanych zakładek',
+            '50 000 zaszyfrowanych zakładek',
             'Oznaczanie fragmentów stron',
             'Wiele linków na zakładce',
             'Filtruj oznaczone gwiazdkami oraz nieprzeczytane',
@@ -83,8 +83,8 @@ export const dictionary: Dictionary = {
           bullets: [
             'Nielimitowane zakładki',
             'Zbiorcze edycje',
+            'Analityka',
             'Kontrola dostępu do profilu publicznego',
-            'Odznaka PRO',
             'Przejmij krótszy nick',
           ],
           button_label: 'Przejdź na Pro',

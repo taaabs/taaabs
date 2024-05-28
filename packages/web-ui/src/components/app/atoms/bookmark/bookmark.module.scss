@@ -77,14 +77,14 @@
         overflow: hidden;
         width: 75px;
         height: 75px;
-        background-color: var(--neutral50);
+        background-color: #f3f3f3;
         > img {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
         > svg {
-          fill: var(--neutral150);
+          fill: var(--neutral200);
           width: 18px;
         }
       }
@@ -179,9 +179,6 @@
             font-size: var(--font-size-1-8rem);
             margin-bottom: 0.8rem;
             overflow-wrap: anywhere;
-            @include at992 {
-              font-size: var(--font-size-1-9rem);
-            }
             &--unread {
               font-weight: var(--font-weight-inter-semi-bold);
             }
