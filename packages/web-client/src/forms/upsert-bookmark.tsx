@@ -17,7 +17,6 @@ import { Divider as UiCommonTemplate_Modal_Content_Sections_Divider } from '../.
 import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { HtmlParser } from '@/utils/html-parser'
 
 type FormValues = {
@@ -55,6 +54,8 @@ type ClipboardData = {
   og_image?: string
 }
 
+const cover_size = 150
+
 export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   const {
     control,
@@ -65,7 +66,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   const [clipboard_data, set_clipboard_data] = useState<ClipboardData>()
   const cover_paste_area = useRef<HTMLDivElement>(null)
   const file_input = useRef<HTMLInputElement>(null)
-  const cover = useRef<string>() // Base64 encoded webp.
+  const [cover, set_cover] = useState<string>() // Base64 encoded webp.
 
   const handle_file_select = (event: Event) => {
     const input = event.target as HTMLInputElement
@@ -90,8 +91,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         // Calculate the offset for centering the crop.
         const cropX = (originalWidth - cropWidth) / 2
         const cropY = (originalHeight - cropHeight) / 2
-        canvas.width = 150
-        canvas.height = 150
+        canvas.width = cover_size
+        canvas.height = cover_size
 
         // Draw the cropped image onto the canvas.
         ctx.drawImage(
@@ -106,7 +107,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           canvas.height,
         )
 
-        cover.current = canvas.toDataURL('image/webp')
+        set_cover(canvas.toDataURL('image/webp'))
       }
     }
   }
@@ -145,23 +146,6 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     }
   }
 
-  useEffect(() => {
-    file_input.current?.addEventListener('change', handle_file_select)
-    cover_paste_area.current?.addEventListener('click', handle_paste_area_focus)
-    cover_paste_area.current?.addEventListener('paste', handle_paste_area_paste)
-    return () => {
-      file_input.current?.removeEventListener('change', handle_file_select)
-      cover_paste_area.current?.removeEventListener(
-        'click',
-        handle_paste_area_focus,
-      )
-      cover_paste_area.current?.removeEventListener(
-        'paste',
-        handle_paste_area_paste,
-      )
-    }
-  }, [])
-
   const [links, set_links] = useState<
     {
       url: string
@@ -199,19 +183,42 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   )
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
-    // let plain_text: string | undefined = undefined
+    let og_image: string | undefined = undefined
+    if (clipboard_data?.og_image) {
+      const img = document.createElement('img')
+      img.src = clipboard_data.og_image
 
-    // if (clipboard_body) {
-    //   const temp_el = document.createElement('div')
-    //   temp_el.innerHTML = clipboard_body
+      await new Promise((resolve) => {
+        img.onload = resolve
+      })
 
-    //   if (temp_el.querySelector('article')) {
-    //     plain_text = temp_el.querySelector('article')!.innerText
-    //   } else if (temp_el.querySelector('main')) {
-    //     plain_text = temp_el.querySelector('main')!.innerText
-    //   }
-    //   plain_text = plain_text?.replace(/[ \t\r\n]+/gm, ' ').trim()
-    // }
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')!
+
+      const originalWidth = img.width
+      const originalHeight = img.height
+      const cropWidth = Math.min(originalWidth, originalHeight)
+      const cropHeight = cropWidth
+
+      const cropX = (originalWidth - cropWidth) / 2
+      const cropY = (originalHeight - cropHeight) / 2
+      canvas.width = cover_size
+      canvas.height = cover_size
+
+      ctx.drawImage(
+        img,
+        cropX,
+        cropY,
+        cropWidth,
+        cropHeight,
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+      )
+
+      og_image = canvas.toDataURL('image/webp')
+    }
 
     const is_bookmark_public =
       (form_data.is_public === undefined && props.bookmark?.is_public) ||
@@ -236,26 +243,26 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           const favicon = clipboard_data?.favicon
             ? clipboard_data.favicon.replace('data:image/webp;base64,', '')
             : undefined
-          const plain_text =
+          const parsed_plain_text =
             props.bookmark_autofill?.links &&
             props.bookmark_autofill.links.length &&
             props.bookmark_autofill.links[0].url == link.url
               ? clipboard_data
-                ? HtmlParser.to_plain_text({
+                ? HtmlParser.parse({
                     url: link.url,
                     html: clipboard_data.html,
-                  })
+                  })?.plain_text
                 : undefined
               : undefined
-          const reader_data =
+          const parsed_reader_data =
             props.bookmark_autofill?.links &&
             props.bookmark_autofill.links.length &&
             props.bookmark_autofill.links[0].url == link.url
               ? clipboard_data
-                ? HtmlParser.to_reader_data({
+                ? HtmlParser.parse({
                     url: link.url,
                     html: clipboard_data.html,
-                  })
+                  })?.reader_data
                 : undefined
               : undefined
           return {
@@ -266,8 +273,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             pin_title: current_link?.pin_title,
             open_snapshot: link.open_snapshot,
             favicon: favicon || current_link?.favicon,
-            parsed_plain_text: plain_text,
-            parsed_reader_data: reader_data,
+            parsed_plain_text,
+            parsed_reader_data,
           }
         }),
       ),
@@ -276,8 +283,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         is_public: (form_data.is_public ? tag.is_public : false) || false, // TODO: make is public optional.
       })),
       cover:
-        cover.current?.replace('data:image/webp;base64,', '') ||
-        clipboard_data?.og_image?.replace('data:image/webp;base64,', '') ||
+        cover?.replace('data:image/webp;base64,', '') ||
+        og_image?.replace('data:image/webp;base64,', '') ||
         props.bookmark?.cover,
     }
     props.on_submit(bookmark)
@@ -290,11 +297,6 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   }
 
   useEffect(() => {
-    window.addEventListener('keydown', handle_keyboard)
-    return () => window.removeEventListener('keydown', handle_keyboard)
-  }, [])
-
-  useEffect(() => {
     navigator.clipboard
       .readText()
       .then((value) => {
@@ -305,6 +307,26 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         }
       })
       .catch(() => {})
+
+    file_input.current?.addEventListener('change', handle_file_select)
+    cover_paste_area.current?.addEventListener('click', handle_paste_area_focus)
+    cover_paste_area.current?.addEventListener('paste', handle_paste_area_paste)
+
+    window.addEventListener('keydown', handle_keyboard)
+
+    return () => {
+      file_input.current?.removeEventListener('change', handle_file_select)
+      cover_paste_area.current?.removeEventListener(
+        'click',
+        handle_paste_area_focus,
+      )
+      cover_paste_area.current?.removeEventListener(
+        'paste',
+        handle_paste_area_paste,
+      )
+
+      window.removeEventListener('keydown', handle_keyboard)
+    }
   }, [])
 
   return (
@@ -567,6 +589,18 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       <UiCommonTemplate_Modal_Content_Sections_StandardSplit
         label={props.dictionary.app.upsert_modal.cover}
       >
+        {(cover || clipboard_data?.og_image || props.bookmark?.cover) && (
+          <img
+            src={
+              cover ||
+              clipboard_data?.og_image ||
+              (props.bookmark?.cover &&
+                `data:image/webp;base64,${props.bookmark?.cover}`)
+            }
+            width={75}
+            height={75}
+          />
+        )}
         <input type="file" ref={file_input} />
         <br />
         <div ref={cover_paste_area}>
@@ -575,25 +609,4 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       </UiCommonTemplate_Modal_Content_Sections_StandardSplit>
     </UiCommonTemplate_Modal_Content>
   )
-}
-
-async function get_favicon_as_base64(url: string): Promise<string | null> {
-  try {
-    const response = await fetch(
-      `https://${get_domain_from_url(url)}/favicon.ico`,
-    )
-    const blob = await response.blob()
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-    const img = new Image()
-    img.src = URL.createObjectURL(blob)
-    await img.decode()
-    canvas.width = 32
-    canvas.height = 32
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-
-    return canvas.toDataURL('image/webp').replace('data:image/webp;base64,', '')
-  } catch {
-    return null
-  }
 }

@@ -13,7 +13,6 @@ import {
 import { construct_tag_hierarchies_from_paths } from '@/utils/construct-tag-hierarchies-from-paths'
 import { TagHierarchy } from '@shared/types/modules/import-export/data'
 import { Crypto } from '@repositories/utils/crypto'
-import { convert_image_to_webp } from '@/utils/convert-image-to-webp'
 
 type ParsedXmlBookmark = {
   title?: string
@@ -153,7 +152,7 @@ export const use_import = () => {
                       site_path: '',
                       favicon: bookmark.favicon
                         ? (
-                            await convert_image_to_webp(bookmark.favicon)
+                            await _convert_image_to_webp(bookmark.favicon)
                           ).replace('data:image/webp;base64,', '')
                         : undefined,
                     },
@@ -210,4 +209,22 @@ export const use_import = () => {
     erase_library,
     set_erase_library,
   }
+}
+
+export const _convert_image_to_webp = async (url: string): Promise<string> => {
+  const img = document.createElement('img')
+  img.src = url
+
+  await new Promise((resolve) => {
+    img.onload = resolve
+  })
+
+  const canvas = document.createElement('canvas')
+  canvas.width = img.width
+  canvas.height = img.height
+
+  const ctx = canvas.getContext('2d')!
+  ctx.drawImage(img, 0, 0)
+
+  return canvas.toDataURL('image/webp')
 }

@@ -7,25 +7,27 @@ export namespace HtmlParser {
     url: string
     html: string
   }
-  export const to_plain_text = (params: Params): string | undefined => {
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(params.html, 'text/html')
-    if (!isProbablyReaderable(doc)) return
-    const article = new Readability(doc).parse()
-    if (!article) return
-    return `${article.title} ${article.siteName} ${article.byline} ${
-      article.publishedTime
-    } ${article.textContent.replace(/[ \t\r\n]+/gm, ' ').trim()}`
+  export type ParsedResult = {
+    plain_text: string
+    reader_data: string
   }
 
-  export const to_reader_data = (params: Params): string | undefined => {
+  export const parse = (params: Params): ParsedResult | undefined => {
     const turndown_service = new TurndownService()
-    const temp_el = document.createElement('div')
+
+    const titleRegex = /<title>(.*?)<\/title>/
+    const match = params.html.match(titleRegex)
+    let title: string = ''
+    if (match) {
+      title = match[1]
+    }
 
     /**
      * ChatGPT
      */
     if (params.url.startsWith('https://chatgpt.com/')) {
+      const temp_el = document.createElement('div')
+      temp_el.innerHTML = params.html
       const message_divs = temp_el.querySelectorAll<HTMLElement>(
         '[data-message-author-role="assistant"], div[data-message-author-role="user"]',
       )
@@ -47,10 +49,19 @@ export namespace HtmlParser {
         }
       })
       if (messages.length) {
-        return JSON.stringify({
-          type: ReaderData.ContentType.CHAT,
-          conversation: messages,
-        } as ReaderData.Chat)
+        return {
+          plain_text: `${title ? `${title} ` : ''}${messages
+            .map((message) =>
+              message.author == 'user' ? message.text : message.content,
+            )
+            .join(' ')
+            .replace(/[ \t\r\n]+/gm, ' ')
+            .trim()}`,
+          reader_data: JSON.stringify({
+            type: ReaderData.ContentType.CHAT,
+            conversation: messages,
+          } as ReaderData.Chat),
+        }
       }
     } else {
       const parser = new DOMParser()
@@ -65,16 +76,22 @@ export namespace HtmlParser {
         }
       })
       const article = new Readability(doc).parse()!
-      const content = turndown_service.turndown(article.content)
-      return JSON.stringify({
-        type: ReaderData.ContentType.ARTICLE,
-        title: article.title,
-        site_name: article.siteName,
-        published_at: article.publishedTime,
-        author: article.byline,
-        length: article.length,
-        content,
-      } as ReaderData.Article)
+      return {
+        plain_text: `${article.title ? `${article.title} ` : ''}${
+          article.siteName ? `${article.siteName} ` : ''
+        }${article.byline ? `${article.byline} ` : ''}${
+          article.publishedTime ? `${article.publishedTime} ` : ''
+        }${article.textContent.replace(/[ \t\r\n]+/gm, ' ').trim()}`,
+        reader_data: JSON.stringify({
+          type: ReaderData.ContentType.ARTICLE,
+          title: article.title,
+          site_name: article.siteName,
+          published_at: article.publishedTime,
+          author: article.byline,
+          length: article.length,
+          content: turndown_service.turndown(article.content),
+        } as ReaderData.Article),
+      }
     }
   }
 }

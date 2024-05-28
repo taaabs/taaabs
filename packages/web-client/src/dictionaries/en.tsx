@@ -48,7 +48,7 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            '5000 public bookmarks',
+            '5 000 public bookmarks',
             '500 Zero-knowledge™ bookmarks',
             "Permanent Reader™ of everything you've saved",
             'Full-text search',
@@ -76,8 +76,8 @@ const dictionary: Dictionary = {
           bullets: [
             'Unlimited bookmarks',
             'Bulk edits',
+            'Analytics',
             'Public profile access control',
-            'Claim PRO badge',
             'Claim shorter username',
           ],
           button_label: 'Subscribe to Pro',

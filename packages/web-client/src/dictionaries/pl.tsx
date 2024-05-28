@@ -51,13 +51,12 @@ export const dictionary: Dictionary = {
       tiers: [
         {
           name: 'Darmowy',
-          description:
-            'Wszystko czego potrzebujesz by zacząć przygodę z Taaabs',
+          description: 'Rozpocznij przygodę z Taaabs',
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
-            '∞ publicznych zakładek',
+            '5000 publicznych zakładek',
             '500 zaszyfrowanych zakładek',
-            'Kopie w trybie czytania',
+            'Wieczne kopie wszystkich stron',
             'Wyszukiwanie pełnotekstowe',
           ],
           button_label: 'Rozpocznij za darmo',
@@ -68,7 +67,8 @@ export const dictionary: Dictionary = {
             'Odblokuj nielimitowane prywatne zakładki oraz przydatne funkcje',
           bullets_heading: 'Wszystko co w darmowym, plus:',
           bullets: [
-            '∞ zaszyfrowanych zakładek',
+            '50000 zaszyfrowanych zakładek',
+            'Oznaczanie fragmentów stron',
             'Wiele linków na zakładce',
             'Filtruj oznaczone gwiazdkami oraz nieprzeczytane',
             'Sortuj ostatnio odwiedzone, edytowane',
@@ -81,6 +81,7 @@ export const dictionary: Dictionary = {
           bullets_heading: 'Wszystko co w Surfer, plus:',
           featured_text: 'Polecane',
           bullets: [
+            'Nielimitowane zakładki',
             'Zbiorcze edycje',
             'Kontrola dostępu do profilu publicznego',
             'Odznaka PRO',
