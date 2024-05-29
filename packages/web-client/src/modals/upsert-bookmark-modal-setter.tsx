@@ -4,7 +4,7 @@ import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/ty
 import { UpsertBookmark as Form_UpsertBookmark } from '../forms/upsert-bookmark'
 import { ModalContext } from '../providers/modal-provider'
 
-export const upsert_bookmark_modal = (params: {
+export const upsert_bookmark_modal_setter = (params: {
   modal_context: ModalContext
   bookmark?: Bookmark_Entity
   is_archived?: boolean

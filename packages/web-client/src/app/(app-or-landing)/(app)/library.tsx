@@ -16,7 +16,7 @@ import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { browser_storage } from '@/constants/browser-storage'
 import { useParams, useSearchParams } from 'next/navigation'
-import { upsert_bookmark_modal } from '@/modals/upsert-bookmark-modal'
+import { upsert_bookmark_modal_setter } from '@/modals/upsert-bookmark-modal-setter'
 import { toast } from 'react-toastify'
 import { CustomRangeSkeleton as UiAppAtom_CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
 import { SwipableColumns as UiAppTemplate_SwipableColumns } from '@web-ui/components/app/templates/swipable-columns'
@@ -63,8 +63,8 @@ import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/componen
 import { CheckboxItem as UiCommon_Dropdown_CheckboxItem } from '@web-ui/components/common/dropdown/checkbox-item'
 import { Separator as UiCommon_Dropdown_Separator } from '@web-ui/components/common/dropdown/separator'
 import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/dropdown/stars'
-import { delete_bookmark_modal } from '@/modals/delete-bookmark-modal'
-import { rename_tag_modal } from '@/modals/rename-tag-modal'
+import { delete_bookmark_modal_setter } from '@/modals/delete-bookmark-modal-setter'
+import { rename_tag_modal_setter } from '@/modals/rename-tag-modal-setter'
 import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
 import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
 // import { find_tag_modal } from '@/modals/find-tag-modal'
@@ -163,7 +163,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     old_tag_id: number
     old_tag_name: string
   }) => {
-    const new_tag_name = await rename_tag_modal({
+    const new_tag_name = await rename_tag_modal_setter({
       dictionary: props.dictionary,
       modal_context,
       old_tag_name: params.old_tag_name,
@@ -2079,7 +2079,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               icon_variant="EDIT"
               label={props.dictionary.app.library.bookmark.edit}
               on_click={async () => {
-                const modified_bookmark = await upsert_bookmark_modal({
+                const modified_bookmark = await upsert_bookmark_modal_setter({
                   modal_context,
                   bookmark,
                   is_archived: is_archived_filter,
@@ -2314,11 +2314,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               icon_variant="DELETE"
               label={props.dictionary.app.library.bookmark.delete}
               on_click={async () => {
-                const is_deletion_confirmed = await delete_bookmark_modal({
-                  dictionary: props.dictionary,
-                  modal_context,
-                  title: bookmark.title,
-                })
+                const is_deletion_confirmed =
+                  await delete_bookmark_modal_setter({
+                    dictionary: props.dictionary,
+                    modal_context,
+                    title: bookmark.title,
+                  })
                 if (!is_deletion_confirmed) {
                   modal_context.set_modal({})
                   return

@@ -5,7 +5,7 @@ import { Footer as UiCommonTemplate_Modal_Content_Footer } from '../../../web-ui
 import { Delete as UiCommonTemplate_Modal_Content_Delete } from '../../../web-ui/src/components/common/templates/modal/content/delete'
 import { useState } from 'react'
 
-export const delete_bookmark_modal = (params: {
+export const delete_bookmark_modal_setter = (params: {
   modal_context: any
   title?: string
   dictionary: Dictionary

@@ -10,7 +10,7 @@ import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/inp
 import { AuthContext } from '@/app/auth-provider'
 import { system_values } from '@shared/constants/system-values'
 
-export const rename_tag_modal = (params: {
+export const rename_tag_modal_setter = (params: {
   modal_context: any
   old_tag_name: string
   dictionary: Dictionary
