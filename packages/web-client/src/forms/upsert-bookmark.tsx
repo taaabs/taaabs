@@ -55,8 +55,8 @@ type ClipboardData = {
 }
 
 const cover_size = {
-  width: 204,
-  height: 152,
+  width: 110 * 2,
+  height: 82 * 2,
 }
 
 export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {

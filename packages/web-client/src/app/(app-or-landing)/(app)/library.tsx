@@ -961,16 +961,16 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                       SortBy.CREATED_AT,
                   },
                   {
-                    label: props.dictionary.app.library.sort_by_options.visited,
-                    is_selected:
-                      sort_by_view_options_hook.current_sort_by_ ==
-                      SortBy.VISITED_AT,
-                  },
-                  {
                     label: props.dictionary.app.library.sort_by_options.edited,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by_ ==
                       SortBy.UPDATED_AT,
+                  },
+                  {
+                    label: props.dictionary.app.library.sort_by_options.visited,
+                    is_selected:
+                      sort_by_view_options_hook.current_sort_by_ ==
+                      SortBy.VISITED_AT,
                   },
                 ]}
                 on_item_click={(option_idx) => {

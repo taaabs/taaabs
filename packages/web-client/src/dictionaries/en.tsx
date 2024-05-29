@@ -48,7 +48,7 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            '5 000 public bookmarks',
+            '2 000 public bookmarks',
             '500 Zero-knowledge™ bookmarks',
             "Permanent Reader™ of everything you've saved",
             'Full-text search',

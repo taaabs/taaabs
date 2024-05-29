@@ -18,6 +18,9 @@ export const Primary = () => (
         on_click_={() => {}}
         on_tag_drag_start_={() => {}}
         library_url_=""
+        translations_={{
+          rename_: 'Rename',
+        }}
       />
     </div>
   </StorybookMargin>

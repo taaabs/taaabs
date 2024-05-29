@@ -31,6 +31,7 @@ import Pin from '../../../../assets/icons/pin.svg'
 import PublicProfile from '../../../../assets/icons/public-profile.svg'
 import Recent from '../../../../assets/icons/recent.svg'
 import Remove from '../../../../assets/icons/remove.svg'
+import Resize from '../../../../assets/icons/resize.svg'
 import Search from '../../../../assets/icons/search.svg'
 import SelectedBold from '../../../../assets/icons/selected-bold.svg'
 import Selected from '../../../../assets/icons/selected.svg'
@@ -85,6 +86,7 @@ export namespace Icon {
     | 'PUBLIC_PROFILE'
     | 'RECENT'
     | 'REMOVE'
+    | 'RESIZE'
     | 'SEARCH'
     | 'SELECTED_BOLD'
     | 'SELECTED'
@@ -232,6 +234,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'REMOVE':
       icon = <Remove />
+      break
+    case 'RESIZE':
+      icon = <Resize />
       break
     case 'SEARCH':
       icon = <Search />

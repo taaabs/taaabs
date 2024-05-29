@@ -9,8 +9,8 @@
 .group {
   display: flex;
   flex-wrap: wrap;
-  column-gap: var(--padding-6px);
-  row-gap: var(--padding-8px);
+  column-gap: 4px;
+  row-gap: 5px;
   align-items: center;
 }
 .first-char {
@@ -37,20 +37,26 @@
   }
 }
 .tag {
-  display: inline-flex;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--padding-8px);
   gap: 4px;
   font-family: var(--font-family-inter-tight);
-  font-size: var(--font-size-1-4rem);
-  display: inline;
   overflow-wrap: anywhere;
   text-align: left;
-  span:first-child {
-    color: var(--green800);
-    @include hover {
-      @include text-decoration-underlinie-thin;
-    }
+  height: 24px;
+  font-size: 13px;
+  background-color: var(--green100);
+  border-radius: var(--border-radius-999px);
+  @include transition-150ms(background-color);
+  @include hover {
+    background-color: var(--green200);
   }
-  span:last-child {
-    color: var(--text-color-dimmed);
+  > span:first-child {
+    color: var(--green700);
+    font-weight: var(--font-weight-inter-tight-medium);
+  }
+  > span:last-child {
+    color: var(--green600);
   }
 }
