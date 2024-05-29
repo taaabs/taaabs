@@ -171,7 +171,7 @@ export const HeaderDesktop: React.FC<{
                   site_path: link.site_path,
                   plain_text: bookmark.links.find(
                     (link) => link.url == link.url,
-                  )?.parsed_plain_text,
+                  )?.plain_text,
                 })),
                 tags: created_bookmark.tags.map((tag) => tag.name),
                 tag_ids: created_bookmark.tags.map((tag) => tag.id),

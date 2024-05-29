@@ -73,15 +73,15 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
                 const site = link.site
                   ? link.site
                   : await Crypto.AES.decrypt(link.site_aes!, encryption_key)
-                const parsed_plain_text = link.parsed_plain_text
-                  ? link.parsed_plain_text
-                  : link.parsed_plain_text_aes
+                const plain_text = link.plain_text
+                  ? link.plain_text
+                  : link.plain_text_aes
                   ? new TextDecoder().decode(
                       pako.inflate(
                         Uint8Array.from(
                           atob(
                             await Crypto.AES.decrypt(
-                              link.parsed_plain_text_aes,
+                              link.plain_text_aes,
                               encryption_key,
                             ),
                           ),
@@ -90,7 +90,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
                       ),
                     )
                   : undefined
-                return { site, parsed_plain_text }
+                return { site, plain_text }
               }),
             ),
             tags: await Promise.all(

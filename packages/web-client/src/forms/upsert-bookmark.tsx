@@ -284,7 +284,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           const favicon = clipboard_data?.favicon
             ? clipboard_data.favicon.replace('data:image/webp;base64,', '')
             : undefined
-          const parsed_plain_text =
+          const plain_text =
             props.bookmark_autofill?.links &&
             props.bookmark_autofill.links.length &&
             props.bookmark_autofill.links[0].url == link.url
@@ -295,7 +295,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                   })?.plain_text
                 : undefined
               : undefined
-          const parsed_reader_data =
+          const reader_data =
             props.bookmark_autofill?.links &&
             props.bookmark_autofill.links.length &&
             props.bookmark_autofill.links[0].url == link.url
@@ -314,8 +314,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             pin_title: current_link?.pin_title,
             open_snapshot: link.open_snapshot,
             favicon: favicon || current_link?.favicon,
-            parsed_plain_text,
-            parsed_reader_data,
+            plain_text,
+            reader_data,
           }
         }),
       ),

@@ -9,8 +9,8 @@ export namespace LibrarySearchBookmarks_Dto {
     class AuthorizedLink {
       public site?: string
       public site_aes?: string
-      public parsed_plain_text?: string
-      public parsed_plain_text_aes?: string
+      public plain_text?: string
+      public plain_text_aes?: string
     }
     class AuthorizedTag {
       public id: number
@@ -43,7 +43,7 @@ export namespace LibrarySearchBookmarks_Dto {
     }
     class PublicLink {
       public site: string
-      public parsed_plain_text?: string
+      public plain_text?: string
     }
     class PublicBookmark extends Bookmark {
       public links: PublicLink[]

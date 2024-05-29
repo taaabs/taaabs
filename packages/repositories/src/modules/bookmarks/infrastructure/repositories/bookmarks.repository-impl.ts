@@ -298,15 +298,15 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         url: link_data.url
           ? link_data.url
           : await Crypto.AES.decrypt(link_data.url_aes!, encryption_key),
-        parsed_plain_text: link_data.parsed_plain_text
-          ? link_data.parsed_plain_text
-          : link_data.parsed_plain_text_aes
+        plain_text: link_data.plain_text
+          ? link_data.plain_text
+          : link_data.plain_text_aes
           ? new TextDecoder().decode(
               pako.inflate(
                 Uint8Array.from(
                   atob(
                     await Crypto.AES.decrypt(
-                      link_data.parsed_plain_text_aes,
+                      link_data.plain_text_aes,
                       encryption_key,
                     ),
                   ),
@@ -315,15 +315,15 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               ),
             )
           : undefined,
-        parsed_reader_data: link_data.parsed_reader_data
-          ? link_data.parsed_reader_data
-          : link_data.parsed_reader_data_aes
+        reader_data: link_data.reader_data
+          ? link_data.reader_data
+          : link_data.reader_data_aes
           ? new TextDecoder().decode(
               pako.inflate(
                 Uint8Array.from(
                   atob(
                     await Crypto.AES.decrypt(
-                      link_data.parsed_reader_data_aes,
+                      link_data.reader_data_aes,
                       encryption_key,
                     ),
                   ),
@@ -349,8 +349,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     for (const link_data of links_data) {
       results.push({
         url: link_data.url,
-        parsed_plain_text: link_data.parsed_plain_text,
-        parsed_reader_data: link_data.parsed_reader_data,
+        plain_text: link_data.plain_text,
+        reader_data: link_data.reader_data,
       })
     }
 

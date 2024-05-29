@@ -1342,9 +1342,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           )
         }
         const link_data = links_data.find((link) => link.url == url)
-        if (link_data && link_data.parsed_reader_data) {
+        if (link_data && link_data.reader_data) {
           await reader_modal_setter({
-            parsed_reader_data: link_data.parsed_reader_data,
+            reader_data: link_data.reader_data,
             dictionary: props.dictionary,
             modal_context: modal_context,
           })
