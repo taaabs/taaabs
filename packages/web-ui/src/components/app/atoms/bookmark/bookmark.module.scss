@@ -52,7 +52,7 @@
   flex-direction: column;
   &__card {
     display: grid;
-    grid-template: 'date cover' 'title cover' 1fr 'tags tags' / 1fr auto;
+    grid-template: 'title cover' 'date cover' 1fr 'tags tags' / 1fr auto;
     background: var(--white);
     @include at992 {
       grid-template: 'cover date' 'cover title' 1fr 'cover tags' / auto 1fr;
@@ -97,8 +97,7 @@
       grid-area: date;
       position: relative;
       @include to992 {
-        padding-left: var(--padding-14px);
-        padding-top: var(--padding-14px);
+        padding: 3px 0 5px var(--padding-14px);
       }
       @include at992 {
         padding-top: var(--padding-12px);
@@ -107,10 +106,7 @@
         color: var(--text-color-variant);
         display: flex;
         white-space: pre-wrap;
-        font-size: var(--font-size-13px);
-        @include at992 {
-          font-size: var(--font-size-14px);
-        }
+        font-size: var(--font-size-14px);
       }
       &__menu {
         @include to992 {
@@ -154,14 +150,14 @@
     }
     &__title {
       grid-area: title;
-      padding: 3px 0 5px 0;
       display: inline;
       color: var(--text-color-normal);
       @include to992 {
         padding-left: var(--padding-14px);
+        padding-top: var(--padding-12px);
       }
       @include at992 {
-        padding-right: var(--padding-14px);
+        padding: 3px var(--padding-14px) 5px 0;
       }
       &__unread {
         display: inline-flex;
@@ -253,14 +249,14 @@
         &--selected {
           background-color: var(--green700);
           @include hover {
-            background-color: var(--green900);
+            background-color: var(--green800);
           }
         }
         &__name {
           color: var(--green700);
           font-weight: var(--font-weight-inter-medium);
           &--selected {
-            color: var(--green100);
+            color: var(--green50);
           }
         }
         &__yields {
@@ -406,11 +402,9 @@
           }
         }
         &__menu {
-          z-index: 1;
-          right: var(--padding-12px);
-          top: var(--padding-12px);
           display: inline-flex;
           flex-direction: column;
+          position: relative;
           @include at992 {
             display: none;
           }

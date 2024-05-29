@@ -144,7 +144,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
     const [is_points_given_requested, set_is_points_given_requested] =
       useState<boolean>()
     const [points_given, set_points_given] = useState<number>()
-    const [is_menu_open, toggle_is_menu_open] = useToggle(false)
+    const [is_desktop_menu_open, toggle_is_desktop_menu_open] = useToggle(false)
+    const [is_mobile_menu_open, toggle_is_mobile_menu_open] = useToggle(false)
     const [link_url_menu_opened, set_link_url_menu_opened] = useState<string>()
     const [recently_visited_link_idx, set_recently_visited_link_idx] =
       useState<number>()
@@ -255,6 +256,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 tag_context_menu.onContextMenu(e)
               }
             }}
+            draggable="false"
           >
             <span
               className={cn([
@@ -549,9 +551,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         </div>
         <div className={styles.bookmark__card__tags__actions__menu}>
           <OutsideClickHandler
-            disabled={!is_menu_open}
+            disabled={!is_mobile_menu_open}
             onOutsideClick={() => {
-              toggle_is_menu_open()
+              toggle_is_mobile_menu_open()
             }}
           >
             <button
@@ -559,22 +561,22 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 styles.bookmark__card__tags__actions__menu__button,
                 {
                   [styles['bookmark__card__tags__actions__menu--toggled']]:
-                    is_menu_open,
+                    is_mobile_menu_open,
                 },
               )}
               onClick={(e) => {
                 e.stopPropagation()
-                toggle_is_menu_open()
+                toggle_is_mobile_menu_open()
               }}
             >
               <Icon variant="MORE" />
             </button>
             <div
               className={cn(styles.slot, {
-                [styles['slot--visible']]: is_menu_open,
+                [styles['slot--visible']]: is_mobile_menu_open,
               })}
               onClick={() => {
-                toggle_is_menu_open()
+                toggle_is_mobile_menu_open()
               }}
             >
               {props.menu_slot_}
@@ -617,7 +619,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         )}
         role="button"
         onClick={() => {
-          if (!is_menu_open && !link_url_menu_opened) props.on_click_()
+          if (!is_desktop_menu_open && !is_mobile_menu_open && !link_url_menu_opened) props.on_click_()
         }}
         onMouseUp={() => {
           if (
@@ -674,29 +676,29 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               </div>
               <div className={styles.bookmark__card__date__menu}>
                 <OutsideClickHandler
-                  disabled={!is_menu_open}
+                  disabled={!is_desktop_menu_open}
                   onOutsideClick={() => {
-                    toggle_is_menu_open()
+                    toggle_is_desktop_menu_open()
                   }}
                 >
                   <button
                     className={cn(styles.bookmark__card__date__menu__button, {
                       [styles['bookmark__card__date__menu--toggled']]:
-                        is_menu_open,
+                        is_desktop_menu_open,
                     })}
                     onClick={(e) => {
                       e.stopPropagation()
-                      toggle_is_menu_open()
+                      toggle_is_desktop_menu_open()
                     }}
                   >
                     <Icon variant="MORE" />
                   </button>
                   <div
                     className={cn(styles.slot, {
-                      [styles['slot--visible']]: is_menu_open,
+                      [styles['slot--visible']]: is_desktop_menu_open,
                     })}
                     onClick={() => {
-                      toggle_is_menu_open()
+                      toggle_is_desktop_menu_open()
                     }}
                   >
                     {props.menu_slot_}
@@ -765,7 +767,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 delay={system_values.sortablejs_delay}
                 delayOnTouchOnly={true}
                 className={styles.bookmark__card__tags}
-                filter={`.${styles.bookmark__card__tags__actions__huggs}`}
+                filter={`.${styles.bookmark__card__tags__actions}`}
                 fallbackClass={
                   !('ontouchstart' in window)
                     ? styles['sortable-fallback']
