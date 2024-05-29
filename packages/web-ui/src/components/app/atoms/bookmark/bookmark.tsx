@@ -682,12 +682,17 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             </div>
 
             <div className={styles.bookmark__card__title}>
-              <div className={styles.bookmark__card__title__menu}>
+              <div
+                className={styles.bookmark__card__title__menu}
+                style={
+                  is_desktop_menu_open
+                    ? { position: 'relative', zIndex: 1 }
+                    : undefined
+                }
+              >
                 <OutsideClickHandler
                   disabled={!is_desktop_menu_open}
-                  onOutsideClick={() => {
-                    toggle_is_desktop_menu_open()
-                  }}
+                  onOutsideClick={toggle_is_desktop_menu_open}
                 >
                   <button
                     className={cn(styles.bookmark__card__title__menu__button, {
@@ -705,9 +710,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                     className={cn(styles.slot, {
                       [styles['slot--visible']]: is_desktop_menu_open,
                     })}
-                    onClick={() => {
-                      toggle_is_desktop_menu_open()
-                    }}
+                    onClick={toggle_is_desktop_menu_open}
                   >
                     {props.menu_slot_}
                   </div>
