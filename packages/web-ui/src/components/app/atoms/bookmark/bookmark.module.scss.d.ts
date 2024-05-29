@@ -12,15 +12,15 @@ declare const styles: {
   readonly bookmark__card__cover__image: string
   readonly bookmark__card__date: string
   readonly bookmark__card__date__text: string
-  readonly bookmark__card__date__menu: string
-  readonly bookmark__card__date__menu__button: string
-  readonly 'bookmark__card__date__menu--toggled': string
   readonly bookmark__card__title: string
   readonly bookmark__card__title__unread: string
   readonly bookmark__card__title__text: string
   readonly 'bookmark__card__title__text--unread': string
   readonly 'bookmark__card__title__text--untitled': string
   readonly bookmark__card__title__stars: string
+  readonly bookmark__card__title__menu: string
+  readonly bookmark__card__title__menu__button: string
+  readonly 'bookmark__card__title__menu--toggled': string
   readonly bookmark__card__tags: string
   readonly bookmark__card__tags__tag: string
   readonly 'bookmark__card__tags__tag--selected': string

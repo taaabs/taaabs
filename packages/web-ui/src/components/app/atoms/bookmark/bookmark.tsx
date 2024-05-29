@@ -619,7 +619,12 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
         )}
         role="button"
         onClick={() => {
-          if (!is_desktop_menu_open && !is_mobile_menu_open && !link_url_menu_opened) props.on_click_()
+          if (
+            !is_desktop_menu_open &&
+            !is_mobile_menu_open &&
+            !link_url_menu_opened
+          )
+            props.on_click_()
         }}
         onMouseUp={() => {
           if (
@@ -674,7 +679,10 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               <div className={styles.bookmark__card__date__text}>
                 {bookmark_date}
               </div>
-              <div className={styles.bookmark__card__date__menu}>
+            </div>
+
+            <div className={styles.bookmark__card__title}>
+              <div className={styles.bookmark__card__title__menu}>
                 <OutsideClickHandler
                   disabled={!is_desktop_menu_open}
                   onOutsideClick={() => {
@@ -682,8 +690,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   }}
                 >
                   <button
-                    className={cn(styles.bookmark__card__date__menu__button, {
-                      [styles['bookmark__card__date__menu--toggled']]:
+                    className={cn(styles.bookmark__card__title__menu__button, {
+                      [styles['bookmark__card__title__menu--toggled']]:
                         is_desktop_menu_open,
                     })}
                     onClick={(e) => {
@@ -705,9 +713,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   </div>
                 </OutsideClickHandler>
               </div>
-            </div>
-
-            <div className={styles.bookmark__card__title}>
               {props.is_unread_ && (
                 <div className={styles.bookmark__card__title__unread} />
               )}

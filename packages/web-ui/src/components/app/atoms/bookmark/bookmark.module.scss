@@ -55,7 +55,7 @@
     grid-template: 'title cover' 'date cover' 1fr 'tags tags' / 1fr auto;
     background: var(--white);
     @include at992 {
-      grid-template: 'cover date' 'cover title' 1fr 'cover tags' / auto 1fr;
+      grid-template: 'cover title' 'cover date' 1fr 'cover tags' / auto 1fr;
       border-top-left-radius: 11px;
       border-top-right-radius: 11px;
     }
@@ -96,55 +96,16 @@
     &__date {
       grid-area: date;
       position: relative;
-      @include to992 {
-        padding: 3px 0 5px var(--padding-14px);
-      }
+      padding: 3px 0 5px var(--padding-14px);
       @include at992 {
-        padding-top: var(--padding-12px);
+        padding: 3px 0 5px 0;
       }
       &__text {
-        color: var(--text-color-variant);
         display: flex;
-        white-space: pre-wrap;
-        font-size: var(--font-size-14px);
-      }
-      &__menu {
-        @include to992 {
-          display: none;
-        }
+        color: var(--text-color-variant);
+        font-size: var(--font-size-13px);
         @include at992 {
-          position: absolute;
-          right: var(--padding-10px);
-          top: var(--padding-10px);
-          display: flex;
-          flex-direction: column;
-        }
-        &__button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: var(--border-radius-999px);
-          @include transition-150ms(background-color);
-          width: var(--button-dimension-28px);
-          height: var(--button-dimension-28px);
-          background-color: var(--blue100);
-          svg {
-            fill: var(--blue600);
-            @include transition-150ms(fill);
-            width: var(--icon-dimension-16px);
-          }
-          @include hover {
-            background-color: var(--blue200);
-            svg {
-              fill: var(--blue700);
-            }
-          }
-        }
-        &--toggled {
-          background-color: var(--blue200);
-          svg {
-            fill: var(--blue700);
-          }
+          font-size: var(--font-size-14px);
         }
       }
     }
@@ -157,7 +118,7 @@
         padding-top: var(--padding-12px);
       }
       @include at992 {
-        padding: 3px var(--padding-14px) 5px 0;
+        padding: 14px 14px 0 0;
       }
       &__unread {
         display: inline-flex;
@@ -171,8 +132,8 @@
         margin-right: 5px;
         @include at992 {
           margin-right: 6px;
-          height: 16px;
-          width: 16px;
+          height: 16.5px;
+          width: 16.5px;
         }
       }
       &__text {
@@ -210,6 +171,47 @@
             width: 19px;
           }
           fill: var(--yellow);
+        }
+      }
+      &__menu {
+        @include to992 {
+          display: none;
+        }
+        @include at992 {
+          float: right;
+          display: inline-flex;
+          flex-direction: column;
+          margin-top: -14px;
+          transform: translateX(2px) translateY(12px);
+          position: relative;
+          z-index: 1;
+        }
+        &__button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: var(--border-radius-999px);
+          @include transition-150ms(background-color);
+          width: var(--button-dimension-28px);
+          height: var(--button-dimension-28px);
+          background-color: var(--blue100);
+          svg {
+            fill: var(--blue600);
+            @include transition-150ms(fill);
+            width: var(--icon-dimension-16px);
+          }
+          @include hover {
+            background-color: var(--blue200);
+            svg {
+              fill: var(--blue700);
+            }
+          }
+        }
+        &--toggled {
+          background-color: var(--blue200);
+          svg {
+            fill: var(--blue700);
+          }
         }
       }
     }
@@ -270,12 +272,12 @@
         gap: 14px;
         padding-right: 10px;
         @include at992 {
-          padding-right: 6px;
+          padding-right: 8px;
         }
         &__huggs {
           display: flex;
           align-items: center;
-          gap: 2px;
+          gap: 3px;
           height: var(--button-dimension-28px);
           border-radius: var(--border-radius-999px);
           padding-left: 10px;
@@ -452,7 +454,7 @@
       border-top: var(--border-secondary);
       height: 52px;
       @include at992 {
-        padding: 0 10px 0 12px;
+        padding: 0 12px;
       }
       &--recently-visited {
         &::after {
