@@ -132,8 +132,8 @@
         margin-right: 5px;
         @include at992 {
           margin-right: 6px;
-          height: 16.5px;
-          width: 16.5px;
+          height: 16px;
+          width: 16px;
         }
       }
       &__text {
@@ -166,9 +166,9 @@
           margin-right: 6px;
         }
         > svg {
-          width: 18px;
+          width: 17px;
           @include at992 {
-            width: 19px;
+            width: 18px;
           }
           fill: var(--yellow);
         }

@@ -55,22 +55,5 @@ try {
   favicon = await get_base64_of_image_url(get_favicon_url(), 32, 32)
 } catch {}
 
-const html_content = document.documentElement.outerHTML
-const parser = new DOMParser()
-const doc = parser.parseFromString(html_content, 'text/html')
-// Remove all <script> elements
-const scripts = doc.getElementsByTagName('script')
-while (scripts.length > 0) {
-  scripts[0].parentNode.removeChild(scripts[0])
-}
-const styles = doc.getElementsByTagName('style')
-while (styles.length > 0) {
-  styles[0].parentNode.removeChild(styles[0])
-}
-const links = doc.getElementsByTagName('link')
-while (links.length > 0) {
-  links[0].parentNode.removeChild(links[0])
-}
-
-const html = new XMLSerializer().serializeToString(doc)
+const html = document.documentElement.outerHTML
 navigator.clipboard.writeText(JSON.stringify({ favicon, og_image, html }))
