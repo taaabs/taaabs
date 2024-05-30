@@ -132,14 +132,14 @@
         margin-right: 5px;
         @include at992 {
           margin-right: 6px;
-          height: 16px;
-          width: 16px;
+          height: 15.5px;
+          width: 15.5px;
         }
       }
       &__text {
         position: relative;
         display: inline;
-        font-weight: var(--font-weight-inter-medium);
+        font-weight: var(--font-weight-inter-semi-bold);
         font-size: var(--font-size-1-7rem);
         margin-bottom: 0.8rem;
         overflow-wrap: anywhere;
@@ -147,11 +147,11 @@
           font-size: var(--font-size-1-8rem);
         }
         &--unread {
-          font-weight: var(--font-weight-inter-semi-bold);
+          font-weight: var(--font-weight-inter-bold);
         }
         &--untitled {
           font-style: italic;
-          font-weight: var(--font-weight-inter-regular);
+          font-weight: var(--font-weight-inter-medium);
         }
       }
       &__stars {
@@ -183,6 +183,7 @@
           flex-direction: column;
           margin-top: -14px;
           transform: translateX(2px) translateY(12px);
+          padding-left: 10px;
         }
         &__button {
           display: flex;
