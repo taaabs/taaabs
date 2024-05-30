@@ -32,7 +32,7 @@ export namespace LibrarySearchBookmarks_Dto {
       public title_aes?: string
       public note_aes?: string
       public visited_at: number
-      public is_unread?: boolean
+      public is_unsorted?: boolean
       public links: AuthorizedLink[]
       public tags: AuthorizedTag[]
     }

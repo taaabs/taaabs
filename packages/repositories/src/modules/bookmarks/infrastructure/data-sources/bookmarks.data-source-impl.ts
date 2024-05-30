@@ -25,7 +25,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       tags: params.tags?.join(','),
       after: params.after,
       starred_only: params.starred_only,
-      unread_only: params.unread_only,
+      unsorted_only: params.unsorted_only,
       is_archived: params.is_archived,
       sort_by: params.sort_by,
       order: params.order,
@@ -150,7 +150,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,
       stars: params.stars || undefined,
-      is_unread: params.is_unread || undefined,
+      is_unsorted: params.is_unsorted || undefined,
       tags: await Promise.all(
         params.tags
           .filter((tag) => tag.name.trim().length > 0)

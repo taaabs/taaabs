@@ -51,21 +51,21 @@ export const use_bookmarks = () => {
         request_params.starred_only =
           Object.values(Filter)[parseInt(query_filter)] == Filter.STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.STARRED_UNREAD ||
+            Filter.STARRED_unsorted ||
           Object.values(Filter)[parseInt(query_filter)] ==
             Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_STARRED_UNREAD ||
+            Filter.ARCHIVED_STARRED_unsorted ||
           undefined
 
-        request_params.unread_only =
-          Object.values(Filter)[parseInt(query_filter)] == Filter.UNREAD ||
+        request_params.unsorted_only =
+          Object.values(Filter)[parseInt(query_filter)] == Filter.unsorted ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.STARRED_UNREAD ||
+            Filter.STARRED_unsorted ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_UNREAD ||
+            Filter.ARCHIVED_unsorted ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_STARRED_UNREAD ||
+            Filter.ARCHIVED_STARRED_unsorted ||
           undefined
 
         request_params.is_archived =
@@ -73,9 +73,9 @@ export const use_bookmarks = () => {
           Object.values(Filter)[parseInt(query_filter)] ==
             Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_UNREAD ||
+            Filter.ARCHIVED_unsorted ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_STARRED_UNREAD ||
+            Filter.ARCHIVED_STARRED_unsorted ||
           undefined
       }
 
@@ -130,11 +130,11 @@ export const use_bookmarks = () => {
         request_params.starred_only =
           Object.values(Filter)[parseInt(query_filter)] == Filter.STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.STARRED_UNREAD ||
+            Filter.STARRED_unsorted ||
           Object.values(Filter)[parseInt(query_filter)] ==
             Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_STARRED_UNREAD ||
+            Filter.ARCHIVED_STARRED_unsorted ||
           undefined
 
         request_params.is_archived =
@@ -142,9 +142,9 @@ export const use_bookmarks = () => {
           Object.values(Filter)[parseInt(query_filter)] ==
             Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_UNREAD ||
+            Filter.ARCHIVED_unsorted ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_STARRED_UNREAD ||
+            Filter.ARCHIVED_STARRED_unsorted ||
           undefined
       }
 

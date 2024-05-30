@@ -27,7 +27,7 @@ type BookmarkOfSearch = {
   title?: string
   note?: string
   is_archived: boolean
-  is_unread: boolean
+  is_unsorted: boolean
   stars?: number
   tags: string[]
   links: { url: string; site_path?: string; plain_text?: string }[]
@@ -45,7 +45,7 @@ export const schema = {
   created_at: 'number',
   updated_at: 'number',
   visited_at: 'number',
-  is_unread: 'boolean',
+  is_unsorted: 'boolean',
   stars: 'number',
   points: 'number',
 } as const
@@ -292,7 +292,7 @@ export const LocalDbProvider: React.FC<{
           'plain_text',
           'sites',
           'sites_variants',
-          'is_unread',
+          'is_unsorted',
           'stars',
           'tags',
           'tags_ids',
@@ -383,7 +383,7 @@ export const LocalDbProvider: React.FC<{
             created_at: bookmark.created_at,
             updated_at: bookmark.updated_at,
             visited_at: bookmark.visited_at,
-            is_unread: bookmark.is_unread,
+            is_unsorted: bookmark.is_unsorted,
             stars: bookmark.stars,
             points: bookmark.points
               ? parseInt(`${bookmark.points}${bookmark.created_at}`)
@@ -456,7 +456,7 @@ export const LocalDbProvider: React.FC<{
         visited_at: Math.round(
           new Date(params.bookmark.visited_at).getTime() / 1000,
         ),
-        is_unread: params.bookmark.is_unread,
+        is_unsorted: params.bookmark.is_unsorted,
         sites,
         sites_variants: sites
           .map((site) => get_site_variants_for_search(site))

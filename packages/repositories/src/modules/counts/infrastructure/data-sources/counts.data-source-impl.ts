@@ -11,7 +11,7 @@ export class Counts_DataSourceImpl implements Counts_DataSource {
   ): Promise<Counts_Dto.Response.Authorized> {
     const search_params: Counts_Dto.SearchParams.Authorized = {
       starred_only: params.starred_only,
-      unread_only: params.unread_only,
+      unsorted_only: params.unsorted_only,
       is_archived: params.is_archived,
       public_only: params.public_only,
       tags: params.tags?.join(','),

@@ -27,7 +27,7 @@ export namespace TagHierarchies_Dto {
     }
     export class Authorized extends Base {
       @ToBoolean()
-      public unread_only?: boolean
+      public unsorted_only?: boolean
     }
     export class Public extends Base {}
   }

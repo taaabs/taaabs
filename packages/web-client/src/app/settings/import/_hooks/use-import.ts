@@ -140,7 +140,7 @@ export const use_import = () => {
               title: bookmark.title,
               note: '',
               is_archived: false,
-              is_unread: false,
+              is_unsorted: false,
               stars: bookmark.is_starred ? 1 : undefined,
               created_at: bookmark.created_at
                 ? bookmark.created_at.toISOString()

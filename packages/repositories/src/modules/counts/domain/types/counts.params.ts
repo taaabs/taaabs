@@ -5,7 +5,7 @@ export namespace Counts_Params {
     tags?: string[]
   }
   export type Authorized = Base & {
-    unread_only?: boolean
+    unsorted_only?: boolean
     public_only?: boolean
   }
   export type Public = Base & {

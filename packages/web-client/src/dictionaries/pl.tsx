@@ -202,7 +202,7 @@ export const dictionary: Dictionary = {
       bookmark: {
         pinned_to_sidebar: 'Przypięte',
         use_snapshot: 'Używa kopii',
-        unread: 'Nieprzeczytane',
+        unsorted: 'Nieuporządkowane',
         edit: 'Edytuj',
         archive: 'Archiwizuj',
         restore: 'Przywróć',
@@ -246,7 +246,7 @@ export const dictionary: Dictionary = {
         'Wszystkie zakładki mieszczą się w jednym miesiącu',
       toolbar: {
         starred: 'Ulubione',
-        unread: 'Nieprze...',
+        unsorted: 'Nieuporz...',
         archived: 'Archiwum',
       },
       errors: {

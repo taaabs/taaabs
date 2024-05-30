@@ -79,14 +79,14 @@
       @include hover {
         @include text-decoration-underlinie-thin;
       }
-      &--unread {
+      &--unsorted {
         font-weight: var(--font-weight-inter-tight-medium);
       }
       &--via-wayback {
         font-style: italic;
       }
     }
-    &__unread {
+    &__unsorted {
       position: absolute;
       top: calc(50% - 1px);
       left: -13.5px;

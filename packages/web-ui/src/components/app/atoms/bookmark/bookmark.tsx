@@ -95,7 +95,7 @@ export namespace Bookmark {
     }[]
     search_params_?: string
     on_click_: () => void
-    is_unread_?: boolean
+    is_unsorted_?: boolean
     stars_: number
     links_: {
       url_: string
@@ -709,8 +709,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                   </div>
                 </OutsideClickHandler>
               </div>
-              {props.is_unread_ && (
-                <div className={styles.bookmark__card__title__unread} />
+              {props.is_unsorted_ && (
+                <div className={styles.bookmark__card__title__unsorted} />
               )}
               {props.stars_ >= 1 && (
                 <div className={styles.bookmark__card__title__stars}>
@@ -722,8 +722,8 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
               {props.title_ ? (
                 <div
                   className={cn(styles.bookmark__card__title__text, {
-                    [styles['bookmark__card__title__text--unread']]:
-                      props.is_unread_,
+                    [styles['bookmark__card__title__text--unsorted']]:
+                      props.is_unsorted_,
                   })}
                 >
                   {props.highlights_

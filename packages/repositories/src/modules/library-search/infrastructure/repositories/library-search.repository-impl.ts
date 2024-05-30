@@ -67,7 +67,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
               : bookmark.note_aes
               ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
               : undefined,
-            is_unread: bookmark.is_unread || false,
+            is_unsorted: bookmark.is_unsorted || false,
             links: await Promise.all(
               bookmark.links.map(async (link) => {
                 const site = link.site

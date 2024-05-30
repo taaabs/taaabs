@@ -6,7 +6,7 @@ export namespace GetTagHierarchies_Params {
     lte?: number
   }
   export type Authorized = {
-    unread_only?: boolean
+    unsorted_only?: boolean
   } & Base
   export type Public = {
     username: string

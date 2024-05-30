@@ -13,14 +13,14 @@ export const Primary = () => (
       selected_archived_={false}
       selected_starred_={false}
       selected_tags_={[]}
-      selected_unread_={false}
+      selected_unsorted_={false}
       items_={[
         {
           url_: 'https://github.com/1',
           title_: 'Example lorem ipsum lorem ipsum 1',
           bookmark_id_: 0,
           created_at_: new Date(),
-          is_unread_: false,
+          is_unsorted_: false,
           stars_: 0,
           tags_: [],
         },
@@ -29,7 +29,7 @@ export const Primary = () => (
           title_: 'Example lorem ipsum 2',
           bookmark_id_: 0,
           created_at_: new Date(),
-          is_unread_: false,
+          is_unsorted_: false,
           stars_: 0,
           tags_: [],
         },
@@ -37,7 +37,7 @@ export const Primary = () => (
           url_: 'https://github.com/3',
           title_: 'Example lorem ipsum 3',
           stars_: 2,
-          is_unread_: true,
+          is_unsorted_: true,
           bookmark_id_: 0,
           created_at_: new Date(),
           tags_: [],
@@ -47,7 +47,7 @@ export const Primary = () => (
           title_: 'Example lorem ipsum 4',
           bookmark_id_: 0,
           created_at_: new Date(),
-          is_unread_: false,
+          is_unsorted_: false,
           stars_: 0,
           tags_: [],
         },
@@ -57,7 +57,7 @@ export const Primary = () => (
           stars_: 5,
           bookmark_id_: 0,
           created_at_: new Date(),
-          is_unread_: false,
+          is_unsorted_: false,
           tags_: [],
         },
       ]}

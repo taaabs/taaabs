@@ -11,9 +11,9 @@ declare const styles: {
   readonly bookmark__card__date: string
   readonly bookmark__card__date__text: string
   readonly bookmark__card__title: string
-  readonly bookmark__card__title__unread: string
+  readonly bookmark__card__title__unsorted: string
   readonly bookmark__card__title__text: string
-  readonly 'bookmark__card__title__text--unread': string
+  readonly 'bookmark__card__title__text--unsorted': string
   readonly 'bookmark__card__title__text--untitled': string
   readonly bookmark__card__title__stars: string
   readonly bookmark__card__title__menu: string

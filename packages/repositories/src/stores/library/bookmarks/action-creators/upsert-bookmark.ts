@@ -79,14 +79,14 @@ export const upsert_bookmark = (params: {
           params.bookmark.stars == 0 &&
           params.last_authorized_counts_params.starred_only
 
-        const is_unread_toggled_should_remove =
-          !params.bookmark.is_unread &&
-          params.last_authorized_counts_params.unread_only
+        const is_unsorted_toggled_should_remove =
+          !params.bookmark.is_unsorted &&
+          params.last_authorized_counts_params.unsorted_only
 
         if (
           is_archived_toggled_should_remove ||
           is_restored_toggled_should_remove ||
-          is_unread_toggled_should_remove ||
+          is_unsorted_toggled_should_remove ||
           is_starred_toggled_should_remove
         ) {
           dispatch(

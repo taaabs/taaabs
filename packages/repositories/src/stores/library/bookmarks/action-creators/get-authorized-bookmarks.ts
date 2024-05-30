@@ -49,7 +49,7 @@ export const get_authorized_bookmarks = (params: {
               lte: params.request_params.yyyymm_lte,
               is_archived: params.request_params.is_archived,
               starred_only: params.request_params.starred_only,
-              unread_only: params.request_params.unread_only,
+              unsorted_only: params.request_params.unsorted_only,
             },
             encryption_key: params.encryption_key,
             ky: params.ky,

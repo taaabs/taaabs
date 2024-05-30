@@ -12,7 +12,7 @@ type Counts = {
   yyyymm: number
   bookmark_count: number
   starred_count: number
-  unread_count: number
+  unsorted_count: number
 }[]
 
 // Don't suffix properties at it won't work with dynamically loaded component.
@@ -52,12 +52,12 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
     const [dragged_end_index, set_dragged_end_index] = useState<number>()
     const [bookmark_count, set_bookmark_count] = useState<number>()
     const [starred_count, set_starred_count] = useState<number>()
-    const [unread_count, set_unread_count] = useState<number>()
+    const [unsorted_count, set_unsorted_count] = useState<number>()
     const calculated_counts_cache = useRef<{
       [start_end_index: string]: {
         bookmark_count: number
         starred_count: number
-        unread_count: number
+        unsorted_count: number
       }
     }>({})
 
@@ -107,10 +107,10 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
             `${params.start_index}-${params.end_index}`
           ].starred_count,
         )
-        set_unread_count(
+        set_unsorted_count(
           calculated_counts_cache.current[
             `${params.start_index}-${params.end_index}`
-          ].unread_count,
+          ].unsorted_count,
         )
       } else {
         let counts_sliced: Counts = []
@@ -122,12 +122,12 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
 
         let bookmark_count = 0
         let starred_count = 0
-        let unread_count = 0
+        let unsorted_count = 0
 
         counts_sliced.forEach((el) => {
           bookmark_count += el.bookmark_count
           starred_count += el.starred_count
-          unread_count += el.unread_count
+          unsorted_count += el.unsorted_count
         })
 
         calculated_counts_cache.current[
@@ -135,12 +135,12 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
         ] = {
           bookmark_count,
           starred_count,
-          unread_count,
+          unsorted_count,
         }
 
         set_bookmark_count(bookmark_count)
         set_starred_count(starred_count)
-        set_unread_count(unread_count)
+        set_unsorted_count(unsorted_count)
       }
 
       set_date(
@@ -375,31 +375,31 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
             )}
           </div>
           {bookmark_count && bookmark_count > 0 ? (
-            bookmark_count != unread_count &&
+            bookmark_count != unsorted_count &&
             bookmark_count != starred_count ? (
               <div className={styles['custom-range__details__counts']}>
                 <div className={styles['custom-range__details__counts__total']}>
                   <span>{bookmark_count}</span>
                 </div>
-                {unread_count !== undefined &&
-                  unread_count > 0 &&
+                {unsorted_count !== undefined &&
+                  unsorted_count > 0 &&
                   starred_count !== undefined &&
-                  starred_count < unread_count && (
+                  starred_count < unsorted_count && (
                     <div
                       className={
-                        styles['custom-range__details__counts__unread']
+                        styles['custom-range__details__counts__unsorted']
                       }
                     >
-                      <span>{unread_count}</span>
+                      <span>{unsorted_count}</span>
                     </div>
                   )}
-                {unread_count !== undefined &&
-                  unread_count > 0 &&
+                {unsorted_count !== undefined &&
+                  unsorted_count > 0 &&
                   starred_count !== undefined &&
-                  starred_count == unread_count && (
+                  starred_count == unsorted_count && (
                     <div
                       className={
-                        styles['custom-range__details__counts__unread']
+                        styles['custom-range__details__counts__unsorted']
                       }
                     />
                   )}
@@ -410,27 +410,27 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     <span>{starred_count}</span>
                   </div>
                 )}
-                {unread_count !== undefined &&
-                  unread_count > 0 &&
+                {unsorted_count !== undefined &&
+                  unsorted_count > 0 &&
                   starred_count !== undefined &&
-                  starred_count > unread_count && (
+                  starred_count > unsorted_count && (
                     <div
                       className={
-                        styles['custom-range__details__counts__unread']
+                        styles['custom-range__details__counts__unsorted']
                       }
                     >
-                      <span>{unread_count}</span>
+                      <span>{unsorted_count}</span>
                     </div>
                   )}
               </div>
-            ) : bookmark_count == unread_count &&
+            ) : bookmark_count == unsorted_count &&
               bookmark_count != starred_count ? (
               <div className={styles['custom-range__details__counts']}>
                 <div
                   className={styles['custom-range__details__counts__total']}
                 />
                 {starred_count !== undefined &&
-                  starred_count > unread_count &&
+                  starred_count > unsorted_count &&
                   starred_count > 0 && (
                     <div
                       className={
@@ -441,12 +441,12 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     </div>
                   )}
                 <div
-                  className={styles['custom-range__details__counts__unread']}
+                  className={styles['custom-range__details__counts__unsorted']}
                 >
-                  <span>{unread_count}</span>
+                  <span>{unsorted_count}</span>
                 </div>
                 {starred_count !== undefined &&
-                  starred_count < unread_count &&
+                  starred_count < unsorted_count &&
                   starred_count > 0 && (
                     <div
                       className={
@@ -458,7 +458,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                   )}
               </div>
             ) : bookmark_count == starred_count &&
-              bookmark_count != unread_count ? (
+              bookmark_count != unsorted_count ? (
               <div className={styles['custom-range__details__counts']}>
                 <div
                   className={styles['custom-range__details__counts__total']}
@@ -468,11 +468,11 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                 >
                   <span>{starred_count}</span>
                 </div>
-                {unread_count !== undefined && unread_count > 0 && (
+                {unsorted_count !== undefined && unsorted_count > 0 && (
                   <div
-                    className={styles['custom-range__details__counts__unread']}
+                    className={styles['custom-range__details__counts__unsorted']}
                   >
-                    <span>{unread_count}</span>
+                    <span>{unsorted_count}</span>
                   </div>
                 )}
               </div>
@@ -485,7 +485,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                   className={styles['custom-range__details__counts__starred']}
                 />
                 <div
-                  className={styles['custom-range__details__counts__unread']}
+                  className={styles['custom-range__details__counts__unsorted']}
                 >
                   <span>{bookmark_count}</span>
                 </div>
@@ -561,12 +561,12 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                   />
                   <Area
                     type="basis"
-                    dataKey="unread_count"
+                    dataKey="unsorted_count"
                     strokeWidth={2}
                     stroke="var(--red)"
                     fill="transparent"
                     isAnimationActive={false}
-                    strokeOpacity={unread_count == 0 ? 0 : 1}
+                    strokeOpacity={unsorted_count == 0 ? 0 : 1}
                     style={{ pointerEvents: 'none' }}
                   />
                   <YAxis tickCount={1} width={0} />

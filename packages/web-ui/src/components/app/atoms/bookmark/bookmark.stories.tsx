@@ -26,7 +26,7 @@ export const Primary = () => (
         stars_={0}
         title_="Lorem ipsum dolor sit amet"
         note_="Lorem ipsum dolor sit amet"
-        is_unread_={false}
+        is_unsorted_={false}
         tags_={[]}
         date_={new Date('2022-02-20')}
         on_click_={() => {}}
@@ -78,7 +78,7 @@ export const Primary = () => (
         stars_={0}
         title_="Lorem ipsum"
         note_="Lorem ipsum dolor sit amet"
-        is_unread_={false}
+        is_unsorted_={false}
         tags_={[
           { id: 1, name_: 'lorem', yields_: 8 },
           { id: 1, name_: 'ipsum', yields_: 2 },
@@ -128,7 +128,7 @@ export const Primary = () => (
         density_="default"
         stars_={0}
         title_="Lorem ipsum dolor sit amet"
-        is_unread_={false}
+        is_unsorted_={false}
         tags_={[]}
         date_={new Date('2022-02-20')}
         on_click_={() => {}}
@@ -165,7 +165,7 @@ export const Primary = () => (
         density_="default"
         stars_={0}
         title_="Lorem ipsum dolor sit amet"
-        is_unread_={false}
+        is_unsorted_={false}
         tags_={[]}
         date_={new Date('2022-02-20')}
         on_click_={() => {}}
@@ -205,7 +205,7 @@ export const Primary = () => (
         stars_={0}
         title_="Lorem ipsum dolor sit amet"
         note_="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies sapien nulla, at facilisis risus dictum sed."
-        is_unread_={false}
+        is_unsorted_={false}
         tags_={[
           { id: 1, name_: 'lorem', yields_: 8 },
           { id: 1, name_: 'ipsum', is_selected_: true },
@@ -252,7 +252,7 @@ export const Primary = () => (
         stars_={0}
         title_="Lorem ipsum dolor sit amet"
         note_="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies sapien nulla, at facilisis risus dictum sed."
-        is_unread_={false}
+        is_unsorted_={false}
         tags_={[
           { id: 1, name_: 'lorem', yields_: 8 },
           { id: 1, name_: 'ipsum', is_selected_: true },
@@ -294,7 +294,7 @@ export const Primary = () => (
         density_="default"
         stars_={2}
         title_="Lorem ipsum dolor sit amet"
-        is_unread_={false}
+        is_unsorted_={false}
         tags_={[
           { id: 1, name_: 'lorem', yields_: 8 },
           { id: 1, name_: 'ipsum', yields_: 2 },
@@ -336,7 +336,7 @@ export const Primary = () => (
         density_="default"
         stars_={0}
         title_="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        is_unread_={true}
+        is_unsorted_={true}
         tags_={[
           { id: 1, name_: 'lorem', yields_: 8 },
           { id: 1, name_: 'lorem1', yields_: 8 },
@@ -385,7 +385,7 @@ export const Primary = () => (
         density_="default"
         stars_={0}
         title_="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        is_unread_={false}
+        is_unsorted_={false}
         tags_={[
           { id: 1, name_: 'lorem', yields_: 8 },
           { id: 1, name_: 'ipsum', yields_: 2 },
@@ -427,7 +427,7 @@ export const Primary = () => (
         density_="default"
         stars_={2}
         title_="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non odi sodal, euismod, fermentum metus"
-        is_unread_={true}
+        is_unsorted_={true}
         tags_={[
           { id: 1, name_: 'lorem', yields_: 8 },
           { id: 1, name_: 'ipsum', yields_: 2 },
@@ -469,7 +469,7 @@ export const Primary = () => (
         density_="default"
         stars_={2}
         title_="Lorem ipsum dolor sit amet"
-        is_unread_={true}
+        is_unsorted_={true}
         tags_={[
           { id: 1, name_: 'lorem', yields_: 8 },
           { id: 1, name_: 'ipsum', yields_: 2 },
@@ -510,7 +510,7 @@ export const Primary = () => (
         points_={100}
         density_="default"
         stars_={2}
-        is_unread_={true}
+        is_unsorted_={true}
         tags_={[
           { id: 1, name_: 'lorem', yields_: 8 },
           { id: 1, name_: 'ipsum', yields_: 2 },
@@ -551,7 +551,7 @@ export const Primary = () => (
         points_={100}
         density_="default"
         stars_={2}
-        is_unread_={true}
+        is_unsorted_={true}
         tags_={[
           { id: 1, name_: 'lorem', yields_: 8 },
           { id: 1, name_: 'ipsum', yields_: 2 },

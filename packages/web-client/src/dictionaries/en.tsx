@@ -63,7 +63,7 @@ const dictionary: Dictionary = {
             '20 000 bookmarks',
             'Highlights',
             'Multi-link bookmarks',
-            'Filters: starred, unread',
+            'Filters: starred, unsorted',
             'Sorts: last visited, updated at',
           ],
           button_label: 'Subscribe to Surfer',
@@ -197,7 +197,7 @@ const dictionary: Dictionary = {
       bookmark: {
         pinned_to_sidebar: 'Pinned to sidebar',
         use_snapshot: 'Use snapshot',
-        unread: 'Unread',
+        unsorted: 'Unsorted',
         edit: 'Edit',
         archive: 'Archive',
         restore: 'Restore',
@@ -240,7 +240,7 @@ const dictionary: Dictionary = {
       results_fit_in_one_month: 'Results fit in one month',
       toolbar: {
         starred: 'Starred',
-        unread: 'Unread',
+        unsorted: 'Unsorted',
         archived: 'Archived',
       },
       errors: {

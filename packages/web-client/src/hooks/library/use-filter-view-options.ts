@@ -58,11 +58,11 @@ export const use_filter_view_options = () => {
 
   const clear_selected_stars_ = () => {
     let updated_search_params: URLSearchParams
-    if (current_filter_ == Filter.STARRED_UNREAD) {
+    if (current_filter_ == Filter.STARRED_unsorted) {
       updated_search_params = update_search_params(
         search_params,
         search_params_keys.filter,
-        Object.values(Filter).indexOf(Filter.UNREAD).toString(),
+        Object.values(Filter).indexOf(Filter.unsorted).toString(),
       )
     } else {
       updated_search_params = update_search_params(
@@ -83,9 +83,9 @@ export const use_filter_view_options = () => {
     )
   }
 
-  const clear_unread_ = () => {
+  const clear_unsorted_ = () => {
     let updated_search_params: URLSearchParams
-    if (current_filter_ == Filter.STARRED_UNREAD) {
+    if (current_filter_ == Filter.STARRED_unsorted) {
       updated_search_params = update_search_params(
         search_params,
         search_params_keys.filter,
@@ -114,6 +114,6 @@ export const use_filter_view_options = () => {
     current_filter_,
     set_filter_query_param_,
     clear_selected_stars_,
-    clear_unread_,
+    clear_unsorted_,
   }
 }

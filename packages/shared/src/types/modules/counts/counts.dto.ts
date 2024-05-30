@@ -8,7 +8,7 @@ export namespace Counts_Dto {
       public starred_only?: boolean
 
       @ToBoolean()
-      public unread_only?: boolean
+      public unsorted_only?: boolean
 
       @ToBoolean()
       public is_archived?: boolean
@@ -33,7 +33,7 @@ export namespace Counts_Dto {
       }[]
       public bookmark_count: number
       public starred_count?: number
-      public unread_count?: number
+      public unsorted_count?: number
     }
 
     class PublicMonth {

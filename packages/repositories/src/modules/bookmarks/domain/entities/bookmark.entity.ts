@@ -18,7 +18,7 @@ export type Bookmark_Entity = {
     favicon?: string
     is_parsed?: boolean
   }[]
-  is_unread: boolean
+  is_unsorted: boolean
   stars: number
   render_height?: number
   is_compact?: boolean

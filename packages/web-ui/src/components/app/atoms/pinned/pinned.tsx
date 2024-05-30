@@ -14,7 +14,7 @@ export namespace Pinned {
     created_at_: Date
     title_?: string
     stars_?: number
-    is_unread_?: boolean
+    is_unsorted_?: boolean
     is_archived_?: boolean
     tags_?: number[]
     open_snapshot_?: boolean
@@ -29,7 +29,7 @@ export namespace Pinned {
     is_draggable_: boolean
     selected_tags_: number[]
     selected_starred_: boolean
-    selected_unread_: boolean
+    selected_unsorted_: boolean
     selected_archived_: boolean
     current_gte_?: number
     current_lte_?: number
@@ -46,7 +46,7 @@ type SortableItem = {
   url_: string
   title_?: string
   stars_?: number
-  is_unread_?: boolean
+  is_unsorted_?: boolean
   is_archived_?: boolean
   tags_?: number[]
   open_snapshot_?: boolean
@@ -62,7 +62,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         url_: item.url_,
         title_: item.title_,
         stars_: item.stars_,
-        is_unread_: item.is_unread_,
+        is_unsorted_: item.is_unsorted_,
         is_archived_: item.is_archived_,
         tags_: item.tags_,
         open_snapshot_: item.open_snapshot_,
@@ -82,7 +82,7 @@ export const Pinned: React.FC<Pinned.Props> = memo(
         is_not_relevant = true
       } else if (props.selected_starred_ && !item.stars_) {
         is_not_relevant = true
-      } else if (props.selected_unread_ && !item.is_unread_) {
+      } else if (props.selected_unsorted_ && !item.is_unsorted_) {
         is_not_relevant = true
       } else if (
         item.tags_ &&
@@ -145,15 +145,15 @@ export const Pinned: React.FC<Pinned.Props> = memo(
             </div>
             <div
               className={cn(styles.item__inner__title, {
-                [styles['item__inner__title--unread']]: item.is_unread_,
+                [styles['item__inner__title--unsorted']]: item.is_unsorted_,
                 [styles['item__inner__title--via-wayback']]:
                   item.open_snapshot_,
               })}
             >
               {item.title_}
             </div>
-            {item.is_unread_ && (
-              <div className={styles['item__inner__unread']} />
+            {item.is_unsorted_ && (
+              <div className={styles['item__inner__unsorted']} />
             )}
           </div>
           {item.stars_ !== undefined && item.title_ && (

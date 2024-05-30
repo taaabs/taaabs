@@ -17,7 +17,7 @@ export class TagHierarchies_DataSourceImpl
   ): Promise<TagHierarchies_Dto.Response.Authorized> {
     const search_params: GetTagHierarchies_Params.Authorized = {
       starred_only: params.starred_only,
-      unread_only: params.unread_only,
+      unsorted_only: params.unsorted_only,
       is_archived: params.is_archived,
       gte: params.gte,
       lte: params.lte,
@@ -64,7 +64,7 @@ export class TagHierarchies_DataSourceImpl
 
     const search_params: GetTagHierarchies_Params.Authorized = {
       starred_only: params.starred_only,
-      unread_only: params.unread_only,
+      unsorted_only: params.unsorted_only,
       is_archived: params.is_archived,
       gte: params.gte,
       lte: params.lte,

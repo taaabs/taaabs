@@ -134,7 +134,7 @@ export type Dictionary = {
       bookmark: {
         pinned_to_sidebar: string
         use_snapshot: string
-        unread: string
+        unsorted: string
         edit: string
         archive: string
         restore: string
@@ -175,7 +175,7 @@ export type Dictionary = {
       results_fit_in_one_month: string
       toolbar: {
         starred: string
-        unread: string
+        unsorted: string
         archived: string
       }
       errors: {

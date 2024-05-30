@@ -30,7 +30,7 @@ export namespace Bookmarks_Dto {
     public starred_only?: boolean
 
     @ToBoolean()
-    public unread_only?: boolean
+    public unsorted_only?: boolean
 
     @ToBoolean()
     public is_archived?: boolean
@@ -79,7 +79,7 @@ export namespace Bookmarks_Dto {
       public updated_at: string
       public visited_at: string
       public stars?: number
-      public is_unread?: boolean
+      public is_unsorted?: boolean
       public points?: number
       public cover?: string
     }

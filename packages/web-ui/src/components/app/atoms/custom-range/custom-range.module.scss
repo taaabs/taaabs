@@ -60,7 +60,7 @@
       &__starred::before {
         background: var(--yellow);
       }
-      &__unread::before {
+      &__unsorted::before {
         background: var(--red);
       }
     }

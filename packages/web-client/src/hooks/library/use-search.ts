@@ -59,8 +59,8 @@ export const use_search = (local_db_: LocalDb) => {
   const is_archived_filter =
     current_filter == Filter.ARCHIVED ||
     current_filter == Filter.ARCHIVED_STARRED ||
-    current_filter == Filter.ARCHIVED_STARRED_UNREAD ||
-    current_filter == Filter.ARCHIVED_UNREAD
+    current_filter == Filter.ARCHIVED_STARRED_unsorted ||
+    current_filter == Filter.ARCHIVED_unsorted
 
   const set_search_fragment = (params: { search_string_: string }) => {
     window.history.pushState(
@@ -206,20 +206,20 @@ export const use_search = (local_db_: LocalDb) => {
                 tag_ids: { containsAll: selected_tag_ids },
               }
             : {}),
-          ...(current_filter == Filter.UNREAD ||
-          current_filter == Filter.STARRED_UNREAD ||
-          current_filter == Filter.ARCHIVED_UNREAD ||
-          current_filter == Filter.ARCHIVED_STARRED_UNREAD
+          ...(current_filter == Filter.unsorted ||
+          current_filter == Filter.STARRED_unsorted ||
+          current_filter == Filter.ARCHIVED_unsorted ||
+          current_filter == Filter.ARCHIVED_STARRED_unsorted
             ? {
-                is_unread: true,
+                is_unsorted: true,
               }
             : {}),
           stars: {
             gte:
               current_filter == Filter.STARRED ||
-              current_filter == Filter.STARRED_UNREAD ||
+              current_filter == Filter.STARRED_unsorted ||
               current_filter == Filter.ARCHIVED_STARRED ||
-              current_filter == Filter.ARCHIVED_STARRED_UNREAD
+              current_filter == Filter.ARCHIVED_STARRED_unsorted
                 ? 1
                 : 0,
           },
@@ -393,20 +393,20 @@ export const use_search = (local_db_: LocalDb) => {
                 tag_ids: { containsAll: selected_tag_ids },
               }
             : {}),
-          ...(current_filter == Filter.UNREAD ||
-          current_filter == Filter.STARRED_UNREAD ||
-          current_filter == Filter.ARCHIVED_UNREAD ||
-          current_filter == Filter.ARCHIVED_STARRED_UNREAD
+          ...(current_filter == Filter.unsorted ||
+          current_filter == Filter.STARRED_unsorted ||
+          current_filter == Filter.ARCHIVED_unsorted ||
+          current_filter == Filter.ARCHIVED_STARRED_unsorted
             ? {
-                is_unread: true,
+                is_unsorted: true,
               }
             : {}),
           stars: {
             gte:
               current_filter == Filter.STARRED ||
-              current_filter == Filter.STARRED_UNREAD ||
+              current_filter == Filter.STARRED_unsorted ||
               current_filter == Filter.ARCHIVED_STARRED ||
-              current_filter == Filter.ARCHIVED_STARRED_UNREAD
+              current_filter == Filter.ARCHIVED_STARRED_unsorted
                 ? 1
                 : 0,
           },
@@ -549,20 +549,20 @@ export const use_search = (local_db_: LocalDb) => {
                     tag_ids: { containsAll: selected_tag_ids },
                   }
                 : {}),
-              ...(current_filter == Filter.UNREAD ||
-              current_filter == Filter.STARRED_UNREAD ||
-              current_filter == Filter.ARCHIVED_UNREAD ||
-              current_filter == Filter.ARCHIVED_STARRED_UNREAD
+              ...(current_filter == Filter.unsorted ||
+              current_filter == Filter.STARRED_unsorted ||
+              current_filter == Filter.ARCHIVED_unsorted ||
+              current_filter == Filter.ARCHIVED_STARRED_unsorted
                 ? {
-                    is_unread: true,
+                    is_unsorted: true,
                   }
                 : {}),
               stars: {
                 gte:
                   current_filter == Filter.STARRED ||
-                  current_filter == Filter.STARRED_UNREAD ||
+                  current_filter == Filter.STARRED_unsorted ||
                   current_filter == Filter.ARCHIVED_STARRED ||
-                  current_filter == Filter.ARCHIVED_STARRED_UNREAD
+                  current_filter == Filter.ARCHIVED_STARRED_unsorted
                     ? 1
                     : 0,
               },
@@ -660,20 +660,20 @@ export const use_search = (local_db_: LocalDb) => {
               properties: ['card'],
               where: {
                 id: ids_of_hits,
-                ...(current_filter == Filter.UNREAD ||
-                current_filter == Filter.STARRED_UNREAD ||
-                current_filter == Filter.ARCHIVED_UNREAD ||
-                current_filter == Filter.ARCHIVED_STARRED_UNREAD
+                ...(current_filter == Filter.unsorted ||
+                current_filter == Filter.STARRED_unsorted ||
+                current_filter == Filter.ARCHIVED_unsorted ||
+                current_filter == Filter.ARCHIVED_STARRED_unsorted
                   ? {
-                      is_unread: true,
+                      is_unsorted: true,
                     }
                   : {}),
                 stars: {
                   gte:
                     current_filter == Filter.STARRED ||
-                    current_filter == Filter.STARRED_UNREAD ||
+                    current_filter == Filter.STARRED_unsorted ||
                     current_filter == Filter.ARCHIVED_STARRED ||
-                    current_filter == Filter.ARCHIVED_STARRED_UNREAD
+                    current_filter == Filter.ARCHIVED_STARRED_unsorted
                       ? 1
                       : 0,
                 },
@@ -771,20 +771,20 @@ export const use_search = (local_db_: LocalDb) => {
               properties: ['card'],
               where: {
                 id: ids_of_hits,
-                ...(current_filter == Filter.UNREAD ||
-                current_filter == Filter.STARRED_UNREAD ||
-                current_filter == Filter.ARCHIVED_UNREAD ||
-                current_filter == Filter.ARCHIVED_STARRED_UNREAD
+                ...(current_filter == Filter.unsorted ||
+                current_filter == Filter.STARRED_unsorted ||
+                current_filter == Filter.ARCHIVED_unsorted ||
+                current_filter == Filter.ARCHIVED_STARRED_unsorted
                   ? {
-                      is_unread: true,
+                      is_unsorted: true,
                     }
                   : {}),
                 stars: {
                   gte:
                     current_filter == Filter.STARRED ||
-                    current_filter == Filter.STARRED_UNREAD ||
+                    current_filter == Filter.STARRED_unsorted ||
                     current_filter == Filter.ARCHIVED_STARRED ||
-                    current_filter == Filter.ARCHIVED_STARRED_UNREAD
+                    current_filter == Filter.ARCHIVED_STARRED_unsorted
                       ? 1
                       : 0,
                 },

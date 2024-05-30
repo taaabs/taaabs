@@ -126,7 +126,7 @@ const bookmark = (
     date_={new Date()}
     links_={[]}
     title_="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-    is_unread_={true}
+    is_unsorted_={true}
     tags_={[
       { id: 1, name_: 'foo', yields_: 100 },
       { id: 2, name_: 'bar', is_selected_: true },

@@ -211,14 +211,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         is_relevant = false
       } else if (
         (filter_view_options_hook.current_filter_ == Filter.STARRED ||
-          filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD) &&
+          filter_view_options_hook.current_filter_ == Filter.STARRED_unsorted) &&
         !item.stars
       ) {
         is_relevant = false
       } else if (
-        (filter_view_options_hook.current_filter_ == Filter.UNREAD ||
-          filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD) &&
-        !item.is_unread
+        (filter_view_options_hook.current_filter_ == Filter.unsorted ||
+          filter_view_options_hook.current_filter_ == Filter.STARRED_unsorted) &&
+        !item.is_unsorted
       ) {
         is_relevant = false
       } else if (
@@ -414,8 +414,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     filter_view_options_hook.current_filter_ == Filter.ARCHIVED ||
     filter_view_options_hook.current_filter_ == Filter.ARCHIVED_STARRED ||
     filter_view_options_hook.current_filter_ ==
-      Filter.ARCHIVED_STARRED_UNREAD ||
-    filter_view_options_hook.current_filter_ == Filter.ARCHIVED_UNREAD
+      Filter.ARCHIVED_STARRED_unsorted ||
+    filter_view_options_hook.current_filter_ == Filter.ARCHIVED_unsorted
 
   const is_not_interactive =
     is_fetching_first_bookmarks ||
@@ -548,11 +548,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           label_: props.dictionary.app.library.toolbar.starred,
           is_toggled_:
             filter_view_options_hook.current_filter_ == Filter.STARRED ||
-            filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD ||
+            filter_view_options_hook.current_filter_ == Filter.STARRED_unsorted ||
             filter_view_options_hook.current_filter_ ==
               Filter.ARCHIVED_STARRED ||
             filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_STARRED_UNREAD,
+              Filter.ARCHIVED_STARRED_unsorted,
           on_click_: () => {
             if (
               is_fetching_first_bookmarks ||
@@ -569,9 +569,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             ) {
               filter = Filter.NONE
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD
+              filter_view_options_hook.current_filter_ == Filter.STARRED_unsorted
             ) {
-              filter = Filter.UNREAD
+              filter = Filter.unsorted
             } else if (
               filter_view_options_hook.current_filter_ ==
               Filter.ARCHIVED_STARRED
@@ -579,21 +579,21 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               filter = Filter.ARCHIVED
             } else if (
               filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_STARRED_UNREAD
+              Filter.ARCHIVED_STARRED_unsorted
             ) {
-              filter = Filter.ARCHIVED_UNREAD
+              filter = Filter.ARCHIVED_unsorted
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.UNREAD
+              filter_view_options_hook.current_filter_ == Filter.unsorted
             ) {
-              filter = Filter.STARRED_UNREAD
+              filter = Filter.STARRED_unsorted
             } else if (
               filter_view_options_hook.current_filter_ == Filter.ARCHIVED
             ) {
               filter = Filter.ARCHIVED_STARRED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.ARCHIVED_UNREAD
+              filter_view_options_hook.current_filter_ == Filter.ARCHIVED_unsorted
             ) {
-              filter = Filter.ARCHIVED_STARRED_UNREAD
+              filter = Filter.ARCHIVED_STARRED_unsorted
             }
             filter_view_options_hook.set_filter_query_param_(filter)
           },
@@ -601,15 +601,15 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         ...(!username
           ? [
               {
-                label_: props.dictionary.app.library.toolbar.unread,
+                label_: props.dictionary.app.library.toolbar.unsorted,
                 is_toggled_:
-                  filter_view_options_hook.current_filter_ == Filter.UNREAD ||
+                  filter_view_options_hook.current_filter_ == Filter.unsorted ||
                   filter_view_options_hook.current_filter_ ==
-                    Filter.STARRED_UNREAD ||
+                    Filter.STARRED_unsorted ||
                   filter_view_options_hook.current_filter_ ==
-                    Filter.ARCHIVED_UNREAD ||
+                    Filter.ARCHIVED_unsorted ||
                   filter_view_options_hook.current_filter_ ==
-                    Filter.ARCHIVED_STARRED_UNREAD,
+                    Filter.ARCHIVED_STARRED_unsorted,
                 on_click_: () => {
                   if (
                     is_fetching_first_bookmarks ||
@@ -620,39 +620,39 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
 
                   let filter = Filter.NONE
                   if (filter_view_options_hook.current_filter_ == Filter.NONE) {
-                    filter = Filter.UNREAD
+                    filter = Filter.unsorted
                   } else if (
-                    filter_view_options_hook.current_filter_ == Filter.UNREAD
+                    filter_view_options_hook.current_filter_ == Filter.unsorted
                   ) {
                     filter = Filter.NONE
                   } else if (
                     filter_view_options_hook.current_filter_ ==
-                    Filter.STARRED_UNREAD
+                    Filter.STARRED_unsorted
                   ) {
                     filter = Filter.STARRED
                   } else if (
                     filter_view_options_hook.current_filter_ ==
-                    Filter.ARCHIVED_UNREAD
+                    Filter.ARCHIVED_unsorted
                   ) {
                     filter = Filter.ARCHIVED
                   } else if (
                     filter_view_options_hook.current_filter_ ==
-                    Filter.ARCHIVED_STARRED_UNREAD
+                    Filter.ARCHIVED_STARRED_unsorted
                   ) {
                     filter = Filter.ARCHIVED_STARRED
                   } else if (
                     filter_view_options_hook.current_filter_ == Filter.STARRED
                   ) {
-                    filter = Filter.STARRED_UNREAD
+                    filter = Filter.STARRED_unsorted
                   } else if (
                     filter_view_options_hook.current_filter_ == Filter.ARCHIVED
                   ) {
-                    filter = Filter.ARCHIVED_UNREAD
+                    filter = Filter.ARCHIVED_unsorted
                   } else if (
                     filter_view_options_hook.current_filter_ ==
                     Filter.ARCHIVED_STARRED
                   ) {
-                    filter = Filter.ARCHIVED_STARRED_UNREAD
+                    filter = Filter.ARCHIVED_STARRED_unsorted
                   }
                   filter_view_options_hook.set_filter_query_param_(filter)
                 },
@@ -666,9 +666,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             filter_view_options_hook.current_filter_ ==
               Filter.ARCHIVED_STARRED ||
             filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_UNREAD ||
+              Filter.ARCHIVED_unsorted ||
             filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_STARRED_UNREAD,
+              Filter.ARCHIVED_STARRED_unsorted,
           on_click_: () => {
             if (
               is_fetching_first_bookmarks ||
@@ -686,13 +686,13 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             ) {
               filter = Filter.ARCHIVED_STARRED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.UNREAD
+              filter_view_options_hook.current_filter_ == Filter.unsorted
             ) {
-              filter = Filter.ARCHIVED_UNREAD
+              filter = Filter.ARCHIVED_unsorted
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD
+              filter_view_options_hook.current_filter_ == Filter.STARRED_unsorted
             ) {
-              filter = Filter.ARCHIVED_STARRED_UNREAD
+              filter = Filter.ARCHIVED_STARRED_unsorted
             } else if (
               filter_view_options_hook.current_filter_ == Filter.ARCHIVED
             ) {
@@ -703,14 +703,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             ) {
               filter = Filter.STARRED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.ARCHIVED_UNREAD
+              filter_view_options_hook.current_filter_ == Filter.ARCHIVED_unsorted
             ) {
-              filter = Filter.UNREAD
+              filter = Filter.unsorted
             } else if (
               filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_STARRED_UNREAD
+              Filter.ARCHIVED_STARRED_unsorted
             ) {
-              filter = Filter.STARRED_UNREAD
+              filter = Filter.STARRED_unsorted
             }
 
             filter_view_options_hook.set_filter_query_param_(filter)
@@ -751,7 +751,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           url_: item.url,
           created_at_: new Date(item.created_at),
           title_: item.title,
-          is_unread_: item.is_unread,
+          is_unsorted_: item.is_unsorted,
           is_archived_: item.is_archived,
           stars_: item.stars,
           tags_: item.tags,
@@ -809,17 +809,17 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       selected_tags_={tag_view_options_hook.selected_tags_}
       selected_starred_={
         filter_view_options_hook.current_filter_ == Filter.STARRED ||
-        filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD ||
+        filter_view_options_hook.current_filter_ == Filter.STARRED_unsorted ||
         filter_view_options_hook.current_filter_ == Filter.ARCHIVED_STARRED ||
         filter_view_options_hook.current_filter_ ==
-          Filter.ARCHIVED_STARRED_UNREAD
+          Filter.ARCHIVED_STARRED_unsorted
       }
-      selected_unread_={
-        filter_view_options_hook.current_filter_ == Filter.UNREAD ||
-        filter_view_options_hook.current_filter_ == Filter.STARRED_UNREAD ||
-        filter_view_options_hook.current_filter_ == Filter.ARCHIVED_UNREAD ||
+      selected_unsorted_={
+        filter_view_options_hook.current_filter_ == Filter.unsorted ||
+        filter_view_options_hook.current_filter_ == Filter.STARRED_unsorted ||
+        filter_view_options_hook.current_filter_ == Filter.ARCHIVED_unsorted ||
         filter_view_options_hook.current_filter_ ==
-          Filter.ARCHIVED_STARRED_UNREAD
+          Filter.ARCHIVED_STARRED_unsorted
       }
       selected_archived_={is_archived_filter}
       current_gte_={date_view_options_hook.current_gte_}
@@ -842,21 +842,21 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             lte: date_view_options_hook.current_lte_,
             starred_only:
               filter == Filter.STARRED ||
-              filter == Filter.STARRED_UNREAD ||
+              filter == Filter.STARRED_unsorted ||
               filter == Filter.ARCHIVED_STARRED ||
-              filter == Filter.ARCHIVED_STARRED_UNREAD ||
+              filter == Filter.ARCHIVED_STARRED_unsorted ||
               undefined,
-            unread_only:
-              filter == Filter.UNREAD ||
-              filter == Filter.STARRED_UNREAD ||
-              filter == Filter.ARCHIVED_UNREAD ||
-              filter == Filter.ARCHIVED_STARRED_UNREAD ||
+            unsorted_only:
+              filter == Filter.unsorted ||
+              filter == Filter.STARRED_unsorted ||
+              filter == Filter.ARCHIVED_unsorted ||
+              filter == Filter.ARCHIVED_STARRED_unsorted ||
               undefined,
             is_archived:
               filter == Filter.ARCHIVED ||
               filter == Filter.ARCHIVED_STARRED ||
-              filter == Filter.ARCHIVED_UNREAD ||
-              filter == Filter.ARCHIVED_STARRED_UNREAD ||
+              filter == Filter.ARCHIVED_unsorted ||
+              filter == Filter.ARCHIVED_STARRED_unsorted ||
               undefined,
           }
 
@@ -1261,7 +1261,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             })
           : []
       }
-      is_unread_={bookmark.is_unread}
+      is_unsorted_={bookmark.is_unsorted}
       stars_={bookmark.stars}
       on_tag_click_={tag_view_options_hook.add_tag_to_search_params_}
       on_selected_tag_click_={(tag_id) =>
@@ -1402,7 +1402,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           title: bookmark.title,
           note: bookmark.note,
           is_archived: is_archived_filter,
-          is_unread: bookmark.is_unread,
+          is_unsorted: bookmark.is_unsorted,
           stars: bookmark.stars,
           links: bookmark.links.map((link) => ({
             url: link.url,
@@ -1456,7 +1456,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             title: bookmark.title,
             note: bookmark.note,
             is_archived: is_archived_filter,
-            is_unread: bookmark.is_unread,
+            is_unsorted: bookmark.is_unsorted,
             stars: bookmark.stars,
             links: bookmark.links.map((link) => ({
               url: link.url,
@@ -1489,7 +1489,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 title: bookmark.title,
                 note: bookmark.note,
                 is_archived: is_archived_filter,
-                is_unread: bookmark.is_unread,
+                is_unsorted: bookmark.is_unsorted,
                 stars: bookmark.stars,
                 links: bookmark.links.map((link) => ({
                   url: link.url,
@@ -1531,7 +1531,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   title: bookmark.title,
                   note: bookmark.note,
                   is_archived: is_archived_filter,
-                  is_unread: bookmark.is_unread,
+                  is_unsorted: bookmark.is_unsorted,
                   stars: bookmark.stars,
                   links: bookmark.links.map((link) => ({
                     url: link.url,
@@ -1568,7 +1568,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           title: bookmark.title,
           note: bookmark.note,
           is_archived: is_archived_filter,
-          is_unread: bookmark.is_unread,
+          is_unsorted: bookmark.is_unsorted,
           stars: bookmark.stars,
           links: bookmark.links.map((link) => ({
             url: link.url,
@@ -1618,7 +1618,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             title: bookmark.title,
             note: bookmark.note,
             is_archived: is_archived_filter,
-            is_unread: bookmark.is_unread,
+            is_unsorted: bookmark.is_unsorted,
             stars: bookmark.stars,
             links: bookmark.links.map((link) => ({
               url: link.url,
@@ -1728,7 +1728,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   title: bookmark.title,
                   note: bookmark.note,
                   is_archived: is_archived_filter,
-                  is_unread: bookmark.is_unread,
+                  is_unsorted: bookmark.is_unsorted,
                   stars: bookmark.stars,
                   links: bookmark.links.map((l) => ({
                     url: l.url,
@@ -1770,7 +1770,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     title: bookmark.title,
                     note: bookmark.note,
                     is_archived: is_archived_filter,
-                    is_unread: bookmark.is_unread,
+                    is_unsorted: bookmark.is_unsorted,
                     stars: bookmark.stars,
                     links: bookmark.links.map((link) => ({
                       url: link.url,
@@ -1804,7 +1804,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   title: bookmark.title,
                   note: bookmark.note,
                   is_archived: is_archived_filter,
-                  is_unread: bookmark.is_unread,
+                  is_unsorted: bookmark.is_unsorted,
                   stars: bookmark.stars,
                   links: bookmark.links.map((l) => ({
                     url: l.url,
@@ -1847,7 +1847,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     title: bookmark.title,
                     note: bookmark.note,
                     is_archived: is_archived_filter,
-                    is_unread: bookmark.is_unread,
+                    is_unsorted: bookmark.is_unsorted,
                     stars: bookmark.stars,
                     links: bookmark.links.map((link) => ({
                       url: link.url,
@@ -1910,7 +1910,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   title: bookmark.title,
                   note: bookmark.note,
                   is_archived: is_archived_filter,
-                  is_unread: bookmark.is_unread,
+                  is_unsorted: bookmark.is_unsorted,
                   stars: bookmark.stars == no_stars ? 0 : no_stars,
                   links: bookmark.links.map((link) => ({
                     url: link.url,
@@ -1958,7 +1958,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     title: bookmark.title,
                     note: bookmark.note,
                     is_archived: is_archived_filter,
-                    is_unread: bookmark.is_unread,
+                    is_unsorted: bookmark.is_unsorted,
                     stars: bookmark.stars == no_stars ? 0 : no_stars,
                     links: bookmark.links.map((link) => ({
                       url: link.url,
@@ -1972,11 +1972,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   search_hook.count &&
                   (filter_view_options_hook.current_filter_ == Filter.STARRED ||
                     filter_view_options_hook.current_filter_ ==
-                      Filter.STARRED_UNREAD ||
+                      Filter.STARRED_unsorted ||
                     filter_view_options_hook.current_filter_ ==
                       Filter.ARCHIVED_STARRED ||
                     filter_view_options_hook.current_filter_ ==
-                      Filter.ARCHIVED_STARRED_UNREAD) &&
+                      Filter.ARCHIVED_STARRED_unsorted) &&
                   bookmark.stars == 1
                 ) {
                   search_hook.set_count(search_hook.count - 1)
@@ -1986,14 +1986,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               }}
             />
             <UiCommon_Dropdown_CheckboxItem
-              is_checked={bookmark.is_unread}
-              label={props.dictionary.app.library.bookmark.unread}
+              is_checked={bookmark.is_unsorted}
+              label={props.dictionary.app.library.bookmark.unsorted}
               on_click={async () => {
                 dispatch(bookmarks_actions.set_is_upserting(true))
                 const { db } = await props.local_db.init({
                   is_archived: is_archived_filter,
                 })
-                const is_unread = !bookmark.is_unread
+                const is_unsorted = !bookmark.is_unsorted
                 const modified_bookmark: UpsertBookmark_Params = {
                   bookmark_id: bookmark.id,
                   is_public: bookmark.is_public,
@@ -2001,7 +2001,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   title: bookmark.title,
                   note: bookmark.note,
                   is_archived: is_archived_filter,
-                  is_unread: is_unread,
+                  is_unsorted: is_unsorted,
                   stars: bookmark.stars,
                   links: bookmark.links.map((link) => ({
                     url: link.url,
@@ -2040,12 +2040,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 )
                 if (
                   search_hook.count &&
-                  (filter_view_options_hook.current_filter_ == Filter.UNREAD ||
+                  (filter_view_options_hook.current_filter_ == Filter.unsorted ||
                     filter_view_options_hook.current_filter_ ==
-                      Filter.STARRED_UNREAD ||
+                      Filter.STARRED_unsorted ||
                     filter_view_options_hook.current_filter_ ==
-                      Filter.ARCHIVED_STARRED_UNREAD) &&
-                  bookmark.is_unread
+                      Filter.ARCHIVED_STARRED_unsorted) &&
+                  bookmark.is_unsorted
                 ) {
                   search_hook.set_count(search_hook.count! - 1)
                 }
@@ -2060,7 +2060,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     title: bookmark.title,
                     note: bookmark.note,
                     is_archived: is_archived_filter,
-                    is_unread,
+                    is_unsorted,
                     stars: bookmark.stars,
                     links: bookmark.links.map((link) => ({
                       url: link.url,
@@ -2166,7 +2166,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   bookmark: {
                     id: bookmark.id,
                     is_archived: is_archived_filter,
-                    is_unread: updated_bookmark.is_unread,
+                    is_unsorted: updated_bookmark.is_unsorted,
                     title: updated_bookmark.title,
                     note: updated_bookmark.note,
                     tags: updated_bookmark.tags.map((tag) => tag.name),
@@ -2213,7 +2213,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   created_at: new Date(bookmark.created_at),
                   title: bookmark.title,
                   is_archived: !is_archived_filter,
-                  is_unread: bookmark.is_unread,
+                  is_unsorted: bookmark.is_unsorted,
                   stars: bookmark.stars,
                   links: bookmark.links.map((link) => ({
                     url: link.url,
@@ -2261,7 +2261,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     title: bookmark.title,
                     note: bookmark.note,
                     is_archived: !is_archived_filter,
-                    is_unread: bookmark.is_unread,
+                    is_unsorted: bookmark.is_unsorted,
                     stars: bookmark.stars,
                     links: bookmark.links.map((link) => ({
                       url: link.url,
@@ -2282,7 +2282,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     title: bookmark.title,
                     note: bookmark.note,
                     is_archived: !is_archived_filter,
-                    is_unread: bookmark.is_unread,
+                    is_unsorted: bookmark.is_unsorted,
                     stars: bookmark.stars,
                     links: bookmark.links.map((link) => ({
                       url: link.url,

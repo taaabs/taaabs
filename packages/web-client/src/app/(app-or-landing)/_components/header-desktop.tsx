@@ -164,7 +164,7 @@ export const HeaderDesktop: React.FC<{
                 title: created_bookmark.title,
                 note: created_bookmark.note,
                 is_archived: false,
-                is_unread: created_bookmark.is_unread,
+                is_unsorted: created_bookmark.is_unsorted,
                 stars: created_bookmark.stars,
                 links: created_bookmark.links.map((link) => ({
                   url: link.url,

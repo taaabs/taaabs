@@ -51,7 +51,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
               bookmark.created_at || created_at_fallback.toISOString(),
             is_public: bookmark.is_public || undefined,
             is_archived: bookmark.is_archived || undefined,
-            is_unread: bookmark.is_unread || undefined,
+            is_unsorted: bookmark.is_unsorted || undefined,
             stars: bookmark.stars || undefined,
             cover:
               bookmark.cover && bookmark.is_public ? bookmark.cover : undefined,

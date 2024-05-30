@@ -23,7 +23,7 @@ export class Counts_RepositoryImpl implements Counts_Repository {
               [k]: {
                 bookmark_count: v.bookmark_count,
                 starred_count: v.starred_count,
-                unread_count: v.unread_count,
+                unsorted_count: v.unsorted_count,
                 tags: (
                   await Promise.all(
                     v.tags.map(async (tag) => ({

@@ -5,7 +5,7 @@ export type UpsertBookmark_Params = {
   title?: string
   note?: string
   is_archived: boolean
-  is_unread: boolean
+  is_unsorted: boolean
   stars?: number
   tags: { name: string; is_public?: boolean }[]
   links: {

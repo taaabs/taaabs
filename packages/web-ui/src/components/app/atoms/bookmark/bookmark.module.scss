@@ -107,7 +107,7 @@
       @include at992 {
         padding: 14px 14px 0 0;
       }
-      &__unread {
+      &__unsorted {
         display: inline-flex;
         align-items: center;
         transform: translateY(0.5px);
@@ -133,7 +133,7 @@
         @include at992 {
           font-size: var(--font-size-1-8rem);
         }
-        &--unread {
+        &--unsorted {
           font-weight: var(--font-weight-inter-bold);
         }
         &--untitled {

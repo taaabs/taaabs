@@ -8,7 +8,7 @@ export namespace GetBookmarks_Params {
     tags?: string[]
     after?: number
     starred_only?: boolean
-    unread_only?: boolean
+    unsorted_only?: boolean
     is_archived?: boolean
     yyyymm_gte?: number
     yyyymm_lte?: number

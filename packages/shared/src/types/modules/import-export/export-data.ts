@@ -27,7 +27,7 @@ export type Bookmark = {
   is_public?: boolean
   is_archived?: boolean
   stars?: number
-  is_unread?: boolean
+  is_unsorted?: boolean
   tags: Tag[]
   links: Link[]
   cover?: string

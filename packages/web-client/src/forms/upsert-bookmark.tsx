@@ -275,7 +275,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         : undefined,
       stars: props.bookmark?.stars,
       is_archived: props.is_archived || false,
-      is_unread: props.bookmark?.is_unread || false,
+      is_unsorted: props.bookmark?.is_unsorted || false,
       links: await Promise.all(
         links.map(async (link) => {
           const current_link = props.bookmark?.links.find(
