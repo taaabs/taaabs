@@ -102,10 +102,10 @@
       color: var(--text-color-normal);
       @include to992 {
         padding-left: var(--padding-14px);
-        padding-top: var(--padding-12px);
+        padding-top: 11px;
       }
       @include at992 {
-        padding: 14px 14px 0 0;
+        padding: 10px 14px 0 0;
       }
       &__unsorted {
         display: inline-flex;
@@ -203,14 +203,14 @@
     }
     &__tags {
       grid-area: tags;
-      margin-bottom: -8px;
+      margin-bottom: -6px;
       padding-bottom: var(--padding-10px);
       @include to992 {
         padding-left: 12px;
       }
       > * {
         margin-right: 6px;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
       }
       > span {
         color: var(--text-color-dimmed);
@@ -218,10 +218,12 @@
       &__tag {
         display: inline-flex;
         align-items: center;
-        background-color: var(--green100);
+        gap: 4px;
+        background-color: var(--green50);
         border-radius: var(--border-radius-999px);
         height: var(--button-dimension-28px);
         padding: var(--padding-10px);
+        color: var(--green600);
         @include transition-150ms;
         // Needed by swipable and sortable - element touch hold detection.
         @include touch-screen {
@@ -232,24 +234,22 @@
         font-family: var(--font-family-inter-tight);
         font-size: var(--font-size-14px);
         @include hover {
-          background-color: var(--green200);
+          background-color: var(--green100);
         }
         &--selected {
-          background-color: var(--green700);
+          background-color: var(--green600);
           @include hover {
-            background-color: var(--green800);
+            background-color: var(--green700);
           }
         }
         &__name {
-          color: var(--green700);
           font-weight: var(--font-weight-inter-medium);
           &--selected {
-            color: var(--green50);
+            color: var(--white);
           }
         }
         &__yields {
-          color: var(--green600);
-          margin-left: 0.4rem;
+          opacity: 0.8;
         }
       }
       &__actions {
@@ -404,9 +404,9 @@
             @include transition-150ms(background-color);
             width: var(--button-dimension-28px);
             height: var(--button-dimension-28px);
-            background-color: var(--blue200);
+            background-color: var(--blue100);
             svg {
-              fill: var(--blue700);
+              fill: var(--blue600);
               @include transition-150ms(fill);
               width: var(--icon-dimension-16px);
             }
@@ -653,6 +653,7 @@
   }
 }
 .highlight {
+  color: var(--text-color-normal);
   background-color: var(--highlight);
 }
 .highlight-link {

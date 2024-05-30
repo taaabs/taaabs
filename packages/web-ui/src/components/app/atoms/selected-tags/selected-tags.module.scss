@@ -3,10 +3,11 @@
 
 .container {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 16px;
-  position: relative;
+  align-items: flex-start;
+  margin-bottom: var(--padding-16px);
+  flex-wrap: wrap;
+  row-gap: 6px;
+  column-gap: 6px;
 }
 .count {
   position: absolute;
@@ -20,21 +21,18 @@
 }
 .tag {
   display: inline-flex;
-  font-family: var(--font-family-inter-tight);
+  align-items: center;
+  border-radius: var(--border-radius-999px);
+  height: var(--button-dimension-28px);
+  padding: var(--padding-10px);
   font-size: var(--font-size-1-4rem);
   overflow-wrap: anywhere;
-  text-align: left;
-  span:first-child {
-    @include hover {
-      @include text-decoration-underline;
-    }
-  }
-  span:first-child {
-    color: var(--green700);
-    font-weight: var(--font-weight-inter-tight-medium);
-  }
-  span:last-child {
-    color: var(--text-color-dimmed);
-    margin-left: 3px;
+  font-family: var(--font-family-inter-tight);
+  font-weight: var(--font-weight-inter-tight-medium);
+  color: var(--white);
+  background-color: var(--green600);
+  @include transition-150ms;
+  @include hover {
+    background-color: var(--green700);
   }
 }

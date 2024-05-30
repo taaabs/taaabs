@@ -212,14 +212,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       } else if (
         (filter_view_options_hook.current_filter_ == Filter.STARRED ||
           filter_view_options_hook.current_filter_ ==
-            Filter.STARRED_unsorted) &&
+            Filter.STARRED_UNSORTED) &&
         !item.stars
       ) {
         is_relevant = false
       } else if (
-        (filter_view_options_hook.current_filter_ == Filter.unsorted ||
+        (filter_view_options_hook.current_filter_ == Filter.UNSORTED ||
           filter_view_options_hook.current_filter_ ==
-            Filter.STARRED_unsorted) &&
+            Filter.STARRED_UNSORTED) &&
         !item.is_unsorted
       ) {
         is_relevant = false
@@ -416,8 +416,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     filter_view_options_hook.current_filter_ == Filter.ARCHIVED ||
     filter_view_options_hook.current_filter_ == Filter.ARCHIVED_STARRED ||
     filter_view_options_hook.current_filter_ ==
-      Filter.ARCHIVED_STARRED_unsorted ||
-    filter_view_options_hook.current_filter_ == Filter.ARCHIVED_unsorted
+      Filter.ARCHIVED_STARRED_UNSORTED ||
+    filter_view_options_hook.current_filter_ == Filter.ARCHIVED_UNSORTED
 
   const is_not_interactive =
     is_fetching_first_bookmarks ||
@@ -551,11 +551,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           is_toggled_:
             filter_view_options_hook.current_filter_ == Filter.STARRED ||
             filter_view_options_hook.current_filter_ ==
-              Filter.STARRED_unsorted ||
+              Filter.STARRED_UNSORTED ||
             filter_view_options_hook.current_filter_ ==
               Filter.ARCHIVED_STARRED ||
             filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_STARRED_unsorted,
+              Filter.ARCHIVED_STARRED_UNSORTED,
           on_click_: () => {
             if (
               is_fetching_first_bookmarks ||
@@ -573,9 +573,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               filter = Filter.NONE
             } else if (
               filter_view_options_hook.current_filter_ ==
-              Filter.STARRED_unsorted
+              Filter.STARRED_UNSORTED
             ) {
-              filter = Filter.unsorted
+              filter = Filter.UNSORTED
             } else if (
               filter_view_options_hook.current_filter_ ==
               Filter.ARCHIVED_STARRED
@@ -583,22 +583,22 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               filter = Filter.ARCHIVED
             } else if (
               filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_STARRED_unsorted
+              Filter.ARCHIVED_STARRED_UNSORTED
             ) {
-              filter = Filter.ARCHIVED_unsorted
+              filter = Filter.ARCHIVED_UNSORTED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.unsorted
+              filter_view_options_hook.current_filter_ == Filter.UNSORTED
             ) {
-              filter = Filter.STARRED_unsorted
+              filter = Filter.STARRED_UNSORTED
             } else if (
               filter_view_options_hook.current_filter_ == Filter.ARCHIVED
             ) {
               filter = Filter.ARCHIVED_STARRED
             } else if (
               filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_unsorted
+              Filter.ARCHIVED_UNSORTED
             ) {
-              filter = Filter.ARCHIVED_STARRED_unsorted
+              filter = Filter.ARCHIVED_STARRED_UNSORTED
             }
             filter_view_options_hook.set_filter_query_param_(filter)
           },
@@ -608,13 +608,13 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               {
                 label_: props.dictionary.app.library.toolbar.unsorted,
                 is_toggled_:
-                  filter_view_options_hook.current_filter_ == Filter.unsorted ||
+                  filter_view_options_hook.current_filter_ == Filter.UNSORTED ||
                   filter_view_options_hook.current_filter_ ==
-                    Filter.STARRED_unsorted ||
+                    Filter.STARRED_UNSORTED ||
                   filter_view_options_hook.current_filter_ ==
-                    Filter.ARCHIVED_unsorted ||
+                    Filter.ARCHIVED_UNSORTED ||
                   filter_view_options_hook.current_filter_ ==
-                    Filter.ARCHIVED_STARRED_unsorted,
+                    Filter.ARCHIVED_STARRED_UNSORTED,
                 on_click_: () => {
                   if (
                     is_fetching_first_bookmarks ||
@@ -625,39 +625,39 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
 
                   let filter = Filter.NONE
                   if (filter_view_options_hook.current_filter_ == Filter.NONE) {
-                    filter = Filter.unsorted
+                    filter = Filter.UNSORTED
                   } else if (
-                    filter_view_options_hook.current_filter_ == Filter.unsorted
+                    filter_view_options_hook.current_filter_ == Filter.UNSORTED
                   ) {
                     filter = Filter.NONE
                   } else if (
                     filter_view_options_hook.current_filter_ ==
-                    Filter.STARRED_unsorted
+                    Filter.STARRED_UNSORTED
                   ) {
                     filter = Filter.STARRED
                   } else if (
                     filter_view_options_hook.current_filter_ ==
-                    Filter.ARCHIVED_unsorted
+                    Filter.ARCHIVED_UNSORTED
                   ) {
                     filter = Filter.ARCHIVED
                   } else if (
                     filter_view_options_hook.current_filter_ ==
-                    Filter.ARCHIVED_STARRED_unsorted
+                    Filter.ARCHIVED_STARRED_UNSORTED
                   ) {
                     filter = Filter.ARCHIVED_STARRED
                   } else if (
                     filter_view_options_hook.current_filter_ == Filter.STARRED
                   ) {
-                    filter = Filter.STARRED_unsorted
+                    filter = Filter.STARRED_UNSORTED
                   } else if (
                     filter_view_options_hook.current_filter_ == Filter.ARCHIVED
                   ) {
-                    filter = Filter.ARCHIVED_unsorted
+                    filter = Filter.ARCHIVED_UNSORTED
                   } else if (
                     filter_view_options_hook.current_filter_ ==
                     Filter.ARCHIVED_STARRED
                   ) {
-                    filter = Filter.ARCHIVED_STARRED_unsorted
+                    filter = Filter.ARCHIVED_STARRED_UNSORTED
                   }
                   filter_view_options_hook.set_filter_query_param_(filter)
                 },
@@ -671,9 +671,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             filter_view_options_hook.current_filter_ ==
               Filter.ARCHIVED_STARRED ||
             filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_unsorted ||
+              Filter.ARCHIVED_UNSORTED ||
             filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_STARRED_unsorted,
+              Filter.ARCHIVED_STARRED_UNSORTED,
           on_click_: () => {
             if (
               is_fetching_first_bookmarks ||
@@ -691,14 +691,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             ) {
               filter = Filter.ARCHIVED_STARRED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.unsorted
+              filter_view_options_hook.current_filter_ == Filter.UNSORTED
             ) {
-              filter = Filter.ARCHIVED_unsorted
+              filter = Filter.ARCHIVED_UNSORTED
             } else if (
               filter_view_options_hook.current_filter_ ==
-              Filter.STARRED_unsorted
+              Filter.STARRED_UNSORTED
             ) {
-              filter = Filter.ARCHIVED_STARRED_unsorted
+              filter = Filter.ARCHIVED_STARRED_UNSORTED
             } else if (
               filter_view_options_hook.current_filter_ == Filter.ARCHIVED
             ) {
@@ -710,14 +710,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               filter = Filter.STARRED
             } else if (
               filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_unsorted
+              Filter.ARCHIVED_UNSORTED
             ) {
-              filter = Filter.unsorted
+              filter = Filter.UNSORTED
             } else if (
               filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_STARRED_unsorted
+              Filter.ARCHIVED_STARRED_UNSORTED
             ) {
-              filter = Filter.STARRED_unsorted
+              filter = Filter.STARRED_UNSORTED
             }
 
             filter_view_options_hook.set_filter_query_param_(filter)
@@ -816,17 +816,17 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       selected_tags_={tag_view_options_hook.selected_tags_}
       selected_starred_={
         filter_view_options_hook.current_filter_ == Filter.STARRED ||
-        filter_view_options_hook.current_filter_ == Filter.STARRED_unsorted ||
+        filter_view_options_hook.current_filter_ == Filter.STARRED_UNSORTED ||
         filter_view_options_hook.current_filter_ == Filter.ARCHIVED_STARRED ||
         filter_view_options_hook.current_filter_ ==
-          Filter.ARCHIVED_STARRED_unsorted
+          Filter.ARCHIVED_STARRED_UNSORTED
       }
       selected_unsorted_={
-        filter_view_options_hook.current_filter_ == Filter.unsorted ||
-        filter_view_options_hook.current_filter_ == Filter.STARRED_unsorted ||
-        filter_view_options_hook.current_filter_ == Filter.ARCHIVED_unsorted ||
+        filter_view_options_hook.current_filter_ == Filter.UNSORTED ||
+        filter_view_options_hook.current_filter_ == Filter.STARRED_UNSORTED ||
+        filter_view_options_hook.current_filter_ == Filter.ARCHIVED_UNSORTED ||
         filter_view_options_hook.current_filter_ ==
-          Filter.ARCHIVED_STARRED_unsorted
+          Filter.ARCHIVED_STARRED_UNSORTED
       }
       selected_archived_={is_archived_filter}
       current_gte_={date_view_options_hook.current_gte_}
@@ -849,21 +849,21 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             lte: date_view_options_hook.current_lte_,
             starred_only:
               filter == Filter.STARRED ||
-              filter == Filter.STARRED_unsorted ||
+              filter == Filter.STARRED_UNSORTED ||
               filter == Filter.ARCHIVED_STARRED ||
-              filter == Filter.ARCHIVED_STARRED_unsorted ||
+              filter == Filter.ARCHIVED_STARRED_UNSORTED ||
               undefined,
             unsorted_only:
-              filter == Filter.unsorted ||
-              filter == Filter.STARRED_unsorted ||
-              filter == Filter.ARCHIVED_unsorted ||
-              filter == Filter.ARCHIVED_STARRED_unsorted ||
+              filter == Filter.UNSORTED ||
+              filter == Filter.STARRED_UNSORTED ||
+              filter == Filter.ARCHIVED_UNSORTED ||
+              filter == Filter.ARCHIVED_STARRED_UNSORTED ||
               undefined,
             is_archived:
               filter == Filter.ARCHIVED ||
               filter == Filter.ARCHIVED_STARRED ||
-              filter == Filter.ARCHIVED_unsorted ||
-              filter == Filter.ARCHIVED_STARRED_unsorted ||
+              filter == Filter.ARCHIVED_UNSORTED ||
+              filter == Filter.ARCHIVED_STARRED_UNSORTED ||
               undefined,
           }
 
@@ -1979,11 +1979,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   search_hook.count &&
                   (filter_view_options_hook.current_filter_ == Filter.STARRED ||
                     filter_view_options_hook.current_filter_ ==
-                      Filter.STARRED_unsorted ||
+                      Filter.STARRED_UNSORTED ||
                     filter_view_options_hook.current_filter_ ==
                       Filter.ARCHIVED_STARRED ||
                     filter_view_options_hook.current_filter_ ==
-                      Filter.ARCHIVED_STARRED_unsorted) &&
+                      Filter.ARCHIVED_STARRED_UNSORTED) &&
                   bookmark.stars == 1
                 ) {
                   search_hook.set_count(search_hook.count - 1)
@@ -2048,11 +2048,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 if (
                   search_hook.count &&
                   (filter_view_options_hook.current_filter_ ==
-                    Filter.unsorted ||
+                    Filter.UNSORTED ||
                     filter_view_options_hook.current_filter_ ==
-                      Filter.STARRED_unsorted ||
+                      Filter.STARRED_UNSORTED ||
                     filter_view_options_hook.current_filter_ ==
-                      Filter.ARCHIVED_STARRED_unsorted) &&
+                      Filter.ARCHIVED_STARRED_UNSORTED) &&
                   bookmark.is_unsorted
                 ) {
                   search_hook.set_count(search_hook.count! - 1)

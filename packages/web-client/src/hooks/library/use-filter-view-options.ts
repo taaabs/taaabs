@@ -58,11 +58,11 @@ export const use_filter_view_options = () => {
 
   const clear_selected_stars_ = () => {
     let updated_search_params: URLSearchParams
-    if (current_filter_ == Filter.STARRED_unsorted) {
+    if (current_filter_ == Filter.STARRED_UNSORTED) {
       updated_search_params = update_search_params(
         search_params,
         search_params_keys.filter,
-        Object.values(Filter).indexOf(Filter.unsorted).toString(),
+        Object.values(Filter).indexOf(Filter.UNSORTED).toString(),
       )
     } else {
       updated_search_params = update_search_params(
@@ -85,7 +85,7 @@ export const use_filter_view_options = () => {
 
   const clear_unsorted_ = () => {
     let updated_search_params: URLSearchParams
-    if (current_filter_ == Filter.STARRED_unsorted) {
+    if (current_filter_ == Filter.STARRED_UNSORTED) {
       updated_search_params = update_search_params(
         search_params,
         search_params_keys.filter,

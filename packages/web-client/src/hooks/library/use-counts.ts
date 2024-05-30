@@ -53,21 +53,21 @@ export const use_counts = () => {
         request_params.starred_only =
           Object.values(Filter)[parseInt(query_filter)] == Filter.STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.STARRED_unsorted ||
+            Filter.STARRED_UNSORTED ||
           Object.values(Filter)[parseInt(query_filter)] ==
             Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_STARRED_unsorted ||
+            Filter.ARCHIVED_STARRED_UNSORTED ||
           undefined
 
         request_params.unsorted_only =
-          Object.values(Filter)[parseInt(query_filter)] == Filter.unsorted ||
+          Object.values(Filter)[parseInt(query_filter)] == Filter.UNSORTED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.STARRED_unsorted ||
+            Filter.STARRED_UNSORTED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_unsorted ||
+            Filter.ARCHIVED_UNSORTED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_STARRED_unsorted ||
+            Filter.ARCHIVED_STARRED_UNSORTED ||
           undefined
 
         request_params.is_archived =
@@ -75,9 +75,9 @@ export const use_counts = () => {
           Object.values(Filter)[parseInt(query_filter)] ==
             Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_unsorted ||
+            Filter.ARCHIVED_UNSORTED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_STARRED_unsorted ||
+            Filter.ARCHIVED_STARRED_UNSORTED ||
           undefined
       }
 
@@ -109,11 +109,11 @@ export const use_counts = () => {
         request_params.starred_only =
           Object.values(Filter)[parseInt(query_filter)] == Filter.STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.STARRED_unsorted ||
+            Filter.STARRED_UNSORTED ||
           Object.values(Filter)[parseInt(query_filter)] ==
             Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_STARRED_unsorted ||
+            Filter.ARCHIVED_STARRED_UNSORTED ||
           undefined
 
         request_params.is_archived =
@@ -121,9 +121,9 @@ export const use_counts = () => {
           Object.values(Filter)[parseInt(query_filter)] ==
             Filter.ARCHIVED_STARRED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_unsorted ||
+            Filter.ARCHIVED_UNSORTED ||
           Object.values(Filter)[parseInt(query_filter)] ==
-            Filter.ARCHIVED_STARRED_unsorted ||
+            Filter.ARCHIVED_STARRED_UNSORTED ||
           undefined
       }
 

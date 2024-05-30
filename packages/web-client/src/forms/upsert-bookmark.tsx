@@ -375,6 +375,19 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             }
           } else if (
             props.bookmark_autofill.links?.[0].url.startsWith(
+              'https://coral.cohere.com/c/',
+            )
+          ) {
+            const temp_el = document.createElement('div')
+            temp_el.innerHTML = clipboard_data.html
+            const title = temp_el.querySelector<HTMLElement>(
+              '.truncate.font-body.text-p-lg',
+            )?.innerText
+            if (title) {
+              setValue('title', title)
+            }
+          } else if (
+            props.bookmark_autofill.links?.[0].url.startsWith(
               'https://gemini.google.com/app/',
             )
           ) {

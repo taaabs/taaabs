@@ -46,17 +46,17 @@
   text-align: left;
   height: 24px;
   font-size: 13px;
-  background-color: var(--green100);
+  background-color: var(--green50);
   border-radius: var(--border-radius-999px);
+  color: var(--green600);
   @include transition-150ms(background-color);
   @include hover {
-    background-color: var(--green200);
+    background-color: var(--green100);
   }
   > span:first-child {
-    color: var(--green700);
     font-weight: var(--font-weight-inter-tight-medium);
   }
   > span:last-child {
-    color: var(--green600);
+    opacity: 0.8;
   }
 }

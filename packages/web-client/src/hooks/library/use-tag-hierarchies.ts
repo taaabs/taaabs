@@ -32,23 +32,23 @@ export const use_tag_hierarchies = () => {
     if (params.filter) {
       request_params.starred_only =
         params.filter == Filter.STARRED ||
-        params.filter == Filter.STARRED_unsorted ||
+        params.filter == Filter.STARRED_UNSORTED ||
         params.filter == Filter.ARCHIVED_STARRED ||
-        params.filter == Filter.ARCHIVED_STARRED_unsorted ||
+        params.filter == Filter.ARCHIVED_STARRED_UNSORTED ||
         undefined
 
       request_params.unsorted_only =
-        params.filter == Filter.unsorted ||
-        params.filter == Filter.STARRED_unsorted ||
-        params.filter == Filter.ARCHIVED_unsorted ||
-        params.filter == Filter.ARCHIVED_STARRED_unsorted ||
+        params.filter == Filter.UNSORTED ||
+        params.filter == Filter.STARRED_UNSORTED ||
+        params.filter == Filter.ARCHIVED_UNSORTED ||
+        params.filter == Filter.ARCHIVED_STARRED_UNSORTED ||
         undefined
 
       request_params.is_archived =
         params.filter == Filter.ARCHIVED ||
         params.filter == Filter.ARCHIVED_STARRED ||
-        params.filter == Filter.ARCHIVED_unsorted ||
-        params.filter == Filter.ARCHIVED_STARRED_unsorted ||
+        params.filter == Filter.ARCHIVED_UNSORTED ||
+        params.filter == Filter.ARCHIVED_STARRED_UNSORTED ||
         undefined
     }
     return request_params
@@ -79,16 +79,16 @@ export const use_tag_hierarchies = () => {
       if (params.filter) {
         request_params.starred_only =
           params.filter == Filter.STARRED ||
-          params.filter == Filter.STARRED_unsorted ||
+          params.filter == Filter.STARRED_UNSORTED ||
           params.filter == Filter.ARCHIVED_STARRED ||
-          params.filter == Filter.ARCHIVED_STARRED_unsorted ||
+          params.filter == Filter.ARCHIVED_STARRED_UNSORTED ||
           undefined
 
         request_params.is_archived =
           params.filter == Filter.ARCHIVED ||
           params.filter == Filter.ARCHIVED_STARRED ||
-          params.filter == Filter.ARCHIVED_unsorted ||
-          params.filter == Filter.ARCHIVED_STARRED_unsorted ||
+          params.filter == Filter.ARCHIVED_UNSORTED ||
+          params.filter == Filter.ARCHIVED_STARRED_UNSORTED ||
           undefined
       }
       await dispatch(

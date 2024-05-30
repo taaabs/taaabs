@@ -33,11 +33,6 @@ export namespace HtmlParser {
       const message_divs = temp_el.querySelectorAll<HTMLElement>(
         '[data-message-author-role="assistant"], div[data-message-author-role="user"]',
       )
-      const title = temp_el
-        .querySelector<HTMLElement>(
-          '.bg-token-sidebar-surface-secondary.active\\:opacity-90.rounded-lg.relative.group > .p-2.gap-2.items-center.flex',
-        )
-        ?.innerText.replace(/\.$/, '')
       const messages: ReaderData.Chat['conversation'] = []
       message_divs.forEach((div) => {
         const author_role = div.getAttribute('data-message-author-role') as
@@ -56,6 +51,9 @@ export namespace HtmlParser {
         }
       })
       if (messages.length) {
+        const title = temp_el.querySelector<HTMLElement>(
+          '.bg-token-sidebar-surface-secondary.active\\:opacity-90.rounded-lg.relative.group > .p-2.gap-2.items-center.flex',
+        )?.innerText
         return {
           plain_text: `${title ? `${title} ` : ''}${messages
             .map((message) =>
@@ -169,6 +167,48 @@ export namespace HtmlParser {
         }
       })
       if (messages.length) {
+        return {
+          plain_text: `${title ? `${title} ` : ''}${messages
+            .map((message) =>
+              message.author == 'user' ? message.text : message.content,
+            )
+            .join(' ')
+            .replace(/[ \t\r\n]+/gm, ' ')
+            .trim()}`,
+          reader_data: JSON.stringify({
+            type: ReaderData.ContentType.CHAT,
+            conversation: messages,
+          } as ReaderData.Chat),
+        }
+      }
+    } else if (params.url.startsWith('https://coral.cohere.com/c/')) {
+      const temp_el = document.createElement('div')
+      temp_el.innerHTML = params.html
+      const user_selector =
+        '.hover\\:bg-mushroom-50.ease-in-out.transition-colors.md\\:flex-row.text-left.p-2.rounded-md.gap-2.flex-col.w-full.h-fit.flex.group:has(img[alt="Avatar user image"])'
+      const assistant_selector =
+        '.hover\\:bg-mushroom-50.ease-in-out.transition-colors.md\\:flex-row.text-left.p-2.rounded-md.gap-2.flex-col.w-full.h-fit.flex.group:has(svg[data-component="CoralLogo"])'
+      const message_divs = temp_el.querySelectorAll<HTMLElement>(
+        `${user_selector}, ${assistant_selector}`,
+      )
+      const messages: ReaderData.Chat['conversation'] = []
+      message_divs.forEach((el) => {
+        if (el.matches(user_selector)) {
+          messages.push({ author: 'user', text: el.textContent?.trim() || '' })
+        } else if (el.matches(assistant_selector)) {
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(el.innerHTML, 'text/html')
+          const article = new Readability(doc).parse()!
+          messages.push({
+            author: 'assistant',
+            content: turndown_service.turndown(article.content),
+          })
+        }
+      })
+      if (messages.length) {
+        const title = temp_el.querySelector<HTMLElement>(
+          '.truncate.font-body.text-p-lg',
+        )?.innerText
         return {
           plain_text: `${title ? `${title} ` : ''}${messages
             .map((message) =>

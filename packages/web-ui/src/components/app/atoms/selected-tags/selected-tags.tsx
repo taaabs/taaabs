@@ -61,8 +61,7 @@ export const SelectedTags: React.FC<SelectedTags.Props> = memo(
               }
             }}
           >
-            <span>{tag.name}</span>
-            <span>×</span>
+            {tag.name}
           </button>
         ))}
       </div>
