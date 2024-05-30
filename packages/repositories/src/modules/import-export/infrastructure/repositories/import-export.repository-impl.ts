@@ -6,6 +6,7 @@ import { SendImportData_Params } from '../../domain/types/send-import-data.param
 import { ImportExport_DataSource } from '../data-sources/import-export.data-source'
 import { Crypto } from '@repositories/utils/crypto'
 import { Backup_Ro } from '../../domain/types/backup.ro'
+import pako from 'pako'
 
 export class ImportExport_RepositoryImpl implements ImportExport_Repository {
   constructor(private readonly _import_data_source: ImportExport_DataSource) {}
@@ -90,6 +91,8 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                       open_snapshot: link.open_snapshot || undefined,
                       is_pinned: link.is_pinned || undefined,
                       pin_order: link.pin_order || undefined,
+                      plain_text: link.plain_text || undefined,
+                      reader_data: link.reader_data || undefined,
                     }
                   } else if (link.url_aes && link.site_aes) {
                     const site = await Crypto.AES.decrypt(
@@ -117,6 +120,36 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                         ? await Crypto.AES.decrypt(
                             link.favicon_aes,
                             encryption_key,
+                          )
+                        : undefined,
+                      plain_text: link.plain_text_aes
+                        ? new TextDecoder().decode(
+                            pako.inflate(
+                              Uint8Array.from(
+                                atob(
+                                  await Crypto.AES.decrypt(
+                                    link.plain_text_aes,
+                                    encryption_key,
+                                  ),
+                                ),
+                                (c) => c.charCodeAt(0),
+                              ),
+                            ),
+                          )
+                        : undefined,
+                      reader_data: link.reader_data_aes
+                        ? new TextDecoder().decode(
+                            pako.inflate(
+                              Uint8Array.from(
+                                atob(
+                                  await Crypto.AES.decrypt(
+                                    link.reader_data_aes,
+                                    encryption_key,
+                                  ),
+                                ),
+                                (c) => c.charCodeAt(0),
+                              ),
+                            ),
                           )
                         : undefined,
                     }

@@ -8,6 +8,7 @@ import { DownloadBackup_Params } from '../../domain/types/download-backup.params
 import { system_values } from '@shared/constants/system-values'
 import { Crypto } from '@repositories/utils/crypto'
 import { KyInstance } from 'ky'
+import pako from 'pako'
 
 export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -107,6 +108,14 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                           open_snapshot: link.open_snapshot,
                           is_pinned: link.is_pinned,
                           pin_order: link.pin_order,
+                          plain_text: link.plain_text,
+                          reader_data: link.reader_data,
+                          favicon_aes: link.favicon
+                            ? await Crypto.AES.encrypt(
+                                link.favicon,
+                                encryption_key,
+                              )
+                            : undefined,
                         }
                       } else {
                         const domain = get_domain_from_url(link.url)
@@ -132,6 +141,26 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                           favicon_aes: link.favicon
                             ? await Crypto.AES.encrypt(
                                 link.favicon,
+                                encryption_key,
+                              )
+                            : undefined,
+                          plain_text_aes: link.plain_text
+                            ? await Crypto.AES.encrypt(
+                                btoa(
+                                  String.fromCharCode(
+                                    ...pako.deflate(link.plain_text),
+                                  ),
+                                ),
+                                encryption_key,
+                              )
+                            : undefined,
+                          reader_data_aes: link.reader_data
+                            ? await Crypto.AES.encrypt(
+                                btoa(
+                                  String.fromCharCode(
+                                    ...pako.deflate(link.reader_data),
+                                  ),
+                                ),
                                 encryption_key,
                               )
                             : undefined,
