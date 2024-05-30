@@ -33,19 +33,6 @@
       border-color: var(--neutral300);
     }
   }
-  &--search-result {
-    border-top-style: dashed;
-    border-top-color: var(--neutral250);
-    @include at992 {
-      border-style: dashed;
-      border-color: var(--neutral300);
-    }
-  }
-  &--search-result-clickable {
-    @include hover {
-      border-color: var(--neutral400);
-    }
-  }
 }
 .bookmark {
   display: flex;

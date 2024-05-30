@@ -3,8 +3,6 @@ declare const styles: {
   readonly 'container--compact': string
   readonly 'container--compact--opened': string
   readonly 'container--clickable': string
-  readonly 'container--search-result': string
-  readonly 'container--search-result-clickable': string
   readonly bookmark: string
   readonly bookmark__card: string
   readonly 'bookmark__card--corners-fix': string

@@ -609,13 +609,6 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
             [styles['container--compact--opened']]:
               props.density_ == 'compact' && props.is_compact_ == false,
           },
-          {
-            [styles['container--search-result']]: props.is_search_result_,
-          },
-          {
-            [styles['container--search-result-clickable']]:
-              props.is_search_result_ && props.density_ == 'compact',
-          },
         )}
         role="button"
         onClick={() => {
