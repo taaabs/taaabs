@@ -66,7 +66,7 @@ export const dictionary: Dictionary = {
           description: 'Podnieś limity użytkowania i funkcje na wyższy poziom',
           bullets_heading: 'Wszystko co w darmowym, plus:',
           bullets: [
-            '50 000 zaszyfrowanych zakładek',
+            '10 000 zaszyfrowanych zakładek',
             'Oznaczanie fragmentów stron',
             'Wiele linków na zakładce',
             'Filtruj oznaczone gwiazdkami oraz nieprzeczytane',

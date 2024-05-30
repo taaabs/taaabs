@@ -60,7 +60,7 @@ const dictionary: Dictionary = {
           description: 'Level up your usage limits and features',
           bullets_heading: 'Everything in Free, plus:',
           bullets: [
-            '50 000 bookmarks',
+            '20 000 bookmarks',
             'Highlights',
             'Multi-link bookmarks',
             'Filters: starred, unread',
