@@ -26,7 +26,7 @@
     1px 0 0 0 var(--border-color-primary);
 }
 .simplebar {
-  max-height: calc(85svh);
+  height: calc(85svh);
   &__inner {
     padding: var(--padding-24px) var(--padding-16px);
     @include at768 {
