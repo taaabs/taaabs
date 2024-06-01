@@ -9,21 +9,31 @@
 .user {
   background: var(--neutral150);
   padding: 20px;
-  max-width: 70%;
   align-self: flex-end;
   word-wrap: anywhere;
   border-radius: var(--border-radius-20px);
+  max-width: 90%;
+  @include at992 {
+    max-width: 70%;
+  }
 }
 .assistant {
   position: relative;
   &::before {
     position: absolute;
     content: '';
-    width: 10px;
-    height: 10px;
+    width: 6px;
+    height: 6px;
     background-color: var(--brand-color);
     border-radius: 50%;
+    left: -10px;
+    top: 8px;
+    @include at992 {
+    width: 10px;
+    height: 10px;
     left: -22px;
     top: 7px;
+      
+    }
   }
 }

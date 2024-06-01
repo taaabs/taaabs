@@ -2,9 +2,10 @@
 @use '../../../../../../styles/foundation' as *;
 
 .container {
-  // style here
-  font-size: var(--font-size-16px);
-  line-height: 1.6;
+  line-height: 1.5;
+  @include at992 {
+    font-size: var(--font-size-16px);
+  }
   > * {
     max-width: 100%;
     overflow: hidden;

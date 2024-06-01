@@ -20,5 +20,6 @@ export const reader_modal_setter = (params: {
           dictionary={params.dictionary}
         />
       ),
+      pin_to_bottom_on_mobile: true,
     })
   })
