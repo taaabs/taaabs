@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import styles from './content.module.scss'
+import styles from './content-standard.module.scss'
 import cn from 'classnames'
 import SimpleBar from 'simplebar-react'
 
-export namespace Content {
+export namespace ContentStandard {
   export type Props = {
     slot_header: React.ReactNode
     width: number
@@ -12,7 +12,7 @@ export namespace Content {
   }
 }
 
-export const Content: React.FC<Content.Props> = (props) => {
+export const ContentStandard: React.FC<ContentStandard.Props> = (props) => {
   const simplebar = useRef<any>(null)
   const [is_scrolled_to_top, set_is_scrolled_to_top] = useState(true)
   const [is_scrolled_to_bottom, set_is_scrolled_to_bottom] = useState(true)

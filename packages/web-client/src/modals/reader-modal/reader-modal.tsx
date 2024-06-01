@@ -1,12 +1,8 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { ReaderData } from '@/utils/html-parser/reader-data'
-import { Content as UiCommonTemplate_Modal_Content } from '@web-ui/components/common/templates/modal/content'
-import { Header as UiCommonTemplate_Modal_Content_Header } from '@web-ui/components/common/templates/modal/content/header'
-import ReactMarkdown from 'react-markdown'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import remarkGfm from 'remark-gfm'
-import hljs from 'highlight.js'
+import { ContentReader as UiCommonTemplate_Modal_ContentReader } from '@web-ui/components/common/templates/modal/content-reader'
+import { ReaderData } from '@shared/utils/html-parser/reader-data'
+import { Chat as UiCommonTemplate_Modal_ContentReader_Chat } from '@web-ui/components/common/templates/modal/content-reader/chat'
+import { Article as UiCommonTemplate_Modal_ContentReader_Article } from '@web-ui/components/common/templates/modal/content-reader/article'
 
 export namespace ReaderModal {
   export type Props = {
@@ -17,54 +13,25 @@ export namespace ReaderModal {
 }
 
 export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
-  if (props.reader_data.type == ReaderData.ContentType.ARTICLE)
+  if (props.reader_data.type == ReaderData.ContentType.ARTICLE) {
     return (
-      <UiCommonTemplate_Modal_Content
-        width={800}
-        slot_header={
-          <UiCommonTemplate_Modal_Content_Header title={'Reading mode'} />
-        }
-        slot_footer={
-          <></>
-          // <UiCommonTemplate_Modal_Content_Footer
-          //   button_label={'Open original'}
-          //   button_on_click={() => {}}
-          //   on_click_cancel={props.on_close}
-          //   translations={{
-          //     cancel: 'Close',
-          //   }}
-          // />
-        }
+      <UiCommonTemplate_Modal_ContentReader
+        slot_left_panel={<></>}
+        slot_right_panel={<></>}
       >
-        <ReactMarkdown
-          children={props.reader_data.content}
-          remarkPlugins={[remarkGfm]}
-          components={{
-            code(props) {
-              const { children, className, ...rest } = props
-              const children_parsed = String(children).replace(/\n$/, '')
-              let language: string | undefined = undefined
-              const match = /language-(\w+)/.exec(className || '')
-              if (match) {
-                language = match[1]
-              } else {
-                language = hljs.highlightAuto(children_parsed).language
-              }
-              return language ? (
-                <SyntaxHighlighter
-                  PreTag="div"
-                  language={language}
-                  children={children_parsed}
-                  style={vscDarkPlus}
-                />
-              ) : (
-                <code className={className} {...rest}>
-                  {children}
-                </code>
-              )
-            },
-          }}
+        <UiCommonTemplate_Modal_ContentReader_Article
+          article={props.reader_data}
         />
-      </UiCommonTemplate_Modal_Content>
+      </UiCommonTemplate_Modal_ContentReader>
     )
+  } else if (props.reader_data.type == ReaderData.ContentType.CHAT) {
+    return (
+      <UiCommonTemplate_Modal_ContentReader
+        slot_left_panel={<></>}
+        slot_right_panel={<></>}
+      >
+        <UiCommonTemplate_Modal_ContentReader_Chat chat={props.reader_data} />
+      </UiCommonTemplate_Modal_ContentReader>
+    )
+  }
 }

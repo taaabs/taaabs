@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
 import styles from './modal.module.scss'
 import cn from 'classnames'
+import OutsideClickHandler from 'react-outside-click-handler'
 
 export namespace Modal {
   export type Props = {
     children?: React.ReactNode
-    slot_modal?: React.ReactNode
+    slot_modal_content?: React.ReactNode
     pin_to_bottom_on_mobile?: boolean
+    on_outside_click: () => void
   }
 }
 
@@ -15,7 +17,7 @@ export const Modal: React.FC<Modal.Props> = (props) => {
     const header = document.querySelector<HTMLElement>('body > header')
     const top_divs = document.querySelectorAll<HTMLElement>('body > div')
     const toolbar = document.getElementById('toolbar')
-    if (props.slot_modal) {
+    if (props.slot_modal_content) {
       const scrollbar_width = window.innerWidth - document.body.clientWidth
 
       document.body.style.overflow = 'hidden'
@@ -30,26 +32,29 @@ export const Modal: React.FC<Modal.Props> = (props) => {
       top_divs.forEach((el: any) => (el.style.paddingRight = ''))
       if (toolbar) toolbar.style.paddingRight = ''
     }
-  }, [props.slot_modal])
+  }, [props.slot_modal_content])
 
   return (
     <>
       {props.children}
       <div
         className={cn(styles.modal, {
-          [styles['modal--visible']]: props.slot_modal,
+          [styles['modal--visible']]: props.slot_modal_content,
           [styles['modal--pin-to-bottom-on-mobile']]:
             props.pin_to_bottom_on_mobile,
         })}
       >
         <div
           className={cn(styles.modal__inner, {
-            [styles['modal__inner--visible']]: props.slot_modal,
+            [styles['modal__inner--visible']]: props.slot_modal_content,
             [styles['modal__inner--pin-to-bottom-on-mobile']]:
               props.pin_to_bottom_on_mobile,
           })}
         >
-          {props.slot_modal}
+          <OutsideClickHandler onOutsideClick={props.on_outside_click}>
+            {/* <></> because children is requried by OutsideClickHandler */}
+            {props.slot_modal_content || <></>}
+          </OutsideClickHandler>
         </div>
       </div>
     </>

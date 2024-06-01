@@ -1,0 +1,16 @@
+// @type
+@use '../../../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  gap: var(--padding-12px);
+  flex-direction: column;
+}
+.user {
+  background: red;
+  padding: 20px;
+}
+.assistant {
+  background-color: blue;
+  padding: 20px;
+}

@@ -1,0 +1,36 @@
+// @type
+@use '../../../../../styles/foundation' as *;
+
+.container {
+  max-width: 700px;
+  @include at1200 {
+    max-width: calc(var(--site-max-width) - (var(--padding-40px) * 2));
+  }
+}
+.content {
+  display: flex;
+  @include to1200 {
+    flex-direction: column;
+  }
+}
+.panel {
+  flex: 1;
+  @include to1200 {
+    display: none;
+  }
+}
+.main {
+  flex: 2.3;
+  background: var(--white);
+  box-shadow: -1px 0 0 0 var(--border-color-primary),
+    1px 0 0 0 var(--border-color-primary);
+}
+.simplebar {
+  max-height: calc(85svh);
+  &__inner {
+    padding: var(--padding-24px) var(--padding-16px);
+    @include at768 {
+      padding: var(--padding-32px) var(--padding-40px);
+    }
+  }
+}

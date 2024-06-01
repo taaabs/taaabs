@@ -193,7 +193,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       })
       set_library_updated_at_timestamp(Date.now())
     }
-    modal_context.set_modal({})
+    modal_context.set_modal_content({})
   }
 
   const set_pinned_count = () => {
@@ -322,7 +322,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           }),
         ),
       ]).then(() => {
-        modal_context.set_modal({})
+        modal_context.set_modal_content({})
       })
     }
   }, [bookmarks_hook.is_fetching_first_bookmarks])
@@ -527,7 +527,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           window.location.pathname + `?${search_params.toString()}`,
         )
       }}
-      is_slash_shortcut_disabled_={modal_context.modal !== undefined}
+      is_slash_shortcut_disabled_={modal_context.modal_content !== undefined}
       on_click_get_help_={() => {}}
       translations_={{
         placeholder_: {
@@ -2094,7 +2094,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   dictionary: props.dictionary,
                 })
                 if (!modified_bookmark) {
-                  modal_context.set_modal({})
+                  modal_context.set_modal_content({})
                   return
                 }
                 dispatch(bookmarks_actions.set_is_upserting(true))
@@ -2196,7 +2196,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   })
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
-                modal_context.set_modal({})
+                modal_context.set_modal_content({})
                 toast.success(props.dictionary.app.library.bookmark_updated)
               }}
             />
@@ -2329,7 +2329,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     title: bookmark.title,
                   })
                 if (!is_deletion_confirmed) {
-                  modal_context.set_modal({})
+                  modal_context.set_modal_content({})
                   return
                 }
                 dispatch(bookmarks_actions.set_is_upserting(true))
@@ -2365,7 +2365,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   search_hook.set_count(search_hook.count - 1)
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
-                modal_context.set_modal({})
+                modal_context.set_modal_content({})
                 toast.success(props.dictionary.app.library.bookmark_deleted)
               }}
             />

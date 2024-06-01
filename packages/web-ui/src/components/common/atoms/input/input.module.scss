@@ -63,6 +63,7 @@
   position: relative;
   padding: 9px var(--padding-12px);
   resize: none;
+  min-height: var(--button-dimension-40px);
   &::placeholder {
     color: var(--text-color-dimmed);
   }

@@ -64,7 +64,7 @@ const dictionary: Dictionary = {
             'Highlights',
             'Multi-link bookmarks',
             'Filters: starred, unsorted',
-            'Sorts: last visited, updated at',
+            'Sorts: updated at, last visited',
           ],
           button_label: 'Subscribe to Surfer',
         },
@@ -76,8 +76,8 @@ const dictionary: Dictionary = {
           bullets: [
             'Unlimited bookmarks',
             'Bulk edits',
-            'Scheduled backups',
             'Public profile access control',
+            'Get search results boost',
             'Claim shorter username',
           ],
           button_label: 'Subscribe to Pro',

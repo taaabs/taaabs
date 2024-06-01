@@ -124,8 +124,8 @@ export const HeaderDesktop: React.FC<{
       hash: window.location.hash.slice(1),
     })
 
-    modal?.set_modal({
-      modal: (
+    modal?.set_modal_content({
+      modal_content: (
         <Form_UpsertBookmark
           action="create"
           bookmark_autofill={
@@ -139,7 +139,7 @@ export const HeaderDesktop: React.FC<{
               : undefined
           }
           on_close={() => {
-            modal.set_modal({})
+            modal.set_modal_content({})
           }}
           on_submit={async (bookmark) => {
             const { db } = await local_db_context.init({
@@ -194,7 +194,7 @@ export const HeaderDesktop: React.FC<{
                 window.location.pathname + '?' + updated_search_params,
               )
             } else {
-              modal.set_modal({})
+              modal.set_modal_content({})
             }
             toast.success(props.dictionary.app.library.bookmark_created)
           }}

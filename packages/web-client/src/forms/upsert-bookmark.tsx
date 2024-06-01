@@ -2,22 +2,22 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { system_values } from '@shared/constants/system-values'
 import { useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Content as UiCommonTemplate_Modal_Content } from '../../../web-ui/src/components/common/templates/modal/content'
-import { Header as UiCommonTemplate_Modal_Content_Header } from '../../../web-ui/src/components/common/templates/modal/content/header'
-import { Footer as UiCommonTemplate_Modal_Content_Footer } from '../../../web-ui/src/components/common/templates/modal/content/footer'
-import { Input as UiCommonAtom_Input } from '../../../web-ui/src/components/common/atoms/input'
-import { DraggableUpsertFormLinks as UiAppAtom_DraggableUpsertFormLinks } from '../../../web-ui/src/components/app/atoms/draggable-upsert-form-links'
-import { DraggableUpsertFormTags as UiAppAtom_DraggableUpsertFormTags } from '../../../web-ui/src/components/app/atoms/draggable-upsert-form-tags'
+import { ContentStandard as UiCommonTemplate_Modal_ContentStandard } from '@web-ui/components/common/templates/modal/content-standard'
+import { Header as UiCommonTemplate_Modal_ContentStandard_Header } from '@web-ui/components/common/templates/modal/content-standard/header'
+import { Footer as UiCommonTemplate_Modal_ContentStandard_Footer } from '@web-ui/components/common/templates/modal/content-standard/footer'
+import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
+import { DraggableUpsertFormLinks as UiAppAtom_DraggableUpsertFormLinks } from '@web-ui/components/app/atoms/draggable-upsert-form-links'
+import { DraggableUpsertFormTags as UiAppAtom_DraggableUpsertFormTags } from '@web-ui/components/app/atoms/draggable-upsert-form-tags'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
-import { StandardSplit as UiCommonTemplate_Modal_Content_Sections_StandardSplit } from '../../../web-ui/src/components/common/templates/modal/content/sections/standard-split'
-import { Standard as UiCommonTemplate_Modal_Content_Sections_Standard } from '../../../web-ui/src/components/common/templates/modal/content/sections/standard'
-import { Centered as UiCommonTemplate_Modal_Content_Sections_Centered } from '../../../web-ui/src/components/common/templates/modal/content/sections/centered'
-import { Divider as UiCommonTemplate_Modal_Content_Sections_Divider } from '../../../web-ui/src/components/common/templates/modal/content/sections/divider'
+import { StandardSplit as UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit } from '@web-ui/components/common/templates/modal/content-standard/sections/standard-split'
+import { Standard as UiCommonTemplate_Modal_ContentStandard_Sections_Standard } from '@web-ui/components/common/templates/modal/content-standard/sections/standard'
+import { Centered as UiCommonTemplate_Modal_ContentStandard_Sections_Centered } from '@web-ui/components/common/templates/modal/content-standard/sections/centered'
+import { Divider as UiCommonTemplate_Modal_ContentStandard_Sections_Divider } from '@web-ui/components/common/templates/modal/content-standard/sections/divider'
 import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { HtmlParser } from '@/utils/html-parser'
+import { HtmlParser } from '@shared/utils/html-parser'
 
 type FormValues = {
   title: string
@@ -432,10 +432,10 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   }, [])
 
   return (
-    <UiCommonTemplate_Modal_Content
+    <UiCommonTemplate_Modal_ContentStandard
       width={600}
       slot_header={
-        <UiCommonTemplate_Modal_Content_Header
+        <UiCommonTemplate_Modal_ContentStandard_Header
           title={
             props.action == 'update'
               ? props.dictionary.app.upsert_modal.edit_boomkark
@@ -444,7 +444,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         />
       }
       slot_footer={
-        <UiCommonTemplate_Modal_Content_Footer
+        <UiCommonTemplate_Modal_ContentStandard_Footer
           on_click_cancel={props.on_close}
           button_label={
             props.action == 'update'
@@ -459,7 +459,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         />
       }
     >
-      <UiCommonTemplate_Modal_Content_Sections_Centered
+      <UiCommonTemplate_Modal_ContentStandard_Sections_Centered
         label={props.dictionary.app.upsert_modal.visibility}
       >
         <Controller
@@ -492,9 +492,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             )
           }}
         />
-      </UiCommonTemplate_Modal_Content_Sections_Centered>
+      </UiCommonTemplate_Modal_ContentStandard_Sections_Centered>
 
-      <UiCommonTemplate_Modal_Content_Sections_Standard
+      <UiCommonTemplate_Modal_ContentStandard_Sections_Standard
         label={props.dictionary.app.upsert_modal.links}
       >
         <Controller
@@ -544,11 +544,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             )
           }}
         />
-      </UiCommonTemplate_Modal_Content_Sections_Standard>
+      </UiCommonTemplate_Modal_ContentStandard_Sections_Standard>
 
-      <UiCommonTemplate_Modal_Content_Sections_Divider />
+      <UiCommonTemplate_Modal_ContentStandard_Sections_Divider />
 
-      <UiCommonTemplate_Modal_Content_Sections_StandardSplit
+      <UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit
         label={props.dictionary.app.upsert_modal.title}
       >
         <UiCommonTemplate_FormControllerFix>
@@ -590,11 +590,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiCommonTemplate_Modal_Content_Sections_StandardSplit>
+      </UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit>
 
-      <UiCommonTemplate_Modal_Content_Sections_Divider />
+      <UiCommonTemplate_Modal_ContentStandard_Sections_Divider />
 
-      <UiCommonTemplate_Modal_Content_Sections_StandardSplit
+      <UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit
         label={props.dictionary.app.upsert_modal.note}
       >
         <UiCommonTemplate_FormControllerFix>
@@ -639,11 +639,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiCommonTemplate_Modal_Content_Sections_StandardSplit>
+      </UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit>
 
-      <UiCommonTemplate_Modal_Content_Sections_Divider />
+      <UiCommonTemplate_Modal_ContentStandard_Sections_Divider />
 
-      <UiCommonTemplate_Modal_Content_Sections_StandardSplit
+      <UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit
         label={props.dictionary.app.upsert_modal.tags}
       >
         <Controller
@@ -684,11 +684,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             )
           }}
         />
-      </UiCommonTemplate_Modal_Content_Sections_StandardSplit>
+      </UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit>
 
-      <UiCommonTemplate_Modal_Content_Sections_Divider />
+      <UiCommonTemplate_Modal_ContentStandard_Sections_Divider />
 
-      <UiCommonTemplate_Modal_Content_Sections_StandardSplit
+      <UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit
         label={props.dictionary.app.upsert_modal.cover}
       >
         {(cover || clipboard_data?.og_image || props.bookmark?.cover) && (
@@ -708,7 +708,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         <div ref={cover_paste_area}>
           Click here and press Ctrl+V to paste an image
         </div>
-      </UiCommonTemplate_Modal_Content_Sections_StandardSplit>
-    </UiCommonTemplate_Modal_Content>
+      </UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit>
+    </UiCommonTemplate_Modal_ContentStandard>
   )
 }

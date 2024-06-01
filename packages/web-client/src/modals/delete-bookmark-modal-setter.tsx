@@ -1,8 +1,8 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { Content as UiCommonTemplate_Modal_Content } from '../../../web-ui/src/components/common/templates/modal/content'
-import { Header as UiCommonTemplate_Modal_Content_Header } from '../../../web-ui/src/components/common/templates/modal/content/header'
-import { Footer as UiCommonTemplate_Modal_Content_Footer } from '../../../web-ui/src/components/common/templates/modal/content/footer'
-import { Delete as UiCommonTemplate_Modal_Content_Delete } from '../../../web-ui/src/components/common/templates/modal/content/delete'
+import { ContentStandard as UiCommonTemplate_Modal_ContentStandard } from '@web-ui/components/common/templates/modal/content-standard'
+import { Header as UiCommonTemplate_Modal_ContentStandard_Header } from '@web-ui/components/common/templates/modal/content-standard/header'
+import { Footer as UiCommonTemplate_Modal_ContentStandard_Footer } from '@web-ui/components/common/templates/modal/content-standard/footer'
+import { Delete as UiCommonTemplate_Modal_ContentStandard_Delete } from '@web-ui/components/common/templates/modal/content-standard/delete'
 import { useState } from 'react'
 
 export const delete_bookmark_modal_setter = (params: {
@@ -13,9 +13,9 @@ export const delete_bookmark_modal_setter = (params: {
   new Promise<boolean>((resolve) => {
     const on_submit_handler = () => resolve(true)
     const on_close_handler = () => resolve(false)
-    params.modal_context.set_modal({
-      modal: (
-        <_Modal
+    params.modal_context.set_modal_content({
+      modal_content: (
+        <_ModalContent
           on_submit={on_submit_handler}
           on_close={on_close_handler}
           dictionary={params.dictionary}
@@ -25,7 +25,7 @@ export const delete_bookmark_modal_setter = (params: {
     })
   })
 
-const _Modal: React.FC<{
+const _ModalContent: React.FC<{
   on_submit: () => void
   on_close: () => void
   dictionary: Dictionary
@@ -34,15 +34,15 @@ const _Modal: React.FC<{
   const [is_deleting, set_is_deleting] = useState<boolean>()
 
   return (
-    <UiCommonTemplate_Modal_Content
+    <UiCommonTemplate_Modal_ContentStandard
       width={400}
       slot_header={
-        <UiCommonTemplate_Modal_Content_Header
+        <UiCommonTemplate_Modal_ContentStandard_Header
           title={props.dictionary.app.delete_modal.delete_bookmark}
         />
       }
       slot_footer={
-        <UiCommonTemplate_Modal_Content_Footer
+        <UiCommonTemplate_Modal_ContentStandard_Footer
           button_label={props.dictionary.app.delete_modal.delete}
           is_disabled={is_deleting}
           button_on_click={() => {
@@ -57,10 +57,10 @@ const _Modal: React.FC<{
         />
       }
     >
-      <UiCommonTemplate_Modal_Content_Delete
+      <UiCommonTemplate_Modal_ContentStandard_Delete
         text={props.dictionary.app.delete_modal.are_you_sure}
         bookmark_title={props.title}
       />
-    </UiCommonTemplate_Modal_Content>
+    </UiCommonTemplate_Modal_ContentStandard>
   )
 }

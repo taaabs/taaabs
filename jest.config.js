@@ -23,7 +23,7 @@ module.exports = {
       displayName: 'shared',
       rootDir: '<rootDir>/packages/shared',
       preset: 'ts-jest',
-      testEnvironment: 'node',
+      testEnvironment: 'jsdom',
     },
     {
       displayName: 'web-client',

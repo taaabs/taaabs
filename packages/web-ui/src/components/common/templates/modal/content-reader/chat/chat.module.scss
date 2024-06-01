@@ -1,0 +1,29 @@
+// @type
+@use '../../../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  gap: var(--padding-24px);
+  flex-direction: column;
+}
+.user {
+  background: var(--neutral150);
+  padding: 20px;
+  max-width: 70%;
+  align-self: flex-end;
+  word-wrap: anywhere;
+  border-radius: var(--border-radius-20px);
+}
+.assistant {
+  position: relative;
+  &::before {
+    position: absolute;
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: var(--brand-color);
+    border-radius: 50%;
+    left: -22px;
+    top: 7px;
+  }
+}

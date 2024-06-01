@@ -1,8 +1,6 @@
-import { Box } from '@web-ui/components/app/atoms/box'
-import { HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
-import { ModalFooter } from '@web-ui/components/app/templates/content/modal-footer'
-import { ModalHeader } from '@web-ui/components/app/templates/content/modal-header'
-import { FormModal } from '@web-ui/components/app/templates/content'
+import { Footer as UiCommonTemplate_Modal_ContentStandard_Footer } from '@web-ui/components/common/templates/modal/content-standard/footer'
+import { Header as UiCommonTemplate_Modal_ContentStandard_Header } from '@web-ui/components/common/templates/modal/content-standard/header'
+import { ContentStandard as UiCommonTemplage_Modal_ContentStandard } from '@web-ui/components/common/templates/modal/content-standard'
 import { Modal } from '@web-ui/components/common/templates/modal'
 import { lorem_ipsum } from '@web-ui/helpers'
 
@@ -13,28 +11,28 @@ export default {
 export const Primary = () => {
   return (
     <Modal
+      on_outside_click={() => {}}
       children={<>{lorem_ipsum.long}</>}
-      slot_modal={
-        <FormModal
-          slot_header={<ModalHeader title_="Update bookmark" />}
+      slot_modal_content={
+        <UiCommonTemplage_Modal_ContentStandard
+          width={500}
+          slot_header={
+            <UiCommonTemplate_Modal_ContentStandard_Header title="Update bookmark" />
+          }
           slot_footer={
-            <ModalFooter
-              button_label_="Update"
-              is_disabled_={false}
-              on_click_cancel_={() => {}}
+            <UiCommonTemplate_Modal_ContentStandard_Footer
+              button_label="Update"
+              is_disabled={false}
+              on_click_cancel={() => {}}
+              button_on_click={() => {}}
+              translations={{
+                cancel: 'Cancel',
+              }}
             />
           }
         >
-          <Box>
-            <HeadingWithSubheading heading="Links" />
-          </Box>
-          <Box>
-            <HeadingWithSubheading heading="Title" />
-          </Box>
-          <Box>
-            <HeadingWithSubheading heading="Tags" />
-          </Box>
-        </FormModal>
+          Lorem ipsum
+        </UiCommonTemplage_Modal_ContentStandard>
       }
     />
   )

@@ -32,11 +32,12 @@
     background-color: var(--background);
     overflow: hidden;
     border-radius: var(--border-radius-14px);
-    transform: translateY(20px);
+    transform: translateY(8px);
     box-shadow: var(--box-shadow-long-strong);
     margin: var(--padding-16px);
     @include at992 {
       border-radius: var(--border-radius-20px);
+      margin: var(--padding-40px);
     }
     > div > div {
       width: calc(100vw - var(--padding-16px) * 2);

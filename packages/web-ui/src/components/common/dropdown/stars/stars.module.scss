@@ -18,10 +18,10 @@
     width: 21px;
   }
   &--checked > svg {
-    fill: var(--yellow);
+    fill: var(--yellow400);
   }
   &--hovered > svg {
-    fill: var(--yellow);
+    fill: var(--yellow400);
   }
   &--hovered-checked > svg {
     fill: var(--neutral200);

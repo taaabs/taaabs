@@ -544,7 +544,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     type="basis"
                     dataKey="starred_count"
                     strokeWidth={0}
-                    fill="var(--yellow)"
+                    fill="var(--yellow400)"
                     fillOpacity={starred_count == 0 ? 0 : 1}
                     isAnimationActive={false}
                     style={{ pointerEvents: 'none' }}

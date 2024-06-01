@@ -18,25 +18,22 @@ export const NavigationForHeader: React.FC<NavigationForHeader.Props> = ({
 }) => {
   return (
     <div className={styles.container}>
-      <ul>
-        {navigation.map((link) => (
-          <li key={link.label}>
-            <ButtonUnderlined
-              href={link.href}
-              is_active={link.is_active}
-              label={link.label}
-              on_click={
-                link.on_click
-                  ? (e) => {
-                      e.preventDefault()
-                      link.on_click!()
-                    }
-                  : undefined
-              }
-            />
-          </li>
-        ))}
-      </ul>
+      {navigation.map((link) => (
+        <ButtonUnderlined
+          key={link.label}
+          href={link.href}
+          is_active={link.is_active}
+          label={link.label}
+          on_click={
+            link.on_click
+              ? (e) => {
+                  e.preventDefault()
+                  link.on_click!()
+                }
+              : undefined
+          }
+        />
+      ))}
     </div>
   )
 }

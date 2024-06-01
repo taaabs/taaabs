@@ -12,8 +12,8 @@ export const reader_modal_setter = (params: {
 }) =>
   new Promise((resolve) => {
     const on_close_handler = () => resolve(null)
-    params.modal_context.set_modal({
-      modal: (
+    params.modal_context.set_modal_content({
+      modal_content: (
         <DynamicReaderModal
           reader_data={JSON.parse(params.reader_data)}
           on_close={on_close_handler}

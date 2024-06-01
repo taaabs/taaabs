@@ -1,7 +1,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { Content as UiCommonTemplate_Modal_Content } from '@web-ui/components/common/templates/modal/content'
-import { Header as UiCommonTemplate_Modal_Content_Header } from '@web-ui/components/common/templates/modal/content/header'
-import { Footer as UiCommonTemplate_Modal_Content_Footer } from '@web-ui/components/common/templates/modal/content/footer'
+import { ContentStandard as UiCommonTemplate_Modal_ContentStandard } from '@web-ui/components/common/templates/modal/content-standard'
+import { Header as UiCommonTemplate_Modal_ContentStandard_Header } from '@web-ui/components/common/templates/modal/content-standard/header'
+import { Footer as UiCommonTemplate_Modal_ContentStandard_Footer } from '@web-ui/components/common/templates/modal/content-standard/footer'
 import { useContext } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
@@ -18,9 +18,9 @@ export const rename_tag_modal_setter = (params: {
   new Promise<string | null>((resolve) => {
     const on_submit_handler = (name: string) => resolve(name)
     const on_close_handler = () => resolve(null)
-    params.modal_context.set_modal({
-      modal: (
-        <_Modal
+    params.modal_context.set_modal_content({
+      modal_content: (
+        <_ModalContent
           on_submit={on_submit_handler}
           on_close={on_close_handler}
           dictionary={params.dictionary}
@@ -34,7 +34,7 @@ type FormValues = {
   name: string
 }
 
-const _Modal: React.FC<{
+const _ModalContent: React.FC<{
   old_tag_name: string
   on_submit: (name: string) => void
   on_close: () => void
@@ -65,15 +65,15 @@ const _Modal: React.FC<{
   }
 
   return (
-    <UiCommonTemplate_Modal_Content
+    <UiCommonTemplate_Modal_ContentStandard
       width={350}
       slot_header={
-        <UiCommonTemplate_Modal_Content_Header
+        <UiCommonTemplate_Modal_ContentStandard_Header
           title={props.dictionary.app.rename_tag_modal.rename_tag}
         />
       }
       slot_footer={
-        <UiCommonTemplate_Modal_Content_Footer
+        <UiCommonTemplate_Modal_ContentStandard_Footer
           button_label={props.dictionary.app.rename_tag_modal.rename}
           is_disabled={isSubmitting}
           button_on_click={handleSubmit(on_submit)}
@@ -115,6 +115,6 @@ const _Modal: React.FC<{
           )
         }}
       />
-    </UiCommonTemplate_Modal_Content>
+    </UiCommonTemplate_Modal_ContentStandard>
   )
 }

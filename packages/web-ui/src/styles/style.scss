@@ -69,33 +69,10 @@ body {
   background: var(--background);
 }
 
-body,
-h1,
-h2,
-h3,
-h4,
-p,
-figure,
-blockquote,
-dl,
-dd {
-  margin: 0;
-}
-
 a {
   color: inherit;
   text-decoration: none;
   cursor: pointer;
-}
-
-ol,
-ul {
-  list-style: none;
-}
-
-ul {
-  margin: 0;
-  padding-inline-start: 0;
 }
 
 img,

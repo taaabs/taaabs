@@ -1,0 +1,89 @@
+// @type
+@use '../../../../../../styles/foundation' as *;
+
+.container {
+  // style here
+  font-size: var(--font-size-16px);
+  line-height: 1.6;
+  > * {
+    max-width: 100%;
+    overflow: hidden;
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  code {
+    font-size: var(--font-size-14px);
+  }
+  p,
+  ol,
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0.7em 0;
+  }
+  li > code {
+    background-color: var(--neutral200);
+    border-radius: 5px;
+    padding: 0 4px;
+  }
+  li::marker {
+    color: var(--text-color-variant);
+  }
+  ul,
+  ol {
+    padding-left: var(--padding-24px);
+  }
+  table {
+    width: 100%;
+  }
+  table,
+  th,
+  td {
+    border: none;
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    padding: 12px 15px;
+  }
+  th {
+    text-align: left;
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  blockquote {
+    border-left: var(--border-primary);
+    background-color: var(--neutral50);
+    margin: 0;
+    padding: 0 var(--padding-16px);
+    border-top-right-radius: var(--border-radius-20px);
+    border-bottom-right-radius: var(--border-radius-20px);
+  }
+  hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color-primary);
+  }
+  strong {
+    font-weight: var(--font-weight-inter-semi-bold);
+  }
+  a {
+    color: var(--text-color-variant);
+    @include text-decoration-underlinie-thin;
+    @include transition-150ms(color);
+    @include hover {
+      color: var(--text-color-normal);
+    }
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-top: 1em;
+    font-weight: var(--font-weight-inter-semi-bold);
+  }
+}

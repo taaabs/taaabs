@@ -1,9 +1,9 @@
-import { Name } from './user-dropdown'
+import { UserDropdown } from './user-dropdown'
 
 export default {
-  component: Name,
+  component: UserDropdown,
 }
 
 export const Primary = () => {
-  return <Name />
+  return <UserDropdown>x</UserDropdown>
 }

@@ -14,8 +14,8 @@ export const upsert_bookmark_modal_setter = (params: {
     const on_submit_handler = (bookmark: UpsertBookmark_Params) =>
       resolve(bookmark)
     const on_close_handler = () => resolve(null)
-    params.modal_context.set_modal({
-      modal: (
+    params.modal_context.set_modal_content({
+      modal_content: (
         <Form_UpsertBookmark
           action="update"
           bookmark={params.bookmark}
