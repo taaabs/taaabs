@@ -4,6 +4,8 @@ import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import remarkGfm from 'remark-gfm'
 import hljs from 'highlight.js'
 import styles from './_render-markdown.module.scss'
+import { Icon as UiCommonParticle_Icon } from '@web-ui/components/common/particles/icon'
+import { toast } from 'react-toastify'
 
 namespace _RenderMarkdown {
   export type Props = {
@@ -19,28 +21,47 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
       remarkPlugins={[remarkGfm]}
       components={{
         code(props) {
-          const { children, className, ...rest } = props
-          const children_parsed = String(children).replace(/\n$/, '')
-          let language: string | undefined = undefined
-          const match = /language-(\w+)/.exec(className || '')
-          if (match) {
-            language = match[1]
+          const { children, className } = props
+          if (!children?.toString()?.includes('\n')) {
+            return <code>{children}</code>
           } else {
-            language = hljs.highlightAuto(children_parsed).language
+            const children_parsed = String(children).replace(/\n$/, '')
+            const language = (className?.match(/language-(\S+)/) || [
+              null,
+              undefined,
+            ])[1]
+            let language_fallback: string | undefined
+            if (!language) {
+              language_fallback = hljs.highlightAuto(children_parsed).language
+            }
+            return language ? (
+              <div className={styles.code}>
+                <div className={styles.code__header}>
+                  <span>{language}</span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard
+                        .writeText(children_parsed)
+                        .then(() => {
+                          toast.success('Copied to clipboard')
+                        })
+                    }}
+                  >
+                    <UiCommonParticle_Icon variant="COPY" />
+                  </button>
+                </div>
+                <SyntaxHighlighter
+                  language={language || language_fallback}
+                  PreTag={'div'}
+                  children={children_parsed}
+                  style={oneLight}
+                  customStyle={{ marginTop: 0 }}
+                />
+              </div>
+            ) : (
+              <code>{children}</code>
+            )
           }
-          return language ? (
-            <SyntaxHighlighter
-              PreTag="div"
-              language={language}
-              children={children_parsed}
-              style={oneLight}
-              wrapLines={true}
-            />
-          ) : (
-            <code className={className} {...rest}>
-              {children}
-            </code>
-          )
         },
       }}
     />

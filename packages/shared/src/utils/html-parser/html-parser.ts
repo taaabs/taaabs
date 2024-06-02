@@ -16,6 +16,32 @@ export namespace HtmlParser {
   export const parse = (params: Params): ParsedResult | undefined => {
     const turndown_service = new TurndownService({ codeBlockStyle: 'fenced' })
     turndown_service.use(turndownPluginGfm.gfm)
+    turndown_service.addRule('fencedCodeBlock', {
+      filter: (node: any, options: any) => {
+        return (
+          options.codeBlockStyle == 'fenced' &&
+          node.nodeName == 'PRE' &&
+          node.querySelector('code')
+        )
+      },
+      replacement: (_: any, node: any, options: any) => {
+        const language = (node
+          .querySelector('code')
+          .className.match(/language-(\S+)/) || [null, ''])[1]
+
+        // TODO: Try detecting language manually.
+        return (
+          '\n\n' +
+          options.fence +
+          language +
+          '\n' +
+          node.textContent +
+          '\n' +
+          options.fence +
+          '\n\n'
+        )
+      },
+    })
 
     const titleRegex = /<title>(.*?)<\/title>/
     const match = params.html.match(titleRegex)
@@ -43,7 +69,7 @@ export namespace HtmlParser {
         } else if (author_role == 'assistant') {
           const parser = new DOMParser()
           const doc = parser.parseFromString(div.innerHTML, 'text/html')
-          const article = new Readability(doc).parse()!
+          const article = new Readability(doc, { keepClasses: true }).parse()!
           messages.push({
             author: 'assistant',
             content: turndown_service.turndown(article.content),
@@ -83,7 +109,7 @@ export namespace HtmlParser {
         } else if (el.matches(assistant_selector)) {
           const parser = new DOMParser()
           const doc = parser.parseFromString(el.innerHTML, 'text/html')
-          const article = new Readability(doc).parse()!
+          const article = new Readability(doc, { keepClasses: true }).parse()!
           messages.push({
             author: 'assistant',
             content: turndown_service.turndown(article.content),
@@ -122,7 +148,7 @@ export namespace HtmlParser {
         } else if (el.matches(assistant_selector)) {
           const parser = new DOMParser()
           const doc = parser.parseFromString(el.innerHTML, 'text/html')
-          const article = new Readability(doc).parse()!
+          const article = new Readability(doc, { keepClasses: true }).parse()!
           messages.push({
             author: 'assistant',
             content: turndown_service.turndown(article.content),
@@ -159,7 +185,7 @@ export namespace HtmlParser {
         } else if (el.matches(assistant_selector)) {
           const parser = new DOMParser()
           const doc = parser.parseFromString(el.innerHTML, 'text/html')
-          const article = new Readability(doc).parse()!
+          const article = new Readability(doc, { keepClasses: true }).parse()!
           messages.push({
             author: 'assistant',
             content: turndown_service.turndown(article.content),
@@ -198,7 +224,7 @@ export namespace HtmlParser {
         } else if (el.matches(assistant_selector)) {
           const parser = new DOMParser()
           const doc = parser.parseFromString(el.innerHTML, 'text/html')
-          const article = new Readability(doc).parse()!
+          const article = new Readability(doc, { keepClasses: true }).parse()!
           messages.push({
             author: 'assistant',
             content: turndown_service.turndown(article.content),
@@ -238,7 +264,7 @@ export namespace HtmlParser {
       if (post_element) {
         const parser = new DOMParser()
         const doc = parser.parseFromString(post_element.innerHTML, 'text/html')
-        const post = new Readability(doc).parse()!
+        const post = new Readability(doc, { keepClasses: true }).parse()!
         return {
           plain_text: `${title ? `${title} ` : ''}${
             author_name ? `${author_name} ` : ''
@@ -266,7 +292,7 @@ export namespace HtmlParser {
           link.setAttribute('href', url.origin + href)
         }
       })
-      const article = new Readability(doc).parse()!
+      const article = new Readability(doc, { keepClasses: true }).parse()!
       return {
         plain_text: `${article.title ? `${article.title} ` : ''}${
           article.siteName ? `${article.siteName} ` : ''

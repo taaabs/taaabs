@@ -20,20 +20,19 @@
     font-size: var(--font-size-14px);
   }
   p,
-  ol,
-  h1,
-  h2,
-  h3,
-  h4 {
+  ol {
     margin: 0.7em 0;
   }
-  li > code {
-    background-color: var(--neutral200);
-    border-radius: 5px;
-    padding: 0 4px;
-  }
-  li::marker {
-    color: var(--text-color-variant);
+  code:not([class]) {
+    font-family: 'Fira Code', 'Fira Mono', Menlo, Consolas, 'DejaVu Sans Mono',
+      monospace;
+    font-weight: bold;
+    &::before {
+      content: '`';
+    }
+    &::after {
+      content: '`';
+    }
   }
   table {
     width: 100%;
@@ -83,7 +82,46 @@
   h2,
   h3,
   h4 {
-    margin-top: 1em;
+    margin: 1em 0 0.7em 0;
     font-weight: var(--font-weight-inter-semi-bold);
+  }
+}
+.code {
+  display: flex;
+  flex-direction: column;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--blue50);
+    border-top-left-radius: var(--border-radius-10px);
+    border-top-right-radius: var(--border-radius-10px);
+    padding: 8px 8px 8px 14px;
+    > span {
+      color: var(--brand-color);
+      font-family: var(--font-family-inter);
+      font-weight: var(--font-weight-inter-medium);
+      font-size: var(--font-size-13px);
+    }
+    > button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      @include transition-150ms(background-color);
+      background-color: var(--blue100);
+      @include hover {
+        background-color: var(--blue200);
+        > svg {
+          fill: var(--blue700);
+        }
+      }
+      > svg {
+        fill: var(--blue600);
+        width: 12px;
+      }
+    }
   }
 }
