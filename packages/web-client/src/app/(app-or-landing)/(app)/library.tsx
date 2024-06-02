@@ -987,11 +987,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     )
                   } else if (option_idx == 1) {
                     sort_by_view_options_hook.set_sort_by_query_param_(
-                      SortBy.VISITED_AT,
+                      SortBy.UPDATED_AT,
                     )
                   } else if (option_idx == 2) {
                     sort_by_view_options_hook.set_sort_by_query_param_(
-                      SortBy.UPDATED_AT,
+                      SortBy.VISITED_AT,
                     )
                   }
                 }}

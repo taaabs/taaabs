@@ -48,7 +48,7 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            '2 000 public bookmarks',
+            'Unlimited public bookmarks',
             '500 Zero-knowledge™ bookmarks',
             "Permanent Reader™ of everything you've saved",
             'Full-text search',
@@ -60,7 +60,7 @@ const dictionary: Dictionary = {
           description: 'Level up your usage limits and features',
           bullets_heading: 'Everything in Free, plus:',
           bullets: [
-            '20 000 bookmarks',
+            '10 000 Zero-knowledge™ bookmarks',
             'Highlights',
             'Multi-link bookmarks',
             'Filters: starred, unsorted',
@@ -74,7 +74,7 @@ const dictionary: Dictionary = {
           bullets_heading: 'Everything in Surfer, plus:',
           featured_text: 'Recommended',
           bullets: [
-            'Unlimited bookmarks',
+            'Unlimited Zero-knowledge™ bookmarks',
             'Bulk edits',
             'Public profile access control',
             'Get search results boost',

@@ -9,7 +9,6 @@ export namespace HtmlParser {
     html: string
   }
   export type ParsedResult = {
-    plain_text: string
     reader_data: string
   }
 
@@ -42,12 +41,12 @@ export namespace HtmlParser {
       },
     })
 
-    const titleRegex = /<title>(.*?)<\/title>/
-    const match = params.html.match(titleRegex)
-    let title: string = ''
-    if (match) {
-      title = match[1]
-    }
+    // const titleRegex = /<title>(.*?)<\/title>/
+    // const match = params.html.match(titleRegex)
+    // let title: string = ''
+    // if (match) {
+    //   title = match[1]
+    // }
 
     /**
      * ChatGPT
@@ -76,17 +75,7 @@ export namespace HtmlParser {
         }
       })
       if (messages.length) {
-        const title = temp_el.querySelector<HTMLElement>(
-          '.bg-token-sidebar-surface-secondary.active\\:opacity-90.rounded-lg.relative.group > .p-2.gap-2.items-center.flex',
-        )?.innerText
         return {
-          plain_text: `${title ? `${title} ` : ''}${messages
-            .map((message) =>
-              message.author == 'user' ? message.text : message.content,
-            )
-            .join(' ')
-            .replace(/[ \t\r\n]+/gm, ' ')
-            .trim()}`,
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.CHAT,
             conversation: messages,
@@ -117,13 +106,6 @@ export namespace HtmlParser {
       })
       if (messages.length) {
         return {
-          plain_text: `${title ? `${title} ` : ''}${messages
-            .map((message) =>
-              message.author == 'user' ? message.text : message.content,
-            )
-            .join(' ')
-            .replace(/[ \t\r\n]+/gm, ' ')
-            .trim()}`,
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.CHAT,
             conversation: messages,
@@ -156,13 +138,6 @@ export namespace HtmlParser {
       })
       if (messages.length) {
         return {
-          plain_text: `${title ? `${title} ` : ''}${messages
-            .map((message) =>
-              message.author == 'user' ? message.text : message.content,
-            )
-            .join(' ')
-            .replace(/[ \t\r\n]+/gm, ' ')
-            .trim()}`,
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.CHAT,
             conversation: messages,
@@ -193,13 +168,6 @@ export namespace HtmlParser {
       })
       if (messages.length) {
         return {
-          plain_text: `${title ? `${title} ` : ''}${messages
-            .map((message) =>
-              message.author == 'user' ? message.text : message.content,
-            )
-            .join(' ')
-            .replace(/[ \t\r\n]+/gm, ' ')
-            .trim()}`,
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.CHAT,
             conversation: messages,
@@ -231,17 +199,7 @@ export namespace HtmlParser {
         }
       })
       if (messages.length) {
-        const title = temp_el.querySelector<HTMLElement>(
-          '.truncate.font-body.text-p-lg',
-        )?.innerText
         return {
-          plain_text: `${title ? `${title} ` : ''}${messages
-            .map((message) =>
-              message.author == 'user' ? message.text : message.content,
-            )
-            .join(' ')
-            .replace(/[ \t\r\n]+/gm, ' ')
-            .trim()}`,
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.CHAT,
             conversation: messages,
@@ -265,11 +223,6 @@ export namespace HtmlParser {
         const doc = parser.parseFromString(post_element.innerHTML, 'text/html')
         const post = new Readability(doc, { keepClasses: true }).parse()!
         return {
-          plain_text: `${title ? `${title} ` : ''}${
-            author_name ? `${author_name} ` : ''
-          }${
-            subreddit_name ? `${subreddit_name.slice(2)} ` : ''
-          }${post.textContent.replace(/[ \t\r\n]+/gm, ' ').trim()}`,
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.ARTICLE,
             author: author_name,
@@ -293,11 +246,6 @@ export namespace HtmlParser {
       })
       const article = new Readability(doc, { keepClasses: true }).parse()!
       return {
-        plain_text: `${article.title ? `${article.title} ` : ''}${
-          article.siteName ? `${article.siteName} ` : ''
-        }${article.byline ? `${article.byline} ` : ''}${
-          article.publishedTime ? `${article.publishedTime} ` : ''
-        }${article.textContent.replace(/[ \t\r\n]+/gm, ' ').trim()}`,
         reader_data: JSON.stringify({
           type: ReaderData.ContentType.ARTICLE,
           title: article.title,

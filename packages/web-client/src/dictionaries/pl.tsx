@@ -54,7 +54,7 @@ export const dictionary: Dictionary = {
           description: 'Rozpocznij przygodę z Taaabs',
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
-            '2 000 publicznych zakładek',
+            'Nielimitowane publiczne zakładki',
             '500 zaszyfrowanych zakładek',
             'Wieczne kopie tekstowe wszystkich stron',
             'Wyszukiwanie pełnotekstowe',
@@ -66,8 +66,8 @@ export const dictionary: Dictionary = {
           description: 'Podnieś limity użytkowania i funkcje na wyższy poziom',
           bullets_heading: 'Wszystko co w darmowym, plus:',
           bullets: [
-            '20 000 zaszyfrowanych zakładek',
-            'Oznaczanie fragmentów stron',
+            '10 000 zaszyfrowanych zakładek',
+            'Oznaczanie fragmentów',
             'Wiele linków na zakładce',
             'Filtruj oznaczone gwiazdkami oraz nieprzeczytane',
             'Sortuj ostatnio odwiedzone, edytowane',

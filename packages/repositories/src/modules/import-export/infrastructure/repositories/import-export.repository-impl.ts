@@ -91,7 +91,6 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                       open_snapshot: link.open_snapshot || undefined,
                       is_pinned: link.is_pinned || undefined,
                       pin_order: link.pin_order || undefined,
-                      plain_text: link.plain_text || undefined,
                       reader_data: link.reader_data || undefined,
                     }
                   } else if (link.url_aes && link.site_aes) {
@@ -120,21 +119,6 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                         ? await Crypto.AES.decrypt(
                             link.favicon_aes,
                             encryption_key,
-                          )
-                        : undefined,
-                      plain_text: link.plain_text_aes
-                        ? new TextDecoder().decode(
-                            pako.inflate(
-                              Uint8Array.from(
-                                atob(
-                                  await Crypto.AES.decrypt(
-                                    link.plain_text_aes,
-                                    encryption_key,
-                                  ),
-                                ),
-                                (c) => c.charCodeAt(0),
-                              ),
-                            ),
                           )
                         : undefined,
                       reader_data: link.reader_data_aes

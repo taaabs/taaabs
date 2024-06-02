@@ -42,9 +42,6 @@ export const upsert_bookmark = (params: {
             ? {
                 links: params.bookmark.links.map((link) => ({
                   ...link,
-                  plain_text: links_data.find(
-                    (link_data) => link_data.url == link.url,
-                  )?.plain_text,
                   reader_data: links_data.find(
                     (link_data) => link_data.url == link.url,
                   )?.reader_data,

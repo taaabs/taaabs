@@ -18,7 +18,6 @@ export type Bookmark_Entity = {
     pin_title?: string
     open_snapshot?: boolean
     favicon?: string // Base64, without prefix.
-    plain_text?: string
     reader_data?: string
   }[]
 }

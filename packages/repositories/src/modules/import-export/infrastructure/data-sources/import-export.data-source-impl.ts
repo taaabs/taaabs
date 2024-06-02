@@ -108,7 +108,6 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                           open_snapshot: link.open_snapshot,
                           is_pinned: link.is_pinned,
                           pin_order: link.pin_order,
-                          plain_text: link.plain_text,
                           reader_data: link.reader_data,
                           favicon_aes: link.favicon
                             ? await Crypto.AES.encrypt(
@@ -141,16 +140,6 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
                           favicon_aes: link.favicon
                             ? await Crypto.AES.encrypt(
                                 link.favicon,
-                                encryption_key,
-                              )
-                            : undefined,
-                          plain_text_aes: link.plain_text
-                            ? await Crypto.AES.encrypt(
-                                btoa(
-                                  String.fromCharCode(
-                                    ...pako.deflate(link.plain_text),
-                                  ),
-                                ),
                                 encryption_key,
                               )
                             : undefined,
