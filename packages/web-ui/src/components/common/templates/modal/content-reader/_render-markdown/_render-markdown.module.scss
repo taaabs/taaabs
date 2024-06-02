@@ -96,12 +96,12 @@
     background-color: var(--blue50);
     border-top-left-radius: var(--border-radius-10px);
     border-top-right-radius: var(--border-radius-10px);
-    padding: 8px 8px 8px 14px;
+    padding: 8px 10px 8px 14px;
     > span {
       color: var(--brand-color);
       font-family: var(--font-family-inter);
       font-weight: var(--font-weight-inter-medium);
-      font-size: var(--font-size-13px);
+      font-size: var(--font-size-14px);
     }
     > button {
       display: flex;
@@ -120,6 +120,7 @@
       }
       > svg {
         fill: var(--blue600);
+        @include transition-150ms(fill);
         width: 12px;
       }
     }

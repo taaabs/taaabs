@@ -29,7 +29,6 @@ export namespace HtmlParser {
           .querySelector('code')
           .className.match(/language-(\S+)/) || [null, ''])[1]
 
-        // TODO: Try detecting language manually.
         return (
           '\n\n' +
           options.fence +

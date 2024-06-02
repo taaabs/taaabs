@@ -37,7 +37,7 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
             return language ? (
               <div className={styles.code}>
                 <div className={styles.code__header}>
-                  <span>{language}</span>
+                  <span>{(language_map as any)[language] || language}</span>
                   <button
                     onClick={() => {
                       navigator.clipboard
@@ -66,4 +66,27 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
       }}
     />
   )
+}
+
+const language_map = {
+  html: 'HTML',
+  css: 'CSS',
+  js: 'JavaScript',
+  javascript: 'JavaScript',
+  python: 'Python',
+  ruby: 'Ruby',
+  java: 'Java',
+  c: 'C',
+  cpp: 'C++',
+  'c++': 'C++',
+  php: 'PHP',
+  swift: 'Swift',
+  go: 'Go',
+  r: 'R',
+  shell: 'bash',
+  bash: 'bash',
+  sql: 'SQL',
+  json: 'JSON',
+  yaml: 'YAML',
+  markdown: 'Markdown',
 }
