@@ -97,11 +97,17 @@
     border-top-left-radius: var(--border-radius-10px);
     border-top-right-radius: var(--border-radius-10px);
     padding: 8px 10px 8px 14px;
-    > span {
-      color: var(--brand-color);
+    &__language {
       font-family: var(--font-family-inter);
-      font-weight: var(--font-weight-inter-medium);
-      font-size: var(--font-size-14px);
+      > span {
+        color: var(--brand-color);
+        font-weight: var(--font-weight-inter-medium);
+        font-size: var(--font-size-14px);
+        > sup {
+          color: var(--blue400);
+          font-weight: var(--font-weight-inter-regular);
+        }
+      }
     }
     > button {
       display: flex;

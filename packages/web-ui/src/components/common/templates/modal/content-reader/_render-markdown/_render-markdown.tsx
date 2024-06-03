@@ -2,10 +2,10 @@ import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import remarkGfm from 'remark-gfm'
-import hljs from 'highlight.js'
 import styles from './_render-markdown.module.scss'
 import { Icon as UiCommonParticle_Icon } from '@web-ui/components/common/particles/icon'
 import { toast } from 'react-toastify'
+import { detect_code_language } from '@web-ui/utils/detect-code-language'
 
 namespace _RenderMarkdown {
   export type Props = {
@@ -32,12 +32,30 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
             ])[1]
             let language_fallback: string | undefined
             if (!language) {
-              language_fallback = hljs.highlightAuto(children_parsed).language
+              language_fallback = detect_code_language(children_parsed)
             }
-            return language ? (
+            return (
               <div className={styles.code}>
                 <div className={styles.code__header}>
-                  <span>{(language_map as any)[language] || language}</span>
+                  <div className={styles.code__header__language}>
+                    {language ? (
+                      <span>{(language_map as any)[language] || language}</span>
+                    ) : (
+                      ''
+                    )}
+                    {language_fallback ? (
+                      <>
+                        <span>
+                          {(language_map as any)[language_fallback] ||
+                            language_fallback}
+                          <sup> detected</sup>
+                        </span>
+                      </>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+
                   <button
                     onClick={() => {
                       navigator.clipboard
@@ -50,16 +68,18 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
                     <UiCommonParticle_Icon variant="COPY" />
                   </button>
                 </div>
-                <SyntaxHighlighter
-                  language={language || language_fallback}
-                  PreTag={'div'}
-                  children={children_parsed}
-                  style={oneLight}
-                  customStyle={{ marginTop: 0 }}
-                />
+                {language || language_fallback ? (
+                  <SyntaxHighlighter
+                    language={language || language_fallback}
+                    PreTag={'div'}
+                    children={children_parsed}
+                    style={oneLight}
+                    customStyle={{ marginTop: 0 }}
+                  />
+                ) : (
+                  <code className="language-">{children}</code>
+                )}
               </div>
-            ) : (
-              <code>{children}</code>
             )
           }
         },
@@ -73,6 +93,8 @@ const language_map = {
   css: 'CSS',
   js: 'JavaScript',
   javascript: 'JavaScript',
+  typescript: 'TypeScript',
+  ts: 'TypeScript',
   python: 'Python',
   ruby: 'Ruby',
   java: 'Java',
@@ -89,4 +111,6 @@ const language_map = {
   json: 'JSON',
   yaml: 'YAML',
   markdown: 'Markdown',
+  rust: 'Rust',
+  zig: 'Zig',
 }

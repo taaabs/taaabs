@@ -1269,7 +1269,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           : []
       }
       is_unsorted_={
-        bookmark.is_unsorted === undefined ? true : bookmark.is_unsorted
+        !username && bookmark.is_unsorted === undefined
+          ? true
+          : bookmark.is_unsorted
       }
       stars_={bookmark.stars}
       on_tag_click_={tag_view_options_hook.add_tag_to_search_params_}
