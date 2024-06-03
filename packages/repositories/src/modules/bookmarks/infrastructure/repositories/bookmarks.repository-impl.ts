@@ -43,7 +43,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                 : bookmark.note_aes
                 ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
                 : undefined,
-              is_unsorted: bookmark.is_unsorted || false,
+              is_unsorted: bookmark.is_unsorted,
               stars: bookmark.stars || 0,
               points: bookmark.points,
               tags: await Promise.all(
@@ -129,7 +129,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             visited_at: bookmark.visited_at,
             title: bookmark.title,
             note: bookmark.note,
-            is_unsorted: bookmark.is_unsorted || false,
+            is_unsorted: bookmark.is_unsorted,
             stars: bookmark.stars || 0,
             points: bookmark.points,
             tags: bookmark.tags.map((tag) => ({
@@ -183,7 +183,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                 : bookmark.note_aes
                 ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
                 : undefined,
-              is_unsorted: bookmark.is_unsorted || false,
+              is_unsorted: bookmark.is_unsorted,
               stars: bookmark.stars || 0,
               points: bookmark.points,
               tags: await Promise.all(
@@ -262,7 +262,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             title: bookmark.title,
             note: bookmark.note,
             is_public: true,
-            is_unsorted: bookmark.is_unsorted || false,
+            is_unsorted: bookmark.is_unsorted,
             stars: bookmark.stars || 0,
             points: bookmark.points,
             tags: bookmark.tags.map((tag) => ({
@@ -364,7 +364,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         : bookmark.note_aes
         ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
         : undefined,
-      is_unsorted: bookmark.is_unsorted || false,
+      is_unsorted: bookmark.is_unsorted,
       stars: bookmark.stars || 0,
       points: bookmark.points,
       tags: await Promise.all(

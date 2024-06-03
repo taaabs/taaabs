@@ -1268,7 +1268,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             })
           : []
       }
-      is_unsorted_={bookmark.is_unsorted}
+      is_unsorted_={
+        bookmark.is_unsorted === undefined ? true : bookmark.is_unsorted
+      }
       stars_={bookmark.stars}
       on_tag_click_={tag_view_options_hook.add_tag_to_search_params_}
       on_selected_tag_click_={(tag_id) =>
@@ -1409,6 +1411,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           title: bookmark.title,
           note: bookmark.note,
           is_archived: is_archived_filter,
+          is_unsorted: bookmark.is_unsorted,
           stars: bookmark.stars,
           links: bookmark.links.map((link) => ({
             url: link.url,
@@ -1495,6 +1498,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 title: bookmark.title,
                 note: bookmark.note,
                 is_archived: is_archived_filter,
+                is_unsorted: bookmark.is_unsorted,
                 stars: bookmark.stars,
                 links: bookmark.links.map((link) => ({
                   url: link.url,
@@ -1573,6 +1577,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           title: bookmark.title,
           note: bookmark.note,
           is_archived: is_archived_filter,
+          is_unsorted: bookmark.is_unsorted,
           stars: bookmark.stars,
           links: bookmark.links.map((link) => ({
             url: link.url,
@@ -1732,6 +1737,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   title: bookmark.title,
                   note: bookmark.note,
                   is_archived: is_archived_filter,
+                  is_unsorted: bookmark.is_unsorted,
                   stars: bookmark.stars,
                   links: bookmark.links.map((l) => ({
                     url: l.url,
@@ -1807,6 +1813,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   title: bookmark.title,
                   note: bookmark.note,
                   is_archived: is_archived_filter,
+                  is_unsorted: bookmark.is_unsorted,
                   stars: bookmark.stars,
                   links: bookmark.links.map((l) => ({
                     url: l.url,
@@ -1912,6 +1919,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   title: bookmark.title,
                   note: bookmark.note,
                   is_archived: is_archived_filter,
+                  is_unsorted: bookmark.is_unsorted,
                   stars: bookmark.stars == no_stars ? 0 : no_stars,
                   links: bookmark.links.map((link) => ({
                     url: link.url,
@@ -1982,6 +1990,101 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 ) {
                   search_hook.set_count(search_hook.count - 1)
                 }
+                dispatch(bookmarks_actions.set_is_upserting(false))
+                toast.success(props.dictionary.app.library.bookmark_updated)
+              }}
+            />
+            <UiCommon_Dropdown_CheckboxItem
+              is_checked={
+                bookmark.is_unsorted === undefined ? true : bookmark.is_unsorted
+              }
+              label={props.dictionary.app.library.bookmark.unsorted}
+              on_click={async () => {
+                dispatch(bookmarks_actions.set_is_upserting(true))
+                const { db } = await props.local_db.init({
+                  is_archived: is_archived_filter,
+                })
+                const modified_bookmark: UpsertBookmark_Params = {
+                  bookmark_id: bookmark.id,
+                  is_public: bookmark.is_public,
+                  created_at: new Date(bookmark.created_at),
+                  title: bookmark.title,
+                  note: bookmark.note,
+                  is_archived: is_archived_filter,
+                  is_unsorted: !(bookmark.is_unsorted === undefined
+                    ? true
+                    : bookmark.is_unsorted),
+                  stars: bookmark.stars,
+                  links: bookmark.links.map((link) => ({
+                    url: link.url,
+                    site_path: link.site_path,
+                    is_public: link.is_public,
+                    is_pinned: link.is_pinned,
+                    pin_title: link.pin_title,
+                    open_snapshot: link.open_snapshot,
+                    favicon: link.favicon,
+                  })),
+                  tags: bookmark.tags.map((tag) => ({
+                    name: tag.name,
+                    is_public: tag.is_public,
+                  })),
+                  cover: bookmark.cover,
+                }
+                const updated_bookmark = await dispatch(
+                  bookmarks_actions.upsert_bookmark({
+                    bookmark: modified_bookmark,
+                    last_authorized_counts_params:
+                      JSON.parse(
+                        sessionStorage.getItem(
+                          browser_storage.session_storage.library
+                            .last_authorized_counts_params,
+                        ) || 'null',
+                      ) || undefined,
+                    get_tag_hierarchies_request_params:
+                      tag_hierarchies_hook.get_authorized_request_params_({
+                        filter: filter_view_options_hook.current_filter_,
+                        gte: date_view_options_hook.current_gte_,
+                        lte: date_view_options_hook.current_lte_,
+                      }),
+                    ky: auth_context.ky_instance,
+                    encryption_key: auth_context.auth_data!.encryption_key,
+                  }),
+                )
+                if (
+                  search_hook.count &&
+                  (filter_view_options_hook.current_filter_ ==
+                    Filter.UNSORTED ||
+                    filter_view_options_hook.current_filter_ ==
+                      Filter.STARRED_UNSORTED ||
+                    filter_view_options_hook.current_filter_ ==
+                      Filter.ARCHIVED_STARRED_UNSORTED) &&
+                  bookmark.is_unsorted
+                ) {
+                  search_hook.set_count(search_hook.count! - 1)
+                }
+                await props.local_db.upsert_bookmark({
+                  db,
+                  is_archived: is_archived_filter,
+                  bookmark: {
+                    id: bookmark.id,
+                    created_at: bookmark.created_at,
+                    visited_at: bookmark.visited_at,
+                    updated_at: updated_bookmark.updated_at,
+                    title: bookmark.title,
+                    note: bookmark.note,
+                    is_archived: is_archived_filter,
+                    is_unsorted: !(bookmark.is_unsorted === undefined
+                      ? true
+                      : bookmark.is_unsorted),
+                    stars: bookmark.stars,
+                    links: bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                    })),
+                    tags: bookmark.tags.map((tag) => tag.name),
+                    tag_ids: bookmark.tags.map((tag) => tag.id),
+                  },
+                })
                 dispatch(bookmarks_actions.set_is_upserting(false))
                 toast.success(props.dictionary.app.library.bookmark_updated)
               }}
@@ -2125,6 +2228,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   created_at: new Date(bookmark.created_at),
                   title: bookmark.title,
                   is_archived: !is_archived_filter,
+                  is_unsorted: bookmark.is_unsorted,
                   stars: bookmark.stars,
                   links: bookmark.links.map((link) => ({
                     url: link.url,

@@ -57,6 +57,7 @@ export namespace CreateBookmark_Dto {
     is_public: z.boolean().optional(),
     is_archived: z.boolean().optional(),
     stars: z.number().int().min(0).max(5).optional(),
+    is_unsorted: z.boolean().optional(),
     tags: z
       .array(
         z.discriminatedUnion('is_public', [

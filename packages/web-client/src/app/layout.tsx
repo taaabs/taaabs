@@ -43,8 +43,8 @@ const Layout: React.FC<{ children: ReactNode }> = (props) => {
         {/* <GlobalStoreInitializer></GlobalStoreInitializer> */}
         <ToastContainer
           position="top-center"
-          autoClose={1500}
-          hideProgressBar={false}
+          autoClose={1000}
+          hideProgressBar={true}
           newestOnTop={false}
           closeOnClick
           rtl={false}

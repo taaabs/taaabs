@@ -27,7 +27,7 @@ type BookmarkOfSearch = {
   title?: string
   note?: string
   is_archived: boolean
-  is_unsorted: boolean
+  is_unsorted?: boolean
   stars?: number
   tags: string[]
   links: { url: string; site_path?: string; plain_text?: string }[]
@@ -456,7 +456,10 @@ export const LocalDbProvider: React.FC<{
         visited_at: Math.round(
           new Date(params.bookmark.visited_at).getTime() / 1000,
         ),
-        is_unsorted: params.bookmark.is_unsorted,
+        is_unsorted:
+          params.bookmark.is_unsorted === undefined
+            ? true
+            : params.bookmark.is_unsorted,
         sites,
         sites_variants: sites
           .map((site) => get_site_variants_for_search(site))
