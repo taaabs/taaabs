@@ -52,7 +52,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
               bookmark.created_at || created_at_fallback.toISOString(),
             is_public: bookmark.is_public || undefined,
             is_archived: bookmark.is_archived || undefined,
-            is_unsorted: bookmark.is_unsorted || undefined,
+            is_unsorted: bookmark.is_unsorted, // It's important to send 'false' if is there, meaning bookmark is sorted.
             stars: bookmark.stars || undefined,
             cover:
               bookmark.cover && bookmark.is_public ? bookmark.cover : undefined,
