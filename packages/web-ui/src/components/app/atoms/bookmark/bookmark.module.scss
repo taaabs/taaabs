@@ -110,17 +110,29 @@
       &__unsorted {
         display: inline-flex;
         align-items: center;
-        transform: translateY(0.5px);
+        position: relative;
+        font-size: 11px;
+        font-weight: var(--font-weight-inter-bold);
+        color: var(--white);
+        transform: translateY(-1.5px);
         left: 0;
-        border-radius: 50%;
-        height: 14px;
-        width: 14px;
-        background: var(--red);
-        margin-right: 5px;
+        margin-right: 8px;
+        margin-left: 4px;
         @include at992 {
-          margin-right: 6px;
-          height: 15.5px;
-          width: 15.5px;
+          font-size: 12px;
+          margin-left: 4px;
+          margin-right: 9px;
+        }
+        &::after {
+          content: '';
+          position: absolute;
+          width: calc(100% + 8px);
+          left: 50%;
+          transform: translateX(-50%);
+          height: calc(100% + 4px);
+          background-color: var(--red);
+          border-radius: 4px;
+          z-index: -1;
         }
       }
       &__text {

@@ -169,9 +169,9 @@ export const HeaderDesktop: React.FC<{
                 links: created_bookmark.links.map((link) => ({
                   url: link.url,
                   site_path: link.site_path,
-                  plain_text: bookmark.links.find(
-                    (link) => link.url == link.url,
-                  )?.plain_text,
+                  plain_text: bookmark.links
+                    .find((link) => link.url == link.url)
+                    ?.reader_data?.toString(),
                 })),
                 tags: created_bookmark.tags.map((tag) => tag.name),
                 tag_ids: created_bookmark.tags.map((tag) => tag.id),

@@ -150,7 +150,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,
       stars: params.stars || undefined,
-      is_unsorted: params.is_unsorted || undefined,
       tags: await Promise.all(
         params.tags
           .filter((tag) => tag.name.trim().length > 0)

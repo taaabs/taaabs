@@ -710,7 +710,9 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                 </OutsideClickHandler>
               </div>
               {props.is_unsorted_ && (
-                <div className={styles.bookmark__card__title__unsorted} />
+                <div className={styles.bookmark__card__title__unsorted}>
+                  UNSORTED
+                </div>
               )}
               {props.stars_ >= 1 && (
                 <div className={styles.bookmark__card__title__stars}>
