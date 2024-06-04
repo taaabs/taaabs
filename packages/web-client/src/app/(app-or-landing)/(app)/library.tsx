@@ -26,7 +26,6 @@ import { SelectedTags as UiAppAtom_SelectedTags } from '@web-ui/components/app/a
 import { Tags as UiAppAtom_Tags } from '@web-ui/components/app/atoms/tags'
 import { TagsSkeleton as UiAppAtom_TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
 import { SegmentedButtonsSkeleton as UiAppAtom_SegmentedButtonsSkeleton } from '@web-ui/components/app/atoms/segmented-buttons-skeleton'
-import { Pinned as UiAppAtom_Pinned } from '@web-ui/components/app/atoms/pinned'
 import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolbar'
 import {
   TagHierarchies,
@@ -67,7 +66,7 @@ import { delete_bookmark_modal_setter } from '@/modals/delete-bookmark-modal-set
 import { rename_tag_modal_setter } from '@/modals/rename-tag-modal-setter'
 import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
 import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
-// import { find_tag_modal } from '@/modals/find-tag-modal'
+import { PinnedBookmarks as Ui_App_Library_PinnedBookmarks } from '@web-ui/components/app/library/pinned-bookmarks'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -106,7 +105,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const [is_fetching_first_bookmarks, set_is_fetching_first_bookmarks] =
     useState<boolean>()
   // END - UI synchronization.
-  const pinned_count = useRef<number>()
 
   const favicon_host = `${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`
 
@@ -134,7 +132,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         set_pinned_updated_at(pinned_hook.fetched_at_timestamp)
         set_is_pinned_stale(false)
       }
-      set_pinned_count()
       if (search_hook.result) {
         search_hook.set_highlights(search_hook.incoming_highlights)
         search_hook.set_highlights_sites_variants(
@@ -194,72 +191,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       set_library_updated_at_timestamp(Date.now())
     }
     modal_context.set_modal_content({})
-  }
-
-  const set_pinned_count = () => {
-    let count = 0
-    pinned_hook.items?.map((item) => {
-      const created_at_timestamp = Math.round(
-        new Date(item.created_at).getTime() / 1000,
-      )
-      let is_relevant = true
-      // check if item includes every selected tags
-      if (
-        (is_archived_filter && !item.is_archived) ||
-        (!is_archived_filter && item.is_archived)
-      ) {
-        is_relevant = false
-      } else if (
-        (filter_view_options_hook.current_filter_ == Filter.STARRED ||
-          filter_view_options_hook.current_filter_ ==
-            Filter.STARRED_UNSORTED) &&
-        !item.stars
-      ) {
-        is_relevant = false
-      } else if (
-        (filter_view_options_hook.current_filter_ == Filter.UNSORTED ||
-          filter_view_options_hook.current_filter_ ==
-            Filter.STARRED_UNSORTED) &&
-        !item.is_unsorted
-      ) {
-        is_relevant = false
-      } else if (
-        item.tags &&
-        !tag_view_options_hook.selected_tags_.every((t) =>
-          item.tags!.includes(t),
-        )
-      ) {
-        is_relevant = false
-      } else if (
-        date_view_options_hook.current_gte_ &&
-        date_view_options_hook.current_lte_ &&
-        (created_at_timestamp <
-          new Date(
-            parseInt(
-              date_view_options_hook.current_gte_.toString().substring(0, 4),
-            ),
-            parseInt(
-              date_view_options_hook.current_gte_.toString().substring(4, 6),
-            ) - 1,
-          ).getTime() /
-            1000 ||
-          created_at_timestamp >
-            new Date(
-              parseInt(
-                date_view_options_hook.current_lte_.toString().substring(0, 4),
-              ),
-              parseInt(
-                date_view_options_hook.current_lte_.toString().substring(4, 6),
-              ),
-            ).getTime() /
-              1000 -
-              1)
-      ) {
-        is_relevant = false
-      }
-      if (is_relevant) count++
-    })
-    pinned_count.current = count
   }
 
   // UpdateEffect breaks rendering items fetched from session storage.
@@ -745,7 +676,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     />
   )
   const slot_pinned = (
-    <UiAppAtom_Pinned
+    <Ui_App_Library_PinnedBookmarks
       key={`${pinned_updated_at}-${popstate_count}`}
       library_updated_at_timestamp_={library_updated_at_timestamp}
       favicon_host_={favicon_host}
@@ -763,15 +694,19 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           stars_: item.stars,
           tags_: item.tags,
           open_snapshot_: item.open_snapshot,
+          menu_slot_: <></>,
         })) || []
       }
       is_draggable_={!username && !pinned_hook.is_updating}
       on_change_={async (updated_pinned) => {
         await dispatch(
           pinned_actions.update_pinned({
-            update_pinned_params: updated_pinned.map((pin) => ({
-              url: pin.url_,
-            })),
+            update_pinned_params: {
+              items: updated_pinned.map((pin) => ({
+                url: pin.url_,
+                is_public: pin.is_public_,
+              })),
+            },
             ky: auth_context.ky_instance,
             encryption_key: auth_context.auth_data!.encryption_key,
           }),
@@ -2412,16 +2347,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         tag_name={tag_view_options_hook.dragged_tag?.name_}
       />
       <UiAppTemplate_SwipableColumns
-        translations_={{
-          mobile_title_bar_: props.dictionary.app.menu_items.library,
-          collapse_alt_: props.dictionary.app.library.collapse_sidebar,
-          follow_: props.dictionary.app.library.follow,
-          unfollow_: props.dictionary.app.library.unfollow,
-          folders_: props.dictionary.app.library.folders,
-          pinned_: props.dictionary.app.library.pinned,
-          clear_selected_tags_:
-            props.dictionary.app.library.clear_selected_tags,
-        }}
         is_following_={undefined}
         welcome_text_={
           !username && auth_context.auth_data
@@ -2432,14 +2357,17 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         show_skeletons_={show_skeletons}
         slot_search_={slot_search}
         slot_toolbar_={slot_toolbar}
-        slot_pinned_={slot_pinned}
-        pinned_count_={pinned_count.current}
         slot_tag_hierarchies_={slot_tag_hierarchies}
         slot_aside_={slot_aside}
         are_bookmarks_dimmed_={
           is_fetching_first_bookmarks || bookmarks_hook.is_upserting || false
         }
-        slot_bookmarks_={slot_bookmarks}
+        slot_main_={
+          <>
+            {slot_pinned}
+            {slot_bookmarks}
+          </>
+        }
         on_page_bottom_reached_={() => {
           if (bookmarks_hook.is_fetching || !bookmarks_hook.bookmarks?.length)
             return
@@ -2494,6 +2422,15 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             ? props.dictionary.app.library.end_of_resutls
             : undefined
         }
+        translations_={{
+          mobile_title_bar_: props.dictionary.app.menu_items.library,
+          collapse_alt_: props.dictionary.app.library.collapse_sidebar,
+          follow_: props.dictionary.app.library.follow,
+          unfollow_: props.dictionary.app.library.unfollow,
+          folders_: props.dictionary.app.library.folders,
+          clear_selected_tags_:
+            props.dictionary.app.library.clear_selected_tags,
+        }}
       />
     </>
   )

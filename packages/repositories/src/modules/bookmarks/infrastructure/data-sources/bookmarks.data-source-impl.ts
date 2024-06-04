@@ -135,6 +135,73 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     params: UpsertBookmark_Params,
     encryption_key: Uint8Array,
   ): Promise<Bookmarks_Dto.Response.AuthorizedBookmark> {
+    const tags: CreateBookmark_Dto.Body['tags'] = []
+    for (const tag of params.tags) {
+      if (!tag.name.trim().length) continue
+      const hash = await Crypto.SHA256(tag.name, encryption_key)
+      if (tags.find((t) => t.hash == hash)) continue
+      if (tag.is_public) {
+        tags.push({
+          is_public: true,
+          hash,
+          name: tag.name.trim(),
+        })
+      } else {
+        tags.push({
+          is_public: false,
+          hash,
+          name_aes: await Crypto.AES.encrypt(tag.name.trim(), encryption_key),
+        })
+      }
+    }
+
+    const links: CreateBookmark_Dto.Body['links'] = []
+    for (const link of params.links) {
+      if (!link.url.trim().length) continue
+      const hash = await Crypto.SHA256(link.url.trim(), encryption_key)
+      if (links.find((l) => l.hash == hash)) continue
+      const domain = get_domain_from_url(link.url)
+      if (link.is_public) {
+        links.push({
+          is_public: true,
+          url: link.url.trim(),
+          hash: await Crypto.SHA256(link.url.trim(), encryption_key),
+          site_path: link.is_public ? link.site_path : undefined,
+          is_pinned: link.is_pinned,
+          pin_title: link.pin_title,
+          open_snapshot: link.open_snapshot,
+          reader_data: link.reader_data,
+          favicon_aes: link.favicon
+            ? await Crypto.AES.encrypt(link.favicon, encryption_key)
+            : undefined,
+        })
+      } else {
+        links.push({
+          is_public: false,
+          url_aes: await Crypto.AES.encrypt(link.url.trim(), encryption_key),
+          site_aes: await Crypto.AES.encrypt(
+            link.site_path ? `${domain}/${link.site_path}` : domain,
+            encryption_key,
+          ),
+          hash: await Crypto.SHA256(link.url.trim(), encryption_key),
+          is_pinned: link.is_pinned,
+          pin_title_aes: link.pin_title
+            ? await Crypto.AES.encrypt(link.pin_title, encryption_key)
+            : undefined,
+          open_snapshot: link.open_snapshot,
+          favicon_aes: link.favicon
+            ? await Crypto.AES.encrypt(link.favicon, encryption_key)
+            : undefined,
+          reader_data_aes: link.reader_data
+            ? await Crypto.AES.encrypt(
+                btoa(String.fromCharCode(...pako.deflate(link.reader_data))),
+                encryption_key,
+              )
+            : undefined,
+        })
+      }
+    }
+
     const body: CreateBookmark_Dto.Body = {
       created_at: params.created_at?.toISOString(),
       title: params.is_public ? params.title : undefined,
@@ -156,103 +223,8 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
             ? false
             : undefined
           : params.is_unsorted,
-      tags: await Promise.all(
-        params.tags
-          .filter((tag) => tag.name.trim().length > 0)
-          .reduce(
-            (acc, tag) => {
-              const is_duplicate =
-                acc.findIndex((t) => t.name == tag.name) != -1
-              if (is_duplicate) {
-                return acc
-              } else {
-                return [...acc, tag]
-              }
-            },
-            [] as UpsertBookmark_Params['tags'],
-          )
-          .map(async (tag) => {
-            if (tag.is_public) {
-              return {
-                is_public: true,
-                hash: await Crypto.SHA256(tag.name, encryption_key),
-                name: tag.name.trim(),
-              }
-            } else {
-              return {
-                is_public: false,
-                hash: await Crypto.SHA256(tag.name, encryption_key),
-                name_aes: await Crypto.AES.encrypt(
-                  tag.name.trim(),
-                  encryption_key,
-                ),
-              }
-            }
-          }),
-      ),
-      links: await Promise.all(
-        params.links
-          .filter((link) => link.url.trim().length > 0)
-          .reduce(
-            (acc, link) => {
-              const is_duplicate =
-                acc.findIndex((l) => l.url == link.url.trim()) != -1
-              if (is_duplicate) {
-                return acc
-              } else {
-                return [...acc, link]
-              }
-            },
-            [] as UpsertBookmark_Params['links'],
-          )
-          .map(async (link) => {
-            const domain = get_domain_from_url(link.url)
-            if (link.is_public) {
-              return {
-                is_public: true,
-                url: link.url.trim(),
-                hash: await Crypto.SHA256(link.url.trim(), encryption_key),
-                site_path: link.is_public ? link.site_path : undefined,
-                is_pinned: link.is_pinned,
-                pin_title: link.pin_title,
-                open_snapshot: link.open_snapshot,
-                reader_data: link.reader_data,
-                favicon_aes: link.favicon
-                  ? await Crypto.AES.encrypt(link.favicon, encryption_key)
-                  : undefined,
-              }
-            } else {
-              return {
-                is_public: false,
-                url_aes: await Crypto.AES.encrypt(
-                  link.url.trim(),
-                  encryption_key,
-                ),
-                site_aes: await Crypto.AES.encrypt(
-                  link.site_path ? `${domain}/${link.site_path}` : domain,
-                  encryption_key,
-                ),
-                hash: await Crypto.SHA256(link.url.trim(), encryption_key),
-                is_pinned: link.is_pinned,
-                pin_title_aes: link.pin_title
-                  ? await Crypto.AES.encrypt(link.pin_title, encryption_key)
-                  : undefined,
-                open_snapshot: link.open_snapshot,
-                favicon_aes: link.favicon
-                  ? await Crypto.AES.encrypt(link.favicon, encryption_key)
-                  : undefined,
-                reader_data_aes: link.reader_data
-                  ? await Crypto.AES.encrypt(
-                      btoa(
-                        String.fromCharCode(...pako.deflate(link.reader_data)),
-                      ),
-                      encryption_key,
-                    )
-                  : undefined,
-              }
-            }
-          }),
-      ),
+      tags,
+      links,
       cover: params.is_public ? params.cover : undefined,
       cover_aes:
         !params.is_public && params.cover

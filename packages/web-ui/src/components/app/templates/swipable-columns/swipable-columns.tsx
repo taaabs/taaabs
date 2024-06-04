@@ -13,12 +13,11 @@ import SimpleBar from 'simplebar-react'
 
 export namespace SwipableColumns {
   export type Props = {
-    slot_pinned_: React.ReactNode
     slot_tag_hierarchies_: React.ReactNode
     slot_aside_: React.ReactNode
     slot_toolbar_: React.ReactNode
     slot_search_: React.ReactNode
-    slot_bookmarks_: React.ReactNode
+    slot_main_: React.ReactNode
     are_bookmarks_dimmed_: boolean
     on_page_bottom_reached_: () => void
     clear_selected_tags_?: () => void
@@ -28,14 +27,12 @@ export namespace SwipableColumns {
     welcome_text_?: string
     on_follow_click_?: () => void
     is_following_?: boolean
-    pinned_count_?: number
     translations_: {
       mobile_title_bar_: string
       collapse_alt_: string
       follow_: string
       unfollow_: string
       folders_: string
-      pinned_: string
       clear_selected_tags_: string
     }
   }
@@ -61,16 +58,10 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
   const [is_right_side_moving, set_is_right_side_moving] = useState<boolean>()
   const [is_left_side_open, set_is_left_side_open] = useState<boolean>()
   const [is_right_side_open, set_is_right_side_open] = useState<boolean>()
-  const [is_pinned_active, set_is_pinned_active] = useState<boolean>()
   const simplebar_tag_hierarchies = useRef<any>(null)
-  const simplebar_pinned = useRef<any>(null)
   const [
     is_simplebar_tag_hierarchies_scrolled_to_top,
     set_is_simplebar_tag_hierarchies_scrolled_to_top,
-  ] = useState(true)
-  const [
-    is_simplebar_pinned_scrolled_to_top,
-    set_is_simplebar_pinned_scrolled_to_top,
   ] = useState(true)
 
   useEffect(() => {
@@ -82,21 +73,6 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
       }
     }
     const element = simplebar_tag_hierarchies.current.getScrollElement()
-    element!.addEventListener('scroll', handle_scroll, { passive: true })
-    return () => {
-      element!.removeEventListener('scroll', handle_scroll)
-    }
-  }, [])
-
-  useEffect(() => {
-    const handle_scroll = (e: any) => {
-      if (e.target.scrollTop == 0) {
-        set_is_simplebar_pinned_scrolled_to_top(true)
-      } else {
-        set_is_simplebar_pinned_scrolled_to_top(false)
-      }
-    }
-    const element = simplebar_pinned.current.getScrollElement()
     element!.addEventListener('scroll', handle_scroll, { passive: true })
     return () => {
       element!.removeEventListener('scroll', handle_scroll)
@@ -117,7 +93,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
 
   const swipeable_handlers = useSwipeable({
     onSwipeStart: ({ dir, event }) => {
-      // Check if user is not dragging over "custom range" handlers or pinned in a draggable state.
+      // Check if user is not dragging over "custom range" handlers or ReactSortable item in a draggable state.
       if (
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
@@ -352,36 +328,8 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
                 </Button>
               )}
             </div>
-            <div className={styles['sidebar__inner__pane-selector']}>
-              <button
-                className={cn(styles['sidebar__inner__pane-selector__button'], {
-                  [styles['sidebar__inner__pane-selector__button--active']]:
-                    !is_pinned_active,
-                })}
-                onClick={() => {
-                  set_is_pinned_active(false)
-                }}
-              >
-                {props.translations_.folders_}
-              </button>
-              <button
-                className={cn(styles['sidebar__inner__pane-selector__button'], {
-                  [styles['sidebar__inner__pane-selector__button--active']]:
-                    is_pinned_active,
-                })}
-                onClick={() => {
-                  set_is_pinned_active(true)
-                }}
-              >
-                {props.translations_.pinned_}{' '}
-                {props.pinned_count_ ? `(${props.pinned_count_})` : ''}
-              </button>
-            </div>
             <SimpleBar
               className={cn(styles['sidebar__inner__simplebar'])}
-              style={{
-                display: is_pinned_active ? 'none' : undefined,
-              }}
               ref={simplebar_tag_hierarchies}
             >
               {!props.show_skeletons_ ? (
@@ -401,22 +349,6 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
                   ))}
                 </div>
               )}
-            </SimpleBar>
-            <SimpleBar
-              className={cn(styles['sidebar__inner__simplebar'])}
-              ref={simplebar_pinned}
-              style={{
-                display: !is_pinned_active ? 'none' : undefined,
-              }}
-            >
-              <div
-                className={cn({
-                  [styles['sidebar__inner__simplebar__pinned--scrolled']]:
-                    !is_simplebar_pinned_scrolled_to_top,
-                })}
-              >
-                {props.slot_pinned_}
-              </div>
             </SimpleBar>
           </div>
         </aside>
@@ -479,7 +411,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
                 [styles.dimmed]: props.are_bookmarks_dimmed_,
               })}
             >
-              {props.slot_bookmarks_}
+              {props.slot_main_}
             </div>
 
             <div className={styles['main__inner__info']} ref={end_of_bookmarks}>

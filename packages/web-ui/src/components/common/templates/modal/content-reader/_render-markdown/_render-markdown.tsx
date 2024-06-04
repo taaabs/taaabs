@@ -48,7 +48,7 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
                         <span>
                           {(language_map as any)[language_fallback] ||
                             language_fallback}
-                          <sup> detected</sup>
+                          <sup> auto-detect</sup>
                         </span>
                       </>
                     ) : (

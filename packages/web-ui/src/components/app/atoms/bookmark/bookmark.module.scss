@@ -77,6 +77,9 @@
         > svg {
           fill: var(--neutral200);
           width: 18px;
+          @include at992 {
+            width: 20px;
+          }
         }
       }
     }
@@ -180,7 +183,7 @@
           float: right;
           display: inline-flex;
           flex-direction: column;
-          margin-top: -14px;
+          margin-top: -12px;
           transform: translateX(2px) translateY(12px);
           padding-left: 10px;
         }
@@ -425,9 +428,9 @@
             }
           }
           &--toggled {
-            background-color: var(--neutral100);
+            background-color: var(--blue200);
             svg {
-              fill: var(--neutral600);
+              fill: var(--blue700);
             }
           }
         }

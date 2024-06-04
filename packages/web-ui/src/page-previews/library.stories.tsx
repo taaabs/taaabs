@@ -95,7 +95,7 @@ export const Primary = () => {
         on_page_bottom_reached_={() => {}}
         slot_pinned_={<>pinned</>}
         are_bookmarks_dimmed_={false}
-        slot_bookmarks_={
+        slot_main_={
           <>
             {bookmark}
             {bookmark}

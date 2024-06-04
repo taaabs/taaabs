@@ -23,16 +23,20 @@ export class Pinned_DataSourceImpl implements Pinned_DataSource {
     params: UpdatePinned_Params,
     encryption_key: Uint8Array,
   ): Promise<Pinned_Dto.Response> {
-    const body: UpdatePinned_Dto.Body = await Promise.all(
-      params.map(async (pinned_item) => ({
-        hash: await Crypto.SHA256(pinned_item.url.trim(), encryption_key),
-        title: pinned_item.is_link_public ? pinned_item.title : undefined,
+    const items: UpdatePinned_Dto.Item[] = []
+    for (const item of params.items) {
+      items.push({
+        hash: await Crypto.SHA256(item.url.trim(), encryption_key),
+        title: item.is_public ? item.title : undefined,
         title_aes:
-          !pinned_item.is_link_public && pinned_item.title
-            ? await Crypto.AES.encrypt(pinned_item.title, encryption_key)
+          !item.is_public && item.title
+            ? await Crypto.AES.encrypt(item.title, encryption_key)
             : undefined,
-      })),
-    )
+      })
+    }
+
+    const body: UpdatePinned_Dto.Body = items
+
     return this._ky
       .put('v1/pinned', {
         json: body,

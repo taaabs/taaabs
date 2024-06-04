@@ -24,85 +24,82 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     const result =
       await this._bookmarks_data_source.get_bookmarks_on_authorized_user(params)
 
+    const bookmarks: Bookmark_Entity[] = []
+
+    for (const bookmark of result.bookmarks || []) {
+      const tags: Bookmark_Entity['tags'] = []
+      for (const tag of bookmark.tags) {
+        tags.push({
+          id: tag.id,
+          name: tag.name
+            ? tag.name
+            : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
+          is_public: tag.is_public,
+        })
+      }
+
+      const links: Bookmark_Entity['links'] = []
+      for (const link of bookmark.links) {
+        let site_path: string | undefined
+        if (link.is_public) {
+          site_path = link.site_path
+        } else {
+          const site = await Crypto.AES.decrypt(link.site_aes!, encryption_key)
+          const domain = `${get_domain_from_url(site)}/`
+          site_path = site.slice(domain.length)
+        }
+        links.push({
+          url: link.is_public
+            ? link.url!
+            : await Crypto.AES.decrypt(link.url_aes!, encryption_key),
+          site_path,
+          is_public: link.is_public || false,
+          saves: link.saves,
+          is_pinned: link.is_pinned,
+          pin_title: link.pin_title
+            ? link.pin_title
+            : link.pin_title_aes
+            ? await Crypto.AES.decrypt(link.pin_title_aes!, encryption_key)
+            : undefined,
+          open_snapshot: link.open_snapshot,
+          favicon: link.favicon_aes
+            ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
+            : undefined,
+          is_parsed: link.is_parsed,
+        })
+      }
+
+      bookmarks.push({
+        id: bookmark.id,
+        is_public: bookmark.is_public || false,
+        created_at: bookmark.created_at,
+        updated_at: bookmark.updated_at,
+        visited_at: bookmark.visited_at,
+        title: bookmark.title
+          ? bookmark.title
+          : bookmark.title_aes
+          ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+          : undefined,
+        note: bookmark.note
+          ? bookmark.note
+          : bookmark.note_aes
+          ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+          : undefined,
+        is_unsorted: bookmark.is_unsorted,
+        stars: bookmark.stars || 0,
+        points: bookmark.points,
+        tags,
+        links,
+        cover: bookmark.cover
+          ? bookmark.cover
+          : bookmark.cover_aes
+          ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
+          : undefined,
+      })
+    }
+
     return {
-      bookmarks: result.bookmarks
-        ? await Promise.all(
-            result.bookmarks.map(async (bookmark) => ({
-              id: bookmark.id,
-              is_public: bookmark.is_public || false,
-              created_at: bookmark.created_at,
-              updated_at: bookmark.updated_at,
-              visited_at: bookmark.visited_at,
-              title: bookmark.title
-                ? bookmark.title
-                : bookmark.title_aes
-                ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
-                : undefined,
-              note: bookmark.note
-                ? bookmark.note
-                : bookmark.note_aes
-                ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
-                : undefined,
-              is_unsorted: bookmark.is_unsorted,
-              stars: bookmark.stars || 0,
-              points: bookmark.points,
-              tags: await Promise.all(
-                bookmark.tags.map(async (tag) => ({
-                  id: tag.id,
-                  name: tag.name
-                    ? tag.name
-                    : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
-                  is_public: tag.is_public || undefined,
-                })),
-              ),
-              links: await Promise.all(
-                bookmark.links.map(async (link) => {
-                  let site_path: string | undefined
-                  if (link.is_public) {
-                    site_path = link.site_path
-                  } else {
-                    const site = await Crypto.AES.decrypt(
-                      link.site_aes!,
-                      encryption_key,
-                    )
-                    const domain = `${get_domain_from_url(site)}/`
-                    site_path = site.slice(domain.length)
-                  }
-                  return {
-                    url: link.is_public
-                      ? link.url!
-                      : await Crypto.AES.decrypt(link.url_aes!, encryption_key),
-                    site_path,
-                    is_public: link.is_public || false,
-                    saves: link.saves,
-                    is_pinned: link.is_pinned,
-                    pin_title: link.pin_title
-                      ? link.pin_title
-                      : link.pin_title_aes
-                      ? await Crypto.AES.decrypt(
-                          link.pin_title_aes!,
-                          encryption_key,
-                        )
-                      : undefined,
-                    open_snapshot: link.open_snapshot,
-                    favicon: link.favicon_aes
-                      ? await Crypto.AES.decrypt(
-                          link.favicon_aes,
-                          encryption_key,
-                        )
-                      : undefined,
-                    is_parsed: link.is_parsed,
-                  }
-                }),
-              ),
-              cover: bookmark.cover
-                ? bookmark.cover
-                : bookmark.cover_aes
-                ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
-                : undefined,
-            })),
-          )
-        : undefined,
+      bookmarks: bookmarks.length ? bookmarks : undefined,
       pagination: result.pagination
         ? {
             has_more: result.pagination.has_more,
@@ -119,35 +116,52 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     const result =
       await this._bookmarks_data_source.get_bookmarks_on_public_user(params)
 
-    return {
-      bookmarks: result.bookmarks
-        ? result.bookmarks.map((bookmark) => ({
-            id: bookmark.id,
+    const bookmarks: Bookmark_Entity[] = []
+
+    if (result.bookmarks) {
+      for (const bookmark of result.bookmarks) {
+        const tags: Bookmark_Entity['tags'] = []
+        for (const tag of bookmark.tags) {
+          tags.push({
+            id: tag.id,
+            name: tag.name,
             is_public: true,
-            created_at: bookmark.created_at,
-            updated_at: bookmark.updated_at,
-            visited_at: bookmark.visited_at,
-            title: bookmark.title,
-            note: bookmark.note,
-            is_unsorted: bookmark.is_unsorted,
-            stars: bookmark.stars || 0,
-            points: bookmark.points,
-            tags: bookmark.tags.map((tag) => ({
-              id: tag.id,
-              name: tag.name,
-            })),
-            links: bookmark.links.map((link) => ({
-              url: link.url,
-              saves: link.saves,
-              site_path: link.site_path,
-              is_public: true,
-              is_pinned: link.is_pinned,
-              open_snapshot: link.open_snapshot,
-              is_parsed: link.is_parsed,
-            })),
-            cover: bookmark.cover ? bookmark.cover : undefined,
-          }))
-        : undefined,
+          })
+        }
+
+        const links: Bookmark_Entity['links'] = []
+        for (const link of bookmark.links) {
+          links.push({
+            url: link.url,
+            saves: link.saves,
+            site_path: link.site_path,
+            is_public: true,
+            is_pinned: link.is_pinned,
+            open_snapshot: link.open_snapshot,
+            is_parsed: link.is_parsed,
+          })
+        }
+
+        bookmarks.push({
+          id: bookmark.id,
+          is_public: true,
+          created_at: bookmark.created_at,
+          updated_at: bookmark.updated_at,
+          visited_at: bookmark.visited_at,
+          title: bookmark.title,
+          note: bookmark.note,
+          is_unsorted: bookmark.is_unsorted,
+          stars: bookmark.stars || 0,
+          points: bookmark.points,
+          tags,
+          links,
+          cover: bookmark.cover ? bookmark.cover : undefined,
+        })
+      }
+    }
+
+    return {
+      bookmarks: bookmarks.length ? bookmarks : undefined,
       pagination: result.pagination
         ? {
             has_more: result.pagination.has_more,
@@ -161,13 +175,13 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     params: GetBookmarksByIds_Params.Authorized,
     encryption_key: Uint8Array,
   ): Promise<GetBookmarksByIds_Ro> {
-    const { bookmarks } =
+    const result =
       await this._bookmarks_data_source.get_bookmarks_by_ids_authorized(params)
 
     return {
-      bookmarks: bookmarks
+      bookmarks: result.bookmarks
         ? await Promise.all(
-            bookmarks.map(async (bookmark) => ({
+            result.bookmarks.map(async (bookmark) => ({
               id: bookmark.id,
               is_public: bookmark.is_public || false,
               created_at: bookmark.created_at,
@@ -249,12 +263,12 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   public async get_bookmarks_by_ids_public(
     params: GetBookmarksByIds_Params.Public,
   ): Promise<GetBookmarksByIds_Ro> {
-    const { bookmarks } =
+    const result =
       await this._bookmarks_data_source.get_bookmarks_by_ids_public(params)
 
     return {
-      bookmarks: bookmarks
-        ? bookmarks.map((bookmark) => ({
+      bookmarks: result.bookmarks
+        ? result.bookmarks.map((bookmark) => ({
             id: bookmark.id,
             created_at: bookmark.created_at,
             updated_at: bookmark.updated_at,

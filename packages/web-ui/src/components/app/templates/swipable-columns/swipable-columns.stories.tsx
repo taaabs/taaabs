@@ -19,7 +19,7 @@ export const Primary = () => (
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached_={() => {}}
     are_bookmarks_dimmed_={false}
-    slot_bookmarks_={<>[BOOKMARKS]</>}
+    slot_main_={<>[BOOKMARKS]</>}
     slot_search_={<>[SEARCH]</>}
     show_skeletons_={false}
     slot_pinned_={<>pinned</>}
@@ -42,7 +42,7 @@ export const Scrolling = () => (
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached_={() => {}}
     are_bookmarks_dimmed_={false}
-    slot_bookmarks_={
+    slot_main_={
       <>
         {lorem} {lorem} {lorem} {lorem}
       </>
@@ -69,7 +69,7 @@ export const Loading = () => (
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached_={() => {}}
     are_bookmarks_dimmed_={false}
-    slot_bookmarks_={<>slot bookmarks</>}
+    slot_main_={<>slot bookmarks</>}
     slot_search_={<>[SEARCH]</>}
     show_skeletons_={true}
     slot_pinned_={<>pinned</>}

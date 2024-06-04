@@ -1,0 +1,14 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.items {
+  display: flex;
+  flex-direction: column;
+  border: var(--border-secondary);
+  border-radius: var(--border-radius-12px);
+  background-color: var(--white);
+}
+.dragging {
+  background-color: var(--border-color-secondary);
+  cursor: grabbing;
+}

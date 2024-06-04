@@ -66,7 +66,6 @@
     width: var(--_collapsed_aside_width);
   }
   &__inner {
-    --_pane-selector-height: 40px;
     width: 100%;
     position: fixed;
     top: var(--header-mobile-height);
@@ -174,41 +173,17 @@
         padding-left: 8px;
       }
     }
-    &__pane-selector {
-      display: flex;
-      gap: 10px;
-      @include to992 {
-        align-items: center;
-        padding: 16px var(--padding-16px) 8px var(--padding-16px);
-      }
-      @include at992 {
-        margin-right: 10px;
-        margin-bottom: 4px;
-      }
-      &__button {
-        font-size: var(--font-size-13px);
-        color: var(--text-color-variant);
-        @include hover {
-          color: var(--text-color-normal);
-        }
-        &--active {
-          pointer-events: none;
-          font-weight: var(--font-weight-inter-medium);
-          color: var(--text-color-normal);
-        }
-      }
-    }
     &__simplebar {
       position: relative;
       overflow: auto;
       height: calc(
-        100svh - var(--header-mobile-height) - var(--_pane-selector-height) -
+        100svh - var(--header-mobile-height) -
           var(--bottom-navigation-bar-height)
       );
       @include at992 {
         height: calc(
           100svh - var(--header-desktop-height) - 16px -
-            var(--search-desktop-height) - var(--_pane-selector-height)
+            var(--search-desktop-height)
         );
       }
       &__tag-hierarchies {

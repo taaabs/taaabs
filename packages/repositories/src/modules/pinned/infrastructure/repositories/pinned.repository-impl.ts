@@ -13,26 +13,33 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
   ): Promise<GetPinned_Ro> {
     const result = await this._pinned_data_source.get_pinned_authorized()
 
-    return await Promise.all(
-      result.map(async (el) => ({
-        bookmark_id: el.bookmark_id,
-        created_at: el.created_at,
-        is_link_public: el.is_link_public,
-        url: el.url
-          ? el.url
-          : await Crypto.AES.decrypt(el.url_aes!, encryption_key),
-        title: el.title
-          ? el.title
-          : el.title_aes
-          ? await Crypto.AES.decrypt(el.title_aes, encryption_key)
+    const items: GetPinned_Ro = []
+
+    for (const item of result) {
+      items.push({
+        bookmark_id: item.bookmark_id,
+        created_at: item.created_at,
+        is_public: item.is_public,
+        url: item.url
+          ? item.url
+          : await Crypto.AES.decrypt(item.url_aes!, encryption_key),
+        title: item.title
+          ? item.title
+          : item.title_aes
+          ? await Crypto.AES.decrypt(item.title_aes, encryption_key)
           : undefined,
-        stars: el.stars,
-        is_unsorted: el.is_unsorted,
-        is_archived: el.is_archived,
-        tags: el.tags,
-        open_snapshot: el.open_snapshot,
-      })),
-    )
+        stars: item.stars,
+        is_unsorted: item.is_unsorted,
+        is_archived: item.is_archived,
+        tags: item.tags,
+        open_snapshot: item.open_snapshot,
+        favicon: item.favicon_aes
+          ? await Crypto.AES.decrypt(item.favicon_aes, encryption_key)
+          : undefined,
+      })
+    }
+
+    return items
   }
 
   public async get_pinned_public(
@@ -42,17 +49,24 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
       username: params.username,
     })
 
-    return result.map((el) => ({
-      bookmark_id: el.bookmark_id,
-      created_at: el.created_at,
-      url: el.url!,
-      title: el.title,
-      stars: el.stars,
-      is_unsorted: el.is_unsorted,
-      is_archived: el.is_archived,
-      tags: el.tags,
-      open_snapshot: el.open_snapshot,
-    }))
+    const items: GetPinned_Ro = []
+
+    for (const item of result) {
+      items.push({
+        bookmark_id: item.bookmark_id,
+        created_at: item.created_at,
+        is_public: item.is_public,
+        url: item.url!,
+        title: item.title!,
+        stars: item.stars,
+        is_unsorted: item.is_unsorted,
+        is_archived: item.is_archived,
+        tags: item.tags,
+        open_snapshot: item.open_snapshot,
+      })
+    }
+
+    return items
   }
 
   public async update_pinned(
