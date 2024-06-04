@@ -98,11 +98,6 @@
       @include to768 {
         font-family: var(--font-family-inter-tight);
       }
-      @include hover {
-        > span:first-child {
-          @include text-decoration-underlinie-thin;
-        }
-      }
       &--dim-visited {
         @include hover {
           &:visited > span {
@@ -115,6 +110,9 @@
       }
       &__title {
         font-weight: var(--font-weight-inter-semi-bold);
+        @include hover {
+          @include text-decoration-underlinie-thin;
+        }
       }
       &__link {
         font-size: var(--font-size-13px);

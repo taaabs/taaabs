@@ -6,7 +6,7 @@ import { system_values } from '@shared/constants/system-values'
 import { _Item } from './_Item/_Item'
 
 export namespace PinnedBookmarks {
-  type Item = {
+  export type Item = {
     bookmark_id_: number
     url_: string
     created_at_: Date
@@ -21,7 +21,6 @@ export namespace PinnedBookmarks {
     is_archived_?: boolean
     stars_?: number
     is_unsorted_?: boolean
-    open_snapshot?: boolean
   }
   export type Props = {
     items_: Item[]
@@ -45,24 +44,20 @@ export namespace PinnedBookmarks {
 
 type SortableItem = {
   id: number
-  bookmark_id_: number
-}
+} & PinnedBookmarks.Item
 
 export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
   function PinnedBookmarks(props) {
     const [sortable_items, set_sortable_items] = useState<SortableItem[]>(
       props.items_.map((item, i) => ({
         id: i,
-        bookmark_id_: item.bookmark_id_,
+        ...item,
       })),
     )
 
     let relevant_items = 0
 
-    const items_dom = sortable_items.map((sortable_item) => {
-      const item = props.items_.find(
-        (item) => item.bookmark_id_ == sortable_item.bookmark_id_,
-      )!
+    const items_dom = sortable_items.map((item) => {
       const created_at_timestamp = Math.round(item.created_at_.getTime() / 1000)
       let is_not_relevant = false
 
@@ -107,10 +102,10 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
         : item.url_
 
       return is_not_relevant ? (
-        <div key={url} />
+        <div key={item.id} />
       ) : (
         <_Item
-          key={url}
+          key={item.id}
           favicon_host_={props.favicon_host_}
           menu_slot_={<>menu</>}
           on_link_click_={() => {}}
@@ -118,10 +113,10 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
           on_new_tab_link_click_={() => {}}
           on_reading_mode_click_={() => {}}
           should_dim_visited_links_={false}
-          url_={item.url_}
+          url_={url}
           favicon_={item.favicon_}
           is_parsed_={item.is_parsed_}
-          open_snapshot_={item.open_snapshot}
+          open_snapshot_={item.open_snapshot_}
           saves_={item.saves_}
           site_path_={item.site_path_}
           title_={item.title_}
@@ -141,19 +136,12 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
             list={sortable_items}
             setList={(new_sortable_items) => {
               if (
-                JSON.stringify(new_sortable_items) ==
-                JSON.stringify(sortable_items)
+                JSON.stringify(new_sortable_items.map((i) => i.id)) ==
+                JSON.stringify(sortable_items.map((i) => i.id))
               )
                 return
               set_sortable_items(new_sortable_items)
-              props.on_change_(
-                new_sortable_items.map(
-                  (new_sortable_item) =>
-                    props.items_.find(
-                      (i) => i.bookmark_id_ == new_sortable_item.bookmark_id_,
-                    )!,
-                ),
-              )
+              props.on_change_(new_sortable_items)
             }}
             animation={system_values.sortablejs_animation_duration}
             forceFallback={true}

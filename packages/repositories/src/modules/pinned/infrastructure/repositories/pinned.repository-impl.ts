@@ -56,7 +56,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
       items.push({
         bookmark_id: item.bookmark_id,
         created_at: item.created_at,
-        is_public: item.is_public,
+        is_public: true,
         url: item.url!,
         title: item.title!,
         stars: item.stars,

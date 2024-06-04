@@ -692,6 +692,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           is_unsorted_: item.is_unsorted,
           is_archived_: item.is_archived,
           is_parsed_: item.is_parsed,
+          is_public_: item.is_public,
           stars_: item.stars,
           tags_: item.tags,
           open_snapshot_: item.open_snapshot,
@@ -703,9 +704,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         await dispatch(
           pinned_actions.update_pinned({
             update_pinned_params: {
-              items: updated_pinned.map((pin) => ({
-                url: pin.url_,
-                is_public: pin.is_public_,
+              items: updated_pinned.map((item) => ({
+                url: item.url_,
+                is_public: item.is_public_,
+                title: item.title_,
               })),
             },
             ky: auth_context.ky_instance,
