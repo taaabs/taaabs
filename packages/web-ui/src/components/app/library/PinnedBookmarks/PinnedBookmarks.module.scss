@@ -1,0 +1,21 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.items {
+  display: flex;
+  flex-direction: column;
+  border-top: var(--border-secondary);
+}
+.dragging {
+  background-color: var(--border-color-secondary);
+  cursor: grabbing;
+}
+.nothing-pinned {
+  font-size: var(--font-size-13px);
+  color: var(--text-color-dimmed);
+  text-align: center;
+  width: 100%;
+  padding: var(--padding-16px);
+  border-top: var(--border-secondary);
+  border-bottom: var(--border-secondary);
+}

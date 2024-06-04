@@ -66,7 +66,7 @@ import { delete_bookmark_modal_setter } from '@/modals/delete-bookmark-modal-set
 import { rename_tag_modal_setter } from '@/modals/rename-tag-modal-setter'
 import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
 import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
-import { PinnedBookmarks as Ui_App_Library_PinnedBookmarks } from '@web-ui/components/app/library/pinned-bookmarks'
+import { PinnedBookmarks as UiAppLibrary_PinnedBookmarks } from '@web-ui/components/app/library/PinnedBookmarks'
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
@@ -676,7 +676,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     />
   )
   const slot_pinned = (
-    <Ui_App_Library_PinnedBookmarks
+    <UiAppLibrary_PinnedBookmarks
       key={`${pinned_updated_at}-${popstate_count}`}
       library_updated_at_timestamp_={library_updated_at_timestamp}
       favicon_host_={favicon_host}
@@ -691,10 +691,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           title_: item.title,
           is_unsorted_: item.is_unsorted,
           is_archived_: item.is_archived,
+          is_parsed_: item.is_parsed,
           stars_: item.stars,
           tags_: item.tags,
           open_snapshot_: item.open_snapshot,
-          menu_slot_: <></>,
+          favicon_: item.favicon,
         })) || []
       }
       is_draggable_={!username && !pinned_hook.is_updating}

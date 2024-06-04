@@ -1,0 +1,210 @@
+// @type
+@use '../../../../../styles/foundation' as *;
+
+.item {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  position: relative;
+  padding: 0 16px 0 12px;
+  border-bottom: var(--border-secondary);
+  height: 52px;
+  @include at992 {
+    padding: 0 13px;
+  }
+  &--recently-visited {
+    &::after {
+      content: '';
+      position: absolute;
+      pointer-events: none;
+      width: 100%;
+      height: calc(100% + 2px);
+      top: -1px;
+      left: 0;
+      background-color: rgba(88, 28, 135, 0.07);
+      border: 1.5px solid var(--purple300);
+      @include to992 {
+        border-left: 0;
+        border-right: 0;
+      }
+      @include at992 {
+        width: calc(100% + 12px);
+        height: calc(100% + 12px);
+        top: -6px;
+        left: -6px;
+        border-radius: 5px;
+      }
+    }
+  }
+  &__link {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    &__site {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background-color: var(--outlined-button-background);
+      border-radius: var(--border-radius-999px);
+      border: var(--border-primary);
+      @include transition-150ms(border-color);
+      @include hover {
+        border-color: var(--border-color-hover);
+      }
+      > img {
+        width: 16px;
+        height: 16px;
+      }
+      > svg {
+        width: 16px;
+        fill: #737373;
+      }
+      &--highlighted {
+        background-color: var(--highlight);
+      }
+    }
+    &__reader {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--border-radius-999px);
+      @include transition-150ms(background-color);
+      width: var(--button-dimension-40px);
+      height: var(--button-dimension-28px);
+      background-color: var(--blue100);
+      svg {
+        fill: var(--blue600);
+        @include transition-150ms(fill);
+        width: 14px;
+      }
+      @include hover {
+        background: var(--blue200);
+        svg {
+          fill: var(--blue700);
+        }
+      }
+    }
+    &__main {
+      display: -webkit-box;
+      overflow-wrap: anywhere;
+      overflow: hidden;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      @include to768 {
+        font-family: var(--font-family-inter-tight);
+      }
+      @include hover {
+        > span:first-child {
+          @include text-decoration-underlinie-thin;
+        }
+      }
+      &--dim-visited {
+        @include hover {
+          &:visited > span {
+            text-decoration-color: var(--text-color-dimmed);
+          }
+        }
+      }
+      &--via-wayback {
+        font-style: italic;
+      }
+      &__title {
+        font-weight: var(--font-weight-inter-semi-bold);
+      }
+      &__link {
+        font-size: var(--font-size-13px);
+        color: var(--text-color-dimmed);
+        padding-left: 4px;
+      }
+      &--dim-visited:visited {
+        color: var(--text-color-dimmed);
+      }
+    }
+  }
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--padding-8px);
+    &__public-saves {
+      white-space: nowrap;
+      margin-right: 5px;
+      color: var(--text-color-dimmed);
+      font-size: var(--font-size-13px);
+      padding: 0 3px;
+      @include hover {
+        text-decoration: underline;
+      }
+    }
+    &__open {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--border-radius-999px);
+      @include transition-150ms(background-color);
+      width: var(--button-dimension-28px);
+      height: var(--button-dimension-28px);
+      background: var(--neutral100);
+      svg {
+        fill: var(--neutral500);
+        @include transition-150ms(fill);
+        width: 10px;
+      }
+      @include hover {
+        background: var(--neutral200);
+        svg {
+          fill: var(--neutral600);
+        }
+      }
+    }
+    &__menu {
+      position: relative;
+      &__button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--border-radius-999px);
+        @include transition-150ms(background-color);
+        width: var(--button-dimension-28px);
+        height: var(--button-dimension-28px);
+        background: var(--neutral100);
+        svg {
+          fill: var(--neutral500);
+          @include transition-150ms(fill);
+          width: var(--icon-dimension-16px);
+        }
+        @include hover {
+          background: var(--neutral200);
+          svg {
+            fill: var(--neutral600);
+          }
+        }
+        &--toggled {
+          background-color: var(--neutral200);
+          svg {
+            fill: var(--neutral600);
+          }
+        }
+      }
+    }
+  }
+}
+.slot {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--button-dimension-28px));
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  &--visible {
+    pointer-events: all;
+    transform: translateY(4px);
+    @include transition-150ms;
+    opacity: 1;
+  }
+}

@@ -1,18 +1,35 @@
-import styles from './pinned-bookmarks.module.scss'
+import styles from './PinnedBookmarks.module.scss'
 import { ReactSortable } from 'react-sortablejs'
 import { memo, useState } from 'react'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { system_values } from '@shared/constants/system-values'
-import { Item } from './item/item'
+import { _Item } from './_Item/_Item'
 
 export namespace PinnedBookmarks {
+  type Item = {
+    bookmark_id_: number
+    url_: string
+    created_at_: Date
+    is_public_?: boolean
+    title_?: string
+    tags_?: number[]
+    site_path_?: string
+    saves_?: number
+    open_snapshot_?: boolean
+    favicon_?: string
+    is_parsed_?: boolean
+    is_archived_?: boolean
+    stars_?: number
+    is_unsorted_?: boolean
+    open_snapshot?: boolean
+  }
   export type Props = {
-    items_: Item.Props[]
+    items_: Item[]
     library_updated_at_timestamp_?: number
-    on_change_: (items: Item.Props[]) => void
+    on_change_: (items: Item[]) => void
     favicon_host_: string
-    on_click_: (item: Item.Props) => void
-    on_middle_click_: (item: Item.Props) => void
+    on_click_: (item: Item) => void
+    on_middle_click_: (item: Item) => void
     is_draggable_: boolean
     selected_tags_: number[]
     selected_starred_: boolean
@@ -28,33 +45,24 @@ export namespace PinnedBookmarks {
 
 type SortableItem = {
   id: number
-} & Item.Props
+  bookmark_id_: number
+}
 
 export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
   function PinnedBookmarks(props) {
-    const [items, set_items] = useState<SortableItem[]>(
+    const [sortable_items, set_sortable_items] = useState<SortableItem[]>(
       props.items_.map((item, i) => ({
         id: i,
         bookmark_id_: item.bookmark_id_,
-        created_at_: item.created_at_,
-        url_: item.url_,
-        cover_: item.cover_,
-        title_: item.title_,
-        stars_: item.stars_,
-        is_unsorted_: item.is_unsorted_,
-        is_archived_: item.is_archived_,
-        tags_: item.tags_,
-        open_snapshot_: item.open_snapshot_,
-        menu_slot_: item.menu_slot_,
-        is_parsed_: item.is_parsed_,
-        saves_: item.saves_,
-        site_path_: item.site_path_,
       })),
     )
 
     let relevant_items = 0
 
-    const items_dom = items.map((item) => {
+    const items_dom = sortable_items.map((sortable_item) => {
+      const item = props.items_.find(
+        (item) => item.bookmark_id_ == sortable_item.bookmark_id_,
+      )!
       const created_at_timestamp = Math.round(item.created_at_.getTime() / 1000)
       let is_not_relevant = false
 
@@ -101,35 +109,51 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
       return is_not_relevant ? (
         <div key={url} />
       ) : (
-        <Item
+        <_Item
           key={url}
-          bookmark_id_={item.bookmark_id_}
-          created_at_={item.created_at_}
-          menu_slot_={item.menu_slot_}
-          tags_={item.tags_}
+          favicon_host_={props.favicon_host_}
+          menu_slot_={<>menu</>}
+          on_link_click_={() => {}}
+          on_link_middle_click_={() => {}}
+          on_new_tab_link_click_={() => {}}
+          on_reading_mode_click_={() => {}}
+          should_dim_visited_links_={false}
           url_={item.url_}
-          cover_={item.cover_}
+          favicon_={item.favicon_}
+          is_parsed_={item.is_parsed_}
+          open_snapshot_={item.open_snapshot}
+          saves_={item.saves_}
+          site_path_={item.site_path_}
           title_={item.title_}
+          is_public_={item.is_public_}
         />
       )
     })
 
     return (
       <>
-        {relevant_items == 0 && (
-          <div>{props.translations_.nothing_pinned_}</div>
-        )}
-        {props.is_draggable_ ? (
+        {relevant_items == 0 ? (
+          <div className={styles['nothing-pinned']}>
+            {props.translations_.nothing_pinned_}
+          </div>
+        ) : props.is_draggable_ ? (
           <ReactSortable
-            list={items}
-            setList={(new_items) => {
+            list={sortable_items}
+            setList={(new_sortable_items) => {
               if (
-                JSON.stringify(new_items.map((i) => i.id)) ==
-                JSON.stringify(items.map((i) => i.id))
+                JSON.stringify(new_sortable_items) ==
+                JSON.stringify(sortable_items)
               )
                 return
-              set_items(new_items)
-              props.on_change_(new_items)
+              set_sortable_items(new_sortable_items)
+              props.on_change_(
+                new_sortable_items.map(
+                  (new_sortable_item) =>
+                    props.items_.find(
+                      (i) => i.bookmark_id_ == new_sortable_item.bookmark_id_,
+                    )!,
+                ),
+              )
             }}
             animation={system_values.sortablejs_animation_duration}
             forceFallback={true}
@@ -143,6 +167,7 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
         ) : (
           <div className={styles.items}>{items_dom}</div>
         )}
+        {}
       </>
     )
   },

@@ -1,4 +1,4 @@
-import { PinnedBookmarks } from './pinned-bookmarks'
+import { PinnedBookmarks } from './PinnedBookmarks'
 
 export default {
   component: PinnedBookmarks,
@@ -16,25 +16,20 @@ export const Primary = () => {
       <PinnedBookmarks
         items_={[
           {
-            title_: 'Lorem ipsum',
             bookmark_id_: 1,
+            title_: 'Lorem ipsum',
             created_at_: new Date(),
             url_: 'http://example.com',
             saves_: 100,
-            menu_slot_: <>menu</>,
             tags_: [],
           },
           {
+            bookmark_id_: 2,
             title_: 'Lorem ipsum',
-            bookmark_id_: 1,
             created_at_: new Date(),
             url_: 'http://example.com',
             saves_: 100,
-            menu_slot_: <>menu</>,
-            tags_: [
-              { id: 1, name: 'Lorem' },
-              { id: 2, name: 'Ipsum' },
-            ],
+            tags_: [],
           },
         ]}
         is_draggable_={true}

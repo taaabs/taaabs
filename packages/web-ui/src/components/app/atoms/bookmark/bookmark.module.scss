@@ -118,9 +118,9 @@
         font-weight: var(--font-weight-inter-bold);
         color: var(--white);
         transform: translateY(-3px);
-        left: 0;
         margin-right: 9px;
         margin-left: 4px;
+        line-height: 1;
         @include at992 {
           transform: translateY(-2px);
           font-size: 12px;
@@ -128,10 +128,10 @@
         &::after {
           content: '';
           position: absolute;
-          width: calc(100% + 8px);
+          width: calc(100% + 0.7em);
           left: 50%;
           transform: translateX(-50%);
-          height: calc(100% + 4px);
+          height: calc(100% + 0.6em);
           background-color: var(--red);
           border-radius: 4px;
           z-index: -1;

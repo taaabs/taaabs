@@ -31,6 +31,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
         stars: item.stars,
         is_unsorted: item.is_unsorted,
         is_archived: item.is_archived,
+        is_parsed: item.is_parsed,
         tags: item.tags,
         open_snapshot: item.open_snapshot,
         favicon: item.favicon_aes
@@ -61,6 +62,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
         stars: item.stars,
         is_unsorted: item.is_unsorted,
         is_archived: item.is_archived,
+        is_parsed: item.is_parsed,
         tags: item.tags,
         open_snapshot: item.open_snapshot,
       })
