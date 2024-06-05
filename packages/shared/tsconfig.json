@@ -12,11 +12,11 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
-    "paths": {
-      "@shared/*": [
-        "src/*"
-      ],
-    }
+    // "paths": {
+    //   "@shared/*": [
+    //     "src/*"
+    //   ],
+    // }
   },
   "include": [
     "src/**/*.ts",

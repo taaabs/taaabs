@@ -1,10 +1,10 @@
 import { PaginatedResponse } from '../../common/paginated-response'
 import { ApiProperty } from '@nestjs/swagger'
-import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
-import { Order } from '@shared/types/modules/bookmarks/order'
-import { PaginationSearchParams } from '@shared/types/common/pagination-options'
 import { Type } from 'class-transformer'
-import { ToBoolean } from '@shared/decorators/to-boolean'
+import { SortBy } from './sort-by'
+import { Order } from './order'
+import { ToBoolean } from '../../../../src/decorators/to-boolean'
+import { PaginationSearchParams } from '../../../../src/types/common/pagination-options'
 
 export namespace Bookmarks_Dto {
   export class SearchParams extends PaginationSearchParams {

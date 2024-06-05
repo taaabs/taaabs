@@ -1,5 +1,5 @@
-import { system_values } from '@shared/constants/system-values'
-import { validate_date_newer_than_epoch } from '@shared/utils/validate-date-newer-than-epoch'
+import { system_values } from '../../../../src/constants/system-values'
+import { validate_date_newer_than_epoch } from '../../../../src/utils/validate-date-newer-than-epoch'
 import { z } from 'zod'
 
 export namespace CreateBookmark_Dto {

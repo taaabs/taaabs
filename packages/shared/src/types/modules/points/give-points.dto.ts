@@ -1,4 +1,4 @@
-import { system_values } from '@shared/constants/system-values'
+import { system_values } from '../../../../src/constants/system-values'
 import { z } from 'zod'
 
 export namespace GivePoints_Dto {

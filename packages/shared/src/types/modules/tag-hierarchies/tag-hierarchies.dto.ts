@@ -1,4 +1,4 @@
-import { ToBoolean } from '@shared/decorators/to-boolean'
+import { ToBoolean } from '../../../../src/decorators/to-boolean'
 
 export namespace TagHierarchies_Dto {
   class Node {

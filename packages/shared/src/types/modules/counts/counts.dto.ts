@@ -1,5 +1,5 @@
+import { ToBoolean } from '../../../../src/decorators/to-boolean'
 import { CountsFetchingDefaults } from './counts-fetching-defaults'
-import { ToBoolean } from '@shared/decorators/to-boolean'
 
 export namespace Counts_Dto {
   export namespace SearchParams {
