@@ -1,4 +1,7 @@
 declare const styles: {
+  readonly simplebar: string
+  readonly simplebar__scrolled: string
+  readonly simplebar__skeleton: string
   readonly container: string
   readonly collapse: string
   readonly 'collapse--collapsed': string

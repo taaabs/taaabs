@@ -65,8 +65,8 @@ export const Primary = () => {
       }
     >
       <UiAppTemplate_Library
-        slot_aside_={<>aside</>}
-        slot_tag_hierarchies_={
+        slot_column_right_={<>aside</>}
+        slot_column_left_={
           <>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a dui
             felis. Donec ultrices placerat est. Cras eget pellentesque neque,

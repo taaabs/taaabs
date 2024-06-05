@@ -16,7 +16,7 @@ import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/ge
 
 export const upsert_bookmark = (params: {
   bookmark: UpsertBookmark_Params
-  should_refetch_links_data?: boolean
+  should_refetch_links_reader_data?: boolean
   last_authorized_counts_params?: Counts_Params.Authorized
   get_tag_hierarchies_request_params?: GetTagHierarchies_Params.Authorized
   ky: KyInstance
@@ -27,7 +27,10 @@ export const upsert_bookmark = (params: {
       const data_source = new Bookmarks_DataSourceImpl(params.ky)
       const repository = new Bookmarks_RepositoryImpl(data_source)
       let links_data: GetLinksData_Ro | undefined = undefined
-      if (params.bookmark.bookmark_id && params.should_refetch_links_data) {
+      if (
+        params.bookmark.bookmark_id &&
+        params.should_refetch_links_reader_data
+      ) {
         links_data = await repository.get_links_data_authorized(
           {
             bookmark_id: params.bookmark.bookmark_id,

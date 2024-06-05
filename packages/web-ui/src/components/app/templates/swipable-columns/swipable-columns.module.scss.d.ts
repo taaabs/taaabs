@@ -12,10 +12,6 @@ declare const styles: {
   readonly 'sidebar__inner__desktop-actions__collapse-button': string
   readonly 'sidebar__inner__desktop-actions__collapse-button--collapsed': string
   readonly 'sidebar__inner__desktop-actions__welcome-text': string
-  readonly sidebar__inner__simplebar: string
-  readonly 'sidebar__inner__simplebar__tag-hierarchies--scrolled': string
-  readonly 'sidebar__inner__simplebar__pinned--scrolled': string
-  readonly sidebar__inner__simplebar__skeleton: string
   readonly main: string
   readonly main__inner: string
   readonly 'main__inner--collapsed-sidebar-hovered': string

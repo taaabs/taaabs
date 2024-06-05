@@ -774,9 +774,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const slot_tag_hierarchies = (
     <div style={{ pointerEvents: is_not_interactive ? 'none' : undefined }}>
       <UiAppAtom_TagHierarchies
-        // key={tag_hierarchies_hook.fetched_at_timestamp}
         library_updated_at_timestamp_={library_updated_at_timestamp}
-        is_updatable_={!username}
+        show_skeleton_={show_skeletons}
+        is_read_only_={!!username}
         tree_={tag_hierarchies_hook.tag_hierarchies}
         on_update_={async (tag_hierarchies: TagHierarchies.Node[]) => {
           const filter = filter_view_options_hook.current_filter_
@@ -2048,24 +2048,24 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 const { db } = await props.local_db.init({
                   is_archived: is_archived_filter,
                 })
-                let should_refetch_links_data = false
+                let should_refetch_links_reader_data = false
                 if (bookmark.is_public != modified_bookmark.is_public) {
-                  should_refetch_links_data = true
+                  should_refetch_links_reader_data = true
                 }
-                if (!should_refetch_links_data) {
+                if (!should_refetch_links_reader_data) {
                   modified_bookmark.links.forEach((link) => {
                     const old_link = bookmark.links.find(
                       (l) => l.url == link.url,
                     )
                     if (old_link && old_link.is_public != link.is_public) {
-                      should_refetch_links_data = true
+                      should_refetch_links_reader_data = true
                     }
                   })
                 }
                 const updated_bookmark = await dispatch(
                   bookmarks_actions.upsert_bookmark({
                     bookmark: modified_bookmark,
-                    should_refetch_links_data,
+                    should_refetch_links_reader_data,
                     last_authorized_counts_params:
                       JSON.parse(
                         sessionStorage.getItem(
@@ -2360,8 +2360,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         show_skeletons_={show_skeletons}
         slot_search_={slot_search}
         slot_toolbar_={slot_toolbar}
-        slot_tag_hierarchies_={slot_tag_hierarchies}
-        slot_aside_={slot_aside}
+        slot_column_left_={slot_tag_hierarchies}
+        slot_column_right_={slot_aside}
         are_bookmarks_dimmed_={
           is_fetching_first_bookmarks || bookmarks_hook.is_upserting || false
         }

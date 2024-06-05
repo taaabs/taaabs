@@ -1,9 +1,56 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
+.simplebar {
+  position: relative;
+  overflow: auto;
+  height: calc(
+    100svh - var(--header-mobile-height) - var(--bottom-navigation-bar-height)
+  );
+  @include at992 {
+    height: calc(
+      100svh - var(--header-desktop-height) - var(--padding-16px) -
+        var(--search-desktop-height) - var(--padding-16px)
+    );
+    padding-bottom: 14px;
+  }
+  &__scrolled {
+    > div > button {
+      box-shadow: var(--box-shadow-strong);
+      @include at992 {
+        // Our shadow must be shorter so we cover it a little bit.
+        &::after {
+          position: absolute;
+          content: '';
+          background-color: var(--background);
+          right: 0;
+          bottom: 0;
+          transform: translateY(100%);
+          height: 10px;
+          width: 10px;
+        }
+      }
+    }
+  }
+  &__skeleton {
+    display: flex;
+    flex-direction: column;
+    padding-top: 4px;
+    @include to992 {
+      padding-left: var(--padding-16px);
+    }
+    > span {
+      margin-bottom: 6px;
+    }
+    > span > span {
+      height: 28px;
+      border-radius: var(--border-radius-4px);
+    }
+  }
+}
 .container {
   width: 100%;
-  // Hacky, but needed this way to have sticky elements above in sidebar play nicely on mobile.
+  // Hacky, but needed this way to have sticky "all" button play nicely on mobile.
   @include to992 {
     > button {
       padding: 0 var(--padding-16px) 0 var(--padding-16px);
@@ -60,6 +107,16 @@
       top: 0;
       z-index: 1;
       background-color: var(--neutral50);
+      &::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: var(--background);
+        top: 0;
+        left: 0;
+        transform: translateY(-100%);
+      }
     }
     > div {
       display: flex;

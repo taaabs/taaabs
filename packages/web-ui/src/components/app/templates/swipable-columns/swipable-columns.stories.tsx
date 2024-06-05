@@ -6,7 +6,7 @@ export default {
 
 export const Primary = () => (
   <SwipableColumns
-    slot_tag_hierarchies_={<>[TAG HIERARCHIES]</>}
+    slot_column_left_={<>[TAG HIERARCHIES]</>}
     translations_={{
       collapse_alt_: '',
       follow_: '',
@@ -14,7 +14,7 @@ export const Primary = () => (
       folders_: 'Folders',
       pinned_: 'Pinned',
     }}
-    slot_aside_={<>[ASIDE]</>}
+    slot_column_right_={<>[ASIDE]</>}
     slot_toolbar_={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached_={() => {}}
@@ -29,7 +29,7 @@ export const Primary = () => (
 
 export const Scrolling = () => (
   <SwipableColumns
-    slot_tag_hierarchies_={<>[TAG HIERARCHIES]</>}
+    slot_column_left_={<>[TAG HIERARCHIES]</>}
     translations_={{
       collapse_alt_: '',
       follow_: '',
@@ -37,7 +37,7 @@ export const Scrolling = () => (
       folders_: 'Folders',
       pinned_: 'Pinned',
     }}
-    slot_aside_={<div>{lorem}</div>}
+    slot_column_right_={<div>{lorem}</div>}
     slot_toolbar_={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached_={() => {}}
@@ -56,7 +56,7 @@ export const Scrolling = () => (
 
 export const Loading = () => (
   <SwipableColumns
-    slot_tag_hierarchies_={<>[TAG HIERARCHIES]</>}
+    slot_column_left_={<>[TAG HIERARCHIES]</>}
     translations_={{
       collapse_alt_: '',
       follow_: '',
@@ -64,7 +64,7 @@ export const Loading = () => (
       folders_: 'Folders',
       pinned_: 'Pinned',
     }}
-    slot_aside_={<>slot aside</>}
+    slot_column_right_={<>slot aside</>}
     slot_toolbar_={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
     on_page_bottom_reached_={() => {}}
