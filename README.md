@@ -24,11 +24,6 @@ Taaabs Community Edition is a free and open-source bookmarking app enabling you 
 
 View the [Roadmap](https://taaabs.com/roadmap) for details on our planned features and future direction.
 
-## Tech Stack
-
-- [Next.js](https://nextjs.org/) – framework
-- [TypeScript](https://www.typescriptlang.org/) – language
-
 ## Self-Hosting
 
 ## Contributing
@@ -50,11 +45,4 @@ Taaabs is published under the AGPLv3 license.
 
 ## Acknowledgements
 
-Special thanks to these amazing projects which help power Cal.com:
-
-- [React](https://github.com/facebook/react)
-- [React Native](https://github.com/facebook/react-native)
-- [Next.js](https://github.com/vercel/next.js)
-- [Orama](https://github.com/askorama/orama)
-
-Cal.com is an [open startup](https://cal.com/open) and [Jitsu](https://github.com/jitsucom/jitsu) (an open-source Segment alternative) helps us to track most of the usage metrics.
+Special thanks to all the authors of [Orama](https://github.com/askorama/orama), next generation, lightweight client-side search engine enabling the development of an End-to-end encrypted bookmarking app.
