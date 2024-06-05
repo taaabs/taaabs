@@ -236,7 +236,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               }
             }}
             onContextMenu={(e) => {
-              if (!props.is_read_only_) return
+              if (props.is_read_only_) return
               set_context_menu_of_item_id((item as Item).id)
               onContextMenu(e)
             }}
@@ -423,7 +423,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                   set_is_dragging(false)
                 }}
                 maxDepth={5}
-                disableDrag={!props.is_read_only_}
+                disableDrag={props.is_read_only_}
                 renderCollapseIcon={({ isCollapsed }) =>
                   render_collapse_icon({ is_collapsed: isCollapsed })
                 }
@@ -431,7 +431,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                 // deeper in the tree if there is a problem higher up.
                 // confirmChange={}
               />
-              {props.is_read_only_ && (
+              {!props.is_read_only_ && (
                 <div
                   className={cn(
                     styles['drop-zone'],

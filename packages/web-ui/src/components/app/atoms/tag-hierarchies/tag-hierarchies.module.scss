@@ -12,7 +12,6 @@
       100svh - var(--header-desktop-height) - var(--padding-16px) -
         var(--search-desktop-height) - var(--padding-16px)
     );
-    padding-bottom: 14px;
   }
   &__scrolled {
     > div > button {
@@ -60,6 +59,7 @@
     }
   }
   @include at992 {
+    padding-bottom: 14px;
     > * {
       padding-right: 10px;
     }
