@@ -46,7 +46,7 @@ Signing CLA needs to be done only once for all PRs and contributions.
 
 ## License
 
-Distributed under the [AGPLv3 License](https://github.com/taaabs/taaabs/blob/main/LICENSE). See `LICENSE` for more information.
+Taaabs is published under the AGPLv3 license.
 
 ## Acknowledgements
 
