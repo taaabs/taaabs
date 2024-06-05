@@ -1,4 +1,3 @@
-const api_config = require('./packages/api/jest.config')
 const web_ui_config = require('./packages/web-ui/jest.config')
 const web_client_config = require('./packages/web-client/jest.config')
 const repositories_config = require('./packages/repositories/jest.config')
@@ -6,12 +5,6 @@ const repositories_config = require('./packages/repositories/jest.config')
 module.exports = {
   verbose: true,
   projects: [
-    {
-      displayName: 'api',
-      rootDir: '<rootDir>/packages/api',
-      preset: 'ts-jest',
-      ...api_config,
-    },
     {
       displayName: 'repositories',
       rootDir: '<rootDir>/packages/repositories',
