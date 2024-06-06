@@ -3,10 +3,8 @@ import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import {
   searchWithHighlight,
-  saveWithHighlight,
 } from '@orama/plugin-match-highlight'
 import { system_values } from '@shared/constants/system-values'
-import localforage from 'localforage'
 import { browser_storage } from '@/constants/browser-storage'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Filter } from '@/types/library/filter'
@@ -14,7 +12,6 @@ import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { search_params_keys } from '@/constants/search-params-keys'
-import { use_has_focus } from '../misc/use-has-focus'
 import { LocalDb, schema } from '@/app/local-db-provider'
 
 type Hint = {
@@ -54,7 +51,6 @@ export const use_search = (local_db_: LocalDb) => {
   const [queried_at_timestamp, set_queried_at_timestamp] = useState<number>()
   const [hints_set_at_timestamp, set_hints_set_at_timestamp] =
     useState<number>()
-  const has_focus = use_has_focus()
 
   const is_archived_filter =
     current_filter == Filter.ARCHIVED ||
@@ -70,104 +66,6 @@ export const use_search = (local_db_: LocalDb) => {
         (search_params.toString() ? `?${search_params.toString()}` : '') +
         `#query=${encodeURIComponent(params.search_string_)}`,
     )
-  }
-
-  // Data is cached on link click, focus lose and route change.
-  const cache_data = async () => {
-    if (local_db_.search_data_awaits_caching) {
-      const cached_at =
-        (await localforage.getItem<number>(
-          !username
-            ? browser_storage.local_forage.authorized_library.search
-                .cached_at_timestamp
-            : browser_storage.local_forage.public_library.search.cached_at_timestamp(
-                {
-                  username: username as string,
-                },
-              ),
-        )) || undefined
-      // Cache was updated in another tab.
-      if (
-        local_db_.db_updated_at_timestamp &&
-        cached_at &&
-        local_db_.db_updated_at_timestamp < cached_at
-      )
-        return
-      const index = await saveWithHighlight(local_db_.db!)
-      if (!username) {
-        await localforage.setItem(
-          browser_storage.local_forage.authorized_library.search
-            .cached_at_timestamp,
-          local_db_.db_updated_at_timestamp,
-        )
-        await localforage.setItem(
-          browser_storage.local_forage.authorized_library.search.index,
-          JSON.stringify(index),
-        )
-      }
-      // else {
-      //   await localforage.setItem(
-      //     browser_storage.local_forage.public_library.search.cached_at_timestamp(
-      //       {
-      //         username: username as string,
-      //       },
-      //     ),
-      //     db_updated_at_timestamp,
-      //   )
-      //   await localforage.setItem(
-      //     browser_storage.local_forage.public_library.search.index({
-      //       username: username as string,
-      //     }),
-      //     JSON.stringify(index),
-      //   )
-      // }
-      local_db_.set_search_data_awaits_caching(false)
-    }
-    if (local_db_.archived_search_data_awaits_caching) {
-      const cached_at =
-        (await localforage.getItem<number>(
-          !username
-            ? browser_storage.local_forage.authorized_library.search
-                .archived_cached_at_timestamp
-            : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-                { username: username as string },
-              ),
-        )) || undefined
-      // Cache was updated in another tab.
-      if (
-        local_db_.archived_db_updated_at_timestamp &&
-        cached_at &&
-        local_db_.archived_db_updated_at_timestamp < cached_at
-      )
-        return
-      const index = await saveWithHighlight(local_db_.archived_db!)
-      if (!username) {
-        await localforage.setItem(
-          browser_storage.local_forage.authorized_library.search
-            .archived_cached_at_timestamp,
-          local_db_.archived_db_updated_at_timestamp,
-        )
-        await localforage.setItem(
-          browser_storage.local_forage.authorized_library.search.archived_index,
-          JSON.stringify(index),
-        )
-      }
-      // else {
-      //   await localforage.setItem(
-      //     browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-      //       { username: username as string },
-      //     ),
-      //     archived_db_updated_at_timestamp,
-      //   )
-      //   await localforage.setItem(
-      //     browser_storage.local_forage.public_library.search.archived_index({
-      //       username: username as string,
-      //     }),
-      //     JSON.stringify(index),
-      //   )
-      // }
-      local_db_.set_archived_search_data_awaits_caching(false)
-    }
   }
 
   const query_db = async (params: {
@@ -1008,30 +906,7 @@ export const use_search = (local_db_: LocalDb) => {
     if (is_query_in_hash && !result) {
       set_search_string(window.location.hash.replace('#query=', ''))
     }
-
-    cache_data()
   }, [search_params])
-
-  useUpdateEffect(() => {
-    if (!has_focus) cache_data()
-  }, [has_focus])
-
-  // Canceling dialog will trigger caching because has_focus will be shortly falsy, triggering effect above.
-  useEffect(() => {
-    const handle_beforeunload = (e: any) => {
-      if (
-        local_db_.search_data_awaits_caching ||
-        local_db_.archived_search_data_awaits_caching
-      ) {
-        e.preventDefault()
-      }
-    }
-    addEventListener('beforeunload', handle_beforeunload)
-    return () => removeEventListener('beforeunload', handle_beforeunload)
-  }, [
-    local_db_.search_data_awaits_caching,
-    local_db_.archived_search_data_awaits_caching,
-  ])
 
   return {
     is_search_focused,
@@ -1060,7 +935,6 @@ export const use_search = (local_db_: LocalDb) => {
     set_highlights_sites_variants,
     hints_set_at_timestamp,
     queried_at_timestamp,
-    cache_data,
     is_full_text,
     set_is_full_text,
   }

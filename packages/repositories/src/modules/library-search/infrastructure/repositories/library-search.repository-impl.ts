@@ -1,9 +1,7 @@
 import { LibrarySearch_Repository } from '../../domain/repositories/library-search.repository'
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
-import { GetLastUpdated_Ro } from '../../domain/types/get-last-updated.ro'
 import { LibrarySearch_DataSource } from '../data-sources/library-search.data-source'
-import { GetLastUpdatedAt_Params } from '../../domain/types/get-last-updated-at.params'
 import { Crypto } from '@repositories/utils/crypto'
 import pako from 'pako'
 
@@ -12,41 +10,11 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
     private readonly _library_search_data_source: LibrarySearch_DataSource,
   ) {}
 
-  public async get_last_updated_at_on_authorized_user(): Promise<GetLastUpdated_Ro> {
-    const result =
-      await this._library_search_data_source.get_last_updated_on_authorized_user()
-
-    return {
-      updated_at: result.updated_at ? new Date(result.updated_at) : undefined,
-      archived_updated_at: result.archived_updated_at
-        ? new Date(result.archived_updated_at)
-        : undefined,
-      bookmarks_version: result.bookmarks_version,
-    }
-  }
-
-  public async get_last_updated_at_on_public_user(
-    params: GetLastUpdatedAt_Params.Public,
-  ): Promise<GetLastUpdated_Ro> {
-    const result =
-      await this._library_search_data_source.get_last_updated_on_public_user(
-        params,
-      )
-
-    return {
-      updated_at: result.updated_at ? new Date(result.updated_at) : undefined,
-      archived_updated_at: result.archived_updated_at
-        ? new Date(result.archived_updated_at)
-        : undefined,
-      bookmarks_version: result.bookmarks_version,
-    }
-  }
-
   public async get_bookmarks_on_authorized_user(
     params: GetBookmarks_Params.Authorized,
     encryption_key: Uint8Array,
   ): Promise<GetBookmarks_Ro> {
-    const { bookmarks } =
+    const { bookmarks, version } =
       await this._library_search_data_source.get_bookmarks_on_authorized_user(
         params,
       )
@@ -70,6 +38,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
               ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
               : undefined,
             is_unsorted: bookmark.is_unsorted || false,
+            is_deleted: bookmark.is_deleted,
             links: await Promise.all(
               bookmark.links.map(async (link) => {
                 const site = link.site
@@ -108,13 +77,14 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           }
         }),
       ),
+      version,
     }
   }
 
   public async get_bookmarks_on_public_user(
     params: GetBookmarks_Params.Public,
   ): Promise<GetBookmarks_Ro> {
-    const { bookmarks } =
+    const { bookmarks, version } =
       await this._library_search_data_source.get_bookmarks_on_public_user(
         params,
       )
@@ -125,6 +95,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           id: bookmark.id,
           created_at: bookmark.created_at,
           updated_at: bookmark.updated_at,
+          is_deleted: bookmark.is_deleted,
           title: bookmark.title,
           note: bookmark.note,
           links: bookmark.links,
@@ -133,6 +104,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           points: bookmark.points || 0,
         }
       }),
+      version,
     }
   }
 }

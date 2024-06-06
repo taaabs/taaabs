@@ -1,5 +1,4 @@
 import { PaginatedResponse } from '../../common/paginated-response'
-import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 import { SortBy } from './sort-by'
 import { Order } from './order'
@@ -8,17 +7,11 @@ import { PaginationSearchParams } from '../../../../src/types/common/pagination-
 
 export namespace Bookmarks_Dto {
   export class SearchParams extends PaginationSearchParams {
-    @ApiProperty({
-      description: 'Comma separated list of tag ids a bookmark must include.',
-      example: '1,2,3',
-    })
     public tags?: string
 
-    @ApiProperty({ description: 'Epoch timestamp in seconds.' })
     @Type()
     public epoch_gte?: number
 
-    @ApiProperty({ description: 'Epoch timestamp in seconds.' })
     @Type()
     public epoch_lte?: number
 
