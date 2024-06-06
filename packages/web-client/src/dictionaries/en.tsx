@@ -77,7 +77,6 @@ const dictionary: Dictionary = {
             'Unlimited Zero-knowledge™ bookmarks',
             'Bulk edits',
             'Public profile access control',
-            'Get search results boost',
             'Claim shorter username',
           ],
           button_label: 'Subscribe to Pro',

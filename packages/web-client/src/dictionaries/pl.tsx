@@ -82,8 +82,7 @@ export const dictionary: Dictionary = {
           bullets: [
             'Nielimitowane zakładki',
             'Zbiorcze edycje',
-            'Kontrola dostępu do profilu publicznego',
-            'Lepsze pozycjonowanie w wyszukiwarce',
+            'Kontrola dostępu profilu publicznego',
             'Przejmij krótszy nick',
           ],
           button_label: 'Przejdź na Pro',
