@@ -194,7 +194,7 @@ const dictionary: Dictionary = {
         one_moment_please: 'One moment please...',
       },
       bookmark: {
-        pinned_to_sidebar: 'Pinned to sidebar',
+        pinned_to_sidebar: 'Pinned',
         use_snapshot: 'Use snapshot',
         unsorted: 'Unsorted',
         edit: 'Edit',
