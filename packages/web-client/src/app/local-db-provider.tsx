@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  Orama,
-  create,
-  insert,
-  insertMultiple,
-  remove,
-  search,
-} from '@orama/orama'
+import { Orama, create, insert, insertMultiple, remove } from '@orama/orama'
 import { ReactNode, createContext, useContext, useState } from 'react'
 import { AuthContext } from './auth-provider'
 import localforage from 'localforage'
@@ -59,6 +52,8 @@ export type LocalDb = {
   init: (params: {
     is_archived: boolean
     force_reinitialization?: boolean
+    include_visited_at?: boolean
+    include_points?: boolean
   }) => Promise<{
     db: Orama<typeof schema>
   }>
@@ -98,7 +93,7 @@ export const LocalDbProvider: React.FC<{
   const [db, set_db] = useState<Orama<typeof schema>>()
   const [archived_db, set_archived_db] = useState<Orama<typeof schema>>()
 
-  const clear_cached_data = async (params: { is_archived: boolean }) => {
+  const _clear_cached_data = async (params: { is_archived: boolean }) => {
     if (!username) {
       await localforage.removeItem(
         !params.is_archived
@@ -154,6 +149,8 @@ export const LocalDbProvider: React.FC<{
   const init = async (params: {
     is_archived: boolean
     force_reinitialization?: boolean
+    include_visited_at?: boolean
+    include_points?: boolean
   }): Promise<{
     db: Orama<typeof schema>
   }> => {
@@ -200,7 +197,9 @@ export const LocalDbProvider: React.FC<{
       const result = await repository.get_bookmarks_on_authorized_user(
         {
           is_archived: params.is_archived,
-          after: cached_at,
+          after: !params.force_reinitialization ? cached_at : undefined,
+          include_visited_at: params.include_visited_at,
+          include_points: params.include_points,
         },
         auth_context.auth_data!.encryption_key,
       )
@@ -210,7 +209,8 @@ export const LocalDbProvider: React.FC<{
       const result = await repository.get_bookmarks_on_public_user({
         is_archived: params.is_archived,
         username: username as string,
-        after: cached_at,
+        after: !params.force_reinitialization ? cached_at : undefined,
+        include_points: params.include_points,
       })
       bookmarks = result.bookmarks
       incoming_version = result.version
@@ -220,12 +220,15 @@ export const LocalDbProvider: React.FC<{
       params.force_reinitialization ||
       (version && version != incoming_version)
     ) {
-      await clear_cached_data({ is_archived: params.is_archived })
+      await _clear_cached_data({ is_archived: params.is_archived })
     }
 
     let fresh_db: Orama<typeof schema>
 
-    if ((!params.is_archived && db) || (params.is_archived && archived_db)) {
+    if (
+      !params.force_reinitialization &&
+      ((!params.is_archived && db) || (params.is_archived && archived_db))
+    ) {
       // DB is initialized, should be updated.
       fresh_db = (!params.is_archived ? db : archived_db)!
       for (const bookmark of bookmarks) {
@@ -276,7 +279,6 @@ export const LocalDbProvider: React.FC<{
             'stars',
             'tags',
             'tags_ids',
-            'points',
           ],
         },
         plugins: [
@@ -425,7 +427,7 @@ export const LocalDbProvider: React.FC<{
           await localforage.setItem(
             browser_storage.local_forage.authorized_library.search
               .archived_cached_at_timestamp,
-              bookmarks[bookmarks.length - 1].updated_at,
+            bookmarks[bookmarks.length - 1].updated_at,
           )
           await localforage.setItem(
             browser_storage.local_forage.authorized_library.search

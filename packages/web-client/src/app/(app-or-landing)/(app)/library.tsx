@@ -413,6 +413,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           await props.local_db.init({
             is_archived: is_archived_filter,
             force_reinitialization: true,
+            include_visited_at:
+              sort_by_view_options_hook.current_sort_by_ == SortBy.VISITED_AT || undefined,
+            include_points:
+              sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY || undefined,
           })
           search_cache_to_be_cleared.current = false
         } else {
@@ -457,6 +461,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       }}
       is_slash_shortcut_disabled_={modal_context.modal_content !== undefined}
       on_click_get_help_={() => {}}
+      sort_by_={sort_by_view_options_hook.current_sort_by_}
       translations_={{
         placeholder_: {
           default_: props.dictionary.app.library.search.placeholder.default,

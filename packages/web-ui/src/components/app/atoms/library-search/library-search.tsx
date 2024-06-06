@@ -7,6 +7,7 @@ import { system_values } from '@shared/constants/system-values'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { Icon } from '@web-ui/components/common/particles/icon'
 import OutsideClickHandler from 'react-outside-click-handler'
+import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 
 export namespace LibrarySearch {
   type Hint = {
@@ -35,6 +36,7 @@ export namespace LibrarySearch {
     on_click_get_help_: () => void
     is_full_text_?: boolean
     toggle_full_text_: () => void
+    sort_by_: SortBy
     translations_: {
       placeholder_: {
         default_: string
@@ -464,5 +466,6 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
     o.on_click_hint_ == n.on_click_hint_ &&
     o.on_click_recent_hint_remove_ == n.on_click_recent_hint_remove_ &&
     o.hints_set_at_timestamp_ == n.hints_set_at_timestamp_ &&
-    o.queried_at_timestamp_ == n.queried_at_timestamp_,
+    o.queried_at_timestamp_ == n.queried_at_timestamp_ &&
+    o.sort_by_ == n.sort_by_,
 )

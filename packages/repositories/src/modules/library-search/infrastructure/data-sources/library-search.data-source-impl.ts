@@ -12,6 +12,8 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
     const search_params: LibrarySearchBookmarks_Dto.SearchParams = {
       is_archived: params.is_archived ? true : undefined,
       after: params.after,
+      include_points: params.include_points,
+      include_visited_at: params.include_visited_at,
     }
 
     return this._ky
@@ -28,6 +30,7 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
     const search_params: LibrarySearchBookmarks_Dto.SearchParams = {
       is_archived: params.is_archived ? true : undefined,
       after: params.after,
+      include_points: params.include_points,
     }
 
     return this._ky

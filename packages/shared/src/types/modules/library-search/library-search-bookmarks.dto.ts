@@ -6,6 +6,12 @@ export namespace LibrarySearchBookmarks_Dto {
     @ToBoolean()
     public is_archived?: boolean
 
+    @ToBoolean()
+    public include_points?: boolean
+
+    @ToBoolean()
+    public include_visited_at?: boolean
+
     @Type()
     public after?: number // Select bookmarks updated after given timestamp in seconds.
   }
@@ -36,7 +42,7 @@ export namespace LibrarySearchBookmarks_Dto {
     interface AuthorizedBookmark extends Bookmark {
       title_aes?: string
       note_aes?: string
-      visited_at: number
+      visited_at?: number
       is_unsorted?: boolean
       links: AuthorizedLink[]
       tags: AuthorizedTag[]
