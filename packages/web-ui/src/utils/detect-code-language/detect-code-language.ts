@@ -258,6 +258,16 @@ const languages: Record<
     { pattern: /if( )+let/, points: 2 },
     { pattern: /while( )+let/, points: 2 },
   ],
+  sql: [
+    { pattern: /^SELECT/, points: 10, near_top: true },
+    { pattern: /FROM( )+\w+/, points: 8 },
+    { pattern: /JOIN( )+\w+/, points: 7 },
+    { pattern: /LEFT( )+JOIN/, points: 7 },
+    { pattern: /WHERE( )+\w+/, points: 5 },
+    { pattern: /AND( )+\w+/, points: 4 },
+    { pattern: /OR( )+\w+/, points: 4 },
+    { pattern: /AS( )+\w+/, points: 3 },
+  ],
 }
 
 export const detect_code_language = (code: string): string | undefined => {

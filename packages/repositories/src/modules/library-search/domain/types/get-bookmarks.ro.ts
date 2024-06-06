@@ -2,4 +2,5 @@ import { SearchableBookmark_Entity } from '../entities/searchable-bookmark.entit
 
 export type GetBookmarks_Ro = {
   bookmarks: SearchableBookmark_Entity[]
+  version: number
 }

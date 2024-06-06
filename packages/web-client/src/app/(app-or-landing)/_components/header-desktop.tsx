@@ -142,9 +142,6 @@ export const HeaderDesktop: React.FC<{
             modal.set_modal_content({})
           }}
           on_submit={async (bookmark) => {
-            const { db } = await local_db_context.init({
-              is_archived: false,
-            })
             const data_source = new Bookmarks_DataSourceImpl(
               auth_context.ky_instance,
             )
@@ -153,33 +150,6 @@ export const HeaderDesktop: React.FC<{
               bookmark,
               auth_context.auth_data!.encryption_key,
             )
-            await local_db_context.upsert_bookmark({
-              db,
-              is_archived: false,
-              bookmark: {
-                id: created_bookmark.id,
-                created_at: created_bookmark.created_at,
-                visited_at: created_bookmark.visited_at,
-                updated_at: created_bookmark.updated_at,
-                title: created_bookmark.title,
-                note: created_bookmark.note,
-                is_archived: false,
-                is_unsorted:
-                  created_bookmark.is_unsorted === undefined
-                    ? true
-                    : created_bookmark.is_unsorted,
-                stars: created_bookmark.stars,
-                links: created_bookmark.links.map((link) => ({
-                  url: link.url,
-                  site_path: link.site_path,
-                  plain_text: bookmark.links
-                    .find((link) => link.url == link.url)
-                    ?.reader_data?.toString(),
-                })),
-                tags: created_bookmark.tags.map((tag) => tag.name),
-                tag_ids: created_bookmark.tags.map((tag) => tag.id),
-              },
-            })
             if (pathname == '/library') {
               sessionStorage.setItem(
                 browser_storage.session_storage.library

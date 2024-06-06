@@ -282,11 +282,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                       width: sizer_width > 250 ? `${sizer_width}px` : undefined,
                     }}
                     placeholder={
-                      props.is_loading_
+                      props.is_loading_ && props.loading_progress_percentage_
                         ? `${props.translations_.one_moment_please_} ${
-                            props.loading_progress_percentage_
-                              ? props.loading_progress_percentage_ + '%'
-                              : ''
+                            props.loading_progress_percentage_ + '%'
                           }`
                         : selected_hint_index != -1
                         ? undefined

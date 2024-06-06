@@ -2,16 +2,18 @@ export const browser_storage = {
   local_forage: {
     authorized_library: {
       search: {
+        version: 'authorized-library.search.version',
         index: 'authorized-library.search.index',
         cached_at_timestamp: 'authorized-library.search.cached-at-timestamp',
         archived_index: 'authorized-library.search.archived-index',
         archived_cached_at_timestamp:
           'authorized-library.search.archived-cached-at-timestamp',
-        bookmarks_version: 'authorized-library.search.bookmarks-version',
       },
     },
     public_library: {
       search: {
+        version: (params: { username: string }) =>
+          `public-library.search.${params.username}.version`,
         index: (params: { username: string }) =>
           `public-library.search.${params.username}.index`,
         cached_at_timestamp: (params: { username: string }) =>
@@ -20,8 +22,6 @@ export const browser_storage = {
           `public-library.search.${params.username}.archived-index`,
         archived_cached_at_timestamp: (params: { username: string }) =>
           `public-library.search.${params.username}archived-cached-at-timestamp`,
-        bookmarks_version: (params: { username: string }) =>
-          `public-library.search.${params.username}.bookmarks-version`,
       },
     },
   },

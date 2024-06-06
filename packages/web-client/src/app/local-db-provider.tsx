@@ -1,22 +1,27 @@
 'use client'
 
-import { Orama, create, insert, insertMultiple, remove } from '@orama/orama'
+import {
+  Orama,
+  create,
+  insert,
+  insertMultiple,
+  remove,
+  search,
+} from '@orama/orama'
 import { ReactNode, createContext, useContext, useState } from 'react'
 import { AuthContext } from './auth-provider'
-import { KyInstance } from 'ky'
 import localforage from 'localforage'
 import {
   afterInsert as highlightAfterInsert,
   loadWithHighlight,
+  saveWithHighlight,
 } from '@orama/plugin-match-highlight'
 import { useParams } from 'next/navigation'
 import { browser_storage } from '@/constants/browser-storage'
 import { LibrarySearch_DataSourceImpl } from '@repositories/modules/library-search/infrastructure/data-sources/library-search.data-source-impl'
 import { LibrarySearch_RepositoryImpl } from '@repositories/modules/library-search/infrastructure/repositories/library-search.repository-impl'
-import { GetLastUpdated_Ro } from '@repositories/modules/library-search/domain/types/get-last-updated.ro'
 import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search'
-import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { english_stop_words } from '@shared/constants/english-stop-words'
 
 type BookmarkOfSearch = {
@@ -61,26 +66,22 @@ export type LocalDb = {
   set_db: (db?: Orama<typeof schema>) => void
   archived_db?: Orama<typeof schema>
   set_archived_db: (db?: Orama<typeof schema>) => void
-  db_updated_at_timestamp?: number
-  set_db_updated_at_timestamp: (timestamp?: number) => void
-  archived_db_updated_at_timestamp?: number
-  set_archived_db_updated_at_timestamp: (timestamp?: number) => void
   is_initializing?: boolean
   indexed_bookmarks_percentage?: number
-  search_data_awaits_caching?: boolean
-  set_search_data_awaits_caching: (awaits_caching: boolean) => void
-  archived_search_data_awaits_caching?: boolean
-  set_archived_search_data_awaits_caching: (awaits_caching: boolean) => void
-  upsert_bookmark: (params: {
-    db: Orama<typeof schema>
-    is_archived: boolean
-    bookmark: BookmarkOfSearch
-  }) => Promise<void>
-  delete_bookmark: (params: {
-    db: Orama<typeof schema>
-    is_archived: boolean
-    bookmark_id: number
-  }) => Promise<void>
+  // search_data_awaits_caching?: boolean
+  // set_search_data_awaits_caching: (awaits_caching: boolean) => void
+  // archived_search_data_awaits_caching?: boolean
+  // set_archived_search_data_awaits_caching: (awaits_caching: boolean) => void
+  // upsert_bookmark: (params: {
+  //   db: Orama<typeof schema>
+  //   is_archived: boolean
+  //   bookmark: BookmarkOfSearch
+  // }) => Promise<void>
+  // delete_bookmark: (params: {
+  //   db: Orama<typeof schema>
+  //   is_archived: boolean
+  //   bookmark_id: number
+  // }) => Promise<void>
 }
 
 export const LocalDbContext = createContext<LocalDb | null>(null)
@@ -93,108 +94,9 @@ export const LocalDbProvider: React.FC<{
   const [is_initializing, set_is_initializing] = useState(false)
   const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =
     useState<number | undefined>()
-  const [search_data_awaits_caching, set_search_data_awaits_caching] =
-    useState<boolean>()
-  const [
-    archived_search_data_awaits_caching,
-    set_archived_search_data_awaits_caching,
-  ] = useState<boolean>()
 
   const [db, set_db] = useState<Orama<typeof schema>>()
   const [archived_db, set_archived_db] = useState<Orama<typeof schema>>()
-  const [db_updated_at_timestamp, set_db_updated_at_timestamp] =
-    useState<number>()
-  const [
-    archived_db_updated_at_timestamp,
-    set_archived_db_updated_at_timestamp,
-  ] = useState<number>()
-
-  enum DbStalenessState {
-    FRESH,
-    INSTANCE_STALE_CACHED_STALE,
-  }
-
-  const get_is_db_stale = async (params: {
-    is_archived: boolean
-    ky: KyInstance
-  }): Promise<DbStalenessState> => {
-    const instance_updated_at: number | undefined = !params.is_archived
-      ? db_updated_at_timestamp
-      : archived_db_updated_at_timestamp
-
-    const cached_at: number | undefined =
-      (await localforage.getItem<number>(
-        !username
-          ? !params.is_archived
-            ? browser_storage.local_forage.authorized_library.search
-                .cached_at_timestamp
-            : browser_storage.local_forage.authorized_library.search
-                .archived_cached_at_timestamp
-          : !params.is_archived
-          ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
-              {
-                username: username,
-              },
-            )
-          : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-              { username: username },
-            ),
-      )) || undefined
-
-    let remote_updated_at: number
-
-    const data_source = new LibrarySearch_DataSourceImpl(params.ky)
-    const repository = new LibrarySearch_RepositoryImpl(data_source)
-
-    let result: GetLastUpdated_Ro
-    if (!username) {
-      result = await repository.get_last_updated_at_on_authorized_user()
-    } else {
-      result = await repository.get_last_updated_at_on_public_user({
-        username: username,
-      })
-    }
-
-    const bookmarks_version: number | undefined =
-      (await localforage.getItem<number>(
-        !username
-          ? browser_storage.local_forage.authorized_library.search
-              .bookmarks_version
-          : browser_storage.local_forage.public_library.search.bookmarks_version(
-              { username },
-            ),
-      )) || undefined
-
-    if (!bookmarks_version || result.bookmarks_version > bookmarks_version) {
-      if (!username) {
-        await localforage.setItem(
-          browser_storage.local_forage.authorized_library.search
-            .bookmarks_version,
-          result.bookmarks_version,
-        )
-      } else {
-        // await localforage.setItem(
-        //   browser_storage.local_forage.public_library.search
-        //     .bookmarks_version({username}),
-        //   result.bookmarks_version,
-        // )
-      }
-      return DbStalenessState.INSTANCE_STALE_CACHED_STALE
-    }
-
-    !params.is_archived
-      ? (remote_updated_at = result.updated_at?.getTime() || 0)
-      : (remote_updated_at = result.archived_updated_at?.getTime() || 0)
-
-    if (
-      (instance_updated_at && instance_updated_at >= remote_updated_at) ||
-      (cached_at && cached_at >= remote_updated_at)
-    ) {
-      return DbStalenessState.FRESH
-    } else {
-      return DbStalenessState.INSTANCE_STALE_CACHED_STALE
-    }
-  }
 
   const clear_cached_data = async (params: { is_archived: boolean }) => {
     if (!username) {
@@ -255,139 +157,81 @@ export const LocalDbProvider: React.FC<{
   }): Promise<{
     db: Orama<typeof schema>
   }> => {
-    if (params.force_reinitialization) {
-      await clear_cached_data({ is_archived: params.is_archived })
-    } else {
-      const staleness_state = await get_is_db_stale({
-        is_archived: params.is_archived,
-        ky: auth_context.ky_instance,
-      })
-
-      // Bypass initialization if current instance is up to date.
-      // Current instance could be out of date if user updated cached db in another tab.
-      if (staleness_state == DbStalenessState.FRESH) {
-        const updated_at = !params.is_archived
-          ? db_updated_at_timestamp!
-          : archived_db_updated_at_timestamp!
-        const cached_at = await localforage.getItem<number>(
-          !username
-            ? !params.is_archived
-              ? browser_storage.local_forage.authorized_library.search
-                  .cached_at_timestamp
-              : browser_storage.local_forage.authorized_library.search
-                  .archived_cached_at_timestamp
-            : !params.is_archived
-            ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
-                {
-                  username: username as string,
-                },
-              )
-            : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-                { username: username as string },
-              ),
-        )
-        if (
-          (updated_at && !cached_at) ||
-          (updated_at && cached_at && updated_at >= cached_at)
-        ) {
-          if (!params.is_archived) {
-            return {
-              db: db!,
-            }
-          } else {
-            return {
-              db: archived_db!,
-            }
-          }
-        }
-      } else if (
-        staleness_state == DbStalenessState.INSTANCE_STALE_CACHED_STALE
-      ) {
-        await clear_cached_data({ is_archived: params.is_archived })
-      }
-    }
-
     set_is_initializing(true)
 
-    const new_db = await create({
-      schema,
-      sort: {
-        unsortableProperties: [
-          'id',
-          'card',
-          'plain_text',
-          'sites',
-          'sites_variants',
-          'is_unsorted',
-          'stars',
-          'tags',
-          'tags_ids',
-          'points',
-        ],
-      },
-      plugins: [
-        {
-          name: 'highlight',
-          afterInsert: highlightAfterInsert,
-        },
-      ],
-      components: {
-        tokenizer: {
-          stemming: true,
-          stopWords: english_stop_words,
-        },
-      },
-    })
+    const version: number | undefined =
+      (await localforage.getItem<number>(
+        !username
+          ? browser_storage.local_forage.authorized_library.search.version
+          : browser_storage.local_forage.public_library.search.version({
+              username: username as string,
+            }),
+      )) || undefined
 
-    const cached_index = await localforage.getItem<string>(
-      !username
-        ? !params.is_archived
-          ? browser_storage.local_forage.authorized_library.search.index
-          : browser_storage.local_forage.authorized_library.search
-              .archived_index
-        : !params.is_archived
-        ? browser_storage.local_forage.public_library.search.index({
-            username: username as string,
-          })
-        : browser_storage.local_forage.public_library.search.archived_index({
-            username: username as string,
-          }),
+    const cached_at: number | undefined =
+      (await localforage.getItem<number>(
+        !username
+          ? !params.is_archived
+            ? browser_storage.local_forage.authorized_library.search
+                .cached_at_timestamp
+            : browser_storage.local_forage.authorized_library.search
+                .archived_cached_at_timestamp
+          : !params.is_archived
+          ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
+              {
+                username: username as string,
+              },
+            )
+          : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
+              {
+                username: username as string,
+              },
+            ),
+      )) || undefined
+
+    const data_source = new LibrarySearch_DataSourceImpl(
+      auth_context.ky_instance,
     )
+    const repository = new LibrarySearch_RepositoryImpl(data_source)
 
-    if (cached_index) {
-      await loadWithHighlight(new_db, JSON.parse(cached_index as any))
-    } else {
-      const data_source = new LibrarySearch_DataSourceImpl(
-        auth_context.ky_instance,
+    let bookmarks: SearchableBookmark_Entity[]
+    let incoming_version: number
+    if (!username) {
+      const result = await repository.get_bookmarks_on_authorized_user(
+        {
+          is_archived: params.is_archived,
+          after: cached_at,
+        },
+        auth_context.auth_data!.encryption_key,
       )
-      const repository = new LibrarySearch_RepositoryImpl(data_source)
+      bookmarks = result.bookmarks
+      incoming_version = result.version
+    } else {
+      const result = await repository.get_bookmarks_on_public_user({
+        is_archived: params.is_archived,
+        username: username as string,
+        after: cached_at,
+      })
+      bookmarks = result.bookmarks
+      incoming_version = result.version
+    }
 
-      let bookmarks: SearchableBookmark_Entity[]
-      if (!username) {
-        bookmarks = (
-          await repository.get_bookmarks_on_authorized_user(
-            {
-              is_archived: params.is_archived,
-            },
-            auth_context.auth_data!.encryption_key,
-          )
-        ).bookmarks
-      } else {
-        bookmarks = (
-          await repository.get_bookmarks_on_public_user({
-            is_archived: params.is_archived,
-            username: username as string,
-          })
-        ).bookmarks
-      }
+    if (
+      params.force_reinitialization ||
+      (version && version != incoming_version)
+    ) {
+      await clear_cached_data({ is_archived: params.is_archived })
+    }
 
-      const chunk_size = 1000
-      let indexed_count = 0
-      for (let i = 0; i < bookmarks.length; i += chunk_size) {
-        const chunk = bookmarks.slice(i, i + chunk_size)
-        await insertMultiple(
-          new_db,
-          chunk.map((bookmark) => ({
+    let fresh_db: Orama<typeof schema>
+
+    if ((!params.is_archived && db) || (params.is_archived && archived_db)) {
+      // DB is initialized, should be updated.
+      fresh_db = (!params.is_archived ? db : archived_db)!
+      for (const bookmark of bookmarks) {
+        await remove(fresh_db, bookmark.id.toString())
+        if (!bookmark.is_deleted) {
+          await insert(fresh_db, {
             id: bookmark.id.toString(),
             card:
               (bookmark.title ? `${bookmark.title} ` : '') +
@@ -414,116 +258,261 @@ export const LocalDbProvider: React.FC<{
             points: bookmark.points
               ? parseInt(`${bookmark.points}${bookmark.created_at}`)
               : bookmark.created_at,
-          })),
-          chunk_size,
-        )
-        indexed_count += chunk.length
-        const progress_percentage = Math.round(
-          (indexed_count / bookmarks.length) * 100,
-        )
-        set_indexed_bookmarks_percentage(
-          progress_percentage < 100 ? progress_percentage : undefined,
-        )
+          })
+        }
+      }
+    } else {
+      // DB is not initialized, should be restored from cache and updated OR created from scratch.
+      fresh_db = await create({
+        schema,
+        sort: {
+          unsortableProperties: [
+            'id',
+            'card',
+            'plain_text',
+            'sites',
+            'sites_variants',
+            'is_unsorted',
+            'stars',
+            'tags',
+            'tags_ids',
+            'points',
+          ],
+        },
+        plugins: [
+          {
+            name: 'highlight',
+            afterInsert: highlightAfterInsert,
+          },
+        ],
+        components: {
+          tokenizer: {
+            stemming: true,
+            stopWords: english_stop_words,
+          },
+        },
+      })
+
+      const cached_index = await localforage.getItem<string>(
+        !username
+          ? !params.is_archived
+            ? browser_storage.local_forage.authorized_library.search.index
+            : browser_storage.local_forage.authorized_library.search
+                .archived_index
+          : !params.is_archived
+          ? browser_storage.local_forage.public_library.search.index({
+              username: username as string,
+            })
+          : browser_storage.local_forage.public_library.search.archived_index({
+              username: username as string,
+            }),
+      )
+
+      if (cached_index) {
+        // Update cached index.
+        await loadWithHighlight(fresh_db, JSON.parse(cached_index as any))
+        for (const bookmark of bookmarks) {
+          await remove(fresh_db, bookmark.id.toString())
+          if (!bookmark.is_deleted) {
+            await insert(fresh_db, {
+              id: bookmark.id.toString(),
+              card:
+                (bookmark.title ? `${bookmark.title} ` : '') +
+                (bookmark.note ? `${bookmark.note} ` : '') +
+                bookmark.tags.map((tag) => tag.name).join(' ') +
+                (bookmark.tags.length ? ' ' : '') +
+                bookmark.links
+                  .map((link) => link.site.replace('/', ' › '))
+                  .join(' '),
+              plain_text: bookmark.links
+                .map((link) => link.plain_text || '')
+                .join(' '),
+              sites: bookmark.links.map((link) => link.site),
+              sites_variants: bookmark.links
+                .map((link) => get_site_variants_for_search(link.site))
+                .flat(),
+              tag_ids: bookmark.tags.map((tag) => tag.id),
+              tags: bookmark.tags.map((tag) => tag.name),
+              created_at: bookmark.created_at,
+              updated_at: bookmark.updated_at,
+              visited_at: bookmark.visited_at,
+              is_unsorted: bookmark.is_unsorted,
+              stars: bookmark.stars,
+              points: bookmark.points
+                ? parseInt(`${bookmark.points}${bookmark.created_at}`)
+                : bookmark.created_at,
+            })
+          }
+        }
+      } else {
+        // DB was not cached, thus is created from scratch.
+        const chunk_size = 1000
+        let indexed_count = 0
+        for (let i = 0; i < bookmarks.length; i += chunk_size) {
+          const chunk = bookmarks.slice(i, i + chunk_size)
+          await insertMultiple(
+            fresh_db,
+            chunk
+              .filter((bookmark) => !bookmark.is_deleted)
+              .map((bookmark) => ({
+                id: bookmark.id.toString(),
+                card:
+                  (bookmark.title ? `${bookmark.title} ` : '') +
+                  (bookmark.note ? `${bookmark.note} ` : '') +
+                  bookmark.tags.map((tag) => tag.name).join(' ') +
+                  (bookmark.tags.length ? ' ' : '') +
+                  bookmark.links
+                    .map((link) => link.site.replace('/', ' › '))
+                    .join(' '),
+                plain_text: bookmark.links
+                  .map((link) => link.plain_text || '')
+                  .join(' '),
+                sites: bookmark.links.map((link) => link.site),
+                sites_variants: bookmark.links
+                  .map((link) => get_site_variants_for_search(link.site))
+                  .flat(),
+                tag_ids: bookmark.tags.map((tag) => tag.id),
+                tags: bookmark.tags.map((tag) => tag.name),
+                created_at: bookmark.created_at,
+                updated_at: bookmark.updated_at,
+                visited_at: bookmark.visited_at,
+                is_unsorted: bookmark.is_unsorted,
+                stars: bookmark.stars,
+                points: bookmark.points
+                  ? parseInt(`${bookmark.points}${bookmark.created_at}`)
+                  : bookmark.created_at,
+              })),
+            chunk_size,
+          )
+          indexed_count += chunk.length
+          const progress_percentage = Math.round(
+            (indexed_count / bookmarks.length) * 100,
+          )
+          set_indexed_bookmarks_percentage(
+            progress_percentage < 100 ? progress_percentage : undefined,
+          )
+        }
+
+        set_indexed_bookmarks_percentage(undefined)
       }
 
-      set_indexed_bookmarks_percentage(undefined)
+      if (!params.is_archived) {
+        set_db(fresh_db)
+      } else {
+        set_archived_db(fresh_db)
+      }
     }
 
-    if (!params.is_archived) {
-      set_db(new_db)
-      set_db_updated_at_timestamp(Date.now())
-      set_search_data_awaits_caching(true)
-    } else {
-      set_archived_db(new_db)
-      set_archived_search_data_awaits_caching(true)
-      set_archived_db_updated_at_timestamp(Date.now())
+    // Cache db
+    if (bookmarks.length) {
+      const index = await saveWithHighlight(fresh_db)
+      if (!username) {
+        await localforage.setItem(
+          browser_storage.local_forage.authorized_library.search.version,
+          incoming_version,
+        )
+        if (!params.is_archived) {
+          await localforage.setItem(
+            browser_storage.local_forage.authorized_library.search
+              .cached_at_timestamp,
+            bookmarks[bookmarks.length - 1].updated_at,
+          )
+          await localforage.setItem(
+            browser_storage.local_forage.authorized_library.search.index,
+            JSON.stringify(index),
+          )
+        } else {
+          await localforage.setItem(
+            browser_storage.local_forage.authorized_library.search
+              .archived_cached_at_timestamp,
+              bookmarks[bookmarks.length - 1].updated_at,
+          )
+          await localforage.setItem(
+            browser_storage.local_forage.authorized_library.search
+              .archived_index,
+            JSON.stringify(index),
+          )
+        }
+      }
     }
 
     set_is_initializing(false)
     return {
-      db: new_db,
+      db: fresh_db,
     }
   }
 
-  const upsert_bookmark = async (params: {
-    db: Orama<typeof schema>
-    is_archived: boolean
-    bookmark: BookmarkOfSearch
-  }) => {
-    await remove(params.db, params.bookmark.id.toString())
+  // const upsert_bookmark = async (params: {
+  //   db: Orama<typeof schema>
+  //   is_archived: boolean
+  //   bookmark: BookmarkOfSearch
+  // }) => {
+  //   await remove(params.db, params.bookmark.id.toString())
 
-    if (
-      (params.is_archived && params.bookmark.is_archived) ||
-      (!params.is_archived && !params.bookmark.is_archived)
-    ) {
-      const sites = params.bookmark.links.map(
-        (link) =>
-          `${get_domain_from_url(link.url)}${
-            link.site_path ? `/${link.site_path}` : ''
-          }`,
-      )
-      await insert(params.db, {
-        id: params.bookmark.id.toString(),
-        card:
-          (params.bookmark.title ? `${params.bookmark.title} ` : '') +
-          (params.bookmark.note ? `${params.bookmark.note} ` : '') +
-          params.bookmark.tags.join(' ') +
-          (sites.length ? ' ' : '') +
-          sites.join(' '),
-        plain_text: params.bookmark.links
-          .map((link) => link.plain_text || '')
-          .join(' '),
-        created_at: Math.round(
-          new Date(params.bookmark.created_at).getTime() / 1000,
-        ),
-        updated_at: Math.round(
-          new Date(params.bookmark.updated_at).getTime() / 1000,
-        ),
-        visited_at: Math.round(
-          new Date(params.bookmark.visited_at).getTime() / 1000,
-        ),
-        is_unsorted:
-          params.bookmark.is_unsorted === undefined
-            ? true
-            : params.bookmark.is_unsorted,
-        sites,
-        sites_variants: sites
-          .map((site) => get_site_variants_for_search(site))
-          .flat(),
-        stars: params.bookmark.stars || 0,
-        tags: params.bookmark.tags,
-        tag_ids: params.bookmark.tag_ids,
-      })
-    }
+  //   if (
+  //     (params.is_archived && params.bookmark.is_archived) ||
+  //     (!params.is_archived && !params.bookmark.is_archived)
+  //   ) {
+  //     const sites = params.bookmark.links.map(
+  //       (link) =>
+  //         `${get_domain_from_url(link.url)}${
+  //           link.site_path ? `/${link.site_path}` : ''
+  //         }`,
+  //     )
+  //     await insert(params.db, {
+  //       id: params.bookmark.id.toString(),
+  //       card:
+  //         (params.bookmark.title ? `${params.bookmark.title} ` : '') +
+  //         (params.bookmark.note ? `${params.bookmark.note} ` : '') +
+  //         params.bookmark.tags.join(' ') +
+  //         (sites.length ? ' ' : '') +
+  //         sites.join(' '),
+  //       plain_text: params.bookmark.links
+  //         .map((link) => link.plain_text || '')
+  //         .join(' '),
+  //       created_at: Math.round(
+  //         new Date(params.bookmark.created_at).getTime() / 1000,
+  //       ),
+  //       updated_at: Math.round(
+  //         new Date(params.bookmark.updated_at).getTime() / 1000,
+  //       ),
+  //       visited_at: Math.round(
+  //         new Date(params.bookmark.visited_at).getTime() / 1000,
+  //       ),
+  //       is_unsorted:
+  //         params.bookmark.is_unsorted === undefined
+  //           ? true
+  //           : params.bookmark.is_unsorted,
+  //       sites,
+  //       sites_variants: sites
+  //         .map((site) => get_site_variants_for_search(site))
+  //         .flat(),
+  //       stars: params.bookmark.stars || 0,
+  //       tags: params.bookmark.tags,
+  //       tag_ids: params.bookmark.tag_ids,
+  //     })
+  //   }
 
-    if (!params.is_archived) {
-      set_search_data_awaits_caching(true)
-      set_db_updated_at_timestamp(
-        new Date(params.bookmark.updated_at).getTime(),
-      )
-    } else {
-      set_archived_search_data_awaits_caching(true)
-      set_archived_db_updated_at_timestamp(
-        new Date(params.bookmark.updated_at).getTime(),
-      )
-    }
-  }
+  //   if (!params.is_archived) {
+  //     set_search_data_awaits_caching(true)
+  //   } else {
+  //     set_archived_search_data_awaits_caching(true)
+  //   }
+  // }
 
-  const delete_bookmark = async (params: {
-    db: Orama<typeof schema>
-    is_archived: boolean
-    bookmark_id: number
-  }) => {
-    await remove(params.db, params.bookmark_id.toString())
+  // const delete_bookmark = async (params: {
+  //   db: Orama<typeof schema>
+  //   is_archived: boolean
+  //   bookmark_id: number
+  // }) => {
+  //   await remove(params.db, params.bookmark_id.toString())
 
-    if (!params.is_archived) {
-      set_search_data_awaits_caching(true)
-      set_db_updated_at_timestamp(Date.now())
-    } else {
-      set_archived_search_data_awaits_caching(true)
-      set_archived_db_updated_at_timestamp(Date.now())
-    }
-  }
+  //   if (!params.is_archived) {
+  //     set_search_data_awaits_caching(true)
+  //   } else {
+  //     set_archived_search_data_awaits_caching(true)
+  //   }
+  // }
 
   return (
     <LocalDbContext.Provider
@@ -533,18 +522,8 @@ export const LocalDbProvider: React.FC<{
         set_db,
         archived_db,
         set_archived_db,
-        db_updated_at_timestamp,
-        set_db_updated_at_timestamp,
-        archived_db_updated_at_timestamp,
-        set_archived_db_updated_at_timestamp,
         is_initializing,
         indexed_bookmarks_percentage,
-        search_data_awaits_caching,
-        set_search_data_awaits_caching,
-        archived_search_data_awaits_caching,
-        set_archived_search_data_awaits_caching,
-        upsert_bookmark,
-        delete_bookmark,
       }}
     >
       {props.children}
