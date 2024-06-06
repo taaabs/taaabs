@@ -7,18 +7,21 @@ export const browser_storage = {
         archived_index: 'authorized-library.search.archived-index',
         archived_cached_at_timestamp:
           'authorized-library.search.archived-cached-at-timestamp',
+        bookmarks_version: 'authorized-library.search.bookmarks-version',
       },
     },
     public_library: {
       search: {
         index: (params: { username: string }) =>
-          `public-library.search.index.${params.username}`,
+          `public-library.search.${params.username}.index`,
         cached_at_timestamp: (params: { username: string }) =>
-          `public-library.search.cached-at-timestamp.${params.username}`,
+          `public-library.search.${params.username}.cached-at-timestamp`,
         archived_index: (params: { username: string }) =>
-          `public-library.search.archived-index.${params.username}`,
+          `public-library.search.${params.username}.archived-index`,
         archived_cached_at_timestamp: (params: { username: string }) =>
-          `public-library.search.archived-cached-at-timestamp.${params.username}`,
+          `public-library.search.${params.username}archived-cached-at-timestamp`,
+        bookmarks_version: (params: { username: string }) =>
+          `public-library.search.${params.username}.bookmarks-version`,
       },
     },
   },

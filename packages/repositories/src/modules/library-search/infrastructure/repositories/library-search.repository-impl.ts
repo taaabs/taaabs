@@ -21,6 +21,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
       archived_updated_at: result.archived_updated_at
         ? new Date(result.archived_updated_at)
         : undefined,
+      bookmarks_version: result.bookmarks_version,
     }
   }
 
@@ -37,6 +38,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
       archived_updated_at: result.archived_updated_at
         ? new Date(result.archived_updated_at)
         : undefined,
+      bookmarks_version: result.bookmarks_version,
     }
   }
 

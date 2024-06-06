@@ -49,7 +49,7 @@ const dictionary: Dictionary = {
           bullets_heading: "What's included:",
           bullets: [
             'Unlimited public bookmarks',
-            '500 Zero-knowledge™ bookmarks',
+            '1000 Zero-knowledge™ bookmarks',
             "Permanent Reader™ of everything you've saved",
             'Full-text search',
           ],

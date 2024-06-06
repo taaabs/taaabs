@@ -65,7 +65,6 @@ export type LocalDb = {
   set_db_updated_at_timestamp: (timestamp?: number) => void
   archived_db_updated_at_timestamp?: number
   set_archived_db_updated_at_timestamp: (timestamp?: number) => void
-
   is_initializing?: boolean
   indexed_bookmarks_percentage?: number
   search_data_awaits_caching?: boolean
@@ -123,7 +122,7 @@ export const LocalDbProvider: React.FC<{
       ? db_updated_at_timestamp
       : archived_db_updated_at_timestamp
 
-    const cached_at =
+    const cached_at: number | undefined =
       (await localforage.getItem<number>(
         !username
           ? !params.is_archived
@@ -134,11 +133,11 @@ export const LocalDbProvider: React.FC<{
           : !params.is_archived
           ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
               {
-                username: username as string,
+                username: username,
               },
             )
           : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-              { username: username as string },
+              { username: username },
             ),
       )) || undefined
 
@@ -152,8 +151,35 @@ export const LocalDbProvider: React.FC<{
       result = await repository.get_last_updated_at_on_authorized_user()
     } else {
       result = await repository.get_last_updated_at_on_public_user({
-        username: username as string,
+        username: username,
       })
+    }
+
+    const bookmarks_version: number | undefined =
+      (await localforage.getItem<number>(
+        !username
+          ? browser_storage.local_forage.authorized_library.search
+              .bookmarks_version
+          : browser_storage.local_forage.public_library.search.bookmarks_version(
+              { username },
+            ),
+      )) || undefined
+
+    if (!bookmarks_version || result.bookmarks_version > bookmarks_version) {
+      if (!username) {
+        await localforage.setItem(
+          browser_storage.local_forage.authorized_library.search
+            .bookmarks_version,
+          result.bookmarks_version,
+        )
+      } else {
+        // await localforage.setItem(
+        //   browser_storage.local_forage.public_library.search
+        //     .bookmarks_version({username}),
+        //   result.bookmarks_version,
+        // )
+      }
+      return DbStalenessState.INSTANCE_STALE_CACHED_STALE
     }
 
     !params.is_archived

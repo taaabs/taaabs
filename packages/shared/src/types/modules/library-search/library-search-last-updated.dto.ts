@@ -1,6 +1,7 @@
 export namespace LibrarySearchLastUpdated_Dto {
-  export class Response {
-    public updated_at?: string
-    public archived_updated_at?: string
+  export type Response = {
+    updated_at?: string
+    archived_updated_at?: string
+    bookmarks_version: number
   }
 }

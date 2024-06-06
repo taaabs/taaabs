@@ -57,9 +57,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
       browser_storage.local_forage.authorized_library.search.index,
     )
     await localforage.removeItem(
-      browser_storage.local_forage.authorized_library.search.bookmarks,
-    )
-    await localforage.removeItem(
       browser_storage.local_forage.authorized_library.search
         .cached_at_timestamp,
     )
@@ -67,11 +64,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
       browser_storage.local_forage.authorized_library.search.archived_index,
     )
     await localforage.removeItem(
-      browser_storage.local_forage.authorized_library.search.archived_bookmarks,
-    )
-    await localforage.removeItem(
       browser_storage.local_forage.authorized_library.search
         .archived_cached_at_timestamp,
+    )
+    await localforage.removeItem(
+      browser_storage.local_forage.authorized_library.search.bookmarks_version
     )
     document.cookie = 'user_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
     document.location = '/'

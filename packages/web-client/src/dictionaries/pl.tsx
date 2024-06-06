@@ -55,7 +55,7 @@ export const dictionary: Dictionary = {
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
             'Nielimitowane publiczne zakładki',
-            '500 zaszyfrowanych zakładek',
+            '1000 zaszyfrowanych zakładek',
             'Wieczne kopie tekstowe wszystkich stron',
             'Wyszukiwanie pełnotekstowe',
           ],
