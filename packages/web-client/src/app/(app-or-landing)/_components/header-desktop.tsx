@@ -36,6 +36,7 @@ import { BookmarkUrlHashData } from '@/utils/bookmark-url-hash-data'
 
 export const HeaderDesktop: React.FC<{
   dictionary: Dictionary
+  bookmarklet_script: string
 }> = (props) => {
   const auth_context = useContext(AuthContext)!
   const local_db_context = useContext(LocalDbContext)!
@@ -218,6 +219,7 @@ export const HeaderDesktop: React.FC<{
                     props.dictionary.app.header_desktop.user_dropdown
                       .bookmarklet.button_label
                   }
+                  bookmarklet_script={props.bookmarklet_script}
                 />
                 <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
                 <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
