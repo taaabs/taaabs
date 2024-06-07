@@ -18,6 +18,7 @@ const landing_pathnames = ['/about', '/pricing', '/help', '/updates']
 const LayoutAuthorized: React.FC<{
   children?: ReactNode
   dictionary: Dictionary
+  bookmarklet_script: string
 }> = (props) => {
   const pathname = usePathname()
 
@@ -40,7 +41,12 @@ const LayoutAuthorized: React.FC<{
   ) : (
     <PublicUserAvatarProvider>
       <UiAppTemplate_App
-        slot_header_desktop={<HeaderDesktop dictionary={props.dictionary} />}
+        slot_header_desktop={
+          <HeaderDesktop
+            dictionary={props.dictionary}
+            bookmarklet_script={props.bookmarklet_script}
+          />
+        }
         slot_header_mobile={<HeaderMobile />}
         slot_bottom_navigation_bar={
           <BottomNavigationBar dictionary={props.dictionary} />
