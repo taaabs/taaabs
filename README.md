@@ -22,7 +22,7 @@ Taaabs Community Edition is a free and open-source bookmarking app enabling you 
 
 ## Roadmap
 
-View the [Roadmap](https://taaabs.com/roadmap) for details on our planned features and future direction.
+View the [Roadmap](https://taaabs.com) for details on our planned features and future direction.
 
 ## Self-Hosting
 
@@ -41,7 +41,7 @@ Signing CLA needs to be done only once for all PRs and contributions.
 
 ## License
 
-Taaabs is published under the AGPLv3 license.
+Taaabs is published under the [CC BY-NC-ND 4.0 license](https://creativecommons.org/licenses/by-nc-nd/4.0/).
 
 ## Acknowledgements
 
