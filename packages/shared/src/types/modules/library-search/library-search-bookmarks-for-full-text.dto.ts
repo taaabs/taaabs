@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer'
 import { ToBoolean } from '../../../decorators/to-boolean'
 
-export namespace LibrarySearchBookmarks_Dto {
+export namespace LibrarySearchBookmarksForFullText_Dto {
   export class SearchParams {
     @ToBoolean()
     public is_archived?: boolean
@@ -20,6 +20,8 @@ export namespace LibrarySearchBookmarks_Dto {
     type AuthorizedLink = {
       site?: string
       site_aes?: string
+      reader_data?: string
+      reader_data_aes?: string
     }
     type AuthorizedTag = {
       id: number
@@ -52,6 +54,7 @@ export namespace LibrarySearchBookmarks_Dto {
     }
     type PublicLink = {
       site: string
+      reader_data?: string
     }
     interface PublicBookmark extends Bookmark {
       links: PublicLink[]

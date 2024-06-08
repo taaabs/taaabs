@@ -13,29 +13,13 @@ import { useParams } from 'next/navigation'
 import { browser_storage } from '@/constants/browser-storage'
 import { LibrarySearch_DataSourceImpl } from '@repositories/modules/library-search/infrastructure/data-sources/library-search.data-source-impl'
 import { LibrarySearch_RepositoryImpl } from '@repositories/modules/library-search/infrastructure/repositories/library-search.repository-impl'
-import { SearchableBookmark_Entity } from '@repositories/modules/library-search/domain/entities/searchable-bookmark.entity'
+import { Bookmark_Entity } from '@repositories/modules/library-search/domain/entities/bookmark.entity'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search'
 import { english_stop_words } from '@shared/constants/english-stop-words'
-
-type BookmarkOfSearch = {
-  id: number
-  created_at: string
-  visited_at: string
-  updated_at: string
-  title?: string
-  note?: string
-  is_archived: boolean
-  is_unsorted?: boolean
-  stars?: number
-  tags: string[]
-  links: { url: string; site_path?: string; plain_text?: string }[]
-  tag_ids: number[]
-}
 
 export const schema = {
   id: 'string',
   card: 'string',
-  plain_text: 'string',
   tag_ids: 'enum[]',
   sites: 'string[]',
   sites_variants: 'string[]',
@@ -63,20 +47,6 @@ export type LocalDb = {
   set_archived_db: (db?: Orama<typeof schema>) => void
   is_initializing?: boolean
   indexed_bookmarks_percentage?: number
-  // search_data_awaits_caching?: boolean
-  // set_search_data_awaits_caching: (awaits_caching: boolean) => void
-  // archived_search_data_awaits_caching?: boolean
-  // set_archived_search_data_awaits_caching: (awaits_caching: boolean) => void
-  // upsert_bookmark: (params: {
-  //   db: Orama<typeof schema>
-  //   is_archived: boolean
-  //   bookmark: BookmarkOfSearch
-  // }) => Promise<void>
-  // delete_bookmark: (params: {
-  //   db: Orama<typeof schema>
-  //   is_archived: boolean
-  //   bookmark_id: number
-  // }) => Promise<void>
 }
 
 export const LocalDbContext = createContext<LocalDb | null>(null)
@@ -191,7 +161,7 @@ export const LocalDbProvider: React.FC<{
     )
     const repository = new LibrarySearch_RepositoryImpl(data_source)
 
-    let bookmarks: SearchableBookmark_Entity[]
+    let bookmarks: Bookmark_Entity[]
     let incoming_version: number
     if (!username) {
       const result = await repository.get_bookmarks_on_authorized_user(
@@ -244,9 +214,6 @@ export const LocalDbProvider: React.FC<{
               bookmark.links
                 .map((link) => link.site.replace('/', ' › '))
                 .join(' '),
-            plain_text: bookmark.links
-              .map((link) => link.plain_text || '')
-              .join(' '),
             sites: bookmark.links.map((link) => link.site),
             sites_variants: bookmark.links
               .map((link) => get_site_variants_for_search(link.site))
@@ -326,9 +293,6 @@ export const LocalDbProvider: React.FC<{
                 bookmark.links
                   .map((link) => link.site.replace('/', ' › '))
                   .join(' '),
-              plain_text: bookmark.links
-                .map((link) => link.plain_text || '')
-                .join(' '),
               sites: bookmark.links.map((link) => link.site),
               sites_variants: bookmark.links
                 .map((link) => get_site_variants_for_search(link.site))
@@ -366,9 +330,6 @@ export const LocalDbProvider: React.FC<{
                   bookmark.links
                     .map((link) => link.site.replace('/', ' › '))
                     .join(' '),
-                plain_text: bookmark.links
-                  .map((link) => link.plain_text || '')
-                  .join(' '),
                 sites: bookmark.links.map((link) => link.site),
                 sites_variants: bookmark.links
                   .map((link) => get_site_variants_for_search(link.site))
@@ -443,78 +404,6 @@ export const LocalDbProvider: React.FC<{
       db: fresh_db,
     }
   }
-
-  // const upsert_bookmark = async (params: {
-  //   db: Orama<typeof schema>
-  //   is_archived: boolean
-  //   bookmark: BookmarkOfSearch
-  // }) => {
-  //   await remove(params.db, params.bookmark.id.toString())
-
-  //   if (
-  //     (params.is_archived && params.bookmark.is_archived) ||
-  //     (!params.is_archived && !params.bookmark.is_archived)
-  //   ) {
-  //     const sites = params.bookmark.links.map(
-  //       (link) =>
-  //         `${get_domain_from_url(link.url)}${
-  //           link.site_path ? `/${link.site_path}` : ''
-  //         }`,
-  //     )
-  //     await insert(params.db, {
-  //       id: params.bookmark.id.toString(),
-  //       card:
-  //         (params.bookmark.title ? `${params.bookmark.title} ` : '') +
-  //         (params.bookmark.note ? `${params.bookmark.note} ` : '') +
-  //         params.bookmark.tags.join(' ') +
-  //         (sites.length ? ' ' : '') +
-  //         sites.join(' '),
-  //       plain_text: params.bookmark.links
-  //         .map((link) => link.plain_text || '')
-  //         .join(' '),
-  //       created_at: Math.round(
-  //         new Date(params.bookmark.created_at).getTime() / 1000,
-  //       ),
-  //       updated_at: Math.round(
-  //         new Date(params.bookmark.updated_at).getTime() / 1000,
-  //       ),
-  //       visited_at: Math.round(
-  //         new Date(params.bookmark.visited_at).getTime() / 1000,
-  //       ),
-  //       is_unsorted:
-  //         params.bookmark.is_unsorted === undefined
-  //           ? true
-  //           : params.bookmark.is_unsorted,
-  //       sites,
-  //       sites_variants: sites
-  //         .map((site) => get_site_variants_for_search(site))
-  //         .flat(),
-  //       stars: params.bookmark.stars || 0,
-  //       tags: params.bookmark.tags,
-  //       tag_ids: params.bookmark.tag_ids,
-  //     })
-  //   }
-
-  //   if (!params.is_archived) {
-  //     set_search_data_awaits_caching(true)
-  //   } else {
-  //     set_archived_search_data_awaits_caching(true)
-  //   }
-  // }
-
-  // const delete_bookmark = async (params: {
-  //   db: Orama<typeof schema>
-  //   is_archived: boolean
-  //   bookmark_id: number
-  // }) => {
-  //   await remove(params.db, params.bookmark_id.toString())
-
-  //   if (!params.is_archived) {
-  //     set_search_data_awaits_caching(true)
-  //   } else {
-  //     set_archived_search_data_awaits_caching(true)
-  //   }
-  // }
 
   return (
     <LocalDbContext.Provider
