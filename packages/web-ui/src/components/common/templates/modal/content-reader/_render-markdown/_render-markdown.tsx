@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import remarkGfm from 'remark-gfm'
 import styles from './_render-markdown.module.scss'
 import { Icon as UiCommonParticle_Icon } from '@web-ui/components/common/particles/icon'
@@ -73,7 +73,7 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
                     language={language || language_fallback}
                     PreTag={'div'}
                     children={children_parsed}
-                    style={oneLight}
+                    style={vscDarkPlus}
                     customStyle={{ marginTop: 0 }}
                   />
                 ) : (

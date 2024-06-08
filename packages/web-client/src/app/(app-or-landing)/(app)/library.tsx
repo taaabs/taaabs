@@ -1371,7 +1371,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           ],
           cover: bookmark.cover,
         }
-        const updated_bookmark = await dispatch(
+        await dispatch(
           bookmarks_actions.upsert_bookmark({
             bookmark: modified_bookmark,
             last_authorized_counts_params:
@@ -1428,7 +1428,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 })),
                 cover: bookmark.cover,
               }
-              const updated_bookmark = await dispatch(
+              await dispatch(
                 bookmarks_actions.upsert_bookmark({
                   bookmark: modified_bookmark,
                   last_authorized_counts_params:
@@ -1619,7 +1619,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   })),
                   cover: bookmark.cover,
                 }
-                const updated_bookmark = await dispatch(
+                await dispatch(
                   bookmarks_actions.upsert_bookmark({
                     bookmark: modified_bookmark,
                     last_authorized_counts_params:
@@ -1672,7 +1672,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   })),
                   cover: bookmark.cover,
                 }
-                const updated_bookmark = await dispatch(
+                await dispatch(
                   bookmarks_actions.upsert_bookmark({
                     bookmark: modified_bookmark,
                     last_authorized_counts_params:
@@ -1753,7 +1753,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   })),
                   cover: bookmark.cover,
                 }
-                const updated_bookmark = await dispatch(
+                await dispatch(
                   bookmarks_actions.upsert_bookmark({
                     bookmark: modified_bookmark,
                     last_authorized_counts_params:
@@ -1823,7 +1823,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   })),
                   cover: bookmark.cover,
                 }
-                const updated_bookmark = await dispatch(
+                await dispatch(
                   bookmarks_actions.upsert_bookmark({
                     bookmark: modified_bookmark,
                     last_authorized_counts_params:
@@ -1985,7 +1985,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   })),
                   cover: bookmark.cover,
                 }
-                const updated_bookmark = await dispatch(
+                await dispatch(
                   bookmarks_actions.upsert_bookmark({
                     bookmark: modified_bookmark,
                     last_authorized_counts_params:
