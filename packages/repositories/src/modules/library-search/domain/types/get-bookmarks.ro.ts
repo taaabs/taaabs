@@ -1,6 +1,6 @@
-import { SearchableBookmark_Entity } from '../entities/searchable-bookmark.entity'
+import { Bookmark_Entity } from '../entities/bookmark.entity'
 
 export type GetBookmarks_Ro = {
-  bookmarks: SearchableBookmark_Entity[]
+  bookmarks: Bookmark_Entity[]
   version: number
 }

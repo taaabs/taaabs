@@ -44,6 +44,87 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
                 const site = link.site
                   ? link.site
                   : await Crypto.AES.decrypt(link.site_aes!, encryption_key)
+                return { site }
+              }),
+            ),
+            tags: await Promise.all(
+              bookmark.tags.map(async (tag) => ({
+                id: tag.id,
+                name: tag.name
+                  ? tag.name
+                  : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
+              })),
+            ),
+            stars: bookmark.stars || 0,
+            points: bookmark.points || 0,
+          }
+        }),
+      ),
+      version,
+    }
+  }
+
+  public async get_bookmarks_on_public_user(
+    params: GetBookmarks_Params.Public,
+  ): Promise<GetBookmarks_Ro> {
+    const { bookmarks, version } =
+      await this._library_search_data_source.get_bookmarks_on_public_user(
+        params,
+      )
+
+    return {
+      bookmarks: bookmarks.map((bookmark) => {
+        return {
+          id: bookmark.id,
+          created_at: bookmark.created_at,
+          updated_at: bookmark.updated_at,
+          is_deleted: bookmark.is_deleted,
+          title: bookmark.title,
+          note: bookmark.note,
+          links: bookmark.links,
+          tags: bookmark.tags,
+          stars: bookmark.stars || 0,
+          points: bookmark.points || 0,
+        }
+      }),
+      version,
+    }
+  }
+
+  public async get_bookmarks_for_full_text_on_authorized_user(
+    params: GetBookmarks_Params.Authorized,
+    encryption_key: Uint8Array,
+  ): Promise<GetBookmarks_Ro> {
+    const { bookmarks, version } =
+      await this._library_search_data_source.get_bookmarks_for_full_text_on_authorized_user(
+        params,
+      )
+
+    return {
+      bookmarks: await Promise.all(
+        bookmarks.map(async (bookmark) => {
+          return {
+            id: bookmark.id,
+            created_at: bookmark.created_at,
+            updated_at: bookmark.updated_at,
+            visited_at: bookmark.visited_at,
+            title: bookmark.title
+              ? bookmark.title
+              : bookmark.title_aes
+              ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+              : undefined,
+            note: bookmark.note
+              ? bookmark.note
+              : bookmark.note_aes
+              ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+              : undefined,
+            is_unsorted: bookmark.is_unsorted || false,
+            is_deleted: bookmark.is_deleted,
+            links: await Promise.all(
+              bookmark.links.map(async (link) => {
+                const site = link.site
+                  ? link.site
+                  : await Crypto.AES.decrypt(link.site_aes!, encryption_key)
                 const reader_data = link.reader_data
                   ? link.reader_data
                   : link.reader_data_aes
@@ -81,11 +162,11 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
     }
   }
 
-  public async get_bookmarks_on_public_user(
+  public async get_bookmarks_for_full_text_on_public_user(
     params: GetBookmarks_Params.Public,
   ): Promise<GetBookmarks_Ro> {
     const { bookmarks, version } =
-      await this._library_search_data_source.get_bookmarks_on_public_user(
+      await this._library_search_data_source.get_bookmarks_for_full_text_on_public_user(
         params,
       )
 
