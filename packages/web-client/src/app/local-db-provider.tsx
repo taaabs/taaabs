@@ -66,8 +66,11 @@ export type LocalDb = {
   indexed_bookmarks_percentage?: number
   upsert_bookmark: (params: {
     db: Orama<typeof schema>
-    is_archived: boolean
     bookmark: BookmarkForSearch
+  }) => Promise<void>
+  delete_bookmark: (params: {
+    db: Orama<typeof schema>
+    bookmark_id: number
   }) => Promise<void>
 }
 
@@ -432,51 +435,52 @@ export const LocalDbProvider: React.FC<{
   // Used solely for updating highlights.
   const upsert_bookmark = async (params: {
     db: Orama<typeof schema>
-    is_archived: boolean
     bookmark: BookmarkForSearch
   }) => {
     await remove(params.db, params.bookmark.id.toString())
 
-    if (
-      (params.is_archived && params.bookmark.is_archived) ||
-      (!params.is_archived && !params.bookmark.is_archived)
-    ) {
-      const sites = params.bookmark.links.map(
-        (link) =>
-          `${get_domain_from_url(link.url)}${
-            link.site_path ? `/${link.site_path}` : ''
-          }`,
-      )
-      await insert(params.db, {
-        id: params.bookmark.id.toString(),
-        card:
-          (params.bookmark.title ? `${params.bookmark.title} ` : '') +
-          (params.bookmark.note ? `${params.bookmark.note} ` : '') +
-          params.bookmark.tags.map((tag) => tag.name).join(' ') +
-          (params.bookmark.tags.length ? ' ' : '') +
-          sites.map((site) => site.replace('/', ' › ')).join(' '),
-        sites,
-        sites_variants: sites
-          .map((site) => get_site_variants_for_search(site))
-          .flat(),
-        tag_ids: params.bookmark.tags.map((tag) => tag.id),
-        tags: params.bookmark.tags.map((tag) => tag.name),
-        created_at: Math.round(
-          new Date(params.bookmark.created_at).getTime() / 1000,
-        ),
-        updated_at: Math.round(
-          new Date(params.bookmark.updated_at).getTime() / 1000,
-        ),
-        visited_at: Math.round(
-          new Date(params.bookmark.visited_at).getTime() / 1000,
-        ),
-        is_unsorted: params.bookmark.is_unsorted,
-        stars: params.bookmark.stars,
-        points: params.bookmark.points
-          ? parseInt(`${params.bookmark.points}${params.bookmark.created_at}`)
-          : Math.round(new Date(params.bookmark.created_at).getTime() / 1000),
-      })
-    }
+    const sites = params.bookmark.links.map(
+      (link) =>
+        `${get_domain_from_url(link.url)}${
+          link.site_path ? `/${link.site_path}` : ''
+        }`,
+    )
+    await insert(params.db, {
+      id: params.bookmark.id.toString(),
+      card:
+        (params.bookmark.title ? `${params.bookmark.title} ` : '') +
+        (params.bookmark.note ? `${params.bookmark.note} ` : '') +
+        params.bookmark.tags.map((tag) => tag.name).join(' ') +
+        (params.bookmark.tags.length ? ' ' : '') +
+        sites.map((site) => site.replace('/', ' › ')).join(' '),
+      sites,
+      sites_variants: sites
+        .map((site) => get_site_variants_for_search(site))
+        .flat(),
+      tag_ids: params.bookmark.tags.map((tag) => tag.id),
+      tags: params.bookmark.tags.map((tag) => tag.name),
+      created_at: Math.round(
+        new Date(params.bookmark.created_at).getTime() / 1000,
+      ),
+      updated_at: Math.round(
+        new Date(params.bookmark.updated_at).getTime() / 1000,
+      ),
+      visited_at: Math.round(
+        new Date(params.bookmark.visited_at).getTime() / 1000,
+      ),
+      is_unsorted: params.bookmark.is_unsorted,
+      stars: params.bookmark.stars,
+      points: params.bookmark.points
+        ? parseInt(`${params.bookmark.points}${params.bookmark.created_at}`)
+        : Math.round(new Date(params.bookmark.created_at).getTime() / 1000),
+    })
+  }
+
+  const delete_bookmark = async (params: {
+    db: Orama<typeof schema>
+    bookmark_id: number
+  }) => {
+    await remove(params.db, params.bookmark_id.toString())
   }
 
   return (
@@ -490,6 +494,7 @@ export const LocalDbProvider: React.FC<{
         is_initializing,
         indexed_bookmarks_percentage,
         upsert_bookmark,
+        delete_bookmark,
       }}
     >
       {props.children}
