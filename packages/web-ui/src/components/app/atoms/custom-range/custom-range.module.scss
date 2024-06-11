@@ -109,10 +109,16 @@
       @include hover {
         > g > rect {
           stroke: var(--neutral400);
+          @include dark {
+            stroke: var(--dark600);
+          }
         }
         > g > line {
           @include transition-150ms(stroke);
           stroke: var(--neutral400);
+          @include dark {
+            stroke: var(--dark600);
+          }
         }
       }
       :focus {
@@ -123,13 +129,20 @@
       }
       > g > rect {
         @include transition-150ms(stroke);
-        fill: #fff;
+        fill: var(--white);
         rx: var(--border-radius-8px);
         stroke: var(--neutral350);
+        @include dark {
+          fill: var(--dark200);
+          stroke: var(--dark500);
+        }
       }
       > g > line {
         @include transition-150ms(stroke);
         stroke: var(--neutral350);
+        @include dark {
+          stroke: var(--dark500);
+        }
         &:first-of-type {
           transform: translateY(-0.6px);
         }

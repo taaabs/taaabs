@@ -86,7 +86,7 @@
     @include hover {
       background-color: var(--blue100);
       @include dark {
-        background-color: var(--dark100);
+        background-color: var(--dark300);
       }
     }
     @include at992 {
@@ -299,9 +299,9 @@
       &--yields-no-results {
         @include hover {
           background-color: var(--red100);
-        }
-        > svg {
-          fill: var(--red) !important;
+          @include dark {
+            background-color: var(--dark300);
+          }
         }
       }
       > svg {

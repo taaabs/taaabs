@@ -4,7 +4,7 @@
 .toolbar {
   display: flex;
   align-items: center;
-  background-color: var(--blue700);
+  background-color: var(--accent-color);
   border-radius: var(--border-radius-999px);
   padding: 4px;
   gap: 3px;
@@ -23,8 +23,14 @@
     display: flex;
     align-items: center;
     color: var(--white);
+    @include dark {
+      color: var(--text-color-normal);
+    }
     @include hover {
       background-color: var(--blue600);
+      @include dark {
+        background-color: var(--blue700);
+      }
     }
     @include to992 {
       font-size: var(--font-size-14px);
@@ -36,8 +42,14 @@
     &--toggled {
       background-color: var(--white);
       color: var(--blue700);
+      @include dark {
+        background-color: var(--blue800);
+      }
       @include hover {
         background-color: var(--white);
+        @include dark {
+          background-color: var(--blue800);
+        }
       }
     }
     > span {
@@ -48,6 +60,9 @@
     height: 20px;
     width: 1px;
     background-color: var(--blue600);
+    @include dark {
+      background-color: var(--blue500);
+    }
     margin: 0 2px 0;
     @include at992 {
       height: 28px;
@@ -73,6 +88,9 @@
       fill: var(--white);
       height: var(--icon-dimension-15px);
       width: var(--icon-dimension-15px);
+      @include dark {
+        fill: var(--dark700);
+      }
       @include at992 {
         height: var(--icon-dimension-20px);
         width: var(--icon-dimension-20px);

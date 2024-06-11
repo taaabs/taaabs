@@ -32,6 +32,9 @@
   a {
     display: inline-block;
     border: 1px solid var(--black);
+    @include dark {
+      border-color: var(--dark500);
+    }
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     border-radius: var(--border-radius-10px);
