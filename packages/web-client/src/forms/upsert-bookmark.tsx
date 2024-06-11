@@ -20,8 +20,8 @@ import { Dictionary } from '@/dictionaries/dictionary'
 import { HtmlParser } from '@shared/utils/html-parser'
 
 type FormValues = {
-  title: string
-  note: string
+  title?: string
+  note?: string
   is_public?: boolean
 }
 
@@ -268,8 +268,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     const bookmark: UpsertBookmark_Params = {
       bookmark_id: props.bookmark?.id,
       is_public: is_bookmark_public,
-      title: form_data.title.trim() || undefined,
-      note: form_data.note.trim() || undefined,
+      title: form_data.title?.trim() || undefined,
+      note: form_data.note?.trim() || undefined,
       created_at: props.bookmark?.created_at
         ? new Date(props.bookmark.created_at)
         : undefined,
@@ -563,7 +563,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
               return (
                 <UiCommonAtom_Input
-                  value={field.value}
+                  value={field.value || ''}
                   on_change={(value) => {
                     if (!isSubmitting) {
                       field.onChange(value)
@@ -609,7 +609,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
 
               return (
                 <UiCommonAtom_Input
-                  value={field.value}
+                  value={field.value || ''}
                   on_change={(value) => {
                     if (!isSubmitting) {
                       field.onChange(value)
