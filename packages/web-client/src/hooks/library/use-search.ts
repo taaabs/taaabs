@@ -1,9 +1,7 @@
 import { Orama, Results, TypedDocument, search } from '@orama/orama'
 import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import {
-  searchWithHighlight,
-} from '@orama/plugin-match-highlight'
+import { searchWithHighlight } from '@orama/plugin-match-highlight'
 import { system_values } from '@shared/constants/system-values'
 import { browser_storage } from '@/constants/browser-storage'
 import { useParams, useSearchParams } from 'next/navigation'
@@ -27,7 +25,7 @@ type Highlights = {
 
 export type Result = TypedDocument<Orama<typeof schema>>
 
-export const use_search = (local_db_: LocalDb) => {
+export const use_search = (local_db: LocalDb) => {
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const [is_full_text, set_is_full_text] = useState<boolean>()
@@ -72,8 +70,8 @@ export const use_search = (local_db_: LocalDb) => {
     search_string_: string
   }): Promise<Results<Result>> => {
     if (
-      (!is_archived_filter && !local_db_.db) ||
-      (is_archived_filter && !local_db_.archived_db)
+      (!is_archived_filter && !local_db.db) ||
+      (is_archived_filter && !local_db.archived_db)
     )
       throw new Error('DB should be there.')
 
@@ -93,7 +91,7 @@ export const use_search = (local_db_: LocalDb) => {
       .trim()
 
     const result: Results<Result> = await searchWithHighlight(
-      !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
+      !is_archived_filter ? local_db.db! : local_db.archived_db!,
       {
         limit: system_values.max_library_search_results,
         term,
@@ -147,19 +145,19 @@ export const use_search = (local_db_: LocalDb) => {
             Object.values(SortBy).indexOf(SortBy.POPULARITY).toString()
               ? 'points'
               : sortby ==
-                Object.values(SortBy).indexOf(SortBy.UPDATED_AT).toString()
-              ? 'updated_at'
-              : sortby ==
-                Object.values(SortBy).indexOf(SortBy.VISITED_AT).toString()
-              ? 'visited_at'
-              : 'created_at',
+                  Object.values(SortBy).indexOf(SortBy.UPDATED_AT).toString()
+                ? 'updated_at'
+                : sortby ==
+                    Object.values(SortBy).indexOf(SortBy.VISITED_AT).toString()
+                  ? 'visited_at'
+                  : 'created_at',
           order:
             sortby ==
             Object.values(SortBy).indexOf(SortBy.POPULARITY).toString()
               ? 'DESC'
               : order == Object.values(Order).indexOf(Order.ASC).toString()
-              ? 'ASC'
-              : 'DESC',
+                ? 'ASC'
+                : 'DESC',
         },
         threshold: term ? 0 : undefined,
       },
@@ -261,8 +259,8 @@ export const use_search = (local_db_: LocalDb) => {
     search_string_: string
   }): Promise<Results<Result>> => {
     if (
-      (!is_archived_filter && !local_db_.db) ||
-      (is_archived_filter && !local_db_.archived_db)
+      (!is_archived_filter && !local_db.db) ||
+      (is_archived_filter && !local_db.archived_db)
     )
       throw new Error('DB should be there.')
 
@@ -280,11 +278,11 @@ export const use_search = (local_db_: LocalDb) => {
       .trim()
 
     const result: Results<Result> = await search(
-      !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
+      !is_archived_filter ? local_db.db! : local_db.archived_db!,
       {
         limit: system_values.max_library_search_results,
         term,
-        properties: ['plain_text'],
+        // properties: ['plain_text'],
         where: {
           ...(selected_tag_ids.length
             ? {
@@ -368,8 +366,8 @@ export const use_search = (local_db_: LocalDb) => {
 
   const get_hints = async () => {
     if (
-      (!is_archived_filter && !local_db_.db) ||
-      (is_archived_filter && !local_db_.archived_db)
+      (!is_archived_filter && !local_db.db) ||
+      (is_archived_filter && !local_db.archived_db)
     )
       return
 
@@ -436,7 +434,7 @@ export const use_search = (local_db_: LocalDb) => {
         const site_term = last_word.substring(5)
 
         const result: Results<Result> = await search(
-          !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
+          !is_archived_filter ? local_db.db! : local_db.archived_db!,
           {
             limit: system_values.max_library_search_results,
             term: site_term ? site_term : undefined,
@@ -552,7 +550,7 @@ export const use_search = (local_db_: LocalDb) => {
 
         if (last_word.length) {
           const result: Results<Result> = await search(
-            !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
+            !is_archived_filter ? local_db.db! : local_db.archived_db!,
             {
               term,
               properties: ['card'],
@@ -600,8 +598,8 @@ export const use_search = (local_db_: LocalDb) => {
                   sortby == '1'
                     ? 'updated_at'
                     : sortby == '2'
-                    ? 'visited_at'
-                    : 'created_at',
+                      ? 'visited_at'
+                      : 'created_at',
                 order: order == '1' ? 'ASC' : 'DESC',
               },
               threshold: 0,
@@ -663,7 +661,7 @@ export const use_search = (local_db_: LocalDb) => {
           )
         } else {
           const result: Results<Result> = await search(
-            !is_archived_filter ? local_db_.db! : local_db_.archived_db!,
+            !is_archived_filter ? local_db.db! : local_db.archived_db!,
             {
               term: term ? term : undefined,
               properties: ['card'],
@@ -711,8 +709,8 @@ export const use_search = (local_db_: LocalDb) => {
                   sortby == '1'
                     ? 'updated_at'
                     : sortby == '2'
-                    ? 'visited_at'
-                    : 'created_at',
+                      ? 'visited_at'
+                      : 'created_at',
                 order: order == '1' ? 'ASC' : 'DESC',
               },
               threshold: term ? 0 : undefined,

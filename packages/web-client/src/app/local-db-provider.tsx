@@ -16,6 +16,23 @@ import { LibrarySearch_RepositoryImpl } from '@repositories/modules/library-sear
 import { Bookmark_Entity } from '@repositories/modules/library-search/domain/entities/bookmark.entity'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search'
 import { english_stop_words } from '@shared/constants/english-stop-words'
+import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
+
+export type BookmarkForSearch = {
+  id: number
+  created_at: string
+  visited_at: string
+  updated_at: string
+  title?: string
+  note?: string
+  is_archived: boolean
+  is_unsorted?: boolean
+  stars?: number
+  tags: { name: string; id: number }[]
+  links: { url: string; site_path?: string }[]
+  tag_ids: number[]
+  points?: number
+}
 
 export const schema = {
   id: 'string',
@@ -47,6 +64,11 @@ export type LocalDb = {
   set_archived_db: (db?: Orama<typeof schema>) => void
   is_initializing?: boolean
   indexed_bookmarks_percentage?: number
+  upsert_bookmark: (params: {
+    db: Orama<typeof schema>
+    is_archived: boolean
+    bookmark: BookmarkForSearch
+  }) => Promise<void>
 }
 
 export const LocalDbContext = createContext<LocalDb | null>(null)
@@ -144,16 +166,16 @@ export const LocalDbProvider: React.FC<{
             : browser_storage.local_forage.authorized_library.search
                 .archived_cached_at_timestamp
           : !params.is_archived
-          ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
-              {
-                username: username as string,
-              },
-            )
-          : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-              {
-                username: username as string,
-              },
-            ),
+            ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
+                {
+                  username: username as string,
+                },
+              )
+            : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
+                {
+                  username: username as string,
+                },
+              ),
       )) || undefined
 
     const data_source = new LibrarySearch_DataSourceImpl(
@@ -269,12 +291,14 @@ export const LocalDbProvider: React.FC<{
             : browser_storage.local_forage.authorized_library.search
                 .archived_index
           : !params.is_archived
-          ? browser_storage.local_forage.public_library.search.index({
-              username: username as string,
-            })
-          : browser_storage.local_forage.public_library.search.archived_index({
-              username: username as string,
-            }),
+            ? browser_storage.local_forage.public_library.search.index({
+                username: username as string,
+              })
+            : browser_storage.local_forage.public_library.search.archived_index(
+                {
+                  username: username as string,
+                },
+              ),
       )
 
       if (cached_index) {
@@ -405,6 +429,56 @@ export const LocalDbProvider: React.FC<{
     }
   }
 
+  // Used solely for updating highlights.
+  const upsert_bookmark = async (params: {
+    db: Orama<typeof schema>
+    is_archived: boolean
+    bookmark: BookmarkForSearch
+  }) => {
+    await remove(params.db, params.bookmark.id.toString())
+
+    if (
+      (params.is_archived && params.bookmark.is_archived) ||
+      (!params.is_archived && !params.bookmark.is_archived)
+    ) {
+      const sites = params.bookmark.links.map(
+        (link) =>
+          `${get_domain_from_url(link.url)}${
+            link.site_path ? `/${link.site_path}` : ''
+          }`,
+      )
+      await insert(params.db, {
+        id: params.bookmark.id.toString(),
+        card:
+          (params.bookmark.title ? `${params.bookmark.title} ` : '') +
+          (params.bookmark.note ? `${params.bookmark.note} ` : '') +
+          params.bookmark.tags.map((tag) => tag.name).join(' ') +
+          (params.bookmark.tags.length ? ' ' : '') +
+          sites.map((site) => site.replace('/', ' › ')).join(' '),
+        sites,
+        sites_variants: sites
+          .map((site) => get_site_variants_for_search(site))
+          .flat(),
+        tag_ids: params.bookmark.tags.map((tag) => tag.id),
+        tags: params.bookmark.tags.map((tag) => tag.name),
+        created_at: Math.round(
+          new Date(params.bookmark.created_at).getTime() / 1000,
+        ),
+        updated_at: Math.round(
+          new Date(params.bookmark.updated_at).getTime() / 1000,
+        ),
+        visited_at: Math.round(
+          new Date(params.bookmark.visited_at).getTime() / 1000,
+        ),
+        is_unsorted: params.bookmark.is_unsorted,
+        stars: params.bookmark.stars,
+        points: params.bookmark.points
+          ? parseInt(`${params.bookmark.points}${params.bookmark.created_at}`)
+          : Math.round(new Date(params.bookmark.created_at).getTime() / 1000),
+      })
+    }
+  }
+
   return (
     <LocalDbContext.Provider
       value={{
@@ -415,6 +489,7 @@ export const LocalDbProvider: React.FC<{
         set_archived_db,
         is_initializing,
         indexed_bookmarks_percentage,
+        upsert_bookmark,
       }}
     >
       {props.children}

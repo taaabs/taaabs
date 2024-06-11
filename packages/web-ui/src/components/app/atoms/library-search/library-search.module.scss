@@ -53,6 +53,9 @@
     border-color: var(--red100) !important;
     background-color: rgba(254, 242, 242, 0.8);
     box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.4);
+    @include dark {
+      border-color: var(--red900) !important;
+    }
     svg {
       fill: var(--red) !important;
     }
@@ -66,6 +69,9 @@
   }
   &--focus-yields-no-results {
     border-color: var(--red300) !important;
+    @include dark {
+      border-color: var(--red) !important;
+    }
     box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.7);
   }
   &__left-side {

@@ -414,9 +414,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             is_archived: is_archived_filter,
             force_reinitialization: true,
             include_visited_at:
-              sort_by_view_options_hook.current_sort_by_ == SortBy.VISITED_AT || undefined,
+              sort_by_view_options_hook.current_sort_by_ == SortBy.VISITED_AT ||
+              undefined,
             include_points:
-              sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY || undefined,
+              sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY ||
+              undefined,
           })
           search_cache_to_be_cleared.current = false
         } else {
@@ -1178,10 +1180,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         sort_by_view_options_hook.current_sort_by_ == SortBy.CREATED_AT
           ? new Date(bookmark.created_at)
           : sort_by_view_options_hook.current_sort_by_ == SortBy.UPDATED_AT
-          ? new Date(bookmark.updated_at)
-          : sort_by_view_options_hook.current_sort_by_ == SortBy.VISITED_AT
-          ? new Date(bookmark.visited_at)
-          : new Date(bookmark.created_at)
+            ? new Date(bookmark.updated_at)
+            : sort_by_view_options_hook.current_sort_by_ == SortBy.VISITED_AT
+              ? new Date(bookmark.visited_at)
+              : new Date(bookmark.created_at)
       }
       search_params_={search_params.toString()}
       tags_={
@@ -1371,7 +1373,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           ],
           cover: bookmark.cover,
         }
-        await dispatch(
+        const updated_bookmark = await dispatch(
           bookmarks_actions.upsert_bookmark({
             bookmark: modified_bookmark,
             last_authorized_counts_params:
@@ -1391,7 +1393,34 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             encryption_key: auth_context.auth_data!.encryption_key,
           }),
         )
+        // Update highlights.
         if (search_hook.result?.hits.length) {
+          await props.local_db.upsert_bookmark({
+            db: (is_archived_filter
+              ? props.local_db.archived_db
+              : props.local_db.db)!,
+            is_archived: is_archived_filter,
+            bookmark: {
+              id: bookmark.id,
+              is_archived: is_archived_filter,
+              is_unsorted: updated_bookmark.is_unsorted,
+              title: updated_bookmark.title,
+              note: updated_bookmark.note,
+              tags: updated_bookmark.tags.map((tag) => ({
+                name: tag.name,
+                id: tag.id,
+              })),
+              links: updated_bookmark.links.map((link) => ({
+                url: link.url,
+                site_path: link.site_path,
+              })),
+              created_at: updated_bookmark.created_at,
+              visited_at: bookmark.visited_at,
+              updated_at: updated_bookmark.updated_at,
+              stars: updated_bookmark.stars,
+              tag_ids: updated_bookmark.tags.map((tag) => tag.id),
+            },
+          })
           await search_hook.get_result({
             search_string: search_hook.search_string,
             refresh_highlights_only: true,
@@ -1428,7 +1457,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 })),
                 cover: bookmark.cover,
               }
-              await dispatch(
+              const updated_bookmark = await dispatch(
                 bookmarks_actions.upsert_bookmark({
                   bookmark: modified_bookmark,
                   last_authorized_counts_params:
@@ -1442,7 +1471,34 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   encryption_key: auth_context.auth_data!.encryption_key,
                 }),
               )
+              // Update highlights.
               if (search_hook.result?.hits.length) {
+                await props.local_db.upsert_bookmark({
+                  db: (is_archived_filter
+                    ? props.local_db.archived_db
+                    : props.local_db.db)!,
+                  is_archived: is_archived_filter,
+                  bookmark: {
+                    id: bookmark.id,
+                    is_archived: is_archived_filter,
+                    is_unsorted: updated_bookmark.is_unsorted,
+                    title: updated_bookmark.title,
+                    note: updated_bookmark.note,
+                    tags: updated_bookmark.tags.map((tag) => ({
+                      name: tag.name,
+                      id: tag.id,
+                    })),
+                    links: updated_bookmark.links.map((link) => ({
+                      url: link.url,
+                      site_path: link.site_path,
+                    })),
+                    created_at: updated_bookmark.created_at,
+                    visited_at: bookmark.visited_at,
+                    updated_at: updated_bookmark.updated_at,
+                    stars: updated_bookmark.stars,
+                    tag_ids: updated_bookmark.tags.map((tag) => tag.id),
+                  },
+                })
                 await search_hook.get_result({
                   search_string: search_hook.search_string,
                   refresh_highlights_only: true,
@@ -1505,7 +1561,34 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             encryption_key: auth_context.auth_data!.encryption_key,
           }),
         )
+        // Update highlights.
         if (search_hook.result?.hits.length) {
+          await props.local_db.upsert_bookmark({
+            db: (is_archived_filter
+              ? props.local_db.archived_db
+              : props.local_db.db)!,
+            is_archived: is_archived_filter,
+            bookmark: {
+              id: bookmark.id,
+              is_archived: is_archived_filter,
+              is_unsorted: updated_bookmark.is_unsorted,
+              title: updated_bookmark.title,
+              note: updated_bookmark.note,
+              tags: updated_bookmark.tags.map((tag) => ({
+                name: tag.name,
+                id: tag.id,
+              })),
+              links: updated_bookmark.links.map((link) => ({
+                url: link.url,
+                site_path: link.site_path,
+              })),
+              created_at: updated_bookmark.created_at,
+              visited_at: bookmark.visited_at,
+              updated_at: updated_bookmark.updated_at,
+              stars: updated_bookmark.stars,
+              tag_ids: updated_bookmark.tags.map((tag) => tag.id),
+            },
+          })
           await search_hook.get_result({
             search_string: search_hook.search_string,
             refresh_highlights_only: true,
@@ -1942,7 +2025,34 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     tags_to_remove_from_search_params,
                   )
                 }
+                // Update highlights.
                 if (search_hook.result?.hits.length) {
+                  await props.local_db.upsert_bookmark({
+                    db: (is_archived_filter
+                      ? props.local_db.archived_db
+                      : props.local_db.db)!,
+                    is_archived: is_archived_filter,
+                    bookmark: {
+                      id: bookmark.id,
+                      is_archived: is_archived_filter,
+                      is_unsorted: updated_bookmark.is_unsorted,
+                      title: updated_bookmark.title,
+                      note: updated_bookmark.note,
+                      tags: updated_bookmark.tags.map((tag) => ({
+                        name: tag.name,
+                        id: tag.id,
+                      })),
+                      links: updated_bookmark.links.map((link) => ({
+                        url: link.url,
+                        site_path: link.site_path,
+                      })),
+                      created_at: updated_bookmark.created_at,
+                      visited_at: bookmark.visited_at,
+                      updated_at: updated_bookmark.updated_at,
+                      stars: updated_bookmark.stars,
+                      tag_ids: updated_bookmark.tags.map((tag) => tag.id),
+                    },
+                  })
                   await search_hook.get_result({
                     search_string: search_hook.search_string,
                     refresh_highlights_only: true,
@@ -2163,17 +2273,17 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           bookmarks_hook.is_fetching_more_bookmarks
             ? props.dictionary.app.library.loading
             : (!search_hook.search_string.length &&
-                !is_fetching_first_bookmarks &&
-                (!bookmarks_hook.bookmarks ||
-                  bookmarks_hook.bookmarks.length == 0)) ||
-              (search_hook.search_string.length &&
-                (!bookmarks_hook.bookmarks ||
-                  bookmarks_hook.bookmarks.length == 0))
-            ? props.dictionary.app.library.no_results
-            : !bookmarks_hook.has_more_bookmarks ||
-              bookmarks_hook.bookmarks?.length == search_hook.count
-            ? props.dictionary.app.library.end_of_resutls
-            : undefined
+                  !is_fetching_first_bookmarks &&
+                  (!bookmarks_hook.bookmarks ||
+                    bookmarks_hook.bookmarks.length == 0)) ||
+                (search_hook.search_string.length &&
+                  (!bookmarks_hook.bookmarks ||
+                    bookmarks_hook.bookmarks.length == 0))
+              ? props.dictionary.app.library.no_results
+              : !bookmarks_hook.has_more_bookmarks ||
+                  bookmarks_hook.bookmarks?.length == search_hook.count
+                ? props.dictionary.app.library.end_of_resutls
+                : undefined
         }
         translations_={{
           mobile_title_bar_: props.dictionary.app.menu_items.library,

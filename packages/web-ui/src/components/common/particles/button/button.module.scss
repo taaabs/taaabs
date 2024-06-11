@@ -16,7 +16,10 @@
   @include transition-150ms(background-color);
   border-radius: var(--border-radius-999px);
   @include hover {
-    background: var(--blue800);
+    background-color: var(--blue800);
+    @include dark {
+      background-color: var(--blue700);
+    }
   }
   height: var(--button-dimension-40px);
   padding: 0 16px;
