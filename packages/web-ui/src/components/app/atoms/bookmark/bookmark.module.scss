@@ -3,16 +3,13 @@
 
 .container {
   @include to992 {
-    border-top: var(--border-secondary);
+    border-top: var(--border-primary);
     border-bottom: var(--border-secondary);
   }
   @include at992 {
-    border: var(--border-secondary);
+    border: var(--border-primary);
     border-radius: var(--border-radius-12px);
     @include transition-150ms(border-color);
-    @include dark {
-      background: blue;
-    }
   }
   &--compact {
     @include to992 {
@@ -30,7 +27,7 @@
   }
   &--clickable {
     @include hover {
-      border-color: var(--neutral300);
+      border-color: var(--border-color-hover);
     }
   }
 }
@@ -40,7 +37,10 @@
   &__card {
     display: grid;
     grid-template: 'title cover' 'date cover' 1fr 'tags tags' / 1fr auto;
-    background: var(--white);
+    background-color: var(--white);
+    @include dark {
+      background-color: var(--dark100);
+    }
     @include at992 {
       grid-template: 'cover title' 'cover date' 1fr 'cover tags' / auto 1fr;
       border-top-left-radius: 11px;
@@ -65,6 +65,9 @@
         width: 90px;
         height: 68px;
         background-color: #f3f3f3;
+        @include dark {
+          background-color: var(--dark200);
+        }
         @include at992 {
           width: 110px;
           height: 82px;
@@ -73,9 +76,15 @@
           width: 100%;
           height: 100%;
           object-fit: cover;
+          @include dark {
+            filter: brightness(var(--dark-mode-brightness-filter));
+          }
         }
         > svg {
           fill: var(--neutral200);
+          @include dark {
+            fill: var(--dark500);
+          }
           width: 18px;
           @include at992 {
             width: 20px;
@@ -102,7 +111,6 @@
     &__title {
       grid-area: title;
       display: inline;
-      color: var(--text-color-normal);
       @include to992 {
         padding-left: var(--padding-14px);
         padding-top: 11px;
@@ -116,7 +124,10 @@
         position: relative;
         font-size: 11px;
         font-weight: var(--font-weight-inter-bold);
-        color: var(--white);
+        color: white;
+        @include dark {
+          color: var(--dark700);
+        }
         transform: translateY(-3px);
         margin-right: 9px;
         margin-left: 4px;
@@ -196,20 +207,34 @@
           width: var(--button-dimension-28px);
           height: var(--button-dimension-28px);
           background-color: var(--blue100);
+          @include dark {
+            background-color: var(--dark300);
+          }
           svg {
             fill: var(--blue600);
+            @include dark {
+              fill: var(--blue500);
+            }
             @include transition-150ms(fill);
             width: var(--icon-dimension-16px);
           }
           @include hover {
             background-color: var(--blue200);
+            @include dark {
+              background-color: var(--dark400);
+            }
             svg {
-              fill: var(--blue700);
+              @include light {
+                fill: var(--blue700);
+              }
             }
           }
         }
         &--toggled {
           background-color: var(--blue200);
+          @include dark {
+            background-color: var(--dark400);
+          }
           svg {
             fill: var(--blue700);
           }
@@ -234,11 +259,15 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        background-color: var(--green50);
         border-radius: var(--border-radius-999px);
         height: var(--button-dimension-28px);
         padding: var(--padding-10px);
         color: var(--green600);
+        background-color: var(--green50);
+        @include dark {
+          color: var(--green500);
+          background-color: var(--green900);
+        }
         @include transition-150ms;
         // Needed by swipable and sortable - element touch hold detection.
         @include touch-screen {
@@ -250,9 +279,15 @@
         font-size: var(--font-size-14px);
         @include hover {
           background-color: var(--green100);
+          @include dark {
+            background-color: var(--green800);
+          }
         }
         &--selected {
           background-color: var(--green600);
+          @include dark {
+            background-color: var(--green700);
+          }
           @include hover {
             background-color: var(--green700);
           }
@@ -261,6 +296,9 @@
           font-weight: var(--font-weight-inter-medium);
           &--selected {
             color: var(--white);
+            @include dark {
+              color: var(--text-color-normal);
+            }
           }
         }
         &__yields {
@@ -285,7 +323,14 @@
           font-weight: var(--font-weight-inter-semi-bold);
           font-size: var(--font-size-14px);
           &--has-poits {
-            background: linear-gradient(to right, var(--blue100), white);
+            background: linear-gradient(to right, var(--blue100), transparent);
+            @include dark {
+              background: linear-gradient(
+                to right,
+                var(--dark300),
+                transparent
+              );
+            }
           }
           &__emoji {
             position: relative;
@@ -399,7 +444,10 @@
             }
           }
           &__amount {
-            color: var(--brand-color);
+            color: var(--accent-color);
+            @include dark {
+              color: inherit;
+            }
             @include hover {
               @include text-decoration-underline;
             }
@@ -510,10 +558,16 @@
           > img {
             width: 16px;
             height: 16px;
+            @include dark {
+              filter: brightness(var(--dark-mode-brightness-filter));
+            }
           }
           > svg {
             width: 16px;
             fill: #737373;
+            @include dark {
+              fill: var(--dark500);
+            }
           }
           &--highlighted {
             background-color: var(--highlight);
@@ -529,15 +583,26 @@
           width: var(--button-dimension-40px);
           height: var(--button-dimension-28px);
           background-color: var(--blue100);
+          @include dark {
+            background-color: var(--dark200);
+          }
           svg {
             fill: var(--blue600);
             @include transition-150ms(fill);
             width: 14px;
+            @include dark {
+              fill: var(--blue500);
+            }
           }
           @include hover {
-            background: var(--blue200);
+            background-color: var(--blue200);
+            @include dark {
+              background-color: var(--dark300);
+            }
             svg {
-              fill: var(--blue700);
+              @include light {
+                fill: var(--blue700);
+              }
             }
           }
         }
@@ -612,16 +677,27 @@
           @include transition-150ms(background-color);
           width: var(--button-dimension-28px);
           height: var(--button-dimension-28px);
-          background: var(--neutral100);
-          svg {
+          background-color: var(--neutral100);
+          @include dark {
+            background-color: var(--dark200);
+          }
+          > svg {
             fill: var(--neutral500);
+            @include dark {
+              fill: var(--dark500);
+            }
             @include transition-150ms(fill);
             width: 10px;
           }
           @include hover {
-            background: var(--neutral200);
-            svg {
-              fill: var(--neutral600);
+            background-color: var(--neutral200);
+            @include dark {
+              background-color: var(--dark300);
+            }
+            > svg {
+              @include light {
+                fill: var(--neutral600);
+              }
             }
           }
         }
@@ -635,22 +711,38 @@
             @include transition-150ms(background-color);
             width: var(--button-dimension-28px);
             height: var(--button-dimension-28px);
-            background: var(--neutral100);
-            svg {
+            background-color: var(--neutral100);
+            @include dark {
+              background-color: var(--dark200);
+            }
+            > svg {
               fill: var(--neutral500);
               @include transition-150ms(fill);
               width: var(--icon-dimension-16px);
+              @include dark {
+                fill: var(--dark500);
+              }
             }
             @include hover {
-              background: var(--neutral200);
-              svg {
-                fill: var(--neutral600);
+              background-color: var(--neutral200);
+              @include dark {
+                background-color: var(--dark300);
+              }
+              > svg {
+                @include light {
+                  fill: var(--neutral600);
+                }
               }
             }
             &--toggled {
               background-color: var(--neutral200);
-              svg {
-                fill: var(--neutral600);
+              @include dark {
+                background-color: var(--dark300);
+              }
+              > svg {
+                @include light {
+                  fill: var(--neutral600);
+                }
               }
             }
           }
@@ -663,6 +755,9 @@
         > svg {
           width: 9px;
           fill: var(--neutral400);
+          @include dark {
+            fill: var(--dark400);
+          }
         }
       }
     }

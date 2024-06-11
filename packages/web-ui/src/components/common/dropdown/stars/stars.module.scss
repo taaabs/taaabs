@@ -15,15 +15,27 @@
   padding: 0 2px;
   > svg {
     fill: var(--neutral200);
+    @include dark {
+      fill: var(--dark400);
+    }
     width: 21px;
   }
   &--checked > svg {
     fill: var(--yellow400);
+    @include dark {
+      fill: var(--yellow400); // Dupe needed for some reason.
+    }
   }
   &--hovered > svg {
     fill: var(--yellow400);
+    @include dark {
+      fill: var(--yellow400); // Dupe needed for some reason.
+    }
   }
   &--hovered-checked > svg {
     fill: var(--neutral200);
+    @include dark {
+      fill: var(--dark400);
+    }
   }
 }

@@ -12,6 +12,7 @@ import DensityDefault from '../../../../assets/icons/density-default.svg'
 import DensityCompact from '../../../../assets/icons/density-compact.svg'
 import Document from '../../../../assets/icons/document.svg'
 import Edit from '../../../../assets/icons/edit.svg'
+import Github from '../../../../assets/icons/github.svg'
 import Globe from '../../../../assets/icons/globe.svg'
 import Google from '../../../../assets/icons/google.svg'
 import GreaterThan from '../../../../assets/icons/greater-than.svg'
@@ -25,6 +26,8 @@ import Info from '../../../../assets/icons/info.svg'
 import LessThan from '../../../../assets/icons/less-than.svg'
 import Link from '../../../../assets/icons/link.svg'
 import LogOut from '../../../../assets/icons/log-out.svg'
+import LogoDark from '../../../../assets/icons/logo-dark.svg'
+import Logo from '../../../../assets/icons/logo.svg'
 import OverviewFilled from '../../../../assets/icons/overview-filled.svg'
 import Overview from '../../../../assets/icons/overview.svg'
 import Pin from '../../../../assets/icons/pin.svg'
@@ -39,9 +42,10 @@ import Settings from '../../../../assets/icons/settings.svg'
 import Sidebar from '../../../../assets/icons/sidebar.svg'
 import StarFilled from '../../../../assets/icons/star-filled.svg'
 import Star from '../../../../assets/icons/star.svg'
-import Sun from '../../../../assets/icons/sun.svg'
+import ThemeAuto from '../../../../assets/icons/theme-auto.svg'
+import ThemeDark from '../../../../assets/icons/theme-dark.svg'
+import ThemeLight from '../../../../assets/icons/theme-light.svg'
 import ThreeDots from '../../../../assets/icons/three-dots.svg'
-import Logo from '../../../../assets/icons/logo.svg'
 import MobileTitleBarLeft from '../../../../assets/icons/mobile-title-bar-left.svg'
 import MobileTitleBarRight from '../../../../assets/icons/mobile-title-bar-right.svg'
 import More from '../../../../assets/icons/more.svg'
@@ -67,6 +71,7 @@ export namespace Icon {
     | 'DENSITY_COMPACT'
     | 'DOCUMENT'
     | 'EDIT'
+    | 'GITHUB'
     | 'GLOBE'
     | 'GOOGLE'
     | 'GREATER_THAN'
@@ -80,6 +85,8 @@ export namespace Icon {
     | 'LESS_THAN'
     | 'LINK'
     | 'LOG_OUT'
+    | 'LOGO_DARK'
+    | 'LOGO'
     | 'OVERVIEW_FILLED'
     | 'OVERVIEW'
     | 'PIN'
@@ -94,9 +101,10 @@ export namespace Icon {
     | 'SIDEBAR'
     | 'STAR_FILLED'
     | 'STAR'
-    | 'SUN'
+    | 'THEME_AUTO'
+    | 'THEME_DARK'
+    | 'THEME_LIGHT'
     | 'THREE_DOTS'
-    | 'LOGO'
     | 'MOBILE_TITLE_BAR_LEFT'
     | 'MOBILE_TITLE_BAR_RIGHT'
     | 'MORE'
@@ -157,6 +165,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'EDIT':
       icon = <Edit />
       break
+    case 'GITHUB':
+      icon = <Github />
+      break
     case 'GLOBE':
       icon = <Globe />
       break
@@ -195,6 +206,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'LOG_OUT':
       icon = <LogOut />
+      break
+    case 'LOGO_DARK':
+      icon = <LogoDark />
       break
     case 'LOGO':
       icon = <Logo />
@@ -256,8 +270,14 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'STAR':
       icon = <Star />
       break
-    case 'SUN':
-      icon = <Sun />
+    case 'THEME_AUTO':
+      icon = <ThemeAuto />
+      break
+    case 'THEME_DARK':
+      icon = <ThemeDark />
+      break
+    case 'THEME_LIGHT':
+      icon = <ThemeLight />
       break
     case 'THREE_DOTS':
       icon = <ThreeDots />

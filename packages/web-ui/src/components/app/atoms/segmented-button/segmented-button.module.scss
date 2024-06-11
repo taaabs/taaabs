@@ -11,7 +11,7 @@
   position: relative;
   @include transition-150ms(outline-color);
   @include hover {
-    outline-color: var(--neutral250);
+    outline-color: var(--border-color-hover);
   }
   &--disabled {
     opacity: var(--dimmed-opacity);
@@ -35,6 +35,9 @@
     top: 50%;
     transform: translateY(-50%);
     background-color: var(--neutral150);
+    @include dark {
+      background-color: var(--dark200);
+    }
     @include transition-250ms(opacity);
     opacity: 0;
   }
@@ -59,6 +62,9 @@
 }
 .selection {
   background-color: var(--white);
+  @include dark {
+    background-color: var(--dark200);
+  }
   border-radius: var(--border-radius-10px);
   box-shadow: var(--box-shadow-strong);
   position: absolute;

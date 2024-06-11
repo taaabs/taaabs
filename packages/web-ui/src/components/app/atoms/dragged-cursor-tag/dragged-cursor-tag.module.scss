@@ -7,14 +7,18 @@
   top: -5px;
   left: -5px;
   color: var(--white);
+  background-color: var(--green600);
+  @include dark {
+    color: var(--text-color-normal);
+    background-color: var(--green700);
+  }
   font-size: var(--font-size-13px);
   display: flex;
   align-items: center;
-  background-color: var(--blue700);
   font-weight: var(--font-weight-inter-medium);
-  border-radius: var(--border-radius-8px);
-  padding: 4px 8px;
-  box-shadow: var(--box-shadow-blue-strong);
+  border-radius: var(--border-radius-999px);
+  padding: 4px 10px;
+  box-shadow: var(--box-shadow-green-strong);
   opacity: 0;
   @include transition-150ms(opacity);
 }

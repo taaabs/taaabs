@@ -3,7 +3,7 @@
 
 .container {
   border-bottom: var(--border-primary);
-  background: var(--header-transparent-background);
+  background-color: var(--header-transparent-background);
   backdrop-filter: var(--backdrop-filter);
   height: var(--header-desktop-height);
 }
@@ -27,7 +27,9 @@
   border-radius: var(--border-radius-10px);
   padding: 4px 8px;
   background-color: var(--white);
-  @include transition-150ms();
+  @include dark {
+    background-color: var(--dark100);
+  }
   @include hover {
     border-color: var(--border-color-hover);
   }

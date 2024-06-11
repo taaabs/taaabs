@@ -31,6 +31,16 @@
   font-weight: var(--font-weight-inter-tight-medium);
   color: var(--white);
   background-color: var(--green600);
+  @include dark {
+    background-color: var(--green700);
+    color: var(--text-color-normal);
+  }
+  @include hover {
+    background-color: var(--green700);
+    @include dark {
+      background-color: var(--green800);
+    }
+  }
   @include transition-150ms;
   @include hover {
     background-color: var(--green700);

@@ -40,13 +40,13 @@
       padding: 0 40px;
     }
     &::before {
+      position: fixed;
+      content: '';
       top: 0;
       left: 0;
       width: 100vw;
-      content: '';
       height: var(--header-desktop-height);
-      background: var(--header-background);
-      position: fixed;
+      background-color: var(--header-background);
     }
   }
 }
@@ -143,7 +143,7 @@
         width: 42px;
         height: var(--button-dimension-40px);
         > svg {
-          fill: var(--brand-color);
+          fill: var(--accent-color);
         }
         > svg:first-child {
           height: 20px;

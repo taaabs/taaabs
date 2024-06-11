@@ -12,6 +12,9 @@
   @include transition-150ms(background-color);
   @include hover {
     background-color: var(--neutral100);
+    @include dark {
+      background-color: var(--dark200);
+    }
   }
   > svg {
     fill: var(--black);

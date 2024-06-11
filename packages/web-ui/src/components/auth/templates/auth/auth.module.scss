@@ -65,7 +65,7 @@
       display: inline-flex;
       > svg {
         height: 60px;
-        fill: var(--brand-color);
+        fill: var(--accent-color);
       }
     }
   }
@@ -104,7 +104,7 @@
       align-items: flex-end;
     }
     > div > a {
-      color: var(--brand-color);
+      color: var(--accent-color);
       font-weight: var(--font-weight-inter-medium);
       @include hover {
         @include text-decoration-underline;

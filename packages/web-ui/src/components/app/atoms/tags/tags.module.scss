@@ -20,7 +20,10 @@
   font-size: 14px;
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-  color: var(--brand-color);
+  color: var(--blue600);
+  @include dark {
+    color: var(--blue500);
+  }
   width: 22px;
   margin-right: 2px;
   &::before {
@@ -34,6 +37,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    @include dark {
+      background-color: var(--dark200);
+    }
   }
 }
 .tag {
@@ -46,12 +52,19 @@
   text-align: left;
   height: 24px;
   font-size: 13px;
-  background-color: var(--green50);
   border-radius: var(--border-radius-999px);
   color: var(--green600);
+  background-color: var(--green50);
+  @include dark {
+    color: var(--green500);
+    background-color: var(--green900);
+  }
   @include transition-150ms(background-color);
   @include hover {
     background-color: var(--green100);
+    @include dark {
+      background-color: var(--green800);
+    }
   }
   > span:first-child {
     font-weight: var(--font-weight-inter-tight-medium);

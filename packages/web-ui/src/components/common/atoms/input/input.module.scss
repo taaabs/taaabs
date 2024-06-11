@@ -4,16 +4,30 @@
 .field {
   width: 100%;
   background-color: var(--white);
-  border: 1.5px solid var(--neutral200);
   border-radius: var(--border-radius-10px);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1.5px solid var(--neutral200);
+  @include dark {
+    border-color: var(--dark300);
+    background-color: var(--dark100);
+  }
+  @include light {
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
   @include transition-150ms();
   @include hover {
     border-color: var(--neutral250);
+    @include dark {
+      border-color: var(--dark400);
+    }
   }
   &:focus {
     border-color: var(--blue400);
-    box-shadow: inset 0 1px 3px var(--blue100);
+    @include dark {
+      border-color: var(--blue600);
+    }
+    @include light {
+      box-shadow: inset 0 1px 3px var(--blue100);
+    }
   }
   &--error {
     background: var(--red100);

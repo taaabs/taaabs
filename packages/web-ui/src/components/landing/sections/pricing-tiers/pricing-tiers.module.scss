@@ -76,7 +76,7 @@
         @include transition-250ms;
         &--selected {
           color: var(--white);
-          background-color: var(--brand-color);
+          background-color: var(--accent-color);
         }
       }
     }
@@ -106,7 +106,7 @@
     padding: 0 40px;
   }
   &--best-value {
-    border-color: var(--brand-color);
+    border-color: var(--accent-color);
     border-width: 2px;
     @include to768 {
       margin-top: 8px;
@@ -122,7 +122,7 @@
       font-family: var(--font-family-plus-jakarta-sans);
       font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
       letter-spacing: 1px;
-      background-color: var(--brand-color);
+      background-color: var(--accent-color);
       color: var(--white);
       position: absolute;
       padding: 4px 10px 5px 10px;
@@ -142,7 +142,7 @@
       padding-top: 32px;
     }
     &__name {
-      color: var(--brand-color);
+      color: var(--accent-color);
       font-size: var(--font-size-28px);
       font-family: var(--font-family-plus-jakarta-sans);
       font-weight: var(--font-weight-plus-jakarta-sans-bold);
@@ -229,7 +229,7 @@
           flex-shrink: 0;
           width: 24px;
           height: 24px;
-          background: var(--brand-color);
+          background: var(--accent-color);
           border-radius: var(--border-radius-999px);
           @include at768 {
             width: 30px;
