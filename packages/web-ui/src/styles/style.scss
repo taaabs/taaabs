@@ -8,6 +8,7 @@
   --white: #fff;
   --black: var(--neutral900);
   --red: var(--red600);
+  --yellow: var(--yellow400);
   --highlight: #ffff00;
 
   // Text
@@ -50,6 +51,7 @@ html[data-theme='dark'] {
   --white: var(--dark50);
   --black: var(--dark700);
   --red: var(--red700);
+  --yellow: var(--yellow500);
   --highlight: #ffff00;
 
   // Text
@@ -290,7 +292,12 @@ small {
 }
 .Toastify__toast {
   border-radius: var(--border-radius-12px) !important;
-  box-shadow: var(--box-shadow) !important;
+  @include light {
+    box-shadow: var(--box-shadow) !important;
+  }
+  @include dark {
+    background-color: var(--dark300);
+  }
   @include to992 {
     margin: 12px 24px 8px 24px !important;
   }

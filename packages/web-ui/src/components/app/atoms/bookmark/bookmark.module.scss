@@ -165,7 +165,7 @@
           @include at992 {
             width: 18px;
           }
-          fill: var(--yellow400);
+          fill: var(--yellow);
         }
       }
       &__text {
@@ -263,7 +263,7 @@
         height: var(--button-dimension-28px);
         padding: var(--padding-10px);
         color: var(--green600);
-        background-color: var(--green50);
+        background-color: var(--green100);
         @include dark {
           color: var(--green500);
           background-color: var(--green900);
@@ -278,7 +278,7 @@
         font-family: var(--font-family-inter-tight);
         font-size: var(--font-size-14px);
         @include hover {
-          background-color: var(--green100);
+          background-color: var(--green200);
           @include dark {
             background-color: var(--green800);
           }
@@ -341,7 +341,7 @@
             }
             &::before {
               content: '';
-              background-color: var(--yellow400);
+              background-color: var(--yellow);
               border-radius: 8px 8px 12px 12px;
               position: absolute;
               width: 100%;

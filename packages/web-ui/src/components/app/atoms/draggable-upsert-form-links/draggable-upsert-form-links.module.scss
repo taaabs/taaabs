@@ -32,6 +32,9 @@
     }
     > svg {
       fill: var(--white);
+      @include dark {
+        fill: var(--dark700);
+      }
       width: 15px;
       transform: rotate(45deg);
     }
@@ -46,6 +49,9 @@
       background-color: transparent;
       border: none;
       color: var(--white);
+      @include dark {
+        color: var(--text-color-normal);
+      }
       font-weight: var(--font-weight-inter-medium);
       padding: var(--padding-12px) var(--padding-16px);
       caret-color: var(--white);
@@ -69,11 +75,15 @@
           height: 0;
           > select {
             color: var(--white);
+            @include dark {
+              color: var(--text-color-normal);
+            }
             min-width: 100px;
             background-color: transparent;
             border: none;
             text-align: right;
             > option {
+              background-color: var(--background);
               color: var(--text-color-normal);
             }
           }
@@ -92,6 +102,9 @@
     border-bottom-right-radius: var(--border-radius-12px);
     > svg {
       fill: var(--white);
+      @include dark {
+        fill: var(--dark700);
+      }
       width: 9px;
     }
   }

@@ -54,14 +54,14 @@
   font-size: 13px;
   border-radius: var(--border-radius-999px);
   color: var(--green600);
-  background-color: var(--green50);
+  background-color: var(--green100);
   @include dark {
     color: var(--green500);
     background-color: var(--green900);
   }
   @include transition-150ms(background-color);
   @include hover {
-    background-color: var(--green100);
+    background-color: var(--green200);
     @include dark {
       background-color: var(--green800);
     }

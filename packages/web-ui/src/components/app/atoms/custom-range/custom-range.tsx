@@ -470,7 +470,9 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                 </div>
                 {unsorted_count !== undefined && unsorted_count > 0 && (
                   <div
-                    className={styles['custom-range__details__counts__unsorted']}
+                    className={
+                      styles['custom-range__details__counts__unsorted']
+                    }
                   >
                     <span>{unsorted_count}</span>
                   </div>
@@ -528,8 +530,16 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                       y2="1"
                       style={{ pointerEvents: 'none' }}
                     >
-                      <stop offset="0%" stopColor="#2563eb" stopOpacity={1} />
-                      <stop offset="100%" stopColor="#2563eb" stopOpacity={0} />
+                      <stop
+                        offset="0%"
+                        stopColor="var(--accent-color)"
+                        stopOpacity={1}
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="var(--accent-color)"
+                        stopOpacity={0}
+                      />
                     </linearGradient>
                   </defs>
                   <Area
@@ -544,7 +554,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     type="basis"
                     dataKey="starred_count"
                     strokeWidth={0}
-                    fill="var(--yellow400)"
+                    fill="var(--yellow)"
                     fillOpacity={starred_count == 0 ? 0 : 1}
                     isAnimationActive={false}
                     style={{ pointerEvents: 'none' }}
@@ -553,7 +563,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
                     type="basis"
                     dataKey="bookmark_count"
                     strokeWidth={2}
-                    stroke="#1d4ed8"
+                    stroke="var(--accent-color)"
                     isAnimationActive={false}
                     fill="transparent"
                     strokeOpacity={bookmark_count == 0 ? 0 : 1}

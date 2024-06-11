@@ -7,7 +7,10 @@
   flex-direction: column;
 }
 .user {
-  background: var(--neutral150);
+  background-color: var(--neutral150);
+  @include dark {
+    background-color: var(--dark200);
+  }
   padding: 20px;
   align-self: flex-end;
   word-wrap: anywhere;
@@ -29,11 +32,10 @@
     left: -10px;
     top: 8px;
     @include at992 {
-    width: 10px;
-    height: 10px;
-    left: -22px;
-    top: 7px;
-      
+      width: 10px;
+      height: 10px;
+      left: -22px;
+      top: 7px;
     }
   }
 }
