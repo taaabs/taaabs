@@ -54,7 +54,7 @@
         border-radius: 6px;
       }
       &__total::before {
-        background-color: #1d4ed8;
+        background-color: var(--accent-color);
       }
 
       &__starred::before {

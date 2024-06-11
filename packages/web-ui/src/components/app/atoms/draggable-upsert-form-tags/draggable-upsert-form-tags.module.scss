@@ -13,6 +13,9 @@
   box-shadow: var(--box-shadow-green-strong);
   border-radius: var(--border-radius-12px);
   background-color: var(--green600);
+  @include dark {
+    background-color: var(--green800);
+  }
   &__remove {
     position: absolute;
     top: 0;
@@ -29,9 +32,15 @@
     @include transition-150ms(background-color);
     @include hover {
       background-color: var(--red700);
+      @include dark {
+        background-color: var(--red800);
+      }
     }
     > svg {
       fill: var(--white);
+      @include dark {
+        fill: var(--dark700);
+      }
       width: 15px;
       transform: rotate(45deg);
     }
@@ -45,6 +54,9 @@
     &__tag {
       background-color: transparent;
       color: var(--white);
+      @include dark {
+        color: var(--text-color-normal);
+      }
       font-weight: var(--font-weight-inter-medium);
       padding: var(--padding-12px) var(--padding-16px);
       caret-color: var(--white);
@@ -60,17 +72,27 @@
         justify-content: space-between;
         padding: var(--padding-10px) var(--padding-16px);
         border-top: 1px solid var(--green500);
+        @include dark {
+          border-top: 1px solid var(--green700);
+        }
         &__label {
           color: var(--green100);
+          @include dark {
+            color: var(--green200);
+          }
         }
         &__content {
           height: 0;
           > select {
             color: var(--white);
+            @include dark {
+              color: var(--text-color-normal);
+            }
             background-color: transparent;
             border: none;
             text-align: right;
             > option {
+              background-color: var(--background);
               color: var(--text-color-normal);
             }
           }
@@ -88,8 +110,14 @@
     background-color: var(--green700);
     border-top-right-radius: var(--border-radius-12px);
     border-bottom-right-radius: var(--border-radius-12px);
+    @include dark {
+      background-color: var(--green900);
+    }
     > svg {
       fill: var(--white);
+      @include dark {
+        fill: var(--dark700);
+      }
       width: 9px;
     }
   }
