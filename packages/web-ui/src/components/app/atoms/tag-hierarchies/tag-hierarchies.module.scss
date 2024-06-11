@@ -54,6 +54,7 @@
   width: 100%;
   // Hacky, but needed this way to have sticky "all" button play nicely on mobile.
   @include to992 {
+    padding-top: 12px;
     > button {
       padding: 0 var(--padding-16px) 0 var(--padding-16px);
     }
