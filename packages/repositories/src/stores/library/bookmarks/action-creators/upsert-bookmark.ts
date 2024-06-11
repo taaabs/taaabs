@@ -100,7 +100,7 @@ export const upsert_bookmark = (params: {
           dispatch(
             bookmarks_actions.set_incoming_bookmarks(
               state.bookmarks.incoming_bookmarks.map((bookmark) => {
-                if (bookmark.id == result.id) {
+                if (bookmark.id == params.bookmark.bookmark_id) {
                   return {
                     ...result,
                     is_compact: false,

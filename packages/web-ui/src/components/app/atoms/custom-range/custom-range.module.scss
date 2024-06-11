@@ -54,14 +54,14 @@
         border-radius: 6px;
       }
       &__total::before {
-        background: #1d4ed8;
+        background-color: #1d4ed8;
       }
 
       &__starred::before {
-        background: var(--yellow);
+        background-color: var(--yellow);
       }
       &__unsorted::before {
-        background: var(--red);
+        background-color: var(--red);
       }
     }
   }
@@ -89,7 +89,10 @@
     @include transition-150ms(background-color);
     border-radius: var(--border-radius-999px);
     @include hover {
-      background: var(--neutral200);
+      background-color: var(--neutral200);
+      @include dark {
+        background-color: var(--dark300);
+      }
     }
     svg {
       width: var(--icon-dimension-16px);
