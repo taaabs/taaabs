@@ -1399,7 +1399,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             db: (is_archived_filter
               ? props.local_db.archived_db
               : props.local_db.db)!,
-            is_archived: is_archived_filter,
             bookmark: {
               id: bookmark.id,
               is_archived: is_archived_filter,
@@ -1477,7 +1476,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   db: (is_archived_filter
                     ? props.local_db.archived_db
                     : props.local_db.db)!,
-                  is_archived: is_archived_filter,
                   bookmark: {
                     id: bookmark.id,
                     is_archived: is_archived_filter,
@@ -1567,7 +1565,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             db: (is_archived_filter
               ? props.local_db.archived_db
               : props.local_db.db)!,
-            is_archived: is_archived_filter,
             bookmark: {
               id: bookmark.id,
               is_archived: is_archived_filter,
@@ -2027,13 +2024,20 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 }
                 // Update highlights.
                 if (search_hook.result?.hits.length) {
+                  if (updated_bookmark.id != modified_bookmark.bookmark_id) {
+                    await props.local_db.delete_bookmark({
+                      db: (is_archived_filter
+                        ? props.local_db.archived_db
+                        : props.local_db.db)!,
+                      bookmark_id: modified_bookmark.bookmark_id!,
+                    })
+                  }
                   await props.local_db.upsert_bookmark({
                     db: (is_archived_filter
                       ? props.local_db.archived_db
                       : props.local_db.db)!,
-                    is_archived: is_archived_filter,
                     bookmark: {
-                      id: bookmark.id,
+                      id: updated_bookmark.id!,
                       is_archived: is_archived_filter,
                       is_unsorted: updated_bookmark.is_unsorted,
                       title: updated_bookmark.title,
