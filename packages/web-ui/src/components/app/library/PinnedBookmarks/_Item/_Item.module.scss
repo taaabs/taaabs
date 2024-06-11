@@ -58,9 +58,6 @@
       > img {
         width: 16px;
         height: 16px;
-        @include dark {
-          filter: brightness(var(--dark-mode-brightness-filter));
-        }
       }
       > svg {
         width: 16px;
