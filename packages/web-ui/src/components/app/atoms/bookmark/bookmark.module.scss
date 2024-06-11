@@ -262,7 +262,7 @@
         color: var(--green600);
         background-color: var(--green100);
         @include dark {
-          color: var(--green500);
+          color: var(--green400);
           background-color: var(--green900);
         }
         @include transition-150ms;
@@ -512,7 +512,7 @@
           height: calc(100% + 2px);
           top: -1px;
           left: 0;
-          border: 1.5px solid var(--purple300);
+          border: 1.5px solid var(--purple400);
           @include dark {
             border-color: var(--purple500);
           }
@@ -586,9 +586,6 @@
             fill: var(--blue600);
             @include transition-150ms(fill);
             width: 14px;
-            @include dark {
-              fill: var(--blue500);
-            }
           }
           @include hover {
             background-color: var(--blue200);

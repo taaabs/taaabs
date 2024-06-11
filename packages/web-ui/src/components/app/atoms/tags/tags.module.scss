@@ -20,9 +20,9 @@
   font-size: 14px;
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-  color: var(--blue600);
+  color: var(--accent-color);
   @include dark {
-    color: var(--blue500);
+    color: var(--blue600);
   }
   width: 22px;
   margin-right: 2px;
@@ -56,7 +56,7 @@
   color: var(--green600);
   background-color: var(--green100);
   @include dark {
-    color: var(--green500);
+    color: var(--green400);
     background-color: var(--green900);
   }
   @include transition-150ms(background-color);

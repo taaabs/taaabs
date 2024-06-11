@@ -45,7 +45,7 @@
         margin-bottom: 6px;
       }
     }
-    > svg {
+    > div > svg {
       height: 48px;
       @include at992 {
         height: 55px;
