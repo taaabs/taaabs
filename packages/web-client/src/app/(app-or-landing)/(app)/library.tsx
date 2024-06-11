@@ -2231,7 +2231,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         slot_main_={
           <>
-            {slot_pinned}
+            {!bookmarks_hook.showing_bookmarks_fetched_by_ids && slot_pinned}
             {slot_bookmarks}
           </>
         }
