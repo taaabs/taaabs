@@ -20,6 +20,9 @@
   @include hover {
     .checkbox {
       border-color: var(--blue400);
+      @include dark {
+        border-color: var(--dark400);
+      }
     }
   }
 }
@@ -34,11 +37,18 @@
   background-color: var(--blue100);
   @include transition-150ms(border-color);
   border: 1.5px solid var(--blue300);
+  @include dark {
+    background-color: var(--dark100);
+    border-color: var(--dark300);
+  }
   svg {
-    fill: var(--blue800);
     visibility: hidden;
     width: var(--icon-dimension-12px);
     height: var(--icon-dimension-12px);
+    fill: var(--blue800);
+    @include dark {
+      fill: var(--blue600);
+    }
   }
   &--checked {
     svg {

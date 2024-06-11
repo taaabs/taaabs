@@ -4,27 +4,31 @@
   @include variables;
   @include colors;
 
+  // Colors
+  --white: #fff;
+  --black: var(--neutral900);
+  --red: var(--red600);
+  --highlight: #ffff00;
+
   // Text
-  --text-color-normal: var(--neutral900);
+  --text-color-normal: var(--black);
   --text-color-variant: var(--neutral600);
   --text-color-dimmed: var(--neutral500);
 
   // Accent
-  --brand-color: var(--blue700);
+  --accent-color: var(--blue700);
 
   // Shared
   --background: var(--neutral50);
-  --selection-background: var(--brand-color);
+  --selection-background: var(--accent-color);
   --selection-foreground: var(--white);
   --border-color-primary: var(--neutral200);
   --border-color-secondary: var(--neutral100);
   --border-color-hover: var(--neutral300);
-  --logo-background: var(--brand-color);
   --outlined-button-background: var(--white);
-  --border-primary: var(--border-width-1px) solid var(--border-color-primary);
-  --border-secondary: var(--border-width-1px) solid
-    var(--border-color-secondary);
-  --border-hover: var(--border-width-1px) solid var(--border-color-hover);
+  --border-primary: 1px solid var(--border-color-primary);
+  --border-secondary: 1px solid var(--border-color-secondary);
+  --border-hover: 1px solid var(--border-color-hover);
   --header-background: var(--white);
   --header-transparent-background: rgba(255, 255, 255, 0.8);
 
@@ -32,13 +36,43 @@
   --skeleton-highlight-color: var(--neutral50);
 
   // Toast overrides
-  --toastify-color-success: var(--brand-color);
-  --toastify-color-info: var(--brand-color);
+  --toastify-color-success: var(--accent-color);
+  --toastify-color-info: var(--accent-color);
   --toastify-color-error: var(--red);
   --toastify-text-color-light: var(--text-color-normal);
 
   // Context menu overrides
   --context-menu-background-color: transparent;
+}
+
+html[data-theme='dark'] {
+  // Colors
+  --white: var(--dark50);
+  --black: var(--dark700);
+  --red: var(--red700);
+  --highlight: #ffff00;
+
+  // Text
+  --text-color-normal: var(--dark700);
+  --text-color-variant: var(--dark600);
+  --text-color-dimmed: var(--dark500);
+
+  // Accent
+  --accent-color: var(--blue600);
+
+  // Shared
+  --background: var(--dark50);
+  --selection-background: var(--dark600);
+  --selection-foreground: var(--dark50);
+  --border-color-primary: var(--dark300);
+  --border-color-secondary: var(--dark200);
+  --border-color-hover: var(--dark400);
+  --outlined-button-background: var(--dark50);
+  --header-background: var(--dark100);
+  --header-transparent-background: rgba(23, 30, 45, 0.8);
+
+  --skeleton-base-color: var(--dark100);
+  --skeleton-highlight-color: var(--dark200);
 }
 
 *,
@@ -57,7 +91,7 @@
 
 html {
   font-size: 62.5%;
-  accent-color: var(--brand-color);
+  accent-color: var(--accent-color);
   caret-color: var(--black);
   -webkit-tap-highlight-color: transparent;
 }
@@ -66,7 +100,8 @@ body {
   font: 15px/1.3 var(--font-family-inter);
   color: var(--text-color-normal);
   overflow-y: scroll;
-  background: var(--background);
+  background-color: var(--background);
+  transition: background-color var(--transition-duration-150ms);
 }
 
 a {
@@ -129,6 +164,10 @@ strong {
 small {
   font-size: var(--font-size-13px);
   color: var(--text-color-dimmed);
+}
+
+.no-transitions * {
+  transition: none !important;
 }
 
 // Cursor overrides.
@@ -303,6 +342,11 @@ small {
 }
 .simplebar-track.simplebar-vertical {
   width: 9px;
+}
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+  @include dark {
+    background-color: var(--dark600);
+  }
 }
 
 .grecaptcha-badge {

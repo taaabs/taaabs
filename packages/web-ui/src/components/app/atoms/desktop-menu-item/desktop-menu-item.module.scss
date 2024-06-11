@@ -38,7 +38,7 @@
   }
   &--active {
     &::after {
-      background: var(--brand-color);
+      background: var(--accent-color);
       transform: translateY(-50%) translateX(0);
     }
   }

@@ -15,10 +15,15 @@
 .box {
   display: flex;
   align-items: center;
-  background-color: var(--blue50-transparent);
-  backdrop-filter: var(--backdrop-filter);
+  background-color: rgba(239, 246, 255, 0.8);
   border: 1.5px solid var(--blue100);
   box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.4);
+  @include dark {
+    background-color: var(--header-transparent-background);
+    border: 1.5px solid var(--dark200);
+    box-shadow: none;
+  }
+  backdrop-filter: var(--backdrop-filter);
   z-index: 2;
   border-radius: var(--border-radius-999px);
   gap: 8px;
@@ -40,18 +45,24 @@
   }
   @include hover {
     border-color: var(--blue200);
+    @include dark {
+      border-color: var(--dark400);
+    }
   }
   &--yields-no-results {
     border-color: var(--red100) !important;
-    background-color: var(--red50-transparent);
+    background-color: rgba(254, 242, 242, 0.8);
     box-shadow: inset 0 2px 3px rgba(254, 226, 226, 0.4);
     svg {
-      fill: var(--red600) !important;
+      fill: var(--red) !important;
     }
   }
   &--focus {
     border-color: var(--blue400) !important;
     box-shadow: inset 0 2px 3px rgba(219, 234, 254, 0.7);
+    @include dark {
+      border-color: var(--blue600) !important;
+    }
   }
   &--focus-yields-no-results {
     border-color: var(--red300) !important;
@@ -67,7 +78,10 @@
     @include transition-150ms(background-color);
     border-radius: var(--border-radius-999px);
     @include hover {
-      background: var(--blue100);
+      background-color: var(--blue100);
+      @include dark {
+        background-color: var(--dark100);
+      }
     }
     @include at992 {
       width: var(--button-dimension-34px);
@@ -76,7 +90,10 @@
     }
     > svg {
       width: var(--icon-dimension-16px);
-      fill: var(--brand-color);
+      fill: var(--blue600);
+      @include dark {
+        fill: var(--blue500);
+      }
       @include transition-150ms(fill);
       @include at992 {
         width: var(--icon-dimension-20px);
@@ -86,7 +103,7 @@
   &__loader {
     width: var(--icon-dimension-18px);
     height: var(--icon-dimension-18px);
-    border: 2px solid var(--brand-color);
+    border: 2px solid var(--accent-color);
     border-bottom-color: transparent !important;
     border-radius: 50%;
     display: inline-block;
@@ -95,7 +112,7 @@
     @include at992 {
       width: var(--icon-dimension-22px);
       height: var(--icon-dimension-22px);
-      border: 2.5px solid var(--brand-color);
+      border: 2.5px solid var(--accent-color);
     }
   }
   &__form {
@@ -118,8 +135,14 @@
       font-size: var(--font-size-12px);
       font-weight: var(--font-weight-inter-medium);
       padding: 0 4px;
-      margin: 0 5px;
-      box-shadow: var(--box-shadow-blue);
+      @include light {
+        box-shadow: var(--box-shadow-blue);
+      }
+      @include dark {
+        color: var(--text-color-dimmed);
+        border-color: var(--dark400);
+        background-color: var(--dark300);
+      }
       @include touch-screen {
         display: none;
       }
@@ -132,7 +155,10 @@
       &__styled-value {
         z-index: -1;
         position: absolute;
-        color: var(--brand-color);
+        color: var(--accent-color);
+        @include dark {
+          color: var(--text-color-normal);
+        }
         @include transition-150ms(color);
         display: flex;
         align-items: center;
@@ -143,9 +169,9 @@
           font-weight: var(--font-weight-inter-tight-medium);
         }
         &--yields-no-results {
-          color: var(--red600) !important;
+          color: var(--red) !important;
           &::placeholder {
-            color: var(--red600) !important;
+            color: ar(--red) !important;
           }
         }
         &__pre-highlight {
@@ -186,7 +212,9 @@
         }
       }
       input {
-        caret-color: var(--brand-color);
+        @include light {
+          caret-color: var(--accent-color);
+        }
         color: transparent;
         width: 100vw; // TODO: Rework workaround.
         font-weight: var(--font-weight-inter-medium);
@@ -198,7 +226,10 @@
           outline: none;
         }
         &::placeholder {
-          color: var(--brand-color);
+          color: var(--accent-color);
+          @include dark {
+            color: var(--text-color-dimmed);
+          }
           opacity: 0.8;
           @include transition-150ms(color);
           @include at992 {
@@ -220,9 +251,15 @@
     &__press_key {
       pointer-events: none;
       color: var(--blue500);
+      @include dark {
+        color: var(--text-color-dimmed);
+      }
       display: flex;
       white-space: pre;
       margin-right: 11px;
+      > div {
+        margin: 0 5px;
+      }
       @include touch-screen {
         display: none;
       }
@@ -236,6 +273,9 @@
       }
       &--yields-no-results {
         color: var(--red500);
+        @include dark {
+          color: var(--red700);
+        }
       }
     }
     &__clear {
@@ -255,12 +295,12 @@
           background-color: var(--red100);
         }
         > svg {
-          fill: var(--red600) !important;
+          fill: var(--red) !important;
         }
       }
       > svg {
         width: var(--icon-dimension-14px);
-        fill: var(--brand-color);
+        fill: var(--accent-color);
         @include transition-150ms(fill);
         @include at992 {
           width: var(--icon-dimension-16px);
@@ -318,9 +358,15 @@
       padding: 0 14px;
       @include hover {
         background-color: var(--neutral100);
+        @include dark {
+          background-color: var(--dark200);
+        }
       }
       &--selected {
-        background-color: var(--neutral50);
+        background-color: var(--neutral100);
+        @include dark {
+          background-color: var(--dark200);
+        }
       }
       &__icon {
         display: flex;
@@ -363,6 +409,11 @@
           padding: 0 4px;
           box-shadow: var(--box-shadow);
           margin-left: 6px;
+          @include dark {
+            color: var(--text-color-dimmed);
+            border-color: var(--dark400);
+            background-color: var(--dark300);
+          }
           @include touch-screen {
             display: none;
           }
@@ -393,7 +444,7 @@
       color: var(--text-color-dimmed);
     }
     > button {
-      color: var(--brand-color);
+      color: var(--accent-color);
       @include hover {
         @include text-decoration-underlinie-thin;
       }

@@ -35,7 +35,7 @@
     height: var(--button-dimension-52px);
   }
   > a {
-    color: var(--brand-color);
+    color: var(--accent-color);
     font-size: var(--font-size-14px);
     @include hover {
       @include text-decoration-underlinie-thin;

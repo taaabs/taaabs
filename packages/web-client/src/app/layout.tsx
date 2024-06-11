@@ -35,9 +35,9 @@ const plus_jakarta_sans = Plus_Jakarta_Sans({
 const Layout: React.FC<{ children: ReactNode }> = (props) => {
   return (
     <html
-      lang="en"
       className={`${inter.variable} ${inter_tight.variable} ${plus_jakarta_sans.variable}`}
-      // color-scheme="dark"
+      lang="en"
+      suppressHydrationWarning
     >
       <body>
         {/* <GlobalStoreInitializer></GlobalStoreInitializer> */}
@@ -60,6 +60,54 @@ const Layout: React.FC<{ children: ReactNode }> = (props) => {
             <ModalProvider>{props.children}</ModalProvider>
           </LocalDbProvider>
         </AuthProvider>
+        <script
+          /** https://github.com/reactjs/react.dev/blob/main/src/pages/_document.tsx */
+          dangerouslySetInnerHTML={{
+            __html: `
+                (function () {
+                  function setTheme(newTheme) {
+                    window.__theme = newTheme;
+                    if (newTheme == 'dark') {
+                      document.documentElement.setAttribute('data-theme', 'dark');
+                      document.documentElement.setAttribute('data-theme-set-by', 'user');
+                    } else if (newTheme == 'light') {
+                      document.documentElement.setAttribute('data-theme', 'light');
+                      document.documentElement.setAttribute('data-theme-set-by', 'user');
+                    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                      document.documentElement.setAttribute('data-theme', 'dark');
+                      document.documentElement.setAttribute('data-theme-set-by', 'system');
+                    } else {
+                      document.documentElement.setAttribute('data-theme', 'light');
+                      document.documentElement.setAttribute('data-theme-set-by', 'system');
+                    }
+                    document.documentElement.classList.add('no-transitions')
+                    setTimeout(() => {
+                      document.documentElement.classList.remove('no-transitions')
+                    }, 0);
+                  }
+
+                  var preferredTheme = localStorage.getItem('theme');
+
+                  window.__setPreferredTheme = function(newTheme) {
+                    preferredTheme = newTheme;
+                    setTheme(newTheme);
+                    localStorage.setItem('theme', newTheme);
+                  };
+
+                  var initialTheme = preferredTheme;
+                  var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+                  setTheme(initialTheme);
+
+                  darkQuery.addEventListener('change', function (e) {
+                    if (!preferredTheme) {
+                      setTheme();
+                    }
+                  });
+                })();
+              `,
+          }}
+        />
       </body>
     </html>
   )

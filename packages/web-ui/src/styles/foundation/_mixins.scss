@@ -63,7 +63,12 @@
   }
 }
 @mixin dark {
-  :where([color-scheme='dark']) & {
+  [data-theme="dark"] & {
+    @content;
+  }
+}
+@mixin light {
+  [data-theme="light"] & {
     @content;
   }
 }

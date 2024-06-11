@@ -6,6 +6,7 @@ export namespace ButtonOutlinedIcon {
     on_click: () => void
     icon_variant: Icon.Variant
     test_id?: string
+    aria_label?: string
   }
 }
 
@@ -17,6 +18,7 @@ export const ButtonOutlinedIcon: React.FC<ButtonOutlinedIcon.Props> = (
       className={styles.button}
       onClick={props.on_click}
       data-testid={props.test_id}
+      aria-label={props.aria_label}
     >
       <Icon variant={props.icon_variant} />
     </button>

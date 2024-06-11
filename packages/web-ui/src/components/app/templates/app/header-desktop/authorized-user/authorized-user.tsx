@@ -34,7 +34,59 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
         icon_variant="SEARCH"
         on_click={props.on_click_search}
       /> */}
+
       <ButtonOutlinedIcon icon_variant="ADD" on_click={props.on_click_add} />
+
+      <div className={styles['theme-set-by-system']}>
+        <div className={styles.dark}>
+          <ButtonOutlinedIcon
+            icon_variant="THEME_AUTO"
+            on_click={() => {
+              ;(window as any).__setPreferredTheme('light')
+            }}
+            aria_label="Use dark mode"
+          />
+        </div>
+        <div className={styles.light}>
+          <ButtonOutlinedIcon
+            icon_variant="THEME_AUTO"
+            on_click={() => {
+              ;(window as any).__setPreferredTheme('dark')
+            }}
+            aria_label="Use light mode"
+          />
+        </div>
+      </div>
+
+      <div className={styles['theme-set-by-user']}>
+        <div className={styles.dark}>
+          <ButtonOutlinedIcon
+            icon_variant="THEME_DARK"
+            on_click={() => {
+              if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                ;(window as any).__setPreferredTheme()
+              } else {
+                ;(window as any).__setPreferredTheme('light')
+              }
+            }}
+            aria_label="Use dark mode"
+          />
+        </div>
+        <div className={styles.light}>
+          <ButtonOutlinedIcon
+            icon_variant="THEME_LIGHT"
+            on_click={() => {
+              if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                ;(window as any).__setPreferredTheme()
+              } else {
+                ;(window as any).__setPreferredTheme('dark')
+              }
+            }}
+            aria_label="Use light mode"
+          />
+        </div>
+      </div>
+
       <div className={styles.user}>
         <ButtonUserDesktop
           name={props.name}

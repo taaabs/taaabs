@@ -60,7 +60,7 @@
       display: none;
     }
     > svg {
-      fill: var(--brand-color);
+      fill: var(--accent-color);
       width: 70px;
       @include at1200 {
         width: 75px;
@@ -208,7 +208,7 @@
     > svg {
       flex-shrink: 0;
       width: var(--icon-dimension-16px);
-      fill: var(--brand-color);
+      fill: var(--accent-color);
       margin-top: 0.25em;
       @include at768 {
         width: var(--icon-dimension-20px);

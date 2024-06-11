@@ -16,7 +16,12 @@ export const LogoForHeader: React.FC<LogoForHeader.Props> = (props) => {
       className={cn(styles.logo, { [styles['logo--large']]: props.is_large })}
       href={props.href}
     >
-      <Icon variant="LOGO" />
+      <div className={cn([styles.logo__icon, styles['logo__icon--light']])}>
+        <Icon variant="LOGO" />
+      </div>
+      <div className={cn([styles.logo__icon, styles['logo__icon--dark']])}>
+        <Icon variant="LOGO_DARK" />
+      </div>
       <span>taaabs</span>
     </Link>
   )

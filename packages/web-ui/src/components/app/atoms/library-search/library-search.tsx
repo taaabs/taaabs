@@ -289,10 +289,10 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                             props.loading_progress_percentage_ + '%'
                           }`
                         : selected_hint_index != -1
-                        ? undefined
-                        : props.is_full_text_
-                        ? props.translations_.placeholder_.full_text_
-                        : props.translations_.placeholder_.default_
+                          ? undefined
+                          : props.is_full_text_
+                            ? props.translations_.placeholder_.full_text_
+                            : props.translations_.placeholder_.default_
                     }
                     onBlur={(e) => {
                       if (
@@ -331,9 +331,9 @@ export const LibrarySearch: React.FC<LibrarySearch.Props> = memo(
                       {props.results_count_ == 0
                         ? 'No'
                         : props.results_count_ ==
-                          system_values.max_library_search_results
-                        ? `${system_values.max_library_search_results}+`
-                        : props.results_count_}{' '}
+                            system_values.max_library_search_results
+                          ? `${system_values.max_library_search_results}+`
+                          : props.results_count_}{' '}
                       {props.results_count_ == 1 ? 'result' : 'results'}
                     </div>
                   )}

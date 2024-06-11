@@ -10,7 +10,10 @@
   border: var(--border-secondary);
   border-radius: 20px;
   @include transition-150ms(border-color);
-  background: var(--white);
+  background-color: var(--white);
+  @include dark {
+    background-color: var(--dark100);
+  }
   @include hover {
     border-color: var(--border-color-hover);
   }

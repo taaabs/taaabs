@@ -1,12 +1,6 @@
 @mixin colors {
-  --white: #fff;
-  --black: var(--neutral900);
-  --red: var(--red600);
-  --highlight: #ffff00;
-
   --neutral25: #fbfbfb;
   --neutral50: #f8f8f8;
-  --neutral50-transparent: rgba(15, 20, 25, 0.05);
   --neutral100: #ebebeb;
   --neutral150: #e9e9e9;
   --neutral200: #e2e2e2;
@@ -19,6 +13,15 @@
   --neutral700: #525252;
   --neutral800: #464646;
   --neutral900: #171717;
+
+  --dark50: #111827;
+  --dark100: #171E2D;
+  --dark200: #1F2937;
+  --dark300: #232F3E;
+  --dark400: #2C394D;
+  --dark500: #6B7280;
+  --dark600: #9CA3AF;
+  --dark700: #D1D5DB;
 
   --yellow50: #fefce8;
   --yellow100: #fffac2;
@@ -44,7 +47,6 @@
   --amber900: #78350f;
 
   --red50: #fff0f0;
-  --red50-transparent: rgba(254, 242, 242, 0.8);
   --red100: #ffdddd;
   --red200: #ffc0c0;
   --red300: #ff9494;
@@ -56,7 +58,6 @@
   --red900: #920a0a;
 
   --blue50: #ecf5ff;
-  --blue50-transparent: rgba(239, 246, 255, 0.8);
   --blue100: #d8e9ff;
   --blue150: #cce3ff;
   --blue200: #bfdbfe;

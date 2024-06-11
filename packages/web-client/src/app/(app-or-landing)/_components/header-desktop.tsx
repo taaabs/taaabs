@@ -31,7 +31,7 @@ import { toast } from 'react-toastify'
 import { browser_storage } from '@/constants/browser-storage'
 import { AuthContext } from '../../auth-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { LocalDbContext } from '@/app/local-db-provider'
+// import { LocalDbContext } from '@/app/local-db-provider'
 import { BookmarkUrlHashData } from '@/utils/bookmark-url-hash-data'
 
 export const HeaderDesktop: React.FC<{
@@ -39,7 +39,7 @@ export const HeaderDesktop: React.FC<{
   bookmarklet_script: string
 }> = (props) => {
   const auth_context = useContext(AuthContext)!
-  const local_db_context = useContext(LocalDbContext)!
+  // const local_db_context = useContext(LocalDbContext)!
   const search_params = useSearchParams()
   const params = useParams()
   const pathname = usePathname()

@@ -7,6 +7,30 @@
   gap: 8px;
   height: 100%;
 }
+.light {
+  display: flex;
+  @include dark {
+    display: none;
+  }
+}
+.dark {
+  display: none;
+  @include dark {
+    display: flex;
+  }
+}
+.theme-set-by-system {
+  display: none;
+  [data-theme-set-by="system"] & {
+    display: flex;
+  }
+}
+.theme-set-by-user {
+  display: none;
+  [data-theme-set-by="user"] & {
+    display: flex;
+  }
+}
 .user {
   position: relative;
   &__dropdown {

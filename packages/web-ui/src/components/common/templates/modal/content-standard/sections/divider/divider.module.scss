@@ -3,9 +3,9 @@
 
 .container {
   height: 1px;
-  background-color: var(--neutral100);
+  background-color: var(--border-color-secondary);
   width: 100%;
   &:before {
-    content: ''
+    content: '';
   }
 }

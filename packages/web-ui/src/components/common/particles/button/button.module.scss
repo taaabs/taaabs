@@ -7,7 +7,10 @@
   justify-content: center;
   flex-shrink: 0;
   color: var(--white);
-  background: var(--brand-color);
+  @include dark {
+    color: var(--text-color-normal);
+  }
+  background: var(--accent-color);
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   @include transition-150ms(background-color);

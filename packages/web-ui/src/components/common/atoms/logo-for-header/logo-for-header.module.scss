@@ -6,7 +6,7 @@
   align-items: center;
   > span {
     position: relative;
-    color: var(--color-text--normal);
+    color: var(--black);
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     letter-spacing: var(--letter-spacing-logo);
@@ -27,14 +27,6 @@
       right: 0;
       bottom: -0.7em;
       font-size: 0.4em;
-      
-    }
-  }
-  > svg {
-    fill: var(--logo-background);
-    height: 34px;
-    @include at992 {
-      height: 42px;
     }
   }
   &--large {
@@ -60,6 +52,25 @@
       }
       @include at1200 {
         height: 60px;
+      }
+    }
+  }
+  &__icon {
+    > svg {
+      fill: var(--accent-color);
+      height: 34px;
+      @include at992 {
+        height: 42px;
+      }
+    }
+    &--light {
+      @include dark {
+        display: none;
+      }
+    }
+    &--dark {
+      @include light {
+        display: none;
       }
     }
   }

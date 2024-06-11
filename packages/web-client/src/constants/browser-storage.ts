@@ -119,5 +119,6 @@ export const browser_storage = {
     authorized_library: {
       record_visit_params: 'authorized-library.record-visit-params',
     },
+    theme: 'theme',
   },
 }
