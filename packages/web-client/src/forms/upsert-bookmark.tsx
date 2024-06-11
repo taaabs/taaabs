@@ -183,11 +183,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           open_snapshot: link.open_snapshot,
         }))
       : props.bookmark_autofill && props.bookmark_autofill.links
-      ? props.bookmark_autofill.links.map(({ url }) => ({
-          url,
-          is_public: true,
-        }))
-      : [],
+        ? props.bookmark_autofill.links.map(({ url }) => ({
+            url,
+            is_public: true,
+          }))
+        : [],
   )
   const [tags, set_tags] = useState<{ name: string; is_public?: boolean }[]>(
     props.bookmark
@@ -196,11 +196,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           is_public: tag.is_public,
         }))
       : props.bookmark_autofill && props.bookmark_autofill.tags
-      ? props.bookmark_autofill.tags.map((name) => ({
-          name,
-          is_public: true,
-        }))
-      : [],
+        ? props.bookmark_autofill.tags.map((name) => ({
+            name,
+            is_public: true,
+          }))
+        : [],
   )
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
@@ -268,8 +268,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     const bookmark: UpsertBookmark_Params = {
       bookmark_id: props.bookmark?.id,
       is_public: is_bookmark_public,
-      title: form_data.title,
-      note: form_data.note || undefined,
+      title: form_data.title.trim() || undefined,
+      note: form_data.note.trim() || undefined,
       created_at: props.bookmark?.created_at
         ? new Date(props.bookmark.created_at)
         : undefined,
@@ -547,8 +547,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               props.bookmark
                 ? props.bookmark.title
                 : props.bookmark_autofill
-                ? props.bookmark_autofill.title
-                : undefined
+                  ? props.bookmark_autofill.title
+                  : undefined
             }
             rules={{
               maxLength: system_values.bookmark.title.max_length,
@@ -593,8 +593,8 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               props.bookmark
                 ? props.bookmark?.note
                 : props.bookmark_autofill
-                ? props.bookmark_autofill.note
-                : undefined
+                  ? props.bookmark_autofill.note
+                  : undefined
             }
             rules={{
               maxLength: system_values.bookmark.note.max_length,
