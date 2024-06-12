@@ -21,7 +21,7 @@
     }
     &__cancel {
       order: -1; // Needed to have proper tab focus order.
-      color: var(--text-color-dimmed);
+      color: var(--text-color-variant);
       @include hover {
         @include text-decoration-underlinie-thin;
       }

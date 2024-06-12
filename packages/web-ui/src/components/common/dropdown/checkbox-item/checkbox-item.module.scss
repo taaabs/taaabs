@@ -45,10 +45,7 @@
     visibility: hidden;
     width: var(--icon-dimension-12px);
     height: var(--icon-dimension-12px);
-    fill: var(--blue800);
-    @include dark {
-      fill: var(--blue600);
-    }
+    fill: var(--accent-color);
   }
   &--checked {
     svg {

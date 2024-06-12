@@ -11,11 +11,14 @@
   cursor: grabbing;
 }
 .nothing-pinned {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--button-dimension-52px);
   font-size: var(--font-size-13px);
   color: var(--text-color-dimmed);
   text-align: center;
   width: 100%;
-  padding: var(--padding-16px);
-  border-top: var(--border-secondary);
+  padding: 0 var(--padding-16px);
   border-bottom: var(--border-secondary);
 }

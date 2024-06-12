@@ -96,10 +96,7 @@
     }
     > svg {
       width: var(--icon-dimension-16px);
-      fill: var(--blue600);
-      @include dark {
-        fill: var(--blue500);
-      }
+      fill: var(--accent-color);
       @include transition-150ms(fill);
       @include at992 {
         width: var(--icon-dimension-20px);
@@ -272,6 +269,9 @@
     }
     &__results-count {
       color: var(--blue500);
+      @include dark {
+        color: var(--text-color-variant);
+      }
       white-space: pre;
       @include transition-150ms(color);
       @include to992 {
@@ -295,6 +295,9 @@
       @include transition-150ms(background-color);
       @include hover {
         background-color: var(--blue100);
+        @include dark {
+          background-color: var(--dark300);
+        }
       }
       &--yields-no-results {
         @include hover {

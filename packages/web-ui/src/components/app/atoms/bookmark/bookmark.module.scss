@@ -208,10 +208,7 @@
             background-color: var(--dark300);
           }
           svg {
-            fill: var(--blue600);
-            @include dark {
-              fill: var(--blue500);
-            }
+            fill: var(--accent-color);
             @include transition-150ms(fill);
             width: var(--icon-dimension-16px);
           }
@@ -220,20 +217,12 @@
             @include dark {
               background-color: var(--dark400);
             }
-            svg {
-              @include light {
-                fill: var(--blue700);
-              }
-            }
           }
         }
         &--toggled {
           background-color: var(--blue200);
           @include dark {
             background-color: var(--dark400);
-          }
-          svg {
-            fill: var(--blue700);
           }
         }
       }
@@ -466,17 +455,17 @@
             width: var(--button-dimension-28px);
             height: var(--button-dimension-28px);
             background-color: var(--blue100);
+            @include dark {
+              background-color: var(--dark300);
+            }
             svg {
-              fill: var(--blue600);
+              fill: var(--accent-color);
               @include transition-150ms(fill);
               width: var(--icon-dimension-16px);
             }
           }
           &--toggled {
             background-color: var(--blue200);
-            svg {
-              fill: var(--blue700);
-            }
           }
         }
       }
@@ -583,7 +572,7 @@
             background-color: var(--dark200);
           }
           svg {
-            fill: var(--blue600);
+            fill: var(--accent-color);
             @include transition-150ms(fill);
             width: 14px;
           }
@@ -591,11 +580,6 @@
             background-color: var(--blue200);
             @include dark {
               background-color: var(--dark300);
-            }
-            svg {
-              @include light {
-                fill: var(--blue700);
-              }
             }
           }
         }
@@ -747,7 +731,7 @@
         left: 3.5px;
         > svg {
           width: 9px;
-          fill: var(--neutral400);
+          fill: var(--neutral300);
           @include dark {
             fill: var(--dark400);
           }

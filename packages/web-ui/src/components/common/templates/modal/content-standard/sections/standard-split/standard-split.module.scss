@@ -15,6 +15,9 @@
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   color: var(--accent-color);
+  @include dark {
+    color: var(--text-color-normal);
+  }
   font-size: var(--font-size-20px);
   line-height: 1;
   @include at768 {

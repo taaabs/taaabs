@@ -135,14 +135,9 @@
         @include dark {
           background-color: var(--dark400);
         }
-        > svg {
-          @include light {
-            fill: var(--blue700);
-          }
-        }
       }
       > svg {
-        fill: var(--blue600);
+        fill: var(--accent-color);
         @include transition-150ms(fill);
         width: 12px;
       }

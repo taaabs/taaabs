@@ -128,8 +128,10 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
     return (
       <>
         {relevant_items == 0 ? (
-          <div className={styles['nothing-pinned']}>
-            {props.translations_.nothing_pinned_}
+          <div className={styles.items}>
+            <div className={styles['nothing-pinned']}>
+              {props.translations_.nothing_pinned_}
+            </div>
           </div>
         ) : props.is_draggable_ ? (
           <ReactSortable

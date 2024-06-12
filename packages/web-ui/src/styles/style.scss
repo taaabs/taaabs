@@ -59,6 +59,9 @@ html[data-theme='dark'] {
   --text-color-variant: var(--dark600);
   --text-color-dimmed: var(--dark500);
 
+  // Accent
+  --accent-color: var(--blue600);
+
   // Shared
   --background: var(--dark50);
   --selection-background: var(--dark600);

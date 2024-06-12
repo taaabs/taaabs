@@ -21,9 +21,6 @@
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
   color: var(--accent-color);
-  @include dark {
-    color: var(--blue600);
-  }
   width: 22px;
   margin-right: 2px;
   &::before {

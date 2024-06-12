@@ -28,6 +28,9 @@
     }
     @include hover {
       background-color: var(--blue600);
+      @include dark {
+        background-color: var(--blue700);
+      }
     }
     @include to992 {
       font-size: var(--font-size-14px);
