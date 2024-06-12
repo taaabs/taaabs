@@ -6,7 +6,10 @@
   align-items: center;
   > span {
     position: relative;
-    color: var(--black);
+    color: black;
+    @include dark {
+      color: white;
+    }
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     letter-spacing: var(--letter-spacing-logo);
@@ -62,16 +65,6 @@
       height: 34px;
       @include at992 {
         height: 42px;
-      }
-    }
-    &--light {
-      @include dark {
-        display: none;
-      }
-    }
-    &--dark {
-      @include light {
-        display: none;
       }
     }
   }
