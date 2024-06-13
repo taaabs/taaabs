@@ -23,7 +23,6 @@ import { AuthContext } from '@/app/auth-provider'
 import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
 import { All_Ro } from '@repositories/modules/tags/domain/all.ro'
 import { Suggested_Ro } from '@repositories/modules/tags/domain/suggested.ro'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 type FormValues = {
   title?: string
@@ -436,14 +435,6 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   }
 
   useEffect(() => {
-    if (suggested_tags.length == 0) {
-      fetch_suggested_tags([])
-    } else if (suggested_tags.length == 1 && props.bookmark?.tags.length) {
-      fetch_suggested_tags(props.bookmark.tags.map((tag) => tag.id))
-    }
-  }, [suggested_tags])
-
-  useEffect(() => {
     const fetch_all_tags = async () => {
       const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
       const repository = new Tags_RepositoryImpl(data_source)
@@ -453,6 +444,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       set_all_tags(result)
     }
     fetch_all_tags()
+    fetch_suggested_tags(props.bookmark?.tags.map((tag) => tag.id) || [])
   }, [])
 
   return (
@@ -660,7 +652,6 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
                 is_public: tag.is_public,
               })),
             )
-            // Refetch suggested tags.
             if (updated_tags.length > tags.length) {
               const tag_ids: number[] = []
               updated_tags.forEach((tag) => {
