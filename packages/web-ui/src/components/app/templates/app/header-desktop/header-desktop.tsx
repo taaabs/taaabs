@@ -6,7 +6,6 @@ export namespace HeaderDesktop {
     slot_logo: React.ReactNode
     slot_navigation: React.ReactNode
     slot_right_side?: React.ReactNode
-    cockroach_url: string
     translations: {
       powered_by: string
     }
@@ -18,20 +17,7 @@ export const HeaderDesktop = (props: HeaderDesktop.Props) => {
     <div className={styles.container}>
       <Wrapper>
         <div className={styles.inner}>
-          <div className={styles.left}>
-            {props.slot_logo}
-            <a
-              href={props.cockroach_url}
-              className={styles.cockroachdb}
-              target="_blank"
-            >
-              <img src={'/cockroachdb.png'} />
-              <div className={styles.cockroachdb__text}>
-                <span>{props.translations.powered_by}</span>
-                <span>CockroachDB</span>
-              </div>
-            </a>
-          </div>
+          <div className={styles.left}>{props.slot_logo}</div>
           <div className={styles.navigation}>{props.slot_navigation}</div>
           {props.slot_right_side}
         </div>

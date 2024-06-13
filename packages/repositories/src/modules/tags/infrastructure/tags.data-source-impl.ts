@@ -1,15 +1,33 @@
 import { KyInstance } from 'ky'
 import { Tags_DataSource } from './tags.data-source'
-import { RenameTag_Params } from '../domain/rename-tag.params'
+import { Rename_Params } from '../domain/rename.params'
 import { Crypto } from '@repositories/utils/crypto'
 import { CheckVisibility_Dto } from '@shared/types/modules/tags/check-visibility'
 import { Rename_Dto } from '@shared/types/modules/tags/rename.dto'
+import { Tags_Dto } from '@shared/types/modules/tags/tags.dto'
+import { Suggested_Dto } from '@shared/types/modules/tags/suggested.dto'
+import { Suggested_Params } from '../domain/suggested.params'
 
 export class Tags_DataSourceImpl implements Tags_DataSource {
   constructor(private readonly _ky: KyInstance) {}
 
+  public async all(): Promise<Tags_Dto> {
+    return this._ky('v1/tags').json()
+  }
+
+  public async suggested(
+    params: Suggested_Params,
+  ): Promise<Suggested_Dto.Response> {
+    const body: Suggested_Dto.Request.Body = params.selected_tags
+    return this._ky
+      .post('v1/tags/suggested', {
+        json: body,
+      })
+      .json()
+  }
+
   public async rename(
-    params: RenameTag_Params,
+    params: Rename_Params,
     encryption_key: Uint8Array,
   ): Promise<void> {
     const hash = await Crypto.SHA256(params.old_tag_name, encryption_key)
@@ -25,7 +43,6 @@ export class Tags_DataSourceImpl implements Tags_DataSource {
     const body: Rename_Dto.Request.Body = {
       old_hash: await Crypto.SHA256(params.old_tag_name, encryption_key),
       new_hash: await Crypto.SHA256(params.new_tag_name, encryption_key),
-      // we should check if tag is public before doing update
       name: visibility_check_result.is_public ? params.new_tag_name : undefined,
       name_aes: await Crypto.AES.encrypt(
         params.new_tag_name.trim(),

@@ -1,28 +1,33 @@
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { system_values } from '@shared/constants/system-values'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { ContentStandard as UiCommonTemplate_Modal_ContentStandard } from '@web-ui/components/common/templates/modal/content-standard'
-import { Header as UiCommonTemplate_Modal_ContentStandard_Header } from '@web-ui/components/common/templates/modal/content-standard/header'
-import { Footer as UiCommonTemplate_Modal_ContentStandard_Footer } from '@web-ui/components/common/templates/modal/content-standard/footer'
-import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
+import { ContentStandard as UiCommonTemplates_Modal_ContentStandard } from '@web-ui/components/common/templates/modal/content-standard'
+import { Header as UiCommonTemplates_Modal_ContentStandard_Header } from '@web-ui/components/common/templates/modal/content-standard/header'
+import { Footer as UiCommonTemplates_Modal_ContentStandard_Footer } from '@web-ui/components/common/templates/modal/content-standard/footer'
+import { Input as UiCommonAtoms_Input } from '@web-ui/components/common/atoms/input'
 import { DraggableUpsertFormLinks as UiAppAtom_DraggableUpsertFormLinks } from '@web-ui/components/app/atoms/draggable-upsert-form-links'
 import { DraggableUpsertFormTags as UiAppAtom_DraggableUpsertFormTags } from '@web-ui/components/app/atoms/draggable-upsert-form-tags'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
-import { StandardSplit as UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit } from '@web-ui/components/common/templates/modal/content-standard/sections/standard-split'
-import { Standard as UiCommonTemplate_Modal_ContentStandard_Sections_Standard } from '@web-ui/components/common/templates/modal/content-standard/sections/standard'
-import { Centered as UiCommonTemplate_Modal_ContentStandard_Sections_Centered } from '@web-ui/components/common/templates/modal/content-standard/sections/centered'
-import { Divider as UiCommonTemplate_Modal_ContentStandard_Sections_Divider } from '@web-ui/components/common/templates/modal/content-standard/sections/divider'
+import { StandardSplit as UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit } from '@web-ui/components/common/templates/modal/content-standard/sections/standard-split'
+import { Standard as UiCommonTemplates_Modal_ContentStandard_Sections_Standard } from '@web-ui/components/common/templates/modal/content-standard/sections/standard'
+import { Centered as UiCommonTemplates_Modal_ContentStandard_Sections_Centered } from '@web-ui/components/common/templates/modal/content-standard/sections/centered'
+import { Divider as UiCommonTemplates_Modal_ContentStandard_Sections_Divider } from '@web-ui/components/common/templates/modal/content-standard/sections/divider'
 import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { HtmlParser } from '@shared/utils/html-parser'
+import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
+import { AuthContext } from '@/app/auth-provider'
+import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
+import { All_Ro } from '@repositories/modules/tags/domain/all.ro'
+import { Suggested_Ro } from '@repositories/modules/tags/domain/suggested.ro'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 type FormValues = {
   title?: string
   note?: string
-  is_public?: boolean
 }
 
 // Data from fragment.
@@ -66,11 +71,17 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     setValue,
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
+  const auth_context = useContext(AuthContext)!
+  const [is_bookmark_public, set_is_bookmark_public] = useState(
+    props.bookmark?.is_public,
+  )
   const [clipboard_url, set_clipboard_url] = useState<string>()
   const [clipboard_data, set_clipboard_data] = useState<ClipboardData>()
   const cover_paste_area = useRef<HTMLDivElement>(null)
   const file_input = useRef<HTMLInputElement>(null)
   const [cover, set_cover] = useState<string>() // Base64 encoded webp.
+  const [all_tags, set_all_tags] = useState<All_Ro>()
+  const [suggested_tags, set_suggested_tags] = useState<Suggested_Ro[]>([]) // We're leaving older suggestions, so users can still select from them.
 
   const handle_file_select = (event: Event) => {
     const input = event.target as HTMLInputElement
@@ -261,13 +272,9 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       og_image = canvas.toDataURL('image/webp')
     }
 
-    const is_bookmark_public =
-      (form_data.is_public === undefined && props.bookmark?.is_public) ||
-      form_data.is_public ||
-      false
     const bookmark: UpsertBookmark_Params = {
       bookmark_id: props.bookmark?.id,
-      is_public: is_bookmark_public,
+      is_public: is_bookmark_public || false,
       title: form_data.title?.trim() || undefined,
       note: form_data.note?.trim() || undefined,
       created_at: props.bookmark?.created_at
@@ -297,7 +304,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               : undefined
           return {
             url: link.url,
-            is_public: (form_data.is_public ? link.is_public : false) || false, // TODO: make is public optional.
+            is_public: (is_bookmark_public ? link.is_public : false) || false, // TODO: make is public optional.
             site_path: link.site_path,
             is_pinned: current_link?.is_pinned,
             pin_title: current_link?.pin_title,
@@ -309,7 +316,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       ),
       tags: tags.map((tag) => ({
         name: tag.name,
-        is_public: (form_data.is_public ? tag.is_public : false) || false, // TODO: make is public optional.
+        is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional.
       })),
       cover:
         cover?.replace('data:image/webp;base64,', '') ||
@@ -419,11 +426,40 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     }
   }, [])
 
+  const fetch_suggested_tags = async (selected_tags: number[]) => {
+    const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
+    const repository = new Tags_RepositoryImpl(data_source)
+    const result = await repository.suggested({ selected_tags })
+    if (result.frequent.length && result.recent.length) {
+      set_suggested_tags([result, ...suggested_tags])
+    }
+  }
+
+  useEffect(() => {
+    if (suggested_tags.length == 0) {
+      fetch_suggested_tags([])
+    } else if (suggested_tags.length == 1 && props.bookmark?.tags.length) {
+      fetch_suggested_tags(props.bookmark.tags.map((tag) => tag.id))
+    }
+  }, [suggested_tags])
+
+  useEffect(() => {
+    const fetch_all_tags = async () => {
+      const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
+      const repository = new Tags_RepositoryImpl(data_source)
+      const result = await repository.all(
+        auth_context.auth_data!.encryption_key,
+      )
+      set_all_tags(result)
+    }
+    fetch_all_tags()
+  }, [])
+
   return (
-    <UiCommonTemplate_Modal_ContentStandard
+    <UiCommonTemplates_Modal_ContentStandard
       width={600}
       slot_header={
-        <UiCommonTemplate_Modal_ContentStandard_Header
+        <UiCommonTemplates_Modal_ContentStandard_Header
           title={
             props.action == 'update'
               ? props.dictionary.app.upsert_modal.edit_boomkark
@@ -432,7 +468,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         />
       }
       slot_footer={
-        <UiCommonTemplate_Modal_ContentStandard_Footer
+        <UiCommonTemplates_Modal_ContentStandard_Footer
           on_click_cancel={props.on_close}
           button_label={
             props.action == 'update'
@@ -447,96 +483,73 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         />
       }
     >
-      <UiCommonTemplate_Modal_ContentStandard_Sections_Centered
+      <UiCommonTemplates_Modal_ContentStandard_Sections_Centered
         label={props.dictionary.app.upsert_modal.visibility}
       >
-        <Controller
-          name="is_public"
-          control={control}
-          defaultValue={props.bookmark?.is_public}
-          render={({ field }) => {
-            return (
-              <div style={{ width: '200px' }}>
-                <SegmentedButton
-                  items={[
-                    {
-                      label: props.dictionary.app.upsert_modal.private,
-                      is_selected: !field.value,
-                    },
-                    {
-                      label: props.dictionary.app.upsert_modal.public,
-                      is_selected: field.value || false,
-                    },
-                  ]}
-                  on_item_click={(selected_idx) => {
-                    if (selected_idx == 0) {
-                      field.onChange(false)
-                    } else {
-                      field.onChange(true)
-                    }
-                  }}
-                />
-              </div>
-            )
-          }}
-        />
-      </UiCommonTemplate_Modal_ContentStandard_Sections_Centered>
+        <div style={{ width: '200px' }}>
+          <SegmentedButton
+            items={[
+              {
+                label: props.dictionary.app.upsert_modal.private,
+                is_selected: !is_bookmark_public,
+              },
+              {
+                label: props.dictionary.app.upsert_modal.public,
+                is_selected: is_bookmark_public || false,
+              },
+            ]}
+            on_item_click={(selected_idx) => {
+              if (selected_idx == 0) {
+                set_is_bookmark_public(false)
+              } else {
+                set_is_bookmark_public(true)
+              }
+            }}
+          />
+        </div>
+      </UiCommonTemplates_Modal_ContentStandard_Sections_Centered>
 
-      <UiCommonTemplate_Modal_ContentStandard_Sections_Standard
+      <UiCommonTemplates_Modal_ContentStandard_Sections_Standard
         label={props.dictionary.app.upsert_modal.links}
       >
-        <Controller
-          name="is_public"
-          control={control}
-          defaultValue={props.bookmark?.is_public}
-          render={({ field }) => {
-            return (
-              <UiAppAtom_DraggableUpsertFormLinks
-                links={links.map((link) => ({
-                  url: link.url,
-                  site_path: link.site_path,
-                  is_public:
-                    props.bookmark?.is_public == false ? true : link.is_public,
-                  open_snapshot: link.open_snapshot,
-                }))}
-                on_change={(links) => {
-                  set_links(
-                    links.map((link) => ({
-                      url: link.url,
-                      site_path: link.site_path,
-                      is_public: link.is_public,
-                      open_snapshot: link.open_snapshot,
-                    })),
-                  )
-                }}
-                show_visibility_toggler={
-                  (field.value === undefined && props.bookmark?.is_public) ||
-                  field.value ||
-                  false
-                }
-                max_items={system_values.bookmark.links.limit}
-                clipboard_url={clipboard_url}
-                translations={{
-                  paste_url: props.dictionary.app.upsert_modal.paste_url,
-                  add: props.dictionary.app.upsert_modal.add_link,
-                  open: props.dictionary.app.upsert_modal.link.open,
-                  original_url:
-                    props.dictionary.app.upsert_modal.link.original_url,
-                  snapshot: props.dictionary.app.upsert_modal.link.snapshot,
-                  visibility: props.dictionary.app.upsert_modal.link.visibility,
-                  private: props.dictionary.app.upsert_modal.link.private,
-                  public: props.dictionary.app.upsert_modal.link.public,
-                  site: props.dictionary.app.upsert_modal.link.site,
-                }}
-              />
+        <UiAppAtom_DraggableUpsertFormLinks
+          links={links.map((link) => ({
+            url: link.url,
+            site_path: link.site_path,
+            is_public:
+              props.bookmark?.is_public == false ? true : link.is_public,
+            open_snapshot: link.open_snapshot,
+          }))}
+          on_change={(links) => {
+            set_links(
+              links.map((link) => ({
+                url: link.url,
+                site_path: link.site_path,
+                is_public: link.is_public,
+                open_snapshot: link.open_snapshot,
+              })),
             )
           }}
+          show_visibility_toggler={is_bookmark_public || false}
+          max_items={system_values.bookmark.links.limit}
+          clipboard_url={clipboard_url}
+          translations={{
+            paste_url: props.dictionary.app.upsert_modal.paste_url,
+            add: props.dictionary.app.upsert_modal.add_link,
+            open: props.dictionary.app.upsert_modal.link.open,
+            original_url: props.dictionary.app.upsert_modal.link.original_url,
+            snapshot: props.dictionary.app.upsert_modal.link.snapshot,
+            visibility: props.dictionary.app.upsert_modal.link.visibility,
+            private: props.dictionary.app.upsert_modal.link.private,
+            public: props.dictionary.app.upsert_modal.link.public,
+            site: props.dictionary.app.upsert_modal.link.site,
+          }}
         />
-      </UiCommonTemplate_Modal_ContentStandard_Sections_Standard>
+      </UiCommonTemplates_Modal_ContentStandard_Sections_Standard>
 
-      <UiCommonTemplate_Modal_ContentStandard_Sections_Divider />
+      <UiCommonTemplates_Modal_ContentStandard_Sections_Divider />
 
-      <UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit
+      <UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit
         label={props.dictionary.app.upsert_modal.title}
       >
         <UiCommonTemplate_FormControllerFix>
@@ -562,7 +575,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               }
 
               return (
-                <UiCommonAtom_Input
+                <UiCommonAtoms_Input
                   value={field.value || ''}
                   on_change={(value) => {
                     if (!isSubmitting) {
@@ -578,11 +591,11 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit>
+      </UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit>
 
-      <UiCommonTemplate_Modal_ContentStandard_Sections_Divider />
+      <UiCommonTemplates_Modal_ContentStandard_Sections_Divider />
 
-      <UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit
+      <UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit
         label={props.dictionary.app.upsert_modal.note}
       >
         <UiCommonTemplate_FormControllerFix>
@@ -608,7 +621,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
               }
 
               return (
-                <UiCommonAtom_Input
+                <UiCommonAtoms_Input
                   value={field.value || ''}
                   on_change={(value) => {
                     if (!isSubmitting) {
@@ -627,56 +640,65 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit>
+      </UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit>
 
-      <UiCommonTemplate_Modal_ContentStandard_Sections_Divider />
+      <UiCommonTemplates_Modal_ContentStandard_Sections_Divider />
 
-      <UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit
+      <UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit
         label={props.dictionary.app.upsert_modal.tags}
       >
-        <Controller
-          name="is_public"
-          control={control}
-          defaultValue={props.bookmark?.is_public}
-          render={({ field }) => {
-            return (
-              <UiAppAtom_DraggableUpsertFormTags
-                tags={tags.map((tag) => ({
-                  name: tag.name,
-                  is_public:
-                    props.bookmark?.is_public == false ? true : tag.is_public,
-                }))}
-                on_change={(tags) => {
-                  set_tags(
-                    tags.map((tag) => ({
-                      name: tag.name,
-                      is_public: tag.is_public,
-                    })),
-                  )
-                }}
-                show_visibility_toggler={
-                  (field.value === undefined && props.bookmark?.is_public) ||
-                  field.value ||
-                  false
-                }
-                max_items={system_values.bookmark.tags.limit}
-                translations={{
-                  enter_tag_name:
-                    props.dictionary.app.upsert_modal.enter_tag_name,
-                  add: props.dictionary.app.upsert_modal.add_tag,
-                  private: props.dictionary.app.upsert_modal.tag.private,
-                  public: props.dictionary.app.upsert_modal.tag.public,
-                  visibility: props.dictionary.app.upsert_modal.tag.visibility,
-                }}
-              />
+        <UiAppAtom_DraggableUpsertFormTags
+          tags={tags.map((tag) => ({
+            name: tag.name,
+            is_public:
+              props.bookmark?.is_public == false ? true : tag.is_public,
+          }))}
+          on_change={(updated_tags) => {
+            set_tags(
+              updated_tags.map((tag) => ({
+                name: tag.name,
+                is_public: tag.is_public,
+              })),
             )
+            // Refetch suggested tags.
+            if (updated_tags.length > tags.length) {
+              const tag_ids: number[] = []
+              updated_tags.forEach((tag) => {
+                const tag_id = all_tags?.find((t) => t.name == tag.name)?.id
+                if (tag_id) {
+                  tag_ids.push(tag_id)
+                }
+              })
+              fetch_suggested_tags(tag_ids)
+            }
+          }}
+          show_visibility_toggler={is_bookmark_public || false}
+          max_tags={system_values.bookmark.tags.limit}
+          suggestions={
+            all_tags
+              ? suggested_tags.map((item) => ({
+                  recent: item.recent.map(
+                    (tag_id) => all_tags.find((tag) => tag.id == tag_id)!.name,
+                  ),
+                  frequent: item.frequent.map(
+                    (tag_id) => all_tags.find((tag) => tag.id == tag_id)!.name,
+                  ),
+                }))
+              : []
+          }
+          translations={{
+            enter_tag_name: props.dictionary.app.upsert_modal.enter_tag_name,
+            add: props.dictionary.app.upsert_modal.add_tag,
+            private: props.dictionary.app.upsert_modal.tag.private,
+            public: props.dictionary.app.upsert_modal.tag.public,
+            visibility: props.dictionary.app.upsert_modal.tag.visibility,
           }}
         />
-      </UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit>
+      </UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit>
 
-      <UiCommonTemplate_Modal_ContentStandard_Sections_Divider />
+      <UiCommonTemplates_Modal_ContentStandard_Sections_Divider />
 
-      <UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit
+      <UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit
         label={props.dictionary.app.upsert_modal.cover}
       >
         {(cover || clipboard_data?.og_image || props.bookmark?.cover) && (
@@ -691,12 +713,12 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
             height={cover_size.height / 2}
           />
         )}
-        <input type="file" ref={file_input} />
+        <input type="file" ref={file_input} accept="image/png, image/jpeg" />
         <br />
         <div ref={cover_paste_area}>
           Click here and press Ctrl+V to paste an image
         </div>
-      </UiCommonTemplate_Modal_ContentStandard_Sections_StandardSplit>
-    </UiCommonTemplate_Modal_ContentStandard>
+      </UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit>
+    </UiCommonTemplates_Modal_ContentStandard>
   )
 }

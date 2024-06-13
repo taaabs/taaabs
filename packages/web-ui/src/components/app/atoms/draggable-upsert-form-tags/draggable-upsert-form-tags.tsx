@@ -18,7 +18,8 @@ namespace DraggableUpsertFormTags {
     tags: Tag[]
     on_change: (items: Tag[]) => void
     show_visibility_toggler: boolean
-    max_items?: number
+    max_tags?: number
+    suggestions: { recent: string[]; frequent: string[] }[]
     translations: {
       enter_tag_name: string
       add: string
@@ -35,7 +36,7 @@ export const DraggableUpsertFormTags: React.FC<
   const is_input_focused = useRef<boolean>()
   const [new_tag, set_new_tag] = useState('')
   const [count, set_count] = useState(props.tags.length)
-  const [items, set_items] = useState<
+  const [tags, set_tags] = useState<
     { id: number; name: string; is_public?: boolean }[]
   >(
     props.tags.map((item, i) => ({
@@ -46,28 +47,25 @@ export const DraggableUpsertFormTags: React.FC<
   )
 
   useUpdateEffect(() => {
-    props.on_change(items)
-  }, [items])
+    props.on_change(tags)
+  }, [tags])
 
-  const add_tag = () => {
-    if (!new_tag) return
-    if (items.find((item) => item.name == new_tag)) {
+  const add_tag = (tag: string) => {
+    if (props.max_tags == tags.length) return
+    if (tags.find((item) => item.name == tag)) {
       set_new_tag('')
       toast.error('Given tag is already there')
       return
     }
-    set_items([...items, { id: count + 1, is_public: true, name: new_tag }])
-    set_count(items.length + 1)
+    set_tags([...tags, { id: count + 1, is_public: true, name: tag }])
+    set_count(tags.length + 1)
     set_new_tag('')
-    setTimeout(() => {
-      document.querySelector(`.${styles['new-tag']}`)?.scrollIntoView()
-    }, 0)
   }
 
   const handle_keyboard = (event: any) => {
-    if (!is_input_focused) return
+    if (!is_input_focused.current) return
     if (event.code == 'Enter') {
-      add_tag()
+      add_tag(new_tag)
     }
   }
 
@@ -81,21 +79,21 @@ export const DraggableUpsertFormTags: React.FC<
 
   return (
     <div>
-      {items.length > 0 && (
+      {tags.length > 0 && (
         <ReactSortable
-          list={items}
-          setList={set_items}
+          list={tags}
+          setList={set_tags}
           className={styles.sortable}
           animation={system_values.sortablejs_animation_duration}
           forceFallback={true}
           handle={'.handle'}
         >
-          {items.map((item) => (
+          {tags.map((item) => (
             <div key={item.id} className={styles.item}>
               <button
                 className={styles.item__remove}
                 onClick={() => {
-                  set_items(items.filter((el) => el.id != item.id))
+                  set_tags(tags.filter((el) => el.id != item.id))
                 }}
               >
                 <Icon variant="ADD" />
@@ -105,8 +103,8 @@ export const DraggableUpsertFormTags: React.FC<
                   className={styles.item__content__tag}
                   value={item.name}
                   onChange={(e) => {
-                    set_items(
-                      items.map((i) =>
+                    set_tags(
+                      tags.map((i) =>
                         i.id == item.id
                           ? {
                               ...i,
@@ -131,8 +129,8 @@ export const DraggableUpsertFormTags: React.FC<
                         <select
                           onChange={(e) => {
                             if (e.target.value == 'private') {
-                              set_items(
-                                items.map((el) => {
+                              set_tags(
+                                tags.map((el) => {
                                   if (el.id == item.id) {
                                     return { ...el, is_public: false }
                                   } else {
@@ -141,8 +139,8 @@ export const DraggableUpsertFormTags: React.FC<
                                 }),
                               )
                             } else if (e.target.value == 'public') {
-                              set_items(
-                                items.map((el) => {
+                              set_tags(
+                                tags.map((el) => {
                                   if (el.id == item.id) {
                                     return { ...el, is_public: true }
                                   } else {
@@ -190,12 +188,53 @@ export const DraggableUpsertFormTags: React.FC<
         />
         <Button
           on_click={() => {
-            add_tag()
+            add_tag(new_tag)
           }}
-          is_disabled={items.length == props.max_items}
+          is_disabled={tags.length == props.max_tags}
         >
           {props.translations.add}
         </Button>
+      </div>
+
+      <div className={styles.suggestions}>
+        {props.suggestions.map((item, i) => (
+          <div className={styles.suggestions__pair} key={i}>
+            <div>
+              <div className={styles.suggestions__pair__label}>Recent</div>
+              <div>
+                <div className={styles.suggestions__pair__tags}>
+                  {item.recent.map((tag, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        add_tag(tag)
+                      }}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div>
+              <div className={styles.suggestions__pair__label}>Frequent</div>
+              <div>
+                <div className={styles.suggestions__pair__tags}>
+                  {item.frequent.map((tag, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        add_tag(tag)
+                      }}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
