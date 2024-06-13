@@ -24,25 +24,6 @@ Taaabs Community Edition is a free and open-source bookmarking app enabling you 
 
 View the [Roadmap](https://taaabs.com) for details on our planned features and future direction.
 
-## Self-Hosting
-
-## Contributing
-
-There are lots of ways to contribute to Taaabs.
-
-- [Submit bug](https://github.com/taaabs/taaabs/issues) reports and help us [verify fixes](https://github.com/taaabs/taaabs/pulls) as they are pushed up.
-- Review and collaborate [source code](https://github.com/taaabs/taaabs/pulls) changes.
-- Engage with other Taaabs users and developers in the [discussions](discussions) tab.
-- Contribute bug fixes.
-- Help translate language packs.
-- Submit feature proposals and documentation improvements.
-
-Signing CLA needs to be done only once for all PRs and contributions.
-
-## License
-
-Taaabs is copyrighted by Robert Piosik and contributors, licensed under the AGPLv3. See the included LICENSE file for details.
-
 ## Acknowledgements
 
 Special thanks to all the authors of [Orama](https://github.com/askorama/orama), next generation, lightweight client-side search engine enabling the development of an End-to-end encrypted bookmarking app.
