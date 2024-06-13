@@ -18,20 +18,22 @@
 
 ## Introduction
 
-Taaabs is a free\*, privacy focused and modern bookmarking app.
+Taaabs is a free<small>\*</small>, privacy focused and modern bookmarking app.
 
-It fetches, parses and stores websites 100% locally, so no external API requests are involved.
+It fetches, parses and stores websites on-device, so no API requests are involved.
 
-Saved bookmark includes everything you'd expect:
+A bookmark includes everything you'd expect:
 
 - title
 - note
 - tags
-- content for Permanent Reader
-- cover image
+- stars
 - favicon
+- cover image
+- content for Permanent Reader
+- highlights
 
-<sub>\* Free for personal use with on-device library. Optional user account offers paid features like unlimited, encrypted e2e synchronization across all your devices.</sub>
+<small>\* Free for personal use with on-device library.</small>
 
 ## Features
 
