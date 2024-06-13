@@ -17,6 +17,9 @@
   border-radius: var(--border-radius-999px);
   @include hover {
     background-color: var(--blue800);
+    @include dark {
+      background-color: var(--blue700);
+    }
   }
   height: var(--button-dimension-40px);
   padding: 0 16px;

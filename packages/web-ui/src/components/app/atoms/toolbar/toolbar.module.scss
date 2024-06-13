@@ -6,7 +6,7 @@
   align-items: center;
   background-color: var(--accent-color);
   @include dark {
-    background-color: var(--dark400);
+    background-color: var(--dark300);
   }
   @include light {
     box-shadow: var(--box-shadow-blue-strong);
@@ -34,7 +34,7 @@
     @include hover {
       background-color: var(--blue600);
       @include dark {
-        background-color: var(--dark300);
+        background-color: var(--dark400);
       }
     }
     @include to992 {
