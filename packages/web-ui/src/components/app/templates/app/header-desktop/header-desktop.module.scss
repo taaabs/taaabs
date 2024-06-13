@@ -19,39 +19,6 @@
   align-items: center;
   gap: var(--padding-16px);
 }
-.cockroachdb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: var(--border-secondary);
-  border-radius: var(--border-radius-10px);
-  padding: 4px 8px;
-  background-color: var(--white);
-  @include dark {
-    background-color: var(--dark100);
-  }
-  @include hover {
-    border-color: var(--border-color-hover);
-  }
-  > img {
-    width: 11px;
-  }
-  &__text {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    > span {
-      line-height: 1;
-      font-weight: var(--font-weight-inter-medium);
-    }
-    > span:first-child {
-      font-size: var(--font-size-10px);
-    }
-    > span:last-child {
-      font-size: var(--font-size-13px);
-    }
-  }
-}
 .navigation {
   position: absolute;
   height: 100%;

@@ -323,7 +323,6 @@ export const HeaderDesktop: React.FC<{
           <div>x</div>
         ))
       }
-      cockroach_url="https://bit.ly/cockroachdb-cloud"
       translations={{ powered_by: props.dictionary.app.powered_by }}
     />
   )

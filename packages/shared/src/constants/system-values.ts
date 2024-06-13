@@ -15,10 +15,6 @@ export const system_values = {
     max_selected_tags: 5,
     bookmarks: {
       per_page: 20,
-      cache_for_days: 7,
-    },
-    counts: {
-      cache_for_days: 7,
     },
   },
   bookmark: {
