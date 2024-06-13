@@ -8,7 +8,7 @@
   flex-shrink: 0;
   color: var(--white);
   @include dark {
-    color: var(--text-color-normal);
+    color: var(--blue100);
   }
   background: var(--accent-color);
   font-family: var(--font-family-plus-jakarta-sans);

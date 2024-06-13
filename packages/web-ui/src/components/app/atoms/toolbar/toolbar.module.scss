@@ -5,10 +5,15 @@
   display: flex;
   align-items: center;
   background-color: var(--accent-color);
+  @include dark {
+    background-color: var(--dark400);
+  }
+  @include light {
+    box-shadow: var(--box-shadow-blue-strong);
+  }
   border-radius: var(--border-radius-999px);
   padding: 4px;
   gap: 3px;
-  box-shadow: var(--box-shadow-blue-strong);
   @include transition-250ms;
   @include at992 {
     padding: 6px;
@@ -24,12 +29,12 @@
     align-items: center;
     color: var(--white);
     @include dark {
-      color: var(--text-color-normal);
+      color: var(--dark700);
     }
     @include hover {
       background-color: var(--blue600);
       @include dark {
-        background-color: var(--blue700);
+        background-color: var(--dark300);
       }
     }
     @include to992 {
@@ -43,12 +48,12 @@
       background-color: var(--white);
       color: var(--blue700);
       @include dark {
-        background-color: var(--blue800);
+        background-color: var(--dark200);
       }
       @include hover {
         background-color: var(--white);
         @include dark {
-          background-color: var(--blue800);
+          background-color: var(--dark200);
         }
       }
     }
@@ -61,7 +66,7 @@
     width: 1px;
     background-color: var(--blue600);
     @include dark {
-      background-color: var(--blue500);
+      background-color: var(--dark500);
     }
     margin: 0 2px 0;
     @include at992 {
@@ -77,7 +82,7 @@
     align-items: center;
     justify-content: center;
     @include hover {
-      background-color: var(--blue600);
+      background-color: var(--dark300);
     }
     @include at992 {
       height: var(--button-dimension-40px);
@@ -86,11 +91,11 @@
     @include transition-150ms(background-color);
     > svg {
       fill: var(--white);
-      height: var(--icon-dimension-15px);
-      width: var(--icon-dimension-15px);
       @include dark {
         fill: var(--dark700);
       }
+      height: var(--icon-dimension-15px);
+      width: var(--icon-dimension-15px);
       @include at992 {
         height: var(--icon-dimension-20px);
         width: var(--icon-dimension-20px);

@@ -668,12 +668,18 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
           suggestions={
             all_tags
               ? suggested_tags.map((item) => ({
-                  recent: item.recent.map(
-                    (tag_id) => all_tags.find((tag) => tag.id == tag_id)!.name,
-                  ),
-                  frequent: item.frequent.map(
-                    (tag_id) => all_tags.find((tag) => tag.id == tag_id)!.name,
-                  ),
+                  recent: item.recent
+                    .slice(0, 10)
+                    .map(
+                      (tag_id) =>
+                        all_tags.find((tag) => tag.id == tag_id)!.name,
+                    ),
+                  frequent: item.frequent
+                    .slice(0, 10)
+                    .map(
+                      (tag_id) =>
+                        all_tags.find((tag) => tag.id == tag_id)!.name,
+                    ),
                 }))
               : []
           }

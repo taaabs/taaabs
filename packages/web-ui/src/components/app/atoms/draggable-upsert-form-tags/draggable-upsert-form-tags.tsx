@@ -196,46 +196,48 @@ export const DraggableUpsertFormTags: React.FC<
         </Button>
       </div>
 
-      <div className={styles.suggestions}>
-        {props.suggestions.map((item, i) => (
-          <div className={styles.suggestions__pair} key={i}>
-            <div>
-              <div className={styles.suggestions__pair__label}>Recent</div>
+      {props.suggestions.length > 0 && (
+        <div className={styles.suggestions}>
+          {props.suggestions.map((item, i) => (
+            <div className={styles.suggestions__pair} key={i}>
               <div>
-                <div className={styles.suggestions__pair__tags}>
-                  {item.recent.map((tag, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        add_tag(tag)
-                      }}
-                    >
-                      {tag}
-                    </button>
-                  ))}
+                <div className={styles.suggestions__pair__label}>Recent</div>
+                <div>
+                  <div className={styles.suggestions__pair__tags}>
+                    {item.recent.map((tag, i) => (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          add_tag(tag)
+                        }}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className={styles.suggestions__pair__label}>Frequent</div>
+                <div>
+                  <div className={styles.suggestions__pair__tags}>
+                    {item.frequent.map((tag, i) => (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          add_tag(tag)
+                        }}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-            <div>
-              <div className={styles.suggestions__pair__label}>Frequent</div>
-              <div>
-                <div className={styles.suggestions__pair__tags}>
-                  {item.frequent.map((tag, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        add_tag(tag)
-                      }}
-                    >
-                      {tag}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
