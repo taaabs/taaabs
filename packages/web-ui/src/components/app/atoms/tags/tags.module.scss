@@ -20,7 +20,10 @@
   font-size: 14px;
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-  color: var(--accent-color);
+  color: var(--blue600);
+  @include dark {
+    color: var(--blue500);
+  }
   width: 22px;
   margin-right: 2px;
   &::before {

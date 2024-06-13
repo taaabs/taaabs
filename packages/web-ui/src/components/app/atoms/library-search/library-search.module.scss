@@ -96,7 +96,10 @@
     }
     > svg {
       width: var(--icon-dimension-16px);
-      fill: var(--accent-color);
+      fill: var(--blue600);
+      @include dark {
+        fill: var(--blue500);
+      }
       @include transition-150ms(fill);
       @include at992 {
         width: var(--icon-dimension-20px);
@@ -309,7 +312,10 @@
       }
       > svg {
         width: var(--icon-dimension-14px);
-        fill: var(--accent-color);
+        fill: var(--blue600);
+        @include dark {
+          fill: var(--blue500);
+        }
         @include transition-150ms(fill);
         @include at992 {
           width: var(--icon-dimension-16px);

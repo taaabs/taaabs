@@ -14,7 +14,7 @@
   border-radius: var(--border-radius-12px);
   box-shadow: var(--box-shadow-blue-strong);
   @include dark {
-    background-color: var(--blue800);
+    background-color: var(--blue700);
   }
   &__remove {
     position: absolute;
@@ -61,6 +61,9 @@
       font-weight: var(--font-weight-inter-medium);
       padding: var(--padding-12px) var(--padding-16px);
       caret-color: var(--white);
+      @include dark {
+        caret-color: var(--dark700);
+      }
       resize: none;
       &::selection {
         background-color: var(--blue400);
@@ -113,7 +116,7 @@
     border-bottom-right-radius: var(--border-radius-12px);
     background-color: var(--blue700);
     @include dark {
-      background-color: var(--blue900);
+      background-color: var(--blue800);
     }
     > svg {
       fill: var(--white);

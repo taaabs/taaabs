@@ -14,7 +14,7 @@
   border-radius: var(--border-radius-12px);
   background-color: var(--green600);
   @include dark {
-    background-color: var(--green800);
+    background-color: var(--green700);
   }
   &__remove {
     position: absolute;
@@ -60,6 +60,9 @@
       font-weight: var(--font-weight-inter-medium);
       padding: var(--padding-12px) var(--padding-16px);
       caret-color: var(--white);
+      @include dark {
+        caret-color: var(--dark700);
+      }
       &::selection {
         background-color: var(--green400);
       }
@@ -73,12 +76,12 @@
         padding: var(--padding-10px) var(--padding-16px);
         border-top: 1px solid var(--green500);
         @include dark {
-          border-top: 1px solid var(--green700);
+          border-top: 1px solid var(--green600);
         }
         &__label {
           color: var(--green100);
           @include dark {
-            color: var(--green200);
+            color: var(--green100);
           }
         }
         &__content {
@@ -111,7 +114,7 @@
     border-top-right-radius: var(--border-radius-12px);
     border-bottom-right-radius: var(--border-radius-12px);
     @include dark {
-      background-color: var(--green900);
+      background-color: var(--green800);
     }
     > svg {
       fill: var(--white);

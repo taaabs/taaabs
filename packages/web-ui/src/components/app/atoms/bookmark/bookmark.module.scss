@@ -208,7 +208,10 @@
             background-color: var(--dark300);
           }
           svg {
-            fill: var(--accent-color);
+            fill: var(--blue600);
+            @include dark {
+              fill: var(--blue500);
+            }
             @include transition-150ms(fill);
             width: var(--icon-dimension-16px);
           }
@@ -459,7 +462,10 @@
               background-color: var(--dark300);
             }
             svg {
-              fill: var(--accent-color);
+              fill: var(--blue600);
+              @include dark {
+                fill: var(--blue500);
+              }
               @include transition-150ms(fill);
               width: var(--icon-dimension-16px);
             }
@@ -575,7 +581,10 @@
             background-color: var(--dark200);
           }
           svg {
-            fill: var(--accent-color);
+            fill: var(--blue600);
+            @include dark {
+              fill: var(--blue500);
+            }
             @include transition-150ms(fill);
             width: 14px;
           }

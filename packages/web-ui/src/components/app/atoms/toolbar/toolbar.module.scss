@@ -82,7 +82,10 @@
     align-items: center;
     justify-content: center;
     @include hover {
-      background-color: var(--dark300);
+      background-color: var(--blue600);
+      @include dark {
+        background-color: var(--dark400);
+      }
     }
     @include at992 {
       height: var(--button-dimension-40px);
