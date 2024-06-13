@@ -496,14 +496,17 @@
         &::after {
           content: '';
           position: absolute;
+          z-index: 1;
           pointer-events: none;
           width: 100%;
           height: calc(100% + 2px);
           top: -1px;
           left: 0;
+          background-color: rgba(126, 34, 206, 0.06);
           border: 1.5px solid var(--purple400);
           @include dark {
             border-color: var(--purple500);
+            background-color: rgba(126, 34, 206, 0.1);
           }
           @include to992 {
             border-left: 0;
