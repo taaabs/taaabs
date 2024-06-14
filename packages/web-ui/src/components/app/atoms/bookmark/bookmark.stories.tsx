@@ -58,7 +58,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -109,7 +109,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -148,7 +148,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -185,7 +185,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -228,7 +228,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -275,7 +275,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -317,7 +317,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -366,7 +366,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -408,7 +408,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -450,7 +450,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -492,7 +492,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -533,7 +533,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}
@@ -569,7 +569,7 @@ export const Primary = () => (
       created_at_={new Date()}
       on_get_points_given_click_={() => {}}
       on_link_click_={async () => {}}
-      on_new_tab_link_click_={() => {}}
+      on_new_tab_click_={() => {}}
       locale="en"
       on_link_middle_click_={() => {}}
       translations_={{ delete_: 'Delete', rename_: 'Rename' }}

@@ -19,6 +19,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
       items.push({
         bookmark_id: item.bookmark_id,
         created_at: item.created_at,
+        updated_at: item.updated_at,
         is_public: item.is_public,
         url: item.url
           ? item.url
@@ -26,8 +27,8 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
         title: item.title
           ? item.title
           : item.title_aes
-          ? await Crypto.AES.decrypt(item.title_aes, encryption_key)
-          : undefined,
+            ? await Crypto.AES.decrypt(item.title_aes, encryption_key)
+            : undefined,
         stars: item.stars,
         is_unsorted: item.is_unsorted,
         is_archived: item.is_archived,
@@ -55,6 +56,7 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
     for (const item of result) {
       items.push({
         bookmark_id: item.bookmark_id,
+        updated_at: item.updated_at,
         created_at: item.created_at,
         is_public: true,
         url: item.url!,
@@ -80,16 +82,17 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
       encryption_key,
     )
 
-    return result.map((el) => ({
-      bookmark_id: el.bookmark_id,
-      created_at: el.created_at,
-      url: el.url!,
-      title: el.title,
-      stars: el.stars,
-      is_unsorted: el.is_unsorted,
-      is_archived: el.is_archived,
-      tags: el.tags,
-      open_snapshot: el.open_snapshot,
+    return result.map((item) => ({
+      bookmark_id: item.bookmark_id,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
+      url: item.url!,
+      title: item.title,
+      stars: item.stars,
+      is_unsorted: item.is_unsorted,
+      is_archived: item.is_archived,
+      tags: item.tags,
+      open_snapshot: item.open_snapshot,
     }))
   }
 }

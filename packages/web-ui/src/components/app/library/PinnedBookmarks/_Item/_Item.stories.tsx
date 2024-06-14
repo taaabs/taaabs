@@ -18,7 +18,7 @@ export const Primary = () => {
         favicon_host_="http://localhost:4000/v1/favicons"
         on_link_click_={() => {}}
         on_link_middle_click_={() => {}}
-        on_new_tab_link_click_={() => {}}
+        on_new_tab_click_={() => {}}
         on_reading_mode_click_={() => {}}
         should_dim_visited_links_={false}
         url_="http://example.com/abc/def"

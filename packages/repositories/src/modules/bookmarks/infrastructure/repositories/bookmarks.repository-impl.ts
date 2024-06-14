@@ -59,8 +59,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           pin_title: link.pin_title
             ? link.pin_title
             : link.pin_title_aes
-            ? await Crypto.AES.decrypt(link.pin_title_aes!, encryption_key)
-            : undefined,
+              ? await Crypto.AES.decrypt(link.pin_title_aes!, encryption_key)
+              : undefined,
           open_snapshot: link.open_snapshot,
           favicon: link.favicon_aes
             ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
@@ -78,13 +78,13 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         title: bookmark.title
           ? bookmark.title
           : bookmark.title_aes
-          ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
-          : undefined,
+            ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+            : undefined,
         note: bookmark.note
           ? bookmark.note
           : bookmark.note_aes
-          ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
-          : undefined,
+            ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+            : undefined,
         is_unsorted: bookmark.is_unsorted,
         stars: bookmark.stars || 0,
         points: bookmark.points,
@@ -93,8 +93,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         cover: bookmark.cover
           ? bookmark.cover
           : bookmark.cover_aes
-          ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
-          : undefined,
+            ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
+            : undefined,
       })
     }
 
@@ -190,13 +190,13 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               title: bookmark.title
                 ? bookmark.title
                 : bookmark.title_aes
-                ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
-                : undefined,
+                  ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+                  : undefined,
               note: bookmark.note
                 ? bookmark.note
                 : bookmark.note_aes
-                ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
-                : undefined,
+                  ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+                  : undefined,
               is_unsorted: bookmark.is_unsorted,
               stars: bookmark.stars || 0,
               points: bookmark.points,
@@ -233,11 +233,11 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                     pin_title: link.pin_title
                       ? link.pin_title
                       : link.pin_title_aes
-                      ? await Crypto.AES.decrypt(
-                          link.pin_title_aes!,
-                          encryption_key,
-                        )
-                      : undefined,
+                        ? await Crypto.AES.decrypt(
+                            link.pin_title_aes!,
+                            encryption_key,
+                          )
+                        : undefined,
                     open_snapshot: link.open_snapshot,
                     favicon: link.favicon_aes
                       ? await Crypto.AES.decrypt(
@@ -252,8 +252,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               cover: bookmark.cover
                 ? bookmark.cover
                 : bookmark.cover_aes
-                ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
-                : undefined,
+                  ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
+                  : undefined,
             })),
           )
         : undefined,
@@ -315,20 +315,20 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         reader_data: link_data.reader_data
           ? link_data.reader_data
           : link_data.reader_data_aes
-          ? new TextDecoder().decode(
-              pako.inflate(
-                Uint8Array.from(
-                  atob(
-                    await Crypto.AES.decrypt(
-                      link_data.reader_data_aes,
-                      encryption_key,
+            ? new TextDecoder().decode(
+                pako.inflate(
+                  Uint8Array.from(
+                    atob(
+                      await Crypto.AES.decrypt(
+                        link_data.reader_data_aes,
+                        encryption_key,
+                      ),
                     ),
+                    (c) => c.charCodeAt(0),
                   ),
-                  (c) => c.charCodeAt(0),
                 ),
-              ),
-            )
-          : undefined,
+              )
+            : undefined,
       })
     }
 
@@ -371,13 +371,13 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       title: bookmark.title
         ? bookmark.title
         : bookmark.title_aes
-        ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
-        : undefined,
+          ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+          : undefined,
       note: bookmark.note
         ? bookmark.note
         : bookmark.note_aes
-        ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
-        : undefined,
+          ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+          : undefined,
       is_unsorted: bookmark.is_unsorted,
       stars: bookmark.stars || 0,
       points: bookmark.points,
@@ -414,8 +414,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             pin_title: link.pin_title
               ? link.pin_title
               : link.pin_title_aes
-              ? await Crypto.AES.decrypt(link.pin_title_aes, encryption_key)
-              : undefined,
+                ? await Crypto.AES.decrypt(link.pin_title_aes, encryption_key)
+                : undefined,
             open_snapshot: link.open_snapshot,
             favicon: link.favicon_aes
               ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
@@ -427,8 +427,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       cover: bookmark.cover
         ? bookmark.cover
         : bookmark.cover_aes
-        ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
-        : undefined,
+          ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
+          : undefined,
     }
   }
 

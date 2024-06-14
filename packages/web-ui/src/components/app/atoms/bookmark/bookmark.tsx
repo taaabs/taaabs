@@ -112,7 +112,7 @@ export namespace Bookmark {
     on_link_click_: (url: string) => void
     on_reading_mode_click_: (url: string) => void
     on_link_middle_click_: () => void
-    on_new_tab_link_click_: (url: string) => void
+    on_new_tab_click_: (url: string) => void
     favicon_host_: string
     menu_slot_: React.ReactNode
     highlights_?: Highlights
@@ -1006,7 +1006,7 @@ export const Bookmark: React.FC<Bookmark.Props> = memo(
                         onClick={async (e) => {
                           e.stopPropagation()
                           set_recently_visited_link_idx(i)
-                          props.on_new_tab_link_click_(url)
+                          props.on_new_tab_click_(url)
                         }}
                       >
                         <Icon variant="NEW_TAB" />

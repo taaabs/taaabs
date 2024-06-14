@@ -4,12 +4,15 @@ import { memo, useState } from 'react'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { system_values } from '@shared/constants/system-values'
 import { _Item } from './_Item/_Item'
+import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/dropdown'
+import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/dropdown/standard-item'
 
 export namespace PinnedBookmarks {
   export type Item = {
     bookmark_id_: number
     url_: string
     created_at_: Date
+    updated_at_: Date
     is_public_?: boolean
     title_?: string
     tags_?: number[]
@@ -27,8 +30,11 @@ export namespace PinnedBookmarks {
     library_updated_at_timestamp_?: number
     on_change_: (items: Item[]) => void
     favicon_host_: string
-    on_click_: (item: Item) => void
-    on_middle_click_: (item: Item) => void
+    on_reading_mode_click_: (item: Item) => void
+    on_link_click_: (item: Item) => void
+    on_link_middle_click_: (item: Item) => void
+    on_new_tab_click_: (item: Item) => void
+    on_is_visible_: (item: Item) => void
     is_draggable_: boolean
     selected_tags_: number[]
     selected_starred_: boolean
@@ -38,6 +44,8 @@ export namespace PinnedBookmarks {
     current_lte_?: number
     translations_: {
       nothing_pinned_: string
+      open_original_url: string
+      open_snapshot: string
     }
   }
 }
@@ -107,11 +115,47 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
         <_Item
           key={item.id}
           favicon_host_={props.favicon_host_}
-          menu_slot_={<>menu</>}
-          on_link_click_={() => {}}
-          on_link_middle_click_={() => {}}
-          on_new_tab_link_click_={() => {}}
-          on_reading_mode_click_={() => {}}
+          menu_slot_={
+            <UiCommon_Dropdown>
+              {item.open_snapshot_ ? (
+                <UiCommon_Dropdown_StandardItem
+                  icon_variant="LINK"
+                  label={props.translations_.open_original_url}
+                  on_click={() => {
+                    props.on_link_middle_click_(item) // TODO: Function name should be more generic.
+                    window.onbeforeunload = null
+                    location.href = item.url_
+                  }}
+                />
+              ) : (
+                <UiCommon_Dropdown_StandardItem
+                  icon_variant="LINK"
+                  label={props.translations_.open_snapshot}
+                  on_click={() => {
+                    props.on_link_middle_click_(item)
+                    window.onbeforeunload = null
+                    location.href = url_to_wayback({
+                      date: new Date(item.created_at_),
+                      url: item.url_,
+                    })
+                  }}
+                />
+              )}
+            </UiCommon_Dropdown>
+          }
+          on_link_click_={() => {
+            props.on_link_click_(item)
+          }}
+          on_link_middle_click_={() => {
+            props.on_link_middle_click_(item)
+          }}
+          on_new_tab_click_={() => {
+            props.on_new_tab_click_(item)
+          }}
+          on_reading_mode_click_={() => {
+            props.on_reading_mode_click_(item)
+          }}
+          on_is_visible={() => props.on_is_visible_(item)}
           should_dim_visited_links_={false}
           url_={url}
           favicon_={item.favicon_}
@@ -151,6 +195,7 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
             fallbackClass={styles.dragging}
             delay={system_values.sortablejs_delay}
             delayOnTouchOnly={true}
+            filter=".no-drag"
           >
             {items_dom}
           </ReactSortable>

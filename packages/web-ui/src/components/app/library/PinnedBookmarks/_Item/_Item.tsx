@@ -3,8 +3,10 @@ import styles from './_Item.module.scss'
 import cn from 'classnames'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
+import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace _Item {
   export type Props = {
@@ -15,7 +17,8 @@ export namespace _Item {
     should_dim_visited_links_: boolean
     on_link_click_: () => void
     on_link_middle_click_: () => void
-    on_new_tab_link_click_: () => void
+    on_new_tab_click_: () => void
+    on_is_visible: () => void
     is_public_?: boolean
     title_?: string
     site_path_?: string
@@ -27,11 +30,17 @@ export namespace _Item {
 }
 
 export const _Item: React.FC<_Item.Props> = (props) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const is_visible = useViewportSpy(ref)
   const [was_recently_visited, set_was_recently_visited] = useState<boolean>()
   const [is_menu_opened, set_is_menu_opened] = useState<boolean>()
 
+  useUpdateEffect(() => {
+    is_visible && props.on_is_visible()
+  }, [is_visible])
+
   return (
-    <div className={styles.item}>
+    <div className={styles.item} ref={ref}>
       <div className={styles.item__link}>
         <button className={styles.item__link__site}>
           {props.is_public_ ? (
@@ -96,12 +105,12 @@ export const _Item: React.FC<_Item.Props> = (props) => {
           onClick={async (e) => {
             e.stopPropagation()
             set_was_recently_visited(true)
-            props.on_new_tab_link_click_()
+            props.on_new_tab_click_()
           }}
         >
           <Icon variant="NEW_TAB" />
         </button>
-        <div className={styles.item__actions__menu}>
+        <div className={cn([styles.item__actions__menu, 'no-drag'])}>
           <OutsideClickHandler
             disabled={!is_menu_opened}
             onOutsideClick={() => {
@@ -113,8 +122,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
                 [styles['item__actions__menu__button--toggled']]:
                   is_menu_opened,
               })}
-              onClick={async (e) => {
-                e.stopPropagation()
+              onClick={() => {
                 set_is_menu_opened(!is_menu_opened)
               }}
             >
