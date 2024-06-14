@@ -5,7 +5,6 @@
   display: flex;
   align-items: center;
   > span {
-    position: relative;
     color: black;
     @include dark {
       color: white;
@@ -20,16 +19,6 @@
       font-size: var(--font-size-28px);
       padding-left: 9px;
       margin-bottom: 4px;
-    }
-    &::after {
-      font-family: var(--font-family-inter);
-      font-weight: initial;
-      letter-spacing: initial;
-      position: absolute;
-      content: 'beta';
-      right: 0;
-      bottom: -0.7em;
-      font-size: 0.4em;
     }
   }
   &--large {

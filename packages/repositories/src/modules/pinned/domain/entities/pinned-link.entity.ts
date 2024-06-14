@@ -1,6 +1,7 @@
 export type PinnedLink_Entity = {
   bookmark_id: number
   created_at: string
+  updated_at: string
   is_public?: boolean
   url: string
   title?: string

@@ -686,12 +686,16 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       favicon_host_={favicon_host}
       translations_={{
         nothing_pinned_: props.dictionary.app.library.nothing_pinned,
+        open_original_url:
+          props.dictionary.app.library.bookmark.open_original_url,
+        open_snapshot: props.dictionary.app.library.bookmark.open_snapshot,
       }}
       items_={
         pinned_hook.items?.map((item) => ({
           bookmark_id_: item.bookmark_id,
           url_: item.url,
           created_at_: new Date(item.created_at),
+          updated_at_: new Date(item.updated_at),
           title_: item.title,
           is_unsorted_: item.is_unsorted,
           is_archived_: item.is_archived,
@@ -722,7 +726,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           props.dictionary.app.library.pinned_links_has_beed_updated,
         )
       }}
-      on_click_={async (item) => {
+      on_link_click_={async (item) => {
         if (!username) {
           const record_visit_params: RecordVisit_Params = {
             bookmark_id: item.bookmark_id_,
@@ -742,7 +746,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           location.href = url
         }, 0)
       }}
-      on_middle_click_={(item) => {
+      on_link_middle_click_={(item) => {
         if (!username) {
           const data_source = new Bookmarks_DataSourceImpl(
             auth_context.ky_instance,
@@ -752,6 +756,85 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             bookmark_id: item.bookmark_id_,
             visited_at: new Date().toISOString(),
           })
+        }
+      }}
+      on_new_tab_click_={(item) => {
+        if (!username) {
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          repository.record_visit({
+            bookmark_id: item.bookmark_id_,
+            visited_at: new Date().toISOString(),
+          })
+        }
+        const url = item.open_snapshot_
+          ? url_to_wayback({ date: item.created_at_, url: item.url_ })
+          : item.url_
+        window.open(url, '_blank')
+      }}
+      on_reading_mode_click_={async (item) => {
+        const data_source = new Bookmarks_DataSourceImpl(
+          auth_context.ky_instance,
+        )
+        const repository = new Bookmarks_RepositoryImpl(data_source)
+        let links_data: GetLinksData_Ro | undefined = undefined
+        if (!username) {
+          links_data = await repository.get_links_data_authorized(
+            {
+              bookmark_id: item.bookmark_id_,
+              bookmark_updated_at: item.updated_at_,
+            },
+            auth_context.auth_data!.encryption_key,
+          )
+        } else {
+          links_data = await repository.get_links_data_public({
+            bookmark_id: item.bookmark_id_,
+            bookmark_updated_at: item.updated_at_,
+            username,
+          })
+        }
+        const link_data = links_data.find((link) => link.url == item.url_)
+        if (link_data && link_data.reader_data) {
+          reader_modal_setter({
+            reader_data: link_data.reader_data,
+            dictionary: props.dictionary,
+            modal_context: modal_context,
+          })
+        }
+        if (!username) {
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          repository.record_visit({
+            bookmark_id: item.bookmark_id_,
+            visited_at: new Date().toISOString(),
+          })
+        }
+      }}
+      on_is_visible_={(item) => {
+        if (item.is_parsed_) {
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          if (!username) {
+            repository.get_links_data_authorized(
+              {
+                bookmark_id: item.bookmark_id_,
+                bookmark_updated_at: item.updated_at_,
+              },
+              auth_context.auth_data!.encryption_key,
+            )
+          } else {
+            repository.get_links_data_public({
+              bookmark_id: item.bookmark_id_,
+              bookmark_updated_at: item.updated_at_,
+              username,
+            })
+          }
         }
       }}
       selected_tags_={tag_view_options_hook.selected_tags_}
@@ -1254,13 +1337,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             auth_context.ky_instance,
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
-          if (username) {
-            repository.get_links_data_public({
-              bookmark_id: bookmark.id,
-              bookmark_updated_at: new Date(bookmark.updated_at),
-              username,
-            })
-          } else {
+          if (!username) {
             repository.get_links_data_authorized(
               {
                 bookmark_id: bookmark.id,
@@ -1268,6 +1345,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               },
               auth_context.auth_data!.encryption_key,
             )
+          } else {
+            repository.get_links_data_public({
+              bookmark_id: bookmark.id,
+              bookmark_updated_at: new Date(bookmark.updated_at),
+              username,
+            })
           }
         }
       }}
@@ -1294,10 +1377,20 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         const link_data = links_data.find((link) => link.url == url)
         if (link_data && link_data.reader_data) {
-          await reader_modal_setter({
+          reader_modal_setter({
             reader_data: link_data.reader_data,
             dictionary: props.dictionary,
             modal_context: modal_context,
+          })
+        }
+        if (!username) {
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          repository.record_visit({
+            bookmark_id: bookmark.id,
+            visited_at: new Date().toISOString(),
           })
         }
       }}
@@ -1313,7 +1406,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           })
         }
       }}
-      on_new_tab_link_click_={(url) => {
+      on_new_tab_click_={(url) => {
         if (!username) {
           const data_source = new Bookmarks_DataSourceImpl(
             auth_context.ky_instance,

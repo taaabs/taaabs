@@ -150,7 +150,7 @@ const bookmark = (
     on_get_points_given_click_={() => {}}
     on_link_click_={() => {}}
     on_link_middle_click_={() => {}}
-    on_new_tab_link_click_={() => {}}
+    on_new_tab_click_={() => {}}
     locale="en"
   />
 )
