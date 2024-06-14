@@ -5,11 +5,9 @@ declare const styles: {
   readonly item__link__site: string
   readonly 'item__link__site--highlighted': string
   readonly item__link__reader: string
-  readonly item__link__main: string
-  readonly 'item__link__main--dim-visited': string
-  readonly 'item__link__main--via-wayback': string
-  readonly item__link__main__title: string
-  readonly item__link__main__link: string
+  readonly item__link__url: string
+  readonly 'item__link__url--dim-visited': string
+  readonly 'item__link__url--via-wayback': string
   readonly item__actions: string
   readonly 'item__actions__public-saves': string
   readonly item__actions__open: string

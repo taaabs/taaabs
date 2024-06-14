@@ -95,14 +95,20 @@
         }
       }
     }
-    &__main {
+    &__url {
       display: -webkit-box;
-      overflow-wrap: anywhere;
       overflow: hidden;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
+      font-weight: var(--font-weight-inter-semi-bold);
+      @include hover {
+        @include text-decoration-underlinie-thin;
+      }
       @include to768 {
         font-family: var(--font-family-inter-tight);
+      }
+      @include at768 {
+        -webkit-line-clamp: 1;
       }
       &--dim-visited {
         @include hover {
@@ -113,17 +119,6 @@
       }
       &--via-wayback {
         font-style: italic;
-      }
-      &__title {
-        font-weight: var(--font-weight-inter-semi-bold);
-        @include hover {
-          @include text-decoration-underlinie-thin;
-        }
-      }
-      &__link {
-        font-size: var(--font-size-13px);
-        color: var(--text-color-dimmed);
-        padding-left: 4px;
       }
       &--dim-visited:visited {
         color: var(--text-color-dimmed);

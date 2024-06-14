@@ -64,13 +64,13 @@ export const _Item: React.FC<_Item.Props> = (props) => {
         )}
         <a
           className={cn(
-            styles.item__link__main,
+            styles.item__link__url,
             {
-              [styles['item__link__main--dim-visited']]:
+              [styles['item__link__url--dim-visited']]:
                 props.should_dim_visited_links_,
             },
             {
-              [styles['item__link__main--via-wayback']]: props.open_snapshot_,
+              [styles['item__link__url--via-wayback']]: props.open_snapshot_,
             },
           )}
           href={props.url_}
@@ -82,13 +82,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
           }}
           onAuxClick={props.on_link_middle_click_}
         >
-          <span className={styles.item__link__main__title}>{props.title_}</span>
-          <span className={styles.item__link__main__link}>
-            {`${get_domain_from_url(props.url_)
-              .split('.')
-              .map((segment) => segment.replace(/(.{5})/g, '$1​'))
-              .join('.')} ${props.site_path_ ? `› ${props.site_path_}` : ''}`}
-          </span>
+          {props.title_}
         </a>
       </div>
       <div className={styles.item__actions}>
