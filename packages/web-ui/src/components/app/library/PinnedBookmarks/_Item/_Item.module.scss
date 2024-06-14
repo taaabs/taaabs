@@ -84,7 +84,10 @@
         background-color: var(--dark200);
       }
       svg {
-        fill: var(--accent-color);
+        fill: var(--blue600);
+        @include dark {
+          fill: var(--blue500);
+        }
         @include transition-150ms(fill);
         width: 14px;
       }

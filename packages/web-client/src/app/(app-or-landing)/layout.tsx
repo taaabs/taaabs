@@ -6,15 +6,16 @@ import { get_dictionary } from '../get_dictionary'
 import fs from 'fs'
 import path from 'path'
 
+const bookmarklet_script = fs.readFileSync(
+  path.resolve(`src/misc/bookmarklet.js`),
+  'utf8',
+)
+
 const Layout: React.FC<{
   children?: ReactNode
 }> = async (props) => {
   const user_id = cookies().get('user_id')
   const dictionary = await get_dictionary()
-  const bookmarklet_script = fs.readFileSync(
-    path.resolve(`src/misc/bookmarklet.js`),
-    'utf8',
-  )
 
   return user_id ? (
     <LayoutAuthorized

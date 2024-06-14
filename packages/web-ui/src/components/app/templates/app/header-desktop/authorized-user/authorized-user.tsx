@@ -42,7 +42,7 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
           <ButtonOutlinedIcon
             icon_variant="THEME_AUTO"
             on_click={() => {
-              ;(window as any).__setPreferredTheme('light')
+              ;(window as any).__set_preferred_theme('light')
             }}
             aria_label="Use dark mode"
           />
@@ -51,7 +51,7 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
           <ButtonOutlinedIcon
             icon_variant="THEME_AUTO"
             on_click={() => {
-              ;(window as any).__setPreferredTheme('dark')
+              ;(window as any).__set_preferred_theme('dark')
             }}
             aria_label="Use light mode"
           />
@@ -64,9 +64,9 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
             icon_variant="THEME_DARK"
             on_click={() => {
               if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                ;(window as any).__setPreferredTheme()
+                ;(window as any).__set_preferred_theme()
               } else {
-                ;(window as any).__setPreferredTheme('light')
+                ;(window as any).__set_preferred_theme('light')
               }
             }}
             aria_label="Use dark mode"
@@ -77,9 +77,9 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
             icon_variant="THEME_LIGHT"
             on_click={() => {
               if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                ;(window as any).__setPreferredTheme()
+                ;(window as any).__set_preferred_theme()
               } else {
-                ;(window as any).__setPreferredTheme('dark')
+                ;(window as any).__set_preferred_theme('dark')
               }
             }}
             aria_label="Use light mode"

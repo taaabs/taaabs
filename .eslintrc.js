@@ -5,7 +5,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
-  ignorePatterns: ['.eslintrc.js', 'jest.config.js'],
+  ignorePatterns: ['.eslintrc.js', 'jest.config.js', 'packages/web-client/src/misc/bookmarklet.js', 'packages/web-client/src/misc/theme-setter.js'],
   rules: {
     'prettier/prettier': 'warn',
     '@typescript-eslint/no-namespace': 'off',
