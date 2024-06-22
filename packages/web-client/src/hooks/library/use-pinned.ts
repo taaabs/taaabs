@@ -20,7 +20,7 @@ export const use_pinned = () => {
     should_refetch,
   } = use_library_selector((state) => state.pinned)
 
-  const get_pinned_ = async () => {
+  const get_pinned = async () => {
     if (!username) {
       dispatch(
         pinned_actions.get_pinned_authorized({
@@ -59,12 +59,12 @@ export const use_pinned = () => {
       dispatch(pinned_actions.set_items(JSON.parse(pinned_items)))
       dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
     } else {
-      get_pinned_()
+      get_pinned()
     }
   }, [is_hydrated])
 
   return {
-    get_pinned_,
+    get_pinned,
     fetched_at_timestamp,
     is_fetching,
     is_updating,

@@ -14,35 +14,35 @@ export const Primary = () => {
       }}
     >
       <PinnedBookmarks
-        items_={[
+        items={[
           {
-            bookmark_id_: 1,
-            title_: 'Lorem ipsum',
-            created_at_: new Date(),
-            url_: 'http://example.com',
-            saves_: 100,
-            tags_: [],
+            bookmark_id: 1,
+            title: 'Lorem ipsum',
+            created_at: new Date(),
+            url: 'http://example.com',
+            saves: 100,
+            tags: [],
           },
           {
-            bookmark_id_: 2,
-            title_: 'Lorem ipsum',
-            created_at_: new Date(),
-            url_: 'http://example.com',
-            saves_: 100,
-            tags_: [],
+            bookmark_id: 2,
+            title: 'Lorem ipsum',
+            created_at: new Date(),
+            url: 'http://example.com',
+            saves: 100,
+            tags: [],
           },
         ]}
-        is_draggable_={true}
-        on_middle_click_={() => {}}
-        selected_archived_={false}
-        selected_starred_={false}
-        selected_tags_={[]}
-        selected_unsorted_={false}
-        on_change_={() => {}}
-        on_click_={() => {}}
-        favicon_host_="http://localhost:4000/v1/favicons"
-        translations_={{
-          nothing_pinned_: 'lorem ipsum',
+        is_draggable={true}
+        on_middle_click={() => {}}
+        selected_archived={false}
+        selected_starred={false}
+        selected_tags={[]}
+        selected_unsorted={false}
+        on_change={() => {}}
+        on_click={() => {}}
+        favicon_host="http://localhost:4000/v1/favicons"
+        translations={{
+          nothing_pinned: 'lorem ipsum',
         }}
       />
     </div>

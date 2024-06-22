@@ -4,11 +4,11 @@ import StickyBox from 'react-sticky-box'
 
 export namespace LibraryAside {
   export type Props = {
-    support_href_: string
-    support_label_: string
-    slot_segmented_buttons_: React.ReactNode
-    slot_custom_range_?: React.ReactNode
-    slot_tags_?: React.ReactNode
+    support_href: string
+    support_label: string
+    slot_segmented_buttons: React.ReactNode
+    slot_custom_range?: React.ReactNode
+    slot_tags?: React.ReactNode
   }
 }
 
@@ -18,14 +18,14 @@ export const LibraryAside: React.FC<LibraryAside.Props> = (props) => {
       <StickyBox offsetTop={shared_values.app_header_desktop}>
         <div className={styles.container}>
           <div className={styles.feedback}>
-            <a href={props.support_href_} target="_blank">
-              {props.support_label_}
+            <a href={props.support_href} target="_blank">
+              {props.support_label}
             </a>
           </div>
           <div className={styles.slots}>
-            {props.slot_segmented_buttons_}
-            {props.slot_custom_range_}
-            <div className={styles.tags}>{props.slot_tags_}</div>
+            {props.slot_segmented_buttons}
+            {props.slot_custom_range}
+            <div className={styles.tags}>{props.slot_tags}</div>
           </div>
         </div>
       </StickyBox>

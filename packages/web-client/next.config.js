@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const crypto = require('crypto')
 const path = require('path')
-const TerserPlugin = require('terser-webpack-plugin')
 
 // https://stackoverflow.com/a/69166434/3998651
 // Nextjs 14 needs this change to the above answer: https://stackoverflow.com/a/76852889/3998651
@@ -66,19 +65,6 @@ const nextConfig = {
         },
       ],
     })
-    config.optimization.minimizer = []
-    config.optimization.minimizer.push(
-      new TerserPlugin({
-        terserOptions: {
-          mangle: {
-            properties: {
-              // Mangle properties suffixed with _ (and not __).
-              regex: /[^_]_$|^_$/,
-            },
-          },
-        },
-      }),
-    )
 
     return config
   },

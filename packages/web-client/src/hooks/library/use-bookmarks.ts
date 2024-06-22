@@ -37,7 +37,7 @@ export const use_bookmarks = () => {
     is_upserting,
   } = use_library_selector((state) => state.bookmarks)
 
-  const get_bookmarks_ = (params: { should_get_next_page?: boolean }) => {
+  const get_bookmarks = (params: { should_get_next_page?: boolean }) => {
     if (!username) {
       const request_params: GetBookmarks_Params.Authorized = {}
 
@@ -186,7 +186,7 @@ export const use_bookmarks = () => {
     }
   }
 
-  const get_bookmarks_by_ids_ = async (params: {
+  const get_bookmarks_by_ids = async (params: {
     // All ids of a search result.
     all_not_paginated_ids: number[]
     should_get_next_page?: boolean
@@ -278,7 +278,7 @@ export const use_bookmarks = () => {
       }
     } else {
       if (window.location.hash.startsWith('#query=')) return
-      get_bookmarks_({})
+      get_bookmarks({})
     }
   }, [is_hydrated, search_params])
 
@@ -331,8 +331,8 @@ export const use_bookmarks = () => {
 
   return {
     bookmarks,
-    get_bookmarks_,
-    get_bookmarks_by_ids_,
+    get_bookmarks,
+    get_bookmarks_by_ids,
     incoming_bookmarks,
     is_fetching,
     is_fetching_more_bookmarks,

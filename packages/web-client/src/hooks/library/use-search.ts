@@ -56,18 +56,18 @@ export const use_search = (local_db: LocalDb) => {
     current_filter == Filter.ARCHIVED_STARRED_UNSORTED ||
     current_filter == Filter.ARCHIVED_UNSORTED
 
-  const set_search_fragment = (params: { search_string_: string }) => {
+  const set_search_fragment = (params: { search_string: string }) => {
     window.history.pushState(
       {},
       '',
       window.location.pathname +
         (search_params.toString() ? `?${search_params.toString()}` : '') +
-        `#query=${encodeURIComponent(params.search_string_)}`,
+        `#query=${encodeURIComponent(params.search_string)}`,
     )
   }
 
   const query_db = async (params: {
-    search_string_: string
+    search_string: string
   }): Promise<Results<Result>> => {
     if (
       (!is_archived_filter && !local_db.db) ||
@@ -83,10 +83,10 @@ export const use_search = (local_db: LocalDb) => {
     // 'lorem site:abc.com site:abc.com ipsum site:abc.com'
     // ["abccom", "abccom", "abccom"]
     const sites_variants = get_sites_variants_from_search_string(
-      params.search_string_,
+      params.search_string,
     )
 
-    const term = params.search_string_
+    const term = params.search_string
       .replace(/(?=site:)(.*?)($|\s)/g, '')
       .trim()
 
@@ -170,7 +170,7 @@ export const use_search = (local_db: LocalDb) => {
     search_string: string
     refresh_highlights_only?: boolean
   }) => {
-    const result = await query_db({ search_string_: params.search_string })
+    const result = await query_db({ search_string: params.search_string })
 
     set_incoming_highlights(
       result.hits.reduce((a, v) => {
@@ -213,7 +213,7 @@ export const use_search = (local_db: LocalDb) => {
         set_result(result)
         set_queried_at_timestamp(Date.now())
         set_search_fragment({
-          search_string_: params.search_string,
+          search_string: params.search_string,
         })
         sessionStorage.setItem(
           browser_storage.session_storage.library.search_string({
@@ -256,7 +256,7 @@ export const use_search = (local_db: LocalDb) => {
   }
 
   const query_db_full_text = async (params: {
-    search_string_: string
+    search_string: string
   }): Promise<Results<Result>> => {
     if (
       (!is_archived_filter && !local_db.db) ||
@@ -270,10 +270,10 @@ export const use_search = (local_db: LocalDb) => {
     // 'lorem site:abc.com site:abc.com ipsum site:abc.com'
     // ["abccom", "abccom", "abccom"]
     const sites_variants = get_sites_variants_from_search_string(
-      params.search_string_,
+      params.search_string,
     )
 
-    const term = params.search_string_
+    const term = params.search_string
       .replace(/(?=site:)(.*?)($|\s)/g, '')
       .trim()
 
@@ -333,9 +333,9 @@ export const use_search = (local_db: LocalDb) => {
     return result
   }
 
-  const get_result_full_text = async (params: { search_string_: string }) => {
+  const get_result_full_text = async (params: { search_string: string }) => {
     const result = await query_db_full_text({
-      search_string_: params.search_string_,
+      search_string: params.search_string,
     })
 
     set_count(result.count)
@@ -343,21 +343,21 @@ export const use_search = (local_db: LocalDb) => {
       set_result(result)
       set_queried_at_timestamp(Date.now())
       set_search_fragment({
-        search_string_: params.search_string_,
+        search_string: params.search_string,
       })
       sessionStorage.setItem(
         browser_storage.session_storage.library.search_string({
           username,
           search_params: search_params.toString(),
-          hash: `#query=${encodeURIComponent(params.search_string_)}`,
+          hash: `#query=${encodeURIComponent(params.search_string)}`,
         }),
-        params.search_string_,
+        params.search_string,
       )
       sessionStorage.setItem(
         browser_storage.session_storage.library.search_results_count({
           username,
           search_params: search_params.toString(),
-          hash: `#query=${encodeURIComponent(params.search_string_)}`,
+          hash: `#query=${encodeURIComponent(params.search_string)}`,
         }),
         result.count.toString(),
       )
@@ -541,7 +541,7 @@ export const use_search = (local_db: LocalDb) => {
         set_count(undefined)
       } else {
         const pre_result = await query_db({
-          search_string_: search_string_lower_case,
+          search_string: search_string_lower_case,
         })
 
         const ids_of_hits = pre_result.hits.map((hit) => hit.id)
@@ -772,7 +772,7 @@ export const use_search = (local_db: LocalDb) => {
     set_hints(undefined)
   }
 
-  const remove_recent_hint = (params: { search_string_: string }) => {
+  const remove_recent_hint = (params: { search_string: string }) => {
     localStorage.setItem(
       browser_storage.local_storage.recent_library_searches,
       JSON.stringify(
@@ -782,7 +782,7 @@ export const use_search = (local_db: LocalDb) => {
           ) || '[]',
         ).filter(
           (recent_serach_string: string) =>
-            recent_serach_string != params.search_string_,
+            recent_serach_string != params.search_string,
         ),
       ),
     )
@@ -938,8 +938,8 @@ export const use_search = (local_db: LocalDb) => {
   }
 }
 
-const get_sites_variants_from_search_string = (search_string_: string) => {
-  return search_string_
+const get_sites_variants_from_search_string = (search_string: string) => {
+  return search_string
     .match(/(?<=site:)(.*?)($|\s)/g)
     ?.map((site) => site.replaceAll('.', '').replaceAll('/', '').trim())
     .filter((variant) => variant != '')

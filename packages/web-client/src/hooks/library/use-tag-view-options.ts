@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 export const use_tag_view_options = () => {
   const search_params = useSearchParams()
   const path_params = useParams()
-  const [selected_tags_, set_selected_tags_] = useState<number[]>(
+  const [selected_tags, set_selected_tags] = useState<number[]>(
     search_params.get(search_params_keys.tags)
       ? search_params
           .get(search_params_keys.tags)!
@@ -19,9 +19,9 @@ export const use_tag_view_options = () => {
       : [],
   )
   const [dragged_tag, set_dragged_tag] = useState<{
-    id_: number
-    name_: string
-    yields_: number
+    id: number
+    name: string
+    yields: number
   }>()
 
   // Clear dragged tag.
@@ -38,14 +38,14 @@ export const use_tag_view_options = () => {
   useUpdateEffect(() => {
     const search_params_tags = search_params.get(search_params_keys.tags)
     if (search_params_tags) {
-      set_selected_tags_(search_params_tags.split(',').map((t) => parseInt(t)))
+      set_selected_tags(search_params_tags.split(',').map((t) => parseInt(t)))
     } else if (!search_params_tags) {
-      set_selected_tags_([])
+      set_selected_tags([])
     }
   }, [search_params])
 
-  const add_tag_to_search_params_ = (tag_id: number) => {
-    if (selected_tags_.length == system_values.library.max_selected_tags) {
+  const add_tag_to_search_params = (tag_id: number) => {
+    if (selected_tags.length == system_values.library.max_selected_tags) {
       toast.error(
         `Up to ${system_values.library.max_selected_tags} tags can be selected at a time`,
       )
@@ -82,7 +82,7 @@ export const use_tag_view_options = () => {
     )
   }
 
-  const remove_tags_from_search_params_ = (tag_ids: number[]) => {
+  const remove_tags_from_search_params = (tag_ids: number[]) => {
     const selected_tags = search_params.get(search_params_keys.tags)
       ? search_params
           .get(search_params_keys.tags)!
@@ -148,9 +148,9 @@ export const use_tag_view_options = () => {
   }
 
   return {
-    selected_tags_,
-    add_tag_to_search_params_,
-    remove_tags_from_search_params_,
+    selected_tags,
+    add_tag_to_search_params,
+    remove_tags_from_search_params,
     clear_selected_tags,
     set_many_tags_to_search_params,
     dragged_tag,

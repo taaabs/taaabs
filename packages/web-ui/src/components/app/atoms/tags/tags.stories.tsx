@@ -9,17 +9,17 @@ export const Primary = () => (
   <StorybookMargin>
     <div style={{ width: 260 }}>
       <Tags
-        tags_={[
+        tags={[
           { name: 'a', id: 1, yields: 1 },
           { name: 'aa', id: 1, yields: 12 },
           { name: 'b', id: 1, yields: 1 },
           { name: 'bb', id: 1, yields: 1 },
         ]}
-        on_click_={() => {}}
-        on_tag_drag_start_={() => {}}
-        library_url_=""
-        translations_={{
-          rename_: 'Rename',
+        on_click={() => {}}
+        on_tag_drag_start={() => {}}
+        library_url=""
+        translations={{
+          rename: 'Rename',
         }}
       />
     </div>

@@ -10,9 +10,9 @@ export namespace SelectedTags {
   export type Props = {
     selected_tags: { name: string; id: number }[]
     on_selected_tag_click: (tagId: number) => void
-    on_tag_rename_click_?: (tag_id: number) => void
-    translations_: {
-      rename_: string
+    on_tag_rename_click?: (tag_id: number) => void
+    translations: {
+      rename: string
     }
   }
 }
@@ -24,11 +24,11 @@ export const SelectedTags: React.FC<SelectedTags.Props> = memo(
     const { contextMenu, onContextMenu } = useContextMenu(
       <UiCommon_Dropdown>
         <UiCommon_Dropdown_StandardItem
-          label={props.translations_.rename_}
+          label={props.translations.rename}
           icon_variant="EDIT"
           on_click={() => {
             if (!context_menu_of_tag_id) return
-            props.on_tag_rename_click_!(context_menu_of_tag_id)
+            props.on_tag_rename_click!(context_menu_of_tag_id)
           }}
         />
       </UiCommon_Dropdown>,
@@ -55,7 +55,7 @@ export const SelectedTags: React.FC<SelectedTags.Props> = memo(
             onContextMenu={(e) => {
               if ('ontouchstart' in window) {
                 e.preventDefault()
-              } else if (props.on_tag_rename_click_) {
+              } else if (props.on_tag_rename_click) {
                 set_context_menu_of_tag_id(tag.id)
                 onContextMenu(e)
               }

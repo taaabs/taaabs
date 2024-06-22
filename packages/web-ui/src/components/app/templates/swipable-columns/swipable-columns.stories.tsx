@@ -6,74 +6,74 @@ export default {
 
 export const Primary = () => (
   <SwipableColumns
-    slot_column_left_={<>[TAG HIERARCHIES]</>}
-    translations_={{
-      collapse_alt_: '',
-      follow_: '',
-      unfollow_: '',
-      folders_: 'Folders',
-      pinned_: 'Pinned',
+    slot_column_left={<>[TAG HIERARCHIES]</>}
+    translations={{
+      collapse_alt: '',
+      follow: '',
+      unfollow: '',
+      folders: 'Folders',
+      pinned: 'Pinned',
     }}
-    slot_column_right_={<>[ASIDE]</>}
-    slot_toolbar_={<>[TOOLBAR]</>}
+    slot_column_right={<>[ASIDE]</>}
+    slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
-    on_page_bottom_reached_={() => {}}
-    are_bookmarks_dimmed_={false}
-    slot_main_={<>[BOOKMARKS]</>}
-    slot_search_={<>[SEARCH]</>}
-    show_skeletons_={false}
-    slot_pinned_={<>pinned</>}
-    info_text_={''}
+    on_page_bottom_reached={() => {}}
+    are_bookmarks_dimmed={false}
+    slot_main={<>[BOOKMARKS]</>}
+    slot_search={<>[SEARCH]</>}
+    show_skeletons={false}
+    slot_pinned={<>pinned</>}
+    info_text={''}
   />
 )
 
 export const Scrolling = () => (
   <SwipableColumns
-    slot_column_left_={<>[TAG HIERARCHIES]</>}
-    translations_={{
-      collapse_alt_: '',
-      follow_: '',
-      unfollow_: '',
-      folders_: 'Folders',
-      pinned_: 'Pinned',
+    slot_column_left={<>[TAG HIERARCHIES]</>}
+    translations={{
+      collapse_alt: '',
+      follow: '',
+      unfollow: '',
+      folders: 'Folders',
+      pinned: 'Pinned',
     }}
-    slot_column_right_={<div>{lorem}</div>}
-    slot_toolbar_={<>[TOOLBAR]</>}
+    slot_column_right={<div>{lorem}</div>}
+    slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
-    on_page_bottom_reached_={() => {}}
-    are_bookmarks_dimmed_={false}
-    slot_main_={
+    on_page_bottom_reached={() => {}}
+    are_bookmarks_dimmed={false}
+    slot_main={
       <>
         {lorem} {lorem} {lorem} {lorem}
       </>
     }
-    slot_search_={<>[SEARCH]</>}
-    show_skeletons_={false}
-    slot_pinned_={<>pinned</>}
-    info_text_={''}
+    slot_search={<>[SEARCH]</>}
+    show_skeletons={false}
+    slot_pinned={<>pinned</>}
+    info_text={''}
   />
 )
 
 export const Loading = () => (
   <SwipableColumns
-    slot_column_left_={<>[TAG HIERARCHIES]</>}
-    translations_={{
-      collapse_alt_: '',
-      follow_: '',
-      unfollow_: '',
-      folders_: 'Folders',
-      pinned_: 'Pinned',
+    slot_column_left={<>[TAG HIERARCHIES]</>}
+    translations={{
+      collapse_alt: '',
+      follow: '',
+      unfollow: '',
+      folders: 'Folders',
+      pinned: 'Pinned',
     }}
-    slot_column_right_={<>slot aside</>}
-    slot_toolbar_={<>[TOOLBAR]</>}
+    slot_column_right={<>slot aside</>}
+    slot_toolbar={<>[TOOLBAR]</>}
     mobile_title_bar={'Lorem ipsum'}
-    on_page_bottom_reached_={() => {}}
-    are_bookmarks_dimmed_={false}
-    slot_main_={<>slot bookmarks</>}
-    slot_search_={<>[SEARCH]</>}
-    show_skeletons_={true}
-    slot_pinned_={<>pinned</>}
-    info_text_={''}
+    on_page_bottom_reached={() => {}}
+    are_bookmarks_dimmed={false}
+    slot_main={<>slot bookmarks</>}
+    slot_search={<>[SEARCH]</>}
+    show_skeletons={true}
+    slot_pinned={<>pinned</>}
+    info_text={''}
   />
 )
 
