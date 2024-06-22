@@ -26,11 +26,11 @@ export const use_counts = () => {
   const [last_query_filter, set_last_query_filter] = useState<string>()
   const [last_query_refresh_trigger, set_last_query_refresh_trigger] =
     useState<string>()
-  const [selected_tags_, set_selected_tags] = useState<number[]>([])
+  const [selected_tags, set_selected_tags] = useState<number[]>([])
   const [last_query_yyyymm_gte, set_last_query_yyyymm_gte] = useState<string>()
   const [last_query_yyyymm_lte, set_last_query_yyyymm_lte] = useState<string>()
 
-  const get_counts_ = () => {
+  const get_counts = () => {
     if (!username) {
       const request_params: Counts_Params.Authorized = {}
 
@@ -156,7 +156,7 @@ export const use_counts = () => {
       query_filter != last_query_filter ||
       query_refresh_trigger != last_query_refresh_trigger
     ) {
-      get_counts_()
+      get_counts()
     }
 
     const query_yyyymm_gte = search_params.get(
@@ -187,9 +187,9 @@ export const use_counts = () => {
 
   useEffect(() => {
     const query_tags = search_params.get(search_params_keys.tags)
-    if (!query_tags && selected_tags_.length > 0) {
+    if (!query_tags && selected_tags.length > 0) {
       set_selected_tags([])
-    } else if (query_tags && query_tags != selected_tags_.join(',')) {
+    } else if (query_tags && query_tags != selected_tags.join(',')) {
       const selected_tags = query_tags.split(',').map((t) => parseInt(t))
       set_selected_tags(selected_tags)
     }
@@ -219,15 +219,15 @@ export const use_counts = () => {
       dispatch(counts_actions.set_tags(JSON.parse(tags)))
     }
 
-    get_counts_()
+    get_counts()
   }, [is_hydrated])
 
   return {
-    get_counts_,
+    get_counts,
     months,
     is_fetching,
     tags,
-    selected_tags_,
+    selected_tags,
     should_refetch,
   }
 }

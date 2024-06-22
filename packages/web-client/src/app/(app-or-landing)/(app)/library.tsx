@@ -181,7 +181,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           },
         }),
       )
-      tag_hierarchies_hook.rename_({
+      tag_hierarchies_hook.rename({
         old_tag_name: params.old_tag_name,
         new_tag_name,
       })
@@ -231,10 +231,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           .counts_reload_requested_by_new_bookmark,
       )
       Promise.all([
-        tag_hierarchies_hook.get_tag_hierarchies_({
-          filter: filter_view_options_hook.current_filter_,
-          gte: date_view_options_hook.current_gte_,
-          lte: date_view_options_hook.current_lte_,
+        tag_hierarchies_hook.get_tag_hierarchies({
+          filter: filter_view_options_hook.current_filter,
+          gte: date_view_options_hook.current_gte,
+          lte: date_view_options_hook.current_lte,
         }),
         dispatch(
           counts_actions.refresh_authorized_counts({
@@ -257,19 +257,19 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
 
   useUpdateEffect(() => {
     if (counts_hook.should_refetch) {
-      counts_hook.get_counts_()
+      counts_hook.get_counts()
     }
   }, [counts_hook.should_refetch])
 
   useUpdateEffect(() => {
     if (pinned_hook.should_refetch) {
-      pinned_hook.get_pinned_()
+      pinned_hook.get_pinned()
     }
   }, [pinned_hook.should_refetch])
 
   useUpdateEffect(() => {
-    search_hook.set_current_filter(filter_view_options_hook.current_filter_)
-  }, [filter_view_options_hook.current_filter_])
+    search_hook.set_current_filter(filter_view_options_hook.current_filter)
+  }, [filter_view_options_hook.current_filter])
 
   // Clear cache when user selects visited at sort_by option or popularity order.
   // Filter is in deps because we want to clear cache when setting to archive.
@@ -277,25 +277,25 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const search_cache_to_be_cleared = useRef(false)
   useUpdateEffect(() => {
     if (
-      sort_by_view_options_hook.current_sort_by_ == SortBy.VISITED_AT ||
-      sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY
+      sort_by_view_options_hook.current_sort_by == SortBy.VISITED_AT ||
+      sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
     ) {
       search_cache_to_be_cleared.current = true
     } else {
       search_cache_to_be_cleared.current = false
     }
   }, [
-    filter_view_options_hook.current_filter_,
-    sort_by_view_options_hook.current_sort_by_,
-    order_view_options_hook.current_order_,
+    filter_view_options_hook.current_filter,
+    sort_by_view_options_hook.current_sort_by,
+    order_view_options_hook.current_order,
   ])
 
   useUpdateEffect(() => {
     if (props.local_db.db || props.local_db.archived_db) {
-      search_hook.set_current_filter(filter_view_options_hook.current_filter_)
-      search_hook.set_selected_tag_ids(tag_view_options_hook.selected_tags_)
+      search_hook.set_current_filter(filter_view_options_hook.current_filter)
+      search_hook.set_selected_tag_ids(tag_view_options_hook.selected_tags)
       search_hook.set_selected_tags(
-        counts_hook.selected_tags_
+        counts_hook.selected_tags
           .filter((id) => {
             if (!bookmarks_hook.bookmarks || !bookmarks_hook.bookmarks[0])
               return false
@@ -319,7 +319,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
 
   useUpdateEffect(() => {
     if (search_hook.result) {
-      bookmarks_hook.get_bookmarks_by_ids_({
+      bookmarks_hook.get_bookmarks_by_ids({
         all_not_paginated_ids: search_hook.result.hits.map((hit) =>
           parseInt(hit.document.id),
         ),
@@ -328,24 +328,24 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   }, [search_hook.queried_at_timestamp])
 
   useUpdateEffect(() => {
-    tag_hierarchies_hook.get_tag_hierarchies_({
-      filter: filter_view_options_hook.current_filter_,
-      gte: date_view_options_hook.current_gte_,
-      lte: date_view_options_hook.current_lte_,
+    tag_hierarchies_hook.get_tag_hierarchies({
+      filter: filter_view_options_hook.current_filter,
+      gte: date_view_options_hook.current_gte,
+      lte: date_view_options_hook.current_lte,
     })
   }, [
     is_hydrated,
-    date_view_options_hook.current_gte_,
-    date_view_options_hook.current_lte_,
-    filter_view_options_hook.current_filter_,
+    date_view_options_hook.current_gte,
+    date_view_options_hook.current_lte,
+    filter_view_options_hook.current_filter,
   ])
 
   const is_archived_filter =
-    filter_view_options_hook.current_filter_ == Filter.ARCHIVED ||
-    filter_view_options_hook.current_filter_ == Filter.ARCHIVED_STARRED ||
-    filter_view_options_hook.current_filter_ ==
+    filter_view_options_hook.current_filter == Filter.ARCHIVED ||
+    filter_view_options_hook.current_filter == Filter.ARCHIVED_STARRED ||
+    filter_view_options_hook.current_filter ==
       Filter.ARCHIVED_STARRED_UNSORTED ||
-    filter_view_options_hook.current_filter_ == Filter.ARCHIVED_UNSORTED
+    filter_view_options_hook.current_filter == Filter.ARCHIVED_UNSORTED
 
   const is_not_interactive =
     is_fetching_first_bookmarks ||
@@ -354,43 +354,43 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
 
   const slot_search = (
     <UiAppAtom_LibrarySearch
-      search_string_={search_hook.search_string}
-      is_full_text_={search_hook.is_full_text}
-      toggle_full_text_={() =>
+      search_string={search_hook.search_string}
+      is_full_text={search_hook.is_full_text}
+      toggle_full_text={() =>
         search_hook.set_is_full_text(!search_hook.is_full_text)
       }
-      is_loading_={props.local_db.is_initializing || false}
-      loading_progress_percentage_={props.local_db.indexed_bookmarks_percentage}
-      hints_={
+      is_loading={props.local_db.is_initializing || false}
+      loading_progress_percentage={props.local_db.indexed_bookmarks_percentage}
+      hints={
         !props.local_db.is_initializing
           ? search_hook.hints?.map((hint) => ({
-              type_: hint.type,
-              completion_: hint.completion,
-              search_string_: hint.search_string,
+              type: hint.type,
+              completion: hint.completion,
+              search_string: hint.search_string,
             }))
           : undefined
       }
-      hints_set_at_timestamp_={search_hook.hints_set_at_timestamp}
-      queried_at_timestamp_={search_hook.queried_at_timestamp}
-      on_click_hint_={(i) => {
+      hints_set_at_timestamp={search_hook.hints_set_at_timestamp}
+      queried_at_timestamp={search_hook.queried_at_timestamp}
+      on_click_hint={(i) => {
         const search_string =
           search_hook.search_string + search_hook.hints![i].completion
         search_hook.set_search_string(search_string)
         search_hook.get_result({ search_string: search_string })
       }}
-      on_click_recent_hint_remove_={(i) => {
+      on_click_recent_hint_remove={(i) => {
         const search_string =
           search_hook.hints![i].search_string + search_hook.hints![i].completion
-        search_hook.remove_recent_hint({ search_string_: search_string })
+        search_hook.remove_recent_hint({ search_string: search_string })
       }}
-      is_focused_={search_hook.is_search_focused}
-      on_focus_={async () => {
+      is_focused={search_hook.is_search_focused}
+      on_focus={async () => {
         if (props.local_db.is_initializing) return
 
         search_hook.set_is_search_focused(true)
-        search_hook.set_selected_tag_ids(tag_view_options_hook.selected_tags_)
+        search_hook.set_selected_tag_ids(tag_view_options_hook.selected_tags)
         search_hook.set_selected_tags(
-          counts_hook.selected_tags_
+          counts_hook.selected_tags
             .filter((id) => {
               if (!bookmarks_hook.bookmarks || !bookmarks_hook.bookmarks[0])
                 return false
@@ -414,10 +414,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             is_archived: is_archived_filter,
             force_reinitialization: true,
             include_visited_at:
-              sort_by_view_options_hook.current_sort_by_ == SortBy.VISITED_AT ||
+              sort_by_view_options_hook.current_sort_by == SortBy.VISITED_AT ||
               undefined,
             include_points:
-              sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY ||
+              sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY ||
               undefined,
           })
           search_cache_to_be_cleared.current = false
@@ -428,15 +428,15 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         search_hook.get_hints()
       }}
-      on_change_={(value) => {
+      on_change={(value) => {
         if (props.local_db.is_initializing) return
         search_hook.set_search_string(value)
       }}
-      on_submit_={async () => {
+      on_submit={async () => {
         // if (props.local_db.is_initializing || !search_hook.search_string.trim() || search_hook.count == 0) return
         if (search_hook.is_full_text) {
           await search_hook.get_result_full_text({
-            search_string_: search_hook.search_string,
+            search_string: search_hook.search_string,
           })
         } else {
           await search_hook.get_result({
@@ -444,12 +444,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           })
         }
       }}
-      on_blur_={() => {
+      on_blur={() => {
         search_hook.clear_hints()
         search_hook.set_is_search_focused(false)
       }}
-      results_count_={search_hook.search_string ? search_hook.count : undefined}
-      on_clear_click_={() => {
+      results_count={search_hook.search_string ? search_hook.count : undefined}
+      on_clear_click={() => {
         search_hook.reset()
         clear_library_session_storage({
           username,
@@ -461,37 +461,37 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           window.location.pathname + `?${search_params.toString()}`,
         )
       }}
-      is_slash_shortcut_disabled_={modal_context.modal_content !== undefined}
-      on_click_get_help_={() => {}}
-      sort_by_={sort_by_view_options_hook.current_sort_by_}
-      translations_={{
-        placeholder_: {
-          default_: props.dictionary.app.library.search.placeholder.default,
-          full_text_: props.dictionary.app.library.search.placeholder.full_text,
+      is_slash_shortcut_disabled={modal_context.modal_content !== undefined}
+      on_click_get_help={() => {}}
+      sort_by={sort_by_view_options_hook.current_sort_by}
+      translations={{
+        placeholder: {
+          default: props.dictionary.app.library.search.placeholder.default,
+          full_text: props.dictionary.app.library.search.placeholder.full_text,
         },
-        footer_tip_: props.dictionary.app.library.search.footer_tip,
-        get_help_link_: props.dictionary.app.library.search.get_help,
-        type_: props.dictionary.app.library.search.type,
-        to_search_: props.dictionary.app.library.search.to_search,
-        one_moment_please_:
+        footer_tip: props.dictionary.app.library.search.footer_tip,
+        get_help_link: props.dictionary.app.library.search.get_help,
+        type: props.dictionary.app.library.search.type,
+        to_search: props.dictionary.app.library.search.to_search,
+        one_moment_please:
           props.dictionary.app.library.search.one_moment_please,
       }}
     />
   )
   const slot_toolbar = (
     <UiAppAtom_Toolbar
-      toggleable_buttons_={[
+      toggleable_buttons={[
         {
-          label_: props.dictionary.app.library.toolbar.starred,
-          is_toggled_:
-            filter_view_options_hook.current_filter_ == Filter.STARRED ||
-            filter_view_options_hook.current_filter_ ==
+          label: props.dictionary.app.library.toolbar.starred,
+          is_toggled:
+            filter_view_options_hook.current_filter == Filter.STARRED ||
+            filter_view_options_hook.current_filter ==
               Filter.STARRED_UNSORTED ||
-            filter_view_options_hook.current_filter_ ==
+            filter_view_options_hook.current_filter ==
               Filter.ARCHIVED_STARRED ||
-            filter_view_options_hook.current_filter_ ==
+            filter_view_options_hook.current_filter ==
               Filter.ARCHIVED_STARRED_UNSORTED,
-          on_click_: () => {
+          on_click: () => {
             if (
               is_fetching_first_bookmarks ||
               bookmarks_hook.is_fetching_more_bookmarks ||
@@ -500,57 +500,55 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               return
 
             let filter = Filter.NONE
-            if (filter_view_options_hook.current_filter_ == Filter.NONE) {
+            if (filter_view_options_hook.current_filter == Filter.NONE) {
               filter = Filter.STARRED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.STARRED
+              filter_view_options_hook.current_filter == Filter.STARRED
             ) {
               filter = Filter.NONE
             } else if (
-              filter_view_options_hook.current_filter_ ==
-              Filter.STARRED_UNSORTED
+              filter_view_options_hook.current_filter == Filter.STARRED_UNSORTED
             ) {
               filter = Filter.UNSORTED
             } else if (
-              filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_STARRED
+              filter_view_options_hook.current_filter == Filter.ARCHIVED_STARRED
             ) {
               filter = Filter.ARCHIVED
             } else if (
-              filter_view_options_hook.current_filter_ ==
+              filter_view_options_hook.current_filter ==
               Filter.ARCHIVED_STARRED_UNSORTED
             ) {
               filter = Filter.ARCHIVED_UNSORTED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.UNSORTED
+              filter_view_options_hook.current_filter == Filter.UNSORTED
             ) {
               filter = Filter.STARRED_UNSORTED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.ARCHIVED
+              filter_view_options_hook.current_filter == Filter.ARCHIVED
             ) {
               filter = Filter.ARCHIVED_STARRED
             } else if (
-              filter_view_options_hook.current_filter_ ==
+              filter_view_options_hook.current_filter ==
               Filter.ARCHIVED_UNSORTED
             ) {
               filter = Filter.ARCHIVED_STARRED_UNSORTED
             }
-            filter_view_options_hook.set_filter_query_param_(filter)
+            filter_view_options_hook.set_filter_query_param(filter)
           },
         },
         ...(!username
           ? [
               {
-                label_: props.dictionary.app.library.toolbar.unsorted,
-                is_toggled_:
-                  filter_view_options_hook.current_filter_ == Filter.UNSORTED ||
-                  filter_view_options_hook.current_filter_ ==
+                label: props.dictionary.app.library.toolbar.unsorted,
+                is_toggled:
+                  filter_view_options_hook.current_filter == Filter.UNSORTED ||
+                  filter_view_options_hook.current_filter ==
                     Filter.STARRED_UNSORTED ||
-                  filter_view_options_hook.current_filter_ ==
+                  filter_view_options_hook.current_filter ==
                     Filter.ARCHIVED_UNSORTED ||
-                  filter_view_options_hook.current_filter_ ==
+                  filter_view_options_hook.current_filter ==
                     Filter.ARCHIVED_STARRED_UNSORTED,
-                on_click_: () => {
+                on_click: () => {
                   if (
                     is_fetching_first_bookmarks ||
                     bookmarks_hook.is_fetching_more_bookmarks ||
@@ -559,57 +557,57 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     return
 
                   let filter = Filter.NONE
-                  if (filter_view_options_hook.current_filter_ == Filter.NONE) {
+                  if (filter_view_options_hook.current_filter == Filter.NONE) {
                     filter = Filter.UNSORTED
                   } else if (
-                    filter_view_options_hook.current_filter_ == Filter.UNSORTED
+                    filter_view_options_hook.current_filter == Filter.UNSORTED
                   ) {
                     filter = Filter.NONE
                   } else if (
-                    filter_view_options_hook.current_filter_ ==
+                    filter_view_options_hook.current_filter ==
                     Filter.STARRED_UNSORTED
                   ) {
                     filter = Filter.STARRED
                   } else if (
-                    filter_view_options_hook.current_filter_ ==
+                    filter_view_options_hook.current_filter ==
                     Filter.ARCHIVED_UNSORTED
                   ) {
                     filter = Filter.ARCHIVED
                   } else if (
-                    filter_view_options_hook.current_filter_ ==
+                    filter_view_options_hook.current_filter ==
                     Filter.ARCHIVED_STARRED_UNSORTED
                   ) {
                     filter = Filter.ARCHIVED_STARRED
                   } else if (
-                    filter_view_options_hook.current_filter_ == Filter.STARRED
+                    filter_view_options_hook.current_filter == Filter.STARRED
                   ) {
                     filter = Filter.STARRED_UNSORTED
                   } else if (
-                    filter_view_options_hook.current_filter_ == Filter.ARCHIVED
+                    filter_view_options_hook.current_filter == Filter.ARCHIVED
                   ) {
                     filter = Filter.ARCHIVED_UNSORTED
                   } else if (
-                    filter_view_options_hook.current_filter_ ==
+                    filter_view_options_hook.current_filter ==
                     Filter.ARCHIVED_STARRED
                   ) {
                     filter = Filter.ARCHIVED_STARRED_UNSORTED
                   }
-                  filter_view_options_hook.set_filter_query_param_(filter)
+                  filter_view_options_hook.set_filter_query_param(filter)
                 },
               },
             ]
           : []),
         {
-          label_: props.dictionary.app.library.toolbar.archived,
-          is_toggled_:
-            filter_view_options_hook.current_filter_ == Filter.ARCHIVED ||
-            filter_view_options_hook.current_filter_ ==
+          label: props.dictionary.app.library.toolbar.archived,
+          is_toggled:
+            filter_view_options_hook.current_filter == Filter.ARCHIVED ||
+            filter_view_options_hook.current_filter ==
               Filter.ARCHIVED_STARRED ||
-            filter_view_options_hook.current_filter_ ==
+            filter_view_options_hook.current_filter ==
               Filter.ARCHIVED_UNSORTED ||
-            filter_view_options_hook.current_filter_ ==
+            filter_view_options_hook.current_filter ==
               Filter.ARCHIVED_STARRED_UNSORTED,
-          on_click_: () => {
+          on_click: () => {
             if (
               is_fetching_first_bookmarks ||
               bookmarks_hook.is_fetching_more_bookmarks ||
@@ -619,49 +617,47 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
 
             let filter = Filter.NONE
 
-            if (filter_view_options_hook.current_filter_ == Filter.NONE) {
+            if (filter_view_options_hook.current_filter == Filter.NONE) {
               filter = Filter.ARCHIVED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.STARRED
+              filter_view_options_hook.current_filter == Filter.STARRED
             ) {
               filter = Filter.ARCHIVED_STARRED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.UNSORTED
+              filter_view_options_hook.current_filter == Filter.UNSORTED
             ) {
               filter = Filter.ARCHIVED_UNSORTED
             } else if (
-              filter_view_options_hook.current_filter_ ==
-              Filter.STARRED_UNSORTED
+              filter_view_options_hook.current_filter == Filter.STARRED_UNSORTED
             ) {
               filter = Filter.ARCHIVED_STARRED_UNSORTED
             } else if (
-              filter_view_options_hook.current_filter_ == Filter.ARCHIVED
+              filter_view_options_hook.current_filter == Filter.ARCHIVED
             ) {
               filter = Filter.NONE
             } else if (
-              filter_view_options_hook.current_filter_ ==
-              Filter.ARCHIVED_STARRED
+              filter_view_options_hook.current_filter == Filter.ARCHIVED_STARRED
             ) {
               filter = Filter.STARRED
             } else if (
-              filter_view_options_hook.current_filter_ ==
+              filter_view_options_hook.current_filter ==
               Filter.ARCHIVED_UNSORTED
             ) {
               filter = Filter.UNSORTED
             } else if (
-              filter_view_options_hook.current_filter_ ==
+              filter_view_options_hook.current_filter ==
               Filter.ARCHIVED_STARRED_UNSORTED
             ) {
               filter = Filter.STARRED_UNSORTED
             }
 
-            filter_view_options_hook.set_filter_query_param_(filter)
+            filter_view_options_hook.set_filter_query_param(filter)
           },
         },
       ]}
-      icon_buttons_={[
+      icon_buttons={[
         {
-          icon_variant_:
+          icon_variant:
             bookmarks_hook.density == 'default'
               ? 'DENSITY_DEFAULT'
               : 'DENSITY_COMPACT',
@@ -675,47 +671,47 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             window.scrollTo(0, 0)
           },
         },
-        { icon_variant_: 'THREE_DOTS', on_click: () => {} },
+        { icon_variant: 'THREE_DOTS', on_click: () => {} },
       ]}
     />
   )
   const slot_pinned = (
     <UiAppLibrary_PinnedBookmarks
       key={`${pinned_updated_at}-${popstate_count}`}
-      library_updated_at_timestamp_={library_updated_at_timestamp}
-      favicon_host_={favicon_host}
-      translations_={{
-        nothing_pinned_: props.dictionary.app.library.nothing_pinned,
+      library_updated_at_timestamp={library_updated_at_timestamp}
+      favicon_host={favicon_host}
+      translations={{
+        nothing_pinned: props.dictionary.app.library.nothing_pinned,
         open_original_url:
           props.dictionary.app.library.bookmark.open_original_url,
         open_snapshot: props.dictionary.app.library.bookmark.open_snapshot,
       }}
-      items_={
+      items={
         pinned_hook.items?.map((item) => ({
-          bookmark_id_: item.bookmark_id,
-          url_: item.url,
-          created_at_: new Date(item.created_at),
-          updated_at_: new Date(item.updated_at),
-          title_: item.title,
-          is_unsorted_: item.is_unsorted,
-          is_archived_: item.is_archived,
-          is_parsed_: item.is_parsed,
-          is_public_: item.is_public,
-          stars_: item.stars,
-          tags_: item.tags,
-          open_snapshot_: item.open_snapshot,
-          favicon_: item.favicon,
+          bookmark_id: item.bookmark_id,
+          url: item.url,
+          created_at: new Date(item.created_at),
+          updated_at: new Date(item.updated_at),
+          title: item.title,
+          is_unsorted: item.is_unsorted,
+          is_archived: item.is_archived,
+          is_parsed: item.is_parsed,
+          is_public: item.is_public,
+          stars: item.stars,
+          tags: item.tags,
+          open_snapshot: item.open_snapshot,
+          favicon: item.favicon,
         })) || []
       }
-      is_draggable_={!username && !pinned_hook.is_updating}
-      on_change_={async (updated_pinned) => {
+      is_draggable={!username && !pinned_hook.is_updating}
+      on_change={async (updated_pinned) => {
         await dispatch(
           pinned_actions.update_pinned({
             update_pinned_params: {
               items: updated_pinned.map((item) => ({
-                url: item.url_,
-                is_public: item.is_public_,
-                title: item.title_,
+                url: item.url,
+                is_public: item.is_public,
+                title: item.title,
               })),
             },
             ky: auth_context.ky_instance,
@@ -726,10 +722,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           props.dictionary.app.library.pinned_links_has_beed_updated,
         )
       }}
-      on_link_click_={async (item) => {
+      on_link_click={async (item) => {
         if (!username) {
           const record_visit_params: RecordVisit_Params = {
-            bookmark_id: item.bookmark_id_,
+            bookmark_id: item.bookmark_id,
             visited_at: new Date().toISOString(),
           }
           localStorage.setItem(
@@ -739,42 +735,42 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           )
         }
         window.onbeforeunload = null
-        const url = item.open_snapshot_
-          ? url_to_wayback({ date: item.created_at_, url: item.url_ })
-          : item.url_
+        const url = item.open_snapshot
+          ? url_to_wayback({ date: item.created_at, url: item.url })
+          : item.url
         setTimeout(() => {
           location.href = url
         }, 0)
       }}
-      on_link_middle_click_={(item) => {
+      on_link_middle_click={(item) => {
         if (!username) {
           const data_source = new Bookmarks_DataSourceImpl(
             auth_context.ky_instance,
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
           repository.record_visit({
-            bookmark_id: item.bookmark_id_,
+            bookmark_id: item.bookmark_id,
             visited_at: new Date().toISOString(),
           })
         }
       }}
-      on_new_tab_click_={(item) => {
+      on_new_tab_click={(item) => {
         if (!username) {
           const data_source = new Bookmarks_DataSourceImpl(
             auth_context.ky_instance,
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
           repository.record_visit({
-            bookmark_id: item.bookmark_id_,
+            bookmark_id: item.bookmark_id,
             visited_at: new Date().toISOString(),
           })
         }
-        const url = item.open_snapshot_
-          ? url_to_wayback({ date: item.created_at_, url: item.url_ })
-          : item.url_
+        const url = item.open_snapshot
+          ? url_to_wayback({ date: item.created_at, url: item.url })
+          : item.url
         window.open(url, '_blank')
       }}
-      on_reading_mode_click_={async (item) => {
+      on_reading_mode_click={async (item) => {
         const data_source = new Bookmarks_DataSourceImpl(
           auth_context.ky_instance,
         )
@@ -783,19 +779,19 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         if (!username) {
           links_data = await repository.get_links_data_authorized(
             {
-              bookmark_id: item.bookmark_id_,
-              bookmark_updated_at: item.updated_at_,
+              bookmark_id: item.bookmark_id,
+              bookmark_updated_at: item.updated_at,
             },
             auth_context.auth_data!.encryption_key,
           )
         } else {
           links_data = await repository.get_links_data_public({
-            bookmark_id: item.bookmark_id_,
-            bookmark_updated_at: item.updated_at_,
+            bookmark_id: item.bookmark_id,
+            bookmark_updated_at: item.updated_at,
             username,
           })
         }
-        const link_data = links_data.find((link) => link.url == item.url_)
+        const link_data = links_data.find((link) => link.url == item.url)
         if (link_data && link_data.reader_data) {
           reader_modal_setter({
             reader_data: link_data.reader_data,
@@ -809,13 +805,13 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           )
           const repository = new Bookmarks_RepositoryImpl(data_source)
           repository.record_visit({
-            bookmark_id: item.bookmark_id_,
+            bookmark_id: item.bookmark_id,
             visited_at: new Date().toISOString(),
           })
         }
       }}
-      on_is_visible_={(item) => {
-        if (item.is_parsed_) {
+      on_is_visible={(item) => {
+        if (item.is_parsed) {
           const data_source = new Bookmarks_DataSourceImpl(
             auth_context.ky_instance,
           )
@@ -823,54 +819,54 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           if (!username) {
             repository.get_links_data_authorized(
               {
-                bookmark_id: item.bookmark_id_,
-                bookmark_updated_at: item.updated_at_,
+                bookmark_id: item.bookmark_id,
+                bookmark_updated_at: item.updated_at,
               },
               auth_context.auth_data!.encryption_key,
             )
           } else {
             repository.get_links_data_public({
-              bookmark_id: item.bookmark_id_,
-              bookmark_updated_at: item.updated_at_,
+              bookmark_id: item.bookmark_id,
+              bookmark_updated_at: item.updated_at,
               username,
             })
           }
         }
       }}
-      selected_tags_={tag_view_options_hook.selected_tags_}
-      selected_starred_={
-        filter_view_options_hook.current_filter_ == Filter.STARRED ||
-        filter_view_options_hook.current_filter_ == Filter.STARRED_UNSORTED ||
-        filter_view_options_hook.current_filter_ == Filter.ARCHIVED_STARRED ||
-        filter_view_options_hook.current_filter_ ==
+      selected_tags={tag_view_options_hook.selected_tags}
+      selected_starred={
+        filter_view_options_hook.current_filter == Filter.STARRED ||
+        filter_view_options_hook.current_filter == Filter.STARRED_UNSORTED ||
+        filter_view_options_hook.current_filter == Filter.ARCHIVED_STARRED ||
+        filter_view_options_hook.current_filter ==
           Filter.ARCHIVED_STARRED_UNSORTED
       }
-      selected_unsorted_={
-        filter_view_options_hook.current_filter_ == Filter.UNSORTED ||
-        filter_view_options_hook.current_filter_ == Filter.STARRED_UNSORTED ||
-        filter_view_options_hook.current_filter_ == Filter.ARCHIVED_UNSORTED ||
-        filter_view_options_hook.current_filter_ ==
+      selected_unsorted={
+        filter_view_options_hook.current_filter == Filter.UNSORTED ||
+        filter_view_options_hook.current_filter == Filter.STARRED_UNSORTED ||
+        filter_view_options_hook.current_filter == Filter.ARCHIVED_UNSORTED ||
+        filter_view_options_hook.current_filter ==
           Filter.ARCHIVED_STARRED_UNSORTED
       }
-      selected_archived_={is_archived_filter}
-      current_gte_={date_view_options_hook.current_gte_}
-      current_lte_={date_view_options_hook.current_lte_}
+      selected_archived={is_archived_filter}
+      current_gte={date_view_options_hook.current_gte}
+      current_lte={date_view_options_hook.current_lte}
     />
   )
   const slot_tag_hierarchies = (
     <div style={{ pointerEvents: is_not_interactive ? 'none' : undefined }}>
       <UiAppAtom_TagHierarchies
-        library_updated_at_timestamp_={library_updated_at_timestamp}
-        show_skeleton_={show_skeletons}
-        is_read_only_={!!username}
-        tree_={tag_hierarchies_hook.tag_hierarchies}
-        on_update_={async (tag_hierarchies: TagHierarchies.Node[]) => {
-          const filter = filter_view_options_hook.current_filter_
+        library_updated_at_timestamp={library_updated_at_timestamp}
+        show_skeleton={show_skeletons}
+        is_read_only={!!username}
+        tree={tag_hierarchies_hook.tag_hierarchies}
+        on_update={async (tag_hierarchies: TagHierarchies.Node[]) => {
+          const filter = filter_view_options_hook.current_filter
 
           const update_tag_hierarchies_params: UpdateTagHierarchies_Params = {
             tag_hierarchies,
-            gte: date_view_options_hook.current_gte_,
-            lte: date_view_options_hook.current_lte_,
+            gte: date_view_options_hook.current_gte,
+            lte: date_view_options_hook.current_lte,
             starred_only:
               filter == Filter.STARRED ||
               filter == Filter.STARRED_UNSORTED ||
@@ -900,46 +896,44 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           )
           toast.success(props.dictionary.app.library.tag_hierarchies_upated)
         }}
-        selected_tag_ids_={tag_view_options_hook.selected_tags_}
-        is_updating_={tag_hierarchies_hook.is_updating}
-        on_item_click_={(tag_ids: number[]) => {
+        selected_tag_ids={tag_view_options_hook.selected_tags}
+        is_updating={tag_hierarchies_hook.is_updating}
+        on_item_click={(tag_ids: number[]) => {
           tag_view_options_hook.set_many_tags_to_search_params({
             tag_ids,
           })
         }}
-        library_url_={username ? `/${username}` : '/library'}
-        dragged_tag_={tag_view_options_hook.dragged_tag}
-        all_bookmarks_yields_={tag_hierarchies_hook.total}
-        is_all_bookmarks_selected_={
-          !tag_view_options_hook.selected_tags_.length
-        }
-        on_click_all_bookmarks_={() => {
+        library_url={username ? `/${username}` : '/library'}
+        dragged_tag={tag_view_options_hook.dragged_tag}
+        all_bookmarks_yields={tag_hierarchies_hook.total}
+        is_all_bookmarks_selected={!tag_view_options_hook.selected_tags.length}
+        on_click_all_bookmarks={() => {
           tag_view_options_hook.clear_selected_tags()
           if (bookmarks_hook.showing_bookmarks_fetched_by_ids) {
             search_hook.reset()
-            if (filter_view_options_hook.current_filter_ == Filter.NONE) {
-              bookmarks_hook.get_bookmarks_({})
+            if (filter_view_options_hook.current_filter == Filter.NONE) {
+              bookmarks_hook.get_bookmarks({})
             }
           }
         }}
-        on_tag_rename_click_={(old_tag_id: number) => {
+        on_tag_rename_click={(old_tag_id: number) => {
           const old_tag_name = counts_hook.tags![old_tag_id].name
           on_tag_rename_click({ old_tag_name, old_tag_id })
         }}
-        translations_={{
-          all_bookmarks_: props.dictionary.app.library.all_bookmarks,
-          drag_here_: props.dictionary.app.library.drag_tag_here,
-          delete_: props.dictionary.app.library.delete,
-          rename_: props.dictionary.app.library.rename,
+        translations={{
+          all_bookmarks: props.dictionary.app.library.all_bookmarks,
+          drag_here: props.dictionary.app.library.drag_tag_here,
+          delete: props.dictionary.app.library.delete,
+          rename: props.dictionary.app.library.rename,
         }}
       />
     </div>
   )
   const slot_aside = (
     <UiAppTemplate_LibraryAside
-      support_label_={props.dictionary.app.library.send_feedback}
-      support_href_="https://github.com/taaabs/community/discussions"
-      slot_segmented_buttons_={
+      support_label={props.dictionary.app.library.send_feedback}
+      support_href="https://github.com/taaabs/community/discussions"
+      slot_segmented_buttons={
         is_hydrated ? (
           <>
             <UiAppAtom_SegmentedButton
@@ -949,28 +943,27 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 {
                   label: props.dictionary.app.library.sort_by_options.date,
                   is_selected:
-                    sort_by_view_options_hook.current_sort_by_ !=
+                    sort_by_view_options_hook.current_sort_by !=
                     SortBy.POPULARITY,
                 },
                 {
                   label:
                     props.dictionary.app.library.sort_by_options.the_huggiest,
                   is_selected:
-                    sort_by_view_options_hook.current_sort_by_ ==
+                    sort_by_view_options_hook.current_sort_by ==
                     SortBy.POPULARITY,
                 },
               ]}
               on_item_click={(option_idx) => {
                 if (
                   option_idx == 0 &&
-                  sort_by_view_options_hook.current_sort_by_ ==
-                    SortBy.POPULARITY
+                  sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
                 ) {
-                  sort_by_view_options_hook.set_sort_by_query_param_(
+                  sort_by_view_options_hook.set_sort_by_query_param(
                     SortBy.CREATED_AT,
                   )
                 } else if (option_idx == 1) {
-                  sort_by_view_options_hook.set_sort_by_query_param_(
+                  sort_by_view_options_hook.set_sort_by_query_param(
                     SortBy.POPULARITY,
                   )
                 }
@@ -981,40 +974,39 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 key={`2-${popstate_count}`}
                 is_not_interactive={is_not_interactive}
                 is_disabled={
-                  sort_by_view_options_hook.current_sort_by_ ==
-                  SortBy.POPULARITY
+                  sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
                 }
                 items={[
                   {
                     label: props.dictionary.app.library.sort_by_options.added,
                     is_selected:
-                      sort_by_view_options_hook.current_sort_by_ ==
+                      sort_by_view_options_hook.current_sort_by ==
                       SortBy.CREATED_AT,
                   },
                   {
                     label: props.dictionary.app.library.sort_by_options.edited,
                     is_selected:
-                      sort_by_view_options_hook.current_sort_by_ ==
+                      sort_by_view_options_hook.current_sort_by ==
                       SortBy.UPDATED_AT,
                   },
                   {
                     label: props.dictionary.app.library.sort_by_options.visited,
                     is_selected:
-                      sort_by_view_options_hook.current_sort_by_ ==
+                      sort_by_view_options_hook.current_sort_by ==
                       SortBy.VISITED_AT,
                   },
                 ]}
                 on_item_click={(option_idx) => {
                   if (option_idx == 0) {
-                    sort_by_view_options_hook.set_sort_by_query_param_(
+                    sort_by_view_options_hook.set_sort_by_query_param(
                       SortBy.CREATED_AT,
                     )
                   } else if (option_idx == 1) {
-                    sort_by_view_options_hook.set_sort_by_query_param_(
+                    sort_by_view_options_hook.set_sort_by_query_param(
                       SortBy.UPDATED_AT,
                     )
                   } else if (option_idx == 2) {
-                    sort_by_view_options_hook.set_sort_by_query_param_(
+                    sort_by_view_options_hook.set_sort_by_query_param(
                       SortBy.VISITED_AT,
                     )
                   }
@@ -1025,30 +1017,29 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 key={`2-${popstate_count}`}
                 is_not_interactive={is_not_interactive}
                 is_disabled={
-                  sort_by_view_options_hook.current_sort_by_ ==
-                  SortBy.POPULARITY
+                  sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
                 }
                 items={[
                   {
                     label: props.dictionary.app.library.sort_by_options.added,
                     is_selected:
-                      sort_by_view_options_hook.current_sort_by_ ==
+                      sort_by_view_options_hook.current_sort_by ==
                       SortBy.CREATED_AT,
                   },
                   {
                     label: props.dictionary.app.library.sort_by_options.edited,
                     is_selected:
-                      sort_by_view_options_hook.current_sort_by_ ==
+                      sort_by_view_options_hook.current_sort_by ==
                       SortBy.UPDATED_AT,
                   },
                 ]}
                 on_item_click={(option_idx) => {
                   if (option_idx == 0) {
-                    sort_by_view_options_hook.set_sort_by_query_param_(
+                    sort_by_view_options_hook.set_sort_by_query_param(
                       SortBy.CREATED_AT,
                     )
                   } else if (option_idx == 1) {
-                    sort_by_view_options_hook.set_sort_by_query_param_(
+                    sort_by_view_options_hook.set_sort_by_query_param(
                       SortBy.UPDATED_AT,
                     )
                   }
@@ -1059,25 +1050,25 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               key={`3-${popstate_count}`}
               is_not_interactive={is_not_interactive}
               is_disabled={
-                sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY
+                sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
               }
               items={[
                 {
                   label: props.dictionary.app.library.order_options.newest,
                   is_selected:
-                    order_view_options_hook.current_order_ == Order.DESC,
+                    order_view_options_hook.current_order == Order.DESC,
                 },
                 {
                   label: props.dictionary.app.library.order_options.oldest,
                   is_selected:
-                    order_view_options_hook.current_order_ == Order.ASC,
+                    order_view_options_hook.current_order == Order.ASC,
                 },
               ]}
               on_item_click={(option_idx) => {
                 if (option_idx == 0) {
-                  order_view_options_hook.set_order_query_param_(Order.DESC)
+                  order_view_options_hook.set_order_query_param(Order.DESC)
                 } else if (option_idx == 1) {
-                  order_view_options_hook.set_order_query_param_(Order.ASC)
+                  order_view_options_hook.set_order_query_param(Order.ASC)
                 }
               }}
             />
@@ -1086,7 +1077,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           <UiAppAtom_SegmentedButtonsSkeleton />
         )
       }
-      slot_custom_range_={
+      slot_custom_range={
         !show_skeletons ? (
           <div
             style={{
@@ -1098,20 +1089,20 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               library_updated_at_timestamp={library_updated_at_timestamp}
               counts={counts_hook.months || undefined}
               on_yyyymm_change={
-                date_view_options_hook.set_gte_lte_search_params_
+                date_view_options_hook.set_gte_lte_search_params
               }
               clear_date_range={
-                date_view_options_hook.clear_gte_lte_search_params_
+                date_view_options_hook.clear_gte_lte_search_params
               }
-              current_gte={date_view_options_hook.current_gte_}
-              current_lte={date_view_options_hook.current_lte_}
-              selected_tags={tag_view_options_hook.selected_tags_}
+              current_gte={date_view_options_hook.current_gte}
+              current_lte={date_view_options_hook.current_lte}
+              selected_tags={tag_view_options_hook.selected_tags}
               is_range_selector_disabled={
-                sort_by_view_options_hook.current_sort_by_ ==
+                sort_by_view_options_hook.current_sort_by ==
                   SortBy.UPDATED_AT ||
-                sort_by_view_options_hook.current_sort_by_ ==
+                sort_by_view_options_hook.current_sort_by ==
                   SortBy.VISITED_AT ||
-                sort_by_view_options_hook.current_sort_by_ == SortBy.POPULARITY
+                sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
               }
               translations={{
                 custom_range: props.dictionary.app.library.range_of_months,
@@ -1127,7 +1118,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           <UiAppAtom_CustomRangeSkeleton />
         )
       }
-      slot_tags_={
+      slot_tags={
         <div
           style={{
             opacity:
@@ -1141,7 +1132,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             <>
               <UiAppAtom_SelectedTags
                 key={`selected-tags-${library_updated_at_timestamp}-${popstate_count}`}
-                selected_tags={tag_view_options_hook.selected_tags_
+                selected_tags={tag_view_options_hook.selected_tags
                   .filter((id) =>
                     !counts_hook.tags ? false : counts_hook.tags[id],
                   )
@@ -1152,27 +1143,25 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     }
                   })}
                 on_selected_tag_click={(tag_id) =>
-                  tag_view_options_hook.remove_tags_from_search_params_([
-                    tag_id,
-                  ])
+                  tag_view_options_hook.remove_tags_from_search_params([tag_id])
                 }
-                on_tag_rename_click_={(old_tag_id: number) => {
+                on_tag_rename_click={(old_tag_id: number) => {
                   const old_tag_name = counts_hook.tags![old_tag_id].name
                   on_tag_rename_click({ old_tag_name, old_tag_id })
                 }}
-                translations_={{
-                  rename_: props.dictionary.app.library.rename,
+                translations={{
+                  rename: props.dictionary.app.library.rename,
                 }}
               />
               <UiAppAtom_Tags
                 key={`tags-${library_updated_at_timestamp}-${popstate_count}`}
-                library_url_={username ? `/${username}` : '/library'}
-                tags_={
+                library_url={username ? `/${username}` : '/library'}
+                tags={
                   counts_hook.tags
                     ? Object.entries(counts_hook.tags)
                         .filter(
                           (tag) =>
-                            !tag_view_options_hook.selected_tags_.includes(
+                            !tag_view_options_hook.selected_tags.includes(
                               parseInt(tag[0]),
                             ),
                         )
@@ -1183,16 +1172,16 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                         }))
                     : []
                 }
-                on_click_={tag_view_options_hook.add_tag_to_search_params_}
-                on_tag_drag_start_={
+                on_click={tag_view_options_hook.add_tag_to_search_params}
+                on_tag_drag_start={
                   !username ? tag_view_options_hook.set_dragged_tag : undefined
                 }
-                on_tag_rename_click_={(old_tag_id: number) => {
+                on_tag_rename_click={(old_tag_id: number) => {
                   const old_tag_name = counts_hook.tags![old_tag_id].name
                   on_tag_rename_click({ old_tag_name, old_tag_id })
                 }}
-                translations_={{
-                  rename_: props.dictionary.app.library.rename,
+                translations={{
+                  rename: props.dictionary.app.library.rename,
                 }}
               />
             </>
@@ -1206,41 +1195,41 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
     <UiAppAtom_BookmarkWrapper
       key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
-      created_at_={new Date(bookmark.created_at)}
+      created_at={new Date(bookmark.created_at)}
       locale={props.dictionary.locale}
-      search_queried_at_timestamp_={search_hook.queried_at_timestamp}
-      bookmark_id_={bookmark.id}
-      library_url_={username ? `/${username}` : '/library'}
-      on_tag_drag_start_={
+      search_queried_at_timestamp={search_hook.queried_at_timestamp}
+      bookmark_id={bookmark.id}
+      library_url={username ? `/${username}` : '/library'}
+      on_tag_drag_start={
         !username ? tag_view_options_hook.set_dragged_tag : undefined
       }
-      density_={bookmarks_hook.density}
-      is_search_result_={bookmarks_hook.showing_bookmarks_fetched_by_ids}
-      is_compact_={bookmark.is_compact}
-      updated_at_={bookmark.updated_at}
-      is_public_={bookmark.is_public}
-      points_given_={points_hook.points_given_[bookmark.id]}
-      points_={bookmark.points}
-      cover_={bookmark.cover}
-      on_get_points_given_click_={
+      density={bookmarks_hook.density}
+      is_search_result={bookmarks_hook.showing_bookmarks_fetched_by_ids}
+      is_compact={bookmark.is_compact}
+      updated_at={bookmark.updated_at}
+      is_public={bookmark.is_public}
+      points_given={points_hook.points_given[bookmark.id]}
+      points={bookmark.points}
+      cover={bookmark.cover}
+      on_get_points_given_click={
         auth_context.auth_data
           ? () => {
-              points_hook.get_points_given_on_bookmark_({
+              points_hook.get_points_given_on_bookmark({
                 bookmark_id: bookmark.id,
               })
             }
           : undefined
       }
-      on_give_point_click_={
+      on_give_point_click={
         auth_context.auth_data
           ? (points: number) => {
-              points_hook.give_points_({ bookmark_id: bookmark.id, points })
+              points_hook.give_points({ bookmark_id: bookmark.id, points })
             }
           : undefined
       }
-      title_={bookmark.title}
-      note_={bookmark.note}
-      on_click_={() => {
+      title={bookmark.title}
+      note={bookmark.note}
+      on_click={() => {
         if (bookmarks_hook.density == 'compact') {
           if (bookmark.is_compact || bookmark.is_compact === undefined) {
             dispatch(
@@ -1259,51 +1248,51 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           }
         }
       }}
-      date_={
-        sort_by_view_options_hook.current_sort_by_ == SortBy.CREATED_AT
+      date={
+        sort_by_view_options_hook.current_sort_by == SortBy.CREATED_AT
           ? new Date(bookmark.created_at)
-          : sort_by_view_options_hook.current_sort_by_ == SortBy.UPDATED_AT
+          : sort_by_view_options_hook.current_sort_by == SortBy.UPDATED_AT
             ? new Date(bookmark.updated_at)
-            : sort_by_view_options_hook.current_sort_by_ == SortBy.VISITED_AT
+            : sort_by_view_options_hook.current_sort_by == SortBy.VISITED_AT
               ? new Date(bookmark.visited_at)
               : new Date(bookmark.created_at)
       }
-      search_params_={search_params.toString()}
-      tags_={
+      search_params={search_params.toString()}
+      tags={
         bookmark.tags
           ? bookmark.tags.map((tag) => {
               const is_selected = is_fetching_first_bookmarks
-                ? counts_hook.selected_tags_.find((t) => t == tag.id) !=
+                ? counts_hook.selected_tags.find((t) => t == tag.id) !=
                   undefined
-                : tag_view_options_hook.selected_tags_.find(
+                : tag_view_options_hook.selected_tags.find(
                     (t) => t == tag.id,
                   ) !== undefined
 
               return {
-                name_: tag.name,
-                is_selected_: is_selected,
+                name: tag.name,
+                is_selected: is_selected,
                 id: tag.id,
-                yields_:
+                yields:
                   !is_selected && counts_hook.tags && counts_hook.tags[tag.id]
                     ? counts_hook.tags[tag.id].yields
                     : undefined,
-                is_public_: tag.is_public,
+                is_public: tag.is_public,
               }
             })
           : []
       }
-      is_unsorted_={
+      is_unsorted={
         !username && bookmark.is_unsorted === undefined
           ? true
           : bookmark.is_unsorted
       }
-      stars_={bookmark.stars}
-      on_tag_click_={tag_view_options_hook.add_tag_to_search_params_}
-      on_selected_tag_click_={(tag_id) =>
-        tag_view_options_hook.remove_tags_from_search_params_([tag_id])
+      stars={bookmark.stars}
+      on_tag_click={tag_view_options_hook.add_tag_to_search_params}
+      on_selected_tag_click={(tag_id) =>
+        tag_view_options_hook.remove_tags_from_search_params([tag_id])
       }
-      render_height_={bookmark.render_height}
-      set_render_height_={(height) => {
+      render_height={bookmark.render_height}
+      set_render_height={(height) => {
         dispatch(
           bookmarks_actions.set_bookmark_render_height({
             index: i,
@@ -1311,7 +1300,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           }),
         )
       }}
-      on_link_click_={async (url) => {
+      on_link_click={async (url) => {
         if (!username) {
           const record_visit_params: RecordVisit_Params = {
             bookmark_id: bookmark.id,
@@ -1354,7 +1343,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           }
         }
       }}
-      on_reading_mode_click_={async (url) => {
+      on_reading_mode_click={async (url) => {
         const data_source = new Bookmarks_DataSourceImpl(
           auth_context.ky_instance,
         )
@@ -1394,7 +1383,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           })
         }
       }}
-      on_link_middle_click_={() => {
+      on_link_middle_click={() => {
         if (!username) {
           const data_source = new Bookmarks_DataSourceImpl(
             auth_context.ky_instance,
@@ -1406,7 +1395,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           })
         }
       }}
-      on_new_tab_click_={(url) => {
+      on_new_tab_click={(url) => {
         if (!username) {
           const data_source = new Bookmarks_DataSourceImpl(
             auth_context.ky_instance,
@@ -1419,10 +1408,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         window.open(url, '_blank')
       }}
-      favicon_host_={favicon_host}
+      favicon_host={favicon_host}
       // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed).
-      dragged_tag_={tag_view_options_hook.dragged_tag}
-      on_mouse_up_={async () => {
+      dragged_tag={tag_view_options_hook.dragged_tag}
+      on_mouse_up={async () => {
         if (!tag_view_options_hook.dragged_tag) return
         if (bookmark.tags.length == system_values.bookmark.tags.limit) {
           toast.error(props.dictionary.app.library.errors.tag_limit_reached)
@@ -1430,7 +1419,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         if (
           bookmark.tags.findIndex(
-            (tag) => tag.id == tag_view_options_hook.dragged_tag!.id_,
+            (tag) => tag.id == tag_view_options_hook.dragged_tag!.id,
           ) != -1
         ) {
           return
@@ -1460,7 +1449,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               is_public: tag.is_public,
             })),
             {
-              name: tag_view_options_hook.dragged_tag.name_,
+              name: tag_view_options_hook.dragged_tag.name,
               is_public: bookmark.is_public,
             },
           ],
@@ -1477,10 +1466,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 ) || 'null',
               ) || undefined,
             get_tag_hierarchies_request_params:
-              tag_hierarchies_hook.get_authorized_request_params_({
-                filter: filter_view_options_hook.current_filter_,
-                gte: date_view_options_hook.current_gte_,
-                lte: date_view_options_hook.current_lte_,
+              tag_hierarchies_hook.get_authorized_request_params({
+                filter: filter_view_options_hook.current_filter,
+                gte: date_view_options_hook.current_gte,
+                lte: date_view_options_hook.current_lte,
               }),
             ky: auth_context.ky_instance,
             encryption_key: auth_context.auth_data!.encryption_key,
@@ -1521,7 +1510,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         dispatch(bookmarks_actions.set_is_upserting(false))
         toast.success(props.dictionary.app.library.bookmark_updated)
       }}
-      on_tags_order_change_={
+      on_tags_order_change={
         !username
           ? async (tags) => {
               dispatch(bookmarks_actions.set_is_upserting(true))
@@ -1544,8 +1533,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   favicon: link.favicon,
                 })),
                 tags: tags.map((tag) => ({
-                  name: tag.name_,
-                  is_public: tag.is_public_ || false,
+                  name: tag.name,
+                  is_public: tag.is_public || false,
                 })),
                 cover: bookmark.cover,
               }
@@ -1600,11 +1589,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             }
           : undefined
       }
-      on_tag_rename_click_={(old_tag_id: number) => {
+      on_tag_rename_click={(old_tag_id: number) => {
         const old_tag_name = counts_hook.tags![old_tag_id].name
         on_tag_rename_click({ old_tag_name, old_tag_id })
       }}
-      on_tag_delete_click_={async (tag_id) => {
+      on_tag_delete_click={async (tag_id) => {
         dispatch(bookmarks_actions.set_is_upserting(true))
         const modified_bookmark: UpsertBookmark_Params = {
           bookmark_id: bookmark.id,
@@ -1643,10 +1632,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 ) || 'null',
               ) || undefined,
             get_tag_hierarchies_request_params:
-              tag_hierarchies_hook.get_authorized_request_params_({
-                filter: filter_view_options_hook.current_filter_,
-                gte: date_view_options_hook.current_gte_,
-                lte: date_view_options_hook.current_lte_,
+              tag_hierarchies_hook.get_authorized_request_params({
+                filter: filter_view_options_hook.current_filter,
+                gte: date_view_options_hook.current_gte,
+                lte: date_view_options_hook.current_lte,
               }),
             ky: auth_context.ky_instance,
             encryption_key: auth_context.auth_data!.encryption_key,
@@ -1686,7 +1675,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
         if (
-          !tag_view_options_hook.selected_tags_.every((t) =>
+          !tag_view_options_hook.selected_tags.every((t) =>
             updated_tag_ids.includes(t),
           )
         ) {
@@ -1701,25 +1690,25 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           }
         }
         if (
-          tag_view_options_hook.selected_tags_.includes(tag_id) &&
+          tag_view_options_hook.selected_tags.includes(tag_id) &&
           counts_hook.tags![tag_id].yields == 1
         ) {
           dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(true))
-          tag_view_options_hook.remove_tags_from_search_params_([tag_id])
+          tag_view_options_hook.remove_tags_from_search_params([tag_id])
         }
         dispatch(bookmarks_actions.set_is_upserting(false))
         toast.success(props.dictionary.app.library.bookmark_updated)
       }}
-      links_={bookmark.links.map((link) => ({
-        url_: link.url,
-        saves_: link.saves,
-        site_path_: link.site_path,
-        is_pinned_: link.is_pinned,
-        is_public_: link.is_public,
-        favicon_: link.favicon,
-        open_snapshot_: link.open_snapshot,
-        is_parsed_: link.is_parsed,
-        menu_slot_: !username ? (
+      links={bookmark.links.map((link) => ({
+        url: link.url,
+        saves: link.saves,
+        site_path: link.site_path,
+        is_pinned: link.is_pinned,
+        is_public: link.is_public,
+        favicon: link.favicon,
+        open_snapshot: link.open_snapshot,
+        is_parsed: link.is_parsed,
+        menu_slot: !username ? (
           <UiCommon_Dropdown>
             {link.open_snapshot ? (
               <UiCommon_Dropdown_StandardItem
@@ -1895,7 +1884,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           </UiCommon_Dropdown>
         ),
       }))}
-      menu_slot_={
+      menu_slot={
         !username ? (
           <UiCommon_Dropdown>
             <UiCommon_Dropdown_Stars
@@ -1937,10 +1926,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                         ) || 'null',
                       ) || undefined,
                     get_tag_hierarchies_request_params:
-                      tag_hierarchies_hook.get_authorized_request_params_({
-                        filter: filter_view_options_hook.current_filter_,
-                        gte: date_view_options_hook.current_gte_,
-                        lte: date_view_options_hook.current_lte_,
+                      tag_hierarchies_hook.get_authorized_request_params({
+                        filter: filter_view_options_hook.current_filter,
+                        gte: date_view_options_hook.current_gte,
+                        lte: date_view_options_hook.current_lte,
                       }),
                     ky: auth_context.ky_instance,
                     encryption_key: auth_context.auth_data!.encryption_key,
@@ -1948,12 +1937,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 )
                 if (
                   search_hook.count &&
-                  (filter_view_options_hook.current_filter_ == Filter.STARRED ||
-                    filter_view_options_hook.current_filter_ ==
+                  (filter_view_options_hook.current_filter == Filter.STARRED ||
+                    filter_view_options_hook.current_filter ==
                       Filter.STARRED_UNSORTED ||
-                    filter_view_options_hook.current_filter_ ==
+                    filter_view_options_hook.current_filter ==
                       Filter.ARCHIVED_STARRED ||
-                    filter_view_options_hook.current_filter_ ==
+                    filter_view_options_hook.current_filter ==
                       Filter.ARCHIVED_STARRED_UNSORTED) &&
                   bookmark.stars == 1
                 ) {
@@ -2007,10 +1996,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                         ) || 'null',
                       ) || undefined,
                     get_tag_hierarchies_request_params:
-                      tag_hierarchies_hook.get_authorized_request_params_({
-                        filter: filter_view_options_hook.current_filter_,
-                        gte: date_view_options_hook.current_gte_,
-                        lte: date_view_options_hook.current_lte_,
+                      tag_hierarchies_hook.get_authorized_request_params({
+                        filter: filter_view_options_hook.current_filter,
+                        gte: date_view_options_hook.current_gte,
+                        lte: date_view_options_hook.current_lte,
                       }),
                     ky: auth_context.ky_instance,
                     encryption_key: auth_context.auth_data!.encryption_key,
@@ -2018,11 +2007,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 )
                 if (
                   search_hook.count &&
-                  (filter_view_options_hook.current_filter_ ==
-                    Filter.UNSORTED ||
-                    filter_view_options_hook.current_filter_ ==
+                  (filter_view_options_hook.current_filter == Filter.UNSORTED ||
+                    filter_view_options_hook.current_filter ==
                       Filter.STARRED_UNSORTED ||
-                    filter_view_options_hook.current_filter_ ==
+                    filter_view_options_hook.current_filter ==
                       Filter.ARCHIVED_STARRED_UNSORTED) &&
                   bookmark.is_unsorted
                 ) {
@@ -2074,10 +2062,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                         ) || 'null',
                       ) || undefined,
                     get_tag_hierarchies_request_params:
-                      tag_hierarchies_hook.get_authorized_request_params_({
-                        filter: filter_view_options_hook.current_filter_,
-                        gte: date_view_options_hook.current_gte_,
-                        lte: date_view_options_hook.current_lte_,
+                      tag_hierarchies_hook.get_authorized_request_params({
+                        filter: filter_view_options_hook.current_filter,
+                        gte: date_view_options_hook.current_gte,
+                        lte: date_view_options_hook.current_lte,
                       }),
                     ky: auth_context.ky_instance,
                     encryption_key: auth_context.auth_data!.encryption_key,
@@ -2085,7 +2073,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 )
                 const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
                 if (
-                  !tag_view_options_hook.selected_tags_.every((t) =>
+                  !tag_view_options_hook.selected_tags.every((t) =>
                     updated_tag_ids.includes(t),
                   )
                 ) {
@@ -2101,7 +2089,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 }
                 // Unselect removed tags when there is no more bookmarks with them.
                 const tags_to_remove_from_search_params =
-                  tag_view_options_hook.selected_tags_.filter((t) => {
+                  tag_view_options_hook.selected_tags.filter((t) => {
                     const yields = Object.entries(counts_hook.tags!).find(
                       (tag) => parseInt(tag[0]) == t,
                     )![1].yields
@@ -2111,7 +2099,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   dispatch(
                     bookmarks_actions.set_is_fetching_first_bookmarks(true),
                   )
-                  tag_view_options_hook.remove_tags_from_search_params_(
+                  tag_view_options_hook.remove_tags_from_search_params(
                     tags_to_remove_from_search_params,
                   )
                 }
@@ -2203,10 +2191,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                         ) || 'null',
                       ) || undefined,
                     get_tag_hierarchies_request_params:
-                      tag_hierarchies_hook.get_authorized_request_params_({
-                        filter: filter_view_options_hook.current_filter_,
-                        gte: date_view_options_hook.current_gte_,
-                        lte: date_view_options_hook.current_lte_,
+                      tag_hierarchies_hook.get_authorized_request_params({
+                        filter: filter_view_options_hook.current_filter,
+                        gte: date_view_options_hook.current_gte,
+                        lte: date_view_options_hook.current_lte,
                       }),
                     ky: auth_context.ky_instance,
                     encryption_key: auth_context.auth_data!.encryption_key,
@@ -2255,10 +2243,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                         ) || 'null',
                       ) || undefined,
                     get_tag_hierarchies_request_params:
-                      tag_hierarchies_hook.get_authorized_request_params_({
-                        filter: filter_view_options_hook.current_filter_,
-                        gte: date_view_options_hook.current_gte_,
-                        lte: date_view_options_hook.current_lte_,
+                      tag_hierarchies_hook.get_authorized_request_params({
+                        filter: filter_view_options_hook.current_filter,
+                        gte: date_view_options_hook.current_gte,
+                        lte: date_view_options_hook.current_lte,
                       }),
                     bookmark_id: bookmark.id,
                     ky: auth_context.ky_instance,
@@ -2284,19 +2272,19 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           </UiCommon_Dropdown>
         ) : undefined
       }
-      highlights_={search_hook.highlights?.[bookmark.id.toString()]}
-      highlights_site_variants_={search_hook.highlights_sites_variants}
-      orama_db_id_={
+      highlights={search_hook.highlights?.[bookmark.id.toString()]}
+      highlights_site_variants={search_hook.highlights_sites_variants}
+      orama_db_id={
         is_archived_filter
           ? props.local_db.archived_db?.id || ''
           : props.local_db.db?.id || ''
       }
-      should_dim_visited_links_={username !== undefined}
+      should_dim_visited_links={username !== undefined}
       // It's important to wait until filter is set to search hook's state.
-      current_filter_={search_hook.current_filter}
-      translations_={{
-        delete_: props.dictionary.app.library.delete,
-        rename_: props.dictionary.app.library.rename,
+      current_filter={search_hook.current_filter}
+      translations={{
+        delete: props.dictionary.app.library.delete,
+        rename: props.dictionary.app.library.rename,
       }}
     />
   ))
@@ -2304,35 +2292,35 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   return (
     <>
       <UiAppAtom_DraggedCursorTag
-        tag_name={tag_view_options_hook.dragged_tag?.name_}
+        tag_name={tag_view_options_hook.dragged_tag?.name}
       />
       <UiAppTemplate_SwipableColumns
-        is_following_={undefined}
-        welcome_text_={
+        is_following={undefined}
+        welcome_text={
           !username && auth_context.auth_data
             ? `${props.dictionary.app.library.welcome}, ${auth_context.auth_data.username}`
             : undefined
         }
-        on_follow_click_={username ? () => {} : undefined}
-        show_skeletons_={show_skeletons}
-        slot_search_={slot_search}
-        slot_toolbar_={slot_toolbar}
-        slot_column_left_={slot_tag_hierarchies}
-        slot_column_right_={slot_aside}
-        are_bookmarks_dimmed_={
+        on_follow_click={username ? () => {} : undefined}
+        show_skeletons={show_skeletons}
+        slot_search={slot_search}
+        slot_toolbar={slot_toolbar}
+        slot_column_left={slot_tag_hierarchies}
+        slot_column_right={slot_aside}
+        are_bookmarks_dimmed={
           is_fetching_first_bookmarks || bookmarks_hook.is_upserting || false
         }
-        slot_main_={
+        slot_main={
           <>
             {!bookmarks_hook.showing_bookmarks_fetched_by_ids && slot_pinned}
             {slot_bookmarks}
           </>
         }
-        on_page_bottom_reached_={() => {
+        on_page_bottom_reached={() => {
           if (bookmarks_hook.is_fetching || !bookmarks_hook.bookmarks?.length)
             return
           if (!search_hook.search_string && bookmarks_hook.has_more_bookmarks) {
-            bookmarks_hook.get_bookmarks_({ should_get_next_page: true })
+            bookmarks_hook.get_bookmarks({ should_get_next_page: true })
           } else if (
             search_hook.search_string &&
             search_hook.count &&
@@ -2340,7 +2328,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             bookmarks_hook.bookmarks.length &&
             bookmarks_hook.bookmarks.length < search_hook.count
           ) {
-            bookmarks_hook.get_bookmarks_by_ids_({
+            bookmarks_hook.get_bookmarks_by_ids({
               all_not_paginated_ids: search_hook.result!.hits.map((hit) =>
                 parseInt(hit.document.id),
               ),
@@ -2348,24 +2336,24 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             })
           }
         }}
-        clear_selected_tags_={
+        clear_selected_tags={
           !is_fetching_first_bookmarks &&
           !search_hook.result &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
-          tag_view_options_hook.selected_tags_.length
+          tag_view_options_hook.selected_tags.length
             ? tag_view_options_hook.clear_selected_tags
             : undefined
         }
-        clear_date_range_={
+        clear_date_range={
           !is_fetching_first_bookmarks &&
           !search_hook.result &&
           (!bookmarks_hook.bookmarks || bookmarks_hook.bookmarks.length == 0) &&
-          (date_view_options_hook.current_gte_ ||
-            date_view_options_hook.current_lte_)
-            ? date_view_options_hook.clear_gte_lte_search_params_
+          (date_view_options_hook.current_gte ||
+            date_view_options_hook.current_lte)
+            ? date_view_options_hook.clear_gte_lte_search_params
             : undefined
         }
-        info_text_={
+        info_text={
           is_fetching_first_bookmarks ||
           bookmarks_hook.is_fetching_more_bookmarks
             ? props.dictionary.app.library.loading
@@ -2382,14 +2370,13 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 ? props.dictionary.app.library.end_of_resutls
                 : undefined
         }
-        translations_={{
-          mobile_title_bar_: props.dictionary.app.menu_items.library,
-          collapse_alt_: props.dictionary.app.library.collapse_sidebar,
-          follow_: props.dictionary.app.library.follow,
-          unfollow_: props.dictionary.app.library.unfollow,
-          folders_: props.dictionary.app.library.folders,
-          clear_selected_tags_:
-            props.dictionary.app.library.clear_selected_tags,
+        translations={{
+          mobile_title_bar: props.dictionary.app.menu_items.library,
+          collapse_alt: props.dictionary.app.library.collapse_sidebar,
+          follow: props.dictionary.app.library.follow,
+          unfollow: props.dictionary.app.library.unfollow,
+          folders: props.dictionary.app.library.folders,
+          clear_selected_tags: props.dictionary.app.library.clear_selected_tags,
         }}
       />
     </>

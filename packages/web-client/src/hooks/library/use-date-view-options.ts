@@ -8,11 +8,11 @@ import { useCallback, useState } from 'react'
 export const use_date_view_options = () => {
   const search_params = useSearchParams()
   const params = useParams()
-  const [current_gte_, set_current_gte] = useState<number | undefined>(
+  const [current_gte, set_current_gte] = useState<number | undefined>(
     parseInt(search_params.get(search_params_keys.greater_than_equal) || '0') ||
       undefined,
   )
-  const [current_lte_, set_current_lte] = useState<number | undefined>(
+  const [current_lte, set_current_lte] = useState<number | undefined>(
     parseInt(search_params.get(search_params_keys.less_than_equal) || '0') ||
       undefined,
   )
@@ -25,13 +25,13 @@ export const use_date_view_options = () => {
       search_params.get(search_params_keys.less_than_equal) || '0',
     )
 
-    if (query_gte != current_gte_ && query_lte != current_lte_) {
+    if (query_gte != current_gte && query_lte != current_lte) {
       set_current_gte(query_gte || undefined)
       set_current_lte(query_lte || undefined)
     }
   }, [search_params])
 
-  const set_gte_lte_search_params_ = ({
+  const set_gte_lte_search_params = ({
     gte,
     lte,
   }: {
@@ -65,7 +65,7 @@ export const use_date_view_options = () => {
     )
   }
 
-  const clear_gte_lte_search_params_ = useCallback(() => {
+  const clear_gte_lte_search_params = useCallback(() => {
     set_current_gte(undefined)
     set_current_lte(undefined)
 
@@ -92,9 +92,9 @@ export const use_date_view_options = () => {
   }, [search_params])
 
   return {
-    set_gte_lte_search_params_,
-    clear_gte_lte_search_params_,
-    current_gte_,
-    current_lte_,
+    set_gte_lte_search_params,
+    clear_gte_lte_search_params,
+    current_gte,
+    current_lte,
   }
 }

@@ -9,11 +9,11 @@ export const Primary = () => {
   return (
     <>
       <TagHierarchies
-        is_read_only_={true}
-        all_bookmarks_yields_={2137}
-        is_all_bookmarks_selected_={false}
-        on_click_all_bookmarks_={() => {}}
-        tree_={[
+        is_read_only={true}
+        all_bookmarks_yields={2137}
+        is_all_bookmarks_selected={false}
+        on_click_all_bookmarks={() => {}}
+        tree={[
           {
             name: 'AAA',
             id: 1,
@@ -60,14 +60,17 @@ export const Primary = () => {
             ],
           },
         ]}
-        on_update_={() => {}}
-        on_item_click_={() => {}}
-        is_updating_={false}
-        selected_tag_ids_={[1, 3, 5]}
-        library_url_="/"
-        translations_={{
-          all_bookmarks_: 'All bookmarks',
-          drag_here_: 'Drag and drop tags here',
+        on_update={() => {}}
+        on_item_click={() => {}}
+        is_updating={false}
+        selected_tag_ids={[1, 3, 5]}
+        library_url="/"
+        show_skeleton={false}
+        translations={{
+          all_bookmarks: 'All bookmarks',
+          drag_here: 'Drag and drop tags here',
+          delete: 'Delete',
+          rename: 'Rename',
         }}
       />
       <StorybookSpacer />
@@ -75,18 +78,21 @@ export const Primary = () => {
       <StorybookSpacer />
       <StorybookMargin>
         <TagHierarchies
-          is_read_only_={true}
-          all_bookmarks_yields_={2137}
-          is_all_bookmarks_selected_={false}
-          on_click_all_bookmarks_={() => {}}
-          on_update_={() => {}}
-          on_item_click_={() => {}}
-          is_updating_={false}
-          selected_tag_ids_={[1, 3, 5]}
-          library_url_="/"
-          translations_={{
-            all_bookmarks_: 'All bookmarks',
-            drag_here_: 'Drag and drop tags here',
+          is_read_only={true}
+          all_bookmarks_yields={2137}
+          is_all_bookmarks_selected={false}
+          on_click_all_bookmarks={() => {}}
+          on_update={() => {}}
+          on_item_click={() => {}}
+          is_updating={false}
+          selected_tag_ids={[1, 3, 5]}
+          library_url="/"
+          show_skeleton={false}
+          translations={{
+            all_bookmarks: 'All bookmarks',
+            drag_here: 'Drag and drop tags here',
+            delete: 'Delete',
+            rename: 'Rename',
           }}
         />
       </StorybookMargin>

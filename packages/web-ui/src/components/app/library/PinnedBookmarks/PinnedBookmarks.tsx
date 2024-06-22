@@ -9,41 +9,41 @@ import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/componen
 
 export namespace PinnedBookmarks {
   export type Item = {
-    bookmark_id_: number
-    url_: string
-    created_at_: Date
-    updated_at_: Date
-    is_public_?: boolean
-    title_?: string
-    tags_?: number[]
-    site_path_?: string
-    saves_?: number
-    open_snapshot_?: boolean
-    favicon_?: string
-    is_parsed_?: boolean
-    is_archived_?: boolean
-    stars_?: number
-    is_unsorted_?: boolean
+    bookmark_id: number
+    url: string
+    created_at: Date
+    updated_at: Date
+    is_public?: boolean
+    title?: string
+    tags?: number[]
+    site_path?: string
+    saves?: number
+    open_snapshot?: boolean
+    favicon?: string
+    is_parsed?: boolean
+    is_archived?: boolean
+    stars?: number
+    is_unsorted?: boolean
   }
   export type Props = {
-    items_: Item[]
-    library_updated_at_timestamp_?: number
-    on_change_: (items: Item[]) => void
-    favicon_host_: string
-    on_reading_mode_click_: (item: Item) => void
-    on_link_click_: (item: Item) => void
-    on_link_middle_click_: (item: Item) => void
-    on_new_tab_click_: (item: Item) => void
-    on_is_visible_: (item: Item) => void
-    is_draggable_: boolean
-    selected_tags_: number[]
-    selected_starred_: boolean
-    selected_unsorted_: boolean
-    selected_archived_: boolean
-    current_gte_?: number
-    current_lte_?: number
-    translations_: {
-      nothing_pinned_: string
+    items: Item[]
+    library_updated_at_timestamp?: number
+    on_change: (items: Item[]) => void
+    favicon_host: string
+    on_reading_mode_click: (item: Item) => void
+    on_link_click: (item: Item) => void
+    on_link_middle_click: (item: Item) => void
+    on_new_tab_click: (item: Item) => void
+    on_is_visible: (item: Item) => void
+    is_draggable: boolean
+    selected_tags: number[]
+    selected_starred: boolean
+    selected_unsorted: boolean
+    selected_archived: boolean
+    current_gte?: number
+    current_lte?: number
+    translations: {
+      nothing_pinned: string
       open_original_url: string
       open_snapshot: string
     }
@@ -57,7 +57,7 @@ type SortableItem = {
 export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
   function PinnedBookmarks(props) {
     const [sortable_items, set_sortable_items] = useState<SortableItem[]>(
-      props.items_.map((item, i) => ({
+      props.items.map((item, i) => ({
         id: i,
         ...item,
       })),
@@ -66,36 +66,36 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
     let relevant_items = 0
 
     const items_dom = sortable_items.map((item) => {
-      const created_at_timestamp = Math.round(item.created_at_.getTime() / 1000)
+      const created_at_timestamp = Math.round(item.created_at.getTime() / 1000)
       let is_not_relevant = false
 
       if (
-        (props.selected_archived_ && !item.is_archived_) ||
-        (!props.selected_archived_ && item.is_archived_)
+        (props.selected_archived && !item.is_archived) ||
+        (!props.selected_archived && item.is_archived)
       ) {
         is_not_relevant = true
-      } else if (props.selected_starred_ && !item.stars_) {
+      } else if (props.selected_starred && !item.stars) {
         is_not_relevant = true
-      } else if (props.selected_unsorted_ && !item.is_unsorted_) {
+      } else if (props.selected_unsorted && !item.is_unsorted) {
         is_not_relevant = true
       } else if (
-        item.tags_ &&
-        !props.selected_tags_.every((t) => item.tags_!.includes(t))
+        item.tags &&
+        !props.selected_tags.every((t) => item.tags!.includes(t))
       ) {
         is_not_relevant = true
       } else if (
-        props.current_gte_ &&
-        props.current_lte_ &&
+        props.current_gte &&
+        props.current_lte &&
         (created_at_timestamp <
           new Date(
-            parseInt(props.current_gte_.toString().substring(0, 4)),
-            parseInt(props.current_gte_.toString().substring(4, 6)) - 1,
+            parseInt(props.current_gte.toString().substring(0, 4)),
+            parseInt(props.current_gte.toString().substring(4, 6)) - 1,
           ).getTime() /
             1000 ||
           created_at_timestamp >
             new Date(
-              parseInt(props.current_lte_.toString().substring(0, 4)),
-              parseInt(props.current_lte_.toString().substring(4, 6)),
+              parseInt(props.current_lte.toString().substring(0, 4)),
+              parseInt(props.current_lte.toString().substring(4, 6)),
             ).getTime() /
               1000 -
               1)
@@ -105,66 +105,63 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
         relevant_items++
       }
 
-      const url = item.open_snapshot_
-        ? url_to_wayback({ date: item.created_at_, url: item.url_ })
-        : item.url_
-
       return is_not_relevant ? (
         <div key={item.id} />
       ) : (
         <_Item
           key={item.id}
-          favicon_host_={props.favicon_host_}
-          menu_slot_={
+          favicon_host={props.favicon_host}
+          menu_slot={
             <UiCommon_Dropdown>
-              {item.open_snapshot_ ? (
+              {item.open_snapshot ? (
                 <UiCommon_Dropdown_StandardItem
                   icon_variant="LINK"
-                  label={props.translations_.open_original_url}
+                  label={props.translations.open_original_url}
                   on_click={() => {
-                    props.on_link_middle_click_(item) // TODO: Function name should be more generic.
+                    props.on_link_middle_click(item) // TODO: Function name should be more generic.
                     window.onbeforeunload = null
-                    location.href = item.url_
+                    location.href = item.url
                   }}
                 />
               ) : (
                 <UiCommon_Dropdown_StandardItem
                   icon_variant="LINK"
-                  label={props.translations_.open_snapshot}
+                  label={props.translations.open_snapshot}
                   on_click={() => {
-                    props.on_link_middle_click_(item)
+                    props.on_link_middle_click(item)
                     window.onbeforeunload = null
                     location.href = url_to_wayback({
-                      date: new Date(item.created_at_),
-                      url: item.url_,
+                      date: new Date(item.created_at),
+                      url: item.url,
                     })
                   }}
                 />
               )}
             </UiCommon_Dropdown>
           }
-          on_link_click_={() => {
-            props.on_link_click_(item)
+          on_link_click={() => {
+            props.on_link_click(item)
           }}
-          on_link_middle_click_={() => {
-            props.on_link_middle_click_(item)
+          on_link_middle_click={() => {
+            props.on_link_middle_click(item)
           }}
-          on_new_tab_click_={() => {
-            props.on_new_tab_click_(item)
+          on_new_tab_click={() => {
+            props.on_new_tab_click(item)
           }}
-          on_reading_mode_click_={() => {
-            props.on_reading_mode_click_(item)
+          on_reading_mode_click={() => {
+            props.on_reading_mode_click(item)
           }}
-          on_is_visible={() => props.on_is_visible_(item)}
-          should_dim_visited_links_={false}
-          url_={url}
-          favicon_={item.favicon_}
-          is_parsed_={item.is_parsed_}
-          open_snapshot_={item.open_snapshot_}
-          saves_={item.saves_}
-          site_path_={item.site_path_}
-          title_={item.title_}
-          is_public_={item.is_public_}
+          on_is_visible={() => props.on_is_visible(item)}
+          should_dim_visited_links={false}
+          url={item.url}
+          created_at={item.created_at}
+          favicon={item.favicon}
+          is_parsed={item.is_parsed}
+          open_snapshot={item.open_snapshot}
+          saves={item.saves}
+          site_path={item.site_path}
+          title={item.title}
+          is_public={item.is_public}
         />
       )
     })
@@ -174,10 +171,10 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
         {relevant_items == 0 ? (
           <div className={styles.items}>
             <div className={styles['nothing-pinned']}>
-              {props.translations_.nothing_pinned_}
+              {props.translations.nothing_pinned}
             </div>
           </div>
-        ) : props.is_draggable_ ? (
+        ) : props.is_draggable ? (
           <ReactSortable
             list={sortable_items}
             setList={(new_sortable_items) => {
@@ -187,7 +184,7 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
               )
                 return
               set_sortable_items(new_sortable_items)
-              props.on_change_(new_sortable_items)
+              props.on_change(new_sortable_items)
             }}
             animation={system_values.sortablejs_animation_duration}
             forceFallback={true}
@@ -206,5 +203,5 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
       </>
     )
   },
-  (o, n) => o.library_updated_at_timestamp_ == n.library_updated_at_timestamp_,
+  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
 )

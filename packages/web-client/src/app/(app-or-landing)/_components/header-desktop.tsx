@@ -256,62 +256,62 @@ export const HeaderDesktop: React.FC<{
                 />
                 <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
                 <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks
-                  links_={[
+                  links={[
                     {
-                      label_:
+                      label:
                         props.dictionary.app.header_desktop.user_dropdown.about,
-                      href_: '/about',
+                      href: '/about',
                     },
                     {
-                      label_:
+                      label:
                         props.dictionary.app.header_desktop.user_dropdown
                           .terms_of_service,
-                      href_: '/terms-of-service',
+                      href: '/terms-of-service',
                     },
                     {
-                      label_:
+                      label:
                         props.dictionary.app.header_desktop.user_dropdown
                           .privacy_policy,
-                      href_: '/privacy-policy',
+                      href: '/privacy-policy',
                     },
                   ]}
                 />
               </UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown>
               //     <UiAppOrganism_App_HeaderDesktop_AuthorizedUser_UserDropdown
-              //       profile_url_={`/${
+              //       profile_url={`/${
               //         auth_context.auth_data.username
               //       }?back=${pathname}?${search_params.toString()}`}
-              //       username_={auth_context.auth_data.username}
-              //       settings_href_={`/settings?back=${pathname}?${search_params.toString()}`}
-              //       on_click_log_out_={auth_context.logout}
-              //       footer_links_={[
+              //       username={auth_context.auth_data.username}
+              //       settings_href={`/settings?back=${pathname}?${search_params.toString()}`}
+              //       on_click_log_out={auth_context.logout}
+              //       footer_links={[
               //         {
-              //           label_:
+              //           label:
               //             props.dictionary.app.header_desktop.user_dropdown.about,
-              //           href_: '/about',
+              //           href: '/about',
               //         },
               //         {
-              //           label_:
+              //           label:
               //             props.dictionary.app.header_desktop.user_dropdown
               //               .terms_of_service,
-              //           href_: '/terms-of-service',
+              //           href: '/terms-of-service',
               //         },
               //         {
-              //           label_:
+              //           label:
               //             props.dictionary.app.header_desktop.user_dropdown
               //               .privacy_policy,
-              //           href_: '/privacy-policy',
+              //           href: '/privacy-policy',
               //         },
               //       ]}
-              //       translations_={{
-              //         save_to_taaabs_:
+              //       translations={{
+              //         save_to_taaabs:
               //           props.dictionary.app.header_desktop.user_dropdown
               //             .save_to_taaabs,
-              //         theme_:
+              //         theme:
               //           props.dictionary.app.header_desktop.user_dropdown.theme,
-              //         settings_:
+              //         settings:
               //           props.dictionary.app.header_desktop.user_dropdown.settings,
-              //         log_out_:
+              //         log_out:
               //           props.dictionary.app.header_desktop.user_dropdown.log_out,
               //       }}
               //     />

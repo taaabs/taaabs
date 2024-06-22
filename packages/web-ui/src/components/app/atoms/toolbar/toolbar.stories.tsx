@@ -10,30 +10,30 @@ export const Primary = () => {
     <StorybookMargin>
       <div style={{ display: 'flex' }}>
         <Toolbar
-          toggleable_buttons_={[
+          toggleable_buttons={[
             {
-              label_: 'Lorem',
-              is_toggled_: false,
-              on_click_: () => {},
-            },
-            {
-              label_: 'Lorem',
-              is_toggled_: true,
-              on_click_: () => {},
-            },
-            {
-              label_: 'Lorem',
-              is_toggled_: false,
-              on_click_: () => {},
-            },
-          ]}
-          icon_buttons_={[
-            {
-              icon_variant_: 'DENSITY_DEFAULT',
+              label: 'Lorem',
+              is_toggled: false,
               on_click: () => {},
             },
             {
-              icon_variant_: 'MORE',
+              label: 'Lorem',
+              is_toggled: true,
+              on_click: () => {},
+            },
+            {
+              label: 'Lorem',
+              is_toggled: false,
+              on_click: () => {},
+            },
+          ]}
+          icon_buttons={[
+            {
+              icon_variant: 'DENSITY_DEFAULT',
+              on_click: () => {},
+            },
+            {
+              icon_variant: 'MORE',
               on_click: () => {},
             },
           ]}

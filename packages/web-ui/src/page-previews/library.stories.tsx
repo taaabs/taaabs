@@ -1,7 +1,6 @@
 import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
 import { BottomNavigationBar as UiAppMolecule_BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
 import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { AuthorizedUser as UiAppOrganism_DesktopUserAreaForAppHeader } from '@web-ui/components/app/organisms/logged-in-user'
 import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
 import { HeaderDesktop as UiAppTemplate_App_HeaderDesktop } from '@web-ui/components/app/templates/app/header-desktop'
 import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
@@ -26,15 +25,8 @@ export const Primary = () => {
               ]}
             />
           }
-          slot_right_side={
-            <UiAppOrganism_DesktopUserAreaForAppHeader
-              on_click_add={() => {}}
-              on_click_search={() => {}}
-              slot_user_dropdown={<></>}
-            />
-          }
+          slot_right_side={<></>}
           translations={{ powered_by: 'Powered by' }}
-          cockroach_url="https://example.com"
         />
       }
       slot_header_mobile={
@@ -65,8 +57,8 @@ export const Primary = () => {
       }
     >
       <UiAppTemplate_Library
-        slot_column_right_={<>aside</>}
-        slot_column_left_={
+        slot_column_right={<>aside</>}
+        slot_column_left={
           <>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a dui
             felis. Donec ultrices placerat est. Cras eget pellentesque neque,
@@ -91,11 +83,10 @@ export const Primary = () => {
             velit.
           </>
         }
-        slot_toolbar_={<>toolbar</>}
-        on_page_bottom_reached_={() => {}}
-        slot_pinned_={<>pinned</>}
-        are_bookmarks_dimmed_={false}
-        slot_main_={
+        slot_toolbar={<>toolbar</>}
+        on_page_bottom_reached={() => {}}
+        are_bookmarks_dimmed={false}
+        slot_main={
           <>
             {bookmark}
             {bookmark}
@@ -104,18 +95,17 @@ export const Primary = () => {
             {bookmark}
           </>
         }
-        show_skeletons_={false}
-        slot_search_={<>search</>}
-        translations_={{
-          collapse_alt_: '',
-          follow_: '',
-          unfollow_: '',
-          folders_: '',
-          mobile_title_bar_: '',
-          pinned_: '',
-          clear_selected_tags_: '',
+        show_skeletons={false}
+        slot_search={<>search</>}
+        translations={{
+          collapse_alt: '',
+          follow: '',
+          unfollow: '',
+          folders: '',
+          mobile_title_bar: '',
+          clear_selected_tags: '',
         }}
-        info_text_=""
+        info_text=""
       />
     </UiAppTemplate_App>
   )
@@ -123,34 +113,35 @@ export const Primary = () => {
 
 const bookmark = (
   <UiAppAtom_Bookmark
-    date_={new Date()}
-    links_={[]}
-    title_="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-    is_unsorted_={true}
-    tags_={[
-      { id: 1, name_: 'foo', yields_: 100 },
-      { id: 2, name_: 'bar', is_selected_: true },
+    date={new Date()}
+    links={[]}
+    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+    is_unsorted={true}
+    tags={[
+      { id: 1, name: 'foo', yields: 100 },
+      { id: 2, name: 'bar', is_selected: true },
     ]}
-    on_tag_click_={() => {}}
-    on_click_={() => {}}
-    on_selected_tag_click_={() => {}}
-    favicon_host_=""
-    menu_slot_={<></>}
-    should_dim_visited_links_={false}
-    stars_={0}
-    updated_at_=""
-    bookmark_id_={1}
-    density_="default"
-    on_tag_delete_click_={() => {}}
-    index_={0}
-    is_public_={true}
-    on_give_point_click_={() => {}}
-    created_at_={new Date()}
-    library_url_=""
-    on_get_points_given_click_={() => {}}
-    on_link_click_={() => {}}
-    on_link_middle_click_={() => {}}
-    on_new_tab_click_={() => {}}
+    on_tag_click={() => {}}
+    on_click={() => {}}
+    on_selected_tag_click={() => {}}
+    favicon_host=""
+    menu_slot={<></>}
+    should_dim_visited_links={false}
+    stars={0}
+    updated_at=""
+    bookmark_id={1}
+    density="default"
+    on_tag_delete_click={() => {}}
+    is_public={true}
+    on_give_point_click={() => {}}
+    created_at={new Date()}
+    library_url=""
+    on_get_points_given_click={() => {}}
+    on_link_click={() => {}}
+    on_link_middle_click={() => {}}
+    on_new_tab_click={() => {}}
     locale="en"
+    on_reading_mode_click={() => {}}
+    translations={{ delete: 'delete', rename: 'rename' }}
   />
 )

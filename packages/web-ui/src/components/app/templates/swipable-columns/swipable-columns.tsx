@@ -12,27 +12,27 @@ import { Button } from '@web-ui/components/common/particles/button'
 
 export namespace SwipableColumns {
   export type Props = {
-    slot_column_left_: React.ReactNode
-    slot_column_right_: React.ReactNode
-    slot_toolbar_: React.ReactNode
-    slot_search_: React.ReactNode
-    slot_main_: React.ReactNode
-    are_bookmarks_dimmed_: boolean
-    on_page_bottom_reached_: () => void
-    clear_selected_tags_?: () => void
-    clear_date_range_?: () => void
-    show_skeletons_: boolean
-    info_text_: React.ReactNode
-    welcome_text_?: string
-    on_follow_click_?: () => void
-    is_following_?: boolean
-    translations_: {
-      mobile_title_bar_: string
-      collapse_alt_: string
-      follow_: string
-      unfollow_: string
-      folders_: string
-      clear_selected_tags_: string
+    slot_column_left: React.ReactNode
+    slot_column_right: React.ReactNode
+    slot_toolbar: React.ReactNode
+    slot_search: React.ReactNode
+    slot_main: React.ReactNode
+    are_bookmarks_dimmed: boolean
+    on_page_bottom_reached: () => void
+    clear_selected_tags?: () => void
+    clear_date_range?: () => void
+    show_skeletons: boolean
+    info_text: React.ReactNode
+    welcome_text?: string
+    on_follow_click?: () => void
+    is_following?: boolean
+    translations: {
+      mobile_title_bar: string
+      collapse_alt: string
+      follow: string
+      unfollow: string
+      folders: string
+      clear_selected_tags: string
     }
   }
 }
@@ -225,14 +225,14 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
 
   useUpdateEffect(() => {
     if (!is_end_of_bookmarks_visible) return
-    props.on_page_bottom_reached_()
+    props.on_page_bottom_reached()
   }, [is_end_of_bookmarks_visible])
 
   return (
     <div className={styles.container} {...swipeable_handlers}>
       {/* id on toolbar used by modal scrollbar padding setting */}
       <div className={styles.toolbar} id="toolbar">
-        <div>{props.slot_toolbar_}</div>
+        <div>{props.slot_toolbar}</div>
       </div>
       <div className={styles.content}>
         <aside
@@ -277,7 +277,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
                 onClick={() => {
                   set_is_sidebar_collapsed(!is_sidebar_collapsed)
                 }}
-                title={props.translations_.collapse_alt_}
+                title={props.translations.collapse_alt}
               >
                 <svg
                   viewBox="0 0 5 30"
@@ -290,24 +290,24 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
                   <path d="M12.1667 1.10294C11.2462 0.16569 9.75379 0.16569 8.83325 1.10294L0.0950623 10L8.83325 18.897C9.75379 19.8342 11.2462 19.8342 12.1667 18.897C13.0873 17.9598 13.0873 16.4402 12.1667 15.503L9.11922 12.4H24.6429C25.9447 12.4 27 11.3255 27 10C27 8.67453 25.9447 7.6 24.6429 7.6H9.11922L12.1667 4.49707C13.0873 3.55979 13.0873 2.04021 12.1667 1.10294Z" />
                 </svg>
               </button>
-              {props.welcome_text_ && (
+              {props.welcome_text && (
                 <div
                   className={
                     styles['sidebar__inner__desktop-actions__welcome-text']
                   }
                 >
-                  {props.welcome_text_}
+                  {props.welcome_text}
                 </div>
               )}
-              {props.on_follow_click_ && (
-                <Button on_click={props.on_follow_click_}>
-                  {!props.is_following_
-                    ? props.translations_.follow_
-                    : props.translations_.unfollow_}
+              {props.on_follow_click && (
+                <Button on_click={props.on_follow_click}>
+                  {!props.is_following
+                    ? props.translations.follow
+                    : props.translations.unfollow}
                 </Button>
               )}
             </div>
-            {props.slot_column_left_}
+            {props.slot_column_left}
           </div>
         </aside>
 
@@ -345,18 +345,18 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
                     !is_right_side_open ? toggle_right_side : undefined
                   }
                   text={
-                    props.translations_.mobile_title_bar_
-                      ? props.translations_.mobile_title_bar_
+                    props.translations.mobile_title_bar
+                      ? props.translations.mobile_title_bar
                       : undefined
                   }
                 />
               </div>
               <div className={styles.main__inner__sticky__search}>
-                {props.slot_search_}
+                {props.slot_search}
               </div>
             </div>
 
-            {props.show_skeletons_ && (
+            {props.show_skeletons && (
               <div className={styles['main__inner__skeleton']}>
                 {[...Array(10)].map((_, i) => (
                   <Skeleton key={i} />
@@ -366,22 +366,22 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
 
             <div
               className={cn({
-                [styles.dimmed]: props.are_bookmarks_dimmed_,
+                [styles.dimmed]: props.are_bookmarks_dimmed,
               })}
             >
-              {props.slot_main_}
+              {props.slot_main}
             </div>
 
             <div className={styles['main__inner__info']} ref={end_of_bookmarks}>
-              {props.info_text_ && <span>{props.info_text_}</span>}
-              {props.clear_date_range_ && (
-                <button onClick={props.clear_date_range_}>
+              {props.info_text && <span>{props.info_text}</span>}
+              {props.clear_date_range && (
+                <button onClick={props.clear_date_range}>
                   Clear custom range
                 </button>
               )}
-              {props.clear_selected_tags_ && (
-                <button onClick={props.clear_selected_tags_}>
-                  {props.translations_.clear_selected_tags_}
+              {props.clear_selected_tags && (
+                <button onClick={props.clear_selected_tags}>
+                  {props.translations.clear_selected_tags}
                 </button>
               )}
             </div>
@@ -395,7 +395,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
             width: `${slidable_width}px`,
           }}
         >
-          <div className={styles.aside__inner}>{props.slot_column_right_}</div>
+          <div className={styles.aside__inner}>{props.slot_column_right}</div>
         </aside>
       </div>
     </div>

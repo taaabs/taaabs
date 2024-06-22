@@ -7,25 +7,27 @@ import { useRef, useState } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 
 export namespace _Item {
   export type Props = {
-    url_: string
-    menu_slot_: React.ReactNode
-    favicon_host_: string
-    on_reading_mode_click_: () => void
-    should_dim_visited_links_: boolean
-    on_link_click_: () => void
-    on_link_middle_click_: () => void
-    on_new_tab_click_: () => void
+    url: string
+    menu_slot: React.ReactNode
+    favicon_host: string
+    on_reading_mode_click: () => void
+    should_dim_visited_links: boolean
+    on_link_click: () => void
+    on_link_middle_click: () => void
+    on_new_tab_click: () => void
     on_is_visible: () => void
-    is_public_?: boolean
-    title_?: string
-    site_path_?: string
-    saves_?: number
-    open_snapshot_?: boolean
-    favicon_?: string
-    is_parsed_?: boolean
+    created_at: Date
+    is_public?: boolean
+    title?: string
+    site_path?: string
+    saves?: number
+    open_snapshot?: boolean
+    favicon?: string
+    is_parsed?: boolean
   }
 }
 
@@ -39,33 +41,37 @@ export const _Item: React.FC<_Item.Props> = (props) => {
     is_visible && props.on_is_visible()
   }, [is_visible])
 
+  const url = props.open_snapshot
+    ? url_to_wayback({ date: props.created_at, url: props.url })
+    : props.url
+
   return (
     <div className={styles.item} ref={ref}>
       <div className={styles.item__link}>
         <button className={styles.item__link__site}>
-          {props.is_public_ ? (
+          {props.is_public ? (
             <LazyLoadImage
               alt={'Favicon'}
               width={16}
               height={16}
-              src={`${props.favicon_host_}/${get_domain_from_url(props.url_)}`}
+              src={`${props.favicon_host}/${get_domain_from_url(props.url)}`}
             />
-          ) : props.favicon_ ? (
+          ) : props.favicon ? (
             <img
               alt={'Favicon'}
               width={16}
               height={16}
-              src={`data:image/webp;base64,${props.favicon_}`}
+              src={`data:image/webp;base64,${props.favicon}`}
             />
           ) : (
             <Icon variant="GLOBE" />
           )}
         </button>
-        {props.is_parsed_ && (
+        {props.is_parsed && (
           <button
             className={styles.item__link__reader}
             onClick={() => {
-              props.on_reading_mode_click_()
+              props.on_reading_mode_click()
             }}
           >
             <Icon variant="RESIZE" />
@@ -76,28 +82,28 @@ export const _Item: React.FC<_Item.Props> = (props) => {
             styles.item__link__url,
             {
               [styles['item__link__url--dim-visited']]:
-                props.should_dim_visited_links_,
+                props.should_dim_visited_links,
             },
             {
-              [styles['item__link__url--via-wayback']]: props.open_snapshot_,
+              [styles['item__link__url--via-wayback']]: props.open_snapshot,
             },
           )}
-          href={props.url_}
+          href={url}
           onClick={async (e) => {
             e.stopPropagation()
             e.preventDefault()
             set_was_recently_visited(true)
-            props.on_link_click_()
+            props.on_link_click()
           }}
-          onAuxClick={props.on_link_middle_click_}
+          onAuxClick={props.on_link_middle_click}
         >
-          {props.title_}
+          {props.title}
         </a>
       </div>
       <div className={styles.item__actions}>
-        {props.saves_ !== undefined && props.saves_ > 0 && (
+        {props.saves !== undefined && props.saves > 0 && (
           <button className={styles['item__actions__public-saves']}>
-            {props.saves_}
+            {props.saves}
           </button>
         )}
         <button
@@ -105,7 +111,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
           onClick={async (e) => {
             e.stopPropagation()
             set_was_recently_visited(true)
-            props.on_new_tab_click_()
+            props.on_new_tab_click()
           }}
         >
           <Icon variant="NEW_TAB" />
@@ -136,7 +142,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
                 set_is_menu_opened(false)
               }}
             >
-              {props.menu_slot_}
+              {props.menu_slot}
             </div>
           </OutsideClickHandler>
         </div>

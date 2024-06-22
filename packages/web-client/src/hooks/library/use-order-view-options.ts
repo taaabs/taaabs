@@ -10,7 +10,7 @@ import { search_params_keys } from '@/constants/search-params-keys'
 export const use_order_view_options = () => {
   const search_params = useSearchParams()
   const params = useParams()
-  const [current_order_, set_current_order] = useState<Order>(
+  const [current_order, set_current_order] = useState<Order>(
     Object.values(Order)[
       parseInt(
         search_params.get(search_params_keys.order) ||
@@ -24,9 +24,7 @@ export const use_order_view_options = () => {
   useUpdateEffect(() => {
     const query_order = search_params.get(search_params_keys.order)
 
-    if (
-      query_order != Object.values(Order).indexOf(current_order_).toString()
-    ) {
+    if (query_order != Object.values(Order).indexOf(current_order).toString()) {
       set_current_order(
         Object.values(Order)[
           parseInt(
@@ -40,7 +38,7 @@ export const use_order_view_options = () => {
     }
   }, [search_params])
 
-  const set_order_query_param_ = (order: Order) => {
+  const set_order_query_param = (order: Order) => {
     const updated_search_params = update_search_params(
       search_params,
       search_params_keys.order,
@@ -61,5 +59,5 @@ export const use_order_view_options = () => {
     )
   }
 
-  return { current_order_, set_order_query_param_ }
+  return { current_order, set_order_query_param }
 }
