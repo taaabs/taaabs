@@ -40,6 +40,10 @@ export namespace HtmlParser {
         )
       },
     })
+    turndown_service.addRule('stripImages', {
+      filter: ['figure', 'picture', 'img'],
+      replacement: () => '',
+    })
 
     // const titleRegex = /<title>(.*?)<\/title>/
     // const match = params.html.match(titleRegex)
