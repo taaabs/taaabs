@@ -1,9 +1,9 @@
 <h3 align="center">Taaabs</h3>
 
 <p align="center">
-    Codebase powering our front-ends.
+    Codebase powering front-ends.
     <br />
-    <i>web, browser extensions and mobile</i>
+    <i>web & mobile apps, browser extension</i>
     <br />
     <a href="https://taaabs.com"><strong>Learn more »</strong></a>
     <br />
@@ -18,9 +18,7 @@
 
 ## Introduction
 
-Taaabs is a free (for personal use), privacy focused bookmarking app.
-
-It fetches, parses and persistently stores data locally, right in your browser. There is no backend to call, thus your privacy cannot be compromised.
+Taaabs is a free, fully-featured bookmarking app designed to operate locally.
 
 A bookmark consists of everything you'd expect:
 
@@ -29,9 +27,11 @@ A bookmark consists of everything you'd expect:
 - tags
 - stars
 - cover image
-- links with favicons and content
+- content for permanent reader
 
-Optionally users can sign-up for an account at any time, which allows access to bookmarks on every device, secured with end-to-end encryption using AES-256, the strongest encryption standard.
+**An optional account** allows syncing bookmarks (secured with end-to-end encryption) across devices. Taaabs users can publish selected items to their profiles and every shared link can help connect people with similar interests so they can learn from each other.
+
+Official sync supports Taaabs but alternative strategies ensure no user ever feels locked-in.
 
 ## Features
 
