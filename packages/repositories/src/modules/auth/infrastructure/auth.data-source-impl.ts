@@ -5,6 +5,8 @@ import { LogIn_Params } from '../domain/log-in.params'
 import { SignUp_Dto } from '@shared/types/modules/auth/sign-up.dto'
 import { SignUp_Params } from '../domain/sign-up.params'
 import { Crypto } from '@repositories/utils/crypto'
+import { Refresh_Dto } from '@shared/types/modules/auth/refresh.dto'
+import { Refresh_Params } from '../domain/refresh.params'
 
 const encoder = new TextEncoder()
 
@@ -41,6 +43,18 @@ export class Auth_DataSourceImpl implements Auth_DataSource {
 
     return this._ky
       .post('v1/auth/signup', {
+        json: body,
+      })
+      .json()
+  }
+
+  public async refresh(params: Refresh_Params): Promise<Refresh_Dto.Response> {
+    const body: Refresh_Dto.Request.Body = {
+      access_token: params.access_token,
+      refresh_token: params.refresh_token,
+    }
+    return this._ky
+      .post('v1/auth/refresh', {
         json: body,
       })
       .json()
