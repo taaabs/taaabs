@@ -52,6 +52,13 @@ const fill_clipboard = async (doc) => {
 };
 
 const check_iframe_support = async () => {
+  // Single page apps like YouTube don't update og:image and other og tags during nav,
+  // but update <title>. We compare og:title to actual title to check if iframe is needed.
+  const title = document.title;
+  const og_title_element = document.querySelector('meta[property="og:title"]');
+  const og_title_content = og_title_element ? og_title_element.getAttribute('content') : null;
+  if(og_title_content && title.startsWith(og_title_content)) return false;
+
   try {
     const response = await fetch(window.location.href);
     const headers = response.headers;
@@ -104,7 +111,7 @@ check_iframe_support().then(async (supports_iframe) => {
           (doc.querySelector("meta[name='description']") != null
             ? doc.querySelector("meta[name='description']").content
             : '') +
-          '&bookmarklet_version=1';
+          '&v=1';
         window.location.assign(target_url);
       });
   } else {
@@ -118,7 +125,7 @@ check_iframe_support().then(async (supports_iframe) => {
       (document.querySelector("meta[name='description']") != null
         ? document.querySelector("meta[name='description']").content
         : '') +
-      '&bookmarklet_version=1';
+      '&v=1';
     window.location.assign(target_url);
   }
 });
