@@ -1,6 +1,5 @@
 declare const styles: {
   readonly header: string
-  readonly wrapper: string
   readonly content: string
   readonly 'content__mobile-nav': string
   readonly content__sidebar: string

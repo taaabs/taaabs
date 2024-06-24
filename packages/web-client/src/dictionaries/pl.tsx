@@ -324,6 +324,20 @@ export const dictionary: Dictionary = {
         username_not_available: 'Podany nick jest już zajęty.',
         username_left_unchanged: 'Nick pozostaje niezmieniony',
       },
+      delete_account: {
+        heading: {
+          text: 'Usuń konto',
+          subtext:
+            'Usunięcie konta spowoduje usunięcie wszystkich Twoich danych z naszych serwerów. Pobierz kopię zapasową przed kontynuowaniem. Ta akcja jest nieodwracalna.',
+        },
+        delete_my_account_button_label: 'Usuń moje konto',
+        modal: {
+          header: 'Usunąć konto?',
+          text: 'Uwaga! Usunięcie konta jest nieodwracalne.',
+          cancel: 'Anuluj',
+          button_label: 'Usuń konto',
+        },
+      },
     },
   },
 }

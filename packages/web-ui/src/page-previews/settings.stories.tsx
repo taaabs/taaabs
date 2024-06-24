@@ -2,7 +2,7 @@ import { Box } from '@web-ui/components/app/atoms/box'
 import { HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
 import { DesktopMenuItem } from '@web-ui/components/app/atoms/desktop-menu-item'
 import { SimpleBackArrowHeader } from '@web-ui/components/app/atoms/simple-back-arrow-header'
-import { Settings } from '@web-ui/components/app/templates/settings'
+import { Template } from '@web-ui/components/settings/Template'
 import { Input } from '@web-ui/components/common/atoms/input'
 import { Button } from '@web-ui/components/common/particles/button'
 
@@ -12,7 +12,7 @@ export default {
 
 export const Primary = () => {
   return (
-    <Settings
+    <Template
       slot_header={
         <SimpleBackArrowHeader
           title="Settings"

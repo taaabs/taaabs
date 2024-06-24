@@ -13,7 +13,9 @@ export const HeadingWithSubheading: React.FC<HeadingWithSubheading.Props> = (
   return (
     <div className={styles.container}>
       <h1>{props.heading}</h1>
-      {props.subheading && <p>{props.subheading}</p>}
+      {props.subheading && (
+        <p dangerouslySetInnerHTML={{ __html: props.subheading }} />
+      )}
     </div>
   )
 }

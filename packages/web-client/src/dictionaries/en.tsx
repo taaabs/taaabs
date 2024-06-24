@@ -318,6 +318,20 @@ const dictionary: Dictionary = {
         username_not_available: 'Given username is taken.',
         username_left_unchanged: 'Username is left unchanged',
       },
+      delete_account: {
+        heading: {
+          text: 'Delete account',
+          subtext:
+            'Deleting your account will remove all your data from our servers. Download backup of your bookmarks before proceeding. <strong>This cannot be undone.</strong>',
+        },
+        delete_my_account_button_label: 'Delete my account',
+        modal: {
+          header: 'Delete account?',
+          text: 'Heads up! This cannot be undone.',
+          cancel: 'Cancel',
+          button_label: 'Delete account',
+        },
+      },
     },
   },
 }
