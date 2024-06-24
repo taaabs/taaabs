@@ -1,6 +1,6 @@
-import styles from './settings.module.scss'
+import styles from './Template.module.scss'
 
-export namespace Settings {
+export namespace Template {
   export type Props = {
     slot_header: React.ReactNode
     slot_main: React.ReactNode
@@ -9,11 +9,12 @@ export namespace Settings {
   }
 }
 
-export const Settings: React.FC<Settings.Props> = (props) => {
+export const Template: React.FC<Template.Props> = (props) => {
   return (
     <>
       <div className={styles.header}>{props.slot_header}</div>
-      <div className={styles.wrapper}>
+      {/* Empty div needed by modal's padding-right setting. */}
+      <div>
         <div className={styles.content}>
           <div className={styles['content__mobile-nav']}>
             {props.slot_mobile_navigation}

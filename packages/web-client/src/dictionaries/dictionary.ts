@@ -253,6 +253,19 @@ export type Dictionary = {
         username_left_unchanged: string
         username_changed: string
       }
+      delete_account: {
+        heading: {
+          text: string
+          subtext: string
+        }
+        delete_my_account_button_label: string
+        modal: {
+          header: string
+          text: string
+          cancel: string
+          button_label: string
+        }
+      }
     }
   }
 }

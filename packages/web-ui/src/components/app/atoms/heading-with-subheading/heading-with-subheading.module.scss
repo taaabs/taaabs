@@ -21,5 +21,8 @@
   }
   > p {
     color: var(--text-color-variant);
+    > strong {
+      font-weight: var(--font-weight-inter-medium);
+    }
   }
 }

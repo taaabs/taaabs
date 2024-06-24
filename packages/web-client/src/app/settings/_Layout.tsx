@@ -1,13 +1,13 @@
 'use client'
 
-import { Settings as UiAppTemplates_Settings } from '@web-ui/components/app/templates/settings'
+import { Template as UiSettings_Template } from '@web-ui/components/settings/Template'
 import { SimpleBackArrowHeader as UiAppAtom_SimpleBackArrowHeader } from '@web-ui/components/app/atoms/simple-back-arrow-header'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { DesktopMenuItem as UiAppAtom_DesktopMenuItem } from '@web-ui/components/app/atoms/desktop-menu-item'
 
-export const LayoutSettings: React.FC<{
+export const _Layout: React.FC<{
   dictionary: Dictionary
   children?: React.ReactNode
 }> = (props) => {
@@ -20,7 +20,7 @@ export const LayoutSettings: React.FC<{
   }, [back_href])
 
   return (
-    <UiAppTemplates_Settings
+    <UiSettings_Template
       slot_header={
         <UiAppAtom_SimpleBackArrowHeader
           back_href={back_href || '/'}

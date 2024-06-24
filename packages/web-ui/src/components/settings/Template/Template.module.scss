@@ -1,5 +1,5 @@
 // @type
-@use '../../../../styles/foundation' as *;
+@use '../../../styles/foundation' as *;
 
 .header {
   position: fixed;
@@ -7,21 +7,17 @@
   top: 0;
   width: 100%;
 }
-.wrapper {
-  height: 100%;
-  width: 100%;
-  max-width: var(--site-max-width);
-  margin: 0 auto;
-  @include at1200 {
-    padding: 0 40px;
-  }
-}
 .content {
+  margin: 0 auto;
+  max-width: var(--site-max-width);
   @include to768 {
     padding-top: var(--header-mobile-height);
   }
   @include at768 {
     display: flex;
+  }
+  @include at1200 {
+    padding: 0 40px;
   }
   &__mobile-nav {
     @include at768 {

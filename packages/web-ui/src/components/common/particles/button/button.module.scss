@@ -48,6 +48,9 @@
     background-color: var(--red);
     @include hover {
       background: var(--red700);
+      @include dark {
+        background-color: var(--red800);
+      }
     }
     &:focus-visible {
       outline-color: var(--red300);
