@@ -1,9 +1,9 @@
 <h3 align="center">Taaabs</h3>
 
 <p align="center">
-    Codebase powering front-ends.
+    Codebase powering our front-ends.
     <br />
-    <i>web & mobile apps, browser extension</i>
+    <i>apps and browser extension</i>
     <br />
     <a href="https://taaabs.com"><strong>Learn more »</strong></a>
     <br />
@@ -18,7 +18,7 @@
 
 ## Introduction
 
-Taaabs is a free, fully-featured bookmarking app designed to operate locally.
+Taaabs is a free, fully-featured bookmarking app.
 
 A bookmark consists of everything you'd expect:
 
@@ -29,19 +29,35 @@ A bookmark consists of everything you'd expect:
 - cover image
 - content for permanent reader
 
-**An optional account** allows syncing bookmarks (secured with end-to-end encryption) across devices. Taaabs users can publish selected items to their profiles and every shared link can help connect people with similar interests so they can learn from each other.
+With **an optional account** you can sync bookmarks (secured with end-to-end encryption) across devices and build a public library to let others subscribe to its updates.
 
-Official sync supports Taaabs but alternative strategies ensure no user ever feels locked-in.
+Taaabs built-in support for alternative syncing services ensures no user ever feels locked-in.
 
 ## Features
 
-### Permanent Reader
+#### Permanent Reader
 
 Anytime you invoke bookmarklet script or save via web extension, HTML of a website (along with cover image and favicon) is copied to the clipboard, and you're redirected to a bookmark creation form for on-device parsing (this process requires clipboard read permissions). Parser then analyzes source and content of a website and determines the best way to parse it - for the best reading experience some sources have dedicated parsers. For example conversations from ChatGPT, Gemini, HuggingFace Chat, etc. are saved in a way to be later displayed following the same conversational structure.
 
-### Full-text search
+#### Full-text search
 
 Taaabs indexes content of saved links. It runs locally thus results are just at your fingerprints.
+
+## Privacy
+
+Taaabs processes and stores all saved bookmarks on-device. The only time the app communicates with the server is when you are syncing with an optional account, then all private bookmarks are secured with end-to-end encryption. Public bookmarks can remain partially private, Taaabs enables granular control over each link and tag visibility.
+
+We use state-of-the-art encryption standards and for transparency, all the code of our clients is available publicly in this repository.
+
+## Pricing
+
+Free for personal use. We don't charge based on features or usage. Only pay if you use Taaabs commercially.
+
+## Sync
+
+Sync is a subscription based offering allowing you to store your bookmarks in the cloud.
+
+It's just $4 USD per month, billed annually.
 
 ## Roadmap
 
