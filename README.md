@@ -66,16 +66,7 @@ It's just $4 USD per month, billed annually.
 
 ## Contributing
 
-There are lots of ways to contribute to Taaabs.
-
-- [Submit bug](https://github.com/taaabs/taaabs/issues) reports and help us [verify fixes](https://github.com/taaabs/taaabs/pulls) as they are pushed up.
-- Review and collaborate [source code](https://github.com/taaabs/taaabs/pulls) changes.
-- Engage with other Taaabs users and developers in the [discussions](discussions) tab.
-- Contribute bug fixes.
-- Help translate language packs.
-- Submit feature proposals and documentation improvements.
-
-Signing CLA needs to be done only once for all PRs and contributions.
+Contributions are welcome. If you have any feature requests, bug reports, or questions, feel free to create an issue or engage with other Taaabs users in [discussions](discussions).
 
 ## Self-hosting
 

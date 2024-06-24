@@ -1,7 +1,7 @@
-import { CustomRange as UiAppAtom_CustomRange } from '@web-ui/components/app/atoms/custom-range'
+import { CustomRange as UiAppLibrary_CustomRange } from '@web-ui/components/app/library/CustomRange'
 
-const DynamicCustomRange = (props: UiAppAtom_CustomRange.Props) => (
-  <UiAppAtom_CustomRange {...props} />
+const DynamicCustomRange = (props: UiAppLibrary_CustomRange.Props) => (
+  <UiAppLibrary_CustomRange {...props} />
 )
 
 export default DynamicCustomRange

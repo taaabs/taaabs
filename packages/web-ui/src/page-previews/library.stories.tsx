@@ -1,4 +1,4 @@
-import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/atoms/bookmark'
+import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/library/bookmark'
 import { BottomNavigationBar as UiAppMolecule_BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
 import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
 import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
