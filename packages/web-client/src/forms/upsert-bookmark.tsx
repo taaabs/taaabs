@@ -14,7 +14,7 @@ import { StandardSplit as UiCommonTemplates_Modal_ContentStandard_Sections_Stand
 import { Standard as UiCommonTemplates_Modal_ContentStandard_Sections_Standard } from '@web-ui/components/common/templates/modal/content-standard/sections/standard'
 import { Centered as UiCommonTemplates_Modal_ContentStandard_Sections_Centered } from '@web-ui/components/common/templates/modal/content-standard/sections/centered'
 import { Divider as UiCommonTemplates_Modal_ContentStandard_Sections_Divider } from '@web-ui/components/common/templates/modal/content-standard/sections/divider'
-import { SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
+import { SegmentedButton as UiCommon_SegmentedButton } from '@web-ui/components/common/SegmentedButton'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { HtmlParser } from '@shared/utils/html-parser'
@@ -479,7 +479,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         label={props.dictionary.app.upsert_modal.visibility}
       >
         <div style={{ width: '200px' }}>
-          <SegmentedButton
+          <UiCommon_SegmentedButton
             items={[
               {
                 label: props.dictionary.app.upsert_modal.private,

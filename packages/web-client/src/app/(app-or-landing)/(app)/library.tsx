@@ -18,20 +18,17 @@ import { browser_storage } from '@/constants/browser-storage'
 import { useParams, useSearchParams } from 'next/navigation'
 import { upsert_bookmark_modal_setter } from '@/modals/upsert-bookmark-modal-setter'
 import { toast } from 'react-toastify'
-import { CustomRangeSkeleton as UiAppAtom_CustomRangeSkeleton } from '@web-ui/components/app/atoms/custom-range-skeleton'
+import { CustomRangeSkeleton as UiAppLibrary_CustomRangeSkeleton } from '@web-ui/components/app/library/CustomRangeSkeleton'
 import { SwipableColumns as UiAppTemplate_SwipableColumns } from '@web-ui/components/app/templates/swipable-columns'
-import { LibrarySearch as UiAppAtom_LibrarySearch } from '@web-ui/components/app/atoms/library-search'
+import { Search as UiAppLibrary_Search } from '@web-ui/components/app/library/Search'
 import { LibraryAside as UiAppTemplate_LibraryAside } from '@web-ui/components/app/templates/library-aside'
 import { SelectedTags as UiAppAtom_SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
-import { Tags as UiAppAtom_Tags } from '@web-ui/components/app/atoms/tags'
-import { TagsSkeleton as UiAppAtom_TagsSkeleton } from '@web-ui/components/app/atoms/tags-skeleton'
-import { SegmentedButtonsSkeleton as UiAppAtom_SegmentedButtonsSkeleton } from '@web-ui/components/app/atoms/segmented-buttons-skeleton'
-import { Toolbar as UiAppAtom_Toolbar } from '@web-ui/components/app/atoms/toolbar'
-import {
-  TagHierarchies,
-  TagHierarchies as UiAppAtom_TagHierarchies,
-} from '@web-ui/components/app/atoms/tag-hierarchies'
-import { DraggedCursorTag as UiAppAtom_DraggedCursorTag } from '@web-ui/components/app/atoms/dragged-cursor-tag'
+import { Tags as UiAppLibrary_Tags } from '@web-ui/components/app/library/Tags'
+import { TagsSkeleton as UiAppLibrary_TagsSkeleton } from '@web-ui/components/app/library/TagsSkeleton'
+import { SegmentedButtonsSkeleton as UiAppLibrary_SegmentedButtonsSkeleton } from '@web-ui/components/app/library/SegmentedButtonsSkeleton'
+import { Toolbar as UiAppLibrary_Toolbar } from '@web-ui/components/app/library/Toolbar'
+import { TagHierarchies as UiAppLibrary_TagHierarchies } from '@web-ui/components/app/library/TagHierarchies'
+import { DraggedCursorTag as UiAppLibrary_DraggedCursorTag } from '@web-ui/components/app/library/DraggedCursorTag'
 import { use_tag_hierarchies } from '@/hooks/library/use-tag-hierarchies'
 import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
 import { system_values } from '@shared/constants/system-values'
@@ -49,19 +46,19 @@ import { counts_actions } from '@repositories/stores/library/counts/counts.slice
 import { use_popstate_count } from '@/hooks/misc/pop-state-count'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
-import { BookmarkWrapper as UiAppAtom_BookmarkWrapper } from '@web-ui/components/app/atoms/bookmark-wrapper'
-import { SegmentedButton as UiAppAtom_SegmentedButton } from '@web-ui/components/app/atoms/segmented-button'
+import { Bookmark as UiAppLibrary_Bookmark } from '@web-ui/components/app/library/Bookmark'
+import { SegmentedButton as UiCommon_SegmentedButton } from '@web-ui/components/common/SegmentedButton'
 import { use_is_hydrated } from '@shared/hooks'
 import { ModalContext } from '@/providers/modal-provider'
 import { AuthContext } from '@/app/auth-provider'
 import { use_search } from '@/hooks/library/use-search'
 import { LocalDb } from '@/app/local-db-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/dropdown'
-import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/dropdown/standard-item'
-import { CheckboxItem as UiCommon_Dropdown_CheckboxItem } from '@web-ui/components/common/dropdown/checkbox-item'
-import { Separator as UiCommon_Dropdown_Separator } from '@web-ui/components/common/dropdown/separator'
-import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/dropdown/stars'
+import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/Dropdown'
+import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/Dropdown/standard-item'
+import { CheckboxItem as UiCommon_Dropdown_CheckboxItem } from '@web-ui/components/common/Dropdown/checkbox-item'
+import { Separator as UiCommon_Dropdown_Separator } from '@web-ui/components/common/Dropdown/separator'
+import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/Dropdown/stars'
 import { delete_bookmark_modal_setter } from '@/modals/delete-bookmark-modal-setter'
 import { rename_tag_modal_setter } from '@/modals/rename-tag-modal-setter'
 import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
@@ -70,7 +67,7 @@ import { PinnedBookmarks as UiAppLibrary_PinnedBookmarks } from '@web-ui/compone
 
 const CustomRange = dynamic(() => import('./dynamic-custom-range'), {
   ssr: false,
-  loading: () => <UiAppAtom_CustomRangeSkeleton />,
+  loading: () => <UiAppLibrary_CustomRangeSkeleton />,
 })
 
 const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
@@ -353,7 +350,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     props.local_db.is_initializing
 
   const slot_search = (
-    <UiAppAtom_LibrarySearch
+    <UiAppLibrary_Search
       search_string={search_hook.search_string}
       is_full_text={search_hook.is_full_text}
       toggle_full_text={() =>
@@ -479,7 +476,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     />
   )
   const slot_toolbar = (
-    <UiAppAtom_Toolbar
+    <UiAppLibrary_Toolbar
       toggleable_buttons={[
         {
           label: props.dictionary.app.library.toolbar.starred,
@@ -855,12 +852,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   )
   const slot_tag_hierarchies = (
     <div style={{ pointerEvents: is_not_interactive ? 'none' : undefined }}>
-      <UiAppAtom_TagHierarchies
+      <UiAppLibrary_TagHierarchies
         library_updated_at_timestamp={library_updated_at_timestamp}
         show_skeleton={show_skeletons}
         is_read_only={!!username}
         tree={tag_hierarchies_hook.tag_hierarchies}
-        on_update={async (tag_hierarchies: TagHierarchies.Node[]) => {
+        on_update={async (
+          tag_hierarchies: UiAppLibrary_TagHierarchies.Node[],
+        ) => {
           const filter = filter_view_options_hook.current_filter
 
           const update_tag_hierarchies_params: UpdateTagHierarchies_Params = {
@@ -936,7 +935,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       slot_segmented_buttons={
         is_hydrated ? (
           <>
-            <UiAppAtom_SegmentedButton
+            <UiCommon_SegmentedButton
               key={`1-${popstate_count}`}
               is_not_interactive={is_not_interactive}
               items={[
@@ -970,7 +969,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               }}
             />
             {!username ? (
-              <UiAppAtom_SegmentedButton
+              <UiCommon_SegmentedButton
                 key={`2-${popstate_count}`}
                 is_not_interactive={is_not_interactive}
                 is_disabled={
@@ -1013,7 +1012,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 }}
               />
             ) : (
-              <UiAppAtom_SegmentedButton
+              <UiCommon_SegmentedButton
                 key={`2-${popstate_count}`}
                 is_not_interactive={is_not_interactive}
                 is_disabled={
@@ -1046,7 +1045,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 }}
               />
             )}
-            <UiAppAtom_SegmentedButton
+            <UiCommon_SegmentedButton
               key={`3-${popstate_count}`}
               is_not_interactive={is_not_interactive}
               is_disabled={
@@ -1074,7 +1073,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             />
           </>
         ) : (
-          <UiAppAtom_SegmentedButtonsSkeleton />
+          <UiAppLibrary_SegmentedButtonsSkeleton />
         )
       }
       slot_custom_range={
@@ -1115,7 +1114,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             />
           </div>
         ) : (
-          <UiAppAtom_CustomRangeSkeleton />
+          <UiAppLibrary_CustomRangeSkeleton />
         )
       }
       slot_tags={
@@ -1153,7 +1152,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   rename: props.dictionary.app.library.rename,
                 }}
               />
-              <UiAppAtom_Tags
+              <UiAppLibrary_Tags
                 key={`tags-${library_updated_at_timestamp}-${popstate_count}`}
                 library_url={username ? `/${username}` : '/library'}
                 tags={
@@ -1186,14 +1185,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               />
             </>
           ) : (
-            <UiAppAtom_TagsSkeleton />
+            <UiAppLibrary_TagsSkeleton />
           )}
         </div>
       }
     />
   )
   const slot_bookmarks = bookmarks_hook.bookmarks?.map((bookmark, i) => (
-    <UiAppAtom_BookmarkWrapper
+    <UiAppLibrary_Bookmark
       key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
       created_at={new Date(bookmark.created_at)}
       locale={props.dictionary.locale}
@@ -2291,7 +2290,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
 
   return (
     <>
-      <UiAppAtom_DraggedCursorTag
+      <UiAppLibrary_DraggedCursorTag
         tag_name={tag_view_options_hook.dragged_tag?.name}
       />
       <UiAppTemplate_SwipableColumns

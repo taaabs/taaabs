@@ -4,8 +4,8 @@ import { memo, useState } from 'react'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { system_values } from '@shared/constants/system-values'
 import { _Item } from './_Item/_Item'
-import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/dropdown'
-import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/dropdown/standard-item'
+import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/Dropdown'
+import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/Dropdown/standard-item'
 
 export namespace PinnedBookmarks {
   export type Item = {
