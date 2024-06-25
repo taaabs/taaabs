@@ -65,7 +65,7 @@ const ky_instance = ky.create({
 
 export type AuthDataLocalStorage = {
   id: string
-  encryption_key: string
+  encryption_key: number[]
   username: string
   access_token: string
   refresh_token: string
@@ -105,13 +105,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
       username: params.username,
       encryption_key: params.encryption_key,
     })
-
     localStorage.setItem(
       browser_storage.local_storage.auth_data,
       JSON.stringify({
         id: params.id,
         username: params.username,
-        encryption_key: String.fromCharCode(...params.encryption_key),
+        encryption_key: [...params.encryption_key],
         access_token: params.access_token,
         refresh_token: params.refresh_token,
       } as AuthDataLocalStorage),
@@ -150,9 +149,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
       set_auth_data({
         id: auth_data.id,
         username: auth_data.username,
-        encryption_key: new Uint8Array(
-          auth_data.encryption_key.split('').map((c: any) => c.charCodeAt(0)),
-        ),
+        encryption_key: new Uint8Array(auth_data.encryption_key),
         access_token: auth_data.access_token,
         refresh_token: auth_data.refresh_token,
       })

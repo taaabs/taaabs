@@ -5,7 +5,12 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
-  ignorePatterns: ['.eslintrc.js', 'jest.config.js', 'packages/web-client/src/misc/bookmarklet.js', 'packages/web-client/src/misc/theme-setter.js'],
+  ignorePatterns: [
+    '.eslintrc.js',
+    'jest.config.js',
+    'packages/web-client/src/misc/bookmarklet.js',
+    'packages/web-client/src/misc/theme-setter.js',
+  ],
   rules: {
     'prettier/prettier': 'warn',
     '@typescript-eslint/no-namespace': 'off',
@@ -26,7 +31,7 @@ module.exports = {
         },
       },
     ],
-    'no-console': ['warn'],
+    'no-console': ['error', { allow: ['warn', 'error'] }],
     '@typescript-eslint/naming-convention': [
       'warn',
       {
