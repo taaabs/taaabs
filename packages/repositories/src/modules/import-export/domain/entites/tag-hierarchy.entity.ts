@@ -1,4 +1,4 @@
 export type TagHierarchy_Entity = {
-  hash: string
+  name: string
   children: TagHierarchy_Entity[]
 }
