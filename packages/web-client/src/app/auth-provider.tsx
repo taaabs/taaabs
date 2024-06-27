@@ -5,63 +5,7 @@ import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/a
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
 import ky, { KyInstance } from 'ky'
 import localforage from 'localforage'
-import { ReactNode, createContext, useEffect, useState } from 'react'
-
-const ky_instance = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-  hooks: {
-    beforeRequest: [
-      async (request) => {
-        const auth_data_local_storage = JSON.parse(
-          localStorage.getItem(browser_storage.local_storage.auth_data) ||
-            'null',
-        ) as AuthDataLocalStorage | null
-        if (auth_data_local_storage) {
-          request.headers.set(
-            'Authorization',
-            `Bearer ${auth_data_local_storage.access_token}`,
-          )
-        }
-      },
-    ],
-    afterResponse: [
-      async (request, _, response) => {
-        if (response.status == 401) {
-          // Token has expired, refresh it.
-          const auth_data_local_storage = JSON.parse(
-            localStorage.getItem(browser_storage.local_storage.auth_data) ||
-              'null',
-          ) as AuthDataLocalStorage | null
-          if (auth_data_local_storage) {
-            const data_source = new Auth_DataSourceImpl(ky_instance)
-            const repostiory = new Auth_RepositoryImpl(data_source)
-            const result = await repostiory.refresh({
-              access_token: auth_data_local_storage.access_token,
-              refresh_token: auth_data_local_storage.refresh_token,
-            })
-
-            localStorage.setItem(
-              browser_storage.local_storage.auth_data,
-              JSON.stringify({
-                ...auth_data_local_storage,
-                access_token: result.access_token,
-                refresh_token: result.refresh_token,
-              }),
-            )
-
-            request.headers.set(
-              'Authorization',
-              `Bearer ${result.access_token}`,
-            )
-
-            // Retry the original request.
-            return ky_instance(request)
-          }
-        }
-      },
-    ],
-  },
-})
+import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
 
 export type AuthDataLocalStorage = {
   id: string
@@ -92,6 +36,63 @@ export const AuthContext = createContext<{
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
   const [auth_data, _set_auth_data] = useState<AuthData>()
+  const ky_instance = useRef(
+    ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      hooks: {
+        beforeRequest: [
+          async (request) => {
+            const auth_data_local_storage = JSON.parse(
+              localStorage.getItem(browser_storage.local_storage.auth_data) ||
+                'null',
+            ) as AuthDataLocalStorage | null
+            if (auth_data_local_storage) {
+              request.headers.set(
+                'Authorization',
+                `Bearer ${auth_data_local_storage.access_token}`,
+              )
+            }
+          },
+        ],
+        afterResponse: [
+          async (request, _, response) => {
+            if (response.status == 401) {
+              // Token has expired, refresh it.
+              const auth_data_local_storage = JSON.parse(
+                localStorage.getItem(browser_storage.local_storage.auth_data) ||
+                  'null',
+              ) as AuthDataLocalStorage | null
+              if (auth_data_local_storage) {
+                const data_source = new Auth_DataSourceImpl(ky_instance.current)
+                const repostiory = new Auth_RepositoryImpl(data_source)
+                const result = await repostiory.refresh({
+                  access_token: auth_data_local_storage.access_token,
+                  refresh_token: auth_data_local_storage.refresh_token,
+                })
+
+                localStorage.setItem(
+                  browser_storage.local_storage.auth_data,
+                  JSON.stringify({
+                    ...auth_data_local_storage,
+                    access_token: result.access_token,
+                    refresh_token: result.refresh_token,
+                  }),
+                )
+
+                request.headers.set(
+                  'Authorization',
+                  `Bearer ${result.access_token}`,
+                )
+
+                // Retry the original request.
+                ky_instance.current(request)
+              }
+            }
+          },
+        ],
+      },
+    }),
+  )
 
   const set_auth_data = (params: {
     id: string
@@ -160,7 +161,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     <AuthContext.Provider
       value={{
         auth_data,
-        ky_instance,
+        ky_instance: ky_instance.current,
         set_auth_data,
         logout,
       }}
