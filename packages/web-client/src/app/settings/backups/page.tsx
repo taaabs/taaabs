@@ -6,8 +6,7 @@ import {
   use_settings_backups_selector,
 } from './_hooks/store'
 import { backups_actions } from '@repositories/stores/settings-backups/backups/backups.slice'
-import { Box as UiAppAtom_Box } from '@web-ui/components/app/atoms/box'
-import { HeadingWithSubheading as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
+import { StandardSection as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/settings/StandardSection'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
@@ -30,13 +29,13 @@ const Page: React.FC = () => {
   }, [is_hydrated])
 
   return (
-    <UiAppAtom_Box>
-      <UiAppAtom_HeadingWithSubheading
-        heading={'Manage backups'}
-        subheading={
-          'This section helps you request the creation of snapshots of all your bookmarks and tag hierarchies.'
-        }
-      />
+    <UiAppAtom_HeadingWithSubheading
+      heading={{
+        text: 'manage backups',
+        subtext:
+          'This section helps you request the creation of snapshots of all your bookmarks and tag hierarchies.',
+      }}
+    >
       <div>
         {state.backups?.map((backup) => (
           <div key={backup.id}>
@@ -65,7 +64,7 @@ const Page: React.FC = () => {
           </div>
         ))}
       </div>
-    </UiAppAtom_Box>
+    </UiAppAtom_HeadingWithSubheading>
   )
 }
 

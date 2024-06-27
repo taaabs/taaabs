@@ -55,25 +55,28 @@
   &__main {
     display: flex;
     flex-direction: column;
-    @include to768 {
-      gap: 16px;
-    }
     @include at768 {
       flex: 1.9;
-      gap: 40px;
-      padding: 68px 24px;
+      padding: 68px var(--padding-24px);
     }
     @include at992 {
       flex: 2.2;
-      gap: 40px;
-      padding: 68px 24px;
+      padding: 68px var(--padding-24px);
     }
     @include at1200 {
       flex: 1.9;
-      padding: 68px 40px;
+      padding: 68px var(--padding-40px);
     }
     @include at1380 {
-      padding: 68px 60px;
+      padding: 68px var(--padding-60px);
+    }
+    &__inner {
+      > div:first-child {
+        margin-top: 0;
+      }
+      > div:last-child {
+        margin-bottom: 0;
+      }
     }
   }
   &__aside {

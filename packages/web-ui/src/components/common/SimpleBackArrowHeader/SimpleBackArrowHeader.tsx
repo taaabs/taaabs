@@ -1,4 +1,4 @@
-import styles from './simple-back-arrow-header.module.scss'
+import styles from './SimpleBackArrowHeader.module.scss'
 import Link from 'next/link'
 import cn from 'classnames'
 import { Wrapper } from '@web-ui/components/common/templates/wrapper'

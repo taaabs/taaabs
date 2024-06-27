@@ -1,4 +1,4 @@
-import { SimpleBackArrowHeader } from './simple-back-arrow-header'
+import { SimpleBackArrowHeader } from './SimpleBackArrowHeader'
 
 export default {
   component: SimpleBackArrowHeader,

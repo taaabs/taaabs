@@ -1,4 +1,4 @@
-import { DesktopMenuItem } from './desktop-menu-item'
+import { DesktopMenuItem } from './DesktopMenuItem'
 import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
 import { Wrapper } from '@web-ui/components/common/templates/wrapper'
 

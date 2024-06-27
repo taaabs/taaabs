@@ -1,11 +1,11 @@
 'use client'
 
 import { Template as UiSettings_Template } from '@web-ui/components/settings/Template'
-import { SimpleBackArrowHeader as UiAppAtom_SimpleBackArrowHeader } from '@web-ui/components/app/atoms/simple-back-arrow-header'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { DesktopMenuItem as UiAppAtom_DesktopMenuItem } from '@web-ui/components/app/atoms/desktop-menu-item'
+import { SimpleBackArrowHeader as UiCommon_SimpleBackArrowHeader } from '@web-ui/components/common/SimpleBackArrowHeader'
+import { DesktopMenuItem as UiSettings_DekstopMenuItem } from '@web-ui/components/settings/DesktopMenuItem'
 
 export const _Layout: React.FC<{
   dictionary: Dictionary
@@ -22,7 +22,7 @@ export const _Layout: React.FC<{
   return (
     <UiSettings_Template
       slot_header={
-        <UiAppAtom_SimpleBackArrowHeader
+        <UiCommon_SimpleBackArrowHeader
           back_href={back_href || '/'}
           title={props.dictionary.settings.settings}
           is_transparent_on_desktop={true}
@@ -30,27 +30,27 @@ export const _Layout: React.FC<{
       }
       slot_desktop_navigation={
         <>
-          <UiAppAtom_DesktopMenuItem
+          <UiSettings_DekstopMenuItem
             href="/settings"
             is_active={pathname == '/settings'}
             label={props.dictionary.settings.menu.general}
           />
-          <UiAppAtom_DesktopMenuItem
+          <UiSettings_DekstopMenuItem
             href="/settings/preferences"
             is_active={pathname == '/settings/preferences'}
             label={props.dictionary.settings.menu.preferences}
           />
-          <UiAppAtom_DesktopMenuItem
+          <UiSettings_DekstopMenuItem
             href="/settings/subscription"
             is_active={pathname == '/settings/subscription'}
             label={props.dictionary.settings.menu.subscription}
           />
-          <UiAppAtom_DesktopMenuItem
+          <UiSettings_DekstopMenuItem
             href="/settings/import"
             is_active={pathname == '/settings/import'}
             label={props.dictionary.settings.menu.import}
           />
-          <UiAppAtom_DesktopMenuItem
+          <UiSettings_DekstopMenuItem
             href="/settings/backups"
             is_active={pathname == '/settings/backups'}
             label={props.dictionary.settings.menu.backups}
@@ -58,7 +58,8 @@ export const _Layout: React.FC<{
         </>
       }
       slot_mobile_navigation={'nav'}
-      slot_main={props.children}
-    />
+    >
+      {props.children}
+    </UiSettings_Template>
   )
 }

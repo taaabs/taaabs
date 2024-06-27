@@ -3,9 +3,9 @@ import styles from './Template.module.scss'
 export namespace Template {
   export type Props = {
     slot_header: React.ReactNode
-    slot_main: React.ReactNode
     slot_desktop_navigation: React.ReactNode
     slot_mobile_navigation: React.ReactNode
+    children: React.ReactNode
   }
 }
 
@@ -24,7 +24,9 @@ export const Template: React.FC<Template.Props> = (props) => {
               {props.slot_desktop_navigation}
             </div>
           </div>
-          <main className={styles.content__main}>{props.slot_main}</main>
+          <main className={styles.content__main}>
+            <div className={styles.content__main__inner}>{props.children}</div>
+          </main>
           <div className={styles.content__aside} />
         </div>
       </div>

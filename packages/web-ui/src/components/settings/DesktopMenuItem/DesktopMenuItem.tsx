@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import styles from './desktop-menu-item.module.scss'
+import styles from './DesktopMenuItem.module.scss'
 import cn from 'classnames'
 
 export namespace DesktopMenuItem {
