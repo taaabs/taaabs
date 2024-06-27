@@ -133,9 +133,27 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
       })
     }
 
+    const parse_tag_hierarchy_node = async (
+      node: SendImportData_Params['tag_hierarchies'][0],
+    ): Promise<SendImportData_Dto.Body['tag_hierarchies'][0]> => {
+      return {
+        hash: await Crypto.SHA256(node.name, encryption_key),
+        children: await Promise.all(
+          node.children.map(
+            async (node) => await parse_tag_hierarchy_node(node),
+          ),
+        ),
+      }
+    }
+
     const body: SendImportData_Dto.Body = {
       bookmarks,
-      tag_hierarchies: params.tag_hierarchies,
+      tag_hierarchies: await Promise.all(
+        params.tag_hierarchies.map(
+          async (node) => await parse_tag_hierarchy_node(node),
+        ),
+      ),
+
       erase_library: params.erase_library || undefined,
     }
 

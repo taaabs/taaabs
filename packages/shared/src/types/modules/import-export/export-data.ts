@@ -37,7 +37,8 @@ export type Bookmark = {
 }
 
 export type TagHierarchy = {
-  hash: string
+  name?: string
+  name_aes?: string
   children: TagHierarchy[]
 }
 

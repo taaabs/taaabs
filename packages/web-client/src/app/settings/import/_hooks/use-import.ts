@@ -11,8 +11,6 @@ import {
   parse_netscape_xml,
 } from '@/utils/parse-netscape-xml'
 import { construct_tag_hierarchies_from_paths } from '@/utils/construct-tag-hierarchies-from-paths'
-import { TagHierarchy } from '@shared/types/modules/import-export/data'
-import { Crypto } from '@repositories/utils/crypto'
 
 type ParsedXmlBookmark = {
   title?: string
@@ -100,25 +98,6 @@ export const use_import = () => {
       const tag_hierarchies = construct_tag_hierarchies_from_paths(
         parsed_xml.map((bookmark) => bookmark.path),
       )
-      type TagHierarchy_Entity = {
-        name: string
-        children: TagHierarchy_Entity[]
-      }
-      const parse_tag_hierarchy_node = async (
-        node: TagHierarchy_Entity,
-      ): Promise<TagHierarchy.TagHierarchyNode> => {
-        return {
-          hash: await Crypto.SHA256(
-            node.name,
-            auth_context.auth_data!.encryption_key,
-          ),
-          children: await Promise.all(
-            node.children.map(
-              async (node) => await parse_tag_hierarchy_node(node),
-            ),
-          ),
-        }
-      }
 
       const bookmarks: SendImportData_Params['bookmarks'] = []
 
@@ -165,11 +144,7 @@ export const use_import = () => {
 
       params = {
         bookmarks,
-        tag_hierarchies: await Promise.all(
-          tag_hierarchies.map(
-            async (node) => await parse_tag_hierarchy_node(node),
-          ),
-        ),
+        tag_hierarchies,
       }
     }
 
