@@ -7,12 +7,16 @@ import {
 } from './_hooks/store'
 import { backups_actions } from '@repositories/stores/settings-backups/backups/backups.slice'
 import { StandardSection as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/settings/StandardSection'
-import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
+import {
+  Button,
+  Button as UiCommonParticle_Button,
+} from '@web-ui/components/common/particles/button'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
 import { AuthContext } from '@/app/auth-provider'
 import { use_is_hydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { toast } from 'react-toastify'
 
 const Page: React.FC = () => {
   const auth_context = useContext(AuthContext)!
@@ -31,15 +35,34 @@ const Page: React.FC = () => {
   return (
     <UiAppAtom_HeadingWithSubheading
       heading={{
-        text: 'manage backups',
-        subtext:
-          'This section helps you request the creation of snapshots of all your bookmarks and tag hierarchies.',
+        text: 'Manage backups',
+        subtext: 'Request and download export files.',
       }}
     >
-      <div>
-        {state.backups?.map((backup) => (
+      <Button
+        on_click={async () => {
+          try {
+            const data_source = new ImportExport_DataSourceImpl(
+              auth_context.ky_instance,
+            )
+            const repository = new ImportExport_RepositoryImpl(data_source)
+            await repository.request_new_backup({})
+            toast.success('Backup has beed requested!')
+          } catch (error) {
+            toast.error('Something went wrong, try again leter')
+          }
+        }}
+      >
+        Request backup
+      </Button>
+
+      {state.backups?.map((backup) => {
+        const created_at = new Date(backup.created_at).toISOString().split('T')
+
+        return (
           <div key={backup.id}>
-            <div>{backup.created_at}</div>
+            <br />
+            <div>{`${created_at[0]} ${created_at[1].split('.')[0]}`}</div>
             <UiCommonParticle_Button
               on_click={async () => {
                 const data_source = new ImportExport_DataSourceImpl(
@@ -62,8 +85,8 @@ const Page: React.FC = () => {
               Download
             </UiCommonParticle_Button>
           </div>
-        ))}
-      </div>
+        )
+      })}
     </UiAppAtom_HeadingWithSubheading>
   )
 }

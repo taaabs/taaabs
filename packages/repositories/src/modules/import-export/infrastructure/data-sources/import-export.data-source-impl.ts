@@ -9,6 +9,8 @@ import { system_values } from '@shared/constants/system-values'
 import { Crypto } from '@repositories/utils/crypto'
 import { KyInstance } from 'ky'
 import pako from 'pako'
+import { RequestNewBackup_Params } from '../../domain/types/request-new-backup.params'
+import { RequestNewBackup_Dto } from '@shared/types/modules/import-export/request-new-backup.dto'
 
 export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -179,5 +181,16 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
     params: DownloadBackup_Params,
   ): Promise<DownloadBackup_Dto.Response> {
     return this._ky.get(`v1/import-export/download-backup/${params.id}`).json()
+  }
+
+  public async request_new_backup(
+    params: RequestNewBackup_Params,
+  ): Promise<void> {
+    const body: RequestNewBackup_Dto.Body = {
+      name: params.name,
+    }
+    await this._ky.post(`v1/import-export/request-new-backup`, {
+      json: body,
+    })
   }
 }
