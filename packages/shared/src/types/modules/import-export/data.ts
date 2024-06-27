@@ -60,8 +60,7 @@ export const bookmark_schema = z.object({
         private_tag_schema,
       ]),
     )
-    .max(system_values.bookmark.tags.limit)
-    .optional(),
+    .max(system_values.bookmark.tags.limit),
   links: z
     .array(
       z.discriminatedUnion('is_public', [
@@ -69,8 +68,7 @@ export const bookmark_schema = z.object({
         private_link_schema,
       ]),
     )
-    .max(system_values.bookmark.links.limit)
-    .optional(),
+    .max(system_values.bookmark.links.limit),
   cover: z.string().optional(),
   cover_aes: z.string().optional(),
 })

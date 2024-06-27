@@ -120,48 +120,51 @@ export const use_import = () => {
         }
       }
 
+      const bookmarks: SendImportData_Params['bookmarks'] = []
+
+      for (const bookmark of parsed_xml) {
+        const tags = [
+          ...bookmark.path
+            .split('/')
+            .filter((segment) => !!segment.length) // Root bookmarks have '/' path.
+            .map((name) => ({
+              name,
+            })),
+          ...(bookmark.tags
+            ? bookmark.tags.map((name) => ({
+                name,
+              }))
+            : []),
+        ]
+        bookmarks.push({
+          title: bookmark.title,
+          note: '',
+          is_archived: false,
+          is_unsorted: false,
+          stars: bookmark.is_starred ? 1 : undefined,
+          created_at: bookmark.created_at
+            ? bookmark.created_at.toISOString()
+            : undefined,
+          links: bookmark.url
+            ? [
+                {
+                  url: bookmark.url,
+                  site_path: '',
+                  favicon: bookmark.favicon
+                    ? (await _convert_image_to_webp(bookmark.favicon)).replace(
+                        'data:image/webp;base64,',
+                        '',
+                      )
+                    : undefined,
+                },
+              ]
+            : [],
+          tags: tags.length ? tags : [],
+        })
+      }
+
       params = {
-        bookmarks: await Promise.all(
-          parsed_xml.map(async (bookmark) => {
-            const tags = [
-              ...bookmark.path
-                .split('/')
-                .filter((segment) => !!segment.length) // Root bookmarks have '/' path.
-                .map((name) => ({
-                  name,
-                })),
-              ...(bookmark.tags
-                ? bookmark.tags.map((name) => ({
-                    name,
-                  }))
-                : []),
-            ]
-            return {
-              title: bookmark.title,
-              note: '',
-              is_archived: false,
-              is_unsorted: false,
-              stars: bookmark.is_starred ? 1 : undefined,
-              created_at: bookmark.created_at
-                ? bookmark.created_at.toISOString()
-                : undefined,
-              links: bookmark.url
-                ? [
-                    {
-                      url: bookmark.url,
-                      site_path: '',
-                      favicon: bookmark.favicon
-                        ? (
-                            await _convert_image_to_webp(bookmark.favicon)
-                          ).replace('data:image/webp;base64,', '')
-                        : undefined,
-                    },
-                  ]
-                : undefined,
-              tags: tags.length ? tags : undefined,
-            }
-          }),
-        ),
+        bookmarks,
         tag_hierarchies: await Promise.all(
           tag_hierarchies.map(
             async (node) => await parse_tag_hierarchy_node(node),
