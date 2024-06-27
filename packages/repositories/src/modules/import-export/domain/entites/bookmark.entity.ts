@@ -8,8 +8,8 @@ export type Bookmark_Entity = {
   is_unsorted?: boolean
   stars?: number
   cover?: string
-  tags?: { name: string; is_public?: boolean }[]
-  links?: {
+  tags: { name: string; is_public?: boolean }[]
+  links: {
     url: string
     site_path?: string
     is_public?: boolean
