@@ -12,6 +12,12 @@
   @include at992 {
     padding: 0 13px;
   }
+  &:nth-child(even) {
+    background-color: var(--neutral25);
+    @include dark {
+      background-color: var(--dark100);
+    }
+  }
   &--recently-visited {
     &::after {
       content: '';
