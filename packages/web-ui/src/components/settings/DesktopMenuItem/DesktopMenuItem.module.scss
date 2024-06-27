@@ -1,5 +1,5 @@
 // @type
-@use '../../../../styles/foundation' as *;
+@use '../../../styles/foundation' as *;
 
 .link {
   position: relative;
@@ -15,7 +15,10 @@
     width: 100%;
     height: 100%;
     right: 0;
-    background: linear-gradient(to right, var(--white), var(--neutral100));
+    background: linear-gradient(to right, transparent, var(--neutral100));
+    @include dark {
+      background: linear-gradient(to right, transparent, var(--dark200));
+    }
     opacity: 0;
     @include transition-150ms(opacity);
   }

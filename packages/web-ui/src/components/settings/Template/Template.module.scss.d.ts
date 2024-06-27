@@ -5,6 +5,7 @@ declare const styles: {
   readonly content__sidebar: string
   readonly content__sidebar__inner: string
   readonly content__main: string
+  readonly content__main__inner: string
   readonly content__aside: string
 }
 export = styles

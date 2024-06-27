@@ -1,7 +1,13 @@
 // @type
-@use '../../../../styles/foundation' as *;
+@use '../../../styles/foundation' as *;
 
 .container {
+  margin: var(--padding-24px) 0;
+  @include at768 {
+    margin: var(--padding-60px) 0;
+  }
+}
+.heading {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -23,6 +29,11 @@
     color: var(--text-color-variant);
     > strong {
       font-weight: var(--font-weight-inter-medium);
+    }
+  }
+  &--danger {
+    > h1 {
+      color: var(--red);
     }
   }
 }

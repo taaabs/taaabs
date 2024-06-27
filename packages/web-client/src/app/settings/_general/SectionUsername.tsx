@@ -1,6 +1,6 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import awesomeDebouncePromise from 'awesome-debounce-promise'
-import { HeadingWithSubheading as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/app/atoms/heading-with-subheading'
+import { StandardSection as UiSettings_StandardSection } from '@web-ui/components/settings/StandardSection'
 import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
 import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
 import { useContext } from 'react'
@@ -78,72 +78,74 @@ export const SectionUsername: React.FC<{ dictionary: Dictionary }> = (
   }, [auth_context.auth_data])
 
   return (
-    <form onSubmit={handleSubmit(on_submit)}>
-      <UiAppAtom_HeadingWithSubheading
-        heading={props.dictionary.settings.general.username.heading.text}
-        subheading={props.dictionary.settings.general.username.heading.subtext}
-      />
-
-      <Controller
-        name="username"
-        control={control}
-        defaultValue={auth_context.auth_data?.username || ''}
-        rules={{
-          required: {
-            value: true,
-            message: props.dictionary.auth.field_is_required,
-          },
-          maxLength: {
-            value: system_values.username_max_length,
-            message: props.dictionary.auth.sign_up.username_too_long,
-          },
-          minLength: {
-            value: system_values.username_min_length,
-            message: props.dictionary.auth.sign_up.username_too_short,
-          },
-          pattern: {
-            value: system_values.username_regex,
-            message:
-              props.dictionary.auth.sign_up
-                .username_contains_incorrect_characters,
-          },
-          validate: awesomeDebouncePromise(async (value) => {
-            return await check_username_availability(value)
-          }, 500),
-        }}
-        render={({ field }) => {
-          const error_message = errors.username?.message
-          return (
-            <UiCommonAtom_Input
-              value={field.value}
-              on_change={(value) => {
-                if (isSubmitting) return
-                resetField('username')
-                field.onChange(value)
-              }}
-              message_type={error_message ? 'error' : undefined}
-              message={
-                error_message ? (
-                  error_message
-                ) : (
-                  <span>
-                    taaabs.com/
-                    <strong>{field.value}</strong>
-                  </span>
-                )
-              }
-              is_disabled={!auth_context.auth_data}
-            />
-          )
-        }}
-      />
-      <br />
-      <UiCommonParticle_Button
-        type="submit"
-        is_disabled={isSubmitting || !auth_context.auth_data}
-      >
-        {props.dictionary.settings.general.username.change_username}
-      </UiCommonParticle_Button>
-    </form>
+    <UiSettings_StandardSection
+      heading={{
+        text: props.dictionary.settings.general.username.heading.text,
+        subtext: props.dictionary.settings.general.username.heading.subtext,
+      }}
+    >
+      <form onSubmit={handleSubmit(on_submit)}>
+        <Controller
+          name="username"
+          control={control}
+          defaultValue={auth_context.auth_data?.username || ''}
+          rules={{
+            required: {
+              value: true,
+              message: props.dictionary.auth.field_is_required,
+            },
+            maxLength: {
+              value: system_values.username_max_length,
+              message: props.dictionary.auth.sign_up.username_too_long,
+            },
+            minLength: {
+              value: system_values.username_min_length,
+              message: props.dictionary.auth.sign_up.username_too_short,
+            },
+            pattern: {
+              value: system_values.username_regex,
+              message:
+                props.dictionary.auth.sign_up
+                  .username_contains_incorrect_characters,
+            },
+            validate: awesomeDebouncePromise(async (value) => {
+              return await check_username_availability(value)
+            }, 500),
+          }}
+          render={({ field }) => {
+            const error_message = errors.username?.message
+            return (
+              <UiCommonAtom_Input
+                value={field.value}
+                on_change={(value) => {
+                  if (isSubmitting) return
+                  resetField('username')
+                  field.onChange(value)
+                }}
+                message_type={error_message ? 'error' : undefined}
+                message={
+                  error_message ? (
+                    error_message
+                  ) : (
+                    <span>
+                      taaabs.com/
+                      <strong>{field.value}</strong>
+                    </span>
+                  )
+                }
+                is_disabled={!auth_context.auth_data}
+              />
+            )
+          }}
+        />
+        <br />
+        <UiCommonParticle_Button
+          type="submit"
+          is_disabled={isSubmitting || !auth_context.auth_data}
+        >
+          {props.dictionary.settings.general.username.change_username}
+        </UiCommonParticle_Button>
+      </form>
+    </UiSettings_StandardSection>
   )
 }
