@@ -267,20 +267,11 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               ])}
             >
               {props.highlights
-                ? tag.name.split('').map((char, i) => {
-                    const real_i = tag_first_char_index_in_search_title + i
-                    const is_highlighted = props.highlights!.find(
-                      ([index, length]) =>
-                        real_i >= index && real_i < index + length,
-                    )
-                    return is_highlighted ? (
-                      <span className={styles.highlight} key={i}>
-                        {char}
-                      </span>
-                    ) : (
-                      <span key={i}>{char}</span>
-                    )
-                  })
+                ? highlight_text(
+                    tag.name,
+                    props.highlights,
+                    tag_first_char_index_in_search_title,
+                  )
                 : tag.name}
             </span>
             {!tag.is_selected && tag.yields && (
@@ -727,19 +718,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   })}
                 >
                   {props.highlights
-                    ? props.title.split('').map((char, i) => {
-                        const is_highlighted = props.highlights!.find(
-                          ([index, length]) => i >= index && i < index + length,
-                        )
-
-                        return is_highlighted ? (
-                          <span className={styles.highlight} key={i}>
-                            {char}
-                          </span>
-                        ) : (
-                          <span key={i}>{char}</span>
-                        )
-                      })
+                    ? highlight_text(props.title, props.highlights)
                     : props.title}
                 </div>
               ) : (
@@ -788,22 +767,11 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
           {props.note && !props.is_compact && (
             <div className={styles.bookmark__note}>
               {props.highlights
-                ? props.note.split('').map((char, i) => {
-                    const real_i =
-                      (props.title ? `${props.title} ` : '').length + i
-
-                    const is_highlighted = props.highlights!.find(
-                      ([index, length]) =>
-                        real_i >= index && real_i < index + length,
-                    )
-                    return is_highlighted ? (
-                      <span className={styles.highlight} key={i}>
-                        {char}
-                      </span>
-                    ) : (
-                      <span key={i}>{char}</span>
-                    )
-                  })
+                ? highlight_text(
+                    props.note,
+                    props.highlights,
+                    (props.title ? `${props.title} ` : '').length,
+                  )
                 : props.note}
             </div>
           )}
@@ -940,42 +908,19 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       >
                         <span>
                           {props.highlights
-                            ? `${get_domain_from_url(link.url)} ${
-                                link.site_path ? `› ${link.site_path} ` : ''
-                              }`
-                                .split('')
-                                .map((char, i) => {
-                                  const real_i =
-                                    link_first_char_index_in_search_title +
-                                    i -
-                                    (i > get_domain_from_url(link.url).length
-                                      ? 2
-                                      : 0) +
-                                    (i >= 0 ? 1 : 0)
-                                  const is_highlighted = props.highlights!.find(
-                                    ([index, length]) =>
-                                      real_i >= index &&
-                                      real_i < index + length,
-                                  )
-                                  return is_highlighted ? (
-                                    <span
-                                      className={styles['highlight-link']}
-                                      key={i}
-                                    >
-                                      {char}
-                                    </span>
-                                  ) : (
-                                    <span key={i}>{char}</span>
-                                  )
-                                })
+                            ? highlight_link_text(
+                                `${get_domain_from_url(link.url)} ${link.site_path ? `› ${link.site_path} ` : ''}`,
+                                props.highlights,
+                                link_first_char_index_in_search_title,
+                              )
                             : `${get_domain_from_url(link.url)
                                 .split('.')
                                 .map((segment) =>
                                   segment.replace(/(.{5})/g, '$1​'),
                                 )
-                                .join('.')} ${
-                                link.site_path ? `› ${link.site_path}` : ''
-                              }`}
+                                .join(
+                                  '.',
+                                )} ${link.site_path ? `› ${link.site_path}` : ''}`}
                         </span>
                         <span>
                           {url_path_for_display({
@@ -1075,3 +1020,61 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     o.dragged_tag?.id == n.dragged_tag?.id &&
     o.highlights == n.highlights,
 )
+
+const highlight_text = (
+  text: string,
+  highlights: [number, number][],
+  start_index: number = 0,
+) => {
+  const words = text.split(/(\s+)/)
+  let current_index = start_index
+
+  return words.map((word, i) => {
+    const word_start = current_index
+    const word_end = current_index + word.length
+    current_index = word_end
+
+    const is_highlighted = highlights.some(
+      ([index, length]) =>
+        (word_start >= index && word_start < index + length) ||
+        (word_end > index && word_end <= index + length) ||
+        (word_start <= index && word_end >= index + length),
+    )
+
+    return is_highlighted ? (
+      <mark key={i}>{word}</mark>
+    ) : (
+      <span key={i}>{word}</span>
+    )
+  })
+}
+
+const highlight_link_text = (
+  text: string,
+  highlights: [number, number][],
+  start_index: number = 0,
+) => {
+  const words = text.split(/(\s+|\.)/)
+  let current_index = start_index
+
+  return words.map((word, i) => {
+    const word_start = current_index
+    const word_end = current_index + word.length
+    current_index = word_end
+
+    const is_highlighted =
+      word != '.' &&
+      highlights.some(
+        ([index, length]) =>
+          (word_start >= index && word_start < index + length) ||
+          (word_end > index && word_end <= index + length) ||
+          (word_start <= index && word_end >= index + length),
+      )
+
+    return is_highlighted ? (
+      <mark key={i}>{word}</mark>
+    ) : (
+      <span key={i}>{word}</span>
+    )
+  })
+}
