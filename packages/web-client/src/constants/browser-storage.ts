@@ -111,6 +111,7 @@ export const browser_storage = {
       counts_reload_requested_by_new_bookmark:
         'library.counts-reload-requested-by-new-bookmark',
     },
+    is_refreshing_auth_tokens: 'is-refreshing-auth-tokens',
   },
   local_storage: {
     auth_data: 'auth-data',

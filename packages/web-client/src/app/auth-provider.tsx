@@ -39,6 +39,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
   const ky_instance = useRef(
     ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      retry: {
+        limit: 100,
+        backoffLimit: 1000,
+        statusCodes: [401, 500],
+      },
       hooks: {
         beforeRequest: [
           async (request) => {
@@ -63,29 +68,43 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
                   'null',
               ) as AuthDataLocalStorage | null
               if (auth_data_local_storage) {
-                const data_source = new Auth_DataSourceImpl(ky_instance.current)
-                const repostiory = new Auth_RepositoryImpl(data_source)
-                const result = await repostiory.refresh({
-                  access_token: auth_data_local_storage.access_token,
-                  refresh_token: auth_data_local_storage.refresh_token,
-                })
-
-                localStorage.setItem(
-                  browser_storage.local_storage.auth_data,
-                  JSON.stringify({
-                    ...auth_data_local_storage,
-                    access_token: result.access_token,
-                    refresh_token: result.refresh_token,
-                  }),
+                const is_refreshing_token = sessionStorage.getItem(
+                  browser_storage.session_storage.is_refreshing_auth_tokens,
                 )
 
-                request.headers.set(
-                  'Authorization',
-                  `Bearer ${result.access_token}`,
-                )
+                if (!is_refreshing_token) {
+                  sessionStorage.setItem(
+                    browser_storage.session_storage.is_refreshing_auth_tokens,
+                    'true',
+                  )
 
-                // Retry the original request.
-                ky_instance.current(request)
+                  const data_source = new Auth_DataSourceImpl(
+                    ky_instance.current,
+                  )
+                  const repostiory = new Auth_RepositoryImpl(data_source)
+                  const result = await repostiory.refresh({
+                    access_token: auth_data_local_storage.access_token,
+                    refresh_token: auth_data_local_storage.refresh_token,
+                  })
+
+                  localStorage.setItem(
+                    browser_storage.local_storage.auth_data,
+                    JSON.stringify({
+                      ...auth_data_local_storage,
+                      access_token: result.access_token,
+                      refresh_token: result.refresh_token,
+                    }),
+                  )
+
+                  request.headers.set(
+                    'Authorization',
+                    `Bearer ${result.access_token}`,
+                  )
+
+                  sessionStorage.removeItem(
+                    browser_storage.session_storage.is_refreshing_auth_tokens,
+                  )
+                }
               }
             }
           },
