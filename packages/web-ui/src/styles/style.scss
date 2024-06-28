@@ -168,6 +168,11 @@ small {
   color: var(--text-color-dimmed);
 }
 
+mark {
+  background-color: var(--highlight);
+  color: var(--black);
+}
+
 .no-transitions * {
   transition: none !important;
 }

@@ -61,8 +61,6 @@ declare const styles: {
   readonly bookmark__links__item__actions__menu__button: string
   readonly 'bookmark__links__item__actions__menu__button--toggled': string
   readonly bookmark__links__item__pinned: string
-  readonly highlight: string
-  readonly 'highlight-link': string
   readonly slot: string
   readonly 'slot--visible': string
   readonly 'sortable-fallback': string

@@ -564,7 +564,7 @@
             }
           }
           &--highlighted {
-            background-color: var(--highlight);
+            box-shadow: 0 0 12px 6px var(--highlight);
           }
         }
         &__reader {
@@ -750,24 +750,6 @@
         }
       }
     }
-  }
-}
-.highlight {
-  color: var(--text-color-normal);
-  background-color: var(--highlight);
-}
-.highlight-link {
-  // Fixes italic text of proxied via a snapshot links.
-  position: relative;
-  &::before {
-    content: '';
-    position: absolute;
-    background-color: var(--highlight);
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    z-index: -1;
   }
 }
 .slot {
