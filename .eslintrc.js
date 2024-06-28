@@ -31,7 +31,7 @@ module.exports = {
         },
       },
     ],
-    'no-console': ['error', { allow: ['warn', 'error'] }],
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
     '@typescript-eslint/naming-convention': [
       'warn',
       {
