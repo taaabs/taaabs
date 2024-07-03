@@ -5,6 +5,9 @@ import { createContext, ReactNode, useEffect, useState } from 'react'
 
 export type ModalContext = {
   set: (content?: ReactNode) => void
+  /**
+   * Pass random value (e.g. Date.now()) to trigger modal closing in a consumer.
+   */
   close_trigger: number
   close: () => void
   is_opened: boolean

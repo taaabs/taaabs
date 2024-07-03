@@ -3,7 +3,7 @@ import { Button as UiCommonParticle_Button } from '@web-ui/components/common/par
 import { useContext } from 'react'
 import { AuthContext } from '@/app/auth-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { delete_account_modal_setter } from '@/modals/delete-account-modal-setter'
+import { delete_account_modal_setter } from '@/modals/delete-account/delete-account-modal-setter'
 import { ModalContext } from '@/providers/modal-provider'
 import { Settings_DataSourceImpl } from '@repositories/modules/settings/infrastructure/settings.data-source-impl'
 import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastructure/settings.repository-impl'
@@ -38,7 +38,7 @@ export const SectionDeleteAccount: React.FC<{ dictionary: Dictionary }> = (
               await repository.delete_account()
               auth_context.logout()
             }
-            modal_context.set_content({})
+            modal_context.close()
           }}
           is_danger={true}
         >
