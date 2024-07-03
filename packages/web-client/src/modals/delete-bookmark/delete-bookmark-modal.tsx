@@ -1,7 +1,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { Header as UiCommonTemplate_Modal_ContentStandard_Header } from '@web-ui/components/common/templates/modal/content-standard/header'
 import { Footer as UiCommonTemplate_Modal_ContentStandard_Footer } from '@web-ui/components/common/templates/modal/content-standard/footer'
-import { Delete as UiCommonTemplate_Modal_ContentStandard_Delete } from '@web-ui/components/common/templates/modal/content-standard/delete'
+import { ContentStandard as UiCommonTemplate_Modal_ContentStandard } from '@web-ui/components/common/templates/modal/content-standard'
 import { useContext, useRef, useState } from 'react'
 import {
   Content,
@@ -36,10 +36,10 @@ export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
   }, [modal_context.close_trigger])
 
   const content = (
-    <UiCommonTemplate_Modal_ContentStandard_Delete
-      text={props.dictionary.app.delete_modal.are_you_sure}
-      bookmark_title={props.title}
-    />
+    <UiCommonTemplate_Modal_ContentStandard>
+      <div>{props.dictionary.app.delete_modal.are_you_sure}</div>
+      {props.title && <strong>{props.title}</strong>}
+    </UiCommonTemplate_Modal_ContentStandard>
   )
 
   const header = (
@@ -69,7 +69,7 @@ export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
       <div
         style={
           {
-            '--modal-width': '300px',
+            '--modal-width': '400px',
           } as any
         }
       >
