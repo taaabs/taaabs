@@ -18,8 +18,8 @@ export const rename_tag_modal_setter = (params: {
   new Promise<string | null>((resolve) => {
     const on_submit_handler = (name: string) => resolve(name)
     const on_close_handler = () => resolve(null)
-    params.modal_context.set_modal_content({
-      modal_content: (
+    params.modal_context.set_content({
+      content: (
         <_ModalContent
           on_submit={on_submit_handler}
           on_close={on_close_handler}

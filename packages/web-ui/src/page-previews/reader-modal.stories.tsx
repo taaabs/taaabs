@@ -9,7 +9,7 @@ export default {
 export const Reader = () => (
   <Modal
     children={<>{lorem_ipsum.long}</>}
-    slot_modal_content={
+    content={
       <UiCommonTemplate_Modal_ContentReader
         slot_left_panel="left"
         slot_right_panel="right"

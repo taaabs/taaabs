@@ -3,10 +3,8 @@
 
 .container {
   display: flex;
-  justify-content: center;
   align-items: center;
   border-bottom: var(--border-primary);
-  background: var(--header-background);
   padding: var(--padding-8px) var(--padding-16px);
   @include at768 {
     padding: var(--padding-10px) var(--padding-40px);

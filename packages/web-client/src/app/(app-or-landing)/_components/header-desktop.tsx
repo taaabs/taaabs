@@ -20,7 +20,7 @@ import { StandardItem as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDrop
 import { Separator as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/separator'
 import { Bookmarklet as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/bookmarklet'
 import { FooterLinks as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/footer-links'
-import { UpsertBookmark as Form_UpsertBookmark } from '@/forms/upsert-bookmark'
+import { UpsertBookmark as Form_UpsertBookmark } from '@/modals/upsert-bookmark-modal/upsert-bookmark-modal'
 import { update_search_params } from '@/utils/update-query-params'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
@@ -45,7 +45,7 @@ export const HeaderDesktop: React.FC<{
   const pathname = usePathname()
   const router = useRouter()
   const public_user_avatar = useContext(PublicUserAvatarContext)
-  const modal = useContext(ModalContext)
+  const modal_context = useContext(ModalContext)!
   const is_hydrated = use_is_hydrated()
 
   let logo: JSX.Element
@@ -125,58 +125,56 @@ export const HeaderDesktop: React.FC<{
       hash: window.location.hash.slice(1),
     })
 
-    modal?.set_modal_content({
-      modal_content: (
-        <Form_UpsertBookmark
-          action="create"
-          bookmark_autofill={
-            params.with_autofill
-              ? {
-                  title: bookmark.title,
-                  links: bookmark.links,
-                  tags: bookmark.tags,
-                  note: bookmark.description,
-                }
-              : undefined
+    modal_context.set_content(
+      <Form_UpsertBookmark
+        key={Date.now()}
+        action="create"
+        bookmark_autofill={
+          params.with_autofill
+            ? {
+                title: bookmark.title,
+                links: bookmark.links,
+                tags: bookmark.tags,
+                note: bookmark.description,
+              }
+            : undefined
+        }
+        on_close={() => {
+          modal_context.close()
+        }}
+        on_submit={async (bookmark) => {
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          const created_bookmark = await repository.upsert_bookmark(
+            bookmark,
+            auth_context.auth_data!.encryption_key,
+          )
+          if (pathname == '/library') {
+            sessionStorage.setItem(
+              browser_storage.session_storage.library
+                .counts_reload_requested_by_new_bookmark,
+              'true',
+            )
+            const updated_search_params = update_search_params(
+              search_params,
+              search_params_keys.new_bookmark_results_refetch_trigger,
+              created_bookmark.id.toString(),
+            )
+            window.history.pushState(
+              {},
+              '',
+              window.location.pathname + '?' + updated_search_params,
+            )
+          } else {
+            modal_context.close()
           }
-          on_close={() => {
-            modal.set_modal_content({})
-          }}
-          on_submit={async (bookmark) => {
-            const data_source = new Bookmarks_DataSourceImpl(
-              auth_context.ky_instance,
-            )
-            const repository = new Bookmarks_RepositoryImpl(data_source)
-            const created_bookmark = await repository.upsert_bookmark(
-              bookmark,
-              auth_context.auth_data!.encryption_key,
-            )
-            if (pathname == '/library') {
-              sessionStorage.setItem(
-                browser_storage.session_storage.library
-                  .counts_reload_requested_by_new_bookmark,
-                'true',
-              )
-              const updated_search_params = update_search_params(
-                search_params,
-                search_params_keys.new_bookmark_results_refetch_trigger,
-                created_bookmark.id.toString(),
-              )
-              window.history.pushState(
-                {},
-                '',
-                window.location.pathname + '?' + updated_search_params,
-              )
-            } else {
-              modal.set_modal_content({})
-            }
-            toast.success(props.dictionary.app.library.bookmark_created)
-          }}
-          dictionary={props.dictionary}
-        />
-      ),
-      pin_to_bottom_on_mobile: true,
-    })
+          toast.success(props.dictionary.app.library.bookmark_created)
+        }}
+        dictionary={props.dictionary}
+      />,
+    )
   }
 
   useUpdateEffect(() => {

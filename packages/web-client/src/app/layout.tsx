@@ -12,6 +12,7 @@ import 'react-nestable/dist/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
 import 'use-context-menu/styles.css'
 import 'simplebar-react/dist/simplebar.min.css'
+import 'react-sheet-slide/style.css'
 import '@web-ui/styles/style.scss'
 
 export const revalidate = 0

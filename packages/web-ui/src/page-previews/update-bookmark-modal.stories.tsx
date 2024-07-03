@@ -13,7 +13,7 @@ export const Primary = () => {
     <Modal
       on_outside_click={() => {}}
       children={<>{lorem_ipsum.long}</>}
-      slot_modal_content={
+      content={
         <UiCommonTemplage_Modal_ContentStandard
           width={500}
           slot_header={

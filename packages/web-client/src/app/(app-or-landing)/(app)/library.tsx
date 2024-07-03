@@ -16,7 +16,7 @@ import { use_session_storage_cleanup } from '@/hooks/library/use-session-storage
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { browser_storage } from '@/constants/browser-storage'
 import { useParams, useSearchParams } from 'next/navigation'
-import { upsert_bookmark_modal_setter } from '@/modals/upsert-bookmark-modal-setter'
+import { upsert_bookmark_modal_setter } from '@/modals/upsert-bookmark-modal/upsert-bookmark-modal-setter'
 import { toast } from 'react-toastify'
 import { CustomRangeSkeleton as UiAppLibrary_CustomRangeSkeleton } from '@web-ui/components/app/library/CustomRangeSkeleton'
 import { SwipableColumns as UiAppTemplate_SwipableColumns } from '@web-ui/components/app/templates/swipable-columns'
@@ -184,7 +184,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       })
       set_library_updated_at_timestamp(Date.now())
     }
-    modal_context.set_modal_content({})
+    modal_context.close()
   }
 
   // UpdateEffect breaks rendering items fetched from session storage.
@@ -247,7 +247,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           }),
         ),
       ]).then(() => {
-        modal_context.set_modal_content({})
+        modal_context.close()
       })
     }
   }, [bookmarks_hook.is_fetching_first_bookmarks])
@@ -458,7 +458,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           window.location.pathname + `?${search_params.toString()}`,
         )
       }}
-      is_slash_shortcut_disabled={modal_context.modal_content !== undefined}
+      is_slash_shortcut_disabled={modal_context.is_opened}
       on_click_get_help={() => {}}
       sort_by={sort_by_view_options_hook.current_sort_by}
       translations={{
@@ -2031,7 +2031,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   dictionary: props.dictionary,
                 })
                 if (!modified_bookmark) {
-                  modal_context.set_modal_content({})
+                  modal_context.close()
                   return
                 }
                 dispatch(bookmarks_actions.set_is_upserting(true))
@@ -2143,7 +2143,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   })
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
-                modal_context.set_modal_content({})
+                modal_context.close()
                 toast.success(props.dictionary.app.library.bookmark_updated)
               }}
             />
@@ -2228,7 +2228,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                     title: bookmark.title,
                   })
                 if (!is_deletion_confirmed) {
-                  modal_context.set_modal_content({})
+                  modal_context.close()
                   return
                 }
                 dispatch(bookmarks_actions.set_is_upserting(true))
@@ -2256,7 +2256,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                   search_hook.set_count(search_hook.count - 1)
                 }
                 dispatch(bookmarks_actions.set_is_upserting(false))
-                modal_context.set_modal_content({})
+                modal_context.close()
                 toast.success(props.dictionary.app.library.bookmark_deleted)
               }}
             />

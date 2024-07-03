@@ -23,6 +23,16 @@ import { AuthContext } from '@/app/auth-provider'
 import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
 import { All_Ro } from '@repositories/modules/tags/domain/all.ro'
 import { Suggested_Ro } from '@repositories/modules/tags/domain/suggested.ro'
+import {
+  Content,
+  Footer,
+  Header,
+  Portal,
+  Sheet,
+  detents,
+} from 'react-sheet-slide'
+import { ModalContext } from '@/providers/modal-provider'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 type FormValues = {
   title?: string
@@ -64,6 +74,9 @@ const cover_size = {
 }
 
 export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const [is_open, set_is_open] = useState<boolean>(true)
+  const modal_context = useContext(ModalContext)!
   const {
     control,
     handleSubmit,
@@ -447,34 +460,12 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
     fetch_suggested_tags(props.bookmark?.tags.map((tag) => tag.id) || [])
   }, [])
 
-  return (
-    <UiCommonTemplates_Modal_ContentStandard
-      width={600}
-      slot_header={
-        <UiCommonTemplates_Modal_ContentStandard_Header
-          title={
-            props.action == 'update'
-              ? props.dictionary.app.upsert_modal.edit_boomkark
-              : props.dictionary.app.upsert_modal.create_bookmark
-          }
-        />
-      }
-      slot_footer={
-        <UiCommonTemplates_Modal_ContentStandard_Footer
-          on_click_cancel={props.on_close}
-          button_label={
-            props.action == 'update'
-              ? props.dictionary.app.upsert_modal.save_changes
-              : props.dictionary.app.upsert_modal.create
-          }
-          is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
-          button_on_click={handleSubmit(on_submit)}
-          translations={{
-            cancel: props.dictionary.app.upsert_modal.cancel,
-          }}
-        />
-      }
-    >
+  useUpdateEffect(() => {
+    set_is_open(false)
+  }, [modal_context.close_trigger])
+
+  const content = (
+    <UiCommonTemplates_Modal_ContentStandard>
       <UiCommonTemplates_Modal_ContentStandard_Sections_Centered
         label={props.dictionary.app.upsert_modal.visibility}
       >
@@ -717,5 +708,62 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
         </div>
       </UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit>
     </UiCommonTemplates_Modal_ContentStandard>
+  )
+
+  const header = (
+    <UiCommonTemplates_Modal_ContentStandard_Header
+      title={
+        props.action == 'update'
+          ? props.dictionary.app.upsert_modal.edit_boomkark
+          : props.dictionary.app.upsert_modal.create_bookmark
+      }
+    />
+  )
+
+  const footer = (
+    <UiCommonTemplates_Modal_ContentStandard_Footer
+      on_click_cancel={props.on_close}
+      button_label={
+        props.action == 'update'
+          ? props.dictionary.app.upsert_modal.save_changes
+          : props.dictionary.app.upsert_modal.create
+      }
+      is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
+      button_on_click={handleSubmit(on_submit)}
+      translations={{
+        cancel: props.dictionary.app.upsert_modal.cancel,
+      }}
+    />
+  )
+
+  return (
+    <Portal>
+      <div
+        style={
+          {
+            '--modal-width': '600px',
+          } as any
+        }
+      >
+        <Sheet
+          ref={ref}
+          open={is_open}
+          onDismiss={() => {
+            props.on_close()
+          }}
+          onClose={() => {
+            // props.on_close()
+            // console.log('2')
+          }}
+          selectedDetent={detents.fit}
+          scrollingExpands={true}
+          useDarkMode={false}
+        >
+          <Header>{header}</Header>
+          <Content>{content}</Content>
+          <Footer>{footer}</Footer>
+        </Sheet>
+      </div>
+    </Portal>
   )
 }
