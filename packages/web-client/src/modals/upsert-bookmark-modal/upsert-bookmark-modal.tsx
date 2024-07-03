@@ -50,7 +50,7 @@ type BookmarkAutofill = {
   tags?: string[]
 }
 
-export namespace UpsertBookmark {
+export namespace UpsertBookmarkModal {
   export type Props = {
     bookmark?: Bookmark_Entity
     bookmark_autofill?: BookmarkAutofill
@@ -73,9 +73,11 @@ const cover_size = {
   height: 82 * 2,
 }
 
-export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const [is_open, set_is_open] = useState<boolean>(true)
+export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
+  props,
+) => {
+  const ref = useRef(null)
+  const [is_open, set_is_open] = useState(true)
   const modal_context = useContext(ModalContext)!
   const {
     control,
@@ -184,7 +186,7 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
       // Create a new File object to set the file input value
       const file = new File([blob], 'pasted-image.png', { type: blob.type })
       const dataTransfer = new DataTransfer()
-      dataTransfer.items.add(file)
+      dataTransfer.items?.add(file)
       file_input.current!.files = dataTransfer.files
       file_input.current!.dispatchEvent(new Event('change'))
     }
@@ -448,16 +450,16 @@ export const UpsertBookmark: React.FC<UpsertBookmark.Props> = (props) => {
   }
 
   useEffect(() => {
-    const fetch_all_tags = async () => {
-      const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
-      const repository = new Tags_RepositoryImpl(data_source)
-      const result = await repository.all(
-        auth_context.auth_data!.encryption_key,
-      )
-      set_all_tags(result)
-    }
-    fetch_all_tags()
-    fetch_suggested_tags(props.bookmark?.tags.map((tag) => tag.id) || [])
+    // const fetch_all_tags = async () => {
+    //   const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
+    //   const repository = new Tags_RepositoryImpl(data_source)
+    //   const result = await repository.all(
+    //     auth_context.auth_data!.encryption_key,
+    //   )
+    //   set_all_tags(result)
+    // }
+    // fetch_all_tags()
+    // fetch_suggested_tags(props.bookmark?.tags.map((tag) => tag.id) || [])
   }, [])
 
   useUpdateEffect(() => {

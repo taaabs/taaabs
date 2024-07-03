@@ -1,10 +1,10 @@
 'use client'
 
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useEffect, useState } from 'react'
 
 export type ModalContext = {
-  set_content: (content?: ReactNode) => void
+  set: (content?: ReactNode) => void
   close_trigger: number
   close: () => void
   is_opened: boolean
@@ -13,7 +13,7 @@ export type ModalContext = {
 export const ModalContext = createContext<ModalContext | null>(null)
 
 export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
-  const [content, set_content] = useState<ReactNode>()
+  const [content, set] = useState<ReactNode>()
   const [close_trigger, set_close_trigger] = useState<number>(0)
   const [is_opened, set_is_opened] = useState<boolean>(false)
 
@@ -26,10 +26,21 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
     if (content) set_is_opened(true)
   }, [content])
 
+  useEffect(() => {
+    const handle_popstate = () => {
+      close()
+      history.go(1)
+    }
+    if (content) {
+      window.addEventListener('popstate', handle_popstate)
+    }
+    return () => window.removeEventListener('popstate', handle_popstate)
+  }, [content])
+
   return (
     <ModalContext.Provider
       value={{
-        set_content,
+        set,
         close_trigger,
         close,
         is_opened,
