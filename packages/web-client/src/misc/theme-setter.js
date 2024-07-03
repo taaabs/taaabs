@@ -19,7 +19,7 @@ function set_theme(newTheme) {
   }, 0)
 }
 
-var preferred_theme = localStorage.getitem('theme')
+var preferred_theme = localStorage.getItem('theme')
 
 window.__set_preferred_theme = function (new_theme) {
   preferred_theme = new_theme

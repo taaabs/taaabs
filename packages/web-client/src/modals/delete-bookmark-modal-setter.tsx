@@ -13,8 +13,8 @@ export const delete_bookmark_modal_setter = (params: {
   new Promise<boolean>((resolve) => {
     const on_submit_handler = () => resolve(true)
     const on_close_handler = () => resolve(false)
-    params.modal_context.set_modal_content({
-      modal_content: (
+    params.modal_context.set_content({
+      content: (
         <_ModalContent
           on_submit={on_submit_handler}
           on_close={on_close_handler}

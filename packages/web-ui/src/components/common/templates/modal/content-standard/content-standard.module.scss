@@ -2,37 +2,12 @@
 @use '../../../../../styles/foundation' as *;
 
 .container {
-  position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
-}
-.header {
-  position: relative;
-  z-index: 1;
-  @include transition-250ms(box-shadow);
-  &--shadow {
-    box-shadow: var(--box-shadow);
-  }
-}
-.simplebar {
-  max-height: calc(70svh);
-  &__inner {
-    display: flex;
-    flex-direction: column;
-    gap: var(--padding-16px);
+  gap: var(--padding-16px);
     padding: var(--padding-24px) var(--padding-16px);
     @include at768 {
       gap: var(--padding-24px);
       padding: var(--padding-32px) var(--padding-40px);
     }
-  }
-}
-.footer {
-  z-index: 1;
-  width: 100%;
-  @include transition-250ms(box-shadow);
-  &--shadow {
-    box-shadow: var(--box-shadow-up);
-  }
 }

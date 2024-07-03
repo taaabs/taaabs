@@ -12,6 +12,7 @@ import { HeaderDesktop } from './_components/header-desktop'
 import { HeaderMobile } from './_components/header-mobile'
 import { BottomNavigationBar } from './_components/bottom-navigation-bar'
 import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
+import { ModalProvider } from '@/providers/modal-provider'
 
 const landing_pathnames = ['/about', '/pricing', '/help', '/updates']
 
@@ -40,20 +41,22 @@ const LayoutAuthorized: React.FC<{
     </UiLandingTemplate_Landing>
   ) : (
     <PublicUserAvatarProvider>
-      <UiAppTemplate_App
-        slot_header_desktop={
-          <HeaderDesktop
-            dictionary={props.dictionary}
-            bookmarklet_script={props.bookmarklet_script}
-          />
-        }
-        slot_header_mobile={<HeaderMobile />}
-        slot_bottom_navigation_bar={
-          <BottomNavigationBar dictionary={props.dictionary} />
-        }
-      >
-        {props.children}
-      </UiAppTemplate_App>
+      <ModalProvider>
+        <UiAppTemplate_App
+          slot_header_desktop={
+            <HeaderDesktop
+              dictionary={props.dictionary}
+              bookmarklet_script={props.bookmarklet_script}
+            />
+          }
+          slot_header_mobile={<HeaderMobile />}
+          slot_bottom_navigation_bar={
+            <BottomNavigationBar dictionary={props.dictionary} />
+          }
+        >
+          {props.children}
+        </UiAppTemplate_App>
+      </ModalProvider>
     </PublicUserAvatarProvider>
   )
 }

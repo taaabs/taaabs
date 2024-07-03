@@ -38,7 +38,7 @@ export const SectionDeleteAccount: React.FC<{ dictionary: Dictionary }> = (
               await repository.delete_account()
               auth_context.logout()
             }
-            modal_context.set_modal_content({})
+            modal_context.set_content({})
           }}
           is_danger={true}
         >
