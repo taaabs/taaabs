@@ -1,7 +1,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
-import { UpsertBookmark as Form_UpsertBookmark } from './upsert-bookmark-modal'
+import { UpsertBookmarkModal } from './upsert-bookmark-modal'
 import { ModalContext } from '@/providers/modal-provider'
 
 export const upsert_bookmark_modal_setter = (params: {
@@ -14,8 +14,8 @@ export const upsert_bookmark_modal_setter = (params: {
     const on_submit_handler = (bookmark: UpsertBookmark_Params) =>
       resolve(bookmark)
     const on_close_handler = () => resolve(null)
-    params.modal_context.set_content(
-      <Form_UpsertBookmark
+    params.modal_context.set(
+      <UpsertBookmarkModal
         key={Date.now()}
         action="update"
         bookmark={params.bookmark}

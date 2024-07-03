@@ -1,25 +1,21 @@
 import { Dictionary } from '@/dictionaries/dictionary'
+import { ModalContext } from '@/providers/modal-provider'
 import dynamic from 'next/dynamic'
 
-const DynamicReaderModal = dynamic(() => import('./dynamic-reader-modal'), {
+const DynamicReaderModal = dynamic(() => import('./DynamicReaderModal'), {
   ssr: false,
 })
 
 export const reader_modal_setter = (params: {
-  modal_context: any
+  modal_context: ModalContext
   dictionary: Dictionary
   reader_data: string
-}) =>
-  new Promise((resolve) => {
-    const on_close_handler = () => resolve(null)
-    params.modal_context.set_content({
-      content: (
-        <DynamicReaderModal
-          reader_data={JSON.parse(params.reader_data)}
-          on_close={on_close_handler}
-          dictionary={params.dictionary}
-        />
-      ),
-      pin_to_bottom_on_mobile: true,
-    })
-  })
+}) => {
+  params.modal_context.set(
+    <DynamicReaderModal
+      key={Date.now()}
+      reader_data={JSON.parse(params.reader_data)}
+      dictionary={params.dictionary}
+    />,
+  )
+}

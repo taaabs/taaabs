@@ -59,7 +59,7 @@ import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/componen
 import { CheckboxItem as UiCommon_Dropdown_CheckboxItem } from '@web-ui/components/common/Dropdown/checkbox-item'
 import { Separator as UiCommon_Dropdown_Separator } from '@web-ui/components/common/Dropdown/separator'
 import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/Dropdown/stars'
-import { delete_bookmark_modal_setter } from '@/modals/delete-bookmark-modal-setter'
+import { delete_bookmark_modal_setter } from '@/modals/delete-bookmark/delete-bookmark-modal-setter'
 import { rename_tag_modal_setter } from '@/modals/rename-tag-modal-setter'
 import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
 import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
@@ -793,7 +793,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           reader_modal_setter({
             reader_data: link_data.reader_data,
             dictionary: props.dictionary,
-            modal_context: modal_context,
+            modal_context,
           })
         }
         if (!username) {
@@ -1368,7 +1368,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           reader_modal_setter({
             reader_data: link_data.reader_data,
             dictionary: props.dictionary,
-            modal_context: modal_context,
+            modal_context,
           })
         }
         if (!username) {
