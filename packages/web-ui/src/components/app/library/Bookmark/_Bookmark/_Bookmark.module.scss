@@ -62,14 +62,14 @@
         justify-content: center;
         border-radius: var(--border-radius-8px);
         overflow: hidden;
-        width: 90px;
+        width: 130px;
         height: 68px;
         background-color: #f3f3f3;
         @include dark {
           background-color: var(--dark200);
         }
         @include at992 {
-          width: 110px;
+          width: 157px;
           height: 82px;
         }
         > img {
