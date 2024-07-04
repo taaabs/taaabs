@@ -28,8 +28,16 @@ jobs:
       working-directory: ./packages/web-client
 
     - name: Build Next.js app
-      run: pnpm build
-      working-directory: ./packages/web-client
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ github.workspace }}/.next/cache
+          ${{ github.workspace }}/packages/web-client/.next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+          run: pnpm build --cache
+          working-directory: ./packages/web-client
 
     - name: Deploy to VPS
       env:
