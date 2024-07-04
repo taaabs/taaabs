@@ -1,0 +1,146 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  line-height: 1.5;
+  @include at992 {
+    font-size: var(--font-size-16px);
+  }
+  > * {
+    max-width: 100%;
+    overflow: hidden;
+    &:first-child {
+      margin-top: 0;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  code {
+    font-size: var(--font-size-14px);
+  }
+  p,
+  ol {
+    margin: 0.7em 0;
+  }
+  code:not([class]) {
+    font-family: 'Fira Code', 'Fira Mono', Menlo, Consolas, 'DejaVu Sans Mono',
+      monospace;
+    font-weight: bold;
+    &::before {
+      content: '`';
+    }
+    &::after {
+      content: '`';
+    }
+  }
+  table {
+    width: 100%;
+  }
+  table,
+  th,
+  td {
+    border: none;
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    padding: 12px 15px;
+  }
+  th {
+    text-align: left;
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  blockquote {
+    border-left: var(--border-primary);
+    background-color: var(--neutral50);
+    margin: 0;
+    padding: 0 var(--padding-16px);
+    border-top-right-radius: var(--border-radius-20px);
+    border-bottom-right-radius: var(--border-radius-20px);
+  }
+  hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color-primary);
+  }
+  strong {
+    font-weight: var(--font-weight-inter-semi-bold);
+  }
+  a {
+    color: var(--text-color-variant);
+    @include text-decoration-underlinie-thin;
+    @include transition-150ms(color);
+    @include hover {
+      color: var(--text-color-normal);
+    }
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 1em 0 0.7em 0;
+    font-weight: var(--font-weight-inter-semi-bold);
+  }
+}
+.code {
+  display: flex;
+  flex-direction: column;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--blue50);
+    @include dark {
+      background-color: var(--dark200);
+    }
+    border-top-left-radius: var(--border-radius-10px);
+    border-top-right-radius: var(--border-radius-10px);
+    padding: 8px 10px 8px 14px;
+    &__language {
+      font-family: var(--font-family-inter);
+      > span {
+        color: var(--accent-color);
+        @include dark {
+          color: var(--text-color-normal);
+        }
+        font-weight: var(--font-weight-inter-medium);
+        font-size: var(--font-size-14px);
+        > sup {
+          color: var(--blue400);
+          @include dark {
+            color: var(--text-color-variant);
+          }
+          font-weight: var(--font-weight-inter-regular);
+        }
+      }
+    }
+    > button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      @include transition-150ms(background-color);
+      background-color: var(--blue100);
+      @include dark {
+        background-color: var(--dark300);
+      }
+      @include hover {
+        background-color: var(--blue200);
+        @include dark {
+          background-color: var(--dark400);
+        }
+      }
+      > svg {
+        fill: var(--accent-color);
+        @include transition-150ms(fill);
+        width: 12px;
+      }
+    }
+  }
+}

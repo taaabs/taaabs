@@ -1,7 +1,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { Header as UiCommonTemplate_Modal_ContentStandard_Header } from '@web-ui/components/common/templates/modal/content-standard/header'
-import { Footer as UiCommonTemplate_Modal_ContentStandard_Footer } from '@web-ui/components/common/templates/modal/content-standard/footer'
-import { ContentStandard as UiCommonTemplate_Modal_ContentStandard } from '@web-ui/components/common/templates/modal/content-standard'
+import { Header as UiModal_Header } from '@web-ui/components/modal/Header'
+import { Footer as UiModal_Footer } from '@web-ui/components/modal/Footer'
+import { Content as UiModal_Content } from '@web-ui/components/modal/Content'
 import { useContext, useRef, useState } from 'react'
 import {
   Content,
@@ -35,19 +35,20 @@ export const DeleteAccountModal: React.FC<DeleteAccountModal.Props> = (
   }, [modal_context.close_trigger])
 
   const content = (
-    <UiCommonTemplate_Modal_ContentStandard>
+    <UiModal_Content>
       {props.dictionary.settings.general.delete_account.modal.text}
-    </UiCommonTemplate_Modal_ContentStandard>
+    </UiModal_Content>
   )
 
   const header = (
-    <UiCommonTemplate_Modal_ContentStandard_Header
+    <UiModal_Header
       title={props.dictionary.settings.general.delete_account.modal.header}
+      on_close_click={props.on_close}
     />
   )
 
   const footer = (
-    <UiCommonTemplate_Modal_ContentStandard_Footer
+    <UiModal_Footer
       button_label={
         props.dictionary.settings.general.delete_account.modal.button_label
       }

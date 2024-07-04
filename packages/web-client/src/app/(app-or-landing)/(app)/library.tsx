@@ -60,7 +60,7 @@ import { CheckboxItem as UiCommon_Dropdown_CheckboxItem } from '@web-ui/componen
 import { Separator as UiCommon_Dropdown_Separator } from '@web-ui/components/common/Dropdown/separator'
 import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/Dropdown/stars'
 import { delete_bookmark_modal_setter } from '@/modals/delete-bookmark/delete-bookmark-modal-setter'
-import { rename_tag_modal_setter } from '@/modals/rename-tag-modal-setter'
+import { rename_tag_modal_setter } from '@/modals/rename-tag/rename-tag-modal-setter'
 import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
 import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
 import { PinnedBookmarks as UiAppLibrary_PinnedBookmarks } from '@web-ui/components/app/library/PinnedBookmarks'
@@ -150,21 +150,18 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     pinned_hook.should_refetch,
   ])
 
-  const on_tag_rename_click = async (params: {
-    old_tag_id: number
-    old_tag_name: string
-  }) => {
+  const on_tag_rename_click = async (params: { id: number; name: string }) => {
     const new_tag_name = await rename_tag_modal_setter({
       dictionary: props.dictionary,
       modal_context,
-      old_tag_name: params.old_tag_name,
+      name: params.name,
     })
     if (new_tag_name) {
       const bookmarks = bookmarks_hook.bookmarks?.map((b) => ({
         ...b,
         tags: b.tags.map((t) => ({
           ...t,
-          name: t.name == params.old_tag_name ? new_tag_name : t.name,
+          name: t.name == params.name ? new_tag_name : t.name,
         })),
       }))
       dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks))
@@ -172,14 +169,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       dispatch(
         counts_actions.set_tags({
           ...counts_hook.tags!,
-          [params.old_tag_id]: {
-            ...counts_hook.tags![params.old_tag_id],
+          [params.id]: {
+            ...counts_hook.tags![params.id],
             name: new_tag_name,
           },
         }),
       )
       tag_hierarchies_hook.rename({
-        old_tag_name: params.old_tag_name,
+        old_tag_name: params.name,
         new_tag_name,
       })
       set_library_updated_at_timestamp(Date.now())
@@ -915,9 +912,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             }
           }
         }}
-        on_tag_rename_click={(old_tag_id: number) => {
-          const old_tag_name = counts_hook.tags![old_tag_id].name
-          on_tag_rename_click({ old_tag_name, old_tag_id })
+        on_tag_rename_click={(id: number) => {
+          const name = counts_hook.tags![id].name
+          on_tag_rename_click({ name, id })
         }}
         translations={{
           all_bookmarks: props.dictionary.app.library.all_bookmarks,
@@ -1144,9 +1141,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 on_selected_tag_click={(tag_id) =>
                   tag_view_options_hook.remove_tags_from_search_params([tag_id])
                 }
-                on_tag_rename_click={(old_tag_id: number) => {
-                  const old_tag_name = counts_hook.tags![old_tag_id].name
-                  on_tag_rename_click({ old_tag_name, old_tag_id })
+                on_tag_rename_click={(id: number) => {
+                  const name = counts_hook.tags![id].name
+                  on_tag_rename_click({ name, id })
                 }}
                 translations={{
                   rename: props.dictionary.app.library.rename,
@@ -1175,9 +1172,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 on_tag_drag_start={
                   !username ? tag_view_options_hook.set_dragged_tag : undefined
                 }
-                on_tag_rename_click={(old_tag_id: number) => {
-                  const old_tag_name = counts_hook.tags![old_tag_id].name
-                  on_tag_rename_click({ old_tag_name, old_tag_id })
+                on_tag_rename_click={(id: number) => {
+                  const name = counts_hook.tags![id].name
+                  on_tag_rename_click({ name, id })
                 }}
                 translations={{
                   rename: props.dictionary.app.library.rename,
@@ -1588,9 +1585,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             }
           : undefined
       }
-      on_tag_rename_click={(old_tag_id: number) => {
-        const old_tag_name = counts_hook.tags![old_tag_id].name
-        on_tag_rename_click({ old_tag_name, old_tag_id })
+      on_tag_rename_click={(id: number) => {
+        const name = counts_hook.tags![id].name
+        on_tag_rename_click({ name, id })
       }}
       on_tag_delete_click={async (tag_id) => {
         dispatch(bookmarks_actions.set_is_upserting(true))

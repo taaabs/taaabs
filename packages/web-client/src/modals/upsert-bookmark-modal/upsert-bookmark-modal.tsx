@@ -2,27 +2,27 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { system_values } from '@shared/constants/system-values'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { ContentStandard as UiCommonTemplates_Modal_ContentStandard } from '@web-ui/components/common/templates/modal/content-standard'
-import { Header as UiCommonTemplates_Modal_ContentStandard_Header } from '@web-ui/components/common/templates/modal/content-standard/header'
-import { Footer as UiCommonTemplates_Modal_ContentStandard_Footer } from '@web-ui/components/common/templates/modal/content-standard/footer'
+import { Header as UiModal_Header } from '@web-ui/components/modal/Header'
+import { Footer as UiModal_Footer } from '@web-ui/components/modal/Footer'
+import { Content as UiModal_Content } from '@web-ui/components/modal/Content'
+import { Centered as UiModal_Content_Centered } from '@web-ui/components/modal/Content/Centered'
+import { Standard as UiModal_Content_Standard } from '@web-ui/components/modal/Content/Standard'
+import { StandardSplit as UiModal_Content_StandardSplit } from '@web-ui/components/modal/Content/StandardSplit'
+import { Divider as UiModal_Content_Divider } from '@web-ui/components/modal/Content/Divider'
 import { Input as UiCommonAtoms_Input } from '@web-ui/components/common/atoms/input'
 import { DraggableUpsertFormLinks as UiAppAtom_DraggableUpsertFormLinks } from '@web-ui/components/app/atoms/draggable-upsert-form-links'
 import { DraggableUpsertFormTags as UiAppAtom_DraggableUpsertFormTags } from '@web-ui/components/app/atoms/draggable-upsert-form-tags'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
-import { StandardSplit as UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit } from '@web-ui/components/common/templates/modal/content-standard/sections/standard-split'
-import { Standard as UiCommonTemplates_Modal_ContentStandard_Sections_Standard } from '@web-ui/components/common/templates/modal/content-standard/sections/standard'
-import { Centered as UiCommonTemplates_Modal_ContentStandard_Sections_Centered } from '@web-ui/components/common/templates/modal/content-standard/sections/centered'
-import { Divider as UiCommonTemplates_Modal_ContentStandard_Sections_Divider } from '@web-ui/components/common/templates/modal/content-standard/sections/divider'
 import { SegmentedButton as UiCommon_SegmentedButton } from '@web-ui/components/common/SegmentedButton'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { HtmlParser } from '@shared/utils/html-parser'
-import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
-import { AuthContext } from '@/app/auth-provider'
-import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
-import { All_Ro } from '@repositories/modules/tags/domain/all.ro'
-import { Suggested_Ro } from '@repositories/modules/tags/domain/suggested.ro'
+// import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
+// import { AuthContext } from '@/app/auth-provider'
+// import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
+// import { All_Ro } from '@repositories/modules/tags/domain/all.ro'
+// import { Suggested_Ro } from '@repositories/modules/tags/domain/suggested.ro'
 import {
   Content,
   Footer,
@@ -85,7 +85,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     setValue,
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
-  const auth_context = useContext(AuthContext)!
+  // const auth_context = useContext(AuthContext)!
   const [is_bookmark_public, set_is_bookmark_public] = useState(
     props.bookmark?.is_public,
   )
@@ -94,8 +94,8 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   const cover_paste_area = useRef<HTMLDivElement>(null)
   const file_input = useRef<HTMLInputElement>(null)
   const [cover, set_cover] = useState<string>() // Base64 encoded webp.
-  const [all_tags, set_all_tags] = useState<All_Ro>()
-  const [suggested_tags, set_suggested_tags] = useState<Suggested_Ro[]>([]) // We're leaving older suggestions, so users can still select from them.
+  // const [all_tags, set_all_tags] = useState<All_Ro>()
+  // const [suggested_tags, set_suggested_tags] = useState<Suggested_Ro[]>([]) // We're leaving older suggestions, so users can still select from them.
 
   const handle_file_select = (event: Event) => {
     const input = event.target as HTMLInputElement
@@ -440,14 +440,14 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     }
   }, [])
 
-  const fetch_suggested_tags = async (selected_tags: number[]) => {
-    const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
-    const repository = new Tags_RepositoryImpl(data_source)
-    const result = await repository.suggested({ selected_tags })
-    if (result.frequent.length && result.recent.length) {
-      set_suggested_tags([result, ...suggested_tags])
-    }
-  }
+  // const fetch_suggested_tags = async (selected_tags: number[]) => {
+  //   const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
+  //   const repository = new Tags_RepositoryImpl(data_source)
+  //   const result = await repository.suggested({ selected_tags })
+  //   if (result.frequent.length && result.recent.length) {
+  //     set_suggested_tags([result, ...suggested_tags])
+  //   }
+  // }
 
   useEffect(() => {
     // const fetch_all_tags = async () => {
@@ -467,8 +467,8 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   }, [modal_context.close_trigger])
 
   const content = (
-    <UiCommonTemplates_Modal_ContentStandard>
-      <UiCommonTemplates_Modal_ContentStandard_Sections_Centered
+    <UiModal_Content>
+      <UiModal_Content_Centered
         label={props.dictionary.app.upsert_modal.visibility}
       >
         <div style={{ width: '200px' }}>
@@ -492,9 +492,9 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             }}
           />
         </div>
-      </UiCommonTemplates_Modal_ContentStandard_Sections_Centered>
+      </UiModal_Content_Centered>
 
-      <UiCommonTemplates_Modal_ContentStandard_Sections_Standard
+      <UiModal_Content_Standard
         label={props.dictionary.app.upsert_modal.links}
       >
         <UiAppAtom_DraggableUpsertFormLinks
@@ -530,11 +530,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             site: props.dictionary.app.upsert_modal.link.site,
           }}
         />
-      </UiCommonTemplates_Modal_ContentStandard_Sections_Standard>
+      </UiModal_Content_Standard>
 
-      <UiCommonTemplates_Modal_ContentStandard_Sections_Divider />
+      <UiModal_Content_Divider />
 
-      <UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit
+      <UiModal_Content_StandardSplit
         label={props.dictionary.app.upsert_modal.title}
       >
         <UiCommonTemplate_FormControllerFix>
@@ -576,11 +576,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit>
+      </UiModal_Content_StandardSplit>
 
-      <UiCommonTemplates_Modal_ContentStandard_Sections_Divider />
+      <UiModal_Content_Divider />
 
-      <UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit
+      <UiModal_Content_StandardSplit
         label={props.dictionary.app.upsert_modal.note}
       >
         <UiCommonTemplate_FormControllerFix>
@@ -625,11 +625,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit>
+      </UiModal_Content_StandardSplit>
 
-      <UiCommonTemplates_Modal_ContentStandard_Sections_Divider />
+      <UiModal_Content_Divider />
 
-      <UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit
+      <UiModal_Content_StandardSplit
         label={props.dictionary.app.upsert_modal.tags}
       >
         <UiAppAtom_DraggableUpsertFormTags
@@ -645,36 +645,37 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
                 is_public: tag.is_public,
               })),
             )
-            if (updated_tags.length > tags.length) {
-              const tag_ids: number[] = []
-              updated_tags.forEach((tag) => {
-                const tag_id = all_tags?.find((t) => t.name == tag.name)?.id
-                if (tag_id) {
-                  tag_ids.push(tag_id)
-                }
-              })
-              fetch_suggested_tags(tag_ids)
-            }
+            // if (updated_tags.length > tags.length) {
+            //   const tag_ids: number[] = []
+            //   updated_tags.forEach((tag) => {
+            //     const tag_id = all_tags?.find((t) => t.name == tag.name)?.id
+            //     if (tag_id) {
+            //       tag_ids.push(tag_id)
+            //     }
+            //   })
+            //   fetch_suggested_tags(tag_ids)
+            // }
           }}
           show_visibility_toggler={is_bookmark_public || false}
           max_tags={system_values.bookmark.tags.limit}
           suggestions={
-            all_tags
-              ? suggested_tags.map((item) => ({
-                  recent: item.recent
-                    .slice(0, 10)
-                    .map(
-                      (tag_id) =>
-                        all_tags.find((tag) => tag.id == tag_id)!.name,
-                    ),
-                  frequent: item.frequent
-                    .slice(0, 10)
-                    .map(
-                      (tag_id) =>
-                        all_tags.find((tag) => tag.id == tag_id)!.name,
-                    ),
-                }))
-              : []
+            // all_tags
+            //   ? suggested_tags.map((item) => ({
+            //       recent: item.recent
+            //         .slice(0, 10)
+            //         .map(
+            //           (tag_id) =>
+            //             all_tags.find((tag) => tag.id == tag_id)!.name,
+            //         ),
+            //       frequent: item.frequent
+            //         .slice(0, 10)
+            //         .map(
+            //           (tag_id) =>
+            //             all_tags.find((tag) => tag.id == tag_id)!.name,
+            //         ),
+            //     }))
+            //   : []
+            []
           }
           translations={{
             enter_tag_name: props.dictionary.app.upsert_modal.enter_tag_name,
@@ -684,11 +685,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             visibility: props.dictionary.app.upsert_modal.tag.visibility,
           }}
         />
-      </UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit>
+      </UiModal_Content_StandardSplit>
 
-      <UiCommonTemplates_Modal_ContentStandard_Sections_Divider />
+      <UiModal_Content_Divider />
 
-      <UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit
+      <UiModal_Content_StandardSplit
         label={props.dictionary.app.upsert_modal.cover}
       >
         {(cover || clipboard_data?.og_image || props.bookmark?.cover) && (
@@ -708,22 +709,23 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         <div ref={cover_paste_area}>
           Click here and press Ctrl+V to paste an image
         </div>
-      </UiCommonTemplates_Modal_ContentStandard_Sections_StandardSplit>
-    </UiCommonTemplates_Modal_ContentStandard>
+      </UiModal_Content_StandardSplit>
+    </UiModal_Content>
   )
 
   const header = (
-    <UiCommonTemplates_Modal_ContentStandard_Header
+    <UiModal_Header
       title={
         props.action == 'update'
           ? props.dictionary.app.upsert_modal.edit_boomkark
           : props.dictionary.app.upsert_modal.create_bookmark
       }
+      on_close_click={props.on_close}
     />
   )
 
   const footer = (
-    <UiCommonTemplates_Modal_ContentStandard_Footer
+    <UiModal_Footer
       on_click_cancel={props.on_close}
       button_label={
         props.action == 'update'
