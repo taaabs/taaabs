@@ -1,0 +1,45 @@
+name: Deploy web-client
+
+on:
+  push:
+    branches:
+      - master  # or your default branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+
+    - name: Install dependencies
+      run: pnpm install
+      working-directory: ./packages/web-client
+
+    - name: Build Next.js app
+      run: pnpm build
+      working-directory: ./packages/web-client
+
+    - name: Deploy to VPS
+      env:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+        scp -r ./packages/web-client/.next $USERNAME@$HOST:/home/ubuntu/apps/taaabs/packages/web-client
+        ssh $USERNAME@$HOST 'pm2 reload taaabs-client'
