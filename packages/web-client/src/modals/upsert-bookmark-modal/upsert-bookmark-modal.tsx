@@ -69,7 +69,7 @@ type ClipboardData = {
 }
 
 const cover_size = {
-  width: 157 * 2,
+  width: 156 * 2,
   height: 82 * 2,
 }
 
