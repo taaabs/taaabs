@@ -1,0 +1,49 @@
+// @type
+@use '../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  border-bottom: var(--border-primary);
+  height: 50px;
+  @include to768 {
+    padding-top: 5px;
+  }
+}
+.title {
+  color: var(--color-text--normal);
+  font-family: var(--font-family-plus-jakarta-sans);
+  font-weight: var(--font-weight-plus-jakarta-sans-bold);
+  letter-spacing: var(--letter-spacing-logo);
+  font-size: var(--font-size-20px);
+  @include at768 {
+    font-size: var(--font-size-22px);
+  }
+}
+.close {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--button-dimension-28px);
+  height: var(--button-dimension-28px);
+  background-color: var(--blue100);
+  border-radius: 50%;
+  transition: var(--transition-duration-150ms);
+  @include hover {
+    background-color: var(--blue200);
+    > svg {
+      fill: var(--blue700);
+    }
+  }
+  > svg {
+    fill: var(--blue600);
+    width: var(--icon-dimension-12px);
+  }
+}

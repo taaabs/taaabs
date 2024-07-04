@@ -1,0 +1,30 @@
+// @type
+@use '../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--padding-24px);
+  border-top: var(--border-primary);
+  padding: var(--padding-16px);
+  @include at768 {
+    padding: var(--padding-16px) var(--padding-40px);
+  }
+  &__right-side {
+    display: flex;
+    align-items: center;
+    gap: var(--padding-16px);
+    @include at768 {
+      gap: var(--padding-24px);
+    }
+    &__cancel {
+      order: -1; // Needed to have proper tab focus order.
+      color: var(--text-color-variant);
+      @include hover {
+        @include text-decoration-underlinie-thin;
+      }
+      @include focus-visible;
+    }
+  }
+}

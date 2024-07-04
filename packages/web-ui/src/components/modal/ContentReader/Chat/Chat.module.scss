@@ -1,0 +1,41 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  gap: var(--padding-24px);
+  flex-direction: column;
+}
+.user {
+  background-color: var(--neutral150);
+  @include dark {
+    background-color: var(--dark200);
+  }
+  padding: 20px;
+  align-self: flex-end;
+  word-wrap: anywhere;
+  border-radius: var(--border-radius-20px);
+  max-width: 90%;
+  @include at992 {
+    max-width: 70%;
+  }
+}
+.assistant {
+  position: relative;
+  &::before {
+    position: absolute;
+    content: '';
+    width: 6px;
+    height: 6px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    left: -10px;
+    top: 8px;
+    @include at992 {
+      width: 10px;
+      height: 10px;
+      left: -22px;
+      top: 7px;
+    }
+  }
+}

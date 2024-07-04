@@ -30,7 +30,7 @@ export class Tags_DataSourceImpl implements Tags_DataSource {
     params: Rename_Params,
     encryption_key: Uint8Array,
   ): Promise<void> {
-    const hash = await Crypto.SHA256(params.old_tag_name, encryption_key)
+    const hash = await Crypto.SHA256(params.old_name, encryption_key)
     const check_visibility_body: CheckVisibility_Dto.Request.Body = {
       hash,
     }
@@ -41,11 +41,11 @@ export class Tags_DataSourceImpl implements Tags_DataSource {
       .json()
 
     const body: Rename_Dto.Request.Body = {
-      old_hash: await Crypto.SHA256(params.old_tag_name, encryption_key),
-      new_hash: await Crypto.SHA256(params.new_tag_name, encryption_key),
-      name: visibility_check_result.is_public ? params.new_tag_name : undefined,
+      old_hash: await Crypto.SHA256(params.old_name, encryption_key),
+      new_hash: await Crypto.SHA256(params.new_name, encryption_key),
+      name: visibility_check_result.is_public ? params.new_name : undefined,
       name_aes: await Crypto.AES.encrypt(
-        params.new_tag_name.trim(),
+        params.new_name.trim(),
         encryption_key,
       ),
     }

@@ -1,0 +1,10 @@
+// @type
+@use '../../../styles/foundation' as *;
+
+.container {
+  background-color: white;
+  padding: var(--padding-16px);
+  @include at768 {
+    padding: 60px;
+  }
+}
