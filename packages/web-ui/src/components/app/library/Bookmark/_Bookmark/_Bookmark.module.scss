@@ -56,26 +56,41 @@
     &__cover {
       grid-area: cover;
       padding: var(--padding-10px);
+      position: relative;
       &__image {
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
         border-radius: var(--border-radius-8px);
         overflow: hidden;
-        width: 106px;
+        width: 114px;
         height: 60px;
         background-color: #f3f3f3;
         @include dark {
           background-color: var(--dark200);
         }
         @include at992 {
-          width: 145px;
+          width: 156px;
           height: 82px;
         }
         > img {
           width: 100%;
           height: 100%;
+          object-fit: contain;
+          position: relative;
+          z-index: 1;
+        }
+        > img:last-child {
+          position: absolute;
+          z-index: 0;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
           object-fit: cover;
+          transform: scale(1.04, 1.14);
+          filter: blur(3px);
         }
         > svg {
           fill: var(--neutral200);
@@ -86,6 +101,32 @@
           @include at992 {
             width: 20px;
           }
+        }
+      }
+      &__shadow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: var(--padding-10px);
+        border-radius: var(--border-radius-8px);
+        width: 114px;
+        height: 60px;
+        @include at992 {
+          width: 156px;
+          height: 82px;
+        }
+        > img:last-child {
+          position: absolute;
+          z-index: 0;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transform: scale(1.04, 1.08);
+          filter: blur(5px);
+          opacity: 0.25;
         }
       }
     }

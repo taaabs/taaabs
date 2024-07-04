@@ -650,7 +650,19 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             <div className={styles.bookmark__card__cover}>
               <div className={styles.bookmark__card__cover__image}>
                 {props.cover ? (
-                  <img src={`data:image/webp;base64,${props.cover}`} />
+                  <>
+                    <img src={`data:image/webp;base64,${props.cover}`} />
+                    <img src={`data:image/webp;base64,${props.cover}`} />
+                  </>
+                ) : (
+                  <Icon variant="BOOKMARK_FILLED" />
+                )}
+              </div>
+              <div className={styles.bookmark__card__cover__shadow}>
+                {props.cover ? (
+                  <>
+                    <img src={`data:image/webp;base64,${props.cover}`} />
+                  </>
                 ) : (
                   <Icon variant="BOOKMARK_FILLED" />
                 )}

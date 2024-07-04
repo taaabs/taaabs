@@ -8,6 +8,7 @@ declare const styles: {
   readonly 'bookmark__card--corners-fix': string
   readonly bookmark__card__cover: string
   readonly bookmark__card__cover__image: string
+  readonly bookmark__card__cover__shadow: string
   readonly bookmark__card__date: string
   readonly bookmark__card__date__text: string
   readonly bookmark__card__title: string

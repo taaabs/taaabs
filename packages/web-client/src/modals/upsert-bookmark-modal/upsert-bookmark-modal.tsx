@@ -69,7 +69,7 @@ type ClipboardData = {
 }
 
 const cover_size = {
-  width: 145 * 2,
+  width: 156 * 2,
   height: 82 * 2,
 }
 
@@ -241,47 +241,25 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')!
 
-      // Set the canvas dimensions
-      const canvasWidth = cover_size.width
-      const canvasHeight = cover_size.height
-      canvas.width = canvasWidth
-      canvas.height = canvasHeight
+      const original_width = img.width
+      const original_height = img.height
 
-      // Calculate aspect ratio
-      const originalWidth = img.width
-      const originalHeight = img.height
-      const canvasRatio = canvasWidth / canvasHeight
-      const imageRatio = originalWidth / originalHeight
+      const aspect_ratio = original_width / original_height
 
-      // Determine the dimensions to draw the image
-      let drawWidth, drawHeight, offsetX, offsetY
+      const max_width = cover_size.width
 
-      if (canvasRatio > imageRatio) {
-        // Canvas is wider relative to its height than the image
-        drawWidth = canvasWidth
-        drawHeight = canvasWidth / imageRatio
-        offsetX = 0
-        offsetY = (canvasHeight - drawHeight) / 2
-      } else {
-        // Canvas is taller relative to its width than the image
-        drawWidth = canvasHeight * imageRatio
-        drawHeight = canvasHeight
-        offsetX = (canvasWidth - drawWidth) / 2
-        offsetY = 0
+      let new_width = Math.min(original_width, max_width)
+      let new_height = new_width / aspect_ratio
+
+      if (new_height > cover_size.height) {
+        new_height = cover_size.height
+        new_width = new_height * aspect_ratio
       }
 
-      // Draw the image onto the canvas
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        originalWidth,
-        originalHeight, // Source rectangle
-        offsetX,
-        offsetY,
-        drawWidth,
-        drawHeight, // Destination rectangle
-      )
+      canvas.width = new_width
+      canvas.height = new_height
+
+      ctx.drawImage(img, 0, 0, new_width, new_height)
 
       og_image = canvas.toDataURL('image/webp')
     }
@@ -494,9 +472,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         </div>
       </UiModal_Content_Centered>
 
-      <UiModal_Content_Standard
-        label={props.dictionary.app.upsert_modal.links}
-      >
+      <UiModal_Content_Standard label={props.dictionary.app.upsert_modal.links}>
         <UiAppAtom_DraggableUpsertFormLinks
           links={links.map((link) => ({
             url: link.url,
