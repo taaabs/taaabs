@@ -659,12 +659,10 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 )}
               </div>
               <div className={styles.bookmark__card__cover__shadow}>
-                {props.cover ? (
+                {props.cover && (
                   <>
                     <img src={`data:image/webp;base64,${props.cover}`} />
                   </>
-                ) : (
-                  <Icon variant="BOOKMARK_FILLED" />
                 )}
               </div>
             </div>
