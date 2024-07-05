@@ -1,9 +1,9 @@
-import { MetadataDataSource } from './metadata-data-source'
+import { Metadata_DataSource } from './metadata-data-source'
 import { MetadataDto } from '@shared/types/modules/metadata/metadata.dto'
 import { MetadataParams } from '../../domain/types/metadata.params'
 import { KyInstance } from 'ky'
 
-export class MetadataDataSourceImpl implements MetadataDataSource {
+export class Metadata_DataSourceImpl implements Metadata_DataSource {
   constructor(private readonly _ky: KyInstance) {}
 
   public async get_authorized(): Promise<MetadataDto.Response.Authorized> {

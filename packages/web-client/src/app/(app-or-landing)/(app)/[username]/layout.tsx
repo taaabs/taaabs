@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { AvatarContextSetter } from './avatar-context-setter'
-import { MetadataDataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
+import { Metadata_DataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
 import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
 import ky from 'ky'
 import { ReactNode } from 'react'
@@ -55,7 +55,7 @@ async function _get_metadata({ username }: { username: string }) {
   const ky_instance = ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
   })
-  const data_source = new MetadataDataSourceImpl(ky_instance)
+  const data_source = new Metadata_DataSourceImpl(ky_instance)
   const repository = new MetadataRepositoryImpl(data_source)
   const metadata = await repository.get_public({ username })
   return metadata

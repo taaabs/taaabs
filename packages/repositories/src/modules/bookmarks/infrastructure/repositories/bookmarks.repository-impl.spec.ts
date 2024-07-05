@@ -4,7 +4,7 @@ import { Bookmarks_RepositoryImpl } from './bookmarks.repository-impl'
 import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { MockProxy, mock, mockReset } from 'jest-mock-extended'
 
-const now = new Date().toISOString()
+const date_stringified = new Date().toISOString()
 
 describe('Bookmarks_RepositoryImpl', () => {
   let bookmarks_data_source_mock: MockProxy<Bookmarks_DataSource>
@@ -24,9 +24,9 @@ describe('Bookmarks_RepositoryImpl', () => {
           {
             id: 1,
             is_public: true,
-            created_at: now,
-            updated_at: now,
-            visited_at: now,
+            created_at: date_stringified,
+            updated_at: date_stringified,
+            visited_at: date_stringified,
             title: 'test',
             links: [],
             tags: [],
@@ -40,18 +40,22 @@ describe('Bookmarks_RepositoryImpl', () => {
         bookmarks: [
           {
             id: 1,
-            created_at: now,
-            updated_at: now,
-            visited_at: now,
-            is_unsorted: false,
+            created_at: date_stringified,
+            updated_at: date_stringified,
+            visited_at: date_stringified,
+            is_unsorted: undefined,
             is_public: true,
             note: undefined,
+            points: undefined,
             stars: 0,
             title: 'test',
             tags: [],
             links: [],
+            cover: undefined,
           },
         ],
+        import_progress: undefined,
+        processing_progress: undefined,
         pagination: {
           has_more: false,
         },
@@ -60,20 +64,26 @@ describe('Bookmarks_RepositoryImpl', () => {
         dto,
       )
       const sut = new Bookmarks_RepositoryImpl(bookmarks_data_source_mock)
-      const result = await sut.get_bookmarks_on_authorized_user({})
+      const result = await sut.get_bookmarks_on_authorized_user(
+        {},
+        new Uint8Array(),
+      )
       expect(result).toStrictEqual(ro)
+      expect(
+        bookmarks_data_source_mock.get_bookmarks_on_authorized_user,
+      ).toHaveBeenCalledTimes(1)
     })
   })
 
   describe('[get_public]', () => {
-    it('should correclty parse dto', async () => {
+    it('should correctly parse dto', async () => {
       const dto: Bookmarks_Dto.Response.Public = {
         bookmarks: [
           {
             id: 1,
-            created_at: now,
-            updated_at: now,
-            visited_at: now,
+            created_at: date_stringified,
+            updated_at: date_stringified,
+            visited_at: date_stringified,
             title: 'test',
             links: [],
             tags: [],
@@ -87,18 +97,21 @@ describe('Bookmarks_RepositoryImpl', () => {
         bookmarks: [
           {
             id: 1,
-            created_at: now,
-            updated_at: now,
-            visited_at: now,
-            is_unsorted: false,
+            created_at: date_stringified,
+            updated_at: date_stringified,
+            visited_at: date_stringified,
+            is_unsorted: undefined,
             stars: 0,
             is_public: true,
             title: 'test',
             note: undefined,
+            points: undefined,
             tags: [],
             links: [],
+            cover: undefined,
           },
         ],
+        processing_progress: undefined,
         pagination: {
           has_more: false,
         },
@@ -111,6 +124,9 @@ describe('Bookmarks_RepositoryImpl', () => {
         username: '',
       })
       expect(result).toStrictEqual(ro)
+      expect(
+        bookmarks_data_source_mock.get_bookmarks_on_public_user,
+      ).toHaveBeenCalledTimes(1)
     })
   })
 })
