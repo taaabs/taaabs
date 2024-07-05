@@ -25,9 +25,9 @@ export const construct_tag_hierarchies_from_paths = (
       }
 
       if (!found) {
-        const newNode = { name: segment, children: [] }
-        current.push(newNode)
-        current = newNode.children
+        const new_node = { name: segment, children: [] }
+        current.push(new_node)
+        current = new_node.children
       }
     }
   }

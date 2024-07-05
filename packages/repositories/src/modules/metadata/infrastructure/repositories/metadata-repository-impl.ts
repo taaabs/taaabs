@@ -1,13 +1,13 @@
 import { MetadataRepository } from '../../domain/repositories/metadata.repository'
 import { MetadataParams } from '../../domain/types/metadata.params'
 import { MetadataRo } from '../../domain/types/metadata.ro'
-import { MetadataDataSource } from '../data-sources/metadata-data-source'
+import { Metadata_DataSource } from '../data-sources/metadata-data-source'
 
 export class MetadataRepositoryImpl implements MetadataRepository {
-  constructor(private readonly _metadataDataSource: MetadataDataSource) {}
+  constructor(private readonly _Metadata_DataSource: Metadata_DataSource) {}
 
   public async get_authorized(): Promise<MetadataRo.Authorized> {
-    const response = await this._metadataDataSource.get_authorized()
+    const response = await this._Metadata_DataSource.get_authorized()
 
     return {
       username: response.username,
@@ -26,7 +26,7 @@ export class MetadataRepositoryImpl implements MetadataRepository {
   public async get_public(
     params: MetadataParams.Public,
   ): Promise<MetadataRo.Public> {
-    const response = await this._metadataDataSource.get_public({
+    const response = await this._Metadata_DataSource.get_public({
       username: params.username,
     })
 

@@ -1,5 +1,5 @@
 import { MockProxy, mock, mockReset } from 'jest-mock-extended'
-import { MetadataDataSource } from '../data-sources/metadata-data-source'
+import { Metadata_DataSource } from '../data-sources/metadata-data-source'
 import { MetadataDto } from '@shared/types/modules/metadata/metadata.dto'
 import { MetadataRo } from '../../domain/types/metadata.ro'
 import { MetadataRepositoryImpl } from './metadata-repository-impl'
@@ -7,10 +7,10 @@ import { MetadataRepositoryImpl } from './metadata-repository-impl'
 const now = new Date()
 
 describe('MetadataRepositoryImpl', () => {
-  let metadata_data_source_mock: MockProxy<MetadataDataSource>
+  let metadata_data_source_mock: MockProxy<Metadata_DataSource>
 
   beforeAll(() => {
-    metadata_data_source_mock = mock<MetadataDataSource>()
+    metadata_data_source_mock = mock<Metadata_DataSource>()
   })
 
   beforeEach(() => {
