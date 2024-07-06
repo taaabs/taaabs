@@ -411,6 +411,7 @@ mark {
   border-top-right-radius: var(--border-radius-20px);
   box-shadow: var(--box-shadow);
   position: relative !important;
+  backdrop-filter: none;
 }
 // header mobile
 ._7vsRM {

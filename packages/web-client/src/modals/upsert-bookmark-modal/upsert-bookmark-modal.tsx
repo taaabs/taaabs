@@ -398,7 +398,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     }
 
     file_input.current?.addEventListener('change', handle_file_select)
-    cover_paste_area.current?.addEventListener('click', handle_paste_area_focus)
+    // cover_paste_area.current?.addEventListener('click', handle_paste_area_focus)
     cover_paste_area.current?.addEventListener('paste', handle_paste_area_paste)
 
     window.addEventListener('keydown', handle_keyboard)
