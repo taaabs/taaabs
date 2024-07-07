@@ -111,6 +111,8 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       font-weight: var(--font-weight-inter-semi-bold);
+      // Padding right fixes italic end of title, when using snapshot.
+      padding-right: 2px;
       @include hover {
         @include text-decoration-underlinie-thin;
       }
