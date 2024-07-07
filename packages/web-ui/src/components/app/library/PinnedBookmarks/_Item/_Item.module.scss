@@ -9,6 +9,7 @@
   padding: 0 16px 0 12px;
   border-bottom: var(--border-secondary);
   height: var(--button-dimension-52px);
+  background-color: var(--background);
   @include at992 {
     padding: 0 13px;
   }

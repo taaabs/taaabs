@@ -2,6 +2,7 @@
 @use '../../../../../styles/foundation' as *;
 
 .container {
+  background-color: var(--background);
   @include to992 {
     border-top: var(--border-primary);
     border-bottom: var(--border-secondary);
@@ -47,7 +48,6 @@
       border-top-right-radius: 11px;
     }
     &--corners-fix {
-      // Ugly but necessary for highlihgts on italic links to work.
       @include at992 {
         border-bottom-left-radius: 11px;
         border-bottom-right-radius: 11px;
@@ -64,8 +64,8 @@
         position: relative;
         border-radius: var(--border-radius-7px);
         overflow: hidden;
-        width: 114px;
-        height: 60px;
+        width: 111px;
+        height: 58px;
         background-color: #f3f3f3;
         @include dark {
           background-color: var(--dark200);
@@ -165,12 +165,11 @@
         @include dark {
           color: var(--dark700);
         }
-        transform: translateY(-3px);
+        transform: translateY(-2px);
         margin-right: 9px;
         margin-left: 4px;
         line-height: 1;
         @include at992 {
-          transform: translateY(-2px);
           font-size: 12px;
         }
         &::after {
@@ -189,13 +188,12 @@
         display: inline-flex;
         align-items: center;
         gap: 3px;
-        transform: translateY(0.5px);
+        transform: translateY(1px);
         height: 0;
         margin-right: 5px;
         @include at992 {
           gap: 4px;
           margin-right: 6px;
-          transform: translateY(0.5px);
         }
         > svg {
           width: 17px;
@@ -209,7 +207,7 @@
         position: relative;
         display: inline;
         font-weight: var(--font-weight-inter-semi-bold);
-        font-size: var(--font-size-1-7rem);
+        font-size: var(--font-size-1-6rem);
         margin-bottom: 0.8rem;
         overflow-wrap: anywhere;
         @include at992 {
@@ -542,7 +540,6 @@
         &::after {
           content: '';
           position: absolute;
-          z-index: 1;
           pointer-events: none;
           width: 100%;
           height: calc(100% + 2px);
