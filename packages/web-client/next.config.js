@@ -66,6 +66,10 @@ const nextConfig = {
       ],
     })
 
+    Object.assign(config.optimization, {
+      minimize: false
+    });
+
     return config
   },
   experimental: {
