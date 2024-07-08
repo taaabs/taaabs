@@ -35,14 +35,14 @@ export const use_tag_view_options = () => {
     }
   }, [])
 
-  // useUpdateEffect(() => {
-  //   const search_params_tags = search_params.get(search_params_keys.tags)
-  //   if (search_params_tags) {
-  //     set_selected_tags(search_params_tags.split(',').map((t) => parseInt(t)))
-  //   } else if (!search_params_tags) {
-  //     set_selected_tags([])
-  //   }
-  // }, [search_params])
+  useUpdateEffect(() => {
+    const search_params_tags = search_params.get(search_params_keys.tags)
+    if (search_params_tags) {
+      set_selected_tags(search_params_tags.split(',').map((t) => parseInt(t)))
+    } else if (!search_params_tags) {
+      set_selected_tags([])
+    }
+  }, [search_params])
 
   const add_tag_to_search_params = (tag_id: number) => {
     if (selected_tags.length == system_values.library.max_selected_tags) {
