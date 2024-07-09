@@ -42,9 +42,9 @@ export const use_bookmarks = () => {
       const request_params: GetBookmarks_Params.Authorized = {}
 
       const query_tags = search_params.get(search_params_keys.tags)
-      // if (query_tags) {
-      //   request_params.tags = query_tags.split(',')
-      // }
+      if (query_tags) {
+        request_params.tags = query_tags.split(',')
+      }
 
       const query_filter = search_params.get(search_params_keys.filter)
       if (query_filter) {
