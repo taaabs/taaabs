@@ -8,6 +8,7 @@ declare const styles: {
   readonly item__link__url: string
   readonly 'item__link__url--dim-visited': string
   readonly 'item__link__url--via-wayback': string
+  readonly item__link__url__stars: string
   readonly item__actions: string
   readonly 'item__actions__public-saves': string
   readonly item__actions__open: string

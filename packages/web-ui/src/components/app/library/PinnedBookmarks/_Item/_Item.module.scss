@@ -105,6 +105,7 @@
         }
       }
     }
+    
     &__url {
       display: -webkit-box;
       overflow: hidden;
@@ -119,9 +120,6 @@
       @include to768 {
         font-family: var(--font-family-inter-tight);
       }
-      @include at768 {
-        -webkit-line-clamp: 1;
-      }
       &--dim-visited {
         @include hover {
           &:visited > span {
@@ -134,6 +132,18 @@
       }
       &--dim-visited:visited {
         color: var(--text-color-dimmed);
+      }
+      &__stars {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        transform: translateY(1.5px);
+        height: 0;
+        margin-right: 1px;
+        > svg {
+          width: 15px;
+          fill: var(--yellow);
+        }
       }
     }
   }
