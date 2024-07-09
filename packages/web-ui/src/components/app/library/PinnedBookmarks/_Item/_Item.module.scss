@@ -105,7 +105,7 @@
         }
       }
     }
-    
+
     &__url {
       display: -webkit-box;
       overflow: hidden;
@@ -115,7 +115,9 @@
       // Padding right fixes italic end of title, when using snapshot.
       padding-right: 2px;
       @include hover {
-        @include text-decoration-underlinie-thin;
+        & > span {
+          @include text-decoration-underlinie-thin;
+        }
       }
       @include to768 {
         font-family: var(--font-family-inter-tight);

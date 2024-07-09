@@ -105,7 +105,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
               ))}
             </div>
           )}{' '}
-          {props.title}
+          <span>{props.title}</span>
         </a>
       </div>
       <div className={styles.item__actions}>
