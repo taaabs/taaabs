@@ -162,6 +162,7 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
           site_path={item.site_path}
           title={item.title}
           is_public={item.is_public}
+          stars={item.stars}
         />
       )
     })

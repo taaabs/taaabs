@@ -28,6 +28,7 @@ export namespace _Item {
     open_snapshot?: boolean
     favicon?: string
     is_parsed?: boolean
+    stars?: number
   }
 }
 
@@ -97,6 +98,13 @@ export const _Item: React.FC<_Item.Props> = (props) => {
           }}
           onAuxClick={props.on_link_middle_click}
         >
+          {props.stars && props.stars >= 1 && (
+            <div className={styles.item__link__url__stars}>
+              {[...new Array(props.stars)].map((_, i) => (
+                <Icon variant="STAR_FILLED" key={i} />
+              ))}
+            </div>
+          )}{' '}
           {props.title}
         </a>
       </div>
