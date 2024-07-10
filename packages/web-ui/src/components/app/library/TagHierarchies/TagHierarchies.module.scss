@@ -37,9 +37,12 @@
   &__skeleton {
     display: flex;
     flex-direction: column;
-    padding-top: 4px;
     @include to992 {
+      padding-top: var(--padding-16px);
       padding-left: var(--padding-16px);
+    }
+    @include at992 {
+      padding-top: 3px;
     }
     > span {
       margin-bottom: 6px;
