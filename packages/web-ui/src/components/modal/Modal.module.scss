@@ -1,0 +1,37 @@
+// @type
+@use '../../styles/foundation' as *;
+
+.modal {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  backdrop-filter: blur(0);
+  background-color: rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  align-items: center;
+  &--visible {
+    pointer-events: all;
+    opacity: 1;
+    backdrop-filter: var(--backdrop-filter);
+    transition-property: opacity, backdrop-filter;
+    transition-timing-function: var(--transition-timing-function);
+    transition-duration: var(--transition-duration-150ms);
+  }
+  &__inner {
+    overflow: hidden;
+    transform: translateY(20px);
+    box-shadow: var(--box-shadow-long-strong);
+    border-radius: var(--border-radius-20px);
+    margin: 0 var(--padding-16px);
+    &--visible {
+      @include transition-150ms(transform);
+      transform: translateY(0);
+    }
+  }
+}

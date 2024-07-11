@@ -6,6 +6,7 @@
   flex-direction: column;
   gap: var(--padding-16px);
   padding: var(--padding-24px) var(--padding-16px);
+  background-color: var(--background);
   @include at768 {
     gap: var(--padding-24px);
     padding: var(--padding-32px) var(--padding-40px);

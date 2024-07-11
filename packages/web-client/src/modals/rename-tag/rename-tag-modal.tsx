@@ -1,18 +1,10 @@
 import { Dictionary } from '@/dictionaries/dictionary'
+import { Modal as UiModal } from '@web-ui/components/modal'
 import { Header as UiModal_Header } from '@web-ui/components/modal/Header'
 import { Footer as UiModal_Footer } from '@web-ui/components/modal/Footer'
 import { Content as UiModal_Content } from '@web-ui/components/modal/Content'
-import { useContext, useRef, useState } from 'react'
-import {
-  Content,
-  Footer,
-  Header,
-  Portal,
-  Sheet,
-  detents,
-} from 'react-sheet-slide'
+import { useContext } from 'react'
 import { ModalContext } from '@/providers/modal-provider'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { AuthContext } from '@/app/auth-provider'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
@@ -34,14 +26,12 @@ type FormValues = {
 }
 
 export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
-  const [is_open, set_is_open] = useState(true)
-  const ref = useRef(null)
   const modal_context = useContext(ModalContext)!
   const auth_context = useContext(AuthContext)!
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
@@ -60,10 +50,6 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
     }
     props.on_submit(form_data.name)
   }
-
-  useUpdateEffect(() => {
-    set_is_open(false)
-  }, [modal_context.close_trigger])
 
   const content = (
     <UiModal_Content>
@@ -111,7 +97,7 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
   const footer = (
     <UiModal_Footer
       button_label={props.dictionary.app.rename_tag_modal.rename}
-      is_disabled={isSubmitting}
+      is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
       button_on_click={handleSubmit(on_submit)}
       on_click_cancel={props.on_close}
       translations={{
@@ -121,33 +107,14 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
   )
 
   return (
-    <Portal>
-      <div
-        style={
-          {
-            '--modal-width': '400px',
-          } as any
-        }
-      >
-        <Sheet
-          ref={ref}
-          open={is_open}
-          onDismiss={() => {
-            props.on_close()
-          }}
-          onClose={() => {
-            // props.on_close()
-            // console.log('2')
-          }}
-          selectedDetent={detents.fit}
-          scrollingExpands={true}
-          useDarkMode={false}
-        >
-          <Header>{header}</Header>
-          <Content>{content}</Content>
-          <Footer>{footer}</Footer>
-        </Sheet>
-      </div>
-    </Portal>
+    <UiModal
+      is_open={modal_context.is_opened}
+      is_dismissible={!(isSubmitting || (isSubmitted && isSubmitSuccessful))}
+      on_close={props.on_close}
+      width={400}
+      slot_header={header}
+      slot_content={content}
+      slot_footer={footer}
+    />
   )
 }

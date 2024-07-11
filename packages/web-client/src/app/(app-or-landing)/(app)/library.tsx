@@ -1248,10 +1248,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         sort_by_view_options_hook.current_sort_by == SortBy.CREATED_AT
           ? new Date(bookmark.created_at)
           : sort_by_view_options_hook.current_sort_by == SortBy.UPDATED_AT
-            ? new Date(bookmark.updated_at)
-            : sort_by_view_options_hook.current_sort_by == SortBy.VISITED_AT
-              ? new Date(bookmark.visited_at)
-              : new Date(bookmark.created_at)
+          ? new Date(bookmark.updated_at)
+          : sort_by_view_options_hook.current_sort_by == SortBy.VISITED_AT
+          ? new Date(bookmark.visited_at)
+          : new Date(bookmark.created_at)
       }
       search_params={search_params.toString()}
       tags={
@@ -2354,17 +2354,17 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           bookmarks_hook.is_fetching_more_bookmarks
             ? props.dictionary.app.library.loading
             : (!search_hook.search_string.length &&
-                  !is_fetching_first_bookmarks &&
-                  (!bookmarks_hook.bookmarks ||
-                    bookmarks_hook.bookmarks.length == 0)) ||
-                (search_hook.search_string.length &&
-                  (!bookmarks_hook.bookmarks ||
-                    bookmarks_hook.bookmarks.length == 0))
-              ? props.dictionary.app.library.no_results
-              : !bookmarks_hook.has_more_bookmarks ||
-                  bookmarks_hook.bookmarks?.length == search_hook.count
-                ? props.dictionary.app.library.end_of_resutls
-                : undefined
+                !is_fetching_first_bookmarks &&
+                (!bookmarks_hook.bookmarks ||
+                  bookmarks_hook.bookmarks.length == 0)) ||
+              (search_hook.search_string.length &&
+                (!bookmarks_hook.bookmarks ||
+                  bookmarks_hook.bookmarks.length == 0))
+            ? props.dictionary.app.library.no_results
+            : !bookmarks_hook.has_more_bookmarks ||
+              bookmarks_hook.bookmarks?.length == search_hook.count
+            ? props.dictionary.app.library.end_of_resutls
+            : undefined
         }
         translations={{
           mobile_title_bar: props.dictionary.app.menu_items.library,

@@ -41,6 +41,7 @@
     "simplebar-react": "^3.2.4",
     "sortablejs": "^1.15.0",
     "use-context-menu": "^0.4.13",
+    "vaul": "^0.9.1",
     "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {

@@ -2,6 +2,7 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { system_values } from '@shared/constants/system-values'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { Modal as UiModal } from '@web-ui/components/modal'
 import { Header as UiModal_Header } from '@web-ui/components/modal/Header'
 import { Footer as UiModal_Footer } from '@web-ui/components/modal/Footer'
 import { Content as UiModal_Content } from '@web-ui/components/modal/Content'
@@ -18,21 +19,13 @@ import { SegmentedButton as UiCommon_SegmentedButton } from '@web-ui/components/
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { HtmlParser } from '@shared/utils/html-parser'
+
 // import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
 // import { AuthContext } from '@/app/auth-provider'
 // import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
 // import { All_Ro } from '@repositories/modules/tags/domain/all.ro'
 // import { Suggested_Ro } from '@repositories/modules/tags/domain/suggested.ro'
-import {
-  Content,
-  Footer,
-  Header,
-  Portal,
-  Sheet,
-  detents,
-} from 'react-sheet-slide'
 import { ModalContext } from '@/providers/modal-provider'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 type FormValues = {
   title?: string
@@ -76,8 +69,6 @@ const cover_size = {
 export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   props,
 ) => {
-  const ref = useRef(null)
-  const [is_open, set_is_open] = useState(true)
   const modal_context = useContext(ModalContext)!
   const {
     control,
@@ -208,11 +199,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
           open_snapshot: link.open_snapshot,
         }))
       : props.bookmark_autofill && props.bookmark_autofill.links
-        ? props.bookmark_autofill.links.map(({ url }) => ({
-            url,
-            is_public: true,
-          }))
-        : [],
+      ? props.bookmark_autofill.links.map(({ url }) => ({
+          url,
+          is_public: true,
+        }))
+      : [],
   )
   const [tags, set_tags] = useState<{ name: string; is_public?: boolean }[]>(
     props.bookmark
@@ -221,11 +212,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
           is_public: tag.is_public,
         }))
       : props.bookmark_autofill && props.bookmark_autofill.tags
-        ? props.bookmark_autofill.tags.map((name) => ({
-            name,
-            is_public: true,
-          }))
-        : [],
+      ? props.bookmark_autofill.tags.map((name) => ({
+          name,
+          is_public: true,
+        }))
+      : [],
   )
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
@@ -318,12 +309,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     props.on_submit(bookmark)
   }
 
-  const handle_keyboard = (event: KeyboardEvent) => {
-    if (event.code == 'Escape') {
-      props.on_close()
-    }
-  }
-
   useEffect(() => {
     navigator.clipboard
       .readText()
@@ -401,8 +386,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     // cover_paste_area.current?.addEventListener('click', handle_paste_area_focus)
     cover_paste_area.current?.addEventListener('paste', handle_paste_area_paste)
 
-    window.addEventListener('keydown', handle_keyboard)
-
     return () => {
       file_input.current?.removeEventListener('change', handle_file_select)
       cover_paste_area.current?.removeEventListener(
@@ -413,8 +396,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         'paste',
         handle_paste_area_paste,
       )
-
-      window.removeEventListener('keydown', handle_keyboard)
     }
   }, [])
 
@@ -439,10 +420,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     // fetch_all_tags()
     // fetch_suggested_tags(props.bookmark?.tags.map((tag) => tag.id) || [])
   }, [])
-
-  useUpdateEffect(() => {
-    set_is_open(false)
-  }, [modal_context.close_trigger])
 
   const content = (
     <UiModal_Content>
@@ -521,8 +498,8 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
               props.bookmark
                 ? props.bookmark.title
                 : props.bookmark_autofill
-                  ? props.bookmark_autofill.title
-                  : undefined
+                ? props.bookmark_autofill.title
+                : undefined
             }
             rules={{
               maxLength: system_values.bookmark.title.max_length,
@@ -567,8 +544,8 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
               props.bookmark
                 ? props.bookmark?.note
                 : props.bookmark_autofill
-                  ? props.bookmark_autofill.note
-                  : undefined
+                ? props.bookmark_autofill.note
+                : undefined
             }
             rules={{
               maxLength: system_values.bookmark.note.max_length,
@@ -717,33 +694,14 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   )
 
   return (
-    <Portal>
-      <div
-        style={
-          {
-            '--modal-width': '600px',
-          } as any
-        }
-      >
-        <Sheet
-          ref={ref}
-          open={is_open}
-          onDismiss={() => {
-            props.on_close()
-          }}
-          onClose={() => {
-            // props.on_close()
-            // console.log('2')
-          }}
-          selectedDetent={detents.fit}
-          scrollingExpands={true}
-          useDarkMode={false}
-        >
-          <Header>{header}</Header>
-          <Content>{content}</Content>
-          <Footer>{footer}</Footer>
-        </Sheet>
-      </div>
-    </Portal>
+    <UiModal
+      is_open={modal_context.is_opened}
+      is_dismissible={!(isSubmitting || (isSubmitted && isSubmitSuccessful))}
+      on_close={props.on_close}
+      width={600}
+      slot_header={header}
+      slot_content={content}
+      slot_footer={footer}
+    />
   )
 }

@@ -1,18 +1,10 @@
 import { Dictionary } from '@/dictionaries/dictionary'
+import { Modal as UiModal } from '@web-ui/components/modal'
 import { Header as UiModal_Header } from '@web-ui/components/modal/Header'
 import { Footer as UiModal_Footer } from '@web-ui/components/modal/Footer'
 import { Content as UiModal_Content } from '@web-ui/components/modal/Content'
-import { useContext, useRef, useState } from 'react'
-import {
-  Content,
-  Footer,
-  Header,
-  Portal,
-  Sheet,
-  detents,
-} from 'react-sheet-slide'
+import { useContext, useState } from 'react'
 import { ModalContext } from '@/providers/modal-provider'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 namespace DeleteBookmarkModal {
   export type Props = {
@@ -26,14 +18,8 @@ namespace DeleteBookmarkModal {
 export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
   props,
 ) => {
-  const [is_open, set_is_open] = useState(true)
-  const ref = useRef(null)
   const modal_context = useContext(ModalContext)!
   const [is_deleting, set_is_deleting] = useState<boolean>()
-
-  useUpdateEffect(() => {
-    set_is_open(false)
-  }, [modal_context.close_trigger])
 
   const content = (
     <UiModal_Content>
@@ -66,33 +52,14 @@ export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
   )
 
   return (
-    <Portal>
-      <div
-        style={
-          {
-            '--modal-width': '400px',
-          } as any
-        }
-      >
-        <Sheet
-          ref={ref}
-          open={is_open}
-          onDismiss={() => {
-            props.on_close()
-          }}
-          onClose={() => {
-            // props.on_close()
-            // console.log('2')
-          }}
-          selectedDetent={detents.fit}
-          scrollingExpands={true}
-          useDarkMode={false}
-        >
-          <Header>{header}</Header>
-          <Content>{content}</Content>
-          <Footer>{footer}</Footer>
-        </Sheet>
-      </div>
-    </Portal>
+    <UiModal
+      is_open={modal_context.is_opened}
+      is_dismissible={!is_deleting}
+      on_close={props.on_close}
+      width={400}
+      slot_header={header}
+      slot_content={content}
+      slot_footer={footer}
+    />
   )
 }
