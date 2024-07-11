@@ -29,7 +29,7 @@ export const DeleteAccountModal: React.FC<DeleteAccountModal.Props> = (
   const header = (
     <UiModal_Header
       title={props.dictionary.settings.general.delete_account.modal.header}
-      on_close_click={props.on_close}
+      on_close={props.on_close}
     />
   )
 

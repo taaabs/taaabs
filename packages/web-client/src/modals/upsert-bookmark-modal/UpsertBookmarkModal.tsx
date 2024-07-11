@@ -673,7 +673,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
           ? props.dictionary.app.upsert_modal.edit_boomkark
           : props.dictionary.app.upsert_modal.create_bookmark
       }
-      on_close_click={props.on_close}
+      on_close={props.on_close}
     />
   )
 

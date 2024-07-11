@@ -90,7 +90,7 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
   const header = (
     <UiModal_Header
       title={props.dictionary.app.rename_tag_modal.rename_tag}
-      on_close_click={props.on_close}
+      on_close={props.on_close}
     />
   )
 

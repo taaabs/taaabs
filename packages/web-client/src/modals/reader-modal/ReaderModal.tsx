@@ -34,7 +34,9 @@ export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
     )
   }
 
-  const header = <UiModal_Header title={'Reader'} on_close_click={() => {}} />
+  const header = (
+    <UiModal_Header title={'Reader'} on_close={modal_context.close} />
+  )
 
   return (
     <UiModal

@@ -31,7 +31,7 @@ export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
   const header = (
     <UiModal_Header
       title={props.dictionary.app.delete_modal.delete_bookmark}
-      on_close_click={props.on_close}
+      on_close={props.on_close}
     />
   )
 
