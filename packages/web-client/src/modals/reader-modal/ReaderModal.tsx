@@ -1,12 +1,11 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { ContentReader as UiModal_ContentReader } from '@web-ui/components/modal/ContentReader'
 import { ReaderData } from '@shared/utils/html-parser/reader-data'
+import { Modal as UiModal } from '@web-ui/components/modal'
 import { Chat as UiModal_ContentReader_Chat } from '@web-ui/components/modal/ContentReader/Chat'
 import { Article as UiModal_ContentReader_Article } from '@web-ui/components/modal/ContentReader/Article'
-import { ReactNode, useContext, useRef, useState } from 'react'
-import { Content, Header, Footer, Portal, Sheet } from 'react-sheet-slide'
+import { ReactNode, useContext } from 'react'
 import { ModalContext } from '@/providers/modal-provider'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace ReaderModal {
   export type Props = {
@@ -16,13 +15,7 @@ export namespace ReaderModal {
 }
 
 export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
-  const [is_open, set_is_open] = useState(true)
-  const ref = useRef(null)
   const modal_context = useContext(ModalContext)!
-
-  useUpdateEffect(() => {
-    set_is_open(false)
-  }, [modal_context.close_trigger])
 
   let content: ReactNode
 
@@ -41,14 +34,14 @@ export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
   }
 
   return (
-    <Portal>
-      <div style={{ '--modal-width': '800px' } as any}>
-        <Sheet ref={ref} open={is_open} onDismiss={() => set_is_open(false)}>
-          <Header>11</Header>
-          <Content>{content}</Content>
-          <Footer>11</Footer>
-        </Sheet>
-      </div>
-    </Portal>
+    <UiModal
+      is_open={modal_context.is_opened}
+      width={800}
+      on_close={modal_context.close}
+      slot_header={<>header</>}
+      slot_content={content}
+      slot_footer={<>footer</>}
+      is_dismissible={true}
+    />
   )
 }

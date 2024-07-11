@@ -7,15 +7,18 @@
   flex-direction: column;
 }
 .user {
+  display: flex;
+  align-items: center;
   background-color: var(--neutral150);
   @include dark {
     background-color: var(--dark200);
   }
-  padding: 20px;
+  padding: 8px 20px;
   align-self: flex-end;
   word-wrap: anywhere;
   border-radius: var(--border-radius-20px);
   max-width: 90%;
+  min-height: var(--button-dimension-40px);
   @include at992 {
     max-width: 70%;
   }
@@ -29,7 +32,7 @@
     height: 6px;
     background-color: var(--accent-color);
     border-radius: 50%;
-    left: -10px;
+    left: -11px;
     top: 8px;
     @include at992 {
       width: 10px;

@@ -9,8 +9,20 @@
   position: relative;
   border-bottom: var(--border-primary);
   height: 50px;
+  background-color: var(--white);
   @include to768 {
     padding-top: 5px;
+    &::after {
+      position: absolute;
+      content: '';
+      width: 40px;
+      height: 4px;
+      background-color: var(--border-color-primary);
+      border-radius: 2px;
+      top: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 }
 .title {
