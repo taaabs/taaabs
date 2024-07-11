@@ -1,7 +1,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
-import { UpsertBookmarkModal } from './upsert-bookmark-modal'
+import { UpsertBookmarkModal } from './UpsertBookmarkModal'
 import { ModalContext } from '@/providers/modal-provider'
 
 export const upsert_bookmark_modal_setter = (params: {

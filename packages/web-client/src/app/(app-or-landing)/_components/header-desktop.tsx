@@ -20,7 +20,7 @@ import { StandardItem as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDrop
 import { Separator as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/separator'
 import { Bookmarklet as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/bookmarklet'
 import { FooterLinks as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/footer-links'
-import { UpsertBookmarkModal as Form_UpsertBookmark } from '@/modals/upsert-bookmark-modal/upsert-bookmark-modal'
+import { UpsertBookmarkModal as Form_UpsertBookmark } from '@/modals/upsert-bookmark-modal/UpsertBookmarkModal'
 import { update_search_params } from '@/utils/update-query-params'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'

@@ -1,5 +1,5 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { DeleteAccountModal } from './delete-account-modal'
+import { DeleteAccountModal } from './DeleteAccountModal'
 import { ModalContext } from '@/providers/modal-provider'
 
 export const delete_account_modal_setter = (params: {
