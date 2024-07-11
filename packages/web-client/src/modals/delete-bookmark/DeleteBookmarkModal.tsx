@@ -53,7 +53,7 @@ export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
 
   return (
     <UiModal
-      is_open={modal_context.is_opened}
+      is_open={modal_context.is_open}
       is_dismissible={!is_deleting}
       on_close={props.on_close}
       width={400}

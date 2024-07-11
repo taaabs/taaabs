@@ -455,7 +455,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           window.location.pathname + `?${search_params.toString()}`,
         )
       }}
-      is_slash_shortcut_disabled={modal_context.is_opened}
+      is_slash_shortcut_disabled={modal_context.is_open}
       on_click_get_help={() => {}}
       sort_by={sort_by_view_options_hook.current_sort_by}
       translations={{

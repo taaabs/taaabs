@@ -10,7 +10,7 @@ namespace Modal {
     children?: React.ReactNode
     slot_header: React.ReactNode
     slot_content: React.ReactNode
-    slot_footer: React.ReactNode
+    slot_footer?: React.ReactNode
     is_open: boolean
     on_close: () => void
     is_dismissible?: boolean
@@ -19,7 +19,6 @@ namespace Modal {
 }
 
 export const Modal: React.FC<Modal.Props> = (props) => {
-  // create modal for desktop
   useUpdateEffect(() => {
     const header = document.querySelector<HTMLElement>('body > header')
     const top_divs = document.querySelectorAll<HTMLElement>('body > div')
@@ -41,18 +40,14 @@ export const Modal: React.FC<Modal.Props> = (props) => {
     }
   }, [props.is_open])
 
-  const handle_keyboard = (event: KeyboardEvent) => {
-    if (event.code == 'Escape') {
-      props.on_close()
-    }
-  }
-
   useEffect(() => {
-    window.addEventListener('keydown', handle_keyboard)
-
-    return () => {
-      window.removeEventListener('keydown', handle_keyboard)
+    const handle_keyboard = (event: KeyboardEvent) => {
+      if (event.code == 'Escape') {
+        props.on_close()
+      }
     }
+    window.addEventListener('keydown', handle_keyboard)
+    return () => window.removeEventListener('keydown', handle_keyboard)
   }, [])
 
   return window.innerWidth >= 768 ? (

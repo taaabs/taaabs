@@ -2,6 +2,7 @@
 @use '../../../styles/foundation' as *;
 
 .container {
+  display: flex;
   background-color: white;
   padding: var(--padding-16px);
   @include at768 {

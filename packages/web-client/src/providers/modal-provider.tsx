@@ -5,28 +5,28 @@ import { createContext, ReactNode, useEffect, useState } from 'react'
 
 export type ModalContext = {
   set: (content?: ReactNode) => void
-  /**
-   * Pass random value (e.g. Date.now()) to trigger modal closing in a consumer.
-   */
-  close_trigger: number
   close: () => void
-  is_opened: boolean
+  is_open: boolean
 }
 
 export const ModalContext = createContext<ModalContext | null>(null)
 
 export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
   const [content, set] = useState<ReactNode>()
-  const [close_trigger, set_close_trigger] = useState<number>(0)
-  const [is_opened, set_is_opened] = useState<boolean>(false)
+  const [is_open, set_is_open] = useState<boolean>(false)
 
   const close = () => {
-    set_close_trigger(Date.now())
-    set_is_opened(false)
+    set_is_open(false)
   }
 
   useUpdateEffect(() => {
-    if (content) set_is_opened(true)
+    if (content) {
+      // We load ReaderModal dynamically and for entry transition
+      // to work we need to wait for the next frame.
+      setTimeout(() => {
+        set_is_open(true)
+      }, 0)
+    }
   }, [content])
 
   useEffect(() => {
@@ -44,9 +44,8 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
     <ModalContext.Provider
       value={{
         set,
-        close_trigger,
         close,
-        is_opened,
+        is_open,
       }}
     >
       {content}

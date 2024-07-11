@@ -108,7 +108,7 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
 
   return (
     <UiModal
-      is_open={modal_context.is_opened}
+      is_open={modal_context.is_open}
       is_dismissible={!(isSubmitting || (isSubmitted && isSubmitSuccessful))}
       on_close={props.on_close}
       width={400}
