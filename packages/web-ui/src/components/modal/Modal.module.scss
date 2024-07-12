@@ -9,7 +9,6 @@
   inset: 0;
   pointer-events: none;
   backdrop-filter: blur(0);
-  background-color: rgba(0, 0, 0, 0.2);
   opacity: 0;
   align-items: center;
   &--visible {
@@ -30,5 +29,12 @@
       @include transition-150ms(transform);
       transform: translateY(0);
     }
+  }
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.2);
+  @include dark {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 }

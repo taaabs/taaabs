@@ -48,8 +48,14 @@
   background-color: var(--blue100);
   border-radius: 50%;
   transition: var(--transition-duration-150ms);
+  @include dark {
+    background-color: var(--dark300);
+  }
   @include hover {
     background-color: var(--blue200);
+    @include dark {
+      background-color: var(--dark400);
+    }
     > svg {
       fill: var(--blue700);
     }
@@ -57,5 +63,8 @@
   > svg {
     fill: var(--blue600);
     width: var(--icon-dimension-12px);
+    @include dark {
+      fill: var(--blue500);
+    }
   }
 }

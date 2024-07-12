@@ -52,7 +52,7 @@ export const Modal: React.FC<Modal.Props> = (props) => {
 
   return window.innerWidth >= 768 ? (
     <div
-      className={cn(styles.modal, {
+      className={cn(styles.modal, styles.overlay, {
         [styles['modal--visible']]: props.is_open,
       })}
     >
@@ -69,7 +69,12 @@ export const Modal: React.FC<Modal.Props> = (props) => {
           style={{ maxWidth: props.width, width: '100%' }}
         >
           {props.slot_header}
-          <div style={{ overflow: 'auto', maxHeight: '75vh' }}>
+          <div
+            style={{
+              overflow: 'auto',
+              maxHeight: props.slot_footer ? '75svh' : '85svh',
+            }}
+          >
             {props.slot_content}
           </div>
           {props.slot_footer}
@@ -88,10 +93,10 @@ export const Modal: React.FC<Modal.Props> = (props) => {
           style={{
             zIndex: 3,
             position: 'fixed',
-            backgroundColor: 'rgb(0 0 0 / 0.4)',
             inset: 0,
           }}
           onClick={props.on_close}
+          className={styles.overlay}
         />
         <Drawer.Content
           style={{
@@ -106,7 +111,12 @@ export const Modal: React.FC<Modal.Props> = (props) => {
           }}
         >
           {props.slot_header}
-          <div style={{ overflow: 'auto', maxHeight: '75vh' }}>
+          <div
+            style={{
+              overflow: 'auto',
+              maxHeight: props.slot_footer ? '75svh' : '85svh',
+            }}
+          >
             {props.slot_content}
           </div>
           {props.slot_footer}
