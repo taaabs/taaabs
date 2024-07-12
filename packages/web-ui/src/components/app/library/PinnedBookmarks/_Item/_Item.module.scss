@@ -19,6 +19,12 @@
       background-color: var(--dark100);
     }
   }
+  @include hover {
+    background-color: var(--white);
+    @include dark {
+      background-color: var(--dark150);
+    }
+  }
   &--recently-visited {
     &::after {
       content: '';
