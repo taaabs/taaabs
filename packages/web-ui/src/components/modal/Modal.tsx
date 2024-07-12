@@ -52,7 +52,7 @@ export const Modal: React.FC<Modal.Props> = (props) => {
 
   return window.innerWidth >= 768 ? (
     <div
-      className={cn(styles.modal, styles.overlay, {
+      className={cn(styles.modal, {
         [styles['modal--visible']]: props.is_open,
       })}
     >
