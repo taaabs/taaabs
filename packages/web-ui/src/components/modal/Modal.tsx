@@ -77,7 +77,12 @@ export const Modal: React.FC<Modal.Props> = (props) => {
       </OutsideClickHandler>
     </div>
   ) : (
-    <Drawer.Root open={props.is_open} dismissible={props.is_dismissible}>
+    <Drawer.Root
+      open={props.is_open}
+      dismissible={props.is_dismissible}
+      onClose={props.on_close}
+      noBodyStyles={true}
+    >
       <Drawer.Portal>
         <Drawer.Overlay
           style={{
