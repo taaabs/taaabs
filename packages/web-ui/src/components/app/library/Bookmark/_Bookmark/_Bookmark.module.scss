@@ -510,16 +510,16 @@
       @include at992 {
         padding: 0 12px;
       }
+      @include hover {
+        background-color: var(--white);
+        @include dark {
+          background-color: var(--dark100);
+        }
+      }
       &--recently-visited {
-        &::before {
-          content: '';
-          position: absolute;
-          pointer-events: none;
-          inset: 0;
-          background: linear-gradient(to right, var(--blue50), transparent);
-          @include dark {
-            background: linear-gradient(to right, var(--dark300), transparent);
-          }
+        background: linear-gradient(to right, var(--blue50), transparent);
+        @include dark {
+          background: linear-gradient(to right, var(--dark300), transparent);
         }
       }
       &:last-of-type {
@@ -527,20 +527,12 @@
           border-bottom-left-radius: 11px;
           border-bottom-right-radius: 11px;
         }
-        &::before {
-          @include at768 {
-            border-bottom-left-radius: 11px;
-            border-bottom-right-radius: 11px;
-          }
-        }
       }
       &__link {
         flex: 1;
         display: flex;
         align-items: center;
         gap: 8px;
-        position: relative;
-        z-index: 1;
         &__site {
           display: flex;
           flex-shrink: 0;
@@ -650,8 +642,6 @@
       &__actions {
         display: flex;
         align-items: center;
-        position: relative;
-        z-index: 1;
         gap: var(--padding-8px);
         &__public-saves {
           white-space: nowrap;
