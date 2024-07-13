@@ -1,0 +1,50 @@
+// @type
+@use '../../styles/foundation' as *;
+
+.modal {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  align-items: center;
+  backdrop-filter: blur(0);
+  background-color: rgba(248, 248, 248, 0.7);
+  @include dark {
+    background-color: rgba(17, 24, 39, 0.7);
+  }
+  &--visible {
+    pointer-events: all;
+    opacity: 1;
+    backdrop-filter: var(--backdrop-filter);
+    transition-property: opacity, backdrop-filter;
+    transition-timing-function: var(--transition-timing-function);
+    transition-duration: var(--transition-duration-150ms);
+  }
+  &__inner {
+    overflow: hidden;
+    margin: 0 var(--padding-16px);
+    max-width: 800px;
+    border-left: var(--border-primary);
+    border-right: var(--border-primary);
+    background-color: var(--white);
+    > div {
+      padding: var(--padding-40px);
+    }
+  }
+}
+
+.drawer-overlay {
+  background-color: rgba(0, 0, 0, 0.2);
+  @include dark {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.drawer-slot-content {
+  overflow: auto;
+  max-height: 85svh;
+  padding: var(--padding-16px);
+}

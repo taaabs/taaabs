@@ -1,0 +1,1 @@
+For modals we use `react-sheet-slide`. It requires children for its three main areas "Header", "Content" and "Footer".
