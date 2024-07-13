@@ -21,8 +21,8 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
 
   useUpdateEffect(() => {
     if (content) {
-      // We load ReaderModal dynamically and for entry transition
-      // to work we need to wait for the next frame.
+      // Needed by dynamically loaded modals (e.g. ReaderModal) - for entry
+      // transition to work we need to wait for the next frame.
       setTimeout(() => {
         set_is_open(true)
       }, 0)

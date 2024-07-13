@@ -76,11 +76,10 @@
     font-weight: var(--font-weight-inter-semi-bold);
   }
   a {
-    color: var(--text-color-variant);
-    @include text-decoration-underlinie-thin;
+    color: var(--accent-color);
     @include transition-150ms(color);
     @include hover {
-      color: var(--text-color-normal);
+      @include text-decoration-underlinie-thin;
     }
   }
   h1,
