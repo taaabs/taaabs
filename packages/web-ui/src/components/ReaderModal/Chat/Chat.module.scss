@@ -7,6 +7,7 @@
   flex-direction: column;
   @include at992 {
     font-size: var(--font-size-16px);
+    gap: var(--padding-40px);
   }
 }
 .user {
