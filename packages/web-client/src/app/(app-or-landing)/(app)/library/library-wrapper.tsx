@@ -1,7 +1,7 @@
 'use client'
 
 import { Dictionary } from '@/dictionaries/dictionary'
-import Library from '../library'
+import Library from '../_library/Library'
 import { useContext } from 'react'
 import { LocalDbContext } from '@/app/local-db-provider'
 
