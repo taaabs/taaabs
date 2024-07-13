@@ -1,10 +1,9 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { ContentReader as UiModal_ContentReader } from '@web-ui/components/modal/ContentReader'
 import { ReaderData } from '@shared/utils/html-parser/reader-data'
-import { Modal as UiModal } from '@web-ui/components/modal'
+import { ReaderModal as UiReaderModal } from '@web-ui/components/ReaderModal'
 import { Header as UiModal_Header } from '@web-ui/components/modal/Header'
-import { Chat as UiModal_ContentReader_Chat } from '@web-ui/components/modal/ContentReader/Chat'
-import { Article as UiModal_ContentReader_Article } from '@web-ui/components/modal/ContentReader/Article'
+import { Article as UiReaderModal_Article } from '@web-ui/components/ReaderModal/Article'
+import { Chat as UiReaderModal_Chat } from '@web-ui/components/ReaderModal/Chat'
 import { ReactNode, useContext } from 'react'
 import { ModalContext } from '@/providers/modal-provider'
 
@@ -21,17 +20,9 @@ export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
   let content: ReactNode
 
   if (props.reader_data.type == ReaderData.ContentType.ARTICLE) {
-    content = (
-      <UiModal_ContentReader>
-        <UiModal_ContentReader_Article article={props.reader_data} />
-      </UiModal_ContentReader>
-    )
+    content = <UiReaderModal_Article article={props.reader_data} />
   } else if (props.reader_data.type == ReaderData.ContentType.CHAT) {
-    content = (
-      <UiModal_ContentReader>
-        <UiModal_ContentReader_Chat chat={props.reader_data} />
-      </UiModal_ContentReader>
-    )
+    content = <UiReaderModal_Chat chat={props.reader_data} />
   }
 
   const header = (
@@ -39,13 +30,11 @@ export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
   )
 
   return (
-    <UiModal
+    <UiReaderModal
       is_open={modal_context.is_open}
-      width={800}
       on_close={modal_context.close}
       slot_header={header}
       slot_content={content}
-      is_dismissible={true}
     />
   )
 }
