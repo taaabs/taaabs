@@ -1,8 +1,8 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { Modal as UiModal } from '@web-ui/components/modal'
-import { Header as UiModal_Header } from '@web-ui/components/modal/Header'
-import { Footer as UiModal_Footer } from '@web-ui/components/modal/Footer'
-import { Content as UiModal_Content } from '@web-ui/components/modal/Content'
+import { Modal as UiModal } from '@web-ui/components/Modal'
+import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
+import { Footer as UiModal_Footer } from '@web-ui/components/Modal/Footer'
+import { Content as UiModal_Content } from '@web-ui/components/Modal/Content'
 import { useContext, useState } from 'react'
 import { ModalContext } from '@/providers/modal-provider'
 

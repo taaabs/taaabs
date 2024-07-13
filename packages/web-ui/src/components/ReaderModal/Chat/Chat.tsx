@@ -1,6 +1,6 @@
 import { ReaderData } from '@shared/utils/html-parser/reader-data'
 import styles from './Chat.module.scss'
-import { _RenderMarkdown } from '../_render-markdown'
+import { _RenderMarkdown } from '../common/_RenderMarkdown'
 
 namespace Chat {
   export type Props = {

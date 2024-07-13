@@ -1,6 +1,6 @@
-import { Footer as UiCommonTemplate_Modal_ContentStandard_Footer } from '@web-ui/components/common/modal/Footer'
-import { Header as UiCommonTemplate_Modal_ContentStandard_Header } from '@web-ui/components/common/modal/Header'
-import { ContentStandard as UiCommonTemplage_Modal_ContentStandard } from '@web-ui/components/common/modal/content'
+import { Footer as UiCommonTemplate_Modal_ContentStandard_Footer } from '@web-ui/components/common/Modal/Footer'
+import { Header as UiCommonTemplate_Modal_ContentStandard_Header } from '@web-ui/components/common/Modal/Header'
+import { ContentStandard as UiCommonTemplage_Modal_ContentStandard } from '@web-ui/components/common/Modal/content'
 import { Modal } from '@web-ui/components/common/modal'
 import { lorem_ipsum } from '@web-ui/helpers'
 

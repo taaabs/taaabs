@@ -10,18 +10,10 @@
   pointer-events: none;
   opacity: 0;
   align-items: center;
-  backdrop-filter: blur(0);
-  background-color: rgba(248, 248, 248, 0.7);
-  @include dark {
-    background-color: rgba(17, 24, 39, 0.7);
-  }
+  background-color: var(--background);
   &--visible {
     pointer-events: all;
     opacity: 1;
-    backdrop-filter: var(--backdrop-filter);
-    transition-property: opacity, backdrop-filter;
-    transition-timing-function: var(--transition-timing-function);
-    transition-duration: var(--transition-duration-150ms);
   }
   &__inner {
     overflow: hidden;

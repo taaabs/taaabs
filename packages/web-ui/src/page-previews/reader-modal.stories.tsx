@@ -1,4 +1,4 @@
-import { ContentReader as UiCommonTemplate_Modal_ContentReader } from '@web-ui/components/common/modal/content-reader'
+import { ContentReader as UiCommonTemplate_Modal_ContentReader } from '@web-ui/components/common/Modal/content-reader'
 import { Modal } from '@web-ui/components/common/modal'
 import { lorem_ipsum } from '@web-ui/helpers'
 

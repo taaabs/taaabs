@@ -1,5 +1,5 @@
 import { ReaderData } from '@shared/utils/html-parser/reader-data'
-import { _RenderMarkdown } from '../_render-markdown'
+import { _RenderMarkdown } from '../common/_RenderMarkdown'
 import styles from './Article.module.scss'
 
 namespace Article {
