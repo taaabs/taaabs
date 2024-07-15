@@ -19,4 +19,5 @@ export type UpsertBookmark_Params = {
     reader_data?: string
   }[]
   cover?: string
+  cover_full?: string
 }

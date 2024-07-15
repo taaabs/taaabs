@@ -230,6 +230,11 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         !params.is_public && params.cover
           ? await Crypto.AES.encrypt(params.cover, encryption_key)
           : undefined,
+      cover_full: params.is_public ? params.cover_full : undefined,
+      cover_full_aes:
+        !params.is_public && params.cover_full
+          ? await Crypto.AES.encrypt(params.cover_full, encryption_key)
+          : undefined,
     }
 
     if (params.bookmark_id) {

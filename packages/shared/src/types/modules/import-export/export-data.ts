@@ -34,6 +34,8 @@ export type Bookmark = {
   links: Link[]
   cover?: string
   cover_aes?: string
+  cover_full?: string
+  cover_full_aes?: string
 }
 
 export type TagHierarchy = {
