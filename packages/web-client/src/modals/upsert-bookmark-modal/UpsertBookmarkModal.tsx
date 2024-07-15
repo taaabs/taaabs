@@ -85,6 +85,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   const cover_paste_area = useRef<HTMLDivElement>(null)
   const file_input = useRef<HTMLInputElement>(null)
   const [cover, set_cover] = useState<string>() // Base64 encoded webp.
+  const [cover_full, set_cover_full] = useState<string>() // Base64 encoded webp.
   // const [all_tags, set_all_tags] = useState<All_Ro>()
   // const [suggested_tags, set_suggested_tags] = useState<Suggested_Ro[]>([]) // We're leaving older suggestions, so users can still select from them.
 
@@ -221,6 +222,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     let og_image: string | undefined = undefined
+    let og_image_full: string | undefined = undefined
     if (clipboard_data?.og_image) {
       const img = document.createElement('img')
       img.src = clipboard_data.og_image
@@ -229,13 +231,21 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         img.onload = resolve
       })
 
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')!
-
       const original_width = img.width
       const original_height = img.height
-
       const aspect_ratio = original_width / original_height
+
+      // Create canvas for full-size image
+      const full_canvas = document.createElement('canvas')
+      full_canvas.width = original_width
+      full_canvas.height = original_height
+      const full_ctx = full_canvas.getContext('2d')!
+      full_ctx.drawImage(img, 0, 0, original_width, original_height)
+      og_image_full = full_canvas.toDataURL('image/webp')
+
+      // Create canvas for resized image
+      const resized_canvas = document.createElement('canvas')
+      const resized_ctx = resized_canvas.getContext('2d')!
 
       const max_width = cover_size.width
 
@@ -247,12 +257,12 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         new_width = new_height * aspect_ratio
       }
 
-      canvas.width = new_width
-      canvas.height = new_height
+      resized_canvas.width = new_width
+      resized_canvas.height = new_height
 
-      ctx.drawImage(img, 0, 0, new_width, new_height)
+      resized_ctx.drawImage(img, 0, 0, new_width, new_height)
 
-      og_image = canvas.toDataURL('image/webp')
+      og_image = resized_canvas.toDataURL('image/webp')
     }
 
     const bookmark: UpsertBookmark_Params = {
@@ -305,6 +315,10 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         cover?.replace('data:image/webp;base64,', '') ||
         og_image?.replace('data:image/webp;base64,', '') ||
         props.bookmark?.cover,
+      cover_full:
+        cover_full?.replace('data:image/webp;base64,', '') ||
+        og_image_full?.replace('data:image/webp;base64,', '') ||
+        props.bookmark?.cover_full,
     }
     props.on_submit(bookmark)
   }

@@ -8,6 +8,7 @@ import { Crypto } from '@repositories/utils/crypto'
 import { Backup_Ro } from '../../domain/types/backup.ro'
 import pako from 'pako'
 import { RequestNewBackup_Params } from '../../domain/types/request-new-backup.params'
+import { ExportData } from '@shared/types/modules/import-export/export-data'
 
 export class ImportExport_RepositoryImpl implements ImportExport_Repository {
   constructor(private readonly _import_data_source: ImportExport_DataSource) {}
@@ -34,6 +35,21 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
   ): Promise<Backup_Ro> {
     const data = await this._import_data_source.download_backup(params)
 
+    const parse_tag_hierarchy_node = async (
+      node: ExportData['tag_hierarchies'][0],
+    ): Promise<Backup_Ro['tag_hierarchies'][0]> => {
+      return {
+        name: node.name
+          ? node.name
+          : await Crypto.AES.decrypt(node.name_aes!, encryption_key),
+        children: await Promise.all(
+          node.children.map(
+            async (node) => await parse_tag_hierarchy_node(node),
+          ),
+        ),
+      }
+    }
+
     return {
       bookmarks: await Promise.all(
         data.bookmarks.map(async (bookmark) => ({
@@ -43,21 +59,26 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
           title: bookmark.title
             ? bookmark.title
             : bookmark.title_aes
-              ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
-              : undefined,
+            ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+            : undefined,
           note: bookmark.note
             ? bookmark.note
             : bookmark.note_aes
-              ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
-              : undefined,
+            ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+            : undefined,
           is_unsorted: bookmark.is_unsorted, // It's important to store 'false' if is there, meaning bookmark is sorted.
           is_archived: bookmark.is_archived,
           stars: bookmark.stars || undefined,
           cover: bookmark.cover
             ? bookmark.cover
             : bookmark.cover_aes
-              ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
-              : undefined,
+            ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
+            : undefined,
+          cover_full: bookmark.cover_full
+            ? bookmark.cover_full
+            : bookmark.cover_full_aes
+            ? await Crypto.AES.decrypt(bookmark.cover_full_aes, encryption_key)
+            : undefined,
           tags: bookmark.tags
             ? await Promise.all(
                 bookmark.tags.map(async (tag) => {
@@ -79,7 +100,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                   }
                 }),
               )
-            : undefined,
+            : [],
           links: bookmark.links
             ? await Promise.all(
                 bookmark.links.map(async (link) => {
@@ -143,10 +164,14 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
                   }
                 }),
               )
-            : undefined,
+            : [],
         })),
       ),
-      tag_hierarchies: data.tag_hierarchies,
+      tag_hierarchies: await Promise.all(
+        data.tag_hierarchies.map(
+          async (node) => await parse_tag_hierarchy_node(node),
+        ),
+      ),
     }
   }
 

@@ -1,7 +1,7 @@
 import { Bookmark_Entity } from '../entites/bookmark.entity'
 
 type TagHierarchy = {
-  hash: string
+  name: string
   children: TagHierarchy[]
 }
 
