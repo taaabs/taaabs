@@ -78,8 +78,6 @@ export namespace CreateBookmark_Dto {
       .optional(),
     cover: z.string().optional(),
     cover_aes: z.string().optional(),
-    cover_full: z.string().optional(),
-    cover_full_aes: z.string().optional(),
   })
 
   export type Body = z.infer<typeof body_schema>

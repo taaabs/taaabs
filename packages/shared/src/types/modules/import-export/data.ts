@@ -71,8 +71,6 @@ export const bookmark_schema = z.object({
     .max(system_values.bookmark.links.limit),
   cover: z.string().optional(),
   cover_aes: z.string().optional(),
-  cover_full: z.string().optional(),
-  cover_full_aes: z.string().optional(),
 })
 export namespace TagHierarchy {
   const base_tag_hierarchy_schema = z.object({
