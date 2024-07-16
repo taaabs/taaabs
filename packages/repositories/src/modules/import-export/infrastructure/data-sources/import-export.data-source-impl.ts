@@ -128,14 +128,6 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
           bookmark.cover && !bookmark.is_public
             ? await Crypto.AES.encrypt(bookmark.cover, encryption_key)
             : undefined,
-        cover_full:
-          bookmark.cover_full && bookmark.is_public
-            ? bookmark.cover_full
-            : undefined,
-        cover_full_aes:
-          bookmark.cover_full && !bookmark.is_public
-            ? await Crypto.AES.encrypt(bookmark.cover_full, encryption_key)
-            : undefined,
         tags,
         links,
       })

@@ -24,5 +24,4 @@ export type Bookmark_Entity = {
   is_compact?: boolean
   points?: number
   cover?: string
-  cover_full?: string
 }

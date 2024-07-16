@@ -95,11 +95,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           : bookmark.cover_aes
           ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
           : undefined,
-        cover_full: bookmark.cover_full
-          ? bookmark.cover_full
-          : bookmark.cover_full_aes
-          ? await Crypto.AES.decrypt(bookmark.cover_full_aes, encryption_key)
-          : undefined,
       })
     }
 
@@ -161,7 +156,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           tags,
           links,
           cover: bookmark.cover ? bookmark.cover : undefined,
-          cover_full: bookmark.cover_full ? bookmark.cover_full : undefined,
         })
       }
     }
@@ -260,14 +254,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                 : bookmark.cover_aes
                 ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
                 : undefined,
-              cover_full: bookmark.cover_full
-                ? bookmark.cover_full
-                : bookmark.cover_full_aes
-                ? await Crypto.AES.decrypt(
-                    bookmark.cover_full_aes,
-                    encryption_key,
-                  )
-                : undefined,
             })),
           )
         : undefined,
@@ -307,7 +293,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               is_parsed: link.is_parsed,
             })),
             cover: bookmark.cover ? bookmark.cover : undefined,
-            cover_full: bookmark.cover_full ? bookmark.cover_full : undefined,
           }))
         : undefined,
     }
@@ -444,11 +429,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         ? bookmark.cover
         : bookmark.cover_aes
         ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
-        : undefined,
-      cover_full: bookmark.cover_full
-        ? bookmark.cover_full
-        : bookmark.cover_full_aes
-        ? await Crypto.AES.decrypt(bookmark.cover_full_aes, encryption_key)
         : undefined,
     }
   }
