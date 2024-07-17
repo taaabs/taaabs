@@ -293,8 +293,7 @@ export const dictionary: Dictionary = {
       cancel: 'Anuluj',
       delete: 'Usuń',
       delete_bookmark: 'Usuń zakładkę',
-      are_you_sure:
-        'Czy jesteś pewien, że chcesz trwale usunąć wybraną zakładkę?',
+      are_you_sure: 'Ta operacja usunie',
     },
     rename_tag_modal: {
       rename_tag: 'Edytuj słowo kluczowe',

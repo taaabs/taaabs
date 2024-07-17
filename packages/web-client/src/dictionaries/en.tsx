@@ -287,8 +287,7 @@ const dictionary: Dictionary = {
       delete_bookmark: 'Delete bookmark',
       cancel: 'Cancel',
       delete: 'Delete',
-      are_you_sure:
-        'Are you sure you want to permanently delete the selected bookmark?',
+      are_you_sure: 'This will delete',
     },
     rename_tag_modal: {
       rename_tag: 'Rename tag',
