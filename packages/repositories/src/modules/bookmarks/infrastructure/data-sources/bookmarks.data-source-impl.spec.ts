@@ -42,6 +42,8 @@ describe('Bookmarks_DataSourceImpl', () => {
     })
   })
 
+  // TODO: Test get_cover.
+
   describe('[record_visit]', () => {
     it('calls api correctly', () => {
       const body: RecordVisit_Dto.Body = {

@@ -13,6 +13,7 @@ import { Crypto } from '@repositories/utils/crypto'
 import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { GetLinksData_Ro } from '../../domain/types/get-links-data.ro'
 import pako from 'pako'
+import { GetCover_Params } from '../../domain/types/get-cover.params'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -90,11 +91,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         points: bookmark.points,
         tags,
         links,
-        cover: bookmark.cover
-          ? bookmark.cover
-          : bookmark.cover_aes
-          ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
-          : undefined,
+        cover_hash: bookmark.cover_hash,
+        has_cover_aes: bookmark.has_cover_aes,
       })
     }
 
@@ -155,7 +153,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           points: bookmark.points,
           tags,
           links,
-          cover: bookmark.cover ? bookmark.cover : undefined,
+          cover_hash: bookmark.cover_hash,
         })
       }
     }
@@ -249,11 +247,8 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
                   }
                 }),
               ),
-              cover: bookmark.cover
-                ? bookmark.cover
-                : bookmark.cover_aes
-                ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
-                : undefined,
+              cover_hash: bookmark.cover_hash,
+              has_cover_aes: bookmark.has_cover_aes,
             })),
           )
         : undefined,
@@ -292,7 +287,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               open_snapshot: link.open_snapshot,
               is_parsed: link.is_parsed,
             })),
-            cover: bookmark.cover ? bookmark.cover : undefined,
+            cover_hash: bookmark.cover_hash,
           }))
         : undefined,
     }
@@ -425,16 +420,21 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           }
         }),
       ),
-      cover: bookmark.cover
-        ? bookmark.cover
-        : bookmark.cover_aes
-        ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
-        : undefined,
+      cover_hash: bookmark.cover_hash,
+      has_cover_aes: bookmark.has_cover_aes,
     }
   }
 
   public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
     await this._bookmarks_data_source.delete_bookmark(params)
+  }
+
+  public async get_cover(
+    params: GetCover_Params,
+    encryption_key: Uint8Array,
+  ): Promise<string> {
+    const cover_aes = await this._bookmarks_data_source.get_cover(params)
+    return await Crypto.AES.decrypt(cover_aes, encryption_key)
   }
 
   public async record_visit(params: RecordVisit_Params): Promise<void> {

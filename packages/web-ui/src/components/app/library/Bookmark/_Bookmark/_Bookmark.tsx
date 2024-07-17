@@ -131,7 +131,8 @@ export namespace _Bookmark {
       yields: number
     }
     on_mouse_up?: () => void
-    cover?: string
+    cover_hash?: string
+    cover?: string // Base64 encoded webp of a private bookmark.
     translations: {
       rename: string
       delete: string
@@ -660,6 +661,17 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       src={`data:image/webp;base64,${props.cover}`}
                     />
                   </>
+                ) : props.cover_hash ? (
+                  <>
+                    <img
+                      className={styles.bookmark__card__cover__image__fill}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
+                    />
+                    <img
+                      className={styles.bookmark__card__cover__image__top}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
+                    />
+                  </>
                 ) : (
                   <Icon variant="BOOKMARK_FILLED" />
                 )}
@@ -918,7 +930,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         <span>
                           {props.highlights
                             ? highlight_link_text(
-                                `${get_domain_from_url(link.url)} ${link.site_path ? `› ${link.site_path} ` : ''}`,
+                                `${get_domain_from_url(link.url)} ${
+                                  link.site_path ? `› ${link.site_path} ` : ''
+                                }`,
                                 props.highlights,
                                 link_first_char_index_in_search_title,
                               )
@@ -927,9 +941,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                                 .map((segment) =>
                                   segment.replace(/(.{5})/g, '$1​'),
                                 )
-                                .join(
-                                  '.',
-                                )} ${link.site_path ? `› ${link.site_path}` : ''}`}
+                                .join('.')} ${
+                                link.site_path ? `› ${link.site_path}` : ''
+                              }`}
                         </span>
                         <span>
                           {url_path_for_display({
@@ -1020,6 +1034,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     o.updated_at == n.updated_at &&
     o.search_queried_at_timestamp == n.search_queried_at_timestamp &&
     o.is_search_result == n.is_search_result &&
+    o.cover == n.cover &&
     o.points == n.points &&
     o.points_given == n.points_given &&
     o.is_compact == n.is_compact &&

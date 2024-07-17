@@ -14,6 +14,7 @@ import { KyInstance } from 'ky'
 import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
 import pako from 'pako'
+import { GetCover_Params } from '../../domain/types/get-cover.params'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -108,7 +109,10 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   ): Promise<LinksData_Dto.Response.Authorized> {
     const search_params = new URLSearchParams()
     if (params.bookmark_updated_at) {
-      search_params.set('v', params.bookmark_updated_at.getTime().toString())
+      search_params.set(
+        'v',
+        `${Math.floor(new Date(params.bookmark_updated_at).getTime() / 1000)}`,
+      )
     }
     return await this._ky
       .get(`v1/bookmarks/${params.bookmark_id}/links-data`, {
@@ -122,7 +126,10 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   ): Promise<LinksData_Dto.Response.Public> {
     const search_params = new URLSearchParams()
     if (params.bookmark_updated_at) {
-      search_params.set('v', params.bookmark_updated_at.getTime().toString())
+      search_params.set(
+        'v',
+        `${Math.floor(new Date(params.bookmark_updated_at).getTime() / 1000)}`,
+      )
     }
     return await this._ky
       .get(`v1/bookmarks/${params.username}/${params.bookmark_id}/links-data`, {
@@ -202,6 +209,43 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       }
     }
 
+    let cover = params.cover
+
+    if (!params.cover) {
+      if (params.cover_hash) {
+        try {
+          const image_blob = await this._ky
+            .get(`v1/covers/${params.cover_hash}`)
+            .blob()
+
+          cover = await new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onloadend = () => {
+              if (reader.result && typeof reader.result === 'string') {
+                resolve(reader.result.split(',')[1])
+              } else {
+                reject(new Error('Failed to read image data'))
+              }
+            }
+            reader.onerror = reject
+            reader.readAsDataURL(image_blob)
+          })
+        } catch (error) {
+          console.error('Error fetching image:', error)
+          throw error
+        }
+      } else if (params.has_cover_aes) {
+        const cover_encrypted = await this.get_cover({
+          bookmark_id: params.bookmark_id!,
+          bookmark_updated_at: '',
+        })
+        cover = await Crypto.AES.decrypt(cover_encrypted, encryption_key)
+        // 1. get encrypted cover
+        // 2. decrypt
+        // 3. assign to cover
+      }
+    }
+
     const body: CreateBookmark_Dto.Body = {
       created_at: params.created_at?.toISOString(),
       title: params.is_public ? params.title : undefined,
@@ -225,10 +269,10 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           : params.is_unsorted,
       tags,
       links,
-      cover: params.is_public ? params.cover : undefined,
+      cover: params.is_public ? cover : undefined,
       cover_aes:
-        !params.is_public && params.cover
-          ? await Crypto.AES.encrypt(params.cover, encryption_key)
+        !params.is_public && cover
+          ? await Crypto.AES.encrypt(cover, encryption_key)
           : undefined,
     }
 
@@ -249,6 +293,19 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
 
   public async delete_bookmark(params: DeleteBookmark_Params): Promise<void> {
     await this._ky.delete(`v1/bookmarks/${params.bookmark_id}`)
+  }
+
+  public async get_cover(params: GetCover_Params): Promise<string> {
+    const search_params = new URLSearchParams()
+    search_params.set(
+      'v',
+      `${Math.floor(new Date(params.bookmark_updated_at).getTime() / 1000)}`,
+    )
+    return await this._ky
+      .get(`v1/bookmarks/${params.bookmark_id}/cover`, {
+        searchParams: search_params,
+      })
+      .text()
   }
 
   public async record_visit(params: RecordVisit_Params): Promise<void> {

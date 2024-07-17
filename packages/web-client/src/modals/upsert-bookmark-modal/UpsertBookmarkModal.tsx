@@ -244,10 +244,9 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         name: tag.name,
         is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional.
       })),
-      cover:
-        cover?.replace('data:image/webp;base64,', '') ||
-        og_image?.replace('data:image/webp;base64,', '') ||
-        props.bookmark?.cover,
+      cover: cover?.split(',')[1] || og_image?.split(',')[1],
+      cover_hash: props.bookmark?.cover_hash,
+      has_cover_aes: props.bookmark?.has_cover_aes,
     }
     props.on_submit(bookmark)
   }
@@ -585,7 +584,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
 
       <UiModal_Content_Divider />
 
-      <UiModal_Content_StandardSplit
+      {/* <UiModal_Content_StandardSplit
         label={props.dictionary.app.upsert_modal.cover}
       >
         {(cover || clipboard_data?.og_image || props.bookmark?.cover) && (
@@ -605,7 +604,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         <div ref={cover_paste_area}>
           Click here and press Ctrl+V to paste an image
         </div>
-      </UiModal_Content_StandardSplit>
+      </UiModal_Content_StandardSplit> */}
     </UiModal_Content>
   )
 

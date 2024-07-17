@@ -19,4 +19,6 @@ export type UpsertBookmark_Params = {
     reader_data?: string
   }[]
   cover?: string
+  cover_hash?: string
+  has_cover_aes?: boolean
 }

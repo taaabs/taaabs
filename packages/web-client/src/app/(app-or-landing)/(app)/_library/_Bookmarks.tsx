@@ -10,7 +10,6 @@ import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
-import { Bookmark as UiAppLibrary_Bookmark } from '@web-ui/components/app/library/Bookmark'
 import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/Dropdown'
 import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/Dropdown/standard-item'
 import { CheckboxItem as UiCommon_Dropdown_CheckboxItem } from '@web-ui/components/common/Dropdown/checkbox-item'
@@ -27,6 +26,7 @@ import { use_library_dispatch } from '@/stores/library'
 import { useSearchParams } from 'next/navigation'
 import { ModalContext } from '@/providers/modal-provider'
 import { LocalDb } from '@/app/local-db-provider'
+import { _Bookmark } from './_bookmarks/_Bookmark'
 
 namespace _Bookmarks {
   export type Props = {
@@ -60,7 +60,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
   const search_params = useSearchParams()
 
   return bookmarks_hook.bookmarks?.map((bookmark, i) => (
-    <UiAppLibrary_Bookmark
+    <_Bookmark
       key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
       created_at={new Date(bookmark.created_at)}
       locale={props.dictionary.locale}
@@ -77,7 +77,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       is_public={bookmark.is_public}
       points_given={points_hook.points_given[bookmark.id]}
       points={bookmark.points}
-      cover={bookmark.cover}
+      has_cover_aes={bookmark.has_cover_aes}
+      cover_hash={bookmark.cover_hash}
       on_get_points_given_click={
         auth_context.auth_data
           ? () => {
@@ -188,27 +189,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       }}
       on_is_visible={() => {
         // Prefetch links data.
-        if (bookmark.links.find((link) => link.is_parsed)) {
-          const data_source = new Bookmarks_DataSourceImpl(
-            auth_context.ky_instance,
-          )
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          if (!username) {
-            repository.get_links_data_authorized(
-              {
-                bookmark_id: bookmark.id,
-                bookmark_updated_at: new Date(bookmark.updated_at),
-              },
-              auth_context.auth_data!.encryption_key,
-            )
-          } else {
-            repository.get_links_data_public({
-              bookmark_id: bookmark.id,
-              bookmark_updated_at: new Date(bookmark.updated_at),
-              username,
-            })
-          }
-        }
       }}
       on_reading_mode_click={async (url) => {
         const data_source = new Bookmarks_DataSourceImpl(
@@ -219,14 +199,14 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
         if (username) {
           links_data = await repository.get_links_data_public({
             bookmark_id: bookmark.id,
-            bookmark_updated_at: new Date(bookmark.updated_at),
+            bookmark_updated_at: bookmark.updated_at,
             username,
           })
         } else {
           links_data = await repository.get_links_data_authorized(
             {
               bookmark_id: bookmark.id,
-              bookmark_updated_at: new Date(bookmark.updated_at),
+              bookmark_updated_at: bookmark.updated_at,
             },
             auth_context.auth_data!.encryption_key,
           )
@@ -320,7 +300,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               is_public: bookmark.is_public,
             },
           ],
-          cover: bookmark.cover,
+          cover_hash: bookmark.cover_hash,
+          has_cover_aes: bookmark.has_cover_aes,
         }
         const updated_bookmark = await dispatch(
           bookmarks_actions.upsert_bookmark({
@@ -403,7 +384,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   name: tag.name,
                   is_public: tag.is_public || false,
                 })),
-                cover: bookmark.cover,
+                cover_hash: bookmark.cover_hash,
+                has_cover_aes: bookmark.has_cover_aes,
               }
               const updated_bookmark = await dispatch(
                 bookmarks_actions.upsert_bookmark({
@@ -486,7 +468,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               name: tag.name,
               is_public: tag.is_public,
             })),
-          cover: bookmark.cover,
+          cover_hash: bookmark.cover_hash,
+          has_cover_aes: bookmark.has_cover_aes,
         }
         const updated_bookmark = await dispatch(
           bookmarks_actions.upsert_bookmark({
@@ -646,7 +629,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                     name: tag.name,
                     is_public: tag.is_public,
                   })),
-                  cover: bookmark.cover,
+                  cover_hash: bookmark.cover_hash,
+                  has_cover_aes: bookmark.has_cover_aes,
                 }
                 await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -699,7 +683,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                     name: tag.name,
                     is_public: tag.is_public,
                   })),
-                  cover: bookmark.cover,
+                  cover_hash: bookmark.cover_hash,
+                  has_cover_aes: bookmark.has_cover_aes,
                 }
                 await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -780,7 +765,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                     name: tag.name,
                     is_public: tag.is_public,
                   })),
-                  cover: bookmark.cover,
+                  cover_hash: bookmark.cover_hash,
+                  has_cover_aes: bookmark.has_cover_aes,
                 }
                 await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -850,7 +836,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                     name: tag.name,
                     is_public: tag.is_public,
                   })),
-                  cover: bookmark.cover,
+                  cover_hash: bookmark.cover_hash,
+                  has_cover_aes: bookmark.has_cover_aes,
                 }
                 await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -1045,7 +1032,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                     name: tag.name,
                     is_public: tag.is_public,
                   })),
-                  cover: bookmark.cover,
+                  cover_hash: bookmark.cover_hash,
+                  has_cover_aes: bookmark.has_cover_aes,
                 }
                 await dispatch(
                   bookmarks_actions.upsert_bookmark({

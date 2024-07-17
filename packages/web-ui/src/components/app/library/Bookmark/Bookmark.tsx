@@ -6,7 +6,7 @@ import { useRef, useState } from 'react'
 import styles from './Bookmark.module.scss'
 import cn from 'classnames'
 
-namespace Bookmark {
+export namespace Bookmark {
   export type Props = _Bookmark.Props & {
     render_height?: number
     set_render_height: (height: number) => void
