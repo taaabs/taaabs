@@ -7,6 +7,7 @@ import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
+import { GetCover_Params } from '../../domain/types/get-cover.params'
 
 export type Bookmarks_DataSource = {
   get_bookmarks_on_authorized_user(
@@ -39,6 +40,8 @@ export type Bookmarks_DataSource = {
   ): Promise<Bookmarks_Dto.Response.AuthorizedBookmark>
 
   delete_bookmark(params: DeleteBookmark_Params): Promise<void>
+
+  get_cover(params: GetCover_Params): Promise<string>
 
   record_visit(params: RecordVisit_Params): Promise<void>
 }

@@ -143,6 +143,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
   const logout = async () => {
     _set_auth_data(undefined)
     localStorage.removeItem(browser_storage.local_storage.auth_data)
+    sessionStorage.removeItem(
+      browser_storage.session_storage.is_refreshing_auth_tokens,
+    )
     await localforage.removeItem(
       browser_storage.local_forage.authorized_library.search.index,
     )

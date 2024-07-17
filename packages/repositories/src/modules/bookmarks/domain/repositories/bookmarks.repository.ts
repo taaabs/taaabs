@@ -8,6 +8,7 @@ import { GetBookmarksByIds_Ro } from '../types/get-bookmarks-by-ids.ro'
 import { Bookmark_Entity } from '../entities/bookmark.entity'
 import { GetLinksData_Params } from '../types/get-links-data.params'
 import { GetLinksData_Ro } from '../types/get-links-data.ro'
+import { GetCover_Params } from '../types/get-cover.params'
 
 export type Bookmarks_Repository = {
   get_bookmarks_on_authorized_user(
@@ -43,6 +44,11 @@ export type Bookmarks_Repository = {
   ): Promise<Bookmark_Entity>
 
   delete_bookmark(params: DeleteBookmark_Params): Promise<void>
+
+  get_cover(
+    params: GetCover_Params,
+    encryption_key: Uint8Array,
+  ): Promise<string>
 
   record_visit(params: RecordVisit_Params): Promise<void>
 }
