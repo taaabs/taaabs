@@ -1,6 +1,6 @@
 'use client'
 
-import { use_has_focus } from '@/hooks/misc/use-has-focus'
+import { use_has_focus } from '@/hooks/use-has-focus'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'

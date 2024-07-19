@@ -3,8 +3,6 @@ import { All_Ro } from '../domain/all.ro'
 import { Rename_Params } from '../domain/rename.params'
 import { Tags_Repository } from '../domain/tags.repository'
 import { Tags_DataSource } from './tags.data-source'
-import { Suggested_Params } from '../domain/suggested.params'
-import { Suggested_Ro } from '../domain/suggested.ro'
 
 export class Tags_RepositoryImpl implements Tags_Repository {
   constructor(private readonly _tags_data_source: Tags_DataSource) {}
@@ -20,10 +18,6 @@ export class Tags_RepositoryImpl implements Tags_Repository {
       tags.push({ id: tag.id, name })
     }
     return tags
-  }
-
-  public async suggested(params: Suggested_Params): Promise<Suggested_Ro> {
-    return this._tags_data_source.suggested(params)
   }
 
   public async rename(

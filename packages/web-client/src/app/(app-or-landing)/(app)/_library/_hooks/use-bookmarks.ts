@@ -3,7 +3,7 @@ import useDebouncedCallback from 'beautiful-react-hooks/useDebouncedCallback'
 import {
   use_library_dispatch,
   use_library_selector,
-} from '../../stores/library'
+} from '../../../../../stores/library'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useContext } from 'react'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'

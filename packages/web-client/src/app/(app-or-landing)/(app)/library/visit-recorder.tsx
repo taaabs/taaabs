@@ -2,7 +2,7 @@
 
 import { AuthContext } from '@/app/auth-provider'
 import { browser_storage } from '@/constants/browser-storage'
-import { use_has_focus } from '@/hooks/misc/use-has-focus'
+import { use_has_focus } from '@/hooks/use-has-focus'
 import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types/record-visit.params'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'

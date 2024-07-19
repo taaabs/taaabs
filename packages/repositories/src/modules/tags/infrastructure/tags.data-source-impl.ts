@@ -5,25 +5,12 @@ import { Crypto } from '@repositories/utils/crypto'
 import { CheckVisibility_Dto } from '@shared/types/modules/tags/check-visibility'
 import { Rename_Dto } from '@shared/types/modules/tags/rename.dto'
 import { Tags_Dto } from '@shared/types/modules/tags/tags.dto'
-import { Suggested_Dto } from '@shared/types/modules/tags/suggested.dto'
-import { Suggested_Params } from '../domain/suggested.params'
 
 export class Tags_DataSourceImpl implements Tags_DataSource {
   constructor(private readonly _ky: KyInstance) {}
 
   public async all(): Promise<Tags_Dto> {
     return this._ky('v1/tags').json()
-  }
-
-  public async suggested(
-    params: Suggested_Params,
-  ): Promise<Suggested_Dto.Response> {
-    const body: Suggested_Dto.Request.Body = params.selected_tags
-    return this._ky
-      .post('v1/tags/suggested', {
-        json: body,
-      })
-      .json()
   }
 
   public async rename(
