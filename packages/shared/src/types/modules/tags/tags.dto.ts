@@ -1,5 +1,8 @@
 export type Tags_Dto = {
-  id: number
-  name?: string
-  name_aes?: string
-}[]
+  all: {
+    id: number
+    name?: string
+    name_aes?: string
+  }[],
+  recent_ids: number[]
+}

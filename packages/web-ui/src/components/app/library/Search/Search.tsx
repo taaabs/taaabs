@@ -71,7 +71,7 @@ export const Search: React.FC<Search.Props> = memo(
       }
     }, [props.is_focused])
 
-    const handle_keyboard = (event: any) => {
+    const handle_keyboard = (event: KeyboardEvent) => {
       if (props.is_loading || props.is_full_text) return
 
       if (event.code == 'Escape' && props.is_focused) {
@@ -287,10 +287,10 @@ export const Search: React.FC<Search.Props> = memo(
                             props.loading_progress_percentage + '%'
                           }`
                         : selected_hint_index != -1
-                          ? undefined
-                          : props.is_full_text
-                            ? props.translations.placeholder.full_text
-                            : props.translations.placeholder.default
+                        ? undefined
+                        : props.is_full_text
+                        ? props.translations.placeholder.full_text
+                        : props.translations.placeholder.default
                     }
                     onBlur={(e) => {
                       if (
@@ -329,9 +329,9 @@ export const Search: React.FC<Search.Props> = memo(
                       {props.results_count == 0
                         ? 'No'
                         : props.results_count ==
-                            system_values.max_library_search_results
-                          ? `${system_values.max_library_search_results}+`
-                          : props.results_count}{' '}
+                          system_values.max_library_search_results
+                        ? `${system_values.max_library_search_results}+`
+                        : props.results_count}{' '}
                       {props.results_count == 1 ? 'result' : 'results'}
                     </div>
                   )}

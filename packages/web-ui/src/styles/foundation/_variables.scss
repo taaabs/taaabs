@@ -9,6 +9,7 @@
   --search-desktop-height: var(--button-dimension-52px);
   --search-mobile-height: var(--button-dimension-40px);
 
+  --padding-2px: 2px;
   --padding-4px: 4px;
   --padding-6px: 6px;
   --padding-8px: 8px;
@@ -88,6 +89,7 @@
   --border-radius-30px: 30px;
   --border-radius-999px: 999px;
 
+  --icon-dimension-10px: 10px;
   --icon-dimension-12px: 12px;
   --icon-dimension-13px: 13px;
   --icon-dimension-14px: 14px;
@@ -115,6 +117,7 @@
   --box-shadow-red: 0px 2px 8px 2px rgba(255, 0, 0, 0.15);
   --box-shadow-green-strong: 0px 2px 8px 2px rgba(22, 122, 48, 0.2);
   --box-shadow-up: 0px -1.5px 5px 2px rgba(0, 0, 0, 0.03);
+  --box-shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.06);
 
   --letter-spacing-logo: -0.04em;
 

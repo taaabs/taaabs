@@ -20,12 +20,12 @@ import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { HtmlParser } from '@shared/utils/html-parser'
 
-// import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
-// import { AuthContext } from '@/app/auth-provider'
-// import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
-// import { All_Ro } from '@repositories/modules/tags/domain/all.ro'
-// import { Suggested_Ro } from '@repositories/modules/tags/domain/suggested.ro'
+import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
+import { AuthContext } from '@/app/auth-provider'
+import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
+import { Tags_Ro } from '@repositories/modules/tags/domain/tags.ro'
 import { ModalContext } from '@/providers/modal-provider'
+import { TagsInput as UiAppLibrary_TagsInput } from '@web-ui/components/app/library/TagsInput'
 
 type FormValues = {
   title?: string
@@ -71,7 +71,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     setValue,
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
-  // const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)!
   const [is_bookmark_public, set_is_bookmark_public] = useState(
     props.bookmark?.is_public,
   )
@@ -80,8 +80,8 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   const cover_paste_area = useRef<HTMLDivElement>(null)
   const file_input = useRef<HTMLInputElement>(null)
   const [cover, set_cover] = useState<string>() // Base64 encoded webp.
-  // const [all_tags, set_all_tags] = useState<All_Ro>()
-  // const [suggested_tags, set_suggested_tags] = useState<Suggested_Ro[]>([]) // We're leaving older suggestions, so users can still select from them.
+  const [is_fetching_my_tags, set_is_fetching_my_tags] = useState<boolean>()
+  const [my_tags, set_my_tags] = useState<Tags_Ro>()
 
   const handle_file_select = (event: Event) => {
     const input = event.target as HTMLInputElement
@@ -350,19 +350,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   //   }
   // }
 
-  useEffect(() => {
-    // const fetch_all_tags = async () => {
-    //   const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
-    //   const repository = new Tags_RepositoryImpl(data_source)
-    //   const result = await repository.all(
-    //     auth_context.auth_data!.encryption_key,
-    //   )
-    //   set_all_tags(result)
-    // }
-    // fetch_all_tags()
-    // fetch_suggested_tags(props.bookmark?.tags.map((tag) => tag.id) || [])
-  }, [])
-
   const content = (
     <UiModal_Content>
       <UiModal_Content_Centered
@@ -527,57 +514,49 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       <UiModal_Content_StandardSplit
         label={props.dictionary.app.upsert_modal.tags}
       >
-        <UiAppAtom_DraggableUpsertFormTags
-          tags={tags.map((tag) => ({
+        <UiAppLibrary_TagsInput
+          selected_tags={tags.map((tag) => ({
             name: tag.name,
             is_public:
               props.bookmark?.is_public == false ? true : tag.is_public,
           }))}
-          on_change={(updated_tags) => {
+          all_tags={
+            my_tags?.all
+              .map((tag) => tag.name)
+              .sort((a, b) => a.localeCompare(b)) || []
+          }
+          recent_tags={
+            my_tags?.recent_ids.map(
+              (id) => my_tags.all.find((tag) => tag.id == id)!.name,
+            ) || []
+          }
+          on_selected_tags_update={(updated_tags) => {
             set_tags(
               updated_tags.map((tag) => ({
                 name: tag.name,
                 is_public: tag.is_public,
               })),
             )
-            // if (updated_tags.length > tags.length) {
-            //   const tag_ids: number[] = []
-            //   updated_tags.forEach((tag) => {
-            //     const tag_id = all_tags?.find((t) => t.name == tag.name)?.id
-            //     if (tag_id) {
-            //       tag_ids.push(tag_id)
-            //     }
-            //   })
-            //   fetch_suggested_tags(tag_ids)
-            // }
           }}
-          show_visibility_toggler={is_bookmark_public || false}
+          is_visibility_toggleable={is_bookmark_public || false}
           max_tags={system_values.bookmark.tags.limit}
-          suggestions={
-            // all_tags
-            //   ? suggested_tags.map((item) => ({
-            //       recent: item.recent
-            //         .slice(0, 10)
-            //         .map(
-            //           (tag_id) =>
-            //             all_tags.find((tag) => tag.id == tag_id)!.name,
-            //         ),
-            //       frequent: item.frequent
-            //         .slice(0, 10)
-            //         .map(
-            //           (tag_id) =>
-            //             all_tags.find((tag) => tag.id == tag_id)!.name,
-            //         ),
-            //     }))
-            //   : []
-            []
-          }
+          on_focus={async () => {
+            if (my_tags !== undefined || is_fetching_my_tags) return
+
+            set_is_fetching_my_tags(true)
+            const data_source = new Tags_DataSourceImpl(
+              auth_context.ky_instance,
+            )
+            const repository = new Tags_RepositoryImpl(data_source)
+            const result = await repository.tags(
+              auth_context.auth_data!.encryption_key,
+            )
+            set_is_fetching_my_tags(false)
+            set_my_tags(result)
+          }}
           translations={{
             enter_tag_name: props.dictionary.app.upsert_modal.enter_tag_name,
-            add: props.dictionary.app.upsert_modal.add_tag,
-            private: props.dictionary.app.upsert_modal.tag.private,
-            public: props.dictionary.app.upsert_modal.tag.public,
-            visibility: props.dictionary.app.upsert_modal.tag.visibility,
+            create: props.dictionary.app.upsert_modal.tags_dropdown.create,
           }}
         />
       </UiModal_Content_StandardSplit>

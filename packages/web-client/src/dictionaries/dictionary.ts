@@ -205,10 +205,8 @@ export type Dictionary = {
       note: string
       jot_something_down: string
       tags: string
-      tag: {
-        visibility: string
-        public: string
-        private: string
+      tags_dropdown: {
+        create: string
       }
       enter_tag_name: string
       add_tag: string

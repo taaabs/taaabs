@@ -269,10 +269,8 @@ const dictionary: Dictionary = {
       note: 'Note',
       jot_something_down: 'Jot something down...',
       tags: 'Tags',
-      tag: {
-        visibility: 'Visibility',
-        public: 'Public',
-        private: 'Private',
+      tags_dropdown: {
+        create: 'Create',
       },
       enter_tag_name: 'Enter tag name',
       add_tag: 'Add tag',

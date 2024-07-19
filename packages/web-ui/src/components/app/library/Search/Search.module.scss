@@ -369,7 +369,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      height: 32px;
+      height: var(--button-dimension-34px);
       padding: 0 14px;
       @include hover {
         background-color: var(--neutral100);

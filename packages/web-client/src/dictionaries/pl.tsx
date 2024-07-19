@@ -275,10 +275,8 @@ export const dictionary: Dictionary = {
       note: 'Notka',
       jot_something_down: 'Zanotuj coś...',
       tags: 'Tagi',
-      tag: {
-        visibility: 'Widoczność',
-        public: 'Publiczne',
-        private: 'Prywatne',
+      tags_dropdown: {
+        create: 'Utwórz',
       },
       enter_tag_name: 'Wpisz słowo kluczowe',
       add_tag: 'Dodaj tag',
