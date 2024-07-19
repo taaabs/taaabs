@@ -1,5 +1,5 @@
 import { Crypto } from '@repositories/utils/crypto'
-import { All_Ro } from '../domain/all.ro'
+import { Tags_Ro } from '../domain/tags.ro'
 import { Rename_Params } from '../domain/rename.params'
 import { Tags_Repository } from '../domain/tags.repository'
 import { Tags_DataSource } from './tags.data-source'
@@ -7,17 +7,24 @@ import { Tags_DataSource } from './tags.data-source'
 export class Tags_RepositoryImpl implements Tags_Repository {
   constructor(private readonly _tags_data_source: Tags_DataSource) {}
 
-  public async all(encryption_key: Uint8Array): Promise<All_Ro> {
-    const result = await this._tags_data_source.all()
-    const tags: All_Ro = []
-    for (const tag of result) {
+  public async tags(encryption_key: Uint8Array): Promise<Tags_Ro> {
+    const result = await this._tags_data_source.tags()
+    const all_tags: Tags_Ro['all'] = []
+    for (const tag of result.all) {
       let name = tag.name
       if (!name) {
-        name = await Crypto.AES.decrypt(tag.name_aes!, encryption_key)
+        if (!tag.name_aes) {
+          console.error('Missing name.')
+          throw new Error()
+        }
+        name = await Crypto.AES.decrypt(tag.name_aes, encryption_key)
       }
-      tags.push({ id: tag.id, name })
+      all_tags.push({ id: tag.id, name })
     }
-    return tags
+    return {
+      all: all_tags,
+      recent_ids: result.recent_ids,
+    }
   }
 
   public async rename(

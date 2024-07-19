@@ -1,7 +1,7 @@
-import { All_Ro } from './all.ro'
+import { Tags_Ro } from './tags.ro'
 import { Rename_Params } from './rename.params'
 
 export type Tags_Repository = {
-  all(encryption_key: Uint8Array): Promise<All_Ro>
+  tags(encryption_key: Uint8Array): Promise<Tags_Ro>
   rename(params: Rename_Params, encryption_key: Uint8Array): Promise<void>
 }

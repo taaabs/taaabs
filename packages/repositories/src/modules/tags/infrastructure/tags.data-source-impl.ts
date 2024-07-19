@@ -9,7 +9,7 @@ import { Tags_Dto } from '@shared/types/modules/tags/tags.dto'
 export class Tags_DataSourceImpl implements Tags_DataSource {
   constructor(private readonly _ky: KyInstance) {}
 
-  public async all(): Promise<Tags_Dto> {
+  public async tags(): Promise<Tags_Dto> {
     return this._ky('v1/tags').json()
   }
 
