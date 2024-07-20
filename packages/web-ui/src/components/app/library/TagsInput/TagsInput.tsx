@@ -71,7 +71,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
         if (!sortable_items.find((i) => i.name == new_tag_name.trim())) {
           set_sortable_items([
             ...sortable_items,
-            { id: Math.random(), name: new_tag_name.trim() },
+            { id: Math.random(), name: new_tag_name.trim(), is_public: true },
           ])
           set_new_tag_name('')
         }
@@ -89,7 +89,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
           event.preventDefault()
           set_sortable_items([
             ...sortable_items,
-            { id: Math.random(), name: first_suggestion },
+            { id: Math.random(), name: first_suggestion, is_public: true },
           ])
           set_new_tag_name('')
         } else {
@@ -247,14 +247,14 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
                   if (sortable_items.length == props.max_tags) return
                   set_sortable_items([
                     ...sortable_items,
-                    { id: Math.random(), name: recent_tag },
+                    { id: Math.random(), name: recent_tag, is_public: true },
                   ])
                 }}
               >
                 {recent_tag}
               </button>
             ))}
-        {/* Filtered out all tags. */}
+        {/* Filtered out "all tags". */}
         {new_tag_name &&
           props.all_tags
             .filter((tag) =>
@@ -270,7 +270,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
                   if (sortable_items.length == props.max_tags) return
                   set_sortable_items([
                     ...sortable_items,
-                    { id: Math.random(), name: tag },
+                    { id: Math.random(), name: tag, is_public: true },
                   ])
                   set_new_tag_name('')
                 }}
@@ -291,7 +291,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
             if (sortable_items.length == props.max_tags) return
             set_sortable_items([
               ...sortable_items,
-              { id: Math.random(), name: new_tag_name.trim() },
+              { id: Math.random(), name: new_tag_name.trim(), is_public: true },
             ])
             set_new_tag_name('')
           }}

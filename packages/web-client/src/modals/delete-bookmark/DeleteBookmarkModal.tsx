@@ -25,7 +25,11 @@ export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
     <UiModal_Content>
       <span>
         {props.dictionary.app.delete_modal.are_you_sure}{' '}
-        {props.title && <strong>{props.title}</strong>}
+        {props.title ? (
+          <strong>{props.title}</strong>
+        ) : (
+          <i>{props.dictionary.app.delete_modal.untitled}</i>
+        )}
       </span>
     </UiModal_Content>
   )

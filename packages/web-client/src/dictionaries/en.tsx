@@ -283,6 +283,7 @@ const dictionary: Dictionary = {
     },
     delete_modal: {
       delete_bookmark: 'Delete bookmark',
+      untitled: 'Untitled',
       cancel: 'Cancel',
       delete: 'Delete',
       are_you_sure: 'This will delete',

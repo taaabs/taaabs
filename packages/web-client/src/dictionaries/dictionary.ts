@@ -219,6 +219,7 @@ export type Dictionary = {
     }
     delete_modal: {
       delete_bookmark: string
+      untitled: string
       cancel: string
       delete: string
       are_you_sure: string

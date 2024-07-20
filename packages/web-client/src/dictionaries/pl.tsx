@@ -289,6 +289,7 @@ export const dictionary: Dictionary = {
     },
     delete_modal: {
       cancel: 'Anuluj',
+      untitled: 'Bez tytułu',
       delete: 'Usuń',
       delete_bookmark: 'Usuń zakładkę',
       are_you_sure: 'Ta operacja usunie',
