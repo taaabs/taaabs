@@ -84,6 +84,7 @@ export const Modal: React.FC<Modal.Props> = (props) => {
       dismissible={props.is_dismissible}
       onClose={props.on_close}
       noBodyStyles={true}
+      disablePreventScroll={true}
     >
       <Drawer.Portal>
         <Drawer.Overlay
