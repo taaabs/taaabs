@@ -276,7 +276,7 @@ export const dictionary: Dictionary = {
       jot_something_down: 'Zanotuj coś...',
       tags: 'Tagi',
       tags_dropdown: {
-        create: 'Utwórz',
+        add: 'Dodaj',
       },
       enter_tag_name: 'Wpisz słowo kluczowe',
       add_tag: 'Dodaj tag',

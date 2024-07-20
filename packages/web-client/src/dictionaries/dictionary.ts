@@ -206,7 +206,7 @@ export type Dictionary = {
       jot_something_down: string
       tags: string
       tags_dropdown: {
-        create: string
+        add: string
       }
       enter_tag_name: string
       add_tag: string

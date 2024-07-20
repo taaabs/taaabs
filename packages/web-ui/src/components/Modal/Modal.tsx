@@ -55,31 +55,28 @@ export const Modal: React.FC<Modal.Props> = (props) => {
       className={cn(styles.modal, {
         [styles['modal--visible']]: props.is_open,
       })}
+      onClick={props.on_close}
     >
-      <OutsideClickHandler
-        onOutsideClick={props.on_close}
-        disabled={
-          props.is_dismissible === undefined ? false : !props.is_dismissible
-        }
+      <div
+        className={cn(styles.modal__inner, {
+          [styles['modal__inner--visible']]: props.is_open,
+        })}
+        style={{ maxWidth: props.width, width: '100%' }}
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
       >
+        {props.slot_header}
         <div
-          className={cn(styles.modal__inner, {
-            [styles['modal__inner--visible']]: props.is_open,
-          })}
-          style={{ maxWidth: props.width, width: '100%' }}
+          style={{
+            overflow: 'auto',
+            maxHeight: props.slot_footer ? '75svh' : '85svh',
+          }}
         >
-          {props.slot_header}
-          <div
-            style={{
-              overflow: 'auto',
-              maxHeight: props.slot_footer ? '75svh' : '85svh',
-            }}
-          >
-            {props.slot_content}
-          </div>
-          {props.slot_footer}
+          {props.slot_content}
         </div>
-      </OutsideClickHandler>
+        {props.slot_footer}
+      </div>
     </div>
   ) : (
     <Drawer.Root

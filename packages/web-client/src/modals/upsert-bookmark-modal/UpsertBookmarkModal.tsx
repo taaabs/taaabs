@@ -12,7 +12,6 @@ import { StandardSplit as UiModal_Content_StandardSplit } from '@web-ui/componen
 import { Divider as UiModal_Content_Divider } from '@web-ui/components/Modal/Content/Divider'
 import { Input as UiCommonAtoms_Input } from '@web-ui/components/common/atoms/input'
 import { DraggableUpsertFormLinks as UiAppAtom_DraggableUpsertFormLinks } from '@web-ui/components/app/atoms/draggable-upsert-form-links'
-import { DraggableUpsertFormTags as UiAppAtom_DraggableUpsertFormTags } from '@web-ui/components/app/atoms/draggable-upsert-form-tags'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { SegmentedButton as UiCommon_SegmentedButton } from '@web-ui/components/common/SegmentedButton'
@@ -556,12 +555,21 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
           }}
           translations={{
             enter_tag_name: props.dictionary.app.upsert_modal.enter_tag_name,
-            create: props.dictionary.app.upsert_modal.tags_dropdown.create,
+            add: props.dictionary.app.upsert_modal.tags_dropdown.add,
           }}
         />
       </UiModal_Content_StandardSplit>
 
       <UiModal_Content_Divider />
+
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
 
       {/* <UiModal_Content_StandardSplit
         label={props.dictionary.app.upsert_modal.cover}

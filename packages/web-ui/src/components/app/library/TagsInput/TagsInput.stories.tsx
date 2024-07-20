@@ -18,7 +18,7 @@ export const Primary = () => {
           max_tags={8}
           on_focus={() => {}}
           translations={{
-            create: 'Create',
+            add: 'Add',
             enter_tag_name: 'Enter tag name',
           }}
         />
@@ -34,7 +34,7 @@ export const Primary = () => {
           max_tags={8}
           on_focus={() => {}}
           translations={{
-            create: 'Create',
+            add: 'Add',
             enter_tag_name: 'Enter tag name',
           }}
         />

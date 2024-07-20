@@ -270,7 +270,7 @@ const dictionary: Dictionary = {
       jot_something_down: 'Jot something down...',
       tags: 'Tags',
       tags_dropdown: {
-        create: 'Create',
+        add: 'Add',
       },
       enter_tag_name: 'Enter tag name',
       add_tag: 'Add tag',

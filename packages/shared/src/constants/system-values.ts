@@ -26,7 +26,7 @@ export const system_values = {
     },
     tags: {
       limit: 8,
-      max_length: 30,
+      max_length: 25,
     },
     links: {
       limit: 20,

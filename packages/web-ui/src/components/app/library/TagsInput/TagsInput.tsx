@@ -22,7 +22,7 @@ export namespace TagsInput {
     on_focus: () => void
     translations: {
       enter_tag_name: string
-      create: string
+      add: string
     }
   }
 }
@@ -50,6 +50,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
   }, [sortable_items])
 
   useUpdateEffect(() => {
+    // Set input width dynamically.
     const span = document.createElement('span')
     document.body.appendChild(span)
     const inputStyles = window.getComputedStyle(ref.current!)
@@ -57,17 +58,43 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
     span.style.whiteSpace = 'pre'
     const width = span.offsetWidth + parseFloat(inputStyles.paddingLeft)
     document.body.removeChild(span)
-    set_input_width(width)
+    set_input_width(width + 10)
 
+    // Hanlde keyboard keys.
     const handle_keyboard = (event: KeyboardEvent) => {
       if (event.code == 'Enter') {
-        if (sortable_items.length == props.max_tags) return
-        if (!sortable_items.find((i) => i.name == new_tag_name)) {
+        if (
+          sortable_items.length == props.max_tags ||
+          !new_tag_name.trim().length
+        )
+          return
+        if (!sortable_items.find((i) => i.name == new_tag_name.trim())) {
           set_sortable_items([
             ...sortable_items,
-            { id: Math.random(), name: new_tag_name },
+            { id: Math.random(), name: new_tag_name.trim() },
           ])
           set_new_tag_name('')
+        }
+      } else if (event.code == 'Tab') {
+        // apply first suggestion
+        const first_suggestion = new_tag_name
+          ? props.all_tags
+              .filter((tag) =>
+                tag.toLowerCase().includes(new_tag_name.toLowerCase()),
+              )
+              .filter((tag) => !sortable_items.find((i) => i.name == tag))[0]
+          : undefined
+
+        if (first_suggestion) {
+          event.preventDefault()
+          set_sortable_items([
+            ...sortable_items,
+            { id: Math.random(), name: first_suggestion },
+          ])
+          set_new_tag_name('')
+        } else {
+          set_is_focused(false)
+          set_show_dropdown(false)
         }
       } else if (event.code == 'Escape') {
         set_is_focused(false)
@@ -83,9 +110,11 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
     return () => document.removeEventListener('keydown', handle_keyboard)
   }, [new_tag_name, is_focused, sortable_items])
 
+  // Control dropdown visibility.
   useUpdateEffect(() => {
     if (
       is_focused &&
+      (!new_tag_name || new_tag_name.trim().length) &&
       ((!new_tag_name &&
         props.recent_tags.filter(
           (recent_tag) => !sortable_items.find((i) => i.name == recent_tag),
@@ -183,6 +212,10 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
         }
         value={new_tag_name}
         onChange={(event) => {
+          if (
+            event.target.value.length >= system_values.bookmark.tags.max_length
+          )
+            return
           set_new_tag_name(event.target.value)
         }}
         onFocus={() => {
@@ -205,7 +238,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
             .filter(
               (recent_tag) => !sortable_items.find((i) => i.name == recent_tag),
             )
-            .slice(0, 10)
+            .slice(0, 12)
             .map((recent_tag) => (
               <button
                 key={recent_tag}
@@ -228,7 +261,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
               tag.toLowerCase().includes(new_tag_name.toLowerCase()),
             )
             .filter((tag) => !sortable_items.find((i) => i.name == tag))
-            .slice(0, 10)
+            .slice(0, 12)
             .map((tag) => (
               <button
                 key={tag}
@@ -251,19 +284,19 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
             ))}
       </div>
       {/* Create new tag (shown when no match in filtered out all tags was found). */}
-      {new_tag_name && !props.all_tags.find((tag) => tag == new_tag_name) && (
+      {new_tag_name.trim() && (
         <button
           className={styles.dropdown__create}
           onClick={() => {
             if (sortable_items.length == props.max_tags) return
             set_sortable_items([
               ...sortable_items,
-              { id: Math.random(), name: new_tag_name },
+              { id: Math.random(), name: new_tag_name.trim() },
             ])
             set_new_tag_name('')
           }}
         >
-          {props.translations.create} "<strong>{new_tag_name}</strong>"
+          {props.translations.add} "<strong>{new_tag_name}</strong>"
         </button>
       )}
     </div>

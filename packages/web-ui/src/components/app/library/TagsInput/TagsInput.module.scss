@@ -41,7 +41,7 @@
   }
 }
 .input {
-  padding-left: 2px;
+  // padding-left: 2px;
   width: 150px;
 }
 .tag {
@@ -145,7 +145,6 @@
         right: 0;
         content: ',';
         margin-right: -4px;
-        color: var(--text-color-dimmed);
       }
       &:last-of-type::after {
         content: '';
@@ -155,6 +154,7 @@
   &__create {
     display: flex;
     margin-bottom: 4px;
+    font-style: italic;
     @include hover {
       @include text-decoration-underlinie-thin;
     }
