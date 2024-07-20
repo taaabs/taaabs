@@ -3,6 +3,7 @@ declare const styles: {
   readonly "field": string;
   readonly "field__focus": string;
   readonly "input": string;
+  readonly "input--empty": string;
   readonly "tag": string;
   readonly "tag__actions": string;
   readonly "tag__actions__action": string;

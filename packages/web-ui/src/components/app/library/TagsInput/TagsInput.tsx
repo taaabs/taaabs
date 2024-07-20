@@ -177,7 +177,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
                   )
                 }}
               >
-                <Icon variant="GLOBE" />
+                <Icon variant="EYE" />
               </button>
             )}
             <button
@@ -206,7 +206,9 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
             : '10px',
           flex: !props.selected_tags.length ? '1' : undefined,
         }}
-        className={styles.input}
+        className={cn(styles.input, {
+          [styles['input--empty']]: !sortable_items.length,
+        })}
         placeholder={
           !sortable_items.length ? props.translations.enter_tag_name : undefined
         }

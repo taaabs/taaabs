@@ -10,7 +10,7 @@
   flex-wrap: wrap;
   gap: var(--padding-6px);
   min-height: var(--button-dimension-40px);
-  padding: var(--padding-8px) var(--padding-10px);
+  padding: var(--padding-8px);
   background-color: var(--white);
   border-radius: var(--border-radius-10px);
   border: 1.5px solid var(--neutral200);
@@ -41,8 +41,11 @@
   }
 }
 .input {
-  // padding-left: 2px;
+  padding-left: var(--padding-2px);
   width: 150px;
+  &--empty {
+    padding-left: var(--padding-4px);
+  }
 }
 .tag {
   display: inline-flex;
@@ -61,12 +64,6 @@
     background-color: var(--green900);
   }
   @include transition-150ms;
-  // Needed by swipable and sortable - element touch hold detection.
-  @include touch-screen {
-    > * {
-      pointer-events: none;
-    }
-  }
   font-family: var(--font-family-inter-tight);
   font-size: var(--font-size-14px);
   &__actions {
