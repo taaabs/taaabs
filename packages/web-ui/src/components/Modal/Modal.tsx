@@ -4,6 +4,7 @@ import cn from 'classnames'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { useEffect } from 'react'
+import { Sheet } from 'react-modal-sheet'
 
 namespace Modal {
   export type Props = {
@@ -79,47 +80,57 @@ export const Modal: React.FC<Modal.Props> = (props) => {
       </div>
     </div>
   ) : (
-    <Drawer.Root
-      open={props.is_open}
-      dismissible={props.is_dismissible}
-      onClose={props.on_close}
-      noBodyStyles={true}
-      disablePreventScroll={true}
-    >
-      <Drawer.Portal>
-        <Drawer.Overlay
-          style={{
-            zIndex: 3,
-            position: 'fixed',
-            inset: 0,
-          }}
-          onClick={props.on_close}
-          className={styles.overlay}
-        />
-        <Drawer.Content
-          style={{
-            position: 'fixed',
-            zIndex: 4,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            borderTopLeftRadius: '14px',
-            borderTopRightRadius: '14px',
-            overflow: 'hidden',
-          }}
-        >
-          {props.slot_header}
-          <div
-            style={{
-              overflow: 'auto',
-              maxHeight: props.slot_footer ? '75svh' : '85svh',
-            }}
-          >
-            {props.slot_content}
-          </div>
-          {props.slot_footer}
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
+    <Sheet isOpen={props.is_open} onClose={props.on_close}>
+      <Sheet.Container>
+        <Sheet.Header>{props.slot_header}</Sheet.Header>
+        <Sheet.Content>
+          <Sheet.Scroller>{props.slot_content}</Sheet.Scroller>
+        </Sheet.Content>
+        {props.slot_footer}
+      </Sheet.Container>
+      <Sheet.Backdrop />
+    </Sheet>
+    // <Drawer.Root
+    //   open={props.is_open}
+    //   dismissible={props.is_dismissible}
+    //   onClose={props.on_close}
+    //   noBodyStyles={true}
+    //   disablePreventScroll={true}
+    // >
+    //   <Drawer.Portal>
+    //     <Drawer.Overlay
+    //       style={{
+    //         zIndex: 3,
+    //         position: 'fixed',
+    //         inset: 0,
+    //       }}
+    //       onClick={props.on_close}
+    //       className={styles.overlay}
+    //     />
+    //     <Drawer.Content
+    //       style={{
+    //         position: 'fixed',
+    //         zIndex: 4,
+    //         left: 0,
+    //         right: 0,
+    //         bottom: 0,
+    //         borderTopLeftRadius: '14px',
+    //         borderTopRightRadius: '14px',
+    //         overflow: 'hidden',
+    //       }}
+    //     >
+    //       {props.slot_header}
+    //       <div
+    //         style={{
+    //           overflow: 'auto',
+    //           maxHeight: props.slot_footer ? '75svh' : '85svh',
+    //         }}
+    //       >
+    //         {props.slot_content}
+    //       </div>
+    //       {props.slot_footer}
+    //     </Drawer.Content>
+    //   </Drawer.Portal>
+    // </Drawer.Root>
   )
 }
