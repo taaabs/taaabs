@@ -18,7 +18,7 @@ import { SegmentedButton as UiCommon_SegmentedButton } from '@web-ui/components/
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { HtmlParser } from '@shared/utils/html-parser'
-
+import { encode } from 'blurhash'
 import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
 import { AuthContext } from '@/app/auth-provider'
 import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
@@ -79,6 +79,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   const cover_paste_area = useRef<HTMLDivElement>(null)
   const file_input = useRef<HTMLInputElement>(null)
   const [cover, set_cover] = useState<string>() // Base64 encoded webp.
+  const [cover_blurhash, set_cover_blurhash] = useState<string>()
   const [is_fetching_my_tags, set_is_fetching_my_tags] = useState<boolean>()
   const [my_tags, set_my_tags] = useState<Tags_Ro>()
 
@@ -107,6 +108,17 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       const ctx = canvas.getContext('2d')!
       ctx.drawImage(img, 0, 0, original_width, original_height)
       set_cover(canvas.toDataURL('image/webp'))
+
+      // Calculate Blurhash.
+      const image_data = ctx.getImageData(
+        0,
+        0,
+        original_width,
+        original_height,
+      ).data
+      set_cover_blurhash(
+        encode(image_data, original_width, original_height, 4, 3),
+      )
     }
   }
 
@@ -178,6 +190,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     let og_image: string | undefined = undefined
+    let og_image_blurhash: string | undefined = undefined
     if (clipboard_data?.og_image) {
       const img = document.createElement('img')
       img.src = clipboard_data.og_image
@@ -192,9 +205,25 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       const canvas = document.createElement('canvas')
       canvas.width = original_width
       canvas.height = original_height
-      const ctx = canvas.getContext('2d')!
+      const ctx = canvas.getContext('2d')
+      if (!ctx) throw new Error('Could not get 2D context from canvas.')
       ctx.drawImage(img, 0, 0, original_width, original_height)
       og_image = canvas.toDataURL('image/webp')
+
+      // Calculate Blurhash.
+      const image_data = ctx.getImageData(
+        0,
+        0,
+        original_width,
+        original_height,
+      ).data
+      og_image_blurhash = encode(
+        image_data,
+        original_width,
+        original_height,
+        6,
+        4,
+      )
     }
 
     const bookmark: UpsertBookmark_Params = {
@@ -246,6 +275,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       cover: cover?.split(',')[1] || og_image?.split(',')[1],
       cover_hash: props.bookmark?.cover_hash,
       has_cover_aes: props.bookmark?.has_cover_aes,
+      blurhash: cover_blurhash || og_image_blurhash || props.bookmark?.blurhash,
     }
     props.on_submit(bookmark)
   }

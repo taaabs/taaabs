@@ -22,6 +22,7 @@
     "argon2id": "^1.0.1",
     "awesome-debounce-promise": "^2.1.0",
     "beautiful-react-hooks": "^5.0.0",
+    "blurhash": "^2.0.5",
     "eslint": "^9.7.0",
     "eslint-config-next": "^13.5.4",
     "ky": "^1.2.2",

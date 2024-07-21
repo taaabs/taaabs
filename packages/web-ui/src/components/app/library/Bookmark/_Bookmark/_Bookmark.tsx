@@ -21,6 +21,7 @@ import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/Dropdown'
 import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/Dropdown/standard-item'
 import { url_path_for_display } from '@shared/utils/url-path-for-display/url-path-for-display'
+import { Blurhash, BlurhashCanvas } from 'react-blurhash'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -133,6 +134,7 @@ export namespace _Bookmark {
     on_mouse_up?: () => void
     cover_hash?: string
     cover?: string // Base64 encoded webp of a private bookmark.
+    blurhash?: string
     translations: {
       rename: string
       delete: string
@@ -650,6 +652,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
           >
             <div className={styles.bookmark__card__cover}>
               <div className={styles.bookmark__card__cover__image}>
+                {props.blurhash && <BlurhashCanvas hash={props.blurhash} />}
                 {props.cover ? (
                   <>
                     <img

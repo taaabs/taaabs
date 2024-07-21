@@ -79,6 +79,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       points={bookmark.points}
       has_cover_aes={bookmark.has_cover_aes}
       cover_hash={bookmark.cover_hash}
+      blurhash={bookmark.blurhash}
       on_get_points_given_click={
         auth_context.auth_data
           ? () => {
