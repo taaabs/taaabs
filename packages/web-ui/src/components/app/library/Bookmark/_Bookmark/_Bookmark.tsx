@@ -6,7 +6,6 @@ import 'dayjs/locale/pl'
 import { ReactSortable } from 'react-sortablejs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search/get-site-variants-for-search'
@@ -668,10 +667,12 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   <>
                     <img
                       className={styles.bookmark__card__cover__image__fill}
+                      loading="lazy"
                       src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
                     />
                     <img
                       className={styles.bookmark__card__cover__image__top}
+                      loading="lazy"
                       src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
                     />
                   </>
@@ -878,13 +879,14 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         )}
                       >
                         {link.is_public ? (
-                          <LazyLoadImage
+                          <img
                             alt={'Favicon'}
                             width={16}
                             height={16}
                             src={`${props.favicon_host}/${get_domain_from_url(
                               link.url,
                             )}`}
+                            loading="lazy"
                           />
                         ) : link.favicon ? (
                           <img
