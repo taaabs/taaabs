@@ -26,6 +26,8 @@ import { Tags_Ro } from '@repositories/modules/tags/domain/tags.ro'
 import { ModalContext } from '@/providers/modal-provider'
 import { TagsInput as UiAppLibrary_TagsInput } from '@web-ui/components/app/library/TagsInput'
 
+const max_cover_width = 1200
+
 type FormValues = {
   title?: string
   note?: string
@@ -92,7 +94,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onloadend = async function () {
-      const img = document.createElement('img')
+      const img = new Image()
       img.src = reader.result as string
 
       await new Promise((resolve) => {
@@ -102,22 +104,50 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       const original_width = img.width
       const original_height = img.height
 
-      const canvas = document.createElement('canvas')
-      canvas.width = original_width
-      canvas.height = original_height
-      const ctx = canvas.getContext('2d')!
-      ctx.drawImage(img, 0, 0, original_width, original_height)
-      set_cover(canvas.toDataURL('image/webp'))
+      // Calculate new dimensions.
+      const max_width = max_cover_width
+      let new_width = original_width
+      let new_height = original_height
 
-      // Calculate Blurhash.
-      const image_data = ctx.getImageData(
+      if (original_width > max_width) {
+        new_width = max_width
+        new_height = Math.round((original_height / original_width) * max_width)
+      }
+
+      // Full-size canvas for cover image.
+      const full_size_canvas = document.createElement('canvas')
+      full_size_canvas.width = new_width
+      full_size_canvas.height = new_height
+      const full_size_ctx = full_size_canvas.getContext('2d')
+      if (!full_size_ctx)
+        throw new Error('Could not get 2D context from full-size canvas.')
+      full_size_ctx.drawImage(img, 0, 0, new_width, new_height)
+      set_cover(full_size_canvas.toDataURL('image/webp'))
+
+      // Smaller canvas for Blurhash calculation.
+      const blurhash_width = 50
+      const blurhash_height = Math.round(
+        (new_height / new_width) * blurhash_width,
+      )
+      const blurhash_canvas = document.createElement('canvas')
+      blurhash_canvas.width = blurhash_width
+      blurhash_canvas.height = blurhash_height
+      const blurhash_ctx = blurhash_canvas.getContext('2d')
+      if (!blurhash_ctx)
+        throw new Error('Could not get 2D context from Blurhash canvas.')
+
+      // Use built-in scaling of drawImage for better quality.
+      blurhash_ctx.drawImage(img, 0, 0, blurhash_width, blurhash_height)
+
+      // Calculate Blurhash using the resized image.
+      const image_data = blurhash_ctx.getImageData(
         0,
         0,
-        original_width,
-        original_height,
+        blurhash_width,
+        blurhash_height,
       ).data
       set_cover_blurhash(
-        encode(image_data, original_width, original_height, 4, 3),
+        encode(image_data, blurhash_width, blurhash_height, 6, 4),
       )
     }
   }
@@ -135,15 +165,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     }
 
     if (blob) {
-      const reader = new FileReader()
-      // reader.onload = function (event: ProgressEvent<FileReader>) {
-      //   if (event.target && event.target.result) {
-      //     preview.src = event.target.result as string;
-      //   }
-      // }
-      reader.readAsDataURL(blob)
-
-      // Create a new File object to set the file input value
+      // Create a new File object to set the file input value.
       const file = new File([blob], 'pasted-image.png', { type: blob.type })
       const dataTransfer = new DataTransfer()
       dataTransfer.items?.add(file)
@@ -191,8 +213,9 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
     let og_image: string | undefined = undefined
     let og_image_blurhash: string | undefined = undefined
+
     if (clipboard_data?.og_image) {
-      const img = document.createElement('img')
+      const img = new Image()
       img.src = clipboard_data.og_image
 
       await new Promise((resolve) => {
@@ -202,25 +225,54 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       const original_width = img.width
       const original_height = img.height
 
-      const canvas = document.createElement('canvas')
-      canvas.width = original_width
-      canvas.height = original_height
-      const ctx = canvas.getContext('2d')
-      if (!ctx) throw new Error('Could not get 2D context from canvas.')
-      ctx.drawImage(img, 0, 0, original_width, original_height)
-      og_image = canvas.toDataURL('image/webp')
+      // Calculate new dimensions.
+      const max_width = max_cover_width
+      let new_width = original_width
+      let new_height = original_height
 
-      // Calculate Blurhash.
-      const image_data = ctx.getImageData(
+      if (original_width > max_width) {
+        new_width = max_width
+        new_height = Math.round((original_height / original_width) * max_width)
+      }
+
+      // Create canvas for full-size image.
+      const full_size_canvas = document.createElement('canvas')
+      full_size_canvas.width = new_width
+      full_size_canvas.height = new_height
+      const full_size_ctx = full_size_canvas.getContext('2d')
+      if (!full_size_ctx)
+        throw new Error('Could not get 2D context from full-size canvas.')
+
+      full_size_ctx.drawImage(img, 0, 0, new_width, new_height)
+      og_image = full_size_canvas.toDataURL('image/webp')
+
+      // Create smaller canvas for Blurhash calculation.
+      const blurhashWidth = 50
+      const blurhashHeight = Math.round(
+        (new_height / new_width) * blurhashWidth,
+      )
+
+      const blurhashCanvas = document.createElement('canvas')
+      blurhashCanvas.width = blurhashWidth
+      blurhashCanvas.height = blurhashHeight
+      const blurhash_ctx = blurhashCanvas.getContext('2d')
+      if (!blurhash_ctx)
+        throw new Error('Could not get 2D context from Blurhash canvas.')
+
+      // Use built-in scaling of drawImage for better quality.
+      blurhash_ctx.drawImage(img, 0, 0, blurhashWidth, blurhashHeight)
+
+      // Calculate Blurhash using the resized image.
+      const image_data = blurhash_ctx.getImageData(
         0,
         0,
-        original_width,
-        original_height,
+        blurhashWidth,
+        blurhashHeight,
       ).data
       og_image_blurhash = encode(
         image_data,
-        original_width,
-        original_height,
+        blurhashWidth,
+        blurhashHeight,
         6,
         4,
       )
@@ -592,26 +644,12 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
 
       <UiModal_Content_Divider />
 
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-
-      {/* <UiModal_Content_StandardSplit
+      <UiModal_Content_StandardSplit
         label={props.dictionary.app.upsert_modal.cover}
       >
-        {(cover || clipboard_data?.og_image || props.bookmark?.cover) && (
+        {(cover || clipboard_data?.og_image) && (
           <img
-            src={
-              cover ||
-              clipboard_data?.og_image ||
-              (props.bookmark?.cover &&
-                `data:image/webp;base64,${props.bookmark?.cover}`)
-            }
+            src={cover || clipboard_data?.og_image}
             width={156}
             height={82}
           />
@@ -621,7 +659,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         <div ref={cover_paste_area}>
           Click here and press Ctrl+V to paste an image
         </div>
-      </UiModal_Content_StandardSplit> */}
+      </UiModal_Content_StandardSplit>
     </UiModal_Content>
   )
 
