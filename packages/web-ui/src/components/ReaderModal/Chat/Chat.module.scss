@@ -15,6 +15,7 @@
 .user {
   display: flex;
   align-items: center;
+  position: relative;
   background-color: var(--neutral150);
   @include dark {
     background-color: var(--dark200);
@@ -23,10 +24,22 @@
   align-self: flex-end;
   word-wrap: anywhere;
   border-radius: var(--border-radius-20px);
+  border-top-right-radius: 0;
   max-width: 90%;
   min-height: var(--button-dimension-40px);
   @include at992 {
     max-width: 70%;
+  }
+  > svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(100%) scaleX(-1);
+    fill: var(--neutral150);
+    width: 12px;
+    @include dark {
+      fill: var(--dark200);
+    }
   }
 }
 .assistant {

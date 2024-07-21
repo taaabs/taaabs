@@ -1,6 +1,7 @@
 import { ReaderData } from '@shared/utils/html-parser/reader-data'
 import styles from './Chat.module.scss'
 import { _RenderMarkdown } from '../common/_RenderMarkdown'
+import { Icon } from '@web-ui/components/common/particles/icon'
 
 namespace Chat {
   export type Props = {
@@ -15,7 +16,8 @@ export const Chat: React.FC<Chat.Props> = (props) => {
         if (message.author == 'user') {
           return (
             <div className={styles.user} key={i}>
-              {message.text}
+              <span>{message.text}</span>
+              <Icon variant="CHAT_BUBBLE_CORNER" />
             </div>
           )
         } else if (message.author == 'assistant') {
