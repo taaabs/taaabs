@@ -247,32 +247,32 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       og_image = full_size_canvas.toDataURL('image/webp')
 
       // Create smaller canvas for Blurhash calculation.
-      const blurhashWidth = 50
-      const blurhashHeight = Math.round(
-        (new_height / new_width) * blurhashWidth,
+      const blurhash_width = 50
+      const blurhash_height = Math.round(
+        (new_height / new_width) * blurhash_width,
       )
 
       const blurhashCanvas = document.createElement('canvas')
-      blurhashCanvas.width = blurhashWidth
-      blurhashCanvas.height = blurhashHeight
+      blurhashCanvas.width = blurhash_width
+      blurhashCanvas.height = blurhash_height
       const blurhash_ctx = blurhashCanvas.getContext('2d')
       if (!blurhash_ctx)
         throw new Error('Could not get 2D context from Blurhash canvas.')
 
       // Use built-in scaling of drawImage for better quality.
-      blurhash_ctx.drawImage(img, 0, 0, blurhashWidth, blurhashHeight)
+      blurhash_ctx.drawImage(img, 0, 0, blurhash_width, blurhash_height)
 
       // Calculate Blurhash using the resized image.
       const image_data = blurhash_ctx.getImageData(
         0,
         0,
-        blurhashWidth,
-        blurhashHeight,
+        blurhash_width,
+        blurhash_height,
       ).data
       og_image_blurhash = encode(
         image_data,
-        blurhashWidth,
-        blurhashHeight,
+        blurhash_width,
+        blurhash_height,
         6,
         4,
       )
