@@ -8,7 +8,7 @@ import { system_values } from '@shared/constants/system-values'
 import OutsideClickHandler from 'react-outside-click-handler'
 
 export namespace TagsInput {
-  type Tag = {
+  export type Tag = {
     name: string
     is_public?: boolean
   }
@@ -155,6 +155,8 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
       })}
       animation={system_values.sortablejs_animation_duration}
       filter={`.${styles.input}`}
+      delay={system_values.sortablejs_delay}
+      delayOnTouchOnly={true}
     >
       {sortable_items.map((item) => (
         <div className={styles.tag} key={item.id}>

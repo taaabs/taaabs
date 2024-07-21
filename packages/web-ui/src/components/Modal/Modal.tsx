@@ -3,6 +3,7 @@ import cn from 'classnames'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect } from 'react'
 import { Sheet } from 'react-modal-sheet'
+import OutsideClickHandler from 'react-outside-click-handler'
 
 namespace Modal {
   export type Props = {
@@ -97,7 +98,7 @@ export const Modal: React.FC<Modal.Props> = (props) => {
         </Sheet.Content>
         {props.slot_footer}
       </Sheet.Container>
-      <Sheet.Backdrop />
+      <Sheet.Backdrop onTap={props.on_close} />
     </Sheet>
   )
 }

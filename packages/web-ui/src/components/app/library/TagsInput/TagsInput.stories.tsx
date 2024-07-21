@@ -1,44 +1,82 @@
-import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
+import { Meta, StoryFn } from '@storybook/react'
 import { TagsInput } from './TagsInput'
+import { StorybookMargin } from '@web-ui/helpers/storybook'
 
 export default {
   component: TagsInput,
+} as Meta
+
+// Mock functions
+const mock_on_selected_tags_update = (selected_tags: TagsInput.Tag[]) => {
+  console.log('Selected tags updated:', selected_tags)
+}
+const mock_on_focus = () => {
+  console.log('TagsInput focused')
 }
 
-export const Primary = () => {
-  return (
-    <StorybookMargin>
-      <div style={{ maxWidth: '300px' }}>
-        <TagsInput
-          all_tags={['aaa', 'bbb', 'ccc', 'ddd']}
-          on_selected_tags_update={() => {}}
-          recent_tags={['aaa', 'ddd']}
-          selected_tags={[]}
-          is_visibility_toggleable={false}
-          max_tags={8}
-          on_focus={() => {}}
-          translations={{
-            add: 'Add',
-            enter_tag_name: 'Enter tag name',
-          }}
-        />
-      </div>
-      <StorybookSpacer />
-      <div style={{ maxWidth: '300px' }}>
-        <TagsInput
-          all_tags={['aaa', 'bbb', 'ccc', 'ddd', 'Lorem ipsum^%$@ ipsum']}
-          on_selected_tags_update={() => {}}
-          recent_tags={['aaa', 'ddd']}
-          selected_tags={[{ name: 'aaa' }, { name: 'bbb' }]}
-          is_visibility_toggleable={true}
-          max_tags={8}
-          on_focus={() => {}}
-          translations={{
-            add: 'Add',
-            enter_tag_name: 'Enter tag name',
-          }}
-        />
-      </div>
-    </StorybookMargin>
-  )
+const base_args: Partial<TagsInput.Props> = {
+  all_tags: [
+    'React',
+    'JavaScript',
+    'TypeScript',
+    'HTML',
+    'CSS',
+    'Node.js',
+    'Express',
+    'MongoDB',
+  ],
+  recent_tags: ['React', 'JavaScript', 'TypeScript'],
+  max_tags: 5,
+  is_visibility_toggleable: false,
+  on_selected_tags_update: mock_on_selected_tags_update,
+  on_focus: mock_on_focus,
+  translations: {
+    enter_tag_name: 'Enter tag name',
+    add: 'Add',
+  },
+}
+
+const Template: StoryFn<TagsInput.Props> = (args) => (
+  <StorybookMargin>
+    <TagsInput {...args} />
+  </StorybookMargin>
+)
+
+export const Default = Template.bind({})
+Default.args = {
+  ...base_args,
+  selected_tags: [
+    { name: 'React', is_public: true },
+    { name: 'JavaScript', is_public: true },
+  ],
+}
+
+export const EmptyState = Template.bind({})
+EmptyState.args = {
+  ...base_args,
+  selected_tags: [],
+}
+
+export const MaxTagsReached = Template.bind({})
+MaxTagsReached.args = {
+  ...base_args,
+  selected_tags: [
+    { name: 'React', is_public: true },
+    { name: 'JavaScript', is_public: true },
+    { name: 'TypeScript', is_public: true },
+    { name: 'HTML', is_public: true },
+    { name: 'CSS', is_public: true },
+  ],
+  max_tags: 5,
+}
+
+export const WithVisibilityControl = Template.bind({})
+WithVisibilityControl.args = {
+  ...base_args,
+  is_visibility_toggleable: true,
+  selected_tags: [
+    { name: 'React', is_public: true },
+    { name: 'JavaScript', is_public: false },
+    { name: 'TypeScript', is_public: true },
+  ],
 }
