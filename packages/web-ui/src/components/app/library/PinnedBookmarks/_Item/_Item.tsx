@@ -1,7 +1,6 @@
 import { Icon } from '@web-ui/components/common/particles/icon'
 import styles from './_Item.module.scss'
 import cn from 'classnames'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { useRef, useState } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
@@ -51,11 +50,12 @@ export const _Item: React.FC<_Item.Props> = (props) => {
       <div className={styles.item__link}>
         <button className={styles.item__link__site}>
           {props.is_public ? (
-            <LazyLoadImage
+            <img
               alt={'Favicon'}
               width={16}
               height={16}
               src={`${props.favicon_host}/${get_domain_from_url(props.url)}`}
+              loading="lazy"
             />
           ) : props.favicon ? (
             <img
