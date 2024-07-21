@@ -240,9 +240,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           bookmark_updated_at: '',
         })
         cover = await Crypto.AES.decrypt(cover_encrypted, encryption_key)
-        // 1. get encrypted cover
-        // 2. decrypt
-        // 3. assign to cover
       }
     }
 
@@ -273,6 +270,10 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       cover_aes:
         !params.is_public && cover
           ? await Crypto.AES.encrypt(cover, encryption_key)
+          : undefined,
+      blurhash_aes:
+        !params.is_public && params.blurhash
+          ? await Crypto.AES.encrypt(params.blurhash, encryption_key)
           : undefined,
     }
 

@@ -25,4 +25,5 @@ export type Bookmark_Entity = {
   points?: number
   has_cover_aes?: boolean
   cover_hash?: string
+  blurhash?: string
 }

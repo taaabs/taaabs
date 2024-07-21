@@ -93,6 +93,11 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         links,
         cover_hash: bookmark.cover_hash,
         has_cover_aes: bookmark.has_cover_aes,
+        blurhash: bookmark.blurhash
+          ? bookmark.blurhash
+          : bookmark.blurhash_aes
+          ? await Crypto.AES.decrypt(bookmark.blurhash_aes, encryption_key)
+          : undefined,
       })
     }
 
@@ -154,6 +159,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           tags,
           links,
           cover_hash: bookmark.cover_hash,
+          blurhash: bookmark.blurhash,
         })
       }
     }
@@ -249,6 +255,14 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               ),
               cover_hash: bookmark.cover_hash,
               has_cover_aes: bookmark.has_cover_aes,
+              blurhash: bookmark.blurhash
+                ? bookmark.blurhash
+                : bookmark.blurhash_aes
+                ? await Crypto.AES.decrypt(
+                    bookmark.blurhash_aes,
+                    encryption_key,
+                  )
+                : undefined,
             })),
           )
         : undefined,
@@ -288,6 +302,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               is_parsed: link.is_parsed,
             })),
             cover_hash: bookmark.cover_hash,
+            blurhash: bookmark.blurhash,
           }))
         : undefined,
     }
@@ -422,6 +437,11 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       ),
       cover_hash: bookmark.cover_hash,
       has_cover_aes: bookmark.has_cover_aes,
+      blurhash: bookmark.blurhash
+          ? bookmark.blurhash
+          : bookmark.blurhash_aes
+          ? await Crypto.AES.decrypt(bookmark.blurhash_aes, encryption_key)
+          : undefined,
     }
   }
 

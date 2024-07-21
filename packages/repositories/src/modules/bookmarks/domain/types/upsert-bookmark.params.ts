@@ -21,4 +21,5 @@ export type UpsertBookmark_Params = {
   cover?: string
   cover_hash?: string
   has_cover_aes?: boolean
+  blurhash?: string
 }
