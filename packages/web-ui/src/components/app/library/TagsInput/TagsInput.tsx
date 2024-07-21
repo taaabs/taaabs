@@ -339,7 +339,7 @@ function highlight_typed_chars(params: { tag: string; typed_chars: string }) {
   )
   const highlighted_tag = params.tag.replace(
     regex,
-    (match) => `<strong>${match}</strong>`,
+    (match) => `<mark>${match}</mark>`,
   )
   return highlighted_tag
 }

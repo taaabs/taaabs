@@ -163,6 +163,10 @@ strong {
   font-weight: var(--font-weight-inter-semi-bold);
 }
 
+u {
+  @include text-decoration-underlinie-thin;
+}
+
 small {
   font-size: var(--font-size-13px);
   color: var(--text-color-dimmed);
