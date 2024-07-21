@@ -22,21 +22,5 @@
     border-left: var(--border-primary);
     border-right: var(--border-primary);
     background-color: var(--white);
-    > div {
-      padding: var(--padding-40px);
-    }
   }
-}
-
-.drawer-overlay {
-  background-color: rgba(0, 0, 0, 0.2);
-  @include dark {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-}
-
-.drawer-slot-content {
-  overflow: auto;
-  max-height: 85svh;
-  padding: var(--padding-16px);
 }

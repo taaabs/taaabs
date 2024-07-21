@@ -1,9 +1,9 @@
-import { Drawer } from 'vaul'
 import styles from './ReaderModal.module.scss'
 import cn from 'classnames'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
+import { Sheet } from 'react-modal-sheet'
 
 namespace ReaderModal {
   export type Props = {
@@ -67,41 +67,23 @@ export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
       </OutsideClickHandler>
     </div>
   ) : (
-    <Drawer.Root
-      open={props.is_open}
-      dismissible={props.is_dismissible}
+    <Sheet
+      isOpen={props.is_open}
       onClose={props.on_close}
-      noBodyStyles={true}
+      disableScrollLocking={true}
+      detent="content-height"
     >
-      <Drawer.Portal>
-        <Drawer.Overlay
-          style={{
-            zIndex: 3,
-            position: 'fixed',
-            inset: 0,
-          }}
-          onClick={props.on_close}
-          className={styles['drawer-overlay']}
-        />
-        <Drawer.Content
-          style={{
-            position: 'fixed',
-            zIndex: 4,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            borderTopLeftRadius: '14px',
-            borderTopRightRadius: '14px',
-            overflow: 'hidden',
-            background: 'var(--white)',
-          }}
-        >
-          {props.slot_header}
-          <div className={styles['drawer-slot-content']}>
-            {props.slot_content}
-          </div>
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
+      <Sheet.Container>
+        <Sheet.Header>
+          <div draggable={false}>{props.slot_header}</div>
+        </Sheet.Header>
+        <Sheet.Content>
+          <Sheet.Scroller>
+            <div style={{ maxHeight: '75svh' }}>{props.slot_content}</div>
+          </Sheet.Scroller>
+        </Sheet.Content>
+      </Sheet.Container>
+      <Sheet.Backdrop />
+    </Sheet>
   )
 }

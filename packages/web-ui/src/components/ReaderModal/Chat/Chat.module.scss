@@ -3,11 +3,13 @@
 
 .container {
   display: flex;
-  gap: var(--padding-24px);
+  gap: var(--padding-32px);
   flex-direction: column;
+  padding: var(--padding-16px);
   @include at992 {
     font-size: var(--font-size-16px);
     gap: var(--padding-40px);
+    padding: var(--padding-40px);
   }
 }
 .user {
@@ -32,17 +34,15 @@
   &::before {
     position: absolute;
     content: '';
-    width: 6px;
-    height: 6px;
+    width: 14px;
+    height: 14px;
     background-color: var(--accent-color);
     border-radius: 50%;
-    left: -10px;
-    top: 6px;
+    left: 0;
+    top: -20px;
     @include at992 {
-      width: 12px;
-      height: 12px;
-      left: -23px;
-      top: 4px;
+      left: -25px;
+      top: 3px;
     }
   }
 }

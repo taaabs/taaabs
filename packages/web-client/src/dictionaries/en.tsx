@@ -286,7 +286,7 @@ const dictionary: Dictionary = {
       untitled: 'Untitled',
       cancel: 'Cancel',
       delete: 'Delete',
-      are_you_sure: 'This will delete',
+      are_you_sure: 'This will permanently delete',
     },
     rename_tag_modal: {
       rename_tag: 'Rename tag',

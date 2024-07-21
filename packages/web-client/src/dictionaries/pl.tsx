@@ -292,7 +292,7 @@ export const dictionary: Dictionary = {
       untitled: 'Bez tytułu',
       delete: 'Usuń',
       delete_bookmark: 'Usuń zakładkę',
-      are_you_sure: 'Ta operacja usunie',
+      are_you_sure: 'Ta operacja trwale usunie',
     },
     rename_tag_modal: {
       rename_tag: 'Edytuj słowo kluczowe',
