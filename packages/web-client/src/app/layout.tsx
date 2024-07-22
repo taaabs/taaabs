@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify'
 import fs from 'fs'
 import path from 'path'
 import { ReactNode } from 'react'
-import { ModalProvider } from '@/providers/modal-provider'
+import { ModalProvider } from '@/providers/ModalProvider'
 import { AuthProvider } from './auth-provider'
 import { LocalDbProvider } from './local-db-provider'
 

@@ -1,5 +1,5 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { ModalContext } from '@/providers/modal-provider'
+import { ModalContext } from '@/providers/ModalProvider'
 import dynamic from 'next/dynamic'
 
 const DynamicReaderModal = dynamic(() => import('./DynamicReaderModal'), {

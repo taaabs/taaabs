@@ -1,6 +1,6 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { DeleteAccountModal } from './DeleteAccountModal'
-import { ModalContext } from '@/providers/modal-provider'
+import { ModalContext } from '@/providers/ModalProvider'
 
 export const delete_account_modal_setter = (params: {
   modal_context: ModalContext

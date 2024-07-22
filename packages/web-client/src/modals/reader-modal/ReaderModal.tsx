@@ -5,7 +5,7 @@ import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
 import { Article as UiReaderModal_Article } from '@web-ui/components/ReaderModal/Article'
 import { Chat as UiReaderModal_Chat } from '@web-ui/components/ReaderModal/Chat'
 import { ReactNode, useContext } from 'react'
-import { ModalContext } from '@/providers/modal-provider'
+import { ModalContext } from '@/providers/ModalProvider'
 
 export namespace ReaderModal {
   export type Props = {

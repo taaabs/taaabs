@@ -1,6 +1,6 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { RenameTagModal } from './RenameTagModal'
-import { ModalContext } from '@/providers/modal-provider'
+import { ModalContext } from '@/providers/ModalProvider'
 
 export const rename_tag_modal_setter = (params: {
   modal_context: ModalContext

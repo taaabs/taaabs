@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { AuthContext } from '@/app/auth-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { delete_account_modal_setter } from '@/modals/delete-account/delete-account-modal-setter'
-import { ModalContext } from '@/providers/modal-provider'
+import { ModalContext } from '@/providers/ModalProvider'
 import { Settings_DataSourceImpl } from '@repositories/modules/settings/infrastructure/settings.data-source-impl'
 import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastructure/settings.repository-impl'
 

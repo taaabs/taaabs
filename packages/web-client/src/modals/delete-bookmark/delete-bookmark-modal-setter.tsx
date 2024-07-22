@@ -1,6 +1,6 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { DeleteBookmarkModal } from './DeleteBookmarkModal'
-import { ModalContext } from '@/providers/modal-provider'
+import { ModalContext } from '@/providers/ModalProvider'
 
 export const delete_bookmark_modal_setter = (params: {
   modal_context: ModalContext

@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { LibraryStoreProvider } from '@/providers/library-store-provider'
+import { LibraryStoreProvider } from '@/providers/LibraryStoreProvider'
 
 const Layout: React.FC<{
   children: React.ReactNode

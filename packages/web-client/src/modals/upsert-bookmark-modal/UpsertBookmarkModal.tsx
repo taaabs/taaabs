@@ -23,7 +23,7 @@ import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/t
 import { AuthContext } from '@/app/auth-provider'
 import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
 import { Tags_Ro } from '@repositories/modules/tags/domain/tags.ro'
-import { ModalContext } from '@/providers/modal-provider'
+import { ModalContext } from '@/providers/ModalProvider'
 import { TagsInput as UiAppLibrary_TagsInput } from '@web-ui/components/app/library/TagsInput'
 
 const max_cover_width = 1200

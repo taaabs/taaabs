@@ -24,7 +24,7 @@ import { Dictionary } from '@/dictionaries/dictionary'
 import { AuthContext } from '@/app/auth-provider'
 import { use_library_dispatch } from '@/stores/library'
 import { useSearchParams } from 'next/navigation'
-import { ModalContext } from '@/providers/modal-provider'
+import { ModalContext } from '@/providers/ModalProvider'
 import { LocalDb } from '@/app/local-db-provider'
 import { _Bookmark } from './_bookmarks/_Bookmark'
 

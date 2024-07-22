@@ -4,7 +4,7 @@ import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
 import { Footer as UiModal_Footer } from '@web-ui/components/Modal/Footer'
 import { Content as UiModal_Content } from '@web-ui/components/Modal/Content'
 import { useContext, useState } from 'react'
-import { ModalContext } from '@/providers/modal-provider'
+import { ModalContext } from '@/providers/ModalProvider'
 
 namespace DeleteBookmarkModal {
   export type Props = {

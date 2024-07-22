@@ -7,12 +7,12 @@ import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { usePathname } from 'next/navigation'
 import { ReactNode } from 'react'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { PublicUserAvatarProvider } from '@/providers/public-user-avatar-provider'
+import { PublicUserAvatarProvider } from '@/providers/PublicUserAvatarProvider'
 import { HeaderDesktop } from './_components/header-desktop'
 import { HeaderMobile } from './_components/header-mobile'
 import { BottomNavigationBar } from './_components/bottom-navigation-bar'
 import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
-import { ModalProvider } from '@/providers/modal-provider'
+import { ModalProvider } from '@/providers/ModalProvider'
 
 const landing_pathnames = ['/about', '/pricing', '/help', '/updates']
 

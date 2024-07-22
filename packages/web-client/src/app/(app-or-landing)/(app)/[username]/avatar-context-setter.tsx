@@ -1,6 +1,6 @@
 'use client'
 
-import { PublicUserAvatarContext } from '@/providers/public-user-avatar-provider'
+import { PublicUserAvatarContext } from '@/providers/PublicUserAvatarProvider'
 import { useContext, useEffect } from 'react'
 
 type Props = {

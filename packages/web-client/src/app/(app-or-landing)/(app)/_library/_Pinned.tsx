@@ -8,7 +8,7 @@ import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
-import { ModalContext } from '@/providers/modal-provider'
+import { ModalContext } from '@/providers/ModalProvider'
 import { AuthContext } from '@/app/auth-provider'
 import { LocalDb } from '@/app/local-db-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
