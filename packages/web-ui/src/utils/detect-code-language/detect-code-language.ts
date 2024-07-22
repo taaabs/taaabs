@@ -7,68 +7,25 @@ const languages: Record<
   { pattern: RegExp; points: number; near_top?: boolean }[]
 > = {
   typescript: [
-    {
-      pattern: /import( )+.*( )+from( )+('|").*('|");/,
-      points: 5,
-      near_top: true,
-    },
-    {
-      pattern:
-        /export( )+(default( )+)?(const|let|var|class|interface|function|enum)/,
-      points: 5,
-      near_top: true,
-    },
-    { pattern: /(const|let|var)( )+\w+:( )*\w+/, points: 3 },
-    { pattern: /function( )+\w+\(.*\):( )*\w+/, points: 3 },
-    { pattern: /interface( )+\w+/, points: 5 },
-    { pattern: /type( )+\w+( )*=( )*{/, points: 5 },
-    { pattern: /enum( )+\w+/, points: 5 },
-    { pattern: /implements( )+\w+/, points: 3 },
-    { pattern: /namespace( )+\w+/, points: 2 },
-    { pattern: /abstract( )+class( )+\w+/, points: 2 },
-    { pattern: /private( )+\w+:/, points: 2 },
-    { pattern: /protected( )+\w+:/, points: 2 },
-    { pattern: /public( )+\w+:/, points: 2 },
-    { pattern: /readonly( )+\w+:/, points: 2 },
-    { pattern: /@Injectable\(\)/, points: 3 },
-    { pattern: /@Component\(\{/, points: 3 },
+    { pattern: /interface( )+\w+( )*\{/, points: 2 },
+    { pattern: /type( )+\w+( )*=/, points: 2 },
+    { pattern: /<\w+>/, points: 1 },
+    { pattern: /:\s*(string|number|boolean|any|void|never)/, points: 1 },
+    { pattern: /export (interface|type|class|function)/, points: 1 },
   ],
   javascript: [
-    { pattern: /undefined/g, points: 2 },
-    { pattern: /console\.log( )*\(/, points: 2 },
-    { pattern: /(var|const|let)( )+\w+( )*=?/, points: 2 },
-    { pattern: /(('|").+('|")( )*|\w+):( )*[{\[]/, points: 2 },
-    { pattern: /===/g, points: 1 },
-    { pattern: /!==/g, points: 1 },
-    { pattern: /function\*?(( )+[\$\w]+( )*\(.*\)|( )*\(.*\))/g, points: 1 },
-    { pattern: /null/g, points: 1 },
-    { pattern: /\(.*\)( )*=>( )*.+/, points: 1 },
-    { pattern: /(else )?if( )+\(.+\)/, points: 1 },
-    { pattern: /while( )+\(.+\)/, points: 1 },
-    { pattern: /(^|\s)(char|long|int|float|double)( )+\w+( )*=?/, points: -1 },
-    { pattern: /(\w+)( )*\*( )*\w+/, points: -1 },
-    {
-      pattern: /<(\/)?script( type=('|")text\/javascript('|"))?>/,
-      points: -50,
-    },
+    { pattern: /const|let|var( )+\w+( )*=/, points: 2 },
+    { pattern: /function( )*\w+\s*\(.*\)( )*\{/, points: 2 },
+    { pattern: /=>/, points: 1 },
+    { pattern: /document\./, points: 1 },
+    { pattern: /console\.log\(/, points: 1 },
   ],
   c: [
-    { pattern: /(char|long|int|float|double)( )+\w+( )*=?/, points: 2 },
-    { pattern: /malloc\(.+\)/, points: 2 },
-    { pattern: /#include (<|")\w+\.h(>|")/, points: 2, near_top: true },
-    { pattern: /(\w+)( )*\*( )*\w+/, points: 2 },
-    { pattern: /(\w+)( )+\w+(;|( )*=)/, points: 1 },
-    { pattern: /(\w+)( )+\w+\[.+\]/, points: 1 },
-    { pattern: /#define( )+.+/, points: 1 },
-    { pattern: /NULL/, points: 1 },
-    { pattern: /void/g, points: 1 },
-    { pattern: /(else )?if( )*\(.+\)/, points: 1 },
-    { pattern: /while( )+\(.+\)/, points: 1 },
-    { pattern: /(printf|puts)( )*\(.+\)/, points: 1 },
-    { pattern: /new \w+/, points: -1 },
-    { pattern: /new [A-Z]\w*( )*\(.+\)/, points: 2 },
-    { pattern: /'.{2,}'/, points: -1 },
-    { pattern: /var( )+\w+( )*=?/, points: -1 },
+    { pattern: /#include( )*<[^>]+>/, points: 2, near_top: true },
+    { pattern: /scanf\(|printf\(/, points: 2 },
+    { pattern: /int main\(.*\)/, points: 2 },
+    { pattern: /malloc\(|free\(/, points: 2 },
+    { pattern: /struct( )+\w+( )*\{/, points: 1 },
   ],
   cpp: [
     { pattern: /(char|long|int|float|double)( )+\w+( )*=?/, points: 2 },
@@ -108,165 +65,89 @@ const languages: Record<
     { pattern: /(&{2}|\|{2})/, points: -1 },
   ],
   java: [
-    {
-      pattern: /^\s*package\s+[a-zA-Z_][\w.]*\s*;/,
-      points: 10,
-      near_top: true,
-    }, // Package declaration
-    { pattern: /^\s*import\s+[a-zA-Z_][\w.*]*\s*;/, points: 8, near_top: true }, // Import statement
-    { pattern: /^\s*public\s+class\s+[A-Z][a-zA-Z0-9_]*\s*{/, points: 10 }, // Public class declaration
-    { pattern: /^\s*class\s+[A-Z][a-zA-Z0-9_]*\s*{/, points: 8 }, // Class declaration
-    {
-      pattern:
-        /^\s*public\s+static\s+void\s+main\s*\(\s*String\s*\[\s*\]\s*[a-zA-Z_][\w]*\s*\)\s*{/,
-      points: 10,
-    }, // Main method signature
-    {
-      pattern: /^\s*public\s+[\w<>\[\]]+\s+[a-zA-Z_][\w]*\s*\(.*\)\s*{/,
-      points: 6,
-    }, // Public method signature
-    {
-      pattern: /^\s*private\s+[\w<>\[\]]+\s+[a-zA-Z_][\w]*\s*\(.*\)\s*{/,
-      points: 6,
-    }, // Private method signature
-    {
-      pattern: /^\s*protected\s+[\w<>\[\]]+\s+[a-zA-Z_][\w]*\s*\(.*\)\s*{/,
-      points: 6,
-    }, // Protected method signature
-    { pattern: /^\s*@[a-zA-Z_][\w]*\s*$/, points: 4 }, // Annotations
-    { pattern: /\bpublic\b|\bprivate\b|\bprotected\b/, points: 2 }, // Access modifiers
-    { pattern: /\bclass\b/, points: 2 }, // class keyword
-    { pattern: /\binterface\b/, points: 2 }, // interface keyword
-    { pattern: /\bextends\b|\bimplements\b/, points: 2 }, // extends and implements keywords
-    { pattern: /\bnew\s+[A-Z][a-zA-Z0-9_]*\s*\(/, points: 2 }, // Object instantiation
-    { pattern: /\bthrow\s+new\s+[A-Z][a-zA-Z0-9_]*\s*\(/, points: 2 }, // Exception throwing
+    { pattern: /public( )+(class|interface)( )+\w+/, points: 2 },
+    { pattern: /private|protected|public/, points: 1 },
+    { pattern: /import( )+\w+(\.\w+)+( )*;/, points: 1, near_top: true },
+    { pattern: /\w+( )+\w+( )*=( )*new( )+\w+\(/, points: 1 },
+    { pattern: /@Override/, points: 1 },
   ],
   html: [
-    { pattern: /^\s*<!DOCTYPE html>/i, points: 10, near_top: true }, // Doctype declaration
-    { pattern: /^\s*<html/i, points: 8, near_top: true }, // <html> tag
-    { pattern: /^\s*<\/html>/i, points: 8 }, // </html> tag
-    { pattern: /^\s*<head>/i, points: 6 }, // <head> tag
-    { pattern: /^\s*<\/head>/i, points: 6 }, // </head> tag
-    { pattern: /^\s*<body>/i, points: 6 }, // <body> tag
-    { pattern: /^\s*<\/body>/i, points: 6 }, // </body> tag
-    { pattern: /^\s*<div/i, points: 4 }, // <div> tag
-    { pattern: /^\s*<\/div>/i, points: 4 }, // </div> tag
-    { pattern: /^\s*<!--/, points: 2 }, // HTML comments
-    { pattern: /^\s*<[a-zA-Z][^>]*>/, points: 2 }, // Generic opening tag
-    { pattern: /^\s*<\/[a-zA-Z][^>]*>/, points: 2 }, // Generic closing tag
-    { pattern: /.*&[a-zA-Z]+;/, points: 1 }, // HTML entities
-    { pattern: /^\s*<meta/i, points: 3 }, // <meta> tag
-    { pattern: /^\s*<link/i, points: 3 }, // <link> tag
-    { pattern: /^\s*<script/i, points: 3 }, // <script> tag
-    { pattern: /^\s*<style/i, points: 3 }, // <style> tag
+    { pattern: /<!DOCTYPE( )+html>/, points: 2, near_top: true },
+    { pattern: /<html>|<\/html>/, points: 2 },
+    { pattern: /<(head|body)>|<\/(head|body)>/, points: 1 },
+    { pattern: /<\w+>.*<\/\w+>/, points: 1 },
+    { pattern: /<\w+(\s+\w+=(["']).*?\2)*\s*\/?>/g, points: 1 },
   ],
   css: [
-    { pattern: /^\s*[a-zA-Z0-9\-\_\.\#\:\[\]=]+\s*\{/, points: 10 }, // Selectors with curly braces
-    { pattern: /^\s*@[a-z\-]+\s*[^\{]+\{/, points: 8 }, // @-rules (media queries, keyframes, etc.)
-    { pattern: /^\s*[a-z\-]+\s*:\s*[a-zA-Z0-9\-\_\.\(\)\%\#]+;$/, points: 6 }, // Property-value pairs
-    { pattern: /\s*\}\s*$/, points: 4 }, // Closing curly braces
-    { pattern: /^\s*\/\*/, points: 2 }, // Comments
-    { pattern: /.*\{\s*\}/, points: 1 }, // Empty CSS rules
-    { pattern: /.*!important\s*;/, points: 2 }, // Important declarations
-    {
-      pattern: /^\s*--[a-zA-Z0-9\-]+\s*:\s*[a-zA-Z0-9\-\_\.\(\)\%\#]+;$/,
-      points: 5,
-    }, // CSS custom properties (variables)
+    { pattern: /(\w+|[.#]\w+)\s*\{[^}]*\}/g, points: 2 },
+    { pattern: /(@media|@keyframes)/, points: 2 },
+    { pattern: /\w+:\s*[^;]+;/, points: 1 },
+    { pattern: /:\s*(hover|active|focus|nth-child)/, points: 1 },
   ],
   ruby: [
-    { pattern: /module( )+\w+/, points: 5, near_top: true },
-    { pattern: /class( )+\w+/, points: 5, near_top: true },
-    { pattern: /def( )+\w+/, points: 2 },
-    { pattern: /attr_accessor( )+:/, points: 2 },
-    { pattern: /attr_reader( )+:/, points: 2 },
-    { pattern: /attr_writer( )+:/, points: 2 },
-    { pattern: /include( )+\w+/, points: 2 },
-    { pattern: /extend( )+\w+/, points: 2 },
-    { pattern: /require( )+['"](.*?)['"]/, points: 2 },
-    { pattern: /require_relative( )+['"](.*?)['"]/, points: 2 },
+    { pattern: /def( )+\w+( )*(\(.+\))?$/, points: 2 },
+    { pattern: /\w+\.each( )+do( )*\|.*\|/, points: 2 },
+    { pattern: /attr_(reader|writer|accessor)/, points: 2 },
+    { pattern: /require( )+['"].*['"]/, points: 1, near_top: true },
+    { pattern: /\w+( )*=( )*%w\(.*\)/, points: 1 },
   ],
   php: [
-    { pattern: /<\?php/, points: 10, near_top: true },
-    { pattern: /\?>/, points: 5 },
-    { pattern: /\$\w+/, points: 2 },
-    { pattern: /echo( )+("|').+("|');/, points: 2 },
-    { pattern: /array\(.+\)/, points: 2 },
-    { pattern: /->\w+/, points: 2 },
-    { pattern: /::\w+/, points: 2 },
-    { pattern: /public( )+function( )+\w+\(.*\)/, points: 2 },
-    { pattern: /private( )+function( )+\w+\(.*\)/, points: 2 },
-    { pattern: /protected( )+function( )+\w+\(.*\)/, points: 2 },
-    { pattern: /function( )+\w+\(.*\)/, points: 1 },
-    { pattern: /namespace( )+.+;/, points: 1 },
-    { pattern: /use( )+.+;/, points: 1 },
-    { pattern: /include( )+\(.+\);/, points: 1 },
-    { pattern: /require( )+\(.+\);/, points: 1 },
-    { pattern: /const( )+\w+( )*=( )*.+;/, points: 1 },
-    { pattern: /class( )+\w+/, points: 1 },
+    { pattern: /<\?php/, points: 2, near_top: true },
+    { pattern: /\$\w+( )*=/, points: 2 },
+    { pattern: /function( )+\w+\s*\(.*\)/, points: 2 },
+    { pattern: /echo( )+(['"]).*\1/, points: 1 },
+    { pattern: /^\s*use\s+[\w\\]+(\s+as\s+\w+)?;/m, points: 1 },
   ],
   go: [
-    { pattern: /package( )+main;/, points: 5, near_top: true },
-    { pattern: /import( )+[""](.*?)[""]/, points: 5, near_top: true },
-    { pattern: /type( )+\w+/, points: 5 },
-    { pattern: /struct( )+\w+/, points: 5 },
-    { pattern: /func( )+\w+\(.*\)/, points: 3 },
-    { pattern: /var( )+\w+/, points: 2 },
-    { pattern: /const( )+\w+/, points: 2 },
+    { pattern: /func( )+\w+\(.*\)( )*(\(.*\))?( )*\{/, points: 2 },
+    { pattern: /import( )*\(/, points: 2, near_top: true },
+    { pattern: /package( )+\w+/, points: 2, near_top: true },
+    { pattern: /\w+( )*:=/, points: 1 },
+    { pattern: /fmt\.(Print|Scan)/, points: 1 },
   ],
   swift: [
-    { pattern: /import( )+UIKit;/, points: 5, near_top: true },
-    { pattern: /class( )+\w+:/, points: 5 },
-    { pattern: /struct( )+\w+:/, points: 5 },
-    { pattern: /enum( )+\w+:/, points: 5 },
-    { pattern: /func( )+\w+\(.*\)/, points: 3 },
-    { pattern: /let( )+\w+:/, points: 2 },
-    { pattern: /var( )+\w+:/, points: 2 },
+    {
+      pattern: /func( )+\w+\s*\(((\w+\s*:\s*\w+,?\s*)*)\)\s*(->\s*\w+\s*)?\{/,
+      points: 2,
+    },
+    { pattern: /class( )+\w+( )*:( )*\w+/, points: 2 },
+    { pattern: /import( )+\w+/, points: 1, near_top: true },
+    { pattern: /var|let( )+\w+( )*:( )*\w+/, points: 1 },
+    { pattern: /override( )+func/, points: 1 },
   ],
   csharp: [
-    { pattern: /using( )+System\.(.*);/, points: 5, near_top: true },
-    { pattern: /public( )+class( )+\w+/, points: 5, near_top: true },
-    { pattern: /private( )+\w+;/, points: 2 },
-    { pattern: /protected( )+\w+;/, points: 2 },
-    { pattern: /public( )+\w+;/, points: 2 },
-    { pattern: /static( )+\w+;/, points: 2 },
-    { pattern: /abstract( )+class( )+\w+/, points: 2 },
-    { pattern: /interface( )+\w+/, points: 5 },
-    { pattern: /enum( )+\w+/, points: 5 },
+    { pattern: /using( )+\w+(\.\w+)*( )*;/, points: 1, near_top: true },
+    { pattern: /namespace( )+\w+(\.\w+)*/, points: 2 },
+    { pattern: /public( )+(class|interface|struct)( )+\w+/, points: 2 },
+    {
+      pattern: /(private|protected|internal|public)( )+(static( )+)?\w+( )+\w+/,
+      points: 1,
+    },
+    { pattern: /Console\.(Write|Read)Line/, points: 1 },
   ],
   zig: [
-    { pattern: /const( )+\w+:/, points: 5, near_top: true },
-    { pattern: /pub( )+fn( )+\w+/, points: 5, near_top: true },
-    { pattern: /var( )+\w+:/, points: 2 },
-    { pattern: /fn( )+\w+/, points: 2 },
-    { pattern: /pub( )+var( )+\w+:/, points: 2 },
-    { pattern: /comptime( )+\w+:/, points: 2 },
-    { pattern: /extern( )+"c"(.*)/, points: 2 },
-    { pattern: /struct( )+\w+/, points: 5 },
-    { pattern: /union( )+\w+/, points: 5 },
-    { pattern: /enum( )+\w+/, points: 5 },
+    { pattern: /const( )+\w+( )*=/, points: 2 },
+    { pattern: /fn( )+\w+\(.*\)( )*(\w+|\{)/, points: 2 },
+    { pattern: /std\.\w+/, points: 1 },
+    { pattern: /comptime/, points: 2 },
+    { pattern: /\|\|( )*\w+:( )*\w+/, points: 1 },
   ],
   rust: [
-    { pattern: /use( )+crate::\*/, points: 5, near_top: true },
-    { pattern: /use( )+std::\*/, points: 5, near_top: true },
-    { pattern: /fn( )+main( )*\(/, points: 5 },
-    { pattern: /struct( )+\w+/, points: 5 },
-    { pattern: /enum( )+\w+/, points: 5 },
-    { pattern: /impl( )+Trait/, points: 5 },
-    { pattern: /let( )+mut( )+\w+/, points: 3 },
-    { pattern: /let( )+\w+/, points: 3 },
-    { pattern: /match( )+.*/, points: 3 },
-    { pattern: /if( )+let/, points: 2 },
-    { pattern: /while( )+let/, points: 2 },
+    {
+      pattern: /fn( )+\w+\s*(<[^>]+>)?\s*\(.*\)(\s*->\s*\w+)?\s*\{/,
+      points: 2,
+    },
+    { pattern: /let( )+mut( )+\w+/, points: 2 },
+    { pattern: /use( )+\w+::\{.*\};/, points: 1, near_top: true },
+    { pattern: /impl( )+\w+( )+for( )+\w+/, points: 2 },
+    { pattern: /#\[derive\(.*\)\]/, points: 1 },
   ],
   sql: [
-    { pattern: /^SELECT/, points: 10, near_top: true },
-    { pattern: /FROM( )+\w+/, points: 8 },
-    { pattern: /JOIN( )+\w+/, points: 7 },
-    { pattern: /LEFT( )+JOIN/, points: 7 },
-    { pattern: /WHERE( )+\w+/, points: 5 },
-    { pattern: /AND( )+\w+/, points: 4 },
-    { pattern: /OR( )+\w+/, points: 4 },
-    { pattern: /AS( )+\w+/, points: 3 },
+    { pattern: /SELECT .+ FROM .+/, points: 2 },
+    { pattern: /INSERT INTO .+ VALUES/, points: 2 },
+    { pattern: /UPDATE .+ SET .+ WHERE/, points: 2 },
+    { pattern: /CREATE TABLE \w+/, points: 2 },
+    { pattern: /ALTER TABLE \w+/, points: 1 },
   ],
 }
 

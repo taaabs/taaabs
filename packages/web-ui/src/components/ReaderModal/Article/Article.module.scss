@@ -3,7 +3,7 @@
 
 .container {
   display: flex;
-  line-height: 1.6;
+  line-height: var(--line-height-1-6);
   font-size: var(--font-size-1-6rem);
   padding: var(--padding-16px);
   @include at992 {

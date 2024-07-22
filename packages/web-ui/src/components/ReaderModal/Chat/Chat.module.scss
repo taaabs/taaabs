@@ -44,6 +44,7 @@
 }
 .assistant {
   position: relative;
+  line-height: var(--line-height-1-6);
   &::before {
     position: absolute;
     content: '';
