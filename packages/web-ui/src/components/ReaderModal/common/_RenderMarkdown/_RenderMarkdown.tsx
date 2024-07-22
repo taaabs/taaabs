@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm'
 import styles from './_RenderMarkdown.module.scss'
 import { Icon as UiCommonParticle_Icon } from '@web-ui/components/common/particles/icon'
 import { toast } from 'react-toastify'
-import { detect_code_language } from '@web-ui/utils/detect-code-language'
+import hljs from 'highlight.js'
 
 namespace _RenderMarkdown {
   export type Props = {
@@ -32,7 +32,9 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
             ])[1]
             let language_fallback: string | undefined
             if (!language) {
-              language_fallback = detect_code_language(children_parsed)
+              language_fallback = hljs.highlightAuto(
+                children_parsed.substring(0, 2000),
+              ).language
             }
             return (
               <div className={styles.code}>
