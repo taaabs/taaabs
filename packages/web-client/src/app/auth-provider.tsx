@@ -40,9 +40,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
       retry: {
-        limit: 100,
-        backoffLimit: 1000,
-        statusCodes: [401, 500],
+        limit: 10,
+        methods: ['get', 'post', 'put', 'delete'],
+        backoffLimit: 5000,
+        statusCodes: [401, 500, 502],
       },
       hooks: {
         beforeRequest: [
