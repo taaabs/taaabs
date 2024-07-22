@@ -1,11 +1,11 @@
 import ReactMarkdown from 'react-markdown'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import remarkGfm from 'remark-gfm'
 import styles from './_RenderMarkdown.module.scss'
 import { Icon as UiCommonParticle_Icon } from '@web-ui/components/common/particles/icon'
 import { toast } from 'react-toastify'
 import hljs from 'highlight.js'
+
+import 'highlight.js/styles/atom-one-dark.css'
 
 namespace _RenderMarkdown {
   export type Props = {
@@ -71,12 +71,13 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
                   </button>
                 </div>
                 {language || language_fallback ? (
-                  <SyntaxHighlighter
-                    language={language || language_fallback}
-                    PreTag={'div'}
-                    children={children_parsed}
-                    style={vscDarkPlus}
-                    customStyle={{ marginTop: 0 }}
+                  <div
+                    className={styles.code__highlight}
+                    dangerouslySetInnerHTML={{
+                      __html: hljs.highlight(children_parsed, {
+                        language: (language || language_fallback)!,
+                      }).value,
+                    }}
                   />
                 ) : (
                   <code className="language-">{children}</code>
