@@ -659,6 +659,9 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         <div ref={cover_paste_area}>
           Click here and press Ctrl+V to paste an image
         </div>
+        <br />
+        <br />
+        <br />
       </UiModal_Content_StandardSplit>
     </UiModal_Content>
   )

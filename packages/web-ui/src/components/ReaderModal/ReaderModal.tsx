@@ -1,6 +1,5 @@
 import styles from './ReaderModal.module.scss'
 import cn from 'classnames'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { Sheet } from 'react-modal-sheet'
@@ -16,7 +15,8 @@ namespace ReaderModal {
 }
 
 export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
-  useUpdateEffect(() => {
+  // We can't use "useUpdateEffect" because this modal is loaded dynamically, therefore is_open is already set when the component is mounted.
+  useEffect(() => {
     const header = document.querySelector<HTMLElement>('body > header')
     const top_divs = document.querySelectorAll<HTMLElement>('body > div')
     const toolbar = document.getElementById('toolbar')
@@ -79,11 +79,11 @@ export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
         </Sheet.Header>
         <Sheet.Content>
           <Sheet.Scroller>
-            <div style={{ maxHeight: '75svh' }}>{props.slot_content}</div>
+            <div style={{ maxHeight: '80svh' }}>{props.slot_content}</div>
           </Sheet.Scroller>
         </Sheet.Content>
       </Sheet.Container>
-      <Sheet.Backdrop />
+      <Sheet.Backdrop onTap={props.on_close} />
     </Sheet>
   )
 }
