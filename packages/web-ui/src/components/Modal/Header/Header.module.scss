@@ -9,7 +9,7 @@
   position: relative;
   border-bottom: var(--border-primary);
   height: 50px;
-  background-color: var(--white);
+  background-color: var(--header-background);
   @include to768 {
     padding-top: 5px;
     &::after {

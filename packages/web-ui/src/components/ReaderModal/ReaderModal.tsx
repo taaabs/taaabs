@@ -73,7 +73,9 @@ export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
       disableScrollLocking={true}
       detent="content-height"
     >
-      <Sheet.Container>
+      <Sheet.Container
+        style={{ backgroundColor: 'var(--white)', overflow: 'hidden' }}
+      >
         <Sheet.Header>
           <div draggable={false}>{props.slot_header}</div>
         </Sheet.Header>

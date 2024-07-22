@@ -147,7 +147,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         blurhash_height,
       ).data
       set_cover_blurhash(
-        encode(image_data, blurhash_width, blurhash_height, 6, 4),
+        encode(image_data, blurhash_width, blurhash_height, 4, 3),
       )
     }
   }
@@ -273,8 +273,8 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         image_data,
         blurhash_width,
         blurhash_height,
-        6,
         4,
+        3,
       )
     }
 

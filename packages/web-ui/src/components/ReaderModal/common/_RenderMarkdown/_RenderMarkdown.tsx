@@ -40,12 +40,10 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
               <div className={styles.code}>
                 <div className={styles.code__header}>
                   <div className={styles.code__header__language}>
-                    {language ? (
+                    {language && (
                       <span>{(language_map as any)[language] || language}</span>
-                    ) : (
-                      ''
                     )}
-                    {language_fallback ? (
+                    {language_fallback && (
                       <>
                         <span>
                           {(language_map as any)[language_fallback] ||
@@ -53,8 +51,6 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
                           <sup> auto-detect</sup>
                         </span>
                       </>
-                    ) : (
-                      ''
                     )}
                   </div>
 
