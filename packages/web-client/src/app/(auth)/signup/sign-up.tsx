@@ -57,11 +57,10 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
   }
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
-    if (!executeRecaptcha) {
-      toast.error('ReCAPTCHA is not available')
-      return
+    let captcha_token = ''
+    if (process.env.NODE_ENV == 'production') {
+      captcha_token = await executeRecaptcha!('sign_up')
     }
-    const captcha_token = await executeRecaptcha('sign_up')
 
     const params: SignUp_Params = {
       username: form_data.username,

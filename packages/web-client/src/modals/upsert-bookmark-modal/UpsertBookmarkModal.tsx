@@ -125,7 +125,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       set_cover(full_size_canvas.toDataURL('image/webp'))
 
       // Smaller canvas for Blurhash calculation.
-      const blurhash_width = 50
+      const blurhash_width = 100
       const blurhash_height = Math.round(
         (new_height / new_width) * blurhash_width,
       )
