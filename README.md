@@ -18,7 +18,7 @@ Taaabs is the hugginest social bookmarking platform built for courious character
 
 Every person should have the right for privacy and Taaabs encrypts all private bookmarks using state-of-the-art algorithms, so no one, not even us can know what they are. For transparency, complete source code of all our apps is available in this repository. People interested in how we handle user data can learn from this codebase. Open [discussion](https://github.com/taaabs/taaabs/discussions) if you have question or suggestion.
 
-## Who builds it?
+## Who's behind it?'
 
 This application is the creation of [a single developer](https://x.com/robertpiosik), standing on the shoulders of giants.
 
