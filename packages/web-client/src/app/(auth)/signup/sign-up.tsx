@@ -31,7 +31,7 @@ type FormValues = {
 }
 
 export const SignUp = (props: { dictionary: Dictionary }) => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const { executeRecaptcha } = useGoogleReCaptcha()
   const {
     control,

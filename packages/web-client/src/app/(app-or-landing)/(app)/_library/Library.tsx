@@ -36,6 +36,7 @@ import { _TagHierarchies } from './_TagHierarchies'
 import { _Aside } from './_Aside'
 import { use_points } from './_hooks/use-points'
 import { use_search } from './_hooks/use-search'
+import { FollowUnfollowContext } from '../[username]/follow-unfollow-provider'
 
 export type LibraryContext = {
   bookmarks_hook: ReturnType<typeof use_bookmarks>
@@ -67,7 +68,7 @@ export const LibraryContext = createContext<LibraryContext | null>(null)
 const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   props,
 ) => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   use_scroll_restore()
   const is_hydrated = use_is_hydrated()
   const popstate_count = use_popstate_count()
@@ -88,6 +89,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const tag_view_options_hook = use_tag_view_options()
   const date_view_options_hook = use_date_view_options()
   const points_hook = use_points()
+  const follow_unfollow_context = useContext(FollowUnfollowContext) // Only available in public library.
   // START - UI synchronization.
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
     useState(0)
@@ -370,13 +372,17 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         tag_name={tag_view_options_hook.dragged_tag?.name}
       />
       <UiAppTemplate_SwipableColumns
-        is_following={undefined}
+        is_following={follow_unfollow_context?.is_following}
         welcome_text={
           !username && auth_context.auth_data
             ? `${props.dictionary.app.library.welcome}, ${auth_context.auth_data.username}`
             : undefined
         }
-        on_follow_click={username ? () => {} : undefined}
+        on_follow_click={
+          username && !follow_unfollow_context?.is_toggling
+            ? follow_unfollow_context?.toggle
+            : undefined
+        }
         show_skeletons={show_skeletons}
         slot_search={
           <_Search dictionary={props.dictionary} local_db={props.local_db} />

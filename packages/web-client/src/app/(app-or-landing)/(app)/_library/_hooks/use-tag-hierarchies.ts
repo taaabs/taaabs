@@ -8,7 +8,7 @@ import { useParams } from 'next/navigation'
 import { useContext } from 'react'
 
 export const use_tag_hierarchies = () => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
   const {

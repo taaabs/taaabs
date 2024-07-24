@@ -299,7 +299,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
                   {props.welcome_text}
                 </div>
               )}
-              {props.on_follow_click && (
+              {props.is_following !== undefined && (
                 <Button on_click={props.on_follow_click}>
                   {!props.is_following
                     ? props.translations.follow

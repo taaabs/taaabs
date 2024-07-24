@@ -23,7 +23,7 @@ type ParsedXmlBookmark = {
 }
 
 export const use_import = () => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const [file_text, set_file_text] = useState<string>()
   // Data coming from official export.
   const [import_data, set_import_data] = useState<SendImportData_Params>()
