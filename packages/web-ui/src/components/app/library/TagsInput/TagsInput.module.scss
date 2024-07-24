@@ -109,7 +109,7 @@
   gap: var(--padding-8px);
   padding-top: var(--padding-12px);
   min-height: 180px;
-  @include at992 {
+  @include at768 {
     min-height: 150px;
   }
   &__items {
