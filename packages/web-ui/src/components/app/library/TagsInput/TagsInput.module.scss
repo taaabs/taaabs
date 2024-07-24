@@ -108,7 +108,10 @@
   align-items: flex-start;
   gap: var(--padding-8px);
   padding-top: var(--padding-12px);
-  min-height: 150px;
+  min-height: 180px;
+  @include at992 {
+    min-height: 150px;
+  }
   &__items {
     display: flex;
     flex-wrap: wrap;
