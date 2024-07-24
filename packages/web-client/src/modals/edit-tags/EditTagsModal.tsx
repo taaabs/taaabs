@@ -32,14 +32,17 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
   const [is_updating, set_is_updating] = useState<boolean>()
 
   useEffect(() => {
-    if (my_tags !== undefined || is_fetching_my_tags) return
-    set_is_fetching_my_tags(true)
-    const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
-    const repository = new Tags_RepositoryImpl(data_source)
-    repository.tags(auth_context.auth_data!.encryption_key).then((result) => {
-      set_is_fetching_my_tags(false)
-      set_my_tags(result)
-    })
+    // Set timeout is necessary for modal animation to finish smoothly.
+    setTimeout(() => {
+      if (my_tags !== undefined || is_fetching_my_tags) return
+      set_is_fetching_my_tags(true)
+      const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
+      const repository = new Tags_RepositoryImpl(data_source)
+      repository.tags(auth_context.auth_data!.encryption_key).then((result) => {
+        set_is_fetching_my_tags(false)
+        set_my_tags(result)
+      })
+    }, 150)
   }, [])
 
   const content = (
@@ -72,7 +75,8 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
         translations={{
           enter_tag_name: props.dictionary.app.upsert_modal.enter_tag_name,
           add: props.dictionary.app.upsert_modal.tag_suggestions.add,
-          recent_tags: props.dictionary.app.upsert_modal.tag_suggestions.recent_tags,
+          recent_tags:
+            props.dictionary.app.upsert_modal.tag_suggestions.recent_tags,
         }}
       />
     </UiModal_Content>

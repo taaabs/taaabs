@@ -13,6 +13,7 @@ declare const styles: {
   readonly "suggestions": string;
   readonly "suggestions__heading": string;
   readonly "suggestions__items": string;
+  readonly "suggestions__items--visible": string;
   readonly "suggestions__items__item": string;
   readonly "suggestions__create": string;
 };

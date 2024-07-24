@@ -105,7 +105,6 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--padding-8px);
   padding-top: var(--padding-12px);
   min-height: 180px;
   @include at768 {
@@ -114,19 +113,24 @@
   &__heading {
     color: var(--text-color-dimmed);
     font-size: var(--font-size-14px);
+    padding-bottom: var(--padding-8px);
   }
   &__items {
     display: flex;
     flex-wrap: wrap;
-    row-gap: var(--padding-8px);
-    column-gap: var(--padding-12px);
-    
+    opacity: 0;
+    &--visible {
+      opacity: 1;
+      @include transition-250ms(opacity);
+    }
     &__item {
       display: flex;
       align-items: center;
       white-space: pre;
       position: relative;
       font-size: var(--font-size-14px);
+      margin-right: var(--padding-12px);
+      margin-bottom: var(--padding-8px);
       @include hover {
         @include text-decoration-underlinie-thin;
       }

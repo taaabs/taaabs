@@ -204,7 +204,11 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
           {props.translations.recent_tags}
         </div>
       )}
-      <div className={styles.suggestions__items}>
+      <div
+        className={cn(styles.suggestions__items, {
+          [styles['suggestions__items--visible']]: props.all_tags.length,
+        })}
+      >
         {/* Recent tags. */}
         {!new_tag_name &&
           props.recent_tags
