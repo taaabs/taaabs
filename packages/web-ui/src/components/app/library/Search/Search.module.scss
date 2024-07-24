@@ -365,6 +365,7 @@
   &__list {
     display: flex;
     flex-direction: column;
+    padding-top: var(--padding-8px);
     &__item {
       display: flex;
       align-items: center;

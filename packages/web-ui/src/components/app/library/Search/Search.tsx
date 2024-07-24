@@ -364,7 +364,7 @@ export const Search: React.FC<Search.Props> = memo(
               [styles['hints--hidden']]: !(props.hints && is_focusedfix),
             })}
           >
-            <button
+            {/* <button
               className={styles.hints__mode}
               onClick={() => {
                 props.toggle_full_text()
@@ -373,7 +373,7 @@ export const Search: React.FC<Search.Props> = memo(
             >
               <span>Full-text search:</span>
               <span>{props.is_full_text ? 'enabled' : 'disabled'}</span>
-            </button>
+            </button> */}
 
             {!props.is_full_text &&
               props.hints &&
