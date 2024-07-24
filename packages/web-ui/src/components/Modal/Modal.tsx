@@ -85,7 +85,9 @@ export const Modal: React.FC<Modal.Props> = (props) => {
       disableScrollLocking={true}
       detent="content-height"
     >
-      <Sheet.Container style={{ backgroundColor: 'var(--background)', overflow: 'hidden' }}>
+      <Sheet.Container
+        style={{ backgroundColor: 'var(--background)', overflow: 'hidden' }}
+      >
         <Sheet.Header>
           <div draggable={false}>{props.slot_header}</div>
         </Sheet.Header>

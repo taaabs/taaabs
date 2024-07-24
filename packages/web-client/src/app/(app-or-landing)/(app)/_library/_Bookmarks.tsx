@@ -27,6 +27,7 @@ import { useSearchParams } from 'next/navigation'
 import { ModalContext } from '@/providers/ModalProvider'
 import { LocalDb } from '@/app/local-db-provider'
 import { _Bookmark } from './_bookmarks/_Bookmark'
+import { edit_tags_modal_setter } from '@/modals/edit-tags/edit-tags-modal-setter'
 
 namespace _Bookmarks {
   export type Props = {
@@ -69,6 +70,102 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       library_url={username ? `/${username}` : '/library'}
       on_tag_drag_start={
         !username ? tag_view_options_hook.set_dragged_tag : undefined
+      }
+      on_modify_tags_click={
+        !username
+          ? async () => {
+              const updated_tags = await edit_tags_modal_setter({
+                modal_context,
+                dictionary: props.dictionary,
+                is_visibility_toggleable: bookmark.is_public,
+                tags: bookmark.tags,
+              })
+              if (!updated_tags) {
+                modal_context.close()
+                return
+              }
+              const modified_bookmark: UpsertBookmark_Params = {
+                bookmark_id: bookmark.id,
+                is_public: bookmark.is_public,
+                created_at: new Date(bookmark.created_at),
+                title: bookmark.title,
+                note: bookmark.note,
+                is_archived: is_archived_filter,
+                is_unsorted: bookmark.is_unsorted,
+                stars: bookmark.stars,
+                links: bookmark.links.map((link) => ({
+                  url: link.url,
+                  site_path: link.site_path,
+                  is_public: link.is_public,
+                  is_pinned: link.is_pinned,
+                  pin_title: link.pin_title,
+                  open_snapshot: link.open_snapshot,
+                  favicon: link.favicon,
+                })),
+                tags: updated_tags.map((tag) => ({
+                  name: tag.name,
+                  is_public: tag.is_public,
+                })),
+                cover_hash: bookmark.cover_hash,
+                has_cover_aes: bookmark.has_cover_aes,
+              }
+              const updated_bookmark = await dispatch(
+                bookmarks_actions.upsert_bookmark({
+                  bookmark: modified_bookmark,
+                  last_authorized_counts_params:
+                    JSON.parse(
+                      sessionStorage.getItem(
+                        browser_storage.session_storage.library
+                          .last_authorized_counts_params,
+                      ) || 'null',
+                    ) || undefined,
+                  get_tag_hierarchies_request_params:
+                    tag_hierarchies_hook.get_authorized_request_params({
+                      filter: filter_view_options_hook.current_filter,
+                      gte: date_view_options_hook.current_gte,
+                      lte: date_view_options_hook.current_lte,
+                    }),
+                  ky: auth_context.ky_instance,
+                  encryption_key: auth_context.auth_data!.encryption_key,
+                }),
+              )
+              const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
+              if (
+                !tag_view_options_hook.selected_tags.every((t) =>
+                  updated_tag_ids.includes(t),
+                )
+              ) {
+                // We filter out bookmark when there are other bookmarks still matching with selected tags.
+                dispatch(
+                  bookmarks_actions.filter_out_bookmark({
+                    bookmark_id: updated_bookmark.id,
+                  }),
+                )
+                if (search_hook.count) {
+                  search_hook.set_count(search_hook.count - 1)
+                }
+              }
+              // Unselect removed tags when there is no more bookmarks with them.
+              const tags_to_remove_from_search_params =
+                tag_view_options_hook.selected_tags.filter((t) => {
+                  const yields = Object.entries(counts_hook.tags!).find(
+                    (tag) => parseInt(tag[0]) == t,
+                  )![1].yields
+                  return !updated_tag_ids.includes(t) && yields == 1
+                })
+              if (tags_to_remove_from_search_params.length) {
+                dispatch(
+                  bookmarks_actions.set_is_fetching_first_bookmarks(true),
+                )
+                tag_view_options_hook.remove_tags_from_search_params(
+                  tags_to_remove_from_search_params,
+                )
+              }
+              dispatch(bookmarks_actions.set_is_upserting(false))
+              modal_context.close()
+              toast.success(props.dictionary.app.library.bookmark_updated)
+            }
+          : undefined
       }
       density={bookmarks_hook.density}
       is_search_result={bookmarks_hook.showing_bookmarks_fetched_by_ids}

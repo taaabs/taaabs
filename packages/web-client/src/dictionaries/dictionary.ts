@@ -231,6 +231,11 @@ export type Dictionary = {
       tag_is_too_short: string
       tag_is_too_long: string
     }
+    edit_tags_modal: {
+      edit_tags: string
+      cancel: string
+      update: string
+    }
   }
   settings: {
     settings: string

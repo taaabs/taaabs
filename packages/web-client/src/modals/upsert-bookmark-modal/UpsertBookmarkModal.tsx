@@ -422,14 +422,18 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     }
   }, [])
 
-  // const fetch_suggested_tags = async (selected_tags: number[]) => {
-  //   const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
-  //   const repository = new Tags_RepositoryImpl(data_source)
-  //   const result = await repository.suggested({ selected_tags })
-  //   if (result.frequent.length && result.recent.length) {
-  //     set_suggested_tags([result, ...suggested_tags])
-  //   }
-  // }
+  // Fetch tags for suggestions.
+  useEffect(() => {
+    if (my_tags !== undefined || is_fetching_my_tags) return
+
+    set_is_fetching_my_tags(true)
+    const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
+    const repository = new Tags_RepositoryImpl(data_source)
+    repository.tags(auth_context.auth_data!.encryption_key).then((result) => {
+      set_is_fetching_my_tags(false)
+      set_my_tags(result)
+    })
+  }, [])
 
   const content = (
     <UiModal_Content>
@@ -458,42 +462,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
           />
         </div>
       </UiModal_Content_Centered>
-
-      <UiModal_Content_Standard label={props.dictionary.app.upsert_modal.links}>
-        <UiAppAtom_DraggableUpsertFormLinks
-          links={links.map((link) => ({
-            url: link.url,
-            site_path: link.site_path,
-            is_public:
-              props.bookmark?.is_public == false ? true : link.is_public,
-            open_snapshot: link.open_snapshot,
-          }))}
-          on_change={(links) => {
-            set_links(
-              links.map((link) => ({
-                url: link.url,
-                site_path: link.site_path,
-                is_public: link.is_public,
-                open_snapshot: link.open_snapshot,
-              })),
-            )
-          }}
-          show_visibility_toggler={is_bookmark_public || false}
-          max_items={system_values.bookmark.links.limit}
-          clipboard_url={clipboard_url}
-          translations={{
-            paste_url: props.dictionary.app.upsert_modal.paste_url,
-            add: props.dictionary.app.upsert_modal.add_link,
-            open: props.dictionary.app.upsert_modal.link.open,
-            original_url: props.dictionary.app.upsert_modal.link.original_url,
-            snapshot: props.dictionary.app.upsert_modal.link.snapshot,
-            visibility: props.dictionary.app.upsert_modal.link.visibility,
-            private: props.dictionary.app.upsert_modal.link.private,
-            public: props.dictionary.app.upsert_modal.link.public,
-            site: props.dictionary.app.upsert_modal.link.site,
-          }}
-        />
-      </UiModal_Content_Standard>
 
       <UiModal_Content_Divider />
 
@@ -539,6 +507,44 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             }}
           />
         </UiCommonTemplate_FormControllerFix>
+      </UiModal_Content_StandardSplit>
+
+      <UiModal_Content_Divider />
+
+      <UiModal_Content_StandardSplit
+        label={props.dictionary.app.upsert_modal.tags}
+      >
+        <UiAppLibrary_TagsInput
+          selected_tags={tags.map((tag) => ({
+            name: tag.name,
+            is_public:
+              props.bookmark?.is_public == false ? true : tag.is_public,
+          }))}
+          all_tags={
+            my_tags?.all
+              .map((tag) => tag.name)
+              .sort((a, b) => a.localeCompare(b)) || []
+          }
+          recent_tags={
+            my_tags?.recent_ids.map(
+              (id) => my_tags.all.find((tag) => tag.id == id)!.name,
+            ) || []
+          }
+          on_selected_tags_update={(updated_tags) => {
+            set_tags(
+              updated_tags.map((tag) => ({
+                name: tag.name,
+                is_public: tag.is_public,
+              })),
+            )
+          }}
+          is_visibility_toggleable={is_bookmark_public || false}
+          max_tags={system_values.bookmark.tags.limit}
+          translations={{
+            enter_tag_name: props.dictionary.app.upsert_modal.enter_tag_name,
+            add: props.dictionary.app.upsert_modal.tags_dropdown.add,
+          }}
+        />
       </UiModal_Content_StandardSplit>
 
       <UiModal_Content_Divider />
@@ -593,58 +599,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       <UiModal_Content_Divider />
 
       <UiModal_Content_StandardSplit
-        label={props.dictionary.app.upsert_modal.tags}
-      >
-        <UiAppLibrary_TagsInput
-          selected_tags={tags.map((tag) => ({
-            name: tag.name,
-            is_public:
-              props.bookmark?.is_public == false ? true : tag.is_public,
-          }))}
-          all_tags={
-            my_tags?.all
-              .map((tag) => tag.name)
-              .sort((a, b) => a.localeCompare(b)) || []
-          }
-          recent_tags={
-            my_tags?.recent_ids.map(
-              (id) => my_tags.all.find((tag) => tag.id == id)!.name,
-            ) || []
-          }
-          on_selected_tags_update={(updated_tags) => {
-            set_tags(
-              updated_tags.map((tag) => ({
-                name: tag.name,
-                is_public: tag.is_public,
-              })),
-            )
-          }}
-          is_visibility_toggleable={is_bookmark_public || false}
-          max_tags={system_values.bookmark.tags.limit}
-          on_focus={async () => {
-            if (my_tags !== undefined || is_fetching_my_tags) return
-
-            set_is_fetching_my_tags(true)
-            const data_source = new Tags_DataSourceImpl(
-              auth_context.ky_instance,
-            )
-            const repository = new Tags_RepositoryImpl(data_source)
-            const result = await repository.tags(
-              auth_context.auth_data!.encryption_key,
-            )
-            set_is_fetching_my_tags(false)
-            set_my_tags(result)
-          }}
-          translations={{
-            enter_tag_name: props.dictionary.app.upsert_modal.enter_tag_name,
-            add: props.dictionary.app.upsert_modal.tags_dropdown.add,
-          }}
-        />
-      </UiModal_Content_StandardSplit>
-
-      <UiModal_Content_Divider />
-
-      <UiModal_Content_StandardSplit
         label={props.dictionary.app.upsert_modal.cover}
       >
         {(cover || clipboard_data?.og_image) && (
@@ -659,10 +613,45 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         <div ref={cover_paste_area}>
           Click here and press Ctrl+V to paste an image
         </div>
-        <br />
-        <br />
-        <br />
       </UiModal_Content_StandardSplit>
+
+      <UiModal_Content_Divider />
+
+      <UiModal_Content_Standard label={props.dictionary.app.upsert_modal.links}>
+        <UiAppAtom_DraggableUpsertFormLinks
+          links={links.map((link) => ({
+            url: link.url,
+            site_path: link.site_path,
+            is_public:
+              props.bookmark?.is_public == false ? true : link.is_public,
+            open_snapshot: link.open_snapshot,
+          }))}
+          on_change={(links) => {
+            set_links(
+              links.map((link) => ({
+                url: link.url,
+                site_path: link.site_path,
+                is_public: link.is_public,
+                open_snapshot: link.open_snapshot,
+              })),
+            )
+          }}
+          show_visibility_toggler={is_bookmark_public || false}
+          max_items={system_values.bookmark.links.limit}
+          clipboard_url={clipboard_url}
+          translations={{
+            paste_url: props.dictionary.app.upsert_modal.paste_url,
+            add: props.dictionary.app.upsert_modal.add_link,
+            open: props.dictionary.app.upsert_modal.link.open,
+            original_url: props.dictionary.app.upsert_modal.link.original_url,
+            snapshot: props.dictionary.app.upsert_modal.link.snapshot,
+            visibility: props.dictionary.app.upsert_modal.link.visibility,
+            private: props.dictionary.app.upsert_modal.link.private,
+            public: props.dictionary.app.upsert_modal.link.public,
+            site: props.dictionary.app.upsert_modal.link.site,
+          }}
+        />
+      </UiModal_Content_Standard>
     </UiModal_Content>
   )
 

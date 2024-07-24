@@ -6,4 +6,7 @@ import '../src/styles/style.scss'
 
 export const parameters = {
   layout: 'fullscreen',
+  controls: {
+    expanded: true,
+  },
 }

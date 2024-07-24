@@ -10,11 +10,10 @@ declare const styles: {
   readonly "tag__actions--remove": string;
   readonly "tag__actions--visibility": string;
   readonly "tag__actions--private": string;
-  readonly "dropdown": string;
-  readonly "dropdown--visible": string;
-  readonly "dropdown__items": string;
-  readonly "dropdown__items__item": string;
-  readonly "dropdown__create": string;
+  readonly "suggestions": string;
+  readonly "suggestions__items": string;
+  readonly "suggestions__items__item": string;
+  readonly "suggestions__create": string;
 };
 export = styles;
 

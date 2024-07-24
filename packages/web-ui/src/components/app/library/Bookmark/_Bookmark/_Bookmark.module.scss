@@ -259,6 +259,32 @@
       > span {
         color: var(--text-color-dimmed);
       }
+      &__edit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        width: var(--button-dimension-28px);
+        height: var(--button-dimension-28px);
+        @include transition-150ms(background-color);
+        background-color: var(--green100);
+        @include dark {
+          background-color: var(--green900);
+        }
+        > svg {
+          width: var(--icon-dimension-13px);
+          fill: var(--green600);
+          @include dark {
+            fill: var(--green400);
+          }
+        }
+        @include hover {
+          background-color: var(--green200);
+          @include dark {
+            background-color: var(--green800);
+          }
+        }
+      }
       &__tag {
         display: inline-flex;
         align-items: center;
