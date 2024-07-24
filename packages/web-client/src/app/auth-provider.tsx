@@ -21,7 +21,7 @@ type AuthData = {
   username: string
 }
 
-export const AuthContext = createContext<{
+type AuthContext = {
   auth_data?: AuthData
   ky_instance: KyInstance
   set_auth_data: (params: {
@@ -32,7 +32,9 @@ export const AuthContext = createContext<{
     refresh_token: string
   }) => void
   logout: () => void
-} | null>(null)
+}
+
+export const AuthContext = createContext<AuthContext>({} as AuthContext)
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
   const [auth_data, _set_auth_data] = useState<AuthData>()

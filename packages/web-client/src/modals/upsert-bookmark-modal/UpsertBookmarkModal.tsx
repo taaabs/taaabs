@@ -72,7 +72,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     setValue,
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const [is_bookmark_public, set_is_bookmark_public] = useState(
     props.bookmark?.is_public,
   )

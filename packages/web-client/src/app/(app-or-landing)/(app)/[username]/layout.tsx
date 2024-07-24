@@ -5,6 +5,7 @@ import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastru
 import ky from 'ky'
 import { ReactNode } from 'react'
 import { LocalDbProvider } from '@/app/local-db-provider'
+import { FollowUnfollowProvider } from './follow-unfollow-provider'
 
 const Layout: React.FC<{
   children: ReactNode
@@ -24,7 +25,7 @@ const Layout: React.FC<{
             : undefined
         }
       />
-      {props.children}
+      <FollowUnfollowProvider>{props.children}</FollowUnfollowProvider>
     </LocalDbProvider>
   )
 }

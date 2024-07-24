@@ -11,7 +11,7 @@ import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastr
 export const SectionDeleteAccount: React.FC<{ dictionary: Dictionary }> = (
   props,
 ) => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const modal_context = useContext(ModalContext)!
 
   return (

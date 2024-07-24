@@ -79,7 +79,7 @@ export const LocalDbContext = createContext<LocalDb | null>(null)
 export const LocalDbProvider: React.FC<{
   children: ReactNode
 }> = (props) => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const { username }: { username?: string } = useParams()
   const [is_initializing, set_is_initializing] = useState(false)
   const [indexed_bookmarks_percentage, set_indexed_bookmarks_percentage] =

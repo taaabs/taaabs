@@ -38,7 +38,7 @@ export const HeaderDesktop: React.FC<{
   dictionary: Dictionary
   bookmarklet_script: string
 }> = (props) => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   // const local_db_context = useContext(LocalDbContext)!
   const search_params = useSearchParams()
   const params = useParams()

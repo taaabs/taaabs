@@ -19,7 +19,7 @@ import { AuthContext } from '@/app/auth-provider'
 import { use_is_hydrated } from '@shared/hooks'
 
 export const use_bookmarks = () => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const is_hydrated = use_is_hydrated()
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()

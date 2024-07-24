@@ -12,7 +12,7 @@ import { KyInstance } from 'ky'
 
 // This logic works only because of referential nature of "points_given" obejct. It works but could be moved to redux.
 export const use_points = () => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()

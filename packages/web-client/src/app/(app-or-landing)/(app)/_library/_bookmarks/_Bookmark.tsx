@@ -18,7 +18,7 @@ namespace _Bookmark {
  * This component also preloads links data.
  */
 export const _Bookmark: React.FC<_Bookmark.Props> = (props) => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const ref = useRef<HTMLDivElement>(null)
   const is_visible = useViewportSpy(ref)
   const { username } = useContext(LibraryContext)!

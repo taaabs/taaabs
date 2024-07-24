@@ -22,7 +22,7 @@ type FormValues = {
 export const SectionUsername: React.FC<{ dictionary: Dictionary }> = (
   props,
 ) => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const {
     control,
     handleSubmit,

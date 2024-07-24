@@ -18,7 +18,7 @@ namespace _TagHierarchies {
 }
 
 export const _TagHierarchies: React.FC<_TagHierarchies.Props> = (props) => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const {
     bookmarks_hook,
     search_hook,

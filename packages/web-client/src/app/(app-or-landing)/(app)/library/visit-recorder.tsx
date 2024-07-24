@@ -10,7 +10,7 @@ import { use_is_hydrated } from '@shared/hooks'
 import { useContext, useEffect } from 'react'
 
 export const VisitRecorder: React.FC = () => {
-  const auth_context = useContext(AuthContext)!
+  const auth_context = useContext(AuthContext)
   const has_focus = use_has_focus()
   const is_hydrated = use_is_hydrated()
 
