@@ -102,7 +102,7 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
   return (
     <UiModal
       is_open={modal_context.is_open}
-      is_dismissible={true}
+      is_dismissible={!is_updating}
       on_close={props.on_close}
       width={500}
       slot_header={header}
