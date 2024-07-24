@@ -87,8 +87,11 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
   const footer = (
     <UiModal_Footer
       button_label={props.dictionary.app.edit_tags_modal.update}
-      is_disabled={false}
-      button_on_click={() => props.on_submit(selected_tags)}
+      is_disabled={is_updating}
+      button_on_click={() => {
+        set_is_updating(true)
+        props.on_submit(selected_tags)
+      }}
       on_click_cancel={props.on_close}
       translations={{
         cancel: props.dictionary.app.edit_tags_modal.cancel,
