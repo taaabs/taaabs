@@ -42,7 +42,7 @@ export const FollowUnfollowProvider: React.FC<{ children: ReactNode }> = (
   }
 
   useEffect(() => {
-    if (auth_context.auth_data) {
+    if (auth_context.auth_data && auth_context.auth_data.username != username) {
       const data_source = new UserConnection_DataSourceImpl(
         auth_context.ky_instance,
       )

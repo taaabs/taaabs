@@ -1,5 +1,6 @@
-import cn from 'classnames'
 import styles from './_Bookmark.module.scss'
+import cn from 'classnames'
+import { BlurhashCanvas } from 'react-blurhash'
 import { memo, useState } from 'react'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pl'
@@ -13,14 +14,12 @@ import { Icon } from '@web-ui/components/common/particles/icon'
 import { useContextMenu } from 'use-context-menu'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import confetti from 'canvas-confetti'
-import { shared_values } from '@web-ui/constants'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { system_values } from '@shared/constants/system-values'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/Dropdown'
 import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/Dropdown/standard-item'
 import { url_path_for_display } from '@shared/utils/url-path-for-display/url-path-for-display'
-import { Blurhash, BlurhashCanvas } from 'react-blurhash'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -87,6 +86,7 @@ export namespace _Bookmark {
     on_selected_tag_click: (tag_id: number) => void
     on_get_points_given_click?: () => void
     on_give_point_click?: (points: number) => void
+    on_modify_tags_click?: () => void
     tags: {
       id: number // Sortable requires "id", so no mangling here.
       is_public?: boolean
@@ -199,7 +199,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
       set_tags(props.tags)
     }, [props.updated_at])
 
-    const tagsdom = [
+    const tags_dom = [
       ...tags.map((tag, i) => {
         const tag_first_char_index_in_search_title = (
           (props.title ? `${props.title} ` : '') +
@@ -305,7 +305,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     ]
 
     const actions_dom = (
-      <div className={styles.bookmark__card__tags__actions}>
+      <div className={cn(styles.bookmark__card__tags__actions, 'static')}>
         <div
           className={cn(styles.bookmark__card__tags__actions__huggs, {
             [styles['bookmark__card__tags__actions__huggs--has-poits']]:
@@ -340,17 +340,13 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         !is_points_givenrequested
                       ) {
                         confetti({
-                          particleCount: 20,
+                          particleCount: 40,
                           startVelocity: 11,
                           spread: 100,
                           gravity: 0.3,
                           ticks: 30,
                           decay: 0.91,
                           scalar: 0.8,
-                          angle:
-                            window.innerWidth < shared_values.media_query_992
-                              ? 120
-                              : undefined,
                           shapes: ['square'],
                           colors: ['#FFD21E', '#1d4ed8'],
                           origin: {
@@ -762,6 +758,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               <ReactSortable
                 list={tags}
                 setList={(new_tags) => {
+                  console.log(new_tags)
                   if (JSON.stringify(new_tags) == JSON.stringify(tags)) return
                   set_tags(new_tags)
                   props.on_tags_order_change?.(new_tags)
@@ -772,19 +769,26 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 delay={system_values.sortablejs_delay}
                 delayOnTouchOnly={true}
                 className={styles.bookmark__card__tags}
-                filter={`.${styles.bookmark__card__tags__actions}`}
+                filter={`.static`}
                 fallbackClass={
                   !('ontouchstart' in window)
                     ? styles['sortable-fallback']
                     : undefined
                 }
               >
-                {tagsdom}
+                {tags_dom}
+                <button
+                  key={'edit-tags'}
+                  onClick={props.on_modify_tags_click}
+                  className={cn(styles.bookmark__card__tags__edit, 'static')}
+                >
+                  <Icon variant="TAG" />
+                </button>
                 {actions_dom}
               </ReactSortable>
             ) : (
               <div className={styles.bookmark__card__tags}>
-                {tagsdom}
+                {tags_dom}
                 {actions_dom}
               </div>
             )}

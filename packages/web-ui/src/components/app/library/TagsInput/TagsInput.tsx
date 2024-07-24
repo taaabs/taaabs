@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ReactSortable } from 'react-sortablejs'
 import styles from './TagsInput.module.scss'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -19,7 +19,6 @@ export namespace TagsInput {
     on_selected_tags_update: (selected_tags: Tag[]) => void
     max_tags: number
     is_visibility_toggleable: boolean
-    on_focus: () => void
     translations: {
       enter_tag_name: string
       add: string
@@ -37,11 +36,10 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
       is_public: tag.is_public,
     })),
   )
-  const ref = useRef<HTMLInputElement>(null)
+  const ref = useRef({} as HTMLInputElement)
   const [new_tag_name, set_new_tag_name] = useState('')
   const [input_width, set_input_width] = useState<number>()
   const [is_focused, set_is_focused] = useState<boolean>()
-  const [show_dropdown, set_show_dropdown] = useState<boolean>()
 
   useUpdateEffect(() => {
     props.on_selected_tags_update(
@@ -66,8 +64,12 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
         if (
           sortable_items.length == props.max_tags ||
           !new_tag_name.trim().length
-        )
+        ) {
+          ref.current.blur()
+          set_is_focused(false)
           return
+        }
+
         if (!sortable_items.find((i) => i.name == new_tag_name.trim())) {
           set_sortable_items([
             ...sortable_items,
@@ -94,7 +96,6 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
           set_new_tag_name('')
         } else {
           set_is_focused(false)
-          set_show_dropdown(false)
         }
       } else if (event.code == 'Escape') {
         set_is_focused(false)
@@ -109,40 +110,6 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
 
     return () => document.removeEventListener('keydown', handle_keyboard)
   }, [new_tag_name, is_focused, sortable_items])
-
-  // Control dropdown visibility.
-  useUpdateEffect(() => {
-    if (
-      is_focused &&
-      (!new_tag_name || new_tag_name.trim().length) &&
-      ((!new_tag_name &&
-        props.recent_tags.filter(
-          (recent_tag) => !sortable_items.find((i) => i.name == recent_tag),
-        ).length) ||
-        (new_tag_name &&
-          props.all_tags
-            .filter((tag) => tag.includes(new_tag_name))
-            .filter((tag) => !sortable_items.find((i) => i.name == tag))
-            .length) ||
-        (new_tag_name && !props.all_tags.find((tag) => tag == new_tag_name)))
-    ) {
-      set_show_dropdown(true)
-    } else {
-      set_show_dropdown(false)
-    }
-  }, [
-    new_tag_name,
-    is_focused,
-    sortable_items,
-    props.all_tags,
-    props.recent_tags,
-  ])
-
-  useUpdateEffect(() => {
-    if (is_focused) {
-      props.on_focus()
-    }
-  }, [is_focused])
 
   const field = (
     <ReactSortable
@@ -230,23 +197,19 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
   )
 
   const dropdown = (
-    <div
-      className={cn(styles.dropdown, {
-        [styles['dropdown--visible']]: show_dropdown,
-      })}
-    >
-      <div className={styles.dropdown__items}>
+    <div className={styles.suggestions}>
+      <div className={styles.suggestions__items}>
         {/* Recent tags. */}
         {!new_tag_name &&
           props.recent_tags
             .filter(
               (recent_tag) => !sortable_items.find((i) => i.name == recent_tag),
             )
-            .slice(0, 12)
+            .slice(0, 20)
             .map((recent_tag) => (
               <button
                 key={recent_tag}
-                className={styles.dropdown__items__item}
+                className={styles.suggestions__items__item}
                 onClick={() => {
                   if (sortable_items.length == props.max_tags) return
                   set_sortable_items([
@@ -265,11 +228,11 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
               tag.toLowerCase().includes(new_tag_name.toLowerCase()),
             )
             .filter((tag) => !sortable_items.find((i) => i.name == tag))
-            .slice(0, 12)
+            .slice(0, 20)
             .map((tag) => (
               <button
                 key={tag}
-                className={styles.dropdown__items__item}
+                className={styles.suggestions__items__item}
                 onClick={() => {
                   if (sortable_items.length == props.max_tags) return
                   set_sortable_items([
@@ -290,7 +253,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
       {/* Create new tag (shown when no match in filtered out all tags was found). */}
       {new_tag_name.trim() && (
         <button
-          className={styles.dropdown__create}
+          className={styles.suggestions__create}
           onClick={() => {
             if (sortable_items.length == props.max_tags) return
             set_sortable_items([

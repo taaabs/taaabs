@@ -22,6 +22,7 @@ declare const styles: {
   readonly "bookmark__card__title__menu__button": string;
   readonly "bookmark__card__title__menu--toggled": string;
   readonly "bookmark__card__tags": string;
+  readonly "bookmark__card__tags__edit": string;
   readonly "bookmark__card__tags__tag": string;
   readonly "bookmark__card__tags__tag--selected": string;
   readonly "bookmark__card__tags__tag__name": string;

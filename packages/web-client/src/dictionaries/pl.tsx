@@ -301,6 +301,11 @@ export const dictionary: Dictionary = {
       tag_is_too_short: 'Tag musi mieć przynajmniej jeden znak',
       tag_is_too_long: 'Tag jest za długi',
     },
+    edit_tags_modal: {
+      edit_tags: 'Edytuj tagi',
+      update: 'Zapisz zmiany',
+      cancel: 'Anuluj',
+    },
   },
   settings: {
     settings: 'Ustawienia',

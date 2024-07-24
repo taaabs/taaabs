@@ -6,7 +6,6 @@ export default {
   component: TagsInput,
 } as Meta
 
-// Mock functions
 const mock_on_selected_tags_update = (selected_tags: TagsInput.Tag[]) => {
   console.log('Selected tags updated:', selected_tags)
 }
@@ -14,7 +13,7 @@ const mock_on_focus = () => {
   console.log('TagsInput focused')
 }
 
-const base_args: Partial<TagsInput.Props> = {
+const base_args: TagsInput.Props = {
   all_tags: [
     'React',
     'JavaScript',
@@ -30,6 +29,7 @@ const base_args: Partial<TagsInput.Props> = {
   is_visibility_toggleable: false,
   on_selected_tags_update: mock_on_selected_tags_update,
   on_focus: mock_on_focus,
+  selected_tags: [],
   translations: {
     enter_tag_name: 'Enter tag name',
     add: 'Add',
@@ -54,7 +54,6 @@ Default.args = {
 export const EmptyState = Template.bind({})
 EmptyState.args = {
   ...base_args,
-  selected_tags: [],
 }
 
 export const MaxTagsReached = Template.bind({})

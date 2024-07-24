@@ -295,6 +295,11 @@ const dictionary: Dictionary = {
       tag_is_too_short: 'Tag must have at least 1 character',
       tag_is_too_long: 'Entered tag is too long',
     },
+    edit_tags_modal: {
+      edit_tags: 'Edit tags',
+      update: 'Update',
+      cancel: 'Cancel',
+    },
   },
   settings: {
     settings: 'Settings',
