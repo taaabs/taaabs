@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { ReactSortable } from 'react-sortablejs'
 import styles from './TagsInput.module.scss'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -22,6 +22,7 @@ export namespace TagsInput {
     translations: {
       enter_tag_name: string
       add: string
+      recent_tags: string
     }
   }
 }
@@ -196,8 +197,13 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
     </ReactSortable>
   )
 
-  const dropdown = (
+  const suggestions = (
     <div className={styles.suggestions}>
+      {!new_tag_name && (
+        <div className={styles.suggestions__heading}>
+          {props.translations.recent_tags}
+        </div>
+      )}
       <div className={styles.suggestions__items}>
         {/* Recent tags. */}
         {!new_tag_name &&
@@ -283,7 +289,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
         }}
       >
         {field}
-        {dropdown}
+        {suggestions}
       </div>
     </OutsideClickHandler>
   )

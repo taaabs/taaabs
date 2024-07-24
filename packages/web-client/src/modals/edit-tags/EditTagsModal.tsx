@@ -71,7 +71,8 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
         max_tags={system_values.bookmark.tags.limit}
         translations={{
           enter_tag_name: props.dictionary.app.upsert_modal.enter_tag_name,
-          add: props.dictionary.app.upsert_modal.tags_dropdown.add,
+          add: props.dictionary.app.upsert_modal.tag_suggestions.add,
+          recent_tags: props.dictionary.app.upsert_modal.tag_suggestions.recent_tags,
         }}
       />
     </UiModal_Content>

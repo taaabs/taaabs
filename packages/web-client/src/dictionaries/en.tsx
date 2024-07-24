@@ -269,8 +269,9 @@ const dictionary: Dictionary = {
       note: 'Note',
       jot_something_down: 'Jot something down...',
       tags: 'Tags',
-      tags_dropdown: {
+      tag_suggestions: {
         add: 'Add',
+        recent_tags: 'Recent tags',
       },
       enter_tag_name: 'Enter tag name',
       add_tag: 'Add tag',
@@ -299,6 +300,7 @@ const dictionary: Dictionary = {
       edit_tags: 'Edit tags',
       update: 'Update',
       cancel: 'Cancel',
+      recent_tags: 'Recent tags',
     },
   },
   settings: {

@@ -275,8 +275,9 @@ export const dictionary: Dictionary = {
       note: 'Notka',
       jot_something_down: 'Zanotuj coś...',
       tags: 'Tagi',
-      tags_dropdown: {
+      tag_suggestions: {
         add: 'Dodaj',
+        recent_tags: 'Ostatnio używane',
       },
       enter_tag_name: 'Wpisz słowo kluczowe',
       add_tag: 'Dodaj tag',
@@ -305,6 +306,7 @@ export const dictionary: Dictionary = {
       edit_tags: 'Edytuj tagi',
       update: 'Zapisz zmiany',
       cancel: 'Anuluj',
+      recent_tags: 'Ostatio używane'
     },
   },
   settings: {

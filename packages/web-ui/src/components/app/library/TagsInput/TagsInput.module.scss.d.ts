@@ -11,6 +11,7 @@ declare const styles: {
   readonly "tag__actions--visibility": string;
   readonly "tag__actions--private": string;
   readonly "suggestions": string;
+  readonly "suggestions__heading": string;
   readonly "suggestions__items": string;
   readonly "suggestions__items__item": string;
   readonly "suggestions__create": string;

@@ -9,9 +9,6 @@ export default {
 const mock_on_selected_tags_update = (selected_tags: TagsInput.Tag[]) => {
   console.log('Selected tags updated:', selected_tags)
 }
-const mock_on_focus = () => {
-  console.log('TagsInput focused')
-}
 
 const base_args: TagsInput.Props = {
   all_tags: [
@@ -28,11 +25,11 @@ const base_args: TagsInput.Props = {
   max_tags: 5,
   is_visibility_toggleable: false,
   on_selected_tags_update: mock_on_selected_tags_update,
-  on_focus: mock_on_focus,
   selected_tags: [],
   translations: {
     enter_tag_name: 'Enter tag name',
     add: 'Add',
+    recent_tags: 'Recent tags',
   },
 }
 

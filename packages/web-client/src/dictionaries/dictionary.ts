@@ -205,8 +205,9 @@ export type Dictionary = {
       note: string
       jot_something_down: string
       tags: string
-      tags_dropdown: {
+      tag_suggestions: {
         add: string
+        recent_tags: string
       }
       enter_tag_name: string
       add_tag: string
@@ -235,6 +236,7 @@ export type Dictionary = {
       edit_tags: string
       cancel: string
       update: string
+      recent_tags: string
     }
   }
   settings: {
