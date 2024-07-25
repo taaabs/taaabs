@@ -10,8 +10,6 @@
 .item {
   display: flex;
   position: relative;
-  border-radius: var(--border-radius-12px);
-  border: var(--border-primary);
   &__remove {
     position: absolute;
     top: 0;
@@ -51,7 +49,7 @@
       background-color: transparent;
       border: none;
       font-weight: var(--font-weight-inter-medium);
-      padding: var(--padding-12px) var(--padding-16px);
+      padding: var(--padding-12px) var(--padding-16px) var(--padding-12px) 0;
       resize: none;
       &::selection {
         background-color: var(--blue400);
@@ -63,7 +61,7 @@
       &__row {
         display: flex;
         justify-content: space-between;
-        padding: var(--padding-10px) var(--padding-16px);
+        padding: var(--padding-10px) var(--padding-16px) var(--padding-10px) 0;
         border-top: var(--border-secondary);
         &__label {
           color: var(--text-color-dimmed);

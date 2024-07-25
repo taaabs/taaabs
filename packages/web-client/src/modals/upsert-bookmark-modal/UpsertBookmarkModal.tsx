@@ -5,11 +5,8 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Modal as UiModal } from '@web-ui/components/Modal'
 import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
 import { Footer as UiModal_Footer } from '@web-ui/components/Modal/Footer'
-import { Content as UiModal_Content } from '@web-ui/components/Modal/Content'
-import { Centered as UiModal_Content_Centered } from '@web-ui/components/Modal/Content/Centered'
-import { Standard as UiModal_Content_Standard } from '@web-ui/components/Modal/Content/Standard'
-import { StandardSplit as UiModal_Content_StandardSplit } from '@web-ui/components/Modal/Content/StandardSplit'
-import { Divider as UiModal_Content_Divider } from '@web-ui/components/Modal/Content/Divider'
+import { UpsertBookmarkContent as UiModal_UpsertBookmarkContent } from '@web-ui/components/Modal/UpsertBookmarkContent'
+import { Section as UiModal_UpsertBookmarkContent_Section } from '@web-ui/components/Modal/UpsertBookmarkContent/Section'
 import { Input as UiCommonAtoms_Input } from '@web-ui/components/common/atoms/input'
 import { DraggableUpsertFormLinks as UiAppAtom_DraggableUpsertFormLinks } from '@web-ui/components/app/atoms/draggable-upsert-form-links'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
@@ -435,37 +432,35 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     })
   }, [])
 
-  const content = (
-    <UiModal_Content>
-      <UiModal_Content_Centered
+  const build_content = () => {
+    const visibility_section = (
+      <UiModal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.visibility}
       >
-        <div style={{ width: '200px' }}>
-          <UiCommon_SegmentedButton
-            items={[
-              {
-                label: props.dictionary.app.upsert_modal.private,
-                is_selected: !is_bookmark_public,
-              },
-              {
-                label: props.dictionary.app.upsert_modal.public,
-                is_selected: is_bookmark_public || false,
-              },
-            ]}
-            on_item_click={(selected_idx) => {
-              if (selected_idx == 0) {
-                set_is_bookmark_public(false)
-              } else {
-                set_is_bookmark_public(true)
-              }
-            }}
-          />
-        </div>
-      </UiModal_Content_Centered>
+        <UiCommon_SegmentedButton
+          items={[
+            {
+              label: props.dictionary.app.upsert_modal.private,
+              is_selected: !is_bookmark_public,
+            },
+            {
+              label: props.dictionary.app.upsert_modal.public,
+              is_selected: is_bookmark_public || false,
+            },
+          ]}
+          on_item_click={(selected_idx) => {
+            if (selected_idx == 0) {
+              set_is_bookmark_public(false)
+            } else {
+              set_is_bookmark_public(true)
+            }
+          }}
+        />
+      </UiModal_UpsertBookmarkContent_Section>
+    )
 
-      <UiModal_Content_Divider />
-
-      <UiModal_Content_StandardSplit
+    const title_section = (
+      <UiModal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.title}
       >
         <UiCommonTemplate_FormControllerFix>
@@ -507,50 +502,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiModal_Content_StandardSplit>
+      </UiModal_UpsertBookmarkContent_Section>
+    )
 
-      <UiModal_Content_Divider />
-
-      <UiModal_Content_StandardSplit
-        label={props.dictionary.app.upsert_modal.tags}
-      >
-        <UiAppLibrary_TagsInput
-          selected_tags={tags.map((tag) => ({
-            name: tag.name,
-            is_public:
-              props.bookmark?.is_public == false ? true : tag.is_public,
-          }))}
-          all_tags={
-            my_tags?.all
-              .map((tag) => tag.name)
-              .sort((a, b) => a.localeCompare(b)) || []
-          }
-          recent_tags={
-            my_tags?.recent_ids.map(
-              (id) => my_tags.all.find((tag) => tag.id == id)!.name,
-            ) || []
-          }
-          on_selected_tags_update={(updated_tags) => {
-            set_tags(
-              updated_tags.map((tag) => ({
-                name: tag.name,
-                is_public: tag.is_public,
-              })),
-            )
-          }}
-          is_visibility_toggleable={is_bookmark_public || false}
-          max_tags={system_values.bookmark.tags.limit}
-          translations={{
-            enter_tag_name: props.dictionary.app.upsert_modal.enter_tag_name,
-            add: props.dictionary.app.upsert_modal.tag_suggestions.add,
-            recent_tags: props.dictionary.app.upsert_modal.tag_suggestions.recent_tags,
-          }}
-        />
-      </UiModal_Content_StandardSplit>
-
-      <UiModal_Content_Divider />
-
-      <UiModal_Content_StandardSplit
+    const note_section = (
+      <UiModal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.note}
       >
         <UiCommonTemplate_FormControllerFix>
@@ -595,11 +551,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiModal_Content_StandardSplit>
+      </UiModal_UpsertBookmarkContent_Section>
+    )
 
-      <UiModal_Content_Divider />
-
-      <UiModal_Content_StandardSplit
+    const cover_section = (
+      <UiModal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.cover}
       >
         {(cover || clipboard_data?.og_image) && (
@@ -614,11 +570,53 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         <div ref={cover_paste_area}>
           Click here and press Ctrl+V to paste an image
         </div>
-      </UiModal_Content_StandardSplit>
+      </UiModal_UpsertBookmarkContent_Section>
+    )
 
-      <UiModal_Content_Divider />
+    const tags_section = (
+      <UiModal_UpsertBookmarkContent_Section
+        label={props.dictionary.app.upsert_modal.tags}
+      >
+        <UiAppLibrary_TagsInput
+          selected_tags={tags.map((tag) => ({
+            name: tag.name,
+            is_public:
+              props.bookmark?.is_public == false ? true : tag.is_public,
+          }))}
+          all_tags={
+            my_tags?.all
+              .map((tag) => tag.name)
+              .sort((a, b) => a.localeCompare(b)) || []
+          }
+          recent_tags={
+            my_tags?.recent_ids.map(
+              (id) => my_tags.all.find((tag) => tag.id == id)!.name,
+            ) || []
+          }
+          on_selected_tags_update={(updated_tags) => {
+            set_tags(
+              updated_tags.map((tag) => ({
+                name: tag.name,
+                is_public: tag.is_public,
+              })),
+            )
+          }}
+          is_visibility_toggleable={is_bookmark_public || false}
+          max_tags={system_values.bookmark.tags.limit}
+          translations={{
+            enter_tag_name: props.dictionary.app.upsert_modal.enter_tag_name,
+            add: props.dictionary.app.upsert_modal.tag_suggestions.add,
+            recent_tags:
+              props.dictionary.app.upsert_modal.tag_suggestions.recent_tags,
+          }}
+        />
+      </UiModal_UpsertBookmarkContent_Section>
+    )
 
-      <UiModal_Content_Standard label={props.dictionary.app.upsert_modal.links}>
+    const links_section = (
+      <UiModal_UpsertBookmarkContent_Section
+        label={props.dictionary.app.upsert_modal.links}
+      >
         <UiAppAtom_DraggableUpsertFormLinks
           links={links.map((link) => ({
             url: link.url,
@@ -652,9 +650,20 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             site: props.dictionary.app.upsert_modal.link.site,
           }}
         />
-      </UiModal_Content_Standard>
-    </UiModal_Content>
-  )
+      </UiModal_UpsertBookmarkContent_Section>
+    )
+
+    return (
+      <UiModal_UpsertBookmarkContent
+        slot_visibility={visibility_section}
+        slot_title={title_section}
+        slot_note={note_section}
+        slot_cover={cover_section}
+        slot_tags={tags_section}
+        slot_links={links_section}
+      />
+    )
+  }
 
   const header = (
     <UiModal_Header
@@ -688,9 +697,9 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       is_open={modal_context.is_open}
       is_dismissible={!(isSubmitting || (isSubmitted && isSubmitSuccessful))}
       on_close={props.on_close}
-      width={600}
+      width={900}
       slot_header={header}
-      slot_content={content}
+      slot_content={build_content()}
       slot_footer={footer}
     />
   )

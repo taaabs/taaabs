@@ -1,0 +1,43 @@
+// @type
+@use '../../../styles/foundation' as *;
+
+.container {
+  display: grid;
+  padding: var(--padding-40px);
+  column-gap: var(--padding-40px);
+  row-gap: var(--padding-24px);
+  background-color: var(--background);
+  @include at992 {
+    grid-template: 'visibility visibility' 'title tags' 'note tags' 'cover tags' 'links links' / 1fr 1fr;
+  }
+}
+.visibility {
+  grid-area: visibility;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  border-bottom: var(--border-secondary);
+  padding-bottom: var(--padding-32px);
+  button {
+    padding: 0 var(--padding-24px);
+  }
+}
+.title {
+  grid-area: title;
+}
+.note {
+  grid-area: note;
+}
+.cover {
+  grid-area: cover;
+}
+.tags {
+  grid-area: tags;
+}
+.links {
+  grid-area: links;
+  @include at992 {
+    border-top: var(--border-secondary);
+    padding-top: var(--padding-16px);
+  }
+}

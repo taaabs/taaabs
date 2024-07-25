@@ -163,8 +163,8 @@ export const dictionary: Dictionary = {
         bookmarklet: {
           text: 'Bookmarklet',
           subtext:
-            'Najłatwiejszy sposób na integrację przeglądarki z Taaabs to po prostu przeciągnięcie tego przycisku na pasek zakładek i kliknięcie go z dowolnej strony internetowej.',
-          button_label: 'Zapisz w taaabs',
+            'Najprostszy sposób na integrację Twojej przeglądarki z Taaabs, po prostu przeciągnij ten przycisk do Paska Zakładek i kliknij z dowolnej strony internetowej.',
+          button_label: 'Zapisz do taaabs',
         },
       },
     },
@@ -333,7 +333,7 @@ export const dictionary: Dictionary = {
         heading: {
           text: 'Usuń konto',
           subtext:
-            'Usunięcie konta spowoduje usunięcie wszystkich Twoich danych z naszych serwerów. Pobierz kopię zapasową przed kontynuowaniem. Ta akcja jest nieodwracalna.',
+            'Usunięcie konta usunie wszystkie Twoje dane z naszych serwerów. Pobierz kopię zapasową swoich zakładek przed kontynuowaniem. <strong>Tej operacji nie można cofnąć.</strong>',
         },
         delete_my_account_button_label: 'Usuń moje konto',
         modal: {

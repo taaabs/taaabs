@@ -3,7 +3,6 @@ import { Modal as UiModal } from '@web-ui/components/Modal'
 import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
 import { Footer as UiModal_Footer } from '@web-ui/components/Modal/Footer'
 import { Content as UiModal_Content } from '@web-ui/components/Modal/Content'
-import { StandardSplit as UiModal_Content_StandardSplit } from '@web-ui/components/Modal/Content/StandardSplit'
 import { useContext, useState, useEffect } from 'react'
 import { ModalContext } from '@/providers/ModalProvider'
 import { AuthContext } from '@/app/auth-provider'
@@ -32,17 +31,14 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
   const [is_updating, set_is_updating] = useState<boolean>()
 
   useEffect(() => {
-    // Set timeout is necessary for modal animation to finish smoothly.
-    setTimeout(() => {
-      if (my_tags !== undefined || is_fetching_my_tags) return
-      set_is_fetching_my_tags(true)
-      const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
-      const repository = new Tags_RepositoryImpl(data_source)
-      repository.tags(auth_context.auth_data!.encryption_key).then((result) => {
-        set_is_fetching_my_tags(false)
-        set_my_tags(result)
-      })
-    }, 150)
+    if (my_tags !== undefined || is_fetching_my_tags) return
+    set_is_fetching_my_tags(true)
+    const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
+    const repository = new Tags_RepositoryImpl(data_source)
+    repository.tags(auth_context.auth_data!.encryption_key).then((result) => {
+      set_is_fetching_my_tags(false)
+      set_my_tags(result)
+    })
   }, [])
 
   const content = (
