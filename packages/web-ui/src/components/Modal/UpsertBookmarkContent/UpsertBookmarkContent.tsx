@@ -5,7 +5,6 @@ export namespace UpsertBookmarkContent {
     slot_title: React.ReactNode
     slot_note: React.ReactNode
     slot_tags: React.ReactNode
-    slot_cover: React.ReactNode
     slot_links: React.ReactNode
   }
 }
@@ -18,7 +17,6 @@ export const UpsertBookmarkContent: React.FC<UpsertBookmarkContent.Props> = (
       <div className={styles.title}>{props.slot_title}</div>
       <div className={styles.note}>{props.slot_note}</div>
       <div className={styles.tags}>{props.slot_tags}</div>
-      <div className={styles.cover}>{props.slot_cover}</div>
       <div className={styles.links}>{props.slot_links}</div>
     </div>
   )

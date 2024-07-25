@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ReactSortable } from 'react-sortablejs'
 import styles from './TagsInput.module.scss'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -6,6 +6,7 @@ import cn from 'classnames'
 import { Icon } from '@web-ui/components/common/particles/icon'
 import { system_values } from '@shared/constants/system-values'
 import OutsideClickHandler from 'react-outside-click-handler'
+import SimpleBar from 'simplebar-react'
 
 export namespace TagsInput {
   export type Tag = {
@@ -52,8 +53,8 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
     // Set input width dynamically.
     const span = document.createElement('span')
     document.body.appendChild(span)
-    const inputStyles = window.getComputedStyle(ref.current!)
-    span.textContent = ref.current!.value
+    const inputStyles = window.getComputedStyle(ref.current)
+    span.textContent = ref.current.value
     span.style.whiteSpace = 'pre'
     const width = span.offsetWidth + parseFloat(inputStyles.paddingLeft)
     document.body.removeChild(span)
@@ -111,6 +112,10 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
 
     return () => document.removeEventListener('keydown', handle_keyboard)
   }, [new_tag_name, is_focused, sortable_items])
+
+  useEffect(() => {
+    ref.current.focus()
+  }, [])
 
   const field = (
     <ReactSortable
@@ -198,24 +203,45 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
   )
 
   const suggestions = (
-    <div className={styles.suggestions}>
+    <SimpleBar className={styles.suggestions}>
       {!new_tag_name && (
         <div className={styles.suggestions__heading}>
           {props.translations.recent_tags}
         </div>
       )}
+
       <div
         className={cn(styles.suggestions__items, {
           [styles['suggestions__items--visible']]: props.all_tags.length,
         })}
       >
+        {/* Create new tag (shown when no match in filtered out all tags was found). */}
+        {new_tag_name.trim() && (
+          <button
+            className={styles.suggestions__create}
+            onClick={() => {
+              if (sortable_items.length == props.max_tags) return
+              set_sortable_items([
+                ...sortable_items,
+                {
+                  id: Math.random(),
+                  name: new_tag_name.trim(),
+                  is_public: true,
+                },
+              ])
+              set_new_tag_name('')
+            }}
+          >
+            {props.translations.add} "<strong>{new_tag_name}</strong>"
+          </button>
+        )}
         {/* Recent tags. */}
         {!new_tag_name &&
           props.recent_tags
             .filter(
               (recent_tag) => !sortable_items.find((i) => i.name == recent_tag),
             )
-            .slice(0, 20)
+            .slice(0, 30)
             .map((recent_tag) => (
               <button
                 key={recent_tag}
@@ -238,7 +264,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
               tag.toLowerCase().includes(new_tag_name.toLowerCase()),
             )
             .filter((tag) => !sortable_items.find((i) => i.name == tag))
-            .slice(0, 20)
+            .slice(0, 30)
             .map((tag) => (
               <button
                 key={tag}
@@ -260,23 +286,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
               />
             ))}
       </div>
-      {/* Create new tag (shown when no match in filtered out all tags was found). */}
-      {new_tag_name.trim() && (
-        <button
-          className={styles.suggestions__create}
-          onClick={() => {
-            if (sortable_items.length == props.max_tags) return
-            set_sortable_items([
-              ...sortable_items,
-              { id: Math.random(), name: new_tag_name.trim(), is_public: true },
-            ])
-            set_new_tag_name('')
-          }}
-        >
-          {props.translations.add} "<strong>{new_tag_name}</strong>"
-        </button>
-      )}
-    </div>
+    </SimpleBar>
   )
 
   return (

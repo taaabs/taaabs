@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { useEffect } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { Sheet } from 'react-modal-sheet'
+import SimpleBar from 'simplebar-react'
 
 namespace ReaderModal {
   export type Props = {
@@ -52,19 +53,20 @@ export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
       className={cn(styles.modal, {
         [styles['modal--visible']]: props.is_open,
       })}
+      onClick={props.on_close}
     >
-      <OutsideClickHandler onOutsideClick={props.on_close}>
-        <div className={styles.modal__inner} style={{ width: '100%' }}>
-          <div
-            style={{
-              height: '100vh',
-              overflow: 'auto',
-            }}
-          >
-            {props.slot_content}
-          </div>
-        </div>
-      </OutsideClickHandler>
+      <div
+        className={styles.modal__inner}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <SimpleBar
+          style={{
+            height: '100vh',
+          }}
+        >
+          {props.slot_content}
+        </SimpleBar>
+      </div>
     </div>
   ) : (
     <Sheet

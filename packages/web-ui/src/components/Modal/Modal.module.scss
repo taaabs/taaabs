@@ -12,9 +12,6 @@
   background-color: rgba(0, 0, 0, 0.2);
   opacity: 0;
   align-items: center;
-  @include dark {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
   &--visible {
     pointer-events: all;
     opacity: 1;

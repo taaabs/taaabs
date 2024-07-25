@@ -11,7 +11,6 @@ import { Input as UiCommonAtoms_Input } from '@web-ui/components/common/atoms/in
 import { DraggableUpsertFormLinks as UiAppAtom_DraggableUpsertFormLinks } from '@web-ui/components/app/atoms/draggable-upsert-form-links'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
-import { SegmentedButton as UiCommon_SegmentedButton } from '@web-ui/components/common/SegmentedButton'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { HtmlParser } from '@shared/utils/html-parser'
@@ -24,7 +23,7 @@ import { ModalContext } from '@/providers/ModalProvider'
 import { TagsInput as UiAppLibrary_TagsInput } from '@web-ui/components/app/library/TagsInput'
 import { Checkbox as UiCheckbox } from '@web-ui/components/Checkbox'
 
-const max_cover_width = 1200
+const cover_max_width = 1200
 
 type FormValues = {
   title?: string
@@ -78,99 +77,8 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   const [clipboard_data, set_clipboard_data] = useState<ClipboardData>()
   const cover_paste_area = useRef<HTMLDivElement>(null)
   const file_input = useRef<HTMLInputElement>(null)
-  const [cover, set_cover] = useState<string>() // Base64 encoded webp.
-  const [cover_blurhash, set_cover_blurhash] = useState<string>()
   const [is_fetching_my_tags, set_is_fetching_my_tags] = useState<boolean>()
   const [my_tags, set_my_tags] = useState<Tags_Ro>()
-
-  const handle_file_select = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    if (!input.files) {
-      return
-    }
-    const file = input.files[0]
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onloadend = async function () {
-      const img = new Image()
-      img.src = reader.result as string
-
-      await new Promise((resolve) => {
-        img.onload = resolve
-      })
-
-      const original_width = img.width
-      const original_height = img.height
-
-      // Calculate new dimensions.
-      const max_width = max_cover_width
-      let new_width = original_width
-      let new_height = original_height
-
-      if (original_width > max_width) {
-        new_width = max_width
-        new_height = Math.round((original_height / original_width) * max_width)
-      }
-
-      // Full-size canvas for cover image.
-      const full_size_canvas = document.createElement('canvas')
-      full_size_canvas.width = new_width
-      full_size_canvas.height = new_height
-      const full_size_ctx = full_size_canvas.getContext('2d')
-      if (!full_size_ctx)
-        throw new Error('Could not get 2D context from full-size canvas.')
-      full_size_ctx.drawImage(img, 0, 0, new_width, new_height)
-      set_cover(full_size_canvas.toDataURL('image/webp'))
-
-      // Smaller canvas for Blurhash calculation.
-      const blurhash_width = 100
-      const blurhash_height = Math.round(
-        (new_height / new_width) * blurhash_width,
-      )
-      const blurhash_canvas = document.createElement('canvas')
-      blurhash_canvas.width = blurhash_width
-      blurhash_canvas.height = blurhash_height
-      const blurhash_ctx = blurhash_canvas.getContext('2d')
-      if (!blurhash_ctx)
-        throw new Error('Could not get 2D context from Blurhash canvas.')
-
-      // Use built-in scaling of drawImage for better quality.
-      blurhash_ctx.drawImage(img, 0, 0, blurhash_width, blurhash_height)
-
-      // Calculate Blurhash using the resized image.
-      const image_data = blurhash_ctx.getImageData(
-        0,
-        0,
-        blurhash_width,
-        blurhash_height,
-      ).data
-      set_cover_blurhash(
-        encode(image_data, blurhash_width, blurhash_height, 4, 3),
-      )
-    }
-  }
-
-  const handle_paste_area_paste = (event: ClipboardEvent) => {
-    const items = event.clipboardData?.items
-    let blob: File | null = null
-
-    if (items) {
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].type.indexOf('image') === 0) {
-          blob = items[i].getAsFile()
-        }
-      }
-    }
-
-    if (blob) {
-      // Create a new File object to set the file input value.
-      const file = new File([blob], 'pasted-image.png', { type: blob.type })
-      const dataTransfer = new DataTransfer()
-      dataTransfer.items?.add(file)
-      file_input.current!.files = dataTransfer.files
-      file_input.current!.dispatchEvent(new Event('change'))
-    }
-  }
 
   const [links, set_links] = useState<
     {
@@ -224,7 +132,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       const original_height = img.height
 
       // Calculate new dimensions.
-      const max_width = max_cover_width
+      const max_width = cover_max_width
       let new_width = original_width
       let new_height = original_height
 
@@ -322,10 +230,10 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         name: tag.name,
         is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional.
       })),
-      cover: cover?.split(',')[1] || og_image?.split(',')[1],
+      cover: og_image?.split(',')[1],
       cover_hash: props.bookmark?.cover_hash,
       has_cover_aes: props.bookmark?.has_cover_aes,
-      blurhash: cover_blurhash || og_image_blurhash || props.bookmark?.blurhash,
+      blurhash: og_image_blurhash || props.bookmark?.blurhash,
     }
     props.on_submit(bookmark)
   }
@@ -402,22 +310,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     const handle_paste_area_focus = () => {
       cover_paste_area.current?.focus()
     }
-
-    file_input.current?.addEventListener('change', handle_file_select)
-    // cover_paste_area.current?.addEventListener('click', handle_paste_area_focus)
-    cover_paste_area.current?.addEventListener('paste', handle_paste_area_paste)
-
-    return () => {
-      file_input.current?.removeEventListener('change', handle_file_select)
-      cover_paste_area.current?.removeEventListener(
-        'click',
-        handle_paste_area_focus,
-      )
-      cover_paste_area.current?.removeEventListener(
-        'paste',
-        handle_paste_area_paste,
-      )
-    }
   }, [])
 
   // Fetch tags for suggestions.
@@ -434,7 +326,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   }, [])
 
   const build_content = () => {
-
     const title_section = (
       <UiModal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.title}
@@ -471,7 +362,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
                   }}
                   message_type={error_message ? 'error' : undefined}
                   message={error_message}
-                  lines={2}
+                  min_lines={1}
                   placeholder={props.dictionary.app.upsert_modal.enter_title}
                 />
               )
@@ -517,7 +408,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
                   }}
                   message_type={error_message ? 'error' : undefined}
                   message={error_message}
-                  lines={5}
+                  min_lines={3}
                   placeholder={
                     props.dictionary.app.upsert_modal.jot_something_down
                   }
@@ -527,25 +418,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiModal_UpsertBookmarkContent_Section>
-    )
-
-    const cover_section = (
-      <UiModal_UpsertBookmarkContent_Section
-        label={props.dictionary.app.upsert_modal.cover}
-      >
-        {(cover || clipboard_data?.og_image) && (
-          <img
-            src={cover || clipboard_data?.og_image}
-            width={156}
-            height={82}
-          />
-        )}
-        <input type="file" ref={file_input} accept="image/png, image/jpeg" />
-        <br />
-        <div ref={cover_paste_area}>
-          Click here and press Ctrl+V to paste an image
-        </div>
       </UiModal_UpsertBookmarkContent_Section>
     )
 
@@ -633,8 +505,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       <UiModal_UpsertBookmarkContent
         slot_title={title_section}
         slot_note={note_section}
-        // slot_cover={cover_section}
-        slot_cover={<></>}
         slot_tags={tags_section}
         slot_links={links_section}
       />
@@ -665,13 +535,15 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       translations={{
         cancel: props.dictionary.app.upsert_modal.cancel,
       }}
-    ><UiCheckbox
-    label="Share to my public profile"
-    is_checked={is_bookmark_public || false}
-    on_click={() => {
-      set_is_bookmark_public(!is_bookmark_public)
-    }}
-  /></UiModal_Footer>
+    >
+      <UiCheckbox
+        label="Share to my public profile"
+        is_checked={is_bookmark_public || false}
+        on_click={() => {
+          set_is_bookmark_public(!is_bookmark_public)
+        }}
+      />
+    </UiModal_Footer>
   )
 
   return (

@@ -758,7 +758,6 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               <ReactSortable
                 list={tags}
                 setList={(new_tags) => {
-                  console.log(new_tags)
                   if (JSON.stringify(new_tags) == JSON.stringify(tags)) return
                   set_tags(new_tags)
                   props.on_tags_order_change?.(new_tags)

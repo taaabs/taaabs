@@ -15,21 +15,21 @@ export namespace Bookmark {
 }
 
 export const Bookmark: React.FC<Bookmark.Props> = (props) => {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef({} as HTMLDivElement)
   const is_visible = useViewportSpy(ref)
   const [dragged_tag, set_dragged_tag] =
     useState<_Bookmark.Props['dragged_tag']>()
 
   useUpdateEffect(() => {
     if (!props.render_height) {
-      const height = ref.current!.getBoundingClientRect().height
+      const height = ref.current.getBoundingClientRect().height
       props.set_render_height(height)
     }
     is_visible && props.on_is_visible()
   }, [is_visible])
 
   useUpdateEffect(() => {
-    const height = ref.current!.getBoundingClientRect().height
+    const height = ref.current.getBoundingClientRect().height
     props.set_render_height(height)
   }, [props.is_compact])
 

@@ -79,7 +79,7 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
               }}
               message_type={error_message ? 'error' : undefined}
               message={error_message}
-              lines={1}
+              min_lines={1}
             />
           )
         }}

@@ -4,14 +4,18 @@
 .container {
   display: flex;
   flex-direction: column;
-  padding: var(--padding-32px) var(--padding-40px) var(--padding-40px)
-    var(--padding-40px);
+  padding: var(--padding-16px);
   column-gap: var(--padding-40px);
   row-gap: var(--padding-24px);
   background-color: var(--background);
+  @include at768 {
+  padding: var(--padding-32px) var(--padding-40px) var(--padding-40px)
+    var(--padding-40px);
+    
+  }
   @include at992 {
     display: grid;
-    grid-template: 'title tags' 'note tags' 'cover tags' 'links links' / 1fr 1fr;
+    grid-template: 'title tags' 'note tags' 'links links' / 1fr 1fr;
   }
 }
 .title {
@@ -28,8 +32,4 @@
 }
 .links {
   grid-area: links;
-  @include at992 {
-    border-top: var(--border-secondary);
-    padding-top: var(--padding-16px);
-  }
 }

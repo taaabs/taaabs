@@ -10,7 +10,7 @@ export const Primary = () => {
     <StorybookMargin>
       <Input on_change={() => {}} value="Lorem" />
       <StorybookSpacer />
-      <Input on_change={() => {}} value="Lorem" lines={2} />
+      <Input on_change={() => {}} value="Lorem" min_lines={2} />
     </StorybookMargin>
   )
 }

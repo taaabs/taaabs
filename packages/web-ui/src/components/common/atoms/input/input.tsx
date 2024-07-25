@@ -14,7 +14,7 @@ export namespace Input {
     message?: React.ReactNode
     is_disabled?: boolean
     autofocus?: boolean
-    lines?: number
+    min_lines?: number
     is_note?: boolean
     on_focus?: () => void
     on_blur?: () => void
@@ -29,7 +29,7 @@ export const Input: React.FC<Input.Props> = ({
 }) => {
   return (
     <div>
-      {props.lines && props.lines > 1 ? (
+      {props.min_lines ? (
         <TextareaAutosize
           className={cn([
             styles.field,
@@ -42,6 +42,7 @@ export const Input: React.FC<Input.Props> = ({
           value={props.value}
           autoFocus={props.autofocus}
           placeholder={props.placeholder}
+          minRows={props.min_lines}
         />
       ) : (
         <input
