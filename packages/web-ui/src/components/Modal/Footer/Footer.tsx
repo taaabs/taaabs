@@ -9,6 +9,7 @@ export namespace Footer {
     on_click_cancel: () => void
     is_disabled?: boolean
     is_danger?: boolean
+    children?: React.ReactNode
     translations: {
       cancel: string
     }
@@ -18,7 +19,8 @@ export namespace Footer {
 export const Footer: React.FC<Footer.Props> = (props) => {
   return (
     <div className={styles.container}>
-      <div className={styles['container__right-side']}>
+      <div>{props.children}</div>
+      <div className={styles.container__actions}>
         <Button
           on_click={props.button_on_click}
           is_disabled={props.is_disabled}
@@ -28,7 +30,7 @@ export const Footer: React.FC<Footer.Props> = (props) => {
           {props.button_label}
         </Button>
         <button
-          className={styles['container__right-side__cancel']}
+          className={styles.container__actions__cancel}
           onClick={() => {
             if (!props.is_disabled) props.on_click_cancel()
           }}

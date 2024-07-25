@@ -2,24 +2,16 @@
 @use '../../../styles/foundation' as *;
 
 .container {
-  display: grid;
-  padding: var(--padding-40px);
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding-32px) var(--padding-40px) var(--padding-40px)
+    var(--padding-40px);
   column-gap: var(--padding-40px);
   row-gap: var(--padding-24px);
   background-color: var(--background);
   @include at992 {
-    grid-template: 'visibility visibility' 'title tags' 'note tags' 'cover tags' 'links links' / 1fr 1fr;
-  }
-}
-.visibility {
-  grid-area: visibility;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  border-bottom: var(--border-secondary);
-  padding-bottom: var(--padding-32px);
-  button {
-    padding: 0 var(--padding-24px);
+    display: grid;
+    grid-template: 'title tags' 'note tags' 'cover tags' 'links links' / 1fr 1fr;
   }
 }
 .title {
@@ -28,11 +20,11 @@
 .note {
   grid-area: note;
 }
-.cover {
-  grid-area: cover;
-}
 .tags {
   grid-area: tags;
+}
+.cover {
+  grid-area: cover;
 }
 .links {
   grid-area: links;

@@ -1,0 +1,52 @@
+// @type
+@use '../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-radius: var(--border-radius-5px);
+  @include transition-150ms(background-color);
+  > svg {
+    fill: var(--black);
+    width: var(--icon-dimension-13px);
+  }
+  > span {
+    white-space: nowrap;
+  }
+  @include hover {
+    .checkbox {
+      border-color: var(--blue400);
+      @include dark {
+        border-color: var(--dark400);
+      }
+    }
+  }
+}
+.checkbox {
+  margin-right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--border-radius-4px);
+  background-color: var(--blue100);
+  @include transition-150ms(border-color);
+  border: 1.5px solid var(--blue300);
+  @include dark {
+    background-color: var(--dark100);
+    border-color: var(--dark300);
+  }
+  svg {
+    visibility: hidden;
+    width: var(--icon-dimension-12px);
+    height: var(--icon-dimension-12px);
+    fill: var(--accent-color);
+  }
+  &--checked {
+    svg {
+      visibility: visible;
+    }
+  }
+}

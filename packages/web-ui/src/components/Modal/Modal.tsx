@@ -3,7 +3,6 @@ import cn from 'classnames'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect } from 'react'
 import { Sheet } from 'react-modal-sheet'
-import OutsideClickHandler from 'react-outside-click-handler'
 
 namespace Modal {
   export type Props = {

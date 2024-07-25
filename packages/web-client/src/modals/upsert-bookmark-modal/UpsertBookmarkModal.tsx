@@ -22,6 +22,7 @@ import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/t
 import { Tags_Ro } from '@repositories/modules/tags/domain/tags.ro'
 import { ModalContext } from '@/providers/ModalProvider'
 import { TagsInput as UiAppLibrary_TagsInput } from '@web-ui/components/app/library/TagsInput'
+import { Checkbox as UiCheckbox } from '@web-ui/components/Checkbox'
 
 const max_cover_width = 1200
 
@@ -433,31 +434,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   }, [])
 
   const build_content = () => {
-    const visibility_section = (
-      <UiModal_UpsertBookmarkContent_Section
-        label={props.dictionary.app.upsert_modal.visibility}
-      >
-        <UiCommon_SegmentedButton
-          items={[
-            {
-              label: props.dictionary.app.upsert_modal.private,
-              is_selected: !is_bookmark_public,
-            },
-            {
-              label: props.dictionary.app.upsert_modal.public,
-              is_selected: is_bookmark_public || false,
-            },
-          ]}
-          on_item_click={(selected_idx) => {
-            if (selected_idx == 0) {
-              set_is_bookmark_public(false)
-            } else {
-              set_is_bookmark_public(true)
-            }
-          }}
-        />
-      </UiModal_UpsertBookmarkContent_Section>
-    )
 
     const title_section = (
       <UiModal_UpsertBookmarkContent_Section
@@ -655,10 +631,10 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
 
     return (
       <UiModal_UpsertBookmarkContent
-        slot_visibility={visibility_section}
         slot_title={title_section}
         slot_note={note_section}
-        slot_cover={cover_section}
+        // slot_cover={cover_section}
+        slot_cover={<></>}
         slot_tags={tags_section}
         slot_links={links_section}
       />
@@ -689,7 +665,13 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       translations={{
         cancel: props.dictionary.app.upsert_modal.cancel,
       }}
-    />
+    ><UiCheckbox
+    label="Share to my public profile"
+    is_checked={is_bookmark_public || false}
+    on_click={() => {
+      set_is_bookmark_public(!is_bookmark_public)
+    }}
+  /></UiModal_Footer>
   )
 
   return (

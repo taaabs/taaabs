@@ -10,6 +10,8 @@
 .item {
   display: flex;
   position: relative;
+  border-radius: var(--border-radius-12px);
+  border: var(--border-primary);
   &__remove {
     position: absolute;
     top: 0;
@@ -49,7 +51,7 @@
       background-color: transparent;
       border: none;
       font-weight: var(--font-weight-inter-medium);
-      padding: var(--padding-12px) var(--padding-16px) var(--padding-12px) 0;
+      padding: var(--padding-12px) var(--padding-16px);
       resize: none;
       &::selection {
         background-color: var(--blue400);
@@ -57,12 +59,26 @@
     }
     &__options {
       display: flex;
-      flex-direction: column;
+      @include to992 {
+        flex-direction: column;
+      }
+      @include at992 {
+        border-top: var(--border-secondary);
+      }
       &__row {
         display: flex;
         justify-content: space-between;
-        padding: var(--padding-10px) var(--padding-16px) var(--padding-10px) 0;
-        border-top: var(--border-secondary);
+        padding: var(--padding-10px) var(--padding-16px);
+        @include to992 {
+          border-top: var(--border-secondary);
+        }
+        @include at992 {
+          border-right: var(--border-secondary);
+          flex: 1;
+          &:last-child {
+            border-right: inherit;
+          }
+        }
         &__label {
           color: var(--text-color-dimmed);
         }
