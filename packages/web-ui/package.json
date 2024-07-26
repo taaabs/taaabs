@@ -42,7 +42,7 @@
     "react-swipeable": "^7.0.1",
     "react-textarea-autosize": "^8.5.3",
     "react-toastify": "^10.0.5",
-    "recharts": "2.13.0-alpha.4",
+    "recharts": "2.12.7",
     "remark-gfm": "^4.0.0",
     "simplebar-react": "^3.2.6",
     "sortablejs": "^1.15.2",
