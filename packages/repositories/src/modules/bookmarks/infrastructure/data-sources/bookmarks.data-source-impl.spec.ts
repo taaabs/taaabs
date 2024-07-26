@@ -1,6 +1,8 @@
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 import { Bookmarks_DataSourceImpl } from './bookmarks.data-source-impl'
 import { KyInstance } from 'ky'
+import { FindDuplicate_Params } from '../../domain/types/find-duplicate.params'
+import { FindDuplicate_Dto } from '@shared/types/modules/bookmarks/find-duplicate.dto'
 
 describe('Bookmarks_DataSourceImpl', () => {
   let mock_ky: KyInstance

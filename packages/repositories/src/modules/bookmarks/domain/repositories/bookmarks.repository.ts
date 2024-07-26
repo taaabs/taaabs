@@ -9,6 +9,8 @@ import { Bookmark_Entity } from '../entities/bookmark.entity'
 import { GetLinksData_Params } from '../types/get-links-data.params'
 import { GetLinksData_Ro } from '../types/get-links-data.ro'
 import { GetCover_Params } from '../types/get-cover.params'
+import { FindDuplicate_Params } from '../types/find-duplicate.params'
+import { FindDuplicate_Ro } from '../types/find-duplicate.ro'
 
 export type Bookmarks_Repository = {
   get_bookmarks_on_authorized_user(
@@ -51,4 +53,9 @@ export type Bookmarks_Repository = {
   ): Promise<string>
 
   record_visit(params: RecordVisit_Params): Promise<void>
+
+  find_duplicate(
+    params: FindDuplicate_Params,
+    encryption_key: Uint8Array,
+  ): Promise<FindDuplicate_Ro>
 }

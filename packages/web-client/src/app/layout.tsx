@@ -82,8 +82,8 @@ const Layout: React.FC<{ children: ReactNode }> = (props) => {
 export default Layout
 
 export const metadata: Metadata = {
-  title: 'TODO',
-  description: 'TODO',
+  title: 'Taaabs',
+  description: 'The huggiest social bookmarking!',
 }
 
 export const viewport: Viewport = {

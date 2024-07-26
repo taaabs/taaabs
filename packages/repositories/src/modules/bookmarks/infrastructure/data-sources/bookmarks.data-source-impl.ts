@@ -15,6 +15,9 @@ import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
 import pako from 'pako'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
+import { FindDuplicate_Dto } from '@shared/types/modules/bookmarks/find-duplicate.dto'
+import { FindDuplicate_Ro } from '../../domain/types/find-duplicate.ro'
+import { FindDuplicate_Params } from '../../domain/types/find-duplicate.params'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -317,5 +320,20 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     await this._ky.post(`v1/bookmarks/record-visit`, {
       json: body,
     })
+  }
+
+  public async find_duplicate(
+    params: FindDuplicate_Params,
+    encryption_key: Uint8Array,
+  ): Promise<FindDuplicate_Dto.Response> {
+    const body: FindDuplicate_Dto.Body = {
+      hash: await Crypto.SHA256(params.url, encryption_key),
+    }
+
+    return this._ky
+      .post('v1/bookmarks/find-duplicate', {
+        json: body,
+      })
+      .json()
   }
 }

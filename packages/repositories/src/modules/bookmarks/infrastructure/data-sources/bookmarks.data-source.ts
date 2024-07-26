@@ -8,6 +8,8 @@ import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-id
 import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
+import { FindDuplicate_Params } from '../../domain/types/find-duplicate.params'
+import { FindDuplicate_Dto } from '@shared/types/modules/bookmarks/find-duplicate.dto'
 
 export type Bookmarks_DataSource = {
   get_bookmarks_on_authorized_user(
@@ -44,4 +46,9 @@ export type Bookmarks_DataSource = {
   get_cover(params: GetCover_Params): Promise<string>
 
   record_visit(params: RecordVisit_Params): Promise<void>
+
+  find_duplicate(
+    params: FindDuplicate_Params,
+    encryption_key: Uint8Array,
+  ): Promise<FindDuplicate_Dto.Response>
 }

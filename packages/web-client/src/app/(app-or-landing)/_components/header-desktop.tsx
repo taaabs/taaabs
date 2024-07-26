@@ -178,11 +178,32 @@ export const HeaderDesktop: React.FC<{
   }
 
   useUpdateEffect(() => {
+    const create_bookmark_with_clipboard_data = async () => {
+      // Look for duplicated urls.
+      if (bookmark.links) {
+        for (let i = 0; i < bookmark.links.length; i++) {
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          const { duplicate_found } = await repository.find_duplicate(
+            { url: bookmark.links[i].url },
+            auth_context.auth_data!.encryption_key,
+          )
+          if (duplicate_found) {
+            toast.error('Duplicate found')
+            return
+          }
+        }
+      }
+      open_new_bookmark_modal({ with_autofill: true })
+    }
+
     const bookmark = BookmarkUrlHashData.parse({
       hash: window.location.hash.slice(1),
     })
-    if (Object.keys(bookmark).length) {
-      open_new_bookmark_modal({ with_autofill: true })
+    if (Object.keys(bookmark).length && auth_context.auth_data) {
+      create_bookmark_with_clipboard_data()
     }
   }, [is_hydrated])
 
