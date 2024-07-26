@@ -12,9 +12,13 @@
   text-align: center;
   gap: 10px;
   padding: 30px 0 70px 0;
+  --gradient-color: var(--blue50);
+  @include dark {
+    --gradient-color: var(--dark200);
+  }
   background: radial-gradient(
     circle at 50% 80%,
-    var(--blue50) 0%,
+    var(--gradient-color) 0%,
     transparent 50%
   );
   @include at768 {
