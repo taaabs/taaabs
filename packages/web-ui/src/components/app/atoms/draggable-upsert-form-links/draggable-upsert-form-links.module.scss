@@ -12,6 +12,10 @@
   position: relative;
   border-radius: var(--border-radius-12px);
   border: var(--border-primary);
+  background-color: var(--white);
+  @include dark {
+    background-color: var(--header-background);
+  }
   &__remove {
     position: absolute;
     top: 0;
