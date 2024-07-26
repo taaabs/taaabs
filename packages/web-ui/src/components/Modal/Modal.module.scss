@@ -26,6 +26,7 @@
     box-shadow: var(--box-shadow-long-strong);
     border-radius: var(--border-radius-20px);
     margin: 0 var(--padding-16px);
+    background-color: var(--background);
     &--visible {
       @include transition-150ms(transform);
       transform: translateY(0);
