@@ -14,6 +14,8 @@ import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { GetLinksData_Ro } from '../../domain/types/get-links-data.ro'
 import pako from 'pako'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
+import { FindDuplicate_Ro } from '../../domain/types/find-duplicate.ro'
+import { FindDuplicate_Params } from '../../domain/types/find-duplicate.params'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -438,10 +440,10 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       cover_hash: bookmark.cover_hash,
       has_cover_aes: bookmark.has_cover_aes,
       blurhash: bookmark.blurhash
-          ? bookmark.blurhash
-          : bookmark.blurhash_aes
-          ? await Crypto.AES.decrypt(bookmark.blurhash_aes, encryption_key)
-          : undefined,
+        ? bookmark.blurhash
+        : bookmark.blurhash_aes
+        ? await Crypto.AES.decrypt(bookmark.blurhash_aes, encryption_key)
+        : undefined,
     }
   }
 
@@ -459,5 +461,18 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
 
   public async record_visit(params: RecordVisit_Params): Promise<void> {
     await this._bookmarks_data_source.record_visit(params)
+  }
+
+  public async find_duplicate(
+    params: FindDuplicate_Params,
+    encryption_key: Uint8Array,
+  ): Promise<FindDuplicate_Ro> {
+    const result = await this._bookmarks_data_source.find_duplicate(
+      params,
+      encryption_key,
+    )
+    return {
+      duplicate_found: result.duplicate_found,
+    }
   }
 }
