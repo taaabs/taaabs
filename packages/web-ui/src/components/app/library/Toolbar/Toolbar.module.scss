@@ -5,12 +5,7 @@
   display: flex;
   align-items: center;
   background-color: var(--accent-color);
-  @include dark {
-    background-color: var(--dark300);
-  }
-  @include light {
-    box-shadow: var(--box-shadow-blue-strong);
-  }
+  box-shadow: var(--box-shadow-blue-strong);
   border-radius: var(--border-radius-999px);
   padding: 4px;
   gap: 3px;
@@ -34,7 +29,7 @@
     @include hover {
       background-color: var(--blue600);
       @include dark {
-        background-color: var(--dark400);
+        background-color: var(--blue500);
       }
     }
     @include to992 {
@@ -48,12 +43,15 @@
       background-color: var(--white);
       color: var(--blue700);
       @include dark {
-        background-color: var(--dark200);
+        color: var(--blue600);
+      }
+      @include dark {
+        background-color: var(--dark700);
       }
       @include hover {
         background-color: var(--white);
         @include dark {
-          background-color: var(--dark200);
+          background-color: var(--dark700);
         }
       }
     }
@@ -66,7 +64,7 @@
     width: 1px;
     background-color: var(--blue600);
     @include dark {
-      background-color: var(--dark500);
+      background-color: var(--blue500);
     }
     margin: 0 2px 0;
     @include at992 {
@@ -84,7 +82,7 @@
     @include hover {
       background-color: var(--blue600);
       @include dark {
-        background-color: var(--dark400);
+        background-color: var(--blue500);
       }
     }
     @include at992 {
