@@ -16,7 +16,6 @@ import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
 import pako from 'pako'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
 import { FindDuplicate_Dto } from '@shared/types/modules/bookmarks/find-duplicate.dto'
-import { FindDuplicate_Ro } from '../../domain/types/find-duplicate.ro'
 import { FindDuplicate_Params } from '../../domain/types/find-duplicate.params'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {

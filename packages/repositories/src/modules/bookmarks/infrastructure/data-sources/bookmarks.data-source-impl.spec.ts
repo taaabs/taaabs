@@ -1,30 +1,21 @@
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 import { Bookmarks_DataSourceImpl } from './bookmarks.data-source-impl'
-import { KyInstance } from 'ky'
 import { FindDuplicate_Params } from '../../domain/types/find-duplicate.params'
-import { FindDuplicate_Dto } from '@shared/types/modules/bookmarks/find-duplicate.dto'
+import { ky_instance_mock } from '@repositories/mocks/ky-instance-mock'
+import { GetCover_Params } from '../../domain/types/get-cover.params'
 
 describe('Bookmarks_DataSourceImpl', () => {
-  let mock_ky: KyInstance
   let sut: Bookmarks_DataSourceImpl
 
   beforeEach(() => {
-    mock_ky = {
-      get: jest.fn().mockReturnValue({ json: jest.fn().mockResolvedValue({}) }),
-      post: jest
-        .fn()
-        .mockReturnValue({ json: jest.fn().mockResolvedValue({}) }),
-      delete: jest
-        .fn()
-        .mockReturnValue({ json: jest.fn().mockResolvedValue({}) }),
-    } as any
-    sut = new Bookmarks_DataSourceImpl(mock_ky)
+    sut = new Bookmarks_DataSourceImpl(ky_instance_mock)
+    jest.clearAllMocks()
   })
 
   describe('[get_bookmarks_on_authorized_user]', () => {
     it('calls api correctly', () => {
       sut.get_bookmarks_on_authorized_user({})
-      expect(mock_ky.get).toHaveBeenCalledWith('v1/bookmarks', {
+      expect(ky_instance_mock.get).toHaveBeenCalledWith('v1/bookmarks', {
         searchParams: {},
       })
     })
@@ -36,7 +27,7 @@ describe('Bookmarks_DataSourceImpl', () => {
         username: 'test',
         tags: ['a', 'b', 'c'],
       })
-      expect(mock_ky.get).toHaveBeenCalledWith(`v1/bookmarks/test`, {
+      expect(ky_instance_mock.get).toHaveBeenCalledWith(`v1/bookmarks/test`, {
         searchParams: {
           tags: 'a,b,c',
         },
@@ -44,7 +35,29 @@ describe('Bookmarks_DataSourceImpl', () => {
     })
   })
 
-  // TODO: Test get_cover.
+  describe('[get_cover]', () => {
+    it('calls api correctly', async () => {
+      const params: GetCover_Params = {
+        bookmark_id: 123,
+        bookmark_updated_at: '2023-10-01T00:00:00Z',
+      }
+
+      const search_params = new URLSearchParams()
+      search_params.set(
+        'v',
+        `${Math.floor(new Date(params.bookmark_updated_at).getTime() / 1000)}`,
+      )
+
+      await sut.get_cover(params)
+
+      expect(ky_instance_mock.get).toHaveBeenCalledWith(
+        `v1/bookmarks/${params.bookmark_id}/cover`,
+        {
+          searchParams: search_params,
+        },
+      )
+    })
+  })
 
   describe('[record_visit]', () => {
     it('calls api correctly', () => {
@@ -56,16 +69,34 @@ describe('Bookmarks_DataSourceImpl', () => {
         bookmark_id: body.bookmark_id,
         visited_at: new Date(body.visited_at).toISOString(),
       })
-      expect(mock_ky.post).toHaveBeenCalledWith(`v1/bookmarks/record-visit`, {
-        json: body,
-      })
+      expect(ky_instance_mock.post).toHaveBeenCalledWith(
+        `v1/bookmarks/record-visit`,
+        {
+          json: body,
+        },
+      )
     })
   })
 
   describe('[delete_bookmark]', () => {
     it('calls api correctly', () => {
       sut.delete_bookmark({ bookmark_id: 1 })
-      expect(mock_ky.delete).toHaveBeenCalledWith(`v1/bookmarks/1`)
+      expect(ky_instance_mock.delete).toHaveBeenCalledWith(`v1/bookmarks/1`)
+    })
+  })
+
+  describe('[find_duplicate]', () => {
+    it('calls API correctly', async () => {
+      const params: FindDuplicate_Params = { url: '' }
+
+      await sut.find_duplicate(params, new Uint8Array())
+
+      expect(ky_instance_mock.post).toHaveBeenCalledWith(
+        'v1/bookmarks/find-duplicate',
+        {
+          json: { hash: 'mocked_hash' },
+        },
+      )
     })
   })
 })

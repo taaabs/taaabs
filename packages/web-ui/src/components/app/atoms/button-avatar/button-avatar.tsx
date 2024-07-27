@@ -1,4 +1,4 @@
-import { Blurhash } from 'react-blurhash'
+// import { Blurhash } from 'react-blurhash'
 import styles from './button-avatar.module.scss'
 
 export namespace ButtonAvatar {
@@ -19,7 +19,7 @@ export const ButtonAvatar: React.FC<ButtonAvatar.Props> = (props) => {
       data-testid={props.test_id}
     >
       <div className={styles.blurhash}>
-        <Blurhash hash={props.blurhash} />
+        {/* <Blurhash hash={props.blurhash} /> */}
       </div>
       <img src={props.url} alt={props.alt} />
     </button>
