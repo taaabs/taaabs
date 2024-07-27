@@ -11,20 +11,20 @@
   background: radial-gradient(
     circle at 40% 70%,
     var(--gradient-color) 0%,
-    transparent 50%
+    var(--white) 50%
   );
   @include at768 {
     background: radial-gradient(
       circle at 30% 70%,
       var(--gradient-color) 0%,
-      transparent 50%
+      var(--white) 50%
     );
   }
   @include at992 {
     background: radial-gradient(
       circle at 50% 70%,
       var(--gradient-color) 0%,
-      transparent 50%
+      var(--white) 50%
     );
   }
 }
