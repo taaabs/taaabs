@@ -25,6 +25,12 @@
     }
   }
 }
+.slot {
+  position: absolute;
+  left: var(--padding-16px);
+  top: 50%;
+  transform: translateY(-50%);
+}
 .title {
   color: var(--color-text--normal);
   font-family: var(--font-family-plus-jakarta-sans);

@@ -8,6 +8,7 @@ import ChatBubbleCorner from '../../../../assets/icons/chat-bubble-corner.svg'
 import Check from '../../../../assets/icons/check.svg'
 import Collapse from '../../../../assets/icons/collapse.svg'
 import Copy from '../../../../assets/icons/copy.svg'
+import Cross from '../../../../assets/icons/cross.svg'
 import Delete from '../../../../assets/icons/delete.svg'
 import DensityDefault from '../../../../assets/icons/density-default.svg'
 import DensityCompact from '../../../../assets/icons/density-compact.svg'
@@ -35,7 +36,6 @@ import Overview from '../../../../assets/icons/overview.svg'
 import Pin from '../../../../assets/icons/pin.svg'
 import PublicProfile from '../../../../assets/icons/public-profile.svg'
 import Recent from '../../../../assets/icons/recent.svg'
-import Remove from '../../../../assets/icons/remove.svg'
 import Resize from '../../../../assets/icons/resize.svg'
 import Search from '../../../../assets/icons/search.svg'
 import SelectedBold from '../../../../assets/icons/selected-bold.svg'
@@ -97,7 +97,7 @@ export namespace Icon {
     | 'PIN'
     | 'PUBLIC_PROFILE'
     | 'RECENT'
-    | 'REMOVE'
+    | 'CROSS'
     | 'RESIZE'
     | 'SEARCH'
     | 'SELECTED_BOLD'
@@ -258,8 +258,8 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'RECENT':
       icon = <Recent />
       break
-    case 'REMOVE':
-      icon = <Remove />
+    case 'CROSS':
+      icon = <Cross />
       break
     case 'RESIZE':
       icon = <Resize />

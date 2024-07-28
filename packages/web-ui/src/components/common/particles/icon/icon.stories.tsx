@@ -31,7 +31,7 @@ export const Icons = () => (
       <StorybookSpacer />
       <Icon variant={'USER_ADD'} />
       <StorybookSpacer />
-      <Icon variant={'USER_REMOVE'} />
+      <Icon variant={'USER_CROSS'} />
       <StorybookSpacer />
       <Icon variant={'USER'} />
       <StorybookSpacer />

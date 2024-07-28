@@ -166,7 +166,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
                 )
               }}
             >
-              <Icon variant="REMOVE" />
+              <Icon variant="CROSS" />
             </button>
           </div>
         </div>
