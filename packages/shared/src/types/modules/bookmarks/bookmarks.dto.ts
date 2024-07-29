@@ -73,6 +73,7 @@ export namespace Bookmarks_Dto {
       public visited_at: string
       public stars?: number
       public is_unsorted?: boolean
+      public is_archived?: boolean
       public points?: number
       public cover_hash?: string
       public blurhash?: string

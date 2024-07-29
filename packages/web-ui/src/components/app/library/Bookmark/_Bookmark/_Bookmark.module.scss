@@ -539,16 +539,10 @@
       @include at992 {
         padding: 0 12px;
       }
-      @include hover {
-        background-color: var(--white);
-        @include dark {
-          background-color: var(--dark150);
-        }
-      }
       &--recently-visited {
         background: linear-gradient(to right, var(--blue50), transparent);
         @include dark {
-          background: linear-gradient(to right, var(--dark300), transparent);
+          background: linear-gradient(to right, rgba(97, 50, 20, 0.3), transparent)
         }
       }
       &:last-of-type {

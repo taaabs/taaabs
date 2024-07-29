@@ -860,6 +860,11 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     onClick={() => {
                       set_recently_visited_link_idx(undefined)
                     }}
+                    onMouseEnter={() => {
+                      if (recently_visited_link_idx == i) {
+                        set_recently_visited_link_idx(undefined)
+                      }
+                    }}
                     key={link.url}
                     onContextMenu={(e) => {
                       if ('ontouchstart' in window) {

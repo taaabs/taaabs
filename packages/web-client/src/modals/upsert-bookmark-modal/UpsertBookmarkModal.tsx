@@ -75,8 +75,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   )
   const [clipboard_url, set_clipboard_url] = useState<string>()
   const [clipboard_data, set_clipboard_data] = useState<ClipboardData>()
-  const cover_paste_area = useRef<HTMLDivElement>(null)
-  const file_input = useRef<HTMLInputElement>(null)
   const [is_fetching_my_tags, set_is_fetching_my_tags] = useState<boolean>()
   const [my_tags, set_my_tags] = useState<Tags_Ro>()
 
@@ -306,10 +304,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         }
       })
       .catch(() => {})
-
-    const handle_paste_area_focus = () => {
-      cover_paste_area.current?.focus()
-    }
   }, [])
 
   // Fetch tags for suggestions.
