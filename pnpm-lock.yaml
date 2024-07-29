@@ -361,7 +361,7 @@ importers:
         version: 2.0.22
       '@reduxjs/toolkit':
         specifier: ^1.9.7
-        version: 1.9.7(react-redux@8.1.3(@types/react-dom@18.3.0)(@types/react@18.2.21)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.2.21)(react@18.3.1))(react@18.3.1)(redux@4.2.1))(react@18.3.1)
+        version: 1.9.7(react-redux@8.1.3(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)(redux@4.2.1))(react@18.3.1)
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.5.4)
@@ -424,7 +424,7 @@ importers:
         version: 1.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-redux:
         specifier: ^8.1.3
-        version: 8.1.3(@types/react-dom@18.3.0)(@types/react@18.2.21)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.2.21)(react@18.3.1))(react@18.3.1)(redux@4.2.1)
+        version: 8.1.3(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)(redux@4.2.1)
       react-sheet-slide:
         specifier: ^1.4.0
         version: 1.5.0(@react-spring/web@9.7.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@use-gesture/react@10.3.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -451,10 +451,10 @@ importers:
         specifier: ^20.8.2
         version: 20.14.12
       '@types/react':
-        specifier: 18.2.21
-        version: 18.2.21
+        specifier: ^18.2.0
+        version: 18.3.3
       '@types/react-dom':
-        specifier: ^18.2.10
+        specifier: ^18.2.0
         version: 18.3.0
       '@types/react-outside-click-handler':
         specifier: ^1.3.1
@@ -3066,9 +3066,6 @@ packages:
 
   '@types/react@18.2.14':
     resolution: {integrity: sha512-A0zjq+QN/O0Kpe30hA1GidzyFjatVvrpIvWLxD+xv67Vt91TWWgco9IvrJBkeyHm1trGaFS/FSGqPlhyeZRm0g==}
-
-  '@types/react@18.2.21':
-    resolution: {integrity: sha512-neFKG/sBAwGxHgXiIxnbm3/AAVQ/cMRS93hvBpg8xYRbeQSPVABp9U2bRnPf0iI4+Ucdv3plSxKK+3CW2ENJxA==}
 
   '@types/react@18.3.3':
     resolution: {integrity: sha512-hti/R0pS0q1/xx+TsI73XIqk26eBsISZ2R0wUijXIngRK9R/e7Xw/cXVxQK7R5JjW+SV4zGcn5hXjudkN/pLIw==}
@@ -12393,14 +12390,14 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.2.14
 
-  '@react-native/virtualized-lists@0.74.84(@types/react@18.2.21)(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.2.21)(react@18.3.1))(react@18.3.1)':
+  '@react-native/virtualized-lists@0.74.84(@types/react@18.3.3)(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)':
     dependencies:
       invariant: 2.2.4
       nullthrows: 1.1.1
       react: 18.3.1
-      react-native: 0.74.2(@babel/core@7.24.9)(@types/react@18.2.21)(react@18.3.1)
+      react-native: 0.74.2(@babel/core@7.24.9)(@types/react@18.3.3)(react@18.3.1)
     optionalDependencies:
-      '@types/react': 18.2.21
+      '@types/react': 18.3.3
     optional: true
 
   '@react-navigation/bottom-tabs@6.3.2(@react-navigation/native@6.0.2(react-native@0.74.2(@babel/core@7.23.0)(@babel/preset-env@7.24.6(@babel/core@7.23.0))(@types/react@18.2.14)(react@18.2.0))(react@18.2.0))(react-native-safe-area-context@4.10.1(react-native@0.74.2(@babel/core@7.23.0)(@babel/preset-env@7.24.6(@babel/core@7.23.0))(@types/react@18.2.14)(react@18.2.0))(react@18.2.0))(react-native-screens@3.31.1(react-native@0.74.2(@babel/core@7.23.0)(@babel/preset-env@7.24.6(@babel/core@7.23.0))(@types/react@18.2.14)(react@18.2.0))(react@18.2.0))(react-native@0.74.2(@babel/core@7.23.0)(@babel/preset-env@7.24.6(@babel/core@7.23.0))(@types/react@18.2.14)(react@18.2.0))(react@18.2.0)':
@@ -12491,7 +12488,7 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  '@reduxjs/toolkit@1.9.7(react-redux@8.1.3(@types/react-dom@18.3.0)(@types/react@18.2.21)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.2.21)(react@18.3.1))(react@18.3.1)(redux@4.2.1))(react@18.3.1)':
+  '@reduxjs/toolkit@1.9.7(react-redux@8.1.3(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)(redux@4.2.1))(react@18.3.1)':
     dependencies:
       immer: 9.0.21
       redux: 4.2.1
@@ -12499,7 +12496,7 @@ snapshots:
       reselect: 4.1.8
     optionalDependencies:
       react: 18.3.1
-      react-redux: 8.1.3(@types/react-dom@18.3.0)(@types/react@18.2.21)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.2.21)(react@18.3.1))(react@18.3.1)(redux@4.2.1)
+      react-redux: 8.1.3(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)(redux@4.2.1)
 
   '@reduxjs/toolkit@2.2.6(react-redux@9.1.2(@types/react@18.3.3)(react@18.3.1)(redux@5.0.1))(react@18.3.1)':
     dependencies:
@@ -13139,12 +13136,6 @@ snapshots:
       '@types/react': 18.3.3
 
   '@types/react@18.2.14':
-    dependencies:
-      '@types/prop-types': 15.7.12
-      '@types/scheduler': 0.23.0
-      csstype: 3.1.3
-
-  '@types/react@18.2.21':
     dependencies:
       '@types/prop-types': 15.7.12
       '@types/scheduler': 0.23.0
@@ -18844,7 +18835,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.2.21)(react@18.3.1):
+  react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.3.3)(react@18.3.1):
     dependencies:
       '@jest/create-cache-key-function': 29.7.0
       '@react-native-community/cli': 13.6.8
@@ -18856,7 +18847,7 @@ snapshots:
       '@react-native/gradle-plugin': 0.74.84
       '@react-native/js-polyfills': 0.74.84
       '@react-native/normalize-colors': 0.74.84
-      '@react-native/virtualized-lists': 0.74.84(@types/react@18.2.21)(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.2.21)(react@18.3.1))(react@18.3.1)
+      '@react-native/virtualized-lists': 0.74.84(@types/react@18.3.3)(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)
       abort-controller: 3.0.0
       anser: 1.4.10
       ansi-regex: 5.0.1
@@ -18885,7 +18876,7 @@ snapshots:
       ws: 6.2.2
       yargs: 17.7.2
     optionalDependencies:
-      '@types/react': 18.2.21
+      '@types/react': 18.3.3
     transitivePeerDependencies:
       - '@babel/core'
       - '@babel/preset-env'
@@ -18913,7 +18904,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  react-redux@8.1.3(@types/react-dom@18.3.0)(@types/react@18.2.21)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.2.21)(react@18.3.1))(react@18.3.1)(redux@4.2.1):
+  react-redux@8.1.3(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.9)(@types/react@18.3.3)(react@18.3.1))(react@18.3.1)(redux@4.2.1):
     dependencies:
       '@babel/runtime': 7.24.6
       '@types/hoist-non-react-statics': 3.3.5
@@ -18923,10 +18914,10 @@ snapshots:
       react-is: 18.3.1
       use-sync-external-store: 1.2.2(react@18.3.1)
     optionalDependencies:
-      '@types/react': 18.2.21
+      '@types/react': 18.3.3
       '@types/react-dom': 18.3.0
       react-dom: 18.3.1(react@18.3.1)
-      react-native: 0.74.2(@babel/core@7.24.9)(@types/react@18.2.21)(react@18.3.1)
+      react-native: 0.74.2(@babel/core@7.24.9)(@types/react@18.3.3)(react@18.3.1)
       redux: 4.2.1
 
   react-redux@9.1.2(@types/react@18.3.3)(react@18.3.1)(redux@5.0.1):

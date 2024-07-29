@@ -1,6 +1,6 @@
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 import { Bookmarks_DataSourceImpl } from './bookmarks.data-source-impl'
-import { FindDuplicate_Params } from '../../domain/types/find-duplicate.params'
+import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
 import { ky_instance_mock } from '@repositories/mocks/ky-instance-mock'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
 
@@ -85,14 +85,14 @@ describe('Bookmarks_DataSourceImpl', () => {
     })
   })
 
-  describe('[find_duplicate]', () => {
+  describe('[find_by_url_hash]', () => {
     it('calls API correctly', async () => {
-      const params: FindDuplicate_Params = { url: '' }
+      const params: FindByUrlHash_Params = { url: '' }
 
-      await sut.find_duplicate(params, new Uint8Array())
+      await sut.find_by_url_hash(params, new Uint8Array())
 
       expect(ky_instance_mock.post).toHaveBeenCalledWith(
-        'v1/bookmarks/find-duplicate',
+        'v1/bookmarks/find-by-url-hash',
         {
           json: { hash: 'mocked_hash' },
         },

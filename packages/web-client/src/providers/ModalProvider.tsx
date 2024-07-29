@@ -9,7 +9,7 @@ export type ModalContext = {
   is_open: boolean
 }
 
-export const ModalContext = createContext<ModalContext | null>(null)
+export const ModalContext = createContext({} as ModalContext)
 
 export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
   const [content, set] = useState<ReactNode>()

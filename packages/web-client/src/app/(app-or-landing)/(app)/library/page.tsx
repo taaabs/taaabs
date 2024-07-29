@@ -1,9 +1,10 @@
 import { get_dictionary } from '@/app/get_dictionary'
-import { VisitRecorder } from './visit-recorder'
-import { ClearLibraryDataOnRefresh } from './clear-library-data-on-refresh'
-import { LibraryWrapper } from './library-wrapper'
+import { VisitRecorder } from './VisitRecorder'
+import { ClearLibraryDataOnRefresh } from './ClearLibraryDataOnRefresh'
+import { LibraryWrapper } from './LibraryWrapper'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { BookmarkletHandler } from './BookmarkletHandler'
 
 const Page: React.FC = async () => {
   const user_id = cookies().get('user_id')
@@ -11,6 +12,7 @@ const Page: React.FC = async () => {
   const dictionary = await get_dictionary()
   return (
     <>
+      <BookmarkletHandler dictionary={dictionary} />
       <VisitRecorder />
       <ClearLibraryDataOnRefresh />
       <LibraryWrapper dictionary={dictionary} />

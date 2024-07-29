@@ -6,8 +6,8 @@ import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
 import { RecordVisit_Params } from '../../domain/types/record-visit.params'
-import { FindDuplicate_Params } from '../../domain/types/find-duplicate.params'
-import { FindDuplicate_Dto } from '@shared/types/modules/bookmarks/find-duplicate.dto'
+import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
+import { FindByUrlHash_Dto } from '@shared/types/modules/bookmarks/find-by-url-hash.dto'
 import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params'
 
 describe('Bookmarks_RepositoryImpl', () => {
@@ -27,7 +27,7 @@ describe('Bookmarks_RepositoryImpl', () => {
       delete_bookmark: jest.fn(),
       get_cover: jest.fn(),
       record_visit: jest.fn(),
-      find_duplicate: jest.fn(),
+      find_by_url_hash: jest.fn(),
     } as jest.Mocked<Bookmarks_DataSource>
     sut = new Bookmarks_RepositoryImpl(data_source_mock)
 
@@ -286,16 +286,36 @@ describe('Bookmarks_RepositoryImpl', () => {
     })
   })
 
-  describe('[find_duplicate]', () => {
+  describe('[find_by_url_hash]', () => {
     it('should call data source and return correct result', async () => {
-      const params: FindDuplicate_Params = { url: 'https://example.com' }
-      const dto_mock: FindDuplicate_Dto.Response = { duplicate_found: true }
+      const params: FindByUrlHash_Params = { url: 'https://example.com' }
+      const dto_mock: FindByUrlHash_Dto.Response = {
+        id: 1,
+        title: 'title',
+        created_at: '',
+        updated_at: '',
+        visited_at: '',
+        links: [],
+        tags: [],
+        blurhash: undefined,
+        blurhash_aes: undefined,
+        cover_hash: undefined,
+        has_cover_aes: undefined,
+        is_archived: undefined,
+        is_public: false,
+        is_unsorted: undefined,
+        note: undefined,
+        note_aes: undefined,
+        points: undefined,
+        stars: 0,
+        title_aes: undefined,
+      }
 
-      data_source_mock.find_duplicate.mockResolvedValue(dto_mock)
+      data_source_mock.find_by_url_hash.mockResolvedValue(dto_mock)
 
-      const result = await sut.find_duplicate(params, encryption_key)
+      const result = await sut.find_by_url_hash(params, encryption_key)
 
-      expect(data_source_mock.find_duplicate).toHaveBeenCalledWith(
+      expect(data_source_mock.find_by_url_hash).toHaveBeenCalledWith(
         params,
         encryption_key,
       )

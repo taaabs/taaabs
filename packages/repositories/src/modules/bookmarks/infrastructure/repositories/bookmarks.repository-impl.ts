@@ -14,11 +14,90 @@ import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { GetLinksData_Ro } from '../../domain/types/get-links-data.ro'
 import pako from 'pako'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
-import { FindDuplicate_Ro } from '../../domain/types/find-duplicate.ro'
-import { FindDuplicate_Params } from '../../domain/types/find-duplicate.params'
+import { FindByUrlHash_Ro } from '../../domain/types/find-by-url-hash.ro'
+import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
+import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
+
+  private async _dto_to_bookmark_entity(
+    bookmark: Bookmarks_Dto.Response.AuthorizedBookmark,
+    encryption_key: Uint8Array,
+  ): Promise<Bookmark_Entity> {
+    const tags: Bookmark_Entity['tags'] = []
+    for (const tag of bookmark.tags) {
+      tags.push({
+        id: tag.id,
+        name: tag.name
+          ? tag.name
+          : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
+        is_public: tag.is_public,
+      })
+    }
+
+    const links: Bookmark_Entity['links'] = []
+    for (const link of bookmark.links) {
+      let site_path: string | undefined
+      if (link.is_public) {
+        site_path = link.site_path
+      } else {
+        const site = await Crypto.AES.decrypt(link.site_aes!, encryption_key)
+        const domain = `${get_domain_from_url(site)}/`
+        site_path = site.slice(domain.length)
+      }
+      links.push({
+        url: link.is_public
+          ? link.url!
+          : await Crypto.AES.decrypt(link.url_aes!, encryption_key),
+        site_path,
+        is_public: link.is_public || false,
+        saves: link.saves,
+        is_pinned: link.is_pinned,
+        pin_title: link.pin_title
+          ? link.pin_title
+          : link.pin_title_aes
+          ? await Crypto.AES.decrypt(link.pin_title_aes!, encryption_key)
+          : undefined,
+        open_snapshot: link.open_snapshot,
+        favicon: link.favicon_aes
+          ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
+          : undefined,
+        is_parsed: link.is_parsed,
+      })
+    }
+
+    return {
+      id: bookmark.id,
+      is_public: bookmark.is_public || false,
+      is_archived: bookmark.is_archived,
+      created_at: bookmark.created_at,
+      updated_at: bookmark.updated_at,
+      visited_at: bookmark.visited_at,
+      title: bookmark.title
+        ? bookmark.title
+        : bookmark.title_aes
+        ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+        : undefined,
+      note: bookmark.note
+        ? bookmark.note
+        : bookmark.note_aes
+        ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+        : undefined,
+      is_unsorted: bookmark.is_unsorted,
+      stars: bookmark.stars || 0,
+      points: bookmark.points,
+      tags,
+      links,
+      cover_hash: bookmark.cover_hash,
+      has_cover_aes: bookmark.has_cover_aes,
+      blurhash: bookmark.blurhash
+        ? bookmark.blurhash
+        : bookmark.blurhash_aes
+        ? await Crypto.AES.decrypt(bookmark.blurhash_aes, encryption_key)
+        : undefined,
+    }
+  }
 
   public async get_bookmarks_on_authorized_user(
     params: GetBookmarks_Params.Authorized,
@@ -30,77 +109,9 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     const bookmarks: Bookmark_Entity[] = []
 
     for (const bookmark of result.bookmarks || []) {
-      const tags: Bookmark_Entity['tags'] = []
-      for (const tag of bookmark.tags) {
-        tags.push({
-          id: tag.id,
-          name: tag.name
-            ? tag.name
-            : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
-          is_public: tag.is_public,
-        })
-      }
-
-      const links: Bookmark_Entity['links'] = []
-      for (const link of bookmark.links) {
-        let site_path: string | undefined
-        if (link.is_public) {
-          site_path = link.site_path
-        } else {
-          const site = await Crypto.AES.decrypt(link.site_aes!, encryption_key)
-          const domain = `${get_domain_from_url(site)}/`
-          site_path = site.slice(domain.length)
-        }
-        links.push({
-          url: link.is_public
-            ? link.url!
-            : await Crypto.AES.decrypt(link.url_aes!, encryption_key),
-          site_path,
-          is_public: link.is_public || false,
-          saves: link.saves,
-          is_pinned: link.is_pinned,
-          pin_title: link.pin_title
-            ? link.pin_title
-            : link.pin_title_aes
-            ? await Crypto.AES.decrypt(link.pin_title_aes!, encryption_key)
-            : undefined,
-          open_snapshot: link.open_snapshot,
-          favicon: link.favicon_aes
-            ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
-            : undefined,
-          is_parsed: link.is_parsed,
-        })
-      }
-
-      bookmarks.push({
-        id: bookmark.id,
-        is_public: bookmark.is_public || false,
-        created_at: bookmark.created_at,
-        updated_at: bookmark.updated_at,
-        visited_at: bookmark.visited_at,
-        title: bookmark.title
-          ? bookmark.title
-          : bookmark.title_aes
-          ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
-          : undefined,
-        note: bookmark.note
-          ? bookmark.note
-          : bookmark.note_aes
-          ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
-          : undefined,
-        is_unsorted: bookmark.is_unsorted,
-        stars: bookmark.stars || 0,
-        points: bookmark.points,
-        tags,
-        links,
-        cover_hash: bookmark.cover_hash,
-        has_cover_aes: bookmark.has_cover_aes,
-        blurhash: bookmark.blurhash
-          ? bookmark.blurhash
-          : bookmark.blurhash_aes
-          ? await Crypto.AES.decrypt(bookmark.blurhash_aes, encryption_key)
-          : undefined,
-      })
+      bookmarks.push(
+        await this._dto_to_bookmark_entity(bookmark, encryption_key),
+      )
     }
 
     return {
@@ -184,90 +195,16 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     const result =
       await this._bookmarks_data_source.get_bookmarks_by_ids_authorized(params)
 
+    const bookmarks: Bookmark_Entity[] = []
+
+    for (const bookmark of result.bookmarks || []) {
+      bookmarks.push(
+        await this._dto_to_bookmark_entity(bookmark, encryption_key),
+      )
+    }
+
     return {
-      bookmarks: result.bookmarks
-        ? await Promise.all(
-            result.bookmarks.map(async (bookmark) => ({
-              id: bookmark.id,
-              is_public: bookmark.is_public || false,
-              created_at: bookmark.created_at,
-              updated_at: bookmark.updated_at,
-              visited_at: bookmark.visited_at,
-              title: bookmark.title
-                ? bookmark.title
-                : bookmark.title_aes
-                ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
-                : undefined,
-              note: bookmark.note
-                ? bookmark.note
-                : bookmark.note_aes
-                ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
-                : undefined,
-              is_unsorted: bookmark.is_unsorted,
-              stars: bookmark.stars || 0,
-              points: bookmark.points,
-              tags: await Promise.all(
-                bookmark.tags.map(async (tag) => ({
-                  id: tag.id,
-                  name: tag.name
-                    ? tag.name
-                    : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
-                  is_public: tag.is_public || false,
-                })),
-              ),
-              links: await Promise.all(
-                bookmark.links.map(async (link) => {
-                  let site_path: string | undefined
-                  if (link.is_public) {
-                    site_path = link.site_path
-                  } else {
-                    const site = await Crypto.AES.decrypt(
-                      link.site_aes!,
-                      encryption_key,
-                    )
-                    const domain = `${get_domain_from_url(site)}/`
-                    site_path = site.slice(domain.length)
-                  }
-                  return {
-                    url: link.is_public
-                      ? link.url!
-                      : await Crypto.AES.decrypt(link.url_aes!, encryption_key),
-                    site_path,
-                    is_public: link.is_public || false,
-                    saves: link.saves,
-                    is_pinned: link.is_pinned,
-                    pin_title: link.pin_title
-                      ? link.pin_title
-                      : link.pin_title_aes
-                      ? await Crypto.AES.decrypt(
-                          link.pin_title_aes!,
-                          encryption_key,
-                        )
-                      : undefined,
-                    open_snapshot: link.open_snapshot,
-                    favicon: link.favicon_aes
-                      ? await Crypto.AES.decrypt(
-                          link.favicon_aes,
-                          encryption_key,
-                        )
-                      : undefined,
-                    is_parsed: link.is_parsed,
-                  }
-                }),
-              ),
-              cover_hash: bookmark.cover_hash,
-              has_cover_aes: bookmark.has_cover_aes,
-              blurhash: bookmark.blurhash
-                ? bookmark.blurhash
-                : bookmark.blurhash_aes
-                ? await Crypto.AES.decrypt(
-                    bookmark.blurhash_aes,
-                    encryption_key,
-                  )
-                : undefined,
-            })),
-          )
-        : undefined,
+      bookmarks: bookmarks.length ? bookmarks : undefined
     }
   }
 
@@ -463,16 +400,15 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     await this._bookmarks_data_source.record_visit(params)
   }
 
-  public async find_duplicate(
-    params: FindDuplicate_Params,
+  public async find_by_url_hash(
+    params: FindByUrlHash_Params,
     encryption_key: Uint8Array,
-  ): Promise<FindDuplicate_Ro> {
-    const result = await this._bookmarks_data_source.find_duplicate(
+  ): Promise<FindByUrlHash_Ro> {
+    const bookmark = await this._bookmarks_data_source.find_by_url_hash(
       params,
       encryption_key,
     )
-    return {
-      duplicate_found: result.duplicate_found,
-    }
+
+    return this._dto_to_bookmark_entity(bookmark, encryption_key)
   }
 }
