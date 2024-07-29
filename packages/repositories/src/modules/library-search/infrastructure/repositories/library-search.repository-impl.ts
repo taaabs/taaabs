@@ -22,6 +22,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
     return {
       bookmarks: await Promise.all(
         bookmarks.map(async (bookmark) => {
+          console.log(bookmark.id)
           return {
             id: bookmark.id,
             created_at: bookmark.created_at,
@@ -39,6 +40,8 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
               : undefined,
             is_unsorted: bookmark.is_unsorted || false,
             is_deleted: bookmark.is_deleted,
+            // links: [],
+            tags: [],
             links: await Promise.all(
               bookmark.links.map(async (link) => {
                 const site = link.site
@@ -47,14 +50,14 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
                 return { site }
               }),
             ),
-            tags: await Promise.all(
-              bookmark.tags.map(async (tag) => ({
-                id: tag.id,
-                name: tag.name
-                  ? tag.name
-                  : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
-              })),
-            ),
+            // tags: await Promise.all(
+            //   bookmark.tags.map(async (tag) => ({
+            //     id: tag.id,
+            //     name: tag.name
+            //       ? tag.name
+            //       : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
+            //   })),
+            // ),
             stars: bookmark.stars || 0,
             points: bookmark.points || 0,
           }

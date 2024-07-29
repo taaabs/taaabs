@@ -62,7 +62,7 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
           set_selected_tags(
             updated_tags.map((tag) => ({
               name: tag.name,
-              is_public: tag.is_public,
+              is_public: props.is_visibility_toggleable ? tag.is_public : false,
             })),
           )
         }}

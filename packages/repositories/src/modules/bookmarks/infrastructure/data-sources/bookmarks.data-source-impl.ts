@@ -15,8 +15,8 @@ import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
 import pako from 'pako'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
-import { FindDuplicate_Dto } from '@shared/types/modules/bookmarks/find-duplicate.dto'
-import { FindDuplicate_Params } from '../../domain/types/find-duplicate.params'
+import { FindByUrlHash_Dto } from '@shared/types/modules/bookmarks/find-by-url-hash.dto'
+import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -321,16 +321,16 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     })
   }
 
-  public async find_duplicate(
-    params: FindDuplicate_Params,
+  public async find_by_url_hash(
+    params: FindByUrlHash_Params,
     encryption_key: Uint8Array,
-  ): Promise<FindDuplicate_Dto.Response> {
-    const body: FindDuplicate_Dto.Body = {
+  ): Promise<FindByUrlHash_Dto.Response> {
+    const body: FindByUrlHash_Dto.Body = {
       hash: await Crypto.SHA256(params.url, encryption_key),
     }
 
     return this._ky
-      .post('v1/bookmarks/find-duplicate', {
+      .post('v1/bookmarks/find-by-url-hash', {
         json: body,
       })
       .json()

@@ -20,9 +20,8 @@ import { StandardItem as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDrop
 import { Separator as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/separator'
 import { Bookmarklet as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/bookmarklet'
 import { FooterLinks as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/app/header-desktop/authorized-user/user-dropdown/footer-links'
-import { UpsertBookmarkModal as Form_UpsertBookmark } from '@/modals/upsert-bookmark-modal/UpsertBookmarkModal'
+import { UpsertBookmarkModal } from '@/modals/upsert-bookmark-modal/UpsertBookmarkModal'
 import { update_search_params } from '@/utils/update-query-params'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
@@ -31,7 +30,6 @@ import { toast } from 'react-toastify'
 import { browser_storage } from '@/constants/browser-storage'
 import { AuthContext } from '../../auth-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
-// import { LocalDbContext } from '@/app/local-db-provider'
 import { BookmarkUrlHashData } from '@/utils/bookmark-url-hash-data'
 
 export const HeaderDesktop: React.FC<{
@@ -39,7 +37,6 @@ export const HeaderDesktop: React.FC<{
   bookmarklet_script: string
 }> = (props) => {
   const auth_context = useContext(AuthContext)
-  // const local_db_context = useContext(LocalDbContext)!
   const search_params = useSearchParams()
   const params = useParams()
   const pathname = usePathname()
@@ -126,7 +123,7 @@ export const HeaderDesktop: React.FC<{
     })
 
     modal_context.set(
-      <Form_UpsertBookmark
+      <UpsertBookmarkModal
         key={Date.now()}
         action="create"
         bookmark_autofill={
@@ -176,36 +173,6 @@ export const HeaderDesktop: React.FC<{
       />,
     )
   }
-
-  useUpdateEffect(() => {
-    const create_bookmark_with_clipboard_data = async () => {
-      // Look for duplicated urls.
-      if (bookmark.links) {
-        for (let i = 0; i < bookmark.links.length; i++) {
-          const data_source = new Bookmarks_DataSourceImpl(
-            auth_context.ky_instance,
-          )
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          const { duplicate_found } = await repository.find_duplicate(
-            { url: bookmark.links[i].url },
-            auth_context.auth_data!.encryption_key,
-          )
-          if (duplicate_found) {
-            toast.error('Duplicate found')
-            return
-          }
-        }
-      }
-      open_new_bookmark_modal({ with_autofill: true })
-    }
-
-    const bookmark = BookmarkUrlHashData.parse({
-      hash: window.location.hash.slice(1),
-    })
-    if (Object.keys(bookmark).length && auth_context.auth_data) {
-      create_bookmark_with_clipboard_data()
-    }
-  }, [is_hydrated])
 
   return (
     <UiAppTemplate_App_HeaderDesktop
@@ -296,50 +263,10 @@ export const HeaderDesktop: React.FC<{
                   ]}
                 />
               </UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown>
-              //     <UiAppOrganism_App_HeaderDesktop_AuthorizedUser_UserDropdown
-              //       profile_url={`/${
-              //         auth_context.auth_data.username
-              //       }?back=${pathname}?${search_params.toString()}`}
-              //       username={auth_context.auth_data.username}
-              //       settings_href={`/settings?back=${pathname}?${search_params.toString()}`}
-              //       on_click_log_out={auth_context.logout}
-              //       footer_links={[
-              //         {
-              //           label:
-              //             props.dictionary.app.header_desktop.user_dropdown.about,
-              //           href: '/about',
-              //         },
-              //         {
-              //           label:
-              //             props.dictionary.app.header_desktop.user_dropdown
-              //               .terms_of_service,
-              //           href: '/terms-of-service',
-              //         },
-              //         {
-              //           label:
-              //             props.dictionary.app.header_desktop.user_dropdown
-              //               .privacy_policy,
-              //           href: '/privacy-policy',
-              //         },
-              //       ]}
-              //       translations={{
-              //         save_to_taaabs:
-              //           props.dictionary.app.header_desktop.user_dropdown
-              //             .save_to_taaabs,
-              //         theme:
-              //           props.dictionary.app.header_desktop.user_dropdown.theme,
-              //         settings:
-              //           props.dictionary.app.header_desktop.user_dropdown.settings,
-              //         log_out:
-              //           props.dictionary.app.header_desktop.user_dropdown.log_out,
-              //       }}
-              //     />
-              //   }
-              // />
             }
           />
         ) : (
-          <div>x</div>
+          <div>TODO</div>
         ))
       }
       translations={{ powered_by: props.dictionary.app.powered_by }}
