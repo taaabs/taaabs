@@ -15,7 +15,10 @@
       "@shared/*": [
         "../shared/src/*"
       ]
-    }
+    },
+    "types": [
+      "jest"
+    ],
   },
   "include": [
     "src/**/*.ts",
