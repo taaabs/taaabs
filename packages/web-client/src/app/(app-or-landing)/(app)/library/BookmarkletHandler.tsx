@@ -221,23 +221,10 @@ export const BookmarkletHandler: React.FC<{
       }
 
       // Close modal.
-      if (should_reload_page && pathname == '/library') {
-        // todo: refetch data through context so that back navigation is possible
-        sessionStorage.setItem(
-          browser_storage.session_storage.library
-            .counts_reload_requested_by_new_bookmark,
-          'true',
-        )
-        const updated_search_params = update_search_params(
-          search_params,
-          search_params_keys.new_bookmark_results_refetch_trigger,
-          Date.now().toString(),
-        )
-        window.history.pushState(
-          {},
-          '',
-          window.location.pathname + '?' + updated_search_params,
-        )
+      if (should_reload_page) {
+        const currentUrl = window.location.href
+        const newUrl = currentUrl.split('#')[0]
+        window.location.href = newUrl
       } else {
         modal_context.close()
       }
