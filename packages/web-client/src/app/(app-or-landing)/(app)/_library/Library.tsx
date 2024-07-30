@@ -37,6 +37,7 @@ import { _Aside } from './_Aside'
 import { use_points } from './_hooks/use-points'
 import { use_search } from './_hooks/use-search'
 import { FollowUnfollowContext } from '../[username]/follow-unfollow-provider'
+import { use_bookmarklet_handler } from './_hooks/use-bookmarklet-handler'
 
 export type LibraryContext = {
   bookmarks_hook: ReturnType<typeof use_bookmarks>
@@ -68,6 +69,7 @@ export const LibraryContext = createContext<LibraryContext | null>(null)
 const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   props,
 ) => {
+  use_bookmarklet_handler({ dictionary: props.dictionary })
   const auth_context = useContext(AuthContext)
   use_scroll_restore()
   const is_hydrated = use_is_hydrated()

@@ -1,5 +1,3 @@
-'use client'
-
 import { AuthContext } from '@/app/auth-provider'
 import { browser_storage } from '@/constants/browser-storage'
 import { search_params_keys } from '@/constants/search-params-keys'
@@ -15,18 +13,15 @@ import { use_is_hydrated } from '@shared/hooks'
 import { HtmlParser } from '@shared/utils/html-parser'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { encode } from 'blurhash'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useContext } from 'react'
 import { toast } from 'react-toastify'
 
-export const BookmarkletHandler: React.FC<{
-  dictionary: Dictionary
-}> = (props: { dictionary: Dictionary }) => {
+export const use_bookmarklet_handler = (props: { dictionary: Dictionary }) => {
   const auth_context = useContext(AuthContext)
   const is_hydrated = use_is_hydrated()
-  const search_params = useSearchParams()
-  const pathname = usePathname()
   const modal_context = useContext(ModalContext)
+  const search_params = useSearchParams()
 
   // Runs on page load, handles bookmarklet script invocation.
   useUpdateEffect(() => {
@@ -222,9 +217,21 @@ export const BookmarkletHandler: React.FC<{
 
       // Close modal.
       if (should_reload_page) {
-        const currentUrl = window.location.href
-        const newUrl = currentUrl.split('#')[0]
-        window.location.href = newUrl
+        sessionStorage.setItem(
+          browser_storage.session_storage.library
+            .counts_reload_requested_by_new_bookmark,
+          'true',
+        )
+        const updated_search_params = update_search_params(
+          search_params,
+          search_params_keys.new_bookmark_results_refetch_trigger,
+          Date.now().toString(),
+        )
+        window.history.pushState(
+          {},
+          '',
+          window.location.pathname + '?' + updated_search_params,
+        )
       } else {
         modal_context.close()
       }
@@ -237,6 +244,4 @@ export const BookmarkletHandler: React.FC<{
       create_bookmark_with_clipboard_data()
     }
   }, [is_hydrated])
-
-  return <></>
 }
