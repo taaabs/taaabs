@@ -183,12 +183,13 @@
       &__text {
         position: relative;
         display: inline;
-        font-weight: var(--font-weight-inter-semi-bold);
         font-size: var(--font-size-1-6rem);
         margin-bottom: 0.8rem;
         overflow-wrap: anywhere;
+        font-weight: var(--font-weight-inter-bold);
         @include at992 {
           font-size: var(--font-size-1-8rem);
+          font-weight: var(--font-weight-inter-semi-bold);
         }
         &--unsorted {
           font-weight: var(--font-weight-inter-bold);
@@ -542,7 +543,11 @@
       &--recently-visited {
         background: linear-gradient(to right, var(--blue50), transparent);
         @include dark {
-          background: linear-gradient(to right, rgba(97, 50, 20, 0.3), transparent)
+          background: linear-gradient(
+            to right,
+            rgba(97, 50, 20, 0.3),
+            transparent
+          );
         }
       }
       &:last-of-type {
