@@ -14,56 +14,64 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
     params: GetBookmarks_Params.Authorized,
     encryption_key: Uint8Array,
   ): Promise<GetBookmarks_Ro> {
-    const { bookmarks, version } =
+    const result =
       await this._library_search_data_source.get_bookmarks_on_authorized_user(
         params,
       )
 
+    const bookmarks: GetBookmarks_Ro['bookmarks'] = []
+
+    for (const bookmark of result.bookmarks) {
+      const tags: GetBookmarks_Ro['bookmarks'][0]['tags'] = []
+      for (const tag of bookmark.tags) {
+        tags.push({
+          id: tag.id,
+          name: tag.name
+            ? tag.name
+            : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
+        })
+      }
+
+      const links: GetBookmarks_Ro['bookmarks'][0]['links'] = []
+      for (const link of bookmark.links) {
+        links.push({
+          site: link.site
+            ? link.site
+            : await Crypto.AES.decrypt(link.site_aes!, encryption_key),
+        })
+      }
+
+      const title = bookmark.title
+        ? bookmark.title
+        : bookmark.title_aes
+        ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+        : undefined
+
+      const note = bookmark.note
+        ? bookmark.note
+        : bookmark.note_aes
+        ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+        : undefined
+
+      bookmarks.push({
+        id: bookmark.id,
+        created_at: bookmark.created_at,
+        updated_at: bookmark.updated_at,
+        visited_at: bookmark.visited_at,
+        title,
+        note,
+        links,
+        tags,
+        is_unsorted: bookmark.is_unsorted || false,
+        is_deleted: bookmark.is_deleted,
+        stars: bookmark.stars || 0,
+        points: bookmark.points || 0,
+      })
+    }
+
     return {
-      bookmarks: await Promise.all(
-        bookmarks.map(async (bookmark) => {
-          console.log(bookmark.id)
-          return {
-            id: bookmark.id,
-            created_at: bookmark.created_at,
-            updated_at: bookmark.updated_at,
-            visited_at: bookmark.visited_at,
-            title: bookmark.title
-              ? bookmark.title
-              : bookmark.title_aes
-              ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
-              : undefined,
-            note: bookmark.note
-              ? bookmark.note
-              : bookmark.note_aes
-              ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
-              : undefined,
-            is_unsorted: bookmark.is_unsorted || false,
-            is_deleted: bookmark.is_deleted,
-            // links: [],
-            tags: [],
-            links: await Promise.all(
-              bookmark.links.map(async (link) => {
-                const site = link.site
-                  ? link.site
-                  : await Crypto.AES.decrypt(link.site_aes!, encryption_key)
-                return { site }
-              }),
-            ),
-            // tags: await Promise.all(
-            //   bookmark.tags.map(async (tag) => ({
-            //     id: tag.id,
-            //     name: tag.name
-            //       ? tag.name
-            //       : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
-            //   })),
-            // ),
-            stars: bookmark.stars || 0,
-            points: bookmark.points || 0,
-          }
-        }),
-      ),
-      version,
+      bookmarks,
+      version: result.version,
     }
   }
 
