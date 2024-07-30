@@ -74,6 +74,9 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
             : bookmark.cover_aes
             ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
             : undefined,
+          blurhash: bookmark.blurhash_aes
+            ? await Crypto.AES.decrypt(bookmark.blurhash_aes, encryption_key)
+            : undefined,
           tags: bookmark.tags
             ? await Promise.all(
                 bookmark.tags.map(async (tag) => {

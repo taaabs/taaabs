@@ -12,6 +12,9 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "types": [
+      "jest"
+    ],
     // "paths": {
     //   "@shared/*": [
     //     "src/*"
