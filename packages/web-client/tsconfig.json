@@ -38,6 +38,9 @@
         "name": "next"
       }
     ],
+    "types": [
+      "jest"
+    ],
     "jsxImportSource": "react"
   },
   "include": [
