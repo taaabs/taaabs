@@ -55,14 +55,14 @@ export const Modal: React.FC<Modal.Props> = (props) => {
       className={cn(styles.modal, {
         [styles['modal--visible']]: props.is_open,
       })}
-      onClick={props.on_close}
+      onMouseDown={props.on_close}
     >
       <div
         className={cn(styles.modal__inner, {
           [styles['modal__inner--visible']]: props.is_open,
         })}
         style={{ maxWidth: props.width, width: '100%' }}
-        onClick={(e) => {
+        onMouseDown={(e) => {
           e.stopPropagation()
         }}
       >
