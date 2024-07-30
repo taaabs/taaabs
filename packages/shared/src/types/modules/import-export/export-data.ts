@@ -34,6 +34,7 @@ export type Bookmark = {
   links: Link[]
   cover?: string
   cover_aes?: string
+  blurhash?: string
   blurhash_aes?: string
 }
 
