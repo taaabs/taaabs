@@ -1,11 +1,8 @@
 import { AuthContext } from '@/app/auth-provider'
-import { browser_storage } from '@/constants/browser-storage'
-import { search_params_keys } from '@/constants/search-params-keys'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { upsert_bookmark_modal_setter } from '@/modals/upsert-bookmark-modal/upsert-bookmark-modal-setter'
 import { ModalContext } from '@/providers/ModalProvider'
 import { BookmarkUrlHashData } from '@/utils/bookmark-url-hash-data'
-import { update_search_params } from '@/utils/update-query-params'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
@@ -13,22 +10,23 @@ import { use_is_hydrated } from '@shared/hooks'
 import { HtmlParser } from '@shared/utils/html-parser'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { encode } from 'blurhash'
-import { useSearchParams } from 'next/navigation'
 import { useContext } from 'react'
 import { toast } from 'react-toastify'
 
-export const use_bookmarklet_handler = (props: { dictionary: Dictionary }) => {
+export const use_bookmarklet_handler = (props: {
+  dictionary: Dictionary
+  refetch_data: () => void
+}) => {
   const auth_context = useContext(AuthContext)
   const is_hydrated = use_is_hydrated()
   const modal_context = useContext(ModalContext)
-  const search_params = useSearchParams()
 
   // Runs on page load, handles bookmarklet script invocation.
   useUpdateEffect(() => {
     const create_bookmark_with_clipboard_data = async () => {
       // Look for duplicated link and open its edit modal.
       let found_duplicate = false
-      let should_reload_page = false
+      let should_refetch_data = false
       if (bookmark.links) {
         for (let i = 0; i < bookmark.links.length; i++) {
           const data_source = new Bookmarks_DataSourceImpl(
@@ -50,7 +48,7 @@ export const use_bookmarklet_handler = (props: { dictionary: Dictionary }) => {
               dictionary: props.dictionary,
             })
             if (updated_bookmark) {
-              should_reload_page = true
+              should_refetch_data = true
               const data_source = new Bookmarks_DataSourceImpl(
                 auth_context.ky_instance,
               )
@@ -70,7 +68,7 @@ export const use_bookmarklet_handler = (props: { dictionary: Dictionary }) => {
 
       // Duplicate not found. Create bookmark and open edit modal.
       if (!found_duplicate) {
-        should_reload_page = true
+        should_refetch_data = true
         const bookmark_url_hash_data = BookmarkUrlHashData.parse({
           hash: window.location.hash.slice(1),
         })
@@ -216,22 +214,8 @@ export const use_bookmarklet_handler = (props: { dictionary: Dictionary }) => {
       }
 
       // Close modal.
-      if (should_reload_page) {
-        sessionStorage.setItem(
-          browser_storage.session_storage.library
-            .counts_reload_requested_by_new_bookmark,
-          'true',
-        )
-        const updated_search_params = update_search_params(
-          search_params,
-          search_params_keys.new_bookmark_results_refetch_trigger,
-          Date.now().toString(),
-        )
-        window.history.pushState(
-          {},
-          '',
-          window.location.pathname + '?' + updated_search_params,
-        )
+      if (should_refetch_data) {
+        props.refetch_data()
       } else {
         modal_context.close()
       }

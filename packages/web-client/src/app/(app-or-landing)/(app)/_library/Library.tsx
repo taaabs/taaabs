@@ -12,14 +12,13 @@ import { use_bookmarks } from './_hooks/use-bookmarks'
 import { use_counts } from './_hooks/use-counts'
 import { use_session_storage_cleanup } from './_hooks/use-session-storage-cleanup'
 import { browser_storage } from '@/constants/browser-storage'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { SwipableColumns as UiAppTemplate_SwipableColumns } from '@web-ui/components/app/templates/swipable-columns'
 import { DraggedCursorTag as UiAppLibrary_DraggedCursorTag } from '@web-ui/components/app/library/DraggedCursorTag'
 import { use_tag_hierarchies } from './_hooks/use-tag-hierarchies'
 import { Filter } from '@/types/library/filter'
 import { use_scroll_restore } from './_hooks/use-scroll-restore'
 import { use_pinned } from './_hooks/use-pinned'
-import { search_params_keys } from '@/constants/search-params-keys'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
 import { use_popstate_count } from '@/hooks/pop-state-count'
 import { use_is_hydrated } from '@shared/hooks'
@@ -69,14 +68,12 @@ export const LibraryContext = createContext<LibraryContext | null>(null)
 const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   props,
 ) => {
-  use_bookmarklet_handler({ dictionary: props.dictionary })
   const auth_context = useContext(AuthContext)
   use_scroll_restore()
   const is_hydrated = use_is_hydrated()
   const popstate_count = use_popstate_count()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
-  const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const modal_context = useContext(ModalContext)!
   const [show_skeletons, set_show_skeletons] = useState(true)
@@ -100,6 +97,18 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const [is_fetching_first_bookmarks, set_is_fetching_first_bookmarks] =
     useState(false)
   // END - UI synchronization.
+
+  use_bookmarklet_handler({
+    dictionary: props.dictionary,
+    refetch_data: async () => {
+      sessionStorage.setItem(
+        browser_storage.session_storage.library
+          .counts_reload_requested_by_new_bookmark,
+        'true',
+      )
+      bookmarks_hook.get_bookmarks({})
+    },
+  })
 
   useUpdateEffect(() => {
     if (
@@ -202,18 +211,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     }
   }, [bookmarks_hook.is_fetching_first_bookmarks])
 
-  // Close "Create bookmark" modal, refresh counts and tag hierarchies.
+  // Close "Upsert bookmark" modal, refresh counts and tag hierarchies.
   useUpdateEffect(() => {
     if (bookmarks_hook.is_fetching_first_bookmarks) return
-    const new_bookmark_results_refetch_trigger = search_params.get(
-      search_params_keys.new_bookmark_results_refetch_trigger,
-    )
     const counts_reload_requested_by_new_bookmark = sessionStorage.getItem(
       browser_storage.session_storage.library
         .counts_reload_requested_by_new_bookmark,
     )
     if (
-      new_bookmark_results_refetch_trigger &&
       counts_reload_requested_by_new_bookmark
     ) {
       sessionStorage.removeItem(
