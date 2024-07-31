@@ -32,8 +32,9 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
     }
     if (content) {
       window.addEventListener('popstate', handle_popstate)
+    } else {
+      window.removeEventListener('popstate', handle_popstate)
     }
-    return () => window.removeEventListener('popstate', handle_popstate)
   }, [content])
 
   return (
