@@ -113,10 +113,6 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
     return () => document.removeEventListener('keydown', handle_keyboard)
   }, [new_tag_name, is_focused, sortable_items])
 
-  useEffect(() => {
-    ref.current.focus()
-  }, [])
-
   const field = (
     <ReactSortable
       list={sortable_items}

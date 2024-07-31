@@ -171,7 +171,7 @@ export const dictionary: Dictionary = {
     menu_items: {
       home: 'Strona główna',
       library: 'Biblioteka',
-      notifications: 'Powiadomienia',
+      chat: 'Czat',
       activity: 'Aktywność',
     },
     library: {

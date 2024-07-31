@@ -20,7 +20,6 @@ import { Filter } from '@/types/library/filter'
 import { use_scroll_restore } from './_hooks/use-scroll-restore'
 import { use_pinned } from './_hooks/use-pinned'
 import { counts_actions } from '@repositories/stores/library/counts/counts.slice'
-import { use_popstate_count } from '@/hooks/pop-state-count'
 import { use_is_hydrated } from '@shared/hooks'
 import { ModalContext } from '@/providers/ModalProvider'
 import { AuthContext } from '@/app/auth-provider'
@@ -37,6 +36,7 @@ import { use_points } from './_hooks/use-points'
 import { use_search } from './_hooks/use-search'
 import { FollowUnfollowContext } from '../[username]/follow-unfollow-provider'
 import { use_bookmarklet_handler } from './_hooks/use-bookmarklet-handler'
+import { BookmarksSkeleton as UiAppLibrary_BookmarksSkeleton } from '@web-ui/components/app/library/BookmarksSkeleton'
 
 export type LibraryContext = {
   bookmarks_hook: ReturnType<typeof use_bookmarks>
@@ -53,17 +53,15 @@ export type LibraryContext = {
 
   username?: string
   library_updated_at_timestamp: number
-  pinned_updated_at: number
-  popstate_count: number
   is_fetching_first_bookmarks: boolean
   is_archived_filter: boolean
   on_tag_rename_click: (params: { id: number; name: string }) => Promise<void>
   search_cache_to_be_cleared: React.MutableRefObject<boolean>
   is_not_interactive: boolean
-  show_skeletons: boolean
+  is_initialized: boolean
 }
 
-export const LibraryContext = createContext<LibraryContext | null>(null)
+export const LibraryContext = createContext({} as LibraryContext)
 
 const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   props,
@@ -71,12 +69,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const auth_context = useContext(AuthContext)
   use_scroll_restore()
   const is_hydrated = use_is_hydrated()
-  const popstate_count = use_popstate_count()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
   const { username }: { username?: string } = useParams()
   const modal_context = useContext(ModalContext)!
-  const [show_skeletons, set_show_skeletons] = useState(true)
   const search_hook = use_search(props.local_db)
   const bookmarks_hook = use_bookmarks()
   const counts_hook = use_counts()
@@ -92,10 +88,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   // START - UI synchronization.
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
     useState(0)
-  const [is_pinned_stale, set_is_pinned_stale] = useState<boolean>()
-  const [pinned_updated_at, set_pinned_updated_at] = useState(0)
   const [is_fetching_first_bookmarks, set_is_fetching_first_bookmarks] =
     useState(false)
+  const [is_initialized, set_is_initialized] = useState(false)
   // END - UI synchronization.
 
   use_bookmarklet_handler({
@@ -128,12 +123,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         window.scrollTo(0, 0)
       }
       set_is_fetching_first_bookmarks(false)
-      set_show_skeletons(false)
       set_library_updated_at_timestamp(Date.now())
-      if (is_pinned_stale) {
-        set_pinned_updated_at(pinned_hook.fetched_at_timestamp!)
-        set_is_pinned_stale(false)
-      }
       if (search_hook.result) {
         search_hook.set_highlights(search_hook.incoming_highlights)
         search_hook.set_highlights_sites_variants(
@@ -143,6 +133,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         search_hook.set_highlights(undefined)
         search_hook.set_highlights_sites_variants(undefined)
       }
+      set_is_initialized(true)
     }
   }, [
     bookmarks_hook.is_fetching_first_bookmarks,
@@ -189,13 +180,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     modal_context.close()
   }
 
-  // UpdateEffect breaks rendering items fetched from session storage.
-  useEffect(() => {
-    if (!pinned_hook.is_fetching) {
-      set_is_pinned_stale(true)
-    }
-  }, [pinned_hook.is_fetching])
-
   useUpdateEffect(() => {
     if (
       !bookmarks_hook.is_fetching_first_bookmarks &&
@@ -218,9 +202,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       browser_storage.session_storage.library
         .counts_reload_requested_by_new_bookmark,
     )
-    if (
-      counts_reload_requested_by_new_bookmark
-    ) {
+    if (counts_reload_requested_by_new_bookmark) {
       sessionStorage.removeItem(
         browser_storage.session_storage.library
           .counts_reload_requested_by_new_bookmark,
@@ -365,14 +347,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
 
         username,
         library_updated_at_timestamp,
-        pinned_updated_at,
-        popstate_count,
         is_fetching_first_bookmarks,
         is_archived_filter,
         on_tag_rename_click,
         search_cache_to_be_cleared,
         is_not_interactive,
-        show_skeletons,
+        is_initialized,
       }}
     >
       <UiAppLibrary_DraggedCursorTag
@@ -390,7 +370,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             ? follow_unfollow_context?.toggle
             : undefined
         }
-        show_skeletons={show_skeletons}
         slot_search={
           <_Search dictionary={props.dictionary} local_db={props.local_db} />
         }
@@ -411,18 +390,28 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         slot_main={
           <>
-            {!bookmarks_hook.showing_bookmarks_fetched_by_ids && (
+            <div
+              style={{
+                display:
+                  bookmarks_hook.showing_bookmarks_fetched_by_ids ||
+                  !bookmarks_hook.first_bookmarks_fetched_at_timestamp
+                    ? 'none'
+                    : undefined,
+              }}
+            >
               <_Pinned
                 dictionary={props.dictionary}
                 local_db={props.local_db}
               />
-            )}
-            {
+            </div>
+            {bookmarks_hook.first_bookmarks_fetched_at_timestamp ? (
               <_Bookmarks
                 dictionary={props.dictionary}
                 local_db={props.local_db}
               />
-            }
+            ) : (
+              <UiAppLibrary_BookmarksSkeleton />
+            )}
           </>
         }
         on_page_bottom_reached={() => {
@@ -463,6 +452,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             : undefined
         }
         info_text={
+          !bookmarks_hook.first_bookmarks_fetched_at_timestamp ||
           is_fetching_first_bookmarks ||
           bookmarks_hook.is_fetching_more_bookmarks
             ? props.dictionary.app.library.loading

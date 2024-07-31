@@ -3,7 +3,6 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
-import Skeleton from 'react-loading-skeleton'
 import { MobileTitleBar as Subcomponent_MobileTitleBar } from './components/mobile-title-bar'
 import styles from './swipable-columns.module.scss'
 import { useSwipeable } from 'react-swipeable'
@@ -21,7 +20,6 @@ export namespace SwipableColumns {
     on_page_bottom_reached: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
-    show_skeletons: boolean
     info_text: React.ReactNode
     welcome_text?: string
     on_follow_click?: () => void
@@ -355,14 +353,6 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
                 {props.slot_search}
               </div>
             </div>
-
-            {props.show_skeletons && (
-              <div className={styles['main__inner__skeleton']}>
-                {[...Array(10)].map((_, i) => (
-                  <Skeleton key={i} />
-                ))}
-              </div>
-            )}
 
             <div
               className={cn({

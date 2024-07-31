@@ -2,7 +2,7 @@
 @use '../../../../styles/foundation' as *;
 
 .wrapper {
-  margin: var(--padding-12px) 0;
+  margin: var(--padding-8px) 0;
   @include at992 {
     margin: var(--padding-16px) 0;
   }

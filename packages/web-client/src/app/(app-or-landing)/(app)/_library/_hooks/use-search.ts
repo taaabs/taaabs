@@ -62,7 +62,7 @@ export const use_search = (local_db: LocalDb) => {
       '',
       window.location.pathname +
         (search_params.toString() ? `?${search_params.toString()}` : '') +
-        `#query=${encodeURIComponent(params.search_string)}`,
+        `#q=${encodeURIComponent(params.search_string)}`,
     )
   }
 
@@ -206,7 +206,7 @@ export const use_search = (local_db: LocalDb) => {
       clear_library_session_storage({
         username,
         search_params: search_params.toString(),
-        hash: `#query=${encodeURIComponent(search_string)}`,
+        hash: `#q=${encodeURIComponent(search_string)}`,
       })
       set_count(result.count)
       if (result.count) {
@@ -219,7 +219,7 @@ export const use_search = (local_db: LocalDb) => {
           browser_storage.session_storage.library.search_string({
             username,
             search_params: search_params.toString(),
-            hash: `#query=${encodeURIComponent(search_string)}`,
+            hash: `#q=${encodeURIComponent(search_string)}`,
           }),
           params.search_string,
         )
@@ -227,7 +227,7 @@ export const use_search = (local_db: LocalDb) => {
           browser_storage.session_storage.library.search_results_count({
             username,
             search_params: search_params.toString(),
-            hash: `#query=${encodeURIComponent(search_string)}`,
+            hash: `#q=${encodeURIComponent(search_string)}`,
           }),
           result.count.toString(),
         )
@@ -349,7 +349,7 @@ export const use_search = (local_db: LocalDb) => {
         browser_storage.session_storage.library.search_string({
           username,
           search_params: search_params.toString(),
-          hash: `#query=${encodeURIComponent(params.search_string)}`,
+          hash: `#q=${encodeURIComponent(params.search_string)}`,
         }),
         params.search_string,
       )
@@ -357,7 +357,7 @@ export const use_search = (local_db: LocalDb) => {
         browser_storage.session_storage.library.search_results_count({
           username,
           search_params: search_params.toString(),
-          hash: `#query=${encodeURIComponent(params.search_string)}`,
+          hash: `#q=${encodeURIComponent(params.search_string)}`,
         }),
         result.count.toString(),
       )
@@ -807,7 +807,7 @@ export const use_search = (local_db: LocalDb) => {
       browser_storage.session_storage.library.highlights({
         username,
         search_params: search_params.toString(),
-        hash: `#query=${encodeURIComponent(search_string)}`,
+        hash: `#q=${encodeURIComponent(search_string)}`,
       }),
       JSON.stringify(highlights),
     )
@@ -819,7 +819,7 @@ export const use_search = (local_db: LocalDb) => {
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
         search_params: search_params.toString(),
-        hash: `#query=${encodeURIComponent(search_string)}`,
+        hash: `#q=${encodeURIComponent(search_string)}`,
       }),
       JSON.stringify(highlights_sites_variants),
     )
@@ -831,7 +831,7 @@ export const use_search = (local_db: LocalDb) => {
       browser_storage.session_storage.library.search_result({
         username,
         search_params: search_params.toString(),
-        hash: `#query=${encodeURIComponent(search_string)}`,
+        hash: `#q=${encodeURIComponent(search_string)}`,
       }),
       JSON.stringify(result),
     )
@@ -840,7 +840,7 @@ export const use_search = (local_db: LocalDb) => {
   useEffect(() => {
     const search_params_stringified = search_params.toString()
 
-    const is_query_in_hash = window.location.hash.startsWith('#query=')
+    const is_query_in_hash = window.location.hash.startsWith('#q=')
 
     if (!is_query_in_hash) reset()
 
@@ -902,7 +902,7 @@ export const use_search = (local_db: LocalDb) => {
 
     // Temporary handling of search string on fresh page load.
     if (is_query_in_hash && !result) {
-      set_search_string(window.location.hash.replace('#query=', ''))
+      set_search_string(window.location.hash.replace('#q=', ''))
     }
   }, [search_params])
 

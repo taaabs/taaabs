@@ -22,7 +22,7 @@ export const _Toolbar: React.FC<_Toolbar.Props> = (props) => {
 
     username,
     is_fetching_first_bookmarks,
-  } = useContext(LibraryContext)!
+  } = useContext(LibraryContext)
   const dispatch = use_library_dispatch()
 
   return (

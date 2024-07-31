@@ -43,12 +43,12 @@ export const BottomNavigationBar: React.FC<{
           },
         },
         {
-          label: props.dictionary.app.menu_items.notifications,
-          icon_variant: 'NOTIFICATIONS',
-          icon_variant_active: 'NOTIFICATIONS_FILLED',
-          is_active: pathname == '/notifications',
+          label: props.dictionary.app.menu_items.chat,
+          icon_variant: 'CHAT',
+          icon_variant_active: 'CHAT_FILLED',
+          is_active: pathname == '/chat',
           on_click: () => {
-            router.push('/notifications')
+            router.push('/chat')
           },
         },
       ]}

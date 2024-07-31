@@ -88,9 +88,9 @@ export const HeaderDesktop: React.FC<{
         },
       },
       {
-        label: props.dictionary.app.menu_items.notifications,
-        href: '/notifications',
-        is_active: pathname == '/notifications',
+        label: props.dictionary.app.menu_items.chat,
+        href: '/chat',
+        is_active: pathname == '/chat',
       },
     ]
   } else {

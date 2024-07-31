@@ -17,10 +17,13 @@ import { system_values } from '@shared/constants/system-values'
 import { search_params_keys } from '@/constants/search-params-keys'
 import { AuthContext } from '@/app/auth-provider'
 import { use_is_hydrated } from '@shared/hooks'
+import { PopstateCountContext } from '@/providers/PopstateCountProvider'
+import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
 
 export const use_bookmarks = () => {
   const auth_context = useContext(AuthContext)
   const is_hydrated = use_is_hydrated()
+  const { popstate_count } = useContext(PopstateCountContext)
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
@@ -243,16 +246,14 @@ export const use_bookmarks = () => {
     )
 
     if (bookmarks) {
-      if (window.location.hash.startsWith('#query=')) {
+      if (window.location.hash.startsWith('#q=')) {
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
       } else {
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
       }
+      dispatch(bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()))
       dispatch(bookmarks_actions.set_incoming_bookmarks(JSON.parse(bookmarks)))
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
-      // dispatch(
-      //   bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
-      // )
       const has_more_bookmarks = sessionStorage.getItem(
         browser_storage.session_storage.library.has_more_bookmarks({
           username: username as string,
@@ -277,7 +278,7 @@ export const use_bookmarks = () => {
         dispatch(bookmarks_actions.set_density(density as any))
       }
     } else {
-      if (window.location.hash.startsWith('#query=')) return
+      if (window.location.hash.startsWith('#q=')) return
       get_bookmarks({})
     }
   }, [is_hydrated, search_params])

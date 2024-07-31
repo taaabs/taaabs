@@ -27,7 +27,7 @@ export const _Search: React.FC<_Search.Props> = (props) => {
     username,
     is_archived_filter,
     search_cache_to_be_cleared,
-  } = useContext(LibraryContext)!
+  } = useContext(LibraryContext)
   const search_params = useSearchParams()
 
   return (
@@ -111,7 +111,7 @@ export const _Search: React.FC<_Search.Props> = (props) => {
         search_hook.set_search_string(value)
       }}
       on_submit={async () => {
-        // if (props.local_db.is_initializing || !search_hook.search_string.trim() || search_hook.count == 0) return
+        if (props.local_db.is_initializing || !search_hook.search_string.trim() || search_hook.count == 0) return
         if (search_hook.is_full_text) {
           await search_hook.get_result_full_text({
             search_string: search_hook.search_string,

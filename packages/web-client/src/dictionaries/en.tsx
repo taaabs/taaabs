@@ -165,8 +165,8 @@ const dictionary: Dictionary = {
     },
     menu_items: {
       home: 'Home',
-      library: 'My library',
-      notifications: 'Notifications',
+      library: 'Library',
+      chat: 'Chat',
       activity: 'Activity',
     },
     library: {
