@@ -390,20 +390,16 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         slot_main={
           <>
-            <div
-              style={{
-                display:
-                  bookmarks_hook.showing_bookmarks_fetched_by_ids ||
-                  !bookmarks_hook.first_bookmarks_fetched_at_timestamp
-                    ? 'none'
-                    : undefined,
-              }}
-            >
-              <_Pinned
-                dictionary={props.dictionary}
-                local_db={props.local_db}
-              />
-            </div>
+            {/* Pinned */}
+            {!bookmarks_hook.showing_bookmarks_fetched_by_ids &&
+              bookmarks_hook.first_bookmarks_fetched_at_timestamp && (
+                <_Pinned
+                  dictionary={props.dictionary}
+                  local_db={props.local_db}
+                />
+              )}
+
+            {/* Bookmarks */}
             {bookmarks_hook.first_bookmarks_fetched_at_timestamp ? (
               <_Bookmarks
                 dictionary={props.dictionary}
