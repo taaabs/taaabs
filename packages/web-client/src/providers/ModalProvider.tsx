@@ -1,7 +1,7 @@
 'use client'
 
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import { createContext, ReactNode, useCallback, useEffect, useState } from 'react'
 
 export type ModalContext = {
   set: (content?: ReactNode) => void
@@ -25,17 +25,18 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
     }
   }, [content])
 
+  const handle_popstate = useCallback(() => {
+    close()
+    history.go(1)
+  }, [])
+
   useEffect(() => {
-    const handle_popstate = () => {
-      close()
-      history.go(1)
-    }
-    if (content) {
+    if (is_open) {
       window.addEventListener('popstate', handle_popstate)
     } else {
       window.removeEventListener('popstate', handle_popstate)
     }
-  }, [content])
+  }, [is_open])
 
   return (
     <ModalContext.Provider

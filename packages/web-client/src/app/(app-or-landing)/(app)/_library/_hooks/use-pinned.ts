@@ -1,11 +1,12 @@
 import { AuthContext } from '@/app/auth-provider'
 import { browser_storage } from '@/constants/browser-storage'
+import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
 import { use_is_hydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useParams } from 'next/navigation'
-import { useContext } from 'react'
+import { useParams, useSearchParams } from 'next/navigation'
+import { useContext, useEffect } from 'react'
 
 export const use_pinned = () => {
   const auth_context = useContext(AuthContext)
@@ -50,18 +51,23 @@ export const use_pinned = () => {
   }, [items])
 
   useUpdateEffect(() => {
+    if (!items) {
+      get_pinned()
+    }
+  }, [is_hydrated])
+
+  useEffect(() => {
     const pinned_items = sessionStorage.getItem(
       browser_storage.session_storage.library.pinned({
         username,
       }),
     )
     if (pinned_items) {
+      console.log(pinned_items)
       dispatch(pinned_actions.set_items(JSON.parse(pinned_items)))
       dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
-    } else {
-      get_pinned()
     }
-  }, [is_hydrated])
+  }, [])
 
   return {
     get_pinned,

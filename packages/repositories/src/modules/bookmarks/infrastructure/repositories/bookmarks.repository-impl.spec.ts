@@ -10,6 +10,8 @@ import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params
 import { FindByUrlHash_Dto } from '@shared/types/modules/bookmarks/find-by-url-hash.dto'
 import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params'
 
+declare const global: any
+
 describe('Bookmarks_RepositoryImpl', () => {
   let data_source_mock: jest.Mocked<Bookmarks_DataSource>
   let sut: Bookmarks_RepositoryImpl

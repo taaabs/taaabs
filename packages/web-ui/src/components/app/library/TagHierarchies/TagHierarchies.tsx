@@ -488,6 +488,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     )
   },
   (o, n) =>
+    o.show_skeleton == n.show_skeleton &&
     o.library_updated_at_timestamp == n.library_updated_at_timestamp &&
     o.is_all_bookmarks_selected == n.is_all_bookmarks_selected &&
     o.is_updating == n.is_updating &&

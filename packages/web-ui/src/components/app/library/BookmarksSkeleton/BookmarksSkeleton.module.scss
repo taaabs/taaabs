@@ -1,0 +1,23 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  width: 100%;
+  background: var(--background);
+  @include to992 {
+    gap: 8px;
+  }
+  @include at992 {
+    gap: 16px;
+  }
+  > span > span {
+    height: 160px;
+    @include at992 {
+      height: 145px;
+      border-radius: var(--border-radius-12px);
+    }
+  }
+}

@@ -16,6 +16,8 @@ import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
 import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
 import { PinnedBookmarks as UiAppLibrary_PinnedBookmarks } from '@web-ui/components/app/library/PinnedBookmarks'
 import { LibraryContext } from './Library'
+import { PopstateCountContext } from '@/providers/PopstateCountProvider'
+import { useSearchParams } from 'next/navigation'
 
 namespace _Pinned {
   export type Props = {
@@ -32,26 +34,18 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
     date_view_options_hook,
     filter_view_options_hook,
     pinned_hook,
+    bookmarks_hook,
 
     username,
     is_archived_filter,
-    library_updated_at_timestamp,
-    pinned_updated_at,
-    popstate_count,
-  } = useContext(LibraryContext)!
+  } = useContext(LibraryContext)
   const dispatch = use_library_dispatch()
 
   return (
     <UiAppLibrary_PinnedBookmarks
-      key={`${pinned_updated_at}-${popstate_count}`}
-      library_updated_at_timestamp={library_updated_at_timestamp}
+      key={`${pinned_hook.fetched_at_timestamp}`}
+      rerender_trigger={`${bookmarks_hook.first_bookmarks_fetched_at_timestamp}`}
       favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
-      translations={{
-        nothing_pinned: props.dictionary.app.library.nothing_pinned,
-        open_original_url:
-          props.dictionary.app.library.bookmark.open_original_url,
-        open_snapshot: props.dictionary.app.library.bookmark.open_snapshot,
-      }}
       items={
         pinned_hook.items?.map((item) => ({
           bookmark_id: item.bookmark_id,
@@ -217,6 +211,12 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
       selected_archived={is_archived_filter}
       current_gte={date_view_options_hook.current_gte}
       current_lte={date_view_options_hook.current_lte}
+      translations={{
+        nothing_pinned: props.dictionary.app.library.nothing_pinned,
+        open_original_url:
+          props.dictionary.app.library.bookmark.open_original_url,
+        open_snapshot: props.dictionary.app.library.bookmark.open_snapshot,
+      }}
     />
   )
 }

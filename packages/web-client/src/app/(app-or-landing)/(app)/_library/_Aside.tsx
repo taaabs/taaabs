@@ -13,6 +13,7 @@ import { use_is_hydrated } from '@shared/hooks'
 import { LocalDb } from '@/app/local-db-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { LibraryContext } from './Library'
+import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 
 const CustomRange = dynamic(() => import('./_aside/dynamic-custom-range'), {
   ssr: false,
@@ -38,12 +39,12 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
     username,
     is_fetching_first_bookmarks,
     library_updated_at_timestamp,
-    popstate_count,
     is_not_interactive,
-    show_skeletons,
     on_tag_rename_click,
-  } = useContext(LibraryContext)!
+    is_initialized,
+  } = useContext(LibraryContext)
   const is_hydrated = use_is_hydrated()
+  const { popstate_count } = useContext(PopstateCountContext)
 
   return (
     <UiAppTemplate_LibraryAside
@@ -194,7 +195,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
         )
       }
       slot_custom_range={
-        !show_skeletons ? (
+        is_initialized ? (
           <div
             style={{
               pointerEvents: is_fetching_first_bookmarks ? 'none' : undefined,
@@ -244,7 +245,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
             pointerEvents: is_not_interactive ? 'none' : undefined,
           }}
         >
-          {!show_skeletons ? (
+          {is_initialized ? (
             <>
               <UiAppAtom_SelectedTags
                 key={`selected-tags-${library_updated_at_timestamp}-${popstate_count}`}

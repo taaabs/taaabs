@@ -104,7 +104,7 @@ export type Dictionary = {
     menu_items: {
       home: string
       library: string
-      notifications: string
+      chat: string
       activity: string
     }
     library: {

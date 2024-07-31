@@ -7,6 +7,7 @@ import { ReactNode } from 'react'
 import { ModalProvider } from '@/providers/ModalProvider'
 import { AuthProvider } from './auth-provider'
 import { LocalDbProvider } from './local-db-provider'
+import { PopstateCountProvider } from '../providers/PopstateCountProvider'
 
 import 'react-nestable/dist/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -63,11 +64,13 @@ const Layout: React.FC<{ children: ReactNode }> = (props) => {
           icon={false}
           draggablePercent={20}
         />
-        <AuthProvider>
-          <LocalDbProvider>
-            <ModalProvider>{props.children}</ModalProvider>
-          </LocalDbProvider>
-        </AuthProvider>
+        <PopstateCountProvider>
+          <AuthProvider>
+            <LocalDbProvider>
+              <ModalProvider>{props.children}</ModalProvider>
+            </LocalDbProvider>
+          </AuthProvider>
+        </PopstateCountProvider>
         <script
           /** https://github.com/reactjs/react.dev/blob/main/src/pages/_document.tsx */
           dangerouslySetInnerHTML={{

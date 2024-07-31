@@ -13,6 +13,7 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "types": [
+      "node",
       "jest"
     ],
     // "paths": {

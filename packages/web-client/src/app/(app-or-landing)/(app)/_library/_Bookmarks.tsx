@@ -28,6 +28,7 @@ import { ModalContext } from '@/providers/ModalProvider'
 import { LocalDb } from '@/app/local-db-provider'
 import { _Bookmark } from './_bookmarks/_Bookmark'
 import { edit_tags_modal_setter } from '@/modals/edit-tags/edit-tags-modal-setter'
+import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 
 namespace _Bookmarks {
   export type Props = {
@@ -39,6 +40,7 @@ namespace _Bookmarks {
 export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
   const auth_context = useContext(AuthContext)
   const modal_context = useContext(ModalContext)!
+  const { popstate_count } = useContext(PopstateCountContext)
   const {
     bookmarks_hook,
     counts_hook,
@@ -52,11 +54,10 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
 
     username,
     library_updated_at_timestamp,
-    popstate_count,
     is_fetching_first_bookmarks,
     is_archived_filter,
     on_tag_rename_click,
-  } = useContext(LibraryContext)!
+  } = useContext(LibraryContext)
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
 
@@ -297,14 +298,14 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
         if (username) {
           links_data = await repository.get_links_data_public({
             bookmark_id: bookmark.id,
-            bookmark_updated_at: bookmark.updated_at,
+            bookmark_updated_at: new Date(bookmark.updated_at),
             username,
           })
         } else {
           links_data = await repository.get_links_data_authorized(
             {
               bookmark_id: bookmark.id,
-              bookmark_updated_at: bookmark.updated_at,
+              bookmark_updated_at: new Date(bookmark.updated_at),
             },
             auth_context.auth_data!.encryption_key,
           )

@@ -27,7 +27,7 @@ export namespace PinnedBookmarks {
   }
   export type Props = {
     items: Item[]
-    library_updated_at_timestamp?: number
+    rerender_trigger?: string
     on_change: (items: Item[]) => void
     favicon_host: string
     on_reading_mode_click: (item: Item) => void
@@ -200,9 +200,8 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
         ) : (
           <div className={styles.items}>{items_dom}</div>
         )}
-        {}
       </>
     )
   },
-  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
+  (o, n) => o.rerender_trigger == n.rerender_trigger,
 )
