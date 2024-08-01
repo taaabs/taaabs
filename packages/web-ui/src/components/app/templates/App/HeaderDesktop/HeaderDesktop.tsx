@@ -1,5 +1,5 @@
 import { Wrapper } from '@web-ui/components/common/templates/wrapper'
-import styles from './header-desktop.module.scss'
+import styles from './HeaderDesktop.module.scss'
 
 export namespace HeaderDesktop {
   export type Props = {

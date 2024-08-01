@@ -1,17 +1,17 @@
 'use client'
 
 import { Landing as UiLandingTemplate_Landing } from '@web-ui/components/landing/templates/landing'
-import { DesktopNavigation } from './_components/desktop-navigation'
+import { DesktopNavigation } from './_components/DesktopNavigation'
 import { DesktopUserForHeader as UiLandingMolecule_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
 import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 import { usePathname } from 'next/navigation'
 import { ReactNode } from 'react'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { PublicUserAvatarProvider } from '@/providers/PublicUserAvatarProvider'
-import { HeaderDesktop } from './_components/header-desktop'
-import { HeaderMobile } from './_components/header-mobile'
-import { BottomNavigationBar } from './_components/bottom-navigation-bar'
-import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/app'
+import { HeaderDesktop } from './_components/HeaderDesktop'
+import { HeaderMobile } from './_components/HeaderMobile'
+import { BottomNavigationBar } from './_components/BottomNavigationBar'
+import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/App'
 import { ModalProvider } from '@/providers/ModalProvider'
 
 const landing_pathnames = ['/about', '/pricing', '/help', '/updates']

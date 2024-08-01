@@ -2,7 +2,6 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import styles from './_RenderMarkdown.module.scss'
 import { Icon as UiCommonParticle_Icon } from '@web-ui/components/common/particles/icon'
-import { toast } from 'react-toastify'
 import hljs from 'highlight.js'
 
 import 'highlight.js/styles/atom-one-dark.css'
@@ -20,8 +19,7 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
       children={props.content}
       remarkPlugins={[remarkGfm]}
       components={{
-        code(props) {
-          const { children, className } = props
+        code({ children, className }) {
           if (!children?.toString()?.includes('\n')) {
             return <code>{children}</code>
           } else {
@@ -59,7 +57,7 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
                       navigator.clipboard
                         .writeText(children_parsed)
                         .then(() => {
-                          toast.success('Copied to clipboard')
+                          alert('Copied to clipboard')
                         })
                     }}
                   >

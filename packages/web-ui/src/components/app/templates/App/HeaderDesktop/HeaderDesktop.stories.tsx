@@ -1,5 +1,5 @@
 import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
-import { HeaderDesktop } from './header-desktop'
+import { HeaderDesktop } from './HeaderDesktop'
 
 export default {
   component: HeaderDesktop,

@@ -359,7 +359,11 @@ mark {
 .simplebar-track.simplebar-vertical {
   width: 9px;
 }
-.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+.simplebar-track.simplebar-horizontal {
+  height: 9px;
+}
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before,
+.simplebar-track.simplebar-horizontal .simplebar-scrollbar:before {
   @include dark {
     background-color: var(--dark600);
   }

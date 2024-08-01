@@ -25,7 +25,6 @@ describe('HtmlParser', () => {
         ],
       })
     })
-
     it('should transform HTML to expected output', () => {
       const html = fs.readFileSync(
         require.resolve('./examples/article-input.html'),

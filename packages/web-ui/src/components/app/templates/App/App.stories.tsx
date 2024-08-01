@@ -1,5 +1,5 @@
 import { lorem_ipsum } from '@web-ui/helpers'
-import { App } from './app'
+import { App } from './App'
 
 export default {
   component: App,

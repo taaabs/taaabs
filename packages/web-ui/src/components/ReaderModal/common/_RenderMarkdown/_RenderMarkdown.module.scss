@@ -16,9 +16,13 @@
   code {
     font-size: var(--font-size-14px);
   }
-  p,
-  ol {
+  > p,
+  > ol {
     margin: 0.7em 0;
+  }
+  ol,
+  ul {
+    padding-inline-start: 1.7em;
   }
   code:not([class]) {
     font-family: 'Fira Code', 'Fira Mono', Menlo, Consolas, 'DejaVu Sans Mono',
@@ -94,27 +98,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--blue50);
-    @include dark {
-      background-color: var(--dark200);
-    }
-    border-top-left-radius: var(--border-radius-10px);
-    border-top-right-radius: var(--border-radius-10px);
-    padding: 8px 10px 8px 14px;
+    border-top: var(--border-secondary);
+    padding: var(--padding-8px) 0;
     &__language {
       font-family: var(--font-family-inter);
       > span {
-        color: var(--accent-color);
-        @include dark {
-          color: var(--text-color-normal);
-        }
         font-weight: var(--font-weight-inter-medium);
         font-size: var(--font-size-14px);
         > sup {
-          color: var(--blue400);
-          @include dark {
-            color: var(--text-color-variant);
-          }
+          color: var(--text-color-dimmed);
           font-weight: var(--font-weight-inter-regular);
         }
       }
@@ -127,27 +119,22 @@
       height: 28px;
       border-radius: 50%;
       @include transition-150ms(background-color);
-      background-color: var(--blue100);
-      @include dark {
-        background-color: var(--dark300);
-      }
+      border: var(--border-secondary);
       @include hover {
-        background-color: var(--blue200);
-        @include dark {
-          background-color: var(--dark400);
-        }
+        border: var(--border-primary);
       }
       > svg {
-        fill: var(--accent-color);
+        fill: var(--black);
         @include transition-150ms(fill);
-        width: 12px;
+        width: 11px;
       }
     }
   }
   &__highlight {
     padding: var(--padding-12px);
-    font-size: var(--font-size-14px);
+    font-size: var(--font-size-13px);
     color: #d1d5db;
-    background-color: #111827;
+    overflow: auto;
+    background-color: var(--dark50);
   }
 }

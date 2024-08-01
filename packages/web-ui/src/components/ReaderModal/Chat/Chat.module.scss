@@ -9,7 +9,7 @@
   @include at992 {
     font-size: var(--font-size-16px);
     gap: var(--padding-40px);
-    padding: var(--padding-40px);
+    padding: var(--padding-60px);
   }
 }
 .user {
@@ -20,7 +20,7 @@
   @include dark {
     background-color: var(--dark200);
   }
-  padding: 8px 20px;
+  padding: var(--padding-14px) var(--padding-20px);
   align-self: flex-end;
   word-wrap: anywhere;
   border-radius: var(--border-radius-20px);
@@ -34,7 +34,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    transform: translateX(100%) scaleX(-1);
+    transform: translateX(calc(100% - 1px));
     fill: var(--neutral150);
     width: 12px;
     @include dark {
