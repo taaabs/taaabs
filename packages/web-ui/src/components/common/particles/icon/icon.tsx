@@ -2,7 +2,6 @@ import ActivityFilled from '../../../../assets/icons/activity-filled.svg'
 import Activity from '../../../../assets/icons/activity.svg'
 import Add from '../../../../assets/icons/add.svg'
 import Archive from '../../../../assets/icons/archive.svg'
-import Bolt from '../../../../assets/icons/bolt.svg'
 import BookmarkFilled from '../../../../assets/icons/bookmark-filled.svg'
 import Bookmark from '../../../../assets/icons/bookmark.svg'
 import ChatBubbleCorner from '../../../../assets/icons/chat-bubble-corner.svg'
@@ -15,10 +14,8 @@ import Cross from '../../../../assets/icons/cross.svg'
 import Delete from '../../../../assets/icons/delete.svg'
 import DensityDefault from '../../../../assets/icons/density-default.svg'
 import DensityCompact from '../../../../assets/icons/density-compact.svg'
-import Document from '../../../../assets/icons/document.svg'
 import Edit from '../../../../assets/icons/edit.svg'
 import Eye from '../../../../assets/icons/eye.svg'
-import Github from '../../../../assets/icons/github.svg'
 import Globe from '../../../../assets/icons/globe.svg'
 import Google from '../../../../assets/icons/google.svg'
 import GreaterThan from '../../../../assets/icons/greater-than.svg'
@@ -28,22 +25,15 @@ import Home from '../../../../assets/icons/home.svg'
 import HuggingFaceHands from '../../../../assets/icons/hugging-face-hands.svg'
 import HuggingFaceNoHands from '../../../../assets/icons/hugging-face-no-hands.svg'
 import HuggingFace from '../../../../assets/icons/hugging-face.svg'
-import Info from '../../../../assets/icons/info.svg'
 import LessThan from '../../../../assets/icons/less-than.svg'
 import Link from '../../../../assets/icons/link.svg'
-import LogOut from '../../../../assets/icons/log-out.svg'
 import LogoDark from '../../../../assets/icons/logo-dark.svg'
 import Logo from '../../../../assets/icons/logo.svg'
-import OverviewFilled from '../../../../assets/icons/overview-filled.svg'
-import Overview from '../../../../assets/icons/overview.svg'
 import Pin from '../../../../assets/icons/pin.svg'
-import PublicProfile from '../../../../assets/icons/public-profile.svg'
-import Recent from '../../../../assets/icons/recent.svg'
 import Resize from '../../../../assets/icons/resize.svg'
 import Search from '../../../../assets/icons/search.svg'
 import SelectedBold from '../../../../assets/icons/selected-bold.svg'
 import Selected from '../../../../assets/icons/selected.svg'
-import Settings from '../../../../assets/icons/settings.svg'
 import Sidebar from '../../../../assets/icons/sidebar.svg'
 import StarFilled from '../../../../assets/icons/star-filled.svg'
 import Star from '../../../../assets/icons/star.svg'
@@ -67,7 +57,6 @@ export namespace Icon {
     | 'ACTIVITY'
     | 'ADD'
     | 'ARCHIVE'
-    | 'BOLT'
     | 'BOOKMARK_FILLED'
     | 'BOOKMARK'
     | 'CHAT_BUBBLE_CORNER'
@@ -79,10 +68,8 @@ export namespace Icon {
     | 'DELETE'
     | 'DENSITY_DEFAULT'
     | 'DENSITY_COMPACT'
-    | 'DOCUMENT'
     | 'EDIT'
     | 'EYE'
-    | 'GITHUB'
     | 'GLOBE'
     | 'GOOGLE'
     | 'GREATER_THAN'
@@ -92,23 +79,16 @@ export namespace Icon {
     | 'HUGGING_FACE_HANDS'
     | 'HUGGING_FACE_NO_HANDS'
     | 'HUGGING_FACE'
-    | 'INFO'
     | 'LESS_THAN'
     | 'LINK'
-    | 'LOG_OUT'
     | 'LOGO_DARK'
     | 'LOGO'
-    | 'OVERVIEW_FILLED'
-    | 'OVERVIEW'
     | 'PIN'
-    | 'PUBLIC_PROFILE'
-    | 'RECENT'
     | 'CROSS'
     | 'RESIZE'
     | 'SEARCH'
     | 'SELECTED_BOLD'
     | 'SELECTED'
-    | 'SETTINGS'
     | 'SIDEBAR'
     | 'STAR_FILLED'
     | 'STAR'
@@ -147,9 +127,6 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'ARCHIVE':
       icon = <Archive />
       break
-    case 'BOLT':
-      icon = <Bolt />
-      break
     case 'BOOKMARK_FILLED':
       icon = <BookmarkFilled />
       break
@@ -183,17 +160,11 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'DENSITY_COMPACT':
       icon = <DensityCompact />
       break
-    case 'DOCUMENT':
-      icon = <Document />
-      break
     case 'EDIT':
       icon = <Edit />
       break
     case 'EYE':
       icon = <Eye />
-      break
-    case 'GITHUB':
-      icon = <Github />
       break
     case 'GLOBE':
       icon = <Globe />
@@ -222,17 +193,11 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'HUGGING_FACE':
       icon = <HuggingFace />
       break
-    case 'INFO':
-      icon = <Info />
-      break
     case 'LESS_THAN':
       icon = <LessThan />
       break
     case 'LINK':
       icon = <Link />
-      break
-    case 'LOG_OUT':
-      icon = <LogOut />
       break
     case 'LOGO_DARK':
       icon = <LogoDark />
@@ -258,20 +223,8 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'NOTIFICATIONS':
       icon = <Notifications />
       break
-    case 'OVERVIEW':
-      icon = <Overview />
-      break
-    case 'OVERVIEW_FILLED':
-      icon = <OverviewFilled />
-      break
     case 'PIN':
       icon = <Pin />
-      break
-    case 'PUBLIC_PROFILE':
-      icon = <PublicProfile />
-      break
-    case 'RECENT':
-      icon = <Recent />
       break
     case 'CROSS':
       icon = <Cross />
@@ -287,9 +240,6 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'SELECTED':
       icon = <Selected />
-      break
-    case 'SETTINGS':
-      icon = <Settings />
       break
     case 'SIDEBAR':
       icon = <Sidebar />
