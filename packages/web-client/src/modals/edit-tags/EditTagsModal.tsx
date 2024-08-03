@@ -33,16 +33,13 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
   useEffect(() => {
     if (my_tags !== undefined || is_fetching_my_tags) return
 
-    // Timeout prevents modal animation glitch.
-    setTimeout(() => {
-      set_is_fetching_my_tags(true)
-      const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
-      const repository = new Tags_RepositoryImpl(data_source)
-      repository.tags(auth_context.auth_data!.encryption_key).then((result) => {
-        set_is_fetching_my_tags(false)
-        set_my_tags(result)
-      })
-    }, 150)
+    set_is_fetching_my_tags(true)
+    const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
+    const repository = new Tags_RepositoryImpl(data_source)
+    repository.tags(auth_context.auth_data!.encryption_key).then((result) => {
+      set_is_fetching_my_tags(false)
+      set_my_tags(result)
+    })
   }, [])
 
   const content = (
