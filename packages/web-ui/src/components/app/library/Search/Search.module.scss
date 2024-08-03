@@ -187,6 +187,9 @@
           background-color: var(--blue200);
           border-radius: var(--border-radius-3px);
           @include transition-150ms(background-color);
+          @include dark {
+            background-color: var(--blue600);
+          }
           &--no-results {
             background-color: var(--red200);
           }

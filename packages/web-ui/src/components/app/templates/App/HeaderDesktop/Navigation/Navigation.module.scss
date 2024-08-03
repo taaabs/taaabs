@@ -1,0 +1,8 @@
+// @type
+@use '../../../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  height: 100%;
+  gap: var(--padding-8px);
+}

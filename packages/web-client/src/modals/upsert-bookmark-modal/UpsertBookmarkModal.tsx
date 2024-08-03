@@ -62,7 +62,7 @@ type ClipboardData = {
 export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   props,
 ) => {
-  const modal_context = useContext(ModalContext)!
+  const modal_context = useContext(ModalContext)
   const {
     control,
     handleSubmit,

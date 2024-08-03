@@ -72,7 +72,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
   const { username }: { username?: string } = useParams()
-  const modal_context = useContext(ModalContext)!
+  const modal_context = useContext(ModalContext)
   const search_hook = use_search(props.local_db)
   const bookmarks_hook = use_bookmarks()
   const counts_hook = use_counts()

@@ -23,7 +23,7 @@ namespace EditTagsModal {
 }
 
 export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
-  const modal_context = useContext(ModalContext)!
+  const modal_context = useContext(ModalContext)
   const auth_context = useContext(AuthContext)
   const [is_fetching_my_tags, set_is_fetching_my_tags] = useState<boolean>()
   const [my_tags, set_my_tags] = useState<Tags_Ro>()

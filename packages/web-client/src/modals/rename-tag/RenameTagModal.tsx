@@ -26,7 +26,7 @@ type FormValues = {
 }
 
 export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
-  const modal_context = useContext(ModalContext)!
+  const modal_context = useContext(ModalContext)
   const auth_context = useContext(AuthContext)
   const {
     control,

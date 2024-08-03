@@ -39,7 +39,7 @@ namespace _Bookmarks {
 
 export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
   const auth_context = useContext(AuthContext)
-  const modal_context = useContext(ModalContext)!
+  const modal_context = useContext(ModalContext)
   const { popstate_count } = useContext(PopstateCountContext)
   const {
     bookmarks_hook,

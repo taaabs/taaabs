@@ -19,11 +19,11 @@ export namespace ReaderData {
     type: ContentType.CHAT
     conversation: Array<
       | {
-          author: 'user'
-          text: string
+          role: 'user'
+          content: string
         }
       | {
-          author: 'assistant'
+          role: 'assistant'
           content: string
         }
     >

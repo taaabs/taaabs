@@ -16,7 +16,7 @@ namespace _Search {
 }
 
 export const _Search: React.FC<_Search.Props> = (props) => {
-  const modal_context = useContext(ModalContext)!
+  const modal_context = useContext(ModalContext)
   const {
     bookmarks_hook,
     counts_hook,

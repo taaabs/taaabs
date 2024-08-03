@@ -1,17 +1,19 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { PublicUserAvatarContext } from '../../../providers/PublicUserAvatarProvider'
-import { UserForHeader as UiAppMolecule_UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
+import { UsernameWithBackArrow as UiAppMolecule_UserForHeader } from '@web-ui/components/app/templates/App/HeaderDesktop/UsernameWithBackArrow'
 import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
-import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
+import { HeaderMobile as Ui_app_templates_HeaderMobile } from '@web-ui/components/app/templates/App/HeaderMobile'
 
 export const HeaderMobile: React.FC = () => {
   const params = useParams()
+  const search_params = useSearchParams()
   const public_user_avatar = useContext(PublicUserAvatarContext)
   const [is_hydrated, set_is_hydrated] = useState(false)
+
+  const back = search_params.get('back')
 
   let logo_slot: JSX.Element
   // TODO: backHref should be smarter :^)
@@ -20,7 +22,7 @@ export const HeaderMobile: React.FC = () => {
       <UiAppMolecule_UserForHeader
         user={{
           username: params.username as string,
-          back_href: '/',
+          back_href: back || '/',
           avatar: public_user_avatar?.avatar
             ? {
                 url: public_user_avatar.avatar.url,
@@ -40,9 +42,9 @@ export const HeaderMobile: React.FC = () => {
   }, [])
 
   return (
-    <UiAppTemplate_AppHeaderMobile
+    <Ui_app_templates_HeaderMobile
       slot_logo={logo_slot}
-      slot_navigation={<UiAppMolecule_NavigationForHeader navigation={[]} />}
+      slot_navigation={<>nav</>}
     />
   )
 }

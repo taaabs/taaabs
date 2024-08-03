@@ -6,7 +6,6 @@
   flex-direction: column;
   z-index: 1;
   width: 100%;
-  background: var(--background);
   @include to992 {
     gap: 8px;
   }

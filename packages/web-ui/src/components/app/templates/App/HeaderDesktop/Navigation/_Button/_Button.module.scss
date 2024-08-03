@@ -1,0 +1,49 @@
+// @type
+@use '../../../../../../../styles/foundation' as *;
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: var(--header-desktop-height);
+  position: relative;
+  @include transition-150ms(background-color);
+  @include hover {
+    background-color: rgba(15, 20, 25, 0.05);
+    @include dark {
+      background-color: rgba(156, 163, 175, 0.07);
+    }
+  }
+  &::after {
+    position: absolute;
+    content: '';
+    width: 18px;
+    bottom: 0;
+    left: 0;
+    margin-left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    @include to992 {
+      $underline-height: 2.7px;
+      height: $underline-height;
+      border-top-right-radius: $underline-height;
+      border-top-left-radius: $underline-height;
+    }
+    @include at992 {
+      $underline-height: 3px;
+      height: $underline-height;
+      border-top-right-radius: $underline-height;
+      border-top-left-radius: $underline-height;
+    }
+  }
+  > svg {
+    height: 22px;
+    fill: var(--black);
+  }
+  &--active {
+    &::after {
+      transform: translateX(-50%) translateY(0);
+      background: var(--accent-color);
+    }
+  }
+}

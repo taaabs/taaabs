@@ -28,7 +28,7 @@ namespace _Pinned {
 
 export const _Pinned: React.FC<_Pinned.Props> = (props) => {
   const auth_context = useContext(AuthContext)
-  const modal_context = useContext(ModalContext)!
+  const modal_context = useContext(ModalContext)
   const {
     tag_view_options_hook,
     date_view_options_hook,

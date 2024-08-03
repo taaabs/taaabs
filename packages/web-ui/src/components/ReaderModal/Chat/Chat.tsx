@@ -13,14 +13,14 @@ export const Chat: React.FC<Chat.Props> = (props) => {
   return (
     <div className={styles.container}>
       {props.chat.conversation.map((message, i) => {
-        if (message.author == 'user') {
+        if (message.role == 'user') {
           return (
             <div className={styles.user} key={i}>
-              <span>{message.text}</span>
+              <span>{message.content}</span>
               <Icon variant="CHAT_BUBBLE_CORNER" />
             </div>
           )
-        } else if (message.author == 'assistant') {
+        } else if (message.role == 'assistant') {
           return (
             <div className={styles.assistant} key={i}>
               <_RenderMarkdown content={message.content} />

@@ -1,9 +1,9 @@
 import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/library/bookmark'
-import { BottomNavigationBar as UiAppMolecule_BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
+import { BottomNavigationBar as UiAppMolecule_BottomNavigationBar } from '@web-ui/components/app/templates/App/bottom-navigation-bar'
 import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
 import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/App'
 import { HeaderDesktop as UiAppTemplate_App_HeaderDesktop } from '@web-ui/components/app/templates/App/HeaderDesktop'
-import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/app-header-mobile'
+import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/App/app-header-mobile'
 import { SwipableColumns as UiAppTemplate_Library } from '@web-ui/components/app/templates/swipable-columns'
 import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
 
@@ -16,7 +16,7 @@ export const Primary = () => {
     <UiAppTemplate_App
       slot_header_desktop={
         <UiAppTemplate_App_HeaderDesktop
-          slot_logo={<UiCommonAtom_LogoForHeader href="" />}
+          slot_left={<UiCommonAtom_LogoForHeader href="" />}
           slot_navigation={
             <UiAppMolecule_NavigationForHeader
               navigation={[
@@ -25,7 +25,7 @@ export const Primary = () => {
               ]}
             />
           }
-          slot_right_side={<></>}
+          slot_right={<></>}
           translations={{ powered_by: 'Powered by' }}
         />
       }
