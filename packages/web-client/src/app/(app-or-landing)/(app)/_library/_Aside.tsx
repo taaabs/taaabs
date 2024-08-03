@@ -49,7 +49,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
   return (
     <UiAppTemplate_LibraryAside
       support_label={props.dictionary.app.library.send_feedback}
-      support_href="https://github.com/taaabs/community/discussions"
+      support_href="https://github.com/taaabs/taaabs/discussions"
       slot_segmented_buttons={
         is_hydrated ? (
           <>

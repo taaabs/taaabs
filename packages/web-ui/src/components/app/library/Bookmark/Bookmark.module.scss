@@ -15,6 +15,9 @@
     }
   }
   &--compact-open {
-    margin: var(--padding-16px) 0;
+    margin: var(--padding-8px) 0;
+    @include at992 {
+      margin: var(--padding-16px) 0;
+    }
   }
 }

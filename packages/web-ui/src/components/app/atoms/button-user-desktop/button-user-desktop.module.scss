@@ -7,15 +7,13 @@
   justify-content: center;
   height: var(--button-dimension-40px);
   min-width: var(--button-dimension-40px);
-  border: var(--border-secondary);
   border-radius: 20px;
-  @include transition-150ms(border-color);
-  background-color: var(--white);
-  @include dark {
-    background-color: var(--dark100);
-  }
+  @include transition-150ms(background-color);
   @include hover {
-    border-color: var(--border-color-hover);
+    background-color: rgba(15, 20, 25, 0.05);
+    @include dark {
+      background-color: rgba(156, 163, 175, 0.07);
+    }
   }
   > span {
     padding-left: 14px;

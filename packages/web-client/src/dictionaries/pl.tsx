@@ -150,7 +150,6 @@ export const dictionary: Dictionary = {
     },
   },
   app: {
-    powered_by: 'Bazujemy na',
     header_desktop: {
       user_dropdown: {
         my_public_profile: 'Mój profil',

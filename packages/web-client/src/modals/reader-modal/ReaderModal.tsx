@@ -15,7 +15,7 @@ export namespace ReaderModal {
 }
 
 export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
-  const modal_context = useContext(ModalContext)!
+  const modal_context = useContext(ModalContext)
 
   let content: ReactNode
 

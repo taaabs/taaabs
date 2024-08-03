@@ -645,7 +645,12 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               }
             }}
           >
-            <div className={styles.bookmark__card__cover}>
+            <div
+              className={cn(styles.bookmark__card__cover, {
+                [styles['bookmark__card__cover--no-image']]:
+                  !props.cover && !props.cover_hash,
+              })}
+            >
               <div className={styles.bookmark__card__cover__image}>
                 {props.blurhash && <BlurhashCanvas hash={props.blurhash} />}
                 {props.cover ? (
@@ -732,12 +737,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 </div>
               )}
               {props.title ? (
-                <div
-                  className={cn(styles.bookmark__card__title__text, {
-                    [styles['bookmark__card__title__text--unsorted']]:
-                      props.is_unsorted,
-                  })}
-                >
+                <div className={styles.bookmark__card__title__text}>
                   {props.highlights
                     ? highlight_text(props.title, props.highlights)
                     : props.title}

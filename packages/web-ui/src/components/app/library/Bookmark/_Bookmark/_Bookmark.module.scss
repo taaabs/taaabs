@@ -55,8 +55,16 @@
     }
     &__cover {
       grid-area: cover;
-      padding: var(--padding-10px);
       position: relative;
+      padding: var(--padding-10px) var(--padding-10px) var(--padding-10px) 0;
+      @include at992 {
+        padding: var(--padding-10px);
+      }
+      &--no-image {
+        @include to992 {
+          display: none;
+        }
+      }
       &__image {
         display: flex;
         align-items: center;
@@ -125,10 +133,7 @@
     &__title {
       grid-area: title;
       display: inline;
-      @include to992 {
-        padding-left: var(--padding-14px);
-        padding-top: 11px;
-      }
+      padding: 11px 10px 0 var(--padding-14px);
       @include at992 {
         padding: 10px 14px 0 0;
       }
@@ -189,10 +194,6 @@
         font-weight: var(--font-weight-inter-bold);
         @include at992 {
           font-size: var(--font-size-1-8rem);
-          font-weight: var(--font-weight-inter-semi-bold);
-        }
-        &--unsorted {
-          font-weight: var(--font-weight-inter-bold);
         }
         &--untitled {
           font-style: italic;

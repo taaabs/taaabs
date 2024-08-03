@@ -7,18 +7,16 @@
   justify-content: center;
   flex-shrink: 0;
   border-radius: 50%;
-  border: var(--border-secondary);
   overflow: hidden;
   position: relative;
   @include transition-150ms(border-color);
   width: var(--button-dimension-40px);
   height: var(--button-dimension-40px);
-  background: var(--white);
-  @include dark {
-    background: var(--dark100);
-  }
   @include hover {
-    border-color: var(--border-color-hover);
+    background-color: rgba(15, 20, 25, 0.05);
+    @include dark {
+      background-color: rgba(156, 163, 175, 0.07);
+    }
   }
   svg {
     width: var(--icon-dimension-20px);

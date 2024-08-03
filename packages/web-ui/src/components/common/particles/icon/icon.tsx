@@ -1,3 +1,4 @@
+import ActivityFilled from '../../../../assets/icons/activity-filled.svg'
 import Activity from '../../../../assets/icons/activity.svg'
 import Add from '../../../../assets/icons/add.svg'
 import Archive from '../../../../assets/icons/archive.svg'
@@ -62,6 +63,7 @@ import User from '../../../../assets/icons/user.svg'
 
 export namespace Icon {
   export type Variant =
+    | 'ACTIVITY_FILLED'
     | 'ACTIVITY'
     | 'ADD'
     | 'ARCHIVE'
@@ -133,6 +135,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
   let icon: JSX.Element
 
   switch (variant) {
+    case 'ACTIVITY_FILLED':
+      icon = <ActivityFilled />
+      break
     case 'ACTIVITY':
       icon = <Activity />
       break

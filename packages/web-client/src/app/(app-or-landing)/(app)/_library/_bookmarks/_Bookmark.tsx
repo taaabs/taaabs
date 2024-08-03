@@ -55,14 +55,14 @@ export const _Bookmark: React.FC<_Bookmark.Props> = (props) => {
         repository.get_links_data_authorized(
           {
             bookmark_id: props.bookmark_id,
-            bookmark_updated_at: props.updated_at,
+            bookmark_updated_at: new Date(props.updated_at),
           },
           auth_context.auth_data!.encryption_key,
         )
       } else {
         repository.get_links_data_public({
           bookmark_id: props.bookmark_id,
-          bookmark_updated_at: props.updated_at,
+          bookmark_updated_at: new Date(props.updated_at),
           username,
         })
       }

@@ -1,0 +1,21 @@
+// @type
+@use '../../../../../styles/foundation' as *;
+
+.container {
+  height: var(--bottom-navigation-bar-height);
+  border-top: var(--border-primary);
+  background-color: var(--white);
+  display: flex;
+  padding: 0 var(--padding-16px);
+}
+.item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: var(--bottom-navigation-bar-height);
+  > svg {
+    height: var(--icon-dimension-22px);
+  }
+}

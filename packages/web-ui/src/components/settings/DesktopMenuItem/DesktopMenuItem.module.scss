@@ -12,12 +12,12 @@
   &::before {
     content: '';
     position: absolute;
-    width: 100%;
+    width: 100vw;
     height: 100%;
     right: 0;
-    background: linear-gradient(to right, transparent, var(--neutral100));
+    background-color: var(--neutral100);
     @include dark {
-      background: linear-gradient(to right, transparent, var(--dark200));
+      background-color: var(--dark200);
     }
     opacity: 0;
     @include transition-150ms(opacity);

@@ -1,0 +1,16 @@
+// @type
+@use '../../../../../../../styles/foundation' as *;
+
+.container {
+  width: 320px;
+  border-radius: var(--border-radius-20px);
+  background-color: var(--white);
+  display: flex;
+  flex-direction: column;
+  border: var(--border-primary);
+  box-shadow: var(--box-shadow-long);
+  padding: var(--padding-12px) 0;
+  @include dark {
+    background-color: var(--header-background);
+  }
+}

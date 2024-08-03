@@ -17,7 +17,7 @@ namespace DeleteAccountModal {
 export const DeleteAccountModal: React.FC<DeleteAccountModal.Props> = (
   props,
 ) => {
-  const modal_context = useContext(ModalContext)!
+  const modal_context = useContext(ModalContext)
   const [is_deleting, set_is_deleting] = useState<boolean>()
 
   const content = (

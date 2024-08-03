@@ -65,13 +65,13 @@ export namespace HtmlParser {
     const messages: ReaderData.Chat['conversation'] = []
     message_divs.forEach((el) => {
       if (el.matches(params.user_selector)) {
-        messages.push({ author: 'user', text: el.textContent?.trim() || '' })
+        messages.push({ role: 'user', content: el.textContent?.trim() || '' })
       } else if (el.matches(params.assistant_selector)) {
         const parser = new DOMParser()
         const doc = parser.parseFromString(el.innerHTML, 'text/html')
         const article = new Readability(doc, { keepClasses: true }).parse()!
         messages.push({
-          author: 'assistant',
+          role: 'assistant',
           content: params.turndown_service.turndown(article.content),
         })
       }

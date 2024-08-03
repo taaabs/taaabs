@@ -10,16 +10,15 @@ import { PublicUserAvatarContext } from '../../../providers/PublicUserAvatarProv
 import { useContext } from 'react'
 import { ModalContext } from '../../../providers/ModalProvider'
 import { use_is_hydrated } from '@shared/hooks'
-import { UserForHeader as UiAppMolecule_UserForHeader } from '@web-ui/components/app/molecules/user-for-header'
-import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
-import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { HeaderDesktop as UiAppTemplate_App_HeaderDesktop } from '@web-ui/components/app/templates/App/HeaderDesktop'
-import { AuthorizedUser as UiAppTemplate_App_HeaderDesktop_AuthorizedUser } from '@web-ui/components/app/templates/App/HeaderDesktop/authorized-user'
-import { UserDropdown as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown } from '@web-ui/components/app/templates/App/HeaderDesktop/authorized-user/user-dropdown'
-import { StandardItem as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem } from '@web-ui/components/app/templates/App/HeaderDesktop/authorized-user/user-dropdown/standard-item'
-import { Separator as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator } from '@web-ui/components/app/templates/App/HeaderDesktop/authorized-user/user-dropdown/separator'
-import { Bookmarklet as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet } from '@web-ui/components/app/templates/App/HeaderDesktop/authorized-user/user-dropdown/bookmarklet'
-import { FooterLinks as UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/App/HeaderDesktop/authorized-user/user-dropdown/footer-links'
+import { UsernameWithBackArrow as Ui_app_templates_App_HeaderDesktop_UsernameWithBackArrow } from '@web-ui/components/app/templates/App/HeaderDesktop/UsernameWithBackArrow'
+import { LogoForHeader as Ui_common_atoms_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { HeaderDesktop as Ui_app_templates_App_HeaderDesktop } from '@web-ui/components/app/templates/App/HeaderDesktop'
+import { AuthorizedUser as Ui_app_templates_App_HeaderDesktop_AuthorizedUser } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser'
+import { UserDropdown as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown'
+import { StandardItem as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/StandardItem'
+import { Separator as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/Separator'
+import { Bookmarklet as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/Bookmarklet'
+import { FooterLinks as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/FooterLinks'
 import { UpsertBookmarkModal } from '@/modals/upsert-bookmark-modal/UpsertBookmarkModal'
 import { update_search_params } from '@/utils/update-query-params'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
@@ -31,6 +30,7 @@ import { browser_storage } from '@/constants/browser-storage'
 import { AuthContext } from '../../auth-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { BookmarkUrlHashData } from '@/utils/bookmark-url-hash-data'
+import { Navigation as Ui_app_templates_App_HeaderDesktop_Navigation } from '@web-ui/components/app/templates/App/HeaderDesktop/Navigation'
 
 export const HeaderDesktop: React.FC<{
   dictionary: Dictionary
@@ -42,79 +42,96 @@ export const HeaderDesktop: React.FC<{
   const pathname = usePathname()
   const router = useRouter()
   const public_user_avatar = useContext(PublicUserAvatarContext)
-  const modal_context = useContext(ModalContext)!
+  const modal_context = useContext(ModalContext)
   const is_hydrated = use_is_hydrated()
 
-  let logo: JSX.Element
-  // TODO: backHref should be smarter :^)
-  if (params.username) {
-    logo = (
-      <UiAppMolecule_UserForHeader
-        user={{
-          username: params.username as string,
-          back_href: search_params.get('back') || '/',
-          avatar: public_user_avatar?.avatar
-            ? {
-                url: public_user_avatar.avatar.url,
-                blurhash: public_user_avatar.avatar.blurhash,
-              }
-            : undefined,
-        }}
-        is_loading_avatar={!is_hydrated}
-      />
-    )
-  } else {
-    logo = <UiCommonAtom_LogoForHeader href="/" />
+  const back = search_params.get('back')
+
+  const get_logo = () => {
+    if (params.username) {
+      return (
+        <Ui_app_templates_App_HeaderDesktop_UsernameWithBackArrow
+          user={{
+            username: params.username as string,
+            back_href: back || '/',
+            avatar: public_user_avatar?.avatar
+              ? {
+                  url: public_user_avatar.avatar.url,
+                  blurhash: public_user_avatar.avatar.blurhash,
+                }
+              : undefined,
+          }}
+          is_loading_avatar={!is_hydrated}
+        />
+      )
+    } else {
+      return <Ui_common_atoms_LogoForHeader href="/" />
+    }
   }
 
-  let navigation: UiAppMolecule_NavigationForHeader.Props['navigation']
-  if (!params.username) {
-    navigation = [
-      {
-        label: props.dictionary.app.menu_items.home,
-        href: '/',
-        is_active: pathname == '/',
-      },
-      {
-        label: props.dictionary.app.menu_items.library,
-        href: '/library',
-        is_active: pathname == '/library',
-        on_click: () => {
-          if (pathname == '/library') return
-          clear_library_session_storage({
-            search_params: search_params.toString(),
-          })
-          router.push('/library')
-        },
-      },
-      {
-        label: props.dictionary.app.menu_items.chat,
+  const get_navigation = () => {
+    let items: Ui_app_templates_App_HeaderDesktop_Navigation.Item[]
+    if (!params.username) {
+      const chat: Ui_app_templates_App_HeaderDesktop_Navigation.Item = {
+        title: props.dictionary.app.menu_items.chat,
+        icon: 'CHAT',
+        filled_icon: 'CHAT_FILLED',
         href: '/chat',
         is_active: pathname == '/chat',
-      },
-    ]
-  } else {
-    const back = search_params.get('back')
-    navigation = [
-      {
-        label: props.dictionary.app.menu_items.library,
-        href: `/${params.username}`,
-        is_active: pathname == `/${params.username}`,
-        on_click: () => {
-          if (pathname == `/${params.username}`) return
-          clear_library_session_storage({
-            username: params.username as string,
-            search_params: search_params.toString(),
-          })
-          router.push(`/${params.username}${back ? `?back=${back}` : ''}`)
+      }
+      items = [
+        {
+          title: props.dictionary.app.menu_items.home,
+          icon: 'HOME',
+          filled_icon: 'HOME_FILLED',
+          href: '/',
+          is_active: pathname == '/',
         },
-      },
-      {
-        label: props.dictionary.app.menu_items.activity,
+        {
+          title: props.dictionary.app.menu_items.library,
+          icon: 'BOOKMARK',
+          filled_icon: 'BOOKMARK_FILLED',
+          href: '/library',
+          is_active: pathname == '/library',
+          on_click: () => {
+            if (pathname == '/library') return
+            clear_library_session_storage({
+              search_params: search_params.toString(),
+            })
+            router.push('/library')
+          },
+        },
+        ...(process.env.NODE_ENV == 'development' ? [chat] : []),
+      ]
+    } else {
+      const activity: Ui_app_templates_App_HeaderDesktop_Navigation.Item = {
+        title: props.dictionary.app.menu_items.activity,
+        icon: 'ACTIVITY',
+        filled_icon: 'ACTIVITY_FILLED',
         href: `/${params.username}/activity${back ? `?back=${back}` : ''}`,
         is_active: pathname == `/${params.username}/activity`,
-      },
-    ]
+      }
+      items = [
+        {
+          title: props.dictionary.app.menu_items.library,
+          icon: 'BOOKMARK',
+          filled_icon: 'BOOKMARK_FILLED',
+          href: `/${params.username}`,
+          is_active: pathname == `/${params.username}`,
+          on_click: () => {
+            if (pathname == `/${params.username}`) return
+            clear_library_session_storage({
+              username: params.username as string,
+              search_params: search_params.toString(),
+            })
+            router.push(`/${params.username}${back ? `?back=${back}` : ''}`)
+          },
+        },
+        ...(process.env.NODE_ENV == 'development' ? [activity] : []),
+      ]
+    }
+  
+    return <Ui_app_templates_App_HeaderDesktop_Navigation items={items} />
   }
 
   const open_new_bookmark_modal = (params: { with_autofill?: boolean }) => {
@@ -174,25 +191,21 @@ export const HeaderDesktop: React.FC<{
     )
   }
 
-  return (
-    <UiAppTemplate_App_HeaderDesktop
-      slot_logo={logo}
-      slot_navigation={
-        <UiAppMolecule_NavigationForHeader navigation={navigation} />
-      }
-      slot_right_side={
-        is_hydrated &&
-        (auth_context.auth_data ? (
-          <UiAppTemplate_App_HeaderDesktop_AuthorizedUser
+  const get_user_actions = () => {
+    if (is_hydrated) {
+      if (auth_context.auth_data) {
+        return (
+          <Ui_app_templates_App_HeaderDesktop_AuthorizedUser
             pathname={pathname}
             on_click_add={() => {
               open_new_bookmark_modal({})
             }}
             on_click_search={() => {}}
+            on_click_notifications={() => {}}
             name={auth_context.auth_data.username}
             slot_user_dropdown={
-              <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown>
-                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet
+              <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown>
+                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet
                   text={
                     props.dictionary.app.header_desktop.user_dropdown
                       .bookmarklet.text
@@ -207,13 +220,12 @@ export const HeaderDesktop: React.FC<{
                   }
                   bookmarklet_script={props.bookmarklet_script}
                 />
-                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
-                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
+                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
+                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
                   label={
                     props.dictionary.app.header_desktop.user_dropdown
                       .my_public_profile
                   }
-                  icon_variant={'PUBLIC_PROFILE'}
                   on_click={() => {
                     router.push(
                       `/${
@@ -222,26 +234,24 @@ export const HeaderDesktop: React.FC<{
                     )
                   }}
                 />
-                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
+                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
                   label={
                     props.dictionary.app.header_desktop.user_dropdown.settings
                   }
-                  icon_variant={'SETTINGS'}
                   on_click={() => {
                     router.push(
                       `/settings?back=${pathname}?${search_params.toString()}`,
                     )
                   }}
                 />
-                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
+                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
                   label={
                     props.dictionary.app.header_desktop.user_dropdown.log_out
                   }
-                  icon_variant={'LOG_OUT'}
                   on_click={auth_context.logout}
                 />
-                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
-                <UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks
+                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
+                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks
                   links={[
                     {
                       label:
@@ -262,14 +272,23 @@ export const HeaderDesktop: React.FC<{
                     },
                   ]}
                 />
-              </UiAppTemplate_App_HeaderDesktop_AuthorizedUser_UserDropdown>
+              </Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown>
             }
           />
-        ) : (
-          <div>TODO</div>
-        ))
+        )
+      } else {
+        return <div>sign in / sign up</div>
       }
-      translations={{ powered_by: props.dictionary.app.powered_by }}
+    } else {
+      return <></>
+    }
+  }
+
+  return (
+    <Ui_app_templates_App_HeaderDesktop
+      slot_left={get_logo()}
+      slot_middle={get_navigation()}
+      slot_right={get_user_actions()}
     />
   )
 }

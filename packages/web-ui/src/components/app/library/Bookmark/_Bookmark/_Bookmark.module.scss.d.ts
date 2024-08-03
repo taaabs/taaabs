@@ -3,6 +3,7 @@ declare const styles: {
   readonly "bookmark__card": string;
   readonly "bookmark__card--corners-fix": string;
   readonly "bookmark__card__cover": string;
+  readonly "bookmark__card__cover--no-image": string;
   readonly "bookmark__card__cover__image": string;
   readonly "bookmark__card__cover__image__fill": string;
   readonly "bookmark__card__cover__image__top": string;
@@ -37,7 +38,6 @@ declare const styles: {
   readonly "bookmark__card__title__menu__button": string;
   readonly "bookmark__card__title__stars": string;
   readonly "bookmark__card__title__text": string;
-  readonly "bookmark__card__title__text--unsorted": string;
   readonly "bookmark__card__title__text--untitled": string;
   readonly "bookmark__card__title__unsorted": string;
   readonly "bookmark__links": string;

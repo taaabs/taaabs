@@ -84,7 +84,6 @@ export type Dictionary = {
     }
   }
   app: {
-    powered_by: string
     header_desktop: {
       user_dropdown: {
         my_public_profile: string

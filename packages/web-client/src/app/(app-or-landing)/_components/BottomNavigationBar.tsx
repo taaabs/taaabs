@@ -2,7 +2,7 @@
 
 import { Dictionary } from '@/dictionaries/dictionary'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
-import { BottomNavigationBar as UiAppMolecule_BottomNavigationBar } from '@web-ui/components/app/molecules/bottom-navigation-bar'
+import { BottomNavigationBar as Ui_app_templates_App_BottomNavigationBar } from '@web-ui/components/app/templates/App/BottomNavigationBar'
 import {
   useParams,
   usePathname,
@@ -19,7 +19,7 @@ export const BottomNavigationBar: React.FC<{
   const search_params = useSearchParams()
 
   return !username ? (
-    <UiAppMolecule_BottomNavigationBar
+    <Ui_app_templates_App_BottomNavigationBar
       items={[
         {
           label: props.dictionary.app.menu_items.home,
@@ -54,7 +54,7 @@ export const BottomNavigationBar: React.FC<{
       ]}
     />
   ) : (
-    <UiAppMolecule_BottomNavigationBar
+    <Ui_app_templates_App_BottomNavigationBar
       items={[
         {
           label: props.dictionary.app.menu_items.library,

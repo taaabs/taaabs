@@ -145,7 +145,6 @@ const dictionary: Dictionary = {
     },
   },
   app: {
-    powered_by: 'Powered by',
     header_desktop: {
       user_dropdown: {
         my_public_profile: 'My profile',
