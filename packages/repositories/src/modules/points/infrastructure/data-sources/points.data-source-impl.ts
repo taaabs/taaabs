@@ -4,7 +4,6 @@ import { Points_DataSource } from './points.data-source'
 import { CheckTotalGivenPoints_Params } from '../../domain/types/check-total-given-points.params'
 import { CheckTotalGivenPoints_Dto } from '@shared/types/modules/points/check-total-given-points.dto'
 import { KyInstance } from 'ky'
-import { ApiEndpoints } from '@shared/constants/api-endpoints'
 
 export class Points_DataSourceImpl implements Points_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -16,7 +15,7 @@ export class Points_DataSourceImpl implements Points_DataSource {
       points: params.points,
     }
 
-    await this._ky.post(ApiEndpoints.Points.POST.GIVE_POINTS, {
+    await this._ky.post('v1/points', {
       json: body,
     })
   }
@@ -29,7 +28,7 @@ export class Points_DataSourceImpl implements Points_DataSource {
       receiver_username: params.receiver_username,
     }
     return this._ky
-      .post(ApiEndpoints.Points.POST.CHECK_TOTAL_GIVEN, {
+      .post('v1/check-total-given', {
         json: body,
       })
       .json()
