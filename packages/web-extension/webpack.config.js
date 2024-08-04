@@ -1,33 +1,26 @@
 const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-  entry: './src/index.tsx',
+  entry: {
+    background: './src/background/main.js',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-    ],
+    extensions: ['.js'],
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-    }),
     new CopyWebpackPlugin({
       patterns: [
         { from: 'manifest.json', to: 'manifest.json' },
-        { from: 'icons', to: 'icons' }, // Copy icons directory if you have one
+        { from: 'icons', to: 'icons' },
+        {
+          from: 'src/content_scripts/get_token.js',
+          to: 'content_scripts/get_token.js',
+        },
       ],
     }),
   ],
