@@ -19,6 +19,10 @@ export namespace ReaderData {
     type: ContentType.CHAT
     conversation: Array<
       | {
+          role: 'system'
+          content: string
+        }
+      | {
           role: 'user'
           content: string
         }
