@@ -88,8 +88,6 @@ export namespace HtmlParser {
         const parser = new DOMParser()
         const doc = parser.parseFromString(el.innerHTML, 'text/html')
         const article = new Readability(doc, { keepClasses: true }).parse()!
-        console.log(article.content)
-        console.log(params.turndown_service.turndown(article.content))
         messages.push({
           role: 'assistant',
           content: params.turndown_service.turndown(article.content),
