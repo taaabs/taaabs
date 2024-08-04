@@ -107,6 +107,7 @@
         font-size: var(--font-size-14px);
         > sup {
           color: var(--text-color-dimmed);
+          font-style: italic;
           font-weight: var(--font-weight-inter-regular);
         }
       }
@@ -119,14 +120,16 @@
       height: 28px;
       border-radius: 50%;
       @include transition-150ms(background-color);
-      border: var(--border-secondary);
       @include hover {
-        border: var(--border-primary);
+        background-color: var(--neutral100);
+        @include dark {
+          background-color: var(--dark300);
+        }
       }
       > svg {
         fill: var(--black);
         @include transition-150ms(fill);
-        width: 11px;
+        height: var(--icon-dimension-13px);
       }
     }
   }

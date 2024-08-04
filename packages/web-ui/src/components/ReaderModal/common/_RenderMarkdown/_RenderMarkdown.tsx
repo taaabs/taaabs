@@ -1,10 +1,14 @@
+import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
+import 'katex/dist/katex.min.css'
 import styles from './_RenderMarkdown.module.scss'
 import { Icon as UiCommonParticle_Icon } from '@web-ui/components/common/particles/icon'
 import hljs from 'highlight.js'
-
 import 'highlight.js/styles/atom-one-dark.css'
+import { language_map } from './language-map'
 
 namespace _RenderMarkdown {
   export type Props = {
@@ -17,7 +21,8 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
     <ReactMarkdown
       className={styles.container}
       children={props.content}
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, remarkMath]}
+      rehypePlugins={[rehypeKatex]}
       components={{
         code({ children, className }) {
           if (!children?.toString()?.includes('\n')) {
@@ -39,14 +44,14 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
                 <div className={styles.code__header}>
                   <div className={styles.code__header__language}>
                     {language && (
-                      <span>{(language_map as any)[language] || language}</span>
+                      <span>{(language_map as any)[language]}</span>
                     )}
                     {language_fallback && (
                       <>
                         <span>
                           {(language_map as any)[language_fallback] ||
                             language_fallback}
-                          <sup> auto-detect</sup>
+                          <sup> unsure</sup>
                         </span>
                       </>
                     )}
@@ -83,31 +88,4 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
       }}
     />
   )
-}
-
-const language_map = {
-  html: 'HTML',
-  css: 'CSS',
-  js: 'JavaScript',
-  javascript: 'JavaScript',
-  typescript: 'TypeScript',
-  ts: 'TypeScript',
-  python: 'Python',
-  ruby: 'Ruby',
-  java: 'Java',
-  c: 'C',
-  cpp: 'C++',
-  'c++': 'C++',
-  php: 'PHP',
-  swift: 'Swift',
-  go: 'Go',
-  r: 'R',
-  shell: 'bash',
-  bash: 'bash',
-  sql: 'SQL',
-  json: 'JSON',
-  yaml: 'YAML',
-  markdown: 'Markdown',
-  rust: 'Rust',
-  zig: 'Zig',
 }

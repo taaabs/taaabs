@@ -19,6 +19,7 @@ export namespace HtmlParser {
       codeBlockStyle: 'fenced',
     })
     turndown_service.use(turndownPluginGfm.gfm)
+    // Convert code blocks to markdown.
     turndown_service.addRule('fencedCodeBlock', {
       filter: (node: any, options: any) => {
         return (
@@ -42,6 +43,23 @@ export namespace HtmlParser {
           options.fence +
           '\n\n'
         )
+      },
+    })
+    // Convert math blocks to markdown.
+    turndown_service.addRule('multiplemath', {
+      filter(node) {
+        return node.nodeName == 'SPAN' && node.classList.contains('katex')
+      },
+      replacement(_, node) {
+        // Check if the node is the only child of its parent paragraph.
+        // Yes - block, no - inline.
+        const is_block =
+          node.parentNode?.nodeName == 'P' &&
+          node.parentNode.childNodes.length == 1
+        // "<annotation>" element holds expression string, right for markdown.
+        const annotation = node.querySelector('annotation')?.textContent
+        if (!annotation) return ''
+        return is_block ? `$$ ${annotation} $$` : `$${annotation}$`
       },
     })
     turndown_service.addRule('stripImages', {
@@ -70,6 +88,8 @@ export namespace HtmlParser {
         const parser = new DOMParser()
         const doc = parser.parseFromString(el.innerHTML, 'text/html')
         const article = new Readability(doc, { keepClasses: true }).parse()!
+        console.log(article.content)
+        console.log(params.turndown_service.turndown(article.content))
         messages.push({
           role: 'assistant',
           content: params.turndown_service.turndown(article.content),
@@ -89,11 +109,6 @@ export namespace HtmlParser {
     //   title = match[1]
     // }
 
-    /**
-     * ChatGPT
-     */
-
-    // try catch
     try {
       if (params.url.startsWith('https://chatgpt.com/')) {
         const user_selector = '[data-message-author-role="user"]'

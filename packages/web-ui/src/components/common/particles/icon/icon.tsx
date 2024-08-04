@@ -30,6 +30,7 @@ import Link from '../../../../assets/icons/link.svg'
 import LogoDark from '../../../../assets/icons/logo-dark.svg'
 import Logo from '../../../../assets/icons/logo.svg'
 import Pin from '../../../../assets/icons/pin.svg'
+import Recent from '../../../../assets/icons/recent.svg'
 import Resize from '../../../../assets/icons/resize.svg'
 import Search from '../../../../assets/icons/search.svg'
 import SelectedBold from '../../../../assets/icons/selected-bold.svg'
@@ -84,6 +85,7 @@ export namespace Icon {
     | 'LOGO_DARK'
     | 'LOGO'
     | 'PIN'
+    | 'RECENT'
     | 'CROSS'
     | 'RESIZE'
     | 'SEARCH'
@@ -225,6 +227,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'PIN':
       icon = <Pin />
+      break
+    case 'RECENT':
+      icon = <Recent />
       break
     case 'CROSS':
       icon = <Cross />
