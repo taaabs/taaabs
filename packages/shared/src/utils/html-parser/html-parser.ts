@@ -48,6 +48,19 @@ export namespace HtmlParser {
     // Convert math blocks to markdown.
     turndown_service.addRule('multiplemath', {
       filter(node) {
+        return (
+          node.nodeName == 'SPAN' && node.classList.contains('katex-display')
+        ) // Check if it's a display math block that centers equation.
+      },
+      replacement(_, node) {
+        // "<annotation>" element holds expression string, right for markdown.
+        const annotation = node.querySelector('annotation')?.textContent
+        if (!annotation) return ''
+        return `$$\n${annotation}\n$$`
+      },
+    })
+    turndown_service.addRule('multiplemath', {
+      filter(node) {
         return node.nodeName == 'SPAN' && node.classList.contains('katex')
       },
       replacement(_, node) {
