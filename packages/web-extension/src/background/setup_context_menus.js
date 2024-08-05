@@ -13,11 +13,12 @@ export function setup_context_menus() {
       return
     }
     if (info.menuItemId == 'save_to_taaabs') {
-      executeBookmarkletScript(tab)
+      execute_bookmarklet_script(tab)
     }
   })
 
   chrome.action.onClicked.addListener((tab) => {
+    console.log('action menu clicked')
     if (
       tab.url.startsWith('https://taaabs.com') ||
       tab.url.startsWith('chrome://')
@@ -25,11 +26,11 @@ export function setup_context_menus() {
       chrome.tabs.update(tab.id, { url: 'https://taaabs.com/library' })
       return
     }
-    executeBookmarkletScript(tab)
+    execute_bookmarklet_script(tab)
   })
 }
 
-function executeBookmarkletScript(tab) {
+function execute_bookmarklet_script(tab) {
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
     func: async () => {
