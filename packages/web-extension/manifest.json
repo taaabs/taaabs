@@ -12,7 +12,7 @@
     },
     "default_title": "Save to taaabs"
   },
-  "author": "taaabs.com",
+  "author": "Taaabs, Inc.",
   "host_permissions": ["https://taaabs.com/*"],
   "permissions": [
     "cookies",
