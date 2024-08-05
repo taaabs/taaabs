@@ -57,14 +57,12 @@ export async function check_url_status(url) {
 
       const hash = await derive_hash_from_url(url, auth_data.encryption_key)
       const response = await fetch(
-        'https://api.taaabs.com/v1/bookmarks/find-by-url-hash',
+        `https://api.taaabs.com/v1/bookmarks/find-by-url-hash/${hash}`,
         {
-          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${auth_data.access_token}`,
           },
-          body: JSON.stringify({ hash }),
         },
       )
 
@@ -77,7 +75,7 @@ export async function check_url_status(url) {
         continue
       }
 
-      if (response.status == 201) {
+      if (response.status == 200) {
         return true
       } else {
         console.error(
