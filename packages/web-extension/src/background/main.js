@@ -4,41 +4,40 @@ import { update_icon } from './update_icon'
 
 chrome.runtime.onInstalled.addListener(setup_context_menus)
 
-async function handle_tab(tab) {
-  if (tab.url) {
-    if (tab.url.startsWith('https://taaabs.com')) {
-      update_icon(tab.id)
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        chrome.tabs.sendMessage(
-          tabs[0].id,
-          { action: 'get_auth_data' },
-          (auth_data) => {
-            if (auth_data) {
-              chrome.storage.local.set(
-                { auth_data: JSON.parse(auth_data) },
-                () => {
-                  console.log('Auth data saved:', auth_data)
-                },
-              )
-            } else {
-              console.log('Auth data not found.')
-            }
-          },
-        )
-      })
-    } else if (tab.url.startsWith('chrome://')) {
-      update_icon(tab.id)
+async function handle_tab(tab_id, url) {
+  if (url) {
+    if (url.startsWith('https://taaabs.com')) {
+      update_icon(tab_id)
+      chrome.tabs.sendMessage(
+        tab_id,
+        { action: 'get_auth_data' },
+        (auth_data) => {
+          if (auth_data) {
+            chrome.storage.local.set(
+              { auth_data: JSON.parse(auth_data) },
+              () => {
+                console.log('Auth data saved:', auth_data)
+              },
+            )
+          } else {
+            console.log('Auth data not found.')
+          }
+        },
+      )
+    } else if (url.startsWith('chrome://')) {
+      update_icon(tab_id)
     } else {
-      const is_saved = await check_url_status(tab.url)
-      update_icon(tab.id, is_saved)
+      const is_saved = await check_url_status(url)
+      update_icon(tab_id, is_saved)
     }
   }
 }
 
-chrome.tabs.onUpdated.addListener(async (_, change_info, tab) => {
-  if (change_info.status == 'complete') {
+chrome.webNavigation.onCompleted.addListener(async (details) => {
+  if (details.frameId == 0) {
+    // 0 indicates the main frame
     try {
-      handle_tab(tab)
+      await handle_tab(details.tabId, details.url)
     } catch (error) {
       console.error('Error handling tab:', error)
     }

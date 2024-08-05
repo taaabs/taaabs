@@ -20,7 +20,7 @@
     "background",
     "contextMenus",
     "activeTab",
-    "tabs"
+    "webNavigation"
   ],
   "background": {
     "service_worker": "background.bundle.js"
