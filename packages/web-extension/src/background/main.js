@@ -1,13 +1,13 @@
-import { setup_context_menus } from './context_menus'
-import { check_url_status } from './url_checker'
-import { update_icon } from './icon_manager'
+import { setup_context_menus } from './setup_context_menus'
+import { check_url_status } from './check_url_status'
+import { update_icon } from './update_icon'
 
 chrome.runtime.onInstalled.addListener(setup_context_menus)
 
 async function handle_tab(tab) {
   if (tab.url) {
-    // get and set access token
     if (tab.url.startsWith('https://taaabs.com')) {
+      update_icon(tab.id)
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         chrome.tabs.sendMessage(
           tabs[0].id,
@@ -27,19 +27,38 @@ async function handle_tab(tab) {
         )
       })
     } else {
-      const is_saved = await check_url_status(tab.url)
-      update_icon(tab.id, is_saved)
+      if (tab.url.startsWith('chrome://')) {
+        update_icon(tab.id)
+      } else {
+        const is_saved = await check_url_status(tab.url)
+        update_icon(tab.id, is_saved)
+      }
     }
   }
 }
 
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
-  const tab = await chrome.tabs.get(activeInfo.tabId)
-  handle_tab(tab)
+  try {
+    const tab = await chrome.tabs.get(activeInfo.tabId)
+    handle_tab(tab)
+  } catch (error) {
+    console.error('Error getting tab:', error)
+  }
 })
 
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  if (changeInfo.status === 'complete') {
-    handle_tab(tab)
+chrome.tabs.onUpdated.addListener(async (_, changeInfo, tab) => {
+  if (changeInfo.status == 'complete') {
+    try {
+      handle_tab(tab)
+    } catch (error) {
+      console.error('Error handling tab:', error)
+    }
+  }
+})
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action == 'get_auth_data') {
+    get_auth_data().then(sendResponse)
+    return true // This keeps the message channel open for asynchronous response.
   }
 })

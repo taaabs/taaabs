@@ -6,12 +6,25 @@ export function setup_context_menus() {
   })
 
   chrome.contextMenus.onClicked.addListener((info, tab) => {
-    if (info.menuItemId === 'save_to_taaabs') {
+    if (
+      tab.url.startsWith('https://taaabs.com') ||
+      tab.url.startsWith('chrome://')
+    ) {
+      return
+    }
+    if (info.menuItemId == 'save_to_taaabs') {
       executeBookmarkletScript(tab)
     }
   })
 
   chrome.action.onClicked.addListener((tab) => {
+    if (
+      tab.url.startsWith('https://taaabs.com') ||
+      tab.url.startsWith('chrome://')
+    ) {
+      chrome.tabs.update(tab.id, { url: 'https://taaabs.com/library' })
+      return
+    }
     executeBookmarkletScript(tab)
   })
 }
