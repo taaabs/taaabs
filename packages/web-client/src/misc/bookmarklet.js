@@ -71,13 +71,10 @@ const check_iframe_support = async () => {
     }
 
     const csp = headers.get('Content-Security-Policy');
-    console.log(csp);
     if (csp && csp.includes('frame-ancestors')) {
       const frame_ancestors = csp.match(/frame-ancestors\s+([^;]+)/);
-      console.log(frame_ancestors);
       if (frame_ancestors) {
         const sources = frame_ancestors[1].split(' ');
-        console.log(sources);
         if (!sources.includes('*') && !sources.includes('self')) {
           return false;
         }

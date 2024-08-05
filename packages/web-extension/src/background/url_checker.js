@@ -103,7 +103,6 @@ async function get_auth_data() {
   return new Promise((resolve, reject) => {
     chrome.storage.local.get(['auth_data'], function (result) {
       resolve(result.auth_data)
-      console.log('Auth data:', result.auth_data)
     })
   })
 }
