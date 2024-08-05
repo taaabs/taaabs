@@ -1,11 +1,14 @@
 import { AuthContext } from '@/app/auth-provider'
+import { browser_storage } from '@/constants/browser-storage'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { upsert_bookmark_modal_setter } from '@/modals/upsert-bookmark-modal/upsert-bookmark-modal-setter'
 import { ModalContext } from '@/providers/ModalProvider'
+import { use_library_dispatch } from '@/stores/library'
 import { BookmarkUrlHashData } from '@/utils/bookmark-url-hash-data'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
+import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { use_is_hydrated } from '@shared/hooks'
 import { HtmlParser } from '@shared/utils/html-parser'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -20,6 +23,7 @@ export const use_bookmarklet_handler = (props: {
   const auth_context = useContext(AuthContext)
   const is_hydrated = use_is_hydrated()
   const modal_context = useContext(ModalContext)
+  const dispatch = use_library_dispatch()
 
   // Runs on page load, handles bookmarklet script invocation.
   useUpdateEffect(() => {
@@ -49,13 +53,34 @@ export const use_bookmarklet_handler = (props: {
             })
             if (updated_bookmark) {
               should_refetch_data = true
-              const data_source = new Bookmarks_DataSourceImpl(
-                auth_context.ky_instance,
-              )
-              const repository = new Bookmarks_RepositoryImpl(data_source)
-              await repository.upsert_bookmark(
-                updated_bookmark,
-                auth_context.auth_data!.encryption_key,
+              let should_refetch_links_reader_data = false
+              if (found_bookmark.is_public != updated_bookmark.is_public) {
+                should_refetch_links_reader_data = true
+              }
+              if (!should_refetch_links_reader_data) {
+                updated_bookmark.links.forEach((link) => {
+                  const old_link = found_bookmark.links.find(
+                    (l) => l.url == link.url,
+                  )
+                  if (old_link && old_link.is_public != link.is_public) {
+                    should_refetch_links_reader_data = true
+                  }
+                })
+              }
+              await dispatch(
+                bookmarks_actions.upsert_bookmark({
+                  bookmark: updated_bookmark,
+                  should_refetch_links_reader_data,
+                  last_authorized_counts_params:
+                    JSON.parse(
+                      sessionStorage.getItem(
+                        browser_storage.session_storage.library
+                          .last_authorized_counts_params,
+                      ) || 'null',
+                    ) || undefined,
+                  ky: auth_context.ky_instance,
+                  encryption_key: auth_context.auth_data!.encryption_key,
+                }),
               )
               toast.success(props.dictionary.app.library.bookmark_updated)
             }
@@ -184,14 +209,19 @@ export const use_bookmarklet_handler = (props: {
           cover: og_image?.split(',')[1],
           blurhash: og_image_blurhash,
         }
-
-        const data_source = new Bookmarks_DataSourceImpl(
-          auth_context.ky_instance,
-        )
-        const repository = new Bookmarks_RepositoryImpl(data_source)
-        const created_bookmark = await repository.upsert_bookmark(
-          new_bookmark,
-          auth_context.auth_data!.encryption_key,
+        const created_bookmark = await dispatch(
+          bookmarks_actions.upsert_bookmark({
+            bookmark: new_bookmark,
+            last_authorized_counts_params:
+              JSON.parse(
+                sessionStorage.getItem(
+                  browser_storage.session_storage.library
+                    .last_authorized_counts_params,
+                ) || 'null',
+              ) || undefined,
+            ky: auth_context.ky_instance,
+            encryption_key: auth_context.auth_data!.encryption_key,
+          }),
         )
         toast.success(props.dictionary.app.library.bookmark_created)
         const updated_bookmark = await upsert_bookmark_modal_setter({
@@ -201,13 +231,34 @@ export const use_bookmarklet_handler = (props: {
           dictionary: props.dictionary,
         })
         if (updated_bookmark) {
-          const data_source = new Bookmarks_DataSourceImpl(
-            auth_context.ky_instance,
-          )
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          await repository.upsert_bookmark(
-            updated_bookmark,
-            auth_context.auth_data!.encryption_key,
+          let should_refetch_links_reader_data = false
+          if (created_bookmark.is_public != updated_bookmark.is_public) {
+            should_refetch_links_reader_data = true
+          }
+          if (!should_refetch_links_reader_data) {
+            updated_bookmark.links.forEach((link) => {
+              const old_link = created_bookmark.links.find(
+                (l) => l.url == link.url,
+              )
+              if (old_link && old_link.is_public != link.is_public) {
+                should_refetch_links_reader_data = true
+              }
+            })
+          }
+          await dispatch(
+            bookmarks_actions.upsert_bookmark({
+              bookmark: updated_bookmark,
+              should_refetch_links_reader_data,
+              last_authorized_counts_params:
+                JSON.parse(
+                  sessionStorage.getItem(
+                    browser_storage.session_storage.library
+                      .last_authorized_counts_params,
+                  ) || 'null',
+                ) || undefined,
+              ky: auth_context.ky_instance,
+              encryption_key: auth_context.auth_data!.encryption_key,
+            }),
           )
           toast.success(props.dictionary.app.library.bookmark_updated)
         }
