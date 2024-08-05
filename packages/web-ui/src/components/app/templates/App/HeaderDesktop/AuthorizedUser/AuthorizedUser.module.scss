@@ -24,6 +24,10 @@
   [data-theme-set-by="system"] & {
     display: flex;
   }
+  svg {
+    width: var(--icon-dimension-24px);
+    height: var(--icon-dimension-24px);
+  }
 }
 .theme-set-by-user {
   display: none;

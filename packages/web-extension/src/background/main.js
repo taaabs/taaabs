@@ -55,10 +55,3 @@ chrome.tabs.onUpdated.addListener(async (_, changeInfo, tab) => {
     }
   }
 })
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action == 'get_auth_data') {
-    get_auth_data().then(sendResponse)
-    return true // This keeps the message channel open for asynchronous response.
-  }
-})
