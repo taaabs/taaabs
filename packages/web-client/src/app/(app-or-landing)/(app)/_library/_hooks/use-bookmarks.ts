@@ -18,12 +18,10 @@ import { search_params_keys } from '@/constants/search-params-keys'
 import { AuthContext } from '@/app/auth-provider'
 import { use_is_hydrated } from '@shared/hooks'
 import { PopstateCountContext } from '@/providers/PopstateCountProvider'
-import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
 
 export const use_bookmarks = () => {
   const auth_context = useContext(AuthContext)
   const is_hydrated = use_is_hydrated()
-  const { popstate_count } = useContext(PopstateCountContext)
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
