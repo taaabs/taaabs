@@ -26,28 +26,17 @@ async function handle_tab(tab) {
           },
         )
       })
+    } else if (tab.url.startsWith('chrome://')) {
+      update_icon(tab.id)
     } else {
-      if (tab.url.startsWith('chrome://')) {
-        update_icon(tab.id)
-      } else {
-        const is_saved = await check_url_status(tab.url)
-        update_icon(tab.id, is_saved)
-      }
+      const is_saved = await check_url_status(tab.url)
+      update_icon(tab.id, is_saved)
     }
   }
 }
 
-chrome.tabs.onActivated.addListener(async (activeInfo) => {
-  try {
-    const tab = await chrome.tabs.get(activeInfo.tabId)
-    handle_tab(tab)
-  } catch (error) {
-    console.error('Error getting tab:', error)
-  }
-})
-
-chrome.tabs.onUpdated.addListener(async (_, changeInfo, tab) => {
-  if (changeInfo.status == 'complete') {
+chrome.tabs.onUpdated.addListener(async (_, change_info, tab) => {
+  if (change_info.status == 'complete') {
     try {
       handle_tab(tab)
     } catch (error) {

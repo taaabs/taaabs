@@ -45,13 +45,13 @@ async function refresh_auth_tokens() {
 
 export async function check_url_status(url) {
   let retries = 0
-  const max_retries = 3 // Define your retry limit
+  const max_retries = 3
 
   while (retries < max_retries) {
     try {
       const auth_data = await get_auth_data()
       if (!auth_data) {
-        console.error('Authentication data is missing.')
+        console.log('Auth data is missing.')
         return false
       }
 
@@ -78,11 +78,6 @@ export async function check_url_status(url) {
       if (response.status == 200) {
         return true
       } else {
-        console.error(
-          'Failed to check URL status:',
-          response.status,
-          await response.text(),
-        )
         return false
       }
     } catch (error) {

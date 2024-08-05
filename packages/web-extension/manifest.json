@@ -15,7 +15,6 @@
   "author": "Taaabs, Inc.",
   "host_permissions": ["https://taaabs.com/*"],
   "permissions": [
-    "cookies",
     "storage",
     "scripting",
     "background",
