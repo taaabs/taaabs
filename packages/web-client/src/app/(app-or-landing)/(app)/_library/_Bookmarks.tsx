@@ -109,6 +109,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                 })),
                 cover_hash: bookmark.cover_hash,
                 has_cover_aes: bookmark.has_cover_aes,
+                blurhash: bookmark.blurhash,
               }
               const updated_bookmark = await dispatch(
                 bookmarks_actions.upsert_bookmark({
@@ -401,6 +402,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           ],
           cover_hash: bookmark.cover_hash,
           has_cover_aes: bookmark.has_cover_aes,
+          blurhash: bookmark.blurhash,
         }
         const updated_bookmark = await dispatch(
           bookmarks_actions.upsert_bookmark({
@@ -485,6 +487,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                 })),
                 cover_hash: bookmark.cover_hash,
                 has_cover_aes: bookmark.has_cover_aes,
+                blurhash: bookmark.blurhash,
               }
               const updated_bookmark = await dispatch(
                 bookmarks_actions.upsert_bookmark({
@@ -569,6 +572,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
             })),
           cover_hash: bookmark.cover_hash,
           has_cover_aes: bookmark.has_cover_aes,
+          blurhash: bookmark.blurhash,
         }
         const updated_bookmark = await dispatch(
           bookmarks_actions.upsert_bookmark({
@@ -730,6 +734,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   })),
                   cover_hash: bookmark.cover_hash,
                   has_cover_aes: bookmark.has_cover_aes,
+                  blurhash: bookmark.blurhash,
                 }
                 await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -784,6 +789,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   })),
                   cover_hash: bookmark.cover_hash,
                   has_cover_aes: bookmark.has_cover_aes,
+                  blurhash: bookmark.blurhash,
                 }
                 await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -866,6 +872,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   })),
                   cover_hash: bookmark.cover_hash,
                   has_cover_aes: bookmark.has_cover_aes,
+                  blurhash: bookmark.blurhash,
                 }
                 await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -937,6 +944,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   })),
                   cover_hash: bookmark.cover_hash,
                   has_cover_aes: bookmark.has_cover_aes,
+                  blurhash: bookmark.blurhash,
                 }
                 await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -1133,6 +1141,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   })),
                   cover_hash: bookmark.cover_hash,
                   has_cover_aes: bookmark.has_cover_aes,
+                  blurhash: bookmark.blurhash,
                 }
                 await dispatch(
                   bookmarks_actions.upsert_bookmark({
