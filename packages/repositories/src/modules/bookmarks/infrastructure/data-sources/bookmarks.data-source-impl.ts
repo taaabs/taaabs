@@ -325,14 +325,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     params: FindByUrlHash_Params,
     encryption_key: Uint8Array,
   ): Promise<FindByUrlHash_Dto.Response> {
-    const body: FindByUrlHash_Dto.Body = {
-      hash: await Crypto.SHA256(params.url, encryption_key),
-    }
-
-    return this._ky
-      .post('v1/bookmarks/find-by-url-hash', {
-        json: body,
-      })
-      .json()
+    const hash = await Crypto.SHA256(params.url, encryption_key)
+    return this._ky.get(`v1/bookmarks/find-by-url-hash/${hash}`).json()
   }
 }
