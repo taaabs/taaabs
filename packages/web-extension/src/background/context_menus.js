@@ -121,7 +121,7 @@ function executeBookmarkletScript(tab) {
                   .document
               await fill_clipboard(doc)
               const target_url =
-                'http://localhost:3000/library#url=' +
+                'https://taaabs.com/library#url=' +
                 encodeURIComponent(document.location) +
                 '&title=' +
                 encodeURIComponent(doc.title) +
