@@ -26,6 +26,7 @@
     "background",
     "contextMenus",
     "activeTab",
+    "tabs",
     "webNavigation",
     "alarms"
   ],

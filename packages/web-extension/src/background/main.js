@@ -33,22 +33,32 @@ async function handle_tab(tab_id, url) {
   }
 }
 
-chrome.webNavigation.onCompleted.addListener(async (details) => {
-  if (details.frameId == 0) {
-    // 0 indicates the main frame.
+chrome.webNavigation.onCommitted.addListener(async (details) => {
+  if (details.frameId === 0) {
+    // Ensure it's the main frame.
     try {
       await handle_tab(details.tabId, details.url)
     } catch (error) {
-      console.error('Error handling tab:', error)
+      console.error('Error handling web navigation commit:', error)
+    }
+  }
+})
+
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
+  if (changeInfo.url) {
+    try {
+      await handle_tab(tabId, changeInfo.url)
+    } catch (error) {
+      console.error('Error handling tab update:', error)
     }
   }
 })
 
 // Set an alarm to keep the service worker alive.
-chrome.alarms.create('keepAlive', { periodInMinutes: 0.5 });
+chrome.alarms.create('keepAlive', { periodInMinutes: 0.5 })
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name == 'keepAlive') {
-    console.log('Service worker is alive.');
+    console.log('Service worker is alive.')
   }
-});
+})
