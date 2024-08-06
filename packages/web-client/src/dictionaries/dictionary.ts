@@ -93,6 +93,14 @@ export type Dictionary = {
         about: string
         privacy_policy: string
         terms_of_service: string
+        extension: {
+          text: string
+          subtext: string
+          chrome: {
+            text: string
+            subtext: string
+          }
+        }
         bookmarklet: {
           text: string
           subtext: string

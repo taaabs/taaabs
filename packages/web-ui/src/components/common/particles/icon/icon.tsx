@@ -8,6 +8,7 @@ import ChatBubbleCorner from '../../../../assets/icons/chat-bubble-corner.svg'
 import Chat from '../../../../assets/icons/chat.svg'
 import ChatFilled from '../../../../assets/icons/chat-filled.svg'
 import Check from '../../../../assets/icons/check.svg'
+import Chrome from '../../../../assets/icons/chrome.svg'
 import Collapse from '../../../../assets/icons/collapse.svg'
 import Copy from '../../../../assets/icons/copy.svg'
 import Cross from '../../../../assets/icons/cross.svg'
@@ -15,6 +16,7 @@ import Delete from '../../../../assets/icons/delete.svg'
 import DensityDefault from '../../../../assets/icons/density-default.svg'
 import DensityCompact from '../../../../assets/icons/density-compact.svg'
 import Edit from '../../../../assets/icons/edit.svg'
+import ExtensionIcon from '../../../../assets/icons/extension-icon.svg'
 import Eye from '../../../../assets/icons/eye.svg'
 import Globe from '../../../../assets/icons/globe.svg'
 import Google from '../../../../assets/icons/google.svg'
@@ -64,12 +66,14 @@ export namespace Icon {
     | 'CHAT'
     | 'CHAT_FILLED'
     | 'CHECK'
+    | 'CHROME'
     | 'COLLAPSE'
     | 'COPY'
     | 'DELETE'
     | 'DENSITY_DEFAULT'
     | 'DENSITY_COMPACT'
     | 'EDIT'
+    | 'EXTENSION_ICON'
     | 'EYE'
     | 'GLOBE'
     | 'GOOGLE'
@@ -147,6 +151,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'CHECK':
       icon = <Check />
       break
+    case 'CHROME':
+      icon = <Chrome />
+      break
     case 'COLLAPSE':
       icon = <Collapse />
       break
@@ -164,6 +171,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'EDIT':
       icon = <Edit />
+      break
+    case 'EXTENSION_ICON':
+      icon = <ExtensionIcon />
       break
     case 'EYE':
       icon = <Eye />
