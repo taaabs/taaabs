@@ -2,6 +2,9 @@ import { setup_context_menus } from './setup_context_menus'
 import { check_url_status } from './check_url_status'
 import { update_icon } from './update_icon'
 
+chrome.action.setBadgeBackgroundColor({ color: '#0DCA3B' })
+chrome.action.setBadgeTextColor({ color: 'white' })
+
 setup_context_menus()
 
 async function handle_tab(tab_id, url) {
