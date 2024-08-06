@@ -9,7 +9,6 @@
   border-radius: var(--border-radius-999px);
   padding: 4px;
   gap: 3px;
-  @include transition-250ms;
   @include at992 {
     padding: 6px;
     gap: 4px;
@@ -22,10 +21,7 @@
     padding: 0 10px;
     display: flex;
     align-items: center;
-    color: var(--white);
-    @include dark {
-      color: var(--dark700);
-    }
+    color: white;
     @include hover {
       background-color: var(--blue600);
       @include dark {
@@ -40,67 +36,20 @@
       padding: 0 16px;
     }
     &--toggled {
-      background-color: var(--white);
+      background-color: white;
       color: var(--blue700);
       @include dark {
         color: var(--blue600);
       }
-      @include dark {
-        background-color: var(--dark700);
-      }
       @include hover {
-        background-color: var(--white);
+        background-color: white;
         @include dark {
-          background-color: var(--dark700);
+          background-color: white;
         }
       }
     }
     > span {
       padding-bottom: 0.05em;
-    }
-  }
-  &__separator {
-    height: 20px;
-    width: 1px;
-    background-color: var(--blue600);
-    @include dark {
-      background-color: var(--blue500);
-    }
-    margin: 0 2px 0;
-    @include at992 {
-      height: 28px;
-      margin: 0 4px 0;
-    }
-  }
-  &__icon_button {
-    border-radius: var(--border-radius-999px);
-    height: var(--button-dimension-28px);
-    width: var(--button-dimension-28px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @include hover {
-      background-color: var(--blue600);
-      @include dark {
-        background-color: var(--blue500);
-      }
-    }
-    @include at992 {
-      height: var(--button-dimension-40px);
-      width: var(--button-dimension-40px);
-    }
-    @include transition-150ms(background-color);
-    > svg {
-      fill: var(--white);
-      @include dark {
-        fill: var(--dark700);
-      }
-      height: var(--icon-dimension-15px);
-      width: var(--icon-dimension-15px);
-      @include at992 {
-        height: var(--icon-dimension-20px);
-        width: var(--icon-dimension-20px);
-      }
     }
   }
 }

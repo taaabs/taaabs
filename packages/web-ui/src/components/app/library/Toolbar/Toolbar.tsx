@@ -1,4 +1,3 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
 import styles from './Toolbar.module.scss'
 import cn from 'classnames'
 
@@ -9,7 +8,6 @@ export namespace Toolbar {
       on_click: () => void
       is_toggled: boolean
     }[]
-    icon_buttons: { icon_variant: Icon.Variant; on_click: () => void }[]
   }
 }
 
@@ -25,16 +23,6 @@ export const Toolbar: React.FC<Toolbar.Props> = (props) => {
           key={i}
         >
           <span>{button.label}</span>
-        </button>
-      ))}
-      <div className={styles.toolbar__separator} />
-      {props.icon_buttons.map((button, i) => (
-        <button
-          className={styles.toolbar__icon_button}
-          onClick={button.on_click}
-          key={i}
-        >
-          <Icon variant={button.icon_variant} />
         </button>
       ))}
     </div>

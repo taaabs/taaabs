@@ -27,16 +27,6 @@ export const Primary = () => {
               on_click: () => {},
             },
           ]}
-          icon_buttons={[
-            {
-              icon_variant: 'DENSITY_DEFAULT',
-              on_click: () => {},
-            },
-            {
-              icon_variant: 'MORE',
-              on_click: () => {},
-            },
-          ]}
         />
       </div>
     </StorybookMargin>
