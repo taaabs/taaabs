@@ -62,7 +62,11 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
         note,
         links,
         tags,
-        is_unsorted: bookmark.is_unsorted || false,
+        // This is due to our approach of handling unsorted status.
+        is_unsorted:
+          bookmark.is_unsorted === undefined
+            ? true
+            : bookmark.is_unsorted || undefined,
         is_deleted: bookmark.is_deleted,
         stars: bookmark.stars || 0,
         points: bookmark.points || 0,
@@ -129,7 +133,10 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
               : bookmark.note_aes
               ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
               : undefined,
-            is_unsorted: bookmark.is_unsorted || false,
+            is_unsorted:
+              bookmark.is_unsorted === undefined
+                ? true
+                : bookmark.is_unsorted || undefined,
             is_deleted: bookmark.is_deleted,
             links: await Promise.all(
               bookmark.links.map(async (link) => {
