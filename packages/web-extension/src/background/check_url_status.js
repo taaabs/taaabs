@@ -1,7 +1,7 @@
 async function refresh_auth_tokens() {
   const auth_data = await get_auth_data()
   if (!auth_data) {
-    console.error('Authentication data is missing.')
+    console.log('[refresh_auth_tokens] Authentication data is missing.')
     return null
   }
 
@@ -17,8 +17,8 @@ async function refresh_auth_tokens() {
   })
 
   if (!response.ok) {
-    console.error(
-      'Failed to refresh token:',
+    console.log(
+      '[refresh_auth_tokens] Failed to refresh token:',
       response.status,
       await response.text(),
     )
@@ -36,7 +36,7 @@ async function refresh_auth_tokens() {
       },
     },
     () => {
-      console.log('New auth data saved:', new_auth_data)
+      console.log('[refresh_auth_tokens] New auth data saved:', new_auth_data)
     },
   )
 
@@ -51,7 +51,7 @@ export async function check_url_status(url) {
     try {
       const auth_data = await get_auth_data()
       if (!auth_data) {
-        console.log('Auth data is missing.')
+        console.log('[check_url_status] Auth data is missing.')
         return false
       }
 
@@ -69,7 +69,7 @@ export async function check_url_status(url) {
       if (response.status == 401) {
         const new_access_token = await refresh_auth_tokens()
         if (!new_access_token) {
-          console.error('Failed to refresh token, aborting.')
+          console.log('[check_url_status] Failed to refresh token, aborting.')
           return false
         }
         continue
@@ -81,14 +81,14 @@ export async function check_url_status(url) {
         return false
       }
     } catch (error) {
-      console.error('Error checking URL status:', error)
+      console.log('[check_url_status] Failed to check URL status.')
       return false
     } finally {
       retries++
     }
   }
 
-  console.error('Max retries reached, aborting.')
+  console.log('[check_url_status] Max retries reached, aborting.')
   return false
 }
 

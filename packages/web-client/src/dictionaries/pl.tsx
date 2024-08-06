@@ -181,7 +181,7 @@ export const dictionary: Dictionary = {
       follow: 'Obserwuj',
       unfollow: 'Przestań obserwować',
       welcome: 'Witaj',
-      send_feedback: 'Forum społeczności Taaabs ↗',
+      send_feedback: 'Prześlij opinię ↗',
       folders: 'Foldery',
       pinned: 'Przypięte',
       rename: 'Zmień nazwę',

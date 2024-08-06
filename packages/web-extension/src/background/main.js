@@ -2,7 +2,7 @@ import { setup_context_menus } from './setup_context_menus'
 import { check_url_status } from './check_url_status'
 import { update_icon } from './update_icon'
 
-chrome.runtime.onInstalled.addListener(setup_context_menus)
+setup_context_menus()
 
 async function handle_tab(tab_id, url) {
   if (url) {
@@ -35,7 +35,7 @@ async function handle_tab(tab_id, url) {
 
 chrome.webNavigation.onCompleted.addListener(async (details) => {
   if (details.frameId == 0) {
-    // 0 indicates the main frame
+    // 0 indicates the main frame.
     try {
       await handle_tab(details.tabId, details.url)
     } catch (error) {
@@ -43,3 +43,12 @@ chrome.webNavigation.onCompleted.addListener(async (details) => {
     }
   }
 })
+
+// Set an alarm to keep the service worker alive.
+chrome.alarms.create('keepAlive', { periodInMinutes: 0.5 });
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name == 'keepAlive') {
+    console.log('Service worker is alive.');
+  }
+});

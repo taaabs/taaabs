@@ -2,7 +2,7 @@ export function setup_context_menus() {
   chrome.contextMenus.create({
     id: 'save_to_taaabs',
     title: 'Save to taaabs',
-    contexts: ['all'],
+    contexts: ['page'],
   })
 
   chrome.contextMenus.onClicked.addListener((info, tab) => {

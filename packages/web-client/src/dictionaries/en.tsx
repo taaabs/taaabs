@@ -176,7 +176,7 @@ const dictionary: Dictionary = {
       follow: 'Follow',
       unfollow: 'Unfollow',
       welcome: 'Howdy',
-      send_feedback: 'Taaabs community ↗',
+      send_feedback: 'Send feedback ↗',
       folders: 'Folders',
       pinned: 'Pinned',
       delete: 'Delete',

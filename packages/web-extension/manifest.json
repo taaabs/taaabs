@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Taaabs - social bookmarking",
+  "name": "Taaabs - bookmark manager",
   "short_name": "taaabs",
-  "description": "Add any link to your personal library.",
-  "version": "0.1.0",
+  "description": "Easy to use, privacy-first way to organize, share and discover web bookmarks.",
+  "version": "0.1.1",
+  "homepage_url": "https://taaabs.com/library",
   "action": {
     "default_icon": {
       "16": "icons/icon16.png",
@@ -11,6 +12,11 @@
       "128": "icons/icon128.png"
     },
     "default_title": "Save to taaabs"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   },
   "author": "Taaabs, Inc.",
   "host_permissions": ["https://taaabs.com/*"],
@@ -20,7 +26,8 @@
     "background",
     "contextMenus",
     "activeTab",
-    "webNavigation"
+    "webNavigation",
+    "alarms"
   ],
   "background": {
     "service_worker": "background.bundle.js"
