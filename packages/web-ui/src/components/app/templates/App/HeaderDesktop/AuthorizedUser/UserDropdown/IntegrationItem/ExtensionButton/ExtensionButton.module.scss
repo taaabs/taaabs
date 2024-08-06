@@ -1,0 +1,38 @@
+// @type
+@use '../../../../../../../../../styles/foundation' as *;
+
+.button {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: var(--padding-10px);
+  border: var(--border-primary);
+  padding: var(--padding-8px) var(--padding-12px);
+  border-radius: var(--border-radius-12px);
+  @include transition-150ms(border-color);
+  @include hover {
+    border-color: var(--border-color-hover);
+  }
+  > svg {
+    height: 34px;
+  }
+  &::after {
+    position: absolute;
+    content: '';
+    top: 50%;
+    right: var(--padding-10px);
+    transform: translateY(-30%);
+    content: '↗';
+  }
+}
+.text {
+  display: flex;
+  flex-direction: column;
+  &__top {
+    font-weight: var(--font-weight-inter-medium);
+  }
+  &__bottom {
+    font-size: var(--font-size-14px);
+    color: var(--text-color-variant);
+  }
+}

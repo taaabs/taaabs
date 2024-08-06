@@ -159,10 +159,18 @@ export const dictionary: Dictionary = {
         about: 'O nas',
         privacy_policy: 'Polityka prywatności',
         terms_of_service: 'Warunki korzystania',
+        extension: {
+          text: 'Rozszerzenie',
+          subtext: 'Dodaj oficjalną wtyczkę do swojej przeglądarki',
+          chrome: {
+            text: 'Dostępne w',
+            subtext: 'Chrome Web Store',
+          },
+        },
         bookmarklet: {
           text: 'Bookmarklet',
           subtext:
-            'Najprostszy sposób na integrację Twojej przeglądarki z Taaabs, po prostu przeciągnij ten przycisk do Paska Zakładek i kliknij z dowolnej strony internetowej.',
+            'Po prostu przeciągnij ten przycisk na pasek zakładek i kliknij z dowolnej strony',
           button_label: 'Zapisz do taaabs',
         },
       },
@@ -305,7 +313,7 @@ export const dictionary: Dictionary = {
       edit_tags: 'Edytuj tagi',
       update: 'Zapisz zmiany',
       cancel: 'Anuluj',
-      recent_tags: 'Ostatio używane'
+      recent_tags: 'Ostatio używane',
     },
   },
   settings: {

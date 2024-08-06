@@ -17,7 +17,9 @@ import { AuthorizedUser as Ui_app_templates_App_HeaderDesktop_AuthorizedUser } f
 import { UserDropdown as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown'
 import { StandardItem as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/StandardItem'
 import { Separator as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/Separator'
-import { Bookmarklet as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/Bookmarklet'
+import { IntegrationItem as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/IntegrationItem'
+import { ExtensionButton as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_ExtensionButton } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/IntegrationItem/ExtensionButton'
+import { BookmarkletButton as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_BookmarkletButton } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/IntegrationItem/BookmarkletButton'
 import { FooterLinks as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/FooterLinks'
 import { UpsertBookmarkModal } from '@/modals/upsert-bookmark-modal/UpsertBookmarkModal'
 import { update_search_params } from '@/utils/update-query-params'
@@ -130,7 +132,7 @@ export const HeaderDesktop: React.FC<{
         ...(process.env.NODE_ENV == 'development' ? [activity] : []),
       ]
     }
-  
+
     return <Ui_app_templates_App_HeaderDesktop_Navigation items={items} />
   }
 
@@ -205,7 +207,30 @@ export const HeaderDesktop: React.FC<{
             name={auth_context.auth_data.username}
             slot_user_dropdown={
               <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown>
-                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Bookmarklet
+                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem
+                  text={
+                    props.dictionary.app.header_desktop.user_dropdown.extension
+                      .text
+                  }
+                  subtext={
+                    props.dictionary.app.header_desktop.user_dropdown.extension
+                      .subtext
+                  }
+                >
+                  <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_ExtensionButton
+                    text={
+                      props.dictionary.app.header_desktop.user_dropdown
+                        .extension.chrome.text
+                    }
+                    subtext={
+                      props.dictionary.app.header_desktop.user_dropdown
+                        .extension.chrome.subtext
+                    }
+                    icon="CHROME"
+                    href="https://chromewebstore.google.com/detail/taaabs-social-bookmarking/mfpmbjjgeklnhjmpahigldafhcdoaona"
+                  />
+                </Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem>
+                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem
                   text={
                     props.dictionary.app.header_desktop.user_dropdown
                       .bookmarklet.text
@@ -214,12 +239,15 @@ export const HeaderDesktop: React.FC<{
                     props.dictionary.app.header_desktop.user_dropdown
                       .bookmarklet.subtext
                   }
-                  button_label={
-                    props.dictionary.app.header_desktop.user_dropdown
-                      .bookmarklet.button_label
-                  }
-                  bookmarklet_script={props.bookmarklet_script}
-                />
+                >
+                  <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_BookmarkletButton
+                    label={
+                      props.dictionary.app.header_desktop.user_dropdown
+                        .bookmarklet.button_label
+                    }
+                    script={props.bookmarklet_script}
+                  />
+                </Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem>
                 <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
                 <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
                   label={

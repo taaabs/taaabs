@@ -154,10 +154,18 @@ const dictionary: Dictionary = {
         about: 'About',
         privacy_policy: 'Privacy policy',
         terms_of_service: 'Terms of service',
+        extension: {
+          text: 'Extension',
+          subtext: 'Add official add-on to your browser',
+          chrome: {
+            text: 'Available in the',
+            subtext: 'Chrome Web Store',
+          },
+        },
         bookmarklet: {
           text: 'Bookmarklet',
           subtext:
-            'The easiest way of integrating your browser with Taaabs, simply drag this button to your Bookmarks Bar and click from any website.',
+            'Simply drag this button to your bookmarks bar and click from any page',
           button_label: 'Save to taaabs',
         },
       },
