@@ -65,3 +65,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     console.log('Service worker is alive.')
   }
 })
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.tabs.create({ url: 'https://taaabs.com/library' })
+})
