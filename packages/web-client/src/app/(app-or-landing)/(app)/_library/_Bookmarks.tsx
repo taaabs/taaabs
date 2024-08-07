@@ -1183,6 +1183,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
             />
             <UiCommon_Dropdown_StandardItem
               icon_variant="DELETE"
+              is_danger={true}
               label={props.dictionary.app.library.bookmark.delete}
               on_click={async () => {
                 const is_deletion_confirmed =

@@ -35,6 +35,7 @@ export namespace PinnedBookmarks {
     on_link_middle_click: (item: Item) => void
     on_new_tab_click: (item: Item) => void
     on_is_visible: (item: Item) => void
+    on_unpin_click?: (item: Item) => void
     is_draggable: boolean
     selected_tags: number[]
     selected_starred: boolean
@@ -46,6 +47,7 @@ export namespace PinnedBookmarks {
       nothing_pinned: string
       open_original_url: string
       open_snapshot: string
+      unpin: string // Add this line
     }
   }
 }
@@ -135,6 +137,14 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
                       url: item.url,
                     })
                   }}
+                />
+              )}
+              {props.on_unpin_click && (
+                <UiCommon_Dropdown_StandardItem
+                  icon_variant="DELETE"
+                  is_danger={true}
+                  label={props.translations.unpin}
+                  on_click={() => props.on_unpin_click!(item)}
                 />
               )}
             </UiCommon_Dropdown>
