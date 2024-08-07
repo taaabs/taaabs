@@ -14,10 +14,9 @@ import { LocalDb } from '@/app/local-db-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
 import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
-import { PinnedBookmarks as UiAppLibrary_PinnedBookmarks } from '@web-ui/components/app/library/PinnedBookmarks'
+import { PinnedBookmarks as Ui_app_library_PinnedBookmarks } from '@web-ui/components/app/library/PinnedBookmarks'
 import { LibraryContext } from './Library'
-import { PopstateCountContext } from '@/providers/PopstateCountProvider'
-import { useSearchParams } from 'next/navigation'
+import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 
 namespace _Pinned {
   export type Props = {
@@ -41,8 +40,46 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
   } = useContext(LibraryContext)
   const dispatch = use_library_dispatch()
 
+  const handle_unpin_click = async (
+    item: Ui_app_library_PinnedBookmarks.Item,
+  ) => {
+    const updated_pinned =
+      pinned_hook.items?.filter((i) => i.url != item.url) || []
+    await dispatch(
+      pinned_actions.update_pinned({
+        update_pinned_params: {
+          items: updated_pinned.map((item) => ({
+            url: item.url,
+            is_public: item.is_public,
+            title: item.title,
+          })),
+        },
+        ky: auth_context.ky_instance,
+        encryption_key: auth_context.auth_data!.encryption_key,
+      }),
+    )
+    dispatch(
+      bookmarks_actions.set_incoming_bookmarks(
+        bookmarks_hook.incoming_bookmarks?.map((bookmark) => {
+          if (bookmark.id === item.bookmark_id) {
+            return {
+              ...bookmark,
+              links: bookmark.links.map((link) => ({
+                ...link,
+                is_pinned: false,
+              })),
+            }
+          }
+          return bookmark
+        }),
+      ),
+    )
+    dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
+    toast.success(props.dictionary.app.library.pinned_links_has_beed_updated)
+  }
+
   return (
-    <UiAppLibrary_PinnedBookmarks
+    <Ui_app_library_PinnedBookmarks
       key={`${pinned_hook.fetched_at_timestamp}`}
       rerender_trigger={`${bookmarks_hook.first_bookmarks_fetched_at_timestamp}`}
       favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
@@ -64,6 +101,9 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
         })) || []
       }
       is_draggable={!username && !pinned_hook.is_updating}
+      on_unpin_click={
+        !username && !pinned_hook.is_updating ? handle_unpin_click : undefined
+      }
       on_change={async (updated_pinned) => {
         await dispatch(
           pinned_actions.update_pinned({
@@ -216,6 +256,7 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
         open_original_url:
           props.dictionary.app.library.bookmark.open_original_url,
         open_snapshot: props.dictionary.app.library.bookmark.open_snapshot,
+        unpin: 'Remove from pinned',
       }}
     />
   )

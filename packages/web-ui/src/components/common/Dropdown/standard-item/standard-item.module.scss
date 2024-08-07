@@ -23,4 +23,10 @@
   > span {
     white-space: nowrap;
   }
+  &--danger {
+    color: var(--red);
+    > svg {
+      fill: var(--red);
+    }
+  }
 }

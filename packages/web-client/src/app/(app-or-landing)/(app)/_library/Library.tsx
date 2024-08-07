@@ -142,6 +142,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     counts_hook.should_refetch,
     tag_hierarchies_hook.is_fetching,
     tag_hierarchies_hook.is_updating,
+    pinned_hook.fetched_at_timestamp,
     pinned_hook.is_fetching,
     pinned_hook.should_refetch,
   ])
