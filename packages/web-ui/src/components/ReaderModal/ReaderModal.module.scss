@@ -11,10 +11,13 @@
   opacity: 0;
   align-items: center;
   pointer-events: none;
-  background-color: var(--background);
   &--visible {
     pointer-events: all;
     opacity: 1;
+    backdrop-filter: var(--backdrop-filter-strong);
+    transition-property: opacity, backdrop-filter;
+    transition-timing-function: var(--transition-timing-function);
+    transition-duration: var(--transition-duration-150ms);
   }
   &__inner {
     overflow: hidden;
