@@ -2,8 +2,8 @@ declare const styles: {
   readonly "bookmark": string;
   readonly "bookmark__card": string;
   readonly "bookmark__card--corners-fix": string;
+  readonly "bookmark__card--no-cover": string;
   readonly "bookmark__card__cover": string;
-  readonly "bookmark__card__cover--no-image": string;
   readonly "bookmark__card__cover__image": string;
   readonly "bookmark__card__cover__image__fill": string;
   readonly "bookmark__card__cover__image__top": string;

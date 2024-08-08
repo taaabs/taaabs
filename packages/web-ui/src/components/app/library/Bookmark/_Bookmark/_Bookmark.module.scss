@@ -53,17 +53,17 @@
         border-bottom-right-radius: 11px;
       }
     }
+    &--no-cover {
+      @include at992 {
+        padding-left: var(--padding-14px);
+      }
+    }
     &__cover {
       grid-area: cover;
       position: relative;
       padding: var(--padding-10px) var(--padding-10px) var(--padding-10px) 0;
       @include at992 {
         padding: var(--padding-10px);
-      }
-      &--no-image {
-        @include to992 {
-          display: none;
-        }
       }
       &__image {
         display: flex;
@@ -74,10 +74,6 @@
         overflow: hidden;
         width: 111px;
         height: 58px;
-        background-color: #f3f3f3;
-        @include dark {
-          background-color: var(--dark200);
-        }
         @include at992 {
           width: 156px;
           height: 82px;

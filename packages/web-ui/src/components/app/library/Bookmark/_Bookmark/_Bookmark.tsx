@@ -636,6 +636,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             className={cn(styles.bookmark__card, {
               [styles['bookmark__card--corners-fix']]:
                 (!props.links.length && !props.note) || props.is_compact,
+              [styles['bookmark__card--no-cover']]:
+                !props.cover && !props.cover_hash,
             })}
             onContextMenu={(e) => {
               if ('ontouchstart' in window) {
@@ -645,43 +647,40 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               }
             }}
           >
-            <div
-              className={cn(styles.bookmark__card__cover, {
-                [styles['bookmark__card__cover--no-image']]:
-                  !props.cover && !props.cover_hash,
-              })}
-            >
-              <div className={styles.bookmark__card__cover__image}>
-                {props.blurhash && <BlurhashCanvas hash={props.blurhash} />}
-                {props.cover ? (
-                  <>
-                    <img
-                      className={styles.bookmark__card__cover__image__fill}
-                      src={`data:image/webp;base64,${props.cover}`}
-                    />
-                    <img
-                      className={styles.bookmark__card__cover__image__top}
-                      src={`data:image/webp;base64,${props.cover}`}
-                    />
-                  </>
-                ) : props.cover_hash ? (
-                  <>
-                    <img
-                      className={styles.bookmark__card__cover__image__fill}
-                      loading="lazy"
-                      src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
-                    />
-                    <img
-                      className={styles.bookmark__card__cover__image__top}
-                      loading="lazy"
-                      src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
-                    />
-                  </>
-                ) : (
-                  <Icon variant="BOOKMARK_FILLED" />
-                )}
+            {(props.cover || props.cover_hash) && (
+              <div className={styles.bookmark__card__cover}>
+                <div className={styles.bookmark__card__cover__image}>
+                  {props.blurhash && <BlurhashCanvas hash={props.blurhash} />}
+                  {props.cover ? (
+                    <>
+                      <img
+                        className={styles.bookmark__card__cover__image__fill}
+                        src={`data:image/webp;base64,${props.cover}`}
+                      />
+                      <img
+                        className={styles.bookmark__card__cover__image__top}
+                        src={`data:image/webp;base64,${props.cover}`}
+                      />
+                    </>
+                  ) : props.cover_hash ? (
+                    <>
+                      <img
+                        className={styles.bookmark__card__cover__image__fill}
+                        loading="lazy"
+                        src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
+                      />
+                      <img
+                        className={styles.bookmark__card__cover__image__top}
+                        loading="lazy"
+                        src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
+                      />
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             <div className={styles.bookmark__card__date}>
               <div className={styles.bookmark__card__date__text}>
