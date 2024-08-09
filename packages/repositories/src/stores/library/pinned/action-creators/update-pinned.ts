@@ -21,6 +21,8 @@ export const update_pinned = (params: {
       params.encryption_key,
     )
 
+    console.log(result)
+
     dispatch(pinned_actions.set_items(result))
     dispatch(pinned_actions.set_is_updating(false))
   }
