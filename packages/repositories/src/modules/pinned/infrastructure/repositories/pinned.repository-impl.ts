@@ -82,17 +82,34 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
       encryption_key,
     )
 
-    return result.map((item) => ({
-      bookmark_id: item.bookmark_id,
-      created_at: item.created_at,
-      updated_at: item.updated_at,
-      url: item.url!,
-      title: item.title,
-      stars: item.stars,
-      is_unsorted: item.is_unsorted,
-      is_archived: item.is_archived,
-      tags: item.tags,
-      open_snapshot: item.open_snapshot,
-    }))
+    const items: GetPinned_Ro = []
+
+    for (const item of result) {
+      items.push({
+        bookmark_id: item.bookmark_id,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+        url: item.url
+          ? item.url
+          : await Crypto.AES.decrypt(item.url_aes!, encryption_key),
+        title: item.title
+          ? item.title
+          : item.title_aes
+          ? await Crypto.AES.decrypt(item.title_aes, encryption_key)
+          : undefined,
+        stars: item.stars,
+        is_unsorted: item.is_unsorted,
+        is_archived: item.is_archived,
+        tags: item.tags,
+        open_snapshot: item.open_snapshot,
+        favicon: item.favicon_aes
+          ? await Crypto.AES.decrypt(item.favicon_aes, encryption_key)
+          : undefined,
+        is_parsed: item.is_parsed,
+        is_public: item.is_public,
+      })
+    }
+
+    return items
   }
 }
