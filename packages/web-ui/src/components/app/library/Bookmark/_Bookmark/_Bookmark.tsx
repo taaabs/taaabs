@@ -131,6 +131,7 @@ export namespace _Bookmark {
       yields: number
     }
     on_mouse_up?: () => void
+    has_cover?: boolean
     cover_hash?: string
     cover?: string // Base64 encoded webp of a private bookmark.
     blurhash?: string
@@ -143,6 +144,7 @@ export namespace _Bookmark {
 
 export const _Bookmark: React.FC<_Bookmark.Props> = memo(
   function _Bookmark(props) {
+    console.log(props.has_cover)
     const [tags, set_tags] = useState<_Bookmark.Props['tags']>(props.tags)
     const [is_points_givenrequested, set_is_points_givenrequested] =
       useState<boolean>()
@@ -636,8 +638,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             className={cn(styles.bookmark__card, {
               [styles['bookmark__card--corners-fix']]:
                 (!props.links.length && !props.note) || props.is_compact,
-              [styles['bookmark__card--no-cover']]:
-                !props.cover && !props.cover_hash,
+              [styles['bookmark__card--no-cover']]: !props.has_cover,
             })}
             onContextMenu={(e) => {
               if ('ontouchstart' in window) {
@@ -647,7 +648,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               }
             }}
           >
-            {(props.cover || props.cover_hash) && (
+            {props.has_cover && (
               <div className={styles.bookmark__card__cover}>
                 <div className={styles.bookmark__card__cover__image}>
                   {props.blurhash && <BlurhashCanvas hash={props.blurhash} />}

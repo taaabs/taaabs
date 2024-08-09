@@ -623,7 +623,7 @@ importers:
         specifier: ^20.14.12
         version: 20.14.12
       '@types/react':
-        specifier: ^18.3.3
+        specifier: ^18.3.1
         version: 18.3.3
       '@types/react-dom':
         specifier: ^18.3.0

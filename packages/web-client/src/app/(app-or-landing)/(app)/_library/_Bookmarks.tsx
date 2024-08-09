@@ -563,6 +563,295 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       toast.success(props.dictionary.app.library.bookmark_updated)
     }
 
+    const handle_reading_mode_click = async (url: string) => {
+      const data_source = new Bookmarks_DataSourceImpl(auth_context.ky_instance)
+      const repository = new Bookmarks_RepositoryImpl(data_source)
+      let links_data: GetLinksData_Ro | undefined = undefined
+      if (username) {
+        links_data = await repository.get_links_data_public({
+          bookmark_id: bookmark.id,
+          bookmark_updated_at: new Date(bookmark.updated_at),
+          username,
+        })
+      } else {
+        links_data = await repository.get_links_data_authorized(
+          {
+            bookmark_id: bookmark.id,
+            bookmark_updated_at: new Date(bookmark.updated_at),
+          },
+          auth_context.auth_data!.encryption_key,
+        )
+      }
+      const link_data = links_data.find((link) => link.url == url)
+      if (link_data && link_data.reader_data) {
+        reader_modal_setter({
+          reader_data: link_data.reader_data,
+          dictionary: props.dictionary,
+          modal_context,
+        })
+      }
+      if (!username) {
+        const data_source = new Bookmarks_DataSourceImpl(
+          auth_context.ky_instance,
+        )
+        const repository = new Bookmarks_RepositoryImpl(data_source)
+        repository.record_visit({
+          bookmark_id: bookmark.id,
+          visited_at: new Date().toISOString(),
+        })
+      }
+    }
+
+    const handle_bookmark_click = () => {
+      if (bookmarks_hook.density == 'compact') {
+        if (bookmark.is_compact || bookmark.is_compact === undefined) {
+          dispatch(
+            bookmarks_actions.set_bookmark_is_compact({
+              index: i,
+              is_compact: false,
+            }),
+          )
+        } else {
+          dispatch(
+            bookmarks_actions.set_bookmark_is_compact({
+              index: i,
+              is_compact: true,
+            }),
+          )
+        }
+      }
+    }
+
+    const handle_link_click = async (url: string) => {
+      if (!username) {
+        const record_visit_params: RecordVisit_Params = {
+          bookmark_id: bookmark.id,
+          visited_at: new Date().toISOString(),
+        }
+        localStorage.setItem(
+          browser_storage.local_storage.authorized_library.record_visit_params,
+          JSON.stringify(record_visit_params),
+        )
+      }
+      window.onbeforeunload = null
+      // Timeout is there so updated by cache_data values of search_data_awaits_caching,
+      // archived_search_data_awaits_caching can be seen by "beforeunload" event handler.
+      setTimeout(() => {
+        location.href = url
+      }, 0)
+    }
+
+    const handle_mouse_up = async () => {
+      if (!tag_view_options_hook.dragged_tag) return
+      if (bookmark.tags.length == system_values.bookmark.tags.limit) {
+        toast.error(props.dictionary.app.library.errors.tag_limit_reached)
+        return
+      }
+      if (
+        bookmark.tags.findIndex(
+          (tag) => tag.id == tag_view_options_hook.dragged_tag!.id,
+        ) != -1
+      ) {
+        return
+      }
+      dispatch(bookmarks_actions.set_is_upserting(true))
+      const modified_bookmark: UpsertBookmark_Params = {
+        bookmark_id: bookmark.id,
+        is_public: bookmark.is_public,
+        created_at: new Date(bookmark.created_at),
+        title: bookmark.title,
+        note: bookmark.note,
+        is_archived: is_archived_filter,
+        is_unsorted: bookmark.is_unsorted,
+        stars: bookmark.stars,
+        links: bookmark.links.map((link) => ({
+          url: link.url,
+          site_path: link.site_path,
+          is_public: link.is_public,
+          is_pinned: link.is_pinned,
+          pin_title: link.pin_title,
+          open_snapshot: link.open_snapshot,
+          favicon: link.favicon,
+        })),
+        tags: [
+          ...bookmark.tags.map((tag) => ({
+            name: tag.name,
+            is_public: tag.is_public,
+          })),
+          {
+            name: tag_view_options_hook.dragged_tag.name,
+            is_public: bookmark.is_public,
+          },
+        ],
+        cover_hash: bookmark.cover_hash,
+        has_cover_aes: bookmark.has_cover_aes,
+        blurhash: bookmark.blurhash,
+      }
+      const updated_bookmark = await dispatch(
+        bookmarks_actions.upsert_bookmark({
+          bookmark: modified_bookmark,
+          last_authorized_counts_params:
+            JSON.parse(
+              sessionStorage.getItem(
+                browser_storage.session_storage.library
+                  .last_authorized_counts_params,
+              ) || 'null',
+            ) || undefined,
+          get_tag_hierarchies_request_params:
+            tag_hierarchies_hook.get_authorized_request_params({
+              filter: filter_view_options_hook.current_filter,
+              gte: date_view_options_hook.current_gte,
+              lte: date_view_options_hook.current_lte,
+            }),
+          ky: auth_context.ky_instance,
+          encryption_key: auth_context.auth_data!.encryption_key,
+        }),
+      )
+      // Update highlights.
+      if (search_hook.result?.hits.length) {
+        await props.local_db.upsert_bookmark({
+          db: (is_archived_filter
+            ? props.local_db.archived_db
+            : props.local_db.db)!,
+          bookmark: {
+            id: bookmark.id,
+            is_archived: is_archived_filter,
+            is_unsorted: updated_bookmark.is_unsorted,
+            title: updated_bookmark.title,
+            note: updated_bookmark.note,
+            tags: updated_bookmark.tags.map((tag) => ({
+              name: tag.name,
+              id: tag.id,
+            })),
+            links: updated_bookmark.links.map((link) => ({
+              url: link.url,
+              site_path: link.site_path,
+            })),
+            created_at: updated_bookmark.created_at,
+            visited_at: bookmark.visited_at,
+            updated_at: updated_bookmark.updated_at,
+            stars: updated_bookmark.stars,
+            tag_ids: updated_bookmark.tags.map((tag) => tag.id),
+          },
+        })
+        await search_hook.get_result({
+          search_string: search_hook.search_string,
+          refresh_highlights_only: true,
+        })
+      }
+      dispatch(bookmarks_actions.set_is_upserting(false))
+      toast.success(props.dictionary.app.library.bookmark_updated)
+    }
+
+    const handle_tag_delete_click = async (tag_id: number) => {
+      dispatch(bookmarks_actions.set_is_upserting(true))
+      const modified_bookmark: UpsertBookmark_Params = {
+        bookmark_id: bookmark.id,
+        is_public: bookmark.is_public,
+        created_at: new Date(bookmark.created_at),
+        title: bookmark.title,
+        note: bookmark.note,
+        is_archived: is_archived_filter,
+        is_unsorted: bookmark.is_unsorted,
+        stars: bookmark.stars,
+        links: bookmark.links.map((link) => ({
+          url: link.url,
+          site_path: link.site_path,
+          is_public: link.is_public,
+          is_pinned: link.is_pinned,
+          pin_title: link.pin_title,
+          open_snapshot: link.open_snapshot,
+          favicon: link.favicon,
+        })),
+        tags: bookmark.tags
+          .filter((tag) => tag.id !== tag_id)
+          .map((tag) => ({
+            name: tag.name,
+            is_public: tag.is_public,
+          })),
+        cover_hash: bookmark.cover_hash,
+        has_cover_aes: bookmark.has_cover_aes,
+        blurhash: bookmark.blurhash,
+      }
+      const updated_bookmark = await dispatch(
+        bookmarks_actions.upsert_bookmark({
+          bookmark: modified_bookmark,
+          last_authorized_counts_params:
+            JSON.parse(
+              sessionStorage.getItem(
+                browser_storage.session_storage.library
+                  .last_authorized_counts_params,
+              ) || 'null',
+            ) || undefined,
+          get_tag_hierarchies_request_params:
+            tag_hierarchies_hook.get_authorized_request_params({
+              filter: filter_view_options_hook.current_filter,
+              gte: date_view_options_hook.current_gte,
+              lte: date_view_options_hook.current_lte,
+            }),
+          ky: auth_context.ky_instance,
+          encryption_key: auth_context.auth_data!.encryption_key,
+        }),
+      )
+      // Update highlights.
+      if (search_hook.result?.hits.length) {
+        await props.local_db.upsert_bookmark({
+          db: (is_archived_filter
+            ? props.local_db.archived_db
+            : props.local_db.db)!,
+          bookmark: {
+            id: bookmark.id,
+            is_archived: is_archived_filter,
+            is_unsorted: updated_bookmark.is_unsorted,
+            title: updated_bookmark.title,
+            note: updated_bookmark.note,
+            tags: updated_bookmark.tags.map((tag) => ({
+              name: tag.name,
+              id: tag.id,
+            })),
+            links: updated_bookmark.links.map((link) => ({
+              url: link.url,
+              site_path: link.site_path,
+            })),
+            created_at: updated_bookmark.created_at,
+            visited_at: bookmark.visited_at,
+            updated_at: updated_bookmark.updated_at,
+            stars: updated_bookmark.stars,
+            tag_ids: updated_bookmark.tags.map((tag) => tag.id),
+          },
+        })
+        await search_hook.get_result({
+          search_string: search_hook.search_string,
+          refresh_highlights_only: true,
+        })
+      }
+      const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
+      if (
+        !tag_view_options_hook.selected_tags.every((t) =>
+          updated_tag_ids.includes(t),
+        )
+      ) {
+        // We filter out bookmark when there are other bookmarks still matching with selected tags.
+        dispatch(
+          bookmarks_actions.filter_out_bookmark({
+            bookmark_id: updated_bookmark.id,
+          }),
+        )
+        if (search_hook.count) {
+          search_hook.set_count(search_hook.count - 1)
+        }
+      }
+      if (
+        tag_view_options_hook.selected_tags.includes(tag_id) &&
+        counts_hook.tags![tag_id].yields == 1
+      ) {
+        dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(true))
+        tag_view_options_hook.remove_tags_from_search_params([tag_id])
+      }
+      dispatch(bookmarks_actions.set_is_upserting(false))
+      toast.success(props.dictionary.app.library.bookmark_updated)
+    }
+
     return (
       <_Bookmark
         key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
@@ -582,6 +871,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
         is_public={bookmark.is_public}
         points_given={points_hook.points_given[bookmark.id]}
         points={bookmark.points}
+        has_cover={!!(bookmark.has_cover_aes || bookmark.cover_hash)}
         has_cover_aes={bookmark.has_cover_aes}
         cover_hash={bookmark.cover_hash}
         blurhash={bookmark.blurhash}
@@ -603,25 +893,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
         }
         title={bookmark.title}
         note={bookmark.note}
-        on_click={() => {
-          if (bookmarks_hook.density == 'compact') {
-            if (bookmark.is_compact || bookmark.is_compact === undefined) {
-              dispatch(
-                bookmarks_actions.set_bookmark_is_compact({
-                  index: i,
-                  is_compact: false,
-                }),
-              )
-            } else {
-              dispatch(
-                bookmarks_actions.set_bookmark_is_compact({
-                  index: i,
-                  is_compact: true,
-                }),
-              )
-            }
-          }
-        }}
+        on_click={handle_bookmark_click}
         date={
           sort_by_view_options_hook.current_sort_by == SortBy.CREATED_AT
             ? new Date(bookmark.created_at)
@@ -674,68 +946,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
             }),
           )
         }}
-        on_link_click={async (url) => {
-          if (!username) {
-            const record_visit_params: RecordVisit_Params = {
-              bookmark_id: bookmark.id,
-              visited_at: new Date().toISOString(),
-            }
-            localStorage.setItem(
-              browser_storage.local_storage.authorized_library
-                .record_visit_params,
-              JSON.stringify(record_visit_params),
-            )
-          }
-          window.onbeforeunload = null
-          // Timeout is there so updated by cache_data values of search_data_awaits_caching,
-          // archived_search_data_awaits_caching can be seen by "beforeunload" event handler.
-          setTimeout(() => {
-            location.href = url
-          }, 0)
-        }}
-        on_is_visible={() => {
-          // Prefetch links data.
-        }}
-        on_reading_mode_click={async (url) => {
-          const data_source = new Bookmarks_DataSourceImpl(
-            auth_context.ky_instance,
-          )
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          let links_data: GetLinksData_Ro | undefined = undefined
-          if (username) {
-            links_data = await repository.get_links_data_public({
-              bookmark_id: bookmark.id,
-              bookmark_updated_at: new Date(bookmark.updated_at),
-              username,
-            })
-          } else {
-            links_data = await repository.get_links_data_authorized(
-              {
-                bookmark_id: bookmark.id,
-                bookmark_updated_at: new Date(bookmark.updated_at),
-              },
-              auth_context.auth_data!.encryption_key,
-            )
-          }
-          const link_data = links_data.find((link) => link.url == url)
-          if (link_data && link_data.reader_data) {
-            reader_modal_setter({
-              reader_data: link_data.reader_data,
-              dictionary: props.dictionary,
-              modal_context,
-            })
-          }
-          if (!username) {
-            const data_source = new Bookmarks_DataSourceImpl(
-              auth_context.ky_instance,
-            )
-            const repository = new Bookmarks_RepositoryImpl(data_source)
-            repository.record_visit({
-              bookmark_id: bookmark.id,
-              visited_at: new Date().toISOString(),
-            })
-          }
-        }}
+        on_link_click={handle_link_click}
+        on_reading_mode_click={handle_reading_mode_click}
         on_link_middle_click={() => {
           if (!username) {
             const data_source = new Bookmarks_DataSourceImpl(
@@ -764,107 +976,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
         favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
         // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed).
         dragged_tag={tag_view_options_hook.dragged_tag}
-        on_mouse_up={async () => {
-          if (!tag_view_options_hook.dragged_tag) return
-          if (bookmark.tags.length == system_values.bookmark.tags.limit) {
-            toast.error(props.dictionary.app.library.errors.tag_limit_reached)
-            return
-          }
-          if (
-            bookmark.tags.findIndex(
-              (tag) => tag.id == tag_view_options_hook.dragged_tag!.id,
-            ) != -1
-          ) {
-            return
-          }
-          dispatch(bookmarks_actions.set_is_upserting(true))
-          const modified_bookmark: UpsertBookmark_Params = {
-            bookmark_id: bookmark.id,
-            is_public: bookmark.is_public,
-            created_at: new Date(bookmark.created_at),
-            title: bookmark.title,
-            note: bookmark.note,
-            is_archived: is_archived_filter,
-            is_unsorted: bookmark.is_unsorted,
-            stars: bookmark.stars,
-            links: bookmark.links.map((link) => ({
-              url: link.url,
-              site_path: link.site_path,
-              is_public: link.is_public,
-              is_pinned: link.is_pinned,
-              pin_title: link.pin_title,
-              open_snapshot: link.open_snapshot,
-              favicon: link.favicon,
-            })),
-            tags: [
-              ...bookmark.tags.map((tag) => ({
-                name: tag.name,
-                is_public: tag.is_public,
-              })),
-              {
-                name: tag_view_options_hook.dragged_tag.name,
-                is_public: bookmark.is_public,
-              },
-            ],
-            cover_hash: bookmark.cover_hash,
-            has_cover_aes: bookmark.has_cover_aes,
-            blurhash: bookmark.blurhash,
-          }
-          const updated_bookmark = await dispatch(
-            bookmarks_actions.upsert_bookmark({
-              bookmark: modified_bookmark,
-              last_authorized_counts_params:
-                JSON.parse(
-                  sessionStorage.getItem(
-                    browser_storage.session_storage.library
-                      .last_authorized_counts_params,
-                  ) || 'null',
-                ) || undefined,
-              get_tag_hierarchies_request_params:
-                tag_hierarchies_hook.get_authorized_request_params({
-                  filter: filter_view_options_hook.current_filter,
-                  gte: date_view_options_hook.current_gte,
-                  lte: date_view_options_hook.current_lte,
-                }),
-              ky: auth_context.ky_instance,
-              encryption_key: auth_context.auth_data!.encryption_key,
-            }),
-          )
-          // Update highlights.
-          if (search_hook.result?.hits.length) {
-            await props.local_db.upsert_bookmark({
-              db: (is_archived_filter
-                ? props.local_db.archived_db
-                : props.local_db.db)!,
-              bookmark: {
-                id: bookmark.id,
-                is_archived: is_archived_filter,
-                is_unsorted: updated_bookmark.is_unsorted,
-                title: updated_bookmark.title,
-                note: updated_bookmark.note,
-                tags: updated_bookmark.tags.map((tag) => ({
-                  name: tag.name,
-                  id: tag.id,
-                })),
-                links: updated_bookmark.links.map((link) => ({
-                  url: link.url,
-                  site_path: link.site_path,
-                })),
-                created_at: updated_bookmark.created_at,
-                visited_at: bookmark.visited_at,
-                updated_at: updated_bookmark.updated_at,
-                stars: updated_bookmark.stars,
-                tag_ids: updated_bookmark.tags.map((tag) => tag.id),
-              },
-            })
-            await search_hook.get_result({
-              search_string: search_hook.search_string,
-              refresh_highlights_only: true,
-            })
-          }
-          dispatch(bookmarks_actions.set_is_upserting(false))
-          toast.success(props.dictionary.app.library.bookmark_updated)
-        }}
+        on_mouse_up={handle_mouse_up}
         on_tags_order_change={
           !username
             ? async (tags) => {
@@ -950,114 +1062,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           const name = counts_hook.tags![id].name
           on_tag_rename_click({ name, id })
         }}
-        on_tag_delete_click={async (tag_id) => {
-          dispatch(bookmarks_actions.set_is_upserting(true))
-          const modified_bookmark: UpsertBookmark_Params = {
-            bookmark_id: bookmark.id,
-            is_public: bookmark.is_public,
-            created_at: new Date(bookmark.created_at),
-            title: bookmark.title,
-            note: bookmark.note,
-            is_archived: is_archived_filter,
-            is_unsorted: bookmark.is_unsorted,
-            stars: bookmark.stars,
-            links: bookmark.links.map((link) => ({
-              url: link.url,
-              site_path: link.site_path,
-              is_public: link.is_public,
-              is_pinned: link.is_pinned,
-              pin_title: link.pin_title,
-              open_snapshot: link.open_snapshot,
-              favicon: link.favicon,
-            })),
-            tags: bookmark.tags
-              .filter((tag) => tag.id !== tag_id)
-              .map((tag) => ({
-                name: tag.name,
-                is_public: tag.is_public,
-              })),
-            cover_hash: bookmark.cover_hash,
-            has_cover_aes: bookmark.has_cover_aes,
-            blurhash: bookmark.blurhash,
-          }
-          const updated_bookmark = await dispatch(
-            bookmarks_actions.upsert_bookmark({
-              bookmark: modified_bookmark,
-              last_authorized_counts_params:
-                JSON.parse(
-                  sessionStorage.getItem(
-                    browser_storage.session_storage.library
-                      .last_authorized_counts_params,
-                  ) || 'null',
-                ) || undefined,
-              get_tag_hierarchies_request_params:
-                tag_hierarchies_hook.get_authorized_request_params({
-                  filter: filter_view_options_hook.current_filter,
-                  gte: date_view_options_hook.current_gte,
-                  lte: date_view_options_hook.current_lte,
-                }),
-              ky: auth_context.ky_instance,
-              encryption_key: auth_context.auth_data!.encryption_key,
-            }),
-          )
-          // Update highlights.
-          if (search_hook.result?.hits.length) {
-            await props.local_db.upsert_bookmark({
-              db: (is_archived_filter
-                ? props.local_db.archived_db
-                : props.local_db.db)!,
-              bookmark: {
-                id: bookmark.id,
-                is_archived: is_archived_filter,
-                is_unsorted: updated_bookmark.is_unsorted,
-                title: updated_bookmark.title,
-                note: updated_bookmark.note,
-                tags: updated_bookmark.tags.map((tag) => ({
-                  name: tag.name,
-                  id: tag.id,
-                })),
-                links: updated_bookmark.links.map((link) => ({
-                  url: link.url,
-                  site_path: link.site_path,
-                })),
-                created_at: updated_bookmark.created_at,
-                visited_at: bookmark.visited_at,
-                updated_at: updated_bookmark.updated_at,
-                stars: updated_bookmark.stars,
-                tag_ids: updated_bookmark.tags.map((tag) => tag.id),
-              },
-            })
-            await search_hook.get_result({
-              search_string: search_hook.search_string,
-              refresh_highlights_only: true,
-            })
-          }
-          const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
-          if (
-            !tag_view_options_hook.selected_tags.every((t) =>
-              updated_tag_ids.includes(t),
-            )
-          ) {
-            // We filter out bookmark when there are other bookmarks still matching with selected tags.
-            dispatch(
-              bookmarks_actions.filter_out_bookmark({
-                bookmark_id: updated_bookmark.id,
-              }),
-            )
-            if (search_hook.count) {
-              search_hook.set_count(search_hook.count - 1)
-            }
-          }
-          if (
-            tag_view_options_hook.selected_tags.includes(tag_id) &&
-            counts_hook.tags![tag_id].yields == 1
-          ) {
-            dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(true))
-            tag_view_options_hook.remove_tags_from_search_params([tag_id])
-          }
-          dispatch(bookmarks_actions.set_is_upserting(false))
-          toast.success(props.dictionary.app.library.bookmark_updated)
-        }}
+        on_tag_delete_click={handle_tag_delete_click}
         links={bookmark.links.map((link) => ({
           url: link.url,
           saves: link.saves,

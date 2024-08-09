@@ -1,11 +1,10 @@
 import { AuthContext } from '@/app/auth-provider'
 import { browser_storage } from '@/constants/browser-storage'
-import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'
 import { use_is_hydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useContext, useEffect } from 'react'
 
 export const use_pinned = () => {

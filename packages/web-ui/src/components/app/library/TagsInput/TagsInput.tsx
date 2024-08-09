@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { ReactSortable } from 'react-sortablejs'
 import styles from './TagsInput.module.scss'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -208,7 +208,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
 
       <div
         className={cn(styles.suggestions__items, {
-          [styles['suggestions__items--visible']]: props.all_tags.length,
+          [styles['suggestions__items--visible']]: props.all_tags !== undefined,
         })}
       >
         {/* Create new tag (shown when no match in filtered out all tags was found). */}

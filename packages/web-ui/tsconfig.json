@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ES6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -14,19 +14,19 @@
     "isolatedModules": true,
     "incremental": true,
     "baseUrl": ".",
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "jsxImportSource": "react",
     "paths": {
       "@web-ui/*": ["src/*"],
       "@shared/*": ["../shared/src/*"]
     },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "types": ["vite/client", "jest"]
   },
-  "include": ["next-env.d.ts","src/**/*.ts", "src/**/*.tsx", "../shared/src/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "../shared/src/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }

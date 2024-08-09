@@ -10,7 +10,6 @@ export namespace Bookmark {
   export type Props = _Bookmark.Props & {
     render_height?: number
     set_render_height: (height: number) => void
-    on_is_visible: () => void
   }
 }
 
@@ -25,7 +24,6 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
       const height = ref.current.getBoundingClientRect().height
       props.set_render_height(height)
     }
-    is_visible && props.on_is_visible()
   }, [is_visible])
 
   useUpdateEffect(() => {
