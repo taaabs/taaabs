@@ -1,0 +1,83 @@
+// @type
+@use '../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--white);
+  @include dark {
+    color: var(--blue100);
+  }
+  background: var(--accent-color);
+  font-family: var(--font-family-plus-jakarta-sans);
+  font-weight: var(--font-weight-plus-jakarta-sans-bold);
+  @include transition-150ms(background-color);
+  border-radius: var(--border-radius-999px);
+  @include hover {
+    background-color: var(--blue800);
+    @include dark {
+      background-color: var(--blue700);
+    }
+  }
+  height: var(--button-dimension-40px);
+  padding: 0 16px;
+  &:focus-visible {
+    outline: 1.5px solid var(--blue400);
+    outline-offset: 2px;
+  }
+
+  span {
+    padding-bottom: 0.07em;
+  }
+  &--disabled,
+  &:disabled {
+    opacity: var(--dimmed-opacity);
+    pointer-events: none;
+  }
+  &--danger {
+    background-color: var(--red);
+    @include hover {
+      background: var(--red700);
+      @include dark {
+        background-color: var(--red800);
+      }
+    }
+    &:focus-visible {
+      outline-color: var(--red300);
+    }
+  }
+  &--small {
+    height: var(--button-dimension-34px);
+    font-size: var(--font-size-13px);
+    padding: 0 14px;
+  }
+  &--medium {
+    @include at768 {
+      font-size: var(--font-size-17px);
+      height: 2.5em;
+      padding: 0 1em;
+    }
+    @include at1200 {
+      font-size: var(--font-size-19px);
+    }
+  }
+  &--large {
+    height: var(--button-dimension-40px);
+    @include at768 {
+      font-size: var(--font-size-17px);
+      height: 2.7em;
+      padding: 0 1em;
+    }
+    @include at992 {
+      font-size: var(--font-size-19px);
+    }
+    @include at1200 {
+      font-size: var(--font-size-20px);
+    }
+    @include at1380 {
+      font-size: var(--font-size-22px);
+    }
+  }
+}

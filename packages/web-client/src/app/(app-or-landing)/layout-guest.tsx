@@ -3,7 +3,7 @@
 import { Landing as UiLandingTemplate_Landing } from '@web-ui/components/landing/templates/landing'
 import { DesktopNavigation } from './_components/DesktopNavigation'
 import { DesktopUserForHeader as UiLandingMolecule_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
-import { LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
 import { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { Dictionary } from '@/dictionaries/dictionary'
@@ -11,7 +11,7 @@ import { PublicUserAvatarProvider } from '@/providers/PublicUserAvatarProvider'
 import { HeaderDesktop } from './_components/HeaderDesktop'
 import { HeaderMobile } from './_components/HeaderMobile'
 import { BottomNavigationBar } from './_components/BottomNavigationBar'
-import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/App'
+import { App as Ui_app_templates_App } from '@web-ui/components/app/templates/App'
 
 const landing_pathnames = ['/', '/pricing', '/help', '/updates']
 
@@ -23,7 +23,7 @@ const LayoutGuest: React.FC<{
 
   return landing_pathnames.includes(pathname) ? (
     <UiLandingTemplate_Landing
-      slot_logo={<LogoForHeader is_large={true} href={'/'} />}
+      slot_logo={<UiLogoForHeader is_large={true} href={'/'} />}
       slot_desktop_user={
         <UiLandingMolecule_DesktopUserForHeader
           button_label={props.dictionary.landing.log_in}
@@ -39,7 +39,7 @@ const LayoutGuest: React.FC<{
     </UiLandingTemplate_Landing>
   ) : (
     <PublicUserAvatarProvider>
-      <UiAppTemplate_App
+      <Ui_app_templates_App
         slot_header_desktop={
           <HeaderDesktop dictionary={props.dictionary} bookmarklet_script="" />
         }
@@ -49,7 +49,7 @@ const LayoutGuest: React.FC<{
         }
       >
         {props.children}
-      </UiAppTemplate_App>
+      </Ui_app_templates_App>
     </PublicUserAvatarProvider>
   )
 }

@@ -2,12 +2,12 @@ import { memo, useEffect, useRef, useState } from 'react'
 import styles from './TagHierarchies.module.scss'
 import cn from 'classnames'
 import Nestable from 'react-nestable'
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
 import { useContextMenu } from 'use-context-menu'
-import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/Dropdown'
-import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/Dropdown/standard-item'
+import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
+import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import Skeleton from 'react-loading-skeleton'
 import SimpleBar from 'simplebar-react'
@@ -67,8 +67,8 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const [context_menu_of_item_id, set_context_menu_of_item_id] =
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
-      <UiCommon_Dropdown>
-        <UiCommon_Dropdown_StandardItem
+      <Ui_Dropdown>
+        <Ui_Dropdown_StandardItem
           label={props.translations.rename}
           icon_variant="EDIT"
           on_click={() => {
@@ -77,7 +77,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             )
           }}
         />
-        <UiCommon_Dropdown_StandardItem
+        <Ui_Dropdown_StandardItem
           label={props.translations.delete}
           icon_variant="DELETE"
           on_click={() => {
@@ -87,7 +87,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             set_selected_tag_ids([])
           }}
         />
-      </UiCommon_Dropdown>,
+      </Ui_Dropdown>,
     )
 
     const clear_mouseover_ids = () => {
@@ -264,9 +264,9 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           })}
         >
           {params.is_collapsed ? (
-            <Icon variant="LESS_THAN" />
+            <UiIcon variant="LESS_THAN" />
           ) : (
-            <Icon variant="LESS_THAN" />
+            <UiIcon variant="LESS_THAN" />
           )}
         </button>
       )

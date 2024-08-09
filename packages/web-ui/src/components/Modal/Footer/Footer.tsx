@@ -1,4 +1,4 @@
-import { Button } from '@web-ui/components/common/particles/button'
+import { Button } from '@web-ui/components/Button'
 import styles from './Footer.module.scss'
 
 // Don't suffix properties as the component is used in at least two places.

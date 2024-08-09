@@ -1,8 +1,8 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import awesomeDebouncePromise from 'awesome-debounce-promise'
 import { StandardSection as UiSettings_StandardSection } from '@web-ui/components/settings/StandardSection'
-import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
-import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
+import { Input as UiInput } from '@web-ui/components/Input'
+import { Button as UiButton } from '@web-ui/components/Button'
 import { useContext } from 'react'
 import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
@@ -115,7 +115,7 @@ export const SectionUsername: React.FC<{ dictionary: Dictionary }> = (
           render={({ field }) => {
             const error_message = errors.username?.message
             return (
-              <UiCommonAtom_Input
+              <UiInput
                 value={field.value}
                 on_change={(value) => {
                   if (isSubmitting) return
@@ -139,12 +139,12 @@ export const SectionUsername: React.FC<{ dictionary: Dictionary }> = (
           }}
         />
         <br />
-        <UiCommonParticle_Button
+        <UiButton
           type="submit"
           is_disabled={isSubmitting || !auth_context.auth_data}
         >
           {props.dictionary.settings.general.username.change_username}
-        </UiCommonParticle_Button>
+        </UiButton>
       </form>
     </UiSettings_StandardSection>
   )

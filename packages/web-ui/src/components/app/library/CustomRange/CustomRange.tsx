@@ -6,7 +6,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pl'
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 
 type Counts = {
   yyyymm: number
@@ -505,7 +505,7 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
               props.clear_date_range()
             }}
           >
-            <Icon variant="ADD" />
+            <UiIcon variant="ADD" />
           </button>
         )}
 

@@ -6,11 +6,8 @@ import {
   use_settings_backups_selector,
 } from './_hooks/store'
 import { backups_actions } from '@repositories/stores/settings-backups/backups/backups.slice'
-import { StandardSection as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/settings/StandardSection'
-import {
-  Button,
-  Button as UiCommonParticle_Button,
-} from '@web-ui/components/common/particles/button'
+import { StandardSection as Ui_settings_StandardSection } from '@web-ui/components/settings/StandardSection'
+import { Button as UiButton } from '@web-ui/components/Button'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
 import { AuthContext } from '@/app/auth-provider'
@@ -33,13 +30,13 @@ const Page: React.FC = () => {
   }, [is_hydrated])
 
   return (
-    <UiAppAtom_HeadingWithSubheading
+    <Ui_settings_StandardSection
       heading={{
         text: 'Manage backups',
         subtext: 'Request and download export files.',
       }}
     >
-      <Button
+      <UiButton
         on_click={async () => {
           try {
             const data_source = new ImportExport_DataSourceImpl(
@@ -54,7 +51,7 @@ const Page: React.FC = () => {
         }}
       >
         Request backup
-      </Button>
+      </UiButton>
 
       {state.backups?.map((backup) => {
         const created_at = new Date(backup.created_at).toISOString().split('T')
@@ -63,7 +60,7 @@ const Page: React.FC = () => {
           <div key={backup.id}>
             <br />
             <div>{`${created_at[0]} ${created_at[1].split('.')[0]}`}</div>
-            <UiCommonParticle_Button
+            <UiButton
               on_click={async () => {
                 const data_source = new ImportExport_DataSourceImpl(
                   auth_context.ky_instance,
@@ -83,11 +80,11 @@ const Page: React.FC = () => {
               }}
             >
               Download
-            </UiCommonParticle_Button>
+            </UiButton>
           </div>
         )
       })}
-    </UiAppAtom_HeadingWithSubheading>
+    </Ui_settings_StandardSection>
   )
 }
 

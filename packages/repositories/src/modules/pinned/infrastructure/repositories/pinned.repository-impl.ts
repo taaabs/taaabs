@@ -27,8 +27,8 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
         title: item.title
           ? item.title
           : item.title_aes
-            ? await Crypto.AES.decrypt(item.title_aes, encryption_key)
-            : undefined,
+          ? await Crypto.AES.decrypt(item.title_aes, encryption_key)
+          : undefined,
         stars: item.stars,
         is_unsorted: item.is_unsorted,
         is_archived: item.is_archived,

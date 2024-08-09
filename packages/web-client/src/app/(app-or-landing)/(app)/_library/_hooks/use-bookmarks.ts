@@ -249,7 +249,9 @@ export const use_bookmarks = () => {
       } else {
         dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
       }
-      dispatch(bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()))
+      dispatch(
+        bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
+      )
       dispatch(bookmarks_actions.set_incoming_bookmarks(JSON.parse(bookmarks)))
       dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
       const has_more_bookmarks = sessionStorage.getItem(

@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { ButtonOutlinedIcon } from '../../../../atoms/button-outlined-icon'
 import styles from './AuthorizedUser.module.scss'
-import { ButtonUserDesktop } from '../../../../atoms/button-user-desktop'
+import { _ButtonUserDesktop } from '../common/_ButtonUserDesktop'
 import cn from 'classnames'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { _IconButton } from '../common/_IconButton'
 
 export namespace AuthorizedUser {
   export type Props = {
@@ -14,8 +14,6 @@ export namespace AuthorizedUser {
       blurhash: string
     }
     pathname: string
-    on_click_notifications: () => void
-    on_click_search: () => void
     on_click_add: () => void
     slot_user_dropdown: React.ReactNode
   }
@@ -31,21 +29,11 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
 
   return (
     <div className={styles.container}>
-      {/* <ButtonOutlinedIcon
-        icon_variant="SEARCH"
-        on_click={props.on_click_search}
-      />
-      
-      <ButtonOutlinedIcon
-        icon_variant="NOTIFICATIONS"
-        on_click={props.on_click_notifications}
-      /> */}
-
-      <ButtonOutlinedIcon icon_variant="ADD" on_click={props.on_click_add} />
+      <_IconButton icon_variant="ADD" on_click={props.on_click_add} />
 
       <div className={styles['theme-set-by-system']}>
         <div className={styles.dark}>
-          <ButtonOutlinedIcon
+          <_IconButton
             icon_variant="THEME_AUTO"
             on_click={() => {
               ;(window as any).__set_preferred_theme('light')
@@ -54,7 +42,7 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
           />
         </div>
         <div className={styles.light}>
-          <ButtonOutlinedIcon
+          <_IconButton
             icon_variant="THEME_AUTO"
             on_click={() => {
               ;(window as any).__set_preferred_theme('dark')
@@ -66,7 +54,7 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
 
       <div className={styles['theme-set-by-user']}>
         <div className={styles.dark}>
-          <ButtonOutlinedIcon
+          <_IconButton
             icon_variant="THEME_DARK"
             on_click={() => {
               if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -79,7 +67,7 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
           />
         </div>
         <div className={styles.light}>
-          <ButtonOutlinedIcon
+          <_IconButton
             icon_variant="THEME_LIGHT"
             on_click={() => {
               if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -94,7 +82,7 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
       </div>
 
       <div className={styles.user}>
-        <ButtonUserDesktop
+        <_ButtonUserDesktop
           name={props.name}
           avatar={props.avatar}
           on_click={() => {

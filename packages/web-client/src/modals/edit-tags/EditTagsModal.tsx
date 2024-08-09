@@ -9,7 +9,7 @@ import { AuthContext } from '@/app/auth-provider'
 import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
 import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
 import { Tags_Ro } from '@repositories/modules/tags/domain/tags.ro'
-import { TagsInput as UiAppLibrary_TagsInput } from '@web-ui/components/app/library/TagsInput'
+import { TagsInput as Ui_app_library_TagsInput } from '@web-ui/components/app/library/TagsInput'
 import { system_values } from '@shared/constants/system-values'
 
 namespace EditTagsModal {
@@ -33,13 +33,13 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
     const data_source = new Tags_DataSourceImpl(auth_context.ky_instance)
     const repository = new Tags_RepositoryImpl(data_source)
     repository.tags(auth_context.auth_data!.encryption_key).then((result) => {
-        set_my_tags(result)
+      set_my_tags(result)
     })
   }, [])
 
   const content = (
     <UiModal_Content>
-      <UiAppLibrary_TagsInput
+      <Ui_app_library_TagsInput
         selected_tags={selected_tags.map((tag) => ({
           name: tag.name,
           is_public: tag.is_public,

@@ -63,12 +63,12 @@
   }
 }
 @mixin dark {
-  [data-theme="dark"] & {
+  [data-theme='dark'] & {
     @content;
   }
 }
 @mixin light {
-  [data-theme="light"] & {
+  [data-theme='light'] & {
     @content;
   }
 }

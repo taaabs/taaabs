@@ -1,7 +1,13 @@
 'use client'
 
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { createContext, ReactNode, useCallback, useEffect, useState } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 
 export type ModalContext = {
   set: (content?: ReactNode) => void

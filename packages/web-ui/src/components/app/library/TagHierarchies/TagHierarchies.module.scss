@@ -9,9 +9,8 @@
   );
   @include at992 {
     height: calc(
-      100svh - var(--header-desktop-height) - var(--padding-16px) - var(
-          --search-desktop-height
-        ) - var(--padding-16px)
+      100svh - var(--header-desktop-height) - var(--padding-16px) -
+        var(--search-desktop-height) - var(--padding-16px)
     );
   }
   &__scrolled {
@@ -167,8 +166,8 @@
     border-color: var(--dark400);
   }
   color: var(--text-color-dimmed);
-  transition:
-    color var(--transition-duration-150ms) var(--transition-timing-function),
+  transition: color var(--transition-duration-150ms)
+      var(--transition-timing-function),
     border-color var(--transition-duration-150ms)
       var(--transition-timing-function),
     background-color var(--transition-duration-150ms)

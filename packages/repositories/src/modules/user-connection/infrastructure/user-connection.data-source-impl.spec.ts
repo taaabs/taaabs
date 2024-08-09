@@ -32,9 +32,12 @@ describe('UserConnection_DataSourceImpl', () => {
       const result = await sut.toggle_following(params)
 
       expect(ky_instance_mock.post).toHaveBeenCalledTimes(1)
-      expect(ky_instance_mock.post).toHaveBeenCalledWith('v1/users/toggle-following', {
-        json: body_mock,
-      })
+      expect(ky_instance_mock.post).toHaveBeenCalledWith(
+        'v1/users/toggle-following',
+        {
+          json: body_mock,
+        },
+      )
       expect(result).toEqual(response_mock)
     })
   })
@@ -58,9 +61,12 @@ describe('UserConnection_DataSourceImpl', () => {
       const result = await sut.check_following(params)
 
       expect(ky_instance_mock.post).toHaveBeenCalledTimes(1)
-      expect(ky_instance_mock.post).toHaveBeenCalledWith('v1/users/check-following', {
-        json: body_mock,
-      })
+      expect(ky_instance_mock.post).toHaveBeenCalledWith(
+        'v1/users/check-following',
+        {
+          json: body_mock,
+        },
+      )
       expect(result).toEqual(response_mock)
     })
   })

@@ -9,9 +9,8 @@
   row-gap: var(--padding-24px);
   background-color: var(--background);
   @include at768 {
-  padding: var(--padding-32px) var(--padding-40px) var(--padding-40px)
-    var(--padding-40px);
-    
+    padding: var(--padding-32px) var(--padding-40px) var(--padding-40px)
+      var(--padding-40px);
   }
   @include at992 {
     display: grid;

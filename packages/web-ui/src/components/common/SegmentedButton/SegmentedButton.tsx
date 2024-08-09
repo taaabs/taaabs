@@ -61,8 +61,8 @@ export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
                 selected_idx == 2
                   ? `translateX(${item_widths[0] + item_widths[1]}px)`
                   : selected_idx == 1
-                    ? `translateX(${item_widths[0]}px)`
-                    : undefined,
+                  ? `translateX(${item_widths[0]}px)`
+                  : undefined,
             }}
           />
         )}

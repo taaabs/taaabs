@@ -2,14 +2,15 @@ import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { useContext } from 'react'
 import dynamic from 'next/dynamic'
-import { CustomRangeSkeleton as UiAppLibrary_CustomRangeSkeleton } from '@web-ui/components/app/library/CustomRangeSkeleton'
-import { LibraryAside as UiAppTemplate_LibraryAside } from '@web-ui/components/app/templates/library-aside'
-import { SelectedTags as UiAppAtom_SelectedTags } from '@web-ui/components/app/atoms/selected-tags'
-import { Tags as UiAppLibrary_Tags } from '@web-ui/components/app/library/Tags'
-import { TagsSkeleton as UiAppLibrary_TagsSkeleton } from '@web-ui/components/app/library/TagsSkeleton'
-import { SegmentedButtonsSkeleton as UiAppLibrary_SegmentedButtonsSkeleton } from '@web-ui/components/app/library/SegmentedButtonsSkeleton'
-import { SegmentedButton as UiCommon_SegmentedButton } from '@web-ui/components/common/SegmentedButton'
+import { CustomRangeSkeleton as Ui_app_library_CustomRangeSkeleton } from '@web-ui/components/app/library/CustomRangeSkeleton'
+import { LibraryAside as Ui_app_templates_LibraryAside } from '@web-ui/components/app/templates/LibraryAside'
+import { SelectedTags as Ui_app_library_SelectedTags } from '@web-ui/components/app/library/SelectedTags'
+import { Tags as Ui_app_library_Tags } from '@web-ui/components/app/library/Tags'
+import { TagsSkeleton as Ui_app_library_TagsSkeleton } from '@web-ui/components/app/library/TagsSkeleton'
+import { SegmentedButtonsSkeleton as Ui_app_library_SegmentedButtonsSkeleton } from '@web-ui/components/app/library/SegmentedButtonsSkeleton'
+import { SegmentedButton as Ui_common_SegmentedButton } from '@web-ui/components/common/SegmentedButton'
 import { use_is_hydrated } from '@shared/hooks'
+
 import { LocalDb } from '@/app/local-db-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { LibraryContext } from './Library'
@@ -17,7 +18,7 @@ import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 
 const CustomRange = dynamic(() => import('./_aside/dynamic-custom-range'), {
   ssr: false,
-  loading: () => <UiAppLibrary_CustomRangeSkeleton />,
+  loading: () => <Ui_app_library_CustomRangeSkeleton />,
 })
 
 namespace _Aside {
@@ -47,13 +48,13 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
   const { popstate_count } = useContext(PopstateCountContext)
 
   return (
-    <UiAppTemplate_LibraryAside
+    <Ui_app_templates_LibraryAside
       support_label={props.dictionary.app.library.send_feedback}
       support_href="https://github.com/taaabs/taaabs/discussions"
       slot_segmented_buttons={
         is_hydrated ? (
           <>
-            <UiCommon_SegmentedButton
+            <Ui_common_SegmentedButton
               key={`1-${popstate_count}`}
               is_not_interactive={is_not_interactive}
               items={[
@@ -87,7 +88,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
               }}
             />
             {!username ? (
-              <UiCommon_SegmentedButton
+              <Ui_common_SegmentedButton
                 key={`2-${popstate_count}`}
                 is_not_interactive={is_not_interactive}
                 is_disabled={
@@ -130,7 +131,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
                 }}
               />
             ) : (
-              <UiCommon_SegmentedButton
+              <Ui_common_SegmentedButton
                 key={`2-${popstate_count}`}
                 is_not_interactive={is_not_interactive}
                 is_disabled={
@@ -163,7 +164,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
                 }}
               />
             )}
-            <UiCommon_SegmentedButton
+            <Ui_common_SegmentedButton
               key={`3-${popstate_count}`}
               is_not_interactive={is_not_interactive}
               is_disabled={
@@ -191,7 +192,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
             />
           </>
         ) : (
-          <UiAppLibrary_SegmentedButtonsSkeleton />
+          <Ui_app_library_SegmentedButtonsSkeleton />
         )
       }
       slot_custom_range={
@@ -232,7 +233,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
             />
           </div>
         ) : (
-          <UiAppLibrary_CustomRangeSkeleton />
+          <Ui_app_library_CustomRangeSkeleton />
         )
       }
       slot_tags={
@@ -247,7 +248,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
         >
           {is_initialized ? (
             <>
-              <UiAppAtom_SelectedTags
+              <Ui_app_library_SelectedTags
                 key={`selected-tags-${library_updated_at_timestamp}-${popstate_count}`}
                 selected_tags={tag_view_options_hook.selected_tags
                   .filter((id) =>
@@ -270,7 +271,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
                   rename: props.dictionary.app.library.rename,
                 }}
               />
-              <UiAppLibrary_Tags
+              <Ui_app_library_Tags
                 key={`tags-${library_updated_at_timestamp}-${popstate_count}`}
                 library_url={username ? `/${username}` : '/library'}
                 tags={
@@ -303,7 +304,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
               />
             </>
           ) : (
-            <UiAppLibrary_TagsSkeleton />
+            <Ui_app_library_TagsSkeleton />
           )}
         </div>
       }

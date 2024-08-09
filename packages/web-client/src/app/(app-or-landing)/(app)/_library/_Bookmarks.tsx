@@ -10,11 +10,11 @@ import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
-import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/Dropdown'
-import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/Dropdown/standard-item'
-import { CheckboxItem as UiCommon_Dropdown_CheckboxItem } from '@web-ui/components/common/Dropdown/checkbox-item'
-import { Separator as UiCommon_Dropdown_Separator } from '@web-ui/components/common/Dropdown/separator'
-import { Stars as UiCommon_Dropdown_Stars } from '@web-ui/components/common/Dropdown/stars'
+import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
+import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
+import { CheckboxItem as Ui_Dropdown_CheckboxItem } from '@web-ui/components/Dropdown/CheckboxItem'
+import { Separator as Ui_Dropdown_Separator } from '@web-ui/components/Dropdown/Separator'
+import { Stars as Ui_Dropdown_Stars } from '@web-ui/components/Dropdown/Stars'
 import { delete_bookmark_modal_setter } from '@/modals/delete-bookmark/delete-bookmark-modal-setter'
 import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
 import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
@@ -64,8 +64,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
   return bookmarks_hook.bookmarks?.map((bookmark, i) => {
     const render_menu = () => {
       return !username ? (
-        <UiCommon_Dropdown>
-          <UiCommon_Dropdown_Stars
+        <Ui_Dropdown>
+          <Ui_Dropdown_Stars
             no_selected={bookmark.stars}
             on_click={async (no_stars) => {
               dispatch(bookmarks_actions.set_is_upserting(true))
@@ -132,7 +132,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               toast.success(props.dictionary.app.library.bookmark_updated)
             }}
           />
-          <UiCommon_Dropdown_CheckboxItem
+          <Ui_Dropdown_CheckboxItem
             is_checked={
               bookmark.is_unsorted === undefined ? true : bookmark.is_unsorted
             }
@@ -202,8 +202,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               toast.success(props.dictionary.app.library.bookmark_updated)
             }}
           />
-          <UiCommon_Dropdown_Separator />
-          <UiCommon_Dropdown_StandardItem
+          <Ui_Dropdown_Separator />
+          <Ui_Dropdown_StandardItem
             icon_variant="EDIT"
             label={props.dictionary.app.library.bookmark.edit}
             on_click={async () => {
@@ -337,7 +337,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               toast.success(props.dictionary.app.library.bookmark_updated)
             }}
           />
-          <UiCommon_Dropdown_StandardItem
+          <Ui_Dropdown_StandardItem
             icon_variant="ARCHIVE"
             label={
               is_archived_filter
@@ -409,7 +409,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               }
             }}
           />
-          <UiCommon_Dropdown_StandardItem
+          <Ui_Dropdown_StandardItem
             icon_variant="DELETE"
             is_danger={true}
             label={props.dictionary.app.library.bookmark.delete}
@@ -452,15 +452,15 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               toast.success(props.dictionary.app.library.bookmark_deleted)
             }}
           />
-        </UiCommon_Dropdown>
+        </Ui_Dropdown>
       ) : auth_context.auth_data ? (
-        <UiCommon_Dropdown>
-          <UiCommon_Dropdown_StandardItem
+        <Ui_Dropdown>
+          <Ui_Dropdown_StandardItem
             icon_variant="COPY"
             label={'Copy to mine'}
             on_click={async () => {}}
           />
-        </UiCommon_Dropdown>
+        </Ui_Dropdown>
       ) : undefined
     }
 
@@ -1068,9 +1068,9 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           open_snapshot: link.open_snapshot,
           is_parsed: link.is_parsed,
           menu_slot: !username ? (
-            <UiCommon_Dropdown>
+            <Ui_Dropdown>
               {link.open_snapshot ? (
-                <UiCommon_Dropdown_StandardItem
+                <Ui_Dropdown_StandardItem
                   icon_variant="LINK"
                   label={
                     props.dictionary.app.library.bookmark.open_original_url
@@ -1090,7 +1090,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   }}
                 />
               ) : (
-                <UiCommon_Dropdown_StandardItem
+                <Ui_Dropdown_StandardItem
                   icon_variant="LINK"
                   label={props.dictionary.app.library.bookmark.open_snapshot}
                   on_click={() => {
@@ -1111,8 +1111,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   }}
                 />
               )}
-              <UiCommon_Dropdown_Separator />
-              <UiCommon_Dropdown_CheckboxItem
+              <Ui_Dropdown_Separator />
+              <Ui_Dropdown_CheckboxItem
                 is_checked={link.is_pinned || false}
                 label={props.dictionary.app.library.bookmark.pinned_to_sidebar}
                 on_click={async () => {
@@ -1166,7 +1166,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   )
                 }}
               />
-              <UiCommon_Dropdown_CheckboxItem
+              <Ui_Dropdown_CheckboxItem
                 is_checked={link.open_snapshot || false}
                 label={props.dictionary.app.library.bookmark.use_snapshot}
                 on_click={async () => {
@@ -1221,11 +1221,11 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   )
                 }}
               />
-            </UiCommon_Dropdown>
+            </Ui_Dropdown>
           ) : (
-            <UiCommon_Dropdown>
+            <Ui_Dropdown>
               {link.open_snapshot ? (
-                <UiCommon_Dropdown_StandardItem
+                <Ui_Dropdown_StandardItem
                   icon_variant="LINK"
                   label={'Open original URL'}
                   on_click={() => {
@@ -1234,7 +1234,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   }}
                 />
               ) : (
-                <UiCommon_Dropdown_StandardItem
+                <Ui_Dropdown_StandardItem
                   icon_variant="LINK"
                   label={'Open snapshot'}
                   on_click={() => {
@@ -1246,7 +1246,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   }}
                 />
               )}
-            </UiCommon_Dropdown>
+            </Ui_Dropdown>
           ),
         }))}
         menu_slot={render_menu()}

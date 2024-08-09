@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import styles from './_Button.module.scss'
 import cn from 'classnames'
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 
 export namespace _Button {
   export type Props = {
@@ -24,7 +24,7 @@ export const _Button: React.FC<_Button.Props> = (props) => {
       onClick={props.on_click ? (e) => props.on_click!(e) : undefined}
       title={props.title}
     >
-      <Icon variant={props.is_active ? props.filled_icon : props.icon} />
+      <UiIcon variant={props.is_active ? props.filled_icon : props.icon} />
     </Link>
   )
 }

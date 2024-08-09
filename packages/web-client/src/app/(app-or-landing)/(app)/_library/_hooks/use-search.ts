@@ -145,19 +145,19 @@ export const use_search = (local_db: LocalDb) => {
             Object.values(SortBy).indexOf(SortBy.POPULARITY).toString()
               ? 'points'
               : sortby ==
-                  Object.values(SortBy).indexOf(SortBy.UPDATED_AT).toString()
-                ? 'updated_at'
-                : sortby ==
-                    Object.values(SortBy).indexOf(SortBy.VISITED_AT).toString()
-                  ? 'visited_at'
-                  : 'created_at',
+                Object.values(SortBy).indexOf(SortBy.UPDATED_AT).toString()
+              ? 'updated_at'
+              : sortby ==
+                Object.values(SortBy).indexOf(SortBy.VISITED_AT).toString()
+              ? 'visited_at'
+              : 'created_at',
           order:
             sortby ==
             Object.values(SortBy).indexOf(SortBy.POPULARITY).toString()
               ? 'DESC'
               : order == Object.values(Order).indexOf(Order.ASC).toString()
-                ? 'ASC'
-                : 'DESC',
+              ? 'ASC'
+              : 'DESC',
         },
         threshold: term ? 0 : undefined,
       },
@@ -598,8 +598,8 @@ export const use_search = (local_db: LocalDb) => {
                   sortby == '1'
                     ? 'updated_at'
                     : sortby == '2'
-                      ? 'visited_at'
-                      : 'created_at',
+                    ? 'visited_at'
+                    : 'created_at',
                 order: order == '1' ? 'ASC' : 'DESC',
               },
               threshold: 0,
@@ -709,8 +709,8 @@ export const use_search = (local_db: LocalDb) => {
                   sortby == '1'
                     ? 'updated_at'
                     : sortby == '2'
-                      ? 'visited_at'
-                      : 'created_at',
+                    ? 'visited_at'
+                    : 'created_at',
                 order: order == '1' ? 'ASC' : 'DESC',
               },
               threshold: term ? 0 : undefined,

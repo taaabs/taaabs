@@ -1,8 +1,8 @@
 import { memo, useState } from 'react'
 import styles from './Tags.module.scss'
 import { useContextMenu } from 'use-context-menu'
-import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/Dropdown'
-import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/Dropdown/standard-item'
+import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
+import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 
 export namespace Tags {
   export type Tag = {
@@ -33,8 +33,8 @@ export const Tags: React.FC<Tags.Props> = memo(
     const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
-      <UiCommon_Dropdown>
-        <UiCommon_Dropdown_StandardItem
+      <Ui_Dropdown>
+        <Ui_Dropdown_StandardItem
           label={props.translations.rename}
           icon_variant="EDIT"
           on_click={() => {
@@ -42,7 +42,7 @@ export const Tags: React.FC<Tags.Props> = memo(
             props.on_tag_rename_click!(context_menu_of_tag_id)
           }}
         />
-      </UiCommon_Dropdown>,
+      </Ui_Dropdown>,
     )
 
     const first_chars_processed: string[] = []

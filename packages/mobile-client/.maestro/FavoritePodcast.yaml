@@ -33,4 +33,3 @@ env:
 - tapOn:
     text: ${FAVORITES_TEXT}
 - assertVisible: ${maestro.copiedText}
-

@@ -4,8 +4,8 @@ import { Auth as UiAuthTemplate_Auth } from '@web-ui/components/auth/templates/a
 import { Dictionary } from '@/dictionaries/dictionary'
 import { LogInForm as UiAuthTemplate_LogInForm } from '@web-ui/components/auth/templates/log-in-form'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
-import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
+import { Input as UiInput } from '@web-ui/components/Input'
+import { Button as UiButton } from '@web-ui/components/Button'
 import { is_object_empty } from '@shared/utils/is-object-empty'
 import { LogIn_Params } from '@repositories/modules/auth/domain/log-in.params'
 import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/auth.data-source-impl'
@@ -96,7 +96,7 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
               render={({ field }) => {
                 const error_message = errors.email?.message
                 return (
-                  <UiCommonAtom_Input
+                  <UiInput
                     value={field.value}
                     on_change={(value) => {
                       resetField('email')
@@ -131,7 +131,7 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
               render={({ field }) => {
                 const error_message = errors.password?.message
                 return (
-                  <UiCommonAtom_Input
+                  <UiInput
                     value={field.value}
                     on_change={(value) => {
                       resetField('password')
@@ -152,14 +152,14 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
             />
           }
           slot_submit_button={
-            <UiCommonParticle_Button
+            <UiButton
               type="submit"
               is_disabled={
                 !is_object_empty(errors) || isSubmitting || will_redirect
               }
             >
               {props.dictionary.auth.log_in.log_in}
-            </UiCommonParticle_Button>
+            </UiButton>
           }
           on_forgot_password_click={() => {}}
           translations={{

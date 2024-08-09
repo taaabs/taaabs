@@ -1,6 +1,6 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import styles from './home-hero.module.scss'
-import { Button } from '@web-ui/components/common/particles/button'
+import { Button } from '@web-ui/components/Button'
 import { Wrapper as UiLandingTemplate_Wrapper } from '../../templates/wrapper/wrapper'
 import confetti from 'canvas-confetti'
 import { useEffect } from 'react'
@@ -31,7 +31,7 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
         <div className={styles.content}>
           <div className={styles.top}>
             <div className={styles.top__logo}>
-              <Icon variant="LOGO" />
+              <UiIcon variant="LOGO" />
             </div>
 
             <h1 className={styles.top__heading}>
@@ -57,7 +57,7 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
                     })
                   }}
                 >
-                  <Icon variant="HUGGING_FACE" />
+                  <UiIcon variant="HUGGING_FACE" />
                 </div>
               </div>
               <span>{props.heading.second_line}</span>
@@ -95,7 +95,7 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
           <div className={styles.checks}>
             {props.ticks.map((tick, i) => (
               <div className={styles.checks__item} key={i}>
-                <Icon variant="CHECK" />
+                <UiIcon variant="CHECK" />
                 <span>{tick}</span>
               </div>
             ))}

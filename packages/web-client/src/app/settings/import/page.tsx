@@ -1,9 +1,9 @@
 'use client'
 
-import { StandardSection as UiAppAtom_HeadingWithSubheading } from '@web-ui/components/settings/StandardSection'
-import { RadioSetting as UiAppAtom_RadioSetting } from '@web-ui/components/app/atoms/radio-setting'
-import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
+import { StandardSection as Ui_settings_StandardSection } from '@web-ui/components/settings/StandardSection'
+import { Button as UiButton } from '@web-ui/components/Button'
 import { use_import } from './_hooks/use-import'
+import { Checkbox as UiCheckbox } from '@web-ui/components/Checkbox'
 
 const Page: React.FC = () => {
   const import_hook = use_import()
@@ -19,7 +19,7 @@ const Page: React.FC = () => {
   }
 
   return (
-    <UiAppAtom_HeadingWithSubheading
+    <Ui_settings_StandardSection
       heading={{
         text: 'Import bookmarks',
         subtext:
@@ -55,47 +55,45 @@ const Page: React.FC = () => {
           <p>Would you like to proceed?</p>
           <br />
           <div>
-            <UiCommonParticle_Button
+            <UiButton
               is_disabled={import_hook.is_sending}
               on_click={import_hook.submit}
             >
               Proceeed
-            </UiCommonParticle_Button>
+            </UiButton>
           </div>
         </>
       )}
 
       {import_hook.import_data && (
         <>
+          <br />
           <h3>File contents</h3>
-          <p>Found {import_hook.import_data.bookmarks.length} bookmarks.</p>
+          <p>Found {import_hook.import_data.bookmarks.length} bookmarks</p>
+          <br />
           <h3>Options</h3>
-          <UiAppAtom_RadioSetting
-            top_line="Erase library"
-            bottom_line="Import will completely overwrite your library"
+          <br />
+          <UiCheckbox
+            label="Erase library"
             on_click={() => {
               import_hook.set_erase_library(!import_hook.erase_library)
             }}
             is_checked={import_hook.erase_library}
           />
-          <h3>Summary</h3>
-          <p>
-            This operation will restore deleted bookmarks. Changes to any
-            existing bookmarks will not be overwritten.
-          </p>
+          <br />
           <p>Would you like to proceed?</p>
           <br />
           <div>
-            <UiCommonParticle_Button
+            <UiButton
               is_disabled={import_hook.is_sending}
               on_click={import_hook.submit}
             >
               Proceeed
-            </UiCommonParticle_Button>
+            </UiButton>
           </div>
         </>
       )}
-    </UiAppAtom_HeadingWithSubheading>
+    </Ui_settings_StandardSection>
   )
 }
 

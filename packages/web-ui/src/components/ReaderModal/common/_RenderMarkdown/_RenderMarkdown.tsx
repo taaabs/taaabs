@@ -5,7 +5,7 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import 'katex/dist/katex.min.css'
 import styles from './_RenderMarkdown.module.scss'
-import { Icon as UiCommonParticle_Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiCommonParticle_Icon } from '@web-ui/components/Icon'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 import { language_map } from './language-map'
@@ -43,9 +43,7 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
               <div className={styles.code}>
                 <div className={styles.code__header}>
                   <div className={styles.code__header__language}>
-                    {language && (
-                      <span>{(language_map as any)[language]}</span>
-                    )}
+                    {language && <span>{(language_map as any)[language]}</span>}
                     {language_fallback && (
                       <>
                         <span>

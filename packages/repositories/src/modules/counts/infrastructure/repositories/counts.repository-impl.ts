@@ -11,8 +11,9 @@ export class Counts_RepositoryImpl implements Counts_Repository {
     params: Counts_Params.Authorized,
     encryption_key: Uint8Array,
   ): Promise<Counts_Ro> {
-    const result =
-      await this._counts_data_source.get_counts_on_authorized_user(params)
+    const result = await this._counts_data_source.get_counts_on_authorized_user(
+      params,
+    )
 
     return {
       months: result.months
@@ -54,8 +55,9 @@ export class Counts_RepositoryImpl implements Counts_Repository {
   public async get_counts_on_public_user(
     params: Counts_Params.Public,
   ): Promise<Counts_Ro> {
-    const result =
-      await this._counts_data_source.get_counts_on_public_user(params)
+    const result = await this._counts_data_source.get_counts_on_public_user(
+      params,
+    )
 
     return {
       months: result.months

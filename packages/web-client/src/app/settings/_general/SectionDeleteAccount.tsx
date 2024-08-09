@@ -1,5 +1,5 @@
 import { StandardSection as UiSettings_StandardSection } from '@web-ui/components/settings/StandardSection'
-import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
+import { Button as UiButton } from '@web-ui/components/Button'
 import { useContext } from 'react'
 import { AuthContext } from '@/app/auth-provider'
 import { Dictionary } from '@/dictionaries/dictionary'
@@ -24,7 +24,7 @@ export const SectionDeleteAccount: React.FC<{ dictionary: Dictionary }> = (
         }}
         is_danger={true}
       >
-        <UiCommonParticle_Button
+        <UiButton
           on_click={async () => {
             const is_deletion_confirmed = await delete_account_modal_setter({
               dictionary: props.dictionary,
@@ -46,7 +46,7 @@ export const SectionDeleteAccount: React.FC<{ dictionary: Dictionary }> = (
             props.dictionary.settings.general.delete_account
               .delete_my_account_button_label
           }
-        </UiCommonParticle_Button>
+        </UiButton>
       </UiSettings_StandardSection>
     </div>
   )

@@ -1,7 +1,7 @@
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { useContext } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Search as UiAppLibrary_Search } from '@web-ui/components/app/library/Search'
+import { Search as Ui_app_library_Search } from '@web-ui/components/app/library/Search'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { ModalContext } from '@/providers/ModalProvider'
 import { LocalDb } from '@/app/local-db-provider'
@@ -31,7 +31,7 @@ export const _Search: React.FC<_Search.Props> = (props) => {
   const search_params = useSearchParams()
 
   return (
-    <UiAppLibrary_Search
+    <Ui_app_library_Search
       search_string={search_hook.search_string}
       is_full_text={search_hook.is_full_text}
       toggle_full_text={() =>
@@ -111,7 +111,12 @@ export const _Search: React.FC<_Search.Props> = (props) => {
         search_hook.set_search_string(value)
       }}
       on_submit={async () => {
-        if (props.local_db.is_initializing || !search_hook.search_string.trim() || search_hook.count == 0) return
+        if (
+          props.local_db.is_initializing ||
+          !search_hook.search_string.trim() ||
+          search_hook.count == 0
+        )
+          return
         if (search_hook.is_full_text) {
           await search_hook.get_result_full_text({
             search_string: search_hook.search_string,

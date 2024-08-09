@@ -1,14 +1,14 @@
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import { useContext, useRef, useState } from 'react'
-import { Bookmark as UiAppLibrary_Bookmark } from '@web-ui/components/app/library/Bookmark'
+import { Bookmark as Ui_app_library_Bookmark } from '@web-ui/components/app/library/Bookmark'
 import { AuthContext } from '@/app/auth-provider'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { LibraryContext } from '../Library'
 
 namespace _Bookmark {
-  export type Props = UiAppLibrary_Bookmark.Props & {
+  export type Props = Ui_app_library_Bookmark.Props & {
     has_cover_aes?: boolean
   }
 }
@@ -72,7 +72,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = (props) => {
 
   return (
     <div ref={ref}>
-      <UiAppLibrary_Bookmark {...props} cover={cover} />
+      <Ui_app_library_Bookmark {...props} cover={cover} />
     </div>
   )
 }

@@ -10,15 +10,15 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search/get-site-variants-for-search'
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import { useContextMenu } from 'use-context-menu'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import confetti from 'canvas-confetti'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { system_values } from '@shared/constants/system-values'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
-import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/Dropdown'
-import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/Dropdown/standard-item'
+import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
+import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 import { url_path_for_display } from '@shared/utils/url-path-for-display/url-path-for-display'
 
 dayjs.extend(relativeTime)
@@ -163,8 +163,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
       useState<number>()
     const tag_context_menu = useContextMenu(
-      <UiCommon_Dropdown>
-        <UiCommon_Dropdown_StandardItem
+      <Ui_Dropdown>
+        <Ui_Dropdown_StandardItem
           label={props.translations.rename}
           icon_variant="EDIT"
           on_click={() => {
@@ -172,7 +172,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             props.on_tag_rename_click!(context_menu_of_tag_id)
           }}
         />
-        <UiCommon_Dropdown_StandardItem
+        <Ui_Dropdown_StandardItem
           label={props.translations.delete}
           icon_variant="DELETE"
           on_click={() => {
@@ -180,7 +180,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             props.on_tag_delete_click!(context_menu_of_tag_id)
           }}
         />
-      </UiCommon_Dropdown>,
+      </Ui_Dropdown>,
     )
 
     useUpdateEffect(() => {
@@ -556,7 +556,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 toggle_is_mobile_menu_open()
               }}
             >
-              <Icon variant="MORE" />
+              <UiIcon variant="MORE" />
             </button>
             <div
               className={cn(styles.slot, {
@@ -711,7 +711,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       toggle_is_desktop_menu_open()
                     }}
                   >
-                    <Icon variant="MORE" />
+                    <UiIcon variant="MORE" />
                   </button>
                   <div
                     className={cn(styles.slot, {
@@ -731,7 +731,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               {props.stars >= 1 && (
                 <div className={styles.bookmark__card__title__stars}>
                   {[...new Array(props.stars)].map((_, i) => (
-                    <Icon variant="STAR_FILLED" key={i} />
+                    <UiIcon variant="STAR_FILLED" key={i} />
                   ))}
                 </div>
               )}
@@ -780,7 +780,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   onClick={props.on_modify_tags_click}
                   className={cn(styles.bookmark__card__tags__edit, 'static')}
                 >
-                  <Icon variant="TAG" />
+                  <UiIcon variant="TAG" />
                 </button>
                 {actions_dom}
               </ReactSortable>
@@ -903,7 +903,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                             src={`data:image/webp;base64,${link.favicon}`}
                           />
                         ) : (
-                          <Icon variant="GLOBE" />
+                          <UiIcon variant="GLOBE" />
                         )}
                       </button>
                       {link.is_parsed && (
@@ -913,7 +913,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                             props.on_reading_mode_click(link.url)
                           }}
                         >
-                          <Icon variant="RESIZE" />
+                          <UiIcon variant="RESIZE" />
                         </button>
                       )}
                       <a
@@ -985,7 +985,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                           props.on_new_tab_click(url)
                         }}
                       >
-                        <Icon variant="NEW_TAB" />
+                        <UiIcon variant="NEW_TAB" />
                       </button>
                       <div
                         className={styles.bookmark__links__item__actions__menu}
@@ -1012,7 +1012,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                                 : set_link_url_menu_opened(undefined)
                             }}
                           >
-                            <Icon variant="MORE" />
+                            <UiIcon variant="MORE" />
                           </button>
                           <div
                             className={cn(styles.slot, {
@@ -1030,7 +1030,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     </div>
                     {link.is_pinned && (
                       <div className={styles.bookmark__links__item__pinned}>
-                        <Icon variant="PIN" />
+                        <UiIcon variant="PIN" />
                       </div>
                     )}
                   </div>
