@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import styles from './auth.module.scss'
 import Link from 'next/link'
 
@@ -26,7 +26,7 @@ export const Auth: React.FC<Auth.Props> = (props) => {
         <div className={styles.box}>
           <div className={styles.box__logo}>
             <Link href={props.logo_href} className={styles.box__logo__icon}>
-              <Icon variant="LOGO" />
+              <UiIcon variant="LOGO" />
             </Link>
           </div>
           <div className={styles.box__heading}>

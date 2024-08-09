@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,27 +16,17 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "@web-ui/*": [
-        "../web-ui/src/*"
-      ],
-      "@repositories/*": [
-        "../repositories/src/*"
-      ],
-      "@shared/*": [
-        "../shared/src/*"
-      ]
+      "@/*": ["src/*"],
+      "@web-ui/*": ["../web-ui/src/*"],
+      "@repositories/*": ["../repositories/src/*"],
+      "@shared/*": ["../shared/src/*"]
     },
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "types": [
-      "jest"
-    ],
+    "types": ["jest"],
     "jsxImportSource": "react"
   },
   "include": [
@@ -50,9 +36,7 @@
     ".next/types/**/*.ts",
     "../web-ui/src/**/*.ts",
     "../repositories/src/**/*.ts",
-    "../shared/src/**/*.ts",
+    "../shared/src/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-  ]
+  "exclude": ["node_modules"]
 }

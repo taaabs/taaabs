@@ -9,22 +9,11 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@repositories/*": [
-        "src/*"
-      ],
-      "@shared/*": [
-        "../shared/src/*"
-      ]
+      "@repositories/*": ["src/*"],
+      "@shared/*": ["../shared/src/*"]
     },
-    "types": [
-      "jest"
-    ],
+    "types": ["jest"]
   },
-  "include": [
-    "src/**/*.ts",
-    "../shared/src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*.ts", "../shared/src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

@@ -12,20 +12,13 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
-    "types": [
-      "node",
-      "jest"
-    ],
+    "types": ["node", "jest"]
     // "paths": {
     //   "@shared/*": [
     //     "src/*"
     //   ],
     // }
   },
-  "include": [
-    "src/**/*.ts",
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

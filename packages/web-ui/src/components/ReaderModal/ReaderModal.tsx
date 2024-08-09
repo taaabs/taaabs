@@ -55,10 +55,7 @@ export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
       })}
       onClick={props.on_close}
     >
-      <div
-        className={styles.modal__inner}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className={styles.modal__inner} onClick={(e) => e.stopPropagation()}>
         <SimpleBar
           style={{
             height: '100vh',

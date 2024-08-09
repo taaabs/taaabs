@@ -1,0 +1,101 @@
+// @type
+@use '../../styles/foundation' as *;
+
+.field {
+  width: 100%;
+  background-color: var(--white);
+  border-radius: var(--border-radius-10px);
+  border: 1.5px solid var(--neutral200);
+  @include dark {
+    border-color: var(--dark300);
+    background-color: var(--dark100);
+  }
+  @include light {
+    box-shadow: var(--box-shadow-inset);
+  }
+  @include transition-150ms();
+  @include hover {
+    border-color: var(--neutral250);
+    @include dark {
+      border-color: var(--dark400);
+    }
+  }
+  &:focus {
+    border-color: var(--blue400);
+    @include dark {
+      border-color: var(--accent-color);
+    }
+    @include light {
+      box-shadow: inset 0 1px 3px var(--blue100);
+    }
+  }
+  &--error {
+    background: var(--red100);
+    border-color: var(--red200);
+    box-shadow: inset 0 1px 3px rgba(255, 0, 0, 0.08);
+    @include hover {
+      border-color: var(--red300);
+    }
+    &:focus {
+      border-color: var(--red400);
+      box-shadow: inset 0 1px 3px rgba(255, 0, 0, 0.15);
+    }
+    &::placeholder {
+      color: var(--red400) !important;
+    }
+  }
+  &--note {
+    background: var(--amber50);
+    border-color: var(--amber200);
+    box-shadow: inset 0 1px 3px rgba(217, 119, 6, 0.08);
+    @include hover {
+      border-color: var(--amber300);
+    }
+    &:focus {
+      border-color: var(--amber400);
+      box-shadow: inset 0 1px 3px rgba(217, 119, 6, 0.12);
+    }
+    &::placeholder {
+      color: var(--amber500) !important;
+    }
+  }
+  &--disabled {
+    background-color: var(--neutral200);
+    border: none;
+    opacity: var(--dimmed-opacity);
+    pointer-events: none;
+  }
+}
+.input {
+  height: 40px;
+  padding: 0 var(--padding-12px);
+  &::placeholder {
+    color: var(--text-color-dimmed);
+  }
+}
+.textarea {
+  position: relative;
+  padding: 9px var(--padding-12px);
+  resize: none;
+  min-height: var(--button-dimension-40px);
+  &::placeholder {
+    color: var(--text-color-dimmed);
+  }
+}
+.message {
+  margin-top: var(--padding-8px);
+  font-size: var(--font-size-13px);
+  strong {
+    font-weight: var(--font-weight-inter-medium);
+    color: var(--text-color-variant);
+  }
+  &--error {
+    color: var(--red500);
+  }
+  &--warning {
+    color: var(--yellow600);
+  }
+  &--info {
+    color: var(--text-color-dimmed);
+  }
+}

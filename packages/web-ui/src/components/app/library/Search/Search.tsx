@@ -5,7 +5,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { system_values } from '@shared/constants/system-values'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 
@@ -175,7 +175,7 @@ export const Search: React.FC<Search.Props> = memo(
               {props.is_loading ? (
                 <div className={styles.box__loader} />
               ) : (
-                <Icon variant="SEARCH" />
+                <UiIcon variant="SEARCH" />
               )}
             </button>
             <form
@@ -345,7 +345,7 @@ export const Search: React.FC<Search.Props> = memo(
                       props.on_clear_click()
                     }}
                   >
-                    <Icon variant="ADD" />
+                    <UiIcon variant="ADD" />
                   </button>
                 </>
               ) : (
@@ -398,8 +398,8 @@ export const Search: React.FC<Search.Props> = memo(
                       }}
                     >
                       <div className={styles.hints__list__item__icon}>
-                        {hint.type == 'new' && <Icon variant="SEARCH" />}
-                        {hint.type == 'recent' && <Icon variant="RECENT" />}
+                        {hint.type == 'new' && <UiIcon variant="SEARCH" />}
+                        {hint.type == 'recent' && <UiIcon variant="RECENT" />}
                       </div>
                       <div
                         className={cn(styles.hints__list__item__content, {

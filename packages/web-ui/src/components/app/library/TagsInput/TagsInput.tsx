@@ -3,7 +3,7 @@ import { ReactSortable } from 'react-sortablejs'
 import styles from './TagsInput.module.scss'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import cn from 'classnames'
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import { system_values } from '@shared/constants/system-values'
 import OutsideClickHandler from 'react-outside-click-handler'
 import SimpleBar from 'simplebar-react'
@@ -148,7 +148,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
                   )
                 }}
               >
-                <Icon variant="EYE" />
+                <UiIcon variant="EYE" />
               </button>
             )}
             <button
@@ -162,7 +162,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
                 )
               }}
             >
-              <Icon variant="CROSS" />
+              <UiIcon variant="CROSS" />
             </button>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import styles from './ExtensionButton.module.scss'
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 export const ExtensionButton: React.FC<Props> = (props) => {
   return (
     <a href={props.href} target="_blank" className={styles.button}>
-      <Icon variant={props.icon} />
+      <UiIcon variant={props.icon} />
       <div className={styles.text}>
         <div className={styles.text__top}>{props.text}</div>
         <div className={styles.text__bottom}>{props.subtext}</div>

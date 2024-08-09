@@ -3,8 +3,8 @@
 import { useParams, useSearchParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { PublicUserAvatarContext } from '../../../providers/PublicUserAvatarProvider'
-import { UsernameWithBackArrow as UiAppMolecule_UserForHeader } from '@web-ui/components/app/templates/App/HeaderDesktop/UsernameWithBackArrow'
-import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { UsernameWithBackArrow as Ui_app_molecule_UserForHeader } from '@web-ui/components/app/templates/App/HeaderDesktop/UsernameWithBackArrow'
+import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
 import { HeaderMobile as Ui_app_templates_HeaderMobile } from '@web-ui/components/app/templates/App/HeaderMobile'
 
 export const HeaderMobile: React.FC = () => {
@@ -19,7 +19,7 @@ export const HeaderMobile: React.FC = () => {
   // TODO: backHref should be smarter :^)
   if (params.username) {
     logo_slot = (
-      <UiAppMolecule_UserForHeader
+      <Ui_app_molecule_UserForHeader
         user={{
           username: params.username as string,
           back_href: back || '/',
@@ -34,7 +34,7 @@ export const HeaderMobile: React.FC = () => {
       />
     )
   } else {
-    logo_slot = <UiCommonAtom_LogoForHeader href="/" />
+    logo_slot = <UiLogoForHeader href="/" />
   }
 
   useEffect(() => {

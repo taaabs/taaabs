@@ -1,11 +1,10 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import styles from './BottomNavigationBar.module.scss'
-import cn from 'classnames'
 
 export namespace BottomNavigationBar {
   type Item = {
-    icon_variant: Icon.Variant
-    icon_variant_active: Icon.Variant
+    icon_variant: UiIcon.Variant
+    icon_variant_active: UiIcon.Variant
     title: string
     on_click: () => void
     is_active: boolean
@@ -28,7 +27,7 @@ export const BottomNavigationBar: React.FC<BottomNavigationBar.Props> = (
           key={i}
           title={item.title}
         >
-          <Icon
+          <UiIcon
             variant={
               item.is_active ? item.icon_variant_active : item.icon_variant
             }

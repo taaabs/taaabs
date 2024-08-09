@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import styles from './Header.module.scss'
 
 export namespace Header {
@@ -15,7 +15,7 @@ export const Header: React.FC<Header.Props> = (props) => {
       {props.children && <div className={styles.slot}>{props.children}</div>}
       <div className={styles.title}>{props.title}</div>
       <button className={styles.close} onClick={props.on_close}>
-        <Icon variant="CROSS" />
+        <UiIcon variant="CROSS" />
       </button>
     </div>
   )

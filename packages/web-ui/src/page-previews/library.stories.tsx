@@ -1,11 +1,10 @@
-import { Bookmark as UiAppAtom_Bookmark } from '@web-ui/components/app/library/bookmark'
-import { BottomNavigationBar as UiAppMolecule_BottomNavigationBar } from '@web-ui/components/app/templates/App/bottom-navigation-bar'
-import { NavigationForHeader as UiAppMolecule_NavigationForHeader } from '@web-ui/components/app/molecules/navigation-for-header'
-import { App as UiAppTemplate_App } from '@web-ui/components/app/templates/App'
-import { HeaderDesktop as UiAppTemplate_App_HeaderDesktop } from '@web-ui/components/app/templates/App/HeaderDesktop'
-import { AppHeaderMobile as UiAppTemplate_AppHeaderMobile } from '@web-ui/components/app/templates/App/app-header-mobile'
-import { SwipableColumns as UiAppTemplate_Library } from '@web-ui/components/app/templates/swipable-columns'
-import { LogoForHeader as UiCommonAtom_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { Bookmark as Ui_app_library_Bookmark } from '@web-ui/components/app/library/Bookmark'
+import { BottomNavigationBar as Ui_app_templates_App_BottomNavigationBar } from '@web-ui/components/app/templates/App/BottomNavigationBar'
+import { App as Ui_app_templates_App } from '@web-ui/components/app/templates/App'
+import { HeaderDesktop as Ui_app_templates_App_HeaderDesktop } from '@web-ui/components/app/templates/App/HeaderDesktop'
+import { HeaderMobile as Ui_app_templates_App_HeaderMobile } from '@web-ui/components/app/templates/App/HeaderMobile'
+import { SwipableColumns as Ui_app_templates_SwipableColumns } from '@web-ui/components/app/templates/SwipableColumns'
+import { LogoForHeader as Ui_common_atoms_LogoForHeader } from '@web-ui/components/logo-for-header'
 
 export default {
   title: 'page-previews/library',
@@ -13,50 +12,35 @@ export default {
 
 export const Primary = () => {
   return (
-    <UiAppTemplate_App
+    <Ui_app_templates_App
       slot_header_desktop={
-        <UiAppTemplate_App_HeaderDesktop
-          slot_left={<UiCommonAtom_LogoForHeader href="" />}
-          slot_navigation={
-            <UiAppMolecule_NavigationForHeader
-              navigation={[
-                { label: 'Lorem', href: '/lorem', is_active: false },
-                { label: 'Ipsum', href: '/ipsum', is_active: true },
-              ]}
-            />
-          }
+        <Ui_app_templates_App_HeaderDesktop
+          slot_left={<Ui_common_atoms_LogoForHeader href="" />}
+          slot_middle={<></>}
           slot_right={<></>}
-          translations={{ powered_by: 'Powered by' }}
         />
       }
       slot_header_mobile={
-        <UiAppTemplate_AppHeaderMobile
-          slot_logo={<UiCommonAtom_LogoForHeader href="" />}
-          slot_navigation={
-            <UiAppMolecule_NavigationForHeader
-              navigation={[
-                { label: 'Lorem', href: '/lorem', is_active: false },
-                { label: 'Ipsum', href: '/ipsum', is_active: true },
-              ]}
-            />
-          }
+        <Ui_app_templates_App_HeaderMobile
+          slot_logo={<Ui_common_atoms_LogoForHeader href="" />}
+          slot_navigation={<></>}
         />
       }
       slot_bottom_navigation_bar={
-        <UiAppMolecule_BottomNavigationBar
+        <Ui_app_templates_App_BottomNavigationBar
           items={[
             {
               icon_variant: 'HOME',
               icon_variant_active: 'HOME_FILLED',
               is_active: true,
-              label: 'Home',
+              title: 'xxx',
               on_click: () => {},
             },
           ]}
         />
       }
     >
-      <UiAppTemplate_Library
+      <Ui_app_templates_SwipableColumns
         slot_column_right={<>aside</>}
         slot_column_left={
           <>
@@ -95,7 +79,6 @@ export const Primary = () => {
             {bookmark}
           </>
         }
-        show_skeletons={false}
         slot_search={<>search</>}
         translations={{
           collapse_alt: '',
@@ -107,12 +90,12 @@ export const Primary = () => {
         }}
         info_text=""
       />
-    </UiAppTemplate_App>
+    </Ui_app_templates_App>
   )
 }
 
 const bookmark = (
-  <UiAppAtom_Bookmark
+  <Ui_app_library_Bookmark
     date={new Date()}
     links={[]}
     title="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
@@ -143,5 +126,7 @@ const bookmark = (
     locale="en"
     on_reading_mode_click={() => {}}
     translations={{ delete: 'delete', rename: 'rename' }}
+    on_is_visible={() => {}}
+    set_render_height={() => {}}
   />
 )

@@ -80,8 +80,8 @@ export const upsert_bookmark = (params: {
           params.last_authorized_counts_params.starred_only
 
         const is_unsorted_toggled_should_remove =
-          (!params.bookmark.is_unsorted &&
-            params.bookmark.is_unsorted !== undefined) &&
+          !params.bookmark.is_unsorted &&
+          params.bookmark.is_unsorted !== undefined &&
           params.last_authorized_counts_params.unsorted_only
 
         if (

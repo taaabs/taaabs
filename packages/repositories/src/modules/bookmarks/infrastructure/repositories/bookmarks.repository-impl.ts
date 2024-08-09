@@ -204,7 +204,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     }
 
     return {
-      bookmarks: bookmarks.length ? bookmarks : undefined
+      bookmarks: bookmarks.length ? bookmarks : undefined,
     }
   }
 

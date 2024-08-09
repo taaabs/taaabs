@@ -1,7 +1,7 @@
 import { use_library_dispatch } from '@/stores/library'
 import { useContext } from 'react'
 import { toast } from 'react-toastify'
-import { TagHierarchies as UiAppLibrary_TagHierarchies } from '@web-ui/components/app/library/TagHierarchies'
+import { TagHierarchies as Ui_app_library_TagHierarchies } from '@web-ui/components/app/library/TagHierarchies'
 import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
 import { Filter } from '@/types/library/filter'
 import { UpdateTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/update-tag-hierarchies.params'
@@ -38,13 +38,13 @@ export const _TagHierarchies: React.FC<_TagHierarchies.Props> = (props) => {
 
   return (
     <div style={{ pointerEvents: is_not_interactive ? 'none' : undefined }}>
-      <UiAppLibrary_TagHierarchies
+      <Ui_app_library_TagHierarchies
         library_updated_at_timestamp={library_updated_at_timestamp}
         show_skeleton={!is_initialized}
         is_read_only={!!username}
         tree={tag_hierarchies_hook.tag_hierarchies}
         on_update={async (
-          tag_hierarchies: UiAppLibrary_TagHierarchies.Node[],
+          tag_hierarchies: Ui_app_library_TagHierarchies.Node[],
         ) => {
           const filter = filter_view_options_hook.current_filter
 

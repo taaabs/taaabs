@@ -21,7 +21,7 @@
 }
 .theme-set-by-system {
   display: none;
-  [data-theme-set-by="system"] & {
+  [data-theme-set-by='system'] & {
     display: flex;
   }
   svg {
@@ -31,7 +31,7 @@
 }
 .theme-set-by-user {
   display: none;
-  [data-theme-set-by="user"] & {
+  [data-theme-set-by='user'] & {
     display: flex;
   }
 }

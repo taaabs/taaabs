@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import styles from './Navigation.module.scss'
 import { _Button } from './_Button'
 

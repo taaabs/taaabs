@@ -1,6 +1,6 @@
 import { use_library_dispatch } from '@/stores/library'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_filter_view_options } from './_hooks/use-filter-view-options'
 import { use_tag_view_options } from './_hooks/use-tag-view-options'
@@ -13,8 +13,9 @@ import { use_counts } from './_hooks/use-counts'
 import { use_session_storage_cleanup } from './_hooks/use-session-storage-cleanup'
 import { browser_storage } from '@/constants/browser-storage'
 import { useParams } from 'next/navigation'
-import { SwipableColumns as UiAppTemplate_SwipableColumns } from '@web-ui/components/app/templates/swipable-columns'
-import { DraggedCursorTag as UiAppLibrary_DraggedCursorTag } from '@web-ui/components/app/library/DraggedCursorTag'
+import { SwipableColumns as Ui_app_templates_SwipableColumns } from '@web-ui/components/app/templates/SwipableColumns'
+import { DraggedCursorTag as Ui_app_library_DraggedCursorTag } from '@web-ui/components/app/library/DraggedCursorTag'
+import { BookmarksSkeleton as Ui_app_library_BookmarksSkeleton } from '@web-ui/components/app/library/BookmarksSkeleton'
 import { use_tag_hierarchies } from './_hooks/use-tag-hierarchies'
 import { Filter } from '@/types/library/filter'
 import { use_scroll_restore } from './_hooks/use-scroll-restore'
@@ -36,7 +37,6 @@ import { use_points } from './_hooks/use-points'
 import { use_search } from './_hooks/use-search'
 import { FollowUnfollowContext } from '../[username]/follow-unfollow-provider'
 import { use_bookmarklet_handler } from './_hooks/use-bookmarklet-handler'
-import { BookmarksSkeleton as UiAppLibrary_BookmarksSkeleton } from '@web-ui/components/app/library/BookmarksSkeleton'
 
 export type LibraryContext = {
   bookmarks_hook: ReturnType<typeof use_bookmarks>
@@ -356,10 +356,10 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         is_initialized,
       }}
     >
-      <UiAppLibrary_DraggedCursorTag
+      <Ui_app_library_DraggedCursorTag
         tag_name={tag_view_options_hook.dragged_tag?.name}
       />
-      <UiAppTemplate_SwipableColumns
+      <Ui_app_templates_SwipableColumns
         is_following={follow_unfollow_context?.is_following}
         welcome_text={
           !username && auth_context.auth_data
@@ -407,7 +407,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 local_db={props.local_db}
               />
             ) : (
-              <UiAppLibrary_BookmarksSkeleton />
+              <Ui_app_library_BookmarksSkeleton />
             )}
           </>
         }

@@ -1,0 +1,27 @@
+// @type
+@use '../../../../../../../styles/foundation' as *;
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  @include transition-150ms(border-color);
+  width: var(--button-dimension-40px);
+  height: var(--button-dimension-40px);
+  @include hover {
+    background-color: rgba(15, 20, 25, 0.05);
+    @include dark {
+      background-color: rgba(156, 163, 175, 0.07);
+    }
+  }
+  svg {
+    width: var(--icon-dimension-20px);
+    height: var(--icon-dimension-20px);
+    fill: var(--black);
+    @include transition-150ms(fill);
+  }
+}

@@ -5,7 +5,5 @@ export default {
 }
 
 export const Default = () => {
-  return (
-    <Checkbox is_checked={true} label="Lorem ipsum" on_click={() => {}} />
-  )
+  return <Checkbox is_checked={true} label="Lorem ipsum" on_click={() => {}} />
 }

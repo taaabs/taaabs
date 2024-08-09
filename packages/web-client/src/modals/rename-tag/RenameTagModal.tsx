@@ -9,7 +9,7 @@ import { AuthContext } from '@/app/auth-provider'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
 import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
-import { Input as UiCommonAtom_Input } from '@web-ui/components/common/atoms/input'
+import { Input as UiInput } from '@web-ui/components/Input'
 import { system_values } from '@shared/constants/system-values'
 
 namespace RenameTagModal {
@@ -70,7 +70,7 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
         render={({ field }) => {
           const error_message = errors.name?.message
           return (
-            <UiCommonAtom_Input
+            <UiInput
               value={field.value}
               on_change={(value) => {
                 if (!isSubmitting) {

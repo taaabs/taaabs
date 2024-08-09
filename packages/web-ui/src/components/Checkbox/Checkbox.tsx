@@ -1,4 +1,4 @@
-import { Icon } from '../common/particles/icon'
+import { Icon as UiIcon } from '../Icon'
 import styles from './Checkbox.module.scss'
 import cn from 'classnames'
 
@@ -6,7 +6,7 @@ export namespace Checkbox {
   export type Props = {
     label: string
     on_click: () => void
-    is_checked: boolean
+    is_checked?: boolean
   }
 }
 
@@ -21,7 +21,7 @@ export const Checkbox: React.FC<Checkbox.Props> = (props) => {
           },
         ])}
       >
-        <Icon variant="SELECTED" />
+        <UiIcon variant="SELECTED" />
       </div>
       <span>{props.label}</span>
     </button>

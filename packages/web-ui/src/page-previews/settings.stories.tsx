@@ -2,7 +2,7 @@ import { StandardSection as UiSettings_StandardSection } from '@web-ui/component
 import { DesktopMenuItem as UiSettings_DesktopMenuItem } from '@web-ui/components/settings/DesktopMenuItem'
 import { Template as UiSettings_Template } from '@web-ui/components/settings/Template'
 import { Input } from '@web-ui/components/common/atoms/input'
-import { Button } from '@web-ui/components/common/particles/button'
+import { Button } from '@web-ui/components/Button'
 import { SimpleBackArrowHeader as UiCommon_SimpleBackArrowHeader } from '@web-ui/components/common/SimpleBackArrowHeader'
 
 export default {

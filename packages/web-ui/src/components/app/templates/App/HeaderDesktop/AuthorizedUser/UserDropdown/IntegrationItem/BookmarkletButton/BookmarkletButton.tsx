@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import styles from './BookmarkletButton.module.scss'
 
 type Props = {
@@ -14,7 +14,7 @@ export const BookmarkletButton: React.FC<Props> = (props) => {
           __html: `<a href='${props.script}' target='_blank' onclick="event.preventDefault();">${props.label}</a>`,
         }}
       />
-      <Icon variant="EXTENSION_ICON" />
+      <UiIcon variant="EXTENSION_ICON" />
     </div>
   )
 }

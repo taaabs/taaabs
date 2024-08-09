@@ -4,8 +4,8 @@ import { memo, useState } from 'react'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { system_values } from '@shared/constants/system-values'
 import { _Item } from './_Item/_Item'
-import { Dropdown as UiCommon_Dropdown } from '@web-ui/components/common/Dropdown'
-import { StandardItem as UiCommon_Dropdown_StandardItem } from '@web-ui/components/common/Dropdown/standard-item'
+import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
+import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 
 export namespace PinnedBookmarks {
   export type Item = {
@@ -114,9 +114,9 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
           key={item.id}
           favicon_host={props.favicon_host}
           menu_slot={
-            <UiCommon_Dropdown>
+            <Ui_Dropdown>
               {item.open_snapshot ? (
-                <UiCommon_Dropdown_StandardItem
+                <Ui_Dropdown_StandardItem
                   icon_variant="LINK"
                   label={props.translations.open_original_url}
                   on_click={() => {
@@ -126,7 +126,7 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
                   }}
                 />
               ) : (
-                <UiCommon_Dropdown_StandardItem
+                <Ui_Dropdown_StandardItem
                   icon_variant="LINK"
                   label={props.translations.open_snapshot}
                   on_click={() => {
@@ -140,14 +140,14 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
                 />
               )}
               {props.on_unpin_click && (
-                <UiCommon_Dropdown_StandardItem
+                <Ui_Dropdown_StandardItem
                   icon_variant="DELETE"
                   is_danger={true}
                   label={props.translations.unpin}
                   on_click={() => props.on_unpin_click!(item)}
                 />
               )}
-            </UiCommon_Dropdown>
+            </Ui_Dropdown>
           }
           on_link_click={() => {
             props.on_link_click(item)

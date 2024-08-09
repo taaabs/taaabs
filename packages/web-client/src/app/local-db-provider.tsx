@@ -169,16 +169,16 @@ export const LocalDbProvider: React.FC<{
             : browser_storage.local_forage.authorized_library.search
                 .archived_cached_at_timestamp
           : !params.is_archived
-            ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
-                {
-                  username: username as string,
-                },
-              )
-            : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-                {
-                  username: username as string,
-                },
-              ),
+          ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
+              {
+                username: username as string,
+              },
+            )
+          : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
+              {
+                username: username as string,
+              },
+            ),
       )) || undefined
 
     const data_source = new LibrarySearch_DataSourceImpl(
@@ -294,14 +294,12 @@ export const LocalDbProvider: React.FC<{
             : browser_storage.local_forage.authorized_library.search
                 .archived_index
           : !params.is_archived
-            ? browser_storage.local_forage.public_library.search.index({
-                username: username as string,
-              })
-            : browser_storage.local_forage.public_library.search.archived_index(
-                {
-                  username: username as string,
-                },
-              ),
+          ? browser_storage.local_forage.public_library.search.index({
+              username: username as string,
+            })
+          : browser_storage.local_forage.public_library.search.archived_index({
+              username: username as string,
+            }),
       )
 
       if (cached_index) {

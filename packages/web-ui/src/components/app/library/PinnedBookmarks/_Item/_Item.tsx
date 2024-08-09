@@ -1,4 +1,4 @@
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import styles from './_Item.module.scss'
 import cn from 'classnames'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
@@ -65,7 +65,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
               src={`data:image/webp;base64,${props.favicon}`}
             />
           ) : (
-            <Icon variant="GLOBE" />
+            <UiIcon variant="GLOBE" />
           )}
         </button>
         {props.is_parsed && (
@@ -75,7 +75,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
               props.on_reading_mode_click()
             }}
           >
-            <Icon variant="RESIZE" />
+            <UiIcon variant="RESIZE" />
           </button>
         )}
         <a
@@ -101,7 +101,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
           {props.stars && props.stars >= 1 && (
             <div className={styles.item__link__url__stars}>
               {[...new Array(props.stars)].map((_, i) => (
-                <Icon variant="STAR_FILLED" key={i} />
+                <UiIcon variant="STAR_FILLED" key={i} />
               ))}
             </div>
           )}{' '}
@@ -122,7 +122,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
             props.on_new_tab_click()
           }}
         >
-          <Icon variant="NEW_TAB" />
+          <UiIcon variant="NEW_TAB" />
         </button>
         <div className={cn([styles.item__actions__menu, 'no-drag'])}>
           <OutsideClickHandler
@@ -140,7 +140,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
                 set_is_menu_opened(!is_menu_opened)
               }}
             >
-              <Icon variant="MORE" />
+              <UiIcon variant="MORE" />
             </button>
             <div
               className={cn(styles.slot, {

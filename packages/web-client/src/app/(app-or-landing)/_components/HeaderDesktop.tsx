@@ -11,7 +11,7 @@ import { useContext } from 'react'
 import { ModalContext } from '../../../providers/ModalProvider'
 import { use_is_hydrated } from '@shared/hooks'
 import { UsernameWithBackArrow as Ui_app_templates_App_HeaderDesktop_UsernameWithBackArrow } from '@web-ui/components/app/templates/App/HeaderDesktop/UsernameWithBackArrow'
-import { LogoForHeader as Ui_common_atoms_LogoForHeader } from '@web-ui/components/common/atoms/logo-for-header'
+import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
 import { HeaderDesktop as Ui_app_templates_App_HeaderDesktop } from '@web-ui/components/app/templates/App/HeaderDesktop'
 import { AuthorizedUser as Ui_app_templates_App_HeaderDesktop_AuthorizedUser } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser'
 import { UserDropdown as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown'
@@ -67,7 +67,7 @@ export const HeaderDesktop: React.FC<{
         />
       )
     } else {
-      return <Ui_common_atoms_LogoForHeader href="/" />
+      return <UiLogoForHeader href="/" />
     }
   }
 
@@ -202,8 +202,6 @@ export const HeaderDesktop: React.FC<{
             on_click_add={() => {
               open_new_bookmark_modal({})
             }}
-            on_click_search={() => {}}
-            on_click_notifications={() => {}}
             name={auth_context.auth_data.username}
             slot_user_dropdown={
               <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown>

@@ -1,7 +1,7 @@
 import { StorybookMargin } from '@web-ui/helpers/storybook'
 import { SignUpForm } from './sign-up-form'
 import { Input } from '@web-ui/components/common/atoms/input'
-import { Button } from '@web-ui/components/common/particles/button'
+import { Button } from '@web-ui/components/Button'
 
 export default {
   component: SignUpForm,

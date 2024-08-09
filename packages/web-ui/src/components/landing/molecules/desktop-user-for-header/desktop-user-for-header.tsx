@@ -1,4 +1,4 @@
-import { Button } from '@web-ui/components/common/particles/button'
+import { Button } from '@web-ui/components/Button'
 
 export namespace DesktopUserForHeader {
   export type Props = {

@@ -1,14 +1,14 @@
 import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities/bookmark.entity'
 import { system_values } from '@shared/constants/system-values'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Modal as UiModal } from '@web-ui/components/Modal'
 import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
 import { Footer as UiModal_Footer } from '@web-ui/components/Modal/Footer'
 import { UpsertBookmarkContent as UiModal_UpsertBookmarkContent } from '@web-ui/components/Modal/UpsertBookmarkContent'
 import { Section as UiModal_UpsertBookmarkContent_Section } from '@web-ui/components/Modal/UpsertBookmarkContent/Section'
-import { Input as UiCommonAtoms_Input } from '@web-ui/components/common/atoms/input'
-import { DraggableUpsertFormLinks as UiAppAtom_DraggableUpsertFormLinks } from '@web-ui/components/app/atoms/draggable-upsert-form-links'
+import { Input as UiInput } from '@web-ui/components/Input'
+import { DraggableUpsertFormLinks as Ui_Modal_UpsertBookmarkContent_Section_DraggableUpsertFormLinks } from '@web-ui/components/Modal/UpsertBookmarkContent/Section/DraggableUpsertFormLinks'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
@@ -20,8 +20,8 @@ import { AuthContext } from '@/app/auth-provider'
 import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
 import { Tags_Ro } from '@repositories/modules/tags/domain/tags.ro'
 import { ModalContext } from '@/providers/ModalProvider'
-import { TagsInput as UiAppLibrary_TagsInput } from '@web-ui/components/app/library/TagsInput'
-import { Checkbox as UiCheckbox } from '@web-ui/components/Checkbox'
+import { TagsInput as Ui_app_library_TagsInput } from '@web-ui/components/app/library/TagsInput'
+import { Checkbox as Ui_Checkbox } from '@web-ui/components/Checkbox'
 
 const cover_max_width = 1200
 
@@ -349,7 +349,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
               }
 
               return (
-                <UiCommonAtoms_Input
+                <UiInput
                   value={field.value || ''}
                   on_change={(value) => {
                     if (!isSubmitting) {
@@ -395,7 +395,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
               }
 
               return (
-                <UiCommonAtoms_Input
+                <UiInput
                   value={field.value || ''}
                   on_change={(value) => {
                     if (!isSubmitting) {
@@ -421,7 +421,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       <UiModal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.tags}
       >
-        <UiAppLibrary_TagsInput
+        <Ui_app_library_TagsInput
           selected_tags={tags.map((tag) => ({
             name: tag.name,
             is_public:
@@ -461,7 +461,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       <UiModal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.links}
       >
-        <UiAppAtom_DraggableUpsertFormLinks
+        <Ui_Modal_UpsertBookmarkContent_Section_DraggableUpsertFormLinks
           links={links.map((link) => ({
             url: link.url,
             site_path: link.site_path,
@@ -532,7 +532,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         cancel: props.dictionary.app.upsert_modal.cancel,
       }}
     >
-      <UiCheckbox
+      <Ui_Checkbox
         label="Share to my public profile"
         is_checked={is_bookmark_public || false}
         on_click={() => {

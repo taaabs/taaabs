@@ -2,7 +2,7 @@
 
 import { PageHero as UiLandingSection_PageHero } from '@web-ui/components/landing/sections/page-hero'
 import { PricingTiers as UiLandingSectionPricingTiers } from '@web-ui/components/landing/sections/pricing-tiers'
-import { Button as UiCommonParticle_Button } from '@web-ui/components/common/particles/button'
+import { Button as UiButton } from '@web-ui/components/Button'
 import { useState } from 'react'
 import { Dictionary } from '@/dictionaries/dictionary'
 
@@ -78,9 +78,9 @@ const Pricing: React.FC<{ dictionary: Dictionary }> = (props) => {
               props.dictionary.landing.pricing.tiers[0].bullets_heading,
             bullets: props.dictionary.landing.pricing.tiers[0].bullets,
             slot_button: (
-              <UiCommonParticle_Button on_click={() => {}} size="medium">
+              <UiButton on_click={() => {}} size="medium">
                 {props.dictionary.landing.pricing.tiers[0].button_label}
-              </UiCommonParticle_Button>
+              </UiButton>
             ),
           },
           {
@@ -102,9 +102,9 @@ const Pricing: React.FC<{ dictionary: Dictionary }> = (props) => {
               props.dictionary.landing.pricing.tiers[1].bullets_heading,
             bullets: props.dictionary.landing.pricing.tiers[1].bullets,
             slot_button: (
-              <UiCommonParticle_Button on_click={() => {}} size="medium">
+              <UiButton on_click={() => {}} size="medium">
                 {props.dictionary.landing.pricing.tiers[1].button_label}
-              </UiCommonParticle_Button>
+              </UiButton>
             ),
           },
           {
@@ -128,9 +128,9 @@ const Pricing: React.FC<{ dictionary: Dictionary }> = (props) => {
             featured_text:
               props.dictionary.landing.pricing.tiers[2].featured_text,
             slot_button: (
-              <UiCommonParticle_Button on_click={() => {}} size="medium">
+              <UiButton on_click={() => {}} size="medium">
                 {props.dictionary.landing.pricing.tiers[2].button_label}
-              </UiCommonParticle_Button>
+              </UiButton>
             ),
           },
         ]}

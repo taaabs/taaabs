@@ -1,6 +1,6 @@
 import styles from './pricing-tiers.module.scss'
 import { Wrapper as UiCommonTemplateWrapper } from '@web-ui/components/common/templates/wrapper'
-import { Icon } from '@web-ui/components/common/particles/icon'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import confetti from 'canvas-confetti'
@@ -183,7 +183,7 @@ export const PricingTiers: React.FC<PricingTiers.Props> = (props) => {
                           styles.pricing_tier__bullets__inner__item__check
                         }
                       >
-                        <Icon variant="SELECTED_BOLD" />
+                        <UiIcon variant="SELECTED_BOLD" />
                       </div>
                       <span>{bullet}</span>
                     </div>

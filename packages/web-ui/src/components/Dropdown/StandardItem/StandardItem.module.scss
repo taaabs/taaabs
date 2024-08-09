@@ -1,0 +1,32 @@
+// @type
+@use '../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px 0 8px;
+  height: 32px;
+  border-radius: var(--border-radius-5px);
+  margin: 0 var(--padding-8px);
+  @include transition-150ms(background-color);
+  @include hover {
+    background-color: var(--neutral100);
+    @include dark {
+      background-color: var(--dark200);
+    }
+  }
+  > svg {
+    fill: var(--black);
+    width: var(--icon-dimension-13px);
+  }
+  > span {
+    white-space: nowrap;
+  }
+  &--danger {
+    color: var(--red);
+    > svg {
+      fill: var(--red);
+    }
+  }
+}

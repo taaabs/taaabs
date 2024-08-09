@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -21,24 +17,11 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "paths": {
-      "@web-ui/*": [
-        "src/*"
-      ],
-      "@shared/*": [
-        "../shared/src/*"
-      ]
+      "@web-ui/*": ["src/*"],
+      "@shared/*": ["../shared/src/*"]
     },
-    "types": [
-      "vite/client",
-      "jest"
-    ],
+    "types": ["vite/client", "jest"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "../shared/src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "../shared/src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
