@@ -20,8 +20,13 @@
       "@web-ui/*": ["src/*"],
       "@shared/*": ["../shared/src/*"]
     },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "types": ["vite/client", "jest"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "../shared/src/**/*.ts"],
+  "include": ["next-env.d.ts","src/**/*.ts", "src/**/*.tsx", "../shared/src/**/*.ts"],
   "exclude": ["node_modules"]
 }

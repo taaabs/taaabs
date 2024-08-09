@@ -15,13 +15,13 @@ describe('HtmlParser', () => {
       expect(JSON.parse(result!.reader_data)).toStrictEqual({
         type: 'chat',
         conversation: [
-          { author: 'user', text: 'write me a single letter' },
+          { role: 'user', content: 'write me a single letter' },
           {
-            author: 'assistant',
+            role: 'assistant',
             content: `Sure, here's a single letter: A`,
           },
-          { author: 'user', text: 'and now, another' },
-          { author: 'assistant', content: 'B' },
+          { role: 'user', content: 'and now, another' },
+          { role: 'assistant', content: 'B' },
         ],
       })
     })

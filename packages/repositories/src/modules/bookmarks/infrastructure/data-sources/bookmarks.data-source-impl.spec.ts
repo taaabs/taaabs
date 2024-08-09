@@ -91,11 +91,8 @@ describe('Bookmarks_DataSourceImpl', () => {
 
       await sut.find_by_url_hash(params, new Uint8Array())
 
-      expect(ky_instance_mock.post).toHaveBeenCalledWith(
-        'v1/bookmarks/find-by-url-hash',
-        {
-          json: { hash: 'mocked_hash' },
-        },
+      expect(ky_instance_mock.get).toHaveBeenCalledWith(
+        'v1/bookmarks/find-by-url-hash/mocked_hash',
       )
     })
   })
