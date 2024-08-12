@@ -309,6 +309,12 @@ const dictionary: Dictionary = {
       cancel: 'Cancel',
       recent_tags: 'Recent tags',
     },
+    saves_modal: {
+      header: 'Saves',
+      follow: 'Follow',
+      unfollow: 'Unfollow',
+      close: 'Close',
+    },
   },
   settings: {
     settings: 'Settings',

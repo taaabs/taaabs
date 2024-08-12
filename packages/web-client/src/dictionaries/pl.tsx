@@ -315,6 +315,12 @@ export const dictionary: Dictionary = {
       cancel: 'Anuluj',
       recent_tags: 'Ostatio używane',
     },
+    saves_modal: {
+      header: 'U społeczności',
+      follow: 'Obserwuj',
+      unfollow: 'Nie obserwuj',
+      close: 'Close',
+    },
   },
   settings: {
     settings: 'Ustawienia',

@@ -29,6 +29,7 @@ import { LocalDb } from '@/app/local-db-provider'
 import { _Bookmark } from './_bookmarks/_Bookmark'
 import { edit_tags_modal_setter } from '@/modals/edit-tags/edit-tags-modal-setter'
 import { PopstateCountContext } from '@/providers/PopstateCountProvider'
+import { saves_modal_setter } from '@/modals/saves/saves-modal-setter'
 
 namespace _Bookmarks {
   export type Props = {
@@ -972,6 +973,14 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
             })
           }
           window.open(url, '_blank')
+        }}
+        on_saves_click={({ url, saves }) => {
+          saves_modal_setter({
+            modal_context,
+            url,
+            saves,
+            dictionary: props.dictionary,
+          })
         }}
         favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
         // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed).

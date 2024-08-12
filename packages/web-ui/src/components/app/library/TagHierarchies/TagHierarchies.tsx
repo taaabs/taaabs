@@ -10,7 +10,7 @@ import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
 import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import Skeleton from 'react-loading-skeleton'
-import SimpleBar from 'simplebar-react'
+import Simplebar from 'simplebar-react'
 
 export namespace TagHierarchies {
   export type Node = {
@@ -359,7 +359,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     }
 
     return (
-      <SimpleBar
+      <Simplebar
         className={cn(styles.simplebar)}
         ref={simplebar_tag_hierarchies}
       >
@@ -484,7 +484,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             ))}
           </div>
         )}
-      </SimpleBar>
+      </Simplebar>
     )
   },
   (o, n) =>

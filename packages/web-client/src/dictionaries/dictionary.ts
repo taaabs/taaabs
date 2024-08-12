@@ -245,6 +245,12 @@ export type Dictionary = {
       update: string
       recent_tags: string
     }
+    saves_modal: {
+      header: string
+      follow: string
+      unfollow: string
+      close: string
+    }
   }
   settings: {
     settings: string
