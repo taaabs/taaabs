@@ -145,7 +145,6 @@ export namespace _Bookmark {
 
 export const _Bookmark: React.FC<_Bookmark.Props> = memo(
   function _Bookmark(props) {
-    console.log(props.has_cover)
     const [tags, set_tags] = useState<_Bookmark.Props['tags']>(props.tags)
     const [is_points_givenrequested, set_is_points_givenrequested] =
       useState<boolean>()
