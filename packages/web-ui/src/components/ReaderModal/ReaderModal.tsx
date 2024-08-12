@@ -1,9 +1,8 @@
 import styles from './ReaderModal.module.scss'
 import cn from 'classnames'
 import { useEffect } from 'react'
-import OutsideClickHandler from 'react-outside-click-handler'
 import { Sheet } from 'react-modal-sheet'
-import SimpleBar from 'simplebar-react'
+import Simplebar from 'simplebar-react'
 
 namespace ReaderModal {
   export type Props = {
@@ -56,13 +55,13 @@ export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
       onClick={props.on_close}
     >
       <div className={styles.modal__inner} onClick={(e) => e.stopPropagation()}>
-        <SimpleBar
+        <Simplebar
           style={{
             height: '100vh',
           }}
         >
           {props.slot_content}
-        </SimpleBar>
+        </Simplebar>
       </div>
     </div>
   ) : (

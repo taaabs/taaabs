@@ -1,0 +1,39 @@
+// @type
+@use '../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding-16px);
+  gap: var(--padding-8px);
+  @include at768 {
+    padding: var(--padding-24px);
+    gap: var(--padding-16px);
+  }
+}
+.user {
+  display: flex;
+  align-items: center;
+  &__left {
+    flex: 1;
+    display: flex;
+    > a {
+      display: flex;
+      flex-direction: column;
+      > div {
+        > span:first-child {
+          font-weight: var(--font-weight-inter-medium);
+          @include hover {
+            @include text-decoration-underlinie-thin;
+          }
+        }
+        > span:nth-child(2) {
+          color: var(--text-color-dimmed);
+        }
+        &:last-child {
+          font-size: var(--font-size-13px);
+        }
+      }
+    }
+  }
+}

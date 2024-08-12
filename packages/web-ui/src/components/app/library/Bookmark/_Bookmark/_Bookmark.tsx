@@ -113,6 +113,7 @@ export namespace _Bookmark {
     on_reading_mode_click: (url: string) => void
     on_link_middle_click: () => void
     on_new_tab_click: (url: string) => void
+    on_saves_click: (params: { url: string; saves: number }) => void
     favicon_host: string
     menu_slot: React.ReactNode
     highlights?: Highlights
@@ -967,13 +968,19 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       </a>
                     </div>
                     <div className={styles.bookmark__links__item__actions}>
-                      {link.saves !== undefined && link.saves > 0 && (
+                      {link.saves && (
                         <button
                           className={
                             styles[
                               'bookmark__links__item__actions__public-saves'
                             ]
                           }
+                          onClick={() => {
+                            props.on_saves_click({
+                              url: link.url,
+                              saves: link.saves!,
+                            })
+                          }}
                         >
                           {link.saves}
                         </button>

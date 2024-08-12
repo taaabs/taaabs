@@ -3,7 +3,7 @@ import cn from 'classnames'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect } from 'react'
 import { Sheet } from 'react-modal-sheet'
-import SimpleBar from 'simplebar-react'
+import Simplebar from 'simplebar-react'
 
 namespace Modal {
   export type Props = {
@@ -67,13 +67,13 @@ export const Modal: React.FC<Modal.Props> = (props) => {
         }}
       >
         {props.slot_header}
-        <SimpleBar
+        <Simplebar
           style={{
             maxHeight: props.slot_footer ? '70svh' : '85svh',
           }}
         >
           {props.slot_content}
-        </SimpleBar>
+        </Simplebar>
         {props.slot_footer}
       </div>
     </div>

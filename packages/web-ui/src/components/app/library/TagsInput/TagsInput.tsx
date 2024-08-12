@@ -6,7 +6,7 @@ import cn from 'classnames'
 import { Icon as UiIcon } from '@web-ui/components/Icon'
 import { system_values } from '@shared/constants/system-values'
 import OutsideClickHandler from 'react-outside-click-handler'
-import SimpleBar from 'simplebar-react'
+import Simplebar from 'simplebar-react'
 
 export namespace TagsInput {
   export type Tag = {
@@ -199,7 +199,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
   )
 
   const suggestions = (
-    <SimpleBar className={styles.suggestions}>
+    <Simplebar className={styles.suggestions}>
       {!new_tag_name && (
         <div className={styles.suggestions__heading}>
           {props.translations.recent_tags}
@@ -282,7 +282,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
               />
             ))}
       </div>
-    </SimpleBar>
+    </Simplebar>
   )
 
   return (
