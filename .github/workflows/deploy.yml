@@ -30,6 +30,7 @@ jobs:
       - name: Create .env file
         run: |
           echo "NEXT_PUBLIC_API_URL=https://api.taaabs.com" >> .env
+          echo "NEXT_PUBLIC_APP_URL=https://taaabs.com" >> .env
           echo "NEXT_PUBLIC_RECAPTCHA_SITE_KEY=6LffM9UpAAAAAOD_kFg_BsrOWvFlOVHZO_heSwkz" >> .env
         working-directory: ./packages/web-client
 
