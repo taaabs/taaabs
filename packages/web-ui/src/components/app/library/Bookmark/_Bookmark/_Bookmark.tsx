@@ -967,7 +967,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       </a>
                     </div>
                     <div className={styles.bookmark__links__item__actions}>
-                      {link.saves && (
+                      {link.saves !== undefined && link.saves > 0 && (
                         <button
                           className={
                             styles[
