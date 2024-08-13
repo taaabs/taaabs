@@ -43,7 +43,7 @@ export const SavesModal: React.FC<SavesModal.Props> = (props) => {
       set_users(result)
     }
     init()
-  })
+  }, [])
 
   const content = (
     <UiModal_SavesContent
