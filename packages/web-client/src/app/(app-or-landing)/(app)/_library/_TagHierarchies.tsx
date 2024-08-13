@@ -5,8 +5,8 @@ import { TagHierarchies as Ui_app_library_TagHierarchies } from '@web-ui/compone
 import { tag_hierarchies_actions } from '@repositories/stores/library/tag-hierarchies/tag-hierarchies.slice'
 import { Filter } from '@/types/library/filter'
 import { UpdateTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/domain/types/update-tag-hierarchies.params'
-import { AuthContext } from '@/app/auth-provider'
-import { LocalDb } from '@/app/local-db-provider'
+import { AuthContext } from '@/providers/AuthProvider'
+import { LocalDb } from '@/providers/LocalDbProvider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { LibraryContext } from './Library'
 

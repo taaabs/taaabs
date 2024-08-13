@@ -10,7 +10,7 @@ import { Counts_Params } from '@repositories/modules/counts/domain/types/counts.
 import { browser_storage } from '@/constants/browser-storage'
 import { Filter } from '@/types/library/filter'
 import { search_params_keys } from '@/constants/search-params-keys'
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { use_is_hydrated } from '@shared/hooks'
 
 export const use_counts = () => {

@@ -1,6 +1,6 @@
 'use client'
 
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { browser_storage } from '@/constants/browser-storage'
 import { use_has_focus } from '@/hooks/use-has-focus'
 import { RecordVisit_Params } from '@repositories/modules/bookmarks/domain/types/record-visit.params'

@@ -13,7 +13,7 @@ import ky from 'ky'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
 import { toast } from 'react-toastify'
 import { useContext, useState } from 'react'
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { Crypto } from '@repositories/utils/crypto'
 
 type FormValues = {

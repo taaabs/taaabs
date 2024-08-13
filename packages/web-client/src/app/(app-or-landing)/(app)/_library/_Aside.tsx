@@ -11,7 +11,7 @@ import { SegmentedButtonsSkeleton as Ui_app_library_SegmentedButtonsSkeleton } f
 import { SegmentedButton as Ui_common_SegmentedButton } from '@web-ui/components/common/SegmentedButton'
 import { use_is_hydrated } from '@shared/hooks'
 
-import { LocalDb } from '@/app/local-db-provider'
+import { LocalDb } from '@/providers/LocalDbProvider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { LibraryContext } from './Library'
 import { PopstateCountContext } from '@/providers/PopstateCountProvider'

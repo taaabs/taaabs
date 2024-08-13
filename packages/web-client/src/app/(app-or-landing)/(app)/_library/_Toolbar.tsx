@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Toolbar as Ui_app_library_Toolbar } from '@web-ui/components/app/library/Toolbar'
 import { Filter } from '@/types/library/filter'
-import { LocalDb } from '@/app/local-db-provider'
+import { LocalDb } from '@/providers/LocalDbProvider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { LibraryContext } from './Library'
 

@@ -29,7 +29,7 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { search_params_keys } from '@/constants/search-params-keys'
 import { toast } from 'react-toastify'
 import { browser_storage } from '@/constants/browser-storage'
-import { AuthContext } from '../../auth-provider'
+import { AuthContext } from '../../../providers/AuthProvider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { BookmarkUrlHashData } from '@/utils/bookmark-url-hash-data'
 import { Navigation as Ui_app_templates_App_HeaderDesktop_Navigation } from '@web-ui/components/app/templates/App/HeaderDesktop/Navigation'

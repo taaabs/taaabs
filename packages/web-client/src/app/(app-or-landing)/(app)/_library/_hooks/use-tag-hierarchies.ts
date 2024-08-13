@@ -1,4 +1,4 @@
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { Filter } from '@/types/library/filter'
 import { TagHierarchy_Entity } from '@repositories/modules/tag-hierarchies/domain/entities/tag-hierarchy.entity'

@@ -10,7 +10,7 @@ import { StandardSection as Ui_settings_StandardSection } from '@web-ui/componen
 import { Button as UiButton } from '@web-ui/components/Button'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { use_is_hydrated } from '@shared/hooks'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { toast } from 'react-toastify'

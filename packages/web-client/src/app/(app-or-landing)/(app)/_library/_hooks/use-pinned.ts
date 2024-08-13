@@ -1,4 +1,4 @@
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { browser_storage } from '@/constants/browser-storage'
 import { use_library_dispatch, use_library_selector } from '@/stores/library'
 import { pinned_actions } from '@repositories/stores/library/pinned/pinned.slice'

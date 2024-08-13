@@ -115,6 +115,7 @@ export const browser_storage = {
   },
   local_storage: {
     auth_data: 'auth-data',
+    guest_auth_data: 'guest-auth-data',
     recent_library_searches: 'recent-library-searches', // This is global - applies to public libraries as well.
     recently_visited_users: 'recently-visited-users',
     authorized_library: {

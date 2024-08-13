@@ -1,7 +1,7 @@
 import { StandardSection as UiSettings_StandardSection } from '@web-ui/components/settings/StandardSection'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { useContext } from 'react'
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { delete_account_modal_setter } from '@/modals/delete-account/delete-account-modal-setter'
 import { ModalContext } from '@/providers/ModalProvider'

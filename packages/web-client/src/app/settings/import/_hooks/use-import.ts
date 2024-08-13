@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'
 import { SendImportData_Params } from '@repositories/modules/import-export/domain/types/send-import-data.params'
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { system_values } from '@shared/constants/system-values'
 import {
   ParsedXmlTreeNode,

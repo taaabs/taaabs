@@ -4,8 +4,8 @@ import { Metadata_DataSourceImpl } from '@repositories/modules/metadata/infrastr
 import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
 import ky from 'ky'
 import { ReactNode } from 'react'
-import { LocalDbProvider } from '@/app/local-db-provider'
 import { FollowUnfollowProvider } from './follow-unfollow-provider'
+import { LocalDbProvider } from '@/providers/LocalDbProvider'
 
 const Layout: React.FC<{
   children: ReactNode

@@ -7,7 +7,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_library_dispatch } from '@/stores/library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { KyInstance } from 'ky'
 
 // This logic works only because of referential nature of "points_given" obejct. It works but could be moved to redux

@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { Search as Ui_app_library_Search } from '@web-ui/components/app/library/Search'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { ModalContext } from '@/providers/ModalProvider'
-import { LocalDb } from '@/app/local-db-provider'
+import { LocalDb } from '@/providers/LocalDbProvider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { LibraryContext } from './Library'
 

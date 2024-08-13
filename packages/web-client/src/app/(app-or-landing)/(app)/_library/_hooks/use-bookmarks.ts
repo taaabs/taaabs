@@ -15,7 +15,7 @@ import { browser_storage } from '@/constants/browser-storage'
 import { Filter } from '@/types/library/filter'
 import { system_values } from '@shared/constants/system-values'
 import { search_params_keys } from '@/constants/search-params-keys'
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { use_is_hydrated } from '@shared/hooks'
 
 export const use_bookmarks = () => {

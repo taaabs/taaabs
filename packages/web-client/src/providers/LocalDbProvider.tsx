@@ -2,7 +2,7 @@
 
 import { Orama, create, insert, insertMultiple, remove } from '@orama/orama'
 import { ReactNode, createContext, useContext, useState } from 'react'
-import { AuthContext } from './auth-provider'
+import { AuthContext } from './AuthProvider'
 import localforage from 'localforage'
 import {
   afterInsert as highlightAfterInsert,

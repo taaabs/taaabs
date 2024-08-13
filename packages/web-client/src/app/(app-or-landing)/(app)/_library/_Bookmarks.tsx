@@ -21,15 +21,15 @@ import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/ge
 import { useContext } from 'react'
 import { LibraryContext } from './Library'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { AuthContext } from '@/app/auth-provider'
 import { use_library_dispatch } from '@/stores/library'
 import { useSearchParams } from 'next/navigation'
 import { ModalContext } from '@/providers/ModalProvider'
-import { LocalDb } from '@/app/local-db-provider'
+import { LocalDb } from '@/providers/LocalDbProvider'
 import { _Bookmark } from './_bookmarks/_Bookmark'
 import { edit_tags_modal_setter } from '@/modals/edit-tags/edit-tags-modal-setter'
 import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 import { saves_modal_setter } from '@/modals/saves/saves-modal-setter'
+import { AuthContext } from '@/providers/AuthProvider'
 
 namespace _Bookmarks {
   export type Props = {

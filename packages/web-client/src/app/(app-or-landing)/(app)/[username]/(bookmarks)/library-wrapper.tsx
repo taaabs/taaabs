@@ -3,7 +3,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { useContext } from 'react'
 import Library from '../../_library/Library'
-import { LocalDbContext } from '@/app/local-db-provider'
+import { LocalDbContext } from '@/providers/LocalDbProvider'
 
 namespace LibraryWrapper {
   export type Props = {

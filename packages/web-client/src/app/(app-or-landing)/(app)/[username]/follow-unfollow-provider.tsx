@@ -1,6 +1,6 @@
 'use client'
 
-import { AuthContext } from '@/app/auth-provider'
+import { AuthContext } from '@/providers/AuthProvider'
 import { UserConnection_DataSourceImpl } from '@repositories/modules/user-connection/infrastructure/user-connection.data-source-impl'
 import { UserConnection_RepositoryImpl } from '@repositories/modules/user-connection/infrastructure/user-connection.repository-impl'
 import { useParams } from 'next/navigation'
