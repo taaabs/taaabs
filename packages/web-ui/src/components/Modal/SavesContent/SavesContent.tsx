@@ -5,6 +5,7 @@ import 'dayjs/locale/pl'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
 import Simplebar from 'simplebar-react'
+import Link from 'next/link'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -84,16 +85,15 @@ export const SavesContent: React.FC<SavesContent.Props> = (props) => {
         return (
           <div key={i} className={styles.user}>
             <div className={styles.user__left}>
-              <a
+              <Link
                 href={`${props.app_url}/${user.username}?back=${props.back}`}
-                target="_blank"
               >
                 <div>
                   <span>{user.username}</span>
                   {user.display_name && <span> {user.display_name}</span>}
                 </div>
                 <div>{date}</div>
-              </a>
+              </Link>
             </div>
             {/* {props.show_follow_buttons && (
               <Button on_click={() => props.on_follow_click(user.username)}>
