@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
         afterResponse: [
           async (request, _, response) => {
             if (response.status == 401) {
-              // Token has expired, refresh it.
+              // Token has expired, refresh it
               const auth_data_local_storage = JSON.parse(
                 localStorage.getItem(browser_storage.local_storage.auth_data) ||
                   'null',

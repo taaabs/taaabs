@@ -41,7 +41,7 @@ export const get_authorized_bookmarks = (params: {
         state.bookmarks.processing_progress !== undefined &&
         result.processing_progress === undefined
       ) {
-        // Refresh tag hierarchies so they can have newly generated counts.
+        // Refresh tag hierarchies so they can have newly generated counts
         dispatch(
           tag_hierarchies_actions.get_tag_hierarchies_authorized({
             request_params: {

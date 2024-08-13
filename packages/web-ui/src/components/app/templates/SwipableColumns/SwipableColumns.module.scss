@@ -73,7 +73,7 @@
       z-index: 1;
       background: var(--background);
       height: 100vh;
-      padding-right: 1px; // Main sheet's border is made of shadow so we need to account for that.
+      padding-right: 1px; // Main sheet's border is made of shadow so we need to account for that
     }
     @include at992 {
       width: var(--_aside-width) !important;

@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 
 const HISTORY_LIMIT = 10
 
-// Purpose of this hook is to avoid hitting storage limits.
+// Purpose of this hook is to avoid hitting storage limits
 export const use_session_storage_cleanup = () => {
   const search_params_hook = useSearchParams()
   const params_hook = useParams()
@@ -13,10 +13,10 @@ export const use_session_storage_cleanup = () => {
       sessionStorage.getItem('query-params-history') || '[]',
     )
 
-    // Remove old entries after reaching history limit.
+    // Remove old entries after reaching history limit
     if (search_params_history.length == HISTORY_LIMIT) {
       const oldest_search_params = search_params_history[0]
-      // We must be sure last page in history wasn't visited sooner.
+      // We must be sure last page in history wasn't visited sooner
       if (
         search_params_history.filter(
           (search_params) => search_params == oldest_search_params,
@@ -31,7 +31,7 @@ export const use_session_storage_cleanup = () => {
       search_params_history.shift()
     }
 
-    // Add new entry.
+    // Add new entry
     sessionStorage.setItem(
       'query-params-history',
       JSON.stringify([

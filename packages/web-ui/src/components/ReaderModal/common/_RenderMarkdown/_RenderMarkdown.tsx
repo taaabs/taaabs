@@ -36,7 +36,7 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
             let language_fallback: string | undefined
             if (!language) {
               language_fallback = hljs.highlightAuto(
-                children_parsed.substring(0, 2000), // Limit length for faster processing.
+                children_parsed.substring(0, 2000), // Limit length for faster processing
               ).language
             }
             return (

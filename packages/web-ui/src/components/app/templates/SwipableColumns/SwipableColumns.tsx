@@ -70,7 +70,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
 
   const swipeable_handlers = useSwipeable({
     onSwipeStart: ({ dir, event }) => {
-      // Check if user is not dragging over "custom range" handlers or ReactSortable item in a draggable state.
+      // Check if user is not dragging over "custom range" handlers or ReactSortable item in a draggable state
       if (
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||

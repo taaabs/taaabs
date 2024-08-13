@@ -45,7 +45,7 @@
 .assistant {
   position: relative;
   line-height: var(--line-height-1-6);
-  &::before {
+  > div > *:first-child::before {
     position: absolute;
     content: '';
     width: 14px;
@@ -55,7 +55,7 @@
     left: 0;
     top: -20px;
     @include at992 {
-      left: -26px;
+      left: -24px;
       top: 5px;
     }
   }

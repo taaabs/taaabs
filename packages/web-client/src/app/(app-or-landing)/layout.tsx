@@ -22,7 +22,7 @@ const Layout: React.FC<{
       dictionary={dictionary}
       bookmarklet_script={`javascript:(async function () {${bookmarklet_script
         .replaceAll("'", '%27')
-        .replace(/\/\*[\s\S]*?\*\/|(?<=[^:])\/\/.*|^\/\/.*/g, '') // Removes comments.
+        .replace(/\/\*[\s\S]*?\*\/|(?<=[^:])\/\/.*|^\/\/.*/g, '') // Removes comments
         .replace(/\s{2,}/g, '')}})()`}
     >
       {props.children}

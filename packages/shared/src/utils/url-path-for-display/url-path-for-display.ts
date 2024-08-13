@@ -4,12 +4,12 @@ export const url_path_for_display = (params: {
 }): string => {
   let parsed_url = params.url.replace('://', '')
 
-  // Remove trailing slash if present.
+  // Remove trailing slash if present
   if (parsed_url.endsWith('/')) {
     parsed_url = parsed_url.substring(0, parsed_url.length - 1)
   }
 
-  // Strip common URL endings.
+  // Strip common URL endings
   const remove_ending_from_url = (url: string) => {
     switch (true) {
       case url.endsWith('/index.html'):

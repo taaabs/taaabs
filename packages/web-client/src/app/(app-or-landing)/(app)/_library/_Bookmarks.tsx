@@ -253,7 +253,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                 }),
               )
               const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
-              // Filter out bookmark.
+              // Filter out bookmark
               if (
                 !tag_view_options_hook.selected_tags.every((t) =>
                   updated_tag_ids.includes(t),
@@ -277,7 +277,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   search_hook.set_count(search_hook.count - 1)
                 }
               }
-              // Unselect removed tags when there is no more bookmarks with them.
+              // Unselect removed tags when there is no more bookmarks with them
               const tags_to_remove_from_search_params =
                 tag_view_options_hook.selected_tags.filter((t) => {
                   const yields = Object.entries(counts_hook.tags!).find(
@@ -293,7 +293,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   tags_to_remove_from_search_params,
                 )
               }
-              // Update highlights.
+              // Update highlights
               if (search_hook.result?.hits.length) {
                 if (updated_bookmark.id != modified_bookmark.bookmark_id) {
                   await props.local_db.delete_bookmark({
@@ -523,7 +523,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
         }),
       )
       const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
-      // Filter out bookmark.
+      // Filter out bookmark
       if (
         !tag_view_options_hook.selected_tags.every((t) =>
           updated_tag_ids.includes(t),
@@ -545,7 +545,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           search_hook.set_count(search_hook.count - 1)
         }
       }
-      // Unselect removed tags when there is no more bookmarks with them.
+      // Unselect removed tags when there is no more bookmarks with them
       const tags_to_remove_from_search_params =
         tag_view_options_hook.selected_tags.filter((t) => {
           const yields = Object.entries(counts_hook.tags!).find(
@@ -708,7 +708,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           encryption_key: auth_context.auth_data!.encryption_key,
         }),
       )
-      // Update highlights.
+      // Update highlights
       if (search_hook.result?.hits.length) {
         await props.local_db.upsert_bookmark({
           db: (is_archived_filter
@@ -794,7 +794,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           encryption_key: auth_context.auth_data!.encryption_key,
         }),
       )
-      // Update highlights.
+      // Update highlights
       if (search_hook.result?.hits.length) {
         await props.local_db.upsert_bookmark({
           db: (is_archived_filter
@@ -832,7 +832,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           updated_tag_ids.includes(t),
         )
       ) {
-        // We filter out bookmark when there are other bookmarks still matching with selected tags.
+        // We filter out bookmark when there are other bookmarks still matching with selected tags
         dispatch(
           bookmarks_actions.filter_out_bookmark({
             bookmark_id: updated_bookmark.id,
@@ -983,7 +983,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           })
         }}
         favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
-        // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed).
+        // We pass dragged tag so on_mouse_up has access to current state (memoized component is refreshed)
         dragged_tag={tag_view_options_hook.dragged_tag}
         on_mouse_up={handle_mouse_up}
         on_tags_order_change={
@@ -1030,7 +1030,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                     encryption_key: auth_context.auth_data!.encryption_key,
                   }),
                 )
-                // Update highlights.
+                // Update highlights
                 if (search_hook.result?.hits.length) {
                   await props.local_db.upsert_bookmark({
                     db: (is_archived_filter
@@ -1272,7 +1272,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
             : props.local_db.db?.id || ''
         }
         should_dim_visited_links={username !== undefined}
-        // It's important to wait until filter is set to search hook's state.
+        // It's important to wait until filter is set to search hook's state
         current_filter={search_hook.current_filter}
         translations={{
           delete: props.dictionary.app.library.delete,

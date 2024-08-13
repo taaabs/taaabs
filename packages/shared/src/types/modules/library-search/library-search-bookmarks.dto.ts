@@ -13,7 +13,7 @@ export namespace LibrarySearchBookmarks_Dto {
     public include_visited_at?: boolean
 
     @Type()
-    public after?: number // Select bookmarks updated after given timestamp in seconds.
+    public after?: number // Select bookmarks updated after given timestamp in seconds
   }
 
   export namespace Response {

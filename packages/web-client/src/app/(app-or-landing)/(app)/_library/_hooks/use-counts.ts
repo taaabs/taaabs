@@ -150,7 +150,7 @@ export const use_counts = () => {
 
     const query_tags = search_params.get(search_params_keys.tags)
     const query_filter = search_params.get(search_params_keys.filter)
-    const query_refresh_trigger = search_params.get('r') // Set after bookmark creation.
+    const query_refresh_trigger = search_params.get('r') // Set after bookmark creation
     if (
       query_tags != last_query_tags ||
       query_filter != last_query_filter ||

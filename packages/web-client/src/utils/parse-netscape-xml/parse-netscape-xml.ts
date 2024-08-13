@@ -45,7 +45,7 @@ const get_url = (item: string): string | undefined =>
   item.match(/HREF="([^"]*)"/)?.[1]
 const get_icon = (item: string): string | undefined =>
   item.match(/ICON="([^"]*)"/)?.[1]
-// Specific to Raindrop.
+// Specific to Raindrop
 const get_data_important = (item: string): string | undefined =>
   item.match(/DATA-IMPORTANT="([^"]*)"/)?.[1]
 const get_tags = (item: string): string[] | undefined =>

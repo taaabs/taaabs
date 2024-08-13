@@ -10,7 +10,7 @@ import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookma
 import { AuthContext } from '@/app/auth-provider'
 import { KyInstance } from 'ky'
 
-// This logic works only because of referential nature of "points_given" obejct. It works but could be moved to redux.
+// This logic works only because of referential nature of "points_given" obejct. It works but could be moved to redux
 export const use_points = () => {
   const auth_context = useContext(AuthContext)
   const dispatch = use_library_dispatch()

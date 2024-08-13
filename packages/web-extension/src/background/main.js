@@ -38,7 +38,7 @@ async function handle_tab(tab_id, url) {
 
 chrome.webNavigation.onCommitted.addListener(async (details) => {
   if (details.frameId === 0) {
-    // Ensure it's the main frame.
+    // Ensure it's the main frame
     try {
       await handle_tab(details.tabId, details.url)
     } catch (error) {
@@ -57,7 +57,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   }
 })
 
-// Set an alarm to keep the service worker alive.
+// Set an alarm to keep the service worker alive
 chrome.alarms.create('keepAlive', { periodInMinutes: 0.5 })
 
 chrome.alarms.onAlarm.addListener((alarm) => {

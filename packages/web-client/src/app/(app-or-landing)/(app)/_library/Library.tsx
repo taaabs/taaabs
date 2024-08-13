@@ -84,14 +84,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const tag_view_options_hook = use_tag_view_options()
   const date_view_options_hook = use_date_view_options()
   const points_hook = use_points()
-  const follow_unfollow_context = useContext(FollowUnfollowContext) // Only available in public library.
-  // START - UI synchronization.
+  const follow_unfollow_context = useContext(FollowUnfollowContext) // Only available in public library
+  // START - UI synchronization
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
     useState(0)
   const [is_fetching_first_bookmarks, set_is_fetching_first_bookmarks] =
     useState(false)
   const [is_initialized, set_is_initialized] = useState(false)
-  // END - UI synchronization.
+  // END - UI synchronization
 
   use_bookmarklet_handler({
     dictionary: props.dictionary,
@@ -196,7 +196,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     }
   }, [bookmarks_hook.is_fetching_first_bookmarks])
 
-  // Close "Upsert bookmark" modal, refresh counts and tag hierarchies.
+  // Close "Upsert bookmark" modal, refresh counts and tag hierarchies
   useUpdateEffect(() => {
     if (bookmarks_hook.is_fetching_first_bookmarks) return
     const counts_reload_requested_by_new_bookmark = sessionStorage.getItem(

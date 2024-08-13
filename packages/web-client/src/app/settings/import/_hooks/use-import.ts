@@ -25,9 +25,9 @@ type ParsedXmlBookmark = {
 export const use_import = () => {
   const auth_context = useContext(AuthContext)
   const [file_text, set_file_text] = useState<string>()
-  // Data coming from official export.
+  // Data coming from official export
   const [import_data, set_import_data] = useState<SendImportData_Params>()
-  // Processed third party file.
+  // Processed third party file
   const [parsed_xml, set_parsed_xml] = useState<ParsedXmlBookmark[]>()
   const [is_sending, set_is_sending] = useState<boolean>()
   const [erase_library, set_erase_library] = useState<boolean>()
@@ -43,7 +43,7 @@ export const use_import = () => {
       set_import_data(JSON.parse(file_text))
       return
     } catch {
-      // JSON is invalid, do nothing.
+      // JSON is invalid, do nothing
     }
 
     try {
@@ -87,7 +87,7 @@ export const use_import = () => {
       }
     } catch {
       toast.error('Selected file is invalid')
-      // Do nothing.
+      // Do nothing
     }
   }, [file_text])
 
@@ -105,7 +105,7 @@ export const use_import = () => {
         const tags = [
           ...bookmark.path
             .split('/')
-            .filter((segment) => !!segment.length) // Root bookmarks have '/' path.
+            .filter((segment) => !!segment.length) // Root bookmarks have '/' path
             .map((name) => ({
               name,
             })),
@@ -171,7 +171,7 @@ export const use_import = () => {
     set_file_text(undefined)
     set_parsed_xml(undefined)
     set_import_data(undefined)
-    // Clear any cached library data.
+    // Clear any cached library data
     for (const key in sessionStorage) {
       sessionStorage.removeItem(key)
     }

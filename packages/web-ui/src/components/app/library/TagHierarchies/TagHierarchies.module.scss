@@ -18,7 +18,7 @@
       @include light {
         box-shadow: var(--box-shadow-strong);
         @include at992 {
-          // Our shadow must be shorter so we cover it a little bit.
+          // Our shadow must be shorter so we cover it a little bit
           &::after {
             position: absolute;
             content: '';
@@ -54,7 +54,7 @@
 }
 .container {
   width: 100%;
-  // Hacky, but needed this way to have sticky "all" button play nicely on mobile.
+  // Hacky, but needed this way to have sticky "all" button play nicely on mobile
   @include to992 {
     padding-top: 12px;
     > button {

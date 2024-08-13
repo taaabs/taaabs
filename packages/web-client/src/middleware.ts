@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
     const preffered_locale = match(languages, locales, default_locale)
     const response = NextResponse.next()
     response.cookies.set('lang', preffered_locale, {
-      expires: new Date(Date.now() + 31536000000), // A year from now.
+      expires: new Date(Date.now() + 31536000000), // A year from now
     })
     return response
   }

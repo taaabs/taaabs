@@ -25,10 +25,10 @@ export const use_bookmarklet_handler = (props: {
   const modal_context = useContext(ModalContext)
   const dispatch = use_library_dispatch()
 
-  // Runs on page load, handles bookmarklet script invocation.
+  // Runs on page load, handles bookmarklet script invocation
   useUpdateEffect(() => {
     const create_bookmark_with_clipboard_data = async () => {
-      // Look for duplicated link and open its edit modal.
+      // Look for duplicated link and open its edit modal
       let found_duplicate = false
       let should_refetch_data = false
       if (bookmark.links) {
@@ -42,7 +42,7 @@ export const use_bookmarklet_handler = (props: {
               { url: bookmark.links[i].url },
               auth_context.auth_data!.encryption_key,
             )
-            // Duplicate found, open edit modal.
+            // Duplicate found, open edit modal
             found_duplicate = true
             toast.info('Link is already in library')
             const updated_bookmark = await upsert_bookmark_modal_setter({
@@ -91,7 +91,7 @@ export const use_bookmarklet_handler = (props: {
         }
       }
 
-      // Duplicate not found. Create bookmark and open edit modal.
+      // Duplicate not found. Create bookmark and open edit modal
       if (!found_duplicate) {
         should_refetch_data = true
         const bookmark_url_hash_data = BookmarkUrlHashData.parse({
@@ -121,7 +121,7 @@ export const use_bookmarklet_handler = (props: {
           const original_width = img.width
           const original_height = img.height
 
-          // Calculate new dimensions.
+          // Calculate new dimensions
           const max_width = 1200
           let new_width = original_width
           let new_height = original_height
@@ -133,7 +133,7 @@ export const use_bookmarklet_handler = (props: {
             )
           }
 
-          // Create canvas for full-size image.
+          // Create canvas for full-size image
           const full_size_canvas = document.createElement('canvas')
           full_size_canvas.width = new_width
           full_size_canvas.height = new_height
@@ -144,7 +144,7 @@ export const use_bookmarklet_handler = (props: {
           full_size_ctx.drawImage(img, 0, 0, new_width, new_height)
           og_image = full_size_canvas.toDataURL('image/webp')
 
-          // Create smaller canvas for Blurhash calculation.
+          // Create smaller canvas for Blurhash calculation
           const blurhash_width = 50
           const blurhash_height = Math.round(
             (new_height / new_width) * blurhash_width,
@@ -157,10 +157,10 @@ export const use_bookmarklet_handler = (props: {
           if (!blurhash_ctx)
             throw new Error('Could not get 2D context from Blurhash canvas.')
 
-          // Use built-in scaling of drawImage for better quality.
+          // Use built-in scaling of drawImage for better quality
           blurhash_ctx.drawImage(img, 0, 0, blurhash_width, blurhash_height)
 
-          // Calculate Blurhash using the resized image.
+          // Calculate Blurhash using the resized image
           const pixels = blurhash_ctx.getImageData(
             0,
             0,
@@ -264,7 +264,7 @@ export const use_bookmarklet_handler = (props: {
         }
       }
 
-      // Close modal.
+      // Close modal
       if (should_refetch_data) {
         props.refetch_data()
       } else {

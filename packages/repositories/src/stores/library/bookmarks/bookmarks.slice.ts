@@ -8,13 +8,13 @@ type BookmarksState = {
   is_fetching?: boolean
   is_upserting?: boolean
   is_fetching_first_bookmarks?: boolean
-  first_bookmarks_fetched_at_timestamp?: number // Used for synchronization of pinned links re-render.
+  first_bookmarks_fetched_at_timestamp?: number // Used for synchronization of pinned links re-render
   is_fetching_more_bookmarks?: boolean
   showing_bookmarks_fetched_by_ids?: boolean
   incoming_bookmarks?: Bookmark_Entity[]
   bookmarks?: Bookmark_Entity[]
   has_more_bookmarks?: boolean
-  processing_progress?: number // Filling tag combinations and generating counts.
+  processing_progress?: number // Filling tag combinations and generating counts
   import_progress?: number
   density: 'default' | 'compact'
 }
@@ -68,7 +68,7 @@ export const bookmarks_slice = createSlice({
     ) {
       if (!state.bookmarks || !state.incoming_bookmarks || !action.payload)
         throw new Error('Some bookmarks should be there.')
-      // Keeping incoming bookmarks up-to-date is important for filtering out lazy loaded bookmarks.
+      // Keeping incoming bookmarks up-to-date is important for filtering out lazy loaded bookmarks
       state.incoming_bookmarks.push(...action.payload)
       state.bookmarks.push(...action.payload)
     },
@@ -82,7 +82,7 @@ export const bookmarks_slice = createSlice({
       state,
       action: PayloadAction<{ index: number; height: number }>,
     ) {
-      // state.bookmarks[action.payload.index] is an important check, without it we sometimes get error during fast tag changes.
+      // state.bookmarks[action.payload.index] is an important check, without it we sometimes get error during fast tag changes
       if (!state.bookmarks || !state.bookmarks[action.payload.index]) return
       state.bookmarks[action.payload.index].render_height =
         action.payload.height

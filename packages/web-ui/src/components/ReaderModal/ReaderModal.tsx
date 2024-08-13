@@ -15,7 +15,7 @@ namespace ReaderModal {
 }
 
 export const ReaderModal: React.FC<ReaderModal.Props> = (props) => {
-  // We can't use "useUpdateEffect" because this modal is loaded dynamically, therefore is_open is already set when the component is mounted.
+  // We can't use "useUpdateEffect" because this modal is loaded dynamically, therefore is_open is already set when the component is mounted
   useEffect(() => {
     const header = document.querySelector<HTMLElement>('body > header')
     const top_divs = document.querySelectorAll<HTMLElement>('body > div')

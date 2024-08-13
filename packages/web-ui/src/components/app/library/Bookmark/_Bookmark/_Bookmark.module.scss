@@ -297,7 +297,7 @@
           background-color: var(--green900);
         }
         @include transition-150ms;
-        // Needed by swipable and sortable - element touch hold detection.
+        // Needed by swipable and sortable - element touch hold detection
         @include touch-screen {
           > * {
             pointer-events: none;

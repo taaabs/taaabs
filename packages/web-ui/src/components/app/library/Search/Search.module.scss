@@ -225,7 +225,7 @@
           caret-color: var(--accent-color);
         }
         color: transparent;
-        width: 100vw; // TODO: Rework workaround.
+        width: 100vw; // TODO: Rework workaround
         font-weight: var(--font-weight-inter-medium);
         @include to1200 {
           font-family: var(--font-family-inter-tight);

@@ -66,7 +66,7 @@
       }
       &::after {
         // Transition is purposely on active modifier to avoid rendering
-        // two indicators at the same time (one fading out, another in).
+        // two indicators at the same time (one fading out, another in)
         @include transition-250ms;
         background: var(--accent-color);
         transform: translateX(-50%);

@@ -20,7 +20,7 @@
       gap: var(--padding-24px);
     }
     &__cancel {
-      order: -1; // Needed to have proper tab focus order.
+      order: -1; // Needed to have proper tab focus order
       color: var(--text-color-variant);
       @include hover {
         @include text-decoration-underlinie-thin;

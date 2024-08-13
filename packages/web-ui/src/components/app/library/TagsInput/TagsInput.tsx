@@ -50,7 +50,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
   }, [sortable_items])
 
   useUpdateEffect(() => {
-    // Set input width dynamically.
+    // Set input width dynamically
     const span = document.createElement('span')
     document.body.appendChild(span)
     const inputStyles = window.getComputedStyle(ref.current)
@@ -60,7 +60,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
     document.body.removeChild(span)
     set_input_width(width + 10)
 
-    // Hanlde keyboard keys.
+    // Hanlde keyboard keys
     const handle_keyboard = (event: KeyboardEvent) => {
       if (event.code == 'Enter') {
         if (

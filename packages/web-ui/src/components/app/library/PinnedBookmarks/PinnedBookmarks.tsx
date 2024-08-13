@@ -120,7 +120,7 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
                   icon_variant="LINK"
                   label={props.translations.open_original_url}
                   on_click={() => {
-                    props.on_link_middle_click(item) // TODO: Function name should be more generic.
+                    props.on_link_middle_click(item) // TODO: Function name should be more generic
                     window.onbeforeunload = null
                     location.href = item.url
                   }}

@@ -1,7 +1,7 @@
 import { Button } from '@web-ui/components/Button'
 import styles from './Footer.module.scss'
 
-// Don't suffix properties as the component is used in at least two places.
+// Don't suffix properties as the component is used in at least two places
 export namespace Footer {
   export type Props = {
     button_label: string

@@ -9,6 +9,7 @@ import { Saves_DataSourceImpl } from '@repositories/modules/saves/infrastructure
 import { Saves_RepositoryImpl } from '@repositories/modules/saves/infrastructure/repositories/saves.repository-impl'
 import { GetSaves_Ro } from '@repositories/modules/saves/domain/types/get_saves.ro'
 import { usePathname, useSearchParams } from 'next/navigation'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 namespace SavesModal {
   export type Props = {
@@ -25,6 +26,11 @@ export const SavesModal: React.FC<SavesModal.Props> = (props) => {
   const [users, set_users] = useState<GetSaves_Ro>()
   const pathname = usePathname()
   const search_params = useSearchParams()
+
+  useUpdateEffect(() => {
+    // Opened user profile from the list
+    props.on_close()
+  }, [pathname])
 
   useEffect(() => {
     const init = async () => {

@@ -156,8 +156,8 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             onClick={(e) => {
               e.preventDefault()
               props.on_item_click((item as Item).hierarchy_tag_ids)
-              // Calling before timeout fixes issue when selecting tag after changing filter.
-              // TODO: Investigate root cause.
+              // Calling before timeout fixes issue when selecting tag after changing filter
+              // TODO: Investigate root cause
               set_selected_tag_ids((item as Item).hierarchy_tag_ids)
               setTimeout(() => {
                 set_selected_tag_ids((item as Item).hierarchy_tag_ids)
@@ -219,7 +219,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                     }
                   }
                 }
-                // Without timeout, newly added item cannot be dragged.
+                // Without timeout, newly added item cannot be dragged
                 setTimeout(() => {
                   update_items({
                     items: items.map((item) => loop_over_items(item)),
@@ -275,7 +275,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const update_items = (params: { items: Item[] }) => {
       if (JSON.stringify(params.items) == JSON.stringify(items)) return
 
-      // Find duplicates in nodes.
+      // Find duplicates in nodes
       const filter_duplicated_siblings = (items: Item[]) => {
         const unique_siblings: Item[] = []
         items.forEach((item) => {
@@ -301,7 +301,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         return
       }
 
-      // Find duplicates in branches.
+      // Find duplicates in branches
       const filter_branches_with_duplicates = (
         item: Item | undefined,
         seen_tag_ids: Set<number>,
@@ -335,7 +335,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         }
       }
 
-      // We need to regenerate ids so on mouseover highlight can work with the new tree.
+      // We need to regenerate ids so on mouseover highlight can work with the new tree
       const new_tree = params.items.map((item) => item_to_tag(item))
       set_items(
         new_tree.map((node) =>
@@ -428,7 +428,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                   render_collapse_icon({ is_collapsed: isCollapsed })
                 }
                 // Note: "confirmChange" can't be used for validation because it stops firing
-                // deeper in the tree if there is a problem higher up.
+                // deeper in the tree if there is a problem higher up
                 // confirmChange={}
               />
               {!props.is_read_only && (
@@ -504,7 +504,7 @@ const tag_to_item = (params: {
   const hierarchy_ids = [...params.hierarchy_ids, id]
   const hierarchy_tag_ids = [...params.hierarchy_tag_ids, params.node.id]
   return {
-    // Nestable requires unique ids for items.
+    // Nestable requires unique ids for items
     id,
     tag_id: params.node.id,
     text: params.node.name,

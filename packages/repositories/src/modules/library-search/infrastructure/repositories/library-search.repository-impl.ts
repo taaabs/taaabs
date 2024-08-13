@@ -62,7 +62,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
         note,
         links,
         tags,
-        // This is due to our approach of handling unsorted status.
+        // This is due to our approach of handling unsorted status
         is_unsorted:
           bookmark.is_unsorted === undefined
             ? true

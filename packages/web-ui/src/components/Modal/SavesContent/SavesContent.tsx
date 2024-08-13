@@ -85,9 +85,7 @@ export const SavesContent: React.FC<SavesContent.Props> = (props) => {
         return (
           <div key={i} className={styles.user}>
             <div className={styles.user__left}>
-              <Link
-                href={`${props.app_url}/${user.username}?back=${props.back}`}
-              >
+              <Link href={`/${user.username}?back=${props.back}`}>
                 <div>
                   <span>{user.username}</span>
                   {user.display_name && <span> {user.display_name}</span>}

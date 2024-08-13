@@ -38,13 +38,13 @@
   &--checked > svg {
     fill: var(--yellow);
     @include dark {
-      fill: var(--yellow); // Dupe needed for some reason.
+      fill: var(--yellow); // Dupe needed for some reason
     }
   }
   &--hovered > svg {
     fill: var(--yellow);
     @include dark {
-      fill: var(--yellow); // Dupe needed for some reason.
+      fill: var(--yellow); // Dupe needed for some reason
     }
   }
   &--hovered-checked {

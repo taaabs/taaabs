@@ -114,7 +114,7 @@ export const upsert_bookmark = (params: {
           )
         }
 
-        // We refetch additional required things here to have those requests running in parallel.
+        // We refetch additional required things here to have those requests running in parallel
         const pinned_data_source = new Pinned_DataSourceImpl(params.ky)
         const pinned_repository = new Pinned_RepositoryImpl(pinned_data_source)
         dispatch(pinned_actions.set_is_fetching(true))

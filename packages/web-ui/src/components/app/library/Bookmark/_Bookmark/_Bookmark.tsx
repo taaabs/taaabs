@@ -88,7 +88,7 @@ export namespace _Bookmark {
     on_give_point_click?: (points: number) => void
     on_modify_tags_click?: () => void
     tags: {
-      id: number // Sortable requires "id", so no mangling here.
+      id: number // Sortable requires "id", so no mangling here
       is_public?: boolean
       name: string
       yields?: number
@@ -120,7 +120,7 @@ export namespace _Bookmark {
     highlights_site_variants?: string[]
     orama_db_id?: string
     should_dim_visited_links: boolean
-    current_filter?: string // Needs by [use_search/update_searchable_bookmarks].
+    current_filter?: string // Needs by [use_search/update_searchable_bookmarks]
     on_tag_drag_start?: (params: {
       id: number
       name: string
@@ -134,7 +134,7 @@ export namespace _Bookmark {
     on_mouse_up?: () => void
     has_cover?: boolean
     cover_hash?: string
-    cover?: string // Base64 encoded webp of a private bookmark.
+    cover?: string // Base64 encoded webp of a private bookmark
     blurhash?: string
     translations: {
       rename: string
@@ -764,7 +764,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 }}
                 animation={system_values.sortablejs_animation_duration}
                 forceFallback={true}
-                dropBubble={true} // Needed for clearing dragged tag UI.
+                dropBubble={true} // Needed for clearing dragged tag UI
                 delay={system_values.sortablejs_delay}
                 delayOnTouchOnly={true}
                 className={styles.bookmark__card__tags}

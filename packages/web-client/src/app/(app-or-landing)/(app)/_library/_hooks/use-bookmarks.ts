@@ -187,13 +187,13 @@ export const use_bookmarks = () => {
   }
 
   const get_bookmarks_by_ids = async (params: {
-    // All ids of a search result.
+    // All ids of a search result
     all_not_paginated_ids: number[]
     should_get_next_page?: boolean
   }) => {
     let ids: number[] = []
     if (params.should_get_next_page) {
-      // Bookmark could be filtered out.
+      // Bookmark could be filtered out
       const last_id = bookmarks![bookmarks!.length - 1].id
       const idx_of_hit =
         params.all_not_paginated_ids.findIndex((id) => id == last_id) + 1

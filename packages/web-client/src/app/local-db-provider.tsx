@@ -224,7 +224,7 @@ export const LocalDbProvider: React.FC<{
       !params.force_reinitialization &&
       ((!params.is_archived && db) || (params.is_archived && archived_db))
     ) {
-      // DB is initialized, should be updated.
+      // DB is initialized, should be updated
       fresh_db = (!params.is_archived ? db : archived_db)!
       for (const bookmark of bookmarks) {
         await remove(fresh_db, bookmark.id.toString())
@@ -257,7 +257,7 @@ export const LocalDbProvider: React.FC<{
         }
       }
     } else {
-      // DB is not initialized, should be restored from cache and updated OR created from scratch.
+      // DB is not initialized, should be restored from cache and updated OR created from scratch
       fresh_db = await create({
         schema,
         sort: {
@@ -303,7 +303,7 @@ export const LocalDbProvider: React.FC<{
       )
 
       if (cached_index) {
-        // Update cached index.
+        // Update cached index
         await loadWithHighlight(fresh_db, JSON.parse(cached_index as any))
         for (const bookmark of bookmarks) {
           await remove(fresh_db, bookmark.id.toString())
@@ -336,7 +336,7 @@ export const LocalDbProvider: React.FC<{
           }
         }
       } else {
-        // DB was not cached, thus is created from scratch.
+        // DB was not cached, thus is created from scratch
         const chunk_size = 1000
         let indexed_count = 0
         for (let i = 0; i < bookmarks.length; i += chunk_size) {
@@ -430,7 +430,7 @@ export const LocalDbProvider: React.FC<{
     }
   }
 
-  // Used solely for updating highlights.
+  // Used solely for updating highlights
   const upsert_bookmark = async (params: {
     db: Orama<typeof schema>
     bookmark: BookmarkForSearch

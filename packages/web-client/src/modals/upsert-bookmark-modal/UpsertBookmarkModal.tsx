@@ -30,7 +30,7 @@ type FormValues = {
   note?: string
 }
 
-// Data from fragment.
+// Data from fragment
 type BookmarkAutofill = {
   title?: string
   note?: string
@@ -129,7 +129,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       const original_width = img.width
       const original_height = img.height
 
-      // Calculate new dimensions.
+      // Calculate new dimensions
       const max_width = cover_max_width
       let new_width = original_width
       let new_height = original_height
@@ -139,7 +139,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         new_height = Math.round((original_height / original_width) * max_width)
       }
 
-      // Create canvas for full-size image.
+      // Create canvas for full-size image
       const full_size_canvas = document.createElement('canvas')
       full_size_canvas.width = new_width
       full_size_canvas.height = new_height
@@ -150,7 +150,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       full_size_ctx.drawImage(img, 0, 0, new_width, new_height)
       og_image = full_size_canvas.toDataURL('image/webp')
 
-      // Create smaller canvas for Blurhash calculation.
+      // Create smaller canvas for Blurhash calculation
       const blurhash_width = 50
       const blurhash_height = Math.round(
         (new_height / new_width) * blurhash_width,
@@ -163,10 +163,10 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       if (!blurhash_ctx)
         throw new Error('Could not get 2D context from Blurhash canvas.')
 
-      // Use built-in scaling of drawImage for better quality.
+      // Use built-in scaling of drawImage for better quality
       blurhash_ctx.drawImage(img, 0, 0, blurhash_width, blurhash_height)
 
-      // Calculate Blurhash using the resized image.
+      // Calculate Blurhash using the resized image
       const image_data = blurhash_ctx.getImageData(
         0,
         0,
@@ -214,7 +214,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
               : undefined
           return {
             url: link.url,
-            is_public: (is_bookmark_public ? link.is_public : false) || false, // TODO: make is public optional.
+            is_public: (is_bookmark_public ? link.is_public : false) || false, // TODO: make is public optional
             site_path: link.site_path,
             is_pinned: current_link?.is_pinned,
             pin_title: current_link?.pin_title,
@@ -226,7 +226,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       ),
       tags: tags.map((tag) => ({
         name: tag.name,
-        is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional.
+        is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional
       })),
       cover: og_image?.split(',')[1],
       cover_hash: props.bookmark?.cover_hash,
@@ -306,7 +306,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       .catch(() => {})
   }, [])
 
-  // Fetch tags for suggestions.
+  // Fetch tags for suggestions
   useEffect(() => {
     if (my_tags !== undefined || is_fetching_my_tags) return
 

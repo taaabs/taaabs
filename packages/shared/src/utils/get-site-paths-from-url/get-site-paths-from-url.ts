@@ -11,7 +11,7 @@ export const get_site_paths_from_url = (url: string): string[] => {
           .slice(0, i + 1)
           .filter(Boolean)
           .join('/')
-          .substring(0, 20), // There is something off with the website if a site path is unreasonably long.
+          .substring(0, 20), // There is something off with the website if a site path is unreasonably long
       )
     }
   } else {

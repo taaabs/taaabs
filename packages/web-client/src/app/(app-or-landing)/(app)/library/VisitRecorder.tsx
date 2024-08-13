@@ -22,7 +22,7 @@ export const VisitRecorder: React.FC = () => {
         ) || 'null',
       )
       if (record_visit_params) {
-        // Timeout prevents white screen when navigating back.
+        // Timeout prevents white screen when navigating back
         setTimeout(() => {
           localStorage.removeItem(
             browser_storage.local_storage.authorized_library

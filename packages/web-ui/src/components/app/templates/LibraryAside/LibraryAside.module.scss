@@ -9,7 +9,7 @@
     @include to992 {
       padding: 0 var(--padding-16px) calc(16px + 36px + 12px)
         var(--padding-16px);
-      // Overrides inline values coming from stickybox.
+      // Overrides inline values coming from stickybox
       position: relative !important;
       top: 0 !important;
     }
@@ -53,6 +53,6 @@
   }
 }
 .disabled_interactivity {
-  // Custom range has its own pointer events styles specified on slider for it to work correctly with mobile swiping.
+  // Custom range has its own pointer events styles specified on slider for it to work correctly with mobile swiping
   pointer-events: none !important;
 }

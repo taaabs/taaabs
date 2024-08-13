@@ -15,7 +15,7 @@ type Counts = {
   unsorted_count: number
 }[]
 
-// Don't suffix properties at it won't work with dynamically loaded component.
+// Don't suffix properties at it won't work with dynamically loaded component
 export namespace CustomRange {
   export type Props = {
     library_updated_at_timestamp?: number

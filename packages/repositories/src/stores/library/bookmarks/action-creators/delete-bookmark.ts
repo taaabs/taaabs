@@ -37,7 +37,7 @@ export const delete_bookmark = (params: {
         ),
       )
 
-      // Updating pinned here prevents layout shift.
+      // Updating pinned here prevents layout shift
       const pinned_data_source = new Pinned_DataSourceImpl(params.ky)
       const pinned_repository = new Pinned_RepositoryImpl(pinned_data_source)
       dispatch(pinned_actions.set_is_fetching(true))

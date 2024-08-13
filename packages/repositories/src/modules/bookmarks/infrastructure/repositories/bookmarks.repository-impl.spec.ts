@@ -33,12 +33,12 @@ describe('Bookmarks_RepositoryImpl', () => {
     } as jest.Mocked<Bookmarks_DataSource>
     sut = new Bookmarks_RepositoryImpl(data_source_mock)
 
-    // Mock TextDecoder.
+    // Mock TextDecoder
     global.TextDecoder = jest.fn().mockImplementation(() => ({
       decode: jest.fn().mockReturnValue('hello'),
     })) as any
 
-    // Mock atob.
+    // Mock atob
     global.atob = jest.fn().mockImplementation((encoded) => {
       if (encoded === 'invalid_base64') {
         throw new Error('Invalid base64')

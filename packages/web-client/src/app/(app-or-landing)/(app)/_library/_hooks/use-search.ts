@@ -45,7 +45,7 @@ export const use_search = (local_db: LocalDb) => {
   const [highlights_sites_variants, set_highlights_sites_variants] =
     useState<string[]>()
   const [count, set_count] = useState<number>()
-  // Used for refreshing highlights after bookmark update.
+  // Used for refreshing highlights after bookmark update
   const [queried_at_timestamp, set_queried_at_timestamp] = useState<number>()
   const [hints_set_at_timestamp, set_hints_set_at_timestamp] =
     useState<number>()
@@ -372,8 +372,8 @@ export const use_search = (local_db: LocalDb) => {
       return
 
     if (is_full_text) {
-      // TODO: Create special hints for full text.
-      // Calling set_hings triggers hints dropdown.
+      // TODO: Create special hints for full text
+      // Calling set_hings triggers hints dropdown
       set_hints([])
       return
     }
@@ -900,7 +900,7 @@ export const use_search = (local_db: LocalDb) => {
       set_result(JSON.parse(result))
     }
 
-    // Temporary handling of search string on fresh page load.
+    // Temporary handling of search string on fresh page load
     if (is_query_in_hash && !result) {
       set_search_string(window.location.hash.replace('#q=', ''))
     }
