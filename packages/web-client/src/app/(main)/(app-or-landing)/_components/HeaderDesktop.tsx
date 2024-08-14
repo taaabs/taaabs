@@ -82,13 +82,17 @@ export const HeaderDesktop: React.FC<{
         is_active: pathname == '/chat',
       }
       items = [
-        {
-          title: props.dictionary.app.menu_items.home,
-          icon: 'HOME',
-          filled_icon: 'HOME_FILLED',
-          href: '/',
-          is_active: pathname == '/',
-        },
+        ...(auth_context.auth_data?.username
+          ? [
+              {
+                title: props.dictionary.app.menu_items.home,
+                icon: 'HOME',
+                filled_icon: 'HOME_FILLED',
+                href: '/',
+                is_active: pathname == '/',
+              },
+            ]
+          : []),
         {
           title: props.dictionary.app.menu_items.library,
           icon: 'BOOKMARK',
@@ -133,7 +137,12 @@ export const HeaderDesktop: React.FC<{
       ]
     }
 
-    return <Ui_app_templates_App_HeaderDesktop_Navigation items={items} />
+    // Avoid flashing home for logged in user
+    return is_hydrated ? (
+      <Ui_app_templates_App_HeaderDesktop_Navigation items={items} />
+    ) : (
+      <></>
+    )
   }
 
   const open_new_bookmark_modal = (params: { with_autofill?: boolean }) => {
