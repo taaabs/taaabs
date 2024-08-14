@@ -1,25 +1,25 @@
 import { useState } from 'react'
-import styles from './AuthorizedUser.module.scss'
+import styles from './UserArea.module.scss'
 import { _ButtonUserDesktop } from '../common/_ButtonUserDesktop'
 import cn from 'classnames'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { _IconButton } from '../common/_IconButton'
 
-export namespace AuthorizedUser {
+export namespace UserArea {
   export type Props = {
     name?: string
     avatar?: {
       url: string
       blurhash: string
     }
-    pathname: string
-    on_click_add: () => void
-    slot_user_dropdown: React.ReactNode
+    pathname?: string
+    on_click_add?: () => void
+    slot_user_dropdown?: React.ReactNode
   }
 }
 
-export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
+export const UserArea: React.FC<UserArea.Props> = (props) => {
   const [is_user_dropdown_visible, set_is_user_dropdown_visible] =
     useState<boolean>()
 
@@ -29,7 +29,9 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
 
   return (
     <div className={styles.container}>
-      <_IconButton icon_variant="ADD" on_click={props.on_click_add} />
+      {props.on_click_add && (
+        <_IconButton icon_variant="ADD" on_click={props.on_click_add} />
+      )}
 
       <div className={styles['theme-set-by-system']}>
         <div className={styles.dark}>
@@ -81,29 +83,31 @@ export const AuthorizedUser: React.FC<AuthorizedUser.Props> = (props) => {
         </div>
       </div>
 
-      <div className={styles.user}>
-        <_ButtonUserDesktop
-          name={props.name}
-          avatar={props.avatar}
-          on_click={() => {
-            set_is_user_dropdown_visible(!is_user_dropdown_visible)
-          }}
-        />
-        <div
-          className={cn(styles.user__dropdown, {
-            [styles['user__dropdown--visible']]: is_user_dropdown_visible,
-          })}
-        >
-          <OutsideClickHandler
-            disabled={!is_user_dropdown_visible}
-            onOutsideClick={() => {
-              set_is_user_dropdown_visible(false)
+      {props.name && (
+        <div className={styles.user}>
+          <_ButtonUserDesktop
+            name={props.name}
+            avatar={props.avatar}
+            on_click={() => {
+              set_is_user_dropdown_visible(!is_user_dropdown_visible)
             }}
+          />
+          <div
+            className={cn(styles.user__dropdown, {
+              [styles['user__dropdown--visible']]: is_user_dropdown_visible,
+            })}
           >
-            {props.slot_user_dropdown}
-          </OutsideClickHandler>
+            <OutsideClickHandler
+              disabled={!is_user_dropdown_visible}
+              onOutsideClick={() => {
+                set_is_user_dropdown_visible(false)
+              }}
+            >
+              {props.slot_user_dropdown as any}
+            </OutsideClickHandler>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

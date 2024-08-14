@@ -12,11 +12,12 @@ const Layout: React.FC<{
   if (!user_id && !guest_user_id) {
     redirect('/init')
   }
+
   return <LibraryStoreProvider>{props.children}</LibraryStoreProvider>
 }
 
 export default Layout
 
 export const metadata: Metadata = {
-  title: 'Bookmarks',
+  title: 'Library',
 }

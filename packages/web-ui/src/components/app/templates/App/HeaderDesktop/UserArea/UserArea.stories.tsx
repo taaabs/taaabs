@@ -1,21 +1,21 @@
 import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
-import { AuthorizedUser } from './AuthorizedUser'
+import { UserArea } from './UserArea'
 
 export default {
-  component: AuthorizedUser,
+  component: UserArea,
 }
 
 export const Primary = () => {
   return (
     <StorybookMargin>
-      <AuthorizedUser
+      <UserArea
         pathname=""
         on_click_add={() => {}}
         name="Lorem"
         slot_user_dropdown={<>dropdown</>}
       />
       <StorybookSpacer />
-      <AuthorizedUser
+      <UserArea
         pathname=""
         on_click_add={() => {}}
         name="Lorem"
@@ -25,7 +25,7 @@ export const Primary = () => {
           blurhash: 'KGF5?xYk^6@-5c,1@[or[Q',
         }}
       />
-      <AuthorizedUser
+      <UserArea
         pathname=""
         on_click_add={() => {}}
         slot_user_dropdown={<>dropdown</>}

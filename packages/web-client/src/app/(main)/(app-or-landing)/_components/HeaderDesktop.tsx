@@ -13,14 +13,14 @@ import { use_is_hydrated } from '@shared/hooks'
 import { UsernameWithBackArrow as Ui_app_templates_App_HeaderDesktop_UsernameWithBackArrow } from '@web-ui/components/app/templates/App/HeaderDesktop/UsernameWithBackArrow'
 import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
 import { HeaderDesktop as Ui_app_templates_App_HeaderDesktop } from '@web-ui/components/app/templates/App/HeaderDesktop'
-import { AuthorizedUser as Ui_app_templates_App_HeaderDesktop_AuthorizedUser } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser'
-import { UserDropdown as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown'
-import { StandardItem as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/StandardItem'
-import { Separator as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/Separator'
-import { IntegrationItem as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/IntegrationItem'
-import { ExtensionButton as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_ExtensionButton } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/IntegrationItem/ExtensionButton'
-import { BookmarkletButton as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_BookmarkletButton } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/IntegrationItem/BookmarkletButton'
-import { FooterLinks as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/App/HeaderDesktop/AuthorizedUser/UserDropdown/FooterLinks'
+import { UserArea as Ui_app_templates_App_HeaderDesktop_UserArea } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea'
+import { UserDropdown as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea/UserDropdown'
+import { StandardItem as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea/UserDropdown/StandardItem'
+import { Separator as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea/UserDropdown/Separator'
+import { IntegrationItem as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea/UserDropdown/IntegrationItem'
+import { ExtensionButton as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_ExtensionButton } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea/UserDropdown/IntegrationItem/ExtensionButton'
+import { BookmarkletButton as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_BookmarkletButton } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea/UserDropdown/IntegrationItem/BookmarkletButton'
+import { FooterLinks as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea/UserDropdown/FooterLinks'
 import { UpsertBookmarkModal } from '@/modals/upsert-bookmark-modal/UpsertBookmarkModal'
 import { update_search_params } from '@/utils/update-query-params'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
@@ -197,7 +197,7 @@ export const HeaderDesktop: React.FC<{
     if (is_hydrated) {
       if (auth_context.auth_data) {
         return (
-          <Ui_app_templates_App_HeaderDesktop_AuthorizedUser
+          <Ui_app_templates_App_HeaderDesktop_UserArea
             pathname={pathname}
             on_click_add={() => {
               open_new_bookmark_modal({})
@@ -331,7 +331,7 @@ export const HeaderDesktop: React.FC<{
           />
         )
       } else {
-        return <div>sign in / sign up</div>
+        return <Ui_app_templates_App_HeaderDesktop_UserArea />
       }
     } else {
       return <></>

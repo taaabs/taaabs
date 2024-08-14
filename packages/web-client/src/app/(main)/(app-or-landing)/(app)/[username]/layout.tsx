@@ -3,12 +3,11 @@ import { AvatarContextSetter } from './avatar-context-setter'
 import { Metadata_DataSourceImpl } from '@repositories/modules/metadata/infrastructure/data-sources/metadata-data-source-impl'
 import { MetadataRepositoryImpl } from '@repositories/modules/metadata/infrastructure/repositories/metadata-repository-impl'
 import ky from 'ky'
-import { ReactNode } from 'react'
 import { FollowUnfollowProvider } from './follow-unfollow-provider'
 import { LocalDbProvider } from '@/providers/LocalDbProvider'
 
 const Layout: React.FC<{
-  children: ReactNode
+  children: React.ReactNode
   params: { username: string }
 }> = async (props) => {
   const metadata = await _get_metadata({ username: props.params.username })

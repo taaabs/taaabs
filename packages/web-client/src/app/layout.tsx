@@ -3,9 +3,9 @@ import { Inter, Plus_Jakarta_Sans, Inter_Tight } from 'next/font/google'
 import { ToastContainer } from 'react-toastify'
 import fs from 'fs'
 import path from 'path'
-import { ReactNode } from 'react'
 import { ModalProvider } from '@/providers/ModalProvider'
 import { PopstateCountProvider } from '../providers/PopstateCountProvider'
+import { RecaptchaProvider } from '@/providers/RecaptchaProvider'
 
 import 'react-nestable/dist/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -39,7 +39,7 @@ const theme_setter = fs.readFileSync(
   'utf8',
 )
 
-const Layout: React.FC<{ children: ReactNode }> = (props) => {
+const Layout: React.FC<{ children: React.ReactNode }> = (props) => {
   return (
     <html
       className={`${inter.variable} ${inter_tight.variable} ${plus_jakarta_sans.variable}`}
@@ -62,9 +62,11 @@ const Layout: React.FC<{ children: ReactNode }> = (props) => {
           icon={false}
           draggablePercent={20}
         />
-        <PopstateCountProvider>
-          <ModalProvider>{props.children}</ModalProvider>
-        </PopstateCountProvider>
+        <RecaptchaProvider>
+          <PopstateCountProvider>
+            <ModalProvider>{props.children}</ModalProvider>
+          </PopstateCountProvider>
+        </RecaptchaProvider>
         <script
           /** https://github.com/reactjs/react.dev/blob/main/src/pages/_document.tsx */
           dangerouslySetInnerHTML={{

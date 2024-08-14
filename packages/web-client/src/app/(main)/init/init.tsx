@@ -6,7 +6,6 @@ import { GuestSignUp_Params } from '@repositories/modules/auth/domain/types/gues
 import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/auth.data-source-impl'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
 import { Crypto } from '@repositories/utils/crypto'
-import ky from 'ky'
 import { useContext, useEffect } from 'react'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { toast } from 'react-toastify'
@@ -24,13 +23,8 @@ export const Init = (props: { dictionary: Dictionary }) => {
       const params: GuestSignUp_Params = {
         captcha_token,
       }
-      const ky_instance = ky.create({
-        prefixUrl: process.env.NEXT_PUBLIC_API_URL,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      const data_source = new Auth_DataSourceImpl(ky_instance)
+     
+      const data_source = new Auth_DataSourceImpl(auth_context.ky_instance)
       const repository = new Auth_RepositoryImpl(data_source)
       try {
         const { id, guest_token, access_token, refresh_token } =
@@ -53,7 +47,7 @@ export const Init = (props: { dictionary: Dictionary }) => {
       window.location.href = `${window.location.origin}/library${window.location.hash}`
     }
 
-    guest_sign_up()
+    // guest_sign_up()
   }, [])
 
   return <></>

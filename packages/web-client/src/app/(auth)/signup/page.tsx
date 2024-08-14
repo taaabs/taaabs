@@ -3,17 +3,12 @@ import { SignUp } from './sign-up'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
-import { RecaptchaProvider } from '@/providers/RecaptchaProvider'
 
 const Page: React.FC = async () => {
   const user_id = cookies().get('user_id')
   if (user_id) redirect('/')
   const dictionary = await get_dictionary()
-  return (
-    <RecaptchaProvider>
-      <SignUp dictionary={dictionary} />
-    </RecaptchaProvider>
-  )
+  return <SignUp dictionary={dictionary} />
 }
 
 export default Page

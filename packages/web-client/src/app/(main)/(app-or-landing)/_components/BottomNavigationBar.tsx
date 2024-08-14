@@ -22,7 +22,7 @@ export const BottomNavigationBar: React.FC<{
     <Ui_app_templates_App_BottomNavigationBar
       items={[
         {
-          label: props.dictionary.app.menu_items.home,
+          title: props.dictionary.app.menu_items.home,
           icon_variant: 'HOME',
           icon_variant_active: 'HOME_FILLED',
           is_active: pathname == '/',
@@ -31,7 +31,7 @@ export const BottomNavigationBar: React.FC<{
           },
         },
         {
-          label: props.dictionary.app.menu_items.library,
+          title: props.dictionary.app.menu_items.library,
           icon_variant: 'BOOKMARK',
           icon_variant_active: 'BOOKMARK_FILLED',
           is_active: pathname == '/library',
@@ -43,7 +43,7 @@ export const BottomNavigationBar: React.FC<{
           },
         },
         {
-          label: props.dictionary.app.menu_items.chat,
+          title: props.dictionary.app.menu_items.chat,
           icon_variant: 'CHAT',
           icon_variant_active: 'CHAT_FILLED',
           is_active: pathname == '/chat',
@@ -57,7 +57,7 @@ export const BottomNavigationBar: React.FC<{
     <Ui_app_templates_App_BottomNavigationBar
       items={[
         {
-          label: props.dictionary.app.menu_items.library,
+          title: props.dictionary.app.menu_items.library,
           icon_variant: 'BOOKMARK',
           icon_variant_active: 'BOOKMARK_FILLED',
           is_active: pathname == `/${username}`,
@@ -70,10 +70,10 @@ export const BottomNavigationBar: React.FC<{
           },
         },
         {
-          label: props.dictionary.app.menu_items.activity,
-          icon_variant: 'OVERVIEW',
-          icon_variant_active: 'OVERVIEW_FILLED',
-          is_active: pathname == `/${username}/overview`,
+          title: props.dictionary.app.menu_items.activity,
+          icon_variant: 'ACTIVITY',
+          icon_variant_active: 'ACTIVITY_FILLED',
+          is_active: pathname == `/${username}/activity`,
           on_click: () => {
             router.push(`/${username}/activity`)
           },

@@ -4,7 +4,6 @@ import { Landing as Ui_landing_templates_Landing } from '@web-ui/components/land
 import { DesktopNavigation } from './_components/DesktopNavigation'
 import { DesktopUserForHeader as Ui_landing_molecules_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
 import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
-import { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { PublicUserAvatarProvider } from '@/providers/PublicUserAvatarProvider'
@@ -16,7 +15,7 @@ import { App as Ui_app_templates_App } from '@web-ui/components/app/templates/Ap
 const landing_pathnames = ['/', '/pricing', '/help', '/updates']
 
 const LayoutGuest: React.FC<{
-  children?: ReactNode
+  children?: React.ReactNode
   dictionary: Dictionary
 }> = (props) => {
   const pathname = usePathname()

@@ -1,7 +1,6 @@
 import { cookies } from 'next/headers'
 import LayoutGuest from './layout-guest'
 import LayoutAuthorized from './layout-authorized'
-import { ReactNode } from 'react'
 import { get_dictionary } from '../../get_dictionary'
 import fs from 'fs'
 import path from 'path'
@@ -12,7 +11,7 @@ const bookmarklet_script = fs.readFileSync(
 )
 
 const Layout: React.FC<{
-  children?: ReactNode
+  children?: React.ReactNode
 }> = async (props) => {
   const user_id = cookies().get('user_id')
   const guest_user_id = cookies().get('guest_user_id')

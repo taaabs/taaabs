@@ -532,13 +532,15 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         cancel: props.dictionary.app.upsert_modal.cancel,
       }}
     >
-      <Ui_Checkbox
-        label="Share to my public profile"
-        is_checked={is_bookmark_public || false}
-        on_click={() => {
-          set_is_bookmark_public(!is_bookmark_public)
-        }}
-      />
+      {auth_context.auth_data?.username && (
+        <Ui_Checkbox
+          label="Share to my public profile"
+          is_checked={is_bookmark_public || false}
+          on_click={() => {
+            set_is_bookmark_public(!is_bookmark_public)
+          }}
+        />
+      )}
     </UiModal_Footer>
   )
 

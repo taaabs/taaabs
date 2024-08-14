@@ -1,9 +1,8 @@
-import { ReactNode } from 'react'
 import { AuthProvider } from '@/providers/AuthProvider'
 import { LocalDbProvider } from '@/providers/LocalDbProvider'
 
 const Layout: React.FC<{
-  children?: ReactNode
+  children?: React.ReactNode
 }> = async (props) => {
   return (
     <AuthProvider>
