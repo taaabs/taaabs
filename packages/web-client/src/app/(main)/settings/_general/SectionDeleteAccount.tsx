@@ -67,6 +67,8 @@ export const SectionDeleteAccount: React.FC<{
               )
             }
             auth_context.logout()
+          } else {
+            modal_context.close()
           }
         }}
         is_danger={true}
