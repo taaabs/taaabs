@@ -9,8 +9,7 @@ const dictionary: Dictionary = {
       pricing: 'Pricing',
       updates: 'Updates',
     },
-    log_in: 'Log in',
-    open_app: 'Open app',
+    my_library: 'My library',
     about: {
       hero: {
         heading: {
@@ -146,10 +145,13 @@ const dictionary: Dictionary = {
   },
   app: {
     header_desktop: {
+      guest_username: 'Guest',
       user_dropdown: {
         my_public_profile: 'My profile',
         theme: 'Theme',
         settings: 'Settings',
+        log_in: 'Log in',
+        create_account: 'Create account',
         log_out: 'Log out',
         about: 'About',
         privacy_policy: 'Privacy policy',
@@ -339,6 +341,11 @@ const dictionary: Dictionary = {
       delete_account: {
         heading: {
           text: 'Delete account',
+          subtext:
+            'Deleting your account will remove all your data from our servers. Download backup of your bookmarks before proceeding. <strong>This cannot be undone.</strong>',
+        },
+        guest_heading: {
+          text: 'Delete guest account',
           subtext:
             'Deleting your account will remove all your data from our servers. Download backup of your bookmarks before proceeding. <strong>This cannot be undone.</strong>',
         },

@@ -7,14 +7,15 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Input as UiInput } from '@web-ui/components/Input'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { is_object_empty } from '@shared/utils/is-object-empty'
-import { LogIn_Params } from '@repositories/modules/auth/domain/log-in.params'
 import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/auth.data-source-impl'
 import ky from 'ky'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
 import { toast } from 'react-toastify'
 import { useContext, useState } from 'react'
-import { AuthContext } from '@/providers/AuthProvider'
+import { AuthContext, AuthDataLocalStorage } from '@/providers/AuthProvider'
 import { Crypto } from '@repositories/utils/crypto'
+import { LogIn_Params } from '@repositories/modules/auth/domain/types/log-in.params'
+import { browser_storage } from '@/constants/browser-storage'
 
 type FormValues = {
   email: string
@@ -22,7 +23,6 @@ type FormValues = {
 }
 
 export const LogIn = (props: { dictionary: Dictionary }) => {
-  const auth_context = useContext(AuthContext)
   const {
     control,
     handleSubmit,
@@ -46,16 +46,24 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
     const repository = new Auth_RepositoryImpl(data_source)
     try {
       const result = await repository.log_in(params)
-      auth_context!.set_auth_data({
+      const encryption_key = await Crypto.derive_encrypton_key(
+        form_data.password,
+        result.id,
+      )
+      const auth_data: AuthDataLocalStorage = {
         id: result.id,
+        username: result.username,
+        encryption_key: [...encryption_key],
         access_token: result.access_token,
         refresh_token: result.refresh_token,
-        username: result.username,
-        encryption_key: await Crypto.derive_encrypton_key(
-          form_data.password,
-          result.id,
-        ),
-      })
+      }
+      localStorage.setItem(
+        browser_storage.local_storage.auth_data,
+        JSON.stringify(auth_data),
+      )
+      document.cookie = `user_id=${result.id}; expires=${new Date(
+        Date.now() + 31536000000,
+      ).toUTCString()}; path=/`
       set_will_redirect(true)
       document.location = '/library'
     } catch (e) {

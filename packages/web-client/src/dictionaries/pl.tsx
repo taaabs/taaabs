@@ -9,8 +9,7 @@ export const dictionary: Dictionary = {
       pricing: 'Cennik',
       updates: 'Co nowego?',
     },
-    log_in: 'Zaloguj się',
-    open_app: 'Do aplikacji',
+    go_to_library: 'Zakładki',
     about: {
       hero: {
         heading: {
@@ -151,10 +150,13 @@ export const dictionary: Dictionary = {
   },
   app: {
     header_desktop: {
+      guest_username: 'Gość',
       user_dropdown: {
         my_public_profile: 'Mój profil',
         theme: 'Motyw',
         settings: 'Ustawienia',
+        log_in: 'Zaloguj się',
+        create_account: 'Utwórz konto',
         log_out: 'Wyloguj się',
         about: 'O nas',
         privacy_policy: 'Polityka prywatności',
@@ -345,6 +347,11 @@ export const dictionary: Dictionary = {
       delete_account: {
         heading: {
           text: 'Usuń konto',
+          subtext:
+            'Usunięcie konta usunie wszystkie Twoje dane z naszych serwerów. Pobierz kopię zapasową swoich zakładek przed kontynuowaniem. <strong>Tej operacji nie można cofnąć.</strong>',
+        },
+        guest_heading: {
+          text: 'Usuń konto gościa',
           subtext:
             'Usunięcie konta usunie wszystkie Twoje dane z naszych serwerów. Pobierz kopię zapasową swoich zakładek przed kontynuowaniem. <strong>Tej operacji nie można cofnąć.</strong>',
         },

@@ -6,9 +6,9 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-import { PublicUserAvatarContext } from '../../../providers/PublicUserAvatarProvider'
+import { PublicUserAvatarContext } from '../../../../providers/PublicUserAvatarProvider'
 import { useContext } from 'react'
-import { ModalContext } from '../../../providers/ModalProvider'
+import { ModalContext } from '../../../../providers/ModalProvider'
 import { use_is_hydrated } from '@shared/hooks'
 import { UsernameWithBackArrow as Ui_app_templates_App_HeaderDesktop_UsernameWithBackArrow } from '@web-ui/components/app/templates/App/HeaderDesktop/UsernameWithBackArrow'
 import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
@@ -29,7 +29,7 @@ import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infras
 import { search_params_keys } from '@/constants/search-params-keys'
 import { toast } from 'react-toastify'
 import { browser_storage } from '@/constants/browser-storage'
-import { AuthContext } from '../../../providers/AuthProvider'
+import { AuthContext } from '../../../../providers/AuthProvider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { BookmarkUrlHashData } from '@/utils/bookmark-url-hash-data'
 import { Navigation as Ui_app_templates_App_HeaderDesktop_Navigation } from '@web-ui/components/app/templates/App/HeaderDesktop/Navigation'
@@ -202,7 +202,10 @@ export const HeaderDesktop: React.FC<{
             on_click_add={() => {
               open_new_bookmark_modal({})
             }}
-            name={auth_context.auth_data.username}
+            name={
+              auth_context.auth_data.username ||
+              props.dictionary.app.header_desktop.guest_username
+            }
             slot_user_dropdown={
               <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown>
                 <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem
@@ -247,19 +250,21 @@ export const HeaderDesktop: React.FC<{
                   />
                 </Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem>
                 <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
-                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
-                  label={
-                    props.dictionary.app.header_desktop.user_dropdown
-                      .my_public_profile
-                  }
-                  on_click={() => {
-                    router.push(
-                      `/${
-                        auth_context.auth_data!.username
-                      }?back=${pathname}?${search_params.toString()}`,
-                    )
-                  }}
-                />
+                {auth_context.auth_data!.username && (
+                  <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
+                    label={
+                      props.dictionary.app.header_desktop.user_dropdown
+                        .my_public_profile
+                    }
+                    on_click={() => {
+                      router.push(
+                        `/${
+                          auth_context.auth_data!.username
+                        }?back=${pathname}?${search_params.toString()}`,
+                      )
+                    }}
+                  />
+                )}
                 <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
                   label={
                     props.dictionary.app.header_desktop.user_dropdown.settings
@@ -270,19 +275,42 @@ export const HeaderDesktop: React.FC<{
                     )
                   }}
                 />
-                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
-                  label={
-                    props.dictionary.app.header_desktop.user_dropdown.log_out
-                  }
-                  on_click={auth_context.logout}
-                />
+                {auth_context.auth_data!.username ? (
+                  <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
+                    label={
+                      props.dictionary.app.header_desktop.user_dropdown.log_out
+                    }
+                    on_click={auth_context.logout}
+                  />
+                ) : (
+                  <>
+                    <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
+                      label={
+                        props.dictionary.app.header_desktop.user_dropdown.log_in
+                      }
+                      on_click={() => {
+                        router.push('/login')
+                      }}
+                    />
+                    <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
+                      label={
+                        props.dictionary.app.header_desktop.user_dropdown
+                          .create_account
+                      }
+                      on_click={() => {
+                        router.push('/signup')
+                      }}
+                    />
+                  </>
+                )}
+
                 <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
                 <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks
                   links={[
                     {
                       label:
                         props.dictionary.app.header_desktop.user_dropdown.about,
-                      href: '/about',
+                      href: auth_context.auth_data!.username ? '/about' : '/',
                     },
                     {
                       label:

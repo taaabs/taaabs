@@ -25,6 +25,7 @@ export const Auth: React.FC<Auth.Props> = (props) => {
       <div className={styles.content}>
         <div className={styles.box}>
           <div className={styles.box__logo}>
+            {/* <a> on purpose! */}
             <Link href={props.logo_href} className={styles.box__logo__icon}>
               <UiIcon variant="LOGO" />
             </Link>

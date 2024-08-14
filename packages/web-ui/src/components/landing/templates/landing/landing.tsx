@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './landing.module.scss'
 
 export namespace Landing {

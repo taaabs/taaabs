@@ -3,7 +3,8 @@ import { redirect } from 'next/navigation'
 
 const Page: React.FC = () => {
   const user_id = cookies().get('user_id')
-  if (!user_id) redirect('/login')
+  const guest_user_id = cookies().get('guest_user_id')
+  if (!user_id && !guest_user_id) redirect('/login')
 
   return (
     <div style={{ textAlign: 'center' }}>

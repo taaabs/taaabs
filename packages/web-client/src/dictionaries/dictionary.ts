@@ -6,8 +6,7 @@ export type Dictionary = {
       help_center: string
       pricing: string
     }
-    log_in: string
-    open_app: string
+    my_library: string
     about: {
       hero: {
         heading: {
@@ -85,10 +84,13 @@ export type Dictionary = {
   }
   app: {
     header_desktop: {
+      guest_username: string
       user_dropdown: {
         my_public_profile: string
         theme: string
         settings: string
+        log_in: string
+        create_account: string
         log_out: string
         about: string
         privacy_policy: string
@@ -274,6 +276,10 @@ export type Dictionary = {
       }
       delete_account: {
         heading: {
+          text: string
+          subtext: string
+        }
+        guest_heading: {
           text: string
           subtext: string
         }

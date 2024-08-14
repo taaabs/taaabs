@@ -1,6 +1,6 @@
 'use client'
 
-import { Auth as UiAuthTemplate_Auth } from '@web-ui/components/auth/templates/auth'
+import { Auth as Ui_auth_templates_Auth } from '@web-ui/components/auth/templates/auth'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { SignUpForm as UiAuthTemplate_SignUpForm } from '@web-ui/components/auth/templates/sign-up-form'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -12,15 +12,16 @@ import ky from 'ky'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
 import { toast } from 'react-toastify'
 import { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '@/providers/AuthProvider'
+import { AuthContext, AuthDataLocalStorage } from '@/providers/AuthProvider'
 import { system_values } from '@shared/constants/system-values'
-import { SignUp_Params } from '@repositories/modules/auth/domain/sign-up.params'
 import { Crypto } from '@repositories/utils/crypto'
 import { useSearchParams } from 'next/navigation'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { Miscellaneous_DataSourceImpl } from '@repositories/modules/miscellaneous/infrastructure/miscellaneous.data-source-impl'
 import { Miscellaneous_RepositoryImpl } from '@repositories/modules/miscellaneous/infrastructure/miscellaneous.repository-impl'
 import awesomeDebouncePromise from 'awesome-debounce-promise'
+import { SignUp_Params } from '@repositories/modules/auth/domain/types/sign-up.params'
+import { browser_storage } from '@/constants/browser-storage'
 
 type FormValues = {
   email: string
@@ -31,7 +32,6 @@ type FormValues = {
 }
 
 export const SignUp = (props: { dictionary: Dictionary }) => {
-  const auth_context = useContext(AuthContext)
   const { executeRecaptcha } = useGoogleReCaptcha()
   const {
     control,
@@ -44,9 +44,13 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
   const [will_redirect, set_will_redirect] = useState<boolean>()
 
   const get_is_username_available = async (username: string) => {
-    const data_source = new Miscellaneous_DataSourceImpl(
-      auth_context.ky_instance,
-    )
+    const ky_instance = ky.create({
+      prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const data_source = new Miscellaneous_DataSourceImpl(ky_instance)
     const repository = new Miscellaneous_RepositoryImpl(data_source)
     const result = await repository.check_username_availability({ username })
     if (result.is_available) {
@@ -79,16 +83,24 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
     const repository = new Auth_RepositoryImpl(data_source)
     try {
       const result = await repository.sign_up(params)
-      auth_context!.set_auth_data({
+      const encryption_key = await Crypto.derive_encrypton_key(
+        form_data.password,
+        result.id,
+      )
+      const auth_data: AuthDataLocalStorage = {
         id: result.id,
+        username: result.username,
+        encryption_key: [...encryption_key],
         access_token: result.access_token,
         refresh_token: result.refresh_token,
-        username: result.username,
-        encryption_key: await Crypto.derive_encrypton_key(
-          form_data.password,
-          result.id,
-        ),
-      })
+      }
+      localStorage.setItem(
+        browser_storage.local_storage.auth_data,
+        JSON.stringify(auth_data),
+      )
+      document.cookie = `user_id=${result.id}; expires=${new Date(
+        Date.now() + 31536000000,
+      ).toUTCString()}; path=/`
       set_will_redirect(true)
       document.location = '/library'
     } catch {
@@ -103,7 +115,7 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
   }, [])
 
   return (
-    <UiAuthTemplate_Auth
+    <Ui_auth_templates_Auth
       logo_href="/"
       heading={{
         text: props.dictionary.auth.sign_up.heading.text,
@@ -347,6 +359,6 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
           }
         />
       </form>
-    </UiAuthTemplate_Auth>
+    </Ui_auth_templates_Auth>
   )
 }

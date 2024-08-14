@@ -5,8 +5,6 @@ import fs from 'fs'
 import path from 'path'
 import { ReactNode } from 'react'
 import { ModalProvider } from '@/providers/ModalProvider'
-import { AuthProvider } from '../providers/AuthProvider'
-import { LocalDbProvider } from '../providers/LocalDbProvider'
 import { PopstateCountProvider } from '../providers/PopstateCountProvider'
 
 import 'react-nestable/dist/styles/index.css'
@@ -65,11 +63,7 @@ const Layout: React.FC<{ children: ReactNode }> = (props) => {
           draggablePercent={20}
         />
         <PopstateCountProvider>
-          <AuthProvider>
-            <LocalDbProvider>
-              <ModalProvider>{props.children}</ModalProvider>
-            </LocalDbProvider>
-          </AuthProvider>
+          <ModalProvider>{props.children}</ModalProvider>
         </PopstateCountProvider>
         <script
           /** https://github.com/reactjs/react.dev/blob/main/src/pages/_document.tsx */

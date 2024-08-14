@@ -1,8 +1,8 @@
 'use client'
 
-import { Landing as UiLandingTemplate_Landing } from '@web-ui/components/landing/templates/landing'
+import { Landing as Ui_landing_templates_Landing } from '@web-ui/components/landing/templates/landing'
 import { DesktopNavigation } from './_components/DesktopNavigation'
-import { DesktopUserForHeader as UiLandingMolecule_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
+import { DesktopUserForHeader as Ui_landing_molecules_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
 import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
 import { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
@@ -22,12 +22,12 @@ const LayoutGuest: React.FC<{
   const pathname = usePathname()
 
   return landing_pathnames.includes(pathname) ? (
-    <UiLandingTemplate_Landing
+    <Ui_landing_templates_Landing
       slot_logo={<UiLogoForHeader is_large={true} href={'/'} />}
       slot_desktop_user={
-        <UiLandingMolecule_DesktopUserForHeader
-          button_label={props.dictionary.landing.log_in}
-          button_href={'/login'}
+        <Ui_landing_molecules_DesktopUserForHeader
+          button_label={props.dictionary.landing.my_library}
+          button_href={'/library'}
         />
       }
       slot_desktop_navigation={
@@ -36,7 +36,7 @@ const LayoutGuest: React.FC<{
       slot_mobile_navigation={<div>mobile nav</div>}
     >
       {props.children}
-    </UiLandingTemplate_Landing>
+    </Ui_landing_templates_Landing>
   ) : (
     <PublicUserAvatarProvider>
       <Ui_app_templates_App

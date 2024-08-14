@@ -74,7 +74,7 @@ export const SectionUsername: React.FC<{ dictionary: Dictionary }> = (
   }
 
   useUpdateEffect(() => {
-    setValue('username', auth_context.auth_data!.username)
+    setValue('username', auth_context.auth_data!.username!)
   }, [auth_context.auth_data])
 
   return (
