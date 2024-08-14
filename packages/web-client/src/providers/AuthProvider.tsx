@@ -15,10 +15,18 @@ export type AuthDataLocalStorage = {
   refresh_token: string
 }
 
+export type GuestAuthDataLocalStorage = {
+  id: string
+  encryption_key: number[]
+  guest_token: string
+  access_token: string
+  refresh_token: string
+}
+
 type AuthData = {
   id: string
   encryption_key: Uint8Array
-  username: string
+  username?: string
 }
 
 type AuthContext = {
@@ -26,7 +34,8 @@ type AuthContext = {
   ky_instance: KyInstance
   set_auth_data: (params: {
     id: string
-    username: string
+    username?: string
+    guest_token?: string
     encryption_key: Uint8Array
     access_token: string
     refresh_token: string
@@ -42,23 +51,35 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
       retry: {
-        limit: 10,
+        limit: 100,
         methods: ['get', 'post', 'put', 'delete'],
-        backoffLimit: 5000,
+        backoffLimit: 1000,
         statusCodes: [401, 502],
       },
       hooks: {
         beforeRequest: [
           async (request) => {
-            const auth_data_local_storage = JSON.parse(
+            const auth_data = JSON.parse(
               localStorage.getItem(browser_storage.local_storage.auth_data) ||
                 'null',
             ) as AuthDataLocalStorage | null
-            if (auth_data_local_storage) {
+            if (auth_data) {
               request.headers.set(
                 'Authorization',
-                `Bearer ${auth_data_local_storage.access_token}`,
+                `Bearer ${auth_data.access_token}`,
               )
+            } else {
+              const guest_auth_data = JSON.parse(
+                localStorage.getItem(
+                  browser_storage.local_storage.guest_auth_data,
+                ) || 'null',
+              ) as GuestAuthDataLocalStorage | null
+              if (guest_auth_data) {
+                request.headers.set(
+                  'Authorization',
+                  `Bearer ${guest_auth_data.access_token}`,
+                )
+              }
             }
           },
         ],
@@ -70,7 +91,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
                 localStorage.getItem(browser_storage.local_storage.auth_data) ||
                   'null',
               ) as AuthDataLocalStorage | null
+
+              const guest_auth_data_local_storage = JSON.parse(
+                localStorage.getItem(
+                  browser_storage.local_storage.guest_auth_data,
+                ) || 'null',
+              ) as GuestAuthDataLocalStorage | null
+
+              let auth_data_to_refresh:
+                | AuthDataLocalStorage
+                | GuestAuthDataLocalStorage
+                | null = null
+
               if (auth_data_local_storage) {
+                auth_data_to_refresh = auth_data_local_storage
+              } else if (guest_auth_data_local_storage) {
+                auth_data_to_refresh = guest_auth_data_local_storage
+              }
+
+              if (auth_data_to_refresh) {
                 const is_refreshing_token = sessionStorage.getItem(
                   browser_storage.session_storage.is_refreshing_auth_tokens,
                 )
@@ -84,20 +123,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
                   const data_source = new Auth_DataSourceImpl(
                     ky_instance.current,
                   )
-                  const repostiory = new Auth_RepositoryImpl(data_source)
-                  const result = await repostiory.refresh({
-                    access_token: auth_data_local_storage.access_token,
-                    refresh_token: auth_data_local_storage.refresh_token,
+                  const repository = new Auth_RepositoryImpl(data_source)
+                  const result = await repository.refresh({
+                    access_token: auth_data_to_refresh.access_token,
+                    refresh_token: auth_data_to_refresh.refresh_token,
                   })
 
-                  localStorage.setItem(
-                    browser_storage.local_storage.auth_data,
-                    JSON.stringify({
-                      ...auth_data_local_storage,
-                      access_token: result.access_token,
-                      refresh_token: result.refresh_token,
-                    }),
-                  )
+                  if (auth_data_local_storage) {
+                    localStorage.setItem(
+                      browser_storage.local_storage.auth_data,
+                      JSON.stringify({
+                        ...auth_data_local_storage,
+                        access_token: result.access_token,
+                        refresh_token: result.refresh_token,
+                      }),
+                    )
+                  } else if (guest_auth_data_local_storage) {
+                    localStorage.setItem(
+                      browser_storage.local_storage.guest_auth_data,
+                      JSON.stringify({
+                        ...guest_auth_data_local_storage,
+                        access_token: result.access_token,
+                        refresh_token: result.refresh_token,
+                      }),
+                    )
+                  }
 
                   request.headers.set(
                     'Authorization',
@@ -118,7 +168,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
 
   const set_auth_data = (params: {
     id: string
-    username: string
+    username?: string
+    guest_token?: string
     encryption_key: Uint8Array
     access_token: string
     refresh_token: string
@@ -128,19 +179,39 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
       username: params.username,
       encryption_key: params.encryption_key,
     })
-    localStorage.setItem(
-      browser_storage.local_storage.auth_data,
-      JSON.stringify({
+    if (params.guest_token) {
+      const guest_auth_data: GuestAuthDataLocalStorage = {
+        id: params.id,
+        guest_token: params.guest_token,
+        encryption_key: [...params.encryption_key],
+        access_token: params.access_token,
+        refresh_token: params.refresh_token,
+      }
+      localStorage.setItem(
+        browser_storage.local_storage.guest_auth_data,
+        JSON.stringify(guest_auth_data),
+      )
+      document.cookie = `guest_user_id=${params.id}; expires=${new Date(
+        Date.now() + 31536000000,
+      ).toUTCString()}; path=/`
+    } else if (params.username) {
+      const auth_data: AuthDataLocalStorage = {
         id: params.id,
         username: params.username,
         encryption_key: [...params.encryption_key],
         access_token: params.access_token,
         refresh_token: params.refresh_token,
-      } as AuthDataLocalStorage),
-    )
-    document.cookie = `user_id=${params.id}; expires=${new Date(
-      Date.now() + 31536000000,
-    ).toUTCString()}; path=/`
+      }
+      localStorage.setItem(
+        browser_storage.local_storage.auth_data,
+        JSON.stringify(auth_data),
+      )
+      document.cookie = `user_id=${params.id}; expires=${new Date(
+        Date.now() + 31536000000,
+      ).toUTCString()}; path=/`
+    }
+
+    
   }
 
   const logout = async () => {
@@ -164,7 +235,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
         .archived_cached_at_timestamp,
     )
     document.cookie = 'user_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
-    document.location = '/'
+    document.cookie = 'guest_user_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
+    document.location = '/about'
   }
 
   useEffect(() => {
@@ -179,6 +251,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
         access_token: auth_data.access_token,
         refresh_token: auth_data.refresh_token,
       })
+    } else {
+      const guest_auth_data = JSON.parse(
+        localStorage.getItem(browser_storage.local_storage.guest_auth_data) ||
+          'null',
+      ) as GuestAuthDataLocalStorage | null
+      if (guest_auth_data) {
+        set_auth_data({
+          id: guest_auth_data.id,
+          guest_token: guest_auth_data.guest_token,
+          encryption_key: new Uint8Array(guest_auth_data.encryption_key),
+          access_token: guest_auth_data.access_token,
+          refresh_token: guest_auth_data.refresh_token,
+        })
+      }
     }
   }, [])
 

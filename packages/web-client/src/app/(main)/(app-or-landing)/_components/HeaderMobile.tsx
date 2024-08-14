@@ -2,7 +2,7 @@
 
 import { useParams, useSearchParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
-import { PublicUserAvatarContext } from '../../../providers/PublicUserAvatarProvider'
+import { PublicUserAvatarContext } from '../../../../providers/PublicUserAvatarProvider'
 import { UsernameWithBackArrow as Ui_app_molecule_UserForHeader } from '@web-ui/components/app/templates/App/HeaderDesktop/UsernameWithBackArrow'
 import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
 import { HeaderMobile as Ui_app_templates_HeaderMobile } from '@web-ui/components/app/templates/App/HeaderMobile'

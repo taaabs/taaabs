@@ -1,6 +1,19 @@
 import loadArgon2idWasm from 'argon2id'
 
 export namespace Crypto {
+  export const generate_strong_password = (length: number = 16): string => {
+    const charset =
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-='
+    let password = ''
+
+    for (let i = 0; i < length; i++) {
+      const random_index = Math.floor(Math.random() * charset.length)
+      password += charset[random_index]
+    }
+
+    return password
+  }
+
   export const derive_encrypton_key = async (
     password: string,
     salt: string, // user id

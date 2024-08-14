@@ -2,7 +2,7 @@ import { cookies } from 'next/headers'
 import LayoutGuest from './layout-guest'
 import LayoutAuthorized from './layout-authorized'
 import { ReactNode } from 'react'
-import { get_dictionary } from '../get_dictionary'
+import { get_dictionary } from '../../get_dictionary'
 import fs from 'fs'
 import path from 'path'
 
@@ -15,9 +15,10 @@ const Layout: React.FC<{
   children?: ReactNode
 }> = async (props) => {
   const user_id = cookies().get('user_id')
+  const guest_user_id = cookies().get('guest_user_id')
   const dictionary = await get_dictionary()
 
-  return user_id ? (
+  return user_id || guest_user_id ? (
     <LayoutAuthorized
       dictionary={dictionary}
       bookmarklet_script={`javascript:(async function () {${bookmarklet_script

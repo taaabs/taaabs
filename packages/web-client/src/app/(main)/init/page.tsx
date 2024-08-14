@@ -1,5 +1,5 @@
 import { get_dictionary } from '@/app/get_dictionary'
-import { SignUp } from './sign-up'
+import { Init } from './init'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
@@ -7,11 +7,12 @@ import { RecaptchaProvider } from '@/providers/RecaptchaProvider'
 
 const Page: React.FC = async () => {
   const user_id = cookies().get('user_id')
-  if (user_id) redirect('/')
+  const guest_user_id = cookies().get('guest_user_id')
+  if (user_id || guest_user_id) redirect('/')
   const dictionary = await get_dictionary()
   return (
     <RecaptchaProvider>
-      <SignUp dictionary={dictionary} />
+      <Init dictionary={dictionary} />{' '}
     </RecaptchaProvider>
   )
 }
@@ -19,5 +20,5 @@ const Page: React.FC = async () => {
 export default Page
 
 export const metadata: Metadata = {
-  title: 'Sign up',
+  title: 'Initializing...',
 }
