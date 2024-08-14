@@ -47,7 +47,7 @@ export const Init = (props: { dictionary: Dictionary }) => {
       window.location.href = `${window.location.origin}/library${window.location.hash}`
     }
 
-    // guest_sign_up()
+    guest_sign_up()
   }, [])
 
   return <></>
