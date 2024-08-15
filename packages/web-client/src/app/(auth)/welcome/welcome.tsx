@@ -35,7 +35,7 @@ export const Welcome = (props: { dictionary: Dictionary }) => {
     const data_source = new Auth_DataSourceImpl(ky_instance)
     const repository = new Auth_RepositoryImpl(data_source)
     try {
-      const { id, guest_token, access_token, refresh_token } =
+      const { id, guest_key, access_token, refresh_token } =
         await repository.guest_sign_up(params)
       const encryption_key = [
         ...(await Crypto.derive_encrypton_key(
@@ -45,7 +45,7 @@ export const Welcome = (props: { dictionary: Dictionary }) => {
       ]
       const guest_auth_data: GuestAuthDataLocalStorage = {
         id,
-        guest_token,
+        guest_key,
         encryption_key,
         access_token: access_token,
         refresh_token: refresh_token,

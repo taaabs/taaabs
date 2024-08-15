@@ -19,7 +19,7 @@ export type AuthDataLocalStorage = {
 export type GuestAuthDataLocalStorage = {
   id: string
   encryption_key: number[]
-  guest_token: string
+  guest_key: string
   access_token: string
   refresh_token: string
 }
@@ -36,7 +36,7 @@ type AuthContext = {
   set_auth_data: (params: {
     id: string
     username?: string
-    guest_token?: string
+    guest_key?: string
     encryption_key: Uint8Array
     access_token: string
     refresh_token: string
@@ -170,7 +170,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
   const set_auth_data = (params: {
     id: string
     username?: string
-    guest_token?: string
+    guest_key?: string
     encryption_key: Uint8Array
     access_token: string
     refresh_token: string
@@ -180,10 +180,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
       username: params.username,
       encryption_key: params.encryption_key,
     })
-    if (params.guest_token) {
+    if (params.guest_key) {
       const guest_auth_data: GuestAuthDataLocalStorage = {
         id: params.id,
-        guest_token: params.guest_token,
+        guest_key: params.guest_key,
         encryption_key: [...params.encryption_key],
         access_token: params.access_token,
         refresh_token: params.refresh_token,
@@ -252,7 +252,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
       if (guest_auth_data) {
         set_auth_data({
           id: guest_auth_data.id,
-          guest_token: guest_auth_data.guest_token,
+          guest_key: guest_auth_data.guest_key,
           encryption_key: new Uint8Array(guest_auth_data.encryption_key),
           access_token: guest_auth_data.access_token,
           refresh_token: guest_auth_data.refresh_token,

@@ -9,7 +9,7 @@ export namespace GuestSignUp_Dto {
   }
 
   export type Response = {
-    guest_token: string
+    guest_key: string
     access_token: string
     refresh_token: string
     id: string

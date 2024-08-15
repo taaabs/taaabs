@@ -81,7 +81,7 @@ export class Auth_DataSourceImpl implements Auth_DataSource {
     params: GuestLogIn_Params,
   ): Promise<GuestLogIn_Dto.Response> {
     const body: GuestLogIn_Dto.Request.Body = {
-      guest_token: params.guest_token,
+      guest_key: params.guest_key,
     }
     return this._ky
       .post('v1/auth/guest-login', {

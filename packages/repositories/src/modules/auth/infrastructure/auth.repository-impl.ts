@@ -47,7 +47,7 @@ export class Auth_RepositoryImpl implements Auth_Repository {
     const result = await this._auth_data_source.guest_sign_up(params)
     return {
       id: result.id,
-      guest_token: result.guest_token,
+      guest_key: result.guest_key,
       access_token: result.access_token,
       refresh_token: result.refresh_token,
     }
