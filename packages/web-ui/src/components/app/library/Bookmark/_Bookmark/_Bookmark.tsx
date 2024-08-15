@@ -111,6 +111,7 @@ export namespace _Bookmark {
     }[]
     on_link_click: (url: string) => void
     on_reading_mode_click: (url: string) => void
+    on_video_player_click: (url: string) => void
     on_link_middle_click: () => void
     on_new_tab_click: (url: string) => void
     on_saves_click: (params: { url: string; saves: number }) => void
@@ -909,9 +910,23 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       </button>
                       {link.is_parsed && (
                         <button
-                          className={styles.bookmark__links__item__link__reader}
+                          className={
+                            styles['bookmark__links__item__link__in-app']
+                          }
                           onClick={() => {
                             props.on_reading_mode_click(link.url)
+                          }}
+                        >
+                          <UiIcon variant="RESIZE" />
+                        </button>
+                      )}
+                      {is_video_url(link.url) && (
+                        <button
+                          className={
+                            styles['bookmark__links__item__link__in-app']
+                          }
+                          onClick={() => {
+                            props.on_video_player_click(link.url)
                           }}
                         >
                           <UiIcon variant="RESIZE" />
@@ -1120,4 +1135,16 @@ const highlight_link_text = (
       <span key={i}>{word}</span>
     )
   })
+}
+
+// Video urls must be supported by VideoEmbedModal
+const is_video_url = (url: string): boolean => {
+  const youtube_regex = /^https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_-]+$/
+  const pornhub_regex =
+    /^https:\/\/(?:[a-z]{3}\.)?pornhub\.com\/view_video\.php\?viewkey=[a-zA-Z0-9]+$/
+  const twitch_regex = /^https:\/\/www\.twitch\.tv\/videos\/\d+$/
+
+  return (
+    youtube_regex.test(url) || pornhub_regex.test(url) || twitch_regex.test(url)
+  )
 }

@@ -9,7 +9,7 @@ export const dictionary: Dictionary = {
       pricing: 'Cennik',
       updates: 'Co nowego?',
     },
-    go_to_library: 'Zakładki',
+    my_library: 'Moja biblioteka',
     about: {
       hero: {
         heading: {

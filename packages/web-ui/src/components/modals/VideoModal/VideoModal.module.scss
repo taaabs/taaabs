@@ -1,5 +1,5 @@
 // @type
-@use '../../styles/foundation' as *;
+@use '../../../styles/foundation' as *;
 
 .modal {
   position: fixed;
@@ -10,7 +10,6 @@
   pointer-events: none;
   opacity: 0;
   align-items: center;
-  pointer-events: none;
   &--visible {
     pointer-events: all;
     opacity: 1;
@@ -21,11 +20,20 @@
   }
   &__inner {
     overflow: hidden;
-    background-color: var(--white);
-    border-left: var(--border-primary);
-    border-right: var(--border-primary);
+    max-width: 60vw;
+    width: 100%;
+    border-radius: var(--border-radius-20px);
+    margin: 0 var(--padding-16px);
+    background-color: black;
     @include dark {
-      background-color: var(--dark100);
+      border: var(--border-primary);
     }
+  }
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.2);
+  @include dark {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 }
