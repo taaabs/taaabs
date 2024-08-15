@@ -8,8 +8,8 @@ const Layout: React.FC<{
   modal: React.ReactNode
 }> = (props) => {
   const user_id = cookies().get('user_id')
-  const guest_user_id = cookies().get('guest_user_id')
-  if (!user_id && !guest_user_id) {
+  const guest_id = cookies().get('guest_id')
+  if (!user_id && !guest_id) {
     redirect('/welcome')
   }
 

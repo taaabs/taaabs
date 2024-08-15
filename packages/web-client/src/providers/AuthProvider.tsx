@@ -18,6 +18,7 @@ export type AuthDataLocalStorage = {
 
 export type GuestAuthDataLocalStorage = {
   id: string
+  password: string
   encryption_key: number[]
   guest_key: string
   access_token: string
@@ -171,6 +172,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     id: string
     username?: string
     guest_key?: string
+    password?: string
     encryption_key: Uint8Array
     access_token: string
     refresh_token: string
@@ -180,10 +182,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
       username: params.username,
       encryption_key: params.encryption_key,
     })
-    if (params.guest_key) {
+    if (params.guest_key && params.password) {
       const guest_auth_data: GuestAuthDataLocalStorage = {
         id: params.id,
         guest_key: params.guest_key,
+        password: params.password,
         encryption_key: [...params.encryption_key],
         access_token: params.access_token,
         refresh_token: params.refresh_token,
@@ -192,7 +195,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
         browser_storage.local_storage.guest_auth_data,
         JSON.stringify(guest_auth_data),
       )
-      Cookies.set('guest_user_id', params.id, { expires: 365 })
+      Cookies.set('guest_id', params.id, { expires: 365 })
     } else if (params.username) {
       const auth_data: AuthDataLocalStorage = {
         id: params.id,

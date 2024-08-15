@@ -14,10 +14,10 @@ const Layout: React.FC<{
   children?: React.ReactNode
 }> = async (props) => {
   const user_id = cookies().get('user_id')
-  const guest_user_id = cookies().get('guest_user_id')
+  const guest_id = cookies().get('guest_id')
   const dictionary = await get_dictionary()
 
-  return user_id || guest_user_id ? (
+  return user_id || guest_id ? (
     <LayoutAuthorized
       dictionary={dictionary}
       bookmarklet_script={`javascript:(async function () {${bookmarklet_script

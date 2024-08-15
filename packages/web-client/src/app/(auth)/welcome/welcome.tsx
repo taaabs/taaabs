@@ -37,15 +37,14 @@ export const Welcome = (props: { dictionary: Dictionary }) => {
     try {
       const { id, guest_key, access_token, refresh_token } =
         await repository.guest_sign_up(params)
+      const password = Crypto.generate_strong_password()
       const encryption_key = [
-        ...(await Crypto.derive_encrypton_key(
-          Crypto.generate_strong_password(),
-          id,
-        )),
+        ...(await Crypto.derive_encrypton_key(password, id)),
       ]
       const guest_auth_data: GuestAuthDataLocalStorage = {
         id,
         guest_key,
+        password,
         encryption_key,
         access_token: access_token,
         refresh_token: refresh_token,
@@ -54,7 +53,7 @@ export const Welcome = (props: { dictionary: Dictionary }) => {
         browser_storage.local_storage.guest_auth_data,
         JSON.stringify(guest_auth_data),
       )
-      Cookies.set('guest_user_id', id, { expires: 365 })
+      Cookies.set('guest_id', id, { expires: 365 })
       window.location.href = `${window.location.origin}/library${window.location.hash}`
     } catch {
       toast.error(props.dictionary.auth.something_went_wrong)

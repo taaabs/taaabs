@@ -66,7 +66,7 @@ export const SectionDeleteAccount: React.FC<{
               localStorage.removeItem(
                 browser_storage.local_storage.guest_auth_data,
               )
-              Cookies.remove('guest_user_id')
+              Cookies.remove('guest_id')
             }
             auth_context.logout()
           } else {
