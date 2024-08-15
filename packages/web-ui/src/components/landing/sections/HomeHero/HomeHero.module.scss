@@ -167,14 +167,25 @@
   }
   &__button {
     position: relative;
+    @include to768 {
+      display: flex;
+      align-items: center;
+      gap: var(--padding-12px);
+    }
     &__incentive {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%) translateY(100%);
-      padding-top: var(--padding-8px);
       color: var(--text-color-dimmed);
-      white-space: nowrap;
+      font-size: var(--font-size-13px);
+      @include at768 {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%) translateY(100%);
+        padding-top: var(--padding-8px);
+        white-space: nowrap;
+      }
+      @include at992 {
+        font-size: var(--font-size-15px);
+      }
     }
   }
 }
