@@ -21,7 +21,7 @@ import { IntegrationItem as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_Us
 import { ExtensionButton as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_ExtensionButton } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea/UserDropdown/IntegrationItem/ExtensionButton'
 import { BookmarkletButton as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_BookmarkletButton } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea/UserDropdown/IntegrationItem/BookmarkletButton'
 import { FooterLinks as Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_FooterLinks } from '@web-ui/components/app/templates/App/HeaderDesktop/UserArea/UserDropdown/FooterLinks'
-import { UpsertBookmarkModal } from '@/modals/upsert-bookmark-modal/UpsertBookmarkModal'
+import { UpsertBookmarkModal } from '@/modals/upsert-bookmark/UpsertBookmarkModal'
 import { update_search_params } from '@/utils/update-query-params'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'

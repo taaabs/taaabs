@@ -5,7 +5,7 @@ import { DesktopNavigation } from './_components/DesktopNavigation'
 import { DesktopUserForHeader as UiLandingMolecule_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
 import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
 import { usePathname, useRouter } from 'next/navigation'
-import { ReactNode, useContext } from 'react'
+import { useContext } from 'react'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { PublicUserAvatarProvider } from '@/providers/PublicUserAvatarProvider'
 import { HeaderDesktop } from './_components/HeaderDesktop'
@@ -18,7 +18,7 @@ import { AuthContext } from '@/providers/AuthProvider'
 const landing_pathnames = ['/about', '/pricing', '/help', '/updates']
 
 const LayoutAuthorized: React.FC<{
-  children?: ReactNode
+  children?: React.ReactNode
   dictionary: Dictionary
   bookmarklet_script: string
 }> = (props) => {

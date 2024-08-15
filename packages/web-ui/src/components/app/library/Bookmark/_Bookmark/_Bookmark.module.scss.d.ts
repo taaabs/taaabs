@@ -51,7 +51,7 @@ declare const styles: {
   readonly "bookmark__links__item__actions__open": string;
   readonly "bookmark__links__item__actions__public-saves": string;
   readonly "bookmark__links__item__link": string;
-  readonly "bookmark__links__item__link__reader": string;
+  readonly "bookmark__links__item__link__in-app": string;
   readonly "bookmark__links__item__link__site": string;
   readonly "bookmark__links__item__link__site--highlighted": string;
   readonly "bookmark__links__item__link__url": string;

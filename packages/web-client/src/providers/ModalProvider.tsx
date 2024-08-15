@@ -1,28 +1,28 @@
 'use client'
 
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, useCallback, useEffect, useState } from 'react'
 
 export type ModalContext = {
-  set: (content?: ReactNode) => void
+  set: (content?: React.ReactNode) => void
   close: () => void
   is_open: boolean
 }
 
 export const ModalContext = createContext({} as ModalContext)
 
-export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
-  const [content, set] = useState<ReactNode>()
+export const ModalProvider: React.FC<{ children: React.ReactNode }> = (
+  props,
+) => {
+  const [content, set] = useState<React.ReactNode>()
   const [is_open, set_is_open] = useState<boolean>(false)
 
   const close = () => {
     set_is_open(false)
+    // Removing in the next frame needed to properly restore scroll on body
+    setTimeout(() => {
+      set(undefined)
+    }, 0)
   }
 
   useUpdateEffect(() => {
@@ -52,8 +52,10 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = (props) => {
         is_open,
       }}
     >
-      {content}
-      {props.children}
+      <>
+        {content}
+        {props.children}
+      </>
     </ModalContext.Provider>
   )
 }

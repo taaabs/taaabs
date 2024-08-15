@@ -2,7 +2,7 @@ import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { browser_storage } from '@/constants/browser-storage'
-import { upsert_bookmark_modal_setter } from '@/modals/upsert-bookmark-modal/upsert-bookmark-modal-setter'
+import { upsert_bookmark_modal_setter } from '@/modals/upsert-bookmark/upsert-bookmark-modal-setter'
 import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
 import { Filter } from '@/types/library/filter'
@@ -30,6 +30,7 @@ import { edit_tags_modal_setter } from '@/modals/edit-tags/edit-tags-modal-sette
 import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 import { saves_modal_setter } from '@/modals/saves/saves-modal-setter'
 import { AuthContext } from '@/providers/AuthProvider'
+import { video_embed_setter } from '@/modals/video-embed/video-embed-modal-setter'
 
 namespace _Bookmarks {
   export type Props = {
@@ -949,6 +950,13 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
         }}
         on_link_click={handle_link_click}
         on_reading_mode_click={handle_reading_mode_click}
+        on_video_player_click={(url) => {
+          video_embed_setter({
+            url,
+            dictionary: props.dictionary,
+            modal_context,
+          })
+        }}
         on_link_middle_click={() => {
           if (!username) {
             const data_source = new Bookmarks_DataSourceImpl(

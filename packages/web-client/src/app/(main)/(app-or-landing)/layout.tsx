@@ -20,10 +20,11 @@ const Layout: React.FC<{
   return user_id || guest_id ? (
     <LayoutAuthorized
       dictionary={dictionary}
-      bookmarklet_script={`javascript:(async function () {${bookmarklet_script
-        .replaceAll("'", '%27')
-        .replace(/\/\*[\s\S]*?\*\/|(?<=[^:])\/\/.*|^\/\/.*/g, '') // Removes comments
-        .replace(/\s{2,}/g, '')}})()`}
+      bookmarklet_script={`javascript:(async function () {${
+        bookmarklet_script
+          .replaceAll("'", '%27') // Escape single quotes
+          .replace(/\s{2,}/g, '') // Remove extra spaces
+      }})()`}
     >
       {props.children}
     </LayoutAuthorized>

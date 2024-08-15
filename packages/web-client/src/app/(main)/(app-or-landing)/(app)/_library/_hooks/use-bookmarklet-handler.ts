@@ -1,7 +1,7 @@
 import { AuthContext } from '@/providers/AuthProvider'
 import { browser_storage } from '@/constants/browser-storage'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { upsert_bookmark_modal_setter } from '@/modals/upsert-bookmark-modal/upsert-bookmark-modal-setter'
+import { upsert_bookmark_modal_setter } from '@/modals/upsert-bookmark/upsert-bookmark-modal-setter'
 import { ModalContext } from '@/providers/ModalProvider'
 import { use_library_dispatch } from '@/stores/library'
 import { BookmarkUrlHashData } from '@/utils/bookmark-url-hash-data'
