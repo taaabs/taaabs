@@ -10,7 +10,7 @@ const Layout: React.FC<{
   const user_id = cookies().get('user_id')
   const guest_user_id = cookies().get('guest_user_id')
   if (!user_id && !guest_user_id) {
-    redirect('/init')
+    redirect('/welcome')
   }
 
   return <LibraryStoreProvider>{props.children}</LibraryStoreProvider>

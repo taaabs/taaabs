@@ -22,6 +22,7 @@ import { Miscellaneous_RepositoryImpl } from '@repositories/modules/miscellaneou
 import awesomeDebouncePromise from 'awesome-debounce-promise'
 import { SignUp_Params } from '@repositories/modules/auth/domain/types/sign-up.params'
 import { browser_storage } from '@/constants/browser-storage'
+import Cookies from 'js-cookie'
 
 type FormValues = {
   email: string
@@ -98,9 +99,7 @@ export const SignUp = (props: { dictionary: Dictionary }) => {
         browser_storage.local_storage.auth_data,
         JSON.stringify(auth_data),
       )
-      document.cookie = `user_id=${result.id}; expires=${new Date(
-        Date.now() + 31536000000,
-      ).toUTCString()}; path=/`
+      Cookies.set('user_id', result.id, { expires: 365 })
       set_will_redirect(true)
       document.location = '/library'
     } catch {

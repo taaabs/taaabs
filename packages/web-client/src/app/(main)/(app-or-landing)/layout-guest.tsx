@@ -4,7 +4,7 @@ import { Landing as Ui_landing_templates_Landing } from '@web-ui/components/land
 import { DesktopNavigation } from './_components/DesktopNavigation'
 import { DesktopUserForHeader as Ui_landing_molecules_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
 import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { PublicUserAvatarProvider } from '@/providers/PublicUserAvatarProvider'
 import { HeaderDesktop } from './_components/HeaderDesktop'
@@ -19,6 +19,7 @@ const LayoutGuest: React.FC<{
   dictionary: Dictionary
 }> = (props) => {
   const pathname = usePathname()
+  const router = useRouter()
 
   return landing_pathnames.includes(pathname) ? (
     <Ui_landing_templates_Landing
@@ -26,7 +27,9 @@ const LayoutGuest: React.FC<{
       slot_desktop_user={
         <Ui_landing_molecules_DesktopUserForHeader
           button_label={props.dictionary.landing.my_library}
-          button_href={'/library'}
+          button_on_click={() => {
+            router.push('/welcome')
+          }}
         />
       }
       slot_desktop_navigation={

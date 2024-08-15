@@ -3,6 +3,7 @@
 import { browser_storage } from '@/constants/browser-storage'
 import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/auth.data-source-impl'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
+import Cookies from 'js-cookie'
 import ky, { KyInstance } from 'ky'
 import localforage from 'localforage'
 import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
@@ -191,9 +192,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
         browser_storage.local_storage.guest_auth_data,
         JSON.stringify(guest_auth_data),
       )
-      document.cookie = `guest_user_id=${params.id}; expires=${new Date(
-        Date.now() + 31536000000,
-      ).toUTCString()}; path=/`
+      Cookies.set('guest_user_id', params.id, { expires: 365 })
     } else if (params.username) {
       const auth_data: AuthDataLocalStorage = {
         id: params.id,
@@ -206,16 +205,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
         browser_storage.local_storage.auth_data,
         JSON.stringify(auth_data),
       )
-      document.cookie = `user_id=${params.id}; expires=${new Date(
-        Date.now() + 31536000000,
-      ).toUTCString()}; path=/`
+      Cookies.set('user_id', params.id, { expires: 365 })
     }
-
-    
   }
 
   const logout = async () => {
-    _set_auth_data(undefined)
     localStorage.removeItem(browser_storage.local_storage.auth_data)
     sessionStorage.removeItem(
       browser_storage.session_storage.is_refreshing_auth_tokens,
@@ -234,9 +228,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
       browser_storage.local_forage.authorized_library.search
         .archived_cached_at_timestamp,
     )
-    document.cookie = 'user_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
-    document.cookie = 'guest_user_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
-    document.location = '/about'
+    Cookies.remove('user_id')
+    document.location = '/'
   }
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { Landing as Ui_landing_templates_Landing } from '@web-ui/components/land
 import { DesktopNavigation } from './_components/DesktopNavigation'
 import { DesktopUserForHeader as UiLandingMolecule_DesktopUserForHeader } from '@web-ui/components/landing/molecules/desktop-user-for-header'
 import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { ReactNode, useContext } from 'react'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { PublicUserAvatarProvider } from '@/providers/PublicUserAvatarProvider'
@@ -23,6 +23,7 @@ const LayoutAuthorized: React.FC<{
   bookmarklet_script: string
 }> = (props) => {
   const pathname = usePathname()
+  const router = useRouter()
   const auth_context = useContext(AuthContext)
 
   return landing_pathnames.includes(pathname) ||
@@ -32,7 +33,9 @@ const LayoutAuthorized: React.FC<{
       slot_desktop_user={
         <UiLandingMolecule_DesktopUserForHeader
           button_label={props.dictionary.landing.my_library}
-          button_href={'/library'}
+          button_on_click={() => {
+            router.push('/library')
+          }}
         />
       }
       slot_desktop_navigation={

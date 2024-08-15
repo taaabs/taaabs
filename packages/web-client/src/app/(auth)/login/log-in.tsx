@@ -16,6 +16,7 @@ import { AuthContext, AuthDataLocalStorage } from '@/providers/AuthProvider'
 import { Crypto } from '@repositories/utils/crypto'
 import { LogIn_Params } from '@repositories/modules/auth/domain/types/log-in.params'
 import { browser_storage } from '@/constants/browser-storage'
+import Cookies from 'js-cookie'
 
 type FormValues = {
   email: string
@@ -45,25 +46,23 @@ export const LogIn = (props: { dictionary: Dictionary }) => {
     const data_source = new Auth_DataSourceImpl(ky_instance)
     const repository = new Auth_RepositoryImpl(data_source)
     try {
-      const result = await repository.log_in(params)
-      const encryption_key = await Crypto.derive_encrypton_key(
-        form_data.password,
-        result.id,
-      )
+      const { id, username, access_token, refresh_token } =
+        await repository.log_in(params)
+      const encryption_key = [
+        ...(await Crypto.derive_encrypton_key(form_data.password, id)),
+      ]
       const auth_data: AuthDataLocalStorage = {
-        id: result.id,
-        username: result.username,
-        encryption_key: [...encryption_key],
-        access_token: result.access_token,
-        refresh_token: result.refresh_token,
+        id,
+        username,
+        encryption_key,
+        access_token,
+        refresh_token,
       }
       localStorage.setItem(
         browser_storage.local_storage.auth_data,
         JSON.stringify(auth_data),
       )
-      document.cookie = `user_id=${result.id}; expires=${new Date(
-        Date.now() + 31536000000,
-      ).toUTCString()}; path=/`
+      Cookies.set('user_id', id, { expires: 365 })
       set_will_redirect(true)
       document.location = '/library'
     } catch (e) {

@@ -1,5 +1,5 @@
 import { get_dictionary } from '@/app/get_dictionary'
-import { Init } from './init'
+import { Welcome } from './welcome'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
@@ -12,7 +12,7 @@ const Page: React.FC = async () => {
   const dictionary = await get_dictionary()
   return (
     <RecaptchaProvider>
-      <Init dictionary={dictionary} />
+      <Welcome dictionary={dictionary} />
     </RecaptchaProvider>
   )
 }
@@ -20,5 +20,5 @@ const Page: React.FC = async () => {
 export default Page
 
 export const metadata: Metadata = {
-  title: 'Initializing...',
+  title: 'Welcome',
 }

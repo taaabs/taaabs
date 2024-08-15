@@ -11,6 +11,7 @@ import { ModalContext } from '@/providers/ModalProvider'
 import { Settings_DataSourceImpl } from '@repositories/modules/settings/infrastructure/settings.data-source-impl'
 import { Settings_RepositoryImpl } from '@repositories/modules/settings/infrastructure/settings.repository-impl'
 import { browser_storage } from '@/constants/browser-storage'
+import Cookies from 'js-cookie'
 
 export const SectionDeleteAccount: React.FC<{
   dictionary: Dictionary
@@ -65,6 +66,7 @@ export const SectionDeleteAccount: React.FC<{
               localStorage.removeItem(
                 browser_storage.local_storage.guest_auth_data,
               )
+              Cookies.remove('guest_user_id')
             }
             auth_context.logout()
           } else {
