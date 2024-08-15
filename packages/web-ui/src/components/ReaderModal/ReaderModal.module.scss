@@ -21,6 +21,8 @@
   }
   &__inner {
     overflow: hidden;
+    max-width: 840px;
+    width: 100%;
     background-color: var(--white);
     border-left: var(--border-primary);
     border-right: var(--border-primary);
