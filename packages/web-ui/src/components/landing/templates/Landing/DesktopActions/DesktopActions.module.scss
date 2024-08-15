@@ -1,0 +1,27 @@
+// @type
+@use '../../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  gap: clamp(12px, 1vw, 16px);
+}
+.github {
+  position: relative;
+  > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--large-button-dimension);
+    width: var(--large-button-dimension);
+    background-color: black;
+    border-radius: var(--border-radius-999px);
+    @include transition-150ms(transform);
+    @include hover {
+      transform: scale(0.95);
+    }
+    > svg {
+      fill: white;
+      height: clamp(22px, 2vw, 32px);
+    }
+  }
+}

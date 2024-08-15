@@ -64,20 +64,8 @@
     }
   }
   &--large {
-    height: var(--button-dimension-40px);
-    @include at768 {
-      font-size: var(--font-size-17px);
-      height: 2.7em;
-      padding: 0 1em;
-    }
-    @include at992 {
-      font-size: var(--font-size-19px);
-    }
-    @include at1200 {
-      font-size: var(--font-size-20px);
-    }
-    @include at1380 {
-      font-size: var(--font-size-22px);
-    }
+    height: var(--large-button-dimension);
+    font-size: clamp(var(--font-size-17px), 1.38vw, var(--font-size-22px));
+    padding: 0 1.2em;
   }
 }

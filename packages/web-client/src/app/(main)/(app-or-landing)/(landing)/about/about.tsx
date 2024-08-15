@@ -1,7 +1,7 @@
 'use client'
 
 import { Dictionary } from '@/dictionaries/dictionary'
-import { HomeHero as UiLandingSection_HomeHero } from '@web-ui/components/landing/sections/home-hero'
+import { HomeHero as Ui_landing_section_HomeHero } from '@web-ui/components/landing/sections/HomeHero'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -12,7 +12,7 @@ const About: React.FC<{ dictionary: Dictionary; is_authorized: boolean }> = (
   const router = useRouter()
   return (
     <>
-      <UiLandingSection_HomeHero
+      <Ui_landing_section_HomeHero
         heading={{
           first_line: props.dictionary.landing.about.hero.heading.first_line,
           second_line: props.dictionary.landing.about.hero.heading.second_line,

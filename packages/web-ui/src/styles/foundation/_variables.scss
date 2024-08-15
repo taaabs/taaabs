@@ -80,6 +80,7 @@
   --button-dimension-48px: 48px;
   --button-dimension-50px: 50px;
   --button-dimension-52px: 52px;
+  --large-button-dimension: clamp(var(--button-dimension-40px), 3.8vw, 60px);
 
   --border-radius-3px: 3px;
   --border-radius-4px: 4px;

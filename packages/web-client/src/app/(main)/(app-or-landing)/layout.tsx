@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import LayoutGuest from './layout-guest'
+import LayoutVisitor from './layout-visitor'
 import LayoutAuthorized from './layout-authorized'
 import { get_dictionary } from '../../get_dictionary'
 import fs from 'fs'
@@ -29,7 +29,7 @@ const Layout: React.FC<{
       {props.children}
     </LayoutAuthorized>
   ) : (
-    <LayoutGuest dictionary={dictionary}>{props.children}</LayoutGuest>
+    <LayoutVisitor dictionary={dictionary}>{props.children}</LayoutVisitor>
   )
 }
 

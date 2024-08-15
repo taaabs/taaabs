@@ -1,4 +1,4 @@
-import { Wrapper } from '@web-ui/components/common/templates/wrapper'
+import { Wrapper as UiWrapper } from '@web-ui/components/Wrapper'
 import styles from './HeaderDesktop.module.scss'
 
 export namespace HeaderDesktop {
@@ -12,13 +12,13 @@ export namespace HeaderDesktop {
 export const HeaderDesktop = (props: HeaderDesktop.Props) => {
   return (
     <div className={styles.container}>
-      <Wrapper>
+      <UiWrapper>
         <div className={styles.inner}>
           {props.slot_left}
           <div className={styles.navigation}>{props.slot_middle}</div>
           {props.slot_right}
         </div>
-      </Wrapper>
+      </UiWrapper>
     </div>
   )
 }

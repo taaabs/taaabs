@@ -18,6 +18,7 @@ import DensityCompact from '../../assets/icons/density-compact.svg'
 import Edit from '../../assets/icons/edit.svg'
 import ExtensionIcon from '../../assets/icons/extension-icon.svg'
 import Eye from '../../assets/icons/eye.svg'
+import GitHub from '../../assets/icons/github.svg'
 import Globe from '../../assets/icons/globe.svg'
 import Google from '../../assets/icons/google.svg'
 import GreaterThan from '../../assets/icons/greater-than.svg'
@@ -74,6 +75,7 @@ export namespace Icon {
     | 'EDIT'
     | 'EXTENSION_ICON'
     | 'EYE'
+    | 'GITHUB'
     | 'GLOBE'
     | 'GOOGLE'
     | 'GREATER_THAN'
@@ -175,6 +177,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'EYE':
       icon = <Eye />
+      break
+    case 'GITHUB':
+      icon = <GitHub />
       break
     case 'GLOBE':
       icon = <Globe />

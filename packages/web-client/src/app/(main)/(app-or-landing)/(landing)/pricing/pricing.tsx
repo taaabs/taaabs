@@ -1,7 +1,7 @@
 'use client'
 
-import { PageHero as UiLandingSection_PageHero } from '@web-ui/components/landing/sections/page-hero'
-import { PricingTiers as UiLandingSectionPricingTiers } from '@web-ui/components/landing/sections/pricing-tiers'
+import { PageHero as Ui_landing_sections_PageHero } from '@web-ui/components/landing/sections/PageHero'
+import { PricingTiers as Ui_landing_sections_PricingTiers } from '@web-ui/components/landing/sections/PricingTiers'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { useState } from 'react'
 import { Dictionary } from '@/dictionaries/dictionary'
@@ -49,11 +49,11 @@ const Pricing: React.FC<{ dictionary: Dictionary }> = (props) => {
 
   return (
     <>
-      <UiLandingSection_PageHero
+      <Ui_landing_sections_PageHero
         text={props.dictionary.landing.pricing.hero.text}
         subtext={props.dictionary.landing.pricing.hero.subtext}
       />
-      <UiLandingSectionPricingTiers
+      <Ui_landing_sections_PricingTiers
         billing_cycle={{
           labels: {
             monthly: props.dictionary.landing.pricing.monthly,
