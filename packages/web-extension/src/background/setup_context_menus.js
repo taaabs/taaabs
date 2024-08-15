@@ -88,6 +88,7 @@ function execute_bookmarklet_script(tab) {
           JSON.stringify({ favicon, og_image, html }),
         )
       }
+
       const check_iframe_support = async () => {
         const title = document.title
         const og_title_element = document.querySelector(
@@ -96,16 +97,23 @@ function execute_bookmarklet_script(tab) {
         const og_title_content = og_title_element
           ? og_title_element.getAttribute('content')
           : null
-        if (og_title_content && title.startsWith(og_title_content)) return false
+        if (
+          og_title_content &&
+          title.toLowerCase().includes(og_title_content.toLowerCase())
+        )
+          return false
+
         try {
           const response = await fetch(window.location.href)
           const headers = response.headers
+
           const x_frame_options = headers.get('X-Frame-Options')
           if (x_frame_options) {
             if (x_frame_options === 'DENY') {
               return false
             }
           }
+
           const csp = headers.get('Content-Security-Policy')
           if (csp && csp.includes('frame-ancestors')) {
             const frame_ancestors = csp.match(/frame-ancestors\s+([^;]+)/)
@@ -116,36 +124,38 @@ function execute_bookmarklet_script(tab) {
               }
             }
           }
+
           return true
         } catch (error) {
           console.error('Error checking iframe support:', error)
           return false
         }
       }
+
       check_iframe_support().then(async (supports_iframe) => {
+        navigator.clipboard.writeText('')
+
         if (supports_iframe) {
-          document.write(
-            `<iframe src="${location.href}" style="visibility: hidden;">`,
-          )
-          document
-            .getElementsByTagName('iframe')[0]
-            .addEventListener('load', async () => {
-              const doc =
-                document.getElementsByTagName('iframe')[0].contentWindow
-                  .document
-              await fill_clipboard(doc)
-              const target_url =
-                'https://taaabs.com/library#url=' +
-                encodeURIComponent(document.location) +
-                '&title=' +
-                encodeURIComponent(doc.title) +
-                '&description=' +
-                (doc.querySelector("meta[name='description']") != null
-                  ? doc.querySelector("meta[name='description']").content
-                  : '') +
-                '&v=1'
-              window.location.assign(target_url)
-            })
+          const iframe = document.createElement('iframe')
+          iframe.src = location.href
+          iframe.style.visibility = 'hidden'
+          document.body.appendChild(iframe)
+
+          iframe.addEventListener('load', async () => {
+            const doc = iframe.contentWindow.document
+            await fill_clipboard(doc)
+            const target_url =
+              'https://taaabs.com/library#url=' +
+              encodeURIComponent(document.location) +
+              '&title=' +
+              encodeURIComponent(doc.title) +
+              '&description=' +
+              (doc.querySelector("meta[name='description']") != null
+                ? doc.querySelector("meta[name='description']").content
+                : '') +
+              '&v=1'
+            window.location.assign(target_url)
+          })
         } else {
           await fill_clipboard(document)
           const target_url =
