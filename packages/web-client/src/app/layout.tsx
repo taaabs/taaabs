@@ -5,7 +5,6 @@ import fs from 'fs'
 import path from 'path'
 import { ModalProvider } from '@/providers/ModalProvider'
 import { PopstateCountProvider } from '../providers/PopstateCountProvider'
-import { RecaptchaProvider } from '@/providers/RecaptchaProvider'
 
 import 'react-nestable/dist/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -62,11 +61,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = (props) => {
           icon={false}
           draggablePercent={20}
         />
-        <RecaptchaProvider>
-          <PopstateCountProvider>
-            <ModalProvider>{props.children}</ModalProvider>
-          </PopstateCountProvider>
-        </RecaptchaProvider>
+        <PopstateCountProvider>
+          <ModalProvider>{props.children}</ModalProvider>
+        </PopstateCountProvider>
         <script
           /** https://github.com/reactjs/react.dev/blob/main/src/pages/_document.tsx */
           dangerouslySetInnerHTML={{
