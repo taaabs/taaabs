@@ -55,7 +55,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
         limit: 100,
         methods: ['get', 'post', 'put', 'delete'],
         backoffLimit: 1000,
-        statusCodes: [401, 502],
+        statusCodes: [401, 429, 502],
       },
       hooks: {
         beforeRequest: [
