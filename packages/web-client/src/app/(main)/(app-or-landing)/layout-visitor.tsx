@@ -44,7 +44,7 @@ const LayoutVisitor: React.FC<{
     <PublicUserAvatarProvider>
       <Ui_app_templates_App
         slot_header_desktop={
-          <HeaderDesktop dictionary={props.dictionary} bookmarklet_script="" />
+          <HeaderDesktop dictionary={props.dictionary}/>
         }
         slot_header_mobile={<HeaderMobile />}
         slot_bottom_navigation_bar={

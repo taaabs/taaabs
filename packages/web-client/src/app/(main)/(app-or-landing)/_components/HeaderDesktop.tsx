@@ -36,7 +36,7 @@ import { Navigation as Ui_app_templates_App_HeaderDesktop_Navigation } from '@we
 
 export const HeaderDesktop: React.FC<{
   dictionary: Dictionary
-  bookmarklet_script: string
+  bookmarklet_script?: string
 }> = (props) => {
   const auth_context = useContext(AuthContext)
   const search_params = useSearchParams()
@@ -240,24 +240,26 @@ export const HeaderDesktop: React.FC<{
                     href="https://chromewebstore.google.com/detail/taaabs-social-bookmarking/mfpmbjjgeklnhjmpahigldafhcdoaona"
                   />
                 </Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem>
-                <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem
-                  text={
-                    props.dictionary.app.header_desktop.user_dropdown
-                      .bookmarklet.text
-                  }
-                  subtext={
-                    props.dictionary.app.header_desktop.user_dropdown
-                      .bookmarklet.subtext
-                  }
-                >
-                  <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_BookmarkletButton
-                    label={
+                {props.bookmarklet_script && (
+                  <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem
+                    text={
                       props.dictionary.app.header_desktop.user_dropdown
-                        .bookmarklet.button_label
+                        .bookmarklet.text
                     }
-                    script={props.bookmarklet_script}
-                  />
-                </Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem>
+                    subtext={
+                      props.dictionary.app.header_desktop.user_dropdown
+                        .bookmarklet.subtext
+                    }
+                  >
+                    <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem_BookmarkletButton
+                      label={
+                        props.dictionary.app.header_desktop.user_dropdown
+                          .bookmarklet.button_label
+                      }
+                      script={props.bookmarklet_script}
+                    />
+                  </Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_IntegrationItem>
+                )}
                 <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_Separator />
                 {auth_context.auth_data!.username && (
                   <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
