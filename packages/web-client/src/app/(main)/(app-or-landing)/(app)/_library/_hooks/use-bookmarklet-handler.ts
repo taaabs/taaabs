@@ -176,11 +176,69 @@ export const use_bookmarklet_handler = (props: {
           )
         }
 
+        // Some websites do not update title during SPA navigation
+        let title = bookmark_url_hash_data.title
+
+        if (clipboard_data?.html) {
+          const temp_el = document.createElement('div')
+          temp_el.innerHTML = clipboard_data.html
+          const url = bookmark_url_hash_data.links?.[0].url
+          if (url) {
+            // chatgpt.com
+            if (url.startsWith('https://chatgpt.com/')) {
+              title = temp_el.querySelector<HTMLElement>(
+                '.bg-token-sidebar-surface-secondary.active\\:opacity-90.rounded-lg.relative.group > .p-2.gap-2.items-center.flex',
+              )?.innerText
+            }
+            // claude.ai
+            else if (url.startsWith('https://claude.ai/chat/')) {
+              title = temp_el.querySelector<HTMLElement>(
+                '.tracking-tight.font-normal.font-tiempos.truncate',
+              )?.innerText
+            }
+            // chat.mistral.ai
+            else if (url.startsWith('https://chat.mistral.ai/chat/')) {
+              title = temp_el.querySelector<HTMLElement>(
+                '.text-primary.bg-muted.group.sm\\:min-h-6.rounded-lg.justify-between.items-center.flex-row.shrink-0.w-full.min-h-7.flex',
+              )?.innerText
+            }
+            // coral.cohere.com
+            else if (url.startsWith('https://coral.cohere.com/c/')) {
+              title = temp_el.querySelector<HTMLElement>(
+                '.truncate.font-body.text-p-lg',
+              )?.innerText
+            }
+            // gemini.google.com
+            else if (url.startsWith('https://gemini.google.com/app/')) {
+              title = temp_el.querySelector<HTMLElement>(
+                '.selected.ng-star-inserted.conversation.mat-mdc-tooltip-trigger > .gmat-body-1.conversation-title',
+              )?.innerText
+            }
+          }
+        }
+
+        const websites_with_generic_description = [
+          'https://chatgpt.com/',
+          'https://chat.mistral.ai/chat/',
+          'https://huggingface.co/chat/',
+          'https://gemini.google.com/app/',
+          'https://claude.ai/chat/',
+          'https://www.reddit.com/r/',
+        ]
+        let note = bookmark_url_hash_data.description
+        if (
+          websites_with_generic_description.some((domain) =>
+            bookmark_url_hash_data.links?.[0].url.startsWith(domain),
+          )
+        ) {
+          note = undefined
+        }
+
         const new_bookmark: UpsertBookmark_Params = {
           is_public: false,
           is_archived: false,
-          title: bookmark_url_hash_data.title?.trim() || undefined,
-          note: bookmark_url_hash_data.description?.trim() || undefined,
+          title,
+          note,
           links:
             bookmark_url_hash_data.links?.map((link) => {
               const favicon = clipboard_data?.favicon

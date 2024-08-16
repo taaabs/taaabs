@@ -54,8 +54,9 @@ const fill_clipboard = async (doc) => {
 const check_iframe_support = async () => {
   const title = document.title;
   const og_title_element = document.querySelector('meta[property="og:title"]');
-  const og_title_content = og_title_element ? og_title_element.getAttribute('content') : null;
-  if (og_title_content && title.toLowerCase().includes(og_title_content.toLowerCase())) return false;
+  if (!og_title_element) return false;
+  const og_title_content = og_title_element.getAttribute('content');
+  if (title.toLowerCase().includes(og_title_content.toLowerCase())) return false;
 
   try {
     const response = await fetch(window.location.href);

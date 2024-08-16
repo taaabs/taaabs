@@ -113,12 +113,12 @@ export namespace HtmlParser {
   export const parse = (params: Params): ParsedResult | undefined => {
     const turndown_service = create_turndown_service()
 
-    // const titleRegex = /<title>(.*?)<\/title>/
-    // const match = params.html.match(titleRegex)
-    // let title: string = ''
-    // if (match) {
-    //   title = match[1]
-    // }
+    const titleRegex = /<title>(.*?)<\/title>/
+    const match = params.html.match(titleRegex)
+    let title: string = ''
+    if (match) {
+      title = match[1]
+    }
 
     try {
       if (params.url.startsWith('https://chatgpt.com/')) {
@@ -235,6 +235,28 @@ export namespace HtmlParser {
             reader_data: JSON.stringify(reader_data),
           }
         }
+      } else if (
+        params.html.includes(
+          '<link rel="search" type="application/opensearchdescription+xml" title="Open WebUI" href="/opensearch.xml">',
+        )
+      ) {
+        const user_selector = '#user-message'
+        const assistant_selector = '.chat-assistant'
+        const messages = parse_chat_messages({
+          html: params.html,
+          user_selector,
+          assistant_selector,
+          turndown_service,
+        })
+        if (messages.length) {
+          const reader_data: ReaderData.Chat = {
+            type: ReaderData.ContentType.CHAT,
+            conversation: messages,
+          }
+          return {
+            reader_data: JSON.stringify(reader_data),
+          }
+        }
       } else if (params.url.startsWith('https://www.reddit.com/')) {
         const temp_el = document.createElement('div')
         temp_el.innerHTML = params.html
@@ -280,7 +302,7 @@ export namespace HtmlParser {
         return {
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.ARTICLE,
-            title: article.title,
+            title: article.title || title,
             site_name: article.siteName,
             published_at: article.publishedTime,
             author: article.byline,

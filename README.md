@@ -22,7 +22,7 @@ Every person should have the right for privacy and Taaabs encrypts all private b
 
 This application is designed and programmed by [Robert Piosik](https://x.com/robertpiosik), standing on the shoulders of giants.
 
-## Feedback, get help
+## Give feedback, get help
 
 Please visit [discussions](https://github.com/taaabs/taaabs/discussions) tab.
 

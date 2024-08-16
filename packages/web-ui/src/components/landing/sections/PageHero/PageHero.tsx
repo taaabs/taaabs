@@ -11,7 +11,7 @@ export namespace PageHero {
 export const PageHero: React.FC<PageHero.Props> = (props) => {
   return (
     <div className={styles.container}>
-      <UiWrapper>
+      <UiWrapper is_landing_page={true}>
         <div className={styles.inner}>
           <h1>{props.text}</h1>
           <p>{props.subtext}</p>

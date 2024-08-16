@@ -10,4 +10,9 @@
   @include at1200 {
     padding: 0 40px;
   }
+  &--landing {
+    @include at768 {
+      padding: 0 40px;
+    }
+  }
 }

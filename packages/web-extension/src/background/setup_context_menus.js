@@ -94,13 +94,9 @@ function execute_bookmarklet_script(tab) {
         const og_title_element = document.querySelector(
           'meta[property="og:title"]',
         )
-        const og_title_content = og_title_element
-          ? og_title_element.getAttribute('content')
-          : null
-        if (
-          og_title_content &&
-          title.toLowerCase().includes(og_title_content.toLowerCase())
-        )
+        if (!og_title_element) return false
+        const og_title_content = og_title_element.getAttribute('content')
+        if (title.toLowerCase().includes(og_title_content.toLowerCase()))
           return false
 
         try {

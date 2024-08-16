@@ -4,7 +4,7 @@ export default {
   component: _Item,
 }
 
-export const Primary = () => {
+export const Default = () => {
   return (
     <div
       style={{
@@ -14,17 +14,24 @@ export const Primary = () => {
       }}
     >
       <_Item
-        title="Lorem ipsum"
+        url="http://example.com/abc/def"
+        menu_slot={<>menu</>}
         favicon_host="http://localhost:4000/v1/favicons"
+        on_reading_mode_click={() => {}}
+        should_dim_visited_links={false}
         on_link_click={() => {}}
         on_link_middle_click={() => {}}
         on_new_tab_click={() => {}}
-        on_reading_mode_click={() => {}}
-        should_dim_visited_links={false}
-        url="http://example.com/abc/def"
+        on_is_visible={() => {}}
+        created_at={new Date()}
+        is_public={false}
+        title="Lorem ipsum"
         site_path="abc"
         saves={100}
-        menu_slot={<>menu</>}
+        open_snapshot={false}
+        favicon={undefined}
+        is_parsed={true}
+        stars={0}
       />
     </div>
   )

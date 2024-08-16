@@ -1,8 +1,8 @@
-import { StandardSection as UiSettings_StandardSection } from '@web-ui/components/settings/StandardSection'
+import { StandardSection as Ui_settings_sections_StandardSection } from '@web-ui/components/settings/sections/StandardSection'
 import { DesktopMenuItem as UiSettings_DesktopMenuItem } from '@web-ui/components/settings/DesktopMenuItem'
 import { Template as UiSettings_Template } from '@web-ui/components/settings/Template'
-import { Input } from '@web-ui/components/common/atoms/input'
-import { Button } from '@web-ui/components/Button'
+import { Input as UiInput } from '@web-ui/components/Input'
+import { Button as UiButton } from '@web-ui/components/Button'
 import { SimpleBackArrowHeader as UiCommon_SimpleBackArrowHeader } from '@web-ui/components/common/SimpleBackArrowHeader'
 
 export default {
@@ -40,24 +40,24 @@ export const Primary = () => {
       }
       slot_mobile_navigation={'nav'}
     >
-      <UiSettings_StandardSection
+      <Ui_settings_sections_StandardSection
         heading={{ text: 'Lorem ipsum', subtext: 'Lorem ipsum' }}
       >
-        <Input value="Lorem ipsum" on_change={() => {}} />
-        <Button size="default">Lorem</Button>
-      </UiSettings_StandardSection>
-      <UiSettings_StandardSection
+        <UiInput value="Lorem ipsum" on_change={() => {}} />
+        <UiButton size="default">Lorem</UiButton>
+      </Ui_settings_sections_StandardSection>
+      <Ui_settings_sections_StandardSection
         heading={{ text: 'Lorem ipsum', subtext: 'Lorem ipsum' }}
       >
-        <Input value="Lorem ipsum" on_change={() => {}} />
-        <Button size="default">Lorem</Button>
-      </UiSettings_StandardSection>
-      <UiSettings_StandardSection
+        <UiInput value="Lorem ipsum" on_change={() => {}} />
+        <UiButton size="default">Lorem</UiButton>
+      </Ui_settings_sections_StandardSection>
+      <Ui_settings_sections_StandardSection
         heading={{ text: 'Lorem ipsum', subtext: 'Lorem ipsum' }}
       >
-        <Input value="Lorem ipsum" on_change={() => {}} />
-        <Button size="default">Lorem</Button>
-      </UiSettings_StandardSection>
+        <UiInput value="Lorem ipsum" on_change={() => {}} />
+        <UiButton size="default">Lorem</UiButton>
+      </Ui_settings_sections_StandardSection>
     </UiSettings_Template>
   )
 }

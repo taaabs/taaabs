@@ -25,9 +25,6 @@
     border-radius: var(--border-radius-20px);
     margin: 0 var(--padding-16px);
     background-color: black;
-    @include dark {
-      border: var(--border-primary);
-    }
   }
 }
 

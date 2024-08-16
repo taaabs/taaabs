@@ -1,6 +1,6 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import awesomeDebouncePromise from 'awesome-debounce-promise'
-import { StandardSection as UiSettings_StandardSection } from '@web-ui/components/settings/StandardSection'
+import { StandardSection as UiSettings_StandardSection } from '@web-ui/components/settings/sections/StandardSection'
 import { Input as UiInput } from '@web-ui/components/Input'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { useContext } from 'react'

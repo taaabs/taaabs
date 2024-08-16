@@ -6,7 +6,7 @@ import {
   use_settings_backups_selector,
 } from './_hooks/store'
 import { backups_actions } from '@repositories/stores/settings-backups/backups/backups.slice'
-import { StandardSection as Ui_settings_StandardSection } from '@web-ui/components/settings/StandardSection'
+import { StandardSection as Ui_settings_StandardSection } from '@web-ui/components/settings/sections/StandardSection'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { ImportExport_DataSourceImpl } from '@repositories/modules/import-export/infrastructure/data-sources/import-export.data-source-impl'
 import { ImportExport_RepositoryImpl } from '@repositories/modules/import-export/infrastructure/repositories/import-export.repository-impl'

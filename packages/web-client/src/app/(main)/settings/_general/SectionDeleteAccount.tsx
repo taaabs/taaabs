@@ -1,4 +1,4 @@
-import { StandardSection as UiSettings_StandardSection } from '@web-ui/components/settings/StandardSection'
+import { StandardSection as UiSettings_StandardSection } from '@web-ui/components/settings/sections/StandardSection'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { useContext } from 'react'
 import {

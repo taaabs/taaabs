@@ -16,13 +16,29 @@
   code {
     font-size: var(--font-size-14px);
   }
+  p,
   ol,
-  p {
+  ul {
     margin: 0.7em 0;
   }
   ol,
   ul {
     padding-inline-start: 1.7em;
+    ::marker {
+      color: var(--text-color-variant);
+    }
+    > li {
+      margin: 0.7em 0;
+      &:first-child {
+        margin-top: 0;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  ul {
+    list-style-type: disc;
   }
   code:not([class]) {
     font-family: 'Fira Code', 'Fira Mono', Menlo, Consolas, 'DejaVu Sans Mono',

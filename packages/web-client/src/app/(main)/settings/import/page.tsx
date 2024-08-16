@@ -1,6 +1,6 @@
 'use client'
 
-import { StandardSection as Ui_settings_StandardSection } from '@web-ui/components/settings/StandardSection'
+import { StandardSection as Ui_settings_StandardSection } from '@web-ui/components/settings/sections/StandardSection'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { use_import } from './_hooks/use-import'
 import { Checkbox as UiCheckbox } from '@web-ui/components/Checkbox'

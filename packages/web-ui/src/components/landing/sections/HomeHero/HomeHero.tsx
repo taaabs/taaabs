@@ -26,7 +26,7 @@ export namespace HomeHero {
 export const HomeHero: React.FC<HomeHero.Props> = (props) => {
   return (
     <div className={styles.container}>
-      <UiWrapper>
+      <UiWrapper is_landing_page={true}>
         <div className={styles.content}>
           <div className={styles.top}>
             <div className={styles.top__logo}>

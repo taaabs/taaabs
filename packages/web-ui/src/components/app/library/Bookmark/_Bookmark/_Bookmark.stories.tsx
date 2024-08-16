@@ -6,6 +6,12 @@ export default {
   component: _Bookmark,
 } as Meta
 
+const mock_on_saves_click = () => {
+  console.log('Saves clicked')
+}
+const mock_on_video_player_click = () => {
+  console.log('Saves clicked')
+}
 const mock_on_click = () => {
   console.log('Bookmark clicked')
 }
@@ -61,6 +67,8 @@ const base_args: _Bookmark.Props = {
   density: 'default',
   is_compact: false,
   library_url: 'https://example.com/library',
+  on_saves_click: mock_on_saves_click,
+  on_video_player_click: mock_on_video_player_click,
   on_tag_click: mock_on_tag_click,
   on_tag_delete_click: mock_on_tag_delete_click,
   on_tag_rename_click: mock_on_tag_rename_click,
