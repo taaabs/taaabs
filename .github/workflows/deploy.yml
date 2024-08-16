@@ -48,8 +48,9 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+          ssh $USERNAME@$HOST 'cd /home/ubuntu/apps/taaabs && git pull && pnpm i'
           scp -r ./packages/web-client/.next $USERNAME@$HOST:/home/ubuntu/apps/taaabs/packages/web-client
-          ssh $USERNAME@$HOST 'cd /home/ubuntu/apps/taaabs && git pull && pnpm i && pm2 reload taaabs-client'
+          ssh $USERNAME@$HOST 'pm2 reload taaabs-client'
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
