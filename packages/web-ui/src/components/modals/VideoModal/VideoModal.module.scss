@@ -20,11 +20,15 @@
   }
   &__inner {
     overflow: hidden;
-    max-width: 60vw;
-    width: 100%;
-    border-radius: var(--border-radius-20px);
-    margin: 0 var(--padding-16px);
     background-color: black;
+    width: 100%;
+    @include at992 {
+      border-radius: var(--border-radius-20px);
+      width: 80vw;
+    }
+    @include at1380 {
+      width: 70vw;
+    }
   }
 }
 
