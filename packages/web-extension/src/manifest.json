@@ -36,7 +36,7 @@
   "content_scripts": [
     {
       "matches": ["https://taaabs.com/*"],
-      "js": ["content_scripts/get_token.js"]
+      "js": ["content-scripts/get-token.js"]
     }
   ]
 }

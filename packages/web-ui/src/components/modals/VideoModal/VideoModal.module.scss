@@ -8,26 +8,33 @@
   z-index: 4;
   inset: 0;
   pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.2);
   opacity: 0;
   align-items: center;
   &--visible {
     pointer-events: all;
     opacity: 1;
-    backdrop-filter: var(--backdrop-filter-strong);
+    backdrop-filter: var(--backdrop-filter);
     transition-property: opacity, backdrop-filter;
     transition-timing-function: var(--transition-timing-function);
     transition-duration: var(--transition-duration-150ms);
   }
   &__inner {
     overflow: hidden;
+    transform: scale(0.95);
+    box-shadow: var(--box-shadow-long-strong);
     background-color: black;
     width: 100%;
     @include at992 {
       border-radius: var(--border-radius-20px);
-      width: 80vw;
+      width: 75vw;
     }
     @include at1380 {
-      width: 70vw;
+      width: 65vw;
+    }
+    &--visible {
+      @include transition-150ms(transform);
+      transform: scale(1);
     }
   }
 }

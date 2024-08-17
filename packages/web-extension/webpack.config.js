@@ -15,12 +15,13 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'manifest.json', to: 'manifest.json' },
-        { from: 'icons', to: 'icons' },
+        { from: 'src/manifest.json', to: 'manifest.json' },
+        { from: 'src/icons', to: 'icons' },
         {
-          from: 'src/content_scripts/get_token.js',
-          to: 'content_scripts/get_token.js',
+          from: 'src/content-scripts/get-token.js',
+          to: 'content-scripts/get-token.js',
         },
+        { from: 'src/new-tab.html', to: 'newtab.html' },
       ],
     }),
   ],

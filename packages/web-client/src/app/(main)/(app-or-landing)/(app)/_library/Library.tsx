@@ -13,7 +13,7 @@ import { use_counts } from './_hooks/use-counts'
 import { use_session_storage_cleanup } from './_hooks/use-session-storage-cleanup'
 import { browser_storage } from '@/constants/browser-storage'
 import { useParams } from 'next/navigation'
-import { SwipableColumns as Ui_app_templates_SwipableColumns } from '@web-ui/components/app/templates/SwipableColumns'
+import { SwipableColumns as Ui_app_templates_App_content_SwipableColumns } from '@web-ui/components/app/templates/App/content/SwipableColumns'
 import { DraggedCursorTag as Ui_app_library_DraggedCursorTag } from '@web-ui/components/app/library/DraggedCursorTag'
 import { BookmarksSkeleton as Ui_app_library_BookmarksSkeleton } from '@web-ui/components/app/library/BookmarksSkeleton'
 import { use_tag_hierarchies } from './_hooks/use-tag-hierarchies'
@@ -359,7 +359,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       <Ui_app_library_DraggedCursorTag
         tag_name={tag_view_options_hook.dragged_tag?.name}
       />
-      <Ui_app_templates_SwipableColumns
+      <Ui_app_templates_App_content_SwipableColumns
         is_following={follow_unfollow_context?.is_following}
         welcome_text={
           !username && auth_context.auth_data

@@ -1,6 +1,6 @@
-import { setup_context_menus } from './setup_context_menus'
-import { check_url_status } from './check_url_status'
-import { update_icon } from './update_icon'
+import { setup_context_menus } from './setup-context-menus'
+import { check_url_status } from './check-url-status'
+import { update_icon } from './update-icon'
 
 chrome.action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 chrome.action.setBadgeTextColor({ color: 'white' })

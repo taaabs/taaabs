@@ -46,13 +46,14 @@ export const VideoModal: React.FC<VideoModal.Props> = (props) => {
 
   return (
     <div
-      className={cn(styles.modal, {
-        [styles['modal--visible']]: props.is_open,
-      })}
+      className={cn(styles.modal, props.is_open && styles['modal--visible'])}
       onMouseDown={props.on_close}
     >
       <div
-        className={styles.modal__inner}
+        className={cn(
+          styles.modal__inner,
+          props.is_open && styles['modal__inner--visible'],
+        )}
         onMouseDown={(e) => {
           e.stopPropagation()
         }}
