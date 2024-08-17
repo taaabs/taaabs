@@ -7,4 +7,4 @@ const NewTabPage: React.FC = () => {
   return <Home />
 }
 
-ReactDOM.render(<NewTabPage />, document.body)
+ReactDOM.render(<NewTabPage />, document.getElementById('root'))

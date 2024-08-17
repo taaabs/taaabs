@@ -5,8 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Tab</title>
     <script src="detect-theme.js"></script>
+    <style>
+      /* Fix for white flash */
+      body {
+        background-color: #f8f8f8;
+        [data-theme='dark'] & {
+          background-color: #111827;
+        }
+      }
+    </style>
   </head>
   <body>
+    <div id="root"></div>
     <script src="new-tab.bundle.js"></script>
   </body>
 </html>
