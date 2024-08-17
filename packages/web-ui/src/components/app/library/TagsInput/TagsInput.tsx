@@ -60,9 +60,10 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
     document.body.removeChild(span)
     set_input_width(width + 10)
 
-    // Hanlde keyboard keys
+    // Handle keyboard keys
     const handle_keyboard = (event: KeyboardEvent) => {
-      if (event.code == 'Enter') {
+      if (event.code == 'Enter' || event.code == 'Comma') {
+        event.preventDefault()
         if (
           sortable_items.length == props.max_tags ||
           !new_tag_name.trim().length
@@ -80,7 +81,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
           set_new_tag_name('')
         }
       } else if (event.code == 'Tab') {
-        // apply first suggestion
+        // Apply first suggestion
         const first_suggestion = new_tag_name
           ? props.all_tags
               .filter((tag) =>
@@ -123,7 +124,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
         [styles.field__focus]: is_focused,
       })}
       animation={system_values.sortablejs_animation_duration}
-      filter={`.${styles.input}`}
+      draggable={`.${styles.tag}`}
       delay={system_values.sortablejs_delay}
       delayOnTouchOnly={true}
     >
@@ -295,6 +296,10 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
       <div
         className={styles.container}
         onClick={() => {
+          if (!is_focused) {
+            ref.current.selectionStart = ref.current.value.length
+            ref.current.selectionEnd = ref.current.value.length
+          }
           ref.current?.focus()
         }}
       >
