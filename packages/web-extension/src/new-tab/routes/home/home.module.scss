@@ -1,0 +1,20 @@
+// @type
+@use '../../../../../web-ui/src/styles/foundation' as *;
+
+.container {
+  height: 100vh;
+}
+.header {
+  height: var(--header-desktop-height);
+}
+.wrapper {
+  max-width: var(--site-max-width);
+  padding: 0 var(--padding-40px);
+  width: 100%;
+  margin: 0 auto;
+}
+.inner {
+  margin: 0 auto;
+  padding-top: var(--padding-16px);
+  width: calc(100% - (300px * 2));
+}

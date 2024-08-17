@@ -1,13 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import styles from './styles.module.scss';
+import ReactDOM from 'react-dom'
+import { Home } from './routes/home/home'
+
+import '../../../web-ui/src/styles/style.scss'
 
 const NewTabPage: React.FC = () => {
-  return (
-    <div className={styles.container}>
-      <div className={styles.box}>x12</div>
-    </div>
-  );
-};
+  return <Home />
+}
 
-ReactDOM.render(<NewTabPage />, document.body);
+ReactDOM.render(<NewTabPage />, document.body)

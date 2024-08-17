@@ -15,6 +15,7 @@ declare const styles: {
   readonly "box__form__keycap": string;
   readonly "box__left-side": string;
   readonly "box__loader": string;
+  readonly "box__placeholder": string;
   readonly "box__right-side": string;
   readonly "box__right-side__clear": string;
   readonly "box__right-side__clear--yields-no-results": string;

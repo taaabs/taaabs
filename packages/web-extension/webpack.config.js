@@ -1,10 +1,11 @@
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 
 module.exports = {
   entry: {
     background: './src/background/main.js',
-    newtab: './src/new-tab/index.tsx',
+    ['new-tab']: './src/new-tab/index.tsx',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -48,6 +49,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new ReactRefreshWebpackPlugin(),
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/manifest.json', to: 'manifest.json' },
@@ -57,6 +59,7 @@ module.exports = {
           to: 'content-scripts/get-token.js',
         },
         { from: 'src/new-tab.html', to: 'new-tab.html' },
+        { from: 'src/detect-theme.js', to: 'detect-theme.js' },
       ],
     }),
   ],
@@ -70,4 +73,4 @@ module.exports = {
   optimization: {
     minimize: false,
   },
-};
+}
