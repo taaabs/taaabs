@@ -1,6 +1,4 @@
-import Skeleton from 'react-loading-skeleton'
 import styles from './Search.module.scss'
-import { use_is_hydrated } from '@shared/hooks'
 import { memo, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { system_values } from '@shared/constants/system-values'
@@ -52,8 +50,7 @@ export namespace Search {
 }
 
 export const Search: React.FC<Search.Props> = memo(
-  function LibrarySearch(props) {
-    const is_hydrated = use_is_hydrated()
+  function Search(props) {
     const input = useRef<HTMLInputElement>(null)
     const [selected_hint_index, set_selected_hint_index] = useState<number>(-1)
     const [is_focusedfix, set_is_focusedfix] = useState(false)
@@ -145,7 +142,7 @@ export const Search: React.FC<Search.Props> = memo(
       set_selected_hint_index(-1)
     }, [props.hints])
 
-    return is_hydrated ? (
+    return (
       <div
         className={styles.container}
         style={{ pointerEvents: props.is_loading ? 'none' : undefined }}
@@ -178,6 +175,19 @@ export const Search: React.FC<Search.Props> = memo(
                 <UiIcon variant="SEARCH" />
               )}
             </button>
+            {props.search_string.length == 0 && (
+              <div className={styles.box__placeholder}>
+                {props.is_loading && props.loading_progress_percentage
+                  ? `${props.translations.one_moment_please} ${
+                      props.loading_progress_percentage + '%'
+                    }`
+                  : selected_hint_index != -1
+                  ? undefined
+                  : props.is_full_text
+                  ? props.translations.placeholder.full_text
+                  : props.translations.placeholder.default}
+              </div>
+            )}
             <form
               className={styles.box__form}
               onSubmit={(e) => {
@@ -281,17 +291,6 @@ export const Search: React.FC<Search.Props> = memo(
                       pointerEvents: !props.is_focused ? 'none' : undefined,
                       width: sizer_width > 250 ? `${sizer_width}px` : undefined,
                     }}
-                    placeholder={
-                      props.is_loading && props.loading_progress_percentage
-                        ? `${props.translations.one_moment_please} ${
-                            props.loading_progress_percentage + '%'
-                          }`
-                        : selected_hint_index != -1
-                        ? undefined
-                        : props.is_full_text
-                        ? props.translations.placeholder.full_text
-                        : props.translations.placeholder.default
-                    }
                     onBlur={(e) => {
                       if (
                         e.relatedTarget?.className !=
@@ -443,10 +442,6 @@ export const Search: React.FC<Search.Props> = memo(
             </div>
           </div>
         </OutsideClickHandler>
-      </div>
-    ) : (
-      <div className={styles.skeleton}>
-        <Skeleton />
       </div>
     )
   },

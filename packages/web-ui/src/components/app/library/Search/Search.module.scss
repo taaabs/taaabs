@@ -121,6 +121,23 @@
       border: 2.5px solid var(--accent-color);
     }
   }
+  &__placeholder {
+    position: absolute;
+    font-weight: var(--font-weight-inter-medium);
+    left: calc(
+      var(--padding-6px) + var(--button-dimension-28px) + var(--padding-8px)
+    );
+    color: var(--accent-color);
+    @include dark {
+      color: var(--text-color-dimmed);
+    }
+    opacity: 0.7;
+    @include transition-150ms(color);
+    @include at992 {
+      font-size: var(--font-size-17px);
+      left: calc(var(--padding-8px) + var(--button-dimension-34px) + 13px);
+    }
+  }
   &__form {
     flex-grow: 1;
     position: relative;
@@ -233,17 +250,6 @@
         }
         &:focus {
           outline: none;
-        }
-        &::placeholder {
-          color: var(--accent-color);
-          @include dark {
-            color: var(--text-color-dimmed);
-          }
-          opacity: 0.8;
-          @include transition-150ms(color);
-          @include at992 {
-            font-size: var(--font-size-17px);
-          }
         }
       }
     }

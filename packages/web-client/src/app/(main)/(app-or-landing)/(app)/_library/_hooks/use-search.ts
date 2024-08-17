@@ -1,5 +1,5 @@
 import { Orama, Results, TypedDocument, search } from '@orama/orama'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { searchWithHighlight } from '@orama/plugin-match-highlight'
 import { system_values } from '@shared/constants/system-values'
@@ -10,7 +10,8 @@ import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { search_params_keys } from '@/constants/search-params-keys'
-import { LocalDb, schema } from '@/app/local-db-provider'
+import { LocalDb, schema } from '@/providers/LocalDbProvider'
+import { AuthContext } from '@/providers/AuthProvider'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -26,6 +27,7 @@ type Highlights = {
 export type Result = TypedDocument<Orama<typeof schema>>
 
 export const use_search = (local_db: LocalDb) => {
+  const auth_context = useContext(AuthContext)
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const [is_full_text, set_is_full_text] = useState<boolean>()
@@ -905,6 +907,35 @@ export const use_search = (local_db: LocalDb) => {
       set_search_string(window.location.hash.replace('#q=', ''))
     }
   }, [search_params])
+
+  // Handle the redirection when the user clicks on the search field in the extension's new tab
+  useUpdateEffect(() => {
+    if (window.location.hash == '#focus-on-search') {
+      local_db
+        .init({
+          is_archived: is_archived_filter,
+        })
+        .then(() => {
+          get_hints()
+          set_is_search_focused(true)
+        })
+    } else if (window.location.hash.startsWith('#q=')) {
+    /**
+     * START - handle case when hash is #q=gila
+     */
+      local_db.init({
+        is_archived: is_archived_filter,
+      })
+    }
+  }, [auth_context.auth_data])
+
+  useUpdateEffect(() => {
+    const db = is_archived_filter ? local_db.archived_db : local_db.db
+    if (db) get_result({ search_string })
+  }, [local_db.db, local_db.archived_db])
+  /**
+   * END - handle case when hash is #q=gila
+   */
 
   return {
     is_search_focused,
