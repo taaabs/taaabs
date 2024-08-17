@@ -33,6 +33,9 @@
   "background": {
     "service_worker": "background.bundle.js"
   },
+  "chrome_url_overrides": {
+    "newtab": "new-tab.html"
+  },
   "content_scripts": [
     {
       "matches": ["https://taaabs.com/*"],
