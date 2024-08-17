@@ -48,9 +48,11 @@ export namespace Counts_Dto {
 
     export class Authorized {
       public months: Record<string, AuthorizedMonth>
+      public is_importing_or_processing?: boolean
     }
     export class Public {
       public months: Record<string, PublicMonth>
+      public is_importing_or_processing?: boolean
     }
   }
 }
