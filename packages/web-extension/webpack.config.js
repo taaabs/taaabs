@@ -33,7 +33,9 @@ module.exports = (env, argv) => {
               loader: 'css-loader',
               options: {
                 modules: {
-                  localIdentName: isProduction ? '[hash:base64:5]' : '[name]__[local]--[hash:base64:5]',
+                  localIdentName: isProduction
+                    ? '[hash:base64:5]'
+                    : '[name]__[local]--[hash:base64:5]',
                 },
               },
             },
@@ -54,6 +56,7 @@ module.exports = (env, argv) => {
           },
           { from: 'src/new-tab.html', to: 'new-tab.html' },
           { from: 'src/detect-theme.js', to: 'detect-theme.js' },
+          { from: 'src/settings.html', to: 'settings.html' },
         ],
       }),
       new MiniCssExtractPlugin({

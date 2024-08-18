@@ -29,6 +29,13 @@ async function handle_tab(tab_id, url) {
       )
     } else if (url.startsWith('chrome://')) {
       update_icon(tab_id)
+      if (url == 'chrome://newtab/') {
+        chrome.storage.sync.get('useCustomNewTab', (data) => {
+          if (data.useCustomNewTab) {
+            chrome.tabs.update(tab_id, { url: 'new-tab.html' })
+          }
+        })
+      }
     } else {
       const is_saved = await check_url_status(url)
       update_icon(tab_id, is_saved)
