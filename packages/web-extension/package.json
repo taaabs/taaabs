@@ -13,6 +13,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.5.1",
+    "mini-css-extract-plugin": "^2.9.0",
     "sass": "^1.49.0",
     "sass-loader": "^12.4.0",
     "style-loader": "^3.3.1",
