@@ -2,6 +2,7 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production'
@@ -45,6 +46,7 @@ module.exports = (env, argv) => {
       ],
     },
     plugins: [
+      new CleanWebpackPlugin(),
       !isProduction && new ReactRefreshWebpackPlugin(),
       new CopyWebpackPlugin({
         patterns: [
@@ -56,13 +58,14 @@ module.exports = (env, argv) => {
           },
           { from: 'src/new-tab.html', to: 'new-tab.html' },
           { from: 'src/detect-theme.js', to: 'detect-theme.js' },
-          { from: 'src/settings.html', to: 'settings.html' },
+          { from: 'src/options.html', to: 'options.html' },
+          { from: 'src/options.js', to: 'options.js' },
         ],
       }),
       new MiniCssExtractPlugin({
         filename: 'style.css',
       }),
-    ].filter(Boolean),
+    ],
     devServer: {
       static: {
         directory: path.join(__dirname, 'dist'),

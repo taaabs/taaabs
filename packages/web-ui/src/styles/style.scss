@@ -99,7 +99,9 @@ html {
 }
 
 body {
-  font: 15px/1.3 var(--font-family-inter);
+  font-size: 1.6rem;
+  line-height: 1.3;
+  font-family: var(--font-family-inter);
   color: var(--text-color-normal);
   overflow-y: scroll;
   background-color: var(--background);

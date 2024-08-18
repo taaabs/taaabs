@@ -3,14 +3,18 @@
 
 .container {
   height: 100vh;
+  overflow: hidden;
 }
 .header {
   height: var(--header-desktop-height);
+  background-color: var(--header-background);
+  border-bottom: var(--border-primary);
 }
 .wrapper {
   max-width: var(--site-max-width);
   padding: 0 var(--padding-40px);
   width: 100%;
+  min-height: 100%;
   margin: 0 auto;
 }
 .inner {

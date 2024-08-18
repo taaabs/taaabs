@@ -44,7 +44,7 @@ async function handle_tab(tab_id, url) {
 }
 
 chrome.webNavigation.onCommitted.addListener(async (details) => {
-  if (details.frameId === 0) {
+  if (details.frameId == 0) {
     // Ensure it's the main frame
     try {
       await handle_tab(details.tabId, details.url)
@@ -74,5 +74,6 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 })
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.tabs.create({ url: 'https://taaabs.com/library' })
+  chrome.storage.sync.set({ useCustomNewTab: true })
+  chrome.tabs.create({ url: 'options.html' })
 })

@@ -18,7 +18,6 @@ export function setup_context_menus() {
   })
 
   chrome.action.onClicked.addListener((tab) => {
-    console.log('action menu clicked')
     if (
       tab.url.startsWith('https://taaabs.com') ||
       tab.url.startsWith('chrome://')
