@@ -172,7 +172,7 @@ export const use_search = (local_db: LocalDb) => {
     search_string: string
     refresh_highlights_only?: boolean
   }) => {
-    if (!search_string.trim()) return
+    if(!params.search_string.trim()) return
     const result = await query_db({ search_string: params.search_string })
 
     set_incoming_highlights(
