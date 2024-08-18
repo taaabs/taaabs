@@ -49,7 +49,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
           scp -r ./packages/web-client/.next $USERNAME@$HOST:/home/ubuntu/apps/taaabs/packages/web-client
-          ssh $USERNAME@$HOST 'cd /home/ubuntu/apps/taaabs && git pull && /home/ubuntu/.local/share/pnpm/pnpm i && pm2 reload taaabs-client'
+          ssh $USERNAME@$HOST 'cd /home/ubuntu/apps/taaabs && rm pnpm-lock.yaml && git pull && /home/ubuntu/.local/share/pnpm/pnpm i && pm2 reload taaabs-client'
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
