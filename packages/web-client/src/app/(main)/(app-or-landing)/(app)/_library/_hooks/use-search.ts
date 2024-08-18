@@ -59,7 +59,6 @@ export const use_search = (local_db: LocalDb) => {
     current_filter == Filter.ARCHIVED_UNSORTED
 
   const set_search_fragment = (params: { search_string: string }) => {
-    if (!params.search_string) return
     window.history.pushState(
       {},
       '',
@@ -173,6 +172,7 @@ export const use_search = (local_db: LocalDb) => {
     search_string: string
     refresh_highlights_only?: boolean
   }) => {
+    if (!search_string.trim()) return
     const result = await query_db({ search_string: params.search_string })
 
     set_incoming_highlights(
