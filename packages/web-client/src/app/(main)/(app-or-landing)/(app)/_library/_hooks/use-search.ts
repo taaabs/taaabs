@@ -59,6 +59,7 @@ export const use_search = (local_db: LocalDb) => {
     current_filter == Filter.ARCHIVED_UNSORTED
 
   const set_search_fragment = (params: { search_string: string }) => {
+    if (!params.search_string) return
     window.history.pushState(
       {},
       '',
@@ -920,9 +921,9 @@ export const use_search = (local_db: LocalDb) => {
           set_is_search_focused(true)
         })
     } else if (window.location.hash.startsWith('#q=')) {
-    /**
-     * START - handle case when hash is #q=gila
-     */
+      /**
+       * START - handle case when hash is #q=gila
+       */
       local_db.init({
         is_archived: is_archived_filter,
       })

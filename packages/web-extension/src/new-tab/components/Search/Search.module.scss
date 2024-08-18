@@ -18,15 +18,8 @@
   height: var(--search-desktop-height);
   transform: translateX(-16px);
   width: calc(100% + 32px);
-  @include transition-150ms;
   text-decoration: none;
   cursor: text;
-  @include hover {
-    border-color: var(--blue200);
-    @include dark {
-      border-color: var(--dark400);
-    }
-  }
 }
 .button {
   display: flex;

@@ -7,7 +7,7 @@ export const Search: React.FC = () => {
     </svg>
   )
   return (
-    <a href="https://taaabs.com/library?search" className={styles.container}>
+    <a href="https://taaabs.com/library#focus-on-search" className={styles.container}>
       <div className={styles.button}>{icon}</div>
       <div className={styles.placeholder}>
         Search in titles, notes, tags and links...

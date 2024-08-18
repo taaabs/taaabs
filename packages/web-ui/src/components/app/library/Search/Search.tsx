@@ -143,10 +143,7 @@ export const Search: React.FC<Search.Props> = memo(
     }, [props.hints])
 
     return (
-      <div
-        className={styles.container}
-        style={{ pointerEvents: props.is_loading ? 'none' : undefined }}
-      >
+      <div className={styles.container}>
         <OutsideClickHandler onOutsideClick={props.on_blur}>
           <div
             className={cn(
@@ -162,7 +159,7 @@ export const Search: React.FC<Search.Props> = memo(
             <button
               className={styles['box__left-side']}
               onClick={() => {
-                if (!props.is_focused) {
+                if (!props.is_focused && !props.is_loading) {
                   input.current?.focus()
                   input.current!.value = ''
                   input.current!.value = props.search_string
@@ -198,7 +195,7 @@ export const Search: React.FC<Search.Props> = memo(
                 set_is_focusedfix(false)
               }}
               onClick={() => {
-                if (!props.is_focused) {
+                if (!props.is_focused && !props.is_loading) {
                   input.current?.focus()
                   input.current?.focus()
                   input.current!.value = ''
