@@ -11,7 +11,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "types": ["jest", "chrome"]
+    "types": ["jest", "chrome", "node"]
   },
   "include": ["src"]
 }

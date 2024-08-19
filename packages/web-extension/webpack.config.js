@@ -11,7 +11,7 @@ module.exports = (env, argv) => {
   return {
     entry: {
       background: './src/background/main.ts',
-      newtab: './src/newtab/index.tsx',
+      newtab: './src/newtab/app.tsx',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -19,10 +19,6 @@ module.exports = (env, argv) => {
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
-      alias: {
-        react: 'preact/compat',
-        'react-dom': 'preact/compat',
-      },
     },
     module: {
       rules: [
@@ -52,8 +48,9 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      new HotModuleReplacementPlugin(),
-      new PreactRefreshPlugin(),
+      ...(!is_production
+        ? [new HotModuleReplacementPlugin(), new PreactRefreshPlugin()]
+        : []),
       new CopyWebpackPlugin({
         patterns: [
           { from: 'src/manifest.json', to: 'manifest.json' },
@@ -79,9 +76,6 @@ module.exports = (env, argv) => {
       compress: true,
       port: 9000,
       hot: true,
-    },
-    optimization: {
-      minimize: false,
     },
   }
 }

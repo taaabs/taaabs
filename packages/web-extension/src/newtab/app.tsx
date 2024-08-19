@@ -1,8 +1,11 @@
+import { render } from 'preact'
 import styles from './app.module.scss'
 import { Search } from './components/Search'
 import { Bookmarks } from './components/Bookmarks'
 
-export const Home: preact.FunctionComponent = () => {
+import '../../../web-ui/src/styles/style.scss'
+
+export const App: preact.FunctionComponent = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}></div>
@@ -20,3 +23,5 @@ export const Home: preact.FunctionComponent = () => {
     </div>
   )
 }
+
+render(<App />, document.getElementById('root')!)
