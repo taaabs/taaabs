@@ -1,8 +1,9 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const PreactRefreshPlugin = require('@prefresh/webpack')
+const { HotModuleReplacementPlugin } = require('webpack')
 
 module.exports = (env, argv) => {
   const is_production = argv.mode === 'production'
@@ -18,6 +19,10 @@ module.exports = (env, argv) => {
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
+      alias: {
+        react: 'preact/compat',
+        'react-dom': 'preact/compat',
+      },
     },
     module: {
       rules: [
@@ -47,7 +52,8 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      !is_production && new ReactRefreshWebpackPlugin(),
+      new HotModuleReplacementPlugin(),
+      new PreactRefreshPlugin(),
       new CopyWebpackPlugin({
         patterns: [
           { from: 'src/manifest.json', to: 'manifest.json' },
@@ -72,6 +78,7 @@ module.exports = (env, argv) => {
       },
       compress: true,
       port: 9000,
+      hot: true,
     },
     optimization: {
       minimize: false,

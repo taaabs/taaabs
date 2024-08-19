@@ -6,11 +6,11 @@
     "start": "webpack serve --mode development --open"
   },
   "dependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "preact": "^10.23.2"
   },
   "devDependencies": {
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
+    "@prefresh/core": "^1.5.2",
+    "@prefresh/webpack": "^4.0.1",
     "@types/chrome": "^0.0.270",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^12.0.2",

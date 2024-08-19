@@ -1,10 +1,10 @@
-import ReactDOM from 'react-dom'
-import { Home } from './routes/home/home'
+import { render } from 'preact'
+import { Home } from './app'
 
 import '../../../web-ui/src/styles/style.scss'
 
-const NewTabPage: React.FC = () => {
+const NewTabPage: preact.FunctionComponent = () => {
   return <Home />
 }
 
-ReactDOM.render(<NewTabPage />, document.getElementById('root'))
+render(<NewTabPage />, document.getElementById('root')!)

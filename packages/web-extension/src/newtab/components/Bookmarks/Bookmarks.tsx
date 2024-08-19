@@ -1,7 +1,6 @@
-import React from 'react'
 import styles from './Bookmarks.module.scss'
 
-export const Bookmarks: React.FC = () => {
+export const Bookmarks: preact.FunctionComponent = () => {
   return (
     <div className={styles.container}>
       <span className={styles.load}>Load library</span>

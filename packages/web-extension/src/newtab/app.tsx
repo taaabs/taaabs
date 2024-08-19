@@ -1,8 +1,8 @@
-import styles from './home.module.scss'
-import { Search } from '../../components/Search'
-import { Bookmarks } from '../../components/Bookmarks'
+import styles from './app.module.scss'
+import { Search } from './components/Search'
+import { Bookmarks } from './components/Bookmarks'
 
-export const Home: React.FC = () => {
+export const Home: preact.FunctionComponent = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}></div>
