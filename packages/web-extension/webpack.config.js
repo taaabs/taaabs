@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
 
   return {
     entry: {
-      background: './src/background/main.js',
+      background: './src/background/main.ts',
       ['new-tab']: './src/new-tab/index.tsx',
     },
     output: {
@@ -74,7 +74,7 @@ module.exports = (env, argv) => {
       port: 9000,
     },
     optimization: {
-      minimize: isProduction,
+      minimize: false,
     },
   }
 }

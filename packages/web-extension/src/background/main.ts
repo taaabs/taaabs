@@ -1,13 +1,14 @@
 import { setup_context_menus } from './setup-context-menus'
 import { check_url_status } from './check-url-status'
 import { update_icon } from './update-icon'
+import { url_parser } from './utils/url_parser'
 
 chrome.action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 chrome.action.setBadgeTextColor({ color: 'white' })
 
 setup_context_menus()
 
-async function handle_tab(tab_id, url) {
+async function handle_tab(tab_id: number, url?: string) {
   if (url) {
     if (url.startsWith('https://taaabs.com')) {
       update_icon(tab_id)
@@ -29,19 +30,23 @@ async function handle_tab(tab_id, url) {
       )
     } else if (url.startsWith('chrome://')) {
       update_icon(tab_id)
-      if (url == 'chrome://newtab/') {
-        chrome.storage.sync.get('useCustomNewTab', (data) => {
-          if (data.useCustomNewTab) {
-            chrome.tabs.update(tab_id, { url: 'new-tab.html' })
-          }
-        })
-      }
     } else {
-      const is_saved = await check_url_status(url)
+      const parsed_url = url_parser(url)
+      const is_saved = await check_url_status(parsed_url)
       update_icon(tab_id, is_saved)
     }
   }
 }
+
+chrome.tabs.onCreated.addListener((tab) => {
+  if (tab.pendingUrl == 'chrome://newtab/') {
+    chrome.storage.sync.get('useCustomNewTab', (data) => {
+      if (!data.useCustomNewTab) {
+        chrome.tabs.update(tab.id!, { url: 'chrome://new-tab-page' });
+      }
+    });
+  }
+});
 
 chrome.webNavigation.onCommitted.addListener(async (details) => {
   if (details.frameId == 0) {

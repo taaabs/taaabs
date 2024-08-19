@@ -7,8 +7,10 @@ export function setup_context_menus() {
 
   chrome.contextMenus.onClicked.addListener((info, tab) => {
     if (
-      tab.url.startsWith('https://taaabs.com') ||
-      tab.url.startsWith('chrome://')
+      tab &&
+      tab.url &&
+      (tab.url.startsWith('https://taaabs.com') ||
+        tab.url.startsWith('chrome://'))
     ) {
       return
     }
@@ -19,21 +21,33 @@ export function setup_context_menus() {
 
   chrome.action.onClicked.addListener((tab) => {
     if (
-      tab.url.startsWith('https://taaabs.com') ||
-      tab.url.startsWith('chrome://')
+      tab &&
+      tab.url &&
+      (tab.url.startsWith('https://taaabs.com') ||
+        tab.url.startsWith('chrome://'))
     ) {
-      chrome.tabs.update(tab.id, { url: 'https://taaabs.com/library' })
+      chrome.tabs.update(tab.id!, { url: 'https://taaabs.com/library' })
       return
     }
     execute_bookmarklet_script(tab)
   })
 }
 
-function execute_bookmarklet_script(tab) {
+function execute_bookmarklet_script(tab: any) {
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
     func: async () => {
-      const fill_clipboard = async (doc) => {
+      const url_parser = (url: string): string => {
+        if (url.startsWith('https://www.youtube.com/watch')) {
+          return `https://www.youtube.com/watch?v=${new URL(
+            url,
+          ).searchParams.get('v')}`
+        } else {
+          return url
+        }
+      }
+
+      const fill_clipboard = async (doc: any) => {
         const get_og_image_url = () => {
           const meta_tags = doc.getElementsByTagName('meta')
           for (let i = 0; i < meta_tags.length; i++) {
@@ -52,7 +66,11 @@ function execute_bookmarklet_script(tab) {
           }
           return new URL(window.location.href).origin + '/favicon.ico'
         }
-        const get_base64_of_image_url = async (url, width, height) => {
+        const get_base64_of_image_url = async (
+          url: any,
+          width?: any,
+          height?: any,
+        ) => {
           const img = doc.createElement('img')
           img.src = url
           img.setAttribute('crossorigin', 'anonymous')
@@ -95,7 +113,7 @@ function execute_bookmarklet_script(tab) {
         )
         if (!og_title_element) return false
         const og_title_content = og_title_element.getAttribute('content')
-        if (title.toLowerCase().includes(og_title_content.toLowerCase()))
+        if (title.toLowerCase().includes(og_title_content!.toLowerCase()))
           return false
 
         try {
@@ -137,30 +155,33 @@ function execute_bookmarklet_script(tab) {
           document.body.appendChild(iframe)
 
           iframe.addEventListener('load', async () => {
-            const doc = iframe.contentWindow.document
+            const doc = iframe.contentWindow!.document
             await fill_clipboard(doc)
+            document.body.removeChild(iframe)
             const target_url =
               'https://taaabs.com/library#url=' +
-              encodeURIComponent(document.location) +
+              encodeURIComponent(url_parser(document.location.href)) +
               '&title=' +
               encodeURIComponent(doc.title) +
               '&description=' +
               (doc.querySelector("meta[name='description']") != null
-                ? doc.querySelector("meta[name='description']").content
+                ? (doc.querySelector("meta[name='description']") as any).content
                 : '') +
               '&v=1'
+
             window.location.assign(target_url)
           })
         } else {
           await fill_clipboard(document)
           const target_url =
             'https://taaabs.com/library#url=' +
-            encodeURIComponent(document.location) +
+            encodeURIComponent(url_parser(document.location.href)) +
             '&title=' +
             encodeURIComponent(document.title) +
             '&description=' +
             (document.querySelector("meta[name='description']") != null
-              ? document.querySelector("meta[name='description']").content
+              ? (document.querySelector("meta[name='description']") as any)
+                  .content
               : '') +
             '&v=1'
           window.location.assign(target_url)

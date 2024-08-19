@@ -39,6 +39,9 @@
       "js": ["content-scripts/get-token.js"]
     }
   ],
+  "chrome_url_overrides": {
+    "newtab": "new-tab.html"
+  },
   "options_ui": {
     "page": "options.html",
     "open_in_tab": true

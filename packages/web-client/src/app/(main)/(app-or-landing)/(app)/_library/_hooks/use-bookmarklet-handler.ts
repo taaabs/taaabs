@@ -44,7 +44,6 @@ export const use_bookmarklet_handler = (props: {
             )
             // Duplicate found, open edit modal
             found_duplicate = true
-            toast.info('Link is already in library')
             const updated_bookmark = await upsert_bookmark_modal_setter({
               modal_context,
               bookmark: found_bookmark,
