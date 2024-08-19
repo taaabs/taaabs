@@ -5,12 +5,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = (env, argv) => {
-  const isProduction = argv.mode === 'production'
+  const is_production = argv.mode === 'production'
 
   return {
     entry: {
       background: './src/background/main.ts',
-      ['new-tab']: './src/new-tab/index.tsx',
+      newtab: './src/newtab/index.tsx',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -34,7 +34,7 @@ module.exports = (env, argv) => {
               loader: 'css-loader',
               options: {
                 modules: {
-                  localIdentName: isProduction
+                  localIdentName: is_production
                     ? '[hash:base64:5]'
                     : '[name]__[local]--[hash:base64:5]',
                 },
@@ -47,7 +47,7 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      !isProduction && new ReactRefreshWebpackPlugin(),
+      !is_production && new ReactRefreshWebpackPlugin(),
       new CopyWebpackPlugin({
         patterns: [
           { from: 'src/manifest.json', to: 'manifest.json' },
@@ -56,7 +56,7 @@ module.exports = (env, argv) => {
             from: 'src/content-scripts/get-token.js',
             to: 'content-scripts/get-token.js',
           },
-          { from: 'src/new-tab.html', to: 'new-tab.html' },
+          { from: 'src/newtab.html', to: 'newtab.html' },
           { from: 'src/detect-theme.js', to: 'detect-theme.js' },
           { from: 'src/options.html', to: 'options.html' },
           { from: 'src/options.js', to: 'options.js' },

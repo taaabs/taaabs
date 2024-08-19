@@ -40,7 +40,7 @@
     }
   ],
   "chrome_url_overrides": {
-    "newtab": "new-tab.html"
+    "newtab": "newtab.html"
   },
   "options_ui": {
     "page": "options.html",
