@@ -13,6 +13,7 @@ import { HtmlParser } from '@shared/utils/html-parser'
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
 import ky from 'ky'
+import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 
 export const Popup: preact.FunctionComponent = () => {
   const [current_tab_id, set_current_tab_id] = useState<number>()
@@ -25,70 +26,68 @@ export const Popup: preact.FunctionComponent = () => {
         set_current_url(tabs[0].url)
       }
     })
-    chrome.runtime.onMessage.addListener(
-      async (request) => {
-        if (request.action == 'tab_data') {
-          const data = request.data as TabData
-          console.log(data)
-          const reader_data = HtmlParser.parse({
-            url: data.url,
-            html: data.html,
-          })?.reader_data
+    chrome.runtime.onMessage.addListener(async (request) => {
+      if (request.action == 'tab_data') {
+        const data = request.data as TabData
+        const reader_data = HtmlParser.parse({
+          url: data.url,
+          html: data.html,
+        })?.reader_data
 
-          const favicon = data?.favicon ? data.favicon.split(',')[1] : undefined
+        const favicon = data?.favicon ? data.favicon.split(',')[1] : undefined
 
-          let cover: string | undefined = undefined
-          let blurhash: string | undefined = undefined
+        let cover: string | undefined = undefined
+        let blurhash: string | undefined = undefined
 
-          if (data?.og_image) {
-            const cover_with_blurhash = await get_cover_with_blurhash(
-              data.og_image,
-            )
-            cover = cover_with_blurhash.cover.split(',')[1]
-            blurhash = cover_with_blurhash.blurhash
-          }
-
-          const new_bookmark: UpsertBookmark_Params = {
-            is_public: false,
-            is_archived: false,
-            title: data.title,
-            note: data.description,
-            tags: [],
-            links: [
-              {
-                url: data.url,
-                is_public: false,
-                favicon,
-                reader_data,
-              },
-            ],
-            cover,
-            blurhash,
-          }
-
-          const auth_data: any = await new Promise((resolve) => {
-            chrome.storage.local.get(['auth_data'], (result) => {
-              resolve(result.auth_data)
-            })
-          })
-
-          console.log(new_bookmark)
-
-          const ky_instance = ky.create({
-            prefixUrl: 'https://api.taaabs.com/',
-            headers: {
-              Authorization: `Bearer ${auth_data.access_token}`,
-            },
-          })
-          const data_source = new Bookmarks_DataSourceImpl(ky_instance)
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          await repository.upsert_bookmark(
-            new_bookmark,
-            new Uint8Array(auth_data.encryption_key),
+        if (data?.og_image) {
+          const cover_with_blurhash = await get_cover_with_blurhash(
+            data.og_image,
           )
+          cover = cover_with_blurhash.cover.split(',')[1]
+          blurhash = cover_with_blurhash.blurhash
         }
-      },
-    )
+
+        const url = url_cleaner(data.url)
+
+        const new_bookmark: UpsertBookmark_Params = {
+          is_public: false,
+          is_archived: false,
+          title: data.title,
+          note: data.description,
+          tags: [],
+          links: [
+            {
+              url,
+              favicon,
+              reader_data,
+            },
+          ],
+          cover,
+          blurhash,
+        }
+
+        const auth_data: any = await new Promise((resolve) => {
+          chrome.storage.local.get(['auth_data'], (result) => {
+            resolve(result.auth_data)
+          })
+        })
+
+        const ky_instance = ky.create({
+          prefixUrl: 'https://api.taaabs.com/',
+          headers: {
+            Authorization: `Bearer ${auth_data.access_token}`,
+          },
+        })
+        const data_source = new Bookmarks_DataSourceImpl(ky_instance)
+        const repository = new Bookmarks_RepositoryImpl(data_source)
+        await repository.upsert_bookmark(
+          new_bookmark,
+          new Uint8Array(auth_data.encryption_key),
+        )
+
+        console.log('Bookmark created!', new_bookmark)
+      }
+    })
   }, [])
 
   return (
@@ -99,7 +98,7 @@ export const Popup: preact.FunctionComponent = () => {
           tab_data_content_script(current_tab_id)
         }}
       >
-        save
+        Save
       </button>
       <div>{current_tab_id}</div>
       <div>{current_url}</div>

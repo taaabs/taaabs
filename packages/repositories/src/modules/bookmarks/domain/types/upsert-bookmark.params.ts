@@ -11,7 +11,7 @@ export type UpsertBookmark_Params = {
   links: {
     url: string
     site_path?: string
-    is_public: boolean
+    is_public?: boolean
     is_pinned?: boolean
     pin_title?: string
     open_snapshot?: boolean
